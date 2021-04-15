@@ -143,3 +143,27 @@ components:
           - google
           - yahoo
     
+    Source:
+      type: object
+      properties:
+        value:
+          type: array
+          description: user defined sources
+          items:
+            type: string
+    
+    CollectionMethod:
+      type: object
+      properties:
+        value:
+          type: array
+          description: various collection methods user have used to create the dataset
+          items:
+            type: string
+            enum:
+            - web-scrapping
+            - manual-human-translated
+            - algorithm-auto-aligned
+            - algorithm-back-translated
+            - phone-recorded-audio
+            - crowd-sourced-audio
