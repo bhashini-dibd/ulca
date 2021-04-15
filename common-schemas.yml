@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+  title: DRAFT - Unified Language Contribution API (ULCA) documentation
+  description: The ULCA API documentation defines a core set of interfaces that enables users and communities to contribute AI/ML datasets to build a large, open Indic languages resource ecosystem. The dataset contributions are primarily geared toward the area of NLP, ASR/TTS and OCR.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 0.5.0
+servers: {}
+paths: {}
+
+components:
+  schemas:
+    LanguagePair:
+      type: object
+      description: language pair, make targetLanguage null to reuse the object to indicate single language
+      required:
+        - sourceLanguage
+      properties:
+        type:
+          type: string
+          enum:
+          - PARAMS
+        sourceLanguage:
+          $ref: '#/components/schemas/Language'
+        targetLanguage:
+          $ref: '#/components/schemas/Language'
+    
+    Language:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - PARAMS
+        value:
+          type: string
+          description: Indic language code, iso-639-1, iso 639-2
+          enum:
+          - en
+          - hi
+          - mr
+          - ta
+          - te
+          - kn
+          - gu
+          - pa
+          - bn
+          - ml
+          - as
+          - brx
+          - doi
+          - ks
+          - kok
+          - mai
+          - mni
+          - ne
+          - or
+          - sd
+          - si
+          - ur
+          - sat
+          - lus
+          - njz
+          - pnr
+          - kha
+          - grt
+          - sa
+        name:
+          type: string
+          description: human name of language code
