@@ -159,3 +159,19 @@ components:
             - algorithm-back-translated
             - phone-recorded-audio
             - crowd-sourced-audio
+
+    DataPoint:
+      required:
+      - label
+      - value
+      type: object
+      properties:
+        label:
+          type: string
+          description: string value to show
+        value:
+          type: number
+          description: numeric value of the data point
+        internalLabel:
+          type: string
+          description: internal representation of the label
