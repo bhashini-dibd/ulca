@@ -17,10 +17,6 @@ components:
       required:
         - sourceLanguage
       properties:
-        type:
-          type: string
-          enum:
-          - PARAMS
         sourceLanguage:
           $ref: '#/components/schemas/Language'
         targetLanguage:
@@ -29,10 +25,6 @@ components:
     Language:
       type: object
       properties:
-        type:
-          type: string
-          enum:
-          - PARAMS
         value:
           type: string
           description: Indic language code, iso-639-1, iso 639-2
