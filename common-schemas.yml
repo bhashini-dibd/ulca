@@ -69,3 +69,77 @@ components:
         name:
           type: string
           description: human name of language code
+
+    LanguagePairs:
+        type: array
+        items:
+          $ref: '#/components/schemas/LanguagePair'
+          minItems: 1
+    
+    Domain:
+        type: object
+        properties:
+          value:
+            type: array
+            items:
+              type: string
+              enum:
+              - general
+              - news
+              - education
+              - legal
+              - government-press-release
+              - healthcare
+              - movies
+              - subtitles
+              - sports
+    
+    License:
+      type: object
+      properties:
+        value:
+          type: string
+          enum:
+          - cc-by-4.0
+          - mit
+          - gpl-3.0
+          - bsd-3-clause
+          - cc-by-nd-2.0
+          
+    Contributor:
+      required:
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 50
+          minLength: 5
+          type: string
+          description: human name of the contributor
+        oauthId:
+          $ref: '#/components/schemas/OAuthIdentity'
+        aboutMe:
+          type: string
+          description: describing the contributor
+    
+    OAuthIdentity:
+      type: object
+      properties:
+        identifier:
+          type: string
+          description: system identification for the contributor
+          format: uuidv4
+        oauthId:
+          type: string
+          description: popular social network identifier, typically identifier returned after auth
+        provider:
+          type: string
+          description: user authentication provider
+          enum:
+          - custom
+          - github
+          - facebook
+          - instagram
+          - google
+          - yahoo
+    
