@@ -3,7 +3,7 @@ info:
   version: 0.5.0
   title: Document OCR API and schema definitions
   description: >-
-    Contributor targeting models in document layout and OCR problem statement, should implement following schema and API contract for the end point. This enables ULCA to make inference callback for benchmark and try me functionalities.
+    Contributor developing models under document layout and OCR task, should implement following schema and API contract for their end point. This will enable ULCA to make inference callback for benchmark and try me functionalities.
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
