@@ -1,7 +1,8 @@
 openapi: 3.0.0
 info:
-  title: DRAFT - Unified Language Contribution API (ULCA) documentation
-  description: The ULCA API documentation defines a core set of interfaces that enables users and communities to contribute AI/ML datasets to build a large, open Indic languages resource ecosystem. The dataset contributions are primarily geared toward the area of NLP, ASR/TTS and OCR.
+  title: ULCA - dataset schema
+  description: >-
+    Dataset and it supporting schema
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
