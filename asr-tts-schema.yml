@@ -41,16 +41,7 @@ components:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioBitsPerSample'
         numberOfSpeakers:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/NumberOfSpeakers'
-    
-    ASRResponse:
-      type: object
-      properties:
-        fileId:
-          type: string
-          description: fileId should be same as returned in the response of file-upload
-        alternatives:
-          $ref: '#/components/schemas/Alternatives'
-    
+
     Alternative:
       type: object
       properties:
@@ -69,3 +60,13 @@ components:
       items:
         $ref: '#/components/schemas/Alternative'
         minItems: 1
+
+    ASRResponse:
+      type: object
+      properties:
+        fileId:
+          type: string
+          description: fileId should be same as returned in the response of file-upload
+        alternatives:
+          $ref: '#/components/schemas/Alternatives'
+    
