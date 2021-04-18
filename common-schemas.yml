@@ -175,3 +175,110 @@ components:
         internalLabel:
           type: string
           description: internal representation of the label
+
+        ImageFormat:
+      type: object
+      properties:
+        value:
+          type: string
+          description: image format description
+          enum:
+          - jpeg
+          - bmp
+          - png
+          - tiff
+    
+    ImageTextType:
+      type: object
+      properties:
+        value:
+          type: string
+          description: textual data present in the image file
+          enum:
+          - scene-text
+          - typewriter-typed-text
+          - computer-typed-text
+          - handwritten-text
+    
+    ImageDPI:
+      type: object
+      properties:
+        value:
+          type: string
+          description: allowed dpi
+          enum:
+          - 300_dpi
+          - 72_dpi
+    
+    AudioFormat:
+      type: object
+      properties:
+        value:
+          type: string
+          description: audio format description
+          enum:
+          - wav
+          - pcm
+          - mp3
+    
+    AudioChannel:
+      type: object
+      properties:
+        value:
+          type: string
+          description: number of channel in the audio
+          enum:
+          - mono
+          - stero
+    
+    AudioSampleRate:
+      type: object
+      properties:
+        value:
+          type: string
+          description: sample rate of the audio file
+          enum:
+          - 44khz
+          - 22khz
+          - 8khz
+    
+    AudioBitsPerSample:
+      type: object
+      properties:
+        value:
+          type: string
+          description: number of bits per sample
+          enum:
+          - sixteen
+          - eight
+          
+    NumberOfSpeakers:
+      type: object
+      properties:
+        value:
+          type: number
+          description: number of speakers in the recorded audio file
+          minimum: 1
+    
+    NumberOfHoursPerGenders:
+      type: array
+      items:
+        $ref: '#/components/schemas/NumberOfHoursPerGender'
+        minItems: 1
+    
+    NumberOfHoursPerGender:
+      type: object
+      properties:
+        value:
+          type: number
+          description: number of hours per gender
+          minimum: 1
+        gender:
+          type: string
+          description: gender description
+          enum:
+            - male
+            - female
+            - others
+
+    
