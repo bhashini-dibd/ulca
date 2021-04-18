@@ -431,4 +431,38 @@ components:
             - success
             - pending
             - failed
-  
+
+    SearchParams:
+      type: object
+      properties:
+        key:
+          type: string
+          enum:
+            - languages
+            - domain
+        params:
+          type: object
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
+    
+    StatusCode:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: status code as encountered in the processing life-cycle
+          enum:
+            - schema-validation-failed
+            - object-validation-failed
+            - searched-query-not-supported
+            - missing-mandatory-parameters
+            - authorization-failed
+            - benchmark-failed
+            - invalid-callback-url
+        message:
+          type: string
+          description: human understandable format
