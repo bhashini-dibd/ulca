@@ -19,11 +19,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              type: object
-              properties:
-                fileName:
-                  type: string
-                  format: binary
+              $ref: '#/components/schemas/FileUploadRequest'
       responses:
         "200":
           description: On successful completion of the job.
@@ -49,6 +45,13 @@ components:
         in: header
   
   schemas:
+  
+    FileUploadRequest:
+      type: object
+      properties:
+        fileName:
+          type: string
+          format: binary
   
     FileUploadResponse:
       type: object
