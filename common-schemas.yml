@@ -176,7 +176,7 @@ components:
           type: string
           description: internal representation of the label
 
-        ImageFormat:
+    ImageFormat:
       type: object
       properties:
         value:
@@ -280,5 +280,3 @@ components:
             - male
             - female
             - others
-
-    
