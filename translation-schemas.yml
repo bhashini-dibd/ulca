@@ -1,10 +1,10 @@
 openapi: 3.0.0
 info:
   version: 0.5.0
-  title: Translation interface API definition
+  title: Translation interface API and schema definition
   description: >-
     Any MT system wanted to benchmark the model comparison against the listed
-    available model has to implement this API contract
+    available models has to implement this API contract
   contact:
     name: ekstep foundation
     email: contact@ekstep.org

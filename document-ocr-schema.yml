@@ -27,7 +27,7 @@ components:
       properties:
         fileId:
           type: string
-          description: ULCA system will use the fileId returned in the response of file-upload
+          description: fileId should be same as returned in the response of file-upload
         language:
           description: indicate only sourceLanguage key with respective ISO code.
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'

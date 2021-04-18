@@ -102,4 +102,3 @@ components:
           description: response object based upon the submitted request
           oneOf:
             - $ref: '#/components/schemas/FileUploadResponse'
-
