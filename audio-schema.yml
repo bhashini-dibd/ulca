@@ -7,40 +7,147 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-    
+
 paths: {}
 
 components:
   securitySchemes:
-      authToken:
-        type: apiKey
-        description: token issued by authenticating the user
-        name: auth-token
-        in: header
-  
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header
+
   schemas:
-  
-    ASRRequest:
+    SpeechRecognitionRequest:
       type: object
       required:
-        - fileId
+        - config
+        - audio
       properties:
-        fileId:
-          type: string
-          description: fileId should be same as returned in the response of file-upload
+        config:
+          $ref: "#/components/schemas/RecognitionConfig"
+        audio:
+          $ref: "#/components/schemas/RecognitionAudio"
+
+    RecognitionAudio:
+      type: object
+      required:
+        - audioContent|audioUri|fileId
+      properties:
+        oneOf:
+          audioContent:
+            type: string
+            format: byte
+            description: "audio content with audio duration <= 1min"
+            example: "byte64 encoded string"
+          audioUri:
+            type: string
+            description: "path on gcp/s3 bucket or https url"
+            example: "gs://bucket/audio.wav"
+          fileId:
+            type: string
+            description: fileId should be same as returned in the response of file-upload
+
+    RecognitionConfig:
+      type: object
+      required:
+        - language
+      properties:
         language:
-          description: indicate only sourceLanguage key with respective ISO code.
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
-        format:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioFormat'
+          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Language"
+        audioFormat:
+          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioFormat"
         channel:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioChannel'
+          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioChannel"
         samplingRate:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioSampleRate'
+          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioSampleRate"
         bitsPerSample:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioBitsPerSample'
-        numberOfSpeakers:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/NumberOfSpeakers'
+          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioBitsPerSample"
+        transcriptionFormat:
+          $ref: "#/components/schemas/TranscriptionFormat"
+        profanityFilter:
+          type: boolean
+          example: true
+        domain:
+          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain"
+        detailed:
+          type: boolean
+          description: "to specify whether details are required in output like SNR, sampling rate"
+        punctuation:
+          type: boolean
+          example: true
+        model:
+          value:
+            type: string
+            description:
+            enum:
+              - command_and_search
+              - phone_call
+              - video
+              - default
+
+    TranscriptionFormat:
+      type: object
+      properties:
+        value:
+          type: string
+          description: format of ASR output
+          enum:
+            - srt
+            - transcript
+            - alternatives
+
+    SpeechRecognitionResult:
+      type: object
+      required:
+        - status
+      properties:
+        oneOf:
+          transcript:
+            type: string
+            example: "This is text"
+          alternatives:
+            $ref: "#/components/schemas/Alternatives"
+          srt:
+            type: string
+            example: "--> This is srt text"
+        status:
+          $ref: "#/components/schemas/RecognitionStatus"
+        detail:
+          $ref: "#/components/schemas/RecognitionDetail"
+
+    RecognitionDetail:
+      type: object
+      properties:
+      channelTag:
+        type: integer
+        description: "For multi-channel audio, this is the channel number corresponding to the recognized result for the audio from that channel. For audioChannelCount = N, its output values can range from '1' to 'N'"
+      languageCode:
+        type: string
+        description: "This language code was detected to have the most likelihood of being spoken in the audio"
+      snr:
+        type: integer
+        description: "sound to noise ratio of audio"
+      samplingRate:
+        type: integer
+        description: "sampling rate of audio"
+      bitsPerSample:
+        type: integer
+        description: "bitsPerSample rate of audio"
+
+    RecognitionStatus:
+      type: object
+      properties:
+        value:
+          type: string
+          description: "status of ASR response"
+          enum:
+            - success
+            - no-match
+            - initial-silence-timeout
+            - babble-timeout
+            - error
 
     Alternative:
       type: object
@@ -54,19 +161,9 @@ components:
         endTime:
           type: string
           format: time
-    
+
     Alternatives:
       type: array
       items:
-        $ref: '#/components/schemas/Alternative'
+        $ref: "#/components/schemas/Alternative"
         minItems: 1
-
-    ASRResponse:
-      type: object
-      properties:
-        fileId:
-          type: string
-          description: fileId should be same as returned in the response of file-upload
-        alternatives:
-          $ref: '#/components/schemas/Alternatives'
-    
