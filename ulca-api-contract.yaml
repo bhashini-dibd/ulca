@@ -109,7 +109,7 @@ paths:
             '*/*':
               schema:
                 $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/StatusCode'
-  /v0.2/dataset/corpus/transform:
+  /v0.2/dataset/ingest:
     post:
       tags:
         - 'dataset, peripheral-api'
