@@ -29,6 +29,7 @@ components:
           audio_content:
             type: string
             format: byte
+            description: "audio duration <= 1min"
             example: "byte64 encoded string"
           audio_uri:
             type: string
@@ -49,11 +50,25 @@ components:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioSampleRate"
         bitsPerSample:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioBitsPerSample"
-        numberOfSpeakers:
-          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/NumberOfSpeakers"
         punctuation:
           type: boolean
           example: true
+        profanityCheck:
+          type: boolean
+          example: true
+        domain:
+          value:
+            type: string
+            description: "domain for which language model will be applied"
+            default: general
+            enum:
+              - general
+              - healthcare
+              - finance
+              - education
+        detailed:
+          type: boolean
+          description: "to specify whether details are required in output like SNR, sampling rate"
 
     TranscriptionFormat:
       type: object
@@ -82,12 +97,27 @@ components:
             example: "--> This is srt text"
         status:
           $ref: "#/components/schemas/RecognitionStatus"
-        channelTag:
-          type: integer
-          description: "For multi-channel audio, this is the channel number corresponding to the recognized result for the audio from that channel. For audioChannelCount = N, its output values can range from '1' to 'N'"
-        languageCode:
-          type: string
-          description: "This language code was detected to have the most likelihood of being spoken in the audio"
+        detail:
+          $ref: "#/components/schemas/RecognitionDetail"
+
+    RecognitionDetail:
+      type: object
+      properties:
+      channelTag:
+        type: integer
+        description: "For multi-channel audio, this is the channel number corresponding to the recognized result for the audio from that channel. For audioChannelCount = N, its output values can range from '1' to 'N'"
+      languageCode:
+        type: string
+        description: "This language code was detected to have the most likelihood of being spoken in the audio"
+      snr:
+        type: integer
+        description: "sound to noise ratio of audio"
+      samplingRate:
+        type: integer
+        description: "sampling rate of audio"
+      bitsPerSample:
+        type: integer
+        description: "bitsPerSample rate of audio"
 
     RecognitionStatus:
       type: object
