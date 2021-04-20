@@ -147,6 +147,12 @@ components:
             - babble-timeout
             - error
 
+    Alternatives:
+      type: array
+      items:
+        $ref: "#/components/schemas/Alternative"
+        minItems: 1
+
     Alternative:
       type: object
       properties:
@@ -160,8 +166,4 @@ components:
           type: string
           format: time
 
-    Alternatives:
-      type: array
-      items:
-        $ref: "#/components/schemas/Alternative"
-        minItems: 1
+    
