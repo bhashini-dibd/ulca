@@ -55,7 +55,7 @@ components:
         - language
       properties:
         language:
-          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Language"
+          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair"
         audioFormat:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioFormat"
         channel:
