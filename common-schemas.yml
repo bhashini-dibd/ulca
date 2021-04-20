@@ -11,46 +11,6 @@ paths: {}
 
 components:
   schemas:
-    Language:
-      type: object
-      properties:
-        value:
-          type: string
-          description: Indic language code, iso-639-1, iso 639-2
-          enum:
-          - en
-          - hi
-          - mr
-          - ta
-          - te
-          - kn
-          - gu
-          - pa
-          - bn
-          - ml
-          - as
-          - brx
-          - doi
-          - ks
-          - kok
-          - mai
-          - mni
-          - ne
-          - or
-          - sd
-          - si
-          - ur
-          - sat
-          - lus
-          - njz
-          - pnr
-          - kha
-          - grt
-          - sa
-        name:
-          type: string
-          description: human name of language code
-
     LanguagePair:
       type: object
       description: language pair, make targetLanguage null to reuse the object to indicate single language
@@ -58,9 +18,83 @@ components:
         - sourceLanguage
       properties:
         sourceLanguage:
-          $ref: '#/components/schemas/Language'
+          type: object
+          properties:
+            value:
+              type: string
+              description: Indic language code, iso-639-1, iso 639-2
+              enum:
+              - en
+              - hi
+              - mr
+              - ta
+              - te
+              - kn
+              - gu
+              - pa
+              - bn
+              - ml
+              - as
+              - brx
+              - doi
+              - ks
+              - kok
+              - mai
+              - mni
+              - ne
+              - or
+              - sd
+              - si
+              - ur
+              - sat
+              - lus
+              - njz
+              - pnr
+              - kha
+              - grt
+              - sa
+            name:
+              type: string
+              description: human name of language code
         targetLanguage:
-          $ref: '#/components/schemas/Language'
+          type: object
+          properties:
+            value:
+              type: string
+              description: Indic language code, iso-639-1, iso 639-2
+              enum:
+              - en
+              - hi
+              - mr
+              - ta
+              - te
+              - kn
+              - gu
+              - pa
+              - bn
+              - ml
+              - as
+              - brx
+              - doi
+              - ks
+              - kok
+              - mai
+              - mni
+              - ne
+              - or
+              - sd
+              - si
+              - ur
+              - sat
+              - lus
+              - njz
+              - pnr
+              - kha
+              - grt
+              - sa
+            name:
+              type: string
+              description: human name of language code
     
     LanguagePairs:
         type: array
