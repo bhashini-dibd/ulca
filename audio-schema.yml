@@ -19,17 +19,27 @@ components:
       in: header
 
   schemas:
+    SpeechRecognitionRequest:
+      type: object
+      required:
+        - config
+        - audio
+      properties:
+        config:
+          $ref: "#/components/schemas/RecognitionConfig"
+        audio:
+          $ref: "#/components/schemas/RecognitionAudio"
+
     RecognitionAudio:
       type: object
       required:
         - audio_content|audio_uri|fileId
-        - language
       properties:
         oneOf:
           audio_content:
             type: string
             format: byte
-            description: "audio duration <= 1min"
+            description: "audio content with audio duration <= 1min"
             example: "byte64 encoded string"
           audio_uri:
             type: string
@@ -38,10 +48,14 @@ components:
           fileId:
             type: string
             description: fileId should be same as returned in the response of file-upload
+
+    RecognitionConfig:
+      type: object
+      required:
+        - language
+      properties:
         language:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Language"
-        transcript_format:
-          $ref: "#/components/schemas/TranscriptionFormat"
         audio_format:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioFormat"
         channel:
@@ -50,18 +64,17 @@ components:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioSampleRate"
         bitsPerSample:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioBitsPerSample"
-        punctuation:
-          type: boolean
-          example: true
-        profanityCheck:
+        transcriptionFormat:
+          $ref: "#/components/schemas/TranscriptionFormat"
+        profanityFilter:
           type: boolean
           example: true
         domain:
           value:
             type: string
             description: "domain for which language model will be applied"
-            default: general
             enum:
+              - default
               - general
               - healthcare
               - finance
@@ -69,6 +82,18 @@ components:
         detailed:
           type: boolean
           description: "to specify whether details are required in output like SNR, sampling rate"
+        punctuation:
+          type: boolean
+          example: true
+        model:
+          value:
+            type: string
+            description:
+            enum:
+              - command_and_search
+              - phone_call
+              - video
+              - default
 
     TranscriptionFormat:
       type: object
