@@ -11,17 +11,6 @@ paths: {}
 
 components:
   schemas:
-    LanguagePair:
-      type: object
-      description: language pair, make targetLanguage null to reuse the object to indicate single language
-      required:
-        - sourceLanguage
-      properties:
-        sourceLanguage:
-          $ref: '#/components/schemas/Language'
-        targetLanguage:
-          $ref: '#/components/schemas/Language'
-    
     Language:
       type: object
       properties:
@@ -62,6 +51,17 @@ components:
           type: string
           description: human name of language code
 
+    LanguagePair:
+      type: object
+      description: language pair, make targetLanguage null to reuse the object to indicate single language
+      required:
+        - sourceLanguage
+      properties:
+        sourceLanguage:
+          $ref: '#/components/schemas/Language'
+        targetLanguage:
+          $ref: '#/components/schemas/Language'
+    
     LanguagePairs:
         type: array
         items:
