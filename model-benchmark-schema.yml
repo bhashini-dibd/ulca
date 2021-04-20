@@ -342,7 +342,7 @@ components:
     
     ASRIndividualBenchmarkResult:
       allOf:
-        - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/audio-schema.yml#/components/schemas/Alternative'
+        - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/audio-schema.yml#/components/schemas/SpeechRecognitionResult'
         - type: object
       type: object
       properties:
