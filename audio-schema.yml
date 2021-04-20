@@ -33,15 +33,15 @@ components:
     RecognitionAudio:
       type: object
       required:
-        - audio_content|audio_uri|fileId
+        - audioContent|audioUri|fileId
       properties:
         oneOf:
-          audio_content:
+          audioContent:
             type: string
             format: byte
             description: "audio content with audio duration <= 1min"
             example: "byte64 encoded string"
-          audio_uri:
+          audioUri:
             type: string
             description: "path on gcp/s3 bucket or https url"
             example: "gs://bucket/audio.wav"
@@ -56,7 +56,7 @@ components:
       properties:
         language:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Language"
-        audio_format:
+        audioFormat:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioFormat"
         channel:
           $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/AudioChannel"
@@ -70,15 +70,7 @@ components:
           type: boolean
           example: true
         domain:
-          value:
-            type: string
-            description: "domain for which language model will be applied"
-            enum:
-              - default
-              - general
-              - healthcare
-              - finance
-              - education
+          $ref: "https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain"
         detailed:
           type: boolean
           description: "to specify whether details are required in output like SNR, sampling rate"
