@@ -1244,6 +1244,7 @@ components:
         - description
         - datasetFileId
       type: object
+      description: describes the dataset schema
       properties:
         datasetId:
           type: string
@@ -1261,6 +1262,7 @@ components:
           minLength: 50
           type: string
           description: describes the purpose and usage of the dataset so that other user can get benefit out of it.
+          example: contribution from team Anuvaad for government press release domain
         datasetFileId:
           $ref: '#/components/schemas/DatasetFileIdentifier'
         submittedOn:
@@ -1468,6 +1470,7 @@ components:
           description: brief description about model, its goal, basically something sweet about it
           minLength: 50
           maxLength: 200
+          example: Speech recognition model for classroom lecture
         task:
           type: object
           description: what kind of task model achieves
@@ -1571,6 +1574,7 @@ components:
           description: description of the benchmark including how it has been curated
           minLength: 50
           maxLength: 200
+          example: benchmark sentences for government press release domain
         domain:
           type: object
           $ref: '#/components/schemas/Domain'
