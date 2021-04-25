@@ -423,6 +423,8 @@ components:
       type: object
       required:
         - acknowledgmentId
+        - status
+        - progress
       properties:
         acknowlegmentId:
           type: string
@@ -439,8 +441,11 @@ components:
             - status-with-errors
             - success
             - failed
-          
-  
+        progress:
+          type: object
+          description: detailed for the dataset as it can be longer running operation
+          $ref: '#/components/schemas/DatasetProgressInformation'
+    
     DatasetIngestRequest:
       type: object
       required:
@@ -1887,6 +1892,25 @@ components:
         description:
           type: string
           description: explain your dataset that you have used for training your model
+          
+    DatasetProgressInformation:
+      type: object
+      description: informs the progress for every submitted records in the dataset.
+      properties:
+        totalRecordCount:
+          type: integer
+          description: total number of records count submitted
+        validaatedRecordCount:
+          type: integer
+          description: how many records have validated
+        failedRecordCount:
+          type: integer
+          description: how many records failed the valdiation
+        validationReportId:
+          type: string
+          description: download why the records failed the validation
+          format: uuid4
+        
     
   securitySchemes:
     authToken:
