@@ -26,13 +26,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
       security:
         - authToken: []
   /v0.2/dataset/corpus/label:
@@ -52,13 +52,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
       security:
         - authToken: []
   /v0.2/dataset/corpus/status-check:
@@ -78,13 +78,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/dataset/statistics/search:
     post:
       tags:
@@ -102,13 +102,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/dataset/ingest:
     post:
       tags:
@@ -118,7 +118,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DatasetTransformRequest'
+              $ref: '#/components/schemas/DatasetIngestRequest'
         required: true
       responses:
         '200':
@@ -126,13 +126,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
       security:
         - authToken: []
   /v0.2/model/submit:
@@ -152,13 +152,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
       security:
         - authToken: []
   /v0.2/model/status-check:
@@ -178,13 +178,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/model/search:
     post:
       tags:
@@ -202,13 +202,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/model/try-me:
     post:
       tags:
@@ -226,13 +226,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/model/benchmark/start:
     post:
       tags:
@@ -250,13 +250,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/model/benchmark/status-check:
     post:
       tags:
@@ -274,13 +274,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/model/benchmark/publish:
     post:
       tags:
@@ -298,13 +298,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/model/benchmark/detailed-result:
     post:
       tags:
@@ -322,13 +322,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
 components:
   schemas:
     DatasetSubmitRequest:
@@ -418,25 +418,30 @@ components:
         acknowlegmentId:
           type: string
           description: provided acknowledgment identifier at the time of dataset submission
+    
     DatasetStatusResponse:
       type: object
       required:
         - acknowledgmentId
-        - contributor
-        - timelines
       properties:
         acknowlegmentId:
           type: string
           description: user provided identifier
-        contributor:
+        dataset:
           type: object
-          description: submitter of the dataset
-          $ref: '#/components/schemas/Contributor'
-        timelines:
-          type: array
-          items:
-            $ref: '#/components/schemas/Timeline'
-    DatasetTransformRequest:
+          description: uploaded dataset and its system representation
+          $ref: '#/components/schemas/Dataset'
+        status:
+          type: string
+          description: status of each stage
+          enum:
+            - in-progress
+            - status-with-errors
+            - success
+            - failed
+          
+  
+    DatasetIngestRequest:
       type: object
       required:
         - acknowlegmentId
@@ -656,7 +661,8 @@ components:
             - $ref: '#/components/schemas/DocumentLayoutBenchmarkResult'
             - $ref: '#/components/schemas/DocumentOCRBenchmark'
             - $ref: '#/components/schemas/ASRBenchmarkResult'
-    HttpResponse:
+    
+    HttpSuccessResponse:
       type: object
       properties:
         ok:
@@ -669,7 +675,6 @@ components:
           type: object
           description: status code as returned
           oneOf:
-            - $ref: '#/components/schemas/StatusCode'
             - $ref: '#/components/schemas/StatusCode'
         data:
           type: object
@@ -685,6 +690,21 @@ components:
             - $ref: '#/components/schemas/DatasetSubmitResponse'
             - $ref: '#/components/schemas/DatasetStatusResponse'
             - $ref: '#/components/schemas/DatasetSearchResponse'
+            
+    HttpErrorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          description: request successful indicator.
+        why:
+          type: string
+          description: Response message.
+        status:
+          type: object
+          description: status code as returned
+          oneOf:
+            - $ref: '#/components/schemas/StatusCode'
   
     LanguagePair:
       type: object
@@ -1060,6 +1080,10 @@ components:
         - submitter
         - contributors
       properties:
+        version:
+          type: string
+          default: 1.0
+          description: params schema version
         languages:
           $ref: '#/components/schemas/LanguagePair'
         collectionSource:
@@ -1250,9 +1274,6 @@ components:
           type: string
           description: unique identification of the dataset. This will be auto-generated value once the submitted dataset is validated by the system
           format: uuid4
-        stage:
-          $ref: '#/components/schemas/DatasetStage'
-          description: uploaded dataset goes through following review stages before the dataset contribution gets listed.
         count:
           minimum: 100
           type: number
@@ -1289,9 +1310,8 @@ components:
       properties:
         stage:
           oneOf:
-            - $ref: '#/components/schemas/DatasetStage'
             - $ref: '#/components/schemas/ProcessStage'
-          description: life-cycle of dataset
+          description: life-cycle of model and its benchmark
         message:
           type: string
           description: human readable message attached for each stage change
@@ -1303,8 +1323,9 @@ components:
           type: string
           description: status of each stage
           enum:
+            - in-progress
+            - status-with-errors
             - success
-            - pending
             - failed
     
     SearchParams:
@@ -1409,15 +1430,7 @@ components:
         - monolingual-corpus
         - asr-corpus
         - document-ocr-corpus
-        
-    DatasetStage:
-      type: string
-      description: various life-cycle stage of the submitted dataset before it gets contributed
-      enum:
-        - submitted
-        - validated
-        - published
-
+    
     StatusCode:
       required:
       - code
@@ -1428,7 +1441,6 @@ components:
           type: string
           description: status code as encountered in the processing life-cycle
           enum:
-            - schema-validation-failed
             - insufficent-dataset-rows-provided
             - searched-query-not-supported
             - missing-mandatory-parameters
@@ -1528,6 +1540,8 @@ components:
           type: object
           oneOf:
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/translation-schemas.yml#/components/schemas/TranslateRequest'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/audio-schema.yml#/components/schemas/SpeechRecognitionRequest'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/document-ocr-schema.yml#/components/schemas/DocumentOCRRequest'
             
     FileUploadAPIEndPoint:
       type: object
@@ -1600,7 +1614,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkScore'
             minItems: 1
     
     DocumentLayoutBenchmark:
@@ -1613,7 +1627,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkScore'
             minItems: 1
             
     DocumentOCRBenchmark:
@@ -1629,7 +1643,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkScore'
             minItems: 1
     
     ASRBenchmark:
@@ -1645,12 +1659,12 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkScore'
             minItems: 1
     
-    BenchmarkScore:
+    TranslationBenchmarkScore:
       type: object
-      description: a model efficacy score under a standard and established metric
+      description: translation benchmark score
       required: 
         - metricName
         - score
@@ -1661,12 +1675,60 @@ components:
           enum: 
             - bleu
             - sacrebleu
+            - meteor
+            - lepor
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+          
+    ASRBenchmarkScore:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
+            - wer
+            - cer
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+    
+    DocumentLayoutBenchmarkScore:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
             - precision
             - recall
             - h1-mean
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+          
+    DocumentOCRBenchmarkScore:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
             - wer
             - cer
-  
         score:
           type: number
           description: is the score as per defined metric for this benchmark.
@@ -1681,7 +1743,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkScore'
             minItems: 1
   
     TranslationBenchmarkResult:
@@ -1699,7 +1761,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkScore'
             minItems: 1
   
     DocumentLayoutIndividualPageBenchmarkResult:
@@ -1712,7 +1774,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkScore'
             minItems: 1
     
     DocumentLayoutBenchmarkResult:
@@ -1730,7 +1792,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkScore'
             minItems: 1
     
     DocumentOCRIndividualPageBenchmarkResult:
@@ -1740,7 +1802,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkScore'
             minItems: 1
     
     DocumentOCRBenchmarkResult:
@@ -1758,7 +1820,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkScore'
             minItems: 1
     
     ASRIndividualBenchmarkResult:
@@ -1771,7 +1833,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkScore'
             minItems: 1
       
     ASRBenchmarkResult:
@@ -1789,7 +1851,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkScore'
             minItems: 1
   
     ModelTask:
