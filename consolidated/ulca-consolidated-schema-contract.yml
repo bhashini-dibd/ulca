@@ -622,7 +622,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/TranslationBenchmarkResult'
             - $ref: '#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: '#/components/schemas/DocumentOCRBenchmark'
+            - $ref: '#/components/schemas/DocumentOCRBenchmarkResult'
             - $ref: '#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkPublishRequest:
       type: object
@@ -634,7 +634,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/TranslationBenchmarkResult'
             - $ref: '#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: '#/components/schemas/DocumentOCRBenchmark'
+            - $ref: '#/components/schemas/DocumentOCRBenchmarkResult'
             - $ref: '#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkPublishResponse:
       type: object
@@ -646,7 +646,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/TranslationBenchmarkResult'
             - $ref: '#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: '#/components/schemas/DocumentOCRBenchmark'
+            - $ref: '#/components/schemas/DocumentOCRBenchmarkResult'
             - $ref: '#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkDetailResultRequest:
       type: object
@@ -664,7 +664,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/TranslationBenchmarkResult'
             - $ref: '#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: '#/components/schemas/DocumentOCRBenchmark'
+            - $ref: '#/components/schemas/DocumentOCRBenchmarkResult'
             - $ref: '#/components/schemas/ASRBenchmarkResult'
     
     HttpSuccessResponse:
