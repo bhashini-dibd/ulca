@@ -315,6 +315,14 @@ components:
             - female
             - others
 
+    ProcessStage:
+      type: string
+      description: various life-cycle stage of model when benchmarking
+      enum:
+        - submitted
+        - benchmarked
+        - published
+
     Timeline:
       type: object
       required:
@@ -345,28 +353,21 @@ components:
             - failed
 
     SearchParams:
-          type: object
-          properties:
-            key:
-              type: string
-              enum:
-                - languages
-                - domain
-                - collectionMethod
-                - collectionSource
-            params:
-              type: object
-              oneOf:
-                - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain'
-                - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
-                - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Source'
-                - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/CollectionMethod'
-
-    ProcessStage:
+      type: object
+      properties:
+        key:
           type: string
-          description: various life-cycle stage of model when benchmarking
           enum:
-            - submitted
-            - benchmarked
-            - published
+            - languages
+            - domain
+            - collectionMethod
+            - collectionSource
+        params:
+          type: object
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Source'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/CollectionMethod'
+  
         
