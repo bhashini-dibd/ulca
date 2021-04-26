@@ -521,7 +521,7 @@ components:
         timelines:
           type: array
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/Timeline'
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Timeline'
     ModelSearchRequest:
       required:
         - criterions
