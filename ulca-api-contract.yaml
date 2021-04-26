@@ -26,13 +26,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
       security:
         - authToken: []
   /v0.2/dataset/corpus/label:
@@ -52,13 +52,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
       security:
         - authToken: []
   /v0.2/dataset/corpus/status-check:
@@ -78,13 +78,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/dataset/statistics/search:
     post:
       tags:
@@ -102,13 +102,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
   /v0.2/dataset/ingest:
     post:
       tags:
@@ -118,7 +118,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DatasetTransformRequest'
+              $ref: '#/components/schemas/DatasetIngestRequest'
         required: true
       responses:
         '200':
@@ -126,13 +126,13 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/StatusCode'
+                $ref: '#/components/schemas/HttpErrorResponse'
       security:
         - authToken: []
   /v0.2/model/submit:
@@ -152,7 +152,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
@@ -178,7 +178,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
@@ -202,7 +202,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
@@ -226,7 +226,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
@@ -250,7 +250,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
@@ -274,7 +274,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
@@ -298,7 +298,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
@@ -322,7 +322,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/HttpResponse'
+                $ref: '#/components/schemas/HttpSuccessResponse'
         '400':
           description: On input errors causing a failure in the job.
           content:
@@ -418,25 +418,35 @@ components:
         acknowlegmentId:
           type: string
           description: provided acknowledgment identifier at the time of dataset submission
+    
     DatasetStatusResponse:
       type: object
       required:
         - acknowledgmentId
-        - contributor
-        - timelines
+        - status
+        - progress
       properties:
         acknowlegmentId:
           type: string
           description: user provided identifier
-        contributor:
+        dataset:
           type: object
-          description: submitter of the dataset
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Contributor'
-        timelines:
-          type: array
-          items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/Timeline'
-    DatasetTransformRequest:
+          description: uploaded dataset and its system representation
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/Dataset'
+        status:
+          type: string
+          description: status of each stage
+          enum:
+            - in-progress
+            - status-with-errors
+            - success
+            - failed
+        progress:
+          type: object
+          description: detailed for the dataset as it can be longer running operation
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/DatasetProgressInformation'
+    
+    DatasetIngestRequest:
       type: object
       required:
         - acknowlegmentId
@@ -467,6 +477,7 @@ components:
               - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/ASRRowSchema'
               - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/DocumentOCRRowSchema'
             minItems: 100
+  
     ModelSubmitRequest:
       type: object
       description: starting the workflow for model life-cycle
@@ -612,7 +623,7 @@ components:
           oneOf:
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmark'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkPublishRequest:
       type: object
@@ -624,7 +635,7 @@ components:
           oneOf:
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmark'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkPublishResponse:
       type: object
@@ -636,7 +647,7 @@ components:
           oneOf:
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmark'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkDetailResultRequest:
       type: object
@@ -654,9 +665,10 @@ components:
           oneOf:
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmark'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
-    HttpResponse:
+    
+    HttpSuccessResponse:
       type: object
       properties:
         ok:
@@ -669,8 +681,7 @@ components:
           type: object
           description: status code as returned
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/model-benchmark-schema.yml#/components/schemas/StatusCode'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/StatusCode'
+            - $ref: '#/components/schemas/StatusCode'
         data:
           type: object
           description: response object based upon the submitted request
@@ -685,6 +696,44 @@ components:
             - $ref: '#/components/schemas/DatasetSubmitResponse'
             - $ref: '#/components/schemas/DatasetStatusResponse'
             - $ref: '#/components/schemas/DatasetSearchResponse'
+    
+    HttpErrorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          description: request successful indicator.
+        why:
+          type: string
+          description: Response message.
+        status:
+          type: object
+          description: status code as returned
+          oneOf:
+            - $ref: '#/components/schemas/StatusCode'
+    
+    StatusCode:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: status code as encountered in the processing life-cycle
+          enum:
+            - insufficent-dataset-rows-provided
+            - searched-query-not-supported
+            - missing-mandatory-parameters
+            - authorization-failed
+            - schema-validation-failed
+            - object-validation-failed
+            - benchmark-failed
+            - invalid-callback-url
+        message:
+          type: string
+          description: human understandable format
+    
   securitySchemes:
     authToken:
       type: apiKey

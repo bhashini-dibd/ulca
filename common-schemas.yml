@@ -314,3 +314,59 @@ components:
             - male
             - female
             - others
+
+    Timeline:
+      type: object
+      required:
+        - stage
+        - message
+        - timestamp
+        - status
+      description: stage life-cycle of model before it gets published
+      properties:
+        stage:
+          oneOf:
+            - $ref: '#/components/schemas/ProcessStage'
+          description: life-cycle of model and its benchmark
+        message:
+          type: string
+          description: human readable message attached for each stage change
+        timestamp:
+          type: string
+          format: datetime
+          description: timestamp of stage changes
+        status:
+          type: string
+          description: status of each stage
+          enum:
+            - in-progress
+            - status-with-errors
+            - success
+            - failed
+
+    SearchParams:
+          type: object
+          properties:
+            key:
+              type: string
+              enum:
+                - languages
+                - domain
+                - collectionMethod
+                - collectionSource
+            params:
+              type: object
+              oneOf:
+                - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain'
+                - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
+                - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Source'
+                - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/CollectionMethod'
+
+    ProcessStage:
+          type: string
+          description: various life-cycle stage of model when benchmarking
+          enum:
+            - submitted
+            - benchmarked
+            - published
+        

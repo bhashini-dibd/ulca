@@ -51,6 +51,7 @@ components:
           description: brief description about model, its goal, basically something sweet about it
           minLength: 50
           maxLength: 200
+          example: Speech recognition model for classroom lecture
         task:
           type: object
           description: what kind of task model achieves
@@ -108,6 +109,8 @@ components:
           type: object
           oneOf:
             - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/translation-schemas.yml#/components/schemas/TranslateRequest'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/audio-schema.yml#/components/schemas/SpeechRecognitionRequest'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/document-ocr-schema.yml#/components/schemas/DocumentOCRRequest'
             
     FileUploadAPIEndPoint:
       type: object
@@ -154,6 +157,7 @@ components:
           description: description of the benchmark including how it has been curated
           minLength: 50
           maxLength: 200
+          example: benchmark sentences for government press release domain
         domain:
           type: object
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain'
@@ -179,7 +183,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
             minItems: 1
     
     DocumentLayoutBenchmark:
@@ -192,7 +196,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
             minItems: 1
             
     DocumentOCRBenchmark:
@@ -208,7 +212,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
             minItems: 1
     
     ASRBenchmark:
@@ -224,12 +228,12 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
             minItems: 1
     
-    BenchmarkScore:
+    TranslationBenchmarkMetric:
       type: object
-      description: a model efficacy score under a standard and established metric
+      description: translation benchmark score
       required: 
         - metricName
         - score
@@ -240,12 +244,60 @@ components:
           enum: 
             - bleu
             - sacrebleu
+            - meteor
+            - lepor
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+          
+    ASRBenchmarkMetric:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
+            - wer
+            - cer
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+    
+    DocumentLayoutBenchmarkMetric:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
             - precision
             - recall
             - h1-mean
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+          
+    DocumentOCRBenchmarkMetric:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
             - wer
             - cer
-  
         score:
           type: number
           description: is the score as per defined metric for this benchmark.
@@ -260,7 +312,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
             minItems: 1
   
     TranslationBenchmarkResult:
@@ -278,7 +330,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
             minItems: 1
   
     DocumentLayoutIndividualPageBenchmarkResult:
@@ -291,7 +343,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
             minItems: 1
     
     DocumentLayoutBenchmarkResult:
@@ -309,7 +361,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
             minItems: 1
     
     DocumentOCRIndividualPageBenchmarkResult:
@@ -319,7 +371,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
             minItems: 1
     
     DocumentOCRBenchmarkResult:
@@ -337,7 +389,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
             minItems: 1
     
     ASRIndividualBenchmarkResult:
@@ -350,7 +402,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
             minItems: 1
       
     ASRBenchmarkResult:
@@ -368,7 +420,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
             minItems: 1
   
     ModelTask:
@@ -384,14 +436,6 @@ components:
             - document-layout
             - ocr
 
-    ProcessStage:
-      type: string
-      description: various life-cycle stage of model when benchmarking
-      enum:
-        - submitted
-        - benchmarked
-        - published
-        
     TrainingDataset:
       type: object
       description: training dataset metadata used to train the model
@@ -404,65 +448,4 @@ components:
         description:
           type: string
           description: explain your dataset that you have used for training your model
-    
-    Timeline:
-      type: object
-      required:
-        - stage
-        - message
-        - timestamp
-        - status
-      description: stage life-cycle of dataset before it gets published or rejected
-      properties:
-        stage:
-          $ref: '#/components/schemas/ProcessStage'
-          description: life-cycle of model before it gets published
-        message:
-          type: string
-          description: human readable message attached for each stage change
-        timestamp:
-          type: string
-          format: datetime
-          description: timestamp of stage changes
-        status:
-          type: string
-          description: status of each stage
-          enum:
-            - success
-            - pending
-            - failed
-
-    SearchParams:
-      type: object
-      properties:
-        key:
-          type: string
-          enum:
-            - languages
-            - domain
-        params:
-          type: object
-          oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
-    
-    StatusCode:
-      required:
-      - code
-      - message
-      type: object
-      properties:
-        code:
-          type: string
-          description: status code as encountered in the processing life-cycle
-          enum:
-            - schema-validation-failed
-            - object-validation-failed
-            - searched-query-not-supported
-            - missing-mandatory-parameters
-            - authorization-failed
-            - benchmark-failed
-            - invalid-callback-url
-        message:
-          type: string
-          description: human understandable format
+  

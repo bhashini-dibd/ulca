@@ -82,6 +82,10 @@ components:
         - submitter
         - contributors
       properties:
+        version:
+          type: string
+          default: 1.0
+          description: params schema version
         languages:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
         collectionSource:
@@ -266,14 +270,12 @@ components:
         - description
         - datasetFileId
       type: object
+      description: describes the dataset schema
       properties:
         datasetId:
           type: string
           description: unique identification of the dataset. This will be auto-generated value once the submitted dataset is validated by the system
           format: uuid4
-        stage:
-          $ref: '#/components/schemas/DatasetStage'
-          description: uploaded dataset goes through following review stages before the dataset contribution gets listed.
         count:
           minimum: 100
           type: number
@@ -283,6 +285,7 @@ components:
           minLength: 50
           type: string
           description: describes the purpose and usage of the dataset so that other user can get benefit out of it.
+          example: contribution from team Anuvaad for government press release domain
         datasetFileId:
           $ref: '#/components/schemas/DatasetFileIdentifier'
         submittedOn:
@@ -298,51 +301,6 @@ components:
           description: timestamp when dataset got listed
           format: datetime
     
-    Timeline:
-      type: object
-      required:
-        - stage
-        - message
-        - timestamp
-        - status
-      description: stage life-cycle of dataset before it gets published or rejected
-      properties:
-        stage:
-          $ref: '#/components/schemas/DatasetStage'
-          description: life-cycle of dataset
-        message:
-          type: string
-          description: human readable message attached for each stage change
-        timestamp:
-          type: string
-          format: datetime
-          description: timestamp of stage changes
-        status:
-          type: string
-          description: status of each stage
-          enum:
-            - success
-            - pending
-            - failed
-    
-    SearchParams:
-      type: object
-      properties:
-        key:
-          type: string
-          enum:
-            - languages
-            - domain
-            - collectionMethod
-            - collectionSource
-        params:
-          type: object
-          oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Source'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/CollectionMethod'
-
     DatasetFileIdentifier:
       type: object
       required:
@@ -427,31 +385,23 @@ components:
         - monolingual-corpus
         - asr-corpus
         - document-ocr-corpus
-        
-    DatasetStage:
-      type: string
-      description: various life-cycle stage of the submitted dataset before it gets contributed
-      enum:
-        - submitted
-        - validated
-        - published
 
-    StatusCode:
-      required:
-      - code
-      - message
+    DatasetProgressInformation:
       type: object
+      description: informs the progress for every submitted records in the dataset.
       properties:
-        code:
+        totalRecordCount:
+          type: integer
+          description: total number of records count submitted
+        validaatedRecordCount:
+          type: integer
+          description: how many records have validated
+        failedRecordCount:
+          type: integer
+          description: how many records failed the valdiation
+        validationReportId:
           type: string
-          description: status code as encountered in the processing life-cycle
-          enum:
-            - schema-validation-failed
-            - insufficent-dataset-rows-provided
-            - object-validation-failed
-            - searched-query-not-supported
-            - missing-mandatory-parameters
-            - authorization-failed
-        message:
-          type: string
-          description: human understandable format
+          description: download why the records failed the validation
+          format: uuid4
+
+    
