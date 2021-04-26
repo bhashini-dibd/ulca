@@ -91,7 +91,7 @@ components:
             - $ref: '#/components/schemas/ASRBenchmarkResult'
         stage:
           description: after submission model goes through a process before it gets listed.
-          $ref: '#/components/schemas/ProcessStage'
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/ProcessStage'
         trainingDataset:
           $ref: '#/components/schemas/TrainingDataset'
   
