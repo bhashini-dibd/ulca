@@ -1619,7 +1619,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/TranslationBenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
             minItems: 1
     
     DocumentLayoutBenchmark:
@@ -1632,7 +1632,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/DocumentLayoutBenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
             minItems: 1
             
     DocumentOCRBenchmark:
@@ -1648,7 +1648,7 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/DocumentOCRBenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
             minItems: 1
     
     ASRBenchmark:
@@ -1664,10 +1664,10 @@ components:
         score:
           type: array
           items:
-            $ref: '#/components/schemas/ASRBenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
             minItems: 1
     
-    TranslationBenchmarkScore:
+    TranslationBenchmarkMetric:
       type: object
       description: translation benchmark score
       required: 
@@ -1686,7 +1686,7 @@ components:
           type: number
           description: is the score as per defined metric for this benchmark.
           
-    ASRBenchmarkScore:
+    ASRBenchmarkMetric:
       type: object
       description: ASR/TTS benchmark score
       required: 
@@ -1703,7 +1703,7 @@ components:
           type: number
           description: is the score as per defined metric for this benchmark.
     
-    DocumentLayoutBenchmarkScore:
+    DocumentLayoutBenchmarkMetric:
       type: object
       description: ASR/TTS benchmark score
       required: 
@@ -1721,7 +1721,7 @@ components:
           type: number
           description: is the score as per defined metric for this benchmark.
           
-    DocumentOCRBenchmarkScore:
+    DocumentOCRBenchmarkMetric:
       type: object
       description: ASR/TTS benchmark score
       required: 
@@ -1748,7 +1748,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/TranslationBenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
             minItems: 1
   
     TranslationBenchmarkResult:
@@ -1766,7 +1766,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/TranslationBenchmarkScore'
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
             minItems: 1
   
     DocumentLayoutIndividualPageBenchmarkResult:
@@ -1779,7 +1779,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/DocumentLayoutBenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
             minItems: 1
     
     DocumentLayoutBenchmarkResult:
@@ -1797,7 +1797,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/DocumentLayoutBenchmarkScore'
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
             minItems: 1
     
     DocumentOCRIndividualPageBenchmarkResult:
@@ -1807,7 +1807,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/DocumentOCRBenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
             minItems: 1
     
     DocumentOCRBenchmarkResult:
@@ -1825,7 +1825,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/DocumentOCRBenchmarkScore'
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
             minItems: 1
     
     ASRIndividualBenchmarkResult:
@@ -1838,7 +1838,7 @@ components:
           type: array
           description: score calculated for each metric mentioned in selected benchmark
           items:
-            $ref: '#/components/schemas/ASRBenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
             minItems: 1
       
     ASRBenchmarkResult:
@@ -1856,7 +1856,7 @@ components:
         summaries:
           type: array
           items:
-            $ref: '#/components/schemas/ASRBenchmarkScore'
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
             minItems: 1
   
     ModelTask:
