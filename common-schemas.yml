@@ -333,8 +333,8 @@ components:
       description: stage life-cycle of model before it gets published
       properties:
         stage:
-          oneOf:
-            - $ref: '#/components/schemas/ProcessStage'
+          type: object
+          - $ref: '#/components/schemas/ProcessStage'
           description: life-cycle of model and its benchmark
         message:
           type: string
