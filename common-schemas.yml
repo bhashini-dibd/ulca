@@ -333,9 +333,7 @@ components:
       description: stage life-cycle of model before it gets published
       properties:
         stage:
-          type: object
-          - $ref: '#/components/schemas/ProcessStage'
-          description: life-cycle of model and its benchmark
+          $ref: '#/components/schemas/ProcessStage'
         message:
           type: string
           description: human readable message attached for each stage change
