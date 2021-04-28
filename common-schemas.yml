@@ -187,12 +187,13 @@ components:
           items:
             type: string
             enum:
-            - web-scrapping
+            - web-scrapping-machine-readable
+            - web-scrapping-ocr
             - manual-human-translated
             - algorithm-auto-aligned
             - algorithm-back-translated
-            - phone-recorded-audio
-            - crowd-sourced-audio
+            - phone-recording
+            - crowd-sourced
 
     DataPoint:
       required:
