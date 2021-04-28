@@ -116,6 +116,10 @@ components:
               - legal
               - government-press-release
               - healthcare
+              - agriculture
+              - automobile
+              - tourism
+              - financial
               - movies
               - subtitles
               - sports
