@@ -332,9 +332,8 @@ components:
       type: object
       properties:
         value:
-          type: string
-          enum:
-          - text-validated
+          type: boolean
+          default: false
     
     TextAlignmentMethod:
       type: object
