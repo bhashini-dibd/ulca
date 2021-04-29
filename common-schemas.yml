@@ -123,6 +123,7 @@ components:
               - movies
               - subtitles
               - sports
+              - technology
     
     License:
       type: object
