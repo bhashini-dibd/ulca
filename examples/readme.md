@@ -13,5 +13,5 @@ ULCA currently allow following type of dataset
   - ocr dataset
 
 ## Data and Params schema for parallel dataset
-  - params schema, ../dataset-schema.yml#ParallelDatasetParamsSchema
-  - data schema, ../dataset-schema.yml#ParallelDatasetRowSchema
+  - params schema, [../dataset-schema.yml#ParallelDatasetParamsSchema]
+  - data schema, [../dataset-schema.yml#ParallelDatasetRowSchema]
