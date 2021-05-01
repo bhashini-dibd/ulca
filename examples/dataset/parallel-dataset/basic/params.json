@@ -5,19 +5,18 @@
             "name": "English"
         },
         "targetLanguage": {
-            "value": "hi",
-            "name": "Hindi"
+            "value": "bn",
+            "name": "Bengali"
         }
     },
     "collectionSource": [
-        "PIB"
+        "NCERT maths book"
     ],
     "domain": [
-        "education",
-        "general"
+        "education"
     ],
     "collectionMethod": [
-        "web-scrapping"
+        "web-scrapping-ocr"
     ],
     "license": [
         "cc-by-4.0"
