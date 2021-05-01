@@ -1,0 +1,42 @@
+{
+    "languages": {
+        "sourceLanguage": {
+            "value": "en",
+            "name": "English"
+        },
+        "targetLanguage": {
+            "value": "hi",
+            "name": "Hindi"
+        }
+    },
+    "collectionSource": [
+        "PIB"
+    ],
+    "domain": [
+        "education",
+        "general"
+    ],
+    "collectionMethod": [
+        "web-scrapping"
+    ],
+    "license": [
+        "cc-by-4.0"
+    ],
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "contribution toward parallel corpus in general domain"
+    },
+    "contributors": [
+        {
+            "name": "Researcher 1",
+            "aboutMe": "contribution toward parallel corpus in general domain"
+        },
+        {
+            "name": "Researcher 2",
+            "aboutMe": "contribution toward parallel corpus in general domain"
+        }
+    ],
+    "alignmentMethod": {
+        "value": "LABSE"
+    }
+}

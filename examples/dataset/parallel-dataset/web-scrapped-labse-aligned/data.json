@@ -1,0 +1,27 @@
+[
+    {
+        "sourceText": "Secretary-General laid on the Table a copy of the President’s Address (Hindi and English versions) to both the Houses of Parliament assembled together on the 31 st January, 2020.",
+        "targetText": "महासचिव ने संसद के दोनों सदनों को राष्ट्रपति के अभिभाषण की एक प्रति (हिंदी और अंग्रेजी संस्करण) 31 जनवरी, 2020 को एक साथ इकट्ठी की।",
+        "alignmentScore": 0.8522
+    },
+    {
+        "sourceText": "4. Papers laid on the Table",
+        "targetText": "4. टेबल पर रखे गए कागज",
+        "alignmentScore": 0.9565
+    },
+    {
+        "sourceText": "(1) A copy (Hindi and English versions) of the Economic Survey 2019-20 (Volume I and Volume II).",
+        "targetText": "(1) आर्थिक सर्वेक्षण 2019-20 (वॉल्यूम I और वॉल्यूम II) की एक प्रति (हिंदी और अंग्रेजी संस्करण)।",
+        "alignmentScore": 0.82454
+    },
+    {
+        "sourceText": "3. President’s Address – Laid on the Table",
+        "targetText": "3. राष्ट्रपति का अभिभाषण - टेबल पर रखी गई",
+        "alignmentScore": 0.8984
+    },
+    {
+        "sourceText": "The Minister of State in the Ministry of Parliamentary Affairs and Minster of State in the Ministry of Heavy Industries and Public Enterprises (Shri Arjun Ram Meghwal) laid on the Table a copy each of the following Ordinances (Hindi and English versions) under article 123 (2) (a) of the Constitution:-",
+        "targetText": "भारी उद्योग और सार्वजनिक उद्यम मंत्रालय (श्री अर्जुन राम मेघवाल) में संसदीय मामलों और राज्य मंत्री के मंत्रालय में राज्य मंत्री, नीचे दिए गए अध्यादेश (हिंदी और अंग्रेजी संस्करणों) में से प्रत्येक पर एक प्रतिलिपि अनुच्छेद 123 (के तहत) 2) (क) संविधान का: -",
+        "alignmentScore": 0.8752
+    }
+]
