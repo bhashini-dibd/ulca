@@ -38,6 +38,29 @@ Dataset should be have following mandatory attributes, we will over each of them
   - collectionSource
 
 ## languages
-It is important to convey what language the dataset is directed toward. The structure of `languages` object should be followed. Same parameter can be used to define single language or or a language pair. In order to indicate single language source, mostly in ASR/TTS, OCR or monolingual text dataset
+It is important to convey what language the dataset is directed toward. The structure of `languages` object should be followed. Same parameter can be used to define single language or or a language pair. In order to indicate single language source, mostly in ASR/TTS, OCR or monolingual text dataset. Let's look at following example where the `languages` defines a dataset that has language pair structure where `sourceLanguage` is `English` and `targetLanguage` is `Bengali`.
+
+```
+  {
+          "sourceLanguage": {
+              "value": "en",
+              "name": "English"
+          },
+          "targetLanguage": {
+              "value": "bn",
+              "name": "Bengali"
+          }
+   }
+```
 
 ### Single language definition
+The above mentioned example can used to express a monolingual or ASR/TTS or OCR dataset as these dataset requires one language.
+
+```
+  {
+          "sourceLanguage": {
+              "value": "en",
+              "name": "English"
+          }
+  }
+```
