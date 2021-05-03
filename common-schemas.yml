@@ -197,6 +197,7 @@ components:
             - manual-human-translated
             - algorithm-auto-aligned
             - algorithm-back-translated
+            - human-evaluated
             - phone-recording
             - crowd-sourced
 
