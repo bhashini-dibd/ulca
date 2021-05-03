@@ -13,20 +13,20 @@ ULCA currently allow following type of dataset
  - ocr dataset
  
 ## data and params schema for parallel dataset
- - [params schema](../../dataset-schema.yml#ParallelDatasetParamsSchema)
- - [data schema](../../dataset-schema.yml#ParallelDatasetRowSchema)
+ - [ParallelDatasetParamsSchema schema](../../dataset-schema.yml#ParallelDatasetParamsSchema)
+ - [ParallelDatasetRowSchema schema](../../dataset-schema.yml#ParallelDatasetRowSchema)
  
 ## data and params schema for monolingual dataset
- - [params schema](../../dataset-schema.yml#MonolingualParamsSchema)
- - [data schema](../../dataset-schema.yml#MonolingualRowSchema)
+ - [MonolingualParamsSchema schema](../../dataset-schema.yml#MonolingualParamsSchema)
+ - [MonolingualRowSchema schema](../../dataset-schema.yml#MonolingualRowSchema)
  
 ## data and params schema for asr / tts dataset
- - [params schema](../../dataset-schema.yml#ASRParamsSchema)
- - [data schema](../../dataset-schema.yml#ASRRowSchema)
+ - [ASRParamsSchema schema](../../dataset-schema.yml#ASRParamsSchema)
+ - [ASRRowSchema schema](../../dataset-schema.yml#ASRRowSchema)
  
 ## data and params schema for ocr dataset
- - [params schema](../../dataset-schema.yml#DocumentOCRParamsSchema)
- - [data schema](../../dataset-schema.yml#DocumentOCRRowSchema)
+ - [DocumentOCRParamsSchema schema](../../dataset-schema.yml#DocumentOCRParamsSchema)
+ - [DocumentOCRRowSchema schema](../../dataset-schema.yml#DocumentOCRRowSchema)
  
 ## Representing a dataset
 ULCA relies upon the submitter to explain their dataset so that it can be beneficial to the large community, following some of the suggestions will surely benefit the community at large.
