@@ -1,22 +1,14 @@
 [
     {
-        "sourceText": "In a group of 120 people, 90 have an age of more 30 years, and the others have an age of less than 20 years.",
-        "targetText": "১২০ জনের একটি গ্রুপে, ৯০ জনের বয়স ৩০ বছরের বেশি এবং অন্যদের বয়স ২০ বছরের কম।"
+        "sourceText": "1. This appeal is placed before us by way of a reference, made by a two-Judge Bench of this Court, C.K. Thakker and Altamas Kabir, JJ. which heard the matter on an earlier occasion and held that the appeal deserves to be allowed and that the Judgment and Order passed by the High Court is liable to be set aside.",
+        "targetText": "1. এই আপিল আমাদের সামনে এই আদালতের দ্বি-বিচারক এজলাস, সি কে ঠাক্কর এবং আলতামাস কবির, জেজে দ্বারা করা একটি রেফারেন্সের মাধ্যমে স্থাপন করা হয়েছে। যা উপলক্ষে এই বিষয়টি শুনেছিল এবং বলেছিল যে আপিলের অনুমতি পাওয়ার যোগ্য এবং হাইকোর্ট কর্তৃক গৃহীত রায় ও আদেশ আলাদা রাখা দায়বদ্ধ।"
     },
     {
-        "sourceText": "What are the coordinates of its image point if it is translated 2 units up and 5 units to the left, and reflected in the x axis?",
-        "targetText": "যদি এটি ২ একক উপর এবং ৫একক বাম দিকে পরিবর্তন হয় এবং X-অক্ষ দ্বারা প্রতিফলিত হয় তবে প্রতিবিম্ব বিন্দুর স্থানাঙ্ক কত?"
+        "sourceText": "The Company took on lease, Plot No. 454 in 1992 for a period of 99 years from Goindwal Sahib Industrial & Investment Corporation, on a condition that it would not transfer the interest in the property for the first fifteen years without prior permission of the lessor.",
+        "targetText": "সংস্থাটি 1992 সালে গোইন্দওাল সাহেব শিল্প ও বিনিয়োগ কর্পোরেশন থেকে 99 বছরের জন্য প্লট নং 454 ইজারা নিয়েছিল, এই শর্তে যে এটি পূর্বের অনুমতি ব্যতীত প্রথম পনেরো বছরের জন্য সম্পত্তির আগ্রহ স্থানান্তর করবে না।"
     },
     {
-        "sourceText": "A water tank, having the shape of a rectangular prism of base 100 square centimeters, is being filled at the rate of 1 liter per minute.",
-        "targetText": "একটি আয়তক্ষেত্রাকার ভূমি বিশিষ্ট প্রিজম আকৃতি জলের ট্যাঙ্ক এর ভূমির ক্ষেত্রফল ১০০ বর্গ সেন্টিমিটর, জলের ট্যাঙ্ক প্রতি মিনিটে ১ লিটার হারে পূরণ করা হচ্ছে।"
-    },
-    {
-        "sourceText": "Dany bought a total of 20 game cards some of which cost $0.25 each and some of which cost $0.15 each.",
-        "targetText": "ড্যানি মোট ২০টি খেলারকার্ড কিনেছিল, যার মধ্যে কিছু কার্ডের প্রতিটির মূল্য ০.২৫ ডলার বাকিগুলির প্রতিটির মূল্য ০.১৫ ডলার।"
-    },
-    {
-        "sourceText": "In a certain college, 40% of the senior class students are taking Physics, 30% are taking calculus and 10% are taking both.",
-        "targetText": "একটি কলেজে সিনিয়র শ্রেণীতে, ৪০% ছাত্র পদার্থবিজ্ঞান নিয়েছে, ৩০% ছাত্র ক্যালকুলাস নিয়েছে এবং ১০% ছাত্র উভয়ই বিষয় নিয়েছে।"
+        "sourceText": "On 15.07.03, an ex-parte final order in favour of IDBI for recovery of above mentioned sum i.e. Rs. 25,26,60,836/- along with interest @ 7.8% p.a. was passed by DRT. DRT expressly directed that in the event of failure on the part of the Company to pay the decretal amount, IDBI will be entitled to sell the mortgaged property of the company and recover the amount.",
+        "targetText": "15.7.03-এ, উল্লিখিত পরিমাণ পুনরুদ্ধারের সঙ্গে আইডিবিআইয়ের পক্ষে প্রাক্তন পার্টের চূড়ান্ত আদেশ অর্থাৎ 25,26,60,836/- টাকা @7.8% বার্ষিক সুদের সাথে ডিআরটি দ্বারা পাস করা হয়েছিল। ডিআরটি স্পষ্টভাবে নির্দেশ দিয়েছিল যে কোম্পানির পক্ষ থেকে ডিক্রিটাল পরিমাণ পরিশোধে ব্যর্থতার ক্ষেত্রে আইডিবিআই কোম্পানির বন্ধকী সম্পত্তি বিক্রি এবং পরিমাণ পুনরুদ্ধারের অধিকারী হবে।"
     }
 ]

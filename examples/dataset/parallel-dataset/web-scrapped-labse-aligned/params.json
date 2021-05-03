@@ -10,14 +10,14 @@
         }
     },
     "collectionSource": [
-        "PIB"
+        "PIB",
+        "https://www.pib.gov.in/Allrel.aspx"
     ],
     "domain": [
-        "education",
-        "general"
+        "government-press-release"
     ],
     "collectionMethod": [
-        "web-scrapping"
+        "web-scrapping-machine-readable"
     ],
     "license": [
         "cc-by-4.0"
@@ -28,12 +28,12 @@
     },
     "contributors": [
         {
-            "name": "Researcher 1",
-            "aboutMe": "contribution toward parallel corpus in general domain"
+            "name": "Dhanvi Desai",
+            "aboutMe": "Part of Tarento Data team working for Anuvaad project."
         },
         {
-            "name": "Researcher 2",
-            "aboutMe": "contribution toward parallel corpus in general domain"
+            "name": "Navneet Kumar",
+            "aboutMe": "Part of Tarento Data team working for Anuvaad project."
         }
     ],
     "alignmentMethod": {

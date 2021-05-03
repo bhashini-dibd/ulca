@@ -10,29 +10,30 @@
         }
     },
     "collectionSource": [
-        "NCERT maths book"
+        "42040.pdf", "https://main.sci.gov.in"
     ],
     "domain": [
-        "education"
+        "legal"
     ],
     "collectionMethod": [
-        "web-scrapping-ocr"
+        "web-scrapping-machine-readable",
+        "algorithm-back-translated"
     ],
     "license": [
         "cc-by-4.0"
     ],
     "submitter": {
         "name": "Project Anuvaad",
-        "aboutMe": "contribution toward parallel corpus in general domain"
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project"
     },
     "contributors": [
         {
-            "name": "Researcher 1",
-            "aboutMe": "contribution toward parallel corpus in general domain"
+            "name": "Ajitesh Sharma",
+            "aboutMe": "NLP team lead at Project Anuvaad"
         },
         {
-            "name": "Researcher 2",
-            "aboutMe": "contribution toward parallel corpus in general domain"
+            "name": "Vishal Mauli",
+            "aboutMe": "Backend team lead at Project Anuvaad"
         }
     ]
 }
