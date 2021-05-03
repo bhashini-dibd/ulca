@@ -46,14 +46,14 @@ It is important to convey what language the dataset is directed toward. The stru
 ```
 
  {
-         "sourceLanguage": {
-             "value": "en",
-             "name": "English"
-         },
-         "targetLanguage": {
-             "value": "bn",
-             "name": "Bengali"
-         }
+    "sourceLanguage": {
+        "value": "en",
+        "name": "English"
+    },
+    "targetLanguage": {
+        "value": "bn",
+        "name": "Bengali"
+    }
   }
 
 ```
@@ -62,10 +62,10 @@ Monolingual or ASR/TTS or OCR dataset typically uses a single language and the f
 ```
 
  {
-         "sourceLanguage": {
-             "value": "en",
-             "name": "English"
-         }
+    "sourceLanguage": {
+        "value": "en",
+        "name": "English"
+    }
  }
 
 ```
