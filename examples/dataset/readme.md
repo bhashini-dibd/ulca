@@ -67,7 +67,7 @@ Monolingual or ASR/TTS or OCR dataset typically uses a single language and the f
 ```
  
 ## domain
-This attribute defines that `relevant business area or domain` under which dataset is curated. ULCA _ONLY_ accepts  one or more values that are [defined here](../common-schemas.yml/#Domain).
+This attribute defines that `relevant business area or domain` under which dataset is curated. ULCA _ONLY_ accepts  one or more values that are [defined here](../common-schemas.yml#/Domain).
  - general
  - news
  - education
