@@ -44,6 +44,7 @@ Following are optional attributes
 It is important to convey what language the dataset is directed toward. The structure of `languages` attributes should be followed. Same parameter can be used to define a single language or or a language pair. Let's look at the following example where the `languages` defines a parallel dataset that typically has a language pair where `sourceLanguage` is `English` and `targetLanguage` is `Bengali`. The defined language code are per ISO 639-1 & 639-2 and can be referred in [LanguagePair](../../common-schemas.yml#LanguagePair)
  
 ```
+
  {
          "sourceLanguage": {
              "value": "en",
@@ -54,16 +55,19 @@ It is important to convey what language the dataset is directed toward. The stru
              "name": "Bengali"
          }
   }
+
 ```
 Monolingual or ASR/TTS or OCR dataset typically uses a single language and the following example can be used to define the `languages` attribute.
  
 ```
+
  {
          "sourceLanguage": {
              "value": "en",
              "name": "English"
          }
  }
+
 ```
  
 ## domain
@@ -73,17 +77,21 @@ Few examples are following
  
 domain specifically for `legal` domain
 ```
-[
- "legal"
-]
+
+  [
+    "legal"
+  ]
+
 ```
 or
  
 dataset meant for `legal`, `news` domain
 ```
-[
- "legal", "news"
-]
+
+  [
+    "legal", "news"
+  ]
+
 ```
  
 ### collectionMethod
@@ -96,32 +104,40 @@ Let's take a few examples to understand the same.
  The textual data has been extracted from html tags so we use `web-scrapping-machine-readable` and finally sentence alignment has been done using LaBSE that is represented as `algorithm-auto-aligned`. This can be expressed as:
  
  ```
-   [
-     "web-scrapping-machine-readable", "algorithm-auto-aligned"
-   ]
+
+  [
+    "web-scrapping-machine-readable", "algorithm-auto-aligned"
+  ]
+ 
  ```
  
  - Let's take another example, team B has downloaded a judgment from [Supreme Court of India](https://main.sci.gov.in), assume that using OCR technique textual data has been extracted from the judgment document, tokenized to get sentences and used an alignment strategy like LaBSE to align the sentences.
  The textual data has been extracted from html tags so we use `web-scrapping-ocr` and finally sentence alignment has been done using LaBSE that is represented as `algorithm-auto-aligned`. This can be expressed as:
  
  ```
-   [
-     "web-scrapping-ocr", "algorithm-auto-aligned"
-   ]
+
+  [
+    "web-scrapping-ocr", "algorithm-auto-aligned"
+  ]
+ 
  ```
 ### license
 This attribute is bit straight forward, dataset submitter should choose on from available [Licenses](../../common-schemas.yml#License).
 
 ```
-[
-  "cc-by-4.0"
-]
+
+  [
+    "cc-by-4.0"
+  ]
+
 ```
 ### collectionSource
 This attribute is mostly free text and optional, however we recommend it to be descriptive so that community user should able to look at the sources from where the dataset has been curated. Mostly putting a URL along with some description should suffice. Have look at the example.
 
 ```
-[
-  "https://main.sci.gov.in", "42040.pdf", "SCI judgment pdfs", 
-]
+
+  [
+    "https://main.sci.gov.in", "42040.pdf", "SCI judgment pdfs", 
+  ]
+
 ```
