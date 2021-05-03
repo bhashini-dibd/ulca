@@ -109,3 +109,19 @@ Let's take a few examples to understand the same.
      "web-scrapping-ocr", "algorithm-auto-aligned"
    ]
  ```
+### license
+This attribute is bit straight forward, dataset submitter should choose on from available [Licenses](../../common-schemas.yml#License).
+
+```
+[
+  "cc-by-4.0"
+]
+```
+### collectionSource
+This attribute is mostly free text and optional, however we recommend it to be descriptive so that community user should able to look at the sources from where the dataset has been curated. Mostly putting a URL along with some description should suffice. Have look at the example.
+
+```
+[
+  "https://main.sci.gov.in", "42040.pdf", "SCI judgment pdfs", 
+]
+```
