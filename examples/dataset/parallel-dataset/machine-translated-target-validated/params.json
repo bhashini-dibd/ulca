@@ -18,7 +18,7 @@
     "collectionMethod": [
         "web-scrapping-machine-readable",
         "algorithm-back-translated",
-        "human-evaluated"
+        "human-validated"
     ],
     "license": [
         "cc-by-4.0"
