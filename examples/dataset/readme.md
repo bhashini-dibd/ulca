@@ -41,7 +41,7 @@ Following are optional attributes
  - collectionSource
  
 ## languages
-It is important to convey what language the dataset is directed toward. The structure of `languages` attributes should be followed. Same parameter can be used to define a single language or or a language pair. Let's look at the following example where the `languages` defines a parallel dataset that typically has a language pair where `sourceLanguage` is `English` and `targetLanguage` is `Bengali`.
+It is important to convey what language the dataset is directed toward. The structure of `languages` attributes should be followed. Same parameter can be used to define a single language or or a language pair. Let's look at the following example where the `languages` defines a parallel dataset that typically has a language pair where `sourceLanguage` is `English` and `targetLanguage` is `Bengali`. The defined language code are per ISO 639-1 & 639-2 and can be referred in [LanguagePair](../../common-schemas.yml#LanguagePair)
  
 ```
  {
@@ -67,21 +67,7 @@ Monolingual or ASR/TTS or OCR dataset typically uses a single language and the f
 ```
  
 ## domain
-This attribute defines that `relevant business area or domain` under which dataset is curated. ULCA _ONLY_ accepts  one or more values that are [defined here](../common-schemas.yml#/Domain).
- - general
- - news
- - education
- - legal
- - government-press-release
- - healthcare
- - agriculture
- - automobile
- - tourism
- - financial
- - movies
- - subtitles
- - sports
- - technology
+This attribute defines that `relevant business area or domain` under which dataset is curated. ULCA _ONLY_ accepts  one or more values that are defined under [Domain schema](../../common-schemas.yml#Domain).
  
 Few examples are following
  
@@ -101,15 +87,7 @@ dataset meant for `legal`, `news` domain
 ```
  
 ### collectionMethod
-The attribute defines `how the dataset has been curated or created ?`. ULCA _ONLY_ accepts  one or more values that are defined here.
- - web-scrapping-machine-readable
- - web-scrapping-ocr
- - manual-human-translated
- - algorithm-auto-aligned
- - algorithm-back-translated
- - human-validated
- - phone-recording
- - crowd-sourced
+The attribute defines `how the dataset has been curated or created ?`. ULCA _ONLY_ accepts  one or more values that are defined under [CollectionMethod schema](../../common-schemas.yml#CollectionMethod).
  
 Let's take a few examples to understand the same.
 ### [parallel dataset examples](./examples/dataset/parallel-dataset)
