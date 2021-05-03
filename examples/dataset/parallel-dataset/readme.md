@@ -3,5 +3,6 @@ Few examples to show how a submitter can contribute dataset to ULCA. The submitt
 
 * [Basic example](./basic)
 * [Web scrapped and LaBSE aligned example](./web-scrapped-labse-aligned)
-* [Mahine translated and target validated](./machine-translated-target-validated)
+* [Machine translated and target validated](./machine-translated-target-validated)
+* [Machine translated, target validated with post editing information](./machine-translated-target-validated-post-edit-information)
 * [Manually translated by humans](./manual-human-translated)
