@@ -28,14 +28,18 @@ ULCA currently allow following type of dataset
  - [DocumentOCRParamsSchema schema](../../dataset-schema.yml#DocumentOCRParamsSchema)
  - [DocumentOCRRowSchema schema](../../dataset-schema.yml#DocumentOCRRowSchema)
  
-## Representing a dataset
+## Representing a dataset `params`
 ULCA relies upon the submitter to explain their dataset so that it can be beneficial to the large community, following some of the suggestions will surely benefit the community at large.
- 
+
+`params` file should have contain the discussed attributes.
+
 Dataset should have the following mandatory attributes, we will cover each of them individually. Please note the mandatory attributes and values assigned to these attributes are _strictly_ enforced.
  - languages
  - domain
  - collectionMethod
  - license
+ - submitter
+ - contributors
  
 Following are optional attributes
  - collectionSource
@@ -122,7 +126,7 @@ Let's take a few examples to understand the same.
  
  ```
 ### license
-This attribute is bit straight forward, dataset submitter should choose on from available [Licenses](../../common-schemas.yml#License).
+This attribute is bit straight forward, dataset submitter should choose on from available [License](../../common-schemas.yml#License).
 
 ```
 
@@ -138,6 +142,40 @@ This attribute is mostly free text and optional, however we recommend it to be d
 
   [
     "https://main.sci.gov.in", "42040.pdf", "SCI judgment pdfs", 
+  ]
+
+```
+### submitter
+The attribute specifically holds the description of user who submitting the dataset. Typically it should describe the project or team's goal. Look at the following example
+
+```
+  {
+    "name": "Project Anuvaad",
+    "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project"
+  }
+```
+
+### contributors
+The attribute defines the team members who are part the project, we suggest acknowledging all team members how small the contribution could be.
+
+```
+  [
+    {
+        "name": "Ajitesh Sharma",
+        "aboutMe": "NLP team lead at Project Anuvaad"
+    },
+    {
+        "name": "Vishal Mauli",
+        "aboutMe": "Backend team lead at Project Anuvaad"
+    },
+    {
+        "name": "Aravinth Bheemraj",
+        "aboutMe": "Data engineering team lead at Project Anuvaad"
+    },
+    {
+        "name": "Rimpa Mondal",
+        "aboutMe": "Freelancer Bengali translator at Project Anuvaad"
+    }
   ]
 
 ```
