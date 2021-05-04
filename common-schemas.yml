@@ -125,6 +125,7 @@ components:
               - sports
               - technology
               - lifestyle
+              - entertainment
     
     License:
       type: object
