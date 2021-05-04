@@ -124,6 +124,7 @@ components:
               - subtitles
               - sports
               - technology
+              - lifestyle
     
     License:
       type: object
