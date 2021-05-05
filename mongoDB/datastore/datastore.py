@@ -6,20 +6,12 @@ import uuid
 import random
 from collections import OrderedDict
 from datetime import datetime
+from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
+from configs import mongo_ulca_dataset_col
 
 import pymongo
 
-file_name = "/data.json"
-file_path = "/Users/mahulivishal/Desktop/ulca/ulcaevaluation/datastore"
-result_path = "/Users/mahulivishal/Desktop/ulca/ulcaevaluation/datastore/dataset/result"
-mongo_server_host = "mongodb://localhost:27017/"
-mongo_ulca_db, mongo_ulca_dataset_col = "ulca", "dataset"
 mongo_instance = None
-bulk = True
-default_offset = 0
-default_limit = 10000
-dummy = False
-
 
 class Datastore:
     def __init__(self):
@@ -28,7 +20,7 @@ class Datastore:
     def load_dataset(self, request):
         print("\nLoading Dataset..... | {}".format(datetime.now()))
         try:
-            if 'path' not in request.keys() or dummy:
+            if 'path' not in request.keys():
                 path = f'{file_path}' + f'{file_name}'
             else:
                 path = request["path"]
@@ -158,11 +150,7 @@ class Datastore:
 
     def insert(self, data_list):
         col = self.get_mongo_instance()
-        if bulk:
-            col.insert_many(data_list)
-        else:
-            for data in data_list:
-                col.insert_one(data)
+        col.insert_many(data_list)
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
