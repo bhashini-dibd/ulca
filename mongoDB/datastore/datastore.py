@@ -1,5 +1,6 @@
 import hashlib
 import json
+import logging
 import threading
 import time
 import uuid
@@ -10,6 +11,8 @@ from configs import file_path, file_name, default_offset, default_limit, mongo_s
 from configs import mongo_ulca_dataset_col
 
 import pymongo
+log = logging.getLogger('file')
+
 
 mongo_instance = None
 
@@ -18,13 +21,13 @@ class Datastore:
         pass
 
     def load_dataset(self, request):
-        print("\nLoading Dataset..... | {}".format(datetime.now()))
+        log.info("\nLoading Dataset..... | {}".format(datetime.now()))
         try:
             if 'path' not in request.keys():
                 path = f'{file_path}' + f'{file_name}'
             else:
                 path = request["path"]
-            print("File -- {} | {}".format(path, datetime.now()))
+            log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
             enriched_data = []
@@ -32,7 +35,7 @@ class Datastore:
             thread_batch_size = 1000000
             while len(data_json) < thread_batch_size:
                 thread_batch_size = thread_batch_size / 10
-            print(f'Thread Batch Size: {thread_batch_size}, Data Size: {len(data_json)} | {datetime.now()}')
+            log.info(f'Thread Batch Size: {thread_batch_size}, Data Size: {len(data_json)} | {datetime.now()}')
             for data in data_json:
                 data["score"] = random.uniform(0, 1)
                 tag_details, details = {}, request["details"]
@@ -52,18 +55,18 @@ class Datastore:
                     j = 0
                     t = threading.Thread(target=self.insert, args=(enriched_data,))
                     t.start()
-                    print(f'Dumping {c}..... | {datetime.now()}')
+                    log.info(f'Dumping {c}..... | {datetime.now()}')
                     enriched_data = []
                 j += 1
             if enriched_data:
                 t = threading.Thread(target=self.insert, args=(enriched_data,))
                 t.start()
                 c += len(enriched_data)
-                print(f'FINAL DUMP -- Dumping {c} ..... | {datetime.now()}')
+                log.info(f'FINAL DUMP -- Dumping {c} ..... | {datetime.now()}')
             else:
-                print(f'FINAL DUMP -- Dumping {c} ..... | {datetime.now()}')
+                log.info(f'FINAL DUMP -- Dumping {c} ..... | {datetime.now()}')
         except Exception as e:
-            print(e)
+            log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
         return {"message": f'loaded {i} no. of records to DB', "status": "SUCCESS"}
 
@@ -78,45 +81,42 @@ class Datastore:
                 yield v
 
     def get_dataset(self, query):
-        print(f'\nFetching datasets..... | {datetime.now()}')
-        offset = query["offset"] if 'offset' in query.keys() else default_offset
-        limit = query["limit"] if 'limit' in query.keys() else default_limit
-        db_query = {}
-        score_query = {}
-        if 'minScore' in query.keys():
-            score_query["$gte"] = query["minScore"]
-        if 'maxScore' in query.keys():
-            score_query["$lte"] = query["maxScore"]
-        if score_query:
-            db_query["data.score"] = score_query
-        if 'score' in query.keys():
-            db_query["data.score"] = query["score"]
-        tags = []
-        if 'languageCode' in query.keys():
-            tags.append(query["languageCode"])
-        if 'collectionMode' in query.keys():
-            tags.append(query["collectionMode"])
-        if 'licence' in query.keys():
-            tags.append(query["licence"])
-        if 'domain' in query.keys():
-            tags.append(query["domain"])
-        if 'srcText' in query.keys():
-            tags.append(str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest()))
-        if tags:
-            db_query["tags"] = {"$all": tags}
-            #db_query["$where"] = f'this.tags.length > {len(tags)}'
-        exclude = {"_id": False, "data": True}
-        data = self.search(db_query, exclude, offset, limit)
-        count = len(data)
-        print(f'Result count: {count} | {datetime.now()}')
-        file = "NA"
-        '''if data:
-            print(f'Dumping dataset to file.... | {datetime.now()}')
-            file = f'{result_path}/{uuid.uuid4()}.json'
-            with open(file, 'w') as f:
-                json.dump(data, f)'''
-        print(f'Done! | {datetime.now()}')
-        return {"count": count, "query": db_query, "dataset": file}
+        log.info(f'\nFetching datasets..... | {datetime.now()}')
+        try:
+            offset = query["offset"] if 'offset' in query.keys() else default_offset
+            limit = query["limit"] if 'limit' in query.keys() else default_limit
+            db_query = {}
+            score_query = {}
+            if 'minScore' in query.keys():
+                score_query["$gte"] = query["minScore"]
+            if 'maxScore' in query.keys():
+                score_query["$lte"] = query["maxScore"]
+            if score_query:
+                db_query["data.score"] = score_query
+            if 'score' in query.keys():
+                db_query["data.score"] = query["score"]
+            tags = []
+            if 'languageCode' in query.keys():
+                tags.append(query["languageCode"])
+            if 'collectionMode' in query.keys():
+                tags.append(query["collectionMode"])
+            if 'licence' in query.keys():
+                tags.append(query["licence"])
+            if 'domain' in query.keys():
+                tags.append(query["domain"])
+            if 'srcText' in query.keys():
+                tags.append(str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest()))
+            if tags:
+                db_query["tags"] = {"$all": tags}
+            exclude = {"_id": False, "data": True}
+            data = self.search(db_query, exclude, offset, limit)
+            count = len(data)
+            log.info(f'Result count: {count} | {datetime.now()}')
+            log.info(f'Done! | {datetime.now()}')
+            return {"count": count, "query": db_query, "dataset": "NA"}
+        except Exception as e:
+            log.exception(e)
+            return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
     ####################### DB ##############################
 
