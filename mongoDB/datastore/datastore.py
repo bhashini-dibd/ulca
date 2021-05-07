@@ -62,6 +62,7 @@ class Datastore:
                 if count == total:
                     log.info(f'Dumping COMPLETE! records -- {count} | {datetime.now()}')
                     break
+            pool.close()
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
