@@ -1,7 +1,7 @@
 import hashlib
 import json
 import logging
-import threading
+import multiprocessing
 import time
 import uuid
 import random
@@ -10,7 +10,7 @@ from datetime import datetime
 from logging.config import dictConfig
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
-from configs import mongo_ulca_dataset_col
+from configs import mongo_ulca_dataset_col, no_of_process
 
 import pymongo
 log = logging.getLogger('file')
@@ -32,12 +32,9 @@ class Datastore:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            enriched_data = []
-            i, j, c = len(data_json), 0, 0
-            thread_batch_size = 1000000
-            while len(data_json) < thread_batch_size:
-                thread_batch_size = thread_batch_size / 10
-            log.info(f'Thread Batch Size: {thread_batch_size}, Data Size: {len(data_json)} | {datetime.now()}')
+            enriched_data, batch_data = [], []
+            total, count, batch = len(data_json), 0, 100000
+            log.info(f'Enriching dataset..... | {datetime.now()}')
             for data in data_json:
                 data["score"] = random.uniform(0, 1)
                 tag_details, details = {}, request["details"]
@@ -51,26 +48,24 @@ class Datastore:
                 data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
                              "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
                              "data": data, "tags": tags}
-                enriched_data.append(data_dict)
-                if j == thread_batch_size:
-                    c += j
-                    j = 0
-                    t = threading.Thread(target=self.insert, args=(enriched_data,))
-                    t.start()
-                    log.info(f'Dumping {c}..... | {datetime.now()}')
-                    enriched_data = []
-                j += 1
-            if enriched_data:
-                t = threading.Thread(target=self.insert, args=(enriched_data,))
-                t.start()
-                c += len(enriched_data)
-                log.info(f'FINAL DUMP -- Dumping {c} ..... | {datetime.now()}')
-            else:
-                log.info(f'FINAL DUMP -- Dumping {c} ..... | {datetime.now()}')
+                batch_data.append(data_dict)
+                if len(batch_data) == batch:
+                    enriched_data.append(batch_data)
+                    batch_data = []
+            if batch_data:
+                enriched_data.append(batch_data)
+            log.info(f'Dumping enriched dataset..... | {datetime.now()}')
+            pool = multiprocessing.Pool(no_of_process)
+            processors = pool.map_async(self.insert, enriched_data).get()
+            for result in processors:
+                count += result
+                if count == total:
+                    log.info(f'Dumping COMPLETE! records -- {count} | {datetime.now()}')
+                    break
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": f'loaded {i} no. of records to DB', "status": "SUCCESS"}
+        return {"message": f'loaded {total} no. of records to DB', "status": "SUCCESS"}
 
     def get_tags(self, d):
         for v in d.values():
@@ -152,9 +147,10 @@ class Datastore:
         else:
             return mongo_instance
 
-    def insert(self, data_list):
+    def insert(self, data):
         col = self.get_mongo_instance()
-        col.insert_many(data_list)
+        col.insert_many(data)
+        return len(data)
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
