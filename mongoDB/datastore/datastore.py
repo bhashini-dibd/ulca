@@ -7,6 +7,8 @@ import uuid
 import random
 from collections import OrderedDict
 from datetime import datetime
+from logging.config import dictConfig
+
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
 from configs import mongo_ulca_dataset_col
 
@@ -21,7 +23,7 @@ class Datastore:
         pass
 
     def load_dataset(self, request):
-        log.info("\nLoading Dataset..... | {}".format(datetime.now()))
+        log.info("Loading Dataset..... | {}".format(datetime.now()))
         try:
             if 'path' not in request.keys():
                 path = f'{file_path}' + f'{file_name}'
@@ -81,7 +83,7 @@ class Datastore:
                 yield v
 
     def get_dataset(self, query):
-        log.info(f'\nFetching datasets..... | {datetime.now()}')
+        log.info(f'Fetching datasets..... | {datetime.now()}')
         try:
             offset = query["offset"] if 'offset' in query.keys() else default_offset
             limit = query["limit"] if 'limit' in query.keys() else default_limit
@@ -122,6 +124,7 @@ class Datastore:
 
     def set_mongo_cluster(self, create):
         if create:
+            log.info(f'Setting the Mongo Shard Cluster up..... | {datetime.now()}')
             client = pymongo.MongoClient(mongo_server_host)
             client.drop_database(mongo_ulca_db)
             ulca_db = client[mongo_ulca_db]
@@ -133,6 +136,7 @@ class Datastore:
             db.command('enableSharding', mongo_ulca_db)
             key = OrderedDict([("id", "hashed")])
             db.command({'shardCollection': f'{mongo_ulca_db}.{mongo_ulca_dataset_col}', 'key': key})
+            log.info(f'Done! | {datetime.now()}')
         else:
             return None
 
@@ -163,3 +167,36 @@ class Datastore:
         for record in res:
             result.append(record)
         return result
+
+# Log config
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})
