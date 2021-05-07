@@ -7,4 +7,4 @@ mongo_ulca_db, mongo_ulca_dataset_col = "ulca", "dataset"
 default_offset = 0
 default_limit = 10000
 no_of_process = 5
-set_cluster = True
+set_cluster = False
