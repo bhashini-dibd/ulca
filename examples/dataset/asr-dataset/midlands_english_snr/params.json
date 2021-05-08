@@ -1,0 +1,46 @@
+{
+    "languages": {
+        "sourceLanguage": {
+            "value": "en",
+            "name": "English"
+        },
+        "targetLanguage": null
+    },
+    "collectionSource": [
+        "openslr"
+    ],
+    "domain": [
+        "general"
+    ],
+    "collectionMethod": [
+        "web-scrapping-audio"
+    ],
+    "license": [
+        "cc-by-4.0"
+    ],
+    "submitter": {
+        "name": "Anirudh",
+        "oauthid": "anirudh.gupta@thoughtworks.com",
+        "provider": "google"
+    },
+    "contributers": {
+        "name": "Harveen",
+        "oauthid": "harveen.chadha@thoughtworks.com",
+        "provider": "google"
+    },
+    "format": {
+        "value": "wav"
+    },
+    "channel": {
+        "value": "mono"
+    },
+    "samplingRate": {
+        "value": 16000
+    },
+    "bitsPerSample": {
+        "value": "sixteen"
+    },
+    "numberOfSpeakers": {
+        "value": 3
+    }
+}

@@ -11,7 +11,7 @@
         "https://main.sci.gov.in"
     ],
     "domain": [
-        "legal"
+        "general"
     ],
     "collectionMethod": [
         "web-scrapping-ocr"
