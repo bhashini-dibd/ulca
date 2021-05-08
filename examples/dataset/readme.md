@@ -33,10 +33,13 @@ Dataset should have the following mandatory attributes, we will cover each of th
 - license
 - submitter
 - contributors
+
 Following are optional attributes
 - collectionSource
+
 ### languages
 It is important to convey what language the dataset is directed toward. The structure of `languages` attributes should be followed. Same parameter can be used to define a single language or or a language pair. Let's look at the following example where the `languages` defines a parallel dataset that typically has a language pair where `sourceLanguage` is `English` and `targetLanguage` is `Bengali`. The defined language code are per ISO 639-1 & 639-2 and can be referred in [LanguagePair](../../common-schemas.yml#LanguagePair)
+
 ```json
  
 {
@@ -52,6 +55,7 @@ It is important to convey what language the dataset is directed toward. The stru
  
 ```
 Monolingual or ASR/TTS or OCR dataset typically uses a single language and the following example can be used to define the `languages` attribute.
+
 ```json
  
 {
@@ -62,10 +66,12 @@ Monolingual or ASR/TTS or OCR dataset typically uses a single language and the f
 }
  
 ```
+
 ### domain
 This attribute defines that `relevant business area or domain` under which dataset is curated. ULCA _ONLY_ accepts  one or more values that are defined under [Domain schema](../../common-schemas.yml#Domain).
 Few examples are following
 domain specifically for `legal` domain
+
 ```json
  
  [
@@ -80,11 +86,13 @@ dataset meant for `legal`, `news` domain
  [
    "legal", "news"
  ]
- 
+
 ```
+
 ### collectionMethod
 The attribute defines `how the dataset has been curated or created ?`. ULCA _ONLY_ accepts  one or more values that are defined under [CollectionMethod schema](../../common-schemas.yml#CollectionMethod).
 Let's take a few examples to understand the same.
+
 ### [parallel dataset examples](./examples/dataset/parallel-dataset)
 - Let's say that team A has scrapped the pages from [PIB website](https://www.pib.gov.in/Allrel.aspx), identified various parallel html pages, extracted the textual data, tokenized to get sentences and used an alignment strategy like LaBSE to align the sentences.
 The textual data has been extracted from html tags so we use `web-scrapping-machine-readable` and finally sentence alignment has been done using LaBSE that is represented as `algorithm-auto-aligned`. This can be expressed as:
@@ -102,6 +110,7 @@ The textual data has been extracted from html tags so we use `web-scrapping-ocr`
    "web-scrapping-ocr", "algorithm-auto-aligned"
  ]
 ```
+
 ### license
 This attribute is bit straight forward, dataset submitter should choose on from available [License](../../common-schemas.yml#License).
  
@@ -112,6 +121,7 @@ This attribute is bit straight forward, dataset submitter should choose on from 
  ]
  
 ```
+
 ### collectionSource
 This attribute is mostly free text and optional, however we recommend it to be descriptive so that community users should be able to look at the sources from where the dataset has been curated. Mostly putting a URL along with some description should suffice. Have a look at the example.
  
@@ -122,6 +132,7 @@ This attribute is mostly free text and optional, however we recommend it to be d
  ]
  
 ```
+
 ### submitter
 The attribute specifically holds the description of the user who submitted the dataset. Typically it should describe the project or team's goal. Look at the following example
  
@@ -155,6 +166,7 @@ The attribute defines the team members who are part of the project, we suggest a
    }
  ]
 ```
+
 ## Representing a specific type dataset `params`
 This section explains the `params` specific to supported dataset type. We will go through each dataset type individually and in detail.
  
@@ -172,3 +184,46 @@ In order to do bitext mining at large scale, submitters often leverage strategie
 We have explained this scenario in the example, [data.json](./parallel-dataset/web-scrapped-labse-aligned/data.json) and [params.json](./parallel-dataset/web-scrapped-labse-aligned/params.json)
 
 
+## OCR dataset specific `params`
+Listed properties are specific to OCR dataset.
+  - format
+  - dpi
+  - imageTextType
+
+### format
+Describe the image file format present in the submitted dataset, choose from following image type. Also refer to the example provided.
+  - jpeg
+  - bmp
+  - png
+  - tiff
+
+```json
+{
+  "value": "tiff" 
+}
+```
+### dpi
+Describes the standard image metadata about pixel density.
+  - 300_dpi
+  - 72_dpi
+
+```json
+{
+  "value": "72_dpi" 
+}
+```
+
+### imageTextType
+This property defines the presence of text on various category of image. For example a text region can be present on scene or let's say on a document. Following are various defined possibilities here.
+  - scene-text
+  - typewriter-typed-text
+  - computer-typed-text
+  - handwritten-text
+
+user can use these options as follows based upon text annotation done on the image type.
+
+```json
+{
+  "value": "computer-typed-text" 
+}
+```

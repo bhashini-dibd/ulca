@@ -1,0 +1,42 @@
+{
+    "languages": {
+        "sourceLanguage": {
+            "value": "ta",
+            "name": "Tamil"
+        },
+        "targetLanguage": null
+    },
+    "collectionSource": [
+        "3522_2009_13_1501_15302_Judgement_24-Jul-2019_TAM.pdf",
+        "https://main.sci.gov.in"
+    ],
+    "domain": [
+        "legal"
+    ],
+    "collectionMethod": [
+        "web-scrapping-ocr"
+    ],
+    "license": [
+        "cc-by-4.0"
+    ],
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project"
+    },
+    "contributors": [
+        {
+            "name": "Naresh Kumar Saini",
+            "aboutMe": "I am working as AI Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad. "
+        },
+        {
+            "name": "Srihari M N",
+            "aboutMe": "I am working as Associate Software Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad "
+        }
+    ],
+    "dpi": {
+        "value": "72_dpi"
+    },
+    "imageTextType": {
+        "value": "computer-typed-text"
+    }
+}
