@@ -33,7 +33,8 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            total, d_count, u_count, i_count = len(data_json), 0, 0, 0
+            total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100000
+            update_batch, insert_batch = [], []
             log.info(f'Enriching and Dumping dataset..... | {datetime.now()}')
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
@@ -64,6 +65,7 @@ class ModelThree:
                         "domain": request["details"]["domain"], "licence": request["details"]["licence"]
                     }
                     record[0]["tags"].extend(list(self.get_tags(tags_dict)))
+                    update_batch.append(record[0])
                     self.update(record[0])
                     u_count += 1
                 else:
@@ -80,6 +82,7 @@ class ModelThree:
                         "submitter": request["submitter"], "contributors": request["contributors"],
                         "targets": targets, "tags": tags
                     }
+                    insert_batch.append(record)
                     self.insert(record)
                     i_count += 1
             log.info(f'Done! -- UPDATES: {u_count}, INSERTS: {i_count}, "DUPLICATES": {d_count} | {datetime.now()}')
@@ -120,7 +123,8 @@ class ModelThree:
             if 'srcLang' in query.keys():
                 tags.append(query["srcLang"])
             if 'tgtLang' in query.keys():
-                tags.append(query["tgtLang"])
+                for tgt in query["tgtLang"]:
+                    tags.append(tgt)
             if 'collectionMode' in query.keys():
                 tags.append(query["collectionMode"])
             if 'licence' in query.keys():
