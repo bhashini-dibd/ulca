@@ -132,7 +132,7 @@ class Datastore:
             count = len(data)
             log.info(f'Result count: {count} | {datetime.now()}')
             log.info(f'Done! | {datetime.now()}')
-            return {"count": count, "query": db_query, "dataset": "NA"}
+            return {"count": count, "query": db_query, "dataset": data[:30]}
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
