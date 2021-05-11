@@ -8,6 +8,7 @@ import random
 from collections import OrderedDict
 from datetime import datetime
 from logging.config import dictConfig
+from bson.code import Code
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
 from configs import mongo_ulca_dataset_col, no_of_process
@@ -94,8 +95,17 @@ class Datastore:
             if 'score' in query.keys():
                 db_query["data.score"] = query["score"]
             tags = []
-            if 'languageCode' in query.keys():
-                tags.append(query["languageCode"])
+            src_lang, tgt_lang = None, None
+            if 'srcLang' in query.keys():
+                src_lang = query["srcLang"]
+            if 'tgtLang' in query.keys():
+                tgt_lang = query["tgtLang"]
+            if src_lang and tgt_lang:
+                for lang in tgt_lang:
+                    tags.append(f'{src_lang}|{lang}')
+            else:
+                if src_lang:
+                    tags.append(src_lang)
             if 'collectionMode' in query.keys():
                 tags.append(query["collectionMode"])
             if 'licence' in query.keys():
@@ -106,6 +116,8 @@ class Datastore:
                 tags.append(str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest()))
             if tags:
                 db_query["tags"] = {"$all": tags}
+            if 'groupBySource' in query.keys():
+                db_query["$groupBySource"] = True
             exclude = {"_id": False, "data": True}
             data = self.search(db_query, exclude, offset, limit)
             count = len(data)
@@ -156,6 +168,9 @@ class Datastore:
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
         col = self.get_mongo_instance()
+        if "$groupBySource" in query.keys():
+            query.pop("$groupBySource")
+            return self.search_map_reduce(col, query, res_limit)
         if offset is None and res_limit is None:
             res = col.find(query, exclude).sort([('_id', 1)])
         else:
@@ -164,6 +179,24 @@ class Datastore:
         for record in res:
             result.append(record)
         return result
+
+    def search_map_reduce(self, col, query, res_limit):
+        map_func = Code("function () { emit(this.data.sourceText, this.data); }")
+        reduce_func = Code("function (key, values) {"
+                      "  var data = [];"
+                      "  var result = [];"
+                      "  for (var i = 0; i < values.length; i++) {"
+                      "    data.push(values[i]);"
+                      "  }"
+                      "  result.push({key: key, value: data})"
+                      "  return result;"
+                      "}")
+        res = col.map_reduce(map_func, reduce_func, "dataset", query=query, limit=res_limit)
+        result = []
+        for record in res:
+            result.append(record)
+        return result
+
 
 # Log config
 dictConfig({
