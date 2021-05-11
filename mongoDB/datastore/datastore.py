@@ -196,7 +196,7 @@ class Datastore:
                       "  for (var i = 0; i < values.length; i++) {"
                       "    data.push(values[i]);"
                       "  }"
-                      "  result.push({key: key, value: data})"
+                      "  result.push({key: key, value: data});"
                       "  return result;"
                       "}")
         res = col.map_reduce(map_func, reduce_func, "dataset", query=query, limit=res_limit)
