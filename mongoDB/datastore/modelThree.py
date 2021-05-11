@@ -33,18 +33,18 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100000
+            total, d_count, u_count, i_count = len(data_json), 0, 0, 0
             log.info(f'Enriching and Dumping dataset..... | {datetime.now()}')
             for data in data_json:
-                if 'sourceText' not in data.keys():
+                if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
                     continue
                 src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
                 tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-                record = self.get_dataset_internal({"tags": [src_hash, tgt_hash], "limit": 100000000})
+                record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
                 if record:
                     d_count += 1
                     continue
-                record = self.get_dataset_internal({"tags": [src_hash], "limit": 100000000})
+                record = self.get_dataset_internal({"tags": [src_hash]})
                 target = {
                     "id": uuid.uuid4(),
                     "targetText": data["targetText"],
