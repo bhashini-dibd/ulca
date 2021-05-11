@@ -118,7 +118,7 @@ class Datastore:
             if 'domain' in query.keys():
                 tags.append(query["domain"])
             if 'srcText' in query.keys():
-                tags.append(str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest()))
+                db_query["srcHash"] = str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest())
             if tags and lang_tags:
                 db_query["tags"] = {"$all": tags, "$in": lang_tags}
             elif tags:
@@ -189,7 +189,7 @@ class Datastore:
         return result
 
     def search_map_reduce(self, col, query, res_limit):
-        map_func = Code("function () { emit(this.data.sourceText, this.data); }")
+        map_func = Code("function () { emit(this.srcHash, this.data); }")
         reduce_func = Code("function (key, values) {"
                       "  var data = [];"
                       "  var result = [];"
