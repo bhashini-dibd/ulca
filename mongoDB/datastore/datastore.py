@@ -36,6 +36,7 @@ class Datastore:
             enriched_data, batch_data = [], []
             total, count, batch = len(data_json), 0, 100000
             log.info(f'Enriching dataset..... | {datetime.now()}')
+            hash_list = []
             for data in data_json:
                 data["score"] = random.uniform(0, 1)
                 tag_details, details = {}, request["details"]
@@ -52,6 +53,9 @@ class Datastore:
                              "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
                              "data": data, "srcHash": src_hash, "tags": tags}
                 batch_data.append(data_dict)
+                if len(hash_list) <= 10:
+                    if src_hash:
+                        hash_list.append({"src": data["sourceText"], "hash": src_hash})
                 if len(batch_data) == batch:
                     enriched_data.append(batch_data)
                     batch_data = []
@@ -66,6 +70,7 @@ class Datastore:
                     log.info(f'Dumping COMPLETE! records -- {count} | {datetime.now()}')
                     break
             pool.close()
+            log.info(hash_list)
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
