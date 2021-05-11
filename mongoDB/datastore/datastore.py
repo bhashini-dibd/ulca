@@ -193,15 +193,17 @@ class Datastore:
         reduce_func = Code("function (key, values) {"
                       "  var data = [];"
                       "  var result = [];"
-                      "  for (var i = 0; i < values.length; i++) {"
-                      "    data.push(values[i]);"
-                      "  }"
-                      "  result.push({key: key, value: data});"
+                      "  if (values.length > 1) {"                    
+                      "     for (var i = 0; i < values.length; i++) {"
+                      "         data.push(values[i]);"
+                      "     }"
+                      "     result.push({key: key, value: data});"
+                      "  } " 
                       "  return result;"
                       "}")
         res = col.map_reduce(map_func, reduce_func, "results", query=query, limit=res_limit)
         result = []
-        for record in res.find():
+        for record in res.find({"_id": False}):
             result.append(record)
         return result
 
