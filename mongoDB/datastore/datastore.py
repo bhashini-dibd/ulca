@@ -39,8 +39,10 @@ class Datastore:
             for data in data_json:
                 data["score"] = random.uniform(0, 1)
                 tag_details, details = {}, request["details"]
+                src_hash = None
                 if 'sourceText' in data.keys():
-                    tag_details["srcHash"] = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
+                    src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
+                tag_details["sourceLanguage"] = details["sourceLanguage"]
                 tag_details["languageCode"] = f'{details["sourceLanguage"]}|{details["targetLanguage"]}'
                 tag_details["name"], tag_details["category"] = details["name"], details["category"]
                 tag_details["collectionMode"] = details["collectionMode"]
@@ -48,7 +50,7 @@ class Datastore:
                 tags = list(self.get_tags(tag_details))
                 data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
                              "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
-                             "data": data, "tags": tags}
+                             "data": data, "srcHash": src_hash, "tags": tags}
                 batch_data.append(data_dict)
                 if len(batch_data) == batch:
                     enriched_data.append(batch_data)
@@ -94,15 +96,18 @@ class Datastore:
                 db_query["data.score"] = score_query
             if 'score' in query.keys():
                 db_query["data.score"] = query["score"]
-            tags = []
+            tags, lang_tags = [], []
             src_lang, tgt_lang = None, None
             if 'srcLang' in query.keys():
                 src_lang = query["srcLang"]
             if 'tgtLang' in query.keys():
                 tgt_lang = query["tgtLang"]
             if src_lang and tgt_lang:
-                for lang in tgt_lang:
-                    tags.append(f'{src_lang}|{lang}')
+                if len(tgt_lang) == 1:
+                    tags.append(f'{src_lang}|{tgt_lang[0]}')
+                else:
+                    for lang in tgt_lang:
+                        lang_tags.append(f'{src_lang}|{lang}')
             else:
                 if src_lang:
                     tags.append(src_lang)
@@ -114,8 +119,12 @@ class Datastore:
                 tags.append(query["domain"])
             if 'srcText' in query.keys():
                 tags.append(str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest()))
-            if tags:
+            if tags and lang_tags:
+                db_query["tags"] = {"$all": tags, "$in": lang_tags}
+            elif tags:
                 db_query["tags"] = {"$all": tags}
+            elif lang_tags:
+                db_query["tags"] = {"$in": lang_tags}
             if 'groupBySource' in query.keys():
                 db_query["$groupBySource"] = True
             exclude = {"_id": False, "data": True}
@@ -139,10 +148,9 @@ class Datastore:
             ulca_col = ulca_db[mongo_ulca_dataset_col]
             ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("id", "hashed")])
             db = client.admin
             db.command('enableSharding', mongo_ulca_db)
-            key = OrderedDict([("id", "hashed")])
+            key = OrderedDict([("_id", "hashed")])
             db.command({'shardCollection': f'{mongo_ulca_db}.{mongo_ulca_dataset_col}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
