@@ -36,7 +36,6 @@ class Datastore:
             enriched_data, batch_data = [], []
             total, count, batch = len(data_json), 0, 100000
             log.info(f'Enriching dataset..... | {datetime.now()}')
-            hash_list = []
             for data in data_json:
                 data["score"] = random.uniform(0, 1)
                 tag_details, details = {}, request["details"]
@@ -53,9 +52,6 @@ class Datastore:
                              "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
                              "data": data, "srcHash": src_hash, "tags": tags}
                 batch_data.append(data_dict)
-                if len(hash_list) <= 10:
-                    if src_hash:
-                        hash_list.append({"src": data["sourceText"], "hash": src_hash})
                 if len(batch_data) == batch:
                     enriched_data.append(batch_data)
                     batch_data = []
@@ -70,7 +66,6 @@ class Datastore:
                     log.info(f'Dumping COMPLETE! records -- {count} | {datetime.now()}')
                     break
             pool.close()
-            log.info(hash_list)
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
@@ -132,12 +127,14 @@ class Datastore:
                 db_query["tags"] = {"$in": lang_tags}
             if 'groupBySource' in query.keys():
                 db_query["$groupBySource"] = True
-            exclude = {"_id": False, "data": True}
+            exclude = {"_id": False}
             data = self.search(db_query, exclude, offset, limit)
             count = len(data)
+            if count > 30:
+                data = data[:30]
             log.info(f'Result count: {count} | {datetime.now()}')
             log.info(f'Done! | {datetime.now()}')
-            return {"count": count, "query": db_query, "dataset": data[:30]}
+            return {"count": count, "query": db_query, "dataset": data}
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
