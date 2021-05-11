@@ -33,18 +33,18 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            total, u_count, i_count, batch = len(data_json), 0, 0, 100000
+            total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100000
             log.info(f'Enriching and Dumping dataset..... | {datetime.now()}')
             for data in data_json:
                 if 'sourceText' not in data.keys():
                     continue
                 src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
                 tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-                record = self.get_dataset({"tags": [src_hash, tgt_hash], "limit": 100000000})
+                record = self.get_dataset_internal({"tags": [src_hash, tgt_hash], "limit": 100000000})
                 if record:
-                    log.info("DUPLICATE: {}".format(data))
+                    d_count += 1
                     continue
-                record = self.get_dataset({"tags": [src_hash], "limit": 100000000})
+                record = self.get_dataset_internal({"tags": [src_hash], "limit": 100000000})
                 target = {
                     "id": uuid.uuid4(),
                     "targetText": data["targetText"],
@@ -82,7 +82,7 @@ class ModelThree:
                     }
                     self.insert(record)
                     i_count += 1
-            log.info(f'Done! -- UPDATES: {u_count}, INSERTS: {i_count} | {datetime.now()}')
+            log.info(f'Done! -- UPDATES: {u_count}, INSERTS: {i_count}, "DUPLICATES": {d_count} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
@@ -98,22 +98,14 @@ class ModelThree:
             else:
                 yield v
 
-    def get_dataset(self, query):
-        log.info(f'Fetching datasets..... | {datetime.now()}')
+    def get_dataset_internal(self, query):
         try:
-            offset = query["offset"] if 'offset' in query.keys() else default_offset
-            limit = query["limit"] if 'limit' in query.keys() else default_limit
             db_query = {}
             if "tags" in query.keys():
                 db_query["tags"] = {"$all": query["tags"]}
             exclude = {"_id": False}
-            data = self.search(db_query, exclude, offset, limit)
-            count = len(data)
-            if count > 30:
-                data = data[:30]
-            log.info(f'Result count: {count} | {datetime.now()}')
-            log.info(f'Done! | {datetime.now()}')
-            return {"count": count, "query": db_query, "dataset": data}
+            data = self.search(db_query, exclude, None, None)
+            return data
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
@@ -160,34 +152,12 @@ class ModelThree:
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
         col = self.get_mongo_instance()
-        if "$groupBySource" in query.keys():
-            query.pop("$groupBySource")
-            return self.search_map_reduce(col, query, res_limit)
         if offset is None and res_limit is None:
             res = col.find(query, exclude).sort([('_id', 1)])
         else:
             res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
         result = []
         for record in res:
-            result.append(record)
-        return result
-
-    def search_map_reduce(self, col, query, res_limit):
-        map_func = Code("function () { emit(this.srcHash, this.data); }")
-        reduce_func = Code("function (key, values) {"
-                      "  var data = [];"
-                      "  var result = [];"
-                      "  if (values.length > 1) {"                    
-                      "     for (var i = 0; i < values.length; i++) {"
-                      "         data.push(values[i]);"
-                      "     }"
-                      "     result.push({key: key, value: data});"
-                      "  } " 
-                      "  return result;"
-                      "}")
-        res = col.map_reduce(map_func, reduce_func, "results", query=query, limit=res_limit)
-        result = []
-        for record in res.find({"_id": False}):
             result.append(record)
         return result
 
