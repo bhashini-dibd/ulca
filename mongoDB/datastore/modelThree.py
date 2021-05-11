@@ -51,7 +51,7 @@ class ModelThree:
                     "alignmentScore": random.uniform(0, 1),
                     "targetLanguage": request["details"]["targetLanguage"],
                     "sourceRef": src_hash,
-                    "submitter": request["details"]["submitter"],
+                    "submitter": request["submitter"],
                     "contributors": request["contributors"],
                 }
                 if 'translator' in data.keys():
@@ -64,7 +64,7 @@ class ModelThree:
                         "domain": request["details"]["domain"], "licence": request["details"]["licence"]
                     }
                     record[0]["tags"].extend(list(self.get_tags(tags_dict)))
-                    self.update(record)
+                    self.update(record[0])
                     u_count += 1
                 else:
                     targets = [target]
@@ -77,7 +77,7 @@ class ModelThree:
                     record = {
                         "id": uuid.uuid4(), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
                         "sourceLanguage": request["details"]["sourceLanguage"],
-                        "submitter": request["details"]["submitter"], "contributors": request["contributors"],
+                        "submitter": request["submitter"], "contributors": request["contributors"],
                         "targets": targets, "tags": tags
                     }
                     self.insert(record)
@@ -106,6 +106,39 @@ class ModelThree:
             exclude = {"_id": False}
             data = self.search(db_query, exclude, None, None)
             return data
+        except Exception as e:
+            log.exception(e)
+            return {"message": str(e), "status": "FAILED", "dataset": "NA"}
+
+    def get_dataset(self, query):
+        log.info(f'Fetching datasets..... | {datetime.now()}')
+        try:
+            offset = query["offset"] if 'offset' in query.keys() else default_offset
+            limit = query["limit"] if 'limit' in query.keys() else default_limit
+            db_query = {}
+            tags, lang_tags = [], []
+            if 'srcLang' in query.keys():
+                tags.append(query["srcLang"])
+            if 'tgtLang' in query.keys():
+                tags.append(query["tgtLang"])
+            if 'collectionMode' in query.keys():
+                tags.append(query["collectionMode"])
+            if 'licence' in query.keys():
+                tags.append(query["licence"])
+            if 'domain' in query.keys():
+                tags.append(query["domain"])
+            if 'srcText' in query.keys():
+                db_query["sourceTextHash"] = str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest())
+            if tags:
+                db_query["tags"] = {"$all": tags}
+            exclude = {"_id": False}
+            data = self.search(db_query, exclude, offset, limit)
+            count = len(data)
+            if count > 30:
+                data = data[:30]
+            log.info(f'Result count: {count} | {datetime.now()}')
+            log.info(f'Done! | {datetime.now()}')
+            return {"count": count, "query": db_query, "dataset": data}
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}

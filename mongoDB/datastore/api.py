@@ -40,3 +40,12 @@ def insert_dataset_m3():
     service = ModelThree()
     response = service.load_dataset(req_criteria)
     return jsonify(response), 200
+
+# REST endpoint to fetch configs
+@ulcdatastoreapp.route('/ulca-evaluation/datastore/v1/dataset/search', methods=["POST"])
+def search_dataset_m3():
+    req_criteria = request.get_json()
+    service = ModelThree()
+    data = service.get_dataset(req_criteria)
+    response = {"dataset": data}
+    return jsonify(response), 200
