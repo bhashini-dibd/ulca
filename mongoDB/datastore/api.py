@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 
 from datastore import Datastore
+from modelThree import ModelThree
 
 ulcdatastoreapp = Flask(__name__)
 
@@ -29,4 +30,13 @@ def set_cluster():
     service = Datastore()
     service.set_mongo_cluster(True)
     response = {"message": "DONE"}
+    return jsonify(response), 200
+
+
+# REST endpoint to fetch configs
+@ulcdatastoreapp.route('/ulca-evaluation/datastore/v1/dataset/load', methods=["POST"])
+def insert_dataset_m3():
+    req_criteria = request.get_json()
+    service = ModelThree()
+    response = service.load_dataset(req_criteria)
     return jsonify(response), 200
