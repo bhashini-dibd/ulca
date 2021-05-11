@@ -199,7 +199,7 @@ class Datastore:
                       "  result.push({key: key, value: data});"
                       "  return result;"
                       "}")
-        res = col.map_reduce(map_func, reduce_func, "dataset", query=query, limit=res_limit)
+        res = col.map_reduce(map_func, reduce_func, "results", query=query, limit=res_limit)
         result = []
         for record in res:
             result.append(record)
