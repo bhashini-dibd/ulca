@@ -35,7 +35,7 @@ class ModelThree:
             data_json = json.load(dataset)
             total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100000
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
-            log.info(f'Enriching and Dumping dataset..... | {datetime.now()}')
+            log.info(f'Enriching the dataset..... | {datetime.now()}')
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
                     continue
@@ -67,6 +67,7 @@ class ModelThree:
                     record[0]["tags"].extend(list(self.get_tags(tags_dict)))
                     update_batch.append(record[0])
                     if len(update_batch) == batch:
+                        log.info(f'Adding batch of {len(update_batch)} to the BULK UPDATE list... | {datetime.now()}')
                         update_records.append(update_batch)
                         update_batch = []
                     u_count += 1
@@ -86,6 +87,7 @@ class ModelThree:
                     }
                     insert_batch.append(record)
                     if len(insert_batch) == batch:
+                        log.info(f'Adding batch of {len(update_batch)} to the BULK INSERT list... | {datetime.now()}')
                         insert_records.append(insert_batch)
                         insert_batch = []
                     i_count += 1
@@ -131,7 +133,7 @@ class ModelThree:
             return data
         except Exception as e:
             log.exception(e)
-            return {"message": str(e), "status": "FAILED", "dataset": "NA"}
+            return None
 
     def get_dataset(self, query):
         log.info(f'Fetching datasets..... | {datetime.now()}')
