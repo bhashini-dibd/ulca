@@ -33,9 +33,10 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100000
+            total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
+            data_json = data_json[:1000]
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
                     continue
@@ -93,8 +94,10 @@ class ModelThree:
                         insert_batch = []
                     i_count += 1
             if insert_batch:
+                log.info(f'Adding batch of {len(update_batch)} to the BULK INSERT list... | {datetime.now()}')
                 insert_records.append(insert_batch)
             if update_batch:
+                log.info(f'Adding batch of {len(update_batch)} to the BULK UPDATE list... | {datetime.now()}')
                 update_records.append(update_batch)
             pool, ins_count, upd_count = multiprocessing.Pool(no_of_process), 0, 0
             log.info(f'Dumping records.... | {datetime.now()}')
@@ -132,8 +135,10 @@ class ModelThree:
             exclude = {"_id": False}
             data = self.search(db_query, exclude, None, None)
             if data:
+                log.info(f'Returning data...| {datetime.now()}')
                 return data
             else:
+                log.info(f'No data...| {datetime.now()}')
                 return None
         except Exception as e:
             log.exception(e)
