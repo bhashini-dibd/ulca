@@ -267,9 +267,8 @@ class ModelThree:
                         },
                         {"$in": {"targetLanguage": query["tgtLang"]}}
                     ]}
-                },
-                {"allowDiskUse": True}
-            ])
+                }
+            ], allowDiskUse=True)
             if res:
                 for record in res:
                     result.append(record)
