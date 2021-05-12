@@ -265,7 +265,7 @@ class ModelThree:
                                 {"targetLanguage": query["srcLang"]}
                             ]
                         },
-                        {"$in": {"targetLanguage": query["tgtLang"]}}
+                        {"targetLanguage": {"$in": query["tgtLang"]}}
                     ]}
                 }
             ], allowDiskUse=True)
