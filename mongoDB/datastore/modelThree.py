@@ -33,7 +33,7 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            total, d_count, batch = len(data_json), 0, 100000
+            total, d_count, batch = len(data_json), 0, 10000
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
             for data in data_json:
@@ -43,7 +43,6 @@ class ModelThree:
                 tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
                 record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
                 if record:
-                    log.info(f'Duplicate: {data}| {datetime.now()}')
                     d_count += 1
                     continue
                 record = self.get_dataset_internal({"tags": [src_hash]})
