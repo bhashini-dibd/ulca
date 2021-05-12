@@ -1,13 +1,7 @@
 {
     "languages": {
-        "sourceLanguage": {
-            "value": "en",
-            "name": "English"
-        },
-        "targetLanguage": {
-            "value": "bn",
-            "name": "Bengali"
-        }
+        "sourceLanguage": "en",
+        "targetLanguage": "bn"
     },
     "collectionSource": [
         "42040.pdf", "https://main.sci.gov.in"
@@ -37,7 +31,5 @@
             "aboutMe": "Backend team lead at Project Anuvaad"
         }
     ],
-    "targetValidated": {
-        "value": true
-    }
+    "targetValidated": true
 }

@@ -1,13 +1,7 @@
 {
     "languages": {
-        "sourceLanguage": {
-            "value": "en",
-            "name": "English"
-        },
-        "targetLanguage": {
-            "value": "bn",
-            "name": "Bengali"
-        }
+        "sourceLanguage": "en",
+        "targetLanguage": "bn"
     },
     "collectionSource": [
         "42040.pdf", "https://main.sci.gov.in"

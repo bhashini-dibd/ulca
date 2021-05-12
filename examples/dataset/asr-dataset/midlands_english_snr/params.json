@@ -1,9 +1,6 @@
 {
     "languages": {
-        "sourceLanguage": {
-            "value": "en",
-            "name": "English"
-        },
+        "sourceLanguage": "en",
         "targetLanguage": null
     },
     "collectionSource": [
@@ -28,19 +25,9 @@
         "oauthid": "harveen.chadha@thoughtworks.com",
         "provider": "google"
     },
-    "format": {
-        "value": "wav"
-    },
-    "channel": {
-        "value": "mono"
-    },
-    "samplingRate": {
-        "value": 16000
-    },
-    "bitsPerSample": {
-        "value": "sixteen"
-    },
-    "numberOfSpeakers": {
-        "value": 3
-    }
+    "format": "wav",
+    "channel": "mono",
+    "samplingRate": 16000,
+    "bitsPerSample": "sixteen",
+    "numberOfSpeakers": 3
 }

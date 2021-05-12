@@ -1,9 +1,6 @@
 {
     "languages": {
-        "sourceLanguage": {
-            "value": "ta",
-            "name": "Tamil"
-        },
+        "sourceLanguage": "ta",
         "targetLanguage": null
     },
     "collectionSource": [
@@ -33,13 +30,7 @@
             "aboutMe": "I am working as Associate Software Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad "
         }
     ],
-    "dpi": {
-        "value": "72_dpi"
-    },
-    "imageTextType": {
-        "value": "computer-typed-text"
-    },
-    "format": {
-        "value": "png"
-    }
+    "dpi": "72_dpi",
+    "imageTextType": "computer-typed-text",
+    "format": "png"
 }

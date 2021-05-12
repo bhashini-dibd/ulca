@@ -1,9 +1,6 @@
 {
     "languages": {
-        "sourceLanguage": {
-            "value": "ta",
-            "name": "Tamil"
-        },
+        "sourceLanguage": "ta",
         "targetLanguage": null
     },
     "collectionSource": [
@@ -29,13 +26,7 @@
             "aboutMe": "Medical Intelligence and Language Engineering (MILE) Lab, Department of Electrical Engineering (EE), Indian Institute of Science (IISc)"
         }
     ],
-    "dpi": {
-        "value": "300_dpi"
-    },
-    "imageTextType": {
-        "value": "computer-typed-text"
-    },
-    "format": {
-        "value": "tiff"
-    }
+    "dpi": "300_dpi",
+    "imageTextType": "computer-typed-text",
+    "format": "tiff"
 }
