@@ -34,7 +34,7 @@ class ModelThree:
             dataset = open(path, "r")
             data_json = json.load(dataset)
             total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100000
-            update_batch, insert_batch, insert_records = [], [], []
+            update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching and Dumping dataset..... | {datetime.now()}')
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
@@ -57,7 +57,7 @@ class ModelThree:
                 }
                 if 'translator' in data.keys():
                     target["translator"] = data["translator"]
-                if record: # How do you know this is src hash or one of the tgt hashes?
+                if record:
                     record[0]["targets"].append(target)
                     tags_dict = {
                         "tgtHash": tgt_hash, "lang": request["details"]["targetLanguage"],
@@ -66,7 +66,9 @@ class ModelThree:
                     }
                     record[0]["tags"].extend(list(self.get_tags(tags_dict)))
                     update_batch.append(record[0])
-                    self.update(record[0])
+                    if len(update_batch) == batch:
+                        update_records.append(update_batch)
+                        update_batch = []
                     u_count += 1
                 else:
                     targets = [target]
@@ -89,14 +91,20 @@ class ModelThree:
                     i_count += 1
             if insert_batch:
                 insert_records.append(insert_batch)
-            pool, count = multiprocessing.Pool(no_of_process), 0
+            if update_batch:
+                update_records.append(update_batch)
+            pool, ins_count, upd_count = multiprocessing.Pool(no_of_process), 0, 0
+            log.info(f'Dumping records.... | {datetime.now()}')
             processors = pool.map_async(self.insert, insert_records).get()
             for result in processors:
-                count += result
-                if count == i_count:
-                    log.info(f'Dumping COMPLETE! records -- {count} | {datetime.now()}')
-                    break
+                ins_count += result
             pool.close()
+            processors = pool.map_async(self.update, update_records).get()
+            for result in processors:
+                upd_count += result
+            pool.close()
+            if (ins_count + upd_count) == total:
+                log.info(f'Dumping COMPLETE! total: {total} | {datetime.now()}')
             log.info(f'Done! -- UPDATES: {u_count}, INSERTS: {i_count}, "DUPLICATES": {d_count} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
@@ -197,7 +205,12 @@ class ModelThree:
 
     def update(self, data):
         col = self.get_mongo_instance()
-        col.replace_one({"id": data["id"]}, data)
+        bulk = col.initialize_unordered_bulk_op()
+        for record in data:
+            bulk.find({'id': record["id"]}).update({'$set': {'targets': record["targets"], "tags": record["tags"]}})
+        bulk.execute()
+        return len(data)
+        #col.replace_one({"id": data["id"]}, data)
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
