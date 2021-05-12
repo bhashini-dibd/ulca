@@ -256,6 +256,7 @@ class ModelThree:
             elif 'srcLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["srcLang"]}]}})
+            pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
                 for record in res:
