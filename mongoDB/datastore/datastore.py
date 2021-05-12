@@ -34,20 +34,23 @@ class Datastore:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
+            data_json = data_json[:10000]
             enriched_data, duplicates, batch_data = [], 0, []
-            total, count, duplicates, batch = len(data_json), 0, 0, 100000
+            total, count, duplicates, batch = len(data_json), 0, 0, 1000
             log.info(f'Enriching dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request)
             pool_enrichers = multiprocessing.Pool(no_of_process)
             enrichment_processors = pool_enrichers.map_async(func, data_json).get()
             for result in enrichment_processors:
-                if len(batch_data) == batch:
-                    log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
-                    enriched_data.append(batch_data)
-                    batch_data = []
-                else:
-                    batch_data.append(result[0])
-                duplicates += result[1]
+                if result:
+                    if result[0]:
+                        if len(batch_data) == batch:
+                            log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
+                            enriched_data.append(batch_data)
+                            batch_data = []
+                        else:
+                            batch_data.append(result[0])
+                    duplicates += result[1]
             pool_enrichers.close()
             if batch_data:
                 log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
