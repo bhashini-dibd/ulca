@@ -43,28 +43,15 @@ It is important to convey what language the dataset is directed toward. The stru
 ```json
  
 {
-   "sourceLanguage": {
-       "value": "en",
-       "name": "English"
-   },
-   "targetLanguage": {
-       "value": "bn",
-       "name": "Bengali"
-   }
- }
+   "sourceLanguage": "en",
+   "targetLanguage": "bn"
+}
  
 ```
 Monolingual or ASR/TTS or OCR dataset typically uses a single language and the following example can be used to define the `languages` attribute.
 
 ```json
- 
-{
-   "sourceLanguage": {
-       "value": "en",
-       "name": "English"
-   }
-}
- 
+ "sourceLanguage": "en" 
 ```
 
 ### domain
@@ -198,9 +185,7 @@ Describe the image file format present in the submitted dataset, choose from fol
   - tiff
 
 ```json
-{
-  "value": "tiff" 
-}
+  "format": "tiff" 
 ```
 ### dpi
 Describes the standard image metadata about pixel density.
@@ -208,9 +193,7 @@ Describes the standard image metadata about pixel density.
   - 72_dpi
 
 ```json
-{
-  "value": "72_dpi" 
-}
+  "dpi": "72_dpi" 
 ```
 
 ### imageTextType
@@ -223,7 +206,5 @@ This property defines the presence of text on various category of image. For exa
 user can use these options as follows based upon text annotation done on the image type.
 
 ```json
-{
-  "value": "computer-typed-text" 
-}
+  "imageTextType": "computer-typed-text" 
 ```
