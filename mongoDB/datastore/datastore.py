@@ -48,10 +48,10 @@ class Datastore:
                 else:
                     batch_data.append(result[0])
                 duplicates += result[1]
+            pool_enrichers.close()
             if batch_data:
                 log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
                 enriched_data.append(batch_data)
-            pool_enrichers.close()
             log.info(f'Dumping enriched dataset..... | {datetime.now()}')
             pool = multiprocessing.Pool(no_of_process)
             processors = pool.map_async(self.insert, enriched_data).get()

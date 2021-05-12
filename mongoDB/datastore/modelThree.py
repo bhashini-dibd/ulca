@@ -7,6 +7,7 @@ import uuid
 import random
 from collections import OrderedDict
 from datetime import datetime
+from functools import partial
 from logging.config import dictConfig
 from bson.code import Code
 
@@ -33,62 +34,31 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            total, d_count, batch = len(data_json), 0, 10000
+            total, duplicates, batch = len(data_json), 0, 10000
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
-            for data in data_json:
-                if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
-                    continue
-                src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
-                tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-                record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
-                if record:
-                    d_count += 1
-                    continue
-                record = self.get_dataset_internal({"tags": [src_hash]})
-                target = {
-                    "id": uuid.uuid4(),
-                    "targetText": data["targetText"],
-                    "alignmentScore": random.uniform(0, 1),
-                    "targetLanguage": request["details"]["targetLanguage"],
-                    "sourceRef": src_hash,
-                    "submitter": request["submitter"],
-                    "contributors": request["contributors"],
-                }
-                if 'translator' in data.keys():
-                    target["translator"] = data["translator"]
-                if record:
-                    record[0]["targets"].append(target)
-                    tags_dict = {
-                        "tgtHash": tgt_hash, "lang": request["details"]["targetLanguage"],
-                        "collectionMode": request["details"]["collectionMode"],
-                        "domain": request["details"]["domain"], "licence": request["details"]["licence"]
-                    }
-                    record[0]["tags"].extend(list(self.get_tags(tags_dict)))
-                    update_batch.append(record[0])
-                    if len(update_batch) == batch:
-                        log.info(f'Adding batch of {len(update_batch)} to the BULK UPDATE list... | {datetime.now()}')
-                        update_records.append(update_batch)
-                        update_batch = []
-                else:
-                    targets = [target]
-                    tags_dict = {
-                        "srcHash": src_hash, "tgtHash": tgt_hash, "tgtLang": request["details"]["targetLanguage"],
-                        "collectionMode": request["details"]["collectionMode"], "srcLang": request["details"]["sourceLanguage"],
-                        "domain": request["details"]["domain"], "licence": request["details"]["licence"]
-                    }
-                    tags = list(self.get_tags(tags_dict))
-                    record = {
-                        "id": uuid.uuid4(), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
-                        "sourceLanguage": request["details"]["sourceLanguage"],
-                        "submitter": request["submitter"], "contributors": request["contributors"],
-                        "targets": targets, "tags": tags
-                    }
-                    insert_batch.append(record)
-                    if len(insert_batch) == batch:
-                        log.info(f'Adding batch of {len(insert_batch)} to the BULK INSERT list... | {datetime.now()}')
-                        insert_records.append(insert_batch)
-                        insert_batch = []
+            func = partial(self.get_enriched_data, request=request)
+            pool_enrichers = multiprocessing.Pool(no_of_process)
+            enrichment_processors = pool_enrichers.map_async(func, data_json).get()
+            for result in enrichment_processors:
+                if result:
+                    if result[1]:
+                        if "INSERT" == result[1]:
+                            if len(insert_batch) == batch:
+                                log.info(f'Adding batch of {len(insert_batch)} to the BULK INSERT list... | {datetime.now()}')
+                                insert_records.append(insert_batch)
+                                insert_batch = []
+                            else:
+                                insert_batch.append(result[0])
+                        if "UPDATE" == result[1]:
+                            if len(update_batch) == batch:
+                                log.info(f'Adding batch of {len(update_batch)} to the BULK INSERT list... | {datetime.now()}')
+                                update_records.append(update_batch)
+                                update_batch = []
+                            else:
+                                update_batch.append(result[0])
+                    duplicates += result[2]
+            pool_enrichers.close()
             if insert_batch:
                 log.info(f'Adding batch of {len(insert_batch)} to the BULK INSERT list... | {datetime.now()}')
                 insert_records.append(insert_batch)
@@ -125,6 +95,51 @@ class ModelThree:
                     yield entries
             else:
                 yield v
+
+    def get_enriched_data(self, data, request):
+        if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
+            return None, None, 0
+        src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
+        tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
+        record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
+        if record:
+            return None, None, 1
+        record = self.get_dataset_internal({"tags": [src_hash]})
+        target = {
+            "id": uuid.uuid4(),
+            "targetText": data["targetText"],
+            "alignmentScore": random.uniform(0, 1),
+            "targetLanguage": request["details"]["targetLanguage"],
+            "sourceRef": src_hash,
+            "submitter": request["submitter"],
+            "contributors": request["contributors"],
+        }
+        if 'translator' in data.keys():
+            target["translator"] = data["translator"]
+        if record:
+            record[0]["targets"].append(target)
+            tags_dict = {
+                "tgtHash": tgt_hash, "lang": request["details"]["targetLanguage"],
+                "collectionMode": request["details"]["collectionMode"],
+                "domain": request["details"]["domain"], "licence": request["details"]["licence"]
+            }
+            record[0]["tags"].extend(list(self.get_tags(tags_dict)))
+            return record[0], "UPDATE", 0
+        else:
+            targets = [target]
+            tags_dict = {
+                "srcHash": src_hash, "tgtHash": tgt_hash, "tgtLang": request["details"]["targetLanguage"],
+                "collectionMode": request["details"]["collectionMode"], "srcLang": request["details"]["sourceLanguage"],
+                "domain": request["details"]["domain"], "licence": request["details"]["licence"]
+            }
+            tags = list(self.get_tags(tags_dict))
+            record = {
+                "id": uuid.uuid4(), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
+                "sourceLanguage": request["details"]["sourceLanguage"],
+                "submitter": request["submitter"], "contributors": request["contributors"],
+                "targets": targets, "tags": tags
+            }
+            return record, "INSERT", 0
 
     def get_dataset_internal(self, query):
         try:
