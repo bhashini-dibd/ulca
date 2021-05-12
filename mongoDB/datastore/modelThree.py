@@ -147,8 +147,7 @@ class ModelThree:
             db_query = {}
             if "tags" in query.keys():
                 db_query["tags"] = {"$all": query["tags"]}
-            exclude = {"_id": False}
-            data = self.search(db_query, exclude, None, None)
+            data = self.search(db_query)
             if data:
                 return data
             else:
@@ -177,8 +176,7 @@ class ModelThree:
                 tags.append(query["domain"])
             if tags:
                 db_query["tags"] = tags
-            exclude = {"_id": False}
-            data = self.search(db_query, exclude)
+            data = self.search(db_query)
             count = len(data)
             if count > 30:
                 data = data[:30]
@@ -235,7 +233,7 @@ class ModelThree:
         #col.replace_one({"id": data["id"]}, data)
 
     # Searches the object into mongo collection
-    def search(self, query, exclude):
+    def search(self, query):
         result = []
         try:
             col = self.get_mongo_instance()
