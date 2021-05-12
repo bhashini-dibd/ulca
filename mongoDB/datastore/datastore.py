@@ -7,6 +7,7 @@ import uuid
 import random
 from collections import OrderedDict
 from datetime import datetime
+from functools import partial
 from logging.config import dictConfig
 from bson.code import Code
 
@@ -33,43 +34,62 @@ class Datastore:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            enriched_data, batch_data = [], []
-            total, count, batch = len(data_json), 0, 100000
+            enriched_data, duplicates, batch_data = [], 0, []
+            total, count, duplicates, batch = len(data_json), 0, 0, 100000
             log.info(f'Enriching dataset..... | {datetime.now()}')
-            for data in data_json:
-                data["score"] = random.uniform(0, 1)
-                tag_details, details = {}, request["details"]
-                src_hash = None
-                if 'sourceText' in data.keys():
-                    src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
-                tag_details["sourceLanguage"] = details["sourceLanguage"]
-                tag_details["languageCode"] = f'{details["sourceLanguage"]}|{details["targetLanguage"]}'
-                tag_details["name"], tag_details["category"] = details["name"], details["category"]
-                tag_details["collectionMode"] = details["collectionMode"]
-                tag_details["domain"], tag_details["licence"] = details["domain"], details["licence"]
-                tags = list(self.get_tags(tag_details))
-                data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
-                             "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
-                             "data": data, "srcHash": src_hash, "tags": tags}
-                batch_data.append(data_dict)
+            func = partial(self.get_enriched_data, request=request)
+            pool_enrichers = multiprocessing.Pool(no_of_process)
+            enrichment_processors = pool_enrichers.map_async(func, data_json).get()
+            for result in enrichment_processors:
                 if len(batch_data) == batch:
+                    log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
                     enriched_data.append(batch_data)
                     batch_data = []
+                else:
+                    batch_data.append(result[0])
+                duplicates += result[1]
             if batch_data:
+                log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
                 enriched_data.append(batch_data)
+            pool_enrichers.close()
             log.info(f'Dumping enriched dataset..... | {datetime.now()}')
             pool = multiprocessing.Pool(no_of_process)
             processors = pool.map_async(self.insert, enriched_data).get()
             for result in processors:
                 count += result
-                if count == total:
+                if (count + duplicates) == total:
                     log.info(f'Dumping COMPLETE! records -- {count} | {datetime.now()}')
                     break
             pool.close()
+            log.info(f'Done! -- INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
         return {"message": f'loaded {total} no. of records to DB', "status": "SUCCESS"}
+
+    def get_enriched_data(self, request, data):
+        if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
+            return None, 0
+        src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
+        tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
+        record = self.get_dataset({"tags": [src_hash, tgt_hash], "limit": 100000000})
+        if record:
+            return None, 1
+        data["score"] = random.uniform(0, 1)
+        tag_details, details = {}, request["details"]
+        tag_details = {
+            "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
+            "srcHash": src_hash, "tgtHash": tgt_hash, "collectionMode": details["collectionMode"],
+            "domain": details["domain"], "licence": details["licence"]
+        }
+        tags = list(self.get_tags(tag_details))
+        data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
+                     "submitter": request["submitter"],
+                     "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
+                     "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, "tags": tags}
+        return data_dict, 0
+
+
 
     def get_tags(self, d):
         for v in d.values():
@@ -96,21 +116,12 @@ class Datastore:
                 db_query["data.score"] = score_query
             if 'score' in query.keys():
                 db_query["data.score"] = query["score"]
-            tags, lang_tags = [], []
-            src_lang, tgt_lang = None, None
+            tags = []
             if 'srcLang' in query.keys():
-                src_lang = query["srcLang"]
+                tags.append(query["srcLang"])
             if 'tgtLang' in query.keys():
-                tgt_lang = query["tgtLang"]
-            if src_lang and tgt_lang:
-                if len(tgt_lang) == 1:
-                    tags.append(f'{src_lang}|{tgt_lang[0]}')
-                else:
-                    for lang in tgt_lang:
-                        lang_tags.append(f'{src_lang}|{lang}')
-            else:
-                if src_lang:
-                    tags.append(src_lang)
+                for tgt in query["tgtLang"]:
+                    tags.append(tgt)
             if 'collectionMode' in query.keys():
                 tags.append(query["collectionMode"])
             if 'licence' in query.keys():
@@ -119,12 +130,10 @@ class Datastore:
                 tags.append(query["domain"])
             if 'srcText' in query.keys():
                 db_query["srcHash"] = str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest())
-            if tags and lang_tags:
-                db_query["tags"] = {"$all": tags, "$in": lang_tags}
-            elif tags:
+            if 'tags' in query.keys():
+                tags.extend(query["tags"])
+            if tags:
                 db_query["tags"] = {"$all": tags}
-            elif lang_tags:
-                db_query["tags"] = {"$in": lang_tags}
             if 'groupBySource' in query.keys():
                 db_query["$groupBySource"] = True
             exclude = {"_id": False}
