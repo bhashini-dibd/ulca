@@ -247,10 +247,10 @@ class ModelThree:
                         {
                             "$or": [
                                 {"sourceLanguage": query["srcLang"]},
-                                {"targetLanguage": query["srcLang"]}
+                                {"$targets.targetLanguage": query["srcLang"]}
                             ]
                         },
-                        {"targetLanguage": {"$in": query["tgtLang"]}}
+                        {"$targets.targetLanguage": {"$in": query["tgtLang"]}}
                     ]}
                 })
             elif 'srcLang' in query.keys():
