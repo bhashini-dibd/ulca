@@ -34,7 +34,7 @@ class Datastore:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            data_json = data_json[:10000]
+            data_json = data_json[:100000]
             enriched_data, duplicates, batch_data = [], 0, []
             total, count, duplicates, batch = len(data_json), 0, 0, 1000
             log.info(f'Enriching dataset..... | {datetime.now()}')

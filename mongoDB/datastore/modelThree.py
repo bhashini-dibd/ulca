@@ -32,7 +32,7 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            data_json = data_json[:10000]
+            data_json = data_json[:100000]
             total, duplicates, batch = len(data_json), 0, 1000
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
@@ -79,7 +79,7 @@ class ModelThree:
             pool_ins.close()
             if (ins_count + upd_count) == total:
                 log.info(f'Dumping COMPLETE! total: {total} | {datetime.now()}')
-            log.info(f'Done! -- UPDATES: {upd_count}, INSERTS: {ins_count}, "DUPLICATES": {d_count} | {datetime.now()}')
+            log.info(f'Done! -- UPDATES: {upd_count}, INSERTS: {ins_count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
