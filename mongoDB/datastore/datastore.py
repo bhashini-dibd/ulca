@@ -67,7 +67,7 @@ class Datastore:
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
         return {"message": f'loaded {total} no. of records to DB', "status": "SUCCESS"}
 
-    def get_enriched_data(self, request, data):
+    def get_enriched_data(self, data, request):
         if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
             return None, 0
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
