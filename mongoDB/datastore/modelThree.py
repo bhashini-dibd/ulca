@@ -33,10 +33,9 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 1000
+            total, d_count, batch = len(data_json), 0, 100000
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
-            data_json = data_json[:10000]
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
                     continue
@@ -72,7 +71,6 @@ class ModelThree:
                         log.info(f'Adding batch of {len(update_batch)} to the BULK UPDATE list... | {datetime.now()}')
                         update_records.append(update_batch)
                         update_batch = []
-                    u_count += 1
                 else:
                     targets = [target]
                     tags_dict = {
@@ -92,7 +90,6 @@ class ModelThree:
                         log.info(f'Adding batch of {len(insert_batch)} to the BULK INSERT list... | {datetime.now()}')
                         insert_records.append(insert_batch)
                         insert_batch = []
-                    i_count += 1
             if insert_batch:
                 log.info(f'Adding batch of {len(insert_batch)} to the BULK INSERT list... | {datetime.now()}')
                 insert_records.append(insert_batch)
@@ -114,7 +111,7 @@ class ModelThree:
             pool_ins.close()
             if (ins_count + upd_count) == total:
                 log.info(f'Dumping COMPLETE! total: {total} | {datetime.now()}')
-            log.info(f'Done! -- UPDATES: {u_count}, INSERTS: {i_count}, "DUPLICATES": {d_count} | {datetime.now()}')
+            log.info(f'Done! -- UPDATES: {upd_count}, INSERTS: {ins_count}, "DUPLICATES": {d_count} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
