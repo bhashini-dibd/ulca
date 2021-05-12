@@ -12,7 +12,7 @@ from logging.config import dictConfig
 from bson.code import Code
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
-from configs import mongo_ulca_dataset_col, no_of_process
+from configs import mongo_ulca_dataset_col, no_of_enrich_process, no_of_dump_process
 
 import pymongo
 log = logging.getLogger('file')
@@ -34,11 +34,12 @@ class Datastore:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
+            data_json = data_json[:100000]
             enriched_data, duplicates, batch_data = [], 0, []
             total, count, duplicates, batch = len(data_json), 0, 0, 10000
             log.info(f'Enriching dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request)
-            pool_enrichers = multiprocessing.Pool(no_of_process)
+            pool_enrichers = multiprocessing.Pool(no_of_enrich_process)
             enrichment_processors = pool_enrichers.map_async(func, data_json).get()
             for result in enrichment_processors:
                 if result:
@@ -55,7 +56,7 @@ class Datastore:
                 log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
                 enriched_data.append(batch_data)
             log.info(f'Dumping enriched dataset..... | {datetime.now()}')
-            pool = multiprocessing.Pool(no_of_process)
+            pool = multiprocessing.Pool(no_of_dump_process)
             processors = pool.map_async(self.insert, enriched_data).get()
             for result in processors:
                 count += result
@@ -202,17 +203,21 @@ class Datastore:
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
-        col = self.get_mongo_instance()
-        if "$groupBySource" in query.keys():
-            query.pop("$groupBySource")
-            return self.search_map_reduce(col, query, res_limit)
-        if offset is None and res_limit is None:
-            res = col.find(query, exclude).sort([('_id', 1)])
-        else:
-            res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
         result = []
-        for record in res:
-            result.append(record)
+        try:
+            col = self.get_mongo_instance()
+            if "$groupBySource" in query.keys():
+                query.pop("$groupBySource")
+                return self.search_map_reduce(col, query, res_limit)
+            if offset is None and res_limit is None:
+                res = col.find(query, exclude).sort([('_id', 1)])
+            else:
+                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+            if res:
+                for record in res:
+                    result.append(record)
+        except Exception as e:
+            log.exception(e)
         return result
 
     def search_map_reduce(self, col, query, res_limit):

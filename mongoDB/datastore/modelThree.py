@@ -2,17 +2,15 @@ import hashlib
 import json
 import logging
 import multiprocessing
-import time
 import uuid
 import random
 from collections import OrderedDict
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from bson.code import Code
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
-from configs import mongo_ulca_dataset_col, no_of_process
+from configs import mongo_ulca_dataset_col, no_of_enrich_process, no_of_dump_process
 
 import pymongo
 log = logging.getLogger('file')
@@ -34,11 +32,12 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
+            data_json = data_json[:100000]
             total, duplicates, batch = len(data_json), 0, 10000
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request)
-            pool_enrichers = multiprocessing.Pool(no_of_process)
+            pool_enrichers = multiprocessing.Pool(no_of_enrich_process)
             enrichment_processors = pool_enrichers.map_async(func, data_json).get()
             for result in enrichment_processors:
                 if result:
@@ -65,7 +64,7 @@ class ModelThree:
             if update_batch:
                 log.info(f'Adding batch of {len(update_batch)} to the BULK UPDATE list... | {datetime.now()}')
                 update_records.append(update_batch)
-            pool_ins, pool_upd, ins_count, upd_count = multiprocessing.Pool(no_of_process), multiprocessing.Pool(no_of_process), 0, 0
+            pool_ins, pool_upd, ins_count, upd_count = multiprocessing.Pool(no_of_dump_process), multiprocessing.Pool(no_of_dump_process), 0, 0
             if update_records:
                 log.info(f'Dumping UPDATE records.... | {datetime.now()}')
                 processors = pool_upd.map_async(self.update, update_records).get()
@@ -237,14 +236,18 @@ class ModelThree:
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
-        col = self.get_mongo_instance()
-        if offset is None and res_limit is None:
-            res = col.find(query, exclude).sort([('_id', 1)])
-        else:
-            res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
         result = []
-        for record in res:
-            result.append(record)
+        try:
+            col = self.get_mongo_instance()
+            if offset is None and res_limit is None:
+                res = col.find(query, exclude).sort([('_id', 1)])
+            else:
+                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+            if res:
+                for record in res:
+                    result.append(record)
+        except Exception as e:
+            log.exception(e)
         return result
 
 
