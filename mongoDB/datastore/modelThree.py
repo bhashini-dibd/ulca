@@ -242,11 +242,11 @@ class ModelThree:
                 pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
-                pipeline.append({"$match": {"$targets.targetLanguage": {"$in": query["tgtLang"]}}})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"$expr": {"$eq": ["$targets.targetLanguage", query["srcLang"]]}}]}})
+                pipeline.append({"$match": {"targets.targetLanguage": {"$in": query["tgtLang"]}}})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
             elif 'srcLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"$expr": {"$eq": ["$targets.targetLanguage", query["srcLang"]]}}]}})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
             pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
