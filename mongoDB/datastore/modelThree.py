@@ -32,8 +32,9 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            data_json = data_json[:100000]
-            total, duplicates, batch = len(data_json), 0, 1000
+            if 'slice' in request.keys():
+                data_json = data_json[:request["slice"]]
+            total, duplicates, batch = len(data_json), 0, request["batch"]
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request)
@@ -188,22 +189,6 @@ class ModelThree:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
-    def post_processor(self, data_list, query):
-        processed_data = []
-        src, tgt = [], []
-        if 'srcLang' in query.keys():
-            src.append(query["srcLang"])
-        if 'tgtLang' in query.keys():
-            for tgt in query["tgtLang"]:
-                tgt.append(tgt)
-        for data in data_list:
-            processed = {}
-            data_clone = data
-            if data["sourceLanguage"] != src:
-                for target in data["targets"]:
-                    if target["targetLanguage"] == src:
-                        processed["sourceText"] = target["targetText"]
-
     ####################### DB ##############################
 
     def set_mongo_cluster(self, create):
@@ -254,10 +239,12 @@ class ModelThree:
         result = []
         try:
             col = self.get_mongo_instance()
-            res = col.aggregate([
-                {"$match": {"tags": {"$all": query["tags"]}}},
-                {"$unwind": "$targets"},
-                {
+            pipeline = []
+            if "tags" in query.keys():
+                pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
+            if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
+                pipeline.append({"$unwind": "$targets"})
+                pipeline.append({
                     "$match": {"$and": [
                         {
                             "$or": [
@@ -267,8 +254,11 @@ class ModelThree:
                         },
                         {"targetLanguage": {"$in": query["tgtLang"]}}
                     ]}
-                }
-            ], allowDiskUse=True)
+                })
+            elif 'srcLang' in query.keys():
+                pipeline.append({"$unwind": "$targets"})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["srcLang"]}]}})
+            res = col.aggregate(*pipeline, allowDiskUse=True)
             if res:
                 for record in res:
                     result.append(record)
