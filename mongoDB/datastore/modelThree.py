@@ -43,6 +43,7 @@ class ModelThree:
                 tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
                 record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
                 if record:
+                    log.info(f'Duplicate: {data}| {datetime.now()}')
                     d_count += 1
                     continue
                 record = self.get_dataset_internal({"tags": [src_hash]})
@@ -130,7 +131,10 @@ class ModelThree:
                 db_query["tags"] = {"$all": query["tags"]}
             exclude = {"_id": False}
             data = self.search(db_query, exclude, None, None)
-            return data
+            if data:
+                return data
+            else:
+                return None
         except Exception as e:
             log.exception(e)
             return None
