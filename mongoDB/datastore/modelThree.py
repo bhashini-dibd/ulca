@@ -268,7 +268,6 @@ class ModelThree:
                         {"$in": {"targetLanguage": query["tgtLang"]}}
                     ]}
                 },
-                exclude,
                 {"allowDiskUse": True}
             ])
             if res:
