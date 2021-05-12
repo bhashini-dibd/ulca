@@ -1,0 +1,38 @@
+@startuml
+
+' edit using https://www.planttext.com/
+' this is a activity flow chart for parallel corpus dedupe logic
+
+title Deduplication - parallel corpus \n
+
+start
+
+note left
+    1. Inputs: srcText, targetText, language, domain.
+    2. lookup function searches both source & target hash values
+    3. domain shall be used. 
+        if multiple data stores partitioned based on domain.
+end note
+
+:sourceDocId = null
+targetDocId = null;
+if(sourceDocId = lookup(hashOf(srcText))) then (found)
+    if(targetDocId = lookup(hashOf(tgtText))) then (found)
+    else (not found)
+    endif
+else (not found)
+    if(targetDocId = lookup(hashOf(tgtText))) then (found)
+    endif
+endif
+
+if(sourceDocId == targetDocId) then (yes)
+    :isDuplciate=yes;
+else (no)
+    :isDuplciate=no;
+endif
+
+:return {isDuplciate, sourceDocId, targetDocId};
+
+stop
+
+@enduml
