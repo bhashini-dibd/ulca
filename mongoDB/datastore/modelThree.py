@@ -159,27 +159,25 @@ class ModelThree:
     def get_dataset(self, query):
         log.info(f'Fetching datasets..... | {datetime.now()}')
         try:
-            offset = query["offset"] if 'offset' in query.keys() else default_offset
-            limit = query["limit"] if 'limit' in query.keys() else default_limit
             db_query = {}
-            tags, lang_tags = [], []
+            tags = []
             if 'srcLang' in query.keys():
                 tags.append(query["srcLang"])
+                db_query["srcLang"] = query["srcLang"]
             if 'tgtLang' in query.keys():
                 for tgt in query["tgtLang"]:
                     tags.append(tgt)
+                db_query["tgtLang"] = query["tgtLang"]
             if 'collectionMode' in query.keys():
                 tags.append(query["collectionMode"])
             if 'licence' in query.keys():
                 tags.append(query["licence"])
             if 'domain' in query.keys():
                 tags.append(query["domain"])
-            if 'srcText' in query.keys():
-                db_query["sourceTextHash"] = str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest())
             if tags:
-                db_query["tags"] = {"$all": tags}
+                db_query["tags"] = tags
             exclude = {"_id": False}
-            data = self.search(db_query, exclude, offset, limit)
+            data = self.search(db_query, exclude)
             count = len(data)
             if count > 30:
                 data = data[:30]
@@ -189,6 +187,22 @@ class ModelThree:
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
+
+    def post_processor(self, data_list, query):
+        processed_data = []
+        src, tgt = [], []
+        if 'srcLang' in query.keys():
+            src.append(query["srcLang"])
+        if 'tgtLang' in query.keys():
+            for tgt in query["tgtLang"]:
+                tgt.append(tgt)
+        for data in data_list:
+            processed = {}
+            data_clone = data
+            if data["sourceLanguage"] != src:
+                for target in data["targets"]:
+                    if target["targetLanguage"] == src:
+                        processed["sourceText"] = target["targetText"]
 
     ####################### DB ##############################
 
@@ -236,14 +250,27 @@ class ModelThree:
         #col.replace_one({"id": data["id"]}, data)
 
     # Searches the object into mongo collection
-    def search(self, query, exclude, offset, res_limit):
+    def search(self, query, exclude):
         result = []
         try:
             col = self.get_mongo_instance()
-            if offset is None and res_limit is None:
-                res = col.find(query, exclude).sort([('_id', 1)])
-            else:
-                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+            res = col.aggregate([
+                {"$match": {"tags": {"$all": query["tags"]}}},
+                {"$unwind": "$targets"},
+                {
+                    "$match": {"$and": [
+                        {
+                            "$or": [
+                                {"sourceLanguage": query["srcLang"]},
+                                {"targetLanguage": query["srcLang"]}
+                            ]
+                        },
+                        {"$in": {"targetLanguage": query["tgtLang"]}}
+                    ]}
+                },
+                exclude,
+                {"allowDiskUse": True}
+            ])
             if res:
                 for record in res:
                     result.append(record)
