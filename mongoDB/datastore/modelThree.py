@@ -32,8 +32,8 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            data_json = data_json[:100000]
-            total, duplicates, batch = len(data_json), 0, 10000
+            data_json = data_json[:10000]
+            total, duplicates, batch = len(data_json), 0, 1000
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request)
@@ -125,6 +125,7 @@ class ModelThree:
             record[0]["tags"].extend(list(self.get_tags(tags_dict)))
             return record[0], "UPDATE", 0
         else:
+            record = self.get_dataset_internal({"tags": [tgt_hash]})
             targets = [target]
             tags_dict = {
                 "srcHash": src_hash, "tgtHash": tgt_hash, "tgtLang": request["details"]["targetLanguage"],

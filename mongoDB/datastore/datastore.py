@@ -34,9 +34,9 @@ class Datastore:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            data_json = data_json[:100000]
+            data_json = data_json[:10000]
             enriched_data, duplicates, batch_data = [], 0, []
-            total, count, duplicates, batch = len(data_json), 0, 0, 10000
+            total, count, duplicates, batch = len(data_json), 0, 0, 1000
             log.info(f'Enriching dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request)
             pool_enrichers = multiprocessing.Pool(no_of_enrich_process)
@@ -75,9 +75,9 @@ class Datastore:
             return None, 0
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-        '''record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
+        record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
         if record:
-            return None, 1'''
+            return None, 1
         data["score"] = random.uniform(0, 1)
         tag_details, details = {}, request["details"]
         tag_details = {
