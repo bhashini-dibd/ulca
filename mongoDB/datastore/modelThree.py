@@ -33,10 +33,10 @@ class ModelThree:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100
+            total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 1000
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
-            data_json = data_json[:1000]
+            data_json = data_json[:10000]
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
                     continue
@@ -89,26 +89,29 @@ class ModelThree:
                     }
                     insert_batch.append(record)
                     if len(insert_batch) == batch:
-                        log.info(f'Adding batch of {len(update_batch)} to the BULK INSERT list... | {datetime.now()}')
+                        log.info(f'Adding batch of {len(insert_batch)} to the BULK INSERT list... | {datetime.now()}')
                         insert_records.append(insert_batch)
                         insert_batch = []
                     i_count += 1
             if insert_batch:
-                log.info(f'Adding batch of {len(update_batch)} to the BULK INSERT list... | {datetime.now()}')
+                log.info(f'Adding batch of {len(insert_batch)} to the BULK INSERT list... | {datetime.now()}')
                 insert_records.append(insert_batch)
             if update_batch:
                 log.info(f'Adding batch of {len(update_batch)} to the BULK UPDATE list... | {datetime.now()}')
                 update_records.append(update_batch)
-            pool, ins_count, upd_count = multiprocessing.Pool(no_of_process), 0, 0
-            log.info(f'Dumping records.... | {datetime.now()}')
-            processors = pool.map_async(self.insert, insert_records).get()
-            for result in processors:
-                ins_count += result
-            pool.close()
-            processors = pool.map_async(self.update, update_records).get()
-            for result in processors:
-                upd_count += result
-            pool.close()
+            pool_ins, pool_upd, ins_count, upd_count = multiprocessing.Pool(no_of_process), multiprocessing.Pool(no_of_process), 0, 0
+            if update_records:
+                log.info(f'Dumping UPDATE records.... | {datetime.now()}')
+                processors = pool_upd.map_async(self.update, update_records).get()
+                for result in processors:
+                    upd_count += result
+            pool_upd.close()
+            if insert_records:
+                log.info(f'Dumping INSERT records.... | {datetime.now()}')
+                processors = pool_ins.map_async(self.insert, insert_records).get()
+                for result in processors:
+                    ins_count += result
+            pool_ins.close()
             if (ins_count + upd_count) == total:
                 log.info(f'Dumping COMPLETE! total: {total} | {datetime.now()}')
             log.info(f'Done! -- UPDATES: {u_count}, INSERTS: {i_count}, "DUPLICATES": {d_count} | {datetime.now()}')
@@ -135,10 +138,8 @@ class ModelThree:
             exclude = {"_id": False}
             data = self.search(db_query, exclude, None, None)
             if data:
-                log.info(f'Returning data...| {datetime.now()}')
                 return data
             else:
-                log.info(f'No data...| {datetime.now()}')
                 return None
         except Exception as e:
             log.exception(e)
