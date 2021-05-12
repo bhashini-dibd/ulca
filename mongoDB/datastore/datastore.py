@@ -72,7 +72,7 @@ class Datastore:
             return None, 0
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-        record = self.get_dataset({"tags": [src_hash, tgt_hash], "limit": 100000000})
+        record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
         if record:
             return None, 1
         data["score"] = random.uniform(0, 1)
@@ -100,6 +100,22 @@ class Datastore:
                     yield entries
             else:
                 yield v
+
+    def get_dataset_internal(self, query):
+        try:
+            db_query = {}
+            if "tags" in query.keys():
+                db_query["tags"] = {"$all": query["tags"]}
+            exclude = {"_id": False}
+            data = self.search(db_query, exclude, None, None)
+            if data:
+                return data
+            else:
+                return None
+        except Exception as e:
+            log.exception(e)
+            return None
+
 
     def get_dataset(self, query):
         log.info(f'Fetching datasets..... | {datetime.now()}')
@@ -130,8 +146,6 @@ class Datastore:
                 tags.append(query["domain"])
             if 'srcText' in query.keys():
                 db_query["srcHash"] = str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest())
-            if 'tags' in query.keys():
-                tags.extend(query["tags"])
             if tags:
                 db_query["tags"] = {"$all": tags}
             if 'groupBySource' in query.keys():
