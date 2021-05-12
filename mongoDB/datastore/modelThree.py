@@ -146,7 +146,7 @@ class ModelThree:
         try:
             db_query = {}
             if "tags" in query.keys():
-                db_query["tags"] = {"$all": query["tags"]}
+                db_query["tags"] = query["tags"]
             data = self.search(db_query)
             if data:
                 return data
