@@ -34,7 +34,7 @@ class ModelThree:
             dataset = open(path, "r")
             data_json = json.load(dataset)
             total, d_count, u_count, i_count, batch = len(data_json), 0, 0, 0, 100000
-            update_batch, insert_batch = [], []
+            update_batch, insert_batch, insert_records = [], [], []
             log.info(f'Enriching and Dumping dataset..... | {datetime.now()}')
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
@@ -83,8 +83,20 @@ class ModelThree:
                         "targets": targets, "tags": tags
                     }
                     insert_batch.append(record)
-                    self.insert(record)
+                    if len(insert_batch) == batch:
+                        insert_records.append(insert_batch)
+                        insert_batch = []
                     i_count += 1
+            if insert_batch:
+                insert_records.append(insert_batch)
+            pool, count = multiprocessing.Pool(no_of_process), 0
+            processors = pool.map_async(self.insert, insert_records).get()
+            for result in processors:
+                count += result
+                if count == i_count:
+                    log.info(f'Dumping COMPLETE! records -- {count} | {datetime.now()}')
+                    break
+            pool.close()
             log.info(f'Done! -- UPDATES: {u_count}, INSERTS: {i_count}, "DUPLICATES": {d_count} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
@@ -180,7 +192,8 @@ class ModelThree:
 
     def insert(self, data):
         col = self.get_mongo_instance()
-        col.insert(data)
+        col.insert_many(data)
+        return len(data)
 
     def update(self, data):
         col = self.get_mongo_instance()
