@@ -244,10 +244,10 @@ class Datastore:
                         if record:
                             if record["srcHash"] in map.keys():
                                 data_list = map[record["srcHash"]]
-                                data_list.append(record)
+                                data_list.append(record["data"])
                                 map[record["srcHash"]] = data_list
                             else:
-                                map[record["srcHash"]] = ["record"]
+                                map[record["srcHash"]] = [record["data"]]
                     result = list(map.values())
             else:
                 if res:
