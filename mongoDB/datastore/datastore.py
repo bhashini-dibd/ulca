@@ -224,7 +224,7 @@ class Datastore:
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBySource' in query.keys():
                 pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": 1}}})
-                pipeline.append({"$group": {"_id": "$_id.sourceHash", "sentences": {"$push": {"$cond": [{"$gt": ["$count", 1]}, {"targetText": "$_id.targetHash", "alignmentScore": "score"}, None]}}}})
+                pipeline.append({"$group": {"_id": "$_id.sourceHash", "sentences": {"$push": {"$cond": [{"$gt": ["$count", 100]}, {"targetText": "$_id.targetHash", "alignmentScore": "score"}, None]}}}})
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             res = col.aggregate(pipeline, allowDiskUse=True)
