@@ -223,7 +223,7 @@ class Datastore:
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBySource' in query.keys():
-                pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": 1}, "content": {"$first": "$$ROOT"}}})
+                pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash", "targetHash": "$targetHash"}, "count": {"$sum": 1}, "content": {"$first": "$$ROOT"}}})
                 pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]},
                                               "sentences": {"$push": {"$cond": [{"$gt": ["$count", 1]}, "$content.data", "$$REMOVE"]}}}})
             else:
@@ -239,7 +239,8 @@ class Datastore:
                                 data.append(record["sentences"])
                                 map[record["_id"]] = data
                             else:
-                                map[record["_id"]] = [record["sentences"]]
+                                if record["sentences"]:
+                                    map[record["_id"]] = [record["sentences"]]
                     result.extend(list(map.values()))
             else:
                 if res:
