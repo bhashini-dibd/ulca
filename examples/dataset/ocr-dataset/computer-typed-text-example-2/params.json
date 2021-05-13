@@ -7,9 +7,7 @@
         "Kannada scanned book",
         "https://github.com/MILE-IISc/Kannada-OCR-test-images-with-ground-truth.git"
     ],
-    "domain": [
-        "general"
-    ],
+    "domain": "general",
     "collectionMethod": [
         "web-scrapping-ocr"
     ],

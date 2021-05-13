@@ -7,9 +7,7 @@
         "3522_2009_13_1501_15302_Judgement_24-Jul-2019_TAM.pdf",
         "https://main.sci.gov.in"
     ],
-    "domain": [
-        "general"
-    ],
+    "domain": "general",
     "collectionMethod": [
         "web-scrapping-ocr"
     ],

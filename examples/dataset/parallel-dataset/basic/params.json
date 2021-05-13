@@ -6,9 +6,7 @@
     "collectionSource": [
         "42040.pdf", "https://main.sci.gov.in"
     ],
-    "domain": [
-        "legal"
-    ],
+    "domain": "legal",
     "collectionMethod": [
         "web-scrapping-machine-readable",
         "algorithm-back-translated"

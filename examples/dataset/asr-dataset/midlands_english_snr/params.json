@@ -6,9 +6,7 @@
     "collectionSource": [
         "openslr"
     ],
-    "domain": [
-        "general"
-    ],
+    "domain": "general",
     "collectionMethod": [
         "web-scrapping-audio"
     ],

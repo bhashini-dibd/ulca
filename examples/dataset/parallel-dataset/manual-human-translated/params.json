@@ -7,9 +7,7 @@
         "219200011442014_1.pdf",
         "Motor Vehicle Claim Tribunal, Alwar"
     ],
-    "domain": [
-        "legal"
-    ],
+    "domain": "legal",
     "collectionMethod": [
         "manual-human-translated"
     ],
