@@ -223,16 +223,23 @@ class Datastore:
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBySource' in query.keys():
-                pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash", "targetHash": "$targetHash"}, "count": {"$sum": 1}, "content": {"$first": "$$ROOT"}}})
+                pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": 1}}})
                 pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
-                '''pipeline.append({"$match": {"srcHash": "$_id"}})
-                pipeline.append({"$project": {"_id": 0, "srcHash": 1, "data": 1}})'''
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             res = col.aggregate(pipeline, allowDiskUse=True)
-            if 'groupBySource' not in query.keys():
+            if 'groupBySource' in query.keys():
                 if res:
+                    hashes = []
+                    for record in res:
+                        if record:
+                            if record["_id"]:
+                                hashes.append(record["_id"])
+                    if hashes:
+                        res = col.find({"srcHash": {"$in": hashes}}, {"_id": False, "srcHash": True, "data": True})
                     map = {}
+                    if not res:
+                        return  result
                     for record in res:
                         if record:
                             if record["srcHash"] in map.keys():
