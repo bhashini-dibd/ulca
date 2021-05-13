@@ -55,24 +55,20 @@ Monolingual or ASR/TTS or OCR dataset typically uses a single language and the f
 ```
 
 ### domain
-This attribute defines that `relevant business area or domain` under which dataset is curated. ULCA _ONLY_ accepts  one or more values that are defined under [Domain schema](../../common-schemas.yml#Domain).
+This attribute defines that `relevant business area or domain` under which dataset is curated. ULCA _ONLY_ accepts  one values that are defined under [Domain schema](../../common-schemas.yml#Domain).
 Few examples are following
 domain specifically for `legal` domain
 
 ```json
  
- [
-   "legal"
- ]
+ "domain": "legal"
  
 ```
 or
-dataset meant for `legal`, `news` domain
+dataset meant for `news` domain
 ```json
  
- [
-   "legal", "news"
- ]
+ "domain": "news"
 
 ```
 
