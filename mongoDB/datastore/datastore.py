@@ -128,15 +128,17 @@ class Datastore:
             if 'maxScore' in query.keys():
                 score_query["$lte"] = query["maxScore"]
             if score_query:
-                db_query["data.score"] = score_query
+                db_query["scoreQuery"] = {"data.score": score_query}
             if 'score' in query.keys():
-                db_query["data.score"] = query["score"]
-            tags = []
+                db_query["scoreQuery"] = {"data.score": query["score"]}
+            tags, src_lang, tgt_lang = [], None, []
             if 'srcLang' in query.keys():
                 tags.append(query["srcLang"])
+                src_lang = query["srcLang"]
             if 'tgtLang' in query.keys():
                 for tgt in query["tgtLang"]:
                     tags.append(tgt)
+                    tgt_lang.append(tgt)
             if 'collectionMode' in query.keys():
                 tags.append(query["collectionMode"])
             if 'licence' in query.keys():
@@ -146,7 +148,11 @@ class Datastore:
             if 'srcText' in query.keys():
                 db_query["srcHash"] = str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest())
             if tags:
-                db_query["tags"] = {"$all": tags}
+                db_query["tags"] = tags
+            if src_lang:
+                db_query["srcLang"] = src_lang
+            if tgt_lang:
+                db_query["tgtLang"] = tgt_lang
             if 'groupBySource' in query.keys():
                 db_query["$groupBySource"] = True
             exclude = {"_id": False}
@@ -206,13 +212,22 @@ class Datastore:
         result = []
         try:
             col = self.get_mongo_instance()
-            if "$groupBySource" in query.keys():
-                query.pop("$groupBySource")
-                return self.search_map_reduce(col, query, res_limit)
-            if offset is None and res_limit is None:
-                res = col.find(query, exclude)
-            else:
-                res = col.find(query, exclude).skip(offset).limit(res_limit)
+            pipeline = []
+            if "tags" in query.keys():
+                pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
+            if "scoreQuery" in query.keys():
+                pipeline.append({"$match": query["scoreQuery"]})
+            if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
+                if len(query["tgtLang"]) > 1:
+                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": {"$in": query["tgtLang"]}}]}})
+                else:
+                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["tgtLang"]}]}})
+            elif 'srcLang' in query.keys():
+                pipeline.append({"$match": {"sourceLanguage": query["srcLang"]}})
+            if 'groupBySource' in query.keys():
+                pipeline.append({"$group": {"_id": "$srcHash"}})
+            pipeline.append({"$project": {"_id": 0, "data": 1}})
+            res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
                 for record in res:
                     result.append(record)
