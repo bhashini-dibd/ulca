@@ -226,7 +226,8 @@ class Datastore:
                 pipeline.append({"$group": {"_id": {"sourceText": "$srcHash", "targetText": "$tgtHash"}}})
                 pipeline.append({"$group": {"_id": "$_id.sourceText", "sentences": {"$push": {"targetText": "$_id.targetText", "alignmentScore": "score"}}}})
                 pipeline.append({"$group": {"_id": "", "data": {"$push": "$$ROOT"}}})
-                pipeline.append({"$project": {"_id": 0, "data": {"$cond": {"if": {"$gt", ["$data.sentences", 1]}, "then": 1, "else": 0}}}})
+                #pipeline.append({"$project": {"_id": 0, "data": {"$cond": {"if": {"$gt", ["$data.sentences", 1]}, "then": 1, "else": 0}}}})
+                pipeline.append({"$project": {"_id": 0, "data": 1}})
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             res = col.aggregate(pipeline, allowDiskUse=True)
