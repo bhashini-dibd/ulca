@@ -13,9 +13,7 @@
     "collectionMethod": [
         "web-scrapping-machine-readable"
     ],
-    "license": [
-        "cc-by-4.0"
-    ],
+    "license":  "cc-by-4.0",
     "submitter": {
         "name": "Project Anuvaad",
         "aboutMe": "contribution toward parallel corpus in general domain"

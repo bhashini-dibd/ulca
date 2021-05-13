@@ -12,9 +12,7 @@
     "collectionMethod": [
         "web-scrapping-audio"
     ],
-    "license": [
-        "cc-by-4.0"
-    ],
+    "license":  "cc-by-4.0",
     "submitter": {
         "name": "Anirudh",
         "oauthid": "anirudh.gupta@thoughtworks.com",

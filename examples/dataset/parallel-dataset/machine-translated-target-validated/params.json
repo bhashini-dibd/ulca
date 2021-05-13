@@ -14,9 +14,7 @@
         "algorithm-back-translated",
         "human-validated"
     ],
-    "license": [
-        "cc-by-4.0"
-    ],
+    "license":  "cc-by-4.0",
     "submitter": {
         "name": "Project Anuvaad",
         "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project"
