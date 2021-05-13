@@ -211,20 +211,20 @@ class Datastore:
         result, pipeline = [], []
         try:
             col = self.get_mongo_instance()
-            if "tags" in query.keys():
-                pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
-            if "scoreQuery" in query.keys():
-                pipeline.append({"$match": query["scoreQuery"]})
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 if len(query["tgtLang"]) > 1:
                     pipeline.append({"$match": {"$and": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": {"$in": query["tgtLang"]}}]}})
                 else:
-                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["tgtLang"]}]}})
+                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["tgtLang"][0]}]}})
             elif 'srcLang' in query.keys():
                 pipeline.append({"$match": {"sourceLanguage": query["srcLang"]}})
+            if "tags" in query.keys():
+                pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
+            if "scoreQuery" in query.keys():
+                pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBySource' in query.keys():
                 pipeline.append({"$group": {"_id": "$srcHash"}})
-            pipeline.append({"$project": {"_id": 0}})
+            pipeline.append({"$project": {"_id": 0, "data": 1}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
                 for record in res:
