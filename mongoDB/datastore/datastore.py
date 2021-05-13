@@ -76,9 +76,9 @@ class Datastore:
             return None, 0
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-        record = self.get_dataset_internal({"hash": [src_hash, tgt_hash]})
+        '''record = self.get_dataset_internal({"hash": [src_hash, tgt_hash]})
         if record:
-            return None, 1
+            return None, 1'''
         data["score"] = random.uniform(0, 1)
         tag_details, details = {}, request["details"]
         tag_details = {
