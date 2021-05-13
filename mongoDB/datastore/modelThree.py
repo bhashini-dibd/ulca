@@ -99,12 +99,20 @@ class ModelThree:
     def get_enriched_data(self, data, request):
         if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
             return None, None, 0
+        append_record = None
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-        record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
-        if record:
-            return None, None, 1
         record = self.get_dataset_internal({"tags": [src_hash]})
+        if record:
+            record = record[0]
+            if tgt_hash in record["tags"]:
+                return None, None, 1
+            else:
+                append_record = record
+        else:
+            record = self.get_dataset_internal({"tags": [tgt_hash]})
+            if record:
+                append_record = record
         target = {
             "id": uuid.uuid4(),
             "targetText": data["targetText"],
@@ -116,17 +124,16 @@ class ModelThree:
         }
         if 'translator' in data.keys():
             target["translator"] = data["translator"]
-        if record:
-            record[0]["targets"].append(target)
+        if append_record:
+            append_record[0]["targets"].append(target)
             tags_dict = {
                 "tgtHash": tgt_hash, "lang": request["details"]["targetLanguage"],
                 "collectionMode": request["details"]["collectionMode"],
                 "domain": request["details"]["domain"], "licence": request["details"]["licence"]
             }
-            record[0]["tags"].extend(list(self.get_tags(tags_dict)))
-            return record[0], "UPDATE", 0
+            append_record[0]["tags"].extend(list(self.get_tags(tags_dict)))
+            return append_record[0], "UPDATE", 0
         else:
-            record = self.get_dataset_internal({"tags": [tgt_hash]})
             targets = [target]
             tags_dict = {
                 "srcHash": src_hash, "tgtHash": tgt_hash, "tgtLang": request["details"]["targetLanguage"],
@@ -240,8 +247,6 @@ class ModelThree:
             pipeline = []
             if "tags" in query.keys():
                 pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
-            if 'groupBySource' in query.keys():
-                pipeline.append({"$match": {"$gte": [{"$size": "targets"}, len(query["tgtLang"])]}})
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
                 pipeline.append({"$match": {"targets.targetLanguage": {"$in": query["tgtLang"]}}})
@@ -249,7 +254,6 @@ class ModelThree:
             elif 'srcLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
-
             pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
