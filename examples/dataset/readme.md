@@ -103,9 +103,7 @@ This attribute is bit straight forward, dataset submitter should choose on from 
  
 ```json
  
- [
-   "cc-by-4.0"
- ]
+  "license": "cc-by-4.0"
  
 ```
 
