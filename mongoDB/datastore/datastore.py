@@ -236,10 +236,10 @@ class Datastore:
                             if record["_id"]:
                                 hashes.append(record["_id"])
                     if hashes:
-                        res = col.find({"srcHash": {"$in": hashes}}, {"_id": False, "srcHash": True, "data": True})
+                        res = col.find({"srcHash": {"$in": hashes}}, {"_id": False, "srcHash": True, "data": True}).skip(0).limit(100)
                     map = {}
                     if not res:
-                        return  result
+                        return result
                     for record in res:
                         if record:
                             if record["srcHash"] in map.keys():
