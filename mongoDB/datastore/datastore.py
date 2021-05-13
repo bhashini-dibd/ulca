@@ -225,12 +225,12 @@ class Datastore:
             if 'groupBySource' in query.keys():
                 pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash", "targetHash": "$targetHash"}, "count": {"$sum": 1}, "content": {"$first": "$$ROOT"}}})
                 pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
-                pipeline.append({"$match": {"srcHash": "$_id"}})
-                pipeline.append({"$project": {"_id": 0, "srcHash": 1, "data": 1}})
+                '''pipeline.append({"$match": {"srcHash": "$_id"}})
+                pipeline.append({"$project": {"_id": 0, "srcHash": 1, "data": 1}})'''
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             res = col.aggregate(pipeline, allowDiskUse=True)
-            if 'groupBySource' in query.keys():
+            if 'groupBySource' not in query.keys():
                 if res:
                     map = {}
                     for record in res:
