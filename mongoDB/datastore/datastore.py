@@ -158,7 +158,6 @@ class Datastore:
             exclude = {"_id": False}
             data = self.search(db_query, exclude, offset, limit)
             result, query, count = data[0], data[1], data[2]
-            count = len(result)
             if count > 30:
                 result = result[:30]
             log.info(f'Result count: {count} | {datetime.now()}')
