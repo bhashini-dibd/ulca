@@ -236,12 +236,12 @@ class Datastore:
                             if record["_id"]:
                                 hashes.append(record["_id"])
                     if hashes:
-                        log.info(f'hashes size: {len(hashes)} | {datetime.now()}')
-                        res = col.find({"srcHash": {"$in": hashes}}, {"_id": False, "srcHash": True, "data": True}).skip(0).limit(50)
-                        res_count = col.count({"srcHash": {"$in": hashes}})
+                        search_hashes = hashes[:100]
+                        res = col.find({"srcHash": {"$in": search_hashes}}, {"_id": False, "srcHash": True, "data": True})
                     map = {}
                     if not res:
                         return result, pipeline, res_count
+                    res_count = len(hashes)
                     for record in res:
                         if record:
                             if record["srcHash"] in map.keys():
