@@ -223,14 +223,16 @@ class Datastore:
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBySource' in query.keys():
-                pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": 1}}})
-                pipeline.append({"$group": {"_id": "$_id.sourceHash", "sentences": {"$push": {"$cond": [{"$gt": ["$count", 100]}, {"targetText": "$_id.targetHash", "alignmentScore": "score"}, None]}}}})
+                pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": 1}, "content": "$data"}})
+                pipeline.append({"$project": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id", "$$REMOVE"]},
+                                              "sentences": {"$push": {"$cond": [{"$gt": ["$count", 1]}, "$content", "$$REMOVE"]}}}})
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
                 for record in res:
-                    result.append(record)
+                    if record:
+                        result.append(record)
         except Exception as e:
             log.exception(e)
         return result, pipeline
