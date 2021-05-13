@@ -153,6 +153,8 @@ class Datastore:
                 db_query["tgtLang"] = tgt_lang
             if 'groupBySource' in query.keys():
                 db_query["groupBySource"] = True
+                if 'countOfTranslations' in query.keys():
+                    db_query["countOfTranslations"] = query["countOfTranslations"]
             exclude = {"_id": False}
             data = self.search(db_query, exclude, offset, limit)
             result, query, count = data[0], data[1], data[2]
@@ -224,7 +226,10 @@ class Datastore:
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBySource' in query.keys():
                 pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": 1}}})
-                pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
+                if 'countOfTranslations' in query.keys():
+                    pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.sourceHash", "$$REMOVE"]}}})
+                else:
+                    pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             res = col.aggregate(pipeline, allowDiskUse=True)
@@ -236,12 +241,11 @@ class Datastore:
                             if record["_id"]:
                                 hashes.append(record["_id"])
                     if hashes:
-                        search_hashes = hashes[:100]
-                        res = col.find({"srcHash": {"$in": search_hashes}}, {"_id": False, "srcHash": True, "data": True})
+                        res_count = len(hashes)
+                        res = col.find({"srcHash": {"$in": hashes[:100]}}, {"_id": False, "srcHash": True, "data": True})
                     map = {}
                     if not res:
                         return result, pipeline, res_count
-                    res_count = len(hashes)
                     for record in res:
                         if record:
                             if record["srcHash"] in map.keys():
@@ -259,6 +263,7 @@ class Datastore:
                 res_count = len(result)
         except Exception as e:
             log.exception(e)
+            return [], pipeline, 0
         return result, pipeline, res_count
 
     def search_map_reduce(self, col, query, res_limit):
