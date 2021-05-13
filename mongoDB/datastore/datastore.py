@@ -236,10 +236,10 @@ class Datastore:
                         if record:
                             if record["_id"] in map.keys():
                                 data = map[record["_id"]]
-                                data.append(record["sentences"][0])
+                                data.append(record["sentences"])
                                 map[record["_id"]] = data
                             else:
-                                map[record["_id"]] = [record["sentences"][0]]
+                                map[record["_id"]] = [record["sentences"]]
                     result.extend(list(map.values()))
             else:
                 if res:
