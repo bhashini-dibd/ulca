@@ -225,14 +225,27 @@ class Datastore:
             if 'groupBySource' in query.keys():
                 pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": 1}, "content": {"$first": "$$ROOT"}}})
                 pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]},
-                                              "sentences": {"$addToSet": {"$cond": [{"$gt": ["$count", 1]}, "$content.data", "$$REMOVE"]}}}})
+                                              "sentences": {"$push": {"$cond": [{"$gt": ["$count", 1]}, "$content.data", "$$REMOVE"]}}}})
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             res = col.aggregate(pipeline, allowDiskUse=True)
-            if res:
-                for record in res:
-                    if record:
-                        result.append(record)
+            if 'groupBySource' in query.keys():
+                if res:
+                    map = {}
+                    for record in res:
+                        if record:
+                            if record["_id"] in map.keys():
+                                data = map[record["_id"]]
+                                data.append(record["sentences"][0])
+                                map[record["_id"]] = data
+                            else:
+                                map[record["_id"]] = [record["sentences"][0]]
+                    result.extend(list(map.values()))
+            else:
+                if res:
+                    for record in res:
+                        if record:
+                            result.append(record)
         except Exception as e:
             log.exception(e)
         return result, pipeline
