@@ -108,7 +108,7 @@ class Datastore:
             exclude = {"_id": False}
             data = self.search(db_query, exclude, None, None)
             if data:
-                return data
+                return data[0]
             else:
                 return None
         except Exception as e:
@@ -155,7 +155,7 @@ class Datastore:
                 db_query["groupBySource"] = True
             exclude = {"_id": False}
             data = self.search(db_query, exclude, offset, limit)
-            result, query = data[0], data[1]
+            result, query, count = data[0], data[1], data[2]
             count = len(result)
             if count > 30:
                 result = result[:30]
@@ -208,7 +208,7 @@ class Datastore:
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
-        result, pipeline = [], []
+        result, res_count, pipeline = [], 0, []
         try:
             col = self.get_mongo_instance()
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
@@ -236,10 +236,12 @@ class Datastore:
                             if record["_id"]:
                                 hashes.append(record["_id"])
                     if hashes:
-                        res = col.find({"srcHash": {"$in": hashes}}, {"_id": False, "srcHash": True, "data": True}).skip(0).limit(100)
+                        log.info(f'hashes size: {len(hashes)} | {datetime.now()}')
+                        res = col.find({"srcHash": {"$in": hashes}}, {"_id": False, "srcHash": True, "data": True}).skip(0).limit(50)
+                        res_count = col.count({"srcHash": {"$in": hashes}})
                     map = {}
                     if not res:
-                        return result
+                        return result, pipeline, res_count
                     for record in res:
                         if record:
                             if record["srcHash"] in map.keys():
@@ -254,9 +256,10 @@ class Datastore:
                     for record in res:
                         if record:
                             result.append(record)
+                res_count = len(result)
         except Exception as e:
             log.exception(e)
-        return result, pipeline
+        return result, pipeline, res_count
 
     def search_map_reduce(self, col, query, res_limit):
         map_func = Code("function () { emit(this.srcHash, this.data); }")
