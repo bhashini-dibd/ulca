@@ -152,7 +152,7 @@ class Datastore:
             if tgt_lang:
                 db_query["tgtLang"] = tgt_lang
             if 'groupBySource' in query.keys():
-                db_query["$groupBySource"] = True
+                db_query["groupBySource"] = True
             exclude = {"_id": False}
             data = self.search(db_query, exclude, offset, limit)
             result, query = data[0], data[1]
