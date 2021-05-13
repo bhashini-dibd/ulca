@@ -34,9 +34,10 @@ class Datastore:
             log.info("File -- {} | {}".format(path, datetime.now()))
             dataset = open(path, "r")
             data_json = json.load(dataset)
-            data_json = data_json[:100000]
+            if 'slice' in request.keys():
+                data_json = data_json[:request["slice"]]
             enriched_data, duplicates, batch_data = [], 0, []
-            total, count, duplicates, batch = len(data_json), 0, 0, 1000
+            total, count, duplicates, batch = len(data_json), 0, 0, request["batch"]
             log.info(f'Enriching dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request)
             pool_enrichers = multiprocessing.Pool(no_of_enrich_process)
@@ -75,24 +76,21 @@ class Datastore:
             return None, 0
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-        record = self.get_dataset_internal({"tags": [src_hash, tgt_hash]})
+        record = self.get_dataset_internal({"hash": [src_hash, tgt_hash]})
         if record:
             return None, 1
         data["score"] = random.uniform(0, 1)
         tag_details, details = {}, request["details"]
         tag_details = {
-            "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
-            "srcHash": src_hash, "tgtHash": tgt_hash, "collectionMode": details["collectionMode"],
+            "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"], "collectionMode": details["collectionMode"],
             "domain": details["domain"], "licence": details["licence"]
         }
         tags = list(self.get_tags(tag_details))
         data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
-                     "submitter": request["submitter"],
-                     "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
+                     "submitter": request["submitter"], "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
+                     "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
                      "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, "tags": tags}
         return data_dict, 0
-
-
 
     def get_tags(self, d):
         for v in d.values():
@@ -106,9 +104,7 @@ class Datastore:
 
     def get_dataset_internal(self, query):
         try:
-            db_query = {}
-            if "tags" in query.keys():
-                db_query["tags"] = {"$all": query["tags"]}
+            db_query = {"$and": [{"srcHash": {"$in": query["hash"]}}, {"tgtHash": {"$in": query["hash"]}}]}
             exclude = {"_id": False}
             data = self.search(db_query, exclude, None, None)
             if data:
@@ -176,9 +172,13 @@ class Datastore:
             ulca_col = ulca_db[mongo_ulca_dataset_col]
             ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
+            ulca_col.create_index([("srcHash", -1)])
+            ulca_col.create_index([("tgtHash", -1)])
+            ulca_col.create_index([("sourceLanguage", 1)])
+            ulca_col.create_index([("targetLanguage", "hashed")])
             db = client.admin
             db.command('enableSharding', mongo_ulca_db)
-            key = OrderedDict([("_id", "hashed")])
+            key = OrderedDict([("sourceLanguage", 1), ("targetLanguage", "hashed")])
             db.command({'shardCollection': f'{mongo_ulca_db}.{mongo_ulca_dataset_col}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
@@ -210,9 +210,9 @@ class Datastore:
                 query.pop("$groupBySource")
                 return self.search_map_reduce(col, query, res_limit)
             if offset is None and res_limit is None:
-                res = col.find(query, exclude).sort([('_id', 1)])
+                res = col.find(query, exclude)
             else:
-                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                res = col.find(query, exclude).skip(offset).limit(res_limit)
             if res:
                 for record in res:
                     result.append(record)

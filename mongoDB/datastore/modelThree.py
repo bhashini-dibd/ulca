@@ -240,6 +240,8 @@ class ModelThree:
             pipeline = []
             if "tags" in query.keys():
                 pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
+            if 'groupBySource' in query.keys():
+                pipeline.append({"$match": {"$gte": [{"$size": "targets"}, len(query["tgtLang"])]}})
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
                 pipeline.append({"$match": {"targets.targetLanguage": {"$in": query["tgtLang"]}}})
@@ -247,6 +249,7 @@ class ModelThree:
             elif 'srcLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
+
             pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
