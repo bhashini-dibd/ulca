@@ -133,11 +133,9 @@ class Datastore:
                 db_query["scoreQuery"] = {"data.score": query["score"]}
             tags, src_lang, tgt_lang = [], None, []
             if 'srcLang' in query.keys():
-                tags.append(query["srcLang"])
                 src_lang = query["srcLang"]
             if 'tgtLang' in query.keys():
                 for tgt in query["tgtLang"]:
-                    tags.append(tgt)
                     tgt_lang.append(tgt)
             if 'collectionMode' in query.keys():
                 tags.append(query["collectionMode"])
@@ -157,12 +155,13 @@ class Datastore:
                 db_query["$groupBySource"] = True
             exclude = {"_id": False}
             data = self.search(db_query, exclude, offset, limit)
-            count = len(data)
+            result, query = data[0], data[1]
+            count = len(result)
             if count > 30:
-                data = data[:30]
+                result = result[:30]
             log.info(f'Result count: {count} | {datetime.now()}')
             log.info(f'Done! | {datetime.now()}')
-            return {"count": count, "query": db_query, "dataset": data}
+            return {"count": count, "query": query, "dataset": result}
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
@@ -209,10 +208,9 @@ class Datastore:
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
-        result = []
+        result, pipeline = [], []
         try:
             col = self.get_mongo_instance()
-            pipeline = []
             if "tags" in query.keys():
                 pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if "scoreQuery" in query.keys():
@@ -226,14 +224,14 @@ class Datastore:
                 pipeline.append({"$match": {"sourceLanguage": query["srcLang"]}})
             if 'groupBySource' in query.keys():
                 pipeline.append({"$group": {"_id": "$srcHash"}})
-            pipeline.append({"$project": {"_id": 0, "data": 1}})
+            pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
                 for record in res:
                     result.append(record)
         except Exception as e:
             log.exception(e)
-        return result
+        return result, pipeline
 
     def search_map_reduce(self, col, query, res_limit):
         map_func = Code("function () { emit(this.srcHash, this.data); }")
