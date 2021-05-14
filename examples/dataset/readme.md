@@ -191,7 +191,7 @@ Describes the standard image metadata about pixel density.
 ```
 
 ### imageTextType
-This property defines the presence of text on various category of image. For example a text region can be present on scene or let's say on a document. Following are various defined possibilities here.
+This property defines the presence of text on various categories of image. For example a text region can be present on scene or let's say on a document. Following are various defined possibilities here.
   - scene-text
   - typewriter-typed-text
   - computer-typed-text
