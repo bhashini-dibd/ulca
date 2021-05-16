@@ -4,7 +4,7 @@
         "targetLanguage": null
     },
     "collectionSource": [
-        "openslr"
+        "openslr", "https://www.youtube.com?v=121212121"
     ],
     "domain": "general",
     "collectionMethod": [
@@ -16,11 +16,11 @@
         "oauthid": "anirudh.gupta@thoughtworks.com",
         "provider": "google"
     },
-    "contributers": {
+    "contributers": [{
         "name": "Harveen",
         "oauthid": "harveen.chadha@thoughtworks.com",
         "provider": "google"
-    },
+    }],
     "format": "wav",
     "channel": "mono",
     "samplingRate": 16000,
