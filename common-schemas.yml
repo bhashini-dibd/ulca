@@ -10,157 +10,6 @@ info:
 paths: {}
 components:
   schemas:
-
-    MachineTranslatedEvaluationMethod1:
-      type: object
-      description: evaluation strategy as proposed by https://www.researchgate.net/publication/273475626_Adequacy-Fluency_Metrics_Evaluating_MT_in_the_Continuous_Space_Model_Framework
-      required:
-        - adequacy
-        - fluency
-      properties:
-        adequacy:
-          type: number
-          description: Adequacy is a rating of how much information is transferred between the original and the translation
-          minimum: 1
-          maximum: 5
-        fluency:
-          type: number
-          description: fluency is a rating of how good the translation is
-          minimum: 1
-          maximum: 5
-  
-    MachineTranslatedEvaluationMethod2:
-      type: object
-      description: evaluation strategy as proposed by example researcher.
-      properties:
-        unknownParameter1:
-          type: number
-          description: researcher has defined this parameter
-        unknownParameter2:
-          type: number
-          description: researcher has defined this parameter
-        unknownParameter3:
-          type: number
-          description: researcher has defined this parameter
-      
-    collectionDetailsMachineTranslated:
-      type: object
-      description: machine translated collection details
-      properties:
-        translationModel:
-          type: string
-          description: name of the translation model/engine used
-          example: 'google translation'
-        translationModelVersion:
-          type: string
-          description: translation model/engine version
-        evaluationMethod:
-          type: object
-          oneOf:
-            - $ref: '#/components/schemas/MachineTranslatedEvaluationMethod1'
-            - $ref: '#/components/schemas/MachineTranslatedEvaluationMethod2'
-        evaluationMethodType:
-          type: string
-          description: manual evaluation strategy adopted
-          example: 'MachineTranslatedEvaluationMethod1'
-          enum:
-            - 'MachineTranslatedEvaluationMethod1'
-            - 'MachineTranslatedEvaluationMethod2'
-  
-    collectionDetailsAutoAligned:
-      type: object
-      description: auto-aligned collection details
-      required:
-        - alignmentTool
-      properties:
-        alignmentTool:
-          type: string
-          description: name of the alignment tool
-          example: "LaBSE"
-          enum:
-            - 'LaBSE'
-            - 'LASER'
-        alignmentToolVersion:
-          type: string
-          description: alignment tool version
-          example: "LaBSE version 3.0"
-        alignmentScore:
-          type: number
-          description: the alignment score between sourceText and targetText
-  
-  
-    collectionDetailsMachineTranslatedPostEdited:
-      type: object
-      description: machine translated and post edited collection details
-      properties:
-        translationModel:
-          type: string
-          description: name of the translation model/engine used
-          example: 'google translation'
-        translationModelVersion:
-          type: string
-          description: translation model/engine version
-        postEditingTool:
-          type: string
-          description: name of the post editing tool
-          example: 'google translation'
-        postEditingToolVersion:
-          type: string
-          description: post editing tool version
-        postEditor:
-          $ref: '#/components/schemas/Contributor'
-        timeSpentInSeconds:
-          type: number
-          description: time spent by user to translated the sentence.
-        numOfKeysPressed:
-          type: number
-          description: number of keyboard keys pressed 
-      
-    collectionDetailsManualTranslated:
-      type: object
-      description: manual translated collection details
-      properties:
-        postEditingTool:
-          type: string
-          description: name of the post editing tool
-          example: 'google translation'
-        postEditingToolVersion:
-          type: string
-          description: post editing tool version
-        postEditor:
-          $ref: '#/components/schemas/Contributor'
-        timeSpentInSeconds:
-          type: number
-          description: time spent by user to translated the sentence.
-        numOfKeysPressed:
-          type: number
-          description: number of keyboard keys pressed 
-  
-    CollectionMethod1:
-      type: object
-      description: specifies how the dataset is curated.
-      required:
-        - collectionDescription
-      properties:
-        collectionDescription:
-          type: array
-          description: various collection methods user have used to create the dataset
-          items:
-            type: string
-            minItems: 1
-            maxItems: 10
-            enum:
-              - auto-aligned
-              - machine-translated
-              - machine-translated-post-edited
-              - manual-translated
-        collectionDetails:
-          oneOf:
-            - $ref: '#/components/schemas/collectionDetailsAutoAligned'
-            - $ref: '#/components/schemas/collectionDetailsMachineTranslated'
-            - $ref: '#/components/schemas/collectionDetailsMachineTranslatedPostEdited'
-            - $ref: '#/components/schemas/collectionDetailsManualTranslated'
-
     LanguagePair:
       type: object
       description: language pair, make targetLanguage null to reuse the object to indicate single language
@@ -268,8 +117,7 @@ components:
           - sports
           - technology
           - lifestyle
-          - entertainment
-            
+          - entertainment    
     
     License:
       type: string
@@ -329,7 +177,6 @@ components:
         type: string
         minItems: 1
         maxItems: 10
-  
   
     CollectionMethod:
       type: array
@@ -448,12 +295,17 @@ components:
           description: number of hours per gender
           minimum: 1
         gender:
-          type: string
-          description: gender description
-          enum:
-            - male
-            - female
-            - others
+          $ref: '#/components/schemas/Gender'
+  
+    Gender:
+      type: string
+      description: gender description
+      enum:
+        - male
+        - female
+        - transgender
+        - non-specified
+        - others
 
     ProcessStage:
       type: string
