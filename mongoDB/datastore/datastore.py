@@ -9,7 +9,6 @@ from collections import OrderedDict
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from bson.code import Code
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
 from configs import mongo_ulca_dataset_col, no_of_enrich_process, no_of_dump_process
@@ -213,12 +212,11 @@ class Datastore:
         try:
             col = self.get_mongo_instance()
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
-                if len(query["tgtLang"]) > 1:
-                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": {"$in": query["tgtLang"]}}]}})
-                else:
-                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["tgtLang"][0]}]}})
+                langs = [query["srcLang"]]
+                langs.extend(query["tgtLang"])
+                pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
             elif 'srcLang' in query.keys():
-                pipeline.append({"$match": {"sourceLanguage": query["srcLang"]}})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["srcLang"]}]}})
             if "tags" in query.keys():
                 pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if "scoreQuery" in query.keys():
@@ -264,25 +262,6 @@ class Datastore:
             log.exception(e)
             return [], pipeline, 0
         return result, pipeline, res_count
-
-    def search_map_reduce(self, col, query, res_limit):
-        map_func = Code("function () { emit(this.srcHash, this.data); }")
-        reduce_func = Code("function (key, values) {"
-                      "  var data = [];"
-                      "  var result = [];"
-                      "  if (values.length > 1) {"                    
-                      "     for (var i = 0; i < values.length; i++) {"
-                      "         data.push(values[i]);"
-                      "     }"
-                      "     result.push({key: key, value: data});"
-                      "  } " 
-                      "  return result;"
-                      "}")
-        res = col.map_reduce(map_func, reduce_func, "results", query=query, limit=res_limit)
-        result = []
-        for record in res.find({"_id": False}):
-            result.append(record)
-        return result
 
 
 # Log config

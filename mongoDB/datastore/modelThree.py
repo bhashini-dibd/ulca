@@ -1,4 +1,5 @@
 import hashlib
+import itertools
 import json
 import logging
 import multiprocessing
@@ -9,8 +10,10 @@ from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 
-from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
-from configs import mongo_ulca_dataset_col, no_of_enrich_process, no_of_dump_process
+from bson import Code
+
+from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_m3_db
+from configs import mongo_ulca_dataset_m3_col, no_of_enrich_process, no_of_dump_process
 
 import pymongo
 log = logging.getLogger('file')
@@ -52,7 +55,7 @@ class ModelThree:
                                 insert_batch.append(result[0])
                         if "UPDATE" == result[1]:
                             if len(update_batch) == batch:
-                                log.info(f'Adding batch of {len(update_batch)} to the BULK INSERT list... | {datetime.now()}')
+                                log.info(f'Adding batch of {len(update_batch)} to the BULK UPDATE list... | {datetime.now()}')
                                 update_records.append(update_batch)
                                 update_batch = []
                             else:
@@ -154,7 +157,7 @@ class ModelThree:
             db_query = {}
             if "tags" in query.keys():
                 db_query["tags"] = query["tags"]
-            data = self.search(db_query)
+            data = self.search(db_query, True)
             if data:
                 return data
             else:
@@ -183,7 +186,7 @@ class ModelThree:
                 tags.append(query["domain"])
             if tags:
                 db_query["tags"] = tags
-            data = self.search(db_query)
+            data = self.search(db_query, False)
             count = len(data)
             if count > 30:
                 data = data[:30]
@@ -200,23 +203,23 @@ class ModelThree:
         if create:
             log.info(f'Setting the Mongo Shard Cluster up..... | {datetime.now()}')
             client = pymongo.MongoClient(mongo_server_host)
-            client.drop_database(mongo_ulca_db)
-            ulca_db = client[mongo_ulca_db]
-            ulca_col = ulca_db[mongo_ulca_dataset_col]
+            client.drop_database(mongo_ulca_m3_db)
+            ulca_db = client[mongo_ulca_m3_db]
+            ulca_col = ulca_db[mongo_ulca_dataset_m3_col]
             ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
             db = client.admin
-            db.command('enableSharding', mongo_ulca_db)
+            db.command('enableSharding', mongo_ulca_m3_db)
             key = OrderedDict([("_id", "hashed")])
-            db.command({'shardCollection': f'{mongo_ulca_db}.{mongo_ulca_dataset_col}', 'key': key})
+            db.command({'shardCollection': f'{mongo_ulca_m3_db}.{mongo_ulca_dataset_m3_col}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
             return None
 
     def instantiate(self):
         client = pymongo.MongoClient(mongo_server_host)
-        db = client[mongo_ulca_db]
-        mongo_instance = db[mongo_ulca_dataset_col]
+        db = client[mongo_ulca_m3_db]
+        mongo_instance = db[mongo_ulca_dataset_m3_col]
         return mongo_instance
 
     def get_mongo_instance(self):
@@ -237,31 +240,88 @@ class ModelThree:
             bulk.find({'id': record["id"]}).update({'$set': {'targets': record["targets"], "tags": record["tags"]}})
         bulk.execute()
         return len(data)
-        #col.replace_one({"id": data["id"]}, data)
 
     # Searches the object into mongo collection
-    def search(self, query):
+    def search(self, query, internal):
         result = []
         try:
             col = self.get_mongo_instance()
             pipeline = []
             if "tags" in query.keys():
-                pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
+                if internal:
+                    pipeline.append({"$match": {"tags": {"$in": query["tags"]}}})
+                else:
+                    pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
-                pipeline.append({"$match": {"targets.targetLanguage": {"$in": query["tgtLang"]}}})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["tgtLang"]}, {"targets.targetLanguage": query["tgtLang"]}]}})
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
             elif 'srcLang' in query.keys():
                 pipeline.append({"$unwind": "$targets"})
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
+            if 'groupBySource' in query.keys():
+                pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": {"$cond": [{"$gt": ["$targets", query["countOfTranslations"]]}, 1, 0]}}}})
+                if 'countOfTranslations' in query.keys():
+                    pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {
+                        "$sum": {"$cond": [{"$gt": ["$targets", query["countOfTranslations"]]}, 1, 0]}}}})
+                else:
+                    pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": {"$cond": [{"$gt": ["$targets", 1]}, 1, 0]}}}})
             pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if res:
                 for record in res:
                     result.append(record)
+            if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
+                result = self.post_process(query, result)
         except Exception as e:
             log.exception(e)
         return result
+
+    def post_process(self, query, res):
+        src_lang, tgt_lang = None, None
+        if 'srcLang' in query.keys():
+            src_lang = query["srcLang"]
+        if 'tgtLang' in query.keys():
+            tgt_lang = query["tgtLang"]
+        result_set = []
+        for record in res:
+            result_array = []
+            result = {}
+            if src_lang == result["sourceLanguage"]:
+                result["sourceText"] = record["sourceText"]
+            elif tgt_lang == result["sourceLanguage"]:
+                result["targetText"] = record["targetText"]
+            if result:
+                for target in record["targets"]:
+                    if 'sourceText' in result.keys():
+                        if tgt_lang == target["targetLanguage"]:
+                            result["targetText"] = target["targetText"]
+                            result_array.append(result)
+                    elif 'targetText' in result.keys():
+                        if tgt_lang == target["sourceLanguage"]:
+                            result["sourceText"] = target["targetText"]
+                            result_array.append(result)
+            else:
+                target_combinations = list(itertools.combinations(record["targets"], 2))
+                for combination in target_combinations:
+                    if src_lang == combination[0]["targetLanguage"]:
+                        result["sourceText"] = combination[0]["targetText"]
+                    elif tgt_lang == combination[0]["targetLanguage"]:
+                        result["targetText"] = combination[0]["targetText"]
+                    if result:
+                        if src_lang == combination[1]["targetLanguage"]:
+                            result["sourceText"] = combination[1]["targetText"]
+                        elif tgt_lang == combination[1]["targetLanguage"]:
+                            result["targetText"] = combination[1]["targetText"]
+                        if len(result.keys()) == 2:
+                            result_array.append(result)
+                        else:
+                            result = {}
+                            continue
+                    else:
+                        continue
+            result_set.append(result_array)
+        return result_set
 
 
 # Log config
