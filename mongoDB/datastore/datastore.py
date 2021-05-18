@@ -48,8 +48,7 @@ class Datastore:
                             log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
                             enriched_data.append(batch_data)
                             batch_data = []
-                        else:
-                            batch_data.extend(result[0])
+                        batch_data.extend(result[0])
                     duplicates += result[1]
             pool_enrichers.close()
             if batch_data:
@@ -65,7 +64,7 @@ class Datastore:
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": f'loaded {total} no. of records to DB', "status": "SUCCESS"}
+        return {"message": 'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count, "duplicates": duplicates}
 
     def get_enriched_data(self, data, request):
         if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
@@ -107,7 +106,7 @@ class Datastore:
             }
             tags = list(self.get_tags(tag_details))
             langs = [details["sourceLanguage"], details["targetLanguage"]]
-            shard_key = hash(set(sorted(langs)))
+            shard_key = hash(frozenset(sorted(langs)))
             data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
                          "submitter": request["submitter"], "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
                          "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
@@ -201,7 +200,7 @@ class Datastore:
             ulca_col = ulca_db[mongo_ulca_dataset_col]
             ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("sourceLanguage", 1)])
+            ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
             ulca_col.create_index([("shardKey", "hashed")])
             db = client.admin
@@ -253,7 +252,8 @@ class Datastore:
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             if "$in" in query.keys():
-                pipeline.append({"match": {"tags": query}})
+                pipeline = []
+                pipeline.append({"$match": {"tags": query}})
                 pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if 'groupBySource' in query.keys():
@@ -265,7 +265,7 @@ class Datastore:
                                 hashes.append(record["_id"])
                     if hashes:
                         res_count = len(hashes)
-                        res = col.find({"srcHash": {"$in": hashes[:100]}}, {"_id": False, "srcHash": True, "data": True})
+                        res = col.find({"srcHash": {"$in": hashes}}, {"_id": False, "srcHash": True, "data": True})
                     map = {}
                     if not res:
                         return result, pipeline, res_count

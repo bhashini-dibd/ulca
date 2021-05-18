@@ -51,15 +51,13 @@ class ModelThree:
                                 log.info(f'Adding batch of {len(insert_batch)} to the BULK INSERT list... | {datetime.now()}')
                                 insert_records.append(insert_batch)
                                 insert_batch = []
-                            else:
-                                insert_batch.append(result[0])
+                            insert_batch.append(result[0])
                         if "UPDATE" == result[1]:
                             if len(update_batch) == batch:
                                 log.info(f'Adding batch of {len(update_batch)} to the BULK UPDATE list... | {datetime.now()}')
                                 update_records.append(update_batch)
                                 update_batch = []
-                            else:
-                                update_batch.append(result[0])
+                            update_batch.append(result[0])
                     duplicates += result[2]
             pool_enrichers.close()
             if insert_batch:
@@ -81,13 +79,11 @@ class ModelThree:
                 for result in processors:
                     ins_count += result
             pool_ins.close()
-            if (ins_count + upd_count) == total:
-                log.info(f'Dumping COMPLETE! total: {total} | {datetime.now()}')
             log.info(f'Done! -- UPDATES: {upd_count}, INSERTS: {ins_count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": f'loaded {total} no. of records to DB', "status": "SUCCESS"}
+        return {"message": 'loaded dataset to DB-M3', "status": "SUCCESS", "total": total, "updates": upd_count, "inserts": ins_count, "duplicates": duplicates}
 
     def get_tags(self, d):
         for v in d.values():
@@ -146,7 +142,7 @@ class ModelThree:
             }
             tags = list(self.get_tags(tags_dict))
             langs = [request["details"]["sourceLanguage"], request["details"]["sourceLanguage"]]
-            shard_key = hash(set(sorted(langs)))
+            shard_key = hash(frozenset(sorted(langs)))
             record = {
                 "id": uuid.uuid4(), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
                 "sourceLanguage": request["details"]["sourceLanguage"],
@@ -162,7 +158,7 @@ class ModelThree:
                 db_query["tags"] = query["tags"]
             data = self.search(db_query, True)
             if data:
-                return data
+                return data[0]
             else:
                 return None
         except Exception as e:
@@ -201,13 +197,17 @@ class ModelThree:
                 tags.append(src_hash)
             if tags:
                 db_query["tags"] = tags
+            if 'groupBySource' in query.keys():
+                db_query["groupBySource"] = True
+                if 'countOfTranslations' in query.keys():
+                    db_query["countOfTranslations"] = query["countOfTranslations"]
             data = self.search(db_query, False)
-            count = len(data)
+            result, query, count = data[0], data[1], data[2]
             if count > 30:
-                data = data[:30]
+                result = result[:30]
             log.info(f'Result count: {count} | {datetime.now()}')
             log.info(f'Done! | {datetime.now()}')
-            return {"count": count, "query": db_query, "dataset": data}
+            return {"count": count, "query": query, "dataset": result}
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
@@ -275,12 +275,14 @@ class ModelThree:
                 langs.extend(query["tgtLang"])
                 pipeline.append({"$unwind": {"path": "$targets"}})
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": {"$in": langs}}, {"target.targetLanguage": {"$in": langs}}]}})
+                pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
                 if 'countOfTranslations' in query.keys():
-                    pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count":
-                        {"$sum": {"$cond": [{"$gt": [{"$size": "$targets"}, query["countOfTranslations"]]}, 1, 0]}}}})
+                    pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.sourceHash", "$$REMOVE"]}}})
                 else:
-                    pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": {"$cond": [{"$gt": ["$targets", 1]}, 1, 0]}}}})
-            pipeline.append({"$project": {"_id": 0}})
+                    pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
+                pipeline.append({"$project": {"_id": 1}})
+            else:
+                pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if 'groupBySource' in query.keys():
                 if res:
@@ -290,21 +292,16 @@ class ModelThree:
                             if record["_id"]:
                                 hashes.append(record["_id"])
                     if hashes:
+                        log.info(f'Hashes -- {hashes} | {datetime.now()}')
                         res_count = len(hashes)
-                        query = {"$or": [{"sourceTextHash": {"$in": hashes}}, {"targets.targetTextHash": {"$in": hashes}}]}
-                        res = col.find(query, {"_id": False})
-                    map = {}
+                        in_query = {"sourceTextHash": {"$in": hashes}}
+                        #query = {"$or": [{"sourceTextHash": {"$in": hashes}}, {"targets.targetTextHash": {"$in": hashes}}]}
+                        res = col.find(in_query, {"_id": False})
                     if not res:
                         return result, pipeline, res_count
                     for record in res:
                         if record:
-                            if record["sourceTextHash"] in map.keys():
-                                data_list = map[record["sourceTextHash"]]
-                                data_list.append(record)
-                                map[record["sourceTextHash"]] = data_list
-                            else:
-                                map[record["sourceTextHash"]] = [record]
-                    result = list(map.values())
+                            result.append(record)
             else:
                 if res:
                     for record in res:
@@ -312,6 +309,7 @@ class ModelThree:
                             result.append(record)
                 res_count = len(result)
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
+                log.info(f'RESULTTTTTT -- {result} | {datetime.now()}')
                 result = self.post_process(query, result)
         except Exception as e:
             log.exception(e)
@@ -327,18 +325,18 @@ class ModelThree:
         for record in res:
             result_array = []
             result = {}
-            if src_lang == result["sourceLanguage"]:
+            if src_lang == record["sourceLanguage"]:
                 result["sourceText"] = record["sourceText"]
-            elif tgt_lang == result["sourceLanguage"]:
+            elif record["sourceLanguage"] in tgt_lang:
                 result["targetText"] = record["targetText"]
             if result:
                 for target in record["targets"]:
                     if 'sourceText' in result.keys():
-                        if tgt_lang == target["targetLanguage"]:
+                        if target["targetLanguage"] in tgt_lang:
                             result["targetText"] = target["targetText"]
                             result_array.append(result)
                     elif 'targetText' in result.keys():
-                        if tgt_lang == target["sourceLanguage"]:
+                        if target["sourceLanguage"] in tgt_lang:
                             result["sourceText"] = target["targetText"]
                             result_array.append(result)
             else:
@@ -346,12 +344,12 @@ class ModelThree:
                 for combination in target_combinations:
                     if src_lang == combination[0]["targetLanguage"]:
                         result["sourceText"] = combination[0]["targetText"]
-                    elif tgt_lang == combination[0]["targetLanguage"]:
+                    elif combination[0]["targetLanguage"] in tgt_lang:
                         result["targetText"] = combination[0]["targetText"]
                     if result:
                         if src_lang == combination[1]["targetLanguage"]:
                             result["sourceText"] = combination[1]["targetText"]
-                        elif tgt_lang == combination[1]["targetLanguage"]:
+                        elif combination[1]["targetLanguage"] in tgt_lang:
                             result["targetText"] = combination[1]["targetText"]
                         if len(result.keys()) == 2:
                             result_array.append(result)
