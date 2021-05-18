@@ -49,7 +49,7 @@ class Datastore:
                             enriched_data.append(batch_data)
                             batch_data = []
                         else:
-                            batch_data.append(result[0])
+                            batch_data.extend(result[0])
                     duplicates += result[1]
             pool_enrichers.close()
             if batch_data:
@@ -60,11 +60,8 @@ class Datastore:
             processors = pool.map_async(self.insert, enriched_data).get()
             for result in processors:
                 count += result
-                if (count + duplicates) == total:
-                    log.info(f'Dumping COMPLETE! records -- {count} | {datetime.now()}')
-                    break
             pool.close()
-            log.info(f'Done! -- INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
+            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
@@ -73,25 +70,50 @@ class Datastore:
     def get_enriched_data(self, data, request):
         if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
             return None, 0
+        insert_records, new_records = [], []
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
-        record = self.get_dataset_internal({"hash": [src_hash, tgt_hash]})
-        if record:
-            return None, 1
-        data["score"] = random.uniform(0, 1)
-        tag_details, details = {}, request["details"]
-        tag_details = {
-            "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["sourceLanguage"], "collectionMode": details["collectionMode"],
-            "domain": details["domain"], "licence": details["licence"]
-        }
-        tags = list(self.get_tags(tag_details))
-        langs = [details["sourceLanguage"], details["sourceLanguage"]]
-        shard_key = hash(set(sorted(langs)))
-        data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
-                     "submitter": request["submitter"], "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
-                     "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
-                     "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, 'shardKey': shard_key, "tags": tags}
-        return data_dict, 0
+        records = self.get_dataset_internal({"hash": [src_hash, tgt_hash]})
+        if records:
+            for record in records:
+                new_data = {}
+                if src_hash in record["tags"] and tgt_hash in record["tags"]:
+                    return None, 1
+                elif src_hash == record["srcHash"]:
+                    new_data = {"sourceText": data["targetText"], "targetText": record["targetText"],
+                                "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["targetLanguage"]}
+                elif src_hash == record["tgtHash"]:
+                    new_data = {"sourceText": data["targetText"], "targetText": record["sourceText"],
+                                "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
+                elif tgt_hash == record["srcHash"]:
+                    new_data = {"sourceText": data["sourceText"], "targetText": record["targetText"],
+                                "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
+                elif tgt_hash == record["tgtHash"]:
+                    new_data = {"sourceText": data["sourceText"], "targetText": record["sourceText"],
+                                "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
+                new_records.append(new_data)
+        new_records.append(data)
+        for record in new_records:
+            record["score"] = random.uniform(0, 1)
+            tag_details, details = {}, request["details"]
+            src_hash = str(hashlib.sha256(record["sourceText"].encode('utf-16')).hexdigest())
+            tgt_hash = str(hashlib.sha256(record["targetText"].encode('utf-16')).hexdigest())
+            if "sourceLanguage" in record.keys() and "targetLanguage" in record.keys():
+                details["sourceLanguage"] = record["sourceLanguage"]
+                details["targetLanguage"] = record["targetLanguage"]
+            tag_details = {
+                "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["sourceLanguage"], "collectionMode": details["collectionMode"],
+                "domain": details["domain"], "licence": details["licence"], "srcHash": src_hash, "tgtHash": tgt_hash
+            }
+            tags = list(self.get_tags(tag_details))
+            langs = [details["sourceLanguage"], details["targetLanguage"]]
+            shard_key = hash(set(sorted(langs)))
+            data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
+                         "submitter": request["submitter"], "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
+                         "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
+                         "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, 'shardKey': shard_key, "tags": tags}
+            insert_records.append(data_dict)
+        return insert_records, 0
 
     def get_tags(self, d):
         for v in d.values():
@@ -105,7 +127,7 @@ class Datastore:
 
     def get_dataset_internal(self, query):
         try:
-            db_query = {"$and": [{"srcHash": {"$in": query["hash"]}}, {"tgtHash": {"$in": query["hash"]}}]}
+            db_query = {"$in": query["hash"]}
             exclude = {"_id": False}
             data = self.search(db_query, exclude, None, None)
             if data:
@@ -230,6 +252,9 @@ class Datastore:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
+            if "$in" in query.keys():
+                pipeline.append({"match": {"tags": query}})
+                pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if 'groupBySource' in query.keys():
                 if res:

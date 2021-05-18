@@ -108,13 +108,9 @@ class ModelThree:
         record = self.get_dataset_internal({"tags": [src_hash]})
         if record:
             record = record[0]
-            if tgt_hash in record["tags"]:
+            if src_hash in record["tags"] and tgt_hash in record["tags"]:
                 return None, None, 1
             else:
-                append_record = record
-        else:
-            record = self.get_dataset_internal({"tags": [tgt_hash]})
-            if record:
                 append_record = record
         target = {
             "id": uuid.uuid4(),
