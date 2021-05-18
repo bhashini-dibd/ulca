@@ -5859,3 +5859,8 @@ TypeError: list indices must be integers or slices, not str
 [2021-05-19 00:27:18,777] {modelThree.py:208} Thread-2 INFO in modelThree: Result count: 0 | 2021-05-19 00:27:18.777002
 [2021-05-19 00:27:18,777] {modelThree.py:209} Thread-2 INFO in modelThree: Done! | 2021-05-19 00:27:18.777094
 [2021-05-19 00:27:18,777] {_internal.py:113} Thread-2 INFO in _internal: 127.0.0.1 - - [19/May/2021 00:27:18] "[37mPOST /ulca-evaluation/datastore/v1/dataset/search HTTP/1.1[0m" 200 -
+[2021-05-19 00:41:52,131] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-05-19 00:42:06,992] {datastore.py:27} Thread-1 INFO in datastore: Loading Dataset..... | 2021-05-19 00:42:06.992657
+[2021-05-19 00:42:06,992] {datastore.py:33} Thread-1 INFO in datastore: File -- /Users/mahulivishal/Desktop/ulca/ulcaevaluation/datastore/dataset/en-hi-ulca.json | 2021-05-19 00:42:06.992850
+[2021-05-19 00:42:35,816] {datastore.py:40} Thread-1 INFO in datastore: Enriching dataset..... | 2021-05-19 00:42:35.816508
+[2021-05-19 01:11:18,915] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)

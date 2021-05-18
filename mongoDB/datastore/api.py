@@ -25,10 +25,18 @@ def search_dataset():
     return jsonify(response), 200
 
 # REST endpoint to fetch configs
+@ulcdatastoreapp.route('/ulca-evaluation/datastore/v1/cluster/set', methods=["GET"])
+def set_cluster_m3():
+    service = ModelThree()
+    service.set_mongo_cluster()
+    response = {"message": "DONE"}
+    return jsonify(response), 200
+
+# REST endpoint to fetch configs
 @ulcdatastoreapp.route('/ulca-evaluation/datastore/v0/cluster/set', methods=["GET"])
 def set_cluster():
     service = Datastore()
-    service.set_mongo_cluster(True)
+    service.set_mongo_cluster()
     response = {"message": "DONE"}
     return jsonify(response), 200
 

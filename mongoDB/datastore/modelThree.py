@@ -214,9 +214,9 @@ class ModelThree:
 
     ####################### DB ##############################
 
-    def set_mongo_cluster(self, create):
-        if create:
-            log.info(f'Setting the Mongo Shard Cluster up..... | {datetime.now()}')
+    def set_mongo_cluster(self):
+        if "localhost" not in mongo_server_host:
+            log.info(f'Setting the Mongo M3 Shard Cluster up..... | {datetime.now()}')
             client = pymongo.MongoClient(mongo_server_host)
             client.drop_database(mongo_ulca_m3_db)
             ulca_db = client[mongo_ulca_m3_db]
@@ -230,7 +230,14 @@ class ModelThree:
             db.command({'shardCollection': f'{mongo_ulca_m3_db}.{mongo_ulca_dataset_m3_col}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
-            return None
+            log.info(f'Setting the Mongo DB M3.... | {datetime.now()}')
+            client = pymongo.MongoClient(mongo_server_host)
+            client.drop_database(mongo_ulca_m3_db)
+            ulca_db = client[mongo_ulca_m3_db]
+            ulca_col = ulca_db[mongo_ulca_dataset_m3_col]
+            ulca_col.create_index([("data.score", -1)])
+            ulca_col.create_index([("tags", -1)])
+            log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):
         client = pymongo.MongoClient(mongo_server_host)
