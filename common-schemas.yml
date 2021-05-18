@@ -147,7 +147,16 @@ components:
         aboutMe:
           type: string
           description: describing the contributor
-    
+
+    DatasetType:
+      type: string
+      description: supported dataset type under language initiatives
+      enum:
+        - parallel-corpus
+        - monolingual-corpus
+        - asr-corpus
+        - document-ocr-corpus
+
     OAuthIdentity:
       type: object
       properties:
@@ -195,7 +204,7 @@ components:
         - human-validated
         - phone-recording
         - crowd-sourced
-  
+
     DataPoint:
       required:
       - label
