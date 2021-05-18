@@ -121,6 +121,7 @@ class ModelThree:
             "targetText": data["targetText"],
             "alignmentScore": random.uniform(0, 1),
             "targetLanguage": request["details"]["targetLanguage"],
+            "targetTextHash": tgt_hash,
             "sourceRef": src_hash,
             "submitter": request["submitter"],
             "contributors": request["contributors"],
@@ -135,6 +136,10 @@ class ModelThree:
                 "domain": request["details"]["domain"], "licence": request["details"]["licence"]
             }
             append_record[0]["tags"].extend(list(self.get_tags(tags_dict)))
+            langs = [append_record[0]["sourceLanguage"]]
+            for target in append_record[0]["targets"]:
+                langs.append(target["targetLanguage"])
+            append_record[0]["shardKey"] = hash(set(sorted(langs)))
             return append_record[0], "UPDATE", 0
         else:
             targets = [target]
@@ -144,11 +149,13 @@ class ModelThree:
                 "domain": request["details"]["domain"], "licence": request["details"]["licence"]
             }
             tags = list(self.get_tags(tags_dict))
+            langs = [request["details"]["sourceLanguage"], request["details"]["sourceLanguage"]]
+            shard_key = hash(set(sorted(langs)))
             record = {
                 "id": uuid.uuid4(), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
                 "sourceLanguage": request["details"]["sourceLanguage"],
                 "submitter": request["submitter"], "contributors": request["contributors"],
-                "targets": targets, "tags": tags
+                "targets": targets, "tags": tags, "shardKey": shard_key
             }
             return record, "INSERT", 0
 
@@ -170,6 +177,15 @@ class ModelThree:
         log.info(f'Fetching datasets..... | {datetime.now()}')
         try:
             db_query = {}
+            score_query = {}
+            if 'minScore' in query.keys():
+                score_query["$gte"] = query["minScore"]
+            if 'maxScore' in query.keys():
+                score_query["$lte"] = query["maxScore"]
+            if score_query:
+                db_query["scoreQuery"] = {"data.score": score_query}
+            if 'score' in query.keys():
+                db_query["scoreQuery"] = {"targets.score": query["score"]}
             tags = []
             if 'srcLang' in query.keys():
                 tags.append(query["srcLang"])
@@ -184,6 +200,9 @@ class ModelThree:
                 tags.append(query["licence"])
             if 'domain' in query.keys():
                 tags.append(query["domain"])
+            if 'srcText' in query.keys():
+                src_hash = str(hashlib.sha256(query["srcText"].encode('utf-16')).hexdigest())
+                tags.append(src_hash)
             if tags:
                 db_query["tags"] = tags
             data = self.search(db_query, False)
@@ -208,9 +227,10 @@ class ModelThree:
             ulca_col = ulca_db[mongo_ulca_dataset_m3_col]
             ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
+            ulca_col.create_index([("shardKey", "hashed")])
             db = client.admin
             db.command('enableSharding', mongo_ulca_m3_db)
-            key = OrderedDict([("_id", "hashed")])
+            key = OrderedDict([("shardKey", "hashed")])
             db.command({'shardCollection': f'{mongo_ulca_m3_db}.{mongo_ulca_dataset_m3_col}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
@@ -243,7 +263,7 @@ class ModelThree:
 
     # Searches the object into mongo collection
     def search(self, query, internal):
-        result = []
+        result, res_count, pipeline = [], 0, []
         try:
             col = self.get_mongo_instance()
             pipeline = []
@@ -252,30 +272,54 @@ class ModelThree:
                     pipeline.append({"$match": {"tags": {"$in": query["tags"]}}})
                 else:
                     pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
-            if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
-                pipeline.append({"$unwind": "$targets"})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["tgtLang"]}, {"targets.targetLanguage": query["tgtLang"]}]}})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
-            elif 'srcLang' in query.keys():
-                pipeline.append({"$unwind": "$targets"})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
+            if "scoreQuery" in query.keys():
+                pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBySource' in query.keys():
-                pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": {"$cond": [{"$gt": ["$targets", query["countOfTranslations"]]}, 1, 0]}}}})
+                langs = [query["srcLang"]]
+                langs.extend(query["tgtLang"])
+                pipeline.append({"$unwind": {"path": "$targets"}})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": {"$in": langs}}, {"target.targetLanguage": {"$in": langs}}]}})
                 if 'countOfTranslations' in query.keys():
-                    pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {
-                        "$sum": {"$cond": [{"$gt": ["$targets", query["countOfTranslations"]]}, 1, 0]}}}})
+                    pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count":
+                        {"$sum": {"$cond": [{"$gt": [{"$size": "$targets"}, query["countOfTranslations"]]}, 1, 0]}}}})
                 else:
                     pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": {"$cond": [{"$gt": ["$targets", 1]}, 1, 0]}}}})
             pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
-            if res:
-                for record in res:
-                    result.append(record)
+            if 'groupBySource' in query.keys():
+                if res:
+                    hashes = []
+                    for record in res:
+                        if record:
+                            if record["_id"]:
+                                hashes.append(record["_id"])
+                    if hashes:
+                        res_count = len(hashes)
+                        query = {"$or": [{"sourceTextHash": {"$in": hashes}}, {"targets.targetTextHash": {"$in": hashes}}]}
+                        res = col.find(query, {"_id": False})
+                    map = {}
+                    if not res:
+                        return result, pipeline, res_count
+                    for record in res:
+                        if record:
+                            if record["sourceTextHash"] in map.keys():
+                                data_list = map[record["sourceTextHash"]]
+                                data_list.append(record)
+                                map[record["sourceTextHash"]] = data_list
+                            else:
+                                map[record["sourceTextHash"]] = [record]
+                    result = list(map.values())
+            else:
+                if res:
+                    for record in res:
+                        if record:
+                            result.append(record)
+                res_count = len(result)
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 result = self.post_process(query, result)
         except Exception as e:
             log.exception(e)
-        return result
+        return result, pipeline, res_count
 
     def post_process(self, query, res):
         src_lang, tgt_lang = None, None

@@ -81,14 +81,16 @@ class Datastore:
         data["score"] = random.uniform(0, 1)
         tag_details, details = {}, request["details"]
         tag_details = {
-            "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"], "collectionMode": details["collectionMode"],
+            "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["sourceLanguage"], "collectionMode": details["collectionMode"],
             "domain": details["domain"], "licence": details["licence"]
         }
         tags = list(self.get_tags(tag_details))
+        langs = [details["sourceLanguage"], details["sourceLanguage"]]
+        shard_key = hash(set(sorted(langs)))
         data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
                      "submitter": request["submitter"], "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
                      "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
-                     "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, "tags": tags}
+                     "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, 'shardKey': shard_key, "tags": tags}
         return data_dict, 0
 
     def get_tags(self, d):
@@ -177,13 +179,12 @@ class Datastore:
             ulca_col = ulca_db[mongo_ulca_dataset_col]
             ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("srcHash", -1)])
-            ulca_col.create_index([("tgtHash", -1)])
             ulca_col.create_index([("sourceLanguage", 1)])
-            ulca_col.create_index([("targetLanguage", "hashed")])
+            ulca_col.create_index([("targetLanguage", -1)])
+            ulca_col.create_index([("shardKey", "hashed")])
             db = client.admin
             db.command('enableSharding', mongo_ulca_db)
-            key = OrderedDict([("sourceLanguage", 1), ("targetLanguage", "hashed")])
+            key = OrderedDict([("shardKey", "hashed")])
             db.command({'shardCollection': f'{mongo_ulca_db}.{mongo_ulca_dataset_col}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
