@@ -148,6 +148,12 @@ components:
           type: string
           description: describing the contributor
 
+    Contributors:
+        type: array
+        items:
+          $ref: '#/components/schemas/Contributor'
+          minItems: 1
+
     DatasetType:
       type: string
       description: supported dataset type under language initiatives
