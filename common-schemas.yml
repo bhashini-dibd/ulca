@@ -154,6 +154,18 @@ components:
           $ref: '#/components/schemas/Contributor'
           minItems: 1
 
+    Submitter:
+      required:
+        - submitter
+      type: object
+      properties:
+        submitter:
+          $ref: '#/components/schemas/Contributor'
+        team:
+          $ref: '#/components/schemas/Contributors'
+          description: textual data in target language
+      description: the schema of data file uploaded should adhere to this specified structure.
+      
     DatasetType:
       type: string
       description: supported dataset type under language initiatives
