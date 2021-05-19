@@ -2,7 +2,7 @@
     "dataset-type": "parallel-corpus",
     "languages": {
         "sourceLanguage": "en",
-        "targetLanguage": "bn"
+        "targetLanguage": "hi"
     },
     "collectionSource": [
         "42040.pdf",

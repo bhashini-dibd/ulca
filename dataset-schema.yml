@@ -6,7 +6,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.5.0
+  version: 0.6.0
 servers:
   - url: /ulca
 paths: {}
@@ -404,7 +404,7 @@ components:
           format: uuid4
     
     ## parallel dataset collection method
-    MachineTranslatedEvaluationMethod1:
+    MTAutomaticEvaluationMethod:
       type: object
       description: evaluation strategy as proposed by https://www.researchgate.net/publication/273475626_Adequacy-Fluency_Metrics_Evaluating_MT_in_the_Continuous_Space_Model_Framework
       required:
@@ -439,6 +439,8 @@ components:
     CollectionDetailsMachineTranslated:
       type: object
       description: machine translated collection details
+      required:
+        - translationModel
       properties:
         translationModel:
           type: string
@@ -450,14 +452,14 @@ components:
         evaluationMethod:
           type: object
           oneOf:
-            - $ref: '#/components/schemas/MachineTranslatedEvaluationMethod1'
+            - $ref: '#/components/schemas/MTAutomaticEvaluationMethod'
             - $ref: '#/components/schemas/MachineTranslatedEvaluationMethod2'
         evaluationMethodType:
           type: string
           description: manual evaluation strategy adopted
-          example: 'MachineTranslatedEvaluationMethod1'
+          example: 'MTAutomaticEvaluationMethod'
           enum:
-            - 'MachineTranslatedEvaluationMethod1'
+            - 'MTAutomaticEvaluationMethod'
             - 'MachineTranslatedEvaluationMethod2'
   
     CollectionDetailsAutoAligned:

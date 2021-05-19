@@ -1,7 +1,7 @@
 [
     {
-        "sourceText": "1. This appeal is placed before us by way of a reference, made by a two-Judge Bench of this Court, C.K. Thakker and Altamas Kabir, JJ. which heard the matter on an earlier occasion and held that the appeal deserves to be allowed and that the Judgment and Order passed by the High Court is liable to be set aside.",
-        "targetText": "1. এই আপিল আমাদের সামনে এই আদালতের দ্বি-বিচারক এজলাস, সি কে ঠাক্কর এবং আলতামাস কবির, জেজে দ্বারা করা একটি রেফারেন্সের মাধ্যমে স্থাপন করা হয়েছে। যা উপলক্ষে এই বিষয়টি শুনেছিল এবং বলেছিল যে আপিলের অনুমতি পাওয়ার যোগ্য এবং হাইকোর্ট কর্তৃক গৃহীত রায় ও আদেশ আলাদা রাখা দায়বদ্ধ।",
+        "sourceText": "I have visited only Kerala and Tamilnadu",
+        "targetText": "நான் கேரளா மற்றும் தமிழ்நாட்டுக்கு மட்டுமே சென்றிருக்கிறேன்.",
         "collectionMethod": {
             "collectionDetails": {
                 "evaluationMethod": {
@@ -12,8 +12,8 @@
         }
     },
     {
-        "sourceText": "The Company took on lease, Plot No. 454 in 1992 for a period of 99 years from Goindwal Sahib Industrial & Investment Corporation, on a condition that it would not transfer the interest in the property for the first fifteen years without prior permission of the lessor.",
-        "targetText": "সংস্থাটি 1992 সালে গোইন্দওাল সাহেব শিল্প ও বিনিয়োগ কর্পোরেশন থেকে 99 বছরের জন্য প্লট নং 454 ইজারা নিয়েছিল, এই শর্তে যে এটি পূর্বের অনুমতি ব্যতীত প্রথম পনেরো বছরের জন্য সম্পত্তির আগ্রহ স্থানান্তর করবে না।",
+        "sourceText": "Who else is there in your team?",
+        "targetText": "உங்களுடைய குழுவில் வேறு யாரெல்லாம் அங்கே இருக்கிறார்கள்?",
         "collectionMethod": {
             "collectionDetails": {
                 "translationModel": "Bing",
@@ -26,8 +26,8 @@
         }
     },
     {
-        "sourceText": "On 15.07.03, an ex-parte final order in favour of IDBI for recovery of above mentioned sum i.e. Rs. 25,26,60,836/- along with interest @ 7.8% p.a. was passed by DRT. DRT expressly directed that in the event of failure on the part of the Company to pay the decretal amount, IDBI will be entitled to sell the mortgaged property of the company and recover the amount.",
-        "targetText": "15.7.03-এ, উল্লিখিত পরিমাণ পুনরুদ্ধারের সঙ্গে আইডিবিআইয়ের পক্ষে প্রাক্তন পার্টের চূড়ান্ত আদেশ অর্থাৎ 25,26,60,836/- টাকা @7.8% বার্ষিক সুদের সাথে ডিআরটি দ্বারা পাস করা হয়েছিল। ডিআরটি স্পষ্টভাবে নির্দেশ দিয়েছিল যে কোম্পানির পক্ষ থেকে ডিক্রিটাল পরিমাণ পরিশোধে ব্যর্থতার ক্ষেত্রে আইডিবিআই কোম্পানির বন্ধকী সম্পত্তি বিক্রি এবং পরিমাণ পুনরুদ্ধারের অধিকারী হবে।",
+        "sourceText": "The global average for case fatality is presently around 6.45%",
+        "targetText": "உலக இறப்பு விகித சராசரி தற்போது 6.45 சதவீதமாக உள்ளது.",
         "collectionMethod": {
             "collectionDetails": {
                 "evaluationMethod": {

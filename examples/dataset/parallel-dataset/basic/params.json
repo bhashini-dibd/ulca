@@ -2,13 +2,12 @@
     "dataset-type": "parallel-corpus",
     "languages": {
         "sourceLanguage": "en",
-        "targetLanguage": "bn"
+        "targetLanguage": "hi"
     },
     "collectionSource": [
-        "42040.pdf",
-        "https: //main.sci.gov.in"
+        "http://pib.gov.in/"
     ],
-    "domain": "legal",
+    "domain": "news",
     "collectionMethod": {
         "collectionDescription": [
             "auto-aligned"

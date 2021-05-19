@@ -1,7 +1,7 @@
 [
     {
-        "sourceText": "The scheme aims at the total removal of all senile and disease affected palms for which the Central Government will give a subsidy of Rs.500/- per palm subject to a ceiling of Rs.13,000/- per hectare.",
-        "targetText": "योजना के तहत बीमार पौधे पूरी तरह हटा दिये जाएंगे जिसके लिए केंद्र सरकार प्रति पौधा 500 रुपये की सब्सिडी तथ्प्रा प्रति हेक्टेयर तक 13 हजार तक की सब्सिडी दी जाएगी।",
+        "sourceText": "But, India offers many more opportunities",
+        "targetText": "लेकिन, भारत कई और अवसर प्रदान करता है",
         "collectionMethod": {
             "collectionDetails": {
                 "alignmentScore": 0.91784
@@ -9,8 +9,8 @@
         }
     },
     {
-        "sourceText": "The issue relating to ‘lock-up’ period for sale of promoter’s equity for UAS Licence was under consideration in the Department and the recommendations of TRAI were also sought on 24.11.2008 which was received on 12th March, 2009",
-        "targetText": "यूएएस लाइसेंस धारक कम्पनी के प्रोमोटरों की इक्विटी की बिक्री के लिए विलंबित अवधि संबंधी मसला विभाग के विचाराधीन था और 24 नवम्बर 2008 को ट्राई की सिफारिशें मांगी गई थी जो 12 मार्च 2009 को प्राप्त हो गई थी।",
+        "sourceText": "In the last 24 hours, 4,987 new confirmed cases have been added.",
+        "targetText": "उन्होंने बताया कि पिछले 24 घंटे में 4987 नए मामलों की पुष्टि हुई है।",
         "collectionMethod": {
             "collectionDetails": {
                 "alignmentScore": 0.79782
@@ -18,8 +18,8 @@
         }
     },
     {
-        "sourceText": "In case of issue of fresh equity, within the lock-in period the declaration of dividend and/ or special dividend shall be barred.",
-        "targetText": "विलंबित अवधि में नई इक्विटी जारी होने के मामले में लाभांश और या विशेष लाभांश की घोषणा बाधित रहेगी।",
+        "sourceText": "PM addresses nation on International Day of Yoga",
+        "targetText": "प्रधानमंत्री ने अंतर्राष्ट्रीय योग दिवस के अवसर पर राष्ट्र को संबोधित किया",
         "collectionMethod": {
             "collectionDetails": {
                 "alignmentScore": 0.69784
@@ -27,8 +27,8 @@
         }
     },
     {
-        "sourceText": "The provision of lock-in period shall not apply, in pursuance to enforcement of pledge by the lending financial institutions/ bank in the event of defaults committed by the UAS licensee company.",
-        "targetText": "यूएएस लाइसेंस धारक कम्पनी द्वारा डिफाल्ट के मामले में उधार देने वाले वित्तीय संस्थानबैंक द्वारा गिरवी रखने के प्रवर्तन के अनुपालन में विलंबित अवधि (लॉक इन पीरियड) लागू नहीं होगी।",
+        "sourceText": "I appreciate their efforts in ensuring India successfully defeats COVID-19",
+        "targetText": "मैं कोविड-19 को हराने में भारत की सफलता सुनिश्चित करने के उनके प्रयासों की सराहना करता हूंsss                                                                                                                                                                                                                                                                                                                                                                                            ß",
         "collectionMethod": {
             "collectionDetails": {
                 "alignmentScore": 0.7884
@@ -36,8 +36,8 @@
         }
     },
     {
-        "sourceText": "As a result, the total number of telephones in the country is 4648.25 lakh as on 30th June 2009;",
-        "targetText": "जिसके परिणामस्वरूप, 30 जून, 2009 को देश में दूरभाषों की कुल संख्या 30 जून, 2008 के 3257.87 लाख की तुलना में बढक़र 4648.25 लाख हो गई।",
+        "sourceText": "This bridge is of strategic importance along the India-Nepal border",
+        "targetText": "भारत-नेपाल सीमा के करीब होने के चलते इस पुल का रणनीतिक महत्व भी है",
         "collectionMethod": {
             "collectionDetails": {
                 "alignmentTool": "LASER",
@@ -47,3 +47,4 @@
         }
     }
 ]
+

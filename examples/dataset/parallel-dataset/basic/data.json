@@ -1,14 +1,14 @@
 [
     {
-        "sourceText": "More than 1650 Observers today participated in the briefing meeting physically and virtually from more than 120 remote locations also.",
-        "targetText": "আজকের এই ব্রিফিং সভায় ১৬৫০ হাজার এর বেশি পর্যবেক্ষক অংশগ্রহণ করে শারীরিক ভাবে এবং ১২০ এর বেশি অংশগ্রহণ করে দূরবর্তী স্থান থেকে"
+        "sourceText": "This bridge is of strategic importance along the India-Nepal border",
+        "targetText": "भारत-नेपाल सीमा के करीब होने के चलते इस पुल का रणनीतिक महत्व भी है"
     },
     {
-        "sourceText": "ELECTION COMMISSION OF INDIA",
-        "targetText": "ভারতের নির্বাচন কমিশন"
+        "sourceText": "In the last 24 hours, 4,987 new confirmed cases have been added.",
+        "targetText": "उन्होंने बताया कि पिछले 24 घंटे में 4987 नए मामलों की पुष्टि हुई है।"
     },
     {
-        "sourceText": "Addressing the Observers, Chief Election Commissioner Shri Arora said that Observers are one of the most important torchbearers of Indian democracy.",
-        "targetText": "মুখ্য নির্বাচন কমিশনার শ্রী অরোরা পর্যবেক্ষকদের উদ্দেশে বলেন, ভারতীয় গণতন্ত্রের অন্যতম গুরুত্বপূর্ণ মশাল-বাহক হিসেবে পর্যবেক্ষকরা রয়েছেন।"
+        "sourceText": "PM addresses nation on International Day of Yoga",
+        "targetText": "प्रधानमंत्री ने अंतर्राष्ट्रीय योग दिवस के अवसर पर राष्ट्र को संबोधित किया"
     }
 ]
