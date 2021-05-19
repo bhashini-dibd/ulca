@@ -282,28 +282,34 @@ class ModelThree:
                     result = list(map.values())
                     result = self.post_process_groupby(query, result)
                     res_count = len(result)
-            elif 'srcLang' in query.keys() or 'tgtLang' in query.keys():
+            elif internal:
+                if res:
+                    for record in res:
+                        if record:
+                            result.append(record)
+                res_count = len(result)
+            else:
                 if res:
                     map = {}
                     for record in res:
                         if record:
                             if record["sourceTextHash"] in map.keys():
                                 data = map[record["sourceTextHash"]]
-                                data["targets"].append(record["targets"])
+                                if type(record["targets"]) == "dict":
+                                    data["targets"].append(record["targets"])
+                                else:
+                                    data["targets"].extend(record["targets"])
                                 map[record["sourceTextHash"]] = data
                             else:
-                                targets = [record["targets"]]
+                                if type(record["targets"]) == "dict":
+                                    targets = [record["targets"]]
+                                else:
+                                    targets = record["targets"]
                                 record["targets"] = targets
                                 map[record["sourceTextHash"]] = record
                         res_count += 1
                     result = list(map.values())
                     result = self.post_process(query, result)
-            else:
-                if res:
-                    for record in res:
-                        if record:
-                            result.append(record)
-                res_count = len(result)
         except Exception as e:
             log.exception(e)
         return result, pipeline, res_count
