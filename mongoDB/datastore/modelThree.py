@@ -347,16 +347,18 @@ class ModelThree:
                         if not target:
                             continue
                         if type(target) == "str":
-                            target = json.loads(target)
+                            target_obj = json.loads(target)
+                        else:
+                            target_obj = target
                         if 'sourceText' in result.keys():
-                            if target["targetLanguage"] in tgt_lang:
-                                result["targetText"] = target["targetText"]
-                                result["alignmentScore"] = target["alignmentScore"]
+                            if target_obj["targetLanguage"] in tgt_lang:
+                                result["targetText"] = target_obj["targetText"]
+                                result["alignmentScore"] = target_obj["alignmentScore"]
                                 result_array.append(result)
                         elif 'targetText' in result.keys():
-                            if target["sourceLanguage"] in tgt_lang:
-                                result["sourceText"] = target["targetText"]
-                                result["alignmentScore"] = target["alignmentScore"]
+                            if target_obj["sourceLanguage"] in tgt_lang:
+                                result["sourceText"] = target_obj["targetText"]
+                                result["alignmentScore"] = target_obj["alignmentScore"]
                                 result_array.append(result)
                 else:
                     target_combinations = list(itertools.combinations(record["targets"], 2))
@@ -380,6 +382,9 @@ class ModelThree:
                         else:
                             continue
             except Exception as e:
+                log.info(target)
+                log.info(target_obj)
+                log.info(record["targets"])
                 log.exception(e)
                 continue
             if result_array:
