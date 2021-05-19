@@ -306,16 +306,16 @@ class ModelThree:
                         if record:
                             if record["sourceTextHash"] in map.keys():
                                 data_list = map[record["sourceTextHash"]]
-                                data_list.append(record)
+                                data_list.append(dict(record))
                                 map[record["sourceTextHash"]] = data_list
                             else:
-                                map[record["sourceTextHash"]] = [record]
+                                map[record["sourceTextHash"]] = [dict(record)]
                     result = list(map.values())
             else:
                 if res:
                     for record in res:
                         if record:
-                            result.append(record)
+                            result.append(dict(record))
                 res_count = len(result)
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 if 'groupBySource' not in query.keys():
