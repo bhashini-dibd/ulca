@@ -2,6 +2,7 @@ import hashlib
 import json
 import logging
 import multiprocessing
+import threading
 import time
 import uuid
 import random
@@ -47,6 +48,9 @@ class Datastore:
                         if len(batch_data) == batch:
                             log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
                             enriched_data.append(batch_data)
+                            persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
+                            persist_thread.start()
+                            persist_thread.join()
                             batch_data = []
                         batch_data.extend(result[0])
                     duplicates += result[1]
@@ -54,12 +58,16 @@ class Datastore:
             if batch_data:
                 log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
                 enriched_data.append(batch_data)
-            log.info(f'Dumping enriched dataset..... | {datetime.now()}')
-            pool = multiprocessing.Pool(no_of_dump_process)
-            processors = pool.map_async(self.insert, enriched_data).get()
-            for result in processors:
-                count += result
-            pool.close()
+                persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
+                persist_thread.start()
+                persist_thread.join()
+            '''if enriched_data:
+                log.info(f'Dumping enriched dataset..... | {datetime.now()}')
+                pool = multiprocessing.Pool(no_of_dump_process)
+                processors = pool.map_async(self.insert, enriched_data).get()
+                for result in processors:
+                    count += result
+                pool.close()'''
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)

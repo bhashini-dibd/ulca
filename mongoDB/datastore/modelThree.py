@@ -37,19 +37,21 @@ class ModelThree:
                 data_json = data_json[request["slice"]["start"]:request["slice"]["end"]]
             total, duplicates, batch = len(data_json), 0, request["batch"]
             log.info(f'Enriching and dumping the dataset..... | {datetime.now()}')
-            func = partial(self.enriched_and_persist, request=request)
-            pool_enrichers = multiprocessing.Pool(no_of_dump_process)
-            enrichment_processors = pool_enrichers.map_async(func, data_json).get()
             u_count, i_count, = 0, 0
-            for result in enrichment_processors:
-                if result:
-                    if result[0]:
-                        if "INSERT" == result[0]:
-                            i_count += 1
-                        if "UPDATE" == result[0]:
-                            u_count += 1
-                    duplicates += result[1]
-            pool_enrichers.close()
+            if data_json:
+                func = partial(self.enriched_and_persist, request=request)
+                pool_enrichers = multiprocessing.Pool(no_of_dump_process)
+                enrichment_processors = pool_enrichers.map_async(func, data_json).get()
+                for result in enrichment_processors:
+                    if result:
+                        if result[0]:
+                            if "INSERT" == result[0]:
+                                i_count += 1
+                            if "UPDATE" == result[0]:
+                                u_count += 1
+                    else:
+                        duplicates += 1
+                pool_enrichers.close()
             log.info(f'Done! -- UPDATES: {u_count}, INSERTS: {i_count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
@@ -76,7 +78,7 @@ class ModelThree:
         if record:
             record = record[0]
             if src_hash in record["tags"] and tgt_hash in record["tags"]:
-                return None, 1
+                return None
             else:
                 append_record = record
         target = {
