@@ -134,7 +134,6 @@ class ModelThree:
             append_record["shardKey"] = hash(frozenset(sorted(langs)))
             return append_record, "UPDATE", 0
         else:
-            targets = [target]
             tags_dict = {
                 "srcHash": src_hash, "tgtHash": tgt_hash, "tgtLang": request["details"]["targetLanguage"],
                 "collectionMode": request["details"]["collectionMode"], "srcLang": request["details"]["sourceLanguage"],
@@ -147,7 +146,7 @@ class ModelThree:
                 "id": str(uuid.uuid4()), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
                 "sourceLanguage": request["details"]["sourceLanguage"],
                 "submitter": request["submitter"], "contributors": request["contributors"],
-                "targets": targets, "tags": tags, "shardKey": shard_key
+                "targets": [target], "tags": tags, "shardKey": shard_key
             }
             return record, "INSERT", 0
 
@@ -285,6 +284,7 @@ class ModelThree:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
                 pipeline.append({"$project": {"_id": 1}})
             else:
+
                 pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
             if 'groupBySource' in query.keys():
@@ -306,16 +306,25 @@ class ModelThree:
                         if record:
                             if record["sourceTextHash"] in map.keys():
                                 data_list = map[record["sourceTextHash"]]
-                                data_list.append(dict(record))
+                                data_list.append(record)
                                 map[record["sourceTextHash"]] = data_list
                             else:
-                                map[record["sourceTextHash"]] = [dict(record)]
+                                map[record["sourceTextHash"]] = [record]
                     result = list(map.values())
             else:
                 if res:
+                    map = {}
                     for record in res:
                         if record:
-                            result.append(dict(record))
+                            if record["sourceTextHash"] in map.keys():
+                                data = map[record["sourceTextHash"]]
+                                data["targets"].append(record["targets"])
+                                map[record["sourceTextHash"]] = data
+                            else:
+                                targets = [record["targets"]]
+                                record["targets"] = targets
+                                map[record["sourceTextHash"]] = record
+                    result = list(map.values())
                 res_count = len(result)
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 if 'groupBySource' not in query.keys():
@@ -336,6 +345,7 @@ class ModelThree:
         for record in res:
             result_array = []
             result = {}
+            log.info(record)
             try:
                 if src_lang == record["sourceLanguage"]:
                     result["sourceText"] = record["sourceText"]
@@ -343,22 +353,17 @@ class ModelThree:
                     result["targetText"] = record["targetText"]
                     result["alignmentScore"] = record["alignmentScore"]
                 if result:
-                    for target in record["targets"]:
-                        if not target:
-                            continue
-                        if type(target) == "str":
-                            target_obj = json.loads(target)
-                        else:
-                            target_obj = target
+                    targets = record["targets"]
+                    for target in targets:
                         if 'sourceText' in result.keys():
-                            if target_obj["targetLanguage"] in tgt_lang:
-                                result["targetText"] = target_obj["targetText"]
-                                result["alignmentScore"] = target_obj["alignmentScore"]
+                            if target["targetLanguage"] in tgt_lang:
+                                result["targetText"] = target["targetText"]
+                                result["alignmentScore"] = target["alignmentScore"]
                                 result_array.append(result)
                         elif 'targetText' in result.keys():
-                            if target_obj["sourceLanguage"] in tgt_lang:
-                                result["sourceText"] = target_obj["targetText"]
-                                result["alignmentScore"] = target_obj["alignmentScore"]
+                            if target["sourceLanguage"] in tgt_lang:
+                                result["sourceText"] = target["targetText"]
+                                result["alignmentScore"] = target["alignmentScore"]
                                 result_array.append(result)
                 else:
                     target_combinations = list(itertools.combinations(record["targets"], 2))
@@ -382,10 +387,6 @@ class ModelThree:
                         else:
                             continue
             except Exception as e:
-                log.info(target)
-                log.info(target_obj)
-                log.info(record["targets"])
-                log.exception(e)
                 continue
             if result_array:
                 result_set.append(result_array)

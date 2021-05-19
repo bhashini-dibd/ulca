@@ -7,5 +7,5 @@ mongo_ulca_db, mongo_ulca_dataset_col = "ulca", "dataset"
 mongo_ulca_m3_db, mongo_ulca_dataset_m3_col,  = "ulca", "dataset-m3"
 default_offset = 0
 default_limit = 10000
-no_of_enrich_process = 5
+no_of_enrich_process = 3
 no_of_dump_process = 5
