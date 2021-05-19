@@ -34,7 +34,7 @@ class Datastore:
             dataset = open(path, "r")
             data_json = json.load(dataset)
             if 'slice' in request.keys():
-                data_json = data_json[:request["slice"]]
+                data_json = data_json[request["slice"]["start"]:request["slice"]["end"]]
             enriched_data, duplicates, batch_data = [], 0, []
             total, count, duplicates, batch = len(data_json), 0, 0, request["batch"]
             log.info(f'Enriching dataset..... | {datetime.now()}')
@@ -106,7 +106,7 @@ class Datastore:
             }
             tags = list(self.get_tags(tag_details))
             langs = [details["sourceLanguage"], details["targetLanguage"]]
-            shard_key = hash(frozenset(sorted(langs)))
+            shard_key = ','.join(map(str, sorted(langs)))
             data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
                          "submitter": request["submitter"], "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
                          "timestamp": eval(str(time.time()).replace('.', '')[0:13]),

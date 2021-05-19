@@ -36,7 +36,7 @@ class ModelThree:
             dataset = open(path, "r")
             data_json = json.load(dataset)
             if 'slice' in request.keys():
-                data_json = data_json[:request["slice"]]
+                data_json = data_json[request["slice"]["start"]:request["slice"]["end"]]
             total, duplicates, batch = len(data_json), 0, request["batch"]
             update_batch, update_records, insert_batch, insert_records = [], [], [], []
             log.info(f'Enriching the dataset..... | {datetime.now()}')
@@ -142,7 +142,7 @@ class ModelThree:
             }
             tags = list(self.get_tags(tags_dict))
             langs = [request["details"]["sourceLanguage"], request["details"]["sourceLanguage"]]
-            shard_key = hash(frozenset(sorted(langs)))
+            shard_key = ','.join(map(str, sorted(langs)))
             record = {
                 "id": str(uuid.uuid4()), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
                 "sourceLanguage": request["details"]["sourceLanguage"],
