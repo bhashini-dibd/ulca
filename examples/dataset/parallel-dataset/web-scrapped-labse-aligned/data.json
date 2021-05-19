@@ -4,8 +4,6 @@
         "targetText": "योजना के तहत बीमार पौधे पूरी तरह हटा दिये जाएंगे जिसके लिए केंद्र सरकार प्रति पौधा 500 रुपये की सब्सिडी तथ्प्रा प्रति हेक्टेयर तक 13 हजार तक की सब्सिडी दी जाएगी।",
         "collectionMethod": {
             "collectionDetails": {
-                "alignmentTool": "LaBSE",
-                "alignmentToolVersion": "v2",
                 "alignmentScore": 0.91784
             }
         }
@@ -15,8 +13,6 @@
         "targetText": "यूएएस लाइसेंस धारक कम्पनी के प्रोमोटरों की इक्विटी की बिक्री के लिए विलंबित अवधि संबंधी मसला विभाग के विचाराधीन था और 24 नवम्बर 2008 को ट्राई की सिफारिशें मांगी गई थी जो 12 मार्च 2009 को प्राप्त हो गई थी।",
         "collectionMethod": {
             "collectionDetails": {
-                "alignmentTool": "LaBSE",
-                "alignmentToolVersion": "v2",
                 "alignmentScore": 0.79782
             }
         }
@@ -26,8 +22,6 @@
         "targetText": "विलंबित अवधि में नई इक्विटी जारी होने के मामले में लाभांश और या विशेष लाभांश की घोषणा बाधित रहेगी।",
         "collectionMethod": {
             "collectionDetails": {
-                "alignmentTool": "LaBSE",
-                "alignmentToolVersion": "v2",
                 "alignmentScore": 0.69784
             }
         }
@@ -37,8 +31,6 @@
         "targetText": "यूएएस लाइसेंस धारक कम्पनी द्वारा डिफाल्ट के मामले में उधार देने वाले वित्तीय संस्थानबैंक द्वारा गिरवी रखने के प्रवर्तन के अनुपालन में विलंबित अवधि (लॉक इन पीरियड) लागू नहीं होगी।",
         "collectionMethod": {
             "collectionDetails": {
-                "alignmentTool": "LaBSE",
-                "alignmentToolVersion": "v2",
                 "alignmentScore": 0.7884
             }
         }
@@ -48,8 +40,8 @@
         "targetText": "जिसके परिणामस्वरूप, 30 जून, 2009 को देश में दूरभाषों की कुल संख्या 30 जून, 2008 के 3257.87 लाख की तुलना में बढक़र 4648.25 लाख हो गई।",
         "collectionMethod": {
             "collectionDetails": {
-                "alignmentTool": "LaBSE",
-                "alignmentToolVersion": "v2",
+                "alignmentTool": "LASER",
+                "alignmentToolVersion": "1.0",
                 "alignmentScore": 0.84906
             }
         }

@@ -12,7 +12,7 @@ components:
   schemas:
     LanguagePair:
       type: object
-      description: language pair, make targetLanguage null to reuse the object to indicate single language
+      description: "language pair, make targetLanguage null to reuse the object to indicate single language"
       required:
         - sourceLanguage
       properties:
@@ -97,7 +97,7 @@ components:
     
     Domain:
         type: array
-        description: This attribute defines that `relevant business area` 
+        description: "This attribute defines that `relevant business area`"
         example: ["news", "legal"]
         items:
           type: string
@@ -156,11 +156,19 @@ components:
 
     Submitter:
       required:
-        - submitter
+        - name
       type: object
       properties:
-        submitter:
-          $ref: '#/components/schemas/Contributor'
+        name:
+          maxLength: 50
+          minLength: 5
+          type: string
+          description: Name of the Submitter
+        oauthId:
+          $ref: '#/components/schemas/OAuthIdentity'
+        aboutMe:
+          type: string
+          description: Describing the Submitter
         team:
           $ref: '#/components/schemas/Contributors'
           description: textual data in target language

@@ -23,11 +23,9 @@
         }
     },
     "license": "cc-by-4.0",
-    "submitterInfo": {
-        "submitter": {
-            "name": "Project Anuvaad",
-            "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project"
-        },
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
         "team": [
             {
                 "name": "Ajitesh Sharma",
