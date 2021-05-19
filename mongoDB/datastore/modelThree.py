@@ -99,10 +99,6 @@ class ModelThree:
                 "domain": request["details"]["domain"], "licence": request["details"]["licence"]
             }
             append_record["tags"].extend(list(self.get_tags(tags_dict)))
-            langs = [append_record["sourceLanguage"]]
-            for target in append_record["targets"]:
-                langs.append(target["targetLanguage"])
-            append_record["shardKey"] = ','.join(map(str, sorted(langs)))
             self.update(append_record)
             return "UPDATE", 0
         else:
@@ -112,13 +108,11 @@ class ModelThree:
                 "domain": request["details"]["domain"], "licence": request["details"]["licence"]
             }
             tags = list(self.get_tags(tags_dict))
-            langs = [request["details"]["sourceLanguage"], request["details"]["sourceLanguage"]]
-            shard_key = ','.join(map(str, sorted(langs)))
             record = {
                 "id": str(uuid.uuid4()), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
                 "sourceLanguage": request["details"]["sourceLanguage"],
                 "submitter": request["submitter"], "contributors": request["contributors"],
-                "targets": [target], "tags": tags, "shardKey": shard_key
+                "targets": [target], "tags": tags
             }
             self.insert(record)
             return "INSERT", 0
@@ -191,10 +185,9 @@ class ModelThree:
             ulca_db = client[mongo_ulca_m3_db]
             ulca_col = ulca_db[mongo_ulca_dataset_m3_col]
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("shardKey", "hashed")])
             db = client.admin
             db.command('enableSharding', mongo_ulca_m3_db)
-            key = OrderedDict([("shardKey", "hashed")])
+            key = OrderedDict([("_id", "hashed")])
             db.command({'shardCollection': f'{mongo_ulca_m3_db}.{mongo_ulca_dataset_m3_col}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
@@ -226,7 +219,7 @@ class ModelThree:
     def update(self, data):
         col = self.get_mongo_instance()
         bulk = col.initialize_unordered_bulk_op()
-        bulk.find({'id': data["id"]}).update({'$set': {'targets': data["targets"], "tags": data["tags"], "shardKey": data["shardKey"]}})
+        bulk.find({'id': data["id"]}).update({'$set': {'targets': data["targets"], "tags": data["tags"]}})
         bulk.execute()
         return 1
 

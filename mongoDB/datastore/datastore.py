@@ -110,7 +110,7 @@ class Datastore:
             data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
                          "submitter": request["submitter"], "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
                          "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
-                         "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, 'shardKey': shard_key, "tags": tags}
+                         "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, 'sk': shard_key, "tags": tags}
             insert_records.append(data_dict)
         return insert_records, 0
 
@@ -201,10 +201,10 @@ class Datastore:
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
-            ulca_col.create_index([("shardKey", "hashed")])
+            ulca_col.create_index([("sk", "hashed")])
             db = client.admin
             db.command('enableSharding', mongo_ulca_db)
-            key = OrderedDict([("shardKey", "hashed")])
+            key = OrderedDict([("sk", "hashed")])
             db.command({'shardCollection': f'{mongo_ulca_db}.{mongo_ulca_dataset_col}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
