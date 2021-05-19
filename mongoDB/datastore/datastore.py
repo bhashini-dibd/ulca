@@ -55,7 +55,7 @@ class Datastore:
                             batch_data = []
                         batch_data.extend(result[0])
                 else:
-                    duplicates += result[1]
+                    duplicates += 1
             pool_enrichers.close()
             if batch_data:
                 log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
