@@ -51,6 +51,7 @@ class Datastore:
                             persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                             persist_thread.start()
                             persist_thread.join()
+                            count += len(batch_data)
                             batch_data = []
                         batch_data.extend(result[0])
                     duplicates += result[1]
@@ -61,6 +62,7 @@ class Datastore:
                 persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                 persist_thread.start()
                 persist_thread.join()
+                count += len(batch_data)
             '''if enriched_data:
                 log.info(f'Dumping enriched dataset..... | {datetime.now()}')
                 pool = multiprocessing.Pool(no_of_dump_process)

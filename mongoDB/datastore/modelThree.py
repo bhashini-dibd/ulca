@@ -295,7 +295,7 @@ class ModelThree:
                                 record["targets"] = targets
                                 map[record["sourceTextHash"]] = record
                     result = list(map.values())
-                    result = self.post_process(query, result)
+                    result, res_count = self.post_process(query, result)
             else:
                 if res:
                     for record in res:
@@ -312,7 +312,7 @@ class ModelThree:
             src_lang = query["srcLang"]
         if 'tgtLang' in query.keys():
             tgt_lang = query["tgtLang"]
-        result_set = []
+        result_set, res_count = [], 0
         for record in res:
             result_array = []
             result = {}
@@ -359,8 +359,9 @@ class ModelThree:
             except Exception as e:
                 continue
             if result_array:
+                res_count += len(result_array)
                 result_set.append(result_array)
-        return result_set
+        return result_set, res_count
 
 
     def post_process_groupby(self, query, res):
