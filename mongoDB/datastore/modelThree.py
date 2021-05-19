@@ -54,7 +54,7 @@ class ModelThree:
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": 'loaded dataset to DB-M3', "status": "SUCCESS", "total": total, "updates": upd_count, "inserts": ins_count, "duplicates": duplicates}
+        return {"message": 'loaded dataset to DB-M3', "status": "SUCCESS", "total": total, "updates": u_count, "inserts": i_count, "duplicates": duplicates}
 
     def get_tags(self, d):
         for v in d.values():
