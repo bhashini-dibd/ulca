@@ -109,7 +109,7 @@ class ModelThree:
             else:
                 append_record = record
         target = {
-            "id": uuid.uuid4(),
+            "id": str(uuid.uuid4()),
             "targetText": data["targetText"],
             "alignmentScore": random.uniform(0, 1),
             "targetLanguage": request["details"]["targetLanguage"],
@@ -121,18 +121,18 @@ class ModelThree:
         if 'translator' in data.keys():
             target["translator"] = data["translator"]
         if append_record:
-            append_record[0]["targets"].append(target)
+            append_record["targets"].append(target)
             tags_dict = {
                 "tgtHash": tgt_hash, "lang": request["details"]["targetLanguage"],
                 "collectionMode": request["details"]["collectionMode"],
                 "domain": request["details"]["domain"], "licence": request["details"]["licence"]
             }
-            append_record[0]["tags"].extend(list(self.get_tags(tags_dict)))
-            langs = [append_record[0]["sourceLanguage"]]
-            for target in append_record[0]["targets"]:
+            append_record["tags"].extend(list(self.get_tags(tags_dict)))
+            langs = [append_record["sourceLanguage"]]
+            for target in append_record["targets"]:
                 langs.append(target["targetLanguage"])
-            append_record[0]["shardKey"] = hash(set(sorted(langs)))
-            return append_record[0], "UPDATE", 0
+            append_record["shardKey"] = hash(frozenset(sorted(langs)))
+            return append_record, "UPDATE", 0
         else:
             targets = [target]
             tags_dict = {
@@ -144,7 +144,7 @@ class ModelThree:
             langs = [request["details"]["sourceLanguage"], request["details"]["sourceLanguage"]]
             shard_key = hash(frozenset(sorted(langs)))
             record = {
-                "id": uuid.uuid4(), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
+                "id": str(uuid.uuid4()), "sourceTextHash": src_hash, "sourceText": data["sourceText"],
                 "sourceLanguage": request["details"]["sourceLanguage"],
                 "submitter": request["submitter"], "contributors": request["contributors"],
                 "targets": targets, "tags": tags, "shardKey": shard_key
@@ -180,11 +180,8 @@ class ModelThree:
                 db_query["scoreQuery"] = {"targets.score": query["score"]}
             tags = []
             if 'srcLang' in query.keys():
-                tags.append(query["srcLang"])
                 db_query["srcLang"] = query["srcLang"]
             if 'tgtLang' in query.keys():
-                for tgt in query["tgtLang"]:
-                    tags.append(tgt)
                 db_query["tgtLang"] = query["tgtLang"]
             if 'collectionMode' in query.keys():
                 tags.append(query["collectionMode"])
@@ -221,7 +218,6 @@ class ModelThree:
             client.drop_database(mongo_ulca_m3_db)
             ulca_db = client[mongo_ulca_m3_db]
             ulca_col = ulca_db[mongo_ulca_dataset_m3_col]
-            ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("shardKey", "hashed")])
             db = client.admin
@@ -235,7 +231,6 @@ class ModelThree:
             client.drop_database(mongo_ulca_m3_db)
             ulca_db = client[mongo_ulca_m3_db]
             ulca_col = ulca_db[mongo_ulca_dataset_m3_col]
-            ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
             log.info(f'Done! | {datetime.now()}')
 
@@ -270,6 +265,11 @@ class ModelThree:
         try:
             col = self.get_mongo_instance()
             pipeline = []
+            if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
+                langs = [query["srcLang"]]
+                langs.extend(query["tgtLang"])
+                pipeline.append({"$unwind": {"path": "$targets"}})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": {"$in": langs}}, {"target.targetLanguage": {"$in": langs}}]}})
             if "tags" in query.keys():
                 if internal:
                     pipeline.append({"$match": {"tags": {"$in": query["tags"]}}})
@@ -278,10 +278,6 @@ class ModelThree:
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBySource' in query.keys():
-                langs = [query["srcLang"]]
-                langs.extend(query["tgtLang"])
-                pipeline.append({"$unwind": {"path": "$targets"}})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": {"$in": langs}}, {"target.targetLanguage": {"$in": langs}}]}})
                 pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
                 if 'countOfTranslations' in query.keys():
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.sourceHash", "$$REMOVE"]}}})
@@ -299,16 +295,22 @@ class ModelThree:
                             if record["_id"]:
                                 hashes.append(record["_id"])
                     if hashes:
-                        log.info(f'Hashes -- {hashes} | {datetime.now()}')
                         res_count = len(hashes)
                         in_query = {"sourceTextHash": {"$in": hashes}}
                         #query = {"$or": [{"sourceTextHash": {"$in": hashes}}, {"targets.targetTextHash": {"$in": hashes}}]}
                         res = col.find(in_query, {"_id": False})
+                    map = {}
                     if not res:
                         return result, pipeline, res_count
                     for record in res:
                         if record:
-                            result.append(record)
+                            if record["sourceTextHash"] in map.keys():
+                                data_list = map[record["sourceTextHash"]]
+                                data_list.append(record)
+                                map[record["sourceTextHash"]] = data_list
+                            else:
+                                map[record["sourceTextHash"]] = [record]
+                    result = list(map.values())
             else:
                 if res:
                     for record in res:
@@ -316,8 +318,10 @@ class ModelThree:
                             result.append(record)
                 res_count = len(result)
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
-                log.info(f'RESULTTTTTT -- {result} | {datetime.now()}')
-                result = self.post_process(query, result)
+                if 'groupBySource' not in query.keys():
+                    result = self.post_process(query, result)
+                else:
+                    result = self.post_process_groupby(query, result)
         except Exception as e:
             log.exception(e)
         return result, pipeline, res_count
@@ -332,40 +336,118 @@ class ModelThree:
         for record in res:
             result_array = []
             result = {}
-            if src_lang == record["sourceLanguage"]:
-                result["sourceText"] = record["sourceText"]
-            elif record["sourceLanguage"] in tgt_lang:
-                result["targetText"] = record["targetText"]
-            if result:
-                for target in record["targets"]:
-                    if 'sourceText' in result.keys():
-                        if target["targetLanguage"] in tgt_lang:
-                            result["targetText"] = target["targetText"]
-                            result_array.append(result)
-                    elif 'targetText' in result.keys():
-                        if target["sourceLanguage"] in tgt_lang:
-                            result["sourceText"] = target["targetText"]
-                            result_array.append(result)
-            else:
-                target_combinations = list(itertools.combinations(record["targets"], 2))
-                for combination in target_combinations:
-                    if src_lang == combination[0]["targetLanguage"]:
-                        result["sourceText"] = combination[0]["targetText"]
-                    elif combination[0]["targetLanguage"] in tgt_lang:
-                        result["targetText"] = combination[0]["targetText"]
-                    if result:
-                        if src_lang == combination[1]["targetLanguage"]:
-                            result["sourceText"] = combination[1]["targetText"]
-                        elif combination[1]["targetLanguage"] in tgt_lang:
-                            result["targetText"] = combination[1]["targetText"]
-                        if len(result.keys()) == 2:
-                            result_array.append(result)
-                        else:
-                            result = {}
+            try:
+                if src_lang == record["sourceLanguage"]:
+                    result["sourceText"] = record["sourceText"]
+                elif record["sourceLanguage"] in tgt_lang:
+                    result["targetText"] = record["targetText"]
+                    result["alignmentScore"] = record["alignmentScore"]
+                if result:
+                    for target in record["targets"]:
+                        if not target:
                             continue
+                        if type(target) == "str":
+                            target = json.loads(target)
+                        if 'sourceText' in result.keys():
+                            if target["targetLanguage"] in tgt_lang:
+                                result["targetText"] = target["targetText"]
+                                result["alignmentScore"] = target["alignmentScore"]
+                                result_array.append(result)
+                        elif 'targetText' in result.keys():
+                            if target["sourceLanguage"] in tgt_lang:
+                                result["sourceText"] = target["targetText"]
+                                result["alignmentScore"] = target["alignmentScore"]
+                                result_array.append(result)
+                else:
+                    target_combinations = list(itertools.combinations(record["targets"], 2))
+                    for combination in target_combinations:
+                        if src_lang == combination[0]["targetLanguage"]:
+                            result["sourceText"] = combination[0]["targetText"]
+                        elif combination[0]["targetLanguage"] in tgt_lang:
+                            result["targetText"] = combination[0]["targetText"]
+                            result["targetText"] = combination[0]["alignmentScore"]
+                        if result:
+                            if src_lang == combination[1]["targetLanguage"]:
+                                result["sourceText"] = combination[1]["targetText"]
+                            elif combination[1]["targetLanguage"] in tgt_lang:
+                                result["targetText"] = combination[1]["targetText"]
+                                result["targetText"] = combination[1]["alignmentScore"]
+                            if len(result.keys()) == 2:
+                                result_array.append(result)
+                            else:
+                                result = {}
+                                continue
+                        else:
+                            continue
+            except Exception as e:
+                log.exception(e)
+                continue
+            if result_array:
+                result_set.append(result_array)
+        return result_set
+
+
+    def post_process_groupby(self, query, res):
+        src_lang, tgt_lang = None, None
+        if 'srcLang' in query.keys():
+            src_lang = query["srcLang"]
+        if 'tgtLang' in query.keys():
+            tgt_lang = query["tgtLang"]
+        result_set = []
+        for record in res:
+            src_result_array = []
+            try:
+                for each_record in record:
+                    result_array = []
+                    result = {}
+                    if src_lang == each_record["sourceLanguage"]:
+                        result["sourceText"] = each_record["sourceText"]
+                    elif each_record["sourceLanguage"] in tgt_lang:
+                        result["targetText"] = each_record["targetText"]
+                        result["alignmentScore"] = each_record["alignmentScore"]
+                    if result:
+                        for target in each_record["targets"]:
+                            if not target:
+                                continue
+                            if type(target) == "str":
+                                target = json.loads(target)
+                            if 'sourceText' in result.keys():
+                                if target["targetLanguage"] in tgt_lang:
+                                    result["targetText"] = target["targetText"]
+                                    result["alignmentScore"] = target["alignmentScore"]
+                                    result_array.append(result)
+                            elif 'targetText' in result.keys():
+                                if target["sourceLanguage"] in tgt_lang:
+                                    result["sourceText"] = target["targetText"]
+                                    result["alignmentScore"] = target["alignmentScore"]
+                                    result_array.append(result)
                     else:
-                        continue
-            result_set.append(result_array)
+                        target_combinations = list(itertools.combinations(each_record["targets"], 2))
+                        for combination in target_combinations:
+                            if src_lang == combination[0]["targetLanguage"]:
+                                result["sourceText"] = combination[0]["targetText"]
+                            elif combination[0]["targetLanguage"] in tgt_lang:
+                                result["targetText"] = combination[0]["targetText"]
+                                result["alignmentScore"] = combination[0]["alignmentScore"]
+                            if result:
+                                if src_lang == combination[1]["targetLanguage"]:
+                                    result["sourceText"] = combination[1]["targetText"]
+                                elif combination[1]["targetLanguage"] in tgt_lang:
+                                    result["targetText"] = combination[1]["targetText"]
+                                    result["alignmentScore"] = combination[1]["alignmentScore"]
+                                if len(result.keys()) == 2:
+                                    result_array.append(result)
+                                else:
+                                    result = {}
+                                    continue
+                            else:
+                                continue
+                    if result_array:
+                        src_result_array.append(result_array)
+            except Exception as e:
+                log.exception(e)
+            if src_result_array:
+                result_set.append(src_result_array)
         return result_set
 
 

@@ -79,16 +79,16 @@ class Datastore:
                 if src_hash in record["tags"] and tgt_hash in record["tags"]:
                     return None, 1
                 elif src_hash == record["srcHash"]:
-                    new_data = {"sourceText": data["targetText"], "targetText": record["targetText"],
+                    new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
                                 "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif src_hash == record["tgtHash"]:
-                    new_data = {"sourceText": data["targetText"], "targetText": record["sourceText"],
+                    new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
                                 "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
                 elif tgt_hash == record["srcHash"]:
-                    new_data = {"sourceText": data["sourceText"], "targetText": record["targetText"],
+                    new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
                                 "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif tgt_hash == record["tgtHash"]:
-                    new_data = {"sourceText": data["sourceText"], "targetText": record["sourceText"],
+                    new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
                                 "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
                 new_records.append(new_data)
         new_records.append(data)
@@ -198,7 +198,6 @@ class Datastore:
             client.drop_database(mongo_ulca_db)
             ulca_db = client[mongo_ulca_db]
             ulca_col = ulca_db[mongo_ulca_dataset_col]
-            ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
@@ -214,12 +213,9 @@ class Datastore:
             client.drop_database(mongo_ulca_db)
             ulca_db = client[mongo_ulca_db]
             ulca_col = ulca_db[mongo_ulca_dataset_col]
-            ulca_col.create_index([("data.score", -1)])
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
-            ulca_col.create_index([("srcHash", -1)])
-            ulca_col.create_index([("tgtHash", -1)])
             log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):
