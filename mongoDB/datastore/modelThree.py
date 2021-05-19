@@ -281,6 +281,7 @@ class ModelThree:
                                 map[record["sourceTextHash"]] = [record]
                     result = list(map.values())
                     result = self.post_process_groupby(query, result)
+                    res_count = len(result)
             elif 'srcLang' in query.keys() or 'tgtLang' in query.keys():
                 if res:
                     map = {}
@@ -294,14 +295,15 @@ class ModelThree:
                                 targets = [record["targets"]]
                                 record["targets"] = targets
                                 map[record["sourceTextHash"]] = record
+                        res_count += 1
                     result = list(map.values())
-                    result, res_count = self.post_process(query, result)
+                    result = self.post_process(query, result)
             else:
                 if res:
                     for record in res:
                         if record:
                             result.append(record)
-            res_count = len(result)
+                res_count = len(result)
         except Exception as e:
             log.exception(e)
         return result, pipeline, res_count
@@ -361,7 +363,7 @@ class ModelThree:
             if result_array:
                 res_count += len(result_array)
                 result_set.append(result_array)
-        return result_set, res_count
+        return result_set
 
 
     def post_process_groupby(self, query, res):

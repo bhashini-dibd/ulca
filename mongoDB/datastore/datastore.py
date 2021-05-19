@@ -54,6 +54,7 @@ class Datastore:
                             count += len(batch_data)
                             batch_data = []
                         batch_data.extend(result[0])
+                else:
                     duplicates += result[1]
             pool_enrichers.close()
             if batch_data:
@@ -87,7 +88,7 @@ class Datastore:
             for record in records:
                 new_data = {}
                 if src_hash in record["tags"] and tgt_hash in record["tags"]:
-                    return None, 1
+                    return None
                 elif src_hash == record["srcHash"]:
                     new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
                                 "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["targetLanguage"]}
