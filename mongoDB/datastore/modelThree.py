@@ -345,7 +345,6 @@ class ModelThree:
         for record in res:
             result_array = []
             result = {}
-            log.info(record)
             try:
                 if src_lang == record["sourceLanguage"]:
                     result["sourceText"] = record["sourceText"]
