@@ -74,35 +74,29 @@ components:
       type: object
       description: common parameters or attributes of dataset that is primarily same across the supported dataset.
       required:
+        - datasetType
         - languages
         - collectionSource
         - domain
-        - collectionMethod
         - license
-        - submitter
-        - contributors
+        - submitterInfo
       properties:
         version:
           type: string
           default: 1.0
           description: params schema version
+        datasetType:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/DatasetType'
         languages:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/LanguagePair'
         collectionSource:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Source'
         domain:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Domain'
-        collectionMethod:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/CollectionMethod'
         license:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/License'
-        submitter:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Contributor'
-        contributors:
-          type: array
-          description: users' or teams' who are part of the dataset curation exercise.
-          items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Contributor'
+        submitterInfo:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Submitter'
 
     ParallelDatasetParamsSchema:
       allOf:
@@ -110,16 +104,13 @@ components:
         - type: object
       type: object
       properties:
-        targetValidated:
-          $ref: '#/components/schemas/TargetTextValidated'
-        alignmentMethod:
-          $ref: '#/components/schemas/TextAlignmentMethod'
+        collectionMethod:
+          $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
 
     ParallelDatasetRowSchema:
       required:
         - sourceText
         - targetText
-      type: object
       properties:
         sourceText:
           type: string
@@ -127,15 +118,9 @@ components:
         targetText:
           type: string
           description: textual data in target language
-        validatedTargetText:
-          type: string
-          description: textual data after annotator has validate the target sentence
-        alignmentScore:
-          maximum: 1
-          minimum: 0.5
-          type: number
-          description: algorithm score secured for the sentence pair
-        
+        collectionMethod:
+          $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
+      type: object
       description: the schema of data file uploaded should adhere to this specified structure.
   
     MonolingualParamsSchema:
@@ -207,6 +192,12 @@ components:
         snr:
           type: string
           description: SNR information
+        startTime:
+          type: string
+          description: "Time of the audio from where the processing starts. Format : hh-mm-ss"
+        endTime:
+          type: string
+          description: "Time of the audio where the processing end. Format : hh-mm-ss"
   
     DocumentOCRParamsSchema:
       allOf:
@@ -393,15 +384,6 @@ components:
           - layout-dataset-type
           - ocr-dataset-type
           - character-dataset-type
-          
-    DatasetType:
-      type: string
-      description: supported dataset type under language initiatives
-      enum:
-        - parallel-corpus
-        - monolingual-corpus
-        - asr-corpus
-        - document-ocr-corpus
 
     DatasetProgressInformation:
       type: object

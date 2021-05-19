@@ -1,33 +1,46 @@
 {
+    "dataset-type": "parallel-corpus",
     "languages": {
         "sourceLanguage": "en",
-        "targetLanguage": "hi"
+        "targetLanguage": "bn"
     },
     "collectionSource": [
-        "219200011442014_1.pdf",
-        "Motor Vehicle Claim Tribunal, Alwar"
+        "42040.pdf",
+        "https: //main.sci.gov.in"
     ],
     "domain": "legal",
-    "collectionMethod": [
-        "manual-human-translated"
-    ],
-    "license":  "cc-by-4.0",
-    "submitter": {
-        "name": "Project Anuvaad",
-        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project"
-    },
-    "contributors": [
-        {
-            "name": "Ajitesh Sharma",
-            "aboutMe": "NLP team lead at Project Anuvaad"
-        },
-        {
-            "name": "Vishal Mauli",
-            "aboutMe": "Backend team lead at Project Anuvaad"
-        },
-        {
-            "name": "Amarjeet Singh",
-            "aboutMe": "Freelance translator working with Project Anuvaad"
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-translated"
+        ],
+        "collectionDetails": {
+            "editingTool": "Anuvaad",
+            "editingToolVersion": "v1.4",
+            "contributor": {
+                "name": "Aravinth Bheemaraj",
+                "aboutMe": "NLP Data team lead at Project Anuvaad"
+            }
         }
-    ]
+    },
+    "license": "cc-by-4.0",
+    "submitterInfo": {
+        "submitter": {
+            "name": "Project Anuvaad",
+            "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project"
+        },
+        "team": [
+            {
+                "name": "Ajitesh Sharma",
+                "aboutMe": "NLP team lead at Project Anuvaad"
+            },
+            {
+                "name": "Vishal Mauli",
+                "aboutMe": "Backend team lead at Project Anuvaad"
+            },
+            {
+                "name": "Aravinth Bheemaraj",
+                "aboutMe": "NLP Data team lead at Project Anuvaad"
+            }
+        ]
+    }
 }
