@@ -36,56 +36,7 @@ class Datastore:
             data_json = json.load(dataset)
             if 'slice' in request.keys():
                 data_json = data_json[request["slice"]["start"]:request["slice"]["end"]]
-            enriched_data, duplicates, batch_data = [], 0, []
-            total, count, duplicates, batch = len(data_json), 0, 0, request["batch"]
-            log.info(f'Enriching dataset..... | {datetime.now()}')
-            func = partial(self.get_enriched_data, request=request, sequential=False)
-            no_of_m1_process = request["processors"]
-            pool_enrichers = multiprocessing.Pool(no_of_m1_process)
-            enrichment_processors = pool_enrichers.map_async(func, data_json).get()
-            threads = []
-            for result in enrichment_processors:
-                if result:
-                    if result[0]:
-                        if len(batch_data) == batch:
-                            log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
-                            enriched_data.append(batch_data)
-                            persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
-                            persist_thread.start()
-                            threads.append(persist_thread)
-                            count += len(batch_data)
-                            batch_data = []
-                        batch_data.extend(result[0])
-                else:
-                    duplicates += 1
-            pool_enrichers.close()
-            if batch_data:
-                log.info(f'Adding batch of {len(batch_data)} to the BULK INSERT list... | {datetime.now()}')
-                enriched_data.append(batch_data)
-                persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
-                persist_thread.start()
-                threads.append(persist_thread)
-                count += len(batch_data)
-            for thread in threads:
-                thread.join()
-            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
-        except Exception as e:
-            log.exception(e)
-            return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": 'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count, "duplicates": duplicates}
-
-    def load_dataset_seq(self, request):
-        log.info("Loading Dataset..... | {}".format(datetime.now()))
-        try:
-            if 'path' not in request.keys():
-                path = f'{file_path}' + f'{file_name}'
-            else:
-                path = request["path"]
-            log.info("File -- {} | {}".format(path, datetime.now()))
-            dataset = open(path, "r")
-            data_json = json.load(dataset)
-            if 'slice' in request.keys():
-                data_json = data_json[request["slice"]["start"]:request["slice"]["end"]]
+            batch_data = []
             total, count, duplicates, record_duplicates, batch = len(data_json), 0, 0, 0, request["batch"]
             log.info(f'Enriching and dumping dataset..... | {datetime.now()}')
             duplicate_records, clean_data = set([]), []
@@ -114,7 +65,7 @@ class Datastore:
                     else:
                         duplicates += 1
                 pool_enrichers.close()
-            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
+            log.info(f'Done! -- INPUT: {total}, CLEAN: {len(clean_data)}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
@@ -149,6 +100,7 @@ class Datastore:
                         new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
                                     "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
                 if new_data:
+                    log.info(f'new data: {new_data} | {datetime.now()}')
                     new_records.append(new_data)
         new_records.append(data)
         for record in new_records:

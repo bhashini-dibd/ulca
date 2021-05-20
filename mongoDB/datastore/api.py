@@ -11,7 +11,7 @@ ulcdatastoreapp = Flask(__name__)
 def insert_dataset():
     req_criteria = request.get_json()
     service = Datastore()
-    response = service.load_dataset_seq(req_criteria)
+    response = service.load_dataset(req_criteria)
     return jsonify(response), 200
 
 
