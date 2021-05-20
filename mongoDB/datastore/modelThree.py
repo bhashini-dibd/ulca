@@ -254,7 +254,7 @@ class ModelThree:
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": {"$in": langs}}, {"targets.targetLanguage": {"$in": langs}}]}})
             elif 'srcLang' in query.keys():
                 pipeline.append({"$unwind": {"path": "$targets"}})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"target.targetLanguage": query["srcLang"]}]}})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
             if "tags" in query.keys():
                 if internal:
                     pipeline.append({"$match": {"tags": {"$in": query["tags"]}}})
@@ -352,55 +352,27 @@ class ModelThree:
         return result, pipeline, res_count
 
     def post_process(self, query, res):
-        src_lang, tgt_lang = None, None
+        langs = []
         if 'srcLang' in query.keys():
-            src_lang = query["srcLang"]
+            langs.append(query["srcLang"])
         if 'tgtLang' in query.keys():
-            tgt_lang = query["tgtLang"]
-        result_set, res_count = [], 0
+            langs.extend(query["tgtLang"])
+        result_set, res_count, result_array = [], 0, []
         for record in res:
-            result_array = []
-            result = {}
+            sentences = []
             try:
-                if src_lang == record["sourceLanguage"]:
-                    result["sourceText"] = record["sourceText"]
-                elif record["sourceLanguage"] in tgt_lang:
-                    result["targetText"] = record["targetText"]
-                    result["alignmentScore"] = record["alignmentScore"]
-                if result:
-                    targets = record["targets"]
-                    for target in targets:
-                        if 'sourceText' in result.keys():
-                            if target["targetLanguage"] in tgt_lang:
-                                result["targetText"] = target["targetText"]
-                                result["alignmentScore"] = target["alignmentScore"]
-                                result_array.append(result)
-                        elif 'targetText' in result.keys():
-                            if target["sourceLanguage"] in tgt_lang:
-                                result["sourceText"] = target["targetText"]
-                                result["alignmentScore"] = target["alignmentScore"]
-                                result_array.append(result)
-                else:
-                    target_combinations = list(itertools.combinations(record["targets"], 2))
+                for target in record["targets"]:
+                    if target["targetLanguage"] in langs:
+                        sentences.append(target)
+                if record["sourceLanguage"] in langs:
+                    source = {"targetText": record["sourceText"], "targetLanguage": record["sourceLanguage"], "alignmentScore": 0}
+                    sentences.append(source)
+                if sentences:
+                    target_combinations = list(itertools.combinations(sentences, 2))
                     for combination in target_combinations:
-                        if src_lang == combination[0]["targetLanguage"]:
-                            result["sourceText"] = combination[0]["targetText"]
-                        elif combination[0]["targetLanguage"] in tgt_lang:
-                            result["targetText"] = combination[0]["targetText"]
-                            result["targetText"] = combination[0]["alignmentScore"]
-                        if result:
-                            if src_lang == combination[1]["targetLanguage"]:
-                                result["sourceText"] = combination[1]["targetText"]
-                            elif combination[1]["targetLanguage"] in tgt_lang:
-                                result["targetText"] = combination[1]["targetText"]
-                                result["targetText"] = combination[1]["alignmentScore"]
-                            if len(result.keys()) == 2:
-                                result_array.append(result)
-                            else:
-                                result = {}
-                                continue
-                        else:
-                            continue
+                        result = {"sourceText": combination[0]["targetText"], "targetText": combination[1]["targetText"],
+                                  "alignmentScore": combination[1]["alignmentScore"]}
+                        result_array.append(result)
             except Exception as e:
                 continue
             if result_array:
