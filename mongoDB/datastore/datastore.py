@@ -97,28 +97,22 @@ class Datastore:
                     log.info(f'DUPLICATE ---- DATA: {data}, RECORD: {record} | {datetime.now()}')
                     return None
                 elif src_hash == record["srcHash"]:
-                    log.info(f'new data: 1 | {datetime.now()}')
                     if request["details"]["targetLanguage"] != record["targetLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
                                     "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif src_hash == record["tgtHash"]:
-                    log.info(f'new data: 2 | {datetime.now()}')
                     if request["details"]["targetLanguage"] != record["sourceLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
                                     "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
                 elif tgt_hash == record["srcHash"]:
-                    log.info(f'new data: 3 | {datetime.now()}')
                     if request["details"]["sourceLanguage"] != record["targetLanguage"]:
                         new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
                                     "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif tgt_hash == record["tgtHash"]:
-                    log.info(f'new data: 4 | {datetime.now()}')
                     if request["details"]["sourceLanguage"] != record["sourceLanguage"]:
                         new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
                                     "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
                 if new_data:
-                    log.info(f'data: {data} | {datetime.now()}')
-                    log.info(f'new data: {new_data} | {datetime.now()}')
                     new_records.append(new_data)
         new_records.append(data)
         for record in new_records:
@@ -272,9 +266,13 @@ class Datastore:
         try:
             col = self.get_mongo_instance()
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
-                langs = [query["srcLang"]]
-                langs.extend(query["tgtLang"])
-                pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
+                if len(query["tgtLang"]) == 1:
+                    pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"], "targetLanguage": query["tgtLang"][0]},
+                                                        {"sourceLanguage": query["tgtLang"][0], "targetLanguage": query["srcLang"]}]}})
+                else:
+                    langs = [query["srcLang"]]
+                    langs.extend(query["tgtLang"])
+                    pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}, "targetLanguage": {"$in": langs}}]}})
             elif 'srcLang' in query.keys():
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["srcLang"]}]}})
             if "tags" in query.keys():
