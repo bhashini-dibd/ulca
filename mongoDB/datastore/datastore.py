@@ -12,7 +12,7 @@ from functools import partial
 from logging.config import dictConfig
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
-from configs import mongo_ulca_dataset_col, no_of_m1_process
+from configs import mongo_ulca_dataset_col
 
 import pymongo
 log = logging.getLogger('file')
@@ -40,6 +40,7 @@ class Datastore:
             total, count, duplicates, batch = len(data_json), 0, 0, request["batch"]
             log.info(f'Enriching dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request, sequential=False)
+            no_of_m1_process = request["processors"]
             pool_enrichers = multiprocessing.Pool(no_of_m1_process)
             enrichment_processors = pool_enrichers.map_async(func, data_json).get()
             threads = []
@@ -91,6 +92,8 @@ class Datastore:
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
                     continue
+                data['sourceText'] = str(data['sourceText']).strip()
+                data['targetText'] = str(data['targetText']).strip()
                 tup = (data['sourceText'], data['targetText'])
                 if tup in duplicate_records:
                     record_duplicates += 1
@@ -102,6 +105,7 @@ class Datastore:
             log.info(f'Actual Data: {len(data_json)}, Clean Data: {len(clean_data)} | {datetime.now()}')
             if clean_data:
                 func = partial(self.get_enriched_data, request=request, sequential=True)
+                no_of_m1_process = request["processors"]
                 pool_enrichers = multiprocessing.Pool(no_of_m1_process)
                 enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
                 for result in enrichment_processors:
@@ -115,7 +119,7 @@ class Datastore:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
         return {"message": 'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
-                "duplicates": duplicates, "recordDuplicates": record_duplicates}
+                "duplicates": duplicates, "recordDuplicates": record_duplicates, "clean": len(clean_data)}
 
     def get_enriched_data(self, data, request, sequential):
         insert_records, new_records = [], []
@@ -128,18 +132,23 @@ class Datastore:
                 if src_hash in record["tags"] and tgt_hash in record["tags"]:
                     return None
                 elif src_hash == record["srcHash"]:
-                    new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
-                                "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["targetLanguage"]}
+                    if request["details"]["targetLanguage"] != record["targetLanguage"]:
+                        new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
+                                    "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif src_hash == record["tgtHash"]:
-                    new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
-                                "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
+                    if request["details"]["targetLanguage"] != record["sourceLanguage"]:
+                        new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
+                                    "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
                 elif tgt_hash == record["srcHash"]:
-                    new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
-                                "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
+                    if request["details"]["sourceLanguage"] != record["targetLanguage"]:
+                        new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
+                                    "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif tgt_hash == record["tgtHash"]:
-                    new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
-                                "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
-                new_records.append(new_data)
+                    if request["details"]["sourceLanguage"] != record["sourceLanguage"]:
+                        new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
+                                    "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
+                if new_data:
+                    new_records.append(new_data)
         new_records.append(data)
         for record in new_records:
             record["score"] = random.uniform(0, 1)

@@ -11,7 +11,7 @@ from functools import partial
 from logging.config import dictConfig
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_m3_db
-from configs import mongo_ulca_dataset_m3_col, no_of_m3_process
+from configs import mongo_ulca_dataset_m3_col
 
 import pymongo
 log = logging.getLogger('file')
@@ -41,6 +41,8 @@ class ModelThree:
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
                     continue
+                data['sourceText'] = str(data['sourceText']).strip()
+                data['targetText'] = str(data['targetText']).strip()
                 tup = (data['sourceText'], data['targetText'])
                 if tup in duplicate_records:
                     record_duplicates += 1
@@ -53,6 +55,7 @@ class ModelThree:
             u_count, i_count, = 0, 0
             if clean_data:
                 func = partial(self.enriched_and_persist, request=request)
+                no_of_m3_process = request["processors"]
                 pool_enrichers = multiprocessing.Pool(no_of_m3_process)
                 enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
                 for result in enrichment_processors:
@@ -69,7 +72,7 @@ class ModelThree:
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": 'loaded dataset to DB-M3', "status": "SUCCESS", "total": total, "updates": u_count,
+        return {"message": 'loaded dataset to DB-M3', "status": "SUCCESS", "total": total, "clean": len(clean_data), "updates":u_count,
                 "inserts": i_count, "duplicates": duplicates, "recordDuplicates": record_duplicates}
 
     def get_tags(self, d):
