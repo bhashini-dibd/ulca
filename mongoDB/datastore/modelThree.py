@@ -178,8 +178,8 @@ class ModelThree:
                 tags.append(src_hash)
             if tags:
                 db_query["tags"] = tags
-            if 'groupBySource' in query.keys():
-                db_query["groupBySource"] = True
+            if 'groupBy' in query.keys():
+                db_query["groupBy"] = True
                 if 'countOfTranslations' in query.keys():
                     db_query["countOfTranslations"] = query["countOfTranslations"]
             data = self.search(db_query, False)
@@ -243,7 +243,7 @@ class ModelThree:
 
     # Searches the object into mongo collection
     def search(self, query, internal):
-        result, res_count, pipeline = [], 0, []
+        result, res_count, pipeline, pipeline_two = [], 0, [], []
         try:
             col = self.get_mongo_instance()
             pipeline = []
@@ -251,7 +251,7 @@ class ModelThree:
                 langs = [query["srcLang"]]
                 langs.extend(query["tgtLang"])
                 pipeline.append({"$unwind": {"path": "$targets"}})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": {"$in": langs}}, {"target.targetLanguage": {"$in": langs}}]}})
+                pipeline.append({"$match": {"$or": [{"sourceLanguage": {"$in": langs}}, {"targets.targetLanguage": {"$in": langs}}]}})
             elif 'srcLang' in query.keys():
                 pipeline.append({"$unwind": {"path": "$targets"}})
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"target.targetLanguage": query["srcLang"]}]}})
@@ -262,40 +262,61 @@ class ModelThree:
                     pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
-            if 'groupBySource' in query.keys():
+            if 'groupBy' in query.keys():
+                pipeline_two = pipeline
                 pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
+                pipeline_two.append({"$group": {"_id": {"targetHash": "$targets.targetTextHash"}, "count": {"$sum": 1}}})
                 if 'countOfTranslations' in query.keys():
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.sourceHash", "$$REMOVE"]}}})
+                    pipeline_two.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.targetHash", "$$REMOVE"]}}})
                 else:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
+                    pipeline_two.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.targetHash", "$$REMOVE"]}}})
                 pipeline.append({"$project": {"_id": 1}})
+                pipeline_two.append({"$project": {"_id": 1}})
             else:
                 pipeline.append({"$project": {"_id": 0}})
-            res = col.aggregate(pipeline, allowDiskUse=True)
-            if 'groupBySource' in query.keys():
+            res, res_two = col.aggregate(pipeline, allowDiskUse=True), None
+            if pipeline_two:
+                res_two = col.aggregate(pipeline_two, allowDiskUse=True)
+            if 'groupBy' in query.keys():
                 if res:
-                    hashes = []
+                    hashes = set([])
                     for record in res:
                         if record:
                             if record["_id"]:
-                                hashes.append(record["_id"])
-                    if hashes:
-                        res_count = len(hashes)
-                        in_query = {"sourceTextHash": {"$in": hashes}}
-                        #query = {"$or": [{"sourceTextHash": {"$in": hashes}}, {"targets.targetTextHash": {"$in": hashes}}]}
-                        res = col.find(in_query, {"_id": False})
-                    map = {}
-                    if not res:
-                        return result, pipeline, res_count
-                    for record in res:
+                                hashes.add(record["_id"])
+                    in_query = {"sourceTextHash": {"$in": hashes}}
+                    res = col.find(in_query, {"_id": False})
+                if res_two:
+                    hashes = set([])
+                    for record in res_two:
                         if record:
-                            if record["sourceTextHash"] in map.keys():
-                                data_list = map[record["sourceTextHash"]]
-                                data_list.append(record)
-                                map[record["sourceTextHash"]] = data_list
-                            else:
-                                map[record["sourceTextHash"]] = [record]
+                            if record["_id"]:
+                                hashes.add(record["_id"])
+                    in_query = {"targets.targetTextHash": {"$in": hashes}}
+                    res_two = col.find(in_query, {"_id": False})
+                if not res and not res_two:
+                    return result, pipeline, res_count
+                map, map_two = {}, {}
+                for record in res:
+                    if record:
+                        if record["sourceTextHash"] in map.keys():
+                            data_list = map[record["sourceTextHash"]]
+                            data_list.append(record)
+                            map[record["sourceTextHash"]] = data_list
+                        else:
+                            map[record["sourceTextHash"]] = [record]
+                for record in res_two:
+                    if record:
+                        if record["sourceTextHash"] in map.keys():
+                            data_list = map[record["sourceTextHash"]]
+                            data_list.append(record)
+                            map[record["sourceTextHash"]] = data_list
+                        else:
+                            map[record["sourceTextHash"]] = [record]
                     result = list(map.values())
+                    result.extend(list(map.values()))
                     result = self.post_process_groupby(query, result)
                     res_count = len(result)
             elif internal:
@@ -323,9 +344,9 @@ class ModelThree:
                                     targets = record["targets"]
                                 record["targets"] = targets
                                 map[record["sourceTextHash"]] = record
-                        res_count += 1
                     result = list(map.values())
                     result = self.post_process(query, result)
+                    res_count = len(result)
         except Exception as e:
             log.exception(e)
         return result, pipeline, res_count
