@@ -42,6 +42,7 @@ class Datastore:
             func = partial(self.get_enriched_data, request=request)
             pool_enrichers = multiprocessing.Pool(no_of_dump_process)
             enrichment_processors = pool_enrichers.map_async(func, data_json).get()
+            threads = []
             for result in enrichment_processors:
                 if result:
                     if result[0]:
@@ -50,7 +51,7 @@ class Datastore:
                             enriched_data.append(batch_data)
                             persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                             persist_thread.start()
-                            persist_thread.join()
+                            threads.append(persist_thread)
                             count += len(batch_data)
                             batch_data = []
                         batch_data.extend(result[0])
@@ -62,15 +63,10 @@ class Datastore:
                 enriched_data.append(batch_data)
                 persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                 persist_thread.start()
-                persist_thread.join()
+                threads.append(persist_thread)
                 count += len(batch_data)
-            '''if enriched_data:
-                log.info(f'Dumping enriched dataset..... | {datetime.now()}')
-                pool = multiprocessing.Pool(no_of_dump_process)
-                processors = pool.map_async(self.insert, enriched_data).get()
-                for result in processors:
-                    count += result
-                pool.close()'''
+            for thread in threads:
+                thread.join()
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
