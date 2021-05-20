@@ -39,7 +39,7 @@ class Datastore:
             enriched_data, duplicates, batch_data = [], 0, []
             total, count, duplicates, batch = len(data_json), 0, 0, request["batch"]
             log.info(f'Enriching dataset..... | {datetime.now()}')
-            func = partial(self.get_enriched_data, request=request)
+            func = partial(self.get_enriched_data, request=request, sequential=False)
             pool_enrichers = multiprocessing.Pool(no_of_m1_process)
             enrichment_processors = pool_enrichers.map_async(func, data_json).get()
             threads = []
@@ -73,7 +73,40 @@ class Datastore:
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
         return {"message": 'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count, "duplicates": duplicates}
 
-    def get_enriched_data(self, data, request):
+    def load_dataset_seq(self, request):
+        log.info("Loading Dataset..... | {}".format(datetime.now()))
+        try:
+            if 'path' not in request.keys():
+                path = f'{file_path}' + f'{file_name}'
+            else:
+                path = request["path"]
+            log.info("File -- {} | {}".format(path, datetime.now()))
+            dataset = open(path, "r")
+            data_json = json.load(dataset)
+            if 'slice' in request.keys():
+                data_json = data_json[request["slice"]["start"]:request["slice"]["end"]]
+            enriched_data, duplicates, batch_data = [], 0, []
+            total, count, duplicates, batch = len(data_json), 0, 0, request["batch"]
+            log.info(f'Enriching and dumping dataset..... | {datetime.now()}')
+            func = partial(self.get_enriched_data, request=request, sequential=True)
+            pool_enrichers = multiprocessing.Pool(no_of_m1_process)
+            enrichment_processors = pool_enrichers.map_async(func, data_json).get()
+            for result in enrichment_processors:
+                if result:
+                    if result[0]:
+                        if len(batch_data) == batch:
+                            count += len(batch_data)
+                else:
+                    duplicates += 1
+            pool_enrichers.close()
+            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
+        except Exception as e:
+            log.exception(e)
+            return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
+        return {"message": 'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
+                "duplicates": duplicates}
+
+    def get_enriched_data(self, data, request, sequential):
         if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
             return None, 0
         insert_records, new_records = [], []
@@ -119,6 +152,8 @@ class Datastore:
                          "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
                          "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, 'sk': shard_key, "tags": tags}
             insert_records.append(data_dict)
+        if sequential:
+            self.insert(insert_records)
         return insert_records, 0
 
     def get_tags(self, d):
