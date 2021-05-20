@@ -36,12 +36,25 @@ class ModelThree:
             if 'slice' in request.keys():
                 data_json = data_json[request["slice"]["start"]:request["slice"]["end"]]
             total, duplicates, batch = len(data_json), 0, request["batch"]
-            log.info(f'Enriching and dumping the dataset..... | {datetime.now()}')
+            log.info(f'Enriching and dumping dataset..... | {datetime.now()}')
+            duplicate_records, clean_data, record_duplicates = set([]), [], 0
+            for data in data_json:
+                if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
+                    continue
+                tup = (data['sourceText'], data['targetText'])
+                if tup in duplicate_records:
+                    record_duplicates += 1
+                    continue
+                else:
+                    duplicate_records.add(tup)
+                    clean_data.append(data)
+            duplicate_records.clear()
+            log.info(f'Actual Data: {len(data_json)}, Clean Data: {len(clean_data)} | {datetime.now()}')
             u_count, i_count, = 0, 0
-            if data_json:
+            if clean_data:
                 func = partial(self.enriched_and_persist, request=request)
                 pool_enrichers = multiprocessing.Pool(no_of_m3_process)
-                enrichment_processors = pool_enrichers.map_async(func, data_json).get()
+                enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
                 for result in enrichment_processors:
                     if result:
                         if result[0]:
@@ -56,7 +69,8 @@ class ModelThree:
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": 'loaded dataset to DB-M3', "status": "SUCCESS", "total": total, "updates": u_count, "inserts": i_count, "duplicates": duplicates}
+        return {"message": 'loaded dataset to DB-M3', "status": "SUCCESS", "total": total, "updates": u_count,
+                "inserts": i_count, "duplicates": duplicates, "recordDuplicates": record_duplicates}
 
     def get_tags(self, d):
         for v in d.values():
@@ -69,8 +83,6 @@ class ModelThree:
                 yield v
 
     def enriched_and_persist(self, data, request):
-        if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
-            return None, None, 0
         append_record = None
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
