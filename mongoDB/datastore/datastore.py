@@ -89,6 +89,7 @@ class Datastore:
         insert_records, new_records = [], []
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
+        details = request["details"]
         records = self.get_dataset_internal({"hash": [src_hash, tgt_hash]})
         if records:
             for record in records:
@@ -97,41 +98,43 @@ class Datastore:
                     log.info(f'DUPLICATE ---- DATA: {data}, RECORD: {record} | {datetime.now()}')
                     return None
                 elif src_hash == record["srcHash"]:
-                    if request["details"]["targetLanguage"] != record["targetLanguage"]:
+                    if details["targetLanguage"] != record["targetLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
-                                    "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["targetLanguage"]}
+                                    "sourceLanguage": details["targetLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif src_hash == record["tgtHash"]:
-                    if request["details"]["targetLanguage"] != record["sourceLanguage"]:
+                    if details["targetLanguage"] != record["sourceLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
-                                    "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
+                                    "sourceLanguage": details["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
                 elif tgt_hash == record["srcHash"]:
-                    if request["details"]["sourceLanguage"] != record["targetLanguage"]:
+                    if details["sourceLanguage"] != record["targetLanguage"]:
                         new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
-                                    "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
+                                    "sourceLanguage": details["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif tgt_hash == record["tgtHash"]:
-                    if request["details"]["sourceLanguage"] != record["sourceLanguage"]:
+                    if details["sourceLanguage"] != record["sourceLanguage"]:
                         new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
-                                    "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
+                                    "sourceLanguage": details["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
                 if new_data:
                     new_records.append(new_data)
         new_records.append(data)
         for record in new_records:
             record["score"] = random.uniform(0, 1)
-            tag_details, details = {}, request["details"]
             src_hash = str(hashlib.sha256(record["sourceText"].encode('utf-16')).hexdigest())
             tgt_hash = str(hashlib.sha256(record["targetText"].encode('utf-16')).hexdigest())
             if "sourceLanguage" in record.keys() and "targetLanguage" in record.keys():
-                details["sourceLanguage"] = record["sourceLanguage"]
-                details["targetLanguage"] = record["targetLanguage"]
+                src_lang = record["sourceLanguage"]
+                tgt_lang = record["targetLanguage"]
+            else:
+                src_lang = details["sourceLanguage"]
+                tgt_lang = details["targetLanguage"]
             tag_details = {
-                "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["sourceLanguage"], "collectionMode": details["collectionMode"],
+                "sourceLanguage": src_lang, "targetLanguage": tgt_lang, "collectionMode": details["collectionMode"],
                 "domain": details["domain"], "licence": details["licence"], "srcHash": src_hash, "tgtHash": tgt_hash
             }
             tags = list(self.get_tags(tag_details))
-            langs = [details["sourceLanguage"], details["targetLanguage"]]
+            langs = [src_lang, tgt_lang]
             shard_key = ','.join(map(str, sorted(langs)))
             data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
-                         "submitter": request["submitter"], "sourceLanguage": details["sourceLanguage"], "targetLanguage": details["targetLanguage"],
+                         "submitter": request["submitter"], "sourceLanguage": src_lang, "targetLanguage": tgt_lang,
                          "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
                          "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, 'sk': shard_key, "tags": tags}
             insert_records.append(data_dict)
@@ -266,13 +269,9 @@ class Datastore:
         try:
             col = self.get_mongo_instance()
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
-                if len(query["tgtLang"]) == 1:
-                    pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"], "targetLanguage": query["tgtLang"][0]},
-                                                        {"sourceLanguage": query["tgtLang"][0], "targetLanguage": query["srcLang"]}]}})
-                else:
-                    langs = [query["srcLang"]]
-                    langs.extend(query["tgtLang"])
-                    pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}, "targetLanguage": {"$in": langs}}]}})
+                langs = [query["srcLang"]]
+                langs.extend(query["tgtLang"])
+                pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
             elif 'srcLang' in query.keys():
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targetLanguage": query["srcLang"]}]}})
             if "tags" in query.keys():
