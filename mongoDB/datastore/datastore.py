@@ -205,8 +205,8 @@ class Datastore:
             exclude = {"_id": False}
             data = self.search(db_query, exclude, offset, limit)
             result, query, count = data[0], data[1], data[2]
-            if count > 30:
-                result = result[:30]
+            if count > 100:
+                result = result[:100]
             log.info(f'Result count: {count} | {datetime.now()}')
             log.info(f'Done! | {datetime.now()}')
             return {"count": count, "query": query, "dataset": result}
@@ -286,7 +286,7 @@ class Datastore:
                 else:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
-                pipeline.append({"$project": {"_id": 0, "data": 1}})
+                pipeline.append({"$project": {"_id": 0, }})
             if "$in" in query.keys():
                 pipeline = []
                 pipeline.append({"$match": {"tags": query}})
