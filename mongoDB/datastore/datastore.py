@@ -55,16 +55,29 @@ class Datastore:
             duplicate_records.clear()
             log.info(f'Actual Data: {len(data_json)}, Clean Data: {len(clean_data)} | {datetime.now()}')
             if clean_data:
-                func = partial(self.get_enriched_data, request=request, sequential=True)
-                no_of_m1_process = request["processors"]
+                func = partial(self.get_enriched_data, request=request, sequential=False)
+                no_of_m1_process, threads = request["processors"], []
                 pool_enrichers = multiprocessing.Pool(no_of_m1_process)
                 enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
                 for result in enrichment_processors:
                     if result:
-                        count += len(result)
+                        if len(batch_data) == batch:
+                            persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
+                            persist_thread.start()
+                            threads.append(persist_thread)
+                            count += len(batch_data)
+                            batch_data = []
+                        batch_data.extend(result)
                     else:
                         duplicates += 1
                 pool_enrichers.close()
+                if batch_data:
+                    persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
+                    persist_thread.start()
+                    threads.append(persist_thread)
+                    count += len(batch_data)
+                for thread in threads:
+                    thread.join()
             log.info(f'Done! -- INPUT: {total}, CLEAN: {len(clean_data)}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
             log.exception(e)
@@ -84,22 +97,27 @@ class Datastore:
                     log.info(f'DUPLICATE ---- DATA: {data}, RECORD: {record} | {datetime.now()}')
                     return None
                 elif src_hash == record["srcHash"]:
+                    log.info(f'new data: 1 | {datetime.now()}')
                     if request["details"]["targetLanguage"] != record["targetLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
                                     "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif src_hash == record["tgtHash"]:
+                    log.info(f'new data: 2 | {datetime.now()}')
                     if request["details"]["targetLanguage"] != record["sourceLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
                                     "sourceLanguage": request["details"]["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
                 elif tgt_hash == record["srcHash"]:
+                    log.info(f'new data: 3 | {datetime.now()}')
                     if request["details"]["sourceLanguage"] != record["targetLanguage"]:
                         new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
                                     "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
                 elif tgt_hash == record["tgtHash"]:
+                    log.info(f'new data: 4 | {datetime.now()}')
                     if request["details"]["sourceLanguage"] != record["sourceLanguage"]:
                         new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
                                     "sourceLanguage": request["details"]["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
                 if new_data:
+                    log.info(f'data: {data} | {datetime.now()}')
                     log.info(f'new data: {new_data} | {datetime.now()}')
                     new_records.append(new_data)
         new_records.append(data)
