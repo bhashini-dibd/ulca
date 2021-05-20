@@ -12,7 +12,7 @@ from functools import partial
 from logging.config import dictConfig
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_db
-from configs import mongo_ulca_dataset_col, no_of_dump_process
+from configs import mongo_ulca_dataset_col, no_of_m1_process
 
 import pymongo
 log = logging.getLogger('file')
@@ -40,7 +40,7 @@ class Datastore:
             total, count, duplicates, batch = len(data_json), 0, 0, request["batch"]
             log.info(f'Enriching dataset..... | {datetime.now()}')
             func = partial(self.get_enriched_data, request=request)
-            pool_enrichers = multiprocessing.Pool(no_of_dump_process)
+            pool_enrichers = multiprocessing.Pool(no_of_m1_process)
             enrichment_processors = pool_enrichers.map_async(func, data_json).get()
             threads = []
             for result in enrichment_processors:

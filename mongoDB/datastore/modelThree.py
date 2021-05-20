@@ -11,7 +11,7 @@ from functools import partial
 from logging.config import dictConfig
 
 from configs import file_path, file_name, default_offset, default_limit, mongo_server_host, mongo_ulca_m3_db
-from configs import mongo_ulca_dataset_m3_col, no_of_dump_process
+from configs import mongo_ulca_dataset_m3_col, no_of_m3_process
 
 import pymongo
 log = logging.getLogger('file')
@@ -40,7 +40,7 @@ class ModelThree:
             u_count, i_count, = 0, 0
             if data_json:
                 func = partial(self.enriched_and_persist, request=request)
-                pool_enrichers = multiprocessing.Pool(no_of_dump_process)
+                pool_enrichers = multiprocessing.Pool(no_of_m3_process)
                 enrichment_processors = pool_enrichers.map_async(func, data_json).get()
                 for result in enrichment_processors:
                     if result:
