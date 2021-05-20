@@ -130,6 +130,7 @@ class Datastore:
             for record in records:
                 new_data = {}
                 if src_hash in record["tags"] and tgt_hash in record["tags"]:
+                    log.info(f'DUPLICATE ---- DATA: {data}, RECORD: {record} | {datetime.now()}')
                     return None
                 elif src_hash == record["srcHash"]:
                     if request["details"]["targetLanguage"] != record["targetLanguage"]:

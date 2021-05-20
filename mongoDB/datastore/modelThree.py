@@ -93,6 +93,7 @@ class ModelThree:
         if record:
             record = record[0]
             if src_hash in record["tags"] and tgt_hash in record["tags"]:
+                log.info(f'DUPLICATE ---- DATA: {data}, RECORD: {record} | {datetime.now()}')
                 return None
             else:
                 append_record = record
@@ -310,13 +311,13 @@ class ModelThree:
                         if record:
                             if record["sourceTextHash"] in map.keys():
                                 data = map[record["sourceTextHash"]]
-                                if type(record["targets"]) == "dict":
+                                if isinstance(record["targets"], dict):
                                     data["targets"].append(record["targets"])
                                 else:
                                     data["targets"].extend(record["targets"])
                                 map[record["sourceTextHash"]] = data
                             else:
-                                if type(record["targets"]) == "dict":
+                                if isinstance(record["targets"], dict):
                                     targets = [record["targets"]]
                                 else:
                                     targets = record["targets"]
@@ -409,7 +410,7 @@ class ModelThree:
                         for target in each_record["targets"]:
                             if not target:
                                 continue
-                            if type(target) == "str":
+                            if isinstance(target, str):
                                 target = json.loads(target)
                             if 'sourceText' in result.keys():
                                 if target["targetLanguage"] in tgt_lang:
