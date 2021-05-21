@@ -140,8 +140,7 @@ class Datastore:
             insert_records.append(data_dict)
         if sequential:
             self.insert(insert_records)
-        if len(insert_records) > 1:
-            log.info(insert_records)
+        log.info(f'DATA: {data}, INSERTIONS: {len(insert_records)} | {datetime.now()}')
         return insert_records
 
     def get_tags(self, d):
