@@ -29,27 +29,30 @@ ULCA relies upon the submitter to explain their dataset so that it can be benefi
 Dataset should have the following mandatory attributes, we will cover each of them individually. Please note the mandatory attributes and values assigned to these attributes are _strictly_ enforced.
 - datasetType
 - languages
-- domain
 - collectionSource
+- domain
 - license
-- submitterInfo
+- submitter
 
 Following are optional attributes
 - version
 
 ### datasetType
 This defines the type of dataset (parallel/monolingual/asr etc). The values can be referred in [DatasetType](../../common-schemas.yml#DatasetType)
+```json
+
+ "dataset-type": "parallel-corpus"
+
+```
 
 ### languages
-It is important to convey what language the dataset is directed toward. The structure of `languages` attributes should be followed. Same parameter can be used to define a single language or or a language pair. Let's look at the following example where the `languages` defines a parallel dataset that typically has a language pair where `sourceLanguage` is `English` and `targetLanguage` is `Bengali`. The defined language code are per ISO 639-1 & 639-2 and can be referred in [LanguagePair](../../common-schemas.yml#LanguagePair)
+It is important to convey what language the dataset is directed towards. The structure of `languages` attributes should be followed. Same parameter can be used to define a single language or a language pair. Let's look at the following example where the `languages` defines a parallel dataset that typically has a language pair where `sourceLanguage` is `English` and `targetLanguage` is `Bengali`. The defined language code are per ISO 639-1 & 639-2 and can be referred in [LanguagePair](../../common-schemas.yml#LanguagePair)
 
 ```json
- 
 {
    "sourceLanguage": "en",
    "targetLanguage": "bn"
 }
- 
 ```
 Monolingual or ASR/TTS or OCR dataset typically uses a single language and the following example can be used to define the `languages` attribute.
 
@@ -63,40 +66,34 @@ Few examples are following
 domain specifically for `legal` domain
 
 ```json
- 
  "domain": "legal"
- 
 ```
 or
 dataset meant for `news` domain
 ```json
- 
  "domain": "news"
-
 ```
 
 ### license
 This attribute is bit straight forward, dataset submitter should choose on from available [License](../../common-schemas.yml#License).
  
 ```json
- 
   "license": "cc-by-4.0"
- 
 ```
 
 ### collectionSource
-This attribute is mostly free text and optional, however we recommend it to be descriptive so that community users should be able to look at the sources from where the dataset has been curated. Mostly putting a URL along with some description should suffice. Have a look at the example.
+This attribute is mostly free text and optional, however we recommend it to be descriptive so that community users should be able to look at the sources from where the dataset has been curated. Mostly putting a URL along with some description should suffice. A good sample is shown below :
  
 ```json
- 
  [
-   "https://main.sci.gov.in", "42040.pdf", "SCI judgment pdfs",
+   "https://main.sci.gov.in",
+   "42040.pdf",
+   "SCI judgment pdfs",
  ]
- 
 ```
 
-### submitterInfo
-The attribute holds the description of the user who submitted the dataset as well as the team members who are part of the project, we suggest acknowledging all team members how small the contribution could be.. Typically it should describe the project or team's goal. Look at the following example
+### submitter
+The attribute holds the description of the user who submitted the dataset as well as the team members who are part of the project, we suggest acknowledging all team members how small the contribution could be. Typically it should describe the project or team's goal. Look at the following example :
  
 ```json
  {
@@ -134,10 +131,43 @@ Parallel dataset `params` have few specific attributes defined below
  - collectionMethod
  
 #### collectionMethod
-This attribute should be present in `params` when the sentence present under `targetText` in `data` file is actually validated by human annotators. Please notice the presence of `validatedTargetText` property. Another important thing to notice here is, if the submitter has defined `targetValidated` it is mandatory to provide `validatedTargetText` property in `data` for every record. ULCA will reject those records not satisfying the mentioned criterion. See such example [data.json](./parallel-dataset/machine-translated-target-validated/data.json) and [params.json](./parallel-dataset/machine-translated-target-validated/params.json)
- 
-#### alignmentMethod
-In order to do bitext mining at large scale, submitters often leverage strategies like LaBSE, LASER etc. to align and generate parallel corpus. This strategy at large scale bitext mining has helped the community at large. Use this property in `params` to indicate your bitext mining strategy and also report `alignmentScore` property in `data` for every record. ULCA will reject those records not satisfying the mentioned criterion.
+This attribute is an optional field in `params` for the parallel dataset. It's a combination of `collectionDescription` and `collectionDetails`. `collectionDescription` is a mandatory property if a `collectionMethod` is included, which actually defines the methods the user has used for creating the dataset (.
+```json
+    "collectionMethod": {
+        "collectionDescription": [
+            "machine-translated-post-edited"
+        ],
+        "collectionDetails": {
+            "translationModel": "Google",
+            "translationModelVersion": "v2",
+            "editingTool": "Anuvaad",
+            "editingToolVersion": "v1.4",
+            "contributor": {
+                "name": "Aravinth Bheemaraj",
+                "aboutMe": "NLP Data team lead at Project Anuvaad"
+            }
+        }
+    }
+```
+The values for the `collectionDescription` can be found [here](../../dataset-schema.yml#ParallelDatasetCollectionMethod)
+Based on the collection method defined, the `collectionDetails` can one of the 4 available schemas.
+See detailed sample usage at [data.json](./parallel-dataset/machine-translated-target-validated/data.json) and [params.json](./parallel-dataset/machine-translated-target-validated/params.json)
+
+In order to do bitext mining at large scale, submitters often leverage strategies like LaBSE, LASER etc. to align and generate parallel corpus. This strategy at large scale bitext mining has helped the community at large. Use this property in `params` to indicate your bitext mining strategy and also report `alignmentScore` property in `data` for every record. A sample record is defined below :
+```json
+    {
+        "sourceText": "In the last 24 hours, 4,987 new confirmed cases have been added.",
+        "targetText": "उन्होंने बताया कि पिछले 24 घंटे में 4987 नए मामलों की पुष्टि हुई है।",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentScore": 0.79782
+            }
+        }
+    }   }
+    }
+```
+
+ULCA will reject those records not satisfying the mentioned criterion.
 We have explained this scenario in the example, [data.json](./parallel-dataset/web-scrapped-labse-aligned/data.json) and [params.json](./parallel-dataset/web-scrapped-labse-aligned/params.json)
 
 
