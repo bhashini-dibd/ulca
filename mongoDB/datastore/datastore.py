@@ -101,7 +101,6 @@ class Datastore:
                     if details["targetLanguage"] != record["targetLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
                                     "sourceLanguage": details["targetLanguage"], "targetLanguage": record["targetLanguage"]}
-                    log.info(new_data)
                 elif src_hash == record["tgtHash"]:
                     if details["targetLanguage"] != record["sourceLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
