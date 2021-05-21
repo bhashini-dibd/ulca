@@ -1,0 +1,39 @@
+{   
+    "dataset-type": "asr-corpus",
+    "languages": {
+        "sourceLanguage": "hi",
+        "targetLanguage": null
+    },
+    "collectionSource": [
+        "YouTube", "https://www.youtube.com/watch?v=UIkSFSHX9AU"
+    ],
+    "domain": "general",
+    "collectionMethod": [
+        "web-scrapping-audio"
+    ],
+    "license":  "cc-by-4.0",
+    "submitter": {
+        "name": "Anirudh",
+        "oauthid": "anirudh.gupta@thoughtworks.com",
+        "provider": "google"
+    },
+    "contributers": [{
+        "name": "Harveen",
+        "oauthid": "harveen.chadha@thoughtworks.com",
+        "provider": "google"
+    }],
+    "format": "wav",
+    "channel": "mono",
+    "samplingRate": 44.1,
+    "bitsPerSample": "sixteen",
+    "numberOfSpeakers": 1,
+    "gender": "male",
+    "collectionDescription": "manual-transcribed",
+    "collectionDetails": [{
+        "contributers": [{
+            "name": "Harveen",
+            "oauthid": "harveen.chadha@thoughtworks.com",
+            "provider": "google"
+    }]
+    }]
+}
