@@ -101,6 +101,7 @@ class Datastore:
                     if details["targetLanguage"] != record["targetLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
                                     "sourceLanguage": details["targetLanguage"], "targetLanguage": record["targetLanguage"]}
+                    log.info(new_data)
                 elif src_hash == record["tgtHash"]:
                     if details["targetLanguage"] != record["sourceLanguage"]:
                         new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
@@ -136,10 +137,12 @@ class Datastore:
             data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
                          "submitter": request["submitter"], "sourceLanguage": src_lang, "targetLanguage": tgt_lang,
                          "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
-                         "data": data, "srcHash": src_hash, "tgtHash": tgt_hash, 'sk': shard_key, "tags": tags}
+                         "data": record, "srcHash": src_hash, "tgtHash": tgt_hash, 'sk': shard_key, "tags": tags}
             insert_records.append(data_dict)
         if sequential:
             self.insert(insert_records)
+        if len(insert_records) > 1:
+            log.info(insert_records)
         return insert_records
 
     def get_tags(self, d):
@@ -265,11 +268,11 @@ class Datastore:
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
-        result, res_count, pipeline, pipeline_two = [], 0, [], []
+        result, res_count, pipeline, langs = [], 0, [], []
         try:
             col = self.get_mongo_instance()
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
-                langs = [query["srcLang"]]
+                langs.append(query["srcLang"])
                 langs.extend(query["tgtLang"])
                 pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
             elif 'srcLang' in query.keys():
@@ -279,63 +282,45 @@ class Datastore:
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBy' in query.keys():
-                pipeline_two = pipeline
                 pipeline.append({"$group": {"_id": {"sourceHash": "$srcHash"}, "count": {"$sum": 1}}})
-                pipeline_two.append({"$group": {"_id": {"targetHash": "$tgtHash"}, "count": {"$sum": 1}}})
                 if 'countOfTranslations' in query.keys():
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.sourceHash", "$$REMOVE"]}}})
-                    pipeline_two.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.targetHash", "$$REMOVE"]}}})
                 else:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
-                    pipeline_two.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.targetHash", "$$REMOVE"]}}})
             else:
                 pipeline.append({"$project": {"_id": 0, "data": 1}})
             if "$in" in query.keys():
-                pipeline = [{"$match": {"tags": query}}, {"$project": {"_id": 0}}]
-            res, res_two = col.aggregate(pipeline, allowDiskUse=True), None
-            if pipeline_two:
-                res_two = col.aggregate(pipeline_two, allowDiskUse=True)
+                pipeline = []
+                pipeline.append({"$match": {"tags": query}})
+                pipeline.append({"$project": {"_id": 0}})
+            res = col.aggregate(pipeline, allowDiskUse=True)
             if 'groupBy' in query.keys():
                 if res:
-                    src_hashes = set([])
+                    hashes = []
                     for record in res:
                         if record:
                             if record["_id"]:
-                                src_hashes.add(record["_id"])
-                    res = col.find({"srcHash": {"$in": src_hashes}}, {"_id": False, "srcHash": True, "data": True})
-                if res_two:
-                    tgt_hashes = set([])
-                    for record in res:
-                        if record:
-                            if record["_id"]:
-                                tgt_hashes.add(record["_id"])
-                    res_two = col.find({"tgtHash": {"$in": tgt_hashes}}, {"_id": False, "tgtHash": True, "data": True})
-                if not res and not res_two:
-                    return result, pipeline, res_count
-                else:
-                    map, map_two = {},  {}
+                                hashes.append(record["_id"])
+                    if hashes:
+                        res_count = len(hashes)
+                        res = col.find({"srcHash": {"$in": hashes}}, {"_id": False})
+                    map = {}
+                    if not res:
+                        return result, pipeline, res_count
                     for record in res:
                         if record:
                             if record["srcHash"] in map.keys():
                                 data_list = map[record["srcHash"]]
-                                data_list.append(record["data"])
+                                if langs:
+                                    if record["sourceLanguage"] in langs and record["targetLanguage"] in langs:
+                                        data_list.append(record["data"])
                                 map[record["srcHash"]] = data_list
                             else:
                                 map[record["srcHash"]] = [record["data"]]
-                        res_count += 1
-                    for record in res_two:
-                        if record:
-                            if record["tgtHash"] in map.keys():
-                                data_list = map[record["tgtHash"]]
-                                data_list.append(record["data"])
-                                map[record["tgtHash"]] = data_list
-                            else:
-                                map[record["tgtHash"]] = [record["data"]]
-                        res_count += 1
                     result = list(map.values())
-                    result.extend(list(map_two.values()))
             else:
                 if res:
+
                     for record in res:
                         if record:
                             result.append(record)

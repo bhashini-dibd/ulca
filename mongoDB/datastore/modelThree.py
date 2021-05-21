@@ -243,15 +243,15 @@ class ModelThree:
 
     # Searches the object into mongo collection
     def search(self, query, internal):
-        result, res_count, pipeline, pipeline_two = [], 0, [], []
+        result, res, res_count, pipeline, langs = [], None, 0, [], []
         try:
             col = self.get_mongo_instance()
             pipeline = []
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
-                langs = [query["srcLang"]]
+                langs.append(query["srcLang"])
                 langs.extend(query["tgtLang"])
                 pipeline.append({"$unwind": {"path": "$targets"}})
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": {"$in": langs}}, {"targets.targetLanguage": {"$in": langs}}]}})
+                pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targets.targetLanguage": {"$in": langs}}]}})
             elif 'srcLang' in query.keys():
                 pipeline.append({"$unwind": {"path": "$targets"}})
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["srcLang"]}, {"targets.targetLanguage": query["srcLang"]}]}})
@@ -263,95 +263,186 @@ class ModelThree:
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBy' in query.keys():
-                pipeline_two = pipeline
                 pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
-                pipeline_two.append({"$group": {"_id": {"targetHash": "$targets.targetTextHash"}, "count": {"$sum": 1}}})
                 if 'countOfTranslations' in query.keys():
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.sourceHash", "$$REMOVE"]}}})
-                    pipeline_two.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.targetHash", "$$REMOVE"]}}})
                 else:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
-                    pipeline_two.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.targetHash", "$$REMOVE"]}}})
                 pipeline.append({"$project": {"_id": 1}})
-                pipeline_two.append({"$project": {"_id": 1}})
+                res = col.aggregate(pipeline, allowDiskUse=True)
+                temp = []
+                for rec in res:
+                    if rec:
+                        temp.append(rec)
+                if not temp:
+                    pipeline[1] = {"$match": {"targets.targetLanguage": {"$in": langs}}}
+                    res = col.aggregate(pipeline, allowDiskUse=True)
+                else:
+                    res = temp
             else:
                 pipeline.append({"$project": {"_id": 0}})
-            res, res_two = col.aggregate(pipeline, allowDiskUse=True), None
-            if pipeline_two:
-                res_two = col.aggregate(pipeline_two, allowDiskUse=True)
+                res = col.aggregate(pipeline, allowDiskUse=True)
+                temp = []
+                for rec in res:
+                    if rec:
+                        temp.append(rec)
+                if not temp:
+                    pipeline[1] = {"$match": {"targets.targetLanguage": {"$in": langs}}}
+                    res = col.aggregate(pipeline, allowDiskUse=True)
+                else:
+                    res = temp
             if 'groupBy' in query.keys():
                 if res:
-                    hashes = set([])
+                    hashes = []
                     for record in res:
                         if record:
                             if record["_id"]:
-                                hashes.add(record["_id"])
-                    in_query = {"sourceTextHash": {"$in": hashes}}
-                    res = col.find(in_query, {"_id": False})
-                if res_two:
-                    hashes = set([])
-                    for record in res_two:
+                                hashes.append(record["_id"])
+                    if hashes:
+                        res_count = len(hashes)
+                        in_query = {"sourceTextHash": {"$in": hashes}}
+                        res = col.find(in_query, {"_id": False})
+                    map = {}
+                    if not res:
+                        return result, pipeline, res_count
+                    for record in res:
                         if record:
-                            if record["_id"]:
-                                hashes.add(record["_id"])
-                    in_query = {"targets.targetTextHash": {"$in": hashes}}
-                    res_two = col.find(in_query, {"_id": False})
-                if not res and not res_two:
-                    return result, pipeline, res_count
-                map, map_two = {}, {}
-                for record in res:
-                    if record:
-                        if record["sourceTextHash"] in map.keys():
-                            data_list = map[record["sourceTextHash"]]
-                            data_list.append(record)
-                            map[record["sourceTextHash"]] = data_list
-                        else:
-                            map[record["sourceTextHash"]] = [record]
-                for record in res_two:
-                    if record:
-                        if record["sourceTextHash"] in map.keys():
-                            data_list = map[record["sourceTextHash"]]
-                            data_list.append(record)
-                            map[record["sourceTextHash"]] = data_list
-                        else:
-                            map[record["sourceTextHash"]] = [record]
+                            if record["sourceTextHash"] in map.keys():
+                                data_list = map[record["sourceTextHash"]]
+                                data_list.append(record)
+                                map[record["sourceTextHash"]] = data_list
+                            else:
+                                map[record["sourceTextHash"]] = [record]
                     result = list(map.values())
-                    result.extend(list(map.values()))
-                    result = self.post_process_groupby(query, result)
-                    res_count = len(result)
-            elif internal:
-                if res:
-                    for record in res:
-                        if record:
-                            result.append(record)
-                res_count = len(result)
-            else:
+                    result, res_count = self.post_process_groupby(query, result)
+            elif 'srcLang' in query.keys() or 'tgtLang' in query.keys():
                 if res:
                     map = {}
                     for record in res:
                         if record:
                             if record["sourceTextHash"] in map.keys():
                                 data = map[record["sourceTextHash"]]
-                                if isinstance(record["targets"], dict):
-                                    data["targets"].append(record["targets"])
-                                else:
-                                    data["targets"].extend(record["targets"])
+                                data["targets"].append(record["targets"])
                                 map[record["sourceTextHash"]] = data
                             else:
-                                if isinstance(record["targets"], dict):
-                                    targets = [record["targets"]]
-                                else:
-                                    targets = record["targets"]
+                                targets = [record["targets"]]
                                 record["targets"] = targets
                                 map[record["sourceTextHash"]] = record
                     result = list(map.values())
                     result = self.post_process(query, result)
                     res_count = len(result)
+            else:
+                if res:
+                    for record in res:
+                        if record:
+                            result.append(record)
+                res_count = len(result)
         except Exception as e:
             log.exception(e)
         return result, pipeline, res_count
 
     def post_process(self, query, res):
+        src_lang, tgt_lang = None, None
+        if 'srcLang' in query.keys():
+            src_lang = query["srcLang"]
+        if 'tgtLang' in query.keys():
+            tgt_lang = query["tgtLang"]
+        result_set, res_count = [], 0
+        for record in res:
+            result_array = []
+            result = {}
+            try:
+                if src_lang == record["sourceLanguage"]:
+                    result["sourceText"] = record["sourceText"]
+                elif record["sourceLanguage"] in tgt_lang:
+                    result["targetText"] = record["targetText"]
+                    result["alignmentScore"] = record["alignmentScore"]
+                if result:
+                    targets = record["targets"]
+                    for target in targets:
+                        if 'sourceText' in result.keys():
+                            if target["targetLanguage"] in tgt_lang:
+                                result["targetText"] = target["targetText"]
+                                result["alignmentScore"] = target["alignmentScore"]
+                                if len(result.keys()) >= 2:
+                                    result_array.append(result)
+                        elif 'targetText' in result.keys():
+                            if target["sourceLanguage"] in tgt_lang:
+                                result["sourceText"] = target["targetText"]
+                                result["alignmentScore"] = target["alignmentScore"]
+                                if len(result.keys()) >= 2:
+                                    result_array.append(result)
+                else:
+                    target_combinations = list(itertools.combinations(record["targets"], 2))
+                    for combination in target_combinations:
+                        if src_lang == combination[0]["targetLanguage"]:
+                            result["sourceText"] = combination[0]["targetText"]
+                        elif combination[0]["targetLanguage"] in tgt_lang:
+                            result["targetText"] = combination[0]["targetText"]
+                            result["alignmentScore"] = combination[0]["alignmentScore"]
+                        if result:
+                            if src_lang == combination[1]["targetLanguage"]:
+                                result["sourceText"] = combination[1]["targetText"]
+                            elif combination[1]["targetLanguage"] in tgt_lang:
+                                result["targetText"] = combination[1]["targetText"]
+                                result["alignmentScore"] = combination[1]["alignmentScore"]
+                            if len(result.keys()) >= 2:
+                                result_array.append(result)
+                            else:
+                                result = {}
+                                continue
+                        else:
+                            continue
+            except Exception as e:
+                continue
+            if result_array:
+                res_count += len(result_array)
+                result_set.append(result_array)
+        return result_set
+
+
+    def post_process_groupby(self, query, res):
+        langs, res_count = [], 0
+        if 'srcLang' in query.keys():
+            langs.append(query["srcLang"])
+        if 'tgtLang' in query.keys():
+            langs.extend(query["tgtLang"])
+        result_set = []
+        for record in res:
+            src_result_array = []
+            try:
+                for each_record in record:
+                    result_array = []
+                    sentences = []
+                    try:
+                        for target in each_record["targets"]:
+                            if target["targetLanguage"] in langs:
+                                sentences.append(target)
+                        if each_record["sourceLanguage"] in langs:
+                            source = {"targetText": each_record["sourceText"], "targetLanguage": each_record["sourceLanguage"],
+                                      "alignmentScore": 0}
+                            sentences.append(source)
+                        if sentences:
+                            target_combinations = list(itertools.combinations(sentences, 2))
+                            for combination in target_combinations:
+                                result = {"sourceText": combination[0]["targetText"],
+                                          "targetText": combination[1]["targetText"],
+                                          "alignmentScore": combination[1]["alignmentScore"]}
+                                result_array.append(result)
+                            if result_array:
+                                res_count += 1
+                                src_result_array.append(result_array)
+                    except Exception as e:
+                        log.exception(e)
+                        continue
+            except Exception as e:
+                log.exception(e)
+            if src_result_array:
+                result_set.append(src_result_array)
+        return result_set, res_count
+
+
+    def post_process_xx(self, query, res):
         langs = []
         if 'srcLang' in query.keys():
             langs.append(query["srcLang"])
@@ -378,70 +469,6 @@ class ModelThree:
             if result_array:
                 res_count += len(result_array)
                 result_set.append(result_array)
-        return result_set
-
-
-    def post_process_groupby(self, query, res):
-        src_lang, tgt_lang = None, None
-        if 'srcLang' in query.keys():
-            src_lang = query["srcLang"]
-        if 'tgtLang' in query.keys():
-            tgt_lang = query["tgtLang"]
-        result_set = []
-        for record in res:
-            src_result_array = []
-            try:
-                for each_record in record:
-                    result_array = []
-                    result = {}
-                    if src_lang == each_record["sourceLanguage"]:
-                        result["sourceText"] = each_record["sourceText"]
-                    elif each_record["sourceLanguage"] in tgt_lang:
-                        result["targetText"] = each_record["targetText"]
-                        result["alignmentScore"] = each_record["alignmentScore"]
-                    if result:
-                        for target in each_record["targets"]:
-                            if not target:
-                                continue
-                            if isinstance(target, str):
-                                target = json.loads(target)
-                            if 'sourceText' in result.keys():
-                                if target["targetLanguage"] in tgt_lang:
-                                    result["targetText"] = target["targetText"]
-                                    result["alignmentScore"] = target["alignmentScore"]
-                                    result_array.append(result)
-                            elif 'targetText' in result.keys():
-                                if target["sourceLanguage"] in tgt_lang:
-                                    result["sourceText"] = target["targetText"]
-                                    result["alignmentScore"] = target["alignmentScore"]
-                                    result_array.append(result)
-                    else:
-                        target_combinations = list(itertools.combinations(each_record["targets"], 2))
-                        for combination in target_combinations:
-                            if src_lang == combination[0]["targetLanguage"]:
-                                result["sourceText"] = combination[0]["targetText"]
-                            elif combination[0]["targetLanguage"] in tgt_lang:
-                                result["targetText"] = combination[0]["targetText"]
-                                result["alignmentScore"] = combination[0]["alignmentScore"]
-                            if result:
-                                if src_lang == combination[1]["targetLanguage"]:
-                                    result["sourceText"] = combination[1]["targetText"]
-                                elif combination[1]["targetLanguage"] in tgt_lang:
-                                    result["targetText"] = combination[1]["targetText"]
-                                    result["alignmentScore"] = combination[1]["alignmentScore"]
-                                if len(result.keys()) == 2:
-                                    result_array.append(result)
-                                else:
-                                    result = {}
-                                    continue
-                            else:
-                                continue
-                    if result_array:
-                        src_result_array.append(result_array)
-            except Exception as e:
-                log.exception(e)
-            if src_result_array:
-                result_set.append(src_result_array)
         return result_set
 
 
