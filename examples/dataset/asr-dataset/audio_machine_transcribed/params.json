@@ -28,6 +28,15 @@
     "bitsPerSample": "sixteen",
     "numberOfSpeakers": 1,
     "gender": "male",
+    "snr": [{
+        "methodType": "WadaSnr",
+        "methodDetails": [{
+            "properties": [{
+                "snrTool": "WADASNR",
+                "snrToolVersion": "1.0.1"
+            }]
+        }]
+    }],
     "collectionDescription": "machine-generated-transcript",
     "collectionDetails":[{
         "asrModel": "gogle asr",

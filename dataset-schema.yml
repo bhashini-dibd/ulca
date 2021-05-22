@@ -173,6 +173,9 @@ components:
             - 'hi-thethi'
             - 'hi-magahi'
             - 'ta-madurai'
+        snr:
+          $ref: '#/components/schemas/AudioQualityEvaluation'
+          type: object
         collectionDescription: 
           - $ref: '#/components/schemas/CollectionMethodAudio'
           - type: object
@@ -677,7 +680,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/AudioQualityEvaluationMethod1'
         
-    AudioQualityEvaluationMethod1:
+    WadaSnr:
       type: object
       description: evaluation strategy as proposed by example researcher.
       properties:
