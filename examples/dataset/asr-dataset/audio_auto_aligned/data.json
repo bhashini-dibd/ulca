@@ -10,12 +10,10 @@
         "gender": "male",
         "age": "60-100",
         "snr": [{
-            "methodType": "AudioQualityEvaluationMethod1",
+            "methodType": "WadaSnr",
             "methodDetails": [{
                 "properties": [{
-                    "snr": 55,
-                    "snrTool": "WADASNR",
-                    "snrToolVersion": "1.0.1"
+                    "snr": 55
                 }]
             }]
         }]
@@ -32,12 +30,10 @@
         "gender": "male",
         "age": "60-100",
         "snr": [{
-            "methodType": "AudioQualityEvaluationMethod1",
+            "methodType": "WadaSnr",
             "methodDetails": [{
                 "properties": [{
-                    "snr": 55,
-                    "snrTool": "WADASNR",
-                    "snrToolVersion": "1.0.1"
+                    "snr": 55
                 }]
             }]
         }]
@@ -54,12 +50,10 @@
         "gender": "male",
         "age": "60-100",
         "snr": [{
-            "methodType": "AudioQualityEvaluationMethod1",
+            "methodType": "WadaSnr",
             "methodDetails": [{
                 "properties": [{
-                    "snr": 55,
-                    "snrTool": "WADASNR",
-                    "snrToolVersion": "1.0.1"
+                    "snr": 55
                 }]
             }]
         }]
@@ -76,12 +70,10 @@
         "gender": "male",
         "age": "60-100",
         "snr": [{
-            "methodType": "AudioQualityEvaluationMethod1",
+            "methodType": "WadaSnr",
             "methodDetails": [{
                 "properties": [{
-                    "snr": 55,
-                    "snrTool": "WADASNR",
-                    "snrToolVersion": "1.0.1"
+                    "snr": 55
                 }]
             }]
         }]
