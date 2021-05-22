@@ -24,6 +24,43 @@ class Datastore:
     def __init__(self):
         pass
 
+    def load_all(self, request):
+        map = {"en|hi": "/home/ubuntu/dataset/en-hi-ulca.json",
+               "en|bn": "/home/ubuntu/dataset/en-bn-ulca.json",
+               "en|kn": "/home/ubuntu/dataset/en-kn-ulca.json",
+               "en|ml": "/home/ubuntu/dataset/en-ml-ulca.json",
+               "en|mr": "/home/ubuntu/dataset/en-mr-ulca.json",
+               "en|pa": "/home/ubuntu/dataset/en-pa-ulca.json",
+               "en|ta": "/home/ubuntu/dataset/en-ta-ulca.json",
+               "en|te": "/home/ubuntu/dataset/en-te-ulca.json"}
+        domains = ["general", "finance", "sports", "news", "tourism", "government"]
+        licenses = ["mit", "gpl-3.0", "cc-by-2.0", "cc-by-n-3.0"]
+        collection_modes = ["manual-translated", "machine-aligned", "phone-recording", "crowd-sourced"]
+        result_list = []
+        log.info("Loading All Datasets..... | {}".format(datetime.now()))
+        for key in map.keys():
+            try:
+                insert_req = request
+                insert_req["path"] = map[key]
+                insert_req["details"]["sourceLanguage"] = key.split("|")[0]
+                insert_req["details"]["targetLanguage"] = key.split("|")[1]
+                insert_req["details"]["domain"] = [random.choice(domains)]
+                insert_req["details"]["collectionMode"] = [random.choice(licenses)]
+                insert_req["details"]["license"] = [random.choice(collection_modes)]
+                if 'batch' not in insert_req.keys():
+                    insert_req["batch"] = 100000
+                start = datetime.now()
+                result = self.load_dataset(insert_req)
+                end = datetime.now()
+                summary = {"start": start, "end": end, "request": insert_req, "response": result}
+                result_list.append(summary)
+            except Exception as e:
+                log.exception(e)
+                continue
+        log.info("FINALLLY! Loading COMPLETED!!!!!! | {}".format(datetime.now()))
+        log.info(f'REPORT: {result_list} | {datetime.now()}')
+        return {"message": result_list, "status": "SUCCESS"}
+
     def load_dataset(self, request):
         log.info("Loading Dataset..... | {}".format(datetime.now()))
         try:
@@ -82,7 +119,8 @@ class Datastore:
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": 'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
+        lang_code = f'{request["details"]["sourceLanguage"]}|{request["details"]["targetLanguage"]}'
+        return {"message": f'loaded {lang_code} dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
                 "duplicates": duplicates, "recordDuplicates": record_duplicates, "clean": len(clean_data)}
 
     def get_enriched_data(self, data, request, sequential):
@@ -134,7 +172,7 @@ class Datastore:
             shard_key = ','.join(map(str, sorted(langs)))
             data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
                          "submitter": request["submitter"], "sourceLanguage": src_lang, "targetLanguage": tgt_lang,
-                         "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
+                         "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
                          "data": record, "srcHash": src_hash, "tgtHash": tgt_hash, 'sk': shard_key, "tags": tags}
             insert_records.append(data_dict)
         if sequential:
