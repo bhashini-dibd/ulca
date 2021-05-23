@@ -51,6 +51,7 @@ class Datastore:
                 result = self.load_dataset(insert_req)
                 end = datetime.now()
                 summary = {"start": start, "end": end, "request": insert_req, "response": result}
+                log.info(f'SUMMARY: {summary} | {datetime.now()}')
                 result_list.append(summary)
             except Exception as e:
                 log.exception(e)
@@ -97,6 +98,7 @@ class Datastore:
                 for result in enrichment_processors:
                     if result:
                         if len(batch_data) == batch:
+                            log.info(f'Forking insertion thread..... | {datetime.now()}')
                             persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                             persist_thread.start()
                             threads.append(persist_thread)
@@ -107,11 +109,13 @@ class Datastore:
                         duplicates += 1
                 pool_enrichers.close()
                 if batch_data:
+                    log.info(f'Forking insertion thread..... | {datetime.now()}')
                     persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                     persist_thread.start()
                     threads.append(persist_thread)
                     count += len(batch_data)
                 for thread in threads:
+                    log.info(f'Waiting for insertion threads..... | {datetime.now()}')
                     thread.join()
             log.info(f'Done! -- INPUT: {total}, CLEAN: {len(clean_data)}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
         except Exception as e:
