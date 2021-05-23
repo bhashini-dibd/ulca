@@ -25,9 +25,7 @@ class Datastore:
         pass
 
     def load_all(self, request):
-        map = {"en|pa": "/home/ubuntu/dataset/en-pa-ulca.json",
-               "en|ta": "/home/ubuntu/dataset/en-ta-ulca.json",
-               "en|hi": "/home/ubuntu/dataset/en-hi-ulca.json"}
+        map = {"en|hi": "/home/ubuntu/dataset/en-hi-ulca.json"}
         domains = ["general", "finance", "sports", "news", "tourism", "government"]
         licenses = ["mit", "gpl-3.0", "cc-by-2.0", "cc-by-n-3.0"]
         collection_modes = ["manual-translated", "machine-aligned", "phone-recording", "crowd-sourced"]
@@ -89,16 +87,15 @@ class Datastore:
             log.info(f'Actual Data: {len(data_json)}, Clean Data: {len(clean_data)}')
             if clean_data:
                 func = partial(self.get_enriched_data, request=request, sequential=False)
-                no_of_m1_process, threads = request["processors"], []
+                no_of_m1_process = request["processors"]
                 pool_enrichers = multiprocessing.Pool(no_of_m1_process)
                 enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
                 for result in enrichment_processors:
                     if result:
                         if len(batch_data) == batch:
-                            log.info(f'Forking insertion thread.....')
                             persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                             persist_thread.start()
-                            threads.append(persist_thread)
+                            persist_thread.join()
                             count += len(batch_data)
                             batch_data = []
                         batch_data.extend(result)
@@ -106,15 +103,11 @@ class Datastore:
                         duplicates += 1
                 pool_enrichers.close()
                 if batch_data:
-                    log.info(f'Forking insertion thread.....')
+                    log.info(f'Processing final batch.....')
                     persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                     persist_thread.start()
-                    threads.append(persist_thread)
+                    persist_thread.join()
                     count += len(batch_data)
-                log.info(f'Pending threads --- {len(threads)}')
-                for thread in threads:
-                    log.info(f'Waiting for insertion threads to complete.....')
-                    thread.join()
             log.info(f'Done! -- INPUT: {total}, CLEAN: {len(clean_data)}, INSERTS: {count}, "DUPLICATES": {duplicates}')
         except Exception as e:
             log.exception(e)
