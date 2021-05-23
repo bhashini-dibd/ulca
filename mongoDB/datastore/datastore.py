@@ -33,7 +33,7 @@ class Datastore:
         licenses = ["mit", "gpl-3.0", "cc-by-2.0", "cc-by-n-3.0"]
         collection_modes = ["manual-translated", "machine-aligned", "phone-recording", "crowd-sourced"]
         result_list = []
-        log.info("Loading All Datasets..... | {}".format(datetime.now()))
+        log.info("Loading All Datasets.....")
         for key in map.keys():
             try:
                 insert_req = request
@@ -44,7 +44,7 @@ class Datastore:
                 insert_req["details"]["collectionMode"] = [random.choice(licenses)]
                 insert_req["details"]["license"] = [random.choice(collection_modes)]
                 if 'batch' not in insert_req.keys():
-                    insert_req["batch"] = 10000
+                    insert_req["batch"] = 100000
                 start = datetime.now()
                 result = self.load_dataset(insert_req)
                 end = datetime.now()
@@ -54,8 +54,8 @@ class Datastore:
             except Exception as e:
                 log.exception(e)
                 continue
-        log.info("FINALLLY! Loading COMPLETED!!!!!! | {}".format(datetime.now()))
-        log.info(f'REPORT: {result_list} | {datetime.now()}')
+        log.info("FINALLLY! Loading COMPLETED!!!!!!")
+        log.info(f'REPORT: {result_list}')
         return {"message": result_list, "status": "SUCCESS"}
 
     def load_dataset(self, request):
@@ -72,7 +72,7 @@ class Datastore:
                 data_json = data_json[request["slice"]["start"]:request["slice"]["end"]]
             batch_data = []
             total, count, duplicates, record_duplicates, batch = len(data_json), 0, 0, 0, request["batch"]
-            log.info(f'Enriching and dumping dataset..... | {datetime.now()}')
+            log.info(f'Enriching and dumping dataset.....')
             duplicate_records, clean_data = set([]), []
             for data in data_json:
                 if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
@@ -87,7 +87,7 @@ class Datastore:
                     duplicate_records.add(tup)
                     clean_data.append(data)
             duplicate_records.clear()
-            log.info(f'Actual Data: {len(data_json)}, Clean Data: {len(clean_data)} | {datetime.now()}')
+            log.info(f'Actual Data: {len(data_json)}, Clean Data: {len(clean_data)}')
             if clean_data:
                 func = partial(self.get_enriched_data, request=request, sequential=False)
                 no_of_m1_process, threads = request["processors"], []
@@ -96,7 +96,7 @@ class Datastore:
                 for result in enrichment_processors:
                     if result:
                         if len(batch_data) == batch:
-                            log.info(f'Forking insertion thread..... | {datetime.now()}')
+                            log.info(f'Forking insertion thread.....')
                             persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                             persist_thread.start()
                             threads.append(persist_thread)
@@ -107,15 +107,16 @@ class Datastore:
                         duplicates += 1
                 pool_enrichers.close()
                 if batch_data:
-                    log.info(f'Forking insertion thread..... | {datetime.now()}')
+                    log.info(f'Forking insertion thread.....')
                     persist_thread = threading.Thread(target=self.insert, args=(batch_data,))
                     persist_thread.start()
                     threads.append(persist_thread)
                     count += len(batch_data)
+                log.info(f'Pending threads --- {len(threads)}')
                 for thread in threads:
-                    log.info(f'Waiting for insertion threads..... | {datetime.now()}')
+                    log.info(f'Waiting for insertion threads to complete.....')
                     thread.join()
-            log.info(f'Done! -- INPUT: {total}, CLEAN: {len(clean_data)}, INSERTS: {count}, "DUPLICATES": {duplicates} | {datetime.now()}')
+            log.info(f'Done! -- INPUT: {total}, CLEAN: {len(clean_data)}, INSERTS: {count}, "DUPLICATES": {duplicates}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
@@ -177,7 +178,7 @@ class Datastore:
             insert_records.append(data_dict)
         if sequential:
             self.insert(insert_records)
-        log.info(f'DATA: {data}, INSERTIONS: {len(insert_records)} | {datetime.now()}')
+        log.info(f'DATA: {details["sourceLanguage"]}|{details["targetLanguage"]}, INSERTIONS: {len(insert_records)}')
         return insert_records
 
     def get_tags(self, d):
