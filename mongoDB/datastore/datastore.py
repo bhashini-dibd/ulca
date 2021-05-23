@@ -25,8 +25,7 @@ class Datastore:
         pass
 
     def load_all(self, request):
-        map = {"en|ml": "/home/ubuntu/dataset/en-ml-ulca.json",
-               "en|mr": "/home/ubuntu/dataset/en-mr-ulca.json",
+        map = {"en|mr": "/home/ubuntu/dataset/en-mr-ulca.json",
                "en|pa": "/home/ubuntu/dataset/en-pa-ulca.json",
                "en|ta": "/home/ubuntu/dataset/en-ta-ulca.json",
                "en|hi": "/home/ubuntu/dataset/en-hi-ulca.json"}
@@ -45,7 +44,7 @@ class Datastore:
                 insert_req["details"]["collectionMode"] = [random.choice(licenses)]
                 insert_req["details"]["license"] = [random.choice(collection_modes)]
                 if 'batch' not in insert_req.keys():
-                    insert_req["batch"] = 100000
+                    insert_req["batch"] = 10000
                 start = datetime.now()
                 result = self.load_dataset(insert_req)
                 end = datetime.now()
