@@ -126,6 +126,7 @@ class Datastore:
             for record in records:
                 new_data = {}
                 if src_hash in record["tags"] and tgt_hash in record["tags"]:
+                    log.info(f'DUPLICATE: {details["sourceLanguage"]}|{details["targetLanguage"]}')
                     return None
                 elif src_hash == record["srcHash"]:
                     if details["targetLanguage"] != record["targetLanguage"]:
@@ -299,6 +300,14 @@ class Datastore:
         result, res_count, pipeline, langs = [], 0, [], []
         try:
             col = self.get_mongo_instance()
+            if not query:
+                res = col.find({})
+                if res:
+                    for record in res:
+                        if record:
+                            result.append(record)
+                res_count = len(result)
+                return result, pipeline, res_count
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 langs.append(query["srcLang"])
                 langs.extend(query["tgtLang"])
@@ -348,7 +357,6 @@ class Datastore:
                     result = list(map.values())
             else:
                 if res:
-
                     for record in res:
                         if record:
                             result.append(record)
