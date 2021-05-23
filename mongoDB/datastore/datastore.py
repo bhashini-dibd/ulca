@@ -25,8 +25,7 @@ class Datastore:
         pass
 
     def load_all(self, request):
-        map = {"en|bn": "/home/ubuntu/dataset/en-bn-ulca.json",
-               "en|ml": "/home/ubuntu/dataset/en-ml-ulca.json",
+        map = {"en|ml": "/home/ubuntu/dataset/en-ml-ulca.json",
                "en|mr": "/home/ubuntu/dataset/en-mr-ulca.json",
                "en|pa": "/home/ubuntu/dataset/en-pa-ulca.json",
                "en|ta": "/home/ubuntu/dataset/en-ta-ulca.json",
