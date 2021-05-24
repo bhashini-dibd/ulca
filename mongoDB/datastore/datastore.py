@@ -301,12 +301,9 @@ class Datastore:
         try:
             col = self.get_mongo_instance()
             if not query:
-                res = col.find({})
-                if res:
-                    for record in res:
-                        if record:
-                            result.append(record)
-                res_count = len(result)
+                res = col.count({})
+                result = [res]
+                res_count = len(res)
                 return result, pipeline, res_count
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 langs.append(query["srcLang"])
