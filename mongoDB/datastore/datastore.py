@@ -303,7 +303,7 @@ class Datastore:
             if not query:
                 res = col.count({})
                 result = [res]
-                res_count = len(res)
+                res_count = len(result)
                 return result, pipeline, res_count
             if 'srcLang' in query.keys() and 'tgtLang' in query.keys():
                 langs.append(query["srcLang"])
