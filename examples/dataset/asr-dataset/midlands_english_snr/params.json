@@ -6,7 +6,9 @@
     "collectionSource": [
         "openslr", "https://www.youtube.com?v=121212121"
     ],
-    "domain": "general",
+    "domain":[
+        "general"
+    ],
     "collectionMethod": [
         "web-scrapping-audio"
     ],

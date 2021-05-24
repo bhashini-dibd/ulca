@@ -7,7 +7,9 @@
     "collectionSource": [
         "http://pib.gov.in/"
     ],
-    "domain": "news",
+    "domain":[
+        "news"
+    ],
     "collectionMethod": {
         "collectionDescription": [
             "auto-aligned"

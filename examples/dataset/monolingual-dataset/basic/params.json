@@ -6,7 +6,9 @@
     "collectionSource": [
         "http://pib.gov.in/"
     ],
-    "domain": "news",
+    "domain":[
+        "news"
+    ],
     "license": "cc-by-4.0",
     "submitter": {
         "name": "Project Anuvaad",

@@ -8,7 +8,9 @@
         "42040.pdf",
         "https: //main.sci.gov.in"
     ],
-    "domain": "legal",
+    "domain":[
+        "legal"
+    ],
     "collectionMethod": {
         "collectionDescription": [
             "manual-translated"

@@ -8,7 +8,9 @@
         "PIB",
         "https://www.pib.gov.in/Allrel.aspx"
     ],
-    "domain": "legal",
+    "domain":[
+        "legal"
+    ],
     "collectionMethod": {
         "collectionDescription": [
             "auto-aligned"
