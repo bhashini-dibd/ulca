@@ -177,8 +177,8 @@ components:
           $ref: '#/components/schemas/AudioQualityEvaluation'
           type: object
         collectionDescription: 
-          - $ref: '#/components/schemas/CollectionMethodAudio'
-          - type: object
+          $ref: '#/components/schemas/CollectionMethodAudio'
+          type: object
 
     ASRRowSchema:
       required:
@@ -227,8 +227,8 @@ components:
           type: string
           description: "Time of the audio where the processing end. Format : hh-mm-ss"
         collectionDetails: 
-          - $ref: '#/components/schemas/CollectionMethodAudio'
-          - type: object
+          $ref: '#/components/schemas/CollectionMethodAudio'
+          type: object
 
   
     DocumentOCRParamsSchema:
@@ -675,10 +675,10 @@ components:
           type: string
           description: evaluation method used for the audio
           enum:
-            - 'AudioQualityEvaluationMethod1'
+            - 'WadaSnr'
         methodDetails:
           oneOf:
-            - $ref: '#/components/schemas/AudioQualityEvaluationMethod1'
+            - $ref: '#/components/schemas/WadaSnr'
         
     WadaSnr:
       type: object
