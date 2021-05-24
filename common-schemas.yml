@@ -294,13 +294,10 @@ components:
       - stereo
     
     AudioSampleRate:
-      type: string
-      description: sample rate of the audio file
-      example: "44khz"
-      enum:
-      - 44khz
-      - 22khz
-      - 8khz
+      type: number
+      description: sample rate of the audio file in kHz
+      example: 44
+     
     
     AudioBitsPerSample:
       type: string
@@ -315,23 +312,7 @@ components:
       description: number of speakers in the recorded audio file
       minimum: 1
       example: 3
-          
-    NumberOfHoursPerGenders:
-      type: array
-      items:
-        $ref: '#/components/schemas/NumberOfHoursPerGender'
-        minItems: 1
-    
-    NumberOfHoursPerGender:
-      type: object
-      properties:
-        value:
-          type: number
-          description: number of hours per gender
-          minimum: 1
-        gender:
-          $ref: '#/components/schemas/Gender'
-  
+
     Gender:
       type: string
       description: gender description
