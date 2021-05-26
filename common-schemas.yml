@@ -125,10 +125,12 @@ components:
       example: 'cc-by-4.0'
       enum:
       - cc-by-4.0
+      - cc-by-sa-4.0
+      - cc-by-nd-2.0
+      - cc-by-nd-4.0
       - mit
       - gpl-3.0
       - bsd-3-clause
-      - cc-by-nd-2.0
       - private-commerical
       - unknown-license
   
