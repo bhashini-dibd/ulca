@@ -25,7 +25,14 @@ class Datastore:
         pass
 
     def load_all(self, request):
-        map = {"en|hi": "/home/ubuntu/dataset/en-hi-ulca.json"}
+        map = {"en|hi": "/home/ubuntu/dataset/en-hi-ulca.json",
+               "en|kn": "/home/ubuntu/dataset/en-kn-ulca.json",
+               "en|bn": "/home/ubuntu/dataset/en-bn-ulca.json",
+               "en|ml": "/home/ubuntu/dataset/en-ml-ulca.json",
+               "en|mr": "/home/ubuntu/dataset/en-mr-ulca.json",
+               "en|pa": "/home/ubuntu/dataset/en-pa-ulca.json",
+               "en|ta": "/home/ubuntu/dataset/en-ta-ulca.json",
+               "en|te": "/home/ubuntu/dataset/en-te-ulca.json"}
         domains = ["general", "finance", "sports", "news", "tourism", "government"]
         licenses = ["mit", "gpl-3.0", "cc-by-2.0", "cc-by-n-3.0"]
         collection_modes = ["manual-translated", "machine-aligned", "phone-recording", "crowd-sourced"]
@@ -157,6 +164,11 @@ class Datastore:
             else:
                 src_lang = details["sourceLanguage"]
                 tgt_lang = details["targetLanguage"]
+            lang_map = {src_lang: record["sourceText"], tgt_lang: record["targetText"]}
+            hashed_key = ''
+            for key in sorted(lang_map.keys()):
+                hashed_key = hashed_key + str(lang_map[key])
+            hashed_key = str(hashlib.sha256(hashed_key.encode('utf-16')).hexdigest())
             tag_details = {
                 "sourceLanguage": src_lang, "targetLanguage": tgt_lang, "collectionMode": details["collectionMode"],
                 "domain": details["domain"], "licence": details["licence"], "srcHash": src_hash, "tgtHash": tgt_hash
@@ -164,7 +176,7 @@ class Datastore:
             tags = list(self.get_tags(tag_details))
             langs = [src_lang, tgt_lang]
             shard_key = ','.join(map(str, sorted(langs)))
-            data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"],
+            data_dict = {"id": str(uuid.uuid4()), "contributors": request["contributors"], "hashedKey": hashed_key,
                          "submitter": request["submitter"], "sourceLanguage": src_lang, "targetLanguage": tgt_lang,
                          "timestamp": eval(str(time.time()).replace('.', '')[0:13]), "details": details,
                          "data": record, "srcHash": src_hash, "tgtHash": tgt_hash, 'sk': shard_key, "tags": tags}
@@ -261,6 +273,7 @@ class Datastore:
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
+            ulca_col.create_index([("hashedKey", -1), ("unique", True)])
             ulca_col.create_index([("sk", "hashed")])
             db = client.admin
             db.command('enableSharding', mongo_ulca_db)
@@ -276,6 +289,7 @@ class Datastore:
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
+            ulca_col.create_index([("hashedKey", -1), ("unique", True)])
             log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):
