@@ -48,7 +48,9 @@ class Datastore:
                 insert_req["details"]["collectionMode"] = [random.choice(licenses)]
                 insert_req["details"]["license"] = [random.choice(collection_modes)]
                 if 'batch' not in insert_req.keys():
-                    insert_req["batch"] = 100000
+                    insert_req["batch"] = 10000
+                if 'slice' not in insert_req.keys():
+                    insert_req["slice"] = {"start": 0, "end": 100000}
                 start = datetime.now()
                 result = self.load_dataset(insert_req)
                 end = datetime.now()
