@@ -275,7 +275,6 @@ class Datastore:
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
-            ulca_col.create_index([("hashedKey", -1)], unique=True)
             ulca_col.create_index([("sk", "hashed")])
             db = client.admin
             db.command('enableSharding', mongo_ulca_db)
@@ -291,7 +290,6 @@ class Datastore:
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
-            ulca_col.create_index([("hashedKey", -1)], unique=True)
             log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):
