@@ -22,12 +22,16 @@ import { LinkedIn } from "react-linkedin-login-oauth2";
 import Divider from "@material-ui/core/Divider";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import {useReducer, useSelector} from "react-redux";
+import {  useHistory } from "react-router-dom";
+
 const Login = (props) => {
   const [values, setValues] = React.useState({
     email: "",
     password: "",
     checked: false,
   });
+
+  const history = useHistory();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -105,7 +109,8 @@ const Login = (props) => {
           <Link
             id="newaccount"
             className={classes.link}
-            href="/forgot-password"
+            href="#"
+            onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/forgot-password`)}}
           >
             {" "}
             Forgot Password?
@@ -226,7 +231,8 @@ const Login = (props) => {
       <div className={classes.createLogin}>
         <Typography className={classes.width}>New to ULCA?</Typography>
         <Typography>
-          <Link id="newaccount" className={classes.link} href="/register">
+          <Link id="newaccount" className={classes.link}  href="#"
+            onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/register`)}}>
             {" "}
             Create an account
           </Link>
