@@ -10,9 +10,9 @@ const GlobalStyles = (theme) => ({
     minHeight: "calc(100vh - 5em)",
   },
   root: {
-    background: theme.palette.background.default,
+    background: "#F8F8F8",
     flexGrow: 1,
-    // height: 430,
+    height: window.innerHeight,
     zIndex: 1,
     overflow: "hidden",
     position: "relative",

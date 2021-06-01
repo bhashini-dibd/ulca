@@ -8,6 +8,7 @@ import history from "./web.history";
 import Layout from "./ui/Layout";
 import Sample from "./ui/container/Sample";
 import Login from "./ui/container/UserManagement/UserManagement";
+import SubmitDataset from './ui/container/UploadDataset/SubmitDataset';
 
 const PrivateRoute = ({ component: Component, authenticate, ...rest }) => (
   <Route
@@ -40,6 +41,15 @@ export default function App() {
             component={Sample}
             authenticate={true}
             currentMenu="organization-list"
+            dontShowHeader={false}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/submit-dataset/upload`}
+            title={"Submit Dataset"}
+            userRoles={[""]}
+            component={SubmitDataset}
+            authenticate={true}
+            currentMenu="submit-dataset"
             dontShowHeader={false}
           />
         </Switch>
