@@ -7,7 +7,7 @@ import DownIcon from '@material-ui/icons/ArrowDropDown';
 import Avatar from '@material-ui/core/Avatar';
 import HeaderStyles from "../../styles/HeaderStyles"
 import HomeIcon from '@material-ui/icons/Home';
-import DataUsageIcon from '@material-ui/icons/DataUsage';
+import DescriptionIcon from '@material-ui/icons/Description';
 import ChromeReaderModeIcon from '@material-ui/icons/ChromeReaderMode';
 
 const StyledMenu = withStyles({
@@ -87,7 +87,7 @@ const Header = (props) => {
                   onClick={(e) => handleOpenMenu(e)}
                   variant="text"
                 >
-                  <DataUsageIcon fontSize="large" />
+                  <DescriptionIcon fontSize="large" />
                   <DownIcon />
                 </Button>
               </div>

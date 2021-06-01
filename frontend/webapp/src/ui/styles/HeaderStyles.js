@@ -15,7 +15,7 @@ const HeaderStyles = (theme) => ({
   },
   title: {
     color: 'white',
-    "@media (max-width:660px)": {
+    "@media (max-width:670px)": {
       display: 'none'
     },
   },
@@ -38,7 +38,7 @@ const HeaderStyles = (theme) => ({
   },
   home: {
     marginLeft: '9.375rem',
-    "@media (max-width:660px)": {
+    "@media (max-width:670px)": {
       marginLeft: '0rem'
     },
     "@media (max-width:425px)": {
@@ -57,7 +57,8 @@ const HeaderStyles = (theme) => ({
     color: 'white'
   },
   styledMenu: {
-    fontSize: '1rem'
+    fontSize: '1rem',
+    borderTop: "1px solid #D6D6D6"
   },
   profileName: {
     marginLeft: '0.5vw',
