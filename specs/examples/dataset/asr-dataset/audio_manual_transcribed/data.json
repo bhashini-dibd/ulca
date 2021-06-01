@@ -9,13 +9,10 @@
         "age": "60-100",
         "snr": [{
             "methodType": "WadaSnr",
-            "methodDetails": [{
-                "properties": [{
-                    "snr": 55
-                }]
-            }]
+            "methodDetails": {
+                "snr": 55
+            }
         }]
-
     },
     {
         "audioFilename": "audios/chunk_02.wav",
@@ -27,13 +24,10 @@
         "age": "60-100",
         "snr": [{
             "methodType": "WadaSnr",
-            "methodDetails": [{
-                "properties": [{
-                    "snr": 55
-                }]
-            }]
+            "methodDetails": {
+                "snr": 55
+            }
         }]
-
     },
     {
         "audioFilename": "audios/chunk_03.wav",
@@ -45,13 +39,10 @@
         "age": "60-100",
         "snr": [{
             "methodType": "WadaSnr",
-            "methodDetails": [{
-                "properties": [{
-                    "snr": 55
-                }]
-            }]
+            "methodDetails": {
+                "snr": 55
+            }
         }]
-
     },
     {
         "audioFilename": "audios/chunk_04.wav",
@@ -63,13 +54,9 @@
         "age": "60-100",
         "snr": [{
             "methodType": "WadaSnr",
-            "methodDetails": [{
-                "properties": [{
-                    "snr": 55
-                }]
-            }]
+            "methodDetails": {
+                "snr": 55
+            }
         }]
-
     }
-
 ]
