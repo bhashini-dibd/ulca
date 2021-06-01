@@ -276,6 +276,8 @@ components:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/ImageFormat'
         dpi:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/ImageDPI'
+        collectionMethod:
+          $ref: '#/components/schemas/OcrCollectionMethod'
 
     DocumentLayoutRowSchema:
       required:
