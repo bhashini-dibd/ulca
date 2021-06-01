@@ -270,18 +270,7 @@ components:
             - paragraph
             - line
             - word
-            - table
-            - table-cell
-            - header
-            - footer
-            - subscript
-            - superscript
-            - inline-image
-            - background-image
-            - watermark
-            - signature
-            - list-bullets
-            - caption
+            - signatureImage
         groundTruth:
           type: string
           description: text data present in boundingbox
@@ -415,7 +404,6 @@ components:
           enum:
           - layout-dataset-type
           - ocr-dataset-type
-          - character-dataset-type
 
     DatasetProgressInformation:
       type: object
