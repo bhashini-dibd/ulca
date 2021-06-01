@@ -47,6 +47,17 @@ const DataSet = (theme) => ({
     breadcrum: {
         marginTop: '1vh',
         marginLeft: '10%'
+    },
+    divStyle:{
+        margin: "0% 3% 3% 3%", paddingTop: "7vh"
+    },
+    link:{
+        color:"rgb(158 84 147)",
+        marginRight: "10px",
+        cursor:"pointer"
+    },
+    span:{
+        color:"green"
     }
 
 });

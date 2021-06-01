@@ -5,78 +5,23 @@ const initialState = {
     responseData: []
 }
 
-const getTime = (duration) => {
-    var milliseconds = parseInt((duration % 1000) / 100),
-        seconds = parseInt((duration / 1000) % 60),
-        minutes = parseInt((duration / (1000 * 60)) % 60),
-        hours = parseInt((duration / (1000 * 60 * 60)) % 24);
 
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
 
-    return hours + ":" + minutes + ":" + seconds;
-}
-
-function removeDuplicates(originalArray, prop) {
-    var newArray = [];
-    var lookupObject = {};
-
-    for (var i in originalArray) {
-        lookupObject[originalArray[i][prop]] = originalArray[i];
-    }
-    for (i in lookupObject) {
-        newArray.push(lookupObject[i]);
-    }
-    return newArray;
-}
-
-const getUserEventData = (payload) => {
-    let result = []
-    payload.forEach(res => {
-        res.forEach(data => {
-            const { src, initial, bleu_score, final, time_spent, s_id, user_events } = data.context.cdata
-            var index = result.findIndex(row=> row.s_id === s_id);
-            if(index<0){
-                src && result.push({
-                    src,
-                    mt: initial !== undefined ? initial : "",
-                    bleu_score: Number(bleu_score).toFixed(2),
-                    tgt: final,
-                    time_spent: getTime(time_spent),
-                    s_id,
-                    user_events: user_events !== undefined ? user_events : []
-                })
-
-            }
-            else{
-                result[index]=({
-                    src,
-                    mt: initial !== undefined ? initial : "",
-                    bleu_score: Number(bleu_score).toFixed(2),
-                    tgt: final,
-                    time_spent: getTime(time_spent),
-                    s_id,
-                    user_events: result[index].user_events !== undefined ? result[index].user_events.concat(data.context.cdata.user_events) : []
-                })
-
-            }
-            
-        })
-    })
-
+const getContributionList = (payload) => {
+   
+    let dataObj = [{"sr_no":"0005770","Dataset":"Tourism Set-1","Submitted_on":"23/5/2011","Status":"Inprogress"},{"sr_no":"0045770","Dataset":"Tourism Set-7","Submitted_on":"3/5/2011","Status":"Published"},{"sr_no":"0205770","Dataset":"Tourism Set-5","Submitted_on":"12/5/2011","Status":"Published"},{"sr_no":"0005470","Dataset":"Tourism Set-4","Submitted_on":"2/5/2011","Status":"Published"}]
     // let latestEvent = removeDuplicates(result, 's_id')
 
     // return latestEvent;
-    console.log(result)
-    return result;
+    
+    return dataObj;
 }
 
 export default (state = initialState, action) => {
     switch (action.type) {
         case C.GET_CONTRIBUTION_LIST:
             return {
-                responseData: getUserEventData(action.payload.responseData),
+                responseData: getContributionList(action.payload.responseData),
                 
             }
         case C.CLEAR_USER_EVENT:

@@ -1,4 +1,4 @@
-import { Grid, withStyles, Tooltip, IconButton } from "@material-ui/core";
+import { Grid, withStyles, Tooltip, IconButton,Link, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
 
 import React, { useEffect, useState } from "react";
 import DataSet from "../../styles/Dataset";
@@ -7,12 +7,14 @@ import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../redux/actions/api/DataSet/MyContribution";
 import { useDispatch, useSelector } from "react-redux";
 import { CloudDownload } from "@material-ui/icons";
+import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+
 
 
 const ContributionList = (props) => {
-
-  const myContributionReport = useSelector((state) => state.myContributionReport);
-  
+  const myContributionReport = useSelector(
+    (state) => state.myContributionReport
+  );
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -23,20 +25,41 @@ const ContributionList = (props) => {
     );
     dispatch(APITransport(userObj));
   }, []);
-  const AddJsonDownload = () => (
-    <Tooltip disableFocusListener title="Download Json">
-      <IconButton onClick={() => this.handleDownLoad()}>
-        <CloudDownload />
-      </IconButton>
-    </Tooltip>
-  );
-
-
   
+
+  const getMuiTheme = () => createMuiTheme({
+    overrides: {
+      MuiTableCell: {
+        head: {
+            backgroundColor: "#c7c6c6 !important"
+        }
+    }
+    }
+});
+
+  const renderStatus = (value) => {
+    if(value === "Inprogress"){
+     return  <Link className= {classes.link}> In-progress </Link>
+    }
+    else{
+      return <span className= {classes.span}>Published </span>
+    }
+  }
+
+  const renderAction = (value) => {
+    if(value === "Inprogress"){
+     
+    }
+    else{
+      return <div className= {classes.span}> <Link className= {classes.link}> Update </Link><Link className= {classes.link}> Delete </Link> </div> 
+    }
+  }
+
+    
   const columns = [
     {
-      name: "s_id",
-      label: "Sentence Id",
+      name: "sr_no",
+      label: "s id",
       options: {
         filter: false,
         sort: false,
@@ -44,65 +67,63 @@ const ContributionList = (props) => {
       },
     },
     {
-      name: "src",
-      label: "Source",
+      name: "sr_no",
+      label: "Sr No.",
       options: {
         filter: false,
         sort: false,
       },
     },
     {
-      name: "mt",
-      label: "Machine Translation",
+      name: "Dataset",
+      label: "Dataset Name",
       options: {
         filter: false,
         sort: false,
       },
     },
     {
-      name: "tgt",
-      label: "Target",
+      name: "Submitted_on",
+      label: "Submitted On",
       options: {
         filter: false,
         sort: false,
+        
       },
-    },
-    {
-      name: "bleu_score",
-      label: "Bleu Score",
-      options: {
-        filter: false,
-        sort: false,
-      },
-    },
-    {
-      name: "time_spent",
-      label: "Time Spent",
-      options: {
-        filter: false,
-        sort: false,
-      },
-    },
-    {
-      name: "user_events",
-      label: "User Events",
+    },{
+      name: "Status",
+      label: "Status",
       options: {
         filter: false,
         sort: false,
         display: "excluded",
       },
     },
-
     {
-      name: "Action",
-      label:"action",
+      name: "Status",
+      label: "status",
       options: {
         filter: true,
         sort: false,
         empty: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
-            return <div></div>;
+            return <div>{renderStatus(tableMeta.rowData[4])}</div>;
+          }
+        },
+      },
+    },
+
+    {
+      name: "Action",
+      label: "action",
+      options: {
+        filter: true,
+        sort: false,
+        empty: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          if (tableMeta.rowData) {
+            return <div>{renderAction(tableMeta.rowData[4])}</div>;
           }
         },
       },
@@ -122,7 +143,7 @@ const ContributionList = (props) => {
       options: { sortDirection: "desc" },
     },
 
-    customToolbar: AddJsonDownload,
+    
     filterType: "checkbox",
     download: false,
     print: false,
@@ -133,14 +154,16 @@ const ContributionList = (props) => {
 
   const { classes } = props;
   return (
-    <div style={{ margin: "0% 3% 3% 3%", paddingTop: "7vh" }}>
-    <MUIDataTable
-    title={`User Event Report`}
-    data={myContributionReport.responseData}
-    columns={columns}
-    options={options}
-  />
-  </div>
+    <div className={classes.divStyle}>
+      <MuiThemeProvider theme={getMuiTheme()}>  
+      <MUIDataTable
+        title={`User Event Report`}
+        data={myContributionReport.responseData}
+        columns={columns}
+        options={options}
+      />
+      </MuiThemeProvider>
+    </div>
   );
 };
 
