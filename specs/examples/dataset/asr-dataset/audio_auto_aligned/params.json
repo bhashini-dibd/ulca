@@ -1,5 +1,5 @@
 {   
-    "dataset-type": "asr-corpus",
+    "datasetType": "asr-corpus",
     "languages": {
         "sourceLanguage": "hi",
         "targetLanguage": null
@@ -7,21 +7,29 @@
     "collectionSource": [
         "YouTube", "https://www.youtube.com/watch?v=UIkSFSHX9AU"
     ],
-    "domain": "general",
+    "domain":[
+        "general"
+    ],
     "collectionMethod": [
         "web-scrapping-audio"
     ],
     "license":  "cc-by-4.0",
     "submitter": {
         "name": "Anirudh",
-        "oauthid": "anirudh.gupta@thoughtworks.com",
-        "provider": "google"
+        "oauthId": {
+            "oauthId": "anirudh.gupta@thoughtworks.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Harveen",
+                "oauthId": {
+                    "oauthId": "anirudh.gupta@thoughtworks.com",
+                    "provider": "google"
+                }
+            }
+        ]
     },
-    "contributers": [{
-        "name": "Harveen",
-        "oauthid": "harveen.chadha@thoughtworks.com",
-        "provider": "google"
-    }],
     "format": "wav",
     "channel": "mono",
     "samplingRate": 44.1,
@@ -37,9 +45,13 @@
             }]
         }]
     }],
-    "collectionDescription": "auto-aligned",
-    "collectionDetails":[{
-        "alignmentTool": "AENEAS",
-        "alignmentToolVersion": "1.4.0.0"
-    }]
+    "collectionMethod": {
+        "collectionDescription": [
+            "auto-aligned"
+        ],
+        "collectionDetails": {
+            "alignmentTool": "AENEAS",
+            "alignmentToolVersion": "1.4.0.0"
+        }
+    }
 }
