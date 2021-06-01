@@ -136,8 +136,8 @@ const Header = (props) => {
             </div>
             <div className={classes.profile}>
               <Button className={classes.menuBtn} variant="text">
-                <Avatar >RS</Avatar>
-                <p className={classes.profileName}>Roshan Shah</p>
+                <Avatar >UU</Avatar>
+                <p className={classes.profileName}>Ulca User</p>
                 <DownIcon />
               </Button>
             </div>
