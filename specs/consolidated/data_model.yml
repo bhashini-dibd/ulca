@@ -1,0 +1,245 @@
+  data_model_parallel:
+    type: object
+    description: ULCA Data Model for Parallel Dataset
+    properties:
+      id: 
+        type: uuid
+        description: Unique ID of the record
+      sourceText: 
+        type: string
+        description: Source Text of the input record -- IP
+      sourceLanguage: 
+        type: string
+        description: Source Language of the input record -- IP
+      sourceHash: 
+        type: string
+        description: SHA256 hash of the source text
+      targetText: 
+        type: string
+        description: Target Text of the input record -- IP
+      targetLanguage: 
+        type: string
+        description: Target Language of the input record -- IP
+      targetHash: 
+        type: string
+        description: SHA256 hash of the target text
+      alignmentScore: 
+        type: number
+        description: Alignment score of the record -- IP
+      dataset:
+        type: string
+        description: ID of the dataset -- IP
+      derived: 
+        type: boolean
+        description: TRUE if it is derived record, FALSE otherwise.
+      contributors:
+        type: array
+        description: Details of the contributors -- IP
+        items:
+          type: object
+      submitter:
+        type: object
+        description: Details of the submitter -- IP
+      collectionModes:
+        type: array
+        description: List of collection modes -- IP
+        items:
+          type: string
+      collectionSources:
+        type: array
+        description: List of collection sources -- IP
+        items:
+          type: string
+      domains:
+        type: array
+        description: List of domains the record belongs to -- IP
+        items:
+          type: string
+      license:
+        type: string
+        description: License of the dataset -- IP
+      tags:
+        type: array
+        description: Dervived list of tags
+        items:
+          type: string
+
+
+
+  data_model_asr:
+    type: object
+    description: ULCA Data Model for ASR Dataset
+    properties:
+      id: 
+        type: uuid
+        description: Unique ID of the record
+      audioFilename: 
+        type: string
+        description: Name of the audio file -- IP
+      audioFilePath: 
+        type: string
+        description: Path of the audio file from the shared storage
+      text: 
+        type: string
+        description: Text format of the audio content -- IP
+      startTime: 
+        type: datetime
+        description: Start time of the audio -- IP
+      endTime: 
+        type: datetime
+        description: End time of the audio -- IP
+      channel: 
+        type: string
+        description: Channel of collection of the audio file -- IP
+      samplingRate: 
+        type: string
+        description: Sampling rate -- IP
+      bitsPerSample: 
+        type: number
+        description: Alignment score of the record -- IP
+      gender:
+        type: string
+        description: Gender of the speaker -- IP
+      age: 
+        type: string
+        description: Age of the speaker -- IP
+      snr: 
+        type: object
+        description: SNR details
+      contributors:
+        type: array
+        description: Details of the contributors -- IP
+        items:
+          type: object
+      submitter:
+        type: object
+        description: Details of the submitter -- IP
+      collectionModes:
+        type: array
+        description: List of collection modes -- IP
+        items:
+          type: string
+      collectionSources:
+        type: array
+        description: List of collection sources -- IP
+        items:
+          type: string
+      domains:
+        type: array
+        description: List of domains the record belongs to -- IP
+        items:
+          type: string
+      license:
+        type: string
+        description: License of the dataset
+      tags:
+        type: array
+        description: Dervived list of tags
+        items:
+          type: string
+
+
+  data_model_ocr:
+    type: object
+    description: ULCA Data Model for OCR Dataset
+    properties:
+      id: 
+        type: uuid
+        description: Unique ID of the record
+      groundTruth: 
+        type: string
+        description: Content of the image -- IP
+      imageFilename: 
+        type: string
+        description: Name of the image file -- IP
+      imageFilePath: 
+        type: string
+        description: Path of the image file from the shared storage
+      boundingBox: 
+        type: array
+        description: Bounding box details
+        items:
+          type: object
+      contributors:
+        type: array
+        description: Details of the contributors -- IP
+        items:
+          type: object
+      submitter:
+        type: object
+        description: Details of the submitter -- IP
+      collectionModes:
+        type: array
+        description: List of collection modes -- IP
+        items:
+          type: string
+      collectionSources:
+        type: array
+        description: List of collection sources -- IP
+        items:
+          type: string
+      domains:
+        type: array
+        description: List of domains the record belongs to -- IP
+        items:
+          type: string
+      license:
+        type: string
+        description: License of the dataset
+      tags:
+        type: array
+        description: Dervived list of tags
+        items:
+          type: string
+
+
+  data_model_monolingual:
+    type: object
+    description: ULCA Data Model for Monolingual Dataset
+    properties:
+      id: 
+        type: uuid
+        description: Unique ID of the record
+      text: 
+        type: string
+        description: Text of the input record -- IP
+      language: 
+        type: string
+        description: Language of the input record -- IP
+      textHash: 
+        type: string
+        description: SHA256 hash of the source text
+      dataset:
+        type: string
+        description: ID of the dataset -- IP
+      contributors:
+        type: array
+        description: Details of the contributors -- IP
+        items:
+          type: object
+      submitter:
+        type: object
+        description: Details of the submitter -- IP
+      collectionModes:
+        type: array
+        description: List of collection modes -- IP
+        items:
+          type: string
+      collectionSources:
+        type: array
+        description: List of collection sources -- IP
+        items:
+          type: string
+      domains:
+        type: array
+        description: List of domains the record belongs to -- IP
+        items:
+          type: string
+      license:
+        type: string
+        description: License of the dataset -- IP
+      tags:
+        type: array
+        description: Dervived list of tags
+        items:
+          type: string
