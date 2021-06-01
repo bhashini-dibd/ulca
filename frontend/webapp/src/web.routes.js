@@ -8,7 +8,7 @@ import history from "./web.history";
 import Layout from "./ui/Layout";
 import Sample from "./ui/container/Sample";
 import Login from "./ui/container/UserManagement/UserManagement";
-import SubmitDataset from './ui/container/UploadDataset/SubmitDataset';
+import SubmitDataset from './ui/container/DataSet/UploadDataset/SubmitDataset';
 import ContributionList from "./ui/container/DataSet/ContributionList";
 
 const PrivateRoute = ({ component: Component, authenticate, ...rest }) => (
