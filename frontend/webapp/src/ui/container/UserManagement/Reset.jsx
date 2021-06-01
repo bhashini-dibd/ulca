@@ -14,12 +14,14 @@ import {
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import {  useHistory } from "react-router-dom";
 
 const ResetPassword = (props) => {
   const [values, setValues] = React.useState({
     password: "",
     confirmPassword: "",
   });
+  const history = useHistory();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -81,7 +83,8 @@ const ResetPassword = (props) => {
 
       <div className={classes.loginLink}>
         <Typography>
-          <Link id="newaccount" className={classes.link} href="/">
+          <Link id="newaccount" className={classes.link}  href="#"
+            onClick={() => { history.push(`${process.env.PUBLIC_URL}/`)}}>
             {" "}
             Back to Login
           </Link>

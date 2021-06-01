@@ -9,11 +9,13 @@ import {
 
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
+import {  useHistory } from "react-router-dom";
 
 const ForgotPassword = (props) => {
   const [values, setValues] = React.useState({
     email: "",
   });
+  const history = useHistory();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -41,7 +43,7 @@ const ForgotPassword = (props) => {
 
       <div className={classes.loginLink}>
         <Typography>
-          <Link id="newaccount" className={classes.link} href="/">
+          <Link id="newaccount" className={classes.link} href="#" onClick={() => { history.push(`${process.env.PUBLIC_URL}/`)}}>
             {" "}
             Back to Login
           </Link>

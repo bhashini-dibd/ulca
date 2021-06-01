@@ -16,6 +16,7 @@ import {
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
+import {  useHistory } from "react-router-dom";
 
 const SignUp = (props) => {
   const [values, setValues] = React.useState({
@@ -24,6 +25,7 @@ const SignUp = (props) => {
     password: "",
     confirmPassword: "",
   });
+  const history = useHistory();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -146,7 +148,8 @@ const SignUp = (props) => {
           Already have an account ?{" "}
         </Typography>
         <Typography>
-          <Link id="newaccount" className={classes.link} href="/login">
+          <Link id="newaccount" className={classes.link} href="#"
+            onClick={() => { history.push(`${process.env.PUBLIC_URL}/`)}}>
             {" "}
             Sign in
           </Link>
