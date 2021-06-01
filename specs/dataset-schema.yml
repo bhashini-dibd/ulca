@@ -176,7 +176,7 @@ components:
         snr:
           $ref: '#/components/schemas/AudioQualityEvaluation'
           type: object
-        collectionDescription: 
+        collectionMethod: 
           $ref: '#/components/schemas/CollectionMethodAudio'
           type: object
 
@@ -226,7 +226,7 @@ components:
         endTime:
           type: string
           description: "Time of the audio where the processing end. Format : hh-mm-ss"
-        collectionDetails: 
+        collectionMethod: 
           $ref: '#/components/schemas/CollectionMethodAudio'
           type: object
 
@@ -270,18 +270,7 @@ components:
             - paragraph
             - line
             - word
-            - table
-            - table-cell
-            - header
-            - footer
-            - subscript
-            - superscript
-            - inline-image
-            - background-image
-            - watermark
-            - signature
-            - list-bullets
-            - caption
+            - signatureImage
         groundTruth:
           type: string
           description: text data present in boundingbox
@@ -415,7 +404,6 @@ components:
           enum:
           - layout-dataset-type
           - ocr-dataset-type
-          - character-dataset-type
 
     DatasetProgressInformation:
       type: object

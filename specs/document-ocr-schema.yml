@@ -84,9 +84,7 @@ components:
             - paragraph
             - line
             - word
-            - table
-            - image
-            - signature
+            - signatureImage
 
         regions:
           type: array

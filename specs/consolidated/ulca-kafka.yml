@@ -1,0 +1,266 @@
+  ingest_input:
+    type: object
+    description: Inout entity for the ingest kafka consumer
+    properties:
+      userAction: 
+        type: string
+        description: Action to be perfomed on the input -- IP
+        enum:
+          - INGEST
+          - ABORT
+          - DELETE
+      fileURL: 
+        type: string
+        description: URL of the file from which dataset has to be downloaded -- IP
+      datasetId: 
+        type: string
+        description: Unique ID for the dataset
+      datasetType: 
+        type: string
+        description: Type of the dataset -- IP
+      serviceRequestNumber: 
+        type: string
+        description:  Unique SRN per request
+      userId: 
+        type: string
+        description: User id of the submitter of this SR -- IP
+      errorReportFile:
+        type: string
+        description: Name of the error report file to be used by the file consumer to save errors.
+
+
+  ingest_output:
+    type: object
+    description: Output entity for the ingest kafka consumer
+    properties:
+      userAction: 
+        type: string
+        description: Action to be perfomed on the input -- IP
+        enum:
+          - INGEST
+          - ABORT
+          - DELETE
+      serviceRequestNumber: 
+        type: string
+        description:  Unique SRN per request
+      datasetId: 
+        type: string
+        description: Unique ID for the dataset
+      datasetType: 
+        type: string
+        description: Type of the dataset
+      userId: 
+        type: string
+        description: User id of the submitter of this SR
+      batchId: 
+        type: string
+        description: Unique batch id of the batch of records
+      records: 
+        type: array
+        description: Denormalised records as per the dataset input
+        items:
+          type: object
+
+
+  validate_input:
+    type: object
+    description: Inout entity for the validate kafka consumer
+    properties:
+      userAction: 
+        type: string
+        description: Action to be perfomed on the input -- IP
+        enum:
+          - INGEST
+          - ABORT
+          - DELETE
+      serviceRequestNumber: 
+        type: string
+        description:  Unique SRN per request
+      datasetId: 
+        type: string
+        description: Unique ID for the dataset
+      datasetType: 
+        type: string
+        description: Type of the dataset
+      userId: 
+        type: string
+        description: User id of the submitter of this SR
+      batchId: 
+        type: string
+        description: Unique batch id of the batch of records
+      records: 
+        type: array
+        description: Denormalised records as per the dataset input
+        items:
+          type: object
+
+
+  validate_output:
+    type: object
+    description: Output entity for the validate kafka consumer
+    properties:
+      serviceRequestNumber: 
+        type: string
+        description:  Unique SRN per request
+      batchId: 
+        type: string
+        description: Unique batch id of the batch of records
+      status: 
+        type: string
+        description: Status of the batch processing
+        enum:
+          - SUCCESS
+          - FAILED
+      totalCount: 
+       type: number
+        description: Size of batch i.e no of records received in this batch
+      successCount: 
+        type: number
+        description: No of records successfully processed
+      failCount: 
+        type: number
+        description: No of records that failed and have been sent for error reporting
+      tool: 
+        type: string
+        description: VALIDATE
+      startTime: 
+        type: number
+        description: 13 digit epoch of the start time
+      endTime: 
+        type: number
+        description: 13 digit epoch of the end time
+
+
+  validate_output_error:
+    type: object
+    description: Output entity for the validate kafka consumer for error records
+    properties:
+      serviceRequestNumber: 
+        type: string
+        description:  Unique SRN per request
+      batchId: 
+        type: string
+        description: Unique batch id of the batch of records
+      tool: 
+        type: string
+        description: VALIDATE
+      records:
+        type: array
+        description: list of failed records
+        items:
+          type: object
+          $ref: '#/error_record'
+
+  publish_input:
+    type: object
+    description: Inout entity for the publish kafka consumer
+    properties:
+      userAction: 
+        type: string
+        description: Action to be perfomed on the input -- IP
+        enum:
+          - INGEST
+          - ABORT
+          - DELETE
+      serviceRequestNumber: 
+        type: string
+        description:  Unique SRN per request
+      datasetId: 
+        type: string
+        description: Unique ID for the dataset
+      datasetType: 
+        type: string
+        description: Type of the dataset
+      userId: 
+        type: string
+        description: User id of the submitter of this SR
+      batchId: 
+        type: string
+        description: Unique batch id of the batch of records
+      records: 
+        type: array
+        description: Denormalised records as per the dataset input
+        items:
+          type: object
+
+
+  publish_output:
+    type: object
+    description: Output entity for the publish kafka consumer
+    properties:
+      serviceRequestNumber: 
+        type: string
+        description:  Unique SRN per request
+      batchId: 
+        type: string
+        description: Unique batch id of the batch of records
+      status: 
+        type: string
+        description: Status of the batch processing
+        enum:
+          - SUCCESS
+          - FAILED
+      totalCount: 
+       type: number
+        description: Size of batch i.e no of records received in this batch
+      successCount: 
+        type: number
+        description: No of records successfully processed
+      failCount: 
+        type: number
+        description: No of records that failed and have been sent for error reporting
+      tool: 
+        type: string
+        description: PUBLISH
+      startTime: 
+        type: number
+        description: 13 digit epoch of the start time
+      endTime: 
+        type: number
+        description: 13 digit epoch of the end time
+
+
+  publish_output_error:
+    type: object
+    description: Output entity for the ingest kafka consumer for error records
+    properties:
+      serviceRequestNumber: 
+        type: string
+        description:  Unique SRN per request
+      batchId: 
+        type: string
+        description: Unique batch id of the batch of records
+      tool: 
+        type: string
+        description: PUBLISH
+      records:
+        type: array
+        description: list of failed records
+        items:
+          type: object
+          $ref: '#/error_record'
+
+
+  error_record:
+    type: object
+    description: error records
+    properties:
+      record: 
+        type: object
+        description: The record that has failed validation
+      timeStamp: 
+        type: number
+        description: 13 digit epoch of the time stamp
+      cause: 
+        type: string
+        description: Cause of the error
+        enum:
+          - DUPLICATE_RECORD
+          - INVALID_DATA
+          - VALIDATION_FAILED
+      description: 
+        type: string
+        description: Detailed description of the error
+      additionalDetails: 
+        type: object
+        description: Additional information of the error if required

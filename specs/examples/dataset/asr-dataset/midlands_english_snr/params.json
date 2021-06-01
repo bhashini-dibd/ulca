@@ -1,4 +1,5 @@
 {
+    "datasetType": "asr-corpus",
     "languages": {
         "sourceLanguage": "en",
         "targetLanguage": null
@@ -12,20 +13,26 @@
     "collectionMethod": [
         "web-scrapping-audio"
     ],
-    "license":  "cc-by-4.0",
-    "submitter": {
-        "name": "Anirudh",
-        "oauthid": "anirudh.gupta@thoughtworks.com",
-        "provider": "google"
-    },
-    "contributers": [{
-        "name": "Harveen",
-        "oauthid": "harveen.chadha@thoughtworks.com",
-        "provider": "google"
-    }],
     "format": "wav",
     "channel": "mono",
     "samplingRate": 16000,
     "bitsPerSample": "sixteen",
-    "numberOfSpeakers": 3
+    "numberOfSpeakers": 3,
+    "license":  "cc-by-4.0",
+    "submitter": {
+        "name": "Anirudh",
+        "oauthId": {
+            "oauthId": "anirudh.gupta@thoughtworks.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Harveen",
+                "oauthId": {
+                    "oauthId": "anirudh.gupta@thoughtworks.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    }
 }
