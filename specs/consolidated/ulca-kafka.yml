@@ -211,7 +211,7 @@
         description: No of records that failed and have been sent for error reporting
       tool: 
         type: string
-        description: VALIDATE
+        description: PUBLISH
       startTime: 
         type: number
         description: 13 digit epoch of the start time
@@ -232,7 +232,7 @@
         description: Unique batch id of the batch of records
       tool: 
         type: string
-        description: VALIDATE
+        description: PUBLISH
       records:
         type: array
         description: list of failed records
