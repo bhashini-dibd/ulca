@@ -1,9 +1,11 @@
 
-import apistatus from './apistatus/apistatus';
-
+import apiStatus from './apistatus/apistatus';
+import myContributionReport from './DataSet/myContribution';
 
 export default {
 
-    apistatus
+    apiStatus,
+    myContributionReport
+
    
 };
