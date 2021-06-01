@@ -6,7 +6,7 @@ const drawerWidth = 240;
 
 const DataSet = (theme) => ({
     divStyle:{
-        margin: "0% 3% 3% 3%", paddingTop: "7vh"
+        margin: "0% 23rem 3% 17rem", paddingTop: "7vh"
     },
     link:{
         color:"rgb(158 84 147)",

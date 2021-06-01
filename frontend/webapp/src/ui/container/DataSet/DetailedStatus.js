@@ -4,30 +4,27 @@ import React, { useEffect, useState } from "react";
 import DataSet from "../../styles/Dataset";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
-import MyContributionList from "../../../redux/actions/api/DataSet/MyContribution";
+import DetailedDatasetStatus from "../../../redux/actions/api/DataSet/DetailedDataset";
 import { useDispatch, useSelector } from "react-redux";
-import { CloudDownload } from "@material-ui/icons";
-import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import {  useHistory } from "react-router-dom";
 
 
-const ContributionList = (props) => {
+const DetailedStatus = (props) => {
 
   const history = useHistory();
 
   const myContributionReport = useSelector(
     (state) => state.myContributionReport
   );
-  debugger
 
   const dispatch = useDispatch();
   useEffect(() => {
-    const userObj = new MyContributionList(
+    const userObj = new DetailedDatasetStatus(
       "SAVE",
       "A_FBTTR-VWSge-1619075981554",
       "241006445d1546dbb5db836c498be6381606221196566"
     );
-    myContributionReport.responseData.length==0  &&dispatch(APITransport(userObj));
+    myContributionReport.length==0  && dispatch(APITransport(userObj));
   }, []);
   
 
@@ -72,7 +69,7 @@ const ContributionList = (props) => {
     },
     {
       name: "sr_no",
-      label: "Sr No.",
+      label: "Stage",
       options: {
         filter: false,
         sort: false,
@@ -80,7 +77,7 @@ const ContributionList = (props) => {
     },
     {
       name: "Dataset",
-      label: "Dataset Name",
+      label: "Status",
       options: {
         filter: false,
         sort: false,
@@ -88,50 +85,14 @@ const ContributionList = (props) => {
     },
     {
       name: "Submitted_on",
-      label: "Submitted On",
+      label: "Record Count",
       options: {
         filter: false,
         sort: false,
         
       },
-    },{
-      name: "Status",
-      label: "Status",
-      options: {
-        filter: false,
-        sort: false,
-        display: "excluded",
-      },
-    },
-    {
-      name: "Status",
-      label: "status",
-      options: {
-        filter: true,
-        sort: false,
-        empty: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          if (tableMeta.rowData) {
-            return <div>{renderStatus(tableMeta.rowData[0],tableMeta.rowData[4])}</div>;
-          }
-        },
-      },
-    },
-
-    {
-      name: "Action",
-      label: "action",
-      options: {
-        filter: true,
-        sort: false,
-        empty: true,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          if (tableMeta.rowData) {
-            return <div>{renderAction(tableMeta.rowData[0], tableMeta.rowData[4])}</div>;
-          }
-        },
-      },
-    },
+    }
+    
   ];
 
   const options = {
@@ -171,4 +132,4 @@ const ContributionList = (props) => {
   );
 };
 
-export default withStyles(DataSet)(ContributionList);
+export default withStyles(DataSet)(DetailedStatus);

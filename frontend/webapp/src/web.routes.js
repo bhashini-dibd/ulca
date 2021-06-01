@@ -10,6 +10,7 @@ import Sample from "./ui/container/Sample";
 import Login from "./ui/container/UserManagement/UserManagement";
 import SubmitDataset from './ui/container/UploadDataset/SubmitDataset';
 import ContributionList from "./ui/container/DataSet/ContributionList";
+import DetailedStatus from "./ui/container/DataSet/DetailedStatus";
 
 const PrivateRoute = ({ component: Component, authenticate, ...rest }) => (
   <Route
@@ -26,15 +27,26 @@ const PrivateRoute = ({ component: Component, authenticate, ...rest }) => (
 );
 
 export default function App() {
+  debugger
   return (
     <Router history={history} basename="/">
+      
       <div>
+      
         <Switch>
           <Route exact path={`${process.env.PUBLIC_URL}/`} component={Login} />
           <Route
             exact
             path={`${process.env.PUBLIC_URL}/user/:page`}
             component={Login}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/dataset-status/:id`}
+            title={"Submit Dataset"}
+            component={DetailedStatus}
+            authenticate={true}
+            currentMenu="submit-dataset"
+            dontShowHeader={false}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/my-contribution`}
@@ -54,6 +66,7 @@ export default function App() {
             currentMenu="submit-dataset"
             dontShowHeader={false}
           />
+          
         </Switch>
       </div>
     </Router>
