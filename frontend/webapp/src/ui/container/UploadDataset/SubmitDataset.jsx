@@ -1,4 +1,4 @@
-import { Grid, Container, Card, CardContent, Typography, Divider, FormControl, Button, TextField } from '@material-ui/core'
+import { Grid, Container, Card, CardContent, Typography, Divider, FormControl, Button, TextField, Hidden } from '@material-ui/core'
 import BreadCrum from '../../components/common/Breadcrum';
 import { makeStyles } from '@material-ui/core/styles';
 import { RadioButton, RadioGroup } from 'react-radio-buttons';
@@ -55,7 +55,7 @@ const SubmitDataset = () => {
                             </Grid>
                         </Grid>
                         <Grid container spacing={5}>
-                            <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
+                            <Grid item xl={5} lg={5} md={5} sm={5} xs={12}>
                                 <Typography color="textSecondary" variant="subtitle1">STEP-1</Typography>
                                 <FormControl className={classes.form}>
                                     <Typography className={classes.typography} variant="b" component="h4">Select Dataset Type</Typography>
@@ -75,10 +75,12 @@ const SubmitDataset = () => {
                                     </RadioGroup>
                                 </FormControl>
                             </Grid>
+                            <Hidden only="xs">
                             <Grid item xl={1} lg={1} md={1} sm={1} xs={1}>
                                 <Divider orientation="vertical" />
                             </Grid>
-                            <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
+                            </Hidden>
+                            <Grid item xl={6} lg={6} md={6} sm={6} xs={12}>
                                 <Typography color="textSecondary" variant="subtitle1">STEP-2</Typography>
                                 <FormControl className={classes.form}>
                                     <Grid container spacing={3}>
