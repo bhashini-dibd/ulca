@@ -4,7 +4,7 @@ import random
 import string
 from logging.config import dictConfig
 
-from service.parallel import ParallelService
+from service.asr import ASRService
 from configs.configs import kafka_bootstrap_server_host, asr_input_topic, ulca_dataset_publish_consumer_grp
 from kafka import KafkaConsumer
 
@@ -28,7 +28,7 @@ def consume():
     try:
         topics = [asr_input_topic]
         consumer = instantiate(topics)
-        service = ParallelService()
+        service = ASRService()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "ASR-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -39,7 +39,7 @@ def consume():
                     if data:
                         log.info(prefix + " | Received on Topic: " + msg.topic + " | Partition: " + str(msg.partition))
                         #Validate
-                        service.load_dataset(data)
+                        service.load_asr_dataset(data)
                     else:
                         break
                 except Exception as e:

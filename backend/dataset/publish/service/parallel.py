@@ -9,11 +9,14 @@ from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, offset, limit
 from repository.parallel import ParallelRepo
+from utils.datasetutils import DatasetUtils
 
 log = logging.getLogger('file')
 
 mongo_instance = None
 repo = ParallelRepo()
+utils = DatasetUtils()
+
 
 class ParallelService:
     def __init__(self):
@@ -126,10 +129,10 @@ class ParallelService:
             hashed_key = str(hashlib.sha256(hashed_key.encode('utf-16')).hexdigest())
             tag_details = {
                 "sourceLanguage": src_lang, "targetLanguage": tgt_lang, "collectionMode": record["collectionMode"],
-                "collectionSource": record["collectionSource"], "dataset": record["dataset"],
+                "collectionSource": record["collectionSource"], "dataset": record["dataset"], "datasetType": record["datasetType"],
                 "domain": record["domain"], "licence": record["licence"], "srcHash": src_hash, "tgtHash": tgt_hash
             }
-            tags = list(self.get_tags(tag_details))
+            tags = list(utils.get_tags(tag_details))
             langs = [src_lang, tgt_lang]
             shard_key = ','.join(map(str, sorted(langs)))
             data_dict["id"], data_dict["timestamp"] = str(uuid.uuid4()), eval(str(time.time()).replace('.', '')[0:13])
@@ -138,15 +141,6 @@ class ParallelService:
             insert_records.append(data_dict)
         return insert_records
 
-    def get_tags(self, d):
-        for v in d.values():
-            if isinstance(v, dict):
-                yield from self.get_tags(v)
-            elif isinstance(v, list):
-                for entries in v:
-                    yield entries
-            else:
-                yield v
 
     def get_dataset_internal(self, query):
         try:
@@ -189,6 +183,10 @@ class ParallelService:
                 tags.append(query["licence"])
             if 'domain' in query.keys():
                 tags.append(query["domain"])
+            if 'datasetId' in query.keys():
+                tags.append(query["datasetId"])
+            if 'datasetType' in query.keys():
+                tags.append(query["datasetType"])
             if tags:
                 db_query["tags"] = tags
             if src_lang:

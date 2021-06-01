@@ -10,12 +10,18 @@ monolingual_collection = os.environ.get('ULCA_DS_PUBLISH_MONOLINGUAL_COL', "mono
 offset = os.environ.get('ULCA_DATASET_DEFAULT_OFFSET', 0)
 if isinstance(offset, str):
     offset = eval(offset)
-limit = os.environ.get('ULCA_DATASET_DEFAULT_LIMIT', 1000)
+limit = os.environ.get('ULCA_DATASET_DEFAULT_LIMIT', 100000000)
 if isinstance(limit, str):
     offset = eval(limit)
 parallel_ds_batch_size = os.environ.get('ULCA_PARALLEL_DS_BATCH_SIZE', 100000)
-if isinstance(limit, str):
-    parallel_ds_batch_size = eval(limit)
+if isinstance(parallel_ds_batch_size, str):
+    parallel_ds_batch_size = eval(parallel_ds_batch_size)
+asr_ds_batch_size = os.environ.get('ULCA_ASR_DS_BATCH_SIZE', 1000)
+if isinstance(asr_ds_batch_size, str):
+    asr_ds_batch_size = eval(asr_ds_batch_size)
+ocr_ds_batch_size = os.environ.get('ULCA_OCR_DS_BATCH_SIZE', 1000)
+if isinstance(ocr_ds_batch_size, str):
+    ocr_ds_batch_size = eval(ocr_ds_batch_size)
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 parallel_input_topic = os.environ.get('KAFKA_ULCA_PARALLEL_DS_PUBLISH_IP_TOPIC', 'ulca-parallel-ds-ip-v0')
