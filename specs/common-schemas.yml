@@ -183,7 +183,8 @@ components:
         - parallel-corpus
         - monolingual-corpus
         - asr-corpus
-        - document-ocr-corpus
+        - ocr-corpus
+        - document-layout-corpus
 
     OAuthIdentity:
       type: object

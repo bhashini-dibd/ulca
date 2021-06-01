@@ -1,12 +1,12 @@
 openapi: 3.0.0
 info:
-  title: ULCA - dataset schema
+  title: ULCA - Dataset Schema
   description: >-
     Dataset and it supporting schema
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.5.0
+  version: 0.6.0
 servers:
   - url: /ulca
 paths: {}
@@ -20,22 +20,14 @@ components:
       description: The object defines the physical structure of the uploaded dataset file. The dataset data and its respective parameters has to be present in an individual directory/folder. The dataset data should have name 'data.json' or 'data.csv', similarly the associated parameters should have name 'params.json' or 'params.csv'. Dataset data file should adhere to 'dataSchema' described in the properties, similarly the parameter of the dataset should adhere to 'paramSchema'. Non compliant will result in rejection of the submission.
       properties:
         data:
-          type: object
-          default: data.json
           $ref: '#/components/schemas/DatasetFile'
-          description: name and file attributes of data file
         dataSchema:
-          type: object
           $ref: '#/components/schemas/DatasetDataRowSchema'
         params:
-          type: object
-          default: params.json
           $ref: '#/components/schemas/DatasetFile'
-          description: name and file attributes of params file
         paramSchema:
-          type: object
           $ref: '#/components/schemas/DatasetParamsSchema'
-    
+
     DatasetDirectories:
       type: object
       description: The object represents a compressed file that can contains multiple 'DatasetDirectory' object.
@@ -44,8 +36,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DatasetDirectory'
-            minItems: 1
-  
+
     DatasetParamsSchema:
       type: object
       description: the dataset params.json/.csv file should follow this schema
@@ -56,8 +47,9 @@ components:
             - $ref: '#/components/schemas/ParallelDatasetParamsSchema'
             - $ref: '#/components/schemas/MonolingualParamsSchema'
             - $ref: '#/components/schemas/ASRParamsSchema'
-            - $ref: '#/components/schemas/DocumentOCRParamsSchema'
-    
+            - $ref: '#/components/schemas/OcrDatasetParamsSchema'
+            - $ref: '#/components/schemas/DocumentLayoutParamsSchema'
+
     DatasetDataRowSchema:
       type: object
       description: the dataset data.json/.csv file should follow this schema
@@ -68,8 +60,9 @@ components:
             - $ref: '#/components/schemas/ParallelDatasetRowSchema'
             - $ref: '#/components/schemas/MonolingualRowSchema'
             - $ref: '#/components/schemas/ASRRowSchema'
-            - $ref: '#/components/schemas/DocumentOCRRowSchema'
-    
+            - $ref: '#/components/schemas/OcrDatasetRowSchema'
+            - $ref: '#/components/schemas/DocumentLayoutRowSchema'
+
     DatasetCommonParamsSchema:
       type: object
       description: common parameters or attributes of dataset that is primarily same across the supported dataset.
@@ -79,7 +72,7 @@ components:
         - collectionSource
         - domain
         - license
-        - submitterInfo
+        - submitter
       properties:
         version:
           type: string
@@ -122,13 +115,13 @@ components:
           $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
-  
+
     MonolingualParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
         - type: object
       type: object
-    
+
     MonolingualRowSchema:
       required:
         - text
@@ -138,7 +131,7 @@ components:
         text:
           type: string
           description: textual data in source language
-  
+
     ASRParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -175,10 +168,8 @@ components:
             - 'ta-madurai'
         snr:
           $ref: '#/components/schemas/AudioQualityEvaluation'
-          type: object
         collectionMethod: 
           $ref: '#/components/schemas/CollectionMethodAudio'
-          type: object
 
     ASRRowSchema:
       required:
@@ -198,7 +189,7 @@ components:
         samplingRate:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioSampleRate'
         bitsPerSample:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample'          
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample'      
         gender:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Gender'
         age:
@@ -219,7 +210,6 @@ components:
             - 'ta-madurai'
         snr:
           $ref: '#/components/schemas/AudioQualityEvaluation'
-          type: object
         startTime:
           type: string
           description: "Time of the audio from where the processing starts. Format : hh-mm-ss"
@@ -228,42 +218,76 @@ components:
           description: "Time of the audio where the processing end. Format : hh-mm-ss"
         collectionMethod: 
           $ref: '#/components/schemas/CollectionMethodAudio'
-          type: object
 
-  
-    DocumentOCRParamsSchema:
+    OcrDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
         - type: object
       required:
-        - ocrType
         - format
         - dpi
         - imageTextType
-        - schema
       type: object
       properties:
-        ocrType:
-          $ref: '#/components/schemas/DocumentOCRDatasetType'
         format:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/ImageFormat'
         dpi:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/ImageDPI'
         imageTextType:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/ImageTextType'
+        collectionMethod:
+          $ref: '#/components/schemas/OcrCollectionMethod'
 
-    DocumentOCRRowSchema:
+    OcrDatasetRowSchema:
       required:
         - imageFilename
-        - boundingBox
+        - groundTruth
       type: object
       description: the schema defines the column name present in physical file that is being pointed by dataFilename key.
       properties:
         imageFilename:
           type: string
           description: filename of the image file
+        groundTruth:
+          type: string
+          description: text data present in boundingbox
         boundingBox:
           $ref: '#/components/schemas/BoundingBox'
+
+    DocumentLayoutParamsSchema:
+      type: object
+      required:
+        - datasetType
+        - collectionSource
+        - license
+        - submitter
+        - format
+        - dpi
+      properties:
+        datasetType:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/DatasetType'
+        collectionSource:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Source'
+        license:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/License'
+        submitter:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Submitter'
+        format:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/ImageFormat'
+        dpi:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/ImageDPI'
+
+    DocumentLayoutRowSchema:
+      required:
+        - imageFilename
+        - layoutClass
+        - boundingBox
+      type: object
+      description: the schema defines the document layout datasets.
+      properties:
+        imageFilename:
+          type: string
+          description: filename of the image file
         layoutClass:
           type: string
           enum:
@@ -271,10 +295,9 @@ components:
             - line
             - word
             - signatureImage
-        groundTruth:
-          type: string
-          description: text data present in boundingbox
-    
+        boundingBox:
+          $ref: '#/components/schemas/BoundingBox'
+
     DatasetFile:
       type: object
       description: represent the physical file attributes
@@ -294,7 +317,7 @@ components:
           enum:
             - json
             - csv
-    
+
     Dataset:
       required:
         - description
@@ -330,7 +353,7 @@ components:
           type: string
           description: timestamp when dataset got listed
           format: datetime
-    
+
     DatasetFileIdentifier:
       type: object
       required:
@@ -357,24 +380,7 @@ components:
           enum:
             - tar_gz
             - zip
-  
-    TargetTextValidated:
-      type: object
-      properties:
-        value:
-          type: boolean
-          default: false
-    
-    TextAlignmentMethod:
-      type: object
-      properties:
-        value:
-          type: string
-          enum:
-          - LABSE
-          - LASER
-          - FAISS
-    
+
     BoundingBox:
       type: object
       properties:
@@ -384,7 +390,7 @@ components:
           items:
             $ref: '#/components/schemas/Vertex'
       description: array of vertex with clockwise coordinate arrangement
-    
+
     Vertex:
       type: object
       properties:
@@ -394,16 +400,6 @@ components:
         y:
           type: number
           description: y-coordinate
-    
-    DocumentOCRDatasetType:
-      type: object
-      properties:
-        value:
-          type: string
-          description: various option of ocr type
-          enum:
-          - layout-dataset-type
-          - ocr-dataset-type
 
     DatasetProgressInformation:
       type: object
@@ -422,7 +418,7 @@ components:
           type: string
           description: download why the records failed the validation
           format: uuid4
-    
+
     ## parallel dataset collection method
     MTAutomaticEvaluationMethod:
       type: object
@@ -441,7 +437,7 @@ components:
           description: fluency is a rating of how good the translation is
           minimum: 1
           maximum: 5
-  
+
     MachineTranslatedEvaluationMethod2:
       type: object
       description: evaluation strategy as proposed by example researcher.
@@ -455,7 +451,7 @@ components:
         unknownParameter3:
           type: number
           description: researcher has defined this parameter
-      
+
     CollectionDetailsMachineTranslated:
       type: object
       description: machine translated collection details
@@ -481,7 +477,7 @@ components:
           enum:
             - 'MTAutomaticEvaluationMethod'
             - 'MachineTranslatedEvaluationMethod2'
-  
+
     CollectionDetailsAutoAligned:
       type: object
       description: auto-aligned collection details
@@ -502,7 +498,7 @@ components:
         alignmentScore:
           type: number
           description: the alignment score between sourceText and targetText
-  
+
     CollectionDetailsMachineTranslatedPostEdited:
       type: object
       description: machine translated and post edited collection details
@@ -529,7 +525,7 @@ components:
         numOfKeysPressed:
           type: number
           description: number of keyboard keys pressed 
-      
+
     CollectionDetailsManualTranslated:
       type: object
       description: manual translated collection details
@@ -549,7 +545,32 @@ components:
         numOfKeysPressed:
           type: number
           description: number of keyboard keys pressed
-  
+
+    CollectionDetailsOcr:
+      type: object
+      description: OCR collection details
+      required:
+        - ocrTool
+      properties:
+        ocrTool:
+          type: string
+          description: name of the ocr tool
+          example: 'google cloud vision'
+          enum:
+            - 'google cloud vision'
+            - 'tesseract'
+            - 'anuvaad ocr'
+            - 'microsoft azure computer vision'
+            - 'calamari'
+            - 'ocropus'
+            - 'amazon textract'
+            - 'abbyy cloud ocr'
+            - 'unknown'
+        ocrToolVersion:
+          type: string
+          description: ocr tool version
+          example: "LaBSE version 3.0"
+
     ParallelDatasetCollectionMethod:
       type: object
       description: specifies how the dataset is curated.
@@ -575,6 +596,26 @@ components:
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslatedPostEdited'
             - $ref: '#/components/schemas/CollectionDetailsManualTranslated'
 
+    OcrCollectionMethod:
+      type: object
+      description: specifies how the dataset is curated.
+      required:
+        - collectionDescription
+      properties:
+        collectionDescription:
+          type: array
+          description: various collection methods user have used to create the dataset
+          items:
+            type: string
+            minItems: 1
+            maxItems: 10
+            enum:
+              - web-scraping-ocr
+              - scanned-ocr
+              - screen-capture
+        collectionDetails:
+          $ref: '#/components/schemas/CollectionDetailsOcr'
+
     ## asr dataset collection method
     TranscriptionEvaluationMethod1:
       type: object
@@ -583,7 +624,7 @@ components:
         wer:
           type: number
           description: model generated vs human transcribed output comp
-  
+
     CollectionDetailsAudioAutoAligned:
       type: object
       description: auto-aligned collection details
@@ -602,7 +643,7 @@ components:
         alignmentScore:
           type: number
           description: the alignment score between audio and text
-  
+
     CollectionDetailsMachineGeneratedTranscript:
       type: object
       description: machine translated collection details
@@ -631,7 +672,7 @@ components:
       properties:
         contributor:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Contributor'
-  
+
     CollectionMethodAudio:
       type: object
       description: specifies how the audio dataset has been curated.
@@ -654,7 +695,7 @@ components:
             - $ref: '#/components/schemas/CollectionDetailsAudioAutoAligned'
             - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedTranscript'
             - $ref: '#/components/schemas/CollectionDetailsManualTranscribed'
-            
+
     AudioQualityEvaluation:
       type: object
       description: describes the audio quality evaluation method
@@ -667,7 +708,7 @@ components:
         methodDetails:
           oneOf:
             - $ref: '#/components/schemas/WadaSnr'
-        
+
     WadaSnr:
       type: object
       description: evaluation strategy as proposed by example researcher.
@@ -681,7 +722,7 @@ components:
         snrToolVersion:
           type: string
           description: snr evaluation tool version
-          
+
     TranscriptFormat:
       type: object
       description: formatting type used in the transcription text
@@ -694,9 +735,7 @@ components:
         formatDetails:
           oneOf:
             - $ref: '#/components/schemas/TranscriptTextFormatType1'
-            
+
     TranscriptTextFormatType1:
       type: object
       description: described in RT-04-guidelines
-
-    

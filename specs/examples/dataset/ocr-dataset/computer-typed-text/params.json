@@ -1,4 +1,5 @@
 {
+    "dataset-type":"ocr-corpus",
     "languages":{
         "sourceLanguage":"ta",
         "targetLanguage":null
@@ -8,27 +9,33 @@
         "https://main.sci.gov.in"
     ],
     "domain":[
-        "general"
-    ],
-    "collectionMethod":[
-        "web-scrapping-ocr"
+        "legal"
     ],
     "license":"cc-by-4.0",
     "submitter":{
         "name":"Project Anuvaad",
-        "aboutMe":"Open source project run by ekStep foundation, part of Sunbird project"
+        "aboutMe":"Open source project run by ekStep foundation, part of Sunbird project",
+        "team":[
+            {
+                "name":"Naresh Kumar Saini",
+                "aboutMe":"I am working as AI Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad. "
+            },
+            {
+                "name":"Srihari M N",
+                "aboutMe":"I am working as Associate Software Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad "
+            }
+        ]
     },
-    "contributors":[
-        {
-            "name":"Naresh Kumar Saini",
-            "aboutMe":"I am working as AI Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad. "
-        },
-        {
-            "name":"Srihari M N",
-            "aboutMe":"I am working as Associate Software Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad "
-        }
-    ],
+    "format":"png",
     "dpi":"72_dpi",
     "imageTextType":"computer-typed-text",
-    "format":"png"
+    "collectionMethod":{
+        "collectionDescription":[
+            "web-scraping-ocr"
+        ],
+        "collectionDetails":{
+            "ocrTool":"anuvaad ocr",
+            "ocrToolVersion":"1.5"
+        }
+    }
 }
