@@ -48,18 +48,37 @@ const DataSet = (theme) => ({
         marginTop: '1vh',
         marginLeft: '10%'
     },
-    divStyle:{
+    divStyle: {
         margin: "0% 3% 3% 3%", paddingTop: "7vh"
     },
-    link:{
-        color:"rgb(158 84 147)",
+    link: {
+        color: "rgb(158 84 147)",
         marginRight: "10px",
-        cursor:"pointer"
+        cursor: "pointer"
     },
-    span:{
-        color:"green"
+    span: {
+        color: "green"
+    },
+    searchDataset: {
+        maxHeight: '1.875rem',
+    },
+    submittedOn: {
+        display: 'block',
+        marginTop: '-0.3rem'
+    },
+    updateDataset: {
+        padding: '2rem',
+        width: '21rem',
+        height: 'auto',
+        overflow: 'auto'
+    },
+    datasetName: {
+        borderBottom: '1px solid #e0e1e0',
+        borderTop: '1px solid #e0e1e0'
+    },
+    popOver: {
+        marginTop: '0.3rem'
     }
-
 });
 
 export default DataSet;
