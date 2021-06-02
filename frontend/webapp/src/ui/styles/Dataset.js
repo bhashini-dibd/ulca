@@ -58,6 +58,7 @@ const DataSet = (theme) => ({
     },
     searchDataset: {
         maxHeight: '1.875rem',
+        heigth: 'auto'
     },
     submittedOn: {
         display: 'block',
@@ -65,9 +66,7 @@ const DataSet = (theme) => ({
     },
     updateDataset: {
         padding: '2rem',
-        width: '21rem',
-        height: 'auto',
-        overflow: 'auto'
+        width: '21rem'
     },
     datasetName: {
         borderBottom: '1px solid #e0e1e0',
@@ -77,29 +76,59 @@ const DataSet = (theme) => ({
         marginTop: '0.3rem'
     },
     footerButtons: {
-        display: "flex", 
-        justifyContent: 'flex-end', 
+        display: "flex",
+        justifyContent: 'flex-end',
         width: "100%",
-        padding:'.6rem 1rem',
+        padding: '.6rem 1rem',
         boxSizing: 'border-box',
         border: "1px solid rgb(224 224 224)",
-    background: "white",
-    marginTop:"-3px"
-      },
+        background: "white",
+        marginTop: "-3px"
+    },
 
-      headerButtons:{
-        display: "flex", 
-        justifyContent: 'flex-end', 
+    headerButtons: {
+        display: "flex",
+        justifyContent: 'flex-end',
         width: "100%",
-        marginBottom:'.6rem',
+        marginBottom: '.6rem',
         boxSizing: 'border-box',
-        
-    
-      },
-      buttonStyle:{
-          marginLeft:"0.7rem"
-      },
-      iconStyle:{marginRight: '.5rem'}
+    },
+    buttonStyle: {
+        marginLeft: "0.7rem"
+    },
+    iconStyle: { marginRight: '.5rem' },
+    thumbsUpIcon: {
+        margin: '24% 0 0 24%',
+        fontSize: '3.7rem'
+    },
+
+    thumbsUpIconSpan: {
+        width: "6.5rem",
+        height: '6.5rem',
+        backgroundColor: "#e0e1e0",
+        borderRadius: "100%",
+        display: "block",
+        margin: '10%',
+    },
+    submissionIcon: {
+        "@media (max-width:1120px)": {
+            display: 'none'
+        }
+    },
+
+    dataSubmissionGrid: {
+        marginTop: '5%'
+    },
+    thankYouTypo: {
+        marginBottom: '1.3%'
+    },
+    reqNoTypo: {
+        marginBottom: '2.5%'
+    },
+    myContriBtn: {
+        marginTop: '8%',
+        fontSize: '0.8rem'
+    }
 });
 
 export default DataSet;

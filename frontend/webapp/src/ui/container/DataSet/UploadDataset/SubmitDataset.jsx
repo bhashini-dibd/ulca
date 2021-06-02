@@ -1,6 +1,13 @@
 import {
-    Grid, Paper, Typography, Divider, FormControl,
-    Button, TextField, Hidden, Popover, InputAdornment, OutlinedInput,
+    Grid,
+    Paper,
+    Typography,
+    Divider,
+    FormControl,
+    Button,
+    TextField,
+    Hidden,
+    Popover
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import BreadCrum from '../../../components/common/Breadcrum';
@@ -8,20 +15,30 @@ import { withStyles } from '@material-ui/core/styles';
 import { RadioButton, RadioGroup } from 'react-radio-buttons';
 import DatasetStyle from '../../../styles/Dataset';
 import { useState } from 'react';
-import SearchIcon from '@material-ui/icons/Search';
+import { useHistory } from "react-router-dom";
 
 const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
-    const [dataset, setDatasetInfo] = useState({ name: "", url: "", type: "pd" })
+    const [dataset, setDatasetInfo] = useState({ name: "", url: "", type: "pd", filteredName: "" })
+    const [error, setError] = useState(false)
+    const [search, setSearch] = useState(false)
+    const history = useHistory();
+
     const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+        setAnchorEl(event.currentTarget)
     };
 
     const handleClose = () => {
         setAnchorEl(null);
     };
 
+    const handleDone = () => {
+        if (dataset.filteredName) {
+            setDatasetInfo({ ...dataset, name: dataset.filteredName })
+        }
+        handleClose();
+    }
 
     const renderUpdateDatasetSearch = () => {
         return (
@@ -29,31 +46,38 @@ const SubmitDataset = (props) => {
                 <div className={classes.updateDataset}>
                     <Grid container spacing={1}>
                         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-
-                            <OutlinedInput className={classes.searchDataset} id="dataset-name" variant="outlined"
-                                fullWidth
-                                placeholder="Search dataset"
-                                color="primary"
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <SearchIcon />
-                                    </InputAdornment>
-                                }
+                            <Autocomplete
+                                id="tags-outlined"
+                                options={[{ "name": 'Test' }, { "name": 'Test123' }, { "name": 'Test456' }]}
+                                getOptionLabel={(option) => option.name}
+                                filterSelectedOptions
+                                open={search}
+                                onChange={(e, value) => {
+                                    setDatasetInfo({ ...dataset, filteredName: value !== null ? value.name : "" })
+                                }}
+                                onOpen={() => {
+                                    setTimeout(() => setSearch(true), 200)
+                                }}
+                                onClose={() => {
+                                    setSearch(false)
+                                }}
+                                openOnFocus
+                                renderInput={(params) => (
+                                    <TextField
+                                        id="search-dataset"
+                                        variant="outlined"
+                                        placeholder="Search Dataset"
+                                        autoFocus={true}
+                                        {...params}
+                                    />
+                                )}
                             />
-                        </Grid>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <div container className={classes.datasetName}>
-                                <Typography variant="subtitle1">Tourism Set-1 Parallel Text Corpus</Typography>
-                                <Typography className={classes.submittedOn}
-                                    color="textSecondary"
-                                    variant="caption">Submitted on: 14/4/2020</Typography>
-                            </div>
                         </Grid>
                     </Grid>
                 </div>
                 <div style={{ float: 'right' }}>
-                    <Button variant="text" color="primary">Cancel</Button>
-                    <Button variant="text" color="primary">Done</Button>
+                    <Button variant="text" color="primary" onClick={handleClose}>Cancel</Button>
+                    <Button variant="text" color="primary" onClick={handleDone}>Done</Button>
                 </div>
             </div>
         )
@@ -73,7 +97,7 @@ const SubmitDataset = (props) => {
     const handleSubmitDataset = (e) => {
         if (dataset.name.trim() !== "" && dataset.url.trim() !== "" && dataset.type.trim() !== "") {
             if (validURL(dataset.url)) {
-                alert('Submitted successfully')
+                history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${5}`)
             } else {
                 alert('Invalid URL')
             }
@@ -168,6 +192,8 @@ const SubmitDataset = (props) => {
                                                 color="primary"
                                                 label="Dataset name"
                                                 value={dataset.name}
+                                                error={error}
+                                                helperText={error && "Dataset name already exists"}
                                                 onChange={(e) => setDatasetInfo({ ...dataset, name: e.target.value })}
                                             />
                                         </Grid>
