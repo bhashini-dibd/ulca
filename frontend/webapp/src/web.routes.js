@@ -11,6 +11,7 @@ import Login from "./ui/container/UserManagement/UserManagement";
 import SubmitDataset from './ui/container/DataSet/UploadDataset/SubmitDataset';
 import ContributionList from "./ui/container/DataSet/ContributionList";
 import DetailedStatus from "./ui/container/DataSet/DetailedStatus";
+import Dashboard  from "./ui/container/Dashboard/ChartRender";
 
 const PrivateRoute = ({ component: Component, authenticate, ...rest }) => (
   <Route
@@ -62,6 +63,15 @@ export default function App() {
             title={"Submit Dataset"}
             userRoles={[""]}
             component={SubmitDataset}
+            authenticate={true}
+            currentMenu="submit-dataset"
+            dontShowHeader={false}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/dashboard`}
+            title={"Submit Dataset"}
+            userRoles={[""]}
+            component={Dashboard}
             authenticate={true}
             currentMenu="submit-dataset"
             dontShowHeader={false}

@@ -1,5 +1,5 @@
 import { Grid, withStyles, Tooltip, IconButton,Link, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
-
+import BreadCrum from '../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import DataSet from "../../styles/Dataset";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
@@ -33,7 +33,7 @@ const DetailedStatus = (props) => {
     overrides: {
       MuiTableCell: {
         head: {
-            backgroundColor: "#f2f2f4 !important"
+            backgroundColor: "#c7c6c68a !important"
         }
     },
     MuiToolbar: { root: { display: "none" } },
@@ -125,6 +125,9 @@ const fetchHeaderButton= () => {
   const { classes } = props;
   return (
     <div className={classes.divStyle}>
+      <div className={classes.breadcrum}>
+                <BreadCrum links={["Dataset","My Contribution"]} activeLink="Dataset details" />
+            </div>
       <div className={classes.headerButtons}>
       {fetchHeaderButton()} 
                         </div>

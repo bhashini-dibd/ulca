@@ -7,7 +7,7 @@ const drawerWidth = 240;
 const DataSet = (theme) => ({
     divStyle: {
         // margin: "1.5rem 23rem 3% 17.5rem",
-        margin:'1.5rem 20% 3% 15.5%',
+        margin:'1.5rem 20% 3rem 15.5%',
         overflow: 'auto'
     },
     root: {
@@ -45,7 +45,8 @@ const DataSet = (theme) => ({
         fontSize: '1rem'
     },
     breadcrum: {
-        marginBottom: '1.5rem'
+        marginBottom: '1.5rem',
+        
     },
     link: {
         color: "rgb(158 84 147)",
