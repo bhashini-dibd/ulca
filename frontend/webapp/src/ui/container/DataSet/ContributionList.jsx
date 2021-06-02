@@ -1,5 +1,5 @@
-import { Grid, withStyles, Tooltip, IconButton,Link, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
-
+import { Grid, withStyles, Tooltip, Typography,Link, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import BreadCrum from '../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import DataSet from "../../styles/Dataset";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { CloudDownload } from "@material-ui/icons";
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import {  useHistory } from "react-router-dom";
-
 
 const ContributionList = (props) => {
 
@@ -34,10 +33,11 @@ const ContributionList = (props) => {
   const getMuiTheme = () => createMuiTheme({
     overrides: {
       MuiTableCell: {
-        // head: {
-        //     backgroundColor: "#c7c6c6 !important"
-        // }
-    }
+        head: {
+            backgroundColor: "#c7c6c6 !important"
+        }
+    },
+    MUIDataTableToolbar:{ root: { display: "none" } }
     }
 });
 
@@ -159,6 +159,12 @@ const ContributionList = (props) => {
   const { classes } = props;
   return (
     <div className={classes.divStyle}>
+      <BreadCrum links={["Dataset"]} activeLink="" />
+      <div className={classes.title}>
+      
+      <Typography variant="b" component="h2">My Contribution</Typography>
+  
+      </div>
       <MuiThemeProvider theme={getMuiTheme()}>  
       <MUIDataTable
         title={`My Contribution`}
