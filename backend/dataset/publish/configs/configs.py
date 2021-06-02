@@ -1,5 +1,8 @@
 import os
 
+app_host = os.environ.get('ULCA_DS_PUBLISH_HOST', '0.0.0.0')
+app_port = os.environ.get('ULCA_DS_PUBLISH_PORT', 5001)
+
 db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://15.207.103.202:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")
 asr_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_COL', "asr-dataset")
@@ -24,11 +27,23 @@ if isinstance(ocr_ds_batch_size, str):
     ocr_ds_batch_size = eval(ocr_ds_batch_size)
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
-parallel_input_topic = os.environ.get('KAFKA_ULCA_PARALLEL_DS_PUBLISH_IP_TOPIC', 'ulca-parallel-ds-ip-v0')
-asr_input_topic = os.environ.get('KAFKA_ULCA_ASR_DS_PUBLISH_IP_TOPIC', 'ulca-asr-ds-ip-v0')
-ocr_input_topic = os.environ.get('KAFKA_ULCA_OCR_DS_PUBLISH_IP_TOPIC', 'ulca-ocr-ds-ip-v0')
-monolingual_input_topic = os.environ.get('KAFKA_ULCA_MONOLINGUAL_PUBLISH_DS_IP_TOPIC', 'ulca-monolingual-ds-ip-v0')
-ulca_dataset_publish_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
-ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_PUBLISH_TOPIC_PARTITIONS', 3)
+publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')
+publish_output_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_OP_TOPIC', 'ulca-ds-publish-op-v0')
+publish_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
+ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 3)
 if isinstance(ulca_dataset_topic_partitions, str):
     ulca_dataset_topic_partitions = eval(ulca_dataset_topic_partitions)
+
+aws_access_key = os.environ.get('ULCA_AWS_S3_ACCESS_KEY', 'access-key')
+aws_secret_key = os.environ.get('ULCA_AWS_S3_SECRET_KEY', 'secret-key')
+aws_bucket_name = os.environ.get('ULCA_AWS_BUCKET_NAME', 'ulca-datasets')
+aws_ocr_prefix = os.environ.get('ULCA_AWS_S3_OCR_PREFIX', '/ocr/')
+aws_asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', '/asr/')
+aws_dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', '/datasets/')
+
+dataset_type_parallel = os.environ.get('DATASET_TYPE_PARALLEL_DS', 'parallel-corpus')
+dataset_type_asr = os.environ.get('DATASET_TYPE_ASR_DS', 'asr')
+dataset_type_ocr = os.environ.get('DATASET_TYPE_OCR_DS', 'ocr')
+dataset_type_monolingual = os.environ.get('DATASET_TYPE_MONOLINGUAL_DS', 'monolingual-corpus')
+
+

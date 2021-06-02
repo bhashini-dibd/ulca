@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import multiprocessing
 import threading
@@ -5,7 +6,7 @@ import time
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, offset, limit
+from configs.configs import parallel_ds_batch_size, offset, limit, aws_asr_prefix
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 
@@ -27,10 +28,13 @@ class ASRService:
             batch_data, error_list = [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
             log.info(f'Enriching and dumping ASR dataset.....')
+            metadata = ip_data
+            metadata.pop("records")
+            ip_data = ip_data["records"]
             clean_data = self.get_clean_asr_data(ip_data, error_list)
             log.info(f'Actual Data: {len(ip_data)}, Clean Data: {len(clean_data)}')
             if clean_data:
-                func = partial(self.get_enriched_asr_data, request=request, sequential=False)
+                func = partial(self.get_enriched_asr_data, metadata=metadata, sequential=False)
                 no_of_m1_process = request["processors"]
                 pool_enrichers = multiprocessing.Pool(no_of_m1_process)
                 enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
@@ -43,9 +47,12 @@ class ASRService:
                                 persist_thread.join()
                                 count += len(batch_data)
                                 batch_data = []
-                            batch_data.append(result)
+                            batch_data.append(result[1])
+                        elif result[0] == "FAILED":
+                            error_list.append({"record": result[1], "cause": "UPLOAD_FAILED",
+                                               "description": "Upload to s3 bucket failed"})
                         else:
-                            error_list.append({"record": result, "cause": "DUPLICATE_RECORD",
+                            error_list.append({"record": result[1], "cause": "DUPLICATE_RECORD",
                                                "description": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
@@ -75,19 +82,21 @@ class ASRService:
                 error_list.append({"record": data, "cause": "AUDIO_UNAVAILABLE",
                                    "description": f'Audio file is unavailable at -- {data["audioFilePath"]}'})
                 continue
-            if audio_hash in duplicate_records:
+            unique_key = f'{audio_hash}|{data["text"]}'
+            unique_key = str(hashlib.sha256(unique_key.encode('utf-16')).hexdigest())
+            if unique_key in duplicate_records:
                 error_list.append({"record": data, "cause": "DUPLICATE_RECORD",
                                    "description": "This audio file is repeated multiple times in the input"})
                 continue
             else:
-                duplicate_records.add(audio_hash)
-                data["audioHash"] = audio_hash
+                duplicate_records.add(unique_key)
+                data["audioHash"] = unique_key
                 clean_data.append(data)
         duplicate_records.clear()
         return clean_data
 
     # Method to enrich asr dataset
-    def get_enriched_asr_data(self, data):
+    def get_enriched_asr_data(self, data, metadata):
         records = self.get_asr_dataset_internal({"audioHash": data["audioHash"]})
         if records:
             return "DUPLICATE", data
@@ -100,7 +109,10 @@ class ASRService:
             "domain": data["domain"], "license": data["license"], "audioHash": data["audioHash"]
         }
         insert_data["tags"] = list(utils.get_tags(tag_details))
-        object_store_path = None
+        s3_file_name = data["audioFilename"] + metadata["serviceRequestNumber"] + insert_data["timestamp"]
+        object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_asr_prefix}{s3_file_name}')
+        if not object_store_path:
+            return "FAILED", insert_data
         insert_data["objStorePath"] = object_store_path
         return "INSERT", insert_data
 
@@ -116,47 +128,6 @@ class ASRService:
         except Exception as e:
             log.exception(e)
             return None
-
-    # Method for searching asr datasets
-    def get_asr_dataset(self, query):
-        log.info(f'Fetching datasets..... | {datetime.now()}')
-        try:
-            off = query["offset"] if 'offset' in query.keys() else offset
-            lim = query["limit"] if 'limit' in query.keys() else limit
-            db_query, tags = {}, []
-            if 'age' in query.keys():
-                db_query["age"] = query["age"]
-            if 'language' in query.keys():
-                tags.append(query["language"])
-            if 'collectionMode' in query.keys():
-                tags.append(query["collectionMode"])
-            if 'collectionSource' in query.keys():
-                tags.append(query["collectionMode"])
-            if 'license' in query.keys():
-                tags.append(query["licence"])
-            if 'domain' in query.keys():
-                tags.append(query["domain"])
-            if 'channel' in query.keys():
-                tags.append(query["channel"])
-            if 'gender' in query.keys():
-                tags.append(query["gender"])
-            if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
-            if 'datasetType' in query.keys():
-                tags.append(query["datasetType"])
-            if tags:
-                db_query["tags"] = tags
-            exclude = {"_id": False}
-            data = repo.search(db_query, exclude, off, lim)
-            result, query, count = data[0], data[1], data[2]
-            if count > 100:
-                result = result[:100]
-            log.info(f'Result count: {count} | {datetime.now()}')
-            log.info(f'Done! | {datetime.now()}')
-            return {"count": count, "query": query, "dataset": result}
-        except Exception as e:
-            log.exception(e)
-            return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
 
 # Log config

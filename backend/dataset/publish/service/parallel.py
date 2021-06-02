@@ -22,7 +22,7 @@ class ParallelService:
     def __init__(self):
         pass
 
-    def load_dataset(self, request):
+    def load_parallel_dataset(self, request):
         log.info("Loading Dataset..... | {}".format(datetime.now()))
         try:
             ip_data = request["data"]
@@ -141,73 +141,18 @@ class ParallelService:
             insert_records.append(data_dict)
         return insert_records
 
-
     def get_dataset_internal(self, query):
         try:
-            db_query = {"$in": query["hash"]}
+            db_query = {"tags": {"$in": query["hash"]}}
             exclude = {"_id": False}
             data = repo.search(db_query, exclude, None, None)
             if data:
-                return data[0]
+                return data
             else:
                 return None
         except Exception as e:
             log.exception(e)
             return None
-
-
-    def get_dataset(self, query):
-        log.info(f'Fetching datasets..... | {datetime.now()}')
-        try:
-            off = query["offset"] if 'offset' in query.keys() else offset
-            lim = query["limit"] if 'limit' in query.keys() else limit
-            db_query = {}
-            score_query = {}
-            if 'minScore' in query.keys():
-                score_query["$gte"] = query["minScore"]
-            if 'maxScore' in query.keys():
-                score_query["$lte"] = query["maxScore"]
-            if score_query:
-                db_query["scoreQuery"] = {"data.score": score_query}
-            if 'score' in query.keys():
-                db_query["scoreQuery"] = {"data.score": query["score"]}
-            tags, src_lang, tgt_lang = [], None, []
-            if 'sourceLanguage' in query.keys():
-                src_lang = query["sourceLanguage"]
-            if 'targetLanguage' in query.keys():
-                for tgt in query["targetLanguage"]:
-                    tgt_lang.append(tgt)
-            if 'collectionMode' in query.keys():
-                tags.append(query["collectionMode"])
-            if 'license' in query.keys():
-                tags.append(query["licence"])
-            if 'domain' in query.keys():
-                tags.append(query["domain"])
-            if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
-            if 'datasetType' in query.keys():
-                tags.append(query["datasetType"])
-            if tags:
-                db_query["tags"] = tags
-            if src_lang:
-                db_query["sourceLanguage"] = src_lang
-            if tgt_lang:
-                db_query["targetLanguage"] = tgt_lang
-            if 'groupBy' in query.keys():
-                db_query["groupBy"] = True
-                if 'countOfTranslations' in query.keys():
-                    db_query["countOfTranslations"] = query["countOfTranslations"]
-            exclude = {"_id": False}
-            data = repo.search(db_query, exclude, offset, limit)
-            result, query, count = data[0], data[1], data[2]
-            if count > 100:
-                result = result[:100]
-            log.info(f'Result count: {count} | {datetime.now()}')
-            log.info(f'Done! | {datetime.now()}')
-            return {"count": count, "query": query, "dataset": result}
-        except Exception as e:
-            log.exception(e)
-            return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
 
 # Log config
