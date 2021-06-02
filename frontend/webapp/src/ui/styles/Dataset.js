@@ -5,18 +5,18 @@ const drawerWidth = 240;
 //let logo = require('../../../assets/logo.png')
 
 const DataSet = (theme) => ({
-    divStyle:{
-        margin: "0% 23rem 3% 17rem", paddingTop: "7vh"
+    divStyle: {
+        // margin: "1.5rem 23rem 3% 17.5rem",
+        margin:'1.5rem 20% 3% 15.5%',
+        overflow: 'auto'
     },
     root: {
         padding: 0,
-        margin: '0rem 2rem 0rem 2rem',
+        margin: "1.5rem 23rem 3% 17.5rem",
         height: window.innerHeight,
         overflow: 'auto'
     },
     paper: {
-        margin: "1% 3% 3% 10%",
-        width: '70%',
         padding: '5%',
     },
     title: {
@@ -45,8 +45,7 @@ const DataSet = (theme) => ({
         fontSize: '1rem'
     },
     breadcrum: {
-        marginTop: '1vh',
-        marginLeft: '10%'
+        marginBottom: '1.5rem'
     },
     link: {
         color: "rgb(158 84 147)",

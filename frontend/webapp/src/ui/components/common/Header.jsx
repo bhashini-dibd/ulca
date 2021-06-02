@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { withStyles, Button, Menu, MenuItem, Hidden } from "@material-ui/core";
+import { withStyles, Button, Menu, MenuItem } from "@material-ui/core";
 import DownIcon from '@material-ui/icons/ArrowDropDown';
 import Avatar from '@material-ui/core/Avatar';
 import HeaderStyles from "../../styles/HeaderStyles"
@@ -49,8 +49,8 @@ const Header = (props) => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
             <Button className={classes.title}>
-              <Typography component="h2" variant="b">
-                {"U L C A"}
+              <Typography variant="h5">
+                <strong>{"U L C A"}</strong>
               </Typography>
             </Button>
             <div className={classes.home}>
@@ -62,7 +62,7 @@ const Header = (props) => {
                 </Button>
             </div>
             <div className={classes.homeBtn}>
-              
+
               <Button
                 className={classes.menuBtn}
                 variant="text"
@@ -73,7 +73,6 @@ const Header = (props) => {
             <div className={classes.options}>
               <div className={classes.dataset}>
                 <Button className={classes.menuBtn}
-                  className={classes.menuBtn}
                   onClick={(e) => handleOpenMenu(e)}
                   variant="text"
                 >
@@ -83,7 +82,6 @@ const Header = (props) => {
               </div>
               <div className={classes.datasetMobile}>
                 <Button className={classes.menuBtn}
-                  className={classes.menuBtn}
                   onClick={(e) => handleOpenMenu(e)}
                   variant="text"
                 >
@@ -116,19 +114,13 @@ const Header = (props) => {
             </div>
             <div className={classes.options}>
               <div className={classes.model}>
-                <Button className={classes.menuBtn} variant="text"
-                  className={classes.menuBtn}
-                  variant="text"
-                >
+                <Button className={classes.menuBtn} variant="text">
                   Model
                     <DownIcon />
                 </Button>
               </div>
               <div className={classes.modelMobile}>
-                <Button className={classes.menuBtn} variant="text"
-                  className={classes.menuBtn}
-                  variant="text"
-                >
+                <Button className={classes.menuBtn} variant="text">
                   <ChromeReaderModeIcon fontSize="large" />
                   <DownIcon />
                 </Button>

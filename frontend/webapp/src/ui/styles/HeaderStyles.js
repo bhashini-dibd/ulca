@@ -28,29 +28,26 @@ const HeaderStyles = (theme) => ({
     borderRadius: 0,
     maxHeight: '100%'
   },
-  headerGrid: {
-    margin: '0vh 15vw'
-  },
   menu: {
-    margin: "0rem 2rem",
+    margin: '0% 2%',
     width: '100%',
     display: 'flex'
   },
   home: {
-    marginLeft: '9.375rem',
+    marginLeft: '8.4%',
     "@media (max-width:670px)": {
-      marginLeft: '0rem'
+      marginLeft: '2%'
     },
     "@media (max-width:425px)": {
       display: 'none'
     },
   },
   options: {
-    marginLeft: '1.875rem'
+    marginLeft: '1.875%'
   },
   profile: {
     marginLeft: 'auto',
-    marginRight: '-1rem'
+    marginRight: '-1%'
   },
   menuBtn: {
     fontSize: '1rem',
@@ -61,7 +58,7 @@ const HeaderStyles = (theme) => ({
     borderTop: "1px solid #D6D6D6"
   },
   profileName: {
-    marginLeft: '0.5vw',
+    marginLeft: '0.5rem',
     "@media (max-width:800px)": {
       display: 'none'
     },

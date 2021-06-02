@@ -12,7 +12,7 @@ export default function SimpleBreadcrumbs(props) {
   return (
     <Breadcrumbs separator=">" aria-label="breadcrumb">
       {
-        props.links.map(link => <Link color="inherit" href="/" onClick={handleClick}>
+        props.links.map((link, i) => <Link key={i} color="inherit" href="/" onClick={handleClick}>
           <Typography variant="h6">{link}</Typography>
         </Link>
         )}
