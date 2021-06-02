@@ -9,6 +9,7 @@ import HeaderStyles from "../../styles/HeaderStyles"
 import HomeIcon from '@material-ui/icons/Home';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ChromeReaderModeIcon from '@material-ui/icons/ChromeReaderMode';
+import { useHistory } from 'react-router-dom';
 
 const StyledMenu = withStyles({
   paper: {
@@ -16,7 +17,7 @@ const StyledMenu = withStyles({
   },
 })((props) => (
   <Menu
-    elevation={0}
+    elevation={4}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
@@ -33,6 +34,7 @@ const StyledMenu = withStyles({
 const Header = (props) => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null)
+  const history = useHistory();
 
   const handleClose = (e) => {
     setAnchorEl(null)
@@ -43,12 +45,18 @@ const Header = (props) => {
     setAnchorEl(e.currentTarget)
   }
 
+  const handleMenuItemClick = (url) => {
+    handleClose();
+    history.push(`${process.env.PUBLIC_URL}${url}`)
+  }
   return (
     <div>
       <AppBar color="primary">
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
-            <Button className={classes.title}>
+            <Button className={classes.title}
+              onClick={() => handleMenuItemClick('/dashboard')}
+            >
               <Typography variant="h5">
                 <strong>{"U L C A"}</strong>
               </Typography>
@@ -57,6 +65,7 @@ const Header = (props) => {
               <Button
                 className={classes.menuBtn}
                 variant="text"
+                onClick={() => handleMenuItemClick('/dashboard')}
               >
                 Home
                 </Button>
@@ -66,6 +75,7 @@ const Header = (props) => {
               <Button
                 className={classes.menuBtn}
                 variant="text"
+                onClick={() => handleMenuItemClick('/dashboard')}
               >
                 <HomeIcon fontSize="large" />
               </Button>
@@ -95,8 +105,11 @@ const Header = (props) => {
                 onClose={(e) => handleClose(e)}
                 className={classes.styledMenu}
               >
-                <MenuItem className={classes.styledMenu}>
-                  My Contrributon
+                <MenuItem
+                  className={classes.styledMenu}
+                  onClick={() => handleMenuItemClick('/my-contribution')}
+                >
+                  My Contributon
                     </MenuItem>
                 <MenuItem className={classes.styledMenu}>
                   My Searches
@@ -107,7 +120,9 @@ const Header = (props) => {
                 <MenuItem className={classes.styledMenu}>
                   Explore Readymade Datasets
                     </MenuItem>
-                <MenuItem className={classes.styledMenu}>
+                <MenuItem className={classes.styledMenu}
+                  onClick={() => handleMenuItemClick('/submit-dataset/upload')}
+                >
                   Submit Dataset
                     </MenuItem>
               </StyledMenu>
