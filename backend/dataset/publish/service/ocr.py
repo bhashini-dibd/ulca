@@ -27,14 +27,12 @@ class OCRService:
             ip_data = request["data"]
             batch_data, error_list = [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
-            log.info(f'Enriching and dumping OCR dataset.....')
             metadata = ip_data
             metadata.pop("records")
             ip_data = ip_data["records"]
             clean_data = self.get_clean_ocr_data(ip_data, error_list)
-            log.info(f'Actual Data: {len(ip_data)}, Clean Data: {len(clean_data)}')
             if clean_data:
-                func = partial(self.get_enriched_ocr_data, metadata=metadata, sequential=False)
+                func = partial(self.get_enriched_ocr_data, metadata=metadata)
                 no_of_m1_process = request["processors"]
                 pool_enrichers = multiprocessing.Pool(no_of_m1_process)
                 enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
@@ -56,7 +54,6 @@ class OCRService:
                                                "description": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
-                    log.info(f'Processing final batch.....')
                     persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                     persist_thread.start()
                     persist_thread.join()

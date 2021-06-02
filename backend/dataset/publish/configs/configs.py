@@ -25,6 +25,9 @@ if isinstance(asr_ds_batch_size, str):
 ocr_ds_batch_size = os.environ.get('ULCA_OCR_DS_BATCH_SIZE', 1000)
 if isinstance(ocr_ds_batch_size, str):
     ocr_ds_batch_size = eval(ocr_ds_batch_size)
+no_of_parallel_processes = os.environ.get('PUBLISH_PARALLEL_PRC', 1)
+if isinstance(no_of_parallel_processes, str):
+    no_of_parallel_processes = eval(no_of_parallel_processes)
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')

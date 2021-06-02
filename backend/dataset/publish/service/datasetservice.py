@@ -2,13 +2,14 @@ import logging
 from datetime import datetime
 from logging.config import dictConfig
 from repository.parallel import ParallelRepo
+from repository.datasetrepo import DatasetRepo
 
 
 log = logging.getLogger('file')
 
 mongo_instance = None
 parallelrepo = ParallelRepo()
-datasetrepo = ParallelRepo()
+datasetrepo = DatasetRepo()
 
 class DatasetService:
     def __init__(self):

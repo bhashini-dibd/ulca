@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, offset, limit
+from configs.configs import parallel_ds_batch_size, no_of_parallel_processes
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 
@@ -26,15 +26,15 @@ class ParallelService:
         log.info("Loading Dataset..... | {}".format(datetime.now()))
         try:
             ip_data = request["data"]
+            metadata = ip_data
+            metadata.pop("record")
+            ip_data = [ip_data["record"]]
             batch_data, error_list = [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
-            log.info(f'Enriching and dumping dataset.....')
             clean_data = self.get_clean_data(ip_data, error_list)
-            log.info(f'Actual Data: {len(ip_data)}, Clean Data: {len(clean_data)}')
             if clean_data:
-                func = partial(self.get_enriched_data, request=request, sequential=False)
-                no_of_m1_process = request["processors"]
-                pool_enrichers = multiprocessing.Pool(no_of_m1_process)
+                func = partial(self.get_enriched_data, metadata=metadata)
+                pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
                 enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
                 for result in enrichment_processors:
                     if result:
@@ -51,7 +51,6 @@ class ParallelService:
                                                "description": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
-                    log.info(f'Processing final batch.....')
                     persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                     persist_thread.start()
                     persist_thread.join()
@@ -85,37 +84,17 @@ class ParallelService:
         duplicate_records.clear()
         return clean_data
 
-    def get_enriched_data(self, data):
+    def get_enriched_data(self, data, metadata):
         insert_records, new_records = [], []
         src_hash = str(hashlib.sha256(data["sourceText"].encode('utf-16')).hexdigest())
         tgt_hash = str(hashlib.sha256(data["targetText"].encode('utf-16')).hexdigest())
         records = self.get_dataset_internal({"hash": [src_hash, tgt_hash]})
         if records:
             for record in records:
-                new_data = {}
                 if src_hash in record["tags"] and tgt_hash in record["tags"]:
                     return data
-                elif src_hash == record["srcHash"]:
-                    if data["targetLanguage"] != record["targetLanguage"]:
-                        new_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
-                                    "sourceLanguage": data["targetLanguage"], "targetLanguage": record["targetLanguage"]}
-                elif src_hash == record["tgtHash"]:
-                    if data["targetLanguage"] != record["sourceLanguage"]:
-                        new_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
-                                    "sourceLanguage": data["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
-                elif tgt_hash == record["srcHash"]:
-                    if data["sourceLanguage"] != record["targetLanguage"]:
-                        new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
-                                    "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
-                elif tgt_hash == record["tgtHash"]:
-                    if data["sourceLanguage"] != record["sourceLanguage"]:
-                        new_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
-                                    "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
-                if new_data:
-                    modified = data
-                    modified["sourceText"], modified["targetText"] = new_data["sourceText"], new_data["targetText"]
-                    modified["sourceLanguage"], modified["targetLanguage"] = new_data["sourceLanguage"], new_data["targetLanguage"]
-                    new_records.append(modified)
+                derived_data = self.enrich_derived_data(data, record, src_hash, tgt_hash)
+                new_records.append(derived_data)
         new_records.append(data)
         for record in new_records:
             data_dict = record
@@ -127,12 +106,21 @@ class ParallelService:
             for key in sorted(lang_map.keys()):
                 hashed_key = hashed_key + str(lang_map[key])
             hashed_key = str(hashlib.sha256(hashed_key.encode('utf-16')).hexdigest())
-            tag_details = {
-                "sourceLanguage": src_lang, "targetLanguage": tgt_lang, "collectionMode": record["collectionMode"],
-                "collectionSource": record["collectionSource"], "dataset": record["dataset"], "datasetType": record["datasetType"],
-                "domain": record["domain"], "licence": record["licence"], "srcHash": src_hash, "tgtHash": tgt_hash
-            }
-            tags = list(utils.get_tags(tag_details))
+            if 'derived' not in data_dict.keys():
+                data_dict["derived"] = False
+            tag_details = {"sourceLanguage": src_lang, "targetLanguage": tgt_lang,
+                           "collectionSource": data_dict["collectionSource"], "datasetType": metadata["datasetType"],
+                           "domain": data_dict["domain"], "licence": data_dict["licence"], "srcHash": src_hash,
+                           "tgtHash": tgt_hash}
+            data_dict["dataset"] = [metadata["dataset"]]
+            tag_details["dataset"] = data_dict["dataset"]
+            if isinstance(data_dict["collectionMethod"], list):
+                collection_modes = data_dict["collectionMethod"][0]["collectionDescription"]
+                collection_modes.extend(data_dict["collectionMethod"][0]["collectionDescription"])
+                tag_details["collectionMode"] = set(collection_modes)
+            else:
+                tag_details["collectionMode"] = set(data_dict["collectionMethod"]["collectionDescription"])
+            tags = set(utils.get_tags(tag_details))
             langs = [src_lang, tgt_lang]
             shard_key = ','.join(map(str, sorted(langs)))
             data_dict["id"], data_dict["timestamp"] = str(uuid.uuid4()), eval(str(time.time()).replace('.', '')[0:13])
@@ -154,6 +142,37 @@ class ParallelService:
             log.exception(e)
             return None
 
+    def enrich_derived_data(self, data, record, src_hash, tgt_hash):
+        derived_data = {}
+        if src_hash in record["tags"] and tgt_hash in record["tags"]:
+            return data
+        elif src_hash == record["srcHash"]:
+            if data["targetLanguage"] != record["targetLanguage"]:
+                derived_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
+                            "sourceLanguage": data["targetLanguage"], "targetLanguage": record["targetLanguage"]}
+        elif src_hash == record["tgtHash"]:
+            if data["targetLanguage"] != record["sourceLanguage"]:
+                derived_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
+                            "sourceLanguage": data["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
+        elif tgt_hash == record["srcHash"]:
+            if data["sourceLanguage"] != record["targetLanguage"]:
+                derived_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
+                            "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
+        elif tgt_hash == record["tgtHash"]:
+            if data["sourceLanguage"] != record["sourceLanguage"]:
+                derived_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
+                            "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
+        derived_data["derived"] = True
+        derived_data["collectionMethod"] = [data["collectionMode"], record["collectionMode"]]
+        if data["collectionSource"] != record["collectionSource"]:
+            derived_data["collectionSource"] = data["collectionSource"]
+            derived_data["collectionSource"].extend(record["collectionSource"])
+        if data["domain"] != record["domain"]:
+            derived_data["domain"] = data["domain"]
+            derived_data["domain"].extend(record["domain"])
+        derived_data["license"] = [data["license"], record["license"]]
+        derived_data["datasetType"] = data["datasetType"]
+        return derived_data
 
 # Log config
 dictConfig({

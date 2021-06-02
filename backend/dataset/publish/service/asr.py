@@ -3,10 +3,9 @@ import logging
 import multiprocessing
 import threading
 import time
-from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, offset, limit, aws_asr_prefix
+from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, aws_asr_prefix
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 
@@ -27,16 +26,14 @@ class ASRService:
             ip_data = request["data"]
             batch_data, error_list = [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
-            log.info(f'Enriching and dumping ASR dataset.....')
             metadata = ip_data
-            metadata.pop("records")
-            ip_data = ip_data["records"]
+            metadata.pop("record")
+            ip_data = [ip_data["record"]]
             clean_data = self.get_clean_asr_data(ip_data, error_list)
             log.info(f'Actual Data: {len(ip_data)}, Clean Data: {len(clean_data)}')
             if clean_data:
-                func = partial(self.get_enriched_asr_data, metadata=metadata, sequential=False)
-                no_of_m1_process = request["processors"]
-                pool_enrichers = multiprocessing.Pool(no_of_m1_process)
+                func = partial(self.get_enriched_asr_data, metadata=metadata)
+                pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
                 enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
                 for result in enrichment_processors:
                     if result:
