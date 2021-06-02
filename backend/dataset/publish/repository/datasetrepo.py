@@ -14,7 +14,7 @@ class DatasetRepo:
 
     def set_dataset_db(self):
         if "localhost" not in db_cluster:
-            log.info(f'Setting the Mongo M1 Sharded DB up..... | {datetime.now()}')
+            log.info(f'Setting the Mongo Sharded DB up.....')
             client = pymongo.MongoClient(db_cluster)
             client.drop_database(db)
             ulca_db = client[db]
@@ -22,7 +22,7 @@ class DatasetRepo:
             db_cli.command('enableSharding', db)
             log.info(f'Done! | {datetime.now()}')
         else:
-            log.info(f'Setting the Mongo DB Local.... | {datetime.now()}')
+            log.info(f'Setting the Mongo DB Local...')
 
 
 # Log config

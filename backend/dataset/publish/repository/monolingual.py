@@ -9,11 +9,11 @@ log = logging.getLogger('file')
 
 mongo_instance = None
 
-class MonolingualRepository:
+class MonolingualRepo:
     def __init__(self):
         pass
 
-    def set_ocr_collection(self):
+    def set_monolingual_collection(self):
         if "localhost" not in db_cluster:
             log.info(f'Setting the Mongo Monolingual DS Shard Cluster up.....')
             client = pymongo.MongoClient(db_cluster)
