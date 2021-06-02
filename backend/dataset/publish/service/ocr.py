@@ -6,15 +6,19 @@ import time
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix
-from repository.asr import OCRRepo
+from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, search_output_topic, sample_size
+from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
+from kafkawrapper.producer import Producer
+
 
 log = logging.getLogger('file')
 
 mongo_instance = None
 repo = OCRRepo()
 utils = DatasetUtils()
+prod = Producer()
+
 
 class OCRService:
     def __init__(self):
@@ -125,6 +129,51 @@ class OCRService:
         except Exception as e:
             log.exception(e)
             return None
+
+    # Method for searching asr datasets
+    def get_ocr_dataset(self, query):
+        log.info(f'Fetching datasets..... | {datetime.now()}')
+        try:
+            off = query["offset"] if 'offset' in query.keys() else offset
+            lim = query["limit"] if 'limit' in query.keys() else limit
+            db_query, tags = {}, []
+            if 'language' in query.keys():
+                tags.append(query["language"])
+            if 'collectionMode' in query.keys():
+                tags.append(query["collectionMode"])
+            if 'collectionSource' in query.keys():
+                tags.append(query["collectionMode"])
+            if 'license' in query.keys():
+                tags.append(query["licence"])
+            if 'domain' in query.keys():
+                tags.append(query["domain"])
+            if 'datasetId' in query.keys():
+                tags.append(query["datasetId"])
+            if 'imageFilename' in query.keys():
+                tags.append(query["imageFilename"])
+            if 'datasetId' in query.keys():
+                tags.append(query["datasetId"])
+            if tags:
+                db_query["tags"] = tags
+            exclude = {"_id": False}
+            data = repo.search(db_query, exclude, off, lim)
+            result, query, count = data[0], data[1], data[2]
+            log.info(f'Result --- Count: {count}, Query: {query}')
+            path = utils.push_result_to_s3(result, query["serviceRequestNumber"])
+            if path:
+                size = sample_size
+                if count <= 10:
+                    size = count
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "sample": result[:size], "dataset": path}
+            else:
+                log.error(f'There was an error while pushing result to S3')
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None}
+            prod.produce(op, search_output_topic, None)
+            log.info(f'Done!')
+            return op
+        except Exception as e:
+            log.exception(e)
+            return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
 
 # Log config

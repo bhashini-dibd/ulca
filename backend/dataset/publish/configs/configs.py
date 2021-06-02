@@ -28,10 +28,19 @@ if isinstance(ocr_ds_batch_size, str):
 no_of_parallel_processes = os.environ.get('PUBLISH_PARALLEL_PRC', 1)
 if isinstance(no_of_parallel_processes, str):
     no_of_parallel_processes = eval(no_of_parallel_processes)
+sample_size = os.environ.get('ULCA_DATASET_SAMPLE_SIZE', 10)
+if isinstance(sample_size, str):
+    sample_size = eval(sample_size)
+shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/app/search/')
+
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')
 publish_output_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_OP_TOPIC', 'ulca-ds-publish-op-v0')
+search_input_topic = os.environ.get('KAFKA_ULCA_DS_SEARCH_IP_TOPIC', 'ulca-ds-search-ip-v0')
+search_output_topic = os.environ.get('KAFKA_ULCA_DS_SEARCH_OP_TOPIC', 'ulca-ds-search-op-v0')
+delete_input_topic = os.environ.get('KAFKA_ULCA_DS_DELETE_IP_TOPIC', 'ulca-ds-delete-ip-v0')
+delete_output_topic = os.environ.get('KAFKA_ULCA_DS_DELETE_OP_TOPIC', 'ulca-ds-delete-op-v0')
 publish_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
 ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 3)
 if isinstance(ulca_dataset_topic_partitions, str):
@@ -45,8 +54,8 @@ aws_asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', '/asr/')
 aws_dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', '/datasets/')
 
 dataset_type_parallel = os.environ.get('DATASET_TYPE_PARALLEL_DS', 'parallel-corpus')
-dataset_type_asr = os.environ.get('DATASET_TYPE_ASR_DS', 'asr')
-dataset_type_ocr = os.environ.get('DATASET_TYPE_OCR_DS', 'ocr')
+dataset_type_asr = os.environ.get('DATASET_TYPE_ASR_DS', 'asr-corpus')
+dataset_type_ocr = os.environ.get('DATASET_TYPE_OCR_DS', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DATASET_TYPE_MONOLINGUAL_DS', 'monolingual-corpus')
 
 

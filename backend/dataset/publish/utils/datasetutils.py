@@ -1,9 +1,11 @@
 import hashlib
+import json
 import logging
+import os
 from logging.config import dictConfig
 
 import boto3 as boto3
-from configs.configs import aws_access_key, aws_secret_key, aws_bucket_name
+from configs.configs import aws_access_key, aws_secret_key, aws_bucket_name, shared_storage_path, aws_dataset_prefix
 
 log = logging.getLogger('file')
 
@@ -23,6 +25,18 @@ class DatasetUtils:
                     yield entries
             else:
                 yield v
+
+    def push_result_to_s3(self, result, service_req_no):
+        res_path = f'{shared_storage_path}{service_req_no}-ds.json'
+        with open(res_path, 'w') as f:
+            json.dump(result, f)
+        res_path_aws = f'{aws_dataset_prefix}{service_req_no}-ds.json'
+        upload = self.upload_file(res_path, res_path_aws)
+        if upload:
+            os.remove(res_path)
+            return res_path_aws
+        else:
+            return False
 
     # Utility to hash a file
     def hash_file(self, filename):
