@@ -1,5 +1,5 @@
 {
-    "dataset-type":"ocr-corpus",
+    "dataset-type":"document-layout-corpus",
     "languages":{
         "sourceLanguage":"ta",
         "targetLanguage":null
@@ -26,7 +26,7 @@
             }
         ]
     },
-    "format":"png",
+    "format":"jpeg",
     "dpi":"72_dpi",
     "imageTextType":"computer-typed-text",
     "collectionMethod":{
