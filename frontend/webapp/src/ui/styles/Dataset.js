@@ -75,7 +75,31 @@ const DataSet = (theme) => ({
     },
     popOver: {
         marginTop: '0.3rem'
-    }
+    },
+    footerButtons: {
+        display: "flex", 
+        justifyContent: 'flex-end', 
+        width: "100%",
+        padding:'.6rem 1rem',
+        boxSizing: 'border-box',
+        border: "1px solid rgb(224 224 224)",
+    background: "white",
+    marginTop:"-3px"
+      },
+
+      headerButtons:{
+        display: "flex", 
+        justifyContent: 'flex-end', 
+        width: "100%",
+        marginBottom:'.6rem',
+        boxSizing: 'border-box',
+        
+    
+      },
+      buttonStyle:{
+          marginLeft:"0.7rem"
+      },
+      iconStyle:{marginRight: '.5rem'}
 });
 
 export default DataSet;

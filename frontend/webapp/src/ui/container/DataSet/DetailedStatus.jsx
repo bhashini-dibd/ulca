@@ -1,4 +1,4 @@
-import { Grid, withStyles, Tooltip, IconButton,Link, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import { Grid, withStyles, Tooltip, IconButton,Link, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
 
 import React, { useEffect, useState } from "react";
 import DataSet from "../../styles/Dataset";
@@ -7,7 +7,7 @@ import MUIDataTable from "mui-datatables";
 import DetailedDatasetStatus from "../../../redux/actions/api/DataSet/DetailedDataset";
 import { useDispatch, useSelector } from "react-redux";
 import {  useHistory } from "react-router-dom";
-
+import {Cached, SaveAlt} from '@material-ui/icons';
 
 const DetailedStatus = (props) => {
 
@@ -17,7 +17,6 @@ const DetailedStatus = (props) => {
     (state) => state.detailedReport
   );
 
-  console.log("-------------",detailedReport)
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -33,30 +32,34 @@ const DetailedStatus = (props) => {
   const getMuiTheme = () => createMuiTheme({
     overrides: {
       MuiTableCell: {
-        // head: {
-        //     backgroundColor: "#c7c6c6 !important"
-        // }
-    }
-    }
+        head: {
+            backgroundColor: "#f2f2f4 !important"
+        }
+    },
+    MuiToolbar: { root: { display: "none" } },
+    MuiPaper: {
+      root:{
+      boxShadow: 'none !important',
+      borderRadius: 0,
+      border: "1px solid rgb(224 224 224)"
+      }
+      }
+    },
+     
 });
 
-  const renderStatus = (id,value) => {
-    if(value === "Inprogress"){
-     return  <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${id}}`)}}> In-progress </Link>
-    }
-    else{
-      return <span className= {classes.span}>Published </span>
-    }
-  }
+const fetchHeaderButton= () => {
+  
 
-  const renderAction = (id,value) => {
-    if(value === "Inprogress"){
-     
-    }
-    else{
-      return <div className= {classes.span}> <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update </Link><Link className= {classes.link}> Delete </Link> </div> 
-    }
-  }
+  return (
+      <div>
+           <Button color={"primary" } size="medium" variant="outlined"  onClick={() => this.handleLanguageChange("domain")}><Cached className ={classes.iconStyle}/>Refresh</Button>
+       
+           <Button color={"primary" } size="medium" variant="outlined" className={classes.buttonStyle} onClick={() => this.handleLanguageChange("domain")}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
+       
+      </div>
+  )
+}
 
     
   const columns = [
@@ -109,8 +112,8 @@ const DetailedStatus = (props) => {
       },
       options: { sortDirection: "desc" },
     },
-
-    
+    displaySelectToolbar : false,
+    fixedHeader :false,
     filterType: "checkbox",
     download: false,
     print: false,
@@ -122,6 +125,9 @@ const DetailedStatus = (props) => {
   const { classes } = props;
   return (
     <div className={classes.divStyle}>
+      <div className={classes.headerButtons}>
+      {fetchHeaderButton()} 
+                        </div>
       <MuiThemeProvider theme={getMuiTheme()}>  
       <MUIDataTable
         title={`My Contribution`}
@@ -130,6 +136,10 @@ const DetailedStatus = (props) => {
         options={options}
       />
       </MuiThemeProvider>
+      <div className={classes.footerButtons}>
+      <Button color={"primary" } size="medium" variant="outlined" className={classes.backButton} onClick={() => this.handleLanguageChange("domain")}>Abort Process</Button>
+         
+                        </div>
     </div>
   );
 };
