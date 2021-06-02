@@ -12,7 +12,7 @@
          this.action = action
          this.jobId = jobId
          this.uid = uid
-         this.type = C.GET_CONTRIBUTION_LIST;
+         this.type = C.GET_DETAILED_REPORT;
          this.endpoint = `${CONFIGS.API_URL}${ENDPOINTS.getContributionList}`;
      }
  

@@ -13,9 +13,11 @@ const DetailedStatus = (props) => {
 
   const history = useHistory();
 
-  const myContributionReport = useSelector(
-    (state) => state.myContributionReport
+  const detailedReport = useSelector(
+    (state) => state.detailedReport
   );
+
+  console.log("-------------",detailedReport)
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -24,7 +26,7 @@ const DetailedStatus = (props) => {
       "A_FBTTR-VWSge-1619075981554",
       "241006445d1546dbb5db836c498be6381606221196566"
     );
-    myContributionReport.length==0  && dispatch(APITransport(userObj));
+    detailedReport.responseData.length==0  && dispatch(APITransport(userObj));
   }, []);
   
 
@@ -68,7 +70,7 @@ const DetailedStatus = (props) => {
       },
     },
     {
-      name: "sr_no",
+      name: "stage",
       label: "Stage",
       options: {
         filter: false,
@@ -76,7 +78,7 @@ const DetailedStatus = (props) => {
       },
     },
     {
-      name: "Dataset",
+      name: "status",
       label: "Status",
       options: {
         filter: false,
@@ -84,7 +86,7 @@ const DetailedStatus = (props) => {
       },
     },
     {
-      name: "Submitted_on",
+      name: "Record Count",
       label: "Record Count",
       options: {
         filter: false,
@@ -123,7 +125,7 @@ const DetailedStatus = (props) => {
       <MuiThemeProvider theme={getMuiTheme()}>  
       <MUIDataTable
         title={`My Contribution`}
-        data={myContributionReport.responseData}
+        data={detailedReport.responseData}
         columns={columns}
         options={options}
       />
