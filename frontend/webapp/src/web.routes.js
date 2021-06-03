@@ -20,7 +20,7 @@ const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) =>
       {...rest}
       render={(props) =>
         authenticate() ? (
-          <Layout component={Component} token={true} {...rest} />
+          <Layout component={Component} {...rest} />
         ) : (
           <Redirect to={`${process.env.PUBLIC_URL}/dashboard`} />
         )

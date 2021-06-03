@@ -63,28 +63,28 @@ const Header = (props) => {
                 <strong>{"U L C A"}</strong>
               </Typography>
             </Button>
-            <div className={classes.home}>
-              <Button
-                className={classes.menuBtn}
-                variant="text"
-                onClick={() => handleMenuItemClick('/dashboard')}
-              >
-                Home
-                </Button>
-            </div>
-
-            <div className={classes.homeBtn}>
-              <Button
-                className={classes.menuBtn}
-                variant="text"
-                onClick={() => handleMenuItemClick('/dashboard')}
-              >
-                <HomeIcon fontSize="large" />
-              </Button>
-            </div>
             {
               authenticate() &&
               <>
+                <div className={classes.home}>
+                  <Button
+                    className={classes.menuBtn}
+                    variant="text"
+                    onClick={() => handleMenuItemClick('/dashboard')}
+                  >
+                    Home
+                </Button>
+                </div>
+
+                <div className={classes.homeBtn}>
+                  <Button
+                    className={classes.menuBtn}
+                    variant="text"
+                    onClick={() => handleMenuItemClick('/dashboard')}
+                  >
+                    <HomeIcon fontSize="large" />
+                  </Button>
+                </div>
                 <div className={classes.options}>
                   <div className={classes.dataset}>
                     <Button className={classes.menuBtn}
