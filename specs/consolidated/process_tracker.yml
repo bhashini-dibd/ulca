@@ -1,0 +1,146 @@
+  process_tracker:
+    type: object
+    description: Process Tracker entity
+    properties:
+      userId:
+        type: string
+        description: Id of the user
+        required: true
+      serviceRequestNumber: 
+        type: string
+        description: Unique identifier of the service request
+        required: true
+      serviceRequestType: 
+        type: string
+        description: Type of the service request
+        enum:
+          - datatset
+          - model
+          - benchmark
+        required: true
+      serviceRequestAction: 
+        type: string
+        description: Action being performed on the service request type
+        enum:
+          - submit
+          - search
+          - abort
+          - delete
+          - update
+        required: true
+      status: 
+        type: string
+        description: Status of the process
+        enum:
+          - inprogress
+          - successful
+          - failed
+        required: true
+      details: 
+        type: object
+        description: Details of the curren status of the process
+        required: true
+      startTime: 
+        type: number
+        description: 13 digit epoch of the instance of the start of process
+        required: true
+      endTime: 
+        type: number
+        description: 13 digit epoch of the instance of the end of process
+        required: true
+      lastModified: 
+        type: number
+        description: 13 digit epoch of the last modified time
+        required: true
+      error: 
+        type: object
+        description: Error details if any
+
+
+  task_tracker:
+    type: object
+    description: Task Tracker entity
+    properties:
+      serviceRequestNumber: 
+        type: string
+        description: Unique identifier of the service request
+        required: true
+      tool: 
+        type: string
+        description: Tool updating this data
+        enum:
+          - download
+          - ingest
+          - validate
+          - publish
+          - search
+          - delete
+        required: true
+      status: 
+        type: string
+        description: Status of the task
+        enum:
+          - inprogress
+          - successful
+          - failed
+        required: true
+      details: 
+        type: object
+        description: Details of the current status of the task
+        required: true
+      startTime: 
+        type: number
+        description: 13 digit epoch of the instance of the start of process
+        required: true
+      endTime: 
+        type: number
+        description: 13 digit epoch of the instance of the end of process
+        required: true
+      lastModified: 
+        type: number
+        description: 13 digit epoch of the last modified time
+        required: true
+
+
+details_submit:
+    type: object
+    description: Task Tracker entity
+    properties:
+      currentRecordIndex: 
+        type: number
+        description: Index of the record under processing
+        required: true
+      totalCount: 
+        type: number
+        description: total no of records tied to be processed as part of the current process
+        required: true
+      successCount: 
+        type: number
+        description: Count of records successfully published
+        required: true
+      failedCount: 
+        type: number
+        description: Count of records failed
+        required: true
+
+details_search:
+    type: object
+    description: Task Tracker entity
+    properties:
+      count: 
+        type: number
+        description: Count of records retrieved
+        required: true
+      dataset: 
+        type: number
+        description: link to the retrieved dataset
+        required: true
+
+details_delete:
+    type: object
+    description: Task Tracker entity
+    properties:
+      count: 
+        type: number
+        description: Count of records deleted
+        required: true
