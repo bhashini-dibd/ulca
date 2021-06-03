@@ -8,11 +8,12 @@ import DetailedDatasetStatus from "../../../redux/actions/api/DataSet/DetailedDa
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Cached, SaveAlt } from '@material-ui/icons';
+import urlconfig from '../../../configs/internalurlmapping';
 
 const DetailedStatus = (props) => {
 
   const history = useHistory();
-
+  const { dataset, myContribution } = urlconfig
   const detailedReport = useSelector(
     (state) => state.detailedReport
   );
@@ -126,7 +127,7 @@ const DetailedStatus = (props) => {
   return (
     <div className={classes.divStyle}>
       <div className={classes.breadcrum}>
-        <BreadCrum links={[{ name: "Dataset", url: '/dashboard' }, { name: "My Contribution", url: '/my-contribution' }]} activeLink="Dataset details" />
+        <BreadCrum links={[dataset, myContribution]} activeLink="Dataset details" />
       </div>
       <div className={classes.headerButtons}>
         {fetchHeaderButton()}

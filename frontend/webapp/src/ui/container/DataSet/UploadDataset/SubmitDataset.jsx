@@ -17,6 +17,7 @@ import DatasetStyle from '../../../styles/Dataset';
 import { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Snackbar from '../../../components/common/Snackbar';
+import urlconfig from '../../../../configs/internalurlmapping';
 
 const SubmitDataset = (props) => {
     const { classes } = props;
@@ -163,11 +164,14 @@ const SubmitDataset = (props) => {
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
+
+    const url = urlconfig.dataset
+
     return (
         <div>
             <div className={classes.divStyle}>
                 <div className={classes.breadcrum}>
-                    <BreadCrum links={[{ name: "Dataset", url: '/dashboard' }]} activeLink="Submit Dataset" />
+                    <BreadCrum links={[url]} activeLink="Submit Dataset" />
                 </div>
                 <Paper elevation={3} className={classes.paper}>
                     <Grid container className={classes.title}>

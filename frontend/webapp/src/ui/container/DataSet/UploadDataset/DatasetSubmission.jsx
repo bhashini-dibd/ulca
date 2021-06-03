@@ -4,18 +4,19 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import { withStyles } from '@material-ui/core';
 import DatasetStyle from '../../../styles/Dataset';
 import BreadCrum from '../../../components/common/Breadcrum';
-import { withRouter,useHistory } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
+import urlconfig from '../../../../configs/internalurlmapping';
 
 
 const DatasetSubmission = (props) => {
     const { classes } = props
     const { reqno } = props.match.params
     const history = useHistory();
-
+    const { dataset } = urlconfig
     return (
         <div className={classes.divStyle}>
             <div className={classes.breadcrum}>
-                <BreadCrum links={[{name:"Dataset",url:'/dashboard'}]} activeLink="Submit Dataset" />
+                <BreadCrum links={[dataset]} activeLink="Submit Dataset" />
             </div>
             <Paper className={classes.paper}>
                 <Grid container className={classes.dataSubmissionGrid}>
@@ -28,7 +29,7 @@ const DatasetSubmission = (props) => {
                         <Typography color="textSecondary" variant="h6">We are currently fetching the dataset from the URL you provided. This process may take some time.</Typography>
                         <Typography color="textSecondary" variant="h6">Note: The submitted dataset will go through a series of validation steps before it gets published.</Typography>
                         <Button className={classes.myContriBtn} color="primary" variant="outlined"
-                        onClick={()=>history.push(`${process.env.PUBLIC_URL}/my-contribution`)}
+                            onClick={() => history.push(`${process.env.PUBLIC_URL}/my-contribution`)}
                         >
                             Go to My Contribution
                         </Button>

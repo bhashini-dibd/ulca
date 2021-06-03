@@ -7,7 +7,7 @@ import Spinner from "./components/common/Spinner";
 
 function App(props) {
   const Component = props.component;
-  const { classes } = props;
+  const { classes, token } = props;
   const apiStatus = useSelector((state) => state.apiStatus);
 
   const renderSpinner = () => {
