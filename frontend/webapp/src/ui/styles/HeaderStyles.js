@@ -91,6 +91,25 @@ const HeaderStyles = (theme) => ({
     "@media (max-width:425px)": {
       display: 'block'
     }
+  },
+  signIn: {
+    fontSize: '1rem',
+    color: 'white'
+  },
+  signUp: {
+    fontSize: '1rem',
+    color: 'white'
+  },
+  desktopAuth: {
+    "@media (max-width:400px)": {
+      display: 'none'
+    }
+  },
+  mobileAuth: {
+    display: 'none',
+    "@media (max-width:400px)": {
+      display: 'block'
+    }
   }
 });
 export default HeaderStyles;

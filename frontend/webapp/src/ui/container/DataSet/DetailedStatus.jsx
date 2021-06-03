@@ -8,6 +8,7 @@ import DetailedDatasetStatus from "../../../redux/actions/api/DataSet/DetailedDa
 import { useDispatch, useSelector } from "react-redux";
 import {  useHistory } from "react-router-dom";
 import {Cached, SaveAlt} from '@material-ui/icons';
+import UrlConfig from '../../../configs/internalurlmapping';
 
 const DetailedStatus = (props) => {
 
@@ -121,7 +122,7 @@ const DetailedStatus = (props) => {
         return (
                 <div className  =       {classes.divStyle}>
                         <div className  = {classes.breadcrum}>
-                                <BreadCrum links = {["Dataset","My Contribution"]} activeLink = "Dataset details" />
+                                <BreadCrum links = {[UrlConfig.dataset,UrlConfig.myContribution]} activeLink = "Dataset details" />
                         </div>
                         <div className = {classes.headerButtons}>
                                 {fetchHeaderButton()} 

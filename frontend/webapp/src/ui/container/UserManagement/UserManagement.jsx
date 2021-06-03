@@ -2,6 +2,7 @@ import { Grid, MuiThemeProvider, withStyles } from "@material-ui/core";
 import Theme from "../../theme/theme-default";
 import AppInfo from "./AppInfo";
 import Login from "./Login";
+import Dashboard from '../Dashboard/ChartRender';
 import SignUp from "./Signup";
 import { useParams, useHistory } from "react-router-dom";
 import ForgotPassword from "./ForgotPassword";
@@ -26,7 +27,7 @@ const UserManagement = (props) => {
         return <ResetPassword />;
 
       default:
-        return <Login />;
+        return <Dashboard />;
     }
   };
   return (

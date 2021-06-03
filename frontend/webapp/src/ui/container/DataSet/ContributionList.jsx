@@ -9,13 +9,13 @@ import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../redux/actions/api/DataSet/MyContribution";
 import Dialog from "../../components/common/Dialog"
 import {Cached, SaveAlt} from '@material-ui/icons';
-
+import UrlConfig from '../../../configs/internalurlmapping';
 const ContributionList = (props) => {
 
         const history                 = useHistory();
         const dispatch                = useDispatch();
         const myContributionReport    = useSelector( (state) => state.myContributionReport);
-
+  
         useEffect(()                  => {
                 myContributionReport.responseData.length == 0  && MyContributionListApi()
         }, []);
@@ -190,7 +190,7 @@ const ContributionList = (props) => {
         return (
                 <div className = {classes.divStyle}>
                         <div className = {classes.breadcrum}>
-                                <BreadCrum links={["Dataset"]} activeLink="My Contribution" />
+                                <BreadCrum links={[UrlConfig.dataset]} activeLink="My Contribution" />
                         </div>
 
                         <div className={classes.headerButtons}>

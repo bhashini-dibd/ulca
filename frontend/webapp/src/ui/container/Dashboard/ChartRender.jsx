@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import Theme from "../../theme/theme-default";
 
 import { withStyles, Typography,Link, MuiThemeProvider, createMuiTheme,Paper, Grid, Button } from "@material-ui/core";
 
-import BreadCrum from '../../components/common/Breadcrum';
 import ChartStyles from "../../styles/Dashboard";
 import {
     ResponsiveContainer,
@@ -17,6 +17,9 @@ import FetchLanguageDataSets from "../../../redux/actions/api/Dashboard/language
 
 import { isMobile } from 'react-device-detect';
 import {FilterList} from '@material-ui/icons';
+import Header from '../../components/common/Header';
+import authenticate from '../../../configs/authenticate';
+
 var jp = require('jsonpath')
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
@@ -35,13 +38,29 @@ const ChartRender = (props) => {
             { value: 'OCR Dataset', label: 'OCR Dataset' },
           ];
 
-        useEffect(()                  => {
-                const userObj         = new FetchLanguageDataSets( "parallel-corpus", "languagePairs");
-                 dispatch(APITransport(userObj));
-        }, []);
+    useEffect(() => {
+        const userObj = new FetchLanguageDataSets("parallel-corpus", "languagePairs");
+        dispatch(APITransport(userObj));
+        if (authenticate()) {
+            history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
+        } else {
+            localStorage.removeItem('token')
+            history.push(`${process.env.PUBLIC_URL}/dashboard`)
 
-    return (
+        }
+    }, []);
 
+     return (
+        <>
+            { !authenticate() &&
+                <MuiThemeProvider theme={Theme}>
+                    <Header />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                </MuiThemeProvider>
+            }
                 <div className={classes.container}>
 
                     
@@ -57,7 +76,7 @@ const ChartRender = (props) => {
                     value={selectedOption}
                     onChange={(value)=>setselectedOption( value  )}
                     options={options}
-    /           >
+                    />
                 <Button color={"primary" } size="medium" variant="outlined" className={classes.filterButton} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/>Filter</Button>
                 <Button color={"primary" } size="medium" variant="outlined" className={classes.filterButtonIcon} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/></Button>
                         </div>
@@ -92,13 +111,14 @@ const ChartRender = (props) => {
                             </ResponsiveContainer>
 
                         </Paper>
-                    </div>
-               
+                    
+            </div>
+        </>
     )
-   
+
 
 }
 
 
 
-export default withStyles(ChartStyles)(ChartRender);
+export default withStyles(ChartStyles(Theme))(ChartRender);

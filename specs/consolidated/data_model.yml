@@ -7,57 +7,59 @@
         description: Unique ID of the record
       sourceText: 
         type: string
-        description: Source Text of the input record -- IP
+        description: Source Text of the input record
       sourceLanguage: 
         type: string
-        description: Source Language of the input record -- IP
+        description: Source Language of the input record
       sourceHash: 
         type: string
         description: SHA256 hash of the source text
       targetText: 
         type: string
-        description: Target Text of the input record -- IP
+        description: Target Text of the input record
       targetLanguage: 
         type: string
-        description: Target Language of the input record -- IP
+        description: Target Language of the input record
       targetHash: 
         type: string
         description: SHA256 hash of the target text
       alignmentScore: 
         type: number
         description: Alignment score of the record -- IP
-      dataset:
-        type: string
-        description: ID of the dataset -- IP
       derived: 
         type: boolean
         description: TRUE if it is derived record, FALSE otherwise.
+      datasetId:
+        type: string
+        description: ID of the dataset
       contributors:
         type: array
-        description: Details of the contributors -- IP
+        description: Details of the contributors
         items:
           type: object
       submitter:
         type: object
-        description: Details of the submitter -- IP
-      collectionModes:
+        description: Details of the submitter
+      collectionMethod:
         type: array
-        description: List of collection modes -- IP
+        description: List of collection modes
+        items:
+          type: object
+      collectionSource:
+        type: array
+        description: List of collection sources
         items:
           type: string
-      collectionSources:
+      domain:
         type: array
-        description: List of collection sources -- IP
-        items:
-          type: string
-      domains:
-        type: array
-        description: List of domains the record belongs to -- IP
+        description: List of domains the record belongs to
         items:
           type: string
       license:
         type: string
-        description: License of the dataset -- IP
+        description: List of licenses the record belongs to
+        items:
+          type: string
       tags:
         type: array
         description: Dervived list of tags
@@ -75,63 +77,74 @@
         description: Unique ID of the record
       audioFilename: 
         type: string
-        description: Name of the audio file -- IP
+        description: Name of the audio file
       audioFilePath: 
         type: string
         description: Path of the audio file from the shared storage
       text: 
         type: string
-        description: Text format of the audio content -- IP
+        description: Text format of the audio content
+      audioHash: 
+        type: string
+        description: Hash of the audio file
+      textHash: 
+        type: string
+        description: Hash of the text content
       startTime: 
         type: datetime
-        description: Start time of the audio -- IP
+        description: Start time of the audio
       endTime: 
         type: datetime
-        description: End time of the audio -- IP
+        description: End time of the audio
       channel: 
         type: string
-        description: Channel of collection of the audio file -- IP
+        description: Channel of collection of the audio file
       samplingRate: 
         type: string
-        description: Sampling rate -- IP
+        description: Sampling rate
       bitsPerSample: 
         type: number
-        description: Alignment score of the record -- IP
+        description: Alignment score of the record
       gender:
         type: string
-        description: Gender of the speaker -- IP
+        description: Gender of the speaker
       age: 
         type: string
-        description: Age of the speaker -- IP
+        description: Age of the speaker
       snr: 
         type: object
         description: SNR details
+      datasetId:
+        type: string
+        description: ID of the dataset
       contributors:
         type: array
-        description: Details of the contributors -- IP
+        description: Details of the contributors
         items:
           type: object
       submitter:
         type: object
-        description: Details of the submitter -- IP
-      collectionModes:
+        description: Details of the submitter
+      collectionMethod:
         type: array
-        description: List of collection modes -- IP
+        description: List of collection modes
         items:
           type: string
-      collectionSources:
+      collectionSource:
         type: array
-        description: List of collection sources -- IP
+        description: List of collection sources
         items:
           type: string
-      domains:
+      domain:
         type: array
-        description: List of domains the record belongs to -- IP
+        description: List of domains the record belongs to
         items:
           type: string
       license:
         type: string
-        description: License of the dataset
+        description: List of licenses the record belongs to
+        items:
+          type: string
       tags:
         type: array
         description: Dervived list of tags
@@ -148,10 +161,16 @@
         description: Unique ID of the record
       groundTruth: 
         type: string
-        description: Content of the image -- IP
+        description: Content of the image
       imageFilename: 
         type: string
-        description: Name of the image file -- IP
+        description: Name of the image file
+      groundTruthHash: 
+        type: string
+        description: Hash of the ground truth
+      imageHash: 
+        type: string
+        description: Hash of the image
       imageFilePath: 
         type: string
         description: Path of the image file from the shared storage
@@ -160,6 +179,9 @@
         description: Bounding box details
         items:
           type: object
+      datasetId:
+        type: string
+        description: ID of the dataset
       contributors:
         type: array
         description: Details of the contributors -- IP
@@ -168,24 +190,26 @@
       submitter:
         type: object
         description: Details of the submitter -- IP
-      collectionModes:
+      collectionMethod:
         type: array
         description: List of collection modes -- IP
         items:
           type: string
-      collectionSources:
+      collectionSource:
         type: array
         description: List of collection sources -- IP
         items:
           type: string
-      domains:
+      domain:
         type: array
         description: List of domains the record belongs to -- IP
         items:
           type: string
       license:
         type: string
-        description: License of the dataset
+        description: List of licenses the record belongs to
+        items:
+          type: string
       tags:
         type: array
         description: Dervived list of tags
@@ -202,42 +226,44 @@
         description: Unique ID of the record
       text: 
         type: string
-        description: Text of the input record -- IP
+        description: Text of the input record
       language: 
         type: string
-        description: Language of the input record -- IP
+        description: Language of the input record
       textHash: 
         type: string
         description: SHA256 hash of the source text
-      dataset:
+      datasetId:
         type: string
-        description: ID of the dataset -- IP
+        description: ID of the dataset
       contributors:
         type: array
-        description: Details of the contributors -- IP
+        description: Details of the contributors
         items:
           type: object
       submitter:
         type: object
-        description: Details of the submitter -- IP
-      collectionModes:
+        description: Details of the submitter
+      collectionMethod:
         type: array
-        description: List of collection modes -- IP
+        description: List of collection modes
         items:
           type: string
-      collectionSources:
+      collectionSource:
         type: array
-        description: List of collection sources -- IP
+        description: List of collection sources
         items:
           type: string
-      domains:
+      domain:
         type: array
-        description: List of domains the record belongs to -- IP
+        description: List of domains the record belongs to
         items:
           type: string
       license:
         type: string
-        description: License of the dataset -- IP
+        description: List of licenses the record belongs to
+        items:
+          type: string
       tags:
         type: array
         description: Dervived list of tags
