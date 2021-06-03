@@ -5,7 +5,7 @@ import threading
 import time
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, aws_asr_prefix, search_output_topic, sample_size
+from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, aws_asr_prefix, search_output_topic, sample_size, offset, limit
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -32,7 +32,6 @@ class ASRService:
             metadata.pop("record")
             ip_data = [ip_data["record"]]
             clean_data = self.get_clean_asr_data(ip_data, error_list)
-            log.info(f'Actual Data: {len(ip_data)}, Clean Data: {len(clean_data)}')
             if clean_data:
                 func = partial(self.get_enriched_asr_data, metadata=metadata)
                 pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
@@ -55,7 +54,6 @@ class ASRService:
                                                "description": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
-                    log.info(f'Processing final batch.....')
                     persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                     persist_thread.start()
                     persist_thread.join()
@@ -76,36 +74,37 @@ class ASRService:
                 error_list.append({"record": data, "cause": "INVALID_RECORD",
                                    "description": "either audioFilename or text or audioFilPath is missing"})
                 continue
-            audio_hash = utils.hash_file(data["audioFilePath"])
-            if not audio_hash:
-                error_list.append({"record": data, "cause": "AUDIO_UNAVAILABLE",
-                                   "description": f'Audio file is unavailable at -- {data["audioFilePath"]}'})
-                continue
-            unique_key = f'{audio_hash}|{data["text"]}'
-            unique_key = str(hashlib.sha256(unique_key.encode('utf-16')).hexdigest())
-            if unique_key in duplicate_records:
+            tup = (data["audioHash"], data["textHash"])
+            if tup in duplicate_records:
                 error_list.append({"record": data, "cause": "DUPLICATE_RECORD",
                                    "description": "This audio file is repeated multiple times in the input"})
                 continue
             else:
-                duplicate_records.add(unique_key)
-                data["audioHash"] = unique_key
+                duplicate_records.add(tup)
                 clean_data.append(data)
         duplicate_records.clear()
         return clean_data
 
     # Method to enrich asr dataset
     def get_enriched_asr_data(self, data, metadata):
-        records = self.get_asr_dataset_internal({"audioHash": data["audioHash"]})
+        records = self.get_asr_dataset_internal({"audioHash": data["audioHash"], "textHash": data["textHash"]})
         if records:
+            dup_data = self.enrich_duplicate_data(data, records[0], metadata)
+            if dup_data:
+                repo.update(dup_data)
+                return None
             return "DUPLICATE", data
         insert_data = data
         insert_data["timestamp"] = eval(str(time.time()).replace('.', '')[0:13])
+        insert_data["datasetId"] = [metadata["datasetId"]]
+        insert_data["collectionMethod"] = [insert_data["collectionMethod"]]
+        insert_data["license"] = [insert_data["license"]]
+        insert_data["datasetType"] = metadata["datasetType"]
         tag_details = {
-            "audioFilename": data["audioFilename"], "channel": data["channel"], "gender": data["gender"],
-            "collectionMode": data["collectionMode"], "language": data["language"],
-            "collectionSource": data["collectionSource"], "dataset": data["datasetId"], "datasetType": data["datasetType"],
-            "domain": data["domain"], "license": data["license"], "audioHash": data["audioHash"]
+            "channel": insert_data["channel"], "gender": insert_data["gender"],
+            "collectionMode": insert_data["collectionMethod"]["collectionDescription"], "language": insert_data["language"],
+            "collectionSource": insert_data["collectionSource"], "dataset": insert_data["datasetId"], "datasetType": insert_data["datasetType"],
+            "domain": insert_data["domain"], "license": insert_data["license"]
         }
         insert_data["tags"] = list(utils.get_tags(tag_details))
         s3_file_name = data["audioFilename"] + metadata["serviceRequestNumber"] + insert_data["timestamp"]
@@ -114,6 +113,29 @@ class ASRService:
             return "FAILED", insert_data
         insert_data["objStorePath"] = object_store_path
         return "INSERT", insert_data
+
+    def enrich_duplicate_data(self, data, record, metadata):
+        is_duplicate = True
+        if data["collectionMethod"] not in record["collectionMethod"]:
+            record["collectionMethod"].append(data["collectionMethod"])
+            is_duplicate = False
+        collection_source = list(set(data["collectionSource"]) | set(record["collectionSource"]))
+        if collection_source != record["collectionSource"]:
+            record["collectionSource"] = collection_source
+            is_duplicate = False
+        domain = list(set(data["domain"]) | set(record["domain"]))
+        if domain != record["domain"]:
+            record["domain"] = list(set(data["domain"]) | set(record["domain"]))
+            is_duplicate = False
+        if metadata["datasetId"] not in record["datasetId"]:
+            record["datasetId"].append(metadata["datasetId"])
+            is_duplicate = False
+        if metadata["license"] not in record["license"]:
+            record["license"].append(metadata["license"])
+            is_duplicate = False
+        if is_duplicate:
+            return False
+        return record
 
     # Method for deduplication
     def get_asr_dataset_internal(self, query):

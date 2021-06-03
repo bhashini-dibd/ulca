@@ -53,6 +53,11 @@ class OCRRepo:
         col.insert_many(data)
         return len(data)
 
+    # Updates the object in the mongo collection
+    def update(self, object_in):
+        col = self.get_mongo_instance()
+        col.replace_one({"id": object_in["id"]}, object_in)
+
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
         col = self.get_mongo_instance()
