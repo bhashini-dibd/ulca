@@ -1,4 +1,4 @@
-import { withStyles, Typography,Link, MuiThemeProvider, createMuiTheme } from "@material-ui/core";
+import { withStyles, Typography,Link, MuiThemeProvider, createMuiTheme,Button } from "@material-ui/core";
 import BreadCrum from '../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,25 +7,30 @@ import DataSet from "../../styles/Dataset";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../redux/actions/api/DataSet/MyContribution";
-
+import Dialog from "../../components/common/Dialog"
+import {Cached, SaveAlt} from '@material-ui/icons';
 
 const ContributionList = (props) => {
 
         const history                 = useHistory();
         const dispatch                = useDispatch();
         const myContributionReport    = useSelector( (state) => state.myContributionReport);
-        
+
         useEffect(()                  => {
-                const userObj         = new MyContributionList( "SAVE", "A_FBTTR-VWSge-1619075981554", "241006445d1546dbb5db836c498be6381606221196566");
-                myContributionReport.responseData.length == 0  && dispatch(APITransport(userObj));
+                myContributionReport.responseData.length == 0  && MyContributionListApi()
         }, []);
   
+        const  MyContributionListApi  = () =>{
+                const userObj         = new MyContributionList( "SAVE", "A_FBTTR-VWSge-1619075981554", "241006445d1546dbb5db836c498be6381606221196566");
+                dispatch(APITransport(userObj));
+        }
 
         const getMuiTheme = () => createMuiTheme({
                 overrides: {
                 MuiTableCell: {
                         head: {
-                                backgroundColor : "#c7c6c68a !important"
+                                backgroundColor : "#c7c6c68a !important",
+                                cursor: 'default'
                         }
                 },
                 MuiPaper: {
@@ -35,9 +40,29 @@ const ContributionList = (props) => {
                                 border          : "1px solid rgb(224 224 224)"
                         }
                 },
-                MUIDataTableToolbar:{ root: { display: "none" } }
+                MUIDataTableToolbar:{ root: { display: "none" } },
+                MuiTableRow:{root:{cursor: 'pointer'}}
                 }
         });
+
+        const HandleDelete = () =>{
+                return <Dialog
+                // message={message}
+                // type={dialogType}
+                // handleClose={this.handleDialogClose.bind(this)}
+                // open
+                // title={dialogTitle}
+                // handleSubmit={this.handleDialogSubmit.bind(this)}
+                // value={value}
+                /> 
+        }
+
+
+        const fetchHeaderButton= () => {
+                return (
+                         <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                )
+              }
 
         const renderStatus = (id,value) => {
                 if(value === "Inprogress"){
@@ -51,9 +76,16 @@ const ContributionList = (props) => {
         const renderAction = (id,value) => {
                 if(value === "Inprogress"){}
                 else{
-                        return <div className= {classes.span}> <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update </Link><Link className= {classes.link}> Delete </Link> </div> 
+                        return <div className= {classes.span}> <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update </Link><Link className= {classes.link} onClick={()=>{HandleDelete()}}> Delete </Link> </div> 
                 }
         }
+
+        const handleRowClick = ( rowMeta) => {
+                if(rowMeta.colIndex!=6){
+                        const value = myContributionReport.responseData[rowMeta.rowIndex].sr_no;
+                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}}`)
+                }
+            };
 
     
         const columns = [
@@ -68,7 +100,7 @@ const ContributionList = (props) => {
                 },
                 {
                 name    : "sr_no",
-                label   : "Sr No.",
+                label   : "SR No.",
                 options : {
                                 filter  : false,
                                 sort    : false,
@@ -143,8 +175,8 @@ const ContributionList = (props) => {
                         },
                         options: { sortDirection: "desc" },
                         },
-
-                
+                        onCellClick: (colData, cellMeta) => handleRowClick( cellMeta),
+               
                 filterType      : "checkbox",
                 download        : false,
                 print           : false,
@@ -161,9 +193,14 @@ const ContributionList = (props) => {
                                 <BreadCrum links={["Dataset"]} activeLink="My Contribution" />
                         </div>
 
-                        <div className={classes.title}>
-                                <Typography variant="b" component="h2">My Contribution</Typography>
+                        <div className={classes.headerButtons}>
+                        <Typography variant="b" component="h2" >My Contribution</Typography>
+                                {fetchHeaderButton()} 
                         </div>
+
+                        {/* <div className={classes.title}>
+                                
+                        </div> */}
 
                         <MuiThemeProvider theme={getMuiTheme()}>  
                                 <MUIDataTable

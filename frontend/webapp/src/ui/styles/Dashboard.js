@@ -1,61 +1,104 @@
-const FileUploadStyles = theme => ({
-    container: {
-      margin:'1.5rem 20% 3rem 15.5%',
-      overflow: 'auto'
-    },
-    
-    breadcrum: {
-      marginBottom: '1.5rem',
-      
+const FileUploadStyles = (theme) => ({
+  container: {
+
+    margin: "1.5rem 20% 3rem 15.5%",
+    overflow: "auto",
+    "@media (max-width:800px)": {
+      margin: "auto"
+    }
   },
-  
-    cursor:{
-      cursor:"pointer"
-    },
-    title: {
-      margin: '0 0 3vh 1vh'
+
+  breadcrum: {
+    marginBottom: "1.5rem",
+  },
+
+  cursor: {
+    cursor: "pointer",
+  },
+  titleBar: {
+    margin: "0 0 1vh 1vh",
+    display: "flex",
+    flexDirection: "row",
   },
   paper: {
-    padding: '3%',
-},
-
-    langPairButtons: {
-      display: "flex", 
-      justifyContent: 'flex-end', 
-      width: "100%",
-      padding:'.6rem 1rem',
-      boxSizing: 'border-box'
-    },
-    cardHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      borderBottom: '1px solid #EEEEF0',
-      padding: '.6rem 1rem',
-      width: '100%',
-      boxSizing: 'border-box'
-    },
-    backButton: {
-      boxShadow: 'none',
-      backgroundColor: '#F0F1F3',
-      color: '#0C0F0F',
-      padding: '.5rem .625rem',
-      marginRight: '.5rem'
-    },
-    seperator: {
-      width: '1px',
-      height: '2rem',
-      backgroundColor: '#DADCE0',
-      margin: '0 1rem',
-      fontSize: '.75rem'
-    },
-    cardHeaderContainer: {
-      display: "flex", 
-      flexDirection: "row",
-      minHeight:"2.3rem"
+    padding: "3%",
+  },
+  Typography: { 
+    margin: ".5rem 3% 0 0 ",
+    "@media (max-width:500px)": {
+      margin: ".7rem 0 0 0 ",
+      fontSize:"12px"
     }
+   },
+  select: {
+    width: "20%",
+    minWidth: "10rem",
+    color:"grey"
+  },
+  filterButton:{
+    marginLeft: 'auto',
+    marginRight: '5%',
+    width:"7rem",
+    maxWidth:"7rem",
+    "@media (max-width:800px)": {
+      display: 'none'
+    }
+  },
+  filterButtonIcon:{
+    
+    display: 'none',
+    "@media (max-width:800px)": {
+      marginLeft: 'auto',
+      display: 'block',
+    marginRight: '5%',
+    maxWidth:"3rem",
+    maxHeight:"2.3rem"
+    }
+  },
 
-  });
-  
-  
-  export default FileUploadStyles;
-  
+  langPairButtons: {
+    display: "flex",
+    justifyContent: "flex-end",
+    width: "100%",
+    padding: ".6rem 1rem",
+    boxSizing: "border-box",
+  },
+  cardHeader: {
+    display: "flex",
+    alignItems: "center",
+    borderBottom: "1px solid #EEEEF0",
+    padding: ".6rem 1rem",
+    width: "100%",
+    boxSizing: "border-box",
+  },
+  backButton: {
+    boxShadow: "none",
+    backgroundColor: "#F0F1F3",
+    color: "#0C0F0F",
+    padding: ".5rem .625rem",
+    marginRight: ".5rem",
+  },
+  seperator: {
+    width: "1px",
+    height: "2rem",
+    backgroundColor: "#DADCE0",
+    margin: "0 1rem",
+    fontSize: ".75rem",
+  },
+  cardHeaderContainer: {
+    display: "flex",
+    flexDirection: "row",
+    minHeight: "2.3rem",
+  },
+  iconStyle:{
+    marginRight:".7rem",
+    "@media (max-width:800px)": {marginRight:"0"}
+  },
+  title:{
+    textAlign: "left",
+    margin: "4.5vh 0 8.5vh 1vh",
+    "@media (max-width:600px)": {textAlign: "center",}
+  }
+});
+
+export default FileUploadStyles;
