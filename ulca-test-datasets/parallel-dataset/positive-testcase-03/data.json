@@ -1,0 +1,38 @@
+[
+    {
+        "sourceText": "The global average for case fatality is presently around 6.45%",
+        "targetText": "महामारी के घातक होने का वैश्विक औसत दर वर्तमान में लगभग 6.45 प्रतिशत है।",
+        "collectionMethod": {
+            "collectionDetails": {
+                "contributor": {
+                    "name": "Vishal",
+                    "aboutMe": "NLP Backend team lead at Project Anuvaad"
+                },
+                "timeSpentInSeconds": 98,
+                "numOfKeysPressed": 45
+            }
+        }
+    },
+    {
+        "sourceText": "1,069 deaths  have been registered in the past 24 hours.",
+        "targetText": "पिछले 24 घंटों में 1,069 मौतें दर्ज की गई हैं।",
+        "collectionMethod": {
+            "collectionDetails": {
+                "timeSpentInSeconds": 38,
+                "numOfKeysPressed": 12
+            }
+        }
+    },
+    {
+        "sourceText": "Access to data and technology will improve",
+        "targetText": "डेटा और प्रौद्योगिकी तक पहुंच में सुधार होगा",
+        "collectionMethod": {
+            "collectionDetails": {
+                "editingTool": "CDAC-Editor",
+                "editingToolVersion": "1.3",
+                "timeSpentInSeconds": 88,
+                "numOfKeysPressed": 4
+            }
+        }
+    }
+]

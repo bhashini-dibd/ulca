@@ -1,0 +1,48 @@
+{
+    "dataset-type": "parallel-corpus",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": "hi"
+    },
+    "collectionSource": [
+        "http://pib.gov.in/",
+        "https://www.mykhel.com/",
+        "https://www.drivespark.com/",
+        "https://www.goodreturns.in/",
+        "https://indianexpress.com/",
+        "http://www.catchnews.com/",
+        "https://dw.com/",
+        "http://ddnews.gov.in/",
+        "https://www.financialexpress.com/",
+        "https://www.zeebiz.com/",
+        "https://www.sakshi.com/",
+        "https://marketfeed.news/"
+    ],
+    "domain":[
+        "news"
+    ],
+    "collectionMethod": {
+        "collectionDescription": [
+            "auto-aligned"
+        ],
+        "collectionDetails": {
+            "alignmentTool": "LaBSE",
+            "alignmentToolVersion": "v2"
+        }
+    },
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
+        "team": [
+            {
+                "name": "Ajitesh Sharma",
+                "aboutMe": "NLP team lead at Project Anuvaad"
+            },
+            {
+                "name": "Vishal Mauli",
+                "aboutMe": "Backend team lead at Project Anuvaad"
+            }
+        ]
+    }
+}

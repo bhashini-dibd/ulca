@@ -1,0 +1,40 @@
+[
+    {
+        "sourceText": "I have visited only Kerala and Tamilnadu",
+        "targetText": "நான் கேரளா மற்றும் தமிழ்நாட்டுக்கு மட்டுமே சென்றிருக்கிறேன்.",
+        "collectionMethod": {
+            "collectionDetails": {
+                "evaluationMethod": {
+                    "adequacy": 5,
+                    "fluency": 5
+                }
+            }
+        }
+    },
+    {
+        "sourceText": "Who else is there in your team?",
+        "targetText": "உங்களுடைய குழுவில் வேறு யாரெல்லாம் அங்கே இருக்கிறார்கள்?",
+        "collectionMethod": {
+            "collectionDetails": {
+                "translationModel": "Bing",
+                "translationModelVersion": "v3",
+                "evaluationMethod": {
+                    "adequacy": 5,
+                    "fluency": 5
+                }
+            }
+        }
+    },
+    {
+        "sourceText": "The global average for case fatality is presently around 6.45%",
+        "targetText": "உலக இறப்பு விகித சராசரி தற்போது 6.45 சதவீதமாக உள்ளது.",
+        "collectionMethod": {
+            "collectionDetails": {
+                "evaluationMethod": {
+                    "adequacy": 5,
+                    "fluency": 5
+                }
+            }
+        }
+    }
+]

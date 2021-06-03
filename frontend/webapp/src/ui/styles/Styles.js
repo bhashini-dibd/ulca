@@ -34,21 +34,30 @@ const GlobalStyles = (theme) => ({
     padding: theme.spacing(3),
     marginTop: "3%",
   },
-  loaderStyle:{
+  loaderStyle: {
     position: 'fixed',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',      
-      zIndex: 1000,
-    width:'100%',
-    height:'100%',  
-      top:0,
-    left:0,
-    
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    zIndex: 1000,
+    width: '100%',
+    height: '100%',
+    top: 0,
+    left: 0,
+
   },
-  progress: {   
-    position:'relative',
-    top:'40%',
-    left:'46%'
-          
+  progress: {
+    position: 'relative',
+    top: '40%',
+    left: '46%'
+
+  },
+  snackbar: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+  snackbarFont: {
+    fontSize: '1rem'
   }
 });
 

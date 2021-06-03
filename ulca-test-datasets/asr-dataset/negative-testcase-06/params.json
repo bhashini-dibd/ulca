@@ -1,0 +1,50 @@
+{
+    "datasetType": "asr-corpus",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": null
+    },
+    "collectionSource": [
+        "openslr",
+        "https://www.youtube.com?v=121212121",
+        "https://www.mymp3world.com/",
+        "https://www.mannkibaath.com/",
+        "https://www.newsonair.in/",
+        "https://indianexpress.com/",
+        "http://www.catchnews.com/",
+        "https://dw.com/",
+        "http://ddnews.gov.in/",
+        "https://www.financialexpress.com/",
+        "https://www.zeebiz.com/",
+        "https://www.sakshi.com/",
+        "https://marketfeed.news/"
+    ],
+    "domain":[
+        "general"
+    ],
+    "collectionMethod": [
+        "web-scrapping-audio"
+    ],
+    "format": "wav",
+    "channel": "mono",
+    "samplingRate": 16000,
+    "bitsPerSample": "sixteen",
+    "numberOfSpeakers": 3,
+    "license":  "cc-by-4.0",
+    "submitter": {
+        "name": "Anirudh",
+        "oauthId": {
+            "oauthId": "anirudh.gupta@thoughtworks.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Harveen",
+                "oauthId": {
+                    "oauthId": "anirudh.gupta@thoughtworks.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    }
+}

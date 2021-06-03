@@ -1,266 +1,290 @@
-  ingest_input:
+  dataset_submit:
     type: object
-    description: Inout entity for the ingest kafka consumer
+    description: Submit event on the kafka queue
     properties:
+      version:
+        type: string
+        description: Version number of the enity
+        required: true
       userAction: 
         type: string
-        description: Action to be perfomed on the input -- IP
+        description: Action to be taken on this event
         enum:
-          - INGEST
-          - ABORT
-          - DELETE
+          - ingest
+          - validate
+          - publish
+        required: true
+      userMode: 
+        type: string
+        description: Mode in which the userAction has to be taken on this event
+        enum:
+          - pseudo
+          - real
+        required: true
       fileURL: 
         type: string
-        description: URL of the file from which dataset has to be downloaded -- IP
+        description: Public URL of the file from which the dataset being submitted has to be downloaded from
       datasetId: 
         type: string
-        description: Unique ID for the dataset
+        description: Unique identifier of the dataset being submitted
+        required: true
       datasetType: 
         type: string
-        description: Type of the dataset -- IP
+        description: Type of the dataset being submitted
+        enum:
+          - parallel-corpus
+          - monolingual-corpus
+          - asr-corpus
+          - ocr-corpus
+        required: true
       serviceRequestNumber: 
         type: string
-        description:  Unique SRN per request
+        description: Unique identifier of the service request initiated for the submit event
+        required: true
       userId: 
         type: string
-        description: User id of the submitter of this SR -- IP
-      errorReportFile:
-        type: string
-        description: Name of the error report file to be used by the file consumer to save errors.
-
-
-  ingest_output:
-    type: object
-    description: Output entity for the ingest kafka consumer
-    properties:
-      userAction: 
-        type: string
-        description: Action to be perfomed on the input -- IP
-        enum:
-          - INGEST
-          - ABORT
-          - DELETE
-      serviceRequestNumber: 
-        type: string
-        description:  Unique SRN per request
-      datasetId: 
-        type: string
-        description: Unique ID for the dataset
-      datasetType: 
-        type: string
-        description: Type of the dataset
-      userId: 
-        type: string
-        description: User id of the submitter of this SR
-      batchId: 
-        type: string
-        description: Unique batch id of the batch of records
-      records: 
-        type: array
-        description: Denormalised records as per the dataset input
-        items:
-          type: object
-
-
-  validate_input:
-    type: object
-    description: Inout entity for the validate kafka consumer
-    properties:
-      userAction: 
-        type: string
-        description: Action to be perfomed on the input -- IP
-        enum:
-          - INGEST
-          - ABORT
-          - DELETE
-      serviceRequestNumber: 
-        type: string
-        description:  Unique SRN per request
-      datasetId: 
-        type: string
-        description: Unique ID for the dataset
-      datasetType: 
-        type: string
-        description: Type of the dataset
-      userId: 
-        type: string
-        description: User id of the submitter of this SR
-      batchId: 
-        type: string
-        description: Unique batch id of the batch of records
-      records: 
-        type: array
-        description: Denormalised records as per the dataset input
-        items:
-          type: object
-
-
-  validate_output:
-    type: object
-    description: Output entity for the validate kafka consumer
-    properties:
-      serviceRequestNumber: 
-        type: string
-        description:  Unique SRN per request
-      batchId: 
-        type: string
-        description: Unique batch id of the batch of records
-      status: 
-        type: string
-        description: Status of the batch processing
-        enum:
-          - SUCCESS
-          - FAILED
-      totalCount: 
-       type: number
-        description: Size of batch i.e no of records received in this batch
-      successCount: 
+        description: Unique identifier of the user submitting the dataset
+        required: true
+      currentRecordIndex: 
         type: number
-        description: No of records successfully processed
-      failCount: 
+        description: Numeric index of the current record under process
+        required: true
+      totalRecordCount: 
         type: number
-        description: No of records that failed and have been sent for error reporting
-      tool: 
-        type: string
-        description: VALIDATE
-      startTime: 
-        type: number
-        description: 13 digit epoch of the start time
-      endTime: 
-        type: number
-        description: 13 digit epoch of the end time
-
-
-  validate_output_error:
-    type: object
-    description: Output entity for the validate kafka consumer for error records
-    properties:
-      serviceRequestNumber: 
-        type: string
-        description:  Unique SRN per request
-      batchId: 
-        type: string
-        description: Unique batch id of the batch of records
-      tool: 
-        type: string
-        description: VALIDATE
-      records:
-        type: array
-        description: list of failed records
-        items:
-          type: object
-          $ref: '#/error_record'
-
-  publish_input:
-    type: object
-    description: Inout entity for the publish kafka consumer
-    properties:
-      userAction: 
-        type: string
-        description: Action to be perfomed on the input -- IP
-        enum:
-          - INGEST
-          - ABORT
-          - DELETE
-      serviceRequestNumber: 
-        type: string
-        description:  Unique SRN per request
-      datasetId: 
-        type: string
-        description: Unique ID for the dataset
-      datasetType: 
-        type: string
-        description: Type of the dataset
-      userId: 
-        type: string
-        description: User id of the submitter of this SR
-      batchId: 
-        type: string
-        description: Unique batch id of the batch of records
-      records: 
-        type: array
-        description: Denormalised records as per the dataset input
-        items:
-          type: object
-
-
-  publish_output:
-    type: object
-    description: Output entity for the publish kafka consumer
-    properties:
-      serviceRequestNumber: 
-        type: string
-        description:  Unique SRN per request
-      batchId: 
-        type: string
-        description: Unique batch id of the batch of records
-      status: 
-        type: string
-        description: Status of the batch processing
-        enum:
-          - SUCCESS
-          - FAILED
-      totalCount: 
-       type: number
-        description: Size of batch i.e no of records received in this batch
-      successCount: 
-        type: number
-        description: No of records successfully processed
-      failCount: 
-        type: number
-        description: No of records that failed and have been sent for error reporting
-      tool: 
-        type: string
-        description: PUBLISH
-      startTime: 
-        type: number
-        description: 13 digit epoch of the start time
-      endTime: 
-        type: number
-        description: 13 digit epoch of the end time
-
-
-  publish_output_error:
-    type: object
-    description: Output entity for the ingest kafka consumer for error records
-    properties:
-      serviceRequestNumber: 
-        type: string
-        description:  Unique SRN per request
-      batchId: 
-        type: string
-        description: Unique batch id of the batch of records
-      tool: 
-        type: string
-        description: PUBLISH
-      records:
-        type: array
-        description: list of failed records
-        items:
-          type: object
-          $ref: '#/error_record'
-
-
-  error_record:
-    type: object
-    description: error records
-    properties:
+        description: Total count of the number of records to be processed.
+        required: true
+      timeStamp: 
+        type: date
+        description: Timestamp of the instance of generation of this event
+        required: true
       record: 
         type: object
-        description: The record that has failed validation
-      timeStamp: 
-        type: number
-        description: 13 digit epoch of the time stamp
-      cause: 
+        description: Record to be processed
+  
+
+  dataset_delete:
+    type: object
+    description: Delete event on the kafka queue
+    properties:
+      version:
         type: string
-        description: Cause of the error
+        description: Version number of the enity
+        required: true
+      userAction: 
+        type: string
+        description: Action to be taken on this event - DELETE
         enum:
-          - DUPLICATE_RECORD
-          - INVALID_DATA
-          - VALIDATION_FAILED
-      description: 
+          - delete
+        required: true
+      userMode: 
         type: string
-        description: Detailed description of the error
-      additionalDetails: 
+        description: Mode in which the userAction has to be taken on this event - REAL
+        enum:
+          - real
+        required: true
+      datasetId: 
+        type: string
+        description: Unique identifier of the dataset being submitted
+        required: true
+      datasetType: 
+        type: string
+        description: Type of the dataset being submitted
+        enum:
+          - parallel-corpus
+          - monolingual-corpus
+          - asr-corpus
+          - ocr-corpus
+        required: true
+      serviceRequestNumber: 
+        type: string
+        description: Unique identifier of the service request initiated for the submit event
+        required: true
+      userId: 
+        type: string
+        description: Unique identifier of the user submitting the dataset
+        required: true
+      timeStamp: 
+        type: date
+        description: Timestamp of the instance of generation of this event
+        required: true
+
+  dataset_search:
+    type: object
+    description: Search event on the kafka queue
+    properties:
+      version:
+        type: string
+        description: Version number of the enity
+        required: true
+      userAction: 
+        type: string
+        description: Action to be taken on this event - SEARCH
+        enum:
+          - search
+        required: true
+      userMode: 
+        type: string
+        description: Mode in which the userAction has to be taken on this event - REAL
+        enum:
+          - real
+        required: true
+      datasetType: 
+        type: string
+        description: Type of the dataset being submitted
+        enum:
+          - parallel-corpus
+          - monolingual-corpus
+          - asr-corpus
+          - ocr-corpus
+        required: true
+      serviceRequestNumber: 
+        type: string
+        description: Unique identifier of the service request initiated for the submit event
+        required: true
+      userId: 
+        type: string
+        description: Unique identifier of the user submitting the dataset
+        required: true
+      timeStamp: 
+        type: date
+        description: Timestamp of the instance of generation of this event
+        required: true
+      filters:
         type: object
-        description: Additional information of the error if required
+        description: Filters to be applied on search, this depends on the type of dataset.
+
+
+  filers_parallel:
+    type: object
+    description: Filters for parallel corpus
+    properties:
+      minScore:
+        type: number
+        description: Minimum alignment score.
+      maxScore:
+        type: number
+        description: Maximum alignment score.
+      score:
+        type: number
+        description:  Alignment score.
+      sourceLanguage:
+        type: string
+        description:  Source language of the records to be fetched
+        required: true
+      targetLanguage:
+        type: array
+        description: Target language of the records to be fetched
+        items:
+          type: string
+        required: true
+      collectionMode: 
+        type: array
+        description: Collection Mode of the records
+      collectionSource: 
+        type: array
+        description: Collection Source of the records
+      license: 
+        type: string
+        description:  license of the records to be fetched
+      domain: 
+        type: string
+        description:  Domain of the records to be fetched
+      datasetId: 
+        type: string
+        description:  Dataset id of the dataset to be fetched
+      groupBy: 
+        type: boolean
+        description:  if the records are to be grouped by the source text, this param must be used
+      countOfTranslations: 
+        type: number
+        description: count of translations of the records to be returned by source text
+
+  filers_asr:
+    type: object
+    description: Filters for ASR corpus
+    properties:
+      language:
+        type: string
+        description:  language of the records to be fetched
+        required: true
+      collectionMode: 
+        type: array
+        description: Collection Mode of the records
+      collectionSource: 
+        type: array
+        description: Collection Source of the records
+      license: 
+        type: string
+        description:  license of the records to be fetched
+      domain: 
+        type: string
+        description:  Domain of the records to be fetched
+      datasetId: 
+        type: string
+        description:  Dataset id of the dataset to be fetched
+      channel: 
+        type: string
+        description:  Channel of a given ASR record
+      text: 
+        type: string
+        description:  Text of the ASR record
+      age: 
+        type: string
+        description:  Age of the speaker of a given ASR record
+      gender: 
+        type: string
+        description:  Gender of the speaker of a given ASR record
+
+  filers_ocr:
+    type: object
+    description: Filters for ASR corpus
+    properties:
+      language:
+        type: string
+        description:  language of the records to be fetched
+        required: true
+      collectionMode: 
+        type: array
+        description: Collection Mode of the records
+      collectionSource: 
+        type: array
+        description: Collection Source of the records
+      license: 
+        type: string
+        description:  license of the records to be fetched
+      domain: 
+        type: string
+        description:  Domain of the records to be fetched
+      datasetId: 
+        type: string
+        description:  Dataset id of the dataset to be fetched
+      groundTruth: 
+        type: string
+        description:  Ground truth of the OCR record
+        
+  filers_monolingual:
+    type: object
+    description: Filters for Monolingual corpus
+    properties:
+      language:
+        type: string
+        description:  language of the records to be fetched
+        required: true
+      collectionMode: 
+        type: array
+        description: Collection Mode of the records
+      collectionSource: 
+        type: array
+        description: Collection Source of the records
+      license: 
+        type: string
+        description:  license of the records to be fetched
+      domain: 
+        type: string
+        description:  Domain of the records to be fetched
+      datasetId: 
+        type: string
+        description:  Dataset id of the dataset to be fetched
+      text: 
+        type: string
+        description:  Text of the record.

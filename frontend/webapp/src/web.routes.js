@@ -10,80 +10,85 @@ import Login from "./ui/container/UserManagement/UserManagement";
 import SubmitDataset from './ui/container/DataSet/UploadDataset/SubmitDataset';
 import ContributionList from "./ui/container/DataSet/ContributionList";
 import DetailedStatus from "./ui/container/DataSet/DetailedStatus";
-import Dashboard  from "./ui/container/Dashboard/ChartRender";
+import Dashboard from "./ui/container/Dashboard/ChartRender";
 import DatasetSubmission from './ui/container/DataSet/UploadDataset/DatasetSubmission';
+import authenticateUser from './configs/authenticate';
 
-const PrivateRoute = ({ component: Component, authenticate, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      authenticate ? (
-
-        <Layout component={Component} {...rest} />
-      ) : (
-        <Redirect to={`${process.env.PUBLIC_URL}/logout`} />
-      )
-    }
-  />
-);
+const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={(props) =>
+        authenticate() ? (
+          <Layout component={Component} {...rest} />
+        ) : (
+          <Redirect to={`${process.env.PUBLIC_URL}/dashboard`} />
+        )
+      }
+    />
+  );
+}
 
 export default function App() {
-  debugger
+
   return (
     <Router history={history} basename="/">
 
       <div>
 
         <Switch>
-          <Route exact path={`${process.env.PUBLIC_URL}/`} component={Login} />
+          <PrivateRoute exact path={`${process.env.PUBLIC_URL}/`}
+            authenticate={authenticateUser}
+            component={Dashboard}
+          />
           <Route
             exact
             path={`${process.env.PUBLIC_URL}/user/:page`}
             component={Login}
           />
+          <Route exact path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard} />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/dataset-status/:id`}
             title={"Submit Dataset"}
             component={DetailedStatus}
-            authenticate={true}
+            authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/my-contribution`}
             title={"My Contribution"}
-
+            authenticate={authenticateUser}
             component={ContributionList}
-            authenticate={true}
             currentMenu="contribution-list"
-            dontShowHeader={true}
+            dontShowHeader={false}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/submit-dataset/upload`}
             title={"Submit Dataset"}
             userRoles={[""]}
             component={SubmitDataset}
-            authenticate={true}
+            authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/dashboard`}
+            path={`${process.env.PUBLIC_URL}/private-dashboard`}
             title={"Submit Dataset"}
             userRoles={[""]}
             component={Dashboard}
-            authenticate={true}
+            authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}
           />
-          
+
 
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/submit-dataset/submission/:reqno`}
             title={"Dataset Submission"}
             userRoles={[""]}
             component={DatasetSubmission}
-            authenticate={true}
+            authenticate={authenticateUser}
             currentMenu="dataset-submission"
             dontShowHeader={false}
           />

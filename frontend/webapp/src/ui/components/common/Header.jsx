@@ -9,6 +9,10 @@ import HeaderStyles from "../../styles/HeaderStyles"
 import HomeIcon from '@material-ui/icons/Home';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ChromeReaderModeIcon from '@material-ui/icons/ChromeReaderMode';
+import { useHistory } from 'react-router-dom';
+import GroupIcon from '@material-ui/icons/Group';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import authenticate from '../../../configs/authenticate';
 
 const StyledMenu = withStyles({
   paper: {
@@ -16,7 +20,7 @@ const StyledMenu = withStyles({
   },
 })((props) => (
   <Menu
-    elevation={0}
+    elevation={4}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
@@ -31,9 +35,9 @@ const StyledMenu = withStyles({
 ));
 
 const Header = (props) => {
-  const { classes } = props;
+  const { classes, token } = props;
   const [anchorEl, setAnchorEl] = useState(null)
-
+  const history = useHistory();
   const handleClose = (e) => {
     setAnchorEl(null)
   }
@@ -43,96 +47,151 @@ const Header = (props) => {
     setAnchorEl(e.currentTarget)
   }
 
+  const handleMenuItemClick = (url) => {
+    handleClose();
+    history.push(`${process.env.PUBLIC_URL}${url}`)
+  }
   return (
     <div>
       <AppBar color="primary">
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
-            <Button className={classes.title}>
+            <Button className={classes.title}
+              onClick={() => handleMenuItemClick('/dashboard')}
+            >
               <Typography variant="h5">
                 <strong>{"U L C A"}</strong>
               </Typography>
             </Button>
-            <div className={classes.home}>
-              <Button
-                className={classes.menuBtn}
-                variant="text"
-              >
-                Home
+            {
+              authenticate() &&
+              <>
+                <div className={classes.home}>
+                  <Button
+                    className={classes.menuBtn}
+                    variant="text"
+                    onClick={() => handleMenuItemClick('/dashboard')}
+                  >
+                    Home
                 </Button>
-            </div>
-            <div className={classes.homeBtn}>
+                </div>
 
-              <Button
-                className={classes.menuBtn}
-                variant="text"
-              >
-                <HomeIcon fontSize="large" />
-              </Button>
-            </div>
-            <div className={classes.options}>
-              <div className={classes.dataset}>
-                <Button className={classes.menuBtn}
-                  onClick={(e) => handleOpenMenu(e)}
-                  variant="text"
-                >
-                  Dataset
+                <div className={classes.homeBtn}>
+                  <Button
+                    className={classes.menuBtn}
+                    variant="text"
+                    onClick={() => handleMenuItemClick('/dashboard')}
+                  >
+                    <HomeIcon fontSize="large" />
+                  </Button>
+                </div>
+                <div className={classes.options}>
+                  <div className={classes.dataset}>
+                    <Button className={classes.menuBtn}
+                      onClick={(e) => handleOpenMenu(e)}
+                      variant="text"
+                    >
+                      Dataset
                     <DownIcon />
-                </Button>
-              </div>
-              <div className={classes.datasetMobile}>
-                <Button className={classes.menuBtn}
-                  onClick={(e) => handleOpenMenu(e)}
-                  variant="text"
-                >
-                  <DescriptionIcon fontSize="large" />
-                  <DownIcon />
-                </Button>
-              </div>
-              <StyledMenu id="data-set"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={(e) => handleClose(e)}
-                className={classes.styledMenu}
-              >
-                <MenuItem className={classes.styledMenu}>
-                  My Contrributon
+                    </Button>
+                  </div>
+                  <div className={classes.datasetMobile}>
+                    <Button className={classes.menuBtn}
+                      onClick={(e) => handleOpenMenu(e)}
+                      variant="text"
+                    >
+                      <DescriptionIcon fontSize="large" />
+                      <DownIcon />
+                    </Button>
+                  </div>
+                  <StyledMenu id="data-set"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={(e) => handleClose(e)}
+                    className={classes.styledMenu}
+                  >
+                    <MenuItem
+                      className={classes.styledMenu}
+                      onClick={() => handleMenuItemClick('/my-contribution')}
+                    >
+                      My Contributon
                     </MenuItem>
-                <MenuItem className={classes.styledMenu}>
-                  My Searches
+                    <MenuItem className={classes.styledMenu}>
+                      My Searches
                     </MenuItem>
-                <MenuItem className={classes.styledMenu}>
-                  Search & Download Records
+                    <MenuItem className={classes.styledMenu}>
+                      Search & Download Records
                     </MenuItem>
-                <MenuItem className={classes.styledMenu}>
-                  Explore Readymade Datasets
+                    <MenuItem className={classes.styledMenu}>
+                      Explore Readymade Datasets
                     </MenuItem>
-                <MenuItem className={classes.styledMenu}>
-                  Submit Dataset
+                    <MenuItem className={classes.styledMenu}
+                      onClick={() => handleMenuItemClick('/submit-dataset/upload')}
+                    >
+                      Submit Dataset
                     </MenuItem>
-              </StyledMenu>
-            </div>
-            <div className={classes.options}>
-              <div className={classes.model}>
-                <Button className={classes.menuBtn} variant="text">
-                  Model
+                  </StyledMenu>
+                </div>
+                <div className={classes.options}>
+                  <div className={classes.model}>
+                    <Button className={classes.menuBtn} variant="text">
+                      Model
                     <DownIcon />
-                </Button>
-              </div>
-              <div className={classes.modelMobile}>
-                <Button className={classes.menuBtn} variant="text">
-                  <ChromeReaderModeIcon fontSize="large" />
-                  <DownIcon />
-                </Button>
-              </div>
-            </div>
-            <div className={classes.profile}>
-              <Button className={classes.menuBtn} variant="text">
-                <Avatar >UU</Avatar>
-                <p className={classes.profileName}>Ulca User</p>
-                <DownIcon />
-              </Button>
-            </div>
+                    </Button>
+                  </div>
+                  <div className={classes.modelMobile}>
+                    <Button className={classes.menuBtn} variant="text">
+                      <ChromeReaderModeIcon fontSize="large" />
+                      <DownIcon />
+                    </Button>
+                  </div>
+                </div>
+              </>
+            }
+            {
+              authenticate() ?
+                <div className={classes.profile}>
+                  <Button className={classes.menuBtn} variant="text">
+                    <Avatar >UU</Avatar>
+                    <p className={classes.profileName}>Ulca User</p>
+                    <DownIcon />
+                  </Button>
+                </div>
+                :
+                <div className={classes.profile}>
+                  <div className={classes.desktopAuth}>
+                    <Button
+                      className={classes.menuBtn}
+                      onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
+                      variant="text"
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      className={classes.menuBtn}
+                      variant="text"
+                      onClick={() => history.push(`${process.env.PUBLIC_URL}/user/register`)}
+                    >
+                      Sign Up</Button>
+                  </div>
+                  <div className={classes.mobileAuth}>
+                    <Button
+                      className={classes.menuBtn}
+                      onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
+                      variant="text"
+                    >
+                      <GroupIcon />
+                    </Button>
+                    <Button
+                      className={classes.menuBtn}
+                      variant="text"
+                      onClick={() => history.push(`${process.env.PUBLIC_URL}/user/register`)}
+                    >
+                      <GroupAddIcon />
+                    </Button>
+                  </div>
+                </div>
+            }
           </div>
         </Toolbar>
       </AppBar>

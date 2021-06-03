@@ -1,0 +1,41 @@
+{
+    "dataset-type":"ocr-corpus",
+    "languages":{
+        "sourceLanguage":"ka",
+        "targetLanguage":null
+    },
+    "collectionSource":[
+        "Kannada scanned book",
+        "https://github.com/MILE-IISc/Kannada-OCR-test-images-with-ground-truth.git"
+    ],
+    "domain":[
+        "legal"
+    ],
+    "license":"cc-by-4.0",
+    "submitter":{
+        "name":"MILE-IISc",
+        "aboutMe":"Medical Intelligence and Language Engineering (MILE) Lab, Department of Electrical Engineering (EE), Indian Institute of Science (IISc)",
+        "team":[
+            {
+                "name":"Shiva",
+                "aboutMe":"Member of the MILE team"
+            },
+            {
+                "name":"Bhargavi Galla",
+                "aboutMe":"Member of the MILE team"
+            }
+        ]
+    },
+    "format":"tiff",
+    "dpi":"300_dpi",
+    "imageTextType":"computer-typed-text",
+    "collectionMethod":{
+        "collectionDescription":[
+            "web-scraping-ocr"
+        ],
+        "collectionDetails":{
+            "ocrTool":"tesseract",
+            "ocrToolVersion":"4.1.1"
+        }
+    }
+}
