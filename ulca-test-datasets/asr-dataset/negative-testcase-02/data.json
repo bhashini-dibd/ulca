@@ -1,0 +1,52 @@
+[
+    {
+        "audioFilename": "audios/mif_03397_01795413856.wav",
+        "text": "Flights on American Airlines from Swansea to Surat leaving August 17 and coming back August 28 start at 600 pounds",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 32
+            }
+        }
+    },
+    {
+        "audioFilename": "audios/mif_02484_01626966997.wav",
+        "text": "McKinley was open to persuasion by United States expansionists and by annexationists from Hawaii",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 40
+            }
+        }
+    },
+    {
+        "audioFilename": "audios/mif_02484_00235587550.wav",
+        "text": "Four boys lurk outside his house",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 22
+            }
+        }
+    },
+    {
+        "audioFilename": "audios/mif_03397_01484155246.wav",
+        "text": "Leave a thermostat unchecked to keep the current temperature",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 61
+            }
+        }
+    },
+    {
+        "audioFilename": "audios/mif_03397_00138718535.wav",
+        "text": "Slide your feet along the ground like you're walking on the moon",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    }
+]
