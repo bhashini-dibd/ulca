@@ -9,15 +9,12 @@
         "bitsPerSample": "sixteen",
         "gender": "male",
         "age": "60-100",
-        "snr": [{
+        "snr": {
             "methodType": "WadaSnr",
-            "methodDetails": [{
-                "properties": [{
-                    "snr": 55
-                }]
-            }]
-        }]
-
+            "methodDetails": {
+                "snr": 55
+            }
+        }
     },
     {
         "audioFilename": "mkb_june2020_one_minute.wav",
@@ -29,15 +26,12 @@
         "bitsPerSample": "sixteen",
         "gender": "male",
         "age": "60-100",
-        "snr": [{
+        "snr": {
             "methodType": "WadaSnr",
-            "methodDetails": [{
-                "properties": [{
-                    "snr": 55
-                }]
-            }]
-        }]
-
+            "methodDetails": {
+                "snr": 55
+            }
+        }
     },
     {
         "audioFilename": "mkb_june2020_one_minute.wav",
@@ -49,15 +43,12 @@
         "bitsPerSample": "sixteen",
         "gender": "male",
         "age": "60-100",
-        "snr": [{
+        "snr": {
             "methodType": "WadaSnr",
-            "methodDetails": [{
-                "properties": [{
-                    "snr": 55
-                }]
-            }]
-        }]
-
+            "methodDetails": {
+                "snr": 55
+            }
+        }
     },
     {
         "audioFilename": "mkb_june2020_one_minute.wav",
@@ -69,15 +60,11 @@
         "bitsPerSample": "sixteen",
         "gender": "male",
         "age": "60-100",
-        "snr": [{
+        "snr": {
             "methodType": "WadaSnr",
-            "methodDetails": [{
-                "properties": [{
-                    "snr": 55
-                }]
-            }]
-        }]
-
+            "methodDetails": {
+                "snr": 55
+            }
+        }
     }
-
 ]

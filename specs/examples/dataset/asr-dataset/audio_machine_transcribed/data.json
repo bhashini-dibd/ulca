@@ -7,12 +7,12 @@
         "bitsPerSample": "sixteen",
         "gender": "male",
         "age": "60-100",
-        "snr": [{
+        "snr": {
             "methodType": "WadaSnr",
             "methodDetails": {
                 "snr": 55
             }
-        }]
+        }
     },
     {
         "audioFilename": "audios/chunk_02.wav",
@@ -22,12 +22,12 @@
         "bitsPerSample": "sixteen",
         "gender": "male",
         "age": "60-100",
-        "snr": [{
+        "snr": {
             "methodType": "WadaSnr",
             "methodDetails": {
                 "snr": 55
             }
-        }]
+        }
     },
     {
         "audioFilename": "audios/chunk_03.wav",
@@ -37,12 +37,12 @@
         "bitsPerSample": "sixteen",
         "gender": "male",
         "age": "60-100",
-        "snr": [{
+        "snr": {
             "methodType": "WadaSnr",
             "methodDetails": {
                 "snr": 55
             }
-        }]
+        }
     },
     {
         "audioFilename": "audios/chunk_04.wav",
@@ -52,11 +52,11 @@
         "bitsPerSample": "sixteen",
         "gender": "male",
         "age": "60-100",
-        "snr": [{
+        "snr": {
             "methodType": "WadaSnr",
             "methodDetails": {
                 "snr": 55
             }
-        }]
+        }
     }
 ]
