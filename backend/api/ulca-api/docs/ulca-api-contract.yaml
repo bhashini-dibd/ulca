@@ -193,7 +193,30 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse'   
-                
+  /v0.2/dataset/corpus/search:
+    post:
+      tags:
+        - 'dataset, core-api'
+      summary: 'to query analytical information for the available datasets, primarily used to get statistical count of records count present in the ULCA ecosystem. The queries can be done based upon the PARAMS like languages, domain, etc.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetSearchRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'              
   /v0.2/corpus/search/listByUserId:
     get:
       tags:
@@ -244,7 +267,38 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse'
-                
+  
+  /v0.2/corpus/download-records:
+    get:
+      tags:
+        - 'dataset, core-api'
+      summary: 'download the searched corpus'
+      parameters:
+        - in: query
+          name: searchRefNum
+          schema:
+            type: string
+          description: searchRefNum
+        - in: query
+          name: limit
+          schema:
+            type: string
+            enum: [sample,all]
+          description: type of search report to download  
+          
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'              
   
  
 components:
@@ -253,12 +307,12 @@ components:
       type: object
       description: request to submit the dataset
       required:
-        - type
+        - datasetType
         - datasetName
         - url
         - storageServiceName
       properties:
-        type:
+        datasetType:
           description: one of the defined possible values
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/DatasetType'
         datasetName: 
@@ -297,14 +351,21 @@ components:
       required:
         - type
       properties:
-        type:
+        datasetId:
+          type: string
+          description: 'unique identifier for dataset'
+          format: uuidv4
+        datasetName: 
+          type: string
+          description: dataset name
+        datasetType:
           description: one of the defined possible values
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/DatasetType'
     
     DatasetUpdateResponse:
       type: object
       properties:
-        acknowlegmentId:
+        updateRefNumber:
           type: string
           description: 'auto generated identifier to identify the internal representation, user can check the status of dataset stage using this acknowlegment identifier'
           format: uuidv4
@@ -337,9 +398,88 @@ components:
           type: string
           description: 'Dataset ingestion status'
       description: 'list the dataset submitted by userId' 
-      
     
       
+    DatasetGetByDatasetIdResponse:
+      type: object
+      properties:
+        
+        datasetName:
+          type: string
+          description: 'Dataset Name'
+        langurages:
+          type: string
+          description: 'Dataset Languages'
+        curatedOn:
+          type: string
+          format: datetime
+          description: dataset submission timestamp
+        records:
+          type: integer
+          description: 'Dataset records'
+        downloads:
+          type: integer
+          description: 'Dataset downloads'  
+      description: 'get the dataset by datasetId' 
+      
+    DatasetGetBySubmitReferenceNumberResponse:
+      type: object
+      properties:
+        
+        datasetName:
+          type: string
+          description: 'Dataset Name'
+        langurages:
+          type: string
+          description: 'Dataset Languages'
+        curatedOn:
+          type: string
+          format: datetime
+          description: dataset submission timestamp
+        records:
+          type: integer
+          description: 'Dataset records'
+        downloads:
+          type: integer
+          description: 'Dataset downloads'  
+      description: 'list the dataset submitted by userId' 
+    
+    DatasetStatusResponse:
+      type: object
+      required:
+        - submitRefNumber
+        - status
+        - progress
+      properties:
+        submitRefNumber:
+          type: string
+          description: dataset submit reference number
+        dataset:
+          type: object
+          description: uploaded dataset and its system representation
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/Dataset'
+        status:
+          type: string
+          description: status of each stage
+          enum:
+            - in-progress
+            - status-with-errors
+            - success
+            - failed
+        progress:
+          type: object
+          description: detailed for the dataset as it can be longer running operation
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetProgressInformation'
+    
+    DatasetDownloadErrorReportResponse:
+      type: object
+      required:
+        - fileUlr
+      properties:
+        fileUlr:
+          type: string
+          description: provided acknowledgment identifier at the time of dataset submission
+          
     DatasetSearchRequest:
       required:
         - criterions
@@ -381,62 +521,48 @@ components:
             $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/DataPoint'
     
     
-    SearchByuserIdResponse:
-      required:
-        - data
-      type: object
-      properties:
-        data:
-          type: array
-          description: collection of value and label
-          items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/common-schemas.yml#/components/schemas/Dataset'
+  
             
-    DatasetStatusRequest:
+    SearchListByuserIdResponse:
+      
       type: object
-      required:
-        - acknowlegmentId
       properties:
-        acknowlegmentId:
+        searchRefNumber:
           type: string
-          description: provided acknowledgment identifier at the time of dataset submission
-    DatasetDownloadReportResponse:
-      type: object
-      required:
-        - fileUlr
-      properties:
-        fileUlr:
+          description: search reference number
+        searchCriteria:
           type: string
-          description: provided acknowledgment identifier at the time of dataset submission
-    DatasetStatusResponse:
-      type: object
-      required:
-        - acknowledgmentId
-        - status
-        - progress
-      properties:
-        acknowlegmentId:
+          description: search criteria 
+        searchOn:
           type: string
-          description: user provided identifier
-        dataset:
-          type: object
-          description: uploaded dataset and its system representation
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/Dataset'
+          format: datetime
+          description: dataset searched timestamp
         status:
           type: string
-          description: status of each stage
-          enum:
-            - in-progress
-            - status-with-errors
-            - success
-            - failed
-        progress:
-          type: object
-          description: detailed for the dataset as it can be longer running operation
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/dataset-schema.yml#/components/schemas/DatasetProgressInformation'
+          description: search status  
     
+    SearchStatusResponse:
+      type: object
+      properties:
+        searchRefNumber:
+          type: string
+          description: search reference number
     
-    
+    DownloadRecordsResponse:
+      type: object
+      properties:
+        searchRefNumber:
+          type: string
+          description: search reference number
+        sentencePair:
+          type: integer
+        datasetsContributed:
+          type: integer
+        sampleUrl:
+          type: string
+        url:
+          type: string
+          
     HttpSuccessResponse:
       type: object
       properties:
@@ -458,10 +584,18 @@ components:
             
             - $ref: '#/components/schemas/DatasetSubmitResponse'
             - $ref: '#/components/schemas/DatasetUpdateResponse'
-            - $ref: '#/components/schemas/DatasetStatusResponse'
-            - $ref: '#/components/schemas/DatasetSearchResponse'
             - $ref: '#/components/schemas/DatasetListByUserIdResponse'
-            - $ref: '#/components/schemas/DatasetDownloadReportResponse'
+            - $ref: '#/components/schemas/DatasetGetByDatasetIdResponse'
+            - $ref: '#/components/schemas/DatasetGetBySubmitReferenceNumberResponse'
+            - $ref: '#/components/schemas/DatasetStatusResponse'
+            - $ref: '#/components/schemas/DatasetDownloadErrorReportResponse'
+            - $ref: '#/components/schemas/DatasetSearchResponse'
+            - $ref: '#/components/schemas/SearchListByuserIdResponse'
+            - $ref: '#/components/schemas/SearchStatusResponse'
+            - $ref: '#/components/schemas/DownloadRecordsResponse'
+            
+            
+            
             
     
     HttpErrorResponse:
