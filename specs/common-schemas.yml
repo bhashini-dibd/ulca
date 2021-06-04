@@ -117,7 +117,8 @@ components:
           - sports
           - technology
           - lifestyle
-          - entertainment    
+          - entertainment
+          - parliamentary  
     
     License:
       type: string
