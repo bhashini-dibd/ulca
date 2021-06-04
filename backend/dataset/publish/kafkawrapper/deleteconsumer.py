@@ -48,7 +48,7 @@ def delete_consume():
                         if data["datasetType"] == dataset_type_ocr:
                             o_service.get_ocr_dataset(data)
                         if data["datasetType"] == dataset_type_asr:
-                            a_service.get_asr_dataset(data)
+                            a_service.delete_dataset(data)
                         if data["datasetType"] == dataset_type_monolingual:
                             m_service.get_monolingual_dataset(data)
                     else:

@@ -38,6 +38,15 @@ class DatasetUtils:
         else:
             return False
 
+    def delete_from_s3(self, file):
+        s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+        try:
+            response = s3_client.delete_file(aws_bucket_name, file)
+            return response
+        except Exception as e:
+            log.exception(e)
+            return False
+
     # Utility to hash a file
     def hash_file(self, filename):
         h = hashlib.sha256()
