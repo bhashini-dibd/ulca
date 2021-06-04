@@ -116,7 +116,9 @@ const Header = (props) => {
                     >
                       My Contributon
                     </MenuItem>
-                    <MenuItem className={classes.styledMenu}>
+                    <MenuItem className={classes.styledMenu}
+                     onClick={() => handleMenuItemClick('/my-searches')}
+                    >
                       My Searches
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}>

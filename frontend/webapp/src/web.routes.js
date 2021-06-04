@@ -13,6 +13,7 @@ import DetailedStatus from "./ui/container/DataSet/DatasetView/DetailedStatus";
 import Dashboard from "./ui/container/Dashboard/ChartRender";
 import DatasetSubmission from './ui/container/DataSet/UploadDataset/DatasetSubmission';
 import authenticateUser from './configs/authenticate';
+import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";
 
 const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) => {
   return (
@@ -77,6 +78,14 @@ export default function App() {
             title={"Submit Dataset"}
             userRoles={[""]}
             component={Dashboard}
+            authenticate={authenticateUser}
+            currentMenu="submit-dataset"
+            dontShowHeader={false}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/my-searches`}
+            userRoles={[""]}
+            component={MySearches}
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}

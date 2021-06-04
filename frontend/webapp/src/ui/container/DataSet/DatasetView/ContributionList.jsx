@@ -6,7 +6,7 @@ import {  useHistory } from "react-router-dom";
 import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
-import MyContributionList from "../../../../redux/actions/api/DataSet/MyContribution";
+import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
 import Dialog from "../../../components/common/Dialog"
 import {Cached, SaveAlt} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
@@ -51,7 +51,10 @@ const ContributionList = (props) => {
 
         const fetchHeaderButton= () => {
                 return (
-                         <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                        <div className={classes.headerButtons}>
+                                <Typography variant="b" component="h2" >My Contribution</Typography>
+                                <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                         </div>
                 )
         }
 
@@ -73,7 +76,10 @@ const ContributionList = (props) => {
         const renderAction = (name,value) => {
                 if(value === "Inprogress"){}
                 else{
-                        return <div className= {classes.span}> <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update </Link><Link className= {classes.link} onClick={()=>{handleSetValues(name)}}> Delete </Link> </div> 
+                        return (<div className= {classes.span}> 
+                                        <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update </Link>
+                                        <Link className= {classes.link} onClick={()=>{handleSetValues(name)}}> Delete </Link> 
+                                </div>)
                 }
         }
 
@@ -170,17 +176,17 @@ const ContributionList = (props) => {
 
         const options = {
                 textLabels: {
-                        body: {},
-                        toolbar: {
+                        body            : {},
+                        toolbar         : {
                                 search          : "Search",
                                 viewColumns     : "View Column",
                         },
-                        pagination: {
+                        pagination      : {
                                 rowsPerPage     : "Rows per page",
                         },
-                        options: { sortDirection: "desc" },
+                        options         : { sortDirection: "desc" },
                         },
-                        onCellClick: (colData, cellMeta) => handleRowClick( cellMeta),
+                        onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
                
                 filterType      : "checkbox",
                 download        : false,
@@ -197,12 +203,7 @@ const ContributionList = (props) => {
                         <div className = {classes.breadcrum}>
                                 <BreadCrum links={[UrlConfig.dataset]} activeLink="My Contribution" />
                         </div>
-
-                        <div className={classes.headerButtons}>
-                        <Typography variant="b" component="h2" >My Contribution</Typography>
-                                {fetchHeaderButton()} 
-                        </div>
-
+                        {fetchHeaderButton()} 
                         {/* <div className={classes.title}>
                                 
                         </div> */}
