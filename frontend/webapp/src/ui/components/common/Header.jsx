@@ -35,7 +35,7 @@ const StyledMenu = withStyles({
 ));
 
 const Header = (props) => {
-  const { classes, token } = props;
+  const { classes} = props;
   const [anchorEl, setAnchorEl] = useState(null)
   const history = useHistory();
   const handleClose = (e) => {

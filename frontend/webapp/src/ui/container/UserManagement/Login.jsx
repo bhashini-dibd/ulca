@@ -16,16 +16,20 @@ import {
 
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
-import { LoginSocialFacebook, LoginSocialGithub } from "reactjs-social-login";
+import { LoginSocialGithub } from "reactjs-social-login";
 import GoogleLogin from "react-google-login";
-import { LinkedIn } from "react-linkedin-login-oauth2";
 import Divider from "@material-ui/core/Divider";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import {useReducer, useSelector} from "react-redux";
 import {  useHistory } from "react-router-dom";
+import GmailIcon from "../../../assets/gmail.png";
+import GithubIcon from "../../../assets/github.png";
+// import {useReducer, useSelector} from "react-redux";
+// import { LoginSocialFacebook, LoginSocialGithub } from "reactjs-social-login";
+// import { LinkedIn } from "react-linkedin-login-oauth2";
+
 
 const Login = (props) => {
-  const [values, setValues] = React.useState({
+  const [values, setValues] = useState({
     email: "",
     password: "",
     checked: false,
@@ -125,7 +129,7 @@ const Login = (props) => {
           HandleSubmit();
         }}
       >
-        Login
+        Sign in
       </Button>
       <div className={classes.line}>
         <Divider className={classes.dividerFullWidth} />{" "}
@@ -142,7 +146,7 @@ const Login = (props) => {
             <span style={{ marginRight: "30px" }}>
               <img
                 
-                src="gmail.png"
+                src={GmailIcon}
                 alt=""
                 width="25px"
                 height="25px"
@@ -223,7 +227,7 @@ const Login = (props) => {
         >
           <span className={classes.width}>
             <img
-              src="github.png"
+              src={GithubIcon}
               alt=""
               width="25px"
               height="25px"

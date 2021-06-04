@@ -1,5 +1,4 @@
 import C from '../../../actions/constants';
-var jp = require('jsonpath')
 
 const initialState = {
     responseData: []
@@ -17,7 +16,7 @@ const getContributionList = (payload) => {
     return dataObj;
 }
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
         case C.GET_CONTRIBUTION_LIST:
             return {
@@ -34,3 +33,5 @@ export default (state = initialState, action) => {
             }
     }
 }
+
+export default reducer;

@@ -84,9 +84,9 @@ const ResetPassword = (props) => {
       <div className={classes.loginLink}>
         <Typography>
           <Link id="newaccount" className={classes.link}  href="#"
-            onClick={() => { history.push(`${process.env.PUBLIC_URL}/`)}}>
+            onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`)}}>
             {" "}
-            Back to Login
+            Back to Sign in
           </Link>
         </Typography>
       </div>

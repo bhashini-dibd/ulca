@@ -1,5 +1,4 @@
 import C from '../../../actions/constants';
-var jp = require('jsonpath')
 
 const initialState = {
     responseData: []
@@ -16,7 +15,7 @@ const getMySearches = (payload) => {
     return dataObj;
 }
 
-export default (state = initialState, action) => {
+ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case C.GET_MY_REPORT:
             return {
@@ -32,3 +31,5 @@ export default (state = initialState, action) => {
             }
     }
 }
+
+export default reducer;

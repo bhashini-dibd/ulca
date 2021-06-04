@@ -1,5 +1,4 @@
 import C from '../../../actions/constants';
-var jp = require('jsonpath')
 
 const initialState = {
     responseData: []
@@ -13,11 +12,10 @@ const getContributionList = (payload) => {
     // let latestEvent = removeDuplicates(result, 's_id')
 
     // return latestEvent;
-        console.log("-----------------------",dataObj)
     return dataObj;
 }
 
-export default (state = initialState, action) => {
+const reducer = (state = initialState, action) => {
     switch (action.type) {
         case C.GET_DETAILED_REPORT:
             return {
@@ -33,3 +31,5 @@ export default (state = initialState, action) => {
             }
     }
 }
+
+export default reducer;

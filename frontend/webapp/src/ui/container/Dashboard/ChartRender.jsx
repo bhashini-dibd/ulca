@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import Theme from "../../theme/theme-default";
-import { withStyles, Typography,Link, MuiThemeProvider, createMuiTheme,Paper, Grid, Button } from "@material-ui/core";
+import { withStyles, Typography, MuiThemeProvider, Paper, Button } from "@material-ui/core";
 import ChartStyles from "../../styles/Dashboard";
-import { ResponsiveContainer, BarChart, Bar, Brush, Cell, CartesianGrid, ReferenceLine, ReferenceArea, XAxis, YAxis, Tooltip, Legend, ErrorBar, LabelList, Rectangle} from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, Cell, CartesianGrid, XAxis, YAxis, Tooltip,} from 'recharts';
 import Select from 'react-select';
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import FetchLanguageDataSets from "../../../redux/actions/api/Dashboard/languageDatasets";
@@ -12,7 +12,7 @@ import { isMobile } from 'react-device-detect';
 import {FilterList} from '@material-ui/icons';
 import Header from '../../components/common/Header';
 import authenticate from '../../../configs/authenticate';
-var jp = require('jsonpath')
+
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
 
