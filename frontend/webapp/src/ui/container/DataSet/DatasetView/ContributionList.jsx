@@ -8,7 +8,7 @@ import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
 import Dialog from "../../../components/common/Dialog"
-import {Cached} from '@material-ui/icons';
+import {Cached, DeleteOutline} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 
 const ContributionList = (props) => {
@@ -33,10 +33,13 @@ const ContributionList = (props) => {
                 overrides: {
                 MuiTableCell: {
                         head: {
-                                backgroundColor : "#c7c6c68a !important",
+                                color : "rgba(0,0,0,0.5) !important",
+                                background: "rgba(0,0,0,0.03) !important",
+                                letterSpacing:"0.14px",
                                 cursor: 'default'
                         }
                 },
+               
                 MuiPaper: {
                         root:{
                                 boxShadow       : 'none !important',
@@ -44,7 +47,7 @@ const ContributionList = (props) => {
                                 border          : "1px solid rgb(224 224 224)"
                         }
                 },
-                MUIDataTableToolbar:{ root: { display: "none" } },
+                
                 MuiTableRow:{root:{cursor: 'pointer'}}
                 }
         });
@@ -70,16 +73,16 @@ const ContributionList = (props) => {
                         return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${id}}`)}}> In-progress </Link>
                 }
                 else{
-                        return <span className = {classes.span}>Published </span>
+                        return <span>Published </span>
                 }
         }
 
         const renderAction = (name,value) => {
                 if(value === "Inprogress"){}
                 else{
-                        return (<div className= {classes.span}> 
-                                        <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update </Link>
-                                        <Link className= {classes.link} onClick={()=>{handleSetValues(name)}}> Delete </Link> 
+                        return (<div> 
+                                        <Link className= {classes.link} color={"primary"} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update  </Link>
+                                        <Link className = {classes.span} onClick={()=>{handleSetValues(name)}}> <DeleteOutline/> </Link> 
                                 </div>)
                 }
         }
@@ -142,7 +145,7 @@ const ContributionList = (props) => {
                 },
                 {
                 name: "Status",
-                label: "status",
+                label: "Status",
                 options: {
                         filter  : true,
                         sort    : false,
@@ -157,7 +160,7 @@ const ContributionList = (props) => {
 
                 {
                 name    : "Action",
-                label   : "action",
+                label   : "Action",
                 options: {
                                 filter  : true,
                                 sort    : false,

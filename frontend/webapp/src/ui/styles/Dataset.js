@@ -43,13 +43,15 @@ const DataSet = (theme) => ({
         
     },
     link: {
-        color: "rgb(158 84 147)",
         marginRight: "10px",
         cursor: "pointer"
     },
     span: {
-        color: "green"
+        color: "#0C0F0F",
+        opacity :"0.5"
     },
+    
+
     searchDataset: {
         maxHeight: '1.875rem',
         heigth: 'auto'

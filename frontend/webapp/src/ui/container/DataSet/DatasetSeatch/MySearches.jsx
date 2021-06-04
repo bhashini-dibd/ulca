@@ -14,15 +14,9 @@ const MySearches = (props) => {
         const detailedReport          =       useSelector((state) => state.mySearchReport);
         const dispatch = useDispatch();
         useEffect(() => {
-                
-                detailedReport.responseData.length === 0  && DetailedDataSetStatusApi()
-        }, []);
-
-        const DetailedDataSetStatusApi  = () =>{
-                const userObj           = new MySearchReport(  "SAVE", "A_FBTTR-VWSge-1619075981554","241006445d1546dbb5db836c498be6381606221196566");
-                dispatch(APITransport(userObj));
-        }
-        
+            const userObj           = new MySearchReport(  "SAVE", "A_FBTTR-VWSge-1619075981554","241006445d1546dbb5db836c498be6381606221196566");
+            detailedReport.responseData.length === 0  &&dispatch(APITransport(userObj));   
+        }, [detailedReport.responseData, dispatch]);
 
         const getMuiTheme = () => createMuiTheme({
                 overrides: {
@@ -51,7 +45,7 @@ const MySearches = (props) => {
             return (
                     <div className={classes.headerButtons}>
                             <Typography variant="b" component="h2" >My Searches</Typography>
-                            <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                            <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() =>{} }><Cached className ={classes.iconStyle}/>Refresh</Button>
                      </div>
             )
     }

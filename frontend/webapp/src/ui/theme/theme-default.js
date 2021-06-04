@@ -2,8 +2,10 @@ import { createMuiTheme } from "@material-ui/core/styles";
 
 const themeDefault = createMuiTheme({
   typography: {
-    fontFamily: '"Source Sans Pro", "Arial", sans-serif',
-    fontSize: 11,
+    fontFamily: '"Lato", "Semibold"',
+    font: "normal normal normal 14px/17px Lato",
+    letterSpacing: "0px",
+    fontSize: 14,
   },
   overrides: {
     MuiButton: {
@@ -21,7 +23,7 @@ const themeDefault = createMuiTheme({
   palette: {
     primary: {
       light: "#60568d",
-      main: "#392C71",
+      main: "#2C2799",
       dark: "#271e4f",
       contrastText: "#FFFFFF",
     },
