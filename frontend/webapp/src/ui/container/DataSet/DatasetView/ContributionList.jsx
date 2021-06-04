@@ -8,8 +8,9 @@ import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
 import Dialog from "../../../components/common/Dialog"
-import {Cached, SaveAlt} from '@material-ui/icons';
+import {Cached} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
+
 const ContributionList = (props) => {
 
         const history                 = useHistory();
@@ -17,10 +18,10 @@ const ContributionList = (props) => {
         const myContributionReport    = useSelector( (state) => state.myContributionReport);
         const [open, setOpen]         = useState(false)
         const [message, setMessage]   = useState("Do you want to delete")
-        const [title, setTilte]       = useState("Delete")
+        const [title, setTitle]       = useState("Delete")
   
         useEffect(()                  => {
-                myContributionReport.responseData.length == 0  && MyContributionListApi()
+                myContributionReport.responseData.length === 0  && MyContributionListApi()
         }, []);
   
         const  MyContributionListApi  = () =>{
@@ -59,7 +60,7 @@ const ContributionList = (props) => {
         }
 
         const handleSetValues = (name) => {
-                setTilte        (`Delete ${name}  `)
+                setTitle        (`Delete ${name}  `)
                 setMessage      (`Do you want to delete ${name} ? `)
                 setOpen         (true)
         }
@@ -84,15 +85,11 @@ const ContributionList = (props) => {
         }
 
         const handleRowClick = ( rowMeta) => {
-                if(rowMeta.colIndex!=6){
+                if(rowMeta.colIndex !== 6){
                         const value = myContributionReport.responseData[rowMeta.rowIndex].sr_no;
                         history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}}`)
                 }
         };
-
-        const handleClose = () =>{
-                debugger
-        }
 
         const handleDialogSubmit = () =>{
 
@@ -197,7 +194,6 @@ const ContributionList = (props) => {
         };
 
         const { classes } = props;
-        console.log(open)
         return (
                 <div className = {classes.divStyle}>
                         <div className = {classes.breadcrum}>

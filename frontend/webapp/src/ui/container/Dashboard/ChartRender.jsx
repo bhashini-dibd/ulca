@@ -122,7 +122,7 @@ const ChartRender = (props) => {
 						/>
 						<YAxis type="number" dx	=	{0} />
 						<CartesianGrid horizontal = {true} vertical = {false} textAnchor = {"middle"} />
-						<Tooltip />
+						<Tooltip cursor={{fill: 'none'}}/>
 						<Bar dataKey = "value" radius = {[4, 4, 0, 0]} maxBarSize = {30}>
 							{
 								DashboardReport.length > 0 && DashboardReport.map((entry, index) => {

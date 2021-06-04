@@ -1,9 +1,3 @@
-
-
-
-const drawerWidth = 240;
-//let logo = require('../../../assets/logo.png')
-
 const DataSet = (theme) => ({
     divStyle: {
         // margin: "1.5rem 23rem 3% 17.5rem",

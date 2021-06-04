@@ -17,7 +17,7 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import {  useHistory } from "react-router-dom";
 
 const ResetPassword = (props) => {
-  const [values, setValues] = React.useState({
+  const [values, setValues] = useState({
     password: "",
     confirmPassword: "",
   });

@@ -141,7 +141,9 @@ const Login = (props) => {
           >
             <span style={{ marginRight: "30px" }}>
               <img
+                
                 src="gmail.png"
+                alt=""
                 width="25px"
                 height="25px"
                 style={{ maginLeft: "20px" }}
@@ -170,6 +172,7 @@ const Login = (props) => {
               <span className={classes.width}>
                 <img
                   src="linkedin.svg"
+                  alt =''
                   width="20px"
                   height="20px"
                   style={{ maginLeft: "20px" }}
@@ -195,6 +198,7 @@ const Login = (props) => {
             <span className={classes.width}>
               <img
                 src="facebook.svg"
+                alt =''
                 width="20px"
                 height="20px"
                 style={{ maginLeft: "20px" }}
@@ -220,6 +224,7 @@ const Login = (props) => {
           <span className={classes.width}>
             <img
               src="github.png"
+              alt=""
               width="25px"
               height="25px"
               style={{ maginLeft: "20px" }}

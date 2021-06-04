@@ -1,6 +1,3 @@
-const drawerWidth = 240;
-//let logo = require('../../../assets/logo.png')
-
 const GlobalStyles = (theme) => ({
   container: {
     margin: "4em 0em 0em 0em",

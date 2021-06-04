@@ -1,23 +1,21 @@
-import { Grid, withStyles, Tooltip, IconButton,Typography, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
+import { withStyles, Typography, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MySearchReport from "../../../../redux/actions/api/DataSet/DatasetSearch/MySearches";
 import { useDispatch, useSelector } from "react-redux";
-import {  useHistory } from "react-router-dom";
-import {Cached, SaveAlt} from '@material-ui/icons';
+import {Cached} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 
 const MySearches = (props) => {
 
-        const history                 =       useHistory();
         const detailedReport          =       useSelector((state) => state.mySearchReport);
         const dispatch = useDispatch();
         useEffect(() => {
                 
-                detailedReport.responseData.length == 0  && DetailedDataSetStatusApi()
+                detailedReport.responseData.length === 0  && DetailedDataSetStatusApi()
         }, []);
 
         const DetailedDataSetStatusApi  = () =>{
@@ -50,8 +48,13 @@ const MySearches = (props) => {
         });
 
         const fetchHeaderButton= () => {
-                return <div className={classes.reqNoTypo}> <Typography variant="b" component="h2" >My Searches</Typography> </div> 
-        }
+            return (
+                    <div className={classes.headerButtons}>
+                            <Typography variant="b" component="h2" >My Searches</Typography>
+                            <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                     </div>
+            )
+    }
 
         
         const columns = [
@@ -107,7 +110,6 @@ const MySearches = (props) => {
                 filterType              :       "checkbox",
                 download                :       false,
                 print                   :       false,
-                fixedHeader             :       true,
                 filter                  :       false,
                 selectableRows          :       "none",
         };

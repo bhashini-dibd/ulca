@@ -1,23 +1,21 @@
-import { Grid, withStyles, Tooltip, IconButton,Link, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
+import { withStyles,  MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
-import React, { useEffect, useState } from "react";
+import React, { useEffect} from "react";
 import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import DetailedDatasetStatus from "../../../../redux/actions/api/DataSet/DatasetView/DetailedDataset";
 import { useDispatch, useSelector } from "react-redux";
-import {  useHistory } from "react-router-dom";
 import {Cached, SaveAlt} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 
 const DetailedStatus = (props) => {
 
-        const history                 =       useHistory();
         const detailedReport          =       useSelector((state) => state.detailedReport);
         const dispatch = useDispatch();
         useEffect(() => {
                 
-                detailedReport.responseData.length == 0  && DetailedDataSetStatusApi()
+                detailedReport.responseData.length === 0  && DetailedDataSetStatusApi()
         }, []);
 
         const DetailedDataSetStatusApi  = () =>{
@@ -113,7 +111,6 @@ const DetailedStatus = (props) => {
                 filterType              :       "checkbox",
                 download                :       false,
                 print                   :       false,
-                fixedHeader             :       true,
                 filter                  :       false,
                 selectableRows          :       "none",
         };

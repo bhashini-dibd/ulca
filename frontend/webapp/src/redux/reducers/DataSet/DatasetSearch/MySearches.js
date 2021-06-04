@@ -13,7 +13,6 @@ const getMySearches = (payload) => {
     // let latestEvent = removeDuplicates(result, 's_id')
 
     // return latestEvent;
-        console.log("-----------------------",dataObj)
     return dataObj;
 }
 
