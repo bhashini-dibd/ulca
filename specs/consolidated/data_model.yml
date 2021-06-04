@@ -30,8 +30,10 @@
         type: boolean
         description: TRUE if it is derived record, FALSE otherwise.
       datasetId:
-        type: string
-        description: ID of the dataset
+        type: array
+        description: IDs of the dataset this record belongs to
+        items:
+          type: string
       contributors:
         type: array
         description: Details of the contributors
@@ -115,8 +117,10 @@
         type: object
         description: SNR details
       datasetId:
-        type: string
-        description: ID of the dataset
+        type: array
+        description: IDs of the dataset this record belongs to
+        items:
+          type: string
       contributors:
         type: array
         description: Details of the contributors
@@ -180,8 +184,10 @@
         items:
           type: object
       datasetId:
-        type: string
-        description: ID of the dataset
+        type: array
+        description: IDs of the dataset this record belongs to
+        items:
+          type: string
       contributors:
         type: array
         description: Details of the contributors -- IP
@@ -234,8 +240,10 @@
         type: string
         description: SHA256 hash of the source text
       datasetId:
-        type: string
-        description: ID of the dataset
+        type: array
+        description: IDs of the dataset this record belongs to
+        items:
+          type: string
       contributors:
         type: array
         description: Details of the contributors
