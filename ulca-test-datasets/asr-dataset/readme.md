@@ -1,37 +1,30 @@
 
-# ULCA Test Datasets : Parallel Corpus
+# ULCA Test Datasets : ASR Corpus
 
 
 ## [positive-testcase-01](./positive-testcase-01) 
 
-**Description** : Basic valid dataset
+**Description** : Valid case of Audio auto-aligned dataset.
 > `params.json` : VALID
 > `data.json`   : VALID
 
 
 ## [positive-testcase-02](./positive-testcase-02)
 
-**Description** : Machine translated & target validated dataset
+**Description** : Valid case of Audio machine-transcribed dataset.
 > `params.json` : VALID
 > `data.json`   : VALID
 
 
 ## [positive-testcase-03](./positive-testcase-03)
 
-**Description** : Machine translated, target validated & post-edited dataset
+**Description** : Valid case of Audio manual-transcribed dataset.
 > `params.json` : VALID
 > `data.json`   : VALID
 
 ## [positive-testcase-04](./positive-testcase-04)
 
-**Description** : Human translated dataset
-> `params.json` : VALID
-> `data.json`   : VALID
-
-
-## [positive-testcase-05](./positive-testcase-05)
-
-**Description** : Web scrapped & LaBSE aligned dataset
+**Description** : Valid case of Midlands English SNR dataset.
 > `params.json` : VALID
 > `data.json`   : VALID
 
@@ -45,11 +38,11 @@ Incorrect dataset type is specified in the params file.
 
 **Error :**
 ```json
-    "datasetType": "Parallel Corpus",
+    "datasetType": "ASR Corpus",
 ```
 **Expected correction :**
 ```json
-    "datasetType": "parallel-corpus",
+    "datasetType": "asr-corpus",
 ```
 Refer to [datasetType schema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/DatasetType) for the usage.
 
@@ -65,14 +58,14 @@ Incorrect language code is specified in the params file under '*languages*' prop
 ```json
     "languages": {
         "sourceLanguage": "English",
-        "targetLanguage": "Hindi"
+        "targetLanguage": null
     },
 ```
 **Expected correction :**
 ```json
     "languages": {
         "sourceLanguage": "en",
-        "targetLanguage": "hi"
+        "targetLanguage": null
     },
 ```
 Refer to [LanguagePair schema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair) for the usage.
@@ -82,6 +75,7 @@ Refer to [LanguagePair schema](https://raw.githubusercontent.com/project-anuvaad
 
 **Description** : 
 The params file is missing the required fields (Ex : license)
+
 > `params.json` : INVALID
 > `data.json`   : VALID
 
@@ -101,6 +95,7 @@ Refer to [ParallelDatasetParamsSchema](https://raw.githubusercontent.com/project
 **Description** : 
 Incorrect schema is specified. 
 Ex : For '*domain*' in params file, a string is specified, whereas it accepts only array of string)
+
 > `params.json` : INVALID
 > `data.json`   : VALID
 
@@ -116,30 +111,25 @@ Ex : For '*domain*' in params file, a string is specified, whereas it accepts on
 ```
 Refer to [Domain schema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain) for the usage.
 
+
 ## [negative-testcase-05](./negative-testcase-05)
 
 **Description** : 
 Usage of a value outside of what is specified under enum of that property.
-Ex : *collectionDescription* defined as '*unknown*', which is not part of the enum
+Ex : *channel* defined as '*5.1*', which is not part of the enum
 
 > `params.json` : INVALID
 > `data.json`   : VALID
 
 **Error :**
 ```json
-    "collectionMethod": {
-        "collectionDescription": [
-            "unknown"
-        ],
+    "channel": "5.1",
 ```
 **Expected correction :**
 ```json
-    "collectionMethod": {
-        "collectionDescription": [
-            "auto-aligned"
-        ],
+    "channel": "mono",
 ```
-Refer to [Domain schema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain) for the usage.
+Refer to [AudioChannel](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioChannel) for the usage.
 
 
 ## [negative-testcase-06](./negative-testcase-06)
@@ -147,16 +137,18 @@ Refer to [Domain schema](https://raw.githubusercontent.com/project-anuvaad/ULCA/
 **Description** : 
 Usage of an array of length outside what is specified by minLength and maxLength of that property.
 Ex : For '*collectionSource*', the minItems & maxItems values are defined as 1 & 10 respectively. If collectionSource array size is > 10, it would fail.
+
 > `params.json` : INVALID
 > `data.json`   : VALID
 
 **Error :**
 ```json
     "collectionSource": [
-        "http://pib.gov.in/",
-        "https://www.mykhel.com/",
-        "https://www.drivespark.com/",
-        "https://www.goodreturns.in/",
+        "openslr",
+        "https://www.youtube.com?v=121212121",
+        "https://www.mymp3world.com/",
+        "https://www.mannkibaath.com/",
+        "https://www.newsonair.in/",
         "https://indianexpress.com/",
         "http://www.catchnews.com/",
         "https://dw.com/",
@@ -171,41 +163,55 @@ Ex : For '*collectionSource*', the minItems & maxItems values are defined as 1 &
 Reduce the number of values to be <= maxItems
 ```json
     "collectionSource": [
-        "http://pib.gov.in/",
-        "https://www.mykhel.com/",
-        "https://www.drivespark.com/",
-        "https://www.goodreturns.in/",
+        "openslr",
+        "https://www.youtube.com?v=121212121",
+        "https://www.mymp3world.com/",
+        "https://www.mannkibaath.com/",
+        "https://www.newsonair.in/",
         "https://indianexpress.com/",
-        "http://www.catchnews.com/",
-        "https://dw.com/",
+        "https://www.zeebiz.com/",
+        "https://www.sakshi.com/",
         "https://marketfeed.news/"
     ],
 ```
 Refer to [collectionSource schema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Source) for the usage.
 
-
 ## [negative-testcase-07](./negative-testcase-07)
 
 **Description** : 
 Incorrect keys are specified in the data file.
+Ex : '*audioFilename*' incorrectly added as '*asrFile*'
+
 > `params.json` : VALID
 > `data.json`   : INVALID
 
 **Error :**
 ```json
     {
-        "src": "This bridge is of strategic importance along the India-Nepal border",
-        "tgt": "भारत-नेपाल सीमा के करीब होने के चलते इस पुल का रणनीतिक महत्व भी है"
-    },
+        "asrFile": "audios/mif_03397_01795413856.wav",
+        "text": "Flights on American Airlines from Swansea to Surat leaving August 17 and coming back August 28 start at 600 pounds",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 32
+            }
+        }
+    }
 ```
 **Expected correction :**
 ```json
     {
-        "sourceText": "This bridge is of strategic importance along the India-Nepal border",
-        "targetText": "भारत-नेपाल सीमा के करीब होने के चलते इस पुल का रणनीतिक महत्व भी है"
-    },
+        "audioFilename": "audios/mif_03397_01795413856.wav",
+        "text": "Flights on American Airlines from Swansea to Surat leaving August 17 and coming back August 28 start at 600 pounds",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 32
+            }
+        }
+    }
 ```
-Refer to [ParallelDatasetRowSchema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ParallelDatasetRowSchema) for the usage.
+Refer to [ASRRowSchema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRRowSchema) for the usage.
 
 
 ## [negative-testcase-08](./negative-testcase-08)
@@ -213,39 +219,37 @@ Refer to [ParallelDatasetRowSchema](https://raw.githubusercontent.com/project-an
 **Description** : 
 Overridden value have incorrect structure in data file. 
 Ex : '*collectionDetails*' is not defined under '*collectionMethod*'.
+
 > `params.json` : VALID
 > `data.json`   : INVALID
 
 **Error :**
 ```json
     {
-        "sourceText": "Cabinet approves MoU of Cooperation between India and Morocco",
-        "targetText": "मंत्रिमंडल ने भारत और मोरक्को के बीच सहयोग के लिए समझौता ज्ञापन को मंजूरी दी",
-        "collectionDetails": {
-            "timeSpentInSeconds": 22,
-            "numOfKeysPressed": 5,
-            "contributor": {
-                "name": "Monika Chauhan",
-                "aboutMe": "Freelance translator working with Project Anuvaad"
-            }
+        "asrFile": "audios/mif_02484_01626966997.wav",
+        "text": "McKinley was open to persuasion by United States expansionists and by annexationists from Hawaii",
+        "methodType": "WadaSnr",
+        "methodDetails": {
+            "snr": 32
         }
-    },
+    }
 ```
 **Expected correction :**
 ```json
     {
-        "sourceText": "Cabinet approves MoU of Cooperation between India and Morocco",
-        "targetText": "मंत्रिमंडल ने भारत और मोरक्को के बीच सहयोग के लिए समझौता ज्ञापन को मंजूरी दी",
-        "collectionMethod": {
-            "collectionDetails": {
-                "timeSpentInSeconds": 22,
-                "numOfKeysPressed": 5,
-                "contributor": {
-                    "name": "Monika Chauhan",
-                    "aboutMe": "Freelance translator working with Project Anuvaad"
-                }
+        "asrFile": "audios/mif_02484_01626966997.wav",
+        "text": "McKinley was open to persuasion by United States expansionists and by annexationists from Hawaii",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 40
             }
         }
-    },
+    }
 ```
-Refer to [ParallelDatasetRowSchema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ParallelDatasetRowSchema) for the usage.
+Refer to [ASRRowSchema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRRowSchema) for the usage.
+
+
+|  11 | negative       | [negative-testcase-07](./asr-dataset/negative-testcase-07) | *incorrect keys in data file*|
+|  12 | negative       | [negative-testcase-08](./asr-dataset/negative-testcase-08) | *overridden value have incorrect structure in data file (methodType & methodDetails are not defined under snr)*|
+
