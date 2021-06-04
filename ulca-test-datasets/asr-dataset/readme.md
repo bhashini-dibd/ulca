@@ -250,6 +250,3 @@ Ex : '*collectionDetails*' is not defined under '*collectionMethod*'.
 Refer to [ASRRowSchema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRRowSchema) for the usage.
 
 
-|  11 | negative       | [negative-testcase-07](./asr-dataset/negative-testcase-07) | *incorrect keys in data file*|
-|  12 | negative       | [negative-testcase-08](./asr-dataset/negative-testcase-08) | *overridden value have incorrect structure in data file (methodType & methodDetails are not defined under snr)*|
-
