@@ -253,6 +253,8 @@ components:
           description: text data present in boundingbox
         boundingBox:
           $ref: '#/components/schemas/BoundingBox'
+        collectionMethod:
+          $ref: '#/components/schemas/OcrCollectionMethod'
 
     DocumentLayoutParamsSchema:
       type: object
