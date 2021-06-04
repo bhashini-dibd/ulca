@@ -1,5 +1,5 @@
 {
-    "dataset-type":"document-layout-corpus",
+    "datasetType":"document-layout-corpus",
     "languages":{
         "sourceLanguage":"ta",
         "targetLanguage":null
