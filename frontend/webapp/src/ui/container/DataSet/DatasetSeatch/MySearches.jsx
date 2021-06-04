@@ -1,19 +1,19 @@
-import { Grid, withStyles, Tooltip, IconButton,Link, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
+import { Grid, withStyles, Tooltip, IconButton,Typography, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
-import DetailedDatasetStatus from "../../../../redux/actions/api/DataSet/DatasetView/DetailedDataset";
+import MySearchReport from "../../../../redux/actions/api/DataSet/DatasetSearch/MySearches";
 import { useDispatch, useSelector } from "react-redux";
 import {  useHistory } from "react-router-dom";
 import {Cached, SaveAlt} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 
-const DetailedStatus = (props) => {
+const MySearches = (props) => {
 
         const history                 =       useHistory();
-        const detailedReport          =       useSelector((state) => state.detailedReport);
+        const detailedReport          =       useSelector((state) => state.mySearchReport);
         const dispatch = useDispatch();
         useEffect(() => {
                 
@@ -21,7 +21,7 @@ const DetailedStatus = (props) => {
         }, []);
 
         const DetailedDataSetStatusApi  = () =>{
-                const userObj           = new DetailedDatasetStatus(  "SAVE", "A_FBTTR-VWSge-1619075981554","241006445d1546dbb5db836c498be6381606221196566");
+                const userObj           = new MySearchReport(  "SAVE", "A_FBTTR-VWSge-1619075981554","241006445d1546dbb5db836c498be6381606221196566");
                 dispatch(APITransport(userObj));
         }
         
@@ -50,29 +50,31 @@ const DetailedStatus = (props) => {
         });
 
         const fetchHeaderButton= () => {
-                return (
-                        <div>
-                                <Button color={"primary" } size="medium" variant="outlined"  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
-                                <Button color={"primary" } size="medium" variant="outlined" className={classes.buttonStyle} onClick={() => this.handleLanguageChange("domain")}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
-                        
-                        </div>
-                );
+                return <div className={classes.reqNoTypo}> <Typography variant="b" component="h2" >My Searches</Typography> </div> 
         }
 
         
         const columns = [
                 {
                         name    : "sr_no",
-                        label   : "s id",
+                        label   : "SR No",
                         options : {
                                 filter  : false,
                                 sort    : false,
-                                display : "excluded",
+                                
                         },
                 },
                 {
-                        name    : "stage",
-                        label   : "Stage",
+                        name    : "search_criteria",
+                        label   : "Search Criteria",
+                        options : {
+                                filter  : false,
+                                sort    : false,
+                        },
+                },
+                {
+                        name    : "searched_on",
+                        label   : "Searched On",
                         options : {
                                 filter  : false,
                                 sort    : false,
@@ -81,14 +83,6 @@ const DetailedStatus = (props) => {
                 {
                         name    : "status",
                         label   : "Status",
-                        options : {
-                                filter  : false,
-                                sort    : false,
-                        },
-                },
-                {
-                        name    : "Record Count",
-                        label   : "Record Count",
                         options : {
                                 filter  : false,
                                 sort    : false,
@@ -122,11 +116,9 @@ const DetailedStatus = (props) => {
         return (
                 <div className  =       {classes.divStyle}>
                         <div className  = {classes.breadcrum}>
-                                <BreadCrum links = {[UrlConfig.dataset,UrlConfig.myContribution]} activeLink = "Dataset details" />
+                                <BreadCrum links = {[UrlConfig.dataset]} activeLink = "My Searches" />
                         </div>
-                        <div className = {classes.headerButtons}>
-                                {fetchHeaderButton()} 
-                        </div>
+                        {fetchHeaderButton()} 
                         <MuiThemeProvider theme = {getMuiTheme()}>  
                                 <MUIDataTable
                                         title   =       {`My Contribution`}
@@ -135,12 +127,9 @@ const DetailedStatus = (props) => {
                                         options ={options}
                                 />
                         </MuiThemeProvider>
-                        <div className = {classes.footerButtons}>
-                                <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => this.handleLanguageChange("domain")}>Abort Process</Button>
-                                
-                        </div>
+                        
                 </div>
         );
 };
 
-export default withStyles(DataSet)(DetailedStatus);
+export default withStyles(DataSet)(MySearches);

@@ -17,14 +17,14 @@ var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447
 
 
 const ChartRender = (props) => {
-        const [selectedOption, setselectedOption]   	= 	useState({ value: 'Parallel Corpus', label: 'Parallel Corpus' });
+        const [selectedOption, setSelectedOption]   	= 	useState({ value: 'Parallel Dataset', label: 'Parallel Dataset' });
         const [title, setTitle]                     	= 	useState("Number of parallel sentences per language with English");
         const history                               	= 	useHistory();
         const dispatch                             	= 	useDispatch();
         const DashboardReport                       	= 	useSelector( (state) => state.dashboardReport);
         const { classes }                           	= 	props;
         const options 				    	= 	[
-									{ value: 'Parallel Corpus', label: 'Parallel Corpus' },
+									{ value: 'Parallel Dataset', label: 'Parallel Dataset' },
 									{ value: 'Monolingual Dataset', label: 'Monolingual Dataset' },
 									{ value: 'ASR / TTS Dataset', label: 'ASR / TTS Dataset' },
 									{ value: 'OCR Dataset', label: 'OCR Dataset' },
@@ -62,6 +62,28 @@ const ChartRender = (props) => {
 		})
 	}
 
+	const handleSelectChange = (value) =>{
+		setSelectedOption( value)
+		switch (value.label) {
+			case 'Parallel Dataset':
+				 setTitle("Number of parallel sentences per language with English")
+				 break;
+			case 'Monolingual Dataset':
+				 setTitle('Number of sentences per language')
+				 break;
+			case 'ASR / TTS Dataset':
+				 setTitle("Numer of audio hours per language")
+				 break;
+			case 'OCR Dataset':
+				setTitle("Numer of images per script")
+				break;
+			default:
+				setTitle("")
+		}
+
+		
+	}
+
      return (
         <>
             	{ !authenticate() &&
@@ -75,11 +97,12 @@ const ChartRender = (props) => {
 			</div> */}
 			<Paper elevation  = {3} className  = {classes.paper}>
 				<div className  =	{classes.titleBar}>
-					<Typography 	variant   = "b" component = "h3" className = {classes.Typography}>	Dataset Type :	</Typography>
+					<Typography 	variant   	=	"b" component = "h3" 
+							className 	= 	{classes.Typography}> Dataset Type :	</Typography>
 					<Select 	className 	= 	{classes.select} 
 							styles 		= 	{customStyles} color= "primary"
 							value   	=	{selectedOption}
-							onChange	=	{(value)=>setselectedOption( value)}
+							onChange	=	{(value)=>{handleSelectChange(value)}}
 							options		=	{options}
 					/>
 					<Button color={"primary" } size="medium" variant="outlined" className={classes.filterButton} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/>Filter</Button>
@@ -89,7 +112,7 @@ const ChartRender = (props) => {
 					<Typography value="" variant="h6"> {title} </Typography>
 				</div>
 				<ResponsiveContainer width = "95%" height = {450}>
-					<BarChart width = {900} height = {450} data={DashboardReport} maxBarSize = {100} >
+					<BarChart width = {900} height 	= 	{450} data={DashboardReport} maxBarSize = {100} >
 						<XAxis 	dataKey 	= 	"label"
 							textAnchor	=	{isMobile ? "end" : "middle"}
 							tick		=	{{ angle: isMobile ? -60 : 0 }} 
@@ -97,17 +120,16 @@ const ChartRender = (props) => {
 							interval	=	{0}
 							position	=	"insideLeft"
 						/>
-						<YAxis type="number" dx={0} 
-					/>
-					<CartesianGrid horizontal = {true} vertical = {false} textAnchor = {"middle"} />
-					<Tooltip />
-					<Bar dataKey = "value" radius = {[4, 4, 0, 0]} maxBarSize = {30}>
-						{
-							DashboardReport.length > 0 && DashboardReport.map((entry, index) => {
-								const color 	= 	colors[index < 9 ? index : index % 10]
-								return <Cell key = {index} fill = {`#${color}`} />;
-							})
-						}
+						<YAxis type="number" dx	=	{0} />
+						<CartesianGrid horizontal = {true} vertical = {false} textAnchor = {"middle"} />
+						<Tooltip />
+						<Bar dataKey = "value" radius = {[4, 4, 0, 0]} maxBarSize = {30}>
+							{
+								DashboardReport.length > 0 && DashboardReport.map((entry, index) => {
+									const color 	= 	colors[index < 9 ? index : index % 10]
+									return <Cell key = {index} fill = {`#${color}`} />;
+								})
+							}
 						</Bar>
 					</BarChart>
 				</ResponsiveContainer>

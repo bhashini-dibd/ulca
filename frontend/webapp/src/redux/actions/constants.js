@@ -12,6 +12,12 @@ const constants = {
    * action for Dashboard report
    */
    DASHBOARD_DATASETS   : "DASHBOARD_DATASETS",
+
+
+   /**
+   * action for Search report
+   */
+   GET_MY_REPORT        : "GET_MY_REPORT"
 };
 
 export default constants;

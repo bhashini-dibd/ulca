@@ -1,18 +1,18 @@
 /**
  * User Event Report API
  */
- import API from "../../api";
- import C from "../../constants";
- import ENDPOINTS from "../../../../configs/apiendpoints";
- import CONFIGS from "../../../../configs/configs";
+ import API from "../../../api";
+ import C from "../../../constants";
+ import ENDPOINTS from "../../../../../configs/apiendpoints";
+ import CONFIGS from "../../../../../configs/configs";
 
- export default class AutoML extends API {ENDOINTS
+ export default class MySearches extends API {ENDOINTS
      constructor(action, jobId, uid, timeout = 200000) {
          super("POST", timeout, false);
          this.action = action
          this.jobId = jobId
          this.uid = uid
-         this.type = C.GET_CONTRIBUTION_LIST;
+         this.type = C.GET_MY_REPORT;
          this.endpoint = `${CONFIGS.API_URL}${ENDPOINTS.getContributionList}`;
      }
  
