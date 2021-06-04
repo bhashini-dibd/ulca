@@ -2,7 +2,9 @@ import API from "../../api";
 import C from "../../constants";
 import ENDPOINTS from "../../../../configs/apiendpoints";
 import CONFIGS from "../../../../configs/configs";
+
 export default class CreateGlossary extends API {
+    
     constructor(dataType,value,criterions = [], timeout = 2000) {
         super('POST', timeout, false);
         this.type = C.DASHBOARD_DATASETS;
@@ -30,9 +32,9 @@ export default class CreateGlossary extends API {
 
     getBody() {
         let request = {}
-        request ["type"]        = this.dataType;
-        request ["criterions"]  = this.criterions;
-        request ["groupby"]     =  {"type":"PARAMS", "value": this.value}
+        request["type"]        = this.dataType;
+        request["criterions"]  = this.criterions;
+        request["groupby"]     =  {"type":"PARAMS", "value": this.value}
         return request;
     }
 

@@ -29,7 +29,7 @@ const SubmitDataset = (props) => {
         message: '',
         variant: 'success'
     })
-    const [error, setError] = useState(false)
+    const [error] = useState(false)
     const [search, setSearch] = useState(false)
     const history = useHistory();
 

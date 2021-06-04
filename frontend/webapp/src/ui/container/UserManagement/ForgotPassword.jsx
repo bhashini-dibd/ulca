@@ -12,7 +12,7 @@ import LoginStyles from "../../styles/Login";
 import {  useHistory } from "react-router-dom";
 
 const ForgotPassword = (props) => {
-  const [values, setValues] = React.useState({
+  const [values, setValues] = useState({
     email: "",
   });
   const history = useHistory();

@@ -4,7 +4,7 @@ import myContributionReport from './DataSet/DatasetView/myContribution';
 import detailedReport from "./DataSet/DatasetView/DetailedDataSet";
 import dashboardReport from "./Dashboard/languageDatasets";
 import mySearchReport from "./DataSet/DatasetSearch/MySearches"
-export default {
+const index = {
 
     apiStatus,
     myContributionReport,
@@ -14,3 +14,5 @@ export default {
 
    
 };
+
+export default index;

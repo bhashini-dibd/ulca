@@ -1,6 +1,6 @@
 import C from '../../actions/constants';
 
-export default function (state = {}, action) {
+ const reducer = (state = {}, action) => {
 
     function compare( a, b ) {
         if ( a.value < b.value ){
@@ -22,3 +22,5 @@ export default function (state = {}, action) {
             return state;
     }
 }
+
+export default reducer;
