@@ -13,7 +13,7 @@ const themeDefault = createMuiTheme({
         lineHeight: "1.14",
         letterSpacing: "1.25px",
         textAlign: "center",
-        height: "26px",
+        height: "26px"
       },
     },
   },

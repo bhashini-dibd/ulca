@@ -1,20 +1,23 @@
 import { withStyles, Typography,Link, MuiThemeProvider, createMuiTheme,Button } from "@material-ui/core";
-import BreadCrum from '../../components/common/Breadcrum';
+import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {  useHistory } from "react-router-dom";
-import DataSet from "../../styles/Dataset";
-import APITransport from "../../../redux/actions/apitransport/apitransport";
+import DataSet from "../../../styles/Dataset";
+import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
-import MyContributionList from "../../../redux/actions/api/DataSet/MyContribution";
-import Dialog from "../../components/common/Dialog"
+import MyContributionList from "../../../../redux/actions/api/DataSet/MyContribution";
+import Dialog from "../../../components/common/Dialog"
 import {Cached, SaveAlt} from '@material-ui/icons';
-import UrlConfig from '../../../configs/internalurlmapping';
+import UrlConfig from '../../../../configs/internalurlmapping';
 const ContributionList = (props) => {
 
         const history                 = useHistory();
         const dispatch                = useDispatch();
         const myContributionReport    = useSelector( (state) => state.myContributionReport);
+        const [open, setOpen]         = useState(false)
+        const [message, setMessage]   = useState("Do you want to delete")
+        const [title, setTilte]       = useState("Delete")
   
         useEffect(()                  => {
                 myContributionReport.responseData.length == 0  && MyContributionListApi()
@@ -45,24 +48,18 @@ const ContributionList = (props) => {
                 }
         });
 
-        const HandleDelete = () =>{
-                return <Dialog
-                // message={message}
-                // type={dialogType}
-                // handleClose={this.handleDialogClose.bind(this)}
-                // open
-                // title={dialogTitle}
-                // handleSubmit={this.handleDialogSubmit.bind(this)}
-                // value={value}
-                /> 
-        }
-
 
         const fetchHeaderButton= () => {
                 return (
                          <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
                 )
-              }
+        }
+
+        const handleSetValues = (name) => {
+                setTilte        (`Delete ${name}  `)
+                setMessage      (`Do you want to delete ${name} ? `)
+                setOpen         (true)
+        }
 
         const renderStatus = (id,value) => {
                 if(value === "Inprogress"){
@@ -73,10 +70,10 @@ const ContributionList = (props) => {
                 }
         }
 
-        const renderAction = (id,value) => {
+        const renderAction = (name,value) => {
                 if(value === "Inprogress"){}
                 else{
-                        return <div className= {classes.span}> <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update </Link><Link className= {classes.link} onClick={()=>{HandleDelete()}}> Delete </Link> </div> 
+                        return <div className= {classes.span}> <Link className= {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update </Link><Link className= {classes.link} onClick={()=>{handleSetValues(name)}}> Delete </Link> </div> 
                 }
         }
 
@@ -85,7 +82,15 @@ const ContributionList = (props) => {
                         const value = myContributionReport.responseData[rowMeta.rowIndex].sr_no;
                         history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}}`)
                 }
-            };
+        };
+
+        const handleClose = () =>{
+                debugger
+        }
+
+        const handleDialogSubmit = () =>{
+
+        }
 
     
         const columns = [
@@ -156,7 +161,7 @@ const ContributionList = (props) => {
                                 empty   : true,
                                 customBodyRender: (value, tableMeta, updateValue) => {
                                         if (tableMeta.rowData) {
-                                                return <div>{renderAction(tableMeta.rowData[0], tableMeta.rowData[4])}</div>;
+                                                return <div>{renderAction(tableMeta.rowData[2], tableMeta.rowData[4])}</div>;
                                         }
                         },
                 },
@@ -186,7 +191,7 @@ const ContributionList = (props) => {
         };
 
         const { classes } = props;
-        
+        console.log(open)
         return (
                 <div className = {classes.divStyle}>
                         <div className = {classes.breadcrum}>
@@ -210,6 +215,13 @@ const ContributionList = (props) => {
                                         options         =       {options}
                                 />
                         </MuiThemeProvider>
+                        {open && <Dialog
+                                message         =       {message}
+                                handleClose     ={() => {setOpen(false)}}
+                                open 
+                                title           =       {title}
+                                handleSubmit    ={() =>        {handleDialogSubmit()}}
+                        /> }
                 </div>
         );
 };
