@@ -1,5 +1,5 @@
 {
-    "dataset-type": "Monolingual Corpus",
+    "datasetType": "Monolingual Corpus",
     "languages": {
         "sourceLanguage": "hi"
     },

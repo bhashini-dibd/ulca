@@ -1,5 +1,5 @@
 {
-    "dataset-type":"OCR Corpus",
+    "datasetType":"OCR Corpus",
     "languages":{
         "sourceLanguage":"ta",
         "targetLanguage":null

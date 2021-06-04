@@ -1,5 +1,5 @@
 {
-    "dataset-type":"ocr-corpus",
+    "datasetType":"ocr-corpus",
     "languages":{
         "sourceLanguage":"ka",
         "targetLanguage":null

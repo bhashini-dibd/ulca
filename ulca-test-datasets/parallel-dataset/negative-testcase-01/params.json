@@ -1,5 +1,5 @@
 {
-    "dataset-type": "Parallel Corpus",
+    "datasetType": "Parallel Corpus",
     "languages": {
         "sourceLanguage": "en",
         "targetLanguage": "hi"
