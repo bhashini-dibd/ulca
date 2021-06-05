@@ -21,8 +21,13 @@ class DatasetUtils:
             if isinstance(v, dict):
                 yield from self.get_tags(v)
             elif isinstance(v, list):
-                for entries in v:
-                    yield entries
+                for entry in v:
+                    if isinstance(entry, dict):
+                        yield from self.get_tags(entry)
+                    elif isinstance(entry, dict):
+                        yield from self.get_tags(entry)
+                    else:
+                        yield entry
             else:
                 yield v
 

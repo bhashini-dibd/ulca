@@ -6,7 +6,7 @@ import time
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, aws_asr_prefix, search_output_topic, \
-    sample_size, offset, limit, delete_output_topic
+    sample_size, offset, limit, delete_output_topic, asr_immutable_keys, asr_non_tag_keys
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -91,23 +91,15 @@ class ASRService:
         records = self.get_asr_dataset_internal({"audioHash": data["audioHash"], "textHash": data["textHash"]})
         if records:
             dup_data = self.enrich_duplicate_data(data, records[0], metadata)
-            if dup_data:
-                repo.update(dup_data)
-                return None
+            repo.update(dup_data)
             return "DUPLICATE", data
         insert_data = data
-        insert_data["timestamp"] = eval(str(time.time()).replace('.', '')[0:13])
-        insert_data["datasetId"] = [metadata["datasetId"]]
-        insert_data["collectionMethod"] = [insert_data["collectionMethod"]]
-        insert_data["license"] = [insert_data["license"]]
         insert_data["datasetType"] = metadata["datasetType"]
-        tag_details = {
-            "channel": insert_data["channel"], "gender": insert_data["gender"],
-            "collectionMode": insert_data["collectionMethod"]["collectionDescription"], "language": insert_data["language"],
-            "collectionSource": insert_data["collectionSource"], "dataset": insert_data["datasetId"], "datasetType": insert_data["datasetType"],
-            "domain": insert_data["domain"], "license": insert_data["license"]
-        }
-        insert_data["tags"] = list(utils.get_tags(tag_details))
+        insert_data["datasetId"] = [metadata["datasetId"]]
+        for key in insert_data.keys():
+            if key not in asr_immutable_keys:
+                insert_data[key] = [insert_data[key]]
+        insert_data["tags"] = self.get_tags(insert_data)
         epoch = eval(str(time.time()).replace('.', '')[0:13])
         s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
         object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_asr_prefix}{s3_file_name}')
@@ -117,27 +109,26 @@ class ASRService:
         return "INSERT", insert_data
 
     def enrich_duplicate_data(self, data, record, metadata):
-        is_duplicate = True
-        if data["collectionMethod"] not in record["collectionMethod"]:
-            record["collectionMethod"].append(data["collectionMethod"])
-            is_duplicate = False
-        collection_source = list(set(data["collectionSource"]) | set(record["collectionSource"]))
-        if collection_source != record["collectionSource"]:
-            record["collectionSource"] = collection_source
-            is_duplicate = False
-        domain = list(set(data["domain"]) | set(record["domain"]))
-        if domain != record["domain"]:
-            record["domain"] = list(set(data["domain"]) | set(record["domain"]))
-            is_duplicate = False
-        if metadata["datasetId"] not in record["datasetId"]:
-            record["datasetId"].append(metadata["datasetId"])
-            is_duplicate = False
-        if metadata["license"] not in record["license"]:
-            record["license"].append(metadata["license"])
-            is_duplicate = False
-        if is_duplicate:
-            return False
+        record["datasetId"].append(metadata["datasetId"])
+        for key in data.keys():
+            if key not in asr_immutable_keys:
+                if key not in record.keys():
+                    record[key] = [data[key]]
+                elif isinstance(data[key], list):
+                    record[key] = list(set(data[key]) | set(record[key]))
+                else:
+                    if isinstance(record[key], list):
+                        if data[key] not in record[key]:
+                            record[key].append(data[key])
+        record["tags"] = self.get_tags(record)
         return record
+
+    def get_tags(self, insert_data):
+        tag_details = insert_data
+        for key in asr_non_tag_keys:
+            if key in tag_details.keys():
+                tag_details.pop(key)
+        return list(utils.get_tags(tag_details))
 
     # Method for deduplication
     def get_asr_dataset_internal(self, query):
@@ -151,7 +142,6 @@ class ASRService:
         except Exception as e:
             log.exception(e)
             return None
-
 
     # Method for searching asr datasets
     def get_asr_dataset(self, query):

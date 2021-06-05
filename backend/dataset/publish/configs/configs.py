@@ -33,6 +33,12 @@ if isinstance(sample_size, str):
     sample_size = eval(sample_size)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/app/search/')
 
+asr_immutable_keys = ["audioFilename", "text", "audioFilePath", "audioHash", "textHash"]
+asr_non_tag_keys = ["startTime", "endTime", "samplingRate"]
+
+parallel_immutable_keys = ["sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage"]
+parallel_non_tag_keys = ["score"]
+
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')

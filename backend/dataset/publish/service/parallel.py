@@ -7,7 +7,8 @@ import uuid
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, search_output_topic, sample_size
+from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, search_output_topic, \
+    sample_size, parallel_immutable_keys, parallel_non_tag_keys
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -98,42 +99,26 @@ class ParallelService:
                         return None
                     else:
                         return data
-                derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"])
+                derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
                 new_records.append(derived_data)
         new_records.append(data)
         for record in new_records:
             data_dict = record
             src_lang, tgt_lang = record["sourceLanguage"], record["targetLanguage"]
-            src_hash = record["sourceTextHash"]
-            tgt_hash = record["targetTextHash"]
             lang_map = {src_lang: record["sourceText"], tgt_lang: record["targetText"]}
-            hashed_key = ''
-            for key in sorted(lang_map.keys()):
-                hashed_key = hashed_key + str(lang_map[key])
-            hashed_key = str(hashlib.sha256(hashed_key.encode('utf-16')).hexdigest())
             if 'derived' not in data_dict.keys():
                 data_dict["derived"] = False
-            data_dict["license"] = [data_dict["license"]]
-            tag_details = {"sourceLanguage": src_lang, "targetLanguage": tgt_lang,
-                           "collectionSource": data_dict["collectionSource"], "datasetType": metadata["datasetType"],
-                           "domain": data_dict["domain"], "license": data_dict["license"], "srcHash": src_hash,
-                           "tgtHash": tgt_hash}
-            if 'datasetId' not in data_dict.keys():
+                hashed_key = ''
+                for key in sorted(lang_map.keys()):
+                    hashed_key = hashed_key + str(lang_map[key])
+                data_dict["hashedKey"] = str(hashlib.sha256(hashed_key.encode('utf-16')).hexdigest())
+                data_dict["sk"] = ','.join(map(str, sorted([src_lang, tgt_lang])))
+                data_dict["datasetType"] = metadata["datasetType"]
                 data_dict["datasetId"] = [metadata["datasetId"]]
-            data_dict["datasetType"] = metadata["datasetType"]
-            tag_details["datasetId"] = data_dict["datasetId"]
-            if isinstance(data_dict["collectionMethod"], list):
-                collection_modes = data_dict["collectionMethod"][0]["collectionDescription"]
-                collection_modes.extend(data_dict["collectionMethod"][0]["collectionDescription"])
-                tag_details["collectionMode"] = set(collection_modes)
-            else:
-                tag_details["collectionMode"] = set(data_dict["collectionMethod"]["collectionDescription"])
-                data_dict["collectionMethod"] = [data_dict["collectionMethod"]]
-            tags = set(utils.get_tags(tag_details))
-            langs = [src_lang, tgt_lang]
-            shard_key = ','.join(map(str, sorted(langs)))
-            data_dict["id"], data_dict["timestamp"] = str(uuid.uuid4()), eval(str(time.time()).replace('.', '')[0:13])
-            data_dict["sk"], data_dict["hashedKey"], data_dict["tags"] = shard_key, hashed_key, tags
+            for key in data_dict.keys():
+                if key not in parallel_immutable_keys:
+                    data_dict[key] = [data_dict[key]]
+            data_dict["tags"] = self.get_tags(data_dict)
             insert_records.append(data_dict)
         return insert_records
 
@@ -151,26 +136,18 @@ class ParallelService:
             return None
 
     def enrich_duplicate_data(self, data, record, metadata):
-        is_duplicate = True
-        if data["collectionMethod"] not in record["collectionMethod"]:
-            record["collectionMethod"].append(data["collectionMethod"])
-            is_duplicate = False
-        collection_source = list(set(data["collectionSource"]) | set(record["collectionSource"]))
-        if collection_source != record["collectionSource"]:
-            record["collectionSource"] = collection_source
-            is_duplicate = False
-        domain = list(set(data["domain"]) | set(record["domain"]))
-        if domain != record["domain"]:
-            record["domain"] = list(set(data["domain"]) | set(record["domain"]))
-            is_duplicate = False
-        if metadata["datasetId"] not in record["datasetId"]:
-            record["datasetId"].append(metadata["datasetId"])
-            is_duplicate = False
-        if metadata["license"] not in record["license"]:
-            record["license"].append(metadata["license"])
-            is_duplicate = False
-        if is_duplicate:
-            return False
+        record["datasetId"].append(metadata["datasetId"])
+        for key in data.keys():
+            if key not in parallel_immutable_keys:
+                if key not in record.keys():
+                    record[key] = [data[key]]
+                elif isinstance(data[key], list):
+                    record[key] = list(set(data[key]) | set(record[key]))
+                else:
+                    if isinstance(record[key], list):
+                        if data[key] not in record[key]:
+                            record[key].append(data[key])
+        record["tags"] = self.get_tags(record)
         return record
 
     def enrich_derived_data(self, data, record, src_hash, tgt_hash, metadata):
@@ -196,13 +173,27 @@ class ParallelService:
                                 "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["data"]["sourceTextHash"],
                             "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
         derived_data["derived"] = True
-        data_cm, data_ds, data_lic = [data["collectionMethod"]], [metadata["datasetId"]], [data["license"]]
-        derived_data["collectionMethod"] = list(set(data_cm) | set(record["collectionMethod"]))
-        derived_data["collectionSource"] = list(set(data["collectionSource"]) | set(record["collectionSource"]))
-        derived_data["domain"] = list(set(data["domain"]) | set(record["domain"]))
-        derived_data["datasetId"] = list(set(metadata["datasetId"]) | set(record["datasetId"]))
-        derived_data["license"] = list(set(data["license"]) | set(record["license"]))
+        derived_data["datasetId"] = [record["datasetId"], metadata["datasetId"]]
+        derived_data["datasetType"] = metadata["datasetType"]
+        for key in data.keys():
+            if key not in parallel_immutable_keys:
+                if key not in record.keys():
+                    record[key] = [data[key]]
+                elif isinstance(data[key], list):
+                    record[key] = list(set(data[key]) | set(record[key]))
+                else:
+                    if isinstance(record[key], list):
+                        if data[key] not in record[key]:
+                            record[key].append(data[key])
+                derived_data[key] = record[key]
         return derived_data
+
+    def get_tags(self, insert_data):
+        tag_details = insert_data
+        for key in parallel_non_tag_keys:
+            if key in tag_details.keys():
+                tag_details.pop(key)
+        return list(utils.get_tags(tag_details))
 
     def get_parallel_dataset(self, query):
         log.info(f'Fetching datasets..... | {datetime.now()}')
