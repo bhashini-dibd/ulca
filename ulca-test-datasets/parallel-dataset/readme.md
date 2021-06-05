@@ -36,6 +36,33 @@
 > `data.json`   : VALID
 
 
+## [positive-testcase-06](./positive-testcase-06)
+
+**Description** : 
+Duplicate pairs in the data file. The system should handle the duplicates.
+Ex : The values for '*sourceText*' and '*targetText*' are repeating.
+> `params.json` : VALID
+> `data.json`   : VALID
+
+**Input Data :**
+```json
+    {
+        "sourceText": "This bridge is of strategic importance along the India-Nepal border",
+        "targetText": "भारत-नेपाल सीमा के करीब होने के चलते इस पुल का रणनीतिक महत्व भी है"
+    },
+    {
+        "sourceText": "This bridge is of strategic importance along the India-Nepal border",
+        "targetText": "भारत-नेपाल सीमा के करीब होने के चलते इस पुल का रणनीतिक महत्व भी है"
+    },
+    {
+        "sourceText": "This bridge is of strategic importance along the India-Nepal border",
+        "targetText": "भारत-नेपाल सीमा के करीब होने के चलते इस पुल का रणनीतिक महत्व भी है"
+    }
+```
+**Expected behaviour :**
+System should ingest only one instance of this pair.
+
+
 ## [negative-testcase-01](./negative-testcase-01)
 
 **Description** : 
