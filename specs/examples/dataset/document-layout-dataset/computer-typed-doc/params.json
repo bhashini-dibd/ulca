@@ -1,15 +1,8 @@
 {
     "datasetType":"document-layout-corpus",
-    "languages":{
-        "sourceLanguage":"ta",
-        "targetLanguage":null
-    },
     "collectionSource":[
         "3522_2009_13_1501_15302_Judgement_24-Jul-2019_TAM.pdf",
         "https://main.sci.gov.in"
-    ],
-    "domain":[
-        "legal"
     ],
     "license":"cc-by-4.0",
     "submitter":{
@@ -28,7 +21,6 @@
     },
     "format":"jpeg",
     "dpi":"72_dpi",
-    "imageTextType":"computer-typed-text",
     "collectionMethod":{
         "collectionDescription":[
             "web-scraping-ocr"
