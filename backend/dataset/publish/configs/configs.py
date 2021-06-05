@@ -31,13 +31,14 @@ if isinstance(no_of_parallel_processes, str):
 sample_size = os.environ.get('ULCA_DATASET_SAMPLE_SIZE', 10)
 if isinstance(sample_size, str):
     sample_size = eval(sample_size)
-shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/app/search/')
+shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/app/publish/')
 
 asr_immutable_keys = ["audioFilename", "text", "audioFilePath", "audioHash", "textHash"]
-asr_non_tag_keys = ["startTime", "endTime", "samplingRate"]
-
+asr_non_tag_keys = ["startTime", "endTime", "samplingRate", "audioFilename", "text"]
 parallel_immutable_keys = ["sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage"]
-parallel_non_tag_keys = ["score"]
+parallel_non_tag_keys = ["score", "sourceText", "targetText"]
+ocr_immutable_keys = ["imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash"]
+ocr_non_tag_keys = ["boundingBox", "imageFilename", "groundTruth", "imageFilePath"]
 
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')

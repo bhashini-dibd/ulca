@@ -6,7 +6,8 @@ import time
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, search_output_topic, sample_size
+from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, search_output_topic, \
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -98,24 +99,47 @@ class OCRService:
 
     # Method to enrich asr dataset
     def get_enriched_ocr_data(self, data, metadata):
-        records = self.get_ocr_dataset_internal({"imageHash": data["imageHash"]})
+        records = self.get_ocr_dataset_internal({"imageHash": data["imageHash"], "groundTruthHash": data["groundTruthHash"]})
         if records:
+            dup_data = self.enrich_duplicate_data(data, records[0], metadata)
+            repo.update(dup_data)
             return "DUPLICATE", data
         insert_data = data
-        insert_data["timestamp"] = eval(str(time.time()).replace('.', '')[0:13])
-        tag_details = {
-            "imageFilename": data["imageFilename"], "datasetType": data["datasetType"],
-            "collectionMode": data["collectionMode"], "language": data["language"],
-            "collectionSource": data["collectionSource"], "dataset": data["datasetId"],
-            "domain": data["domain"], "license": data["license"], "imageHash": data["imageHash"]
-        }
-        insert_data["tags"] = list(utils.get_tags(tag_details))
-        s3_file_name = data["audioFilename"] + metadata["serviceRequestNumber"] + insert_data["timestamp"]
-        object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_ocr_prefix}{s3_file_name}')
+        insert_data["datasetType"] = metadata["datasetType"]
+        insert_data["datasetId"] = [metadata["datasetId"]]
+        for key in insert_data.keys():
+            if key not in ocr_immutable_keys:
+                insert_data[key] = [insert_data[key]]
+        insert_data["tags"] = self.get_tags(insert_data)
+        epoch = eval(str(time.time()).replace('.', '')[0:13])
+        s3_file_name = f'{data["imageFilename"]}|{metadata["datasetId"]}|{epoch}'
+        object_store_path = utils.upload_file(data["imageFilePath"], f'{aws_ocr_prefix}{s3_file_name}')
         if not object_store_path:
             return "FAILED", insert_data
         insert_data["objStorePath"] = object_store_path
         return "INSERT", insert_data
+
+    def enrich_duplicate_data(self, data, record, metadata):
+        record["datasetId"].append(metadata["datasetId"])
+        for key in data.keys():
+            if key not in ocr_immutable_keys:
+                if key not in record.keys():
+                    record[key] = [data[key]]
+                elif isinstance(data[key], list):
+                    record[key] = list(set(data[key]) | set(record[key]))
+                else:
+                    if isinstance(record[key], list):
+                        if data[key] not in record[key]:
+                            record[key].append(data[key])
+        record["tags"] = self.get_tags(record)
+        return record
+
+    def get_tags(self, insert_data):
+        tag_details = insert_data
+        for key in ocr_non_tag_keys:
+            if key in tag_details.keys():
+                tag_details.pop(key)
+        return list(utils.get_tags(tag_details))
 
     # Method for deduplication
     def get_ocr_dataset_internal(self, query):
