@@ -2,13 +2,11 @@ import hashlib
 import logging
 import multiprocessing
 import threading
-import time
-import uuid
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, search_output_topic, \
-    sample_size, parallel_immutable_keys, parallel_non_tag_keys
+    sample_size, parallel_immutable_keys, parallel_non_tag_keys, delete_output_topic
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -253,6 +251,27 @@ class ParallelService:
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
+
+    def delete_parallel_dataset(self, delete_req):
+        log.info(f'Deleting datasets....')
+        records = self.get_parallel_dataset({"datasetId": delete_req["datasetId"]})
+        d, u = 0, 0
+        for record in records:
+            if len(record["datasetId"]) == 1:
+                repo.delete(record["id"])
+                d += 1
+            elif record["derived"]:
+                repo.delete(record["id"])
+                d += 1
+            else:
+                record["datasetId"].remove(delete_req["datasetId"])
+                record["tags"].remove(delete_req["datasetId"])
+                repo.update(record)
+                u += 1
+        op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
+        prod.produce(op, delete_output_topic, None)
+        log.info(f'Done!')
+        return op
 
 # Log config
 dictConfig({

@@ -54,6 +54,11 @@ class OCRRepo:
         return len(data)
 
     # Updates the object in the mongo collection
+    def delete(self, rec_id):
+        col = self.get_mongo_instance()
+        col.delete_one({"id": rec_id})
+
+    # Updates the object in the mongo collection
     def update(self, object_in):
         col = self.get_mongo_instance()
         col.replace_one({"id": object_in["id"]}, object_in)

@@ -46,11 +46,11 @@ def delete_consume():
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.get_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:
-                            o_service.get_ocr_dataset(data)
+                            o_service.delete_ocr_dataset(data)
                         if data["datasetType"] == dataset_type_asr:
-                            a_service.delete_dataset(data)
+                            a_service.delete_asr_dataset(data)
                         if data["datasetType"] == dataset_type_monolingual:
-                            m_service.get_monolingual_dataset(data)
+                            m_service.delete_mono_dataset(data)
                     else:
                         break
                 except Exception as e:

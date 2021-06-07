@@ -7,7 +7,7 @@ from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, search_output_topic, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys, delete_output_topic
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -198,6 +198,25 @@ class OCRService:
         except Exception as e:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
+
+    def delete_ocr_dataset(self, delete_req):
+        log.info(f'Deleting datasets....')
+        records = self.get_ocr_dataset({"datasetId": delete_req["datasetId"]})
+        d, u = 0, 0
+        for record in records:
+            if len(record["datasetId"]) == 1:
+                repo.delete(record["id"])
+                utils.delete_from_s3(record["objStorePath"])
+                d += 1
+            else:
+                record["datasetId"].remove(delete_req["datasetId"])
+                record["tags"].remove(delete_req["datasetId"])
+                repo.update(record)
+                u += 1
+        op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
+        prod.produce(op, delete_output_topic, None)
+        log.info(f'Done!')
+        return op
 
 
 # Log config

@@ -190,7 +190,7 @@ class ASRService:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
-    def delete_dataset(self, delete_req):
+    def delete_asr_dataset(self, delete_req):
         log.info(f'Deleting datasets....')
         records = self.get_asr_dataset({"datasetId": delete_req["datasetId"]})
         d, u = 0, 0
