@@ -41,9 +41,10 @@ class MonolingualService:
                     if result:
                         if result[0] == "INSERT":
                             if len(batch_data) == batch:
-                                persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                                persist_thread.start()
-                                persist_thread.join()
+                                if metadata["datasetMode"] != 'pseudo':
+                                    persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
+                                    persist_thread.start()
+                                    persist_thread.join()
                                 count += len(batch_data)
                                 batch_data = []
                             batch_data.append(result[1])
@@ -52,9 +53,10 @@ class MonolingualService:
                                                "description": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
-                    persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                    persist_thread.start()
-                    persist_thread.join()
+                    if metadata["datasetMode"] != 'pseudo':
+                        persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
+                        persist_thread.start()
+                        persist_thread.join()
                     count += len(batch_data)
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "INVALID": {len(error_list)}')
         except Exception as e:

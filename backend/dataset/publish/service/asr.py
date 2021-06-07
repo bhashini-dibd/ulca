@@ -41,9 +41,10 @@ class ASRService:
                     if result:
                         if result[0] == "INSERT":
                             if len(batch_data) == batch:
-                                persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                                persist_thread.start()
-                                persist_thread.join()
+                                if metadata["datasetMode"] != 'pseudo':
+                                    persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
+                                    persist_thread.start()
+                                    persist_thread.join()
                                 count += len(batch_data)
                                 batch_data = []
                             batch_data.append(result[1])
@@ -55,9 +56,10 @@ class ASRService:
                                                "description": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
-                    persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                    persist_thread.start()
-                    persist_thread.join()
+                    if metadata["datasetMode"] != 'pseudo':
+                        persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
+                        persist_thread.start()
+                        persist_thread.join()
                     count += len(batch_data)
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "INVALID": {len(error_list)}')
         except Exception as e:
@@ -100,12 +102,13 @@ class ASRService:
             if key not in asr_immutable_keys:
                 insert_data[key] = [insert_data[key]]
         insert_data["tags"] = self.get_tags(insert_data)
-        epoch = eval(str(time.time()).replace('.', '')[0:13])
-        s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
-        object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_asr_prefix}{s3_file_name}')
-        if not object_store_path:
-            return "FAILED", insert_data
-        insert_data["objStorePath"] = object_store_path
+        if metadata["datasetMode"] != 'pseudo':
+            epoch = eval(str(time.time()).replace('.', '')[0:13])
+            s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
+            object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_asr_prefix}{s3_file_name}')
+            if not object_store_path:
+                return "FAILED", insert_data
+            insert_data["objStorePath"] = object_store_path
         return "INSERT", insert_data
 
     def enrich_duplicate_data(self, data, record, metadata):

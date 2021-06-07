@@ -42,9 +42,10 @@ class ParallelService:
                     if result:
                         if isinstance(result, list):
                             if len(batch_data) == batch:
-                                persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                                persist_thread.start()
-                                persist_thread.join()
+                                if metadata["datasetMode"] != 'pseudo':
+                                    persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
+                                    persist_thread.start()
+                                    persist_thread.join()
                                 count += len(batch_data)
                                 batch_data = []
                             batch_data.extend(result)
@@ -53,9 +54,10 @@ class ParallelService:
                                                "description": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
-                    persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                    persist_thread.start()
-                    persist_thread.join()
+                    if metadata["datasetMode"] != 'pseudo':
+                        persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
+                        persist_thread.start()
+                        persist_thread.join()
                     count += len(batch_data)
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "INVALID": {len(error_list)}')
         except Exception as e:
@@ -272,6 +274,7 @@ class ParallelService:
         prod.produce(op, delete_output_topic, None)
         log.info(f'Done!')
         return op
+
 
 # Log config
 dictConfig({
