@@ -1,3 +1,574 @@
 [2021-06-07 09:50:05,882] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(GYAT) -- Running..........
 [2021-06-07 09:50:05,882] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(TBTJ) -- Running..........
 [2021-06-07 09:50:05,883] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(ZOot) -- Running..........
+[2021-06-07 17:50:22,625] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(Tcvv) -- Running..........
+[2021-06-07 17:50:22,625] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(JCOK) -- Running..........
+[2021-06-07 17:50:22,626] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(OXRb) -- Running..........
+[2021-06-07 17:51:30,138] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 17:51:30,394] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(oLUY) -- Running..........
+[2021-06-07 17:51:30,394] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(fMTU) -- Running..........
+[2021-06-07 17:51:30,397] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(cYZB) -- Running..........
+[2021-06-07 17:51:39,316] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset..... | 2021-06-07 17:51:39.316388
+[2021-06-07 17:51:39,316] {parallel.py:69} Thread-1 ERROR in parallel: 'data'
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 32, in load_parallel_dataset
+    ip_data = request["data"]
+KeyError: 'data'
+[2021-06-07 17:51:39,322] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 17:51:39] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 17:52:35,221] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 17:52:35,613] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(SyNQ) -- Running..........
+[2021-06-07 17:52:35,613] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(nyNp) -- Running..........
+[2021-06-07 17:52:35,614] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(DipX) -- Running..........
+[2021-06-07 17:52:52,457] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset..... | 2021-06-07 17:52:52.457196
+[2021-06-07 17:52:52,457] {parallel.py:69} Thread-1 ERROR in parallel: 'record'
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 35, in load_parallel_dataset
+    ip_data = [ip_data["record"]]
+KeyError: 'record'
+[2021-06-07 17:52:52,464] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 17:52:52] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 17:53:18,586] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 17:53:18,965] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(pcyt) -- Running..........
+[2021-06-07 17:53:18,968] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(anCS) -- Running..........
+[2021-06-07 17:53:18,968] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(Rxox) -- Running..........
+[2021-06-07 17:53:22,903] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset..... | 2021-06-07 17:53:22.903628
+[2021-06-07 17:53:22,904] {parallel.py:68} Thread-1 ERROR in parallel: 'record'
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 34, in load_parallel_dataset
+    ip_data = [request["record"]]
+KeyError: 'record'
+[2021-06-07 17:53:22,909] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 17:53:22] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 17:53:53,456] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 17:53:53,688] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(GIqv) -- Running..........
+[2021-06-07 17:53:53,689] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(VpwJ) -- Running..........
+[2021-06-07 17:53:53,692] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(cIwB) -- Running..........
+[2021-06-07 17:54:08,532] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 17:54:08,532] {parallel.py:34} Thread-1 INFO in parallel: {'datasetId': 'datasetId', 'datasetType': 'parallel-corpus', 'serviceRequestNumber': 'serviceRequestNumber', 'userId': 'userId', 'datasetMode': 'pseudo'}
+[2021-06-07 17:54:08,532] {parallel.py:69} Thread-1 ERROR in parallel: 'record'
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 35, in load_parallel_dataset
+    ip_data = [request["record"]]
+KeyError: 'record'
+[2021-06-07 17:54:08,537] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 17:54:08] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 17:55:16,015] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 17:55:16,383] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(QiyE) -- Running..........
+[2021-06-07 17:55:16,384] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(rleE) -- Running..........
+[2021-06-07 17:55:16,387] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(fWIT) -- Running..........
+[2021-06-07 17:55:21,260] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 17:55:21,260] {parallel.py:33} Thread-1 INFO in parallel: {'datasetId': 'datasetId', 'datasetType': 'parallel-corpus', 'serviceRequestNumber': 'serviceRequestNumber', 'userId': 'userId', 'datasetMode': 'pseudo'}
+[2021-06-07 17:55:21,260] {parallel.py:68} Thread-1 ERROR in parallel: 'record'
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 34, in load_parallel_dataset
+    ip_data = [request["record"]]
+KeyError: 'record'
+[2021-06-07 17:55:21,265] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 17:55:21] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 17:55:52,991] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(zyIa) -- Running..........
+[2021-06-07 17:55:52,991] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(fjbF) -- Running..........
+[2021-06-07 17:55:52,992] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(ktNR) -- Running..........
+[2021-06-07 17:55:53,641] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 17:55:57,750] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 17:56:28,322] {parallel.py:119} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 113, in get_dataset_internal
+    data = repo.search_internal(db_query, exclude, None, None)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 77, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 17:56:28,338] {parallel.py:65} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 2, "INVALID": 0
+[2021-06-07 17:56:28,338] {app.py:1891} Thread-1 ERROR in app: Exception on /ulca/dataset/v0/load [POST]
+Traceback (most recent call last):
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Library/Python/3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/api/apis.py", line 19, in insert_dataset
+    data = p_service.load_parallel_dataset(req_criteria)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 69, in load_parallel_dataset
+    lang_code = f'{request["details"]["sourceLanguage"]}|{request["details"]["targetLanguage"]}'
+KeyError: 'details'
+[2021-06-07 17:56:28,351] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 17:56:28] "[35m[1mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 500 -
+[2021-06-07 17:59:33,977] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 17:59:34,132] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(hYhk) -- Running..........
+[2021-06-07 17:59:34,132] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(jyAx) -- Running..........
+[2021-06-07 17:59:34,134] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(WScq) -- Running..........
+[2021-06-07 17:59:39,392] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:00:09,913] {parallel.py:119} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 113, in get_dataset_internal
+    data = repo.search_internal(db_query, exclude, None, None)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 77, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:00:09,926] {parallel.py:65} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 2, "INVALID": 0
+[2021-06-07 18:00:09,927] {app.py:1891} Thread-1 ERROR in app: Exception on /ulca/dataset/v0/load [POST]
+Traceback (most recent call last):
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 2447, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 1952, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 1821, in handle_user_exception
+    reraise(exc_type, exc_value, tb)
+  File "/Library/Python/3.8/site-packages/flask/_compat.py", line 39, in reraise
+    raise value
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Library/Python/3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/api/apis.py", line 19, in insert_dataset
+    data = p_service.load_parallel_dataset(req_criteria)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 69, in load_parallel_dataset
+    lang_code = f'{request["sourceLanguage"]}|{request["targetLanguage"]}'
+KeyError: 'sourceLanguage'
+[2021-06-07 18:00:09,957] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:00:09] "[35m[1mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 500 -
+[2021-06-07 18:02:43,842] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:02:44,046] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(ibTG) -- Running..........
+[2021-06-07 18:02:44,046] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(PaEN) -- Running..........
+[2021-06-07 18:02:44,046] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(AAsg) -- Running..........
+[2021-06-07 18:02:50,616] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:03:21,145] {parallel.py:121} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 115, in get_dataset_internal
+    data = repo.search_internal(db_query, exclude, None, None)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 77, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:03:21,156] {parallel.py:63} Thread-1 INFO in parallel: [[{'id': ['uuid'], 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': [['42040.pdf', 'https: //main.sci.gov.in']], 'domain': [['legal']], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': [{'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}], 'derived': [False], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': [['datasetId']], 'tags': ['uuid', 'en', 'hi', 'sourceTextHash', 'targetTextHash', ['42040.pdf', 'https: //main.sci.gov.in'], ['legal'], 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', 'Project Anuvaad', 'Open source project run by ekStep foundation, part of Sunbird project', 'Ajitesh Sharma', 'NLP team lead at Project Anuvaad', 'Vishal Mauli', 'Backend team lead at Project Anuvaad', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', ['datasetId']]}], [{'id': ['uuid'], 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': [['42040.pdf', 'https: //main.sci.gov.in']], 'domain': [['legal']], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': [{'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}], 'derived': [False], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': [['datasetId']], 'tags': ['uuid', 'en', 'hi', 'sourceTextHash', 'targetTextHash', ['42040.pdf', 'https: //main.sci.gov.in'], ['legal'], 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', 'Project Anuvaad', 'Open source project run by ekStep foundation, part of Sunbird project', 'Ajitesh Sharma', 'NLP team lead at Project Anuvaad', 'Vishal Mauli', 'Backend team lead at Project Anuvaad', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', ['datasetId']]}]]
+[2021-06-07 18:03:21,156] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 2, "INVALID": 0
+[2021-06-07 18:03:21,161] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:03:21] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:05:24,404] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:05:24,537] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(HEIw) -- Running..........
+[2021-06-07 18:05:24,537] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(DUIW) -- Running..........
+[2021-06-07 18:05:24,538] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(YXTo) -- Running..........
+[2021-06-07 18:05:29,982] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:06:00,640] {parallel.py:121} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 115, in get_dataset_internal
+    data = repo.search_internal(db_query, exclude, None, None)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 77, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:06:00,658] {parallel.py:63} Thread-1 INFO in parallel: [{'id': ['uuid'], 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': [['42040.pdf', 'https: //main.sci.gov.in']], 'domain': [['legal']], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': [{'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}], 'derived': [False], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': [['datasetId']], 'tags': ['uuid', 'en', 'hi', 'sourceTextHash', 'targetTextHash', ['42040.pdf', 'https: //main.sci.gov.in'], ['legal'], 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', 'Project Anuvaad', 'Open source project run by ekStep foundation, part of Sunbird project', 'Ajitesh Sharma', 'NLP team lead at Project Anuvaad', 'Vishal Mauli', 'Backend team lead at Project Anuvaad', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', ['datasetId']]}]
+[2021-06-07 18:06:00,659] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:06:00,667] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:06:00] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:06:51,364] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:06:51,671] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(ZRGb) -- Running..........
+[2021-06-07 18:06:51,671] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(iuqG) -- Running..........
+[2021-06-07 18:06:51,671] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(vtIE) -- Running..........
+[2021-06-07 18:06:57,615] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:07:28,115] {parallel.py:121} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 115, in get_dataset_internal
+    data = repo.search_internal(db_query, exclude, None, None)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 77, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:07:28,148] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': [['42040.pdf', 'https: //main.sci.gov.in']], 'domain': [['legal']], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': [{'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}], 'derived': [False], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': [['datasetId']], 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', ['42040.pdf', 'https: //main.sci.gov.in'], ['legal'], 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', 'Project Anuvaad', 'Open source project run by ekStep foundation, part of Sunbird project', 'Ajitesh Sharma', 'NLP team lead at Project Anuvaad', 'Vishal Mauli', 'Backend team lead at Project Anuvaad', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', ['datasetId']]}]
+[2021-06-07 18:07:28,150] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:07:28,164] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:07:28] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:10:44,570] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:10:44,736] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(rZhB) -- Running..........
+[2021-06-07 18:10:44,736] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(ydyG) -- Running..........
+[2021-06-07 18:10:44,736] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(hpWq) -- Running..........
+[2021-06-07 18:10:49,547] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:11:20,037] {parallel.py:125} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/service/parallel.py", line 119, in get_dataset_internal
+    data = repo.search_internal(db_query, exclude, None, None)
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 77, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:11:20,054] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': [['42040.pdf', 'https: //main.sci.gov.in']], 'domain': [['legal']], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'derived': [False], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': [['datasetId']], 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', ['42040.pdf', 'https: //main.sci.gov.in'], ['legal'], 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', ['datasetId']]}]
+[2021-06-07 18:11:20,055] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:11:20,062] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:11:20] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:12:22,569] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:12:22,906] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(Guxp) -- Running..........
+[2021-06-07 18:12:22,906] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(JNgf) -- Running..........
+[2021-06-07 18:12:22,907] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(qwdP) -- Running..........
+[2021-06-07 18:12:27,074] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:12:57,776] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:12:57,789] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': [['42040.pdf', 'https: //main.sci.gov.in']], 'domain': [['legal']], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'derived': [False], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': [['datasetId']], 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', ['42040.pdf', 'https: //main.sci.gov.in'], ['legal'], 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', ['datasetId']]}]
+[2021-06-07 18:12:57,790] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:12:57,798] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:12:57] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:20:55,890] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:20:55,971] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(VFUD) -- Running..........
+[2021-06-07 18:20:55,971] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(MjGQ) -- Running..........
+[2021-06-07 18:20:55,972] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(mxFe) -- Running..........
+[2021-06-07 18:21:01,985] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:21:32,492] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:21:32,507] {parallel.py:93} MainThread INFO in parallel: Enrichingggg
+[2021-06-07 18:21:32,507] {parallel.py:197} MainThread INFO in parallel: {'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'derived': [False], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': ['datasetId']}
+[2021-06-07 18:21:32,508] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'derived': [False], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': ['datasetId'], 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}]
+[2021-06-07 18:21:32,509] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:21:32,515] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:21:32] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:25:25,824] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:25:26,006] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(cGdO) -- Running..........
+[2021-06-07 18:25:26,006] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(piBp) -- Running..........
+[2021-06-07 18:25:26,006] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(nPkV) -- Running..........
+[2021-06-07 18:25:30,123] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:26:00,647] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:26:00,659] {parallel.py:93} MainThread INFO in parallel: Enrichingggg
+[2021-06-07 18:26:00,659] {parallel.py:95} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:26:00,660] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'hashedKey': ['80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204'], 'sk': ['en,hi'], 'datasetType': ['parallel-corpus'], 'datasetId': ['datasetId'], 'derived': False, 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}]
+[2021-06-07 18:26:00,660] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:26:00,666] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:26:00] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:29:17,438] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:29:17,747] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(CmCg) -- Running..........
+[2021-06-07 18:29:17,747] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(Iuvn) -- Running..........
+[2021-06-07 18:29:17,747] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(valG) -- Running..........
+[2021-06-07 18:29:24,567] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:29:55,068] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:29:55,081] {parallel.py:93} MainThread INFO in parallel: Enrichingggg
+[2021-06-07 18:29:55,081] {parallel.py:95} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:29:55,082] {parallel.py:112} MainThread INFO in parallel: {'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'hashedKey': '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'sk': 'en,hi', 'datasetType': 'parallel-corpus', 'datasetId': ['datasetId'], 'derived': False, 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}
+[2021-06-07 18:29:55,083] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'hashedKey': '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'sk': 'en,hi', 'datasetType': 'parallel-corpus', 'datasetId': ['datasetId'], 'derived': False, 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}]
+[2021-06-07 18:29:55,083] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:29:55,088] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:29:55] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:32:44,784] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:32:44,901] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(BDRR) -- Running..........
+[2021-06-07 18:32:44,901] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(qtWE) -- Running..........
+[2021-06-07 18:32:44,901] {consumer.py:39} MainThread INFO in consumer: DS-SEARCH-(PLAU) -- Running..........
+[2021-06-07 18:32:49,585] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:33:20,198] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:33:20,210] {parallel.py:98} MainThread INFO in parallel: id
+[2021-06-07 18:33:20,210] {parallel.py:98} MainThread INFO in parallel: sourceText
+[2021-06-07 18:33:20,210] {parallel.py:98} MainThread INFO in parallel: targetText
+[2021-06-07 18:33:20,210] {parallel.py:98} MainThread INFO in parallel: sourceLanguage
+[2021-06-07 18:33:20,211] {parallel.py:98} MainThread INFO in parallel: targetLanguage
+[2021-06-07 18:33:20,211] {parallel.py:98} MainThread INFO in parallel: sourceTextHash
+[2021-06-07 18:33:20,211] {parallel.py:98} MainThread INFO in parallel: targetTextHash
+[2021-06-07 18:33:20,211] {parallel.py:98} MainThread INFO in parallel: collectionSource
+[2021-06-07 18:33:20,211] {parallel.py:100} MainThread INFO in parallel: collectionSource
+[2021-06-07 18:33:20,211] {parallel.py:98} MainThread INFO in parallel: domain
+[2021-06-07 18:33:20,211] {parallel.py:100} MainThread INFO in parallel: domain
+[2021-06-07 18:33:20,211] {parallel.py:98} MainThread INFO in parallel: collectionMethod
+[2021-06-07 18:33:20,211] {parallel.py:100} MainThread INFO in parallel: collectionMethod
+[2021-06-07 18:33:20,211] {parallel.py:98} MainThread INFO in parallel: license
+[2021-06-07 18:33:20,211] {parallel.py:100} MainThread INFO in parallel: license
+[2021-06-07 18:33:20,211] {parallel.py:98} MainThread INFO in parallel: submitter
+[2021-06-07 18:33:20,212] {parallel.py:100} MainThread INFO in parallel: submitter
+[2021-06-07 18:33:20,212] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'hashedKey': '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'sk': 'en,hi', 'datasetType': 'parallel-corpus', 'datasetId': ['datasetId'], 'derived': False, 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}]
+[2021-06-07 18:33:20,213] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:33:20,218] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:33:20] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:34:50,523] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:34:50,883] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(ebCq) -- Running..........
+[2021-06-07 18:34:50,883] {consumer.py:39} MainThread INFO in consumer: DS-CONS-(OxhC) -- Running..........
+[2021-06-07 18:34:50,883] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(szWL) -- Running..........
+[2021-06-07 18:34:54,920] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:35:25,418] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:35:25,431] {parallel.py:98} MainThread INFO in parallel: collectionSource
+[2021-06-07 18:35:25,431] {parallel.py:98} MainThread INFO in parallel: domain
+[2021-06-07 18:35:25,431] {parallel.py:98} MainThread INFO in parallel: collectionMethod
+[2021-06-07 18:35:25,432] {parallel.py:98} MainThread INFO in parallel: license
+[2021-06-07 18:35:25,432] {parallel.py:98} MainThread INFO in parallel: submitter
+[2021-06-07 18:35:25,432] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'hashedKey': '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'sk': 'en,hi', 'datasetType': 'parallel-corpus', 'datasetId': ['datasetId'], 'derived': False, 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}]
+[2021-06-07 18:35:25,433] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:35:25,439] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:35:25] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:36:05,581] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:36:05,763] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(BwFe) -- Running..........
+[2021-06-07 18:36:05,763] {consumer.py:39} MainThread INFO in consumer: DS-CONS-(oLZc) -- Running..........
+[2021-06-07 18:36:05,765] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(fwXo) -- Running..........
+[2021-06-07 18:36:10,038] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:36:40,593] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:36:40,608] {parallel.py:99} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:36:40,608] {parallel.py:99} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:36:40,608] {parallel.py:99} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:36:40,609] {parallel.py:63} Thread-1 INFO in parallel: [{'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'hashedKey': '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'sk': 'en,hi', 'datasetType': 'parallel-corpus', 'datasetId': ['datasetId'], 'derived': False, 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}]
+[2021-06-07 18:36:40,610] {parallel.py:67} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:36:40,616] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:36:40] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:37:32,360] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:37:32,686] {consumer.py:39} MainThread INFO in consumer: DS-CONS-(vUDO) -- Running..........
+[2021-06-07 18:37:32,686] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(xCXm) -- Running..........
+[2021-06-07 18:37:32,686] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(nHAn) -- Running..........
+[2021-06-07 18:37:36,844] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:38:07,371] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:38:07,380] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,380] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,380] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,380] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,380] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,380] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,380] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,380] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,381] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,381] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,381] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,381] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:38:07,381] {parallel.py:103} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': [{'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}]}
+[2021-06-07 18:38:07,381] {parallel.py:110} MainThread INFO in parallel: {'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'hashedKey': '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'sk': 'en,hi', 'datasetType': 'parallel-corpus', 'datasetId': ['datasetId'], 'derived': False, 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}
+[2021-06-07 18:38:07,382] {parallel.py:66} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:38:07,388] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:38:07] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -
+[2021-06-07 18:40:32,236] {_internal.py:113} MainThread INFO in _internal:  * Running on http://0.0.0.0:5010/ (Press CTRL+C to quit)
+[2021-06-07 18:40:32,409] {searchconsumer.py:39} MainThread INFO in searchconsumer: DS-SEARCH-(dKvx) -- Running..........
+[2021-06-07 18:40:32,410] {consumer.py:39} MainThread INFO in consumer: DS-CONS-(Dhev) -- Running..........
+[2021-06-07 18:40:32,410] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(WLEz) -- Running..........
+[2021-06-07 18:40:35,718] {parallel.py:30} Thread-1 INFO in parallel: Loading Dataset.....
+[2021-06-07 18:41:06,257] {parallel.py:82} MainThread ERROR in parallel: 15.207.103.202:27017: timed out
+Traceback (most recent call last):
+  File "/Users/mahulivishal/Desktop/ulca/ulca-git/ULCA/backend/dataset/publish/repository/parallel.py", line 78, in search_internal
+    for record in res:
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1156, in next
+    if len(self.__data) or self._refresh():
+  File "/Library/Python/3.8/site-packages/pymongo/cursor.py", line 1050, in _refresh
+    self.__session = self.__collection.database.client._ensure_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1810, in _ensure_session
+    return self.__start_session(True, causal_consistency=False)
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1763, in __start_session
+    server_session = self._get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/mongo_client.py", line 1796, in _get_server_session
+    return self._topology.get_server_session()
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 482, in get_server_session
+    self._select_servers_loop(
+  File "/Library/Python/3.8/site-packages/pymongo/topology.py", line 208, in _select_servers_loop
+    raise ServerSelectionTimeoutError(
+pymongo.errors.ServerSelectionTimeoutError: 15.207.103.202:27017: timed out
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,266] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': {'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}, 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,267] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': 'cc-by-4.0', 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,267] {parallel.py:96} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': {'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}}
+[2021-06-07 18:41:06,267] {parallel.py:103} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': [{'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}]}
+[2021-06-07 18:41:06,267] {parallel.py:110} MainThread INFO in parallel: {'id': 'uuid', 'sourceText': 'sourceText', 'targetText': 'targetText', 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'sourceTextHash': 'sourceTextHash', 'targetTextHash': 'targetTextHash', 'collectionSource': ['42040.pdf', 'https: //main.sci.gov.in'], 'domain': ['legal'], 'collectionMethod': [{'collectionDescription': ['manual-translated'], 'collectionDetails': {'editingTool': 'Anuvaad', 'editingToolVersion': 'v1.4', 'contributor': {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}}}], 'license': ['cc-by-4.0'], 'submitter': [{'name': 'Project Anuvaad', 'aboutMe': 'Open source project run by ekStep foundation, part of Sunbird project', 'team': [{'name': 'Ajitesh Sharma', 'aboutMe': 'NLP team lead at Project Anuvaad'}, {'name': 'Vishal Mauli', 'aboutMe': 'Backend team lead at Project Anuvaad'}, {'name': 'Aravinth Bheemaraj', 'aboutMe': 'NLP Data team lead at Project Anuvaad'}]}], 'hashedKey': '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'sk': 'en,hi', 'datasetType': 'parallel-corpus', 'datasetId': ['datasetId'], 'derived': False, 'tags': ['en', 'hi', 'sourceTextHash', 'targetTextHash', '42040.pdf', 'https: //main.sci.gov.in', 'legal', 'manual-translated', 'Anuvaad', 'v1.4', 'Aravinth Bheemaraj', 'NLP Data team lead at Project Anuvaad', 'cc-by-4.0', '80c65e80ea10e76ce18b885408ee0748677b3f017af13e02480dadeb52c5b204', 'en,hi', 'parallel-corpus', 'datasetId']}
+[2021-06-07 18:41:06,268] {parallel.py:66} Thread-1 INFO in parallel: Done! -- INPUT: 1, INSERTS: 1, "INVALID": 0
+[2021-06-07 18:41:06,273] {_internal.py:113} Thread-1 INFO in _internal: 127.0.0.1 - - [07/Jun/2021 18:41:06] "[37mPOST /ulca/dataset/v0/load HTTP/1.1[0m" 200 -

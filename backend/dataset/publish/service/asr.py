@@ -27,12 +27,11 @@ class ASRService:
     def load_asr_dataset(self, request):
         log.info("Loading ASR Dataset.....")
         try:
-            ip_data = request["data"]
+            metadata = request
+            record = request["record"]
+            ip_data = [record]
             batch_data, error_list = [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
-            metadata = ip_data
-            metadata.pop("record")
-            ip_data = [ip_data["record"]]
             if ip_data:
                 func = partial(self.get_enriched_asr_data, metadata=metadata)
                 pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
@@ -69,35 +68,39 @@ class ASRService:
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        lang_code = f'{request["details"]["sourceLanguage"]}|{request["details"]["targetLanguage"]}'
-        return {"message": f'loaded {lang_code} dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
+        return {"message": f'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
                 "invalid": len(error_list)}
 
     # Method to enrich asr dataset
     def get_enriched_asr_data(self, data, metadata):
-        records = self.get_asr_dataset_internal({"audioHash": data["audioHash"], "textHash": data["textHash"]})
-        if records:
-            dup_data = self.enrich_duplicate_data(data, records[0], metadata)
-            if dup_data:
-                repo.update(dup_data)
-                return None
-            else:
-                return "DUPLICATE", data, records[0]
-        insert_data = data
-        insert_data["datasetType"] = metadata["datasetType"]
-        insert_data["datasetId"] = [metadata["datasetId"]]
-        for key in insert_data.keys():
-            if key not in asr_immutable_keys:
-                insert_data[key] = [insert_data[key]]
-        insert_data["tags"] = self.get_tags(insert_data)
-        if metadata["datasetMode"] != 'pseudo':
-            epoch = eval(str(time.time()).replace('.', '')[0:13])
-            s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
-            object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_asr_prefix}{s3_file_name}')
-            if not object_store_path:
-                return "FAILED", insert_data, insert_data
-            insert_data["objStorePath"] = object_store_path
-        return "INSERT", insert_data, insert_data
+        try:
+            records = self.get_asr_dataset_internal({"audioHash": data["audioHash"], "textHash": data["textHash"]})
+            if records:
+                dup_data = self.enrich_duplicate_data(data, records[0], metadata)
+                if dup_data:
+                    repo.update(dup_data)
+                    return None
+                else:
+                    return "DUPLICATE", data, records[0]
+            insert_data = data
+            for key in insert_data.keys():
+                if key not in asr_immutable_keys:
+                    if not isinstance(insert_data[key], list):
+                        insert_data[key] = [insert_data[key]]
+            insert_data["datasetType"] = metadata["datasetType"]
+            insert_data["datasetId"] = [metadata["datasetId"]]
+            insert_data["tags"] = self.get_tags(insert_data)
+            if metadata["datasetMode"] != 'pseudo':
+                epoch = eval(str(time.time()).replace('.', '')[0:13])
+                s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
+                object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_asr_prefix}{s3_file_name}')
+                if not object_store_path:
+                    return "FAILED", insert_data, insert_data
+                insert_data["objStorePath"] = object_store_path
+            return "INSERT", insert_data, insert_data
+        except Exception as e:
+            log.exception(e)
+            return None
 
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = record
@@ -119,10 +122,10 @@ class ASRService:
             return False
 
     def get_tags(self, insert_data):
-        tag_details = insert_data
-        for key in asr_non_tag_keys:
-            if key in tag_details.keys():
-                tag_details.pop(key)
+        tag_details = {}
+        for key in insert_data:
+            if key not in asr_non_tag_keys:
+                tag_details[key] = insert_data[key]
         return list(utils.get_tags(tag_details))
 
     # Method for deduplication

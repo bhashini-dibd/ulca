@@ -27,12 +27,11 @@ class ParallelService:
         pass
 
     def load_parallel_dataset(self, request):
-        log.info("Loading Dataset..... | {}".format(datetime.now()))
+        log.info("Loading Dataset.....")
         try:
-            ip_data = request["data"]
-            metadata = ip_data
-            metadata.pop("record")
-            ip_data = [ip_data["record"]]
+            metadata = request
+            record = request["record"]
+            ip_data = [record]
             batch_data, error_list = [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
             if ip_data:
@@ -49,7 +48,7 @@ class ParallelService:
                                     persist_thread.join()
                                 count += len(batch_data)
                                 batch_data = []
-                            batch_data.extend(result)
+                            batch_data.extend(result[0])
                         else:
                             error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
                                                "datasetType": dataset_type_parallel,
@@ -68,45 +67,49 @@ class ParallelService:
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        lang_code = f'{request["details"]["sourceLanguage"]}|{request["details"]["targetLanguage"]}'
+        lang_code = f'{record["sourceLanguage"]}|{record["targetLanguage"]}'
         return {"message": f'loaded {lang_code} dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
                 "invalid": len(error_list)}
 
     def get_enriched_data(self, data, metadata):
         insert_records, new_records = [], []
-        hashes = [data["sourceTextHash"], data["targetTextHash"]]
-        records = self.get_dataset_internal({"hash": hashes})
-        if records:
-            for record in records:
-                if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
-                    dup_data = self.enrich_duplicate_data(data, record, metadata)
-                    if dup_data:
-                        repo.update(dup_data)
-                        return None
-                    else:
-                        return data, record
-                derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
-                new_records.append(derived_data)
-        new_records.append(data)
-        for record in new_records:
-            data_dict = record
-            src_lang, tgt_lang = record["sourceLanguage"], record["targetLanguage"]
-            lang_map = {src_lang: record["sourceText"], tgt_lang: record["targetText"]}
-            if 'derived' not in data_dict.keys():
-                data_dict["derived"] = False
-                hashed_key = ''
-                for key in sorted(lang_map.keys()):
-                    hashed_key = hashed_key + str(lang_map[key])
-                data_dict["hashedKey"] = str(hashlib.sha256(hashed_key.encode('utf-16')).hexdigest())
-                data_dict["sk"] = ','.join(map(str, sorted([src_lang, tgt_lang])))
-                data_dict["datasetType"] = metadata["datasetType"]
-                data_dict["datasetId"] = [metadata["datasetId"]]
-            for key in data_dict.keys():
-                if key not in parallel_immutable_keys:
-                    data_dict[key] = [data_dict[key]]
-            data_dict["tags"] = self.get_tags(data_dict)
-            insert_records.append(data_dict)
-        return insert_records, insert_records
+        try:
+            hashes = [data["sourceTextHash"], data["targetTextHash"]]
+            records = self.get_dataset_internal({"hash": hashes})
+            if records:
+                for record in records:
+                    if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
+                        dup_data = self.enrich_duplicate_data(data, record, metadata)
+                        if dup_data:
+                            repo.update(dup_data)
+                            return None
+                        else:
+                            return data, record
+                    derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
+                    new_records.append(derived_data)
+            new_records.append(data)
+            for record in new_records:
+                src_lang, tgt_lang = record["sourceLanguage"], record["targetLanguage"]
+                lang_map = {src_lang: record["sourceText"], tgt_lang: record["targetText"]}
+                if 'derived' not in record.keys():
+                    for key in record.keys():
+                        if key not in parallel_immutable_keys:
+                            if not isinstance(record[key], list):
+                                record[key] = [record[key]]
+                    hashed_key = ''
+                    for key in sorted(lang_map.keys()):
+                        hashed_key = hashed_key + str(lang_map[key])
+                    record["hashedKey"] = str(hashlib.sha256(hashed_key.encode('utf-16')).hexdigest())
+                    record["sk"] = ','.join(map(str, sorted([src_lang, tgt_lang])))
+                    record["datasetType"] = metadata["datasetType"]
+                    record["datasetId"] = [metadata["datasetId"]]
+                    record["derived"] = False
+                    record["tags"] = self.get_tags(record)
+                insert_records.append(record)
+            return insert_records, insert_records
+        except Exception as e:
+            log.exception(e)
+            return None
 
     def get_dataset_internal(self, query):
         try:
@@ -166,9 +169,6 @@ class ParallelService:
                 derived_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
                                 "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["data"]["sourceTextHash"],
                             "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
-        derived_data["derived"] = True
-        derived_data["datasetId"] = [record["datasetId"], metadata["datasetId"]]
-        derived_data["datasetType"] = metadata["datasetType"]
         for key in data.keys():
             if key not in parallel_immutable_keys:
                 if key not in record.keys():
@@ -180,13 +180,17 @@ class ParallelService:
                         if data[key] not in record[key]:
                             record[key].append(data[key])
                 derived_data[key] = record[key]
+        derived_data["datasetId"] = [record["datasetId"], metadata["datasetId"]]
+        derived_data["datasetType"] = metadata["datasetType"]
+        derived_data["derived"] = True
+        derived_data["tags"] = self.get_tags(derived_data)
         return derived_data
 
     def get_tags(self, insert_data):
-        tag_details = insert_data
-        for key in parallel_non_tag_keys:
-            if key in tag_details.keys():
-                tag_details.pop(key)
+        tag_details = {}
+        for key in insert_data:
+            if key not in parallel_non_tag_keys:
+                tag_details[key] = insert_data[key]
         return list(utils.get_tags(tag_details))
 
     def get_parallel_dataset(self, query):

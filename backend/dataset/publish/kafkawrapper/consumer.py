@@ -35,7 +35,7 @@ def consume():
         consumer = instantiate(topics)
         p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
-        prefix = "DS-SEARCH-" + "(" + rand_str + ")"
+        prefix = "DS-CONS-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
         while True:
             for msg in consumer:

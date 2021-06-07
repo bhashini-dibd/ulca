@@ -31,12 +31,11 @@ class OCRService:
     def load_ocr_dataset(self, request):
         log.info("Loading OCR Dataset.....")
         try:
-            ip_data = request["data"]
+            metadata = request
+            record = request["record"]
+            ip_data = [record]
             batch_data, error_list = [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
-            metadata = ip_data
-            metadata.pop("records")
-            ip_data = ip_data["records"]
             if ip_data:
                 func = partial(self.get_enriched_ocr_data, metadata=metadata)
                 no_of_m1_process = request["processors"]
@@ -77,35 +76,39 @@ class OCRService:
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        lang_code = f'{request["details"]["sourceLanguage"]}|{request["details"]["targetLanguage"]}'
-        return {"message": f'loaded {lang_code} dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
+        return {"message": f'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
                 "invalid": len(error_list)}
 
     # Method to enrich asr dataset
     def get_enriched_ocr_data(self, data, metadata):
-        records = self.get_ocr_dataset_internal({"imageHash": data["imageHash"], "groundTruthHash": data["groundTruthHash"]})
-        if records:
-            dup_data = self.enrich_duplicate_data(data, records[0], metadata)
-            if dup_data:
-                repo.update(dup_data)
-                return None
-            else:
-                return "DUPLICATE", data, records[0]
-        insert_data = data
-        insert_data["datasetType"] = metadata["datasetType"]
-        insert_data["datasetId"] = [metadata["datasetId"]]
-        for key in insert_data.keys():
-            if key not in ocr_immutable_keys:
-                insert_data[key] = [insert_data[key]]
-        insert_data["tags"] = self.get_tags(insert_data)
-        if metadata["datasetMode"] != 'pseudo':
-            epoch = eval(str(time.time()).replace('.', '')[0:13])
-            s3_file_name = f'{data["imageFilename"]}|{metadata["datasetId"]}|{epoch}'
-            object_store_path = utils.upload_file(data["imageFilePath"], f'{aws_ocr_prefix}{s3_file_name}')
-            if not object_store_path:
-                return "FAILED", insert_data, insert_data
-            insert_data["objStorePath"] = object_store_path
-        return "INSERT", insert_data, insert_data
+        try:
+            records = self.get_ocr_dataset_internal({"imageHash": data["imageHash"], "groundTruthHash": data["groundTruthHash"]})
+            if records:
+                dup_data = self.enrich_duplicate_data(data, records[0], metadata)
+                if dup_data:
+                    repo.update(dup_data)
+                    return None
+                else:
+                    return "DUPLICATE", data, records[0]
+            insert_data = data
+            for key in insert_data.keys():
+                if key not in ocr_immutable_keys:
+                    if not isinstance(insert_data[key], list):
+                        insert_data[key] = [insert_data[key]]
+            insert_data["datasetType"] = metadata["datasetType"]
+            insert_data["datasetId"] = [metadata["datasetId"]]
+            insert_data["tags"] = self.get_tags(insert_data)
+            if metadata["datasetMode"] != 'pseudo':
+                epoch = eval(str(time.time()).replace('.', '')[0:13])
+                s3_file_name = f'{data["imageFilename"]}|{metadata["datasetId"]}|{epoch}'
+                object_store_path = utils.upload_file(data["imageFilePath"], f'{aws_ocr_prefix}{s3_file_name}')
+                if not object_store_path:
+                    return "FAILED", insert_data, insert_data
+                insert_data["objStorePath"] = object_store_path
+            return "INSERT", insert_data, insert_data
+        except Exception as e:
+            log.exception(e)
+            return None
 
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = record
@@ -127,10 +130,10 @@ class OCRService:
             return False
 
     def get_tags(self, insert_data):
-        tag_details = insert_data
-        for key in ocr_non_tag_keys:
-            if key in tag_details.keys():
-                tag_details.pop(key)
+        tag_details = {}
+        for key in insert_data:
+            if key not in ocr_non_tag_keys:
+                tag_details[key] = insert_data[key]
         return list(utils.get_tags(tag_details))
 
     # Method for deduplication

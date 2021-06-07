@@ -1,7 +1,7 @@
 import os
 
 app_host = os.environ.get('ULCA_DS_PUBLISH_HOST', '0.0.0.0')
-app_port = os.environ.get('ULCA_DS_PUBLISH_PORT', 5001)
+app_port = os.environ.get('ULCA_DS_PUBLISH_PORT', 5010)
 
 db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://15.207.103.202:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")
@@ -33,14 +33,14 @@ if isinstance(sample_size, str):
     sample_size = eval(sample_size)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/app/publish/')
 
-asr_immutable_keys = ["audioFilename", "text", "audioFilePath", "audioHash", "textHash"]
-asr_non_tag_keys = ["startTime", "endTime", "samplingRate", "audioFilename", "text"]
-parallel_immutable_keys = ["sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage"]
-parallel_non_tag_keys = ["score", "sourceText", "targetText"]
-ocr_immutable_keys = ["imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash"]
-ocr_non_tag_keys = ["boundingBox", "imageFilename", "groundTruth", "imageFilePath"]
-mono_immutable_keys = ["text", "textHash"]
-mono_non_tag_keys = ["text"]
+asr_immutable_keys = ["id", "audioFilename", "text", "audioFilePath", "audioHash", "textHash", "datasetType"]
+asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter"]
+parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType"]
+parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
+ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash", "datasetType"]
+ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter"]
+mono_immutable_keys = ["id", "text", "textHash", "datasetType"]
+mono_non_tag_keys = ["id", "text", "submitter"]
 publish_error_code = "3000_XXX"
 
 
