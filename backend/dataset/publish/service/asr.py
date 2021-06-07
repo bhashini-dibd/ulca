@@ -5,10 +5,11 @@ import time
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, aws_asr_prefix, search_output_topic, \
-    sample_size, offset, limit, delete_output_topic, asr_immutable_keys, asr_non_tag_keys
+    sample_size, offset, limit, delete_output_topic, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
+from events.error import ErrorEvent
 
 log = logging.getLogger('file')
 
@@ -16,6 +17,7 @@ mongo_instance = None
 repo = ASRRepo()
 utils = DatasetUtils()
 prod = Producer()
+error_event = ErrorEvent()
 
 class ASRService:
     def __init__(self):
@@ -31,11 +33,10 @@ class ASRService:
             metadata = ip_data
             metadata.pop("record")
             ip_data = [ip_data["record"]]
-            clean_data = self.get_clean_asr_data(ip_data, error_list)
-            if clean_data:
+            if ip_data:
                 func = partial(self.get_enriched_asr_data, metadata=metadata)
                 pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
-                enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
+                enrichment_processors = pool_enrichers.map_async(func, ip_data).get()
                 for result in enrichment_processors:
                     if result:
                         if result[0] == "INSERT":
@@ -48,11 +49,13 @@ class ASRService:
                                 batch_data = []
                             batch_data.append(result[1])
                         elif result[0] == "FAILED":
-                            error_list.append({"record": result[1], "cause": "UPLOAD_FAILED",
-                                               "description": "Upload to s3 bucket failed"})
+                            error_list.append({"record": result[1], "code": "UPLOAD_FAILED",
+                                               "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                               "message": "Upload to s3 bucket failed"})
                         else:
-                            error_list.append({"record": result[1], "cause": "DUPLICATE_RECORD",
-                                               "description": "This record is already available in the system"})
+                            error_list.append({"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
+                                               "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                               "message": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
                     if metadata["datasetMode"] != 'pseudo':
@@ -60,6 +63,8 @@ class ASRService:
                         persist_thread.start()
                         persist_thread.join()
                     count += len(batch_data)
+            if error_list:
+                error_event.create_error_event(error_list)
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "INVALID": {len(error_list)}')
         except Exception as e:
             log.exception(e)
@@ -68,32 +73,16 @@ class ASRService:
         return {"message": f'loaded {lang_code} dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
                 "invalid": len(error_list)}
 
-    # Method to perform basic checks on the input
-    def get_clean_asr_data(self, ip_data, error_list):
-        duplicate_records, clean_data = set([]), []
-        for data in ip_data:
-            if 'audioFilename' not in data.keys() or 'text' not in data.keys() or 'audioFilePath' not in data.keys():
-                error_list.append({"record": data, "cause": "INVALID_RECORD",
-                                   "description": "either audioFilename or text or audioFilPath is missing"})
-                continue
-            tup = (data["audioHash"], data["textHash"])
-            if tup in duplicate_records:
-                error_list.append({"record": data, "cause": "DUPLICATE_RECORD",
-                                   "description": "This audio file is repeated multiple times in the input"})
-                continue
-            else:
-                duplicate_records.add(tup)
-                clean_data.append(data)
-        duplicate_records.clear()
-        return clean_data
-
     # Method to enrich asr dataset
     def get_enriched_asr_data(self, data, metadata):
         records = self.get_asr_dataset_internal({"audioHash": data["audioHash"], "textHash": data["textHash"]})
         if records:
             dup_data = self.enrich_duplicate_data(data, records[0], metadata)
-            repo.update(dup_data)
-            return "DUPLICATE", data
+            if dup_data:
+                repo.update(dup_data)
+                return None
+            else:
+                return "DUPLICATE", data, records[0]
         insert_data = data
         insert_data["datasetType"] = metadata["datasetType"]
         insert_data["datasetId"] = [metadata["datasetId"]]
@@ -106,12 +95,12 @@ class ASRService:
             s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
             object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_asr_prefix}{s3_file_name}')
             if not object_store_path:
-                return "FAILED", insert_data
+                return "FAILED", insert_data, insert_data
             insert_data["objStorePath"] = object_store_path
-        return "INSERT", insert_data
+        return "INSERT", insert_data, insert_data
 
     def enrich_duplicate_data(self, data, record, metadata):
-        record["datasetId"].append(metadata["datasetId"])
+        db_record = record
         for key in data.keys():
             if key not in asr_immutable_keys:
                 if key not in record.keys():
@@ -122,8 +111,12 @@ class ASRService:
                     if isinstance(record[key], list):
                         if data[key] not in record[key]:
                             record[key].append(data[key])
-        record["tags"] = self.get_tags(record)
-        return record
+        if db_record != record:
+            record["datasetId"].append(metadata["datasetId"])
+            record["tags"] = self.get_tags(record)
+            return record
+        else:
+            return False
 
     def get_tags(self, insert_data):
         tag_details = insert_data

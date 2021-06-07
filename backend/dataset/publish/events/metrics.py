@@ -1,16 +1,20 @@
 import logging
 from logging.config import dictConfig
+from configs.configs import metric_event_input_topic
+from kafkawrapper.producer import Producer
 
 log = logging.getLogger('file')
 
 
 mongo_instance = None
+prod = Producer()
 
 class MetricEvent:
     def __init__(self):
         pass
 
-    def create_metric_event(self, data):
+    def create_metric_event(self, data, is_del, is_upd):
+        prod.produce(data, metric_event_input_topic, None)
         pass
 
 

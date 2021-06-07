@@ -41,6 +41,7 @@ ocr_immutable_keys = ["imageFilename", "groundTruth", "imageFilePath", "imageHas
 ocr_non_tag_keys = ["boundingBox", "imageFilename", "groundTruth", "imageFilePath"]
 mono_immutable_keys = ["text", "textHash"]
 mono_non_tag_keys = ["text"]
+publish_error_code = "3000_XXX"
 
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
@@ -51,6 +52,8 @@ search_output_topic = os.environ.get('KAFKA_ULCA_DS_SEARCH_OP_TOPIC', 'ulca-ds-s
 delete_input_topic = os.environ.get('KAFKA_ULCA_DS_DELETE_IP_TOPIC', 'ulca-ds-delete-ip-v0')
 delete_output_topic = os.environ.get('KAFKA_ULCA_DS_DELETE_OP_TOPIC', 'ulca-ds-delete-op-v0')
 publish_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
+error_event_input_topic = os.environ.get('KAFKA_ULCA_DS_ERROR_IP_TOPIC', 'ulca-ds-error-op-v0')
+metric_event_input_topic = os.environ.get('KAFKA_ULCA_DS_METRIC_IP_TOPIC', 'ulca-ds-metric-op-v0')
 ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 3)
 if isinstance(ulca_dataset_topic_partitions, str):
     ulca_dataset_topic_partitions = eval(ulca_dataset_topic_partitions)

@@ -6,10 +6,11 @@ from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, search_output_topic, \
-    sample_size, parallel_immutable_keys, parallel_non_tag_keys, delete_output_topic
+    sample_size, parallel_immutable_keys, parallel_non_tag_keys, delete_output_topic, dataset_type_parallel
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
+from events.error import ErrorEvent
 
 
 log = logging.getLogger('file')
@@ -18,6 +19,7 @@ mongo_instance = None
 repo = ParallelRepo()
 utils = DatasetUtils()
 prod = Producer()
+error_event = ErrorEvent()
 
 
 class ParallelService:
@@ -33,14 +35,13 @@ class ParallelService:
             ip_data = [ip_data["record"]]
             batch_data, error_list = [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
-            clean_data = self.get_clean_data(ip_data, error_list)
-            if clean_data:
+            if ip_data:
                 func = partial(self.get_enriched_data, metadata=metadata)
                 pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
-                enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
+                enrichment_processors = pool_enrichers.map_async(func, ip_data).get()
                 for result in enrichment_processors:
                     if result:
-                        if isinstance(result, list):
+                        if isinstance(result[0], list):
                             if len(batch_data) == batch:
                                 if metadata["datasetMode"] != 'pseudo':
                                     persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
@@ -50,8 +51,10 @@ class ParallelService:
                                 batch_data = []
                             batch_data.extend(result)
                         else:
-                            error_list.append({"record": result, "cause": "DUPLICATE_RECORD",
-                                               "description": "This record is already available in the system"})
+                            error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
+                                               "datasetType": dataset_type_parallel,
+                                               "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                               "message": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
                     if metadata["datasetMode"] != 'pseudo':
@@ -59,6 +62,8 @@ class ParallelService:
                         persist_thread.start()
                         persist_thread.join()
                     count += len(batch_data)
+            if error_list:
+                error_event.create_error_event(error_list)
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "INVALID": {len(error_list)}')
         except Exception as e:
             log.exception(e)
@@ -66,25 +71,6 @@ class ParallelService:
         lang_code = f'{request["details"]["sourceLanguage"]}|{request["details"]["targetLanguage"]}'
         return {"message": f'loaded {lang_code} dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
                 "invalid": len(error_list)}
-
-    # Method to perform basic checks on the input
-    def get_clean_data(self, ip_data, error_list):
-        duplicate_records, clean_data = set([]), []
-        for data in ip_data:
-            if 'sourceText' not in data.keys() or 'targetText' not in data.keys():
-                error_list.append({"record": data, "cause": "INVALID_RECORD",
-                                   "description": "either sourceText or the targetText is missing"})
-                continue
-            tup = (data['sourceTextHash'], data['targetTextHash'])
-            if tup in duplicate_records:
-                error_list.append({"record": data, "cause": "DUPLICATE_RECORD",
-                                   "description": "This record is repeated multiple times in the input"})
-                continue
-            else:
-                duplicate_records.add(tup)
-                clean_data.append(data)
-        duplicate_records.clear()
-        return clean_data
 
     def get_enriched_data(self, data, metadata):
         insert_records, new_records = [], []
@@ -98,7 +84,7 @@ class ParallelService:
                         repo.update(dup_data)
                         return None
                     else:
-                        return data
+                        return data, record
                 derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
                 new_records.append(derived_data)
         new_records.append(data)
@@ -120,7 +106,7 @@ class ParallelService:
                     data_dict[key] = [data_dict[key]]
             data_dict["tags"] = self.get_tags(data_dict)
             insert_records.append(data_dict)
-        return insert_records
+        return insert_records, insert_records
 
     def get_dataset_internal(self, query):
         try:
@@ -136,11 +122,7 @@ class ParallelService:
             return None
 
     def enrich_duplicate_data(self, data, record, metadata):
-        if record["derived"]:
-            record["datasetId"] = [metadata["datasetId"]]
-            record["derived"] = False
-        else:
-            record["datasetId"].append(metadata["datasetId"])
+        db_record = record
         for key in data.keys():
             if key not in parallel_immutable_keys:
                 if key not in record.keys():
@@ -151,8 +133,16 @@ class ParallelService:
                     if isinstance(record[key], list):
                         if data[key] not in record[key]:
                             record[key].append(data[key])
-        record["tags"] = self.get_tags(record)
-        return record
+        if db_record != record:
+            if record["derived"]:
+                record["datasetId"] = [metadata["datasetId"]]
+                record["derived"] = False
+            else:
+                record["datasetId"].append(metadata["datasetId"])
+            record["tags"] = self.get_tags(record)
+            return record
+        else:
+            return False
 
     def enrich_derived_data(self, data, record, src_hash, tgt_hash, metadata):
         derived_data = {}

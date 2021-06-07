@@ -7,10 +7,11 @@ from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, search_output_topic, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys, delete_output_topic
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys, delete_output_topic, dataset_type_ocr
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
+from events.error import ErrorEvent
 
 
 log = logging.getLogger('file')
@@ -19,6 +20,7 @@ mongo_instance = None
 repo = OCRRepo()
 utils = DatasetUtils()
 prod = Producer()
+error_event = ErrorEvent()
 
 
 class OCRService:
@@ -35,12 +37,11 @@ class OCRService:
             metadata = ip_data
             metadata.pop("records")
             ip_data = ip_data["records"]
-            clean_data = self.get_clean_ocr_data(ip_data, error_list)
-            if clean_data:
+            if ip_data:
                 func = partial(self.get_enriched_ocr_data, metadata=metadata)
                 no_of_m1_process = request["processors"]
                 pool_enrichers = multiprocessing.Pool(no_of_m1_process)
-                enrichment_processors = pool_enrichers.map_async(func, clean_data).get()
+                enrichment_processors = pool_enrichers.map_async(func, ip_data).get()
                 for result in enrichment_processors:
                     if result:
                         if result[0] == "INSERT":
@@ -53,11 +54,16 @@ class OCRService:
                                 batch_data = []
                             batch_data.append(result[1])
                         elif result[0] == "FAILED":
-                            error_list.append({"record": result[1], "cause": "UPLOAD_FAILED",
-                                               "description": "Upload to s3 bucket failed"})
+                            error_list.append({"record": result[1], "code": "UPLOAD_FAILED",
+                                               "datasetType": dataset_type_ocr,
+                                               "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                               "message": "Upload to s3 bucket failed"})
                         else:
-                            error_list.append({"record": result[1], "cause": "DUPLICATE_RECORD",
-                                               "description": "This record is already available in the system"})
+                            error_list.append(
+                                {"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
+                                 "datasetType": dataset_type_ocr,
+                                 "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                 "message": "This record is already available in the system"})
                 pool_enrichers.close()
                 if batch_data:
                     if metadata["datasetMode"] != 'pseudo':
@@ -65,6 +71,8 @@ class OCRService:
                         persist_thread.start()
                         persist_thread.join()
                     count += len(batch_data)
+            if error_list:
+                error_event.create_error_event(error_list)
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "INVALID": {len(error_list)}')
         except Exception as e:
             log.exception(e)
@@ -73,39 +81,16 @@ class OCRService:
         return {"message": f'loaded {lang_code} dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
                 "invalid": len(error_list)}
 
-    # Method to perform basic checks on the input
-    def get_clean_ocr_data(self, ip_data, error_list):
-        duplicate_records, clean_data = set([]), []
-        for data in ip_data:
-            if 'groundTruth' not in data.keys() or 'imageFilename' not in data.keys() or 'imageFilePath' not in data.keys():
-                error_list.append({"record": data, "cause": "INVALID_RECORD",
-                                   "description": "either groundTruth or imageFilename or imageFilePath is missing"})
-                continue
-            image_hash = utils.hash_file(data["imageFilePath"])
-            if not image_hash:
-                error_list.append({"record": data, "cause": "IMAGE_UNAVAILABLE",
-                                   "description": f'Image file is unavailable at -- {data["imageFilePath"]}'})
-                continue
-            unique_key = f'{image_hash}|{data["groundTruth"]}'
-            unique_key = str(hashlib.sha256(unique_key.encode('utf-16')).hexdigest())
-            if unique_key in duplicate_records:
-                error_list.append({"record": data, "cause": "DUPLICATE_RECORD",
-                                   "description": "This image file is repeated multiple times in the input"})
-                continue
-            else:
-                duplicate_records.add(unique_key)
-                data["imageHash"] = unique_key
-                clean_data.append(data)
-        duplicate_records.clear()
-        return clean_data
-
     # Method to enrich asr dataset
     def get_enriched_ocr_data(self, data, metadata):
         records = self.get_ocr_dataset_internal({"imageHash": data["imageHash"], "groundTruthHash": data["groundTruthHash"]})
         if records:
             dup_data = self.enrich_duplicate_data(data, records[0], metadata)
-            repo.update(dup_data)
-            return "DUPLICATE", data
+            if dup_data:
+                repo.update(dup_data)
+                return None
+            else:
+                return "DUPLICATE", data, records[0]
         insert_data = data
         insert_data["datasetType"] = metadata["datasetType"]
         insert_data["datasetId"] = [metadata["datasetId"]]
@@ -118,12 +103,12 @@ class OCRService:
             s3_file_name = f'{data["imageFilename"]}|{metadata["datasetId"]}|{epoch}'
             object_store_path = utils.upload_file(data["imageFilePath"], f'{aws_ocr_prefix}{s3_file_name}')
             if not object_store_path:
-                return "FAILED", insert_data
+                return "FAILED", insert_data, insert_data
             insert_data["objStorePath"] = object_store_path
-        return "INSERT", insert_data
+        return "INSERT", insert_data, insert_data
 
     def enrich_duplicate_data(self, data, record, metadata):
-        record["datasetId"].append(metadata["datasetId"])
+        db_record = record
         for key in data.keys():
             if key not in ocr_immutable_keys:
                 if key not in record.keys():
@@ -134,8 +119,12 @@ class OCRService:
                     if isinstance(record[key], list):
                         if data[key] not in record[key]:
                             record[key].append(data[key])
-        record["tags"] = self.get_tags(record)
-        return record
+        if db_record != record:
+            record["datasetId"].append(metadata["datasetId"])
+            record["tags"] = self.get_tags(record)
+            return record
+        else:
+            return False
 
     def get_tags(self, insert_data):
         tag_details = insert_data
