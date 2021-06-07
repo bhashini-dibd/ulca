@@ -24,10 +24,12 @@ class DatasetUtils:
                 for entry in v:
                     if isinstance(entry, dict):
                         yield from self.get_tags(entry)
-                    elif isinstance(entry, dict):
-                        yield from self.get_tags(entry)
+                    elif isinstance(entry, int) or isinstance(entry, float):
+                        continue
                     else:
                         yield entry
+            elif isinstance(v, int) or isinstance(v, float):
+                continue
             else:
                 yield v
 

@@ -6,7 +6,8 @@ import time
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, search_output_topic, sample_size
+from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, search_output_topic, \
+    sample_size, mono_non_tag_keys, mono_immutable_keys
 from repository.monolingual import MonolingualRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -82,21 +83,41 @@ class MonolingualService:
         return clean_data
 
     def get_enriched_data(self, data, metadata):
-        txt_hash = str(hashlib.sha256(data["text"].encode('utf-16')).hexdigest())
-        records = self.get_monolingual_dataset_internal({"textHash": txt_hash})
+        records = self.get_monolingual_dataset_internal({"textHash": data["textHash"]})
         if records:
+            dup_data = self.enrich_duplicate_data(data, records[0], metadata)
+            repo.update(dup_data)
             return "DUPLICATE", data
         insert_data = data
-        insert_data["textHash"] = txt_hash
-        insert_data["timestamp"] = eval(str(time.time()).replace('.', '')[0:13])
-        tag_details = {
-            "datasetType": data["datasetType"],
-            "collectionMode": data["collectionMode"], "language": data["language"],
-            "collectionSource": data["collectionSource"], "dataset": metadata["datasetId"],
-            "domain": data["domain"], "license": data["license"], "textHash": data["textHash"]
-        }
-        insert_data["tags"] = list(utils.get_tags(tag_details))
+        insert_data["datasetType"] = metadata["datasetType"]
+        insert_data["datasetId"] = [metadata["datasetId"]]
+        for key in insert_data.keys():
+            if key not in mono_immutable_keys:
+                insert_data[key] = [insert_data[key]]
+        insert_data["tags"] = self.get_tags(insert_data)
         return "INSERT", insert_data
+
+    def enrich_duplicate_data(self, data, record, metadata):
+        record["datasetId"].append(metadata["datasetId"])
+        for key in data.keys():
+            if key not in mono_immutable_keys:
+                if key not in record.keys():
+                    record[key] = [data[key]]
+                elif isinstance(data[key], list):
+                    record[key] = list(set(data[key]) | set(record[key]))
+                else:
+                    if isinstance(record[key], list):
+                        if data[key] not in record[key]:
+                            record[key].append(data[key])
+        record["tags"] = self.get_tags(record)
+        return record
+
+    def get_tags(self, insert_data):
+        tag_details = insert_data
+        for key in mono_non_tag_keys:
+            if key in tag_details.keys():
+                tag_details.pop(key)
+        return list(utils.get_tags(tag_details))
 
 
     def get_monolingual_dataset_internal(self, query):

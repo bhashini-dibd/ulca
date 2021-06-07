@@ -39,6 +39,8 @@ parallel_immutable_keys = ["sourceText", "targetText", "sourceTextHash", "target
 parallel_non_tag_keys = ["score", "sourceText", "targetText"]
 ocr_immutable_keys = ["imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash"]
 ocr_non_tag_keys = ["boundingBox", "imageFilename", "groundTruth", "imageFilePath"]
+mono_immutable_keys = ["text", "textHash"]
+mono_non_tag_keys = ["text"]
 
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
