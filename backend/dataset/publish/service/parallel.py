@@ -136,7 +136,11 @@ class ParallelService:
             return None
 
     def enrich_duplicate_data(self, data, record, metadata):
-        record["datasetId"].append(metadata["datasetId"])
+        if record["derived"]:
+            record["datasetId"] = [metadata["datasetId"]]
+            record["derived"] = False
+        else:
+            record["datasetId"].append(metadata["datasetId"])
         for key in data.keys():
             if key not in parallel_immutable_keys:
                 if key not in record.keys():
@@ -224,6 +228,7 @@ class ParallelService:
                 tags.append(query["domain"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
+                db_query["derived"] = False
             if tags:
                 db_query["tags"] = tags
             if src_lang:
