@@ -43,6 +43,14 @@ mono_immutable_keys = ["id", "text", "textHash", "datasetType"]
 mono_non_tag_keys = ["id", "text", "submitter"]
 publish_error_code = "3000_XXX"
 
+pt_publish_tool = "publish"
+pt_inprogress_status = "inprogress"
+pt_success_status = "successful"
+pt_failed_status = "failed"
+pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
+pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
+
+
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')

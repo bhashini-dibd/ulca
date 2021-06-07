@@ -1,3 +1,5 @@
+import uuid
+
 from flask import Flask, jsonify, request
 
 from service.parallel import ParallelService
@@ -15,6 +17,7 @@ ulca_dataset_publish = Flask(__name__)
 def insert_dataset():
     req_criteria, data = request.get_json(), {}
     p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
+    req_criteria["record"]["id"] = str(uuid.uuid4())
     if req_criteria["datasetType"] == dataset_type_parallel:
         data = p_service.load_parallel_dataset(req_criteria)
     if req_criteria["datasetType"] == dataset_type_ocr:

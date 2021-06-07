@@ -32,7 +32,7 @@ class ParallelService:
             metadata = request
             record = request["record"]
             ip_data = [record]
-            batch_data, error_list = [], []
+            batch_data, error_list, pt_list = [], [], []
             total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
             if ip_data:
                 func = partial(self.get_enriched_data, metadata=metadata)
