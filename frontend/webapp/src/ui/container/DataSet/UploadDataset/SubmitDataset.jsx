@@ -61,7 +61,8 @@ const SubmitDataset = (props) => {
                                 filterSelectedOptions
                                 open={search}
                                 onChange={(e, value) => {
-                                    setDatasetInfo({ ...dataset, filteredName: value !== null ? value.name : "" })
+                                    setDatasetInfo({ ...dataset, name: value.name})
+                                    handleClose();
                                 }}
                                 onOpen={() => {
                                     setTimeout(() => setSearch(true), 200)
@@ -83,10 +84,7 @@ const SubmitDataset = (props) => {
                         </Grid>
                     </Grid>
                 </div>
-                <div style={{ float: 'right' }}>
-                    <Button variant="text" color="primary" onClick={handleClose}>Cancel</Button>
-                    <Button variant="text" color="primary" onClick={handleDone}>Done</Button>
-                </div>
+               
             </div>
         )
     }

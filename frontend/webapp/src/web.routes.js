@@ -14,6 +14,7 @@ import Dashboard from "./ui/container/Dashboard/ChartRender";
 import DatasetSubmission from './ui/container/DataSet/UploadDataset/DatasetSubmission';
 import authenticateUser from './configs/authenticate';
 import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";
+import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/SearchDownloadRecords";
 
 const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) => {
   return (
@@ -99,6 +100,14 @@ export default function App() {
             component={DatasetSubmission}
             authenticate={authenticateUser}
             currentMenu="dataset-submission"
+            dontShowHeader={false}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/search-and-download-rec`}
+            userRoles={[""]}
+            component={SearchAndDownloadRecords}
+            authenticate={authenticateUser}
+            currentMenu="search-and-download-rec"
             dontShowHeader={false}
           />
 

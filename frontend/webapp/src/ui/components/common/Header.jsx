@@ -121,7 +121,9 @@ const Header = (props) => {
                     >
                       My Searches
                     </MenuItem>
-                    <MenuItem className={classes.styledMenu}>
+                    <MenuItem className={classes.styledMenu}
+                    onClick={() => handleMenuItemClick('/search-and-download-rec')}
+                    >
                       Search & Download Records
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}>

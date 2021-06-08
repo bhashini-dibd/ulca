@@ -127,7 +127,23 @@ const DataSet = (theme) => ({
     },
     ButtonRefresh:{
         marginLeft:"auto"
+    },
+    searchDivStyle:{
+        padding:'0% 4%',
+    },
+    buttonDiv:{
+         margin: '0% 0 3% 0'
+    },
+    innerButton:{
+        margin:'0 2% 2% 0'
+    },
+    subHeader:{
+        marginBottom:'3%'
+    },
+    clearNSubmit:{
+        float:'right'
     }
+
 });
 
 export default DataSet;
