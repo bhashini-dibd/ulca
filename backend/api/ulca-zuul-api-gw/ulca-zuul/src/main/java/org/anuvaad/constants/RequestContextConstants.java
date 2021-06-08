@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestContextConstants {
     public static final String AUTH_BOOLEAN_FLAG_NAME = "shouldDoAuth";
-    public static final String AUTH_TOKEN_KEY = "authToken";
+    public static final String PUBLIC_KEY = "public-key";
+    public static final String SIG_KEY = "signature";
     public static final String PATH_PARAM_URI = "pathParamUri";
     public static final String QUERY_PARAM_URI = "queryParamUri";
     public static final String REQ_URI = "reqUri";

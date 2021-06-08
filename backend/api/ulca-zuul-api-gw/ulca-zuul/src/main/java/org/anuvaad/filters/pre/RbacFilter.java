@@ -100,6 +100,9 @@ public class RbacFilter extends ZuulFilter {
     public Boolean verifyAuthorization(RequestContext ctx, String uri) {
         try {
             User user = (User) ctx.get(USER_INFO_KEY);
+            Boolean sigVerify = verifySignature(ctx.get(SIG_KEY), user.getPrivateKey(), ctx.getRequest().getEntity());
+            if(!sigVerify)
+                return sigVerify;
             List<String> roleCodes = user.getRoles().stream().map(UserRole::getRoleCode).collect(Collectors.toList());
             if(roleCodes.contains(superUserCode)) return true;
             Boolean isRolesCorrect = verifyRoles(user.getRoles());
@@ -110,6 +113,25 @@ public class RbacFilter extends ZuulFilter {
             logger.error(RETRIEVING_USER_FAILED_MESSAGE, ex);
             return false;
         }
+    }
+
+    /**
+     * Verifies thr user signature
+     * @param userRoles
+     * @return
+     */
+    public Boolean verifySignature(String signature, String privateKey, Object body) {
+        try{
+            String hash = null;
+            if(hash.equals(signature))
+                return true;
+            else
+                return false;
+        }catch (Exception e) {
+            logger.error("Exception while verifying signature: ", e);
+            return false;
+        }
+
     }
 
     /**

@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7678352b-cc99-4f58-a25b-930c2b9340b0" name="Default Changelist" comment="" />
+    <list default="true" id="7678352b-cc99-4f58-a25b-930c2b9340b0" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ulca-zuul/commit_id.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ulca-zuul/src/main/java/org/anuvaad/constants/RequestContextConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/ulca-zuul/src/main/java/org/anuvaad/constants/RequestContextConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ulca-zuul/src/main/java/org/anuvaad/filters/pre/AuthFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ulca-zuul/src/main/java/org/anuvaad/filters/pre/AuthFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ulca-zuul/src/main/java/org/anuvaad/filters/pre/RbacFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ulca-zuul/src/main/java/org/anuvaad/filters/pre/RbacFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ulca-zuul/target/classes/org/anuvaad/constants/RequestContextConstants.class" beforeDir="false" afterPath="$PROJECT_DIR$/ulca-zuul/target/classes/org/anuvaad/constants/RequestContextConstants.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ulca-zuul/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/ulca-zuul/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

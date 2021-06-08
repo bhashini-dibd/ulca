@@ -37,7 +37,8 @@ public class AuthFilter extends ZuulFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static final String AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE = "Couldn't find auth-token in the request.";
+    private static final String PK_RETRIEVE_FAILURE_MESSAGE = "Couldn't find public key in the request.";
+    private static final String SIG_RETRIEVE_FAILURE_MESSAGE = "Couldn't find signature in the request.";
     private static final String SKIP_AUTH_CHECK = "Auth check skipped - whitelisted endpoint | {}";
     private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted - No auth token";
     private static final String RETRIEVING_USER_FAILED_MESSAGE = "Retrieving user failed";
@@ -63,7 +64,7 @@ public class AuthFilter extends ZuulFilter {
 
     @Override
     public Object run() {
-        String authToken;
+        Map<String, String> headerMap = new HashMap<>();
         RequestContext ctx = RequestContext.getCurrentContext();
         List<String> openEndpointsWhitelist = ZuulConfigCache.whiteListEndpoints;
         String uri = getRequestURI();
@@ -79,28 +80,33 @@ public class AuthFilter extends ZuulFilter {
             ExceptionUtils.raiseCustomException(HttpStatus.NOT_FOUND, INVALID_ENDPOINT_MSG);
         }
         try {
-            authToken = getAuthTokenFromRequestHeader();
+            headerMap = getKeyAndSigFromRequestHeader();
         } catch (Exception e) {
-            logger.error(AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE, e);
-            ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE);
+            logger.error(PK_RETRIEVE_FAILURE_MESSAGE, e);
+            ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, PK_RETRIEVE_FAILURE_MESSAGE);
             return null;
         }
-        if (authToken == null) {
-            logger.info(AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE);
-            ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, AUTH_TOKEN_RETRIEVE_FAILURE_MESSAGE);
-        } else {
-            ctx.set(AUTH_TOKEN_KEY, authToken);
-            User user = verifyAuthenticity(ctx, authToken);
+        if (headerMap.get("PK") == null) {
+            logger.info(PK_RETRIEVE_FAILURE_MESSAGE);
+            ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, PK_RETRIEVE_FAILURE_MESSAGE);
+        }
+        else if (headerMap.get("SIG") == null){
+            logger.info(SIG_RETRIEVE_FAILURE_MESSAGE);
+            ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, SIG_RETRIEVE_FAILURE_MESSAGE);
+        }
+        else {
+            String publicKey = headerMap.get("PK");
+            String sig = headerMap.get("SIG");
+            ctx.set(PUBLIC_KEY, publicKey);
+            ctx.set(SIG_KEY, sig);
+            User user = verifyAuthenticity(ctx, publicKey);
             if (null == user){
                 logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, uri);
                 ExceptionUtils.raiseCustomException(HttpStatus.UNAUTHORIZED, UNAUTH_USER_MESSAGE);
             }
             else {
                 logger.info(PROCEED_ROUTING_MESSAGE, uri);
-                ctx.addZuulRequestHeader(ZUUL_AUTH_TOKEN_HEADER_KEY, authToken);
                 ctx.addZuulRequestHeader(ZUUL_USER_ID_HEADER_KEY, user.getUserID());
-                ctx.addZuulRequestHeader(ZUUL_ORG_ID_HEADER_KEY, user.getOrgID());
-                ctx.addZuulRequestHeader(ZUUL_SESSION_ID_HEADER_KEY, authToken); // A session is User activity per token.
                 List<String> roles = new ArrayList<>();
                 for(UserRole role: user.getRoles())
                     roles.add(role.getRoleCode());
@@ -188,9 +194,9 @@ public class AuthFilter extends ZuulFilter {
      * Fetches auth token from the request header.
      * @return
      */
-    private String getKeyAndSigFromRequestHeader() {
+    private Map getKeyAndSigFromRequestHeader() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        Map<String, String> headers = new Hashmap<>();
+        Map<String, String> headers = new HashMap<>();
         headers.put("PK", ctx.getRequest().getHeader(PUBLIC_KEY_HEADER));
         headers.put("SIG", ctx.getRequest().getHeader(SIG_HEADER));
         return headers;

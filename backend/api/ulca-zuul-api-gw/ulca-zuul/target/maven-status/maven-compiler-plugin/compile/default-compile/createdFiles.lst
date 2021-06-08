@@ -1,6 +1,7 @@
 org/anuvaad/models/UserRole.class
 org/anuvaad/exceptions/CustomException.class
 org/anuvaad/filters/pre/CorrelationFilter.class
+org/anuvaad/filters/pre/AuthFilter.class
 org/anuvaad/utils/UserUtils.class
 org/anuvaad/models/User.class
 org/anuvaad/app/ZuulGatewayApplication.class
