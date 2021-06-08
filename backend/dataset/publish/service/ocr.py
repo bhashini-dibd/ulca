@@ -7,11 +7,12 @@ from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, search_output_topic, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys, delete_output_topic, dataset_type_ocr
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys, delete_output_topic, dataset_type_ocr, no_of_parallel_processes
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
 from events.error import ErrorEvent
+from processtracker.processtracker import ProcessTracker
 
 
 log = logging.getLogger('file')
@@ -21,6 +22,7 @@ repo = OCRRepo()
 utils = DatasetUtils()
 prod = Producer()
 error_event = ErrorEvent()
+pt = ProcessTracker()
 
 
 class OCRService:
@@ -34,12 +36,11 @@ class OCRService:
             metadata = request
             record = request["record"]
             ip_data = [record]
-            batch_data, error_list = [], []
-            total, count, duplicates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
+            batch_data, error_list, pt_list = [], [], []
+            total, count, updates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
             if ip_data:
                 func = partial(self.get_enriched_ocr_data, metadata=metadata)
-                no_of_m1_process = request["processors"]
-                pool_enrichers = multiprocessing.Pool(no_of_m1_process)
+                pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
                 enrichment_processors = pool_enrichers.map_async(func, ip_data).get()
                 for result in enrichment_processors:
                     if result:
@@ -52,17 +53,27 @@ class OCRService:
                                 count += len(batch_data)
                                 batch_data = []
                             batch_data.append(result[1])
+                            pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                            "currentRecordIndex": metadata["currentRecordIndex"]})
                         elif result[0] == "FAILED":
                             error_list.append({"record": result[1], "code": "UPLOAD_FAILED",
                                                "datasetType": dataset_type_ocr,
                                                "serviceRequestNumber": metadata["serviceRequestNumber"],
                                                "message": "Upload to s3 bucket failed"})
+                            pt_list.append({"status": "FAILED", "code": "UPLOAD_FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                            "currentRecordIndex": metadata["currentRecordIndex"]})
+                        elif result[0] == "UPDATE":
+                            pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                            "currentRecordIndex": metadata["currentRecordIndex"]})
+                            updates += 1
                         else:
                             error_list.append(
                                 {"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
                                  "datasetType": dataset_type_ocr,
                                  "serviceRequestNumber": metadata["serviceRequestNumber"],
                                  "message": "This record is already available in the system"})
+                            pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                            "currentRecordIndex": metadata["currentRecordIndex"]})
                 pool_enrichers.close()
                 if batch_data:
                     if metadata["datasetMode"] != 'pseudo':
@@ -72,24 +83,26 @@ class OCRService:
                     count += len(batch_data)
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, "INVALID": {len(error_list)}')
+            for pt_rec in pt_list:
+                pt.create_task_event(pt_rec)
+            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {error_list}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"message": f'loaded dataset to DB', "status": "SUCCESS", "total": total, "inserts": count,
-                "invalid": len(error_list)}
+        return {"status": "SUCCESS", "total": total, "inserts": count, "updates": updates, "invalid": error_list}
+
 
     # Method to enrich asr dataset
     def get_enriched_ocr_data(self, data, metadata):
         try:
-            records = self.get_ocr_dataset_internal({"imageHash": data["imageHash"], "groundTruthHash": data["groundTruthHash"]})
-            if records:
-                dup_data = self.enrich_duplicate_data(data, records[0], metadata)
+            record = self.get_ocr_dataset_internal({"imageHash": data["imageHash"], "groundTruthHash": data["groundTruthHash"]})
+            if record:
+                dup_data = self.enrich_duplicate_data(data, record, metadata)
                 if dup_data:
                     repo.update(dup_data)
-                    return None
+                    return "UPDATE", data, record
                 else:
-                    return "DUPLICATE", data, records[0]
+                    return "DUPLICATE", data, record
             insert_data = data
             for key in insert_data.keys():
                 if key not in ocr_immutable_keys:
@@ -112,22 +125,26 @@ class OCRService:
 
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = record
+        found = False
         for key in data.keys():
             if key not in ocr_immutable_keys:
-                if key not in record.keys():
-                    record[key] = [data[key]]
+                if key not in db_record.keys():
+                    found = True
+                    db_record[key] = [data[key]]
                 elif isinstance(data[key], list):
-                    record[key] = list(set(data[key]) | set(record[key]))
+                    pairs = zip(data[key], db_record[key])
+                    if any(x != y for x, y in pairs):
+                        found = True
+                        db_record[key].extend(data[key])
                 else:
-                    if isinstance(record[key], list):
-                        if data[key] not in record[key]:
-                            record[key].append(data[key])
-        if db_record != record:
-            record["datasetId"].append(metadata["datasetId"])
-            record["tags"] = self.get_tags(record)
-            return record
-        else:
-            return False
+                    if isinstance(db_record[key], list):
+                        if data[key] not in db_record[key]:
+                            found = True
+                            db_record[key].append(data[key])
+        if found:
+            db_record["datasetId"].append(metadata["datasetId"])
+            db_record["tags"] = self.get_tags(record)
+            return db_record
 
     def get_tags(self, insert_data):
         tag_details = {}

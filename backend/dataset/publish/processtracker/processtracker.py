@@ -15,23 +15,28 @@ class ProcessTracker:
         pass
 
     def create_task_event(self, data):
-        task_event = self.search_task_event(data)
-        if task_event:
-            return self.update_task_event(data)
-        task_event = {"id": str(uuid.uuid4()), "tool": pt_publish_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                      "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
-        if data["status"] == "SUCCESS":
-            processed_count = [{"type": "success", "count": 1}, {"type": "failed", "typeDetails": {}, "count": 0}]
-        else:
-            processed_count = [{"type": "failed", "typeDetails": {data["code"]: 1}, "count": 1}, {"type": "success", "count": 0}]
-        details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed_count, "timeStamp": str(datetime.now())}
-        task_event["details"] = details
-        repo.insert(task_event)
+        try:
+            log.info(f'Publishing pt event for -- {data["serviceRequestNumber"]}')
+            task_event = self.search_task_event(data)
+            if task_event:
+                return self.update_task_event(data)
+            task_event = {"id": str(uuid.uuid4()), "tool": pt_publish_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
+                          "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
+            if data["status"] == "SUCCESS":
+                processed_count = [{"type": "success", "count": 1}, {"type": "failed", "typeDetails": {}, "count": 0}]
+            else:
+                processed_count = [{"type": "failed", "typeDetails": {data["code"]: 1}, "count": 1}, {"type": "success", "count": 0}]
+            details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed_count, "timeStamp": str(datetime.now())}
+            task_event["details"] = details
+            repo.insert(task_event)
+        except Exception as e:
+            log.exception(e)
 
     def update_task_event(self, data):
+        log.info(data)
         task_event = self.search_task_event(data)
         task_event = task_event[0]
-        processed = task_event["processedCount"]
+        processed = task_event["details"]["processedCount"]
         if data["status"] == "SUCCESS":
             for value in processed:
                 if value["type"] == "success":
@@ -56,7 +61,7 @@ class ProcessTracker:
 
     def search_task_event(self, data):
         query = {"serviceRequestNumber": data["serviceRequestNumber"], "tool": pt_publish_tool}
-        exclude = {"_id": -1}
+        exclude = {"_id": False}
         result = repo.search(query, exclude, None, None)
         return result
 

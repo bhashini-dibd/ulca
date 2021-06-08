@@ -3,11 +3,11 @@ import os
 app_host = os.environ.get('ULCA_DS_PUBLISH_HOST', '0.0.0.0')
 app_port = os.environ.get('ULCA_DS_PUBLISH_PORT', 5010)
 
-db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://15.207.103.202:27017/")
+db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://localhost:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")
 asr_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_COL', "asr-dataset")
 ocr_collection = os.environ.get('ULCA_DS_PUBLISH_OCR_COL', "ocr-dataset")
-parallel_collection = os.environ.get('ULCA_DS_PUBLISH_PARALLEL_COL', "parallel-datatset")
+parallel_collection = os.environ.get('ULCA_DS_PUBLISH_PARALLEL_COL', "parallel-dataset")
 monolingual_collection = os.environ.get('ULCA_DS_PUBLISH_MONOLINGUAL_COL', "monolingual-dataset")
 
 offset = os.environ.get('ULCA_DATASET_DEFAULT_OFFSET', 0)
@@ -33,12 +33,12 @@ if isinstance(sample_size, str):
     sample_size = eval(sample_size)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/app/publish/')
 
-asr_immutable_keys = ["id", "audioFilename", "text", "audioFilePath", "audioHash", "textHash", "datasetType"]
+asr_immutable_keys = ["id", "audioFilename", "text", "audioFilePath", "audioHash", "textHash", "datasetType", "sourceLanguage"]
 asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter"]
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType"]
 parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
-ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash", "datasetType"]
-ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter"]
+ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash", "datasetType", "sourceLanguage"]
+ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "sourceLanguage"]
 mono_immutable_keys = ["id", "text", "textHash", "datasetType"]
 mono_non_tag_keys = ["id", "text", "submitter"]
 publish_error_code = "3000_XXX"

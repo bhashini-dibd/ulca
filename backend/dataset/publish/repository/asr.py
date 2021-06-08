@@ -65,15 +65,19 @@ class ASRRepo:
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
-        col = self.get_mongo_instance()
-        if offset is None and res_limit is None:
-            res = col.find(query, exclude).sort([('_id', 1)])
-        else:
-            res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
-        result = []
-        for record in res:
-            result.append(record)
-        return result
+        try:
+            col = self.get_mongo_instance()
+            if offset is None and res_limit is None:
+                res = col.find(query, exclude).sort([('_id', 1)])
+            else:
+                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+            result = []
+            for record in res:
+                result.append(record)
+            return result
+        except Exception as e:
+            log.exception(e)
+            return []
 
 
 # Log config

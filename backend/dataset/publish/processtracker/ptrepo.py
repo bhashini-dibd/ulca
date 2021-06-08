@@ -25,6 +25,8 @@ class PTRepo:
 
     def insert(self, data):
         col = self.get_mongo_instance()
+        if isinstance(data, dict):
+            data = [data]
         col.insert_many(data)
         return len(data)
 
