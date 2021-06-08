@@ -1,17 +1,13 @@
 {
     "datasetType": "asr-corpus",
     "languages": {
-        "sourceLanguage": "en",
-        "targetLanguage": null
+        "sourceLanguage": "en"
     },
     "collectionSource": [
         "openslr", "https://www.youtube.com?v=121212121"
     ],
     "domain":[
         "general"
-    ],
-    "collectionMethod": [
-        "web-scrapping-audio"
     ],
     "format": "wav",
     "channel": "mono",
