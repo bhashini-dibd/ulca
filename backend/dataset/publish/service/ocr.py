@@ -185,12 +185,8 @@ class OCRService:
                 tags.append(query["domain"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
-            if 'imageFilename' in query.keys():
-                tags.append(query["imageFilename"])
-            if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
             if tags:
-                db_query["tags"] = tags
+                db_query["tags"] = {"$in": tags}
             exclude = {"_id": False}
             data = repo.search(db_query, exclude, off, lim)
             result, query, count = data[0], data[1], data[2]

@@ -241,6 +241,8 @@ class ParallelService:
             if 'targetLanguage' in query.keys():
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
+            if 'collectionSource' in query.keys():
+                tags.append(query["collectionSource"])
             if 'collectionMode' in query.keys():
                 tags.append(query["collectionMode"])
             if 'license' in query.keys():
@@ -260,8 +262,7 @@ class ParallelService:
                 db_query["groupBy"] = True
                 if 'countOfTranslations' in query.keys():
                     db_query["countOfTranslations"] = query["countOfTranslations"]
-            exclude = {"_id": False}
-            data = repo.search(db_query, exclude, offset, limit)
+            data = repo.search(db_query, off, lim)
             result, query, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}')
             path = utils.push_result_to_s3(result, query["serviceRequestNumber"])

@@ -168,8 +168,6 @@ class ASRService:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
-            if 'age' in query.keys():
-                db_query["age"] = query["age"]
             if 'language' in query.keys():
                 tags.append(query["language"])
             if 'collectionMode' in query.keys():
@@ -187,7 +185,7 @@ class ASRService:
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
             if tags:
-                db_query["tags"] = tags
+                db_query["tags"] = {"$in": tags}
             exclude = {"_id": False}
             data = repo.search(db_query, exclude, off, lim)
             result, query, count = data[0], data[1], data[2]

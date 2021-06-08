@@ -83,7 +83,7 @@ class ParallelRepo:
             return []
 
     # Searches the object into mongo collection
-    def search(self, query, exclude, offset, res_limit):
+    def search(self, query, offset, res_limit):
         result, res_count, pipeline, langs = [], 0, [], []
         try:
             col = self.get_mongo_instance()
@@ -112,6 +112,10 @@ class ParallelRepo:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
                 pipeline.append({"$project": {"_id": 0}})
+            if offset is not None and res_limit is not None:
+                pipeline.append({"$sort": {"_id": -1}})
+                pipeline.append({"$skip": offset})
+                pipeline.append({"$limit": res_limit})
             if "$in" in query.keys():
                 pipeline = []
                 pipeline.append({"$match": {"tags": query}})

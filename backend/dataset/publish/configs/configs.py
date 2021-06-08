@@ -10,10 +10,10 @@ ocr_collection = os.environ.get('ULCA_DS_PUBLISH_OCR_COL', "ocr-dataset")
 parallel_collection = os.environ.get('ULCA_DS_PUBLISH_PARALLEL_COL', "parallel-dataset")
 monolingual_collection = os.environ.get('ULCA_DS_PUBLISH_MONOLINGUAL_COL', "monolingual-dataset")
 
-offset = os.environ.get('ULCA_DATASET_DEFAULT_OFFSET', 0)
+offset = os.environ.get('ULCA_DATASET_DEFAULT_OFFSET', None)
 if isinstance(offset, str):
     offset = eval(offset)
-limit = os.environ.get('ULCA_DATASET_DEFAULT_LIMIT', 100000000)
+limit = os.environ.get('ULCA_DATASET_DEFAULT_LIMIT', None)
 if isinstance(limit, str):
     offset = eval(limit)
 parallel_ds_batch_size = os.environ.get('ULCA_PARALLEL_DS_BATCH_SIZE', 100000)
@@ -33,11 +33,14 @@ if isinstance(sample_size, str):
     sample_size = eval(sample_size)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/app/publish/')
 
-asr_immutable_keys = ["id", "audioFilename", "text", "audioFilePath", "audioHash", "textHash", "datasetType", "sourceLanguage"]
+asr_immutable_keys = ["id", "audioFilename", "text", "audioFilePath", "audioHash", "textHash", "datasetType",
+                      "sourceLanguage"]
 asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter"]
-parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType"]
+parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage",
+                           "targetLanguage", "datasetType"]
 parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
-ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash", "datasetType", "sourceLanguage"]
+ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash",
+                      "datasetType", "sourceLanguage"]
 ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "sourceLanguage"]
 mono_immutable_keys = ["id", "text", "textHash", "datasetType"]
 mono_non_tag_keys = ["id", "text", "submitter"]
@@ -49,8 +52,6 @@ pt_success_status = "successful"
 pt_failed_status = "failed"
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
-
-
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')
@@ -77,5 +78,3 @@ dataset_type_parallel = os.environ.get('DATASET_TYPE_PARALLEL_DS', 'parallel-cor
 dataset_type_asr = os.environ.get('DATASET_TYPE_ASR_DS', 'asr-corpus')
 dataset_type_ocr = os.environ.get('DATASET_TYPE_OCR_DS', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DATASET_TYPE_MONOLINGUAL_DS', 'monolingual-corpus')
-
-
