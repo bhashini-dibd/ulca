@@ -11,6 +11,7 @@ import SubmitDataset from './ui/container/DataSet/UploadDataset/SubmitDataset';
 import ContributionList from "./ui/container/DataSet/DatasetView/ContributionList";
 import DetailedStatus from "./ui/container/DataSet/DatasetView/DetailedStatus";
 import Dashboard from "./ui/container/Dashboard/ChartRender";
+// import Dashboard from "./ui/container/Dashboard/Dashboard";
 import DatasetSubmission from './ui/container/DataSet/UploadDataset/DatasetSubmission';
 import authenticateUser from './configs/authenticate';
 import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";

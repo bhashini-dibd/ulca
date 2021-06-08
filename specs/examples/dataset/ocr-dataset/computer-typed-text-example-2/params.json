@@ -1,8 +1,7 @@
 {
     "datasetType":"ocr-corpus",
     "languages":{
-        "sourceLanguage":"ka",
-        "targetLanguage":null
+        "sourceLanguage":"ka"
     },
     "collectionSource":[
         "Kannada scanned book",

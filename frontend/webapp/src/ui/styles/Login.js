@@ -6,7 +6,7 @@ const LoginStyle = (theme) => ({
   title: {
     width: "20%",
     height: "auto",
-    margin: "90px 294px 148px 39px",
+    margin: "22% 294px 10% 39px",
     fontSize: "1.875rem",
     fontWeight: "600",
     fontStretch: "normal",
@@ -19,9 +19,9 @@ const LoginStyle = (theme) => ({
   subTitle: {
     width: "80%",
     height: "auto",
-    maxWidth: "280px",
-    margin: "141px 70px 30px 39px",
-    fontSize: "2rem",
+    maxWidth: "300px",
+    margin: "20% 70px 15% 39px",
+    fontSize: "1.9rem",
     fontWeight: "500",
     fontStretch: "normal",
     fontStyle: "normal",
@@ -30,13 +30,14 @@ const LoginStyle = (theme) => ({
     textAlign: "left",
     color: theme.palette.primary.contrastText,
     "@media (max-width:1040px)": {
-      fontSize: "1.5rem",
+      fontSize: "1.6rem",
       letterSpacing: "1px",
       maxWidth: "280px",
+      width: "80%",
     },
     "@media (min-width:1790px)": {
       fontSize: "2rem",
-      width: "62%",
+      width: "68%",
     },
   },
   body: {
@@ -44,7 +45,7 @@ const LoginStyle = (theme) => ({
     height: "auto",
     margin: "30px 0px 50px 39px",
     fontFamily: "Lato",
-    fontSize: "0.7rem",
+    fontSize: "70%",
     fontWeight: "normal",
     fontStretch: "normal",
     fontStyle: "normal",
@@ -53,13 +54,13 @@ const LoginStyle = (theme) => ({
     textAlign: "left",
     color: "#f2f2f4",
     "@media (max-width:1040px)": {
-      fontSize: "0.75rem",
+      fontSize: "56%",
       letterSpacing: "1px",
       maxWidth: "280px",
     },
     "@media (min-width:1790px)": {
-      fontSize: ".9rem",
-      width: "80%",
+      fontSize: "90%",
+      width: "85%",
     },
   },
   expButton: {
@@ -94,7 +95,7 @@ const LoginStyle = (theme) => ({
   },
   fullWidth: {
     width: "100%",
-    marginTop: "20px",
+    marginTop: "30px",
     textAlign: "Left",
   },
   line: {
@@ -202,6 +203,9 @@ const LoginStyle = (theme) => ({
       left: "0",
       width: "100%",
       padding: "0",
+    },
+    "@media (max-height:750px)": {
+      display :"none"
     },
     "@media (max-width: 1000px) and (min-width: 600px)": {
       left: "34%",

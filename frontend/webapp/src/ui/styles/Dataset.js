@@ -44,11 +44,13 @@ const DataSet = (theme) => ({
     },
     link: {
         marginRight: "10px",
-        cursor: "pointer"
+        cursor: "pointer",
+        display:"flex",flexDirection:"row"
     },
     span: {
         color: "#0C0F0F",
-        opacity :"0.5"
+        opacity :"0.5",
+        margin:"-3px 0 0 1rem"
     },
     
 
@@ -125,7 +127,7 @@ const DataSet = (theme) => ({
         marginTop: '8%',
         fontSize: '0.8rem'
     },
-    ButtonRefresh:{
+    ButtonRefresh   :   {
         marginLeft:"auto"
     },
     searchDivStyle:{
@@ -142,8 +144,9 @@ const DataSet = (theme) => ({
     },
     clearNSubmit:{
         float:'right'
-    }
+    },
 
+    action : {display:"flex",flexDirection:"row"}
 });
 
 export default DataSet;

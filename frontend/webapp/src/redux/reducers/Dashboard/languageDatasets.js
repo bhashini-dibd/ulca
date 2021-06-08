@@ -11,6 +11,41 @@ import C from '../../actions/constants';
         }
         return 0;
       }
+
+    //   const handleData = (dataValues) =>{
+    //     debugger
+    //     if (dataValues.length > 0) {
+    //       let others = dataValues.slice(7, dataValues.length)
+    //       let othersCount = 0
+    //       others.map(dataVal => {
+    //           othersCount = dataVal.value + othersCount
+  
+    //       })
+  
+    //       let dataSetValues = dataValues.slice(0, 7)
+    //       let obj = {}
+  
+    //       if (dataValues.length > 7) {
+    //           obj.value = othersCount
+    //           obj.label = "Others"
+    //           dataSetValues.push(obj)
+    //       }
+  
+    //        console.log(dataSetValues) 
+    //       return {dataSetValues, dataValues} 
+         
+
+    //   }
+
+      
+    // }
+
+
+    const handleExpand = (data) =>{
+
+      debugger
+
+    }
       
       
     switch (action.type) {

@@ -9,7 +9,7 @@ import Select from 'react-select';
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import FetchLanguageDataSets from "../../../redux/actions/api/Dashboard/languageDatasets";
 import { isMobile } from 'react-device-detect';
-import {FilterList} from '@material-ui/icons';
+import {ArrowBack} from '@material-ui/icons';
 import Header from '../../components/common/Header';
 import authenticate from '../../../configs/authenticate';
 
@@ -17,22 +17,24 @@ var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447
 
 
 const ChartRender = (props) => {
-        const [selectedOption, setSelectedOption]   	= 	useState({ value: 'Parallel Dataset', label: 'Parallel Dataset' });
+        const [selectedOption, setSelectedOption]   	= 	useState({ value: 'parallel-dataset', label: 'Parallel Dataset' });
         const [title, setTitle]                     	= 	useState("Number of parallel sentences per language with English");
+	const [filterValue, setFilterValue]		=	useState("domain");
+	const [selectedLanguage,setSelectedLanguage]	=	useState("");
+	const [page, setPage]				= 	useState(0);
         const history                               	= 	useHistory();
         const dispatch                             	= 	useDispatch();
         const DashboardReport                       	= 	useSelector( (state) => state.dashboardReport);
         const { classes }                           	= 	props;
         const options 				    	= 	[
-									{ value: 'Parallel Dataset', label: 'Parallel Dataset' },
-									{ value: 'Monolingual Dataset', label: 'Monolingual Dataset' },
-									{ value: 'ASR / TTS Dataset', label: 'ASR / TTS Dataset' },
-									{ value: 'OCR Dataset', label: 'OCR Dataset' },
+									{ value: 'parallel-dataset', label: 'Parallel Dataset' },
+									{ value: 'monolingual-dataset', label: 'Monolingual Dataset' },
+									{ value: 'ASR/TTS-dataset', label: 'ASR / TTS Dataset' },
+									{ value: 'OCR-dataset', label: 'OCR Dataset' },
 								];
 
 	useEffect(() => {
-		const userObj 		= 	new FetchLanguageDataSets("parallel-corpus", "languagePairs");
-		dispatch(APITransport(userObj));
+		fetchChartData(selectedOption.value, "languagePairs", [])
 		if (authenticate()) {
 			history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
 		} 
@@ -42,6 +44,12 @@ const ChartRender = (props) => {
 
 		}
 	}, []);
+
+	const fetchChartData = (dataType, value, criterions) =>{
+		const userObj 		= 	new FetchLanguageDataSets(dataType, value, criterions);
+		dispatch(APITransport(userObj));
+		
+	} 
 
 	const customStyles = {
 		option	: (provided, state) => ({
@@ -62,19 +70,79 @@ const ChartRender = (props) => {
 		})
 	}
 
-	const handleSelectChange = (value) =>{
-		setSelectedOption( value)
-		switch (value.label) {
-			case 'Parallel Dataset':
+	const handleOnClick= (value, event, filter) =>  {
+		// if (event && event.hasOwnProperty("label") && event.label === "Others") {
+		//     let others = this.props.dataValues.slice(7, this.props.dataValues.length)
+		//     this.setState({
+		// 	dataSetValues: others,
+		// 	cardNavigation: true
+		//     })
+		// } else {
+		    switch (value) {
+			case 1:
+				
+				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "English" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label } }])
+				setPage(value)
+				setTitle( `English-${selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label }  parallel corpus - Grouped by ${(filter === "domain") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod" ? "Collection Method" : "Domain"}`)
+				setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label)
+				
+				break;
+			case 2:
+				fetchChartData(selectedOption.value, filter === "source" ? "domain" : "source", [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "English" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage } }, { "type": "PARAMS", "value": event && event.hasOwnProperty("label") && event.label }])
+				setPage(value)
+				setFilterValue('domain')
+				setTitle( `English-${selectedLanguage} parallel corpus`)
+				break;
+			case 0:
+				fetchChartData(selectedOption.value, "languagePairs", [])
+				setPage(value)
+				setFilterValue('domain')
+				setTitle("English-Indic language parallel corpus")
+				setSelectedLanguage("")
+				
+				
+				break;
+			default:
+	
+		    }
+		
+	    }
+
+	const handleLanguageChange = (value) => {
+		setFilterValue(value)
+		setTitle( `English-${selectedLanguage }  parallel corpus - Grouped by ${(value === "domain") ? "Domain" : (value === "source") ? "Source" : value === "collectionMethod" ? "Collection Method" : "Domain"}`)
+		handleOnClick(1, "", value)
+	    }
+	const  handleCardNavigation = () => {
+
+		    handleOnClick(page - 1)
+	    }
+
+	const fetchLanuagePairButtons = () => {
+		console.log(filterValue)
+		return (
+		    <div className={classes.filterButton}>
+			<Button  color={filterValue ==="domain" ? "primary" :"default" } style={ filterValue === "domain" ? {backgroundColor: "#E8F5F8"} : {} } size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domain")}>Domain</Button>
+			<Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button>
+			<Button  color={filterValue === "collectionMethod" ?"primary" :"default"} style={ filterValue === "collectionMethod" ? {backgroundColor: "#E8F5F8"} : {} } size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("collectionMethod")}>Collection Method</Button>
+		   
+		    </div>
+		)
+	    }
+
+	const handleSelectChange = (dataSet) =>{
+		setSelectedOption( dataSet)
+		switch (dataSet.value) {
+			case 'parallel-dataset':
 				 setTitle("Number of parallel sentences per language with English")
 				 break;
-			case 'Monolingual Dataset':
+			case 'monolingual-dataset':
 				 setTitle('Number of sentences per language')
 				 break;
-			case 'ASR / TTS Dataset':
+			case 'ASR/TTS-dataset':
 				 setTitle("Numer of audio hours per language")
 				 break;
-			case 'OCR Dataset':
+			case 'OCR-dataset':
 				setTitle("Numer of images per script")
 				break;
 			default:
@@ -83,6 +151,8 @@ const ChartRender = (props) => {
 
 		
 	}
+
+	console.log(DashboardReport)
 
      return (
         <>
@@ -96,7 +166,11 @@ const ChartRender = (props) => {
 				<BreadCrum links={["Dataset"]} activeLink="Submit Dataset" />
 			</div> */}
 			<Paper elevation  = {3} className  = {classes.paper}>
+			
 				<div className  =	{classes.titleBar}>
+					{page!==0 && <><Button color="light" size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
+					<div className={classes.seperator}></div></>}
+					
 					<Typography 	variant   	=	"b" component = "h3" 
 							className 	= 	{classes.Typography}> Dataset Type :	</Typography>
 					<Select 	className 	= 	{classes.select} 
@@ -105,8 +179,9 @@ const ChartRender = (props) => {
 							onChange	=	{(value)=>{handleSelectChange(value)}}
 							options		=	{options}
 					/>
-					<Button color={"primary" } size="medium" variant="outlined" className={classes.filterButton} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/>Filter</Button>
-					<Button color={"primary" } size="medium" variant="outlined" className={classes.filterButtonIcon} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/></Button>
+					{page === 1 && fetchLanuagePairButtons()}
+					{/* <Button color={"primary" } size="medium" variant="outlined" className={classes.filterButton} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/>Filter</Button>
+					<Button color={"primary" } size="medium" variant="outlined" className={classes.filterButtonIcon} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/></Button> */}
 				</div>
 				<div className={classes.title}>
 					<Typography value="" variant="h6"> {title} </Typography>
@@ -123,7 +198,7 @@ const ChartRender = (props) => {
 						<YAxis type="number" dx	=	{0} />
 						<CartesianGrid horizontal = {true} vertical = {false} textAnchor = {"middle"} />
 						<Tooltip cursor={{fill: 'none'}}/>
-						<Bar dataKey = "value" radius = {[4, 4, 0, 0]} maxBarSize = {30}>
+						<Bar dataKey = "value" radius = {[4, 4, 0, 0]} maxBarSize = {30} onClick={(event) => { handleOnClick(page + 1, event) }}>
 							{
 								DashboardReport.length > 0 && DashboardReport.map((entry, index) => {
 									const color 	= 	colors[index < 9 ? index : index % 10]

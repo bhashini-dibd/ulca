@@ -8,7 +8,7 @@ import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
 import Dialog from "../../../components/common/Dialog"
-import {Cached, DeleteOutline} from '@material-ui/icons';
+import {Cached, DeleteOutline, VerticalAlignTop} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 
 const ContributionList = (props) => {
@@ -56,7 +56,7 @@ const ContributionList = (props) => {
         const fetchHeaderButton= () => {
                 return (
                         <div className={classes.headerButtons}>
-                                <Typography variant="b" component="h2" >My Contribution</Typography>
+                                <Typography  component="h2" >My Contribution</Typography>
                                 <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
                          </div>
                 )
@@ -73,16 +73,22 @@ const ContributionList = (props) => {
                         return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${id}}`)}}> In-progress </Link>
                 }
                 else{
-                        return <span>Published </span>
+                        return <span
+                        >Published </span>
                 }
         }
 
         const renderAction = (name,value) => {
                 if(value === "Inprogress"){}
                 else{
-                        return (<div> 
-                                        <Link className= {classes.link} color={"primary"} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update  </Link>
-                                        <Link className = {classes.span} onClick={()=>{handleSetValues(name)}}> <DeleteOutline/> </Link> 
+                        return (<div className = {classes.action}> 
+                                        <div className= {classes.link}>
+                                        <Link className= {classes.link} color={"primary"} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update <div ><VerticalAlignTop style={{"height":"0.8em"}} onClick={()=>{handleSetValues(name)}}/>  </div></Link>
+                                                                              </div>
+                                        <div className = {classes.span
+                                        }>
+                                        <DeleteOutline onClick={()=>{handleSetValues(name)}}/> 
+                                        </div>
                                 </div>)
                 }
         }
