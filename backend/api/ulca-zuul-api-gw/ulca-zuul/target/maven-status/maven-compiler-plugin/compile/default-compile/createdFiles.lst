@@ -1,0 +1,9 @@
+org/anuvaad/models/UserRole.class
+org/anuvaad/exceptions/CustomException.class
+org/anuvaad/filters/pre/CorrelationFilter.class
+org/anuvaad/utils/UserUtils.class
+org/anuvaad/models/User.class
+org/anuvaad/app/ZuulGatewayApplication.class
+org/anuvaad/cache/ZuulConfigCache.class
+org/anuvaad/models/UMSResponse.class
+org/anuvaad/constants/RequestContextConstants.class
