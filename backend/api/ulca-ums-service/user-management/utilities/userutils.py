@@ -506,7 +506,7 @@ class UserUtils:
             msg         = Message(subject="ULCA - Registration confirmed",
                               sender=mail_server,
                               recipients=[email])
-            msg.html    = render_template('usr_verification.html',ui_link=mail_ui_link,activation_link=mail_ui_link+"activate/{}/{}/{}".format(email,user_id,eval(str(time.time()).replace('.', '')[0:13])))
+            msg.html    = render_template('usr_confirm_registration.html',ui_link=mail_ui_link)
             mail.send(msg)
             log.info("Generated email notification for user confirmation")
         except Exception as e:

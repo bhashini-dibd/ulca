@@ -174,9 +174,9 @@ class UserAuthenticationModel(object):
             new_keys   =   UserUtils.generate_api_keys(user_email)
            
             #email notification for registered users
-            # user_notified=UserUtils.generate_email_confirmation(user_email)
-            # if user_notified is not None:
-            #     return user_notified
+            user_notified=UserUtils.generate_email_confirmation(user_email)
+            if user_notified is not None:
+                return user_notified
             return new_keys
         except Exception as e:
             log.exception("Database  exception ",  MODULE_CONTEXT, e)
