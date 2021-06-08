@@ -10,15 +10,22 @@ import {
     Divider
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import SearchResult from "./SearchResult";
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
 import BreadCrum from '../../../components/common/Breadcrum';
 import UrlConfig from '../../../../configs/internalurlmapping';
+
 import { useState } from 'react';
+import DownloadDatasetRecords from "./DownloadDatasetRecords";
+import RequestNumberCreation from "./RequestNumberCreation";
+import { useHistory, useParams } from 'react-router';
 
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
+    const param = useParams();
+    const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
         source: '',
         target: ''
@@ -28,6 +35,10 @@ const SearchAndDownloadRecords = (props) => {
         source: '',
         collectionMethod: ''
     });
+
+    const [datasetType, setDatasetType] = useState({
+        pd: true
+    })
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
@@ -59,9 +70,22 @@ const SearchAndDownloadRecords = (props) => {
         checkedA: true,
         checkedB: false,
     });
-   console.log('filterBy', filterBy);
-   console.log('languagePair', languagePair);
 
+    const renderPage = () => {
+        const { params } = param
+        switch (params) {
+            case 'inprogress':
+                return <RequestNumberCreation reqno={"0005870"} />
+            case 'published':
+                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={"9.8 Million"} datasetsContributed={"29"} />
+            default:
+                return <SearchResult />
+        }
+    }
+
+    const handleDatasetClick = (property) => {
+        setDatasetType({[property]:true })
+    }
     return (
         <div className={classes.searchDivStyle}>
             <Grid container spacing={3}>
@@ -72,16 +96,28 @@ const SearchAndDownloadRecords = (props) => {
                     <Typography className={classes.subHeader} variant="h6">Select Dataset Type</Typography>
 
                     <div className={classes.buttonDiv}>
-                        <Button className={classes.innerButton} variant="contained" color="primary">
+                        <Button className={classes.innerButton} variant={datasetType.pd ? "contained" : "outlined"}
+                            color="primary"
+                            onClick={() => handleDatasetClick('pd')}
+                        >
                             Parallel Dataset
                     </Button>
-                        <Button className={classes.innerButton} variant="outlined" color="primary">
+                        <Button className={classes.innerButton} variant={datasetType.md ? "contained" : "outlined"}
+                            color="primary"
+                            onClick={() => handleDatasetClick('md')}
+                        >
                             Monolingual Dataset
                     </Button>
-                        <Button className={classes.innerButton} variant="outlined" color="primary">
+                        <Button className={classes.innerButton} variant={datasetType.atd ? "contained" : "outlined"}
+                            color="primary"
+                            onClick={() => handleDatasetClick('atd')}
+                        >
                             ASR/TTS Dataset
                     </Button>
-                        <Button className={classes.innerButton} variant="outlined" color="primary">
+                        <Button className={classes.innerButton} variant={datasetType.od ? "contained" : "outlined"}
+                            color="primary"
+                            onClick={() => handleDatasetClick('od')}
+                        >
                             OCR Dataset
                     </Button>
                     </div>
@@ -94,7 +130,7 @@ const SearchAndDownloadRecords = (props) => {
                             select
                             label="Source Language *"
                             value={languagePair.source}
-                            onChange={(event)=>handleLanguagePairChange(event.target.value,'source')}
+                            onChange={(event) => handleLanguagePairChange(event.target.value, 'source')}
                         >
                             {sourceLanguages.map((option) => (
                                 <MenuItem key={option.value} value={option.value}>
@@ -102,14 +138,15 @@ const SearchAndDownloadRecords = (props) => {
                                 </MenuItem>
                             ))}
                         </TextField>
-                        <Autocomplete
+                       { !datasetType.md && 
+                       <Autocomplete
                             filterSelectedOptions
                             limitTags={3}
                             multiple
                             id="select-target-language"
                             options={sourceLanguages}
                             getOptionLabel={(option) => option.label}
-                            onChange= {(event, value, reason)=>handleLanguagePairChange(value,'target')}
+                            onChange={(event, value, reason) => handleLanguagePairChange(value, 'target')}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -118,7 +155,7 @@ const SearchAndDownloadRecords = (props) => {
                                 // placeholder="Favorites"
                                 />
                             )}
-                        />
+                        />}
                     </div>
                     <Typography className={classes.subHeader} variant="h6">Filter by</Typography>
                     <div className={classes.subHeader}>
@@ -198,16 +235,19 @@ const SearchAndDownloadRecords = (props) => {
                         <Button color="primary">
                             Clear
                     </Button>
-                        <Button variant="contained" color="primary">
+                        <Button variant="contained" color="primary" onClick={() => history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)}>
                             Submit
                     </Button>
                     </div>
                 </Grid>
-                <Grid item>
+                <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                     <Divider orientation="vertical" />
                 </Grid>
-                <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
-                    {/* <Paper >xs=6</Paper> */}
+                <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+                    {renderPage()}
+                    {/* <SearchResult/> */}
+                    {/* <RequestNumberCreation reqno={"0005870"} /> */}
+                    {/* <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={"9.8 Million"} datasetsContributed={"29"}/> */}
                 </Grid>
 
             </Grid>

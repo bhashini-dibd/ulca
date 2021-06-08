@@ -55,7 +55,7 @@ const HeaderStyles = (theme) => ({
   },
   styledMenu: {
     fontSize: '1rem',
-    borderTop: "1px solid #D6D6D6"
+    // borderTop: "1px solid #D6D6D6"
   },
   profileName: {
     marginLeft: '0.5rem',

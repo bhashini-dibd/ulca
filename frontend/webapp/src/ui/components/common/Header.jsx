@@ -35,16 +35,21 @@ const StyledMenu = withStyles({
 ));
 
 const Header = (props) => {
-  const { classes} = props;
+  const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null)
+  const [logout, setAnchorElLogout] = useState(null)
   const history = useHistory();
   const handleClose = (e) => {
-    setAnchorEl(null)
+   setAnchorEl(null)
+   setAnchorElLogout(null)
   }
 
   const handleOpenMenu = (e) => {
-    setAnchorEl(null)
     setAnchorEl(e.currentTarget)
+  }
+
+  const handleLogoutOption = (e) => {
+    setAnchorElLogout(e.currentTarget)
   }
 
   const handleMenuItemClick = (url) => {
@@ -117,12 +122,12 @@ const Header = (props) => {
                       My Contributon
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}
-                     onClick={() => handleMenuItemClick('/my-searches')}
+                      onClick={() => handleMenuItemClick('/my-searches')}
                     >
                       My Searches
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}
-                    onClick={() => handleMenuItemClick('/search-and-download-rec')}
+                      onClick={() => handleMenuItemClick('/search-and-download-rec/initiate')}
                     >
                       Search & Download Records
                     </MenuItem>
@@ -155,11 +160,24 @@ const Header = (props) => {
             {
               authenticate() ?
                 <div className={classes.profile}>
-                  <Button className={classes.menuBtn} variant="text">
+                  <Button onClick={(e) => handleLogoutOption(e)} className={classes.menuBtn} variant="text">
                     <Avatar >UU</Avatar>
                     <p className={classes.profileName}>Ulca User</p>
                     <DownIcon />
                   </Button>
+                  <StyledMenu id="data-set"
+                    anchorEl={logout}
+                    open={Boolean(logout)}
+                    onClose={(e) => handleClose(e)}
+                    className={classes.styledMenu}
+                  >
+                    <MenuItem
+                      className={classes.styledMenu}
+                      onClick={() => handleMenuItemClick('/user/login')}
+                    >
+                      Log out
+                    </MenuItem>
+                  </StyledMenu>
                 </div>
                 :
                 <div className={classes.profile}>
