@@ -1,6 +1,6 @@
 import C from '../../actions/constants';
 
-const apiStatus = (state = 0 , action) => {
+const apistatus = (state = 0 , action) => {
     switch (action.type) {
         case C.APISTATUS:
             return action.payload;
@@ -9,4 +9,4 @@ const apiStatus = (state = 0 , action) => {
     }
 }
 
-export default apiStatus;
+export default apistatus;

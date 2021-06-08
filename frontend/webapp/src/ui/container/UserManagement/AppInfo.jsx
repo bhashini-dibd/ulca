@@ -11,7 +11,7 @@ function AppInfo(props) {
   const { classes } = props;
   return (
     <Hidden only="xs">
-      <Grid item xs={12} sm={4} md={3} lg={3} className={classes.appInfo}>
+      <Grid item xs={12} sm={4} md={3} lg={3} color = {"primary"}className={classes.appInfo}>
         <Typography className={classes.title}>ULCA</Typography>
         <Typography className={classes.subTitle}>
           Universal Language Contribution APIs

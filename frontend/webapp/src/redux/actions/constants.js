@@ -8,10 +8,12 @@ const constants = {
   CLEAR_USER_EVENT      : "CLEAR_USER_EVENT",
   GET_DETAILED_REPORT   : "GET_DETAILED_REPORT",
 
+
   /**
    * action for Dashboard report
    */
    DASHBOARD_DATASETS   : "DASHBOARD_DATASETS",
+   DASHBOARD_DATASETS_EXPAND  : 'DASHBOARD_DATASETS_EXPAND',
 
 
    /**

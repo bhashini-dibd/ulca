@@ -37,12 +37,14 @@ const FileUploadStyles = (theme) => ({
   },
   filterButton:{
     marginLeft: 'auto',
-    marginRight: '5%',
-    width:"7rem",
-    maxWidth:"7rem",
-    "@media (max-width:800px)": {
-      display: 'none'
-    }
+    paddingRight: '5%',
+    minWidth:"auto",
+    display: "flex",
+    flexDirection: "row",
+
+    // "@media (max-width:800px)": {
+    //   display: 'none'
+    // }
   },
   filterButtonIcon:{
     
@@ -75,7 +77,6 @@ const FileUploadStyles = (theme) => ({
     boxShadow: "none",
     backgroundColor: "#F0F1F3",
     color: "#0C0F0F",
-    padding: ".5rem .625rem",
     marginRight: ".5rem",
   },
   seperator: {

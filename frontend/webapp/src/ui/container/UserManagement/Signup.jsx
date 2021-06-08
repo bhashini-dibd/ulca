@@ -12,6 +12,7 @@ import {
   FormControl,
   Checkbox,
   FormControlLabel,
+  FormHelperText,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import React, { useState } from "react";
@@ -25,10 +26,17 @@ const SignUp = (props) => {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState({
+    name: false,
+    email: false,
+    password: false,
+    confirmPassword: false,
+  });
   const history = useHistory();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
+    setError({ ...error, [prop]: false });
   };
 
   const handleCheckChange = (prop) => (event) => {
@@ -43,9 +51,43 @@ const SignUp = (props) => {
     event.preventDefault();
   };
 
-  const HandleSubmit = () => {
-    console.log(values);
-  };
+  const handleSubmit = () =>{
+
+  }
+
+  const  ValidateEmail = (mail) => 
+{
+ if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
+  {
+    return (true)
+  }
+  else{
+    return false;
+  }  
+}
+
+  
+    const HandleSubmitValidate = () => {
+      debugger
+      if(!(/^[A-Za-z ]+$/.test(values.name))){
+        setError({...error, name:true})
+      }
+      else if(!ValidateEmail(values.email)){
+      setError({...error, email:true})
+      }
+      else if(!(values.password.length>8)){
+      setError({...error, password:true})
+      }
+      else if(values.password !== values.confirmPassword){
+      setError({...error, confirmPassword:true})
+      }
+      else{
+        handleSubmit()
+      }
+  
+  
+    }
+  
   const { classes } = props;
 
   return (
@@ -59,8 +101,10 @@ const SignUp = (props) => {
         required
         onChange={handleChange("name")}
         id="outlined-required"
+        error  = {error.name ? true : false}
         value={values.name}
         label="Name"
+        helperText = {error.name ? "Name is not proper" : ""}
         variant="outlined"
       />
       <TextField
@@ -68,17 +112,20 @@ const SignUp = (props) => {
         required
         onChange={handleChange("email")}
         id="outlined-required"
+        error  = {error.email ? true : false}
         value={values.email}
+        helperText = {error.email ? "Invalid email" : ""}
         label="Email address"
         variant="outlined"
       />
       <FormControl className={classes.fullWidth} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <InputLabel error  = {error.password ? true : false} htmlFor="outlined-adornment-password">Password</InputLabel>
         <OutlinedInput
           id="outlined-adornment-password"
           type={values.showPassword ? "text" : "password"}
           value={values.password}
           onChange={handleChange("password")}
+          error  = {error.password ? true :false }
           endAdornment={
             <InputAdornment position="end">
               <IconButton
@@ -94,25 +141,22 @@ const SignUp = (props) => {
           labelWidth={70}
         />
       </FormControl>
-      <Typography className={classes.passwordHint}>
-        At least one uppercase letter, one lowercase letter and one number
-      </Typography>
+      {error.password && <FormHelperText error={true}>Length should be 8 chanracters and at least one uppercase letter, one lowercase letter and one number </FormHelperText>}
+
       <FormControl className={classes.fullWidth} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">
-          Confirm password
+          Confirm Password *
         </InputLabel>
         <OutlinedInput
           id="outlined-adornment-password"
           type={"password"}
-          value={values.confirm}
-          onChange={handleChange("password")}
-          labelWidth={70}
+          error  = {error.confirmPassword ? true :false }
+          value={values.confirmPassword}
+          onChange={handleChange("confirmPassword")}
+          labelWidth={140}
         />
       </FormControl>
-
-      <Typography className={classes.passwordHint}>
-        Both password must match.
-      </Typography>
+      {error.confirmPassword && <FormHelperText error={true}>Both password must match.</FormHelperText>}
 
       <div className={classes.privatePolicy}>
         <FormControlLabel
@@ -138,7 +182,7 @@ const SignUp = (props) => {
         color="primary"
         className={classes.fullWidth}
         onClick={() => {
-          HandleSubmit();
+          HandleSubmitValidate();
         }}
       >
         Sign up

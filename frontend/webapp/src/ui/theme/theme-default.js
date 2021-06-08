@@ -49,4 +49,14 @@ themeDefault.typography.h4 = {
   [themeDefault.breakpoints.up("md")]: {},
 };
 
+themeDefault.typography.h4 = {
+  fontSize: "1.875rem",
+  fontWeight: "500",
+
+  fontFamily: '"Poppins SemiBold", Regular',
+  textAlign: "Left",
+  "@media (min-width:600px)": {},
+  [themeDefault.breakpoints.up("md")]: {},
+};
+
 export default themeDefault;

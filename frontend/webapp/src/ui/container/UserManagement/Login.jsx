@@ -9,6 +9,7 @@ import {
   OutlinedInput,
   IconButton,
   InputAdornment,
+  FormHelperText,
   FormControl,
   Checkbox,
   FormControlLabel,
@@ -16,6 +17,7 @@ import {
 
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
+import LoginApi from "../../../redux/actions/api/UserManagement/Login"
 import { LoginSocialGithub } from "reactjs-social-login";
 import GoogleLogin from "react-google-login";
 import Divider from "@material-ui/core/Divider";
@@ -34,10 +36,16 @@ const Login = (props) => {
     password: "",
     checked: false,
   });
+  const [error, setError] = useState({
+    email: false,
+    password: false,
+    
+  });
 
   const history = useHistory();
 
   const handleChange = (prop) => (event) => {
+    setError({ ...error, password: false , email: false });
     setValues({ ...values, [prop]: event.target.value });
   };
 
@@ -53,12 +61,61 @@ const Login = (props) => {
     event.preventDefault();
   };
 
+  const  ValidateEmail = (mail) => 
+{
+ if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
+  {
+    return (true)
+  }
+  else{
+    return false;
+  }  
+}
+
+const ValidatePassword = (password) =>{
+  if(password.length>7) {
+    return (true)
+  }
+  else{
+    return false;
+  } 
+}
+
+const handleSubmit = () => {
+  let apiObj = new LoginApi(values)
+       
+          fetch(apiObj.apiEndPoint(), {
+            method: 'post',
+            headers: apiObj.getHeaders().headers,
+            body: JSON.stringify(apiObj.getBody())
+        })
+    .then(async res => {
+        if (res.ok) {
+            
+            
+            return true;
+        } else {
+            
+            return false;
+        }
+    })
+}
+
   const responseGoogle = (data) => {
     alert(JSON.stringify(data));
   };
 
-  const HandleSubmit = () => {
-    console.log(values);
+  const HandleSubmitCheck = () => {
+    if(!ValidateEmail(values.email)){
+      setError({ ...error, email: true });
+    }
+    else if (!ValidatePassword(values.password)){
+      setError({ ...error, password: true });
+    }
+    else{
+      handleSubmit();
+    }
+    
   };
   const { classes } = props;
   const REDIRECT_URI = "http://localhost:3000";
@@ -66,22 +123,28 @@ const Login = (props) => {
   return (
     <Grid container className={classes.loginGrid}>
       <Typography className={classes.body2}>Login to ULCA</Typography>
-
+      <form className={classes.root} autoComplete="off">
       <TextField
         className={classes.textField}
         required
         onChange={handleChange("email")}
         id="outlined-required"
         value={values.email}
+        error = {error.email}
         label="Email address"
+        helperText={error.email ? "Incorrect Email.":" "}
         variant="outlined"
       />
       <FormControl className={classes.fullWidth} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <InputLabel error ={error.password} htmlFor="outlined-adornment-password">Password * </InputLabel>
+        
         <OutlinedInput
           id="outlined-adornment-password"
           type={values.showPassword ? "text" : "password"}
           value={values.password}
+          required
+          error = {error.password}
+          helperText={error.password ? "Incorrect Password.":""}
           onChange={handleChange("password")}
           endAdornment={
             <InputAdornment position="end">
@@ -95,10 +158,11 @@ const Login = (props) => {
               </IconButton>
             </InputAdornment>
           }
-          labelWidth={70}
+          labelWidth={80}
         />
+        {error.password && <FormHelperText error={true}>Incorrect password</FormHelperText>}
       </FormControl>
-      <div className={classes.forgotPassword}>
+      {/* <div className={classes.forgotPassword}>
         <FormControlLabel
           control={
             <Checkbox
@@ -120,18 +184,20 @@ const Login = (props) => {
             Forgot Password?
           </Link>
         </Typography>
-      </div>
+      </div> */}
       <Button
         variant="contained"
         color="primary"
+        size = "large"
         className={classes.fullWidth}
         onClick={() => {
-          HandleSubmit();
+          HandleSubmitCheck();
         }}
       >
         Sign in
       </Button>
-      <div className={classes.line}>
+      </form>
+      {/* <div className={classes.line}>
         <Divider className={classes.dividerFullWidth} />{" "}
         <Typography className={classes.divider}>Or</Typography>
         <Divider className={classes.dividerFullWidth} />
@@ -161,7 +227,7 @@ const Login = (props) => {
         onSuccess={responseGoogle}
         onFailure={responseGoogle}
         cookiePolicy={"single_host_origin"}
-      />
+      /> */}
       {/* <LinkedIn
           clientId="7859u4ovb44uiu"
           onFailure={responseGoogle}
@@ -211,7 +277,7 @@ const Login = (props) => {
             Continue with Facebook
           </Button>
         </LoginSocialFacebook> */}
-      <LoginSocialGithub
+      {/* <LoginSocialGithub
         client_id={"fc66013ca8d2c0bcf178"}
         className={classes.labelWidth}
         redirect={REDIRECT_URI}
@@ -236,7 +302,7 @@ const Login = (props) => {
           </span>
           <span>Continue with Github</span>
         </Button>
-      </LoginSocialGithub>
+      </LoginSocialGithub> */}
       <div className={classes.createLogin}>
         <Typography className={classes.width}>New to ULCA?</Typography>
         <Typography>
