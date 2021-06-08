@@ -29,7 +29,7 @@ const SubmitDataset = (props) => {
         message: '',
         variant: 'success'
     })
-    const [error] = useState(false)
+    const [error, setError] = useState({name: "", url: "", type: false, filteredName: false})
     const [search, setSearch] = useState(false)
     const history = useHistory();
 
@@ -62,6 +62,7 @@ const SubmitDataset = (props) => {
                                 open={search}
                                 onChange={(e, value) => {
                                     setDatasetInfo({ ...dataset, filteredName: value !== null ? value.name : "" })
+                                    setError({...error, name:false})
                                 }}
                                 onOpen={() => {
                                     setTimeout(() => setSearch(true), 200)
@@ -103,46 +104,27 @@ const SubmitDataset = (props) => {
     }
 
     const handleSubmitDataset = (e) => {
-        if (dataset.name.trim() !== "" && dataset.url.trim() !== "" && dataset.type.trim() !== "") {
-            if (validURL(dataset.url)) {
-                setSnackbarInfo({
-                    ...snackbar,
-                    open: true,
-                    message: 'Please wait while we process your request...',
-                    timeOut: 3000,
-                    variant: 'info'
-                })
-
-                setTimeout(() => history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${5}`), 3000)
-            } else {
-                setSnackbarInfo({
-                    ...snackbar,
-                    open: true,
-                    message: 'Invalid URL',
-                    timeOut: 3000,
-                    variant: 'error'
-                })
-            }
-            if (dataset.name.length > 256) {
-                setSnackbarInfo({
-                    ...snackbar,
-                    open: true,
-                    message: 'Dataset name field can have a max of 256 characters',
-                    timeOut: 3000,
-                    variant: 'error'
-                })
-                alert('')
-            }
-
-        } else {
+        debugger
+        if(dataset.name.trim() === "" || dataset.name.length > 256){
+            setError({...error, name:"Name is not Valid"})
+            
+        }
+        else if(dataset.url.trim() === "" || !validURL(dataset.url)){
+            setError({...error, url:"Url is not valid"})
+        }else{
             setSnackbarInfo({
                 ...snackbar,
                 open: true,
-                message: 'Please fill all the details',
+                message: 'Please wait while we process your request...',
                 timeOut: 3000,
-                variant: 'error'
+                variant: 'info'
             })
+
+            setTimeout(() => history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${5}`), 3000)
         }
+
+       
+        
     }
 
     const renderDatasetType = () => {
@@ -250,9 +232,12 @@ const SubmitDataset = (props) => {
                                                     color="primary"
                                                     label="Dataset name"
                                                     value={dataset.name}
-                                                    error={error}
-                                                    helperText={error && "Dataset name already exists"}
-                                                    onChange={(e) => setDatasetInfo({ ...dataset, name: e.target.value })}
+                                                    error={error.name? true : false}
+                                                    helperText={error.name}
+                                                    onChange={(e) => {
+                                                        setDatasetInfo({ ...dataset, name: e.target.value })
+                                                        setError({...error, name:false})
+                                                }}
                                                 />
                                             </Grid>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
@@ -261,7 +246,12 @@ const SubmitDataset = (props) => {
                                                     color="primary"
                                                     label="Paste the URL of the public repository"
                                                     value={dataset.url}
-                                                    onChange={(e) => setDatasetInfo({ ...dataset, url: e.target.value })}
+                                                    error = {error.url? true : false}
+                                                    helperText={error.url}
+                                                    onChange={(e) => {
+                                                        setDatasetInfo({ ...dataset, url: e.target.value })
+                                                        setError({...error, url:false})
+                                                    }}
                                                 />
                                             </Grid>
                                         </Grid>
