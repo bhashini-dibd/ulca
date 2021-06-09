@@ -1,0 +1,14 @@
+[
+    {
+        "test_name":"SentenceLengthCheck", "active":"True"
+    },
+    {
+        "test_name":"WordLengthCheck", "active":"True"
+    },
+    {
+        "test_name":"DuplicateWhitespaces", "active":"True"
+    },
+    {
+        "test_name":"CaseDedup", "active":"True"
+    }
+]
