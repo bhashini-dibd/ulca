@@ -12,6 +12,7 @@ from service.monolingual import MonolingualService
 from configs.configs import kafka_bootstrap_server_host, publish_input_topic, publish_consumer_grp
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from kafka import KafkaConsumer
+from processtracker.processtracker import ProcessTracker
 
 log = logging.getLogger('file')
 
@@ -34,6 +35,7 @@ def consume():
         topics = [publish_input_topic]
         consumer = instantiate(topics)
         p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
+        pt = ProcessTracker()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-CONS-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -42,15 +44,19 @@ def consume():
                 try:
                     data = msg.value
                     if data:
-                        log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
-                        if data["datasetType"] == dataset_type_parallel:
-                            p_service.load_parallel_dataset(data)
-                        if data["datasetType"] == dataset_type_ocr:
-                            o_service.load_ocr_dataset(data)
-                        if data["datasetType"] == dataset_type_asr:
-                            a_service.load_asr_dataset(data)
-                        if data["datasetType"] == dataset_type_monolingual:
-                            m_service.load_monolingual_dataset(data)
+                        if 'eof' not in data.keys():
+                            log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
+                            if data["datasetType"] == dataset_type_parallel:
+                                p_service.load_parallel_dataset(data)
+                            if data["datasetType"] == dataset_type_ocr:
+                                o_service.load_ocr_dataset(data)
+                            if data["datasetType"] == dataset_type_asr:
+                                a_service.load_asr_dataset(data)
+                            if data["datasetType"] == dataset_type_monolingual:
+                                m_service.load_monolingual_dataset(data)
+                        else:
+                            if data["eof"]:
+                                pt.end_processing(data)
                     else:
                         break
                 except Exception as e:

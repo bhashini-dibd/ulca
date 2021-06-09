@@ -20,7 +20,11 @@ class ProcessTracker:
         try:
             task_event = self.search_task_event(data, pt_publish_tool)
             if task_event:
-                return self.update_task_event(data, task_event)
+                if task_event["status"] == pt_inprogress_status:
+                    return self.update_task_event(data, task_event)
+                else:
+                    log.error(f'Record receieved for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
+                    return
             task_event = {"id": str(uuid.uuid4()), "tool": pt_publish_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
                           "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
             if data["status"] == "SUCCESS":
@@ -34,6 +38,17 @@ class ProcessTracker:
         except Exception as e:
             log.exception(e)
             return
+
+    def end_processing(self, data):
+        task_event = self.search_task_event(data, pt_publish_tool)
+        if task_event:
+            task_event["status"] = pt_success_status
+            task_event["lastModified"] = str(datetime.now())
+            task_event["endTime"] = task_event["lastModified"]
+            repo.update(task_event)
+        else:
+            log.error(f'EOF received for a non existent SRN -- {data["serviceRequestNumber"]}')
+        return
 
     def update_task_event(self, data, task_event):
         task_event = task_event[0]
@@ -71,7 +86,8 @@ class ProcessTracker:
                     task_event["error"] = error
                 else:
                     task_event["status"] = pt_success_status
-                task_event["endTime"] = str(datetime.now())
+                task_event["lastModified"] = str(datetime.now())
+                task_event["endTime"] = task_event["lastModified"]
                 repo.update(task_event)
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
