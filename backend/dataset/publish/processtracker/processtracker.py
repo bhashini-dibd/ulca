@@ -43,10 +43,13 @@ class ProcessTracker:
         log.error(f'EOF received for SRN -- {data["serviceRequestNumber"]}')
         task_event = self.search_task_event(data, pt_publish_tool)
         if task_event:
-            task_event["status"] = pt_success_status
-            task_event["lastModified"] = str(datetime.now())
-            task_event["endTime"] = task_event["lastModified"]
-            repo.update(task_event)
+            if task_event["status"] == pt_inprogress_status:
+                task_event["status"] = pt_success_status
+                task_event["lastModified"] = str(datetime.now())
+                task_event["endTime"] = task_event["lastModified"]
+                repo.update(task_event)
+            else:
+                log.error(f'EOF received for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
         else:
             log.error(f'EOF received for a non existent SRN -- {data["serviceRequestNumber"]}')
         log.error(f'Done!')
