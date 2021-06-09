@@ -1,6 +1,6 @@
 const configs = {
     BASE_URL: 'http://52.40.71.62:5000',
-    BASE_URL_AUTO: process.env.REACT_APP_APIGW_BASE_URL ? process.env.REACT_APP_APIGW_BASE_URL : 'https://auth.anuvaad.org',
+    BASE_URL_AUTO: "http://34.221.132.8:8080",
     BASE_URL_NMT: 'http://52.40.71.62:3000',
     API_URL: process.env.REACT_APP_DASHBOARD_URL ? process.env.REACT_APP_DASHBOARD_URL : 'https://dev-dashboard.anuvaad.org/api',
     DASHBOARD_URL:"https://sangrah-dev-api.anuvaad.org/",

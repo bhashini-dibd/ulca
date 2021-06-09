@@ -33,10 +33,11 @@ const ContributionList = (props) => {
                 overrides: {
                 MuiTableCell: {
                         head: {
-                                color : "rgba(0,0,0,0.5) !important",
-                                background: "rgba(0,0,0,0.03) !important",
-                                letterSpacing:"0.14px",
-                                cursor: 'default'
+                                // color : "rgba(0,0,0,0.5) !important",
+                                // background: "rgba(0,0,0,0.03) !important",
+                                // letterSpacing:"0.14px",
+                                // cursor: 'default'
+                                backgroundColor : "#c7c6c68a !important"
                         }
                 },
                
@@ -47,6 +48,11 @@ const ContributionList = (props) => {
                                 border          : "1px solid rgb(224 224 224)"
                         }
                 },
+                MUIDataTableToolbar: {
+                        root: { 
+                                display: "none" 
+                               } 
+                       },
                 
                 MuiTableRow:{root:{cursor: 'pointer'}}
                 }
@@ -56,7 +62,7 @@ const ContributionList = (props) => {
         const fetchHeaderButton= () => {
                 return (
                         <div className={classes.headerButtons}>
-                                <Typography  component="h2" >My Contribution</Typography>
+                                <Typography variant="h5" >My Contribution</Typography>
                                 <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
                          </div>
                 )

@@ -1,16 +1,27 @@
 import React from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
-import { withStyles } from '@material-ui/core/styles';
+import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import GlobalStyle from '../../styles/Styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 const CustomizedSnackbars = (props) => {
+
+    const getMuiTheme = () => createMuiTheme({
+        overrides: {
+            MuiSnackbar :{
+                anchorOriginTopRight :{
+            marginTop :"50px"
+        }
+       }
+        }
+});
     let { classes } = props
     return (
+        <MuiThemeProvider theme={getMuiTheme()}> 
         <div className={classes.snackbar}>
             <Snackbar
                 open={props.open}
-                autoHideDuration={props.timeOut}
                 onClose={props.handleClose}
                 anchorOrigin={props.anchorOrigin}
             >
@@ -23,6 +34,7 @@ const CustomizedSnackbars = (props) => {
                 </Alert>
             </Snackbar>
         </div>
+    </MuiThemeProvider>
     );
 }
 

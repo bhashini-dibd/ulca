@@ -5,7 +5,7 @@ const themeDefault = createMuiTheme({
     fontFamily: '"Lato", "Semibold"',
     font: "normal normal normal 14px/17px Lato",
     letterSpacing: "0px",
-    fontSize: 14,
+    fontSize: 13,
   },
   overrides: {
     MuiButton: {
@@ -43,20 +43,11 @@ themeDefault.typography.h4 = {
   fontSize: "1.875rem",
   fontWeight: "500",
 
-  fontFamily: '"Poppins SemiBold", Regular',
+  fontFamily: '"Poppins", Regular',
   textAlign: "Left",
   "@media (min-width:600px)": {},
   [themeDefault.breakpoints.up("md")]: {},
 };
 
-themeDefault.typography.h4 = {
-  fontSize: "1.875rem",
-  fontWeight: "500",
-
-  fontFamily: '"Poppins SemiBold", Regular',
-  textAlign: "Left",
-  "@media (min-width:600px)": {},
-  [themeDefault.breakpoints.up("md")]: {},
-};
 
 export default themeDefault;

@@ -20,6 +20,8 @@ const constants = {
    * action for Search report
    */
    GET_MY_REPORT        : "GET_MY_REPORT"
+
+   
 };
 
 export default constants;

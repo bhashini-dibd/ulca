@@ -11,7 +11,6 @@ const GlobalStyles = (theme) => ({
     flexGrow: 1,
     height: window.innerHeight,
     zIndex: 1,
-    overflow: "hidden",
     position: "relative",
     minHeight: "720px",
     display: "flex",
@@ -49,8 +48,9 @@ const GlobalStyles = (theme) => ({
   },
   snackbar: {
     width: '100%',
+    marginTop:"50px",
     '& > * + *': {
-      marginTop: theme.spacing(2),
+      marginTop: "50px",
     },
   },
   snackbarFont: {

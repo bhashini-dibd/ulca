@@ -18,16 +18,17 @@ const DataSet = (theme) => ({
     },
     form: {
         marginTop: '1vh',
-        width: '100%',
+        width: '90%',
     },
     radioGroup: {
-        marginTop: '1vh',
+        marginTop: '3vh',
         paddingRight: '2vw'
     },
 
+    typography:{fontSize:"1.1rem"},
+
     updateBtn: {
-        backgroundColor: "white",
-        border: '1px solid black',
+        
         display: 'flex',
         justifyItems: 'center',
         marginLeft: 'auto',
@@ -121,15 +122,30 @@ const DataSet = (theme) => ({
         marginBottom: '1.3%'
     },
     reqNoTypo: {
-        marginBottom: '2.5%'
+        marginBottom: '2.5%',
     },
     myContriBtn: {
         marginTop: '8%',
-        fontSize: '0.8rem'
     },
     ButtonRefresh   :   {
         marginLeft:"auto"
     },
+    searchDivStyle:{
+        padding:'0% 4%',
+    },
+    buttonDiv:{
+         margin: '0% 0 3% 0'
+    },
+    innerButton:{
+        margin:'0 2% 2% 0'
+    },
+    subHeader:{
+        marginBottom:'3%'
+    },
+    clearNSubmit:{
+        float:'right'
+    },
+
     action : {display:"flex",flexDirection:"row"}
 });
 
