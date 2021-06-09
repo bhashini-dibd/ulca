@@ -2,6 +2,7 @@ from configs.configs import parallel_corpus_config_path, asr_config_path, ocr_co
 import json
 import validations as validator_package
 from validations.basic_schema_check import BasicSchemaCheck
+import os
 
 class ValidationPipeline:
 
@@ -71,22 +72,26 @@ class ValidationPipeline:
         # load validation pipeline for parallel corpus
         self.parallel_pipeline = BasicSchemaCheck()
         validation_p = self.parallel_pipeline
-        self.initiate_validators(parallel_corpus_config_path, validation_p)
+        p_filepath = os.path.abspath(os.path.join(os.curdir, parallel_corpus_config_path))
+        self.initiate_validators(p_filepath, validation_p)
 
         # load validation pipeline for asr
         self.asr_pipeline = BasicSchemaCheck()
         validation_p = self.asr_pipeline
-        self.initiate_validators(asr_config_path, validation_p)
+        p_filepath = os.path.abspath(os.path.join(os.curdir, asr_config_path))
+        self.initiate_validators(p_filepath, validation_p)
 
         # load validation pipeline for ocr
         self.ocr_pipeline = BasicSchemaCheck()
         validation_p = self.ocr_pipeline
-        self.initiate_validators(ocr_config_path, validation_p)
+        p_filepath = os.path.abspath(os.path.join(os.curdir, ocr_config_path))
+        self.initiate_validators(p_filepath, validation_p)
 
         # load validation pipeline for monolingual
         self.monolingual_pipeline = BasicSchemaCheck()
         validation_p = self.monolingual_pipeline
-        self.initiate_validators(monolingual_config_path, validation_p)
+        p_filepath = os.path.abspath(os.path.join(os.curdir, monolingual_config_path))
+        self.initiate_validators(p_filepath, validation_p)
 
 
     def runParallelValidators(self, record):
