@@ -26,7 +26,7 @@ class ProcessTracker:
                     log.error(f'Record received for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
                     return
             task_event = {"id": str(uuid.uuid4()), "tool": pt_publish_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                          "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
+                          "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
             if data["status"] == "SUCCESS":
                 processed_count = [{"type": "success", "count": 1}, {"type": "failed", "typeDetails": {}, "count": 0}]
             else:
@@ -45,8 +45,8 @@ class ProcessTracker:
         if task_event:
             if task_event["status"] == pt_inprogress_status:
                 task_event["status"] = pt_success_status
-                task_event["lastModified"] = str(datetime.now())
-                task_event["endTime"] = task_event["lastModified"]
+                task_event["lastModifiedTime"] = str(datetime.now())
+                task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
             else:
                 log.error(f'EOF received for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
@@ -76,7 +76,7 @@ class ProcessTracker:
                     value["count"] += 1
         details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed, "timeStamp": str(datetime.now())}
         task_event["details"] = details
-        task_event["lastModified"] = str(datetime.now())
+        task_event["lastModifiedTime"] = str(datetime.now())
         repo.update(task_event)
         return
 
@@ -91,12 +91,12 @@ class ProcessTracker:
                     task_event["error"] = error
                 else:
                     task_event["status"] = pt_success_status
-                task_event["lastModified"] = str(datetime.now())
-                task_event["endTime"] = task_event["lastModified"]
+                task_event["lastModifiedTime"] = str(datetime.now())
+                task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                              "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
+                              "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
                 repo.insert(task_event)
             return
         except Exception as e:
@@ -114,11 +114,12 @@ class ProcessTracker:
                     task_event["error"] = error
                 else:
                     task_event["status"] = pt_success_status
-                task_event["endTime"] = str(datetime.now())
+                task_event["lastModifiedTime"] = str(datetime.now())
+                task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_delete_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                              "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
+                              "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
                 repo.insert(task_event)
             return
         except Exception as e:
