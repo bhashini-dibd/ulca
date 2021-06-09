@@ -7,6 +7,7 @@ import org.anuvaad.cache.ZuulConfigCache;
 import org.anuvaad.models.*;
 import org.anuvaad.utils.ExceptionUtils;
 import org.anuvaad.utils.UserUtils;
+import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -100,9 +106,14 @@ public class RbacFilter extends ZuulFilter {
     public Boolean verifyAuthorization(RequestContext ctx, String uri) {
         try {
             User user = (User) ctx.get(USER_INFO_KEY);
-            Boolean sigVerify = verifySignature(ctx.get(SIG_KEY), user.getPrivateKey(), ctx.getRequest().getEntity());
+            String charset = ctx.getRequest().getCharacterEncoding();
+            InputStream in = (InputStream) ctx.get("requestEntity");
+            if (null == in)
+                in = ctx.getRequest().getInputStream();
+            String requestEntityStr = StreamUtils.copyToString(in, Charset.forName(charset));
+            Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), requestEntityStr);
             if(!sigVerify)
-                return sigVerify;
+                return false;
             List<String> roleCodes = user.getRoles().stream().map(UserRole::getRoleCode).collect(Collectors.toList());
             if(roleCodes.contains(superUserCode)) return true;
             Boolean isRolesCorrect = verifyRoles(user.getRoles());
@@ -116,22 +127,36 @@ public class RbacFilter extends ZuulFilter {
     }
 
     /**
-     * Verifies thr user signature
-     * @param userRoles
+     * Verifies signature with private key
+     * @param signature
+     * @param privateKey
+     * @param body
      * @return
      */
-    public Boolean verifySignature(String signature, String privateKey, Object body) {
+    public Boolean verifySignature(String signature, String privateKey, String body) {
         try{
-            String hash = null;
-            if(hash.equals(signature))
-                return true;
-            else
-                return false;
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            String bodyHash  = bytesToHex(digest.digest(body.getBytes(StandardCharsets.UTF_8)));
+            String sigHash = bodyHash + "|" + privateKey;
+            String hash = bytesToHex(digest.digest(sigHash.getBytes(StandardCharsets.UTF_8)));
+            return hash.equals(signature);
         }catch (Exception e) {
             logger.error("Exception while verifying signature: ", e);
             return false;
         }
 
+    }
+
+    private static String bytesToHex(byte[] hash) {
+        StringBuilder hexString = new StringBuilder(2 * hash.length);
+        for (int i = 0; i < hash.length; i++) {
+            String hex = Integer.toHexString(0xff & hash[i]);
+            if(hex.length() == 1) {
+                hexString.append('0');
+            }
+            hexString.append(hex);
+        }
+        return hexString.toString();
     }
 
     /**

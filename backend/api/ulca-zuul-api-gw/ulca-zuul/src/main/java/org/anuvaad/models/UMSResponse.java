@@ -12,72 +12,36 @@ public class UMSResponse {
     @JsonProperty("data")
     public User data;
 
-    @JsonProperty("why")
-    public String why;
+    @JsonProperty("message")
+    public String message;
 
-    @JsonProperty("ok")
-    public Boolean ok;
-
-    @JsonProperty("http")
-    public Map<String, Integer> http;
-
-    @Override
-    public String toString() {
-        return "UMSResponse{" +
-                "count=" + count +
-                ", data=" + data +
-                ", why='" + why + '\'' +
-                ", http=" + http +
-                '}';
-    }
-
-    public void setCount(Integer count) {
+    public UMSResponse(Integer count, User data, String message) {
         this.count = count;
-    }
-
-    public void setData(User data) {
         this.data = data;
-    }
-
-    public void setWhy(String why) {
-        this.why = why;
-    }
-
-    public Boolean getOk() {
-        return ok;
-    }
-
-    public void setOk(Boolean ok) {
-        this.ok = ok;
-    }
-
-    public void setHttp(Map<String, Integer> http) {
-        this.http = http;
+        this.message = message;
     }
 
     public Integer getCount() {
         return count;
     }
 
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+
     public User getData() {
         return data;
     }
 
-    public String getWhy() {
-        return why;
-    }
-
-    public Map<String, Integer> getHttp() {
-        return http;
-    }
-
-    public UMSResponse() { }
-
-    public UMSResponse(Integer count, User data, String why, Boolean ok, Map<String, Integer> http) {
-        this.count = count;
+    public void setData(User data) {
         this.data = data;
-        this.why = why;
-        this.ok = ok;
-        this.http = http;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

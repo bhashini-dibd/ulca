@@ -38,14 +38,14 @@ public class UserUtils {
 
     /**
      * Fetches user from the UMS via API.
-     * @param authToken
+     * @param publicKey
      * @param ctx
      * @return
      */
-    public User getUser(String authToken, RequestContext ctx) {
+    public User getUser(String publicKey, RequestContext ctx) {
         String authURL = String.format("%s%s", umsHost, umsSearchWithToken);
         Map<String, String> req_body = new HashMap<>();
-        req_body.put("token", authToken);
+        req_body.put("key", publicKey);
         final HttpHeaders headers = new HttpHeaders();
         headers.add(CORRELATION_ID_HEADER_NAME, (String) ctx.get(CORRELATION_ID_KEY));
         final HttpEntity<Object> httpEntity = new HttpEntity<>(req_body, headers);

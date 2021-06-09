@@ -160,9 +160,9 @@ public class AuthFilter extends ZuulFilter {
      * @param authToken
      * @return
      */
-    public User verifyAuthenticity(RequestContext ctx, String authToken) {
+    public User verifyAuthenticity(RequestContext ctx, String publicKey) {
         try {
-            User user = userUtils.getUser(authToken, ctx);
+            User user = userUtils.getUser(publicKey, ctx);
             if (null != user)
                 ctx.set(USER_INFO_KEY, user);
             return user;
@@ -194,7 +194,7 @@ public class AuthFilter extends ZuulFilter {
      * Fetches auth token from the request header.
      * @return
      */
-    private Map getKeyAndSigFromRequestHeader() {
+    private Map<String, String> getKeyAndSigFromRequestHeader() {
         RequestContext ctx = RequestContext.getCurrentContext();
         Map<String, String> headers = new HashMap<>();
         headers.put("PK", ctx.getRequest().getHeader(PUBLIC_KEY_HEADER));

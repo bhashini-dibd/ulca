@@ -10,26 +10,32 @@ public class User {
     @JsonProperty("userID")
     public String userID;
 
-    @JsonProperty("name")
-    public String name;
-
-    @JsonProperty("userName")
-    public String userName;
-
     @JsonProperty("email")
     public String email;
+
+    @JsonProperty("firstName")
+    public String firstName;
+
+    @JsonProperty("lastName")
+    public String lastName;
 
     @JsonProperty("phoneNo")
     public String phoneNo;
 
-    @JsonProperty("orgID")
-    public String orgID;
+    @JsonProperty("isVerified")
+    public Boolean isVerified;
+
+    @JsonProperty("isActive")
+    public Boolean isActive;
+
+    @JsonProperty("registeredTime")
+    public String registeredTime;
+
+    @JsonProperty("activatedTime")
+    public String activatedTime;
 
     @JsonProperty("roles")
     public List<UserRole> roles;
-
-    @JsonProperty("publicKey")
-    public String publicKey;
 
     @JsonProperty("privateKey")
     public String privateKey;
@@ -42,36 +48,28 @@ public class User {
         this.userID = userID;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public String getEmail() {
         return email;
     }
 
-    public void setOrgID(String orgID) {
-        this.orgID = orgID;
-    }
-
-    public String getOrgID() {
-        return orgID;
-    }
-
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPhoneNo() {
@@ -82,12 +80,44 @@ public class User {
         this.phoneNo = phoneNo;
     }
 
-    public String getPublicKey() {
-        return publicKey;
+    public Boolean getVerified() {
+        return isVerified;
     }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
+    public void setVerified(Boolean verified) {
+        isVerified = verified;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public String getRegisteredTime() {
+        return registeredTime;
+    }
+
+    public void setRegisteredTime(String registeredTime) {
+        this.registeredTime = registeredTime;
+    }
+
+    public String getActivatedTime() {
+        return activatedTime;
+    }
+
+    public void setActivatedTime(String activatedTime) {
+        this.activatedTime = activatedTime;
+    }
+
+    public List<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<UserRole> roles) {
+        this.roles = roles;
     }
 
     public String getPrivateKey() {
@@ -98,12 +128,18 @@ public class User {
         this.privateKey = privateKey;
     }
 
-    public List<UserRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<UserRole> roles) {
+    public User(String userID, String email, String firstName, String lastName, String phoneNo, Boolean isVerified, Boolean isActive, String registeredTime, String activatedTime, List<UserRole> roles, String privateKey) {
+        this.userID = userID;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNo = phoneNo;
+        this.isVerified = isVerified;
+        this.isActive = isActive;
+        this.registeredTime = registeredTime;
+        this.activatedTime = activatedTime;
         this.roles = roles;
+        this.privateKey = privateKey;
     }
 }
 
