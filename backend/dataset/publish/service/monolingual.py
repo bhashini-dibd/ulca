@@ -171,9 +171,7 @@ class MonolingualService:
             log.info(f'Result --- Count: {count}, Query: {query}')
             path = utils.push_result_to_s3(result, query["serviceRequestNumber"])
             if path:
-                size = sample_size
-                if count <= 10:
-                    size = count
+                size = sample_size if count > sample_size else count
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "sample": result[:size], "dataset": path}
                 pt.task_event_search(op, None)
             else:
@@ -189,22 +187,32 @@ class MonolingualService:
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
     def delete_mono_dataset(self, delete_req):
-        log.info(f'Deleting datasets....')
-        records = self.get_monolingual_dataset({"datasetId": delete_req["datasetId"]})
+        log.info(f'Deleting MONOLINGUAL datasets....')
         d, u = 0, 0
-        for record in records:
-            if len(record["datasetId"]) == 1:
-                repo.delete(record["id"])
-                d += 1
-            else:
-                record["datasetId"].remove(delete_req["datasetId"])
-                record["tags"].remove(delete_req["datasetId"])
-                repo.update(record)
-                u += 1
-        op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
-        #prod.produce(op, delete_output_topic, None)
-        log.info(f'Done!')
-        return op
+        try:
+            records = self.get_monolingual_dataset({"datasetId": delete_req["datasetId"]})
+            for record in records:
+                if len(record["datasetId"]) == 1:
+                    repo.delete(record["id"])
+                    d += 1
+                else:
+                    record["datasetId"].remove(delete_req["datasetId"])
+                    record["tags"].remove(delete_req["datasetId"])
+                    repo.update(record)
+                    u += 1
+            op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
+            pt.task_event_search(op, None)
+            log.info(f'Done!')
+            return op
+        except Exception as e:
+            log.exception(e)
+            log.error(f'There was an error while deleting records')
+            error = {"code": "DELETE_FAILED", "datasetType": dataset_type_monolingual,
+                     "serviceRequestNumber": delete_req["serviceRequestNumber"],
+                     "message": "There was an error while deleting records"}
+            op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
+            pt.task_event_search(op, error)
+            return None
 
 # Log config
 dictConfig({

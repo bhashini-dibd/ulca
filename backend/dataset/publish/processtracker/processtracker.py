@@ -2,7 +2,8 @@ import logging
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import pt_publish_tool, pt_search_tool, pt_inprogress_status, pt_success_status, pt_failed_status
+from configs.configs import pt_publish_tool, pt_search_tool, pt_delete_tool, \
+    pt_inprogress_status, pt_success_status, pt_failed_status
 from .ptrepo import PTRepo
 
 log = logging.getLogger('file')
@@ -62,7 +63,7 @@ class ProcessTracker:
     def task_event_search(self, data, error):
         log.info(f'Publishing pt event for SEARCH -- {data["serviceRequestNumber"]}')
         try:
-            task_event = self.search_task_event(data, pt_publish_tool)
+            task_event = self.search_task_event(data, pt_search_tool)
             if task_event:
                 task_event["details"] = data
                 if error:
@@ -74,6 +75,28 @@ class ProcessTracker:
                 repo.update(task_event)
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
+                              "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
+                repo.insert(task_event)
+            return
+        except Exception as e:
+            log.exception(e)
+            return None
+
+    def task_event_delete(self, data, error):
+        log.info(f'Publishing pt event for DELETE -- {data["serviceRequestNumber"]}')
+        try:
+            task_event = self.search_task_event(data, pt_delete_tool)
+            if task_event:
+                task_event["details"] = data
+                if error:
+                    task_event["status"] = pt_failed_status
+                    task_event["error"] = error
+                else:
+                    task_event["status"] = pt_success_status
+                task_event["endTime"] = str(datetime.now())
+                repo.update(task_event)
+            else:
+                task_event = {"id": str(uuid.uuid4()), "tool": pt_delete_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
                               "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
                 repo.insert(task_event)
             return

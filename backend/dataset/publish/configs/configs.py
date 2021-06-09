@@ -1,7 +1,7 @@
 import os
 
 app_host = os.environ.get('ULCA_DS_PUBLISH_HOST', '0.0.0.0')
-app_port = os.environ.get('ULCA_DS_PUBLISH_PORT', 5010)
+app_port = os.environ.get('ULCA_DS_PUBLISH_PORT', 5001)
 
 db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://localhost:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")
@@ -48,6 +48,7 @@ publish_error_code = "3000_XXX"
 
 pt_publish_tool = os.environ.get('PT_TOOL_PUBLISH', 'publish')
 pt_search_tool = os.environ.get('PT_TOOL_SEARCH', 'search')
+pt_delete_tool = os.environ.get('PT_TOOL_DELETE', 'delete')
 pt_inprogress_status = os.environ.get('PT_STATUS_INPROGRESS', 'inprogress')
 pt_success_status = os.environ.get('PT_STATUS_SUCCESS', 'successful')
 pt_failed_status = os.environ.get('PT_STATUS_FAILED', 'failed')
