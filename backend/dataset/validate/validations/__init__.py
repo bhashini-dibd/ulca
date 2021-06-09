@@ -1,0 +1,5 @@
+from .sentence_length_check import SentenceLengthCheck
+from .word_length_check import WordLengthCheck
+from .basic_schema_check import BasicSchemaCheck
+from .duplicate_whitespaces import DuplicateWhitespaces
+from .alphabet_case_dedup import CaseDedup
