@@ -46,23 +46,23 @@ mono_immutable_keys = ["id", "text", "textHash", "datasetType"]
 mono_non_tag_keys = ["id", "text", "submitter"]
 publish_error_code = "3000_XXX"
 
-pt_publish_tool = "publish"
-pt_inprogress_status = "inprogress"
-pt_success_status = "successful"
-pt_failed_status = "failed"
+pt_publish_tool = os.environ.get('PT_TOOL_PUBLISH', 'publish')
+pt_search_tool = os.environ.get('PT_TOOL_SEARCH', 'search')
+pt_inprogress_status = os.environ.get('PT_STATUS_INPROGRESS', 'inprogress')
+pt_success_status = os.environ.get('PT_STATUS_SUCCESS', 'successful')
+pt_failed_status = os.environ.get('PT_STATUS_FAILED', 'failed')
+
+ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')
-publish_output_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_OP_TOPIC', 'ulca-ds-publish-op-v0')
 search_input_topic = os.environ.get('KAFKA_ULCA_DS_SEARCH_IP_TOPIC', 'ulca-ds-search-ip-v0')
-search_output_topic = os.environ.get('KAFKA_ULCA_DS_SEARCH_OP_TOPIC', 'ulca-ds-search-op-v0')
 delete_input_topic = os.environ.get('KAFKA_ULCA_DS_DELETE_IP_TOPIC', 'ulca-ds-delete-ip-v0')
-delete_output_topic = os.environ.get('KAFKA_ULCA_DS_DELETE_OP_TOPIC', 'ulca-ds-delete-op-v0')
 publish_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
-error_event_input_topic = os.environ.get('KAFKA_ULCA_DS_ERROR_IP_TOPIC', 'ulca-ds-error-op-v0')
-metric_event_input_topic = os.environ.get('KAFKA_ULCA_DS_METRIC_IP_TOPIC', 'ulca-ds-metric-op-v0')
+error_event_input_topic = os.environ.get('KAFKA_ULCA_DS_ERROR_IP_TOPIC', 'ulca-ds-error-ip-v0')
+metric_event_input_topic = os.environ.get('KAFKA_ULCA_DS_METRIC_IP_TOPIC', 'ulca-ds-metric-ip-v0')
 ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 3)
 if isinstance(ulca_dataset_topic_partitions, str):
     ulca_dataset_topic_partitions = eval(ulca_dataset_topic_partitions)
@@ -74,7 +74,10 @@ aws_ocr_prefix = os.environ.get('ULCA_AWS_S3_OCR_PREFIX', '/ocr/')
 aws_asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', '/asr/')
 aws_dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', '/datasets/')
 
-dataset_type_parallel = os.environ.get('DATASET_TYPE_PARALLEL_DS', 'parallel-corpus')
-dataset_type_asr = os.environ.get('DATASET_TYPE_ASR_DS', 'asr-corpus')
-dataset_type_ocr = os.environ.get('DATASET_TYPE_OCR_DS', 'ocr-corpus')
-dataset_type_monolingual = os.environ.get('DATASET_TYPE_MONOLINGUAL_DS', 'monolingual-corpus')
+dataset_type_parallel = os.environ.get('DS_TYPE_PARALLEL', 'parallel-corpus')
+dataset_type_asr = os.environ.get('DS_TYPE_ASR', 'asr-corpus')
+dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
+dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
+
+user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'pseudo')
+user_mode_real = os.environ.get('USER_MODE_REAL', 'real')

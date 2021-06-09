@@ -6,8 +6,8 @@ import time
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, search_output_topic, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys, delete_output_topic, dataset_type_ocr, no_of_parallel_processes
+from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, user_mode_pseudo, \
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -46,7 +46,7 @@ class OCRService:
                     if result:
                         if result[0] == "INSERT":
                             if len(batch_data) == batch:
-                                if metadata["datasetMode"] != 'pseudo':
+                                if metadata["datasetMode"] != user_mode_pseudo:
                                     persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                                     persist_thread.start()
                                     persist_thread.join()
@@ -76,7 +76,7 @@ class OCRService:
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                 pool_enrichers.close()
                 if batch_data:
-                    if metadata["datasetMode"] != 'pseudo':
+                    if metadata["datasetMode"] != user_mode_pseudo:
                         persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                         persist_thread.start()
                         persist_thread.join()
@@ -200,7 +200,7 @@ class OCRService:
             else:
                 log.error(f'There was an error while pushing result to S3')
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None}
-            prod.produce(op, search_output_topic, None)
+            #prod.produce(op, search_output_topic, None)
             log.info(f'Done!')
             return op
         except Exception as e:
@@ -222,7 +222,7 @@ class OCRService:
                 repo.update(record)
                 u += 1
         op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
-        prod.produce(op, delete_output_topic, None)
+       #prod.produce(op, delete_output_topic, None)
         log.info(f'Done!')
         return op
 

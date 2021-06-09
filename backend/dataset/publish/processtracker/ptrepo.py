@@ -1,6 +1,6 @@
 import logging
 from logging.config import dictConfig
-from configs.configs import db_cluster, pt_db, pt_task_collection
+from configs.configs import ulca_db_cluster, pt_db, pt_task_collection
 
 import pymongo
 log = logging.getLogger('file')
@@ -13,7 +13,7 @@ class PTRepo:
         pass
 
     def instantiate(self):
-        client = pymongo.MongoClient(db_cluster)
+        client = pymongo.MongoClient(ulca_db_cluster)
         mongo_instance = client[pt_db][pt_task_collection]
         return mongo_instance
 

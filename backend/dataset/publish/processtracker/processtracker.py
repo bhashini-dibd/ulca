@@ -17,9 +17,9 @@ class ProcessTracker:
     def create_task_event(self, data):
         try:
             log.info(f'Publishing pt event for -- {data["serviceRequestNumber"]}')
-            task_event = self.search_task_event(data)
+            task_event = self.search_task_event(data, pt_publish_tool)
             if task_event:
-                return self.update_task_event(data)
+                return self.update_task_event(data, task_event)
             task_event = {"id": str(uuid.uuid4()), "tool": pt_publish_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
                           "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
             if data["status"] == "SUCCESS":
@@ -32,9 +32,7 @@ class ProcessTracker:
         except Exception as e:
             log.exception(e)
 
-    def update_task_event(self, data):
-        log.info(data)
-        task_event = self.search_task_event(data)
+    def update_task_event(self, data, task_event):
         task_event = task_event[0]
         processed = task_event["details"]["processedCount"]
         if data["status"] == "SUCCESS":
@@ -59,8 +57,8 @@ class ProcessTracker:
         repo.update(task_event)
         return None
 
-    def search_task_event(self, data):
-        query = {"serviceRequestNumber": data["serviceRequestNumber"], "tool": pt_publish_tool}
+    def search_task_event(self, data, tool):
+        query = {"serviceRequestNumber": data["serviceRequestNumber"], "tool": tool}
         exclude = {"_id": False}
         result = repo.search(query, exclude, None, None)
         return result

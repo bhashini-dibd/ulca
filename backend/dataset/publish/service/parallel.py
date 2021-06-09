@@ -6,8 +6,8 @@ import uuid
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, search_output_topic, \
-    sample_size, parallel_immutable_keys, parallel_non_tag_keys, delete_output_topic, dataset_type_parallel
+from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, user_mode_pseudo, \
+    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -45,7 +45,7 @@ class ParallelService:
                     if result:
                         if isinstance(result[0], list):
                             if len(batch_data) == batch:
-                                if metadata["datasetMode"] != 'pseudo':
+                                if metadata["datasetMode"] != user_mode_pseudo:
                                     persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                                     persist_thread.start()
                                     persist_thread.join()
@@ -67,7 +67,7 @@ class ParallelService:
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                 pool_enrichers.close()
                 if batch_data:
-                    if metadata["datasetMode"] != 'pseudo':
+                    if metadata["datasetMode"] != user_mode_pseudo:
                         persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                         persist_thread.start()
                         persist_thread.join()
@@ -274,7 +274,7 @@ class ParallelService:
             else:
                 log.error(f'There was an error while pushing result to S3')
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None}
-            prod.produce(op, search_output_topic, None)
+            #prod.produce(op, search_output_topic, None)
             log.info(f'Done!')
             return op
         except Exception as e:
@@ -298,7 +298,7 @@ class ParallelService:
                 repo.update(record)
                 u += 1
         op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
-        prod.produce(op, delete_output_topic, None)
+        #prod.produce(op, delete_output_topic, None)
         log.info(f'Done!')
         return op
 
