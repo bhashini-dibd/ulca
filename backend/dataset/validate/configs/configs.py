@@ -3,10 +3,10 @@ import os
 app_host = os.environ.get('ULCA_DS_VALIDATE_HOST', '0.0.0.0')
 app_port = os.environ.get('ULCA_DS_VALIDATE_PORT', 5001)
 
-parallel_corpus_config_path = os.environ.get('ULCA_VALIDATE_PARALLEL_CONFIG', r'C:\Users\Dheeraj Gujral\Documents\cassandra_server\cassandra_evaluation_poc\validation_test\configs\parallel_corpus_config.json')
-asr_config_path = os.environ.get('ULCA_VALIDATE_ASR_CONFIG', r'C:\Users\Dheeraj Gujral\Documents\cassandra_server\cassandra_evaluation_poc\validation_test\configs\asr_config.json')
-ocr_config_path = os.environ.get('ULCA_VALIDATE_OCR_CONFIG', r'C:\Users\Dheeraj Gujral\Documents\cassandra_server\cassandra_evaluation_poc\validation_test\configs\ocr_config.json')
-monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', r'C:\Users\Dheeraj Gujral\Documents\cassandra_server\cassandra_evaluation_poc\validation_test\configs\monolingual_config.json')
+parallel_corpus_config_path = os.environ.get('ULCA_VALIDATE_PARALLEL_CONFIG', 'configs/parallel_corpus_config.json')
+asr_config_path = os.environ.get('ULCA_VALIDATE_ASR_CONFIG', 'configs/asr_config.json')
+ocr_config_path = os.environ.get('ULCA_VALIDATE_OCR_CONFIG', 'configs/ocr_config.json')
+monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', 'configs/monolingual_config.json')
 
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
