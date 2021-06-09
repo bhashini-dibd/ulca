@@ -9,7 +9,6 @@ import {
     FormControlLabel,
     Divider
 } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import SearchResult from "./SearchResult";
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
@@ -20,6 +19,7 @@ import { useState } from 'react';
 import DownloadDatasetRecords from "./DownloadDatasetRecords";
 import RequestNumberCreation from "./RequestNumberCreation";
 import { useHistory, useParams } from 'react-router';
+import Autocomplete from '../../../components/common/Autocomplete';
 
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
@@ -28,12 +28,12 @@ const SearchAndDownloadRecords = (props) => {
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
         source: '',
-        target: ''
+        target: []
     });
     const [filterBy, setFilterBy] = useState({
-        domain: '',
-        source: '',
-        collectionMethod: ''
+        domain: [],
+        source: [],
+        collectionMethod: []
     });
 
     const [datasetType, setDatasetType] = useState({
@@ -44,9 +44,14 @@ const SearchAndDownloadRecords = (props) => {
     };
     const handleLanguagePairChange = (value, property) => {
         setLanguagePair({ ...languagePair, [property]: value });
+
+        if (property === 'source')
+            setSrcError(false)
+        else
+            setTgtError(false)
     };
-    const handleFilterByChange = (event, property) => {
-        setFilterBy({ ...filterBy, [`${property}`]: event.target.value });
+    const handleFilterByChange = (value, property) => {
+        setFilterBy({ ...filterBy, [property]: value });
     };
     const sourceLanguages = [
         {
@@ -67,9 +72,11 @@ const SearchAndDownloadRecords = (props) => {
         },
     ];
     const [state, setState] = useState({
-        checkedA: true,
+        checkedA: false,
         checkedB: false,
     });
+    const [srcError, setSrcError] = useState(false)
+    const [tgtError, setTgtError] = useState(false)
 
     const renderPage = () => {
         const { params } = param
@@ -84,7 +91,46 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     const handleDatasetClick = (property) => {
-        setDatasetType({[property]:true })
+        clearfilter()
+        setDatasetType({ [property]: true })
+        setSrcError(false)
+        setTgtError(false)
+    }
+    const getLabel = () => {
+        if (datasetType.pd)
+            return "Target Language *"
+        else if (datasetType.md || datasetType.atd)
+            return "Select Language *"
+        else
+            return "Select Script *"
+    }
+    const clearfilter = () => {
+        setFilterBy({
+            domain: [],
+            source: [],
+            collectionMethod: []
+        });
+        setLanguagePair({
+            source: "",
+            target: []
+        });
+        setDatasetType({
+            pd: true
+        });
+    }
+    const handleSubmitBtn = () => {
+        if (languagePair.source && languagePair.target.length)
+            history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)
+        else if (!languagePair.source && !languagePair.target.length) {
+            setSrcError(true)
+            setTgtError(true)
+        }
+        else if (!languagePair.source)
+            setSrcError(true)
+        else if (!languagePair.target.length)
+            setTgtError(true)
+
+
     }
     return (
         <div className={classes.searchDivStyle}>
@@ -124,89 +170,67 @@ const SearchAndDownloadRecords = (props) => {
 
                     <Typography className={classes.subHeader} variant="h6">Select Language Pair</Typography>
                     <div className={classes.subHeader}>
-                        <TextField className={classes.subHeader}
-                            fullWidth
-                            id="select-source-language"
-                            select
-                            label="Source Language *"
-                            value={languagePair.source}
-                            onChange={(event) => handleLanguagePairChange(event.target.value, 'source')}
-                        >
-                            {sourceLanguages.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
-                       { !datasetType.md && 
-                       <Autocomplete
-                            filterSelectedOptions
-                            limitTags={3}
-                            multiple
-                            id="select-target-language"
+                        {datasetType.pd &&
+                            <TextField className={classes.subHeader}
+                                fullWidth
+                                error={srcError}
+                                helperText={srcError && "Source language is mandatory"}
+                                select
+                                id="select-source-language"
+                                label="Source Language *"
+                                value={languagePair.source}
+                                onChange={(event) => handleLanguagePairChange(event.target.value, 'source')}
+                            >
+                                {sourceLanguages.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>}
+
+                        <Autocomplete
+                            id="language-target"
                             options={sourceLanguages}
-                            getOptionLabel={(option) => option.label}
-                            onChange={(event, value, reason) => handleLanguagePairChange(value, 'target')}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    variant="standard"
-                                    label="Target Language *"
-                                // placeholder="Favorites"
-                                />
-                            )}
-                        />}
+                            filter='target'
+                            value={languagePair.target}
+                            handleOnChange={handleLanguagePairChange}
+                            label={getLabel()}
+                            error={tgtError}
+                            helperText="This field is mandatory"
+                        />
                     </div>
                     <Typography className={classes.subHeader} variant="h6">Filter by</Typography>
                     <div className={classes.subHeader}>
                         <Grid container spacing={2}>
                             <Grid className={classes.subHeader} item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    id="select-source-language"
-                                    select
-                                    label="Select Domain"
+                                <Autocomplete
+                                    id="domain"
+                                    options={sourceLanguages}
+                                    filter="domain"
                                     value={filterBy.domain}
-                                    onChange={(event) => handleFilterByChange(event, 'domain')}
-                                >
-                                    {sourceLanguages.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                                    handleOnChange={handleFilterByChange}
+                                    label="Select Domain"
+                                />
                             </Grid>
                             <Grid item xs={6}>
-                                <TextField
-                                    fullWidth
-                                    id="select-source-language"
-                                    select
-                                    label="Select Source"
+                                <Autocomplete
+                                    id="source"
+                                    options={sourceLanguages}
+                                    filter="source"
                                     value={filterBy.source}
-                                    onChange={(event) => handleFilterByChange(event, 'source')}
-                                >
-                                    {sourceLanguages.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                                    handleOnChange={handleFilterByChange}
+                                    label="Select Source"
+                                />
                             </Grid>
                         </Grid>
-                        <TextField
-                            fullWidth
-                            id="select-source-language"
-                            select
-                            label="Select Collection Method"
+                        <Autocomplete
+                            id="collection-method"
+                            options={sourceLanguages}
+                            filter="collectionMethod"
                             value={filterBy.collectionMethod}
-                            onChange={(event) => handleFilterByChange(event, 'collectionMethod')}
-                        >
-                            {sourceLanguages.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </TextField>
+                            handleOnChange={handleFilterByChange}
+                            label="Select Collection Method"
+                        />
                     </div>
 
                     <FormControlLabel
@@ -232,10 +256,10 @@ const SearchAndDownloadRecords = (props) => {
                         label="Source sentences manually translated by multiple translators"
                     />
                     <div className={classes.clearNSubmit}>
-                        <Button color="primary">
+                        <Button color="primary" onClick={clearfilter}>
                             Clear
                     </Button>
-                        <Button variant="contained" color="primary" onClick={() => history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)}>
+                        <Button variant="contained" color="primary" onClick={handleSubmitBtn}>
                             Submit
                     </Button>
                     </div>

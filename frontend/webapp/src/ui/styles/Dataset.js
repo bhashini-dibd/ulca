@@ -149,7 +149,7 @@ const DataSet = (theme) => ({
     FindInPageIcon: { fontSize: '8rem' },
     searchResult:{
         textAlign: 'center',
-        marginTop: '50%',
+        marginTop: '45%',
     },
     reqPaper:{
         // padding:'10%',
