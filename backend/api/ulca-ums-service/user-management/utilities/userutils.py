@@ -499,14 +499,14 @@ class UserUtils:
             return post_error("Exception while generating email notification for user registration","Exception occurred:{}".format(str(e)),None)
     
     @staticmethod
-    def generate_email_confirmation(email,keys=None):
+    def generate_email_confirmation(email,name):
         """Confirmation email for successful user verification"""
      
         try: 
             msg         = Message(subject="ULCA - Registration confirmed",
                               sender=mail_server,
                               recipients=[email])
-            msg.html    = render_template('usr_confirm_registration.html',ui_link=mail_ui_link)
+            msg.html    = render_template('usr_confirm_registration.html',ui_link=mail_ui_link,user_name=name)
             mail.send(msg)
             log.info("Generated email notification for user confirmation")
         except Exception as e:

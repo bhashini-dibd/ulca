@@ -1,3 +1,4 @@
+from os import name
 from utilities import MODULE_CONTEXT, userutils
 from db import get_db
 from utilities import UserUtils
@@ -145,6 +146,7 @@ class UserAuthenticationModel(object):
         """User verification and activation."""
 
         try:
+            name = None
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
             #checking for pre-verified records on the same username 
@@ -157,6 +159,7 @@ class UserAuthenticationModel(object):
             if record.count() ==1:
                 for user in record:
                     register_time = user["registeredTime"]
+                    name  = user["firstName"]
                     #checking whether verfication link had expired or not
                     if (datetime.utcnow() - register_time) > timedelta(hours=verify_mail_expiry):
                         log.info("Verification link expired for {}".format(user_email), MODULE_CONTEXT)
@@ -174,7 +177,7 @@ class UserAuthenticationModel(object):
             new_keys   =   UserUtils.generate_api_keys(user_email)
            
             #email notification for registered users
-            user_notified=UserUtils.generate_email_confirmation(user_email)
+            user_notified=UserUtils.generate_email_confirmation(user_email,name)
             if user_notified is not None:
                 return user_notified
             return new_keys
