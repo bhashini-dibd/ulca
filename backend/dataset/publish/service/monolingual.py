@@ -42,7 +42,7 @@ class MonolingualService:
                     if result:
                         if result[0] == "INSERT":
                             if len(batch_data) == batch:
-                                if metadata["datasetMode"] != user_mode_pseudo:
+                                if metadata["userMode"] != user_mode_pseudo:
                                     persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                                     persist_thread.start()
                                     persist_thread.join()
@@ -65,7 +65,7 @@ class MonolingualService:
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                 pool_enrichers.close()
                 if batch_data:
-                    if metadata["datasetMode"] != user_mode_pseudo:
+                    if metadata["userMode"] != user_mode_pseudo:
                         persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                         persist_thread.start()
                         persist_thread.join()

@@ -45,7 +45,7 @@ class ParallelService:
                     if result:
                         if isinstance(result[0], list):
                             if len(batch_data) == batch:
-                                if metadata["datasetMode"] != user_mode_pseudo:
+                                if metadata["userMode"] != user_mode_pseudo:
                                     persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                                     persist_thread.start()
                                     persist_thread.join()
@@ -67,7 +67,7 @@ class ParallelService:
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                 pool_enrichers.close()
                 if batch_data:
-                    if metadata["datasetMode"] != user_mode_pseudo:
+                    if metadata["userMode"] != user_mode_pseudo:
                         persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
                         persist_thread.start()
                         persist_thread.join()
