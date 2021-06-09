@@ -1,7 +1,7 @@
 const DataSet = (theme) => ({
     divStyle: {
         // margin: "1.5rem 23rem 3% 17.5rem",
-        margin:'1.5rem 20% 3rem 15.5%',
+        margin: '1.5rem 20% 3rem 15.5%',
         overflow: 'auto'
     },
     root: {
@@ -41,19 +41,19 @@ const DataSet = (theme) => ({
     },
     breadcrum: {
         marginBottom: '1.5rem',
-        
+
     },
     link: {
         marginRight: "10px",
         cursor: "pointer",
-        display:"flex",flexDirection:"row"
+        display: "flex", flexDirection: "row"
     },
     span: {
         color: "#0C0F0F",
-        opacity :"0.5",
-        margin:"-3px 0 0 1rem"
+        opacity: "0.5",
+        margin: "-3px 0 0 1rem"
     },
-    
+
 
     searchDataset: {
         maxHeight: '1.875rem',
@@ -106,8 +106,7 @@ const DataSet = (theme) => ({
         height: '6.5rem',
         backgroundColor: "#e0e1e0",
         borderRadius: "100%",
-        display: "block",
-        margin: '10%',
+        display: "block"
     },
     submissionIcon: {
         "@media (max-width:1120px)": {
@@ -127,26 +126,68 @@ const DataSet = (theme) => ({
     myContriBtn: {
         marginTop: '8%',
     },
-    ButtonRefresh   :   {
-        marginLeft:"auto"
+    ButtonRefresh: {
+        marginLeft: "auto"
     },
-    searchDivStyle:{
-        padding:'0% 4%',
+    searchDivStyle: {
+        padding: '0% 4%',
     },
-    buttonDiv:{
-         margin: '0% 0 3% 0'
+    buttonDiv: {
+        margin: '0% 0 3% 0'
     },
-    innerButton:{
-        margin:'0 2% 2% 0'
+    innerButton: {
+        margin: '0 2% 2% 0'
     },
-    subHeader:{
-        marginBottom:'3%'
+    subHeader: {
+        marginBottom: '3%'
     },
-    clearNSubmit:{
-        float:'right'
+    clearNSubmit: {
+        float: 'right'
     },
 
-    action : {display:"flex",flexDirection:"row"}
+    action: { display: "flex", flexDirection: "row" },
+    FindInPageIcon: { fontSize: '8rem' },
+    searchResult:{
+        textAlign: 'center',
+        marginTop: '50%',
+    },
+    reqPaper:{
+        // padding:'10%',
+        // width:'60%'
+        marginTop: '25%'
+    },
+    alignTypo:{
+        textAlign: 'center',
+    },
+    iconSub:{
+        marginLeft:'34%',
+        marginBottom: '2%'
+    },
+    yourSearchQuery:{
+        marginBottom: '2%'
+    },
+    serReqNoTypo:{
+        marginBottom: '7%'
+    },
+    mySearches:{
+      marginTop:'1%',
+      width: '60%'
+    },
+    downloadDiv:{
+        marginTop:'4%'
+    },
+    downloadPaper:{
+        marginTop:'4%',
+        padding:'5% 14% 2% 4%',
+        width:'70%',
+    },
+    downloadBtnDiv:{
+        marginTop:'10%'
+    },
+    downloadBtn:{
+        fontSize:'0.8rem',
+        marginRight:'1%'
+    }
 });
 
 export default DataSet;

@@ -104,7 +104,7 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/search-and-download-rec`}
+            path={`${process.env.PUBLIC_URL}/search-and-download-rec/:params`}
             userRoles={[""]}
             component={SearchAndDownloadRecords}
             authenticate={authenticateUser}
