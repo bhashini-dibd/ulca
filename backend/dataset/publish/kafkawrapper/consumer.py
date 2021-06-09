@@ -44,16 +44,19 @@ def consume():
                 try:
                     data = msg.value
                     if data:
-                        if 'eof' not in data.keys():
-                            log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
-                            if data["datasetType"] == dataset_type_parallel:
-                                p_service.load_parallel_dataset(data)
-                            if data["datasetType"] == dataset_type_ocr:
-                                o_service.load_ocr_dataset(data)
-                            if data["datasetType"] == dataset_type_asr:
-                                a_service.load_asr_dataset(data)
-                            if data["datasetType"] == dataset_type_monolingual:
-                                m_service.load_monolingual_dataset(data)
+                        log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
+                        if 'eof' in data.keys():
+                            if data["eof"]:
+                                pt.end_processing(data)
+                                break
+                        if data["datasetType"] == dataset_type_parallel:
+                            p_service.load_parallel_dataset(data)
+                        if data["datasetType"] == dataset_type_ocr:
+                            o_service.load_ocr_dataset(data)
+                        if data["datasetType"] == dataset_type_asr:
+                            a_service.load_asr_dataset(data)
+                        if data["datasetType"] == dataset_type_monolingual:
+                            m_service.load_monolingual_dataset(data)
                         else:
                             if data["eof"]:
                                 pt.end_processing(data)

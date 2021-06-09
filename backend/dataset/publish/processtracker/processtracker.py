@@ -23,7 +23,7 @@ class ProcessTracker:
                 if task_event["status"] == pt_inprogress_status:
                     return self.update_task_event(data, task_event)
                 else:
-                    log.error(f'Record receieved for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
+                    log.error(f'Record received for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
                     return
             task_event = {"id": str(uuid.uuid4()), "tool": pt_publish_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
                           "startTime": str(datetime.now()), "lastModified": str(datetime.now())}
@@ -40,6 +40,7 @@ class ProcessTracker:
             return
 
     def end_processing(self, data):
+        log.error(f'EOF received for SRN -- {data["serviceRequestNumber"]}')
         task_event = self.search_task_event(data, pt_publish_tool)
         if task_event:
             task_event["status"] = pt_success_status
@@ -48,6 +49,7 @@ class ProcessTracker:
             repo.update(task_event)
         else:
             log.error(f'EOF received for a non existent SRN -- {data["serviceRequestNumber"]}')
+        log.error(f'Done!')
         return
 
     def update_task_event(self, data, task_event):
