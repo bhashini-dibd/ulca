@@ -175,10 +175,13 @@ class MonolingualService:
                 if count <= 10:
                     size = count
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "sample": result[:size], "dataset": path}
+                pt.task_event_search(op, None)
             else:
                 log.error(f'There was an error while pushing result to S3')
+                error = {"code": "S3_UPLOAD_FAILED", "datasetType": dataset_type_monolingual, "serviceRequestNumber": query["serviceRequestNumber"],
+                                               "message": "There was an error while pushing result to S3"}
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None}
-            #prod.produce(op, search_output_topic, None)
+                pt.task_event_search(op, error)
             log.info(f'Done!')
             return op
         except Exception as e:
