@@ -23,14 +23,14 @@ ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:2701
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
 
-pt_publish_tool = os.environ.get('PT_TOOL_PUBLISH', 'publish')
+pt_publish_tool = os.environ.get('PT_TOOL_PUBLISH', 'validate')
 pt_inprogress_status = os.environ.get('PT_STATUS_INPROGRESS', 'inprogress')
 pt_success_status = os.environ.get('PT_STATUS_SUCCESS', 'successful')
 pt_failed_status = os.environ.get('PT_STATUS_FAILED', 'failed')
 
-dataset_type_parallel = os.environ.get('DATASET_TYPE_PARALLEL_DS', 'parallel-corpus')
-dataset_type_asr = os.environ.get('DATASET_TYPE_ASR_DS', 'asr-corpus')
-dataset_type_ocr = os.environ.get('DATASET_TYPE_OCR_DS', 'ocr-corpus')
-dataset_type_monolingual = os.environ.get('DATASET_TYPE_MONOLINGUAL_DS', 'monolingual-corpus')
+dataset_type_parallel = os.environ.get('DS_TYPE_PARALLEL', 'parallel-corpus')
+dataset_type_asr = os.environ.get('DS_TYPE_ASR', 'asr-corpus')
+dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
+dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 
 
