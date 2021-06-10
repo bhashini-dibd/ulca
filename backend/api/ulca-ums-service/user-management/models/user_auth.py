@@ -22,7 +22,6 @@ class UserAuthenticationModel(object):
 
         try:
             user_keys = UserUtils.get_data_from_keybase(user_email,keys=True)
-            print(user_keys,"kkkkkkkkkkkkkkkkkkkk")
             if "errorID" in user_keys:
                 return user_keys
 

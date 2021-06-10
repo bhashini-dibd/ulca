@@ -28,7 +28,7 @@ class CreateUsers(Resource):
 
         try:
             result = userRepo.create_users(users)
-            if "errorID" in result:
+            if result is not None:
                 log.info("User creation failed | {}".format(str(result)), MODULE_CONTEXT)
                 return result, 400   
             else:
