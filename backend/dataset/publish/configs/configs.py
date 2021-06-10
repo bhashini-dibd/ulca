@@ -31,18 +31,21 @@ if isinstance(no_of_parallel_processes, str):
 sample_size = os.environ.get('ULCA_DATASET_SAMPLE_SIZE', 10)
 if isinstance(sample_size, str):
     sample_size = eval(sample_size)
-shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/app/publish/')
+shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/publish/')
 
 asr_immutable_keys = ["id", "audioFilename", "text", "audioFilePath", "audioHash", "textHash", "datasetType",
                       "sourceLanguage"]
 asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter"]
+
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage",
                            "targetLanguage", "datasetType"]
 parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
+
 ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash",
                       "datasetType", "sourceLanguage"]
-ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "sourceLanguage"]
-mono_immutable_keys = ["id", "text", "textHash", "datasetType"]
+ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter"]
+
+mono_immutable_keys = ["id", "text", "textHash", "datasetType", "sourceLanguage"]
 mono_non_tag_keys = ["id", "text", "submitter"]
 publish_error_code = "3000_XXX"
 
