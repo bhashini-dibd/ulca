@@ -27,7 +27,7 @@ class UserAuthenticationModel(object):
 
             collections = get_db()[USR_MONGO_COLLECTION]
             #fetching user data
-            user_details = collections.find({"email": user_email, "isActive": True},{"_id":0,"password":0})
+            user_details = collections.find({"email": user_email, "isActive": True,"isVerified":True},{"_id":0,"password":0})
             if user_details.count() == 0:
                 return post_error("Data not valid","Error on fetching user details")
             for user in user_details:
@@ -38,7 +38,7 @@ class UserAuthenticationModel(object):
             #     new_keys = userutils.renew_api_keys(user_email)
                 
         except Exception as e:
-            log.exception("Database connection exception ",  MODULE_CONTEXT, e)
+            log.exception("Database connection exception | {} ".format(str(e)))
             return post_error("Database  exception", "An error occurred while processing on the database:{}".format(str(e)), None)
 
 
@@ -77,13 +77,13 @@ class UserAuthenticationModel(object):
                 return result
             email = result["email"]
             collections = get_db()[USR_MONGO_COLLECTION] 
-            user = collections.find({"email":email},{"password":0,"_id":0})
+            user = collections.find({"email":email,"isVerified":True,"isActive":True},{"password":0,"_id":0})
             for record in user:
                 record["privateKey"] = result["privateKey"]
                 return normalize_bson_to_json(record)
 
         except Exception as e:
-            log.exception("Database connection exception ",  MODULE_CONTEXT, e)
+            log.exception("Database connection exception | {}".format(str(e)))
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)
 
   
@@ -151,7 +151,7 @@ class UserAuthenticationModel(object):
             #checking for pre-verified records on the same username 
             primary_record= collections.find({"email": user_email,"isVerified": True})
             if primary_record.count()!=0:
-                log.info("{} is already a verified user".format(user_email), MODULE_CONTEXT) 
+                log.info("{} is already a verified user".format(user_email)) 
                 return post_error("Not allowed","This user already have a verified account",None)
             #fetching user record matching userName and userID
             record = collections.find({"email": user_email,"userID":user_id})
@@ -161,15 +161,15 @@ class UserAuthenticationModel(object):
                     name  = user["firstName"]
                     #checking whether verfication link had expired or not
                     if (datetime.utcnow() - register_time) > timedelta(hours=verify_mail_expiry):
-                        log.info("Verification link expired for {}".format(user_email), MODULE_CONTEXT)
+                        log.exception("Verification link expired for {}".format(user_email))
                         return post_error("Data Not valid","Verification link expired",None)
 
                     results = collections.update(user, {"$set": {"isVerified": True,"isActive": True,"activatedTime": datetime.utcnow()}})
                     if 'writeError' in list(results.keys()):
                             return post_error("Database error", "writeError whie updating record", None)
-                    log.info("Record updated for {}, activation & verification statuses are set to True".format(user_email), MODULE_CONTEXT)
+                    log.info("Record updated for {}, activation & verification statuses are set to True".format(user_email))
             else:
-                log.info("No proper database records found for activation of {}".format(user_email), MODULE_CONTEXT)
+                log.exception("No proper database records found for activation of {}".format(user_email))
                 return post_error("Data Not valid","No records matching the given parameters ",None) 
 
             #Generating API Keys
@@ -181,7 +181,7 @@ class UserAuthenticationModel(object):
                 return user_notified
             return new_keys
         except Exception as e:
-            log.exception("Database  exception ",  MODULE_CONTEXT, e)
+            log.exception("Database  exception ")
             return post_error("Database exception", "Exception:{}".format(str(e)), None)
 
         

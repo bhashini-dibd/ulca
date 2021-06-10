@@ -115,7 +115,7 @@ class UserUtils:
                 return post_error("Data not valid", "Email already exists. Please use a different Email", None)
             log.info("Email is not already taken, validated")
         except Exception as e:
-            log.exception("Database connection exception ",  MODULE_CONTEXT, e)
+            log.exception("Database connection exception |{}".format(str(e)))
             return post_error("Database exception", "An error occurred while working on the database:{}".format(str(e)), None)
 
     @staticmethod
@@ -161,8 +161,8 @@ class UserUtils:
             return verification_payload
 
         except Exception as e:
-            log.exception("Database exception ",  MODULE_CONTEXT, e)
-            return post_error("Database connection exception", "An error occurred while connecting to redis store", None)
+            log.exception("Database exception | {}".format(str(e)))
+            return post_error("Database connection exception", "An error occurred while connecting to database :{}".format(str(e)), None)
 
 
     @staticmethod
@@ -254,19 +254,22 @@ class UserUtils:
             collections = get_db()[USR_KEY_MONGO_COLLECTION] 
             if keys:
                 result = collections.find({"email":value},{"email":1,"publicKey":1,"privateKey":1,"_id":0})
+                if result.count() ==0:
+                    log.info("No keys found matching the request")
+                    return post_error("Invalid data", "Data received on request is not valid", None)
                 for key in result:
                     return key  
             if email:
                 result = collections.find({"publicKey":value},{"email":1,"privateKey":1,"_id":0})
+                if result.count() ==0:
+                    log.info("No data found matching the request")
+                    return post_error("Invalid key", "key received is invalid", None)
                 for key in result:
                     return key
 
         except Exception as e:
-            log.exception("db connection exception ",  MODULE_CONTEXT, e)
+            log.exception("db connection exception | {}".format(str(e)))
             return post_error("Database connection exception", "An error occurred while connecting to the database", None)
-
-
-
         
 
     @staticmethod
@@ -344,9 +347,9 @@ class UserUtils:
         if user.get("roles") != None:
             rolecodes = user["roles"]
             if UserUtils.validate_rolecodes(rolecodes) == False:
-                log.info("Role validation failed")
+                og.info("Role validation failed")
                 return post_error("Invalid data", "Rolecode given is not valid", None) 
-        log.info("Role/s validated")
+            log.info("Role/s validated")
 
         if user.get("phoneNo") != None:
             phone_validity = UserUtils.validate_phone(user["phoneNo"])          
@@ -494,8 +497,7 @@ class UserUtils:
                 mail.send(msg)
                 log.info("Generated email notification for user registration ")
         except Exception as e:
-            log.exception("Exception while generating email notification for user registration: " +
-                          str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while generating email notification for user registration | {}".format(str(e)))
             return post_error("Exception while generating email notification for user registration","Exception occurred:{}".format(str(e)),None)
     
     @staticmethod
@@ -510,8 +512,7 @@ class UserUtils:
             mail.send(msg)
             log.info("Generated email notification for user confirmation")
         except Exception as e:
-            log.exception("Exception while generating email notification for user registration: " +
-                          str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while generating email notification for user registration | {}".format(str(e)))
             return post_error("Exception while generating email notification for user registration","Exception occurred:{}".format(str(e)),None)
 
 
@@ -526,8 +527,7 @@ class UserUtils:
             mail.send(msg)
             log.info("Generated email notification for {} on reset password".format(email), MODULE_CONTEXT)
         except Exception as e:
-            log.exception("Exception while generating reset password notification: " +
-                          str(e), MODULE_CONTEXT, e)
+            llog.exception("Exception while generating email notification for user registration | {}".format(str(e)))
             return post_error("Exception while generating reset password notification","Exception occurred:{}".format(str(e)),None)
             
     @staticmethod

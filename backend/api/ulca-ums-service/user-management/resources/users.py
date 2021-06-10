@@ -22,22 +22,21 @@ class CreateUsers(Resource):
         for i,user in enumerate(users):
             validity = UserUtils.validate_user_input_creation(user)
             if validity is not None:
-                log.info("User validation failed for user{}".format(i+1), MODULE_CONTEXT)
+                log.info("User validation failed for user{}".format(i+1))
                 return validity, 400
         log.info("Users are validated")
 
         try:
             result = userRepo.create_users(users)
             if result is not None:
-                log.info("User creation failed | {}".format(str(result)), MODULE_CONTEXT)
+                log.info("User creation failed | {}".format(str(result)))
                 return result, 400   
             else:
                 res = CustomResponse(Status.SUCCESS_USR_CREATION.value, None)
                 log.info("User creation successful")
                 return res.getresjson(), 200
         except Exception as e:
-            log.exception("Exception while creating user records: " +
-                          str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while creating user records: {}".format(str(e)))
             return post_error("Exception occurred", "Exception while performing user creation:{}".format(str(e)), None), 400
 
 

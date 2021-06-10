@@ -23,23 +23,23 @@ class UserLogin(Resource):
         
         email = credentials["email"]
         password = credentials["password"]
-        log.info("Request for login from {}".format(email),MODULE_CONTEXT)
+        log.info("Request for login from {}".format(email))
 
         validity=UserUtils.validate_user_login_input(email, password)
         if validity is not None:
-            log.info("Login credentials check failed for {}".format(email),MODULE_CONTEXT)
+            log.exception("Login credentials check failed for {}".format(email))
             return validity, 400
-        log.info("Login credentials check passed for {}".format(email),MODULE_CONTEXT)
+        log.info("Login credentials check passed for {}".format(email))
         try:
             result = authRepo.user_login(email, password)
             if "errorID" in result:
-                log.info("Login failed for {}".format(email),MODULE_CONTEXT)
+                log.exception("Login failed for {}".format(email))
                 return result, 400
-            log.info("Login successful for {}".format(email),MODULE_CONTEXT)
+            log.info("Login successful for {}".format(email))
             res = CustomResponse(Status.SUCCESS_USR_LOGIN.value, result)
             return res.getresjson(), 200
         except Exception as e:
-            log.exception("Exception while  user login: " + str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while  user login | {}".format(str(e)))
             return post_error("Exception occurred", "Exception while performing user login", None), 400            
 
 
@@ -79,14 +79,14 @@ class ApiKeySearch(Resource):
         try:
             result = authRepo.token_search(key)
             if "errorID" in result:
-                log.info("api-key search request failed")
+                log.exception("api-key search request failed")
                 return result, 400
             else:
                 log.info("api-key search request successsful")
                 res = CustomResponse(Status.SUCCESS_USR_TOKEN.value, result)
             return res.getresjson(), 200
         except Exception as e:
-            log.exception("Exception while api-key search: " + str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while api-key search | {}".format(str(e)))
             return post_error("Exception occurred", "Exception while api-key search", None), 400
             
 
@@ -173,20 +173,20 @@ class VerifyUser(Resource):
         user_email = body["email"]
         user_id = body["userID"]
 
-        log.info("Request received for user verification of {}".format(user_email),MODULE_CONTEXT)
+        log.info("Request received for user verification of {}".format(user_email))
         try:
             result = authRepo.verify_user(user_email,user_id)
             if "errorID" in result:
-                log.info("User verification for {} failed".format(user_email),MODULE_CONTEXT)
+                log.exception("User verification for {} failed".format(user_email))
                 return result, 400
             else:
-                log.info("User verification for {} successful".format(user_email),MODULE_CONTEXT)
+                log.info("User verification for {} successful".format(user_email))
                 res = CustomResponse(
                         Status.SUCCESS_ACTIVATE_USR.value, result)
                 return res.getresjson(), 200        
         except Exception as e:
-            log.exception("Exception while user verification: " + str(e), MODULE_CONTEXT, e)
-            return post_error("Exception occurred", "Exception while Activate user api call:{}".format(str(e)), None), 400
+            log.exception("Exception while user verification | {} ".format(str(e)))
+            return post_error("Exception occurred", "Exception while verification user api call:{}".format(str(e)), None), 400
 
 
 class ActivateDeactivateUser(Resource):

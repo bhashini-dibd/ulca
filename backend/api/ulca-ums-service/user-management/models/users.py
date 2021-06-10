@@ -26,8 +26,7 @@ class UserManagementModel(object):
             if user_notified is not None:
                 return user_notified
         except Exception as e:
-            log.exception("Database connection exception " +
-                          str(e),  MODULE_CONTEXT, e)
+            log.exception("Database connection exception {}".format(str(e)))
             return post_error("Database  exception", "An error occurred while processing on the db :{}".format(str(e)), None)
 
 
