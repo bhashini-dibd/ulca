@@ -56,7 +56,6 @@ class ProcessTracker:
         return
 
     def update_task_event(self, data, task_event):
-        task_event = task_event[0]
         processed = task_event["details"]["processedCount"]
         if data["status"] == "SUCCESS":
             for value in processed:
