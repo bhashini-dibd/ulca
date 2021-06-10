@@ -64,6 +64,13 @@ public class DatasetIngestService {
 				JsonToken jsonToken = jsonParser.nextToken();
 				int numberOfRecords = 0;
 				JSONObject vModel = new JSONObject();
+				vModel.put("record", record);
+				vModel.put("datasetId", datasetId);
+				vModel.put("datasetType", "parallel-corpus");
+				vModel.put("serviceRequestNumber", serviceRequestNumber);
+				vModel.put("userId", "userId");
+				vModel.put("userMode", "real");
+
 				while (jsonToken != JsonToken.END_ARRAY) {
 					String fieldname = jsonParser.getCurrentName();
 					if (SOURCE_TEXT.equals(fieldname)) {
@@ -91,31 +98,22 @@ public class DatasetIngestService {
 							record.remove("languages");
 						}
 
-						vModel.put("record", record);
-						vModel.put("datasetId", datasetId);
-						vModel.put("datasetType", "parallel-corpus");
-						vModel.put("serviceRequestNumber", serviceRequestNumber);
-						vModel.put("userId", "userId");
-						vModel.put("userMode", "real");
 						vModel.put("currentRecordIndex", numberOfRecords);
-
-						jsonToken = jsonParser.nextToken();
-
-						if (jsonToken.toString().equals("END_ARRAY")) {
-							vModel.put("eof", true);
-
-							log.info("Eof reached");
-							jsonParser.close();
-
-						}
 
 						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 
-					} else {
-						jsonToken = jsonParser.nextToken();
 					}
+					jsonToken = jsonParser.nextToken();
 
 				}
+
+				vModel.put("eof", true);
+				vModel.remove("record");
+				vModel.remove("currentRecordIndex");
+
+				log.info("Eof reached");
+				jsonParser.close();
+				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 
 			} catch (JsonProcessingException | JSONException e) {
 				// TODO Auto-generated catch block
