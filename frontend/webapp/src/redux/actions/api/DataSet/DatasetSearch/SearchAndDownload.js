@@ -7,7 +7,8 @@ export default class SearchAndDownload extends API {
     constructor(timeout = 200000) {
         super("GET", timeout, false);
         this.type = C.GET_SEARCH_OPTIONS;
-        this.endpoint = `${CONFIGS.API_URL}${ENDPOINTS.getSearchOptions}`;
+        this.endpoint= "https://jsonplaceholder.typicode.com/posts"
+        //this.endpoint = `${CONFIGS.API_URL}${ENDPOINTS.getSearchOptions}`;
     }
 
     toString() {
