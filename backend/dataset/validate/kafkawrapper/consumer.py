@@ -9,7 +9,7 @@ from service.asr import ASRValidate
 from service.ocr import OCRValidate
 from service.monolingual import MonolingualValidate
 
-from configs.configs import kafka_bootstrap_server_host, validate_input_topic, validate_consumer_grp
+from configs.configs import kafka_bootstrap_server_host, validate_input_topic, validate_consumer_grp, validate_output_topic
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from kafka import KafkaConsumer
 from processtracker.processtracker import ProcessTracker
