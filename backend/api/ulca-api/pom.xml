@@ -81,6 +81,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>ulca-api</finalName>
 	</build>
 
 </project>

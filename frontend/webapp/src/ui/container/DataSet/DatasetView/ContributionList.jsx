@@ -10,6 +10,7 @@ import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetVie
 import Dialog from "../../../components/common/Dialog"
 import {Cached, DeleteOutline, VerticalAlignTop} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
+import { useParams } from "react-router";
 
 const ContributionList = (props) => {
 
@@ -19,9 +20,12 @@ const ContributionList = (props) => {
         const [open, setOpen]         = useState(false)
         const [message, setMessage]   = useState("Do you want to delete")
         const [title, setTitle]       = useState("Delete")
-  
+        const {added}                 = useParams()
+        const data                    = myContributionReport.responseData
+
+        
         useEffect(()                  => {
-                myContributionReport.responseData.length === 0  && MyContributionListApi()
+                (myContributionReport.responseData.length === 0 || myContributionReport.refreshStatus || added) && MyContributionListApi()
         }, []);
   
         const  MyContributionListApi  = () =>{
@@ -63,7 +67,7 @@ const ContributionList = (props) => {
                 return (
                         <div className={classes.headerButtons}>
                                 <Typography variant="h5" >My Contribution</Typography>
-                                <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                                <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
                          </div>
                 )
         }
@@ -76,7 +80,7 @@ const ContributionList = (props) => {
 
         const renderStatus = (id,value) => {
                 if(value === "Inprogress"){
-                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${id}}`)}}> In-progress </Link>
+                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${id}}`)}}> In-progress </Link>
                 }
                 else{
                         return <span
@@ -101,8 +105,10 @@ const ContributionList = (props) => {
 
         const handleRowClick = ( rowMeta) => {
                 if(rowMeta.colIndex !== 6){
-                        const value = myContributionReport.responseData[rowMeta.rowIndex].sr_no;
-                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}}`)
+                        debugger
+                        const value = data[rowMeta.rowIndex].submitRefNumber;
+                        const status = data[rowMeta.rowIndex].status.toLowerCase();
+                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${value}}`)
                 }
         };
 
@@ -110,10 +116,11 @@ const ContributionList = (props) => {
 
         }
 
+
     
         const columns = [
                 {
-                name: "sr_no",
+                name: "submitRefNumber",
                 label: "s id",
                 options: {
                         filter  : false,
@@ -122,7 +129,7 @@ const ContributionList = (props) => {
                         },
                 },
                 {
-                name    : "sr_no",
+                name    : "submitRefNumber",
                 label   : "SR No.",
                 options : {
                                 filter  : false,
@@ -130,7 +137,7 @@ const ContributionList = (props) => {
                         },
                 },
                 {
-                name    : "Dataset",
+                name    : "datasetName",
                 label   : "Dataset Name",
                 options: {
                         filter  : false,
@@ -138,7 +145,7 @@ const ContributionList = (props) => {
                         },
                 },
                 {
-                name    : "Submitted_on",
+                name    : "submittedOn",
                 label   : "Submitted On",
                 options : {
                                 filter  : false,
@@ -147,7 +154,7 @@ const ContributionList = (props) => {
                         },
                 },
                 {
-                name    : "Status",
+                name    : "status",
                 label   : "Status",
                 options : {
                         filter  : false,
@@ -209,6 +216,7 @@ const ContributionList = (props) => {
         };
 
         const { classes } = props;
+        console.log(data)
         return (
                 <div className = {classes.divStyle}>
                         <div className = {classes.breadcrum}>
@@ -222,7 +230,7 @@ const ContributionList = (props) => {
                         <MuiThemeProvider theme={getMuiTheme()}>  
                                 <MUIDataTable
                                         title           =       {`My Contribution`}
-                                        data            =       {myContributionReport.responseData}
+                                        data            =       {data}
                                         columns         =       {columns}
                                         options         =       {options}
                                 />

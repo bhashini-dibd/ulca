@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.util.UnzipUtility;
 
 import io.swagger.model.ParallelDatasetParamsSchema;
@@ -31,7 +33,12 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	DatasetIngestService datasetIngestService;
 	
+	@Autowired
+	ProcessTrackerDao processTrackerDao;
 
+	@Value(value = "${FILE_DOWNLOAD_FOLDER}")
+    private String downlaodFolder;
+	
 	@KafkaListener(groupId = "file-download-1", topics = "file-download", containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
@@ -40,7 +47,7 @@ public class KafkaFileDownloadConsumer {
 		log.info(file.getFileUrl());
 		log.info(file.getServiceRequestNumber());
 
-		String downlaodFolder = "/tmp/saroj";
+		
 
 		try {
 			String filePath = downloadUsingNIO(file.getFileUrl(), downlaodFolder);

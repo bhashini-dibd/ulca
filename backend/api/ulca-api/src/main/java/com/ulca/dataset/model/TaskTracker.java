@@ -1,11 +1,16 @@
 package com.ulca.dataset.model;
 
+import java.util.Date;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -17,7 +22,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-08T12:36:29.236Z[GMT]")
 
-
+@Document(collection = "taskTracker")
 public class TaskTracker   {
   @JsonProperty("serviceRequestNumber")
   private String serviceRequestNumber = null;
@@ -104,13 +109,16 @@ public class TaskTracker   {
   private Object details = null;
 
   @JsonProperty("startTime")
-  private BigDecimal startTime = null;
+  @DateTimeFormat(iso=ISO.DATE_TIME)
+  private Date startTime = null;
 
   @JsonProperty("endTime")
-  private BigDecimal endTime = null;
+  @DateTimeFormat(iso=ISO.DATE_TIME)
+  private Date endTime = null;
 
   @JsonProperty("lastModified")
-  private BigDecimal lastModified = null;
+  @DateTimeFormat(iso=ISO.DATE_TIME)
+  private Date lastModified = null;
 
   @JsonProperty("error")
   private Error error = null;
@@ -191,7 +199,7 @@ public class TaskTracker   {
     this.details = details;
   }
 
-  public TaskTracker startTime(BigDecimal startTime) {
+  public TaskTracker startTime(Date startTime) {
     this.startTime = startTime;
     return this;
   }
@@ -203,15 +211,16 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the start of process")
   
     @Valid
-    public BigDecimal getStartTime() {
+    
+    public Date getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(BigDecimal startTime) {
+  public void setStartTime(Date startTime) {
     this.startTime = startTime;
   }
 
-  public TaskTracker endTime(BigDecimal endTime) {
+  public TaskTracker endTime(Date endTime) {
     this.endTime = endTime;
     return this;
   }
@@ -223,15 +232,15 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public BigDecimal getEndTime() {
+    public Date getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(BigDecimal endTime) {
+  public void setEndTime(Date endTime) {
     this.endTime = endTime;
   }
 
-  public TaskTracker lastModified(BigDecimal lastModified) {
+  public TaskTracker lastModified(Date lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -243,11 +252,11 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public BigDecimal getLastModified() {
+    public Date getLastModified() {
     return lastModified;
   }
 
-  public void setLastModified(BigDecimal lastModified) {
+  public void setLastModified(Date lastModified) {
     this.lastModified = lastModified;
   }
 

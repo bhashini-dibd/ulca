@@ -49,9 +49,10 @@ export default function App() {
             path={`${process.env.PUBLIC_URL}/user/:page`}
             component={Login}
           />
+          
           <Route exact path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard} />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/dataset-status/:id`}
+            path={`${process.env.PUBLIC_URL}/dataset-status/:status/:id`}
             title={"Submit Dataset"}
             component={DetailedStatus}
             authenticate={authenticateUser}
@@ -59,7 +60,7 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/my-contribution`}
+            path={`${process.env.PUBLIC_URL}/my-contribution/:added?`}
             title={"My Contribution"}
             authenticate={authenticateUser}
             component={ContributionList}

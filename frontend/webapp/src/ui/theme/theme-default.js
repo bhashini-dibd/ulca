@@ -2,7 +2,7 @@ import { createMuiTheme } from "@material-ui/core/styles";
 
 const themeDefault = createMuiTheme({
   typography: {
-    fontFamily: '"Lato", "Semibold"',
+    fontFamily: '"Lato"',
     font: "normal normal normal 14px/17px Lato",
     letterSpacing: "0px",
     fontSize: 13,
@@ -43,7 +43,7 @@ themeDefault.typography.h4 = {
   fontSize: "1.875rem",
   fontWeight: "500",
 
-  fontFamily: '"Poppins", Regular',
+  fontFamily: '"Poppins","lato" ,sans-serif',
   textAlign: "Left",
   "@media (min-width:600px)": {},
   [themeDefault.breakpoints.up("md")]: {},

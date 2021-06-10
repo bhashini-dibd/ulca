@@ -25,7 +25,7 @@ const DataSet = (theme) => ({
         paddingRight: '2vw'
     },
 
-    typography:{fontSize:"1.1rem"},
+    // typography:{fontSize:"1.1rem"},
 
     updateBtn: {
         

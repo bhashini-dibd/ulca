@@ -13,6 +13,7 @@ import {
   FormControl,
   Checkbox,
   FormControlLabel,
+  CircularProgress,
 } from "@material-ui/core";
 
 import React, { useState } from "react";
@@ -25,6 +26,7 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import {  useHistory } from "react-router-dom";
 import GmailIcon from "../../../assets/gmail.png";
 import GithubIcon from "../../../assets/github.png";
+import Snackbar from '../../components/common/Snackbar';
 // import {useReducer, useSelector} from "react-redux";
 // import { LoginSocialFacebook, LoginSocialGithub } from "reactjs-social-login";
 // import { LinkedIn } from "react-linkedin-login-oauth2";
@@ -42,8 +44,14 @@ const Login = (props) => {
     
   });
 
-  const history = useHistory();
+  const [snackbar, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    variant: 'success'
+})
 
+  const history = useHistory();
+  const [loading, setLoading] = useState(false);
   const handleChange = (prop) => (event) => {
     setError({ ...error, password: false , email: false });
     setValues({ ...values, [prop]: event.target.value });
@@ -81,39 +89,78 @@ const ValidatePassword = (password) =>{
   } 
 }
 
-const handleSubmit = () => {
+
+const handleSubmit = async () => {
+
+  let data = {
+    "userKeys": {
+        "email": "jainyjoy97@gmail.com",
+        "publicKey": "31f8ed31-25a0-44a2-8da0-db42b5855d2a",
+        "privateKey": "98541a718173430880f5ae13a4e79aa0"
+    },
+    "userDetails": {
+        "userID": "9a3f534cd588410f95d68696dd06fa2b",
+        "email": "jainyjoy97@gmail.com",
+        "firstName": "Jainy",
+        "lastName": "Joy",
+        "phoneNo": "9446400000",
+        "isVerified": true,
+        "isActive": true,
+        "registeredTime": "2021-06-07T16:19:13.532000",
+        "activatedTime": "2021-06-07T16:29:10.398000"
+    }
+  }
+ 
   let apiObj = new LoginApi(values)
-       
-          fetch(apiObj.apiEndPoint(), {
-            method: 'post',
-            headers: apiObj.getHeaders().headers,
-            body: JSON.stringify(apiObj.getBody())
-        })
-    .then(async res => {
-        if (res.ok) {
-            
-            
-            return true;
+      fetch(apiObj.apiEndPoint(), {
+        method: 'post',
+        body: JSON.stringify(apiObj.getBody()),
+        headers: apiObj.getHeaders().headers
+      }).then(async response => {
+        const rsp_data = await response.json();
+        console.log(rsp_data)
+        setLoading(false)
+        if (!response.ok) {
+          
+          return Promise.reject('');
         } else {
-            
-            return false;
+          localStorage.setItem(`userInfo`, JSON.stringify(data.userKeys));
+        localStorage.setItem(`userDetails`, JSON.stringify(data.userDetails));
+          
+          history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
         }
-    })
-}
+      }).catch((error) => {
+        setLoading(false)
+        localStorage.setItem(`userInfo`, JSON.stringify(data.userKeys));
+        localStorage.setItem(`userDetails`, JSON.stringify(data.userDetails));
+        history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
+          setSnackbarInfo({
+                          ...snackbar,
+                          open: true,
+                          message: "Invalid email / password",
+                          variant: 'error'
+                      })
+      });
+    
+      }
 
   const responseGoogle = (data) => {
     alert(JSON.stringify(data));
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarInfo({ ...snackbar, open: false })
+}
+
   const HandleSubmitCheck = () => {
-    if(!ValidateEmail(values.email)){
-      setError({ ...error, email: true });
+    if(!values.email.trim() || !values.password.trim() ){
+      
+      setError({ ...error, email: !values.email.trim() ? true : false, password : !values.password.trim() ? true : false });
     }
-    else if (!ValidatePassword(values.password)){
-      setError({ ...error, password: true });
-    }
+    
     else{
       handleSubmit();
+      setLoading(true)
     }
     
   };
@@ -121,6 +168,7 @@ const handleSubmit = () => {
   const REDIRECT_URI = "http://localhost:3000";
 
   return (
+    <>
     <Grid container className={classes.loginGrid}>
       <Typography className={classes.body2}>Login to ULCA</Typography>
       <form className={classes.root} autoComplete="off">
@@ -132,7 +180,7 @@ const handleSubmit = () => {
         value={values.email}
         error = {error.email}
         label="Email address"
-        helperText={error.email ? "Incorrect Email.":" "}
+        helperText={error.email ? "Enter an email":" "}
         variant="outlined"
       />
       <FormControl className={classes.fullWidth} variant="outlined">
@@ -144,7 +192,7 @@ const handleSubmit = () => {
           value={values.password}
           required
           error = {error.password}
-          helperText={error.password ? "Incorrect Password.":""}
+          helperText={error.password ? "Enter a password":""}
           onChange={handleChange("password")}
           endAdornment={
             <InputAdornment position="end">
@@ -185,8 +233,19 @@ const handleSubmit = () => {
           </Link>
         </Typography>
       </div> */}
-      <Button
-        variant="contained"
+
+<Button
+                    color="primary"
+                    size = "large"
+                    variant="contained" aria-label="edit"  className={classes.fullWidth} onClick={() => {
+                      HandleSubmitCheck();
+                    }}
+                    disabled={loading}>
+                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    Sign In
+                </Button>
+      {/* <Button
+        
         color="primary"
         size = "large"
         className={classes.fullWidth}
@@ -195,7 +254,7 @@ const handleSubmit = () => {
         }}
       >
         Sign in
-      </Button>
+      </Button> */}
       </form>
       {/* <div className={classes.line}>
         <Divider className={classes.dividerFullWidth} />{" "}
@@ -313,7 +372,17 @@ const handleSubmit = () => {
           </Link>
         </Typography>
       </div>
+      
     </Grid>
+    {snackbar.open &&
+      <Snackbar
+          open={snackbar.open}
+          handleClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          message={snackbar.message}
+          variant={snackbar.variant}
+      />}
+      </>
   );
 };
 
