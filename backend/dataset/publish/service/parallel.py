@@ -263,8 +263,8 @@ class ParallelService:
                 if 'countOfTranslations' in query.keys():
                     db_query["countOfTranslations"] = query["countOfTranslations"]
             data = repo.search(db_query, off, lim)
-            result, query, count = data[0], data[1], data[2]
-            log.info(f'Result --- Count: {count}, Query: {query}')
+            result, pipeline, count = data[0], data[1], data[2]
+            log.info(f'Result --- Count: {count}, Query: {pipeline}')
             path = utils.push_result_to_s3(result, query["serviceRequestNumber"])
             if path:
                 size = sample_size if count > sample_size else count
