@@ -146,6 +146,7 @@ let apiObj = new SubmitDatasetApi(dataset)
     }
 
     const validURL = (str) => {
+        debugger
         var pattern = new RegExp('^((ft|htt)ps?:\\/\\/)?' + // protocol
             '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name and extension
             '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
@@ -158,16 +159,13 @@ let apiObj = new SubmitDatasetApi(dataset)
 
     const handleSubmitDataset = (e) => {
         debugger
-        if(dataset.datasetName.trim() === ""){
-            setError({...error, name:"‘Name cannot be empty"})
+        if(dataset.datasetName.trim() === "" || dataset.url.trim() === ""){
+            setError({...error, name: !dataset.datasetName.trim() ? "Name cannot be empty":"",url:!dataset.url.trim() ?"URL cannot be empty" :"" })
             
         }
         else if(dataset.datasetName.length > 256) {
             setError({...error, name:"Max 256 characters allowed"})
             
-        }
-        else if(dataset.url.trim() === ""){
-            setError({...error, url:"‘URL cannot be empty"})
         }
         else if(!validURL(dataset.url)){
             setError({...error, url:"‘Invalid URL"})
