@@ -31,7 +31,7 @@ public class KafkaFileDwonloadConsumerConfig {
 		configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
 		configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-		configs.put(ConsumerConfig.GROUP_ID_CONFIG, "file-download-1");
+		configs.put(ConsumerConfig.GROUP_ID_CONFIG, "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}");
 		return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(FileDownload.class));
 	}
 
