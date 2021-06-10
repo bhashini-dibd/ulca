@@ -39,8 +39,8 @@ const Header = (props) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [logout, setAnchorElLogout] = useState(null)
   const history = useHistory();
-  
-  const {firstName,lastName} = JSON.parse(localStorage.getItem('userProfile')).userDetails
+ 
+  const {firstName,lastName} = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : {firstName:"",lastName:""}
   const handleClose = (e) => {
     setAnchorEl(null)
     setAnchorElLogout(null)
@@ -52,11 +52,6 @@ const Header = (props) => {
 
   const handleLogoutOption = (e) => {
     setAnchorElLogout(e.currentTarget)
-  }
-
-  const handleLogOut = () => {
-    localStorage.clear();
-    handleMenuItemClick('/user/login')
   }
 
   const handleMenuItemClick = (url) => {
@@ -180,7 +175,9 @@ const Header = (props) => {
                   >
                     <MenuItem
                       className={classes.styledMenu}
-                      onClick={() => handleLogOut()}
+                      onClick={() => {
+                        localStorage.removeItem('userInfo')
+                        handleMenuItemClick('/user/login')}}
                     >
                       Log out
                     </MenuItem>
