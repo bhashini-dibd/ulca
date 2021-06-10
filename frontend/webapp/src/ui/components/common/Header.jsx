@@ -133,9 +133,9 @@ const Header = (props) => {
                     >
                       Search & Download Records
                     </MenuItem>
-                    <MenuItem className={classes.styledMenu}>
+                    {/* <MenuItem className={classes.styledMenu}>
                       Explore Readymade Datasets
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem className={classes.styledMenu}
                       onClick={() => handleMenuItemClick('/submit-dataset/upload')}
                     >
@@ -163,7 +163,7 @@ const Header = (props) => {
               authenticate() ?
                 <div className={classes.profile}>
                   <Button onClick={(e) => handleLogoutOption(e)} className={classes.menuBtn} variant="text">
-                    <Avatar >{`${firstName[0]}${lastName[0]}`}</Avatar>
+                    <Avatar >{`${firstName[0].toUpperCase()}${lastName[0].toUpperCase()}`}</Avatar>
                     <p className={classes.profileName}>{`${firstName} ${lastName}`}</p>
                     <DownIcon />
                   </Button>
