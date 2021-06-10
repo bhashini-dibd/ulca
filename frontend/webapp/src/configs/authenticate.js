@@ -1,10 +1,9 @@
 const aunthenticate = () => {
-    // let token = localStorage.getItem('token')
-    // if (token) {
-    //     return true;
-    // }
-    // return false;
-    return true;
+    let userInfo = JSON.parse(localStorage.getItem("userInfo"))
+    if (userInfo && userInfo.privateKey ) {
+        return true;
+    }
+    return false;
 }
 
 export default aunthenticate;
