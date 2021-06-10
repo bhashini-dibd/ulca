@@ -14,8 +14,10 @@ import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
 import BreadCrum from '../../../components/common/Breadcrum';
 import UrlConfig from '../../../../configs/internalurlmapping';
-
-import { useState } from 'react';
+import SearchAndDownload from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
+import { useDispatch, useSelector } from "react-redux";
+import APITransport from "../../../../redux/actions/apitransport/apitransport";
+import { useState, useEffect } from 'react';
 import DownloadDatasetRecords from "./DownloadDatasetRecords";
 import RequestNumberCreation from "./RequestNumberCreation";
 import { useHistory, useParams } from 'react-router';
@@ -39,6 +41,15 @@ const SearchAndDownloadRecords = (props) => {
     const [datasetType, setDatasetType] = useState({
         pd: true
     })
+
+   // const detailedReport = useSelector((state) => state.mySearchReport);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        const userObj = new SearchAndDownload();
+      //  detailedReport.responseData.length === 0 && 
+        dispatch(APITransport(userObj));
+    }, []);
+
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
@@ -114,21 +125,27 @@ const SearchAndDownloadRecords = (props) => {
             source: "",
             target: []
         });
-        setDatasetType({
-            pd: true
-        });
     }
     const handleSubmitBtn = () => {
-        if (languagePair.source && languagePair.target.length)
-            history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)
-        else if (!languagePair.source && !languagePair.target.length) {
-            setSrcError(true)
-            setTgtError(true)
+        if (datasetType.pd) {
+            if (languagePair.source && languagePair.target.length)
+                history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)
+            else if (!languagePair.source && !languagePair.target.length) {
+                setSrcError(true)
+                setTgtError(true)
+            }
+
+            else if (!languagePair.source)
+                setSrcError(true)
+            else if (!languagePair.target.length)
+                setTgtError(true)
         }
-        else if (!languagePair.source)
-            setSrcError(true)
-        else if (!languagePair.target.length)
-            setTgtError(true)
+        else {
+            if (!languagePair.target.length)
+                setTgtError(true)
+            else
+                history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)
+        }
 
 
     }
@@ -238,7 +255,7 @@ const SearchAndDownloadRecords = (props) => {
                             <Checkbox
                                 checked={state.checkedA}
                                 onChange={handleCheckboxChange}
-                                name="checkedB"
+                                name="checkedA"
                                 color="primary"
                             />
                         }
