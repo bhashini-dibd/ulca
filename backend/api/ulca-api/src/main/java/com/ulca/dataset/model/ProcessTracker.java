@@ -23,7 +23,8 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-08T12:36:29.236Z[GMT]")
 
-@Document(collection = "processTracker")
+
+@Document(collection = "ulca-pt-processes")
 public class ProcessTracker {
 
 	@JsonProperty("userId")
