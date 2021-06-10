@@ -503,6 +503,20 @@ components:
           type: number
           description: the alignment score between sourceText and targetText
 
+    CollectionDetailsManualAligned:
+      type: object
+      description: manual aligned collection details. The pair was mapped manually from existing parallel documents. 
+      properties:
+        editingTool:
+          type: string
+          description: name of the editing tool
+          example: 'microsoft excel'
+        editingToolVersion:
+          type: string
+          description: editing tool version
+        contributor:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Contributor'
+
     CollectionDetailsMachineTranslatedPostEdited:
       type: object
       description: machine translated and post edited collection details
@@ -590,12 +604,14 @@ components:
             maxItems: 10
             enum:
               - auto-aligned
+              - manual-aligned
               - machine-translated
               - machine-translated-post-edited
               - manual-translated
         collectionDetails:
           oneOf:
             - $ref: '#/components/schemas/CollectionDetailsAutoAligned'
+            - $ref: '#/components/schemas/CollectionDetailsManualAligned'
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslated'
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslatedPostEdited'
             - $ref: '#/components/schemas/CollectionDetailsManualTranslated'
