@@ -39,7 +39,9 @@ public class KafkaFileDownloadConsumer {
 	@Value(value = "${FILE_DOWNLOAD_FOLDER}")
     private String downlaodFolder;
 	
-	@KafkaListener(groupId = "file-download-1", topics = "file-download", containerFactory = "filedownloadKafkaListenerContainerFactory")
+	
+	
+	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
 		log.info("************ Entry KafkaFileDownloadConsumer :: downloadFile *********");
