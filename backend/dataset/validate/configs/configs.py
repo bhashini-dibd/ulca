@@ -23,7 +23,7 @@ ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:2701
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
 
-pt_publish_tool = os.environ.get('PT_TOOL_PUBLISH', 'validate')
+pt_publish_tool = os.environ.get('PT_TOOL_VALIDATE', 'validate')
 pt_inprogress_status = os.environ.get('PT_STATUS_INPROGRESS', 'inprogress')
 pt_success_status = os.environ.get('PT_STATUS_SUCCESS', 'successful')
 pt_failed_status = os.environ.get('PT_STATUS_FAILED', 'failed')
