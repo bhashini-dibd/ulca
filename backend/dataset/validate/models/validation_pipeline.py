@@ -61,6 +61,8 @@ class ValidationPipeline:
     def initiate_validators(self, filepath, validation_ptr):
         p_list = self.getValidators(filepath)
         for i in p_list:
+            if i["active"] != "True":
+                continue
             test = i["test_name"]
             v_class = vars(validator_package)[test]
             # v_class = getattr(importlib.import_module('validations'), i)

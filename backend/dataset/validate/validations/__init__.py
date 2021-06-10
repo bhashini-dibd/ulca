@@ -1,3 +1,4 @@
+from .text_language_check import TextLanguageCheck
 from .sentence_length_check import SentenceLengthCheck
 from .word_length_check import WordLengthCheck
 from .basic_schema_check import BasicSchemaCheck
