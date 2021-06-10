@@ -20,7 +20,7 @@ if [  $( docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME" ) ]
 then
 docker rm "$JOB_BASE_NAME"
 fi
-docker run -v $(pwd):/opt --name "$JOB_BASE_NAME" maven:3.8.1-jdk-11 "cd /opt && mvn clean package"
+docker run -v $(pwd):/opt --name "$JOB_BASE_NAME" maven:3.8.1-jdk-11 /bin/sh -c "cd /opt && mvn clean package"
 docker rm "$JOB_BASE_NAME"
 commit_id=${BUILD_ID}-$(git rev-parse --short HEAD)
 echo $commit_id> commit_id.txt
