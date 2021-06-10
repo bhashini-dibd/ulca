@@ -11,7 +11,7 @@ const CustomizedSnackbars = (props) => {
         overrides: {
             MuiSnackbar :{
                 anchorOriginTopRight :{
-            marginTop :"50px"
+            
         }
        }
         }

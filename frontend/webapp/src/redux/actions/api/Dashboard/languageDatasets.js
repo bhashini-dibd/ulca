@@ -12,7 +12,7 @@ export default class CreateGlossary extends API {
         this.criterions = criterions
         this.value = value
        
-        this.endpoint = `${CONFIGS.DASHBOARD_URL}${ENDPOINTS.dataSetSearchApi}`;
+        this.endpoint = `${CONFIGS.BASE_DASHBOARD}${ENDPOINTS.dataSetSearchApi}`;
     }
 
     toString() {

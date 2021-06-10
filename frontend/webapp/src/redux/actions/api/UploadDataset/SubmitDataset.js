@@ -10,7 +10,7 @@
    constructor(fileDetails, timeout = 2000) {
      super("POST", timeout, false);
     this.fileDetails = fileDetails;
-     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.datasetSubmit}`;
+     this.endpoint = `${super.apiEndPoint()}${ENDPOINTS.datasetSubmit}`;
    }
  
  
@@ -25,7 +25,8 @@
    getHeaders() {
      this.headers = {
        headers: {
-         "Content-Type": "application/json"
+         "Content-Type": "application/json",
+         "userId": "6491af71d71b4f1d9cff293522260838"
        }
      };
      return this.headers;
