@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Theme from "../../theme/theme-default";
 import { withStyles, Typography, MuiThemeProvider, Paper, Button } from "@material-ui/core";
 import ChartStyles from "../../styles/Dashboard";
@@ -32,14 +32,13 @@ const ChartRender = (props) => {
 									{ value: 'ASR/TTS-dataset', label: 'ASR / TTS Dataset' },
 									{ value: 'OCR-dataset', label: 'OCR Dataset' },
 								];
-
 	useEffect(() => {
 		fetchChartData(selectedOption.value, "languagePairs", [])
 		if (authenticate()) {
 			history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
 		} 
 		else {
-			localStorage.removeItem('token')
+			localStorage.clear()
 			history.push(`${process.env.PUBLIC_URL}/dashboard`)
 
 		}

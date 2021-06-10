@@ -52,6 +52,11 @@ const Header = (props) => {
     setAnchorElLogout(e.currentTarget)
   }
 
+  const handleLogOut = () => {
+    localStorage.clear();
+    handleMenuItemClick('/user/login')
+  }
+
   const handleMenuItemClick = (url) => {
     handleClose();
     history.push(`${process.env.PUBLIC_URL}${url}`)
@@ -117,7 +122,7 @@ const Header = (props) => {
                   >
                     <MenuItem
                       className={classes.styledMenu}
-                      onClick={() => handleMenuItemClick('/my-contribution/false')}
+                      onClick={() => handleMenuItemClick('/my-contribution')}
                     >
                       My Contributon
                     </MenuItem>
@@ -173,7 +178,7 @@ const Header = (props) => {
                   >
                     <MenuItem
                       className={classes.styledMenu}
-                      onClick={() => handleMenuItemClick('/user/login')}
+                      onClick={() => handleLogOut()}
                     >
                       Log out
                     </MenuItem>
