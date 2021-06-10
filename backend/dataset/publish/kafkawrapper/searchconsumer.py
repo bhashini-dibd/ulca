@@ -36,7 +36,7 @@ def search_consume():
         p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-SEARCH-" + "(" + rand_str + ")"
-        log.info(f'{prefix} -- Running..........')
+        log.info(f'{prefix} -- Running.......... {kafka_bootstrap_server_host}')
         while True:
             for msg in consumer:
                 try:

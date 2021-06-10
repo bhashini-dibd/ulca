@@ -42,6 +42,7 @@ class ParallelRepo:
 
     def instantiate(self):
         client = pymongo.MongoClient(db_cluster)
+        log.info(f'{db_cluster} | {db}')
         mongo_instance = client[db][parallel_collection]
         return mongo_instance
 
