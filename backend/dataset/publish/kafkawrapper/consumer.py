@@ -45,7 +45,7 @@ def consume():
                 try:
                     data = msg.value
                     if data:
-                        log.info(f'{prefix} | Received on Topic: " + {msg.topic} + " | Partition: {str(msg.partition)}')
+                        log.info(f'{prefix} | Received on Topic: {msg.topic} + Partition: {str(msg.partition)}')
                         if 'eof' in data.keys():
                             if data["eof"]:
                                 pt.end_processing(data)
@@ -60,9 +60,6 @@ def consume():
                             a_service.load_asr_dataset(data)
                         if data["datasetType"] == dataset_type_monolingual:
                             m_service.load_monolingual_dataset(data)
-                        else:
-                            if data["eof"]:
-                                pt.end_processing(data)
                     else:
                         break
                 except Exception as e:
