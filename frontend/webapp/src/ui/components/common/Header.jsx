@@ -17,6 +17,7 @@ import authenticate from '../../../configs/authenticate';
 const StyledMenu = withStyles({
   paper: {
     border: '1px solid #d3d4d5',
+    margin:'0.7%'
   },
 })((props) => (
   <Menu

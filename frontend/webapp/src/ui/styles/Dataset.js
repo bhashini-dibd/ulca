@@ -130,7 +130,8 @@ const DataSet = (theme) => ({
         marginLeft: "auto"
     },
     searchDivStyle: {
-        padding: '0% 4%',
+        //padding: '0% 4%',
+        margin: '1% 10% 0 10%',
     },
     buttonDiv: {
         margin: '0% 0 3% 0'
@@ -142,6 +143,7 @@ const DataSet = (theme) => ({
         marginBottom: '3%'
     },
     clearNSubmit: {
+        marginTop: '10vh',
         float: 'right'
     },
 
