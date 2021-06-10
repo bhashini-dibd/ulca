@@ -493,9 +493,9 @@ class UserUtils:
                 msg         = Message(subject="ULCA - Email verification link",
                               sender=mail_server,
                               recipients=[email])
-                msg.html    = render_template('usr_verification.html',verification_link=mail_ui_link+"activate/{}/{}/{}".format(email,user_id,eval(str(time.time()).replace('.', '')[0:13])))
+                msg.html    = render_template('register_mail_template.html',verification_link=mail_ui_link+"activate/{}/{}/{}".format(email,user_id,eval(str(time.time()).replace('.', '')[0:13])))
                 mail.send(msg)
-                log.info("Generated email notification for user registration ")
+                log.info("Generated email notification for user registration from {}".format(mail_server))
         except Exception as e:
             log.exception("Exception while generating email notification for user registration | {}".format(str(e)))
             return post_error("Exception while generating email notification for user registration","Exception occurred:{}".format(str(e)),None)
