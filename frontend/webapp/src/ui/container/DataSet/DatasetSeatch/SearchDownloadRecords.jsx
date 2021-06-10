@@ -1,6 +1,5 @@
 import {
     Grid,
-    Paper,
     Typography,
     Button,
     TextField,
@@ -42,13 +41,13 @@ const SearchAndDownloadRecords = (props) => {
         pd: true
     })
 
-   // const detailedReport = useSelector((state) => state.mySearchReport);
+    const searchOptions = useSelector((state) => state.mySearchOptions);
     const dispatch = useDispatch();
     useEffect(() => {
         const userObj = new SearchAndDownload();
-      //  detailedReport.responseData.length === 0 && 
-        dispatch(APITransport(userObj));
+        searchOptions.result.length === 0 && dispatch(APITransport(userObj));
     }, []);
+    console.log(searchOptions)
 
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
@@ -152,7 +151,7 @@ const SearchAndDownloadRecords = (props) => {
     return (
         <div className={classes.searchDivStyle}>
             <Grid container spacing={3}>
-                <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+                <Grid item xs={12} sm={5} md={4} lg={4} xl={4}>
                     <div className={classes.breadcrum}>
                         <BreadCrum links={[url]} activeLink="Search & Download Records" />
                     </div>
@@ -218,8 +217,8 @@ const SearchAndDownloadRecords = (props) => {
                     </div>
                     <Typography className={classes.subHeader} variant="h6">Filter by</Typography>
                     <div className={classes.subHeader}>
-                        <Grid container spacing={2}>
-                            <Grid className={classes.subHeader} item xs={6}>
+                        <Grid container spacing={1}>
+                            <Grid className={classes.subHeader} item xs={12} sm={12} md={6} lg={6} xl={6}>
                                 <Autocomplete
                                     id="domain"
                                     options={sourceLanguages}
@@ -229,7 +228,7 @@ const SearchAndDownloadRecords = (props) => {
                                     label="Select Domain"
                                 />
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                                 <Autocomplete
                                     id="source"
                                     options={sourceLanguages}
@@ -284,7 +283,7 @@ const SearchAndDownloadRecords = (props) => {
                 <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                     <Divider orientation="vertical" />
                 </Grid>
-                <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+                <Grid item xs={12} sm={6} md={7} lg={7} xl={7}>
                     {renderPage()}
                     {/* <SearchResult/> */}
                     {/* <RequestNumberCreation reqno={"0005870"} /> */}

@@ -44,7 +44,7 @@ const MySearches = (props) => {
         const fetchHeaderButton= () => {
             return (
                     <div className={classes.headerButtons}>
-                            <Typography  variant="h4" >My Searches</Typography>
+                            <Typography  variant="h5" >My Searches</Typography>
                             <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() =>{} }><Cached className ={classes.iconStyle}/>Refresh</Button>
                      </div>
             )

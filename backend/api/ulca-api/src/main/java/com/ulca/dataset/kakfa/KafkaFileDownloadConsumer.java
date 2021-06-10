@@ -1,11 +1,13 @@
 package com.ulca.dataset.kakfa;
 
 import java.io.FileOutputStream;
+import com.ulca.dataset.model.Error;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +17,9 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.ulca.dataset.dao.ProcessTrackerDao;
+//import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.model.ProcessTracker.StatusEnum;
+import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.util.UnzipUtility;
 
 import io.swagger.model.ParallelDatasetParamsSchema;
@@ -35,6 +40,9 @@ public class KafkaFileDownloadConsumer {
 	
 	@Autowired
 	ProcessTrackerDao processTrackerDao;
+	
+	//@Autowired
+	//TaskTrackerDao taskTrackerDao;
 
 	@Value(value = "${FILE_DOWNLOAD_FOLDER}")
     private String downlaodFolder;
@@ -60,9 +68,30 @@ public class KafkaFileDownloadConsumer {
 			for (String filePathUnzipped : fileList) {
 				System.out.println("listing unzipped files :: " + filePathUnzipped);
 				if (filePathUnzipped.contains("param")) {
-					 paramsSchema = paramsSchemaValidator.validateParamsSchema(filePathUnzipped);
+					try {
+						 paramsSchema = paramsSchemaValidator.validateParamsSchema(filePathUnzipped);
+						 fileMap.put("params", filePathUnzipped);
+						
+					} catch(Exception e) {
+						 //update error
+						TaskTracker taskTracker = new TaskTracker();
+						taskTracker.setLastModified(new Date());
+						taskTracker.setEndTime(new Date());
+						taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.FAILED);
+						Error error = new Error();
+						error.setCause("params validation failed");
+						error.setMessage("params validation failed");
+						error.setCode("01_00000001");
+						taskTracker.setError(error);
+						taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
 
-					fileMap.put("params", filePathUnzipped);
+						//taskTrackerDao.save(taskTracker);
+						 return ;
+						
+					}
+					
+
+					
 				}
 				if (filePathUnzipped.contains("data")) {
 
@@ -76,6 +105,19 @@ public class KafkaFileDownloadConsumer {
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			//update error
+			TaskTracker taskTracker = new TaskTracker();
+			taskTracker.setLastModified(new Date());
+			taskTracker.setEndTime(new Date());
+			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.FAILED);
+			Error error = new Error();
+			error.setCause("file download failed");
+			error.setMessage("file download failed");
+			error.setCode("01_00000000");
+			taskTracker.setError(error);
+			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
+			//taskTrackerDao.save(taskTracker);
+			
 			e.printStackTrace();
 		}
 		log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
