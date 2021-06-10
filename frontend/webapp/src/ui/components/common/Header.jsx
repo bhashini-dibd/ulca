@@ -39,9 +39,11 @@ const Header = (props) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [logout, setAnchorElLogout] = useState(null)
   const history = useHistory();
+ 
+  const {firstName,lastName} = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : {firstName:"",lastName:""}
   const handleClose = (e) => {
-   setAnchorEl(null)
-   setAnchorElLogout(null)
+    setAnchorEl(null)
+    setAnchorElLogout(null)
   }
 
   const handleOpenMenu = (e) => {
@@ -50,11 +52,6 @@ const Header = (props) => {
 
   const handleLogoutOption = (e) => {
     setAnchorElLogout(e.currentTarget)
-  }
-
-  const handleLogOut = () => {
-    localStorage.clear();
-    handleMenuItemClick('/user/login')
   }
 
   const handleMenuItemClick = (url) => {
@@ -166,8 +163,8 @@ const Header = (props) => {
               authenticate() ?
                 <div className={classes.profile}>
                   <Button onClick={(e) => handleLogoutOption(e)} className={classes.menuBtn} variant="text">
-                    <Avatar >UU</Avatar>
-                    <p className={classes.profileName}>Ulca User</p>
+                    <Avatar >{`${firstName[0]}${lastName[0]}`}</Avatar>
+                    <p className={classes.profileName}>{`${firstName} ${lastName}`}</p>
                     <DownIcon />
                   </Button>
                   <StyledMenu id="data-set"
@@ -178,7 +175,9 @@ const Header = (props) => {
                   >
                     <MenuItem
                       className={classes.styledMenu}
-                      onClick={() => handleLogOut()}
+                      onClick={() => {
+                        localStorage.removeItem('userInfo')
+                        handleMenuItemClick('/user/login')}}
                     >
                       Log out
                     </MenuItem>
