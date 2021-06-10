@@ -19,8 +19,12 @@ const constants = {
    /**
    * action for Search report
    */
-   GET_MY_REPORT        : "GET_MY_REPORT"
+   GET_MY_REPORT        : "GET_MY_REPORT",
 
+   /**
+    * action for search and download report
+    */
+   GET_SEARCH_OPTIONS :"GET_SEARCH_OPTIONS"
    
 };
 
