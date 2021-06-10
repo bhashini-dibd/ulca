@@ -12,6 +12,8 @@ from service.monolingual import MonolingualValidate
 from configs.configs import kafka_bootstrap_server_host, validate_input_topic, validate_consumer_grp
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from kafka import KafkaConsumer
+from processtracker.processtracker import ProcessTracker
+from kafkawrapper.producer import Producer
 
 log = logging.getLogger('file')
 
@@ -33,6 +35,9 @@ def consume():
     try:
         topics = [validate_input_topic]
         consumer = instantiate(topics)
+        p_service, o_service, a_service, m_service = ParallelValidate(), OCRValidate(), ASRValidate(), MonolingualValidate()
+        pt = ProcessTracker()
+        prod = Producer()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-VALIDATE-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -42,17 +47,18 @@ def consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
+                        if 'eof' in data.keys():
+                            if data["eof"]:
+                                prod.produce(data, validate_output_topic, None)
+                                pt.end_processing(data)
+                                break
                         if data["datasetType"] == dataset_type_parallel:
-                            p_service = ParallelValidate()
                             p_service.execute_validation_pipeline(data)
                         if data["datasetType"] == dataset_type_ocr:
-                            o_service = OCRValidate()
                             o_service.execute_validation_pipeline(data)
                         if data["datasetType"] == dataset_type_asr:
-                            a_service = ASRValidate()
                             a_service.execute_validation_pipeline(data)
                         if data["datasetType"] == dataset_type_monolingual:
-                            m_service = MonolingualValidate()
                             m_service.execute_validation_pipeline(data)
                     else:
                         break
