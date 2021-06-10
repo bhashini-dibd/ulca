@@ -13,7 +13,7 @@ ulca_dataset_publish = Flask(__name__)
 
 
 # REST endpoint to fetch configs
-@ulca_dataset_publish.route('/ulca/dataset/v0/load', methods=["POST"])
+@ulca_dataset_publish.route('/ulca/publish/dataset/v0/load', methods=["POST"])
 def insert_dataset():
     req_criteria, data = request.get_json(), {}
     p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
@@ -30,7 +30,7 @@ def insert_dataset():
 
 
 # REST endpoint to fetch configs
-@ulca_dataset_publish.route('/ulca/dataset/v0/search', methods=["POST"])
+@ulca_dataset_publish.route('/ulca/publish/dataset/v0/search', methods=["POST"])
 def search_dataset():
     req_criteria, data = request.get_json(), {}
     p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
