@@ -38,7 +38,7 @@ def consume():
         pt = ProcessTracker()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-CONS-" + "(" + rand_str + ")"
-        log.info(f'{prefix} -- Running.......... {kafka_bootstrap_server_host}')
+        log.info(f'{prefix} -- Running..........')
         while True:
             for msg in consumer:
                 try:
