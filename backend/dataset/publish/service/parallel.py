@@ -56,11 +56,11 @@ class ParallelService:
                             batch_data.extend(result[0])
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[0], metadata["serviceRequestNumber"], metadata["userId"], None, None)
+                            #metrics.build_metric_event(result[0], metadata["serviceRequestNumber"], metadata["userId"], None, None)
                         elif isinstance(result[0], str):
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, True)
+                            #metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, True)
                             updates += 1
                         else:
                             error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
