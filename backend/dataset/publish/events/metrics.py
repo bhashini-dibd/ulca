@@ -15,7 +15,24 @@ class MetricEvent:
     def __init__(self):
         pass
 
-    def create_metric_event(self, data, is_del, is_upd):
+    def build_metric_event(self, records, srn, user_id, is_del, is_upd):
+        if not isinstance(records, list):
+            records["serviceRequestNumber"], records["userId"] = srn, user_id
+            if is_del:
+                records["isDelete"] = True
+            if is_upd:
+                records["isUpdate"] = True
+            self.create_metric_event(records)
+        else:
+            for record in records:
+                record["serviceRequestNumber"] = srn
+                if is_del:
+                    record["isDelete"] = True
+                if is_upd:
+                    record["isUpdate"] = True
+                self.create_metric_event(record)
+
+    def create_metric_event(self, data):
         log.info(f'Publishing BI metric event for srn -- {data["serviceRequestNumber"]}')
         try:
             event = {"eventType": "dataset-training", "eventId": f'{data["serviceRequestNumber"]}|{data["id"]}',
@@ -30,17 +47,18 @@ class MetricEvent:
                 event["license"] = data["license"]
             if 'submitter' in data.keys():
                 submitter = data["submitter"]
-                event["primarySubmitterId"] = submitter["id"]
+                if 'id' in submitter.keys():
+                    event["primarySubmitterId"] = submitter["id"]
                 if 'team' in submitter.keys():
                     secondary_submitters = []
                     for team in data["submitter"]["team"]:
-                        secondary_submitters.append(team["id"])
+                        secondary_submitters.append(team["name"])
                     if secondary_submitters:
                         event["secondarySubmitterIds"] = secondary_submitters
-            if is_del:
+            if data["isDelete"]:
                 event["isDelete"] = True
                 prod.produce(data, metric_event_input_topic, None)
-            elif is_upd:
+            elif data["isUpdate"]:
                 event["isDelete"] = True
                 prod.produce(data, metric_event_input_topic, None)
                 event["isDelete"] = False

@@ -13,6 +13,7 @@ from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
 from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
+from events.metrics import MetricEvent
 
 
 log = logging.getLogger('file')
@@ -23,6 +24,7 @@ utils = DatasetUtils()
 prod = Producer()
 error_event = ErrorEvent()
 pt = ProcessTracker()
+metrics = MetricEvent()
 
 
 class ParallelService:
@@ -35,7 +37,7 @@ class ParallelService:
             metadata = request
             record = request["record"]
             ip_data = [record]
-            batch_data, error_list, pt_list = [], [], []
+            batch_data, error_list, pt_list, metric_list = [], [], [], []
             total, count, updates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
             if ip_data:
                 func = partial(self.get_enriched_data, metadata=metadata)
@@ -54,9 +56,11 @@ class ParallelService:
                             batch_data.extend(result[0])
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
+                            metrics.build_metric_event(result[0], metadata["serviceRequestNumber"], metadata["userId"], None, None)
                         elif isinstance(result[0], str):
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
+                            metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, True)
                             updates += 1
                         else:
                             error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
@@ -92,7 +96,7 @@ class ParallelService:
                         dup_data = self.enrich_duplicate_data(data, record, metadata)
                         if dup_data:
                             repo.update(dup_data)
-                            return "UPDATE", data
+                            return "UPDATE", dup_data
                         else:
                             return data, record
                     derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
@@ -290,14 +294,20 @@ class ParallelService:
             for record in records:
                 if len(record["datasetId"]) == 1:
                     repo.delete(record["id"])
+                    metrics.build_metric_event(record, delete_req["serviceRequestNumber"], delete_req["userId"], True,
+                                               None)
                     d += 1
                 elif record["derived"]:
                     repo.delete(record["id"])
+                    metrics.build_metric_event(record, delete_req["serviceRequestNumber"], delete_req["userId"], True,
+                                               None)
                     d += 1
                 else:
                     record["datasetId"].remove(delete_req["datasetId"])
                     record["tags"].remove(delete_req["datasetId"])
                     repo.update(record)
+                    metrics.build_metric_event(record, delete_req["serviceRequestNumber"], delete_req["userId"], None,
+                                               True)
                     u += 1
             op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
             pt.task_event_search(op, None)
