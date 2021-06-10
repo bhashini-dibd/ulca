@@ -29,7 +29,7 @@ const DatasetSubmission = (props) => {
                         <Typography color="textSecondary" variant="h6">We are currently fetching the dataset from the URL you provided. This process may take some time.</Typography>
                         <Typography color="textSecondary" variant="h6">Note: The submitted dataset will go through a series of validation steps before it gets published.</Typography>
                         <Button className={classes.myContriBtn} color="primary" variant="outlined"
-                            onClick={() => history.push(`${process.env.PUBLIC_URL}/my-contribution`)}
+                            onClick={() => history.push(`${process.env.PUBLIC_URL}/my-contribution/true`)}
                         >
                             Go to My Contribution
                         </Button>

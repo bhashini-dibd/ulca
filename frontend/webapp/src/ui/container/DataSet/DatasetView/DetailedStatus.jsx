@@ -1,4 +1,4 @@
-import { withStyles,  MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
+import { withStyles,  MuiThemeProvider, createMuiTheme, Button, Typography } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect} from "react";
 import DataSet from "../../../styles/Dataset";
@@ -8,14 +8,17 @@ import DetailedDatasetStatus from "../../../../redux/actions/api/DataSet/Dataset
 import { useDispatch, useSelector } from "react-redux";
 import {Cached, SaveAlt} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
+import { useParams } from "react-router";
 
 const DetailedStatus = (props) => {
 
         const detailedReport          =       useSelector((state) => state.detailedReport);
         const dispatch = useDispatch();
+        const {status} = useParams();
+        console.log(status)
         useEffect(() => {
                 
-                detailedReport.responseData.length === 0  && DetailedDataSetStatusApi()
+                 DetailedDataSetStatusApi()
         }, []);
 
         const DetailedDataSetStatusApi  = () =>{
@@ -49,9 +52,10 @@ const DetailedStatus = (props) => {
 
         const fetchHeaderButton= () => {
                 return (
-                        <div>
-                                <Button color={"primary" } size="medium" variant="outlined"  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
-                                <Button color={"primary" } size="medium" variant="outlined" className={classes.buttonStyle} onClick={() => this.handleLanguageChange("domain")}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
+                        <div className={classes.headerButtons}>
+                                <Typography  variant="h5" >Validation Stage</Typography>
+                                {status !== "published" && <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined"  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
+                                <Button color={"primary" } size="medium" variant="outlined" className={status !== "published" ? classes.buttonStyle : classes.ButtonRefresh} onClick={() => this.handleLanguageChange("domain")}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
                         
                         </div>
                 );
@@ -132,10 +136,10 @@ const DetailedStatus = (props) => {
                                         options ={options}
                                 />
                         </MuiThemeProvider>
-                        <div className = {classes.footerButtons}>
+                        {status !== "published" && <div className = {classes.footerButtons}>
                                 <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => this.handleLanguageChange("domain")}>Abort Process</Button>
                                 
-                        </div>
+                        </div>}
                 </div>
         );
 };

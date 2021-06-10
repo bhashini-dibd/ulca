@@ -117,7 +117,7 @@ const Header = (props) => {
                   >
                     <MenuItem
                       className={classes.styledMenu}
-                      onClick={() => handleMenuItemClick('/my-contribution')}
+                      onClick={() => handleMenuItemClick('/my-contribution/false')}
                     >
                       My Contributon
                     </MenuItem>
