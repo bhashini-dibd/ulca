@@ -20,7 +20,7 @@ class ParallelValidate:
             log.info("Executing parallel dataset validation....  {}".format(datetime.now()))
             v_pipeline = ValidationPipeline.getInstance()
             res = v_pipeline.runParallelValidators(request)
-
+            log.info("Validation complete....  {}".format(res))
             # Produce event for publish
             if res["status"] == "SUCCESS":
                 prod.produce(request, validate_output_topic, None)
