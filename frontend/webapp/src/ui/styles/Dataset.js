@@ -131,7 +131,7 @@ const DataSet = (theme) => ({
     },
     searchDivStyle: {
         //padding: '0% 4%',
-        margin: '1% 10% 0 10%',
+        margin: '1% 3% 0 3%',
     },
     buttonDiv: {
         margin: '0% 0 3% 0'

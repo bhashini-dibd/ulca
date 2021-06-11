@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.dataset.dao.ProcessTrackerDao;
 
 import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +29,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class DatasetIngestService {
-
+	
+	
 	@Autowired
 	private KafkaTemplate<String, String> datasetValidateKafkaTemplate;
 
 	@Value(value = "${KAFKA_ULCA_DS_VALIDATE_IP_TOPIC}")
 	private String validateTopic;
-
+	
 	public static final String SOURCE_TEXT = "sourceText";
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
 	public static final String TARGET_TEXT = "targetText";
@@ -47,6 +49,7 @@ public class DatasetIngestService {
 
 		String datasetId = file.getDatasetId();
 		String serviceRequestNumber = file.getServiceRequestNumber();
+		String userId = file.getUserId();
 
 		if (paramsSchema != null) {
 
@@ -66,9 +69,9 @@ public class DatasetIngestService {
 				JSONObject vModel = new JSONObject();
 				vModel.put("record", record);
 				vModel.put("datasetId", datasetId);
-				vModel.put("datasetType", "parallel-corpus");
+				vModel.put("datasetType", paramsSchema.getDatasetType().name());
 				vModel.put("serviceRequestNumber", serviceRequestNumber);
-				vModel.put("userId", "userId");
+				vModel.put("userId", userId);
 				vModel.put("userMode", "real");
 
 				while (jsonToken != JsonToken.END_ARRAY) {

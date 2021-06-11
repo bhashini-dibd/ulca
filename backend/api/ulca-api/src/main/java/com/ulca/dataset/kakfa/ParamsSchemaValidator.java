@@ -26,8 +26,6 @@ public class ParamsSchemaValidator {
 	    //JSON file to Java object
 		try {
 			
-			
-			
 			ParallelDatasetParamsSchema obj = mapper.readValue(new File(filePath), ParallelDatasetParamsSchema.class);
 			
 			log.info("params validation success ");

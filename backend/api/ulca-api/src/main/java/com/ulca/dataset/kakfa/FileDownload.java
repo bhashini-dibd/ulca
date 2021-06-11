@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FileDownload {
 	
-	
+	private String userId;
 	private String fileUrl;
 	private String datasetId;
 	private String serviceRequestNumber;

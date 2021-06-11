@@ -2,8 +2,7 @@ package com.ulca.dataset.request;
 
 import javax.validation.constraints.NotBlank;
 
-import com.ulca.dataset.constants.DatasetType;
-
+import io.swagger.model.DatasetType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 public class DatasetSubmitRequest {
 	
 	@NotBlank(message="datasetType is required")
-	private final String type;
+	private final DatasetType type;
 	
 	@NotBlank(message="datasetName is required")
     private final String datasetName;

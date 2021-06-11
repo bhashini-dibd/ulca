@@ -10,6 +10,7 @@
         "inputFormat": {
           "type": "json"
         },
+        "taskCount": 4,
         "pollTimeout": 10,
         "useEarliestOffset": true
       },

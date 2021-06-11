@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,6 +27,10 @@ import javax.validation.constraints.*;
 
 @Document(collection = "ulca-pt-processes")
 public class ProcessTracker {
+	
+	@Id
+	@JsonProperty("id")
+	private String id = null;
 
 	@JsonProperty("userId")
 	private String userId = null;
@@ -174,6 +179,14 @@ public class ProcessTracker {
 		return this;
 	}
 
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 	/**
 	 * Id of the user
 	 * 
@@ -184,6 +197,7 @@ public class ProcessTracker {
 	public String getUserId() {
 		return userId;
 	}
+
 
 	public void setUserId(String userId) {
 		this.userId = userId;
