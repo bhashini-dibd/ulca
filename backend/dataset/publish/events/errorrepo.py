@@ -45,7 +45,7 @@ class ErrorRepo:
         try:
             col = self.get_mongo_instance()
             if offset is None and res_limit is None:
-                res = col.find(query, exclude)
+                res = col.find(query, exclude).sort([('_id', 1)])
             else:
                 res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
             result = []
@@ -53,7 +53,7 @@ class ErrorRepo:
                 result.append(record)
             return result
         except Exception as e:
-            log.exception(f'Exception in repo-search: {e}', e)
+            log.exception(f'Exception in repo search: {e}', e)
             return []
 
 

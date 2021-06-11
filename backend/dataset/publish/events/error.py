@@ -80,16 +80,19 @@ class ErrorEvent:
 
     def write_to_csv(self, data, file, create):
         data_file = open(file, 'w')
-        csv_writer = csv.writer(file)
-        if create:
-            header = data.keys()
-            csv_writer.writerow(header)
-        csv_writer.writerow(data.values())
+        try:
+            csv_writer = csv.writer(file)
+            if create:
+                header = data.keys()
+                csv_writer.writerow(header)
+            csv_writer.writerow(data.values())
+        except Exception as e:
+            log.exception(f'Exception in csv writer: {e}', e)
         data_file.close()
 
     def get_error_report(self, srn):
         query = {"serviceRequestNumber": srn}
-        exclude = {"_id", False}
+        exclude = {"_id": False}
         error_record = error_repo.search(query, exclude, None, None)
         if error_record:
             return error_record
