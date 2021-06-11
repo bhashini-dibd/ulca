@@ -6,7 +6,7 @@ from logging.config import dictConfig
 from configs.configs import error_event_input_topic, publish_error_code, shared_storage_path, pt_inprogress_status, \
     pt_success_status, aws_error_prefix, pt_publish_tool
 from kafkawrapper.producer import Producer
-from errorrepo import ErrorRepo
+from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
 
 

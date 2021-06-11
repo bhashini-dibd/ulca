@@ -2,7 +2,7 @@ import logging
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import metric_event_input_topic
+from configs.configs import metric_event_input_topic, user_mode_pseudo
 from kafkawrapper.producer import Producer
 
 log = logging.getLogger('file')
@@ -16,6 +16,8 @@ class MetricEvent:
         pass
 
     def build_metric_event(self, records, metadata, is_del, is_upd):
+        if metadata["userMode"] == user_mode_pseudo:
+            return
         if not isinstance(records, list):
             records["serviceRequestNumber"], records["userId"] = metadata["serviceRequestNumber"], metadata["userId"]
             records["datasetType"] = metadata["datasetType"]
