@@ -63,32 +63,32 @@ class ErrorEvent:
                             return
                 if error_record["status"] == pt_inprogress_status:
                     log.info(f'Updating error file for SRN -- {data["serviceRequestNumber"]}')
+                    self.write_to_csv(data, file, False)
                     error_record["lastModifiedTime"] = str(datetime.now())
                     error_repo.update(error_record)
-                    self.write_to_csv(data, file, False)
             else:
                 if "eof" not in data.keys():
                     log.info(f'Creating error file for SRN -- {data["serviceRequestNumber"]}')
                     file = f'{shared_storage_path}error-{data["serviceRequestNumber"]}.csv'
+                    self.write_to_csv(data, file, True)
                     error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
                              "file": file, "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
                     error_repo.insert(error_rec)
-                    self.write_to_csv(data, file, True)
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}', e)
             return
 
     def write_to_csv(self, data, file, create):
-        data_file = open(file, 'w')
         try:
-            csv_writer = csv.writer(file)
-            if create:
-                header = data.keys()
-                csv_writer.writerow(header)
-            csv_writer.writerow(data.values())
+            with open(file, 'wb') as data_file:
+                writer = csv.writer(data_file)
+                if create:
+                    header = data.keys()
+                    writer.writerow(header)
+                writer.writerow(data.values())
+            data_file.close()
         except Exception as e:
             log.exception(f'Exception in csv writer: {e}', e)
-        data_file.close()
 
     def get_error_report(self, srn):
         query = {"serviceRequestNumber": srn}
