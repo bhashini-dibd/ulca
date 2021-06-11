@@ -16,5 +16,8 @@
     },
 	{
         "test_name":"SpecialCharacterCheck", "active":"True"
-    }
+    },
+	{
+	    "test_name":"LabseModelRun", "active":"True"
+	}
 ]
