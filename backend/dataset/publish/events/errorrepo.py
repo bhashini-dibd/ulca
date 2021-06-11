@@ -44,7 +44,7 @@ class ErrorRepo:
     def search(self, query, exclude, offset, res_limit):
         col = self.get_mongo_instance()
         if offset is None and res_limit is None:
-            res = col.find(query, exclude).sort([('_id', 1)])
+            res = col.find(query, exclude)
         else:
             res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
         result = []

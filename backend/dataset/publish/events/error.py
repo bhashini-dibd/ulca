@@ -42,7 +42,7 @@ class ErrorEvent:
         prod.produce(eof_event, error_event_input_topic, None)
 
     def write_error(self, data):
-        error_record = error_repo.search({"serviceRequestNumber": data["serviceRequestNumber"]}, {"_id", False}, None, None)
+        error_record = self.get_error_report(data["serviceRequestNumber"])
         try:
             if error_record:
                 error_record = error_record[0]
@@ -84,7 +84,9 @@ class ErrorEvent:
         data_file.close()
 
     def get_error_report(self, srn):
-        error_record = error_repo.search({"serviceRequestNumber": srn}, {"_id", False}, None, None)
+        query = {"serviceRequestNumber": srn}
+        exclude = {"_id", False}
+        error_record = error_repo.search(query, exclude, None, None)
         if error_record:
             return error_record
         else:
