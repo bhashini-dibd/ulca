@@ -5,7 +5,8 @@ const endpoints = {
   dataSetSearchApi: '/sangrah/api/v0/dataset/parallel-corpus/search',
   login: 'ulca/user-mgmt/v1/users/login',
   datasetSubmit: 'dataset/corpus/submit',
-  getSearchOptions: '/ulca/user-mgmt/v1/users/login'
+  getSearchOptions: '/ulca/user-mgmt/v1/users/login',
+  submitSearchReq:'dataset/corpus/submit-search'
 };
 
 export default endpoints;

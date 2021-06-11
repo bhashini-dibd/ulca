@@ -131,7 +131,7 @@ const DataSet = (theme) => ({
     },
     searchDivStyle: {
         //padding: '0% 4%',
-        margin: '1% 3% 0 3%',
+        margin: '1% 2.5% 0 2.5%',
     },
     buttonDiv: {
         margin: '0% 0 3% 0'
@@ -189,6 +189,9 @@ const DataSet = (theme) => ({
     downloadBtn:{
         fontSize:'0.8rem',
         marginRight:'1%'
+    },
+    divider:{
+        marginLeft:"10%"
     }
 });
 

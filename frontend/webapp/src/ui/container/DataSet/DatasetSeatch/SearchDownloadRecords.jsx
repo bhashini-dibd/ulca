@@ -11,6 +11,7 @@ import {
 import SearchResult from "./SearchResult";
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
+import Snackbar from '../../../components/common/Snackbar';
 import BreadCrum from '../../../components/common/Breadcrum';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import SearchAndDownload from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
@@ -21,6 +22,9 @@ import DownloadDatasetRecords from "./DownloadDatasetRecords";
 import RequestNumberCreation from "./RequestNumberCreation";
 import { useHistory, useParams } from 'react-router';
 import Autocomplete from '../../../components/common/Autocomplete';
+import { Language, FilterBy } from '../../../../configs/DatasetItems';
+import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest';
+import DatasetType from '../../../../configs/DatasetItems';
 
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
@@ -38,16 +42,16 @@ const SearchAndDownloadRecords = (props) => {
     });
 
     const [datasetType, setDatasetType] = useState({
-        pd: true
+        'parallel-dataset': true
     })
 
-    const searchOptions = useSelector((state) => state.mySearchOptions);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        const userObj = new SearchAndDownload();
-        searchOptions.result.length === 0 && dispatch(APITransport(userObj));
-    }, []);
-    console.log(searchOptions)
+    // const searchOptions = useSelector((state) => state.mySearchOptions);
+    // const dispatch = useDispatch();
+    // useEffect(() => {
+    //     const userObj = new SearchAndDownload();
+    //     searchOptions.result.length === 0 && dispatch(APITransport(userObj));
+    // }, []);
+    // console.log(searchOptions)
 
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
@@ -63,24 +67,11 @@ const SearchAndDownloadRecords = (props) => {
     const handleFilterByChange = (value, property) => {
         setFilterBy({ ...filterBy, [property]: value });
     };
-    const sourceLanguages = [
-        {
-            value: 'Eng',
-            label: 'English',
-        },
-        {
-            value: 'Hin',
-            label: 'Hindi',
-        },
-        {
-            value: 'Ben',
-            label: 'Bengali',
-        },
-        {
-            value: 'Mar',
-            label: 'Marathi',
-        },
-    ];
+    const [snackbar, setSnackbarInfo] = useState({
+        open: false,
+        message: '',
+        variant: 'success'
+    })
     const [state, setState] = useState({
         checkedA: false,
         checkedB: false,
@@ -107,12 +98,21 @@ const SearchAndDownloadRecords = (props) => {
         setTgtError(false)
     }
     const getLabel = () => {
-        if (datasetType.pd)
+        if (datasetType['parallel-dataset'])
             return "Target Language *"
-        else if (datasetType.md || datasetType.atd)
-            return "Select Language *"
-        else
+        else if (datasetType['OCR-dataset'])
             return "Select Script *"
+        else
+            return "Select Language *"
+    }
+
+    const getTitle = () => {
+        if (datasetType['parallel-dataset'])
+            return "Select Language Pair"
+        else if (datasetType['OCR-dataset'])
+            return "Select Script"
+        else
+            return "Select Language"
     }
     const clearfilter = () => {
         setFilterBy({
@@ -125,10 +125,48 @@ const SearchAndDownloadRecords = (props) => {
             target: []
         });
     }
+
+    const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type) => {
+        setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: 'Please wait while we process your request...',
+            variant: 'info'
+        })
+        const apiObj = new SubmitSearchRequest(type, tgt, src, domain, collectionMethod)
+        fetch(apiObj.apiEndPoint(), {
+            method: 'post',
+            headers: apiObj.getHeaders().headers,
+            body: JSON.stringify(apiObj.getBody())
+        })
+            .then(res => {
+                if (res.ok) {
+                    history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)
+                    handleSnackbarClose()
+
+                } else {
+                    new Promise.reject("")
+                }
+            })
+            .catch(err => {
+                setSnackbarInfo({
+                    ...snackbar,
+                    open: true,
+                    message: 'Failed to submit your search request...',
+                    variant: 'error'
+                })
+            })
+
+    }
+    const handleSnackbarClose = () => {
+        setSnackbarInfo({ ...snackbar, open: false })
+    }
     const handleSubmitBtn = () => {
-        if (datasetType.pd) {
-            if (languagePair.source && languagePair.target.length)
-                history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)
+        if (datasetType['parallel-dataset']) {
+            if (languagePair.source && languagePair.target.length) {
+                makeSubmitAPICall(languagePair.source, languagePair.target, filterBy.domain, filterBy.collectionMethod)
+            }
+
             else if (!languagePair.source && !languagePair.target.length) {
                 setSrcError(true)
                 setTgtError(true)
@@ -142,12 +180,30 @@ const SearchAndDownloadRecords = (props) => {
         else {
             if (!languagePair.target.length)
                 setTgtError(true)
-            else
-                history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)
+            else {
+                makeSubmitAPICall(null, languagePair.target, filterBy.domain, filterBy.collectionMethod)
+            }
+
         }
 
 
     }
+
+    const renderDatasetButtons = () => {
+        return (
+            DatasetType.map((type) => {
+                return (
+                    <Button className={classes.innerButton} variant={datasetType[type.value] ? "contained" : "outlined"}
+                        color="primary"
+                        onClick={() => handleDatasetClick(type.value)}
+                    >
+                        {type.label}
+                    </Button>)
+            })
+
+        )
+    }
+
     return (
         <div className={classes.searchDivStyle}>
             <Grid container spacing={3}>
@@ -158,7 +214,8 @@ const SearchAndDownloadRecords = (props) => {
                     <Typography className={classes.subHeader} variant="h6">Select Dataset Type</Typography>
 
                     <div className={classes.buttonDiv}>
-                        <Button className={classes.innerButton} variant={datasetType.pd ? "contained" : "outlined"}
+                        {renderDatasetButtons()}
+                        {/* <Button className={classes.innerButton} variant={datasetType.pd ? "contained" : "outlined"}
                             color="primary"
                             onClick={() => handleDatasetClick('pd')}
                         >
@@ -181,12 +238,12 @@ const SearchAndDownloadRecords = (props) => {
                             onClick={() => handleDatasetClick('od')}
                         >
                             OCR Dataset
-                    </Button>
+                    </Button> */}
                     </div>
 
-                    <Typography className={classes.subHeader} variant="h6">Select Language Pair</Typography>
+                    <Typography className={classes.subHeader} variant="h6">{getTitle()}</Typography>
                     <div className={classes.subHeader}>
-                        {datasetType.pd &&
+                        {datasetType['parallel-dataset'] &&
                             <TextField className={classes.subHeader}
                                 fullWidth
                                 error={srcError}
@@ -197,7 +254,7 @@ const SearchAndDownloadRecords = (props) => {
                                 value={languagePair.source}
                                 onChange={(event) => handleLanguagePairChange(event.target.value, 'source')}
                             >
-                                {sourceLanguages.map((option) => (
+                                {Language.map((option) => (
                                     <MenuItem key={option.value} value={option.value}>
                                         {option.label}
                                     </MenuItem>
@@ -206,7 +263,7 @@ const SearchAndDownloadRecords = (props) => {
 
                         <Autocomplete
                             id="language-target"
-                            options={sourceLanguages}
+                            options={Language}
                             filter='target'
                             value={languagePair.target}
                             handleOnChange={handleLanguagePairChange}
@@ -218,17 +275,17 @@ const SearchAndDownloadRecords = (props) => {
                     <Typography className={classes.subHeader} variant="h6">Filter by</Typography>
                     <div className={classes.subHeader}>
                         <Grid container spacing={1}>
-                            <Grid className={classes.subHeader} item xs={12} sm={12} md={6} lg={6} xl={6}>
+                            <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                 <Autocomplete
                                     id="domain"
-                                    options={sourceLanguages}
+                                    options={FilterBy.domain}
                                     filter="domain"
                                     value={filterBy.domain}
                                     handleOnChange={handleFilterByChange}
                                     label="Select Domain"
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                            {/* <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
                                 <Autocomplete
                                     id="source"
                                     options={sourceLanguages}
@@ -237,11 +294,11 @@ const SearchAndDownloadRecords = (props) => {
                                     handleOnChange={handleFilterByChange}
                                     label="Select Source"
                                 />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                         <Autocomplete
                             id="collection-method"
-                            options={sourceLanguages}
+                            options={FilterBy.collectionMethod}
                             filter="collectionMethod"
                             value={filterBy.collectionMethod}
                             handleOnChange={handleFilterByChange}
@@ -281,16 +338,21 @@ const SearchAndDownloadRecords = (props) => {
                     </div>
                 </Grid>
                 <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
-                    <Divider orientation="vertical" />
+                    <Divider className={classes.divider} orientation="vertical" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={7} lg={7} xl={7}>
                     {renderPage()}
-                    {/* <SearchResult/> */}
-                    {/* <RequestNumberCreation reqno={"0005870"} /> */}
-                    {/* <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={"9.8 Million"} datasetsContributed={"29"}/> */}
                 </Grid>
 
             </Grid>
+            {snackbar.open &&
+                <Snackbar
+                    open={snackbar.open}
+                    handleClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    message={snackbar.message}
+                    variant={snackbar.variant}
+                />}
         </div>
     )
 
