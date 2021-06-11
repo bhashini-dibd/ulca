@@ -6,7 +6,6 @@ from src.db import get_db, get_data_store
 import pymongo
 from sqlalchemy import text
 from config import DRUID_DB_SCHEMA 
-from iso_language_codes import language_name
 import logging
 
 log = logging.getLogger('file')
