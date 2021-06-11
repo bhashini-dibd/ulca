@@ -13,5 +13,8 @@
     },
     {
         "test_name":"CaseDedup", "active":"True"
+    },
+	{
+        "test_name":"SpecialCharacterCheck", "active":"True"
     }
 ]
