@@ -1,9 +1,9 @@
 const DatasetItems = [
 
-    { value: 'parallel-dataset', label: 'Parallel Dataset' },
-    { value: 'monolingual-dataset', label: 'Monolingual Dataset' },
-    { value: 'ASR/TTS-dataset', label: 'ASR / TTS Dataset' },
-    { value: 'OCR-dataset', label: 'OCR Dataset' },
+    { value: 'parallel-corpus', label: 'Parallel Dataset' },
+    { value: 'monolingual-corpus', label: 'Monolingual Dataset' },
+    { value: 'asr-corpus', label: 'ASR / TTS Dataset' },
+    { value: 'ocr-corpus', label: 'OCR Dataset' },
 
 
 ];

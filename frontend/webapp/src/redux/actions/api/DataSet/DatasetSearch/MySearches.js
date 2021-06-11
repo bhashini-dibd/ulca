@@ -5,9 +5,9 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 export default class MyCOntribution extends API {
     constructor( user_id, timeout = 200000) {
         super("GET", timeout, false);
-        this.user_id = user_id
-        this.type = C.GET_MY_REPORT;
-        this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.mySearches}`;
+        this.user_id        = user_id
+        this.type           = C.GET_MY_REPORT;
+        this.endpoint       = `${super.apiEndPointAuto()}${ENDPOINTS.mySearches}`;
     }
 
     toString() {
@@ -36,8 +36,7 @@ export default class MyCOntribution extends API {
 
     getHeaders() {
         this.headers = {
-            headers: {
-                 
+            headers: {  
             }
         };
         return this.headers;

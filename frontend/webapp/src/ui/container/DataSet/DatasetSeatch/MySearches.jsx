@@ -8,11 +8,13 @@ import MySearchReport from "../../../../redux/actions/api/DataSet/DatasetSearch/
 import { useDispatch, useSelector } from "react-redux";
 import {Cached} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
+import {  useHistory } from "react-router-dom";
 
 const MySearches = (props) => {
 
-        const detailedReport          =       useSelector((state) => state.mySearchReport);
-        const dispatch = useDispatch();
+        const detailedReport            =       useSelector((state) => state.mySearchReport);
+        const dispatch                  = useDispatch();
+        const history                   = useHistory();
         useEffect(() => {
             const userObj           = new MySearchReport(  "SAVE", "A_FBTTR-VWSge-1619075981554","241006445d1546dbb5db836c498be6381606221196566");
             detailedReport.responseData.length === 0  &&dispatch(APITransport(userObj));   
@@ -48,6 +50,10 @@ const MySearches = (props) => {
                             <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() =>{} }><Cached className ={classes.iconStyle}/>Refresh</Button>
                      </div>
             )
+    }
+
+    const renderAction = (rowData, rowMeta) =>{
+        console.log(rowData, rowMeta)
     }
 
         
@@ -106,6 +112,8 @@ const MySearches = (props) => {
                 print                   :       false,
                 filter                  :       false,
                 selectableRows          :       "none",
+
+                onRowClick                 : (rowData, rowMeta) => {history.push(`${process.env.PUBLIC_URL}//${rowData[0]}/${rowData[4]}`)}
         };
 
         const { classes }               = props;

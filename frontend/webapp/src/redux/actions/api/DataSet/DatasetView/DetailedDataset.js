@@ -22,17 +22,9 @@ export default class MyCOntribution extends API {
     }
 
     apiEndPoint() {
-
-        
         let url = `${this.endpoint}?record_id=${this.id}` 
-        
          return url;
     }
-
-    getBody() {
-        return {};
-    }
-
     getHeaders() {
         this.headers = {
             headers: {

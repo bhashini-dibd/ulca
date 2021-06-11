@@ -130,7 +130,7 @@ const Header = (props) => {
                       My Searches
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}
-                      onClick={() => handleMenuItemClick('/search-and-download-rec/initiate')}
+                      onClick={() => handleMenuItemClick('/search-and-download-rec/initiate/-1')}
                     >
                       Search & Download Records
                     </MenuItem>

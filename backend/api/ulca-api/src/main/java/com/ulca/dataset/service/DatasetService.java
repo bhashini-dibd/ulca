@@ -2,7 +2,10 @@ package com.ulca.dataset.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,6 +28,7 @@ import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.ServiceRequestActionEnum;
 import com.ulca.dataset.model.ProcessTracker.ServiceRequestTypeEnum;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
+import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.DatasetSubmitRequest;
 import com.ulca.dataset.request.SearchCriteria;
@@ -131,6 +135,37 @@ public class DatasetService {
 		
 		DatasetCorpusSearchResponse response = new DatasetCorpusSearchResponse(serviceRequestNumber, new Date());
 		return response;
+	}
+
+	public Map<String, ArrayList<TaskTracker>> datasetById(String datasetId) {
+		
+		
+		Map<String, ArrayList<TaskTracker>> map = new HashMap<String, ArrayList<TaskTracker>>();
+		
+		List<ProcessTracker> processTrackerList = processTrackerDao.findByDatasetId(datasetId);
+		Dataset dataset = datasetDao.findById(datasetId).get();
+		
+		if(processTrackerList != null && processTrackerList.size() > 0) {
+			
+			for(ProcessTracker pt : processTrackerList) {
+				
+				String serviceRequestNumber = pt.getServiceRequestNumber();
+				
+				List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+				
+				map.put(serviceRequestNumber, (ArrayList<TaskTracker>) taskTrackerList);
+			}
+			
+		}
+		
+
+		return map;
+	}
+
+	public List<TaskTracker> datasetByServiceRequestNumber(String serviceRequestNumber) {
+		
+
+		return taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 	}
 
 }
