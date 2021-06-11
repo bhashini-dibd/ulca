@@ -37,9 +37,9 @@ class SummarizeDatasetModel(object):
         try:
             collections.create_index('datasetId')
         except pymongo.errors.DuplicateKeyError as e:
-            log_info("duplicate key, ignoring", LOG_WITHOUT_CONTEXT)
+            log.info("duplicate key, ignoring")
         except Exception as e:
-            log_exception("db connection exception ",  LOG_WITHOUT_CONTEXT, e)
+            log.exception("db connection exception :{} ".format(e))
 
     def store(self, dataset):
         try:
@@ -48,7 +48,7 @@ class SummarizeDatasetModel(object):
             if result != None and result.acknowledged == True:
                 return True
         except Exception as e:
-            log_exception("db connection exception ",  LOG_WITHOUT_CONTEXT, e)
+            log.exception("db connection exception :{}".format(e))
             return False
 
     # def generate_grouping_query(self, group_param):
