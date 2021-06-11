@@ -48,8 +48,10 @@ class MetricEvent:
                 event["domains"] = data["domain"]
             if 'license' in data.keys():
                 event["license"] = data["license"]
+            if 'collectionSource' in data.keys():
+                event["collectionSource"] = data["collectionSource"]
             if 'submitter' in data.keys():
-                submitter = data["submitter"]
+                submitter = data["submitter"][0]
                 if 'id' in submitter.keys():
                     event["primarySubmitterId"] = submitter["id"]
                 if 'team' in submitter.keys():
@@ -59,7 +61,7 @@ class MetricEvent:
                     if secondary_submitters:
                         event["secondarySubmitterIds"] = secondary_submitters
             if 'collectionMethod' in data.keys():
-                cm = data["collectionMethod"]
+                cm = data["collectionMethod"][0]
                 if 'collectionDescription' in cm.keys():
                     event["collectionMethod_collectionDescriptions"] = cm["collectionDescription"]
                 if 'collectionDetails' in cm.keys():
