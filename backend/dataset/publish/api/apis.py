@@ -8,6 +8,7 @@ from service.monolingual import MonolingualService
 from service.asr import ASRService
 from service.ocr import OCRService
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from events.error import ErrorEvent
 
 ulca_dataset_publish = Flask(__name__)
 
@@ -47,10 +48,19 @@ def search_dataset():
 
 
 # REST endpoint to fetch configs
-@ulca_dataset_publish.route('/ulca/dataset/v0/cluster/set', methods=["POST"])
+@ulca_dataset_publish.route('/ulca/publish/v0/cluster/set', methods=["POST"])
 def set_cluster():
     service = DatasetService()
     req_criteria = request.get_json()
     service.set_dataset_db(req_criteria)
     response = {"message": "DONE"}
     return jsonify(response), 200
+
+
+# REST endpoint to fetch configs
+@ulca_dataset_publish.route('/ulca/publish/v0/error/report', methods=["POST"])
+def get_error_report():
+    service = ErrorEvent()
+    req_criteria = request.get_json()
+    result = service.get_error_report(req_criteria["serviceRequestNumber"])
+    return jsonify(result), 200

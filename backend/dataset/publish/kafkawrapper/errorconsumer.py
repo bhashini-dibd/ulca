@@ -32,15 +32,13 @@ def instantiate(topics):
 
 
 # Method to read and process the requests from the kafka queue
-def consume():
+def error_consume():
     try:
         topics = [publish_input_topic]
         consumer = instantiate(topics)
-        p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
-        pt = ProcessTracker()
         error_event = ErrorEvent()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
-        prefix = "DS-CONS-" + "(" + rand_str + ")"
+        prefix = "DS-ERROR-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
         while True:
             for msg in consumer:
@@ -48,28 +46,13 @@ def consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
-                        if 'eof' in data.keys():
-                            if data["eof"]:
-                                pt.end_processing(data)
-                                error_event.publish_eof(data)
-                                break
-                        if 'id' not in data["record"].keys():
-                            data["record"]["id"] = str(uuid.uuid4())
-                        if data["datasetType"] == dataset_type_parallel:
-                            p_service.load_parallel_dataset(data)
-                        if data["datasetType"] == dataset_type_ocr:
-                            o_service.load_ocr_dataset(data)
-                        if data["datasetType"] == dataset_type_asr:
-                            a_service.load_asr_dataset(data)
-                        if data["datasetType"] == dataset_type_monolingual:
-                            m_service.load_monolingual_dataset(data)
-                        break
+                        error_event.write_error(data)
                     else:
                         break
                 except Exception as e:
-                    log.exception(f'{prefix} Exception in ds consumer while consuming: {str(e)}', e)
+                    log.exception(f'{prefix} Exception in ds error consumer while consuming: {str(e)}', e)
     except Exception as e:
-        log.exception(f'Exception in ds consumer while consuming: {str(e)}', e)
+        log.exception(f'Exception in ds error consumer while consuming: {str(e)}', e)
 
 
 # Method that provides a deserialiser for the kafka record.

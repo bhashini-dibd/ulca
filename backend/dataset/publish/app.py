@@ -6,6 +6,7 @@ from api.apis import ulca_dataset_publish
 from kafkawrapper.consumer import consume
 from kafkawrapper.searchconsumer import search_consume
 from kafkawrapper.deleteconsumer import delete_consume
+from kafkawrapper.errorconsumer import error_consume
 from configs.configs import app_host, app_port
 
 log = logging.getLogger('file')
@@ -21,6 +22,8 @@ def start_consumer():
             search_consumer_process.start()
             delete_consumer_process = Process(target=delete_consume)
             delete_consumer_process.start()
+            error_consumer_process = Process(target=error_consume)
+            error_consumer_process.start()
         except Exception as e:
             log.exception(f'Exception while starting the ULCA DS Publish kafka consumer: {str(e)}')
 
