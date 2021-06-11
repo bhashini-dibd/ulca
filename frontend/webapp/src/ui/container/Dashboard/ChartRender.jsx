@@ -11,13 +11,14 @@ import FetchLanguageDataSets from "../../../redux/actions/api/Dashboard/language
 import { isMobile } from 'react-device-detect';
 import {ArrowBack} from '@material-ui/icons';
 import Header from '../../components/common/Header';
+import Dataset from "../../../configs/DatasetItems";
 import authenticate from '../../../configs/authenticate';
 
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
 
 const ChartRender = (props) => {
-        const [selectedOption, setSelectedOption]   	= 	useState({ value: 'parallel-dataset', label: 'Parallel Dataset' });
+        const [selectedOption, setSelectedOption]   	= 	useState(Dataset[0]);
         const [title, setTitle]                     	= 	useState("Number of parallel sentences per language with English");
 	const [filterValue, setFilterValue]		=	useState("domain");
 	const [selectedLanguage,setSelectedLanguage]	=	useState("");
@@ -26,12 +27,7 @@ const ChartRender = (props) => {
         const dispatch                             	= 	useDispatch();
         const DashboardReport                       	= 	useSelector( (state) => state.dashboardReport);
         const { classes }                           	= 	props;
-        const options 				    	= 	[
-									{ value: 'parallel-dataset', label: 'Parallel Dataset' },
-									{ value: 'monolingual-dataset', label: 'Monolingual Dataset' },
-									{ value: 'ASR/TTS-dataset', label: 'ASR / TTS Dataset' },
-									{ value: 'OCR-dataset', label: 'OCR Dataset' },
-								];
+        const options 				    	= 	Dataset;
 	useEffect(() => {
 		fetchChartData(selectedOption.value, "languagePairs", [])
 		if (authenticate()) {
@@ -170,7 +166,7 @@ const ChartRender = (props) => {
 					{page!==0 && <><Button color="light" size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
 					<div className={classes.seperator}></div></>}
 					
-					<Typography 	variant   	=	"b" component = "h3" 
+					<Typography 	variant   	=	"h3" component = "h3" 
 							className 	= 	{classes.Typography}> Dataset Type :	</Typography>
 					<Select 	className 	= 	{classes.select} 
 							styles 		= 	{customStyles} color= "primary"
@@ -197,7 +193,7 @@ const ChartRender = (props) => {
 						<YAxis type="number" dx	=	{0} />
 						<CartesianGrid horizontal = {true} vertical = {false} textAnchor = {"middle"} />
 						<Tooltip cursor={{fill: 'none'}}/>
-						<Bar dataKey = "value" radius = {[4, 4, 0, 0]} maxBarSize = {30} onClick={(event) => { handleOnClick(page + 1, event) }}>
+						<Bar dataKey = "value" cursor ="pointer" radius = {[4, 4, 0, 0]} maxBarSize = {30} onClick={(event) => { handleOnClick(page + 1, event) }}>
 							{
 								DashboardReport.length > 0 && DashboardReport.map((entry, index) => {
 									const color 	= 	colors[index < 9 ? index : index % 10]

@@ -74,7 +74,7 @@ const Header = (props) => {
             {
               authenticate() &&
               <>
-                <div className={classes.home}>
+                {/* <div className={classes.home}>
                   <Button
                     className={classes.menuBtn}
                     variant="text"
@@ -92,8 +92,8 @@ const Header = (props) => {
                   >
                     <HomeIcon fontSize="large" />
                   </Button>
-                </div>
-                <div className={classes.options}>
+                </div> */}
+                <div className={classes.datasetOption}>
                   <div className={classes.dataset}>
                     <Button className={classes.menuBtn}
                       onClick={(e) => handleOpenMenu(e)}
@@ -146,7 +146,7 @@ const Header = (props) => {
                 </div>
                 <div className={classes.options}>
                   <div className={classes.model}>
-                    <Button className={classes.menuBtn} variant="text">
+                    <Button className={classes.menuBtn} variant="text" onClick={() => alert("Still in progress")}>
                       Model
                     <DownIcon />
                     </Button>

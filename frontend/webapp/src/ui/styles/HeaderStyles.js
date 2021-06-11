@@ -33,14 +33,11 @@ const HeaderStyles = (theme) => ({
     width: '100%',
     display: 'flex'
   },
-  home: {
+  datasetOption: {
     marginLeft: '8.4%',
     "@media (max-width:670px)": {
       marginLeft: '2%'
-    },
-    "@media (max-width:425px)": {
-      display: 'none'
-    },
+    }
   },
   options: {
     marginLeft: '1.875%'

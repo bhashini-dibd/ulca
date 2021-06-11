@@ -10,7 +10,7 @@
    constructor(fileDetails, timeout = 2000) {
      super("POST", timeout, false);
     this.fileDetails = fileDetails;
-     this.endpoint = `${super.apiEndPoint()}${ENDPOINTS.datasetSubmit}`;
+     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.datasetSubmit}`;
    }
  
  
