@@ -282,6 +282,7 @@ class ParallelService:
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
                 pt.task_event_search(op, error)
             log.info(f'Done!')
+            op["pipeline"] = pipeline
             return op
         except Exception as e:
             log.exception(e)

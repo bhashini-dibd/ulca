@@ -87,11 +87,6 @@ class ParallelRepo:
         result, res_count, pipeline, langs = [], 0, [], []
         try:
             col = self.get_mongo_instance()
-            if not query:
-                res = col.count({})
-                result = [res]
-                res_count = len(result)
-                return result, pipeline, res_count
             if 'sourceLanguage' in query.keys() and 'targetLanguage' in query.keys():
                 langs.append(query["sourceLanguage"])
                 langs.extend(query["targetLanguage"])
