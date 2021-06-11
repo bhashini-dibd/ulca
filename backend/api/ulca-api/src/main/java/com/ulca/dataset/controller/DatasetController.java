@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.DatasetSubmitRequest;
+import com.ulca.dataset.response.DatasetCorpusSearchResponse;
 import com.ulca.dataset.response.DatasetListByUserIdResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
 import com.ulca.dataset.service.DatasetService;
@@ -53,5 +56,14 @@ public class DatasetController {
 		
 		return datasetService.dataSetListByUserId(userId);
 	}
+	
+	@PostMapping("/corpus/search")
+	public DatasetCorpusSearchResponse corpusSearch(@RequestBody DatasetCorpusSearchRequest request, @RequestHeader("userId") String userId) throws JsonProcessingException {
+		
+		
+	    log.info("******** Entry DatasetController:: datasetSubmit *******" );
+	    return datasetService.corpusSearch(request, userId);
+	  }
+
 
 }

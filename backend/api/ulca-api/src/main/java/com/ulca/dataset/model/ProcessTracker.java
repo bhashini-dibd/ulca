@@ -5,9 +5,12 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.ulca.dataset.request.SearchCriteria;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 
+import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -76,6 +79,7 @@ public class ProcessTracker {
 	}
 
 	@JsonProperty("serviceRequestType")
+	
 	private ServiceRequestTypeEnum serviceRequestType = null;
 
 	/**
@@ -117,6 +121,10 @@ public class ProcessTracker {
 
 	@JsonProperty("serviceRequestAction")
 	private ServiceRequestActionEnum serviceRequestAction = null;
+	
+	
+	@JsonProperty("searchCriteria")
+	private SearchCriteria searchCriteria = null;
 
 	/**
 	 * Status of the process
@@ -126,7 +134,7 @@ public class ProcessTracker {
 
 		INPROGRESS("inprogress"),
 
-		SUCCESSFUL("successful"),
+		SUCCESSFUL("publish"),
 
 		FAILED("failed");
 
@@ -282,6 +290,19 @@ public class ProcessTracker {
 
 	public void setServiceRequestAction(ServiceRequestActionEnum serviceRequestAction) {
 		this.serviceRequestAction = serviceRequestAction;
+	}
+	/**
+	 * SearchCriterion of the seach process process
+	 * 
+	 * @return searchCriterion
+	 **/
+	
+	public SearchCriteria getSearchCriterion() {
+		return searchCriteria;
+	}
+
+	public void setSearchCriterion(SearchCriteria searchCriteria) {
+		this.searchCriteria = searchCriteria;
 	}
 
 	public ProcessTracker status(StatusEnum status) {
