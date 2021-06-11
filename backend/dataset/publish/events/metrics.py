@@ -56,7 +56,7 @@ class MetricEvent:
                     event["primarySubmitterId"] = submitter["id"]
                 if 'team' in submitter.keys():
                     secondary_submitters = []
-                    for team in data["submitter"]["team"]:
+                    for team in submitter["team"]:
                         secondary_submitters.append(team["name"])
                     if secondary_submitters:
                         event["secondarySubmitterIds"] = secondary_submitters
