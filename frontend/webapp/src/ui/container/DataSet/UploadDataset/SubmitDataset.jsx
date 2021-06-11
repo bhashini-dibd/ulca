@@ -19,7 +19,7 @@ import { useHistory } from "react-router-dom";
 import Snackbar from '../../../components/common/Snackbar';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import SubmitDatasetApi from "../../../../redux/actions/api/UploadDataset/SubmitDataset"
-
+import DatasetItems from "../../../../configs/DatasetItems";
 const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
@@ -145,6 +145,28 @@ let apiObj = new SubmitDatasetApi(dataset)
   
     }
 
+    const renderRadioIcons = ()   =>{
+        return <RadioGroup value={dataset.type} onChange={(e) => setDatasetInfo({ ...dataset, type: e })} className={classes.radioGroup} vertical="true">
+                {DatasetItems.map((item, index)=>(
+                    <RadioButton key ={index} rootColor="grey" pointColor="black" value={item.value}>
+                   {item.label}
+                </RadioButton>
+                ))}
+                                    {/* <RadioButton rootColor="grey" pointColor="black" value="Parallel Dataset">
+                                        Parallel Dataset
+                                    </RadioButton>
+                                    <RadioButton rootColor="grey" pointColor="black" value="Monolingual Dataset">
+                                        Monolingual Dataset
+                                    </RadioButton>
+                                    <RadioButton rootColor="grey" pointColor="black" value="ASR/TTS Dataset">
+                                        ASR/TTS Dataset
+                                    </RadioButton>
+                                    <RadioButton rootColor="grey" pointColor="black" value="OCR Dataset">
+                                        OCR Dataset
+                                    </RadioButton> */}
+                                </RadioGroup>
+    }
+
     const validURL = (str) => {
         debugger
         var pattern = new RegExp('^((ft|htt)ps?:\\/\\/)?' + // protocol
@@ -208,20 +230,7 @@ let apiObj = new SubmitDatasetApi(dataset)
                             <Typography color="textSecondary" variant="subtitle1">STEP-1</Typography>
                             <FormControl className={classes.form}>
                                 <Typography className={classes.typography} variant="subtitle1"><strong>Select Dataset Type</strong></Typography>
-                                <RadioGroup value={dataset.type} onChange={(e) => setDatasetInfo({ ...dataset, type: e })} className={classes.radioGroup} vertical="true">
-                                    <RadioButton rootColor="grey" pointColor="black" value="Parallel Dataset">
-                                        Parallel Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="Monolingual Dataset">
-                                        Monolingual Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="ASR/TTS Dataset">
-                                        ASR/TTS Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="OCR Dataset">
-                                        OCR Dataset
-                                    </RadioButton>
-                                </RadioGroup>
+                                    {renderRadioIcons()}
                             </FormControl>
                         </Grid>
                         <Hidden>

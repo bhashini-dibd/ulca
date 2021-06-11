@@ -38,7 +38,7 @@ const reducer = (state = initialState, action) => {
     
     switch (action.type) {
         case C.GET_CONTRIBUTION_LIST:
-            return getContributionList(action.payload.responseData);
+            return getContributionList([{"submitRefNumber":"0005771","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"},{"submitRefNumber":"0005770","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"},{"submitRefNumber":"0005772","datasetName":"Tourism Set-1","submittedOn":"16228006077741","status":"Published"},{"submitRefNumber":"0005770","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"}]);
         case C.CLEAR_USER_EVENT:
             return {
                 ...initialState

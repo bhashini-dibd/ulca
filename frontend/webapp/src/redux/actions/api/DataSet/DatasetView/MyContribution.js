@@ -6,7 +6,7 @@ export default class MyCOntribution extends API {
     constructor(file_name, user_id, timeout = 200000) {
         super("GET", timeout, false);
         this.user_id = user_id
-        this.type = C.DOWNLOAD_FILE;
+        this.type = C.GET_CONTRIBUTION_LIST;
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getContributionList}`;
     }
 
@@ -22,8 +22,11 @@ export default class MyCOntribution extends API {
     }
 
     apiEndPoint() {
-        // let url = `${this.endpoint}?filename=${this.file_name}&userid=${this.user_id}` 
-         return this.endpoint
+
+        
+        let url = `${this.endpoint}/listByUserId?userId=6491af71d71b4f1d9cff293522260838` 
+        
+         return url;
     }
 
     getBody() {
