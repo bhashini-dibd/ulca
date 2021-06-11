@@ -14,11 +14,12 @@ class ErrorEvent:
         pass
 
     def create_error_event(self, error_list):
-        log.info(f'Publishing error event to -- {error_event_input_topic}')
         for error in error_list:
+            log.info(f'Publishing error event for srn -- {error["serviceRequestNumber"]}')
             try:
                 event = {"eventType": "dataset-training", "messageType": "error", "code": publish_error_code.replace("XXX", error["code"]),
                          "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),
+                         "serviceRequestNumber": error["serviceRequestNumber"],
                          "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
                 if 'originalRecord' in error.keys():
                     event["originalRecord"] = error["originalRecord"]
@@ -26,6 +27,10 @@ class ErrorEvent:
             except Exception as e:
                 log.exception(e)
                 continue
+
+    def publish_eof(self, eof_event):
+        log.info(f'Publishing EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
+        prod.produce(eof_event, error_event_input_topic, None)
 
 # Log config
 dictConfig({
