@@ -14,6 +14,7 @@ import { useParams } from "react-router";
 const DetailedStatus = (props) => {
 
         const detailedReport          =       useSelector((state) => state.detailedReport);
+        console.log(detailedReport)
         const dispatch = useDispatch();
         const {status, id} = useParams();
 
@@ -28,6 +29,10 @@ const DetailedStatus = (props) => {
                 const userId           = new ErrorFileDownload(id);
                 dispatch(APITransport(userObj));
                 dispatch(APITransport(userId));
+        }
+
+        const handleDownload = () =>{
+                
         }
         
 
@@ -59,7 +64,7 @@ const DetailedStatus = (props) => {
                         <div className={classes.headerButtons}>
                                 <Typography  variant="h5" >Validation Stage</Typography>
                                 {status !== "published" && <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined"  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
-                                <Button color={"primary" } size="medium" variant="outlined" className={status !== "published" ? classes.buttonStyle : classes.ButtonRefresh} onClick={() => this.handleLanguageChange("domain")}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
+                                <Button color={"primary" } size="medium" variant="outlined" disabled={status !== "published"? true:false} className={status !== "published" ? classes.buttonStyle : classes.ButtonRefresh} onClick={() => this.handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
                         
                         </div>
                 );
@@ -68,8 +73,16 @@ const DetailedStatus = (props) => {
         
         const columns = [
                 {
-                        name    : "sr_no",
+                        name    : "srNo",
                         label   : "s id",
+                        options : {
+                                filter  : false,
+                                sort    : false,
+                                display : "excluded",
+                        },
+                },{
+                        name    : "datasetId",
+                        label   : "Dataset ID",
                         options : {
                                 filter  : false,
                                 sort    : false,
@@ -93,8 +106,17 @@ const DetailedStatus = (props) => {
                         },
                 },
                 {
-                        name    : "Record Count",
+                        name    : "recordCount",
                         label   : "Record Count",
+                        options : {
+                                filter  : false,
+                                sort    : false,
+                                
+                        },
+                },
+                {
+                        name    : "failedCount",
+                        label   : "Failed Count",
                         options : {
                                 filter  : false,
                                 sort    : false,

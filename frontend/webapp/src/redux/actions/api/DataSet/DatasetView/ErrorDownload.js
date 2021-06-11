@@ -2,9 +2,9 @@ import API from "../../../api";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
 
 export default class LoginAPI extends API {
-  constructor(fileDetails, timeout = 2000) {
+  constructor(userId, timeout = 2000) {
     super("POST", timeout, false);
-   this.fileDetails = fileDetails;
+   this.userId = userId;
     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.errorReport}`;
   }
 
@@ -13,15 +13,22 @@ export default class LoginAPI extends API {
     return this.endpoint;
   }
 
+  processResponse(res) {
+      debugger
+    super.processResponse(res);
+    if (res) {
+        this.report = res;
+    }
+}
+
   getBody() {
-    return this.fileDetails;
+    return {"serviceRequestNumber":this.userId}
   }
 
   getHeaders() {
     this.headers = {
       headers: {
         "Content-Type": "application/json",
-        "userId": "6491af71d71b4f1d9cff293522260838"
       }
     };
     return this.headers;
