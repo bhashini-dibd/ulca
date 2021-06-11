@@ -1,6 +1,8 @@
 package com.ulca.dataset.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.DatasetSubmitRequest;
 import com.ulca.dataset.response.DatasetCorpusSearchResponse;
@@ -55,6 +58,20 @@ public class DatasetController {
 		log.info("******** Entry DatasetController:: listByUserId *******" );
 		
 		return datasetService.dataSetListByUserId(userId);
+	}
+	
+	@GetMapping("/getByDatasetId")
+	public Map<String, ArrayList<TaskTracker>> datasetById(@RequestParam String datasetId) {
+		log.info("******** Entry DatasetController:: listByUserId *******" );
+		
+		return datasetService.datasetById(datasetId);
+	}
+	
+	@GetMapping("/getByServiceRequestNumber")
+	public List<TaskTracker> datasetByServiceRequestNumber(@RequestParam String serviceRequestNumber) {
+		log.info("******** Entry DatasetController:: listByUserId *******" );
+		
+		return datasetService.datasetByServiceRequestNumber(serviceRequestNumber);
 	}
 	
 	@PostMapping("/corpus/search")
