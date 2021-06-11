@@ -5,7 +5,7 @@ import os
 from logging.config import dictConfig
 
 import boto3 as boto3
-from configs.configs import aws_access_key, aws_secret_key, aws_bucket_name, shared_storage_path, aws_dataset_prefix
+from configs.configs import aws_access_key, aws_secret_key, aws_bucket_name, shared_storage_path, aws_dataset_prefix, aws_link_prefix
 
 log = logging.getLogger('file')
 
@@ -47,7 +47,7 @@ class DatasetUtils:
         if upload:
             os.remove(res_path)
             os.remove(res_path_sample)
-            return res_path_aws, res_path_sample_aws
+            return f'{aws_link_prefix}{res_path_aws}', f'{aws_link_prefix}{res_path_sample_aws}'
         else:
             return False, False
 
@@ -78,13 +78,16 @@ class DatasetUtils:
     def upload_file(self, file_name, s3_file_name):
         if s3_file_name is None:
             s3_file_name = file_name
+        file_name = f'{shared_storage_path}{file_name}'
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
         try:
             response = s3_client.upload_file(file_name, aws_bucket_name, s3_file_name)
-            return response
+            if response:
+                log.info(response)
+                return f'{aws_link_prefix}{s3_file_name}'
         except Exception as e:
             log.exception(e)
-            return False
+        return False
 
     # Utility to download files to ULCA S3 Bucket
     def download_file(self, s3_file_name):
