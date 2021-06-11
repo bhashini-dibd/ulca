@@ -77,11 +77,10 @@ class MetricEvent:
                 event["bitsPerSample"] = data["bitsPerSample"]
             if 'gender' in data.keys():
                 event["gender"] = data["gender"]
-
-            if data["isDelete"]:
+            if 'isDelete' in data.keys():
                 event["isDelete"] = True
                 prod.produce(data, metric_event_input_topic, None)
-            elif data["isUpdate"]:
+            elif 'isUpdate' in data.keys():
                 event["isDelete"] = True
                 prod.produce(data, metric_event_input_topic, None)
                 event["isDelete"] = False
