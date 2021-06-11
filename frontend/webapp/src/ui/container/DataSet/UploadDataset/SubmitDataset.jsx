@@ -23,7 +23,7 @@ import DatasetItems from "../../../../configs/DatasetItems";
 const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
-    const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "", type: "Parallel Dataset" })
+    const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "", type: "parallel-corpus" })
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
@@ -124,12 +124,10 @@ let apiObj = new SubmitDatasetApi(dataset)
       headers: apiObj.getHeaders().headers
     }).then(async response => {
       const rsp_data = await response.json();
-      debugger
       if (!response.ok) {
         
         return Promise.reject('');
       } else {
-          debugger
         history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.serviceRequestNumber}`)
 //           return true;
       }
@@ -152,19 +150,7 @@ let apiObj = new SubmitDatasetApi(dataset)
                    {item.label}
                 </RadioButton>
                 ))}
-                                    {/* <RadioButton rootColor="grey" pointColor="black" value="Parallel Dataset">
-                                        Parallel Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="Monolingual Dataset">
-                                        Monolingual Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="ASR/TTS Dataset">
-                                        ASR/TTS Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="OCR Dataset">
-                                        OCR Dataset
-                                    </RadioButton> */}
-                                </RadioGroup>
+            </RadioGroup>
     }
 
     const validURL = (str) => {

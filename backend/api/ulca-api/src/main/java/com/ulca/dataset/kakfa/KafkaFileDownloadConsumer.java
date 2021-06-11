@@ -2,6 +2,8 @@ package com.ulca.dataset.kakfa;
 
 import java.io.FileOutputStream;
 import com.ulca.dataset.model.Error;
+import com.ulca.dataset.model.ProcessTracker;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -17,9 +19,10 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import com.ulca.dataset.dao.ProcessTrackerDao;
-//import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker;
+import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.util.UnzipUtility;
 
 import io.swagger.model.ParallelDatasetParamsSchema;
@@ -41,8 +44,8 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	ProcessTrackerDao processTrackerDao;
 	
-	//@Autowired
-	//TaskTrackerDao taskTrackerDao;
+	@Autowired
+	TaskTrackerDao taskTrackerDao;
 
 	@Value(value = "${FILE_DOWNLOAD_FOLDER}")
     private String downlaodFolder;
@@ -53,18 +56,42 @@ public class KafkaFileDownloadConsumer {
 	public void downloadFile(FileDownload file) {
 
 		log.info("************ Entry KafkaFileDownloadConsumer :: downloadFile *********");
-		log.info(file.getDatasetId());
-		log.info(file.getFileUrl());
-		log.info(file.getServiceRequestNumber());
-
+		String datasetId = file.getDatasetId();
+		String fileUrl = file.getFileUrl();
+		String serviceRequestNumber = file.getServiceRequestNumber();
+		
+		log.info(" datasetId :: " + datasetId);
+		log.info("fileUrl :: " + fileUrl);
+		log.info("serviceRequestNumber :: " + serviceRequestNumber);
 		
 
+		
+		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
+		
+		
+		log.info(processTracker.toString());
+		
 		try {
-			String filePath = downloadUsingNIO(file.getFileUrl(), downlaodFolder);
+			processTracker.setStatus(StatusEnum.INPROGRESS);
+			processTrackerDao.save(processTracker);
+			
+			
+			String filePath = downloadUsingNIO(fileUrl, downlaodFolder);
 			ArrayList<String> fileList = unzipUtility.unzip(filePath, downlaodFolder);
+			
+			
+			TaskTracker taskTracker = new TaskTracker();
+			taskTracker.setLastModified(new Date());
+			taskTracker.setEndTime(new Date());
+			taskTracker.setTool(ToolEnum.DOWNLOAD);
+			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.SUCCESSFUL);
+			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
+			taskTrackerDao.save(taskTracker);
+			
 
 			Map<String, String> fileMap = new HashMap<String, String>();
 			ParallelDatasetParamsSchema paramsSchema = null;
+			
 			for (String filePathUnzipped : fileList) {
 				System.out.println("listing unzipped files :: " + filePathUnzipped);
 				if (filePathUnzipped.contains("param")) {
@@ -74,9 +101,10 @@ public class KafkaFileDownloadConsumer {
 						
 					} catch(Exception e) {
 						 //update error
-						TaskTracker taskTracker = new TaskTracker();
+						taskTracker = new TaskTracker();
 						taskTracker.setLastModified(new Date());
 						taskTracker.setEndTime(new Date());
+						taskTracker.setTool(ToolEnum.VALIDATE);
 						taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.FAILED);
 						Error error = new Error();
 						error.setCause("params validation failed");
@@ -85,7 +113,9 @@ public class KafkaFileDownloadConsumer {
 						taskTracker.setError(error);
 						taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
 
-						//taskTrackerDao.save(taskTracker);
+						taskTrackerDao.save(taskTracker);
+						processTracker.setStatus(StatusEnum.FAILED);
+						processTrackerDao.save(processTracker);
 						 return ;
 						
 					}
@@ -102,6 +132,16 @@ public class KafkaFileDownloadConsumer {
 			
 			datasetIngestService.datasetIngest(paramsSchema,file, fileMap);
 			
+			taskTracker = new TaskTracker();
+			taskTracker.setLastModified(new Date());
+			taskTracker.setEndTime(new Date());
+			taskTracker.setTool(ToolEnum.INGEST);
+			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.SUCCESSFUL);
+			
+			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
+
+			taskTrackerDao.save(taskTracker);
+			
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -109,6 +149,7 @@ public class KafkaFileDownloadConsumer {
 			TaskTracker taskTracker = new TaskTracker();
 			taskTracker.setLastModified(new Date());
 			taskTracker.setEndTime(new Date());
+			taskTracker.setTool(ToolEnum.DOWNLOAD);
 			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.FAILED);
 			Error error = new Error();
 			error.setCause("file download failed");
@@ -116,7 +157,9 @@ public class KafkaFileDownloadConsumer {
 			error.setCode("01_00000000");
 			taskTracker.setError(error);
 			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
-			//taskTrackerDao.save(taskTracker);
+			taskTrackerDao.save(taskTracker);
+			processTracker.setStatus(StatusEnum.FAILED);
+			processTrackerDao.save(processTracker);
 			
 			e.printStackTrace();
 		}

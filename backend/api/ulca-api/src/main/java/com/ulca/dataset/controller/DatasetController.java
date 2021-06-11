@@ -51,7 +51,6 @@ public class DatasetController {
 	public List<DatasetListByUserIdResponse> listByUserId(@RequestParam String userId) {
 		log.info("******** Entry DatasetController:: listByUserId *******" );
 		
-		//datasetService
 		return datasetService.dataSetListByUserId(userId);
 	}
 

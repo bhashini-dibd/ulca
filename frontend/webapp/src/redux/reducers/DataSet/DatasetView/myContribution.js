@@ -6,12 +6,8 @@ const initialState = {
 
 const dateConversion = (value) =>{
     
-    let date = value.toString()
-        let timestamp = date.substring(0, 13)
-        var d = new Date(parseInt(timestamp))
-        let dateStr = d.toISOString()
-        var myDate = new Date(dateStr);
-        let result = (myDate.toLocaleString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }))
+    var myDate = new Date(value);
+    let result = (myDate.toLocaleString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }))
     return result;
 }
 
@@ -21,25 +17,27 @@ const getContributionList = (payload) => {
     payload.forEach(element => {
         responseData.push(
             {
-            submitRefNumber       : element.submitRefNumber,
-            datasetName      : element.datasetName,
-            submittedOn : dateConversion(element.submittedOn),
-            status       : element.status
+                     submitRefNumber      : element.serviceRequestNumber,
+                     datasetName          : element.datasetName,
+                     submittedOn          : dateConversion(element.submittedOn),
+                     status               : element.status === "INPROGRESS" ? "In-Progress" : element.status === "NOTSTARTED" ? "Not Started" : element.status === "PUBLISHED"? "Published" : element.status === "FAILED"? "Failed" : (element.status.toLowerCase())
             }
         )
-        if(element.status === "Inprogress"){
+        if(element.status === "INPROGRESS" || "NOTSTARTED"){
             refreshStatus = true
         }
     }); 
+    responseData = responseData.reverse()
     return {responseData , refreshStatus};
 }
-////[{"submitRefNumber":"0005771","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"},{"submitRefNumber":"0005770","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"},{"submitRefNumber":"0005772","datasetName":"Tourism Set-1","submittedOn":"16228006077741","status":"Published"},{"submitRefNumber":"0005770","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"}]
+
 const reducer = (state = initialState, action) => {
     
     switch (action.type) {
+
         case C.GET_CONTRIBUTION_LIST:
-            return getContributionList([{"submitRefNumber":"0005771","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"},{"submitRefNumber":"0005770","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"},{"submitRefNumber":"0005772","datasetName":"Tourism Set-1","submittedOn":"16228006077741","status":"Published"},{"submitRefNumber":"0005770","datasetName":"Tourism Set-1","submittedOn":"1622800607774","status":"Published"}]);
-        case C.CLEAR_USER_EVENT:
+            return getContributionList(action.payload);
+        case C.CLEAR_CONTRIBUTION_LIST:
             return {
                 ...initialState
             }
