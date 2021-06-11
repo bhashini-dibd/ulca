@@ -240,9 +240,9 @@ class ParallelService:
                 db_query["scoreQuery"] = {"data.score": score_query}
             if 'score' in query.keys():
                 db_query["scoreQuery"] = {"data.score": query["score"]}
-            tags, src_lang, tgt_lang = [], None, []
+            tags, tgt_lang = [], []
             if 'sourceLanguage' in query.keys():
-                src_lang = query["sourceLanguage"]
+                db_query["sourceLanguage"] = query["sourceLanguage"]
             if 'targetLanguage' in query.keys():
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
@@ -259,8 +259,6 @@ class ParallelService:
                 db_query["derived"] = False
             if tags:
                 db_query["tags"] = tags
-            if src_lang:
-                db_query["sourceLanguage"] = src_lang
             if tgt_lang:
                 db_query["targetLanguage"] = tgt_lang
             if 'multipleContributors' in query.keys():

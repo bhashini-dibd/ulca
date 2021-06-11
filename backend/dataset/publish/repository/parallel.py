@@ -149,7 +149,7 @@ class ParallelRepo:
                             result.append(record)
                 res_count = len(result)
         except Exception as e:
-            log.exception(e)
+            log.exception(f'Exception while executing search query: {e}', e)
             return [], pipeline, 0
         return result, pipeline, res_count
 

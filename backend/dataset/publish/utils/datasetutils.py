@@ -34,6 +34,7 @@ class DatasetUtils:
                 yield v
 
     def push_result_to_s3(self, result, service_req_no, size):
+        log.info(f'Pushing results and sample to S3......')
         try:
             res_path = f'{shared_storage_path}{service_req_no}-ds.json'
             with open(res_path, 'w') as f:
@@ -52,7 +53,7 @@ class DatasetUtils:
             else:
                 return False, False
         except Exception as e:
-            log.exception(e)
+            log.exception(f'Exception while pushing search results to s3: {e}', e)
             return False, False
 
     def delete_from_s3(self, file):
@@ -80,6 +81,7 @@ class DatasetUtils:
 
     # Utility to upload files to ULCA S3 Bucket
     def upload_file(self, file_name, s3_file_name):
+        log.info(f'Pushing file to S3......')
         if s3_file_name is None:
             s3_file_name = file_name
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
@@ -87,9 +89,9 @@ class DatasetUtils:
             response = s3_client.upload_file(file_name, aws_bucket_name, s3_file_name)
             if response:
                 log.info(response)
-                return f'{aws_link_prefix}{s3_file_name}'
+            return f'{aws_link_prefix}{s3_file_name}'
         except Exception as e:
-            log.exception(e)
+            log.exception(f'Exception while pushing to s3: {e}', e)
         return False
 
     # Utility to download files to ULCA S3 Bucket
