@@ -15,6 +15,7 @@ export default class MyCOntribution extends API {
     }
 
     processResponse(res) {
+        debugger
         super.processResponse(res);
         if (res) {
             this.report = res;
@@ -24,7 +25,7 @@ export default class MyCOntribution extends API {
     apiEndPoint() {
 
         
-        let url = `${this.endpoint}/listByUserId?userId=6491af71d71b4f1d9cff293522260838` 
+        let url = `${this.endpoint}?userId=6491af71d71b4f1d9cff293522260838` 
         
          return url;
     }
@@ -36,7 +37,7 @@ export default class MyCOntribution extends API {
     getHeaders() {
         this.headers = {
             headers: {
-                 'auth-token': `${decodeURI(localStorage.getItem("token"))}`
+                 
             }
         };
         return this.headers;

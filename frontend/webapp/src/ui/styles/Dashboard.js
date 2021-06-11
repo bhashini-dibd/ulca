@@ -24,7 +24,7 @@ const FileUploadStyles = (theme) => ({
     padding: "3%",
   },
   Typography: { 
-    margin: ".5rem 3% 0 0 ",
+    margin: ".2rem 3% 0 0 ",
     "@media (max-width:500px)": {
       margin: ".7rem 0 0 0 ",
       fontSize:"12px"
