@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ulca.dataset.dao.DatasetDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
+import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.kakfa.FileDownload;
 import com.ulca.dataset.model.Dataset;
 import com.ulca.dataset.model.Fileidentifier;
@@ -23,51 +24,51 @@ import com.ulca.dataset.model.ProcessTracker.ServiceRequestActionEnum;
 import com.ulca.dataset.model.ProcessTracker.ServiceRequestTypeEnum;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.request.DatasetSubmitRequest;
+import com.ulca.dataset.response.DatasetListByUserIdResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
-import com.ulca.dataset.response.DatasetListByUserIdResponse;
 @Slf4j
 @Service
 public class DatasetService {
-	
+
 	@Autowired
 	DatasetDao datasetDao;
-	
+
 	@Autowired
 	FileIdentifierDao fileIdentifierDao;
-	
+
 	@Autowired
 	ProcessTrackerDao processTrackerDao;
-	
+
+	@Autowired
+	TaskTrackerDao taskTrackerDao;
+
 	@Autowired
 	private KafkaTemplate<String, Object> template;
-	
-	
+
 	@Value(value = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}")
-    private String fileDownloadTopic;
-	
+	private String fileDownloadTopic;
+
 	@Transactional
-	public DatasetSubmitResponse datasetSubmit(DatasetSubmitRequest request,String userId ) {
-		
+	public DatasetSubmitResponse datasetSubmit(DatasetSubmitRequest request, String userId) {
+
 		Dataset dataset = new Dataset();
 		dataset.setDatasetName(request.getDatasetName());
-		dataset.setDatasetType(request.getType());
+		dataset.setDatasetType(request.getType().name());
 		dataset.setCreatedOn(new Date());
-	
-		
+
 		Fileidentifier fileIndetifier = new Fileidentifier();
 		fileIndetifier.setFileLocationURL(request.getUrl());
-		
+
 		fileIndetifier.setCreatedOn(new Date());
 		fileIdentifierDao.insert(fileIndetifier);
-		
-		
+
 		dataset.setDatasetFileIdentifier(fileIndetifier);
-		
+
 		datasetDao.insert(dataset);
-		
+
 		ProcessTracker processTracker = new ProcessTracker();
 		processTracker.setUserId(userId);
 		processTracker.setDatasetId(dataset.getDatasetId());
@@ -77,42 +78,39 @@ public class DatasetService {
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.DATATSET);
 		processTracker.setStatus(StatusEnum.NOTSTARTED);
 		processTracker.setStartTime(new Date());
-	
+
 		processTrackerDao.insert(processTracker);
-		
-		
+
 		FileDownload fileDownload = new FileDownload();
-		fileDownload.setDatasetId(dataset.getDatasetId());	
+		fileDownload.setUserId(userId);
+		fileDownload.setDatasetId(dataset.getDatasetId());
 		fileDownload.setFileUrl(request.getUrl());
 		fileDownload.setServiceRequestNumber(processTracker.getServiceRequestNumber());
-		
-		
+
 		template.send(fileDownloadTopic, fileDownload);
-		
-		return new DatasetSubmitResponse(processTracker.getServiceRequestNumber(), dataset.getDatasetId(), dataset.getCreatedOn());
+
+		return new DatasetSubmitResponse(processTracker.getServiceRequestNumber(), dataset.getDatasetId(),
+				dataset.getCreatedOn());
 	}
-	
+
 	public List<DatasetListByUserIdResponse> dataSetListByUserId(String userId) {
-		
-		log.info("******** Entry DatasetService:: dataSetListByUserId *******" );
-		
-		List<DatasetListByUserIdResponse> list = new ArrayList<DatasetListByUserIdResponse> ();
-		
-		
-		List<ProcessTracker>  processList = processTrackerDao.findByUserId(userId);
-		for(ProcessTracker p : processList) {
-			
+
+		log.info("******** Entry DatasetService:: dataSetListByUserId *******");
+
+		List<DatasetListByUserIdResponse> list = new ArrayList<DatasetListByUserIdResponse>();
+
+		List<ProcessTracker> processList = processTrackerDao.findByUserId(userId);
+		for (ProcessTracker p : processList) {
+
 			Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
-			
-			list.add(new DatasetListByUserIdResponse(p.getServiceRequestNumber(),dataset.get().getDatasetName(),dataset.get().getCreatedOn(),p.getStatus().toString()));	
+
+			list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
+					dataset.get().getDatasetName(), dataset.get().getCreatedOn(), p.getStatus().name()));
 		}
-			
-			
-			
-		log.info("******** Exit DatasetService:: dataSetListByUserId *******" );
+
+		log.info("******** Exit DatasetService:: dataSetListByUserId *******");
 		return list;
-		
-		
+
 	}
 
 }

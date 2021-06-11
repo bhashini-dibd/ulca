@@ -14,5 +14,6 @@ public interface ProcessTrackerDao extends MongoRepository<ProcessTracker, Strin
 	List<ProcessTracker> findByDatasetId(String datasetId);
 
 	List<ProcessTracker> findByUserId(String userId);
+	ProcessTracker findByServiceRequestNumber(String serviceRequestNumber);
 
 }
