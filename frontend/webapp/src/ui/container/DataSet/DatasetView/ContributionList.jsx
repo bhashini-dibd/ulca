@@ -79,17 +79,17 @@ const ContributionList = (props) => {
         }
 
         const renderStatus = (id,value) => {
-                if(value === "Inprogress"){
-                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${id}}`)}}> In-progress </Link>
+                if(value === "In-Progress"){
+                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${id}`)}}> In-Progress </Link>
                 }
                 else{
                         return <span
-                        >Published </span>
+                        >{value} </span>
                 }
         }
 
         const renderAction = (name,value) => {
-                if(value === "Inprogress"){}
+                if(value === "In-Progress"){}
                 else{
                         return (<div className = {classes.action}> 
                                         <div className= {classes.link}>
@@ -108,7 +108,7 @@ const ContributionList = (props) => {
                         debugger
                         const value = data[rowMeta.rowIndex].submitRefNumber;
                         const status = data[rowMeta.rowIndex].status.toLowerCase();
-                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${value}}`)
+                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${value}`)
                 }
         };
 

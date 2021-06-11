@@ -14,15 +14,15 @@ const DetailedStatus = (props) => {
 
         const detailedReport          =       useSelector((state) => state.detailedReport);
         const dispatch = useDispatch();
-        const {status} = useParams();
-        console.log(status)
+        const {status, id} = useParams();
+        console.log(status, id)
         useEffect(() => {
                 
                  DetailedDataSetStatusApi()
         }, []);
 
         const DetailedDataSetStatusApi  = () =>{
-                const userObj           = new DetailedDatasetStatus(  "SAVE", "A_FBTTR-VWSge-1619075981554","241006445d1546dbb5db836c498be6381606221196566");
+                const userObj           = new DetailedDatasetStatus(id);
                 dispatch(APITransport(userObj));
         }
         
