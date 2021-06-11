@@ -15,6 +15,7 @@ export default class MyCOntribution extends API {
     }
 
     processResponse(res) {
+        debugger
         super.processResponse(res);
         if (res) {
             this.report = res;
@@ -22,7 +23,7 @@ export default class MyCOntribution extends API {
     }
 
     apiEndPoint() {
-        let url = `${this.endpoint}?record_id=${this.id}` 
+        let url = `${this.endpoint}?serviceRequestNumber=${this.id}` 
          return url;
     }
     getHeaders() {

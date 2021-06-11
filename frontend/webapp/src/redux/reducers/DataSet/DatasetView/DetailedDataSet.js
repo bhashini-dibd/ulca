@@ -5,22 +5,34 @@ const initialState = {
 }
 
 
-
-const getContributionList = (payload) => {
-   
-    let dataObj = [{"stage":"File Download","status":"Completed"},{"stage":"Sanity Check","status":"Completed","Record Count":"5000/5000"},{"stage":"Record validation","status":"In Progress","Record Count":"50001/1000000"},{"stage":"Record Publish","status":"In Progress","Record Count":"40000/100000"}]
-    // let latestEvent = removeDuplicates(result, 's_id')
-
-    // return latestEvent;
-    return dataObj;
+const getDetailedReport = (payload) => {
+    let responseData = [];
+    let refreshStatus = false;
+    payload.forEach(element => {
+        responseData.push(
+            {
+                    srNo                    : element.serviceRequestNumber,
+                     datasetId              : element.datasetName,
+                     recordCount            : element.details,
+                     failedCount            : element.error,
+                     stage                  : element.tool,
+                     status                 : element.status 
+                    }
+        )
+        if(element.status === "INPROGRESS" || "NOTSTARTED"){
+            refreshStatus = true
+        }
+    }); 
+    responseData = responseData.reverse()
+    return {responseData , refreshStatus};
 }
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case C.GET_DETAILED_REPORT:
-            return {
-                responseData: getContributionList(action.payload.responseData)  
-            }
+            return  getDetailedReport(action.payload)  
+            
         case C.CLEAR_USER_EVENT:
             return {
                 ...initialState
