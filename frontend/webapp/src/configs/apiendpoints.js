@@ -6,7 +6,7 @@ const endpoints = {
   login: 'ulca/user-mgmt/v1/users/login',
   datasetSubmit: 'dataset/corpus/submit',
   getSearchOptions: '/ulca/user-mgmt/v1/users/login',
-  submitSearchReq:'dataset/corpus/submit-search'
+  submitSearchReq:'dataset/corpus/search'
 };
 
 export default endpoints;

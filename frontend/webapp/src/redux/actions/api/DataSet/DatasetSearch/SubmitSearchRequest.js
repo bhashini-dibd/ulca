@@ -8,7 +8,7 @@ export default class SubmitSearchRequest extends API {
         this.src = src
         this.domain = domain
         this.collectionMethod = collectionMethod
-        this.datasettype = type
+        this.datasetType = type
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.submitSearchReq}`;
       
     }
@@ -20,15 +20,14 @@ export default class SubmitSearchRequest extends API {
 
     getBody() {
         return {
-            type: this.datasettype,
-            criterion: {
+            datasetType: this.datasetType,
+            criteria: {
                 sourceLanguage: this.src !== null ? this.src : this.tgt,
-                targetLanguage: this.src === null ? null : this.tgt
-            },
-            groupby: {
+                targetLanguage: this.src === null ? null : this.tgt,
                 domain: this.domain,
                 collectionMethod: this.collectionMethod
-            }
+            },
+            // groupby: []
         }
     }
 
@@ -36,7 +35,7 @@ export default class SubmitSearchRequest extends API {
         this.headers = {
             headers: {
                 "Content-Type": "application/json",
-                "userId": "6491af71d71b4f1d9cff293522260838"
+                "userId": JSON.parse(localStorage.getItem('userDetails')).userID
             }
         };
         return this.headers;
