@@ -42,8 +42,9 @@ class ErrorEvent:
         prod.produce(eof_event, error_event_input_topic, None)
 
     def write_error(self, data):
-        error_record = self.get_error_report(data["serviceRequestNumber"])
+        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
+            error_record = self.get_error_report(data["serviceRequestNumber"])
             if error_record:
                 error_record = error_record[0]
                 file = error_record["file"]
@@ -53,6 +54,7 @@ class ErrorEvent:
                             path = file.split("/")[2]
                             aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
                             if aws_file:
+                                log.info(f'Uploading error file to s3 for SRN -- {data["serviceRequestNumber"]}')
                                 error_record["status"] = pt_success_status
                                 error_record["file"] = aws_file
                                 error_record["lastModifiedTime"] = str(datetime.now())
@@ -60,16 +62,18 @@ class ErrorEvent:
                                 error_repo.update(error_record)
                             return
                 if error_record["status"] == pt_inprogress_status:
-                    self.write_to_csv(data, file, False)
+                    log.info(f'Updating error file for SRN -- {data["serviceRequestNumber"]}')
                     error_record["lastModifiedTime"] = str(datetime.now())
                     error_repo.update(error_record)
+                    self.write_to_csv(data, file, False)
             else:
                 if "eof" not in data.keys():
+                    log.info(f'Creating error file for SRN -- {data["serviceRequestNumber"]}')
                     file = f'{shared_storage_path}error-{data["serviceRequestNumber"]}.csv'
-                    self.write_to_csv(data, file, True)
                     error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
                              "file": file, "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
                     error_repo.insert(error_rec)
+                    self.write_to_csv(data, file, True)
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}', e)
             return
