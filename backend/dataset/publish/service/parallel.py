@@ -56,11 +56,11 @@ class ParallelService:
                             batch_data.extend(result[0])
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[0], metadata["serviceRequestNumber"], metadata["userId"], None, None)
+                            metrics.build_metric_event(result[0], metadata, None, None)
                         elif isinstance(result[0], str):
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, True)
+                            metrics.build_metric_event(result[1], metadata, None, True)
                             updates += 1
                         else:
                             error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
@@ -226,6 +226,7 @@ class ParallelService:
 
     def get_parallel_dataset(self, query):
         log.info(f'Fetching datasets..... | {datetime.now()}')
+        pt.task_event_search(query, None)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
@@ -294,20 +295,17 @@ class ParallelService:
             for record in records:
                 if len(record["datasetId"]) == 1:
                     repo.delete(record["id"])
-                    metrics.build_metric_event(record, delete_req["serviceRequestNumber"], delete_req["userId"], True,
-                                               None)
+                    metrics.build_metric_event(record, delete_req, True, None)
                     d += 1
                 elif record["derived"]:
                     repo.delete(record["id"])
-                    metrics.build_metric_event(record, delete_req["serviceRequestNumber"], delete_req["userId"], True,
-                                               None)
+                    metrics.build_metric_event(record, delete_req, True, None)
                     d += 1
                 else:
                     record["datasetId"].remove(delete_req["datasetId"])
                     record["tags"].remove(delete_req["datasetId"])
                     repo.update(record)
-                    metrics.build_metric_event(record, delete_req["serviceRequestNumber"], delete_req["userId"], None,
-                                               True)
+                    metrics.build_metric_event(record, delete_req, None, True)
                     u += 1
             op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
             pt.task_event_search(op, None)

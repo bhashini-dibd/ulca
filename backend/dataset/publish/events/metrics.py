@@ -15,9 +15,10 @@ class MetricEvent:
     def __init__(self):
         pass
 
-    def build_metric_event(self, records, srn, user_id, is_del, is_upd):
+    def build_metric_event(self, records, metadata, is_del, is_upd):
         if not isinstance(records, list):
-            records["serviceRequestNumber"], records["userId"] = srn, user_id
+            records["serviceRequestNumber"], records["userId"] = metadata["serviceRequestNumber"], metadata["userId"]
+            records["datasetType"] = metadata["datasetType"]
             if is_del:
                 records["isDelete"] = True
             if is_upd:
@@ -25,7 +26,9 @@ class MetricEvent:
             self.create_metric_event(records)
         else:
             for record in records:
-                record["serviceRequestNumber"], record["userId"] = srn, user_id
+                record["serviceRequestNumber"], record["userId"] = metadata["serviceRequestNumber"], metadata[
+                    "userId"]
+                record["datasetType"] = metadata["datasetType"]
                 if is_del:
                     record["isDelete"] = True
                 if is_upd:
@@ -36,7 +39,7 @@ class MetricEvent:
         log.info(f'Publishing BI metric event for srn -- {data["serviceRequestNumber"]}')
         try:
             event = {"eventType": "dataset-training", "eventId": f'{data["serviceRequestNumber"]}|{data["id"]}',
-                     "timestamp": str(datetime.now()), "submitterId": data["userId"]}
+                     "timestamp": str(datetime.now()), "submitterId": data["userId"], "datasetType": data["datasetType"]}
             if 'sourceLanguage' in data.keys():
                 event["sourceLanguage"] = data["sourceLanguage"]
             if 'targetLanguage' in data.keys():
@@ -55,6 +58,24 @@ class MetricEvent:
                         secondary_submitters.append(team["name"])
                     if secondary_submitters:
                         event["secondarySubmitterIds"] = secondary_submitters
+            if 'collectionMethod' in data.keys():
+                cm = data["collectionMethod"]
+                if 'collectionDescription' in cm.keys():
+                    event["collectionMethod_collectionDescriptions"] = cm["collectionDescription"]
+                if 'collectionDetails' in cm.keys():
+                    if 'alignmentTool' in cm["collectionDetails"].keys():
+                        event["collectionMethod_collectionDetails_alignmentTool"] = cm["collectionDetails"]["alignmentTool"]
+            if 'format' in data.keys():
+                event["format"] = data["format"]
+            if 'channel' in data.keys():
+                event["channel"] = data["channel"]
+            if 'samplingRate' in data.keys():
+                event["samplingRate"] = data["samplingRate"]
+            if 'bitsPerSample' in data.keys():
+                event["bitsPerSample"] = data["bitsPerSample"]
+            if 'gender' in data.keys():
+                event["gender"] = data["gender"]
+
             if data["isDelete"]:
                 event["isDelete"] = True
                 prod.produce(data, metric_event_input_topic, None)

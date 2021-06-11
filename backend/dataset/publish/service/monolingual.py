@@ -53,11 +53,11 @@ class MonolingualService:
                             batch_data.append(result[1])
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, None)
+                            metrics.build_metric_event(result[1], metadata, None, None)
                         elif result[0] == "UPDATE":
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[2], metadata["serviceRequestNumber"], metadata["userId"], None, None)
+                            metrics.build_metric_event(result[2], metadata, None, True)
                             updates += 1
                         else:
                             error_list.append(
@@ -151,6 +151,7 @@ class MonolingualService:
     # Method for searching asr datasets
     def get_monolingual_dataset(self, query):
         log.info(f'Fetching datasets..... | {datetime.now()}')
+        pt.task_event_search(query, None)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
@@ -198,11 +199,13 @@ class MonolingualService:
             for record in records:
                 if len(record["datasetId"]) == 1:
                     repo.delete(record["id"])
+                    metrics.build_metric_event(record, delete_req, True, None)
                     d += 1
                 else:
                     record["datasetId"].remove(delete_req["datasetId"])
                     record["tags"].remove(delete_req["datasetId"])
                     repo.update(record)
+                    metrics.build_metric_event(record, delete_req, None, True)
                     u += 1
             op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
             pt.task_event_search(op, None)

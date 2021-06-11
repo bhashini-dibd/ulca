@@ -53,7 +53,7 @@ class ASRService:
                             batch_data.append(result[1])
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, None)
+                            metrics.build_metric_event(result[1], metadata, None, None)
                         elif result[0] == "FAILED":
                             error_list.append({"record": result[1], "code": "UPLOAD_FAILED",
                                                "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
@@ -64,7 +64,7 @@ class ASRService:
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                             updates += 1
-                            metrics.build_metric_event(result[2], metadata["serviceRequestNumber"], metadata["userId"], None, None)
+                            metrics.build_metric_event(result[2], metadata, None, None)
                         else:
                             error_list.append({"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
                                                "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
@@ -168,6 +168,7 @@ class ASRService:
     # Method for searching asr datasets
     def get_asr_dataset(self, query):
         log.info(f'Fetching datasets....')
+        pt.task_event_search(query, None)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
@@ -220,11 +221,13 @@ class ASRService:
                 if len(record["datasetId"]) == 1:
                     repo.delete(record["id"])
                     utils.delete_from_s3(record["objStorePath"])
+                    metrics.build_metric_event(record, delete_req, True, None)
                     d += 1
                 else:
                     record["datasetId"].remove(delete_req["datasetId"])
                     record["tags"].remove(delete_req["datasetId"])
                     repo.update(record)
+                    metrics.build_metric_event(record, delete_req, None, True)
                     u += 1
             op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
             pt.task_event_search(op, None)
