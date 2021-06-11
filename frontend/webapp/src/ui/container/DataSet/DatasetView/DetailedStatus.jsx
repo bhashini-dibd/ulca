@@ -5,6 +5,7 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import DetailedDatasetStatus from "../../../../redux/actions/api/DataSet/DatasetView/DetailedDataset";
+import ErrorFileDownload from "../../../../redux/actions/api/DataSet/DatasetView/ErrorDownload";
 import { useDispatch, useSelector } from "react-redux";
 import {Cached, SaveAlt} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
@@ -15,15 +16,18 @@ const DetailedStatus = (props) => {
         const detailedReport          =       useSelector((state) => state.detailedReport);
         const dispatch = useDispatch();
         const {status, id} = useParams();
-        console.log(status, id)
+
         useEffect(() => {
                 
                  DetailedDataSetStatusApi()
+                 
         }, []);
 
         const DetailedDataSetStatusApi  = () =>{
                 const userObj           = new DetailedDatasetStatus(id);
+                const userId           = new ErrorFileDownload(id);
                 dispatch(APITransport(userObj));
+                dispatch(APITransport(userId));
         }
         
 

@@ -9,32 +9,33 @@ const CustomizedSnackbars = (props) => {
 
     const getMuiTheme = () => createMuiTheme({
         overrides: {
-            MuiSnackbar :{
-                anchorOriginTopRight :{
-            marginTop :"50px"
+            MuiSnackbar: {
+                anchorOriginTopRight: {
+                    marginTop: "50px"
+                }
+            }
         }
-       }
-        }
-});
+    });
     let { classes } = props
     return (
-        <MuiThemeProvider theme={getMuiTheme()}> 
-        <div className={classes.snackbar}>
-            <Snackbar
-                open={props.open}
-                onClose={props.handleClose}
-                anchorOrigin={props.anchorOrigin}
-            >
-                <Alert elevation={3}
-                    variant="filled"
-                    className={classes.snackbarFont}
+        <MuiThemeProvider theme={getMuiTheme()}>
+            <div className={classes.snackbar}>
+                <Snackbar
+                    // autoHideDuration={props.timeout? props.timeout : 4000}
+                    open={props.open}
                     onClose={props.handleClose}
-                    severity={props.variant}>
-                    {props.message}
-                </Alert>
-            </Snackbar>
-        </div>
-    </MuiThemeProvider>
+                    anchorOrigin={props.anchorOrigin}
+                >
+                    <Alert elevation={3}
+                        variant="filled"
+                        className={classes.snackbarFont}
+                        onClose={props.handleClose}
+                        severity={props.variant}>
+                        {props.message}
+                    </Alert>
+                </Snackbar>
+            </div>
+        </MuiThemeProvider>
     );
 }
 

@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ulca.dataset.dao.DatasetDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
@@ -23,7 +25,10 @@ import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.ServiceRequestActionEnum;
 import com.ulca.dataset.model.ProcessTracker.ServiceRequestTypeEnum;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
+import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.DatasetSubmitRequest;
+import com.ulca.dataset.request.SearchCriteria;
+import com.ulca.dataset.response.DatasetCorpusSearchResponse;
 import com.ulca.dataset.response.DatasetListByUserIdResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
 
@@ -44,6 +49,10 @@ public class DatasetService {
 
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
+	
+	
+	@Autowired
+	SearchKafkaPublish searchKafkaPublish;
 
 	@Autowired
 	private KafkaTemplate<String, Object> template;
@@ -111,6 +120,17 @@ public class DatasetService {
 		log.info("******** Exit DatasetService:: dataSetListByUserId *******");
 		return list;
 
+	}
+	
+	public DatasetCorpusSearchResponse corpusSearch(DatasetCorpusSearchRequest request, String userId) throws JsonProcessingException {
+		
+		log.info("******** Entry DatasetService:: corpusSearch *******");
+		
+		String serviceRequestNumber = searchKafkaPublish.searchPublish(request, userId);
+		
+		
+		DatasetCorpusSearchResponse response = new DatasetCorpusSearchResponse(serviceRequestNumber, new Date());
+		return response;
 	}
 
 }
