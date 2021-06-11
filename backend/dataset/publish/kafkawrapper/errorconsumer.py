@@ -2,18 +2,11 @@ import json
 import logging
 import random
 import string
-import uuid
 from logging.config import dictConfig
 
-from service.parallel import ParallelService
-from service.asr import ASRService
-from service.ocr import OCRService
-from service.monolingual import MonolingualService
 
-from configs.configs import kafka_bootstrap_server_host, publish_input_topic, publish_consumer_grp
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import kafka_bootstrap_server_host, error_event_input_topic, publish_consumer_grp
 from kafka import KafkaConsumer
-from processtracker.processtracker import ProcessTracker
 from events.error import ErrorEvent
 
 log = logging.getLogger('file')
@@ -34,7 +27,7 @@ def instantiate(topics):
 # Method to read and process the requests from the kafka queue
 def error_consume():
     try:
-        topics = [publish_input_topic]
+        topics = [error_event_input_topic]
         consumer = instantiate(topics)
         error_event = ErrorEvent()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
