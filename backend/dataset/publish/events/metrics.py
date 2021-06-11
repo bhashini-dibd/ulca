@@ -45,7 +45,7 @@ class MetricEvent:
             if 'targetLanguage' in data.keys():
                 event["targetLanguage"] = data["targetLanguage"]
             if 'domain' in data.keys():
-                event["domains"] = data["domains"]
+                event["domains"] = data["domain"]
             if 'license' in data.keys():
                 event["license"] = data["license"]
             if 'submitter' in data.keys():

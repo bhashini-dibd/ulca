@@ -5,7 +5,7 @@ import time
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, aws_asr_prefix, \
-    sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo
+    sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, shared_storage_path
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -110,8 +110,9 @@ class ASRService:
             insert_data["tags"] = self.get_tags(insert_data)
             if metadata["datasetMode"] != 'pseudo':
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
+                file_path = f'{shared_storage_path}{data["audioFilePath"]}'
                 s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
-                object_store_path = utils.upload_file(data["audioFilePath"], f'{aws_asr_prefix}{s3_file_name}')
+                object_store_path = utils.upload_file(file_path, f'{aws_asr_prefix}{s3_file_name}')
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path

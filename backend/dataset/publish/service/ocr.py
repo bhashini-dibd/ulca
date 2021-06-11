@@ -7,7 +7,7 @@ from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, user_mode_pseudo, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, shared_storage_path
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -117,8 +117,9 @@ class OCRService:
             insert_data["tags"] = self.get_tags(insert_data)
             if metadata["datasetMode"] != 'pseudo':
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
+                file_path = f'{shared_storage_path}{data["imageFilePath"]}'
                 s3_file_name = f'{data["imageFilename"]}|{metadata["datasetId"]}|{epoch}'
-                object_store_path = utils.upload_file(data["imageFilePath"], f'{aws_ocr_prefix}{s3_file_name}')
+                object_store_path = utils.upload_file(file_path, f'{aws_ocr_prefix}{s3_file_name}')
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path

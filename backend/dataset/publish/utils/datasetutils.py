@@ -78,7 +78,6 @@ class DatasetUtils:
     def upload_file(self, file_name, s3_file_name):
         if s3_file_name is None:
             s3_file_name = file_name
-        file_name = f'{shared_storage_path}{file_name}'
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
         try:
             response = s3_client.upload_file(file_name, aws_bucket_name, s3_file_name)
