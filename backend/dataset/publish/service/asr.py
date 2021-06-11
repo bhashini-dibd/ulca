@@ -190,6 +190,8 @@ class ASRService:
                 tags.append(query["gender"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
+            if 'multipleContributors' in query.keys():
+                db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
             exclude = {"_id": False}

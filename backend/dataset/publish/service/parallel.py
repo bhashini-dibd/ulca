@@ -263,6 +263,8 @@ class ParallelService:
                 db_query["sourceLanguage"] = src_lang
             if tgt_lang:
                 db_query["targetLanguage"] = tgt_lang
+            if 'multipleContributors' in query.keys():
+                db_query["multipleContributors"] = query["multipleContributors"]
             if 'groupBy' in query.keys():
                 db_query["groupBy"] = True
                 if 'countOfTranslations' in query.keys():
