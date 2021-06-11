@@ -74,9 +74,9 @@ if isinstance(ulca_dataset_topic_partitions, str):
 aws_access_key = os.environ.get('ULCA_AWS_S3_ACCESS_KEY', 'access-key')
 aws_secret_key = os.environ.get('ULCA_AWS_S3_SECRET_KEY', 'secret-key')
 aws_bucket_name = os.environ.get('ULCA_AWS_BUCKET_NAME', 'ulca-datasets')
-aws_ocr_prefix = os.environ.get('ULCA_AWS_S3_OCR_PREFIX', '/ocr/')
-aws_asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', '/asr/')
-aws_dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', '/datasets/')
+aws_ocr_prefix = os.environ.get('ULCA_AWS_S3_OCR_PREFIX', 'ocr/')
+aws_asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', 'asr/')
+aws_dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', 'datasets/')
 aws_link_prefix = f'http://{aws_bucket_name}.s3.amazonaws.com/'
 
 dataset_type_parallel = os.environ.get('DS_TYPE_PARALLEL', 'parallel-corpus')
