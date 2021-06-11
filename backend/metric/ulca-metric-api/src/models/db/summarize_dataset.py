@@ -194,7 +194,7 @@ class SummarizeDatasetModel(object):
                 sub_q= criterions[1]["value"]
                 grp_val = grouping["value"]
                 query = "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,{group},isDelete FROM \"{schema}\" \
-                        WHERE ((\'{match}\' = \'{val}\') AND (sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\'))\
+                        WHERE ((\'{match}\' = \'{val}\') AND (sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\'))\
                              GROUP BY sourceLanguage, targetLanguage, {group},isDelete".format(schema=DRUID_DB_SCHEMA,group=grp_val,val=sub_q,srcl=src,tgtl=tgt,match=add_field)
 
                 log.info("Query executed : {}".format(query))
