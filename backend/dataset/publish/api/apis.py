@@ -62,5 +62,5 @@ def set_cluster():
 def get_error_report():
     service = ErrorEvent()
     req_criteria = request.get_json()
-    result = service.get_error_report(req_criteria["serviceRequestNumber"])
+    result = service.get_error_report(req_criteria["serviceRequestNumber"], False)
     return jsonify(result), 200

@@ -44,55 +44,65 @@ class ErrorEvent:
     def write_error(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
-            error_record = self.get_error_report(data["serviceRequestNumber"])
+            error_record = self.get_error_report(data["serviceRequestNumber"], True)
             if error_record:
                 error_record = error_record[0]
                 file = error_record["file"]
                 if "eof" in data.keys():
                     if 'tool' in data.keys():
                         if data["eof"] and data["tool"] == pt_publish_tool:
+                            self.write_to_csv(error_record["error_list"], file)
                             path = file.split("/")[2]
                             aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
                             if aws_file:
                                 log.info(f'Uploading error file to s3 for SRN -- {data["serviceRequestNumber"]}')
-                                error_record["status"] = pt_success_status
-                                error_record["file"] = aws_file
+                                error_record["status"], error_record["file"] = pt_success_status, aws_file
                                 error_record["lastModifiedTime"] = str(datetime.now())
                                 error_record["endTime"] = error_record["lastModifiedTime"]
                                 error_repo.update(error_record)
+                            error_record["error_list"] = None
+                            error_repo.update(error_record)
                             return
                 if error_record["status"] == pt_inprogress_status:
                     log.info(f'Updating error file for SRN -- {data["serviceRequestNumber"]}')
-                    self.write_to_csv(data, file, False)
+                    error_list = error_record["error_list"]
+                    error_list.append(data)
+                    error_record["error_list"] = error_list
                     error_record["lastModifiedTime"] = str(datetime.now())
                     error_repo.update(error_record)
             else:
                 if "eof" not in data.keys():
                     log.info(f'Creating error file for SRN -- {data["serviceRequestNumber"]}')
                     file = f'{shared_storage_path}error-{data["serviceRequestNumber"]}.csv'
-                    self.write_to_csv(data, file, True)
                     error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                             "file": file, "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
+                             "file": file, "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now()), "error_list": [data]}
                     error_repo.insert(error_rec)
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}', e)
             return
 
-    def write_to_csv(self, data, file, create):
+    def write_to_csv(self, data_list, file):
         try:
             with open(file, 'wb') as data_file:
+                count = 0
                 writer = csv.writer(data_file)
-                if create:
-                    header = data.keys()
-                    writer.writerow(header)
-                writer.writerow(data.values())
+                for data in data_list:
+                    if count == 0:
+                        header = data.keys()
+                        writer.writerow(header)
+                    writer.writerow(data.values())
+                    count += 1
             data_file.close()
+            log.info(f'Wrote {len(data_list)} errors to csv -- {file}')
         except Exception as e:
             log.exception(f'Exception in csv writer: {e}', e)
 
-    def get_error_report(self, srn):
+    def get_error_report(self, srn, internal):
         query = {"serviceRequestNumber": srn}
-        exclude = {"_id": False}
+        if internal:
+            exclude = {"_id": False}
+        else:
+            exclude = {"_id": False, "error_list": False}
         error_record = error_repo.search(query, exclude, None, None)
         if error_record:
             return error_record
