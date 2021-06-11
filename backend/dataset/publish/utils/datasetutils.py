@@ -33,17 +33,23 @@ class DatasetUtils:
             else:
                 yield v
 
-    def push_result_to_s3(self, result, service_req_no):
+    def push_result_to_s3(self, result, service_req_no, size):
         res_path = f'{shared_storage_path}{service_req_no}-ds.json'
         with open(res_path, 'w') as f:
             json.dump(result, f)
         res_path_aws = f'{aws_dataset_prefix}{service_req_no}-ds.json'
         upload = self.upload_file(res_path, res_path_aws)
+        res_path_sample = f'{shared_storage_path}{service_req_no}-sample-ds.json'
+        with open(res_path_sample, 'w') as f:
+            json.dump(result[:size], f)
+        res_path_sample_aws = f'{aws_dataset_prefix}{service_req_no}-sample-ds.json'
+        upload = self.upload_file(res_path_sample, res_path_sample_aws)
         if upload:
             os.remove(res_path)
-            return res_path_aws
+            os.remove(res_path_sample)
+            return res_path_aws, res_path_sample_aws
         else:
-            return False
+            return False, False
 
     def delete_from_s3(self, file):
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)

@@ -21,8 +21,7 @@ class MonolingualRepo:
             ulca_db.drop_collection(monolingual_collection)
             ulca_col = ulca_db[monolingual_collection]
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("language", -1)])
-            ulca_col.create_index([("textHash", -1)])
+            ulca_col.create_index([("sourceLanguage", -1)])
             db_cli = client.admin
             key = OrderedDict([("_id", "hashed")])
             db_cli.command({'shardCollection': f'{db}.{monolingual_collection}', 'key': key})
@@ -34,8 +33,7 @@ class MonolingualRepo:
             ulca_db.drop_collection(monolingual_collection)
             ulca_col = ulca_db[monolingual_collection]
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("language", -1)])
-            ulca_col.create_index([("textHash", -1)])
+            ulca_col.create_index([("sourceLanguage", -1)])
             log.info(f'Done!')
 
     def instantiate(self):

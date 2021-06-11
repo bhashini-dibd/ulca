@@ -22,7 +22,7 @@ class OCRRepo:
             ulca_db.drop_collection(ocr_collection)
             ulca_col = ulca_db[ocr_collection]
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("imageHash", -1)])
+            ulca_col.create_index([("sourceLanguage", -1)])
             db_cli = client.admin
             key = OrderedDict([("_id", "hashed")])
             db_cli.command({'shardCollection': f'{db}.{ocr_collection}', 'key': key})
@@ -34,7 +34,7 @@ class OCRRepo:
             ulca_db.drop_collection(ocr_collection)
             ulca_col = ulca_db[ocr_collection]
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("imageHash", -1)])
+            ulca_col.create_index([("sourceLanguage", -1)])
             log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):

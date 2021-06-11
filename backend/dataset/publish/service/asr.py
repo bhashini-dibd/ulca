@@ -11,6 +11,7 @@ from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
 from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
+from events.metrics import MetricEvent
 
 log = logging.getLogger('file')
 
@@ -20,6 +21,7 @@ utils = DatasetUtils()
 prod = Producer()
 error_event = ErrorEvent()
 pt = ProcessTracker()
+metrics = MetricEvent()
 
 class ASRService:
     def __init__(self):
@@ -51,6 +53,7 @@ class ASRService:
                             batch_data.append(result[1])
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
+                            metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, None)
                         elif result[0] == "FAILED":
                             error_list.append({"record": result[1], "code": "UPLOAD_FAILED",
                                                "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
@@ -61,6 +64,7 @@ class ASRService:
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                             updates += 1
+                            metrics.build_metric_event(result[2], metadata["serviceRequestNumber"], metadata["userId"], None, None)
                         else:
                             error_list.append({"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
                                                "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
@@ -168,16 +172,16 @@ class ASRService:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
-            if 'language' in query.keys():
-                tags.append(query["language"])
+            if 'sourceLanguage' in query.keys():
+                db_query["sourceLanguage"] = query["sourceLanguage"]
             if 'collectionMode' in query.keys():
-                tags.append(query["collectionMode"])
+                tags.extend(query["collectionMode"])
             if 'collectionSource' in query.keys():
-                tags.append(query["collectionMode"])
+                tags.extend(query["collectionMode"])
             if 'license' in query.keys():
                 tags.append(query["licence"])
             if 'domain' in query.keys():
-                tags.append(query["domain"])
+                tags.extend(query["domain"])
             if 'channel' in query.keys():
                 tags.append(query["channel"])
             if 'gender' in query.keys():
@@ -185,21 +189,21 @@ class ASRService:
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
             if tags:
-                db_query["tags"] = {"$in": tags}
+                db_query["tags"] = {"$all": tags}
             exclude = {"_id": False}
             data = repo.search(db_query, exclude, off, lim)
             result, query, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}')
-            path = utils.push_result_to_s3(result, query["serviceRequestNumber"])
+            size = sample_size if count > sample_size else count
+            path, path_sample = utils.push_result_to_s3(result, query["serviceRequestNumber"], size)
             if path:
-                size = sample_size if count > sample_size else count
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "sample": result[:size], "dataset": path}
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
                 pt.task_event_search(op, None)
             else:
                 log.error(f'There was an error while pushing result to S3')
                 error = {"code": "S3_UPLOAD_FAILED", "datasetType": dataset_type_asr, "serviceRequestNumber": query["serviceRequestNumber"],
                                                "message": "There was an error while pushing result to S3"}
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None}
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
                 pt.task_event_search(op, error)
             log.info(f'Done!')
             return op

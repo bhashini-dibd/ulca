@@ -56,11 +56,11 @@ class ParallelService:
                             batch_data.extend(result[0])
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            #metrics.build_metric_event(result[0], metadata["serviceRequestNumber"], metadata["userId"], None, None)
+                            metrics.build_metric_event(result[0], metadata["serviceRequestNumber"], metadata["userId"], None, None)
                         elif isinstance(result[0], str):
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
-                            #metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, True)
+                            metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, True)
                             updates += 1
                         else:
                             error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
@@ -246,13 +246,13 @@ class ParallelService:
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
             if 'collectionSource' in query.keys():
-                tags.append(query["collectionSource"])
+                tags.extend(query["collectionSource"])
             if 'collectionMode' in query.keys():
-                tags.append(query["collectionMode"])
+                tags.extend(query["collectionMode"])
             if 'license' in query.keys():
                 tags.append(query["licence"])
             if 'domain' in query.keys():
-                tags.append(query["domain"])
+                tags.extend(query["domain"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
                 db_query["derived"] = False
@@ -268,17 +268,17 @@ class ParallelService:
                     db_query["countOfTranslations"] = query["countOfTranslations"]
             data = repo.search(db_query, off, lim)
             result, pipeline, count = data[0], data[1], data[2]
-            log.info(f'Result --- Count: {count}, Query: {pipeline}')
-            path = utils.push_result_to_s3(result, query["serviceRequestNumber"])
+            log.info(f'Result --- Count: {count}, Query: {query}')
+            size = sample_size if count > sample_size else count
+            path, path_sample = utils.push_result_to_s3(result, query["serviceRequestNumber"], size)
             if path:
-                size = sample_size if count > sample_size else count
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "sample": result[:size], "dataset": path}
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
                 pt.task_event_search(op, None)
             else:
                 log.error(f'There was an error while pushing result to S3')
                 error = {"code": "S3_UPLOAD_FAILED", "datasetType": dataset_type_parallel, "serviceRequestNumber": query["serviceRequestNumber"],
                                                "message": "There was an error while pushing result to S3"}
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None}
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
                 pt.task_event_search(op, error)
             log.info(f'Done!')
             return op

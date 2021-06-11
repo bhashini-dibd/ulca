@@ -25,7 +25,7 @@ class MetricEvent:
             self.create_metric_event(records)
         else:
             for record in records:
-                record["serviceRequestNumber"] = srn
+                record["serviceRequestNumber"], record["userId"] = srn, user_id
                 if is_del:
                     record["isDelete"] = True
                 if is_upd:

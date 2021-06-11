@@ -12,6 +12,7 @@ from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
 from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
+from events.metrics import MetricEvent
 
 log = logging.getLogger('file')
 
@@ -20,6 +21,7 @@ utils = DatasetUtils()
 prod = Producer()
 error_event = ErrorEvent()
 pt = ProcessTracker()
+metrics = MetricEvent()
 
 
 class MonolingualService:
@@ -51,9 +53,11 @@ class MonolingualService:
                             batch_data.append(result[1])
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
+                            metrics.build_metric_event(result[1], metadata["serviceRequestNumber"], metadata["userId"], None, None)
                         elif result[0] == "UPDATE":
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
+                            metrics.build_metric_event(result[2], metadata["serviceRequestNumber"], metadata["userId"], None, None)
                             updates += 1
                         else:
                             error_list.append(
@@ -82,14 +86,14 @@ class MonolingualService:
 
     def get_enriched_data(self, data, metadata):
         try:
-            records = self.get_monolingual_dataset_internal({"textHash": data["textHash"]})
-            if records:
-                dup_data = self.enrich_duplicate_data(data, records[0], metadata)
+            record = self.get_monolingual_dataset_internal({"textHash": data["textHash"]})
+            if record:
+                dup_data = self.enrich_duplicate_data(data, record, metadata)
                 if dup_data:
                     repo.update(dup_data)
-                    return "UPDATE", data, records[0]
+                    return "UPDATE", data, dup_data
                 else:
-                    return "DUPLICATE", data, records[0]
+                    return "DUPLICATE", data, record
             insert_data = data
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
@@ -151,34 +155,34 @@ class MonolingualService:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
-            if 'language' in query.keys():
-                tags.append(query["language"])
+            if 'sourceLanguage' in query.keys():
+                db_query["sourceLanguage"] = query["sourceLanguage"]
             if 'collectionMode' in query.keys():
-                tags.append(query["collectionMode"])
+                tags.extend(query["collectionMode"])
             if 'collectionSource' in query.keys():
-                tags.append(query["collectionMode"])
+                tags.extend(query["collectionMode"])
             if 'license' in query.keys():
                 tags.append(query["licence"])
             if 'domain' in query.keys():
-                tags.append(query["domain"])
+                tags.extend(query["domain"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
             if tags:
-                db_query["tags"] = {"$in": tags}
+                db_query["tags"] = {"$all": tags}
             exclude = {"_id": False}
             data = repo.search(db_query, exclude, off, lim)
             result, query, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}')
-            path = utils.push_result_to_s3(result, query["serviceRequestNumber"])
+            size = sample_size if count > sample_size else count
+            path, path_sample = utils.push_result_to_s3(result, query["serviceRequestNumber"], size)
             if path:
-                size = sample_size if count > sample_size else count
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "sample": result[:size], "dataset": path}
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
                 pt.task_event_search(op, None)
             else:
                 log.error(f'There was an error while pushing result to S3')
                 error = {"code": "S3_UPLOAD_FAILED", "datasetType": dataset_type_monolingual, "serviceRequestNumber": query["serviceRequestNumber"],
                                                "message": "There was an error while pushing result to S3"}
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None}
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
                 pt.task_event_search(op, error)
             log.info(f'Done!')
             return op

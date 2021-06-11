@@ -98,10 +98,10 @@ class ParallelRepo:
                 pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
             elif 'sourceLanguage' in query.keys():
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["sourceLanguage"]}]}})
-            if "tags" in query.keys():
-                pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if "derived" in query.keys():
                 pipeline.append({"$match": {"derived": query["derived"]}})
+            if "tags" in query.keys():
+                pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
             if 'groupBy' in query.keys():

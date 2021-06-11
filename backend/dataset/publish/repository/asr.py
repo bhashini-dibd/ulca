@@ -22,7 +22,7 @@ class ASRRepo:
             ulca_db.drop_collection(asr_collection)
             ulca_col = ulca_db[asr_collection]
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("audioHash", -1)])
+            ulca_col.create_index([("sourceLanguage", -1)])
             db_cli = client.admin
             key = OrderedDict([("_id", "hashed")])
             db_cli.command({'shardCollection': f'{db}.{asr_collection}', 'key': key})
@@ -34,7 +34,7 @@ class ASRRepo:
             ulca_db.drop_collection(asr_collection)
             ulca_col = ulca_db[asr_collection]
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("audioHash", -1)])
+            ulca_col.create_index([("sourceLanguage", -1)])
             log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):
