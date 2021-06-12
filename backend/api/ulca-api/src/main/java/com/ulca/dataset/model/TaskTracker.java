@@ -106,7 +106,7 @@ public class TaskTracker   {
   private StatusEnum status = null;
 
   @JsonProperty("details")
-  private Object details = null;
+  private String details = null;
 
   @JsonProperty("startTime")
   @DateTimeFormat(iso=ISO.DATE_TIME)
@@ -180,7 +180,7 @@ public class TaskTracker   {
     this.status = status;
   }
 
-  public TaskTracker details(Object details) {
+  public TaskTracker details(String details) {
     this.details = details;
     return this;
   }
@@ -195,7 +195,7 @@ public class TaskTracker   {
     return details;
   }
 
-  public void setDetails(Object details) {
+  public void setDetails(String details) {
     this.details = details;
   }
 

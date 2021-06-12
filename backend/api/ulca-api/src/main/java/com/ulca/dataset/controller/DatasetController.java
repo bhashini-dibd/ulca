@@ -82,5 +82,10 @@ public class DatasetController {
 	    return datasetService.corpusSearch(request, userId);
 	  }
 
-
+	@GetMapping("/corpus/search/status")
+	public List<TaskTracker> searchStatus(@RequestParam String serviceRequestNumber) {
+		log.info("******** Entry DatasetController:: listByUserId *******" );
+		
+		return datasetService.searchStatus(serviceRequestNumber);
+	}
 }

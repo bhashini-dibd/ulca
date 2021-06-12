@@ -168,4 +168,8 @@ public class DatasetService {
 		return taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 	}
 
+	public List<TaskTracker> searchStatus(String serviceRequestNumber) {
+		return taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+	}
+
 }
