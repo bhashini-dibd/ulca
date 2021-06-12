@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 import uuid
 from datetime import datetime
@@ -51,6 +52,8 @@ class ErrorEvent:
                 if "eof" in data.keys():
                     if 'tool' in data.keys():
                         if data["eof"] and data["tool"] == pt_publish_tool:
+                            log.info(f'Writing error EOF for SRN -- {data["serviceRequestNumber"]}')
+                            log.info(f'Error List: {len(error_record["error_list"])} for SRN -- {data["serviceRequestNumber"]}')
                             self.write_to_csv(error_record["error_list"], file)
                             path = file.split("/")[2]
                             aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
@@ -84,14 +87,12 @@ class ErrorEvent:
     def write_to_csv(self, data_list, file):
         try:
             with open(file, 'wb') as data_file:
-                count = 0
-                writer = csv.writer(data_file)
-                for data in data_list:
-                    if count == 0:
-                        header = data.keys()
-                        writer.writerow(header)
-                    writer.writerow(data.values())
-                    count += 1
+                writer = csv.DictWriter(data_file, data_list[0].keys())
+                writer.writeheader()
+                for row in data_list:
+                    if isinstance(row, str):
+                        row = json.loads(row)
+                    writer.writerow(row)
             data_file.close()
             log.info(f'Wrote {len(data_list)} errors to csv -- {file}')
         except Exception as e:

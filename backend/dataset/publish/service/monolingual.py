@@ -78,7 +78,7 @@ class MonolingualService:
                 error_event.create_error_event(error_list)
             for pt_rec in pt_list:
                 pt.create_task_event(pt_rec)
-            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {error_list}')
+            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
