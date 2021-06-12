@@ -52,7 +52,7 @@ export default function App() {
           
           <Route exact path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard} />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/dataset-status/:status/:id`}
+            path={`${process.env.PUBLIC_URL}/dataset-status/:status/:name/:id`}
             title={"Submit Dataset"}
             component={DetailedStatus}
             authenticate={authenticateUser}

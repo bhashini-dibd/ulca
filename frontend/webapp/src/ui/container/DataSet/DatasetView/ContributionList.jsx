@@ -83,7 +83,7 @@ const ContributionList = (props) => {
 
         const renderStatus = (id,name,value) => {
                 if(value === "In-Progress"){
-                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${id}`)}}> In-Progress </Link>
+                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${name}/${id}`)}}> In-Progress </Link>
                 }
                 else{
                         return <span
@@ -110,7 +110,8 @@ const ContributionList = (props) => {
                 if(rowMeta.colIndex !== 6){
                         const value = data[rowMeta.rowIndex].submitRefNumber;
                         const status = data[rowMeta.rowIndex].status.toLowerCase();
-                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${value}`)
+                        const name = data[rowMeta.rowIndex].datasetName;
+                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${value}`)
                 }
         };
 

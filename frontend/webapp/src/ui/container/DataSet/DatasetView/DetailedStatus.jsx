@@ -16,7 +16,7 @@ const DetailedStatus = (props) => {
         const detailedReport          =       useSelector((state) => state.detailedReport);
         console.log(detailedReport)
         const dispatch = useDispatch();
-        const {status, id} = useParams();
+        const {status,name, id} = useParams();
 
         useEffect(() => {
                 
@@ -65,7 +65,7 @@ const DetailedStatus = (props) => {
         const fetchHeaderButton= () => {
                 return (
                         <div className={classes.headerButtons}>
-                                <Typography  variant="h5" >Validation Stage</Typography>
+                                <Typography  variant="h5" >{name}</Typography>
                                 {status !== "published" && <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined"  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
                                 <Button color={"primary" } href="" color="transparent" target="_blank" size="medium" variant="outlined" disabled={status !== "published"? true:false} className={status !== "published" ? classes.buttonStyle : classes.ButtonRefresh} onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
                         
