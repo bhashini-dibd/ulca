@@ -13,7 +13,7 @@ import C from '../../actions/constants';
       }
 
     //   const handleData = (dataValues) =>{
-    //     debugger
+
     //     if (dataValues.length > 0) {
     //       let others = dataValues.slice(7, dataValues.length)
     //       let othersCount = 0
@@ -31,7 +31,7 @@ import C from '../../actions/constants';
     //           dataSetValues.push(obj)
     //       }
   
-    //        console.log(dataSetValues) 
+
     //       return {dataSetValues, dataValues} 
          
 
@@ -42,8 +42,6 @@ import C from '../../actions/constants';
 
 
     const handleExpand = (data) =>{
-
-      debugger
 
     }
       

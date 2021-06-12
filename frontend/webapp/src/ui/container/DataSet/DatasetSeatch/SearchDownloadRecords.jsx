@@ -52,7 +52,6 @@ const SearchAndDownloadRecords = (props) => {
     //     const userObj = new SearchAndDownload();
     //     searchOptions.result.length === 0 && dispatch(APITransport(userObj));
     // }, []);
-    // console.log(searchOptions)
 
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });

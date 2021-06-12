@@ -14,7 +14,6 @@ const UserManagement = (props) => {
   const { classes } = props;
   const param = useParams();
   let history = useHistory();
-  console.log(param, history);
   const renderPage = () => {
     switch (param && param.page) {
       case "register":

@@ -14,7 +14,6 @@ import { useParams } from "react-router";
 const DetailedStatus = (props) => {
 
         const detailedReport          =       useSelector((state) => state.detailedReport);
-        console.log(detailedReport)
         const dispatch = useDispatch();
         const {status,name, id} = useParams();
 
