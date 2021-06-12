@@ -54,8 +54,7 @@ public class DatasetService {
 
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
-	
-	
+
 	@Autowired
 	SearchKafkaPublish searchKafkaPublish;
 
@@ -115,67 +114,67 @@ public class DatasetService {
 
 		List<ProcessTracker> processList = processTrackerDao.findByUserId(userId);
 		for (ProcessTracker p : processList) {
+			if (p.getDatasetId() != null && !p.getDatasetId().isEmpty()) {
+				Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
 
-			Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
+				list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
+						dataset.get().getDatasetName(), dataset.get().getCreatedOn(), p.getStatus().name()));
+			}
 
-			list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
-					dataset.get().getDatasetName(), dataset.get().getCreatedOn(), p.getStatus().name()));
 		}
 
 		log.info("******** Exit DatasetService:: dataSetListByUserId *******");
 		return list;
 
 	}
-	
-	public DatasetCorpusSearchResponse corpusSearch(DatasetCorpusSearchRequest request, String userId) throws JsonProcessingException {
-		
+
+	public DatasetCorpusSearchResponse corpusSearch(DatasetCorpusSearchRequest request, String userId)
+			throws JsonProcessingException {
+
 		log.info("******** Entry DatasetService:: corpusSearch *******");
-		
+
 		String serviceRequestNumber = searchKafkaPublish.searchPublish(request, userId);
-		
-		
+
 		DatasetCorpusSearchResponse response = new DatasetCorpusSearchResponse(serviceRequestNumber, new Date());
 		return response;
 	}
 
 	public Map<String, ArrayList<TaskTracker>> datasetById(String datasetId) {
-		
-		
+
 		Map<String, ArrayList<TaskTracker>> map = new HashMap<String, ArrayList<TaskTracker>>();
-		
+
 		List<ProcessTracker> processTrackerList = processTrackerDao.findByDatasetId(datasetId);
 		Dataset dataset = datasetDao.findById(datasetId).get();
-		
-		if(processTrackerList != null && processTrackerList.size() > 0) {
-			
-			for(ProcessTracker pt : processTrackerList) {
-				
+
+		if (processTrackerList != null && processTrackerList.size() > 0) {
+
+			for (ProcessTracker pt : processTrackerList) {
+
 				String serviceRequestNumber = pt.getServiceRequestNumber();
-				
+
 				List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
-				
+
 				map.put(serviceRequestNumber, (ArrayList<TaskTracker>) taskTrackerList);
 			}
-			
+
 		}
-		
 
 		return map;
 	}
 
 	public List<TaskTracker> datasetByServiceRequestNumber(String serviceRequestNumber) {
-		
 
 		return taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 	}
 
 	public DatasetSearchStatusResponse searchStatus(String serviceRequestNumber) {
-		
+
 		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
-		
-		List<TaskTracker>  taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
-		
-		return new DatasetSearchStatusResponse(processTracker.getServiceRequestNumber(),processTracker.getStartTime(),processTracker.getSearchCriterion(), taskTrackerList);
+
+		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+
+		return new DatasetSearchStatusResponse(processTracker.getServiceRequestNumber(), processTracker.getStartTime(),
+				processTracker.getSearchCriterion(), taskTrackerList);
 	}
 
 }
