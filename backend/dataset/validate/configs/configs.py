@@ -12,6 +12,8 @@ monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', 'co
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 validate_input_topic = os.environ.get('KAFKA_ULCA_DS_VALIDATE_IP_TOPIC', 'ulca-ds-validate-ip-v0')
 validate_output_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')
+error_event_input_topic = os.environ.get('KAFKA_ULCA_DS_ERROR_IP_TOPIC', 'ulca-ds-error-ip-v0')
+validate_error_code = "2000_XXX"
 
 validate_consumer_grp = os.environ.get('KAFKA_ULCA_DS_VALIDATE_CONSUMER_GRP', 'ulca-ds-validate-consumer-group-v0')
 ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 3)

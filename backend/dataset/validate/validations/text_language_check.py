@@ -17,12 +17,12 @@ class TextLanguageCheck(BaseValidator):
         detected_lang = str(res[0]).split(':')[0]
         prob = str(res[0]).split(':')[1]
         if detected_lang != src_lang or float(prob) < 0.8:
-            return {"message": "Source sentence does not match the specified language", "status": "FAILED"}
+            return {"message": "Source sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
 
         res = detect_langs(tgt_txt)
         detected_lang = str(res[0]).split(':')[0]
         prob = str(res[0]).split(':')[1]
         if detected_lang != target_lang or float(prob) < 0.8:
-            return {"message": "Target sentence does not match the specified language", "status": "FAILED"}
+            return {"message": "Target sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
 
         return super().execute(request)

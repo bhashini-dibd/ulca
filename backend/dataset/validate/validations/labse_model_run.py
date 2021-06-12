@@ -36,6 +36,6 @@ class LabseModelRun(BaseValidator):
         print(cos)
 
         if cos < validate_parallel_labse_threshold:
-            return {"message": "Low translation accuracy", "status": "FAILED"}
+            return {"message": "Low translation accuracy", "code": "LOW_TRANSLATION_SCORE", "status": "FAILED"}
         
         return super().execute(request)
