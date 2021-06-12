@@ -14,8 +14,8 @@ const getDetailedReport = (payload) => {
             {
                     srNo                    : element.serviceRequestNumber,
                      datasetId              : element.datasetName,
-                     recordCount            : element.details,
-                     
+                     recordCount            : element.details? element.details: 0,
+                     errorCount             : element.error ? element.error : 0,
                      stage                  : element.tool,
                      status                 : element.status 
                     }

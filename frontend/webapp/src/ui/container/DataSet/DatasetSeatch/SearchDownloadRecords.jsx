@@ -219,7 +219,7 @@ const SearchAndDownloadRecords = (props) => {
                     </div>
                     <Typography className={classes.subHeader} variant="h6">Select Dataset Type</Typography>
 
-                    <div className={classes.buttonDiv}>
+                    <div className={classes.buttonDiv} >
                         {renderDatasetButtons()}
                         {/* <Button className={classes.innerButton} variant={datasetType.pd ? "contained" : "outlined"}
                             color="primary"
