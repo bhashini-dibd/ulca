@@ -16,7 +16,7 @@ error_event_input_topic = os.environ.get('KAFKA_ULCA_DS_ERROR_IP_TOPIC', 'ulca-d
 validate_error_code = "2000_XXX"
 
 validate_consumer_grp = os.environ.get('KAFKA_ULCA_DS_VALIDATE_CONSUMER_GRP', 'ulca-ds-validate-consumer-group-v0')
-ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 3)
+ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 1)
 if isinstance(ulca_dataset_topic_partitions, str):
     ulca_dataset_topic_partitions = eval(ulca_dataset_topic_partitions)
 
