@@ -76,10 +76,10 @@ const ChartRender = (props) => {
 		    switch (value) {
 			case 1:
 				
-				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label } }])
+				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id } }])
 				setPage(value)
 				setTitle( `English-${selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label }  parallel corpus - Grouped by ${(filter === "domains") ? "Domains" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domains"}`)
-				setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label)
+				setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 				
 				break;
 			case 2:
@@ -159,7 +159,7 @@ const ChartRender = (props) => {
 			<Paper elevation  = {3} className  = {classes.paper}>
 			
 				<div className  =	{classes.titleBar}>
-					{page!==0 && <><Button color="light" size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
+					{page!==0 && <><Button color="primary" size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
 					<div className={classes.seperator}></div></>}
 					
 					<Typography 	variant   	=	"h5" component = "h3" 

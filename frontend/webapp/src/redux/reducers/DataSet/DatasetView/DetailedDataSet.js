@@ -5,25 +5,56 @@ const initialState = {
 }
 
 
-const getDetailedReport = (payload) => {
+//{"CurrentRecordIndex": 2, "ProcessedCount": [{"Type": "Success", "Count": 3}, {"Type": "Failed", "TypeDetails": {}, "Count": 0}], "TimeStamp": "2021-06-12 11:47:23.861540"}
+
+const getRecordCount = (value) =>
+{
+
     debugger
+    console.log("----------------",value, typeof(value))
+    let valueArray = value.processedCount;
+
+    console.log("-------",valueArray, typeof(valueArray))
+    var countDetails = {}
+    valueArray.length> 0 && valueArray.forEach(element =>{
+        debugger
+        if(element.type==="success"){
+            countDetails["success"] = element.count;
+        }
+        else if(element.type==="failed"){
+            countDetails["failed"] = element.count;
+        }
+    })
+
+   
+
+    return countDetails;
+
+}
+
+const getDetailedReport = (payload) => {
+    
     let responseData = [];
     let refreshStatus = false;
     payload.forEach(element => {
+        debugger
+        let count = element.details ? getRecordCount( JSON.parse(element.details)):""
         responseData.push(
             {
                     srNo                    : element.serviceRequestNumber,
                      datasetId              : element.datasetName,
-                     recordCount            : element.details? element.details: 0,
+                     recordCount            : count && count.success,
+                     failedCount            : count && count.failed,
                      stage                  : element.tool,
-                     status                 : element.status 
+                     status                 : element.status==="successful" ? "Completed" :  element.status
                     }
         )
-        if(element.status === "INPROGRESS" || "NOTSTARTED"){
+        if(element.status === "successful" || "NOTSTARTED"){
             refreshStatus = true
         }
     }); 
-    responseData = responseData.reverse()
+
+    debugger
     return {responseData , refreshStatus};
 }
 

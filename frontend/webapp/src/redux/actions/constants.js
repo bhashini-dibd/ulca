@@ -1,5 +1,6 @@
 const constants = {
   APISTATUS             : "APISTATUS",
+  GET_ERROR_REPORT      : "GET_ERROR_REPORT",
 
   /**
    * action for Dataset report

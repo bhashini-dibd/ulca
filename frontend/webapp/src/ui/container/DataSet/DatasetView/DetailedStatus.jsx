@@ -15,7 +15,7 @@ const DetailedStatus = (props) => {
 
         const {detailedReport, errorData}         =       useSelector((state) => state);
 
-        console.log(detailedReport)
+        console.log(detailedReport, errorData)
         const dispatch = useDispatch();
         const {status,name, id} = useParams();
 
@@ -63,12 +63,13 @@ const DetailedStatus = (props) => {
         
         });
 
+
         const fetchHeaderButton= () => {
                 return (
                         <div className={classes.headerButtons}>
                                 <Typography  variant="h5" >{name}</Typography>
-                                {status !== "published" && <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined"  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
-                                <Button color={"primary" } href="http://ulca-datasets.s3.amazonaws.com/datasets/srn-search-1-ds.json" color="transparent" target="_blank" size="medium" variant="outlined" disabled={status !== "published"? false:false} className={status !== "published" ? classes.buttonStyle : classes.ButtonRefresh} onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
+                                {(status !== "published") && <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined"  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
+                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.status==="successful")? false:true} className={!(errorData.status!=="published")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
                         
                         </div>
                 );
@@ -115,7 +116,7 @@ const DetailedStatus = (props) => {
                 },
                 {
                         name    : "recordCount",
-                        label   : "Record Count",
+                        label   : "Success Count",
                         options : {
                                 filter  : false,
                                 sort    : false,
@@ -171,7 +172,7 @@ const DetailedStatus = (props) => {
                                 />
                         </MuiThemeProvider>
                         {status !== "published" && <div className = {classes.footerButtons}>
-                                <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => this.handleAbort()}>Abort Process</Button>
+                                <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => handleAbort()}>Abort Process</Button>
                                 
                         </div>}
                 </div>

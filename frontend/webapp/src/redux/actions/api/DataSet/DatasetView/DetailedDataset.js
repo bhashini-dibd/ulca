@@ -17,6 +17,7 @@ export default class MyCOntribution extends API {
     processResponse(res) {
         super.processResponse(res);
         if (res) {
+
             this.report = res;
         }
     }
@@ -35,6 +36,7 @@ export default class MyCOntribution extends API {
     }
 
     getPayload() {
+        debugger
         return this.report;
     }
 }

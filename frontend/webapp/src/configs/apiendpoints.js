@@ -8,7 +8,7 @@ const endpoints = {
   getSearchOptions: '/ulca/user-mgmt/v1/users/login',
   mySearches: "/corpus/search/listByUserId",
   submitSearchReq: '/dataset/corpus/search',
-  errorReport: "ulca/publish/v0/error/report"
+  errorReport: "/ulca/publish/v0/error/report"
 };
 
 export default endpoints;
