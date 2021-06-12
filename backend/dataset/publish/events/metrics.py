@@ -40,8 +40,12 @@ class MetricEvent:
     def create_metric_event(self, data):
         log.info(f'Publishing BI metric event for srn -- {data["serviceRequestNumber"]}')
         try:
-            event = {"eventType": "dataset-training", "eventId": f'{data["serviceRequestNumber"]}|{data["id"]}',
-                     "timestamp": str(datetime.now()), "submitterId": data["userId"], "datasetType": data["datasetType"]}
+            event = {"eventType": "dataset-training", "eventId": f'{data["serviceRequestNumber"]}_{data["id"]}',
+                     "timestamp": str(datetime.now()), "submitterId": data["userId"], "datasetType": data["datasetType"],
+                     "sourceLanguage": None, "targetLanguage": None, "domains": None, "license": None, "collectionSource": None,
+                     "primarySubmitterId": None, "secondarySubmitterIds": None, "collectionMethod_collectionDescriptions": None,
+                     "collectionMethod_collectionDetails_alignmentTool": None, "format": None, "channel": None, "samplingRate": None,
+                     "bitsPerSample": None, "gender": None}
             if 'sourceLanguage' in data.keys():
                 event["sourceLanguage"] = data["sourceLanguage"]
             if 'targetLanguage' in data.keys():

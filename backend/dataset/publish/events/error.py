@@ -28,7 +28,7 @@ class ErrorEvent:
             try:
                 event = {"eventType": "dataset-training", "messageType": "error", "code": publish_error_code.replace("XXX", error["code"]),
                          "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),
-                         "serviceRequestNumber": error["serviceRequestNumber"],
+                         "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool,
                          "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
                 if 'originalRecord' in error.keys():
                     event["originalRecord"] = error["originalRecord"]
