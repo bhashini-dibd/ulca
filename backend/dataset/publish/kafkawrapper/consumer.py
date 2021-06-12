@@ -50,11 +50,10 @@ def consume():
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
                         if 'eof' in data.keys():
                             if data["eof"]:
-                                pt.end_processing(data)
-                                error_event.publish_eof(data)
+                                end = pt.end_processing(data)
+                                if end:
+                                    error_event.publish_eof(data)
                                 break
-                        if 'id' not in data["record"].keys():
-                            data["record"]["id"] = str(uuid.uuid4())
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.load_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:

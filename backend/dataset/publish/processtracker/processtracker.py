@@ -48,12 +48,13 @@ class ProcessTracker:
                 task_event["lastModifiedTime"] = str(datetime.now())
                 task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
+                return task_event
             else:
                 log.error(f'EOF received for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
+                return None
         else:
             log.error(f'EOF received for a non existent SRN -- {data["serviceRequestNumber"]}')
-        log.error(f'Done!')
-        return
+            return None
 
     def update_task_event(self, data, task_event):
         processed = task_event["details"]["processedCount"]
