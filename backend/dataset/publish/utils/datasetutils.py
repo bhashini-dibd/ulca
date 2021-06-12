@@ -81,14 +81,12 @@ class DatasetUtils:
 
     # Utility to upload files to ULCA S3 Bucket
     def upload_file(self, file_name, s3_file_name):
-        log.info(f'Pushing file to S3......')
         if s3_file_name is None:
             s3_file_name = file_name
+        log.info(f'Pushing {file_name} to S3 at {s3_file_name} ......')
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
         try:
-            response = s3_client.upload_file(file_name, aws_bucket_name, s3_file_name)
-            if response:
-                log.info(response)
+            s3_client.upload_file(file_name, aws_bucket_name, s3_file_name)
             return f'{aws_link_prefix}{s3_file_name}'
         except Exception as e:
             log.exception(f'Exception while pushing to s3: {e}', e)

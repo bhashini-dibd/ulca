@@ -52,10 +52,12 @@ class ErrorEvent:
                 if "eof" in data.keys():
                     if 'tool' in data.keys():
                         if data["eof"] and data["tool"] == pt_publish_tool:
-                            log.info(f'Writing error EOF for SRN -- {data["serviceRequestNumber"]}')
                             log.info(f'Error List: {len(error_record["error_list"])} for SRN -- {data["serviceRequestNumber"]}')
+                            log.info(f'FILE -- {file}')
                             self.write_to_csv(error_record["error_list"], file)
                             path = file.split("/")[2]
+                            log.info(f'FILE -- {file}')
+                            log.info(f'PATH -- {path}')
                             aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
                             if aws_file:
                                 log.info(f'Uploading error file to s3 for SRN -- {data["serviceRequestNumber"]}')
@@ -93,10 +95,10 @@ class ErrorEvent:
                     if isinstance(row, str):
                         row = json.loads(row)
                     writer.writerow(row)
-            data_file.close()
-            log.info(f'Wrote {len(data_list)} errors to csv -- {file}')
+            return
         except Exception as e:
             log.exception(f'Exception in csv writer: {e}', e)
+            return
 
     def get_error_report(self, srn, internal):
         query = {"serviceRequestNumber": srn}
