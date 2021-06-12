@@ -173,8 +173,9 @@ class SummarizeDatasetModel(object):
                 chart_data =[]
                 for val in aggs_parsed:
                     elem={}
+                    title=val.split('-')
                     elem["_id"]=val
-                    elem["label"]=val
+                    elem["label"]=" ".join(title).title()
                     elem["value"]=aggs_parsed.get(val)
                     chart_data.append(elem)
                     
@@ -194,7 +195,7 @@ class SummarizeDatasetModel(object):
                 sub_q= criterions[1]["value"]
                 grp_val = grouping["value"]
                 query = "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,{group},isDelete FROM \"{schema}\" \
-                        WHERE ((\'{match}\' = \'{val}\') AND (sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\'))\
+                        WHERE (({match} = \'{val}\') AND (sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\'))\
                              GROUP BY sourceLanguage, targetLanguage, {group},isDelete".format(schema=DRUID_DB_SCHEMA,group=grp_val,val=sub_q,srcl=src,tgtl=tgt,match=add_field)
 
                 log.info("Query executed : {}".format(query))
@@ -230,8 +231,9 @@ class SummarizeDatasetModel(object):
                 chart_data =[]
                 for val in aggs_parsed:
                     elem={}
+                    title=val.split('-')
                     elem["_id"]=val
-                    elem["label"]=val
+                    elem["label"]=" ".join(title).title()
                     elem["value"]=aggs_parsed.get(val)
                     chart_data.append(elem)                 
                 return chart_data        
