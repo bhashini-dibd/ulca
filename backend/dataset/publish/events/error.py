@@ -53,20 +53,17 @@ class ErrorEvent:
                     if 'tool' in data.keys():
                         if data["eof"] and data["tool"] == pt_publish_tool:
                             log.info(f'Error List: {len(error_record["error_list"])} for SRN -- {data["serviceRequestNumber"]}')
-                            log.info(f'FILE -- {file}')
                             self.write_to_csv(error_record["error_list"], file)
                             path = file.split("/")[2]
-                            log.info(f'FILE -- {file}')
-                            log.info(f'PATH -- {path}')
                             aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
                             if aws_file:
-                                log.info(f'Uploading error file to s3 for SRN -- {data["serviceRequestNumber"]}')
                                 error_record["status"], error_record["file"] = pt_success_status, aws_file
                                 error_record["lastModifiedTime"] = str(datetime.now())
                                 error_record["endTime"] = error_record["lastModifiedTime"]
                                 error_repo.update(error_record)
                             error_record["error_list"] = None
                             error_repo.update(error_record)
+                            log.info(f'Error file UPLOADED to s3 for SRN -- {data["serviceRequestNumber"]}')
                             return
                 if error_record["status"] == pt_inprogress_status:
                     log.info(f'Updating error file for SRN -- {data["serviceRequestNumber"]}')
@@ -88,13 +85,21 @@ class ErrorEvent:
 
     def write_to_csv(self, data_list, file):
         try:
+            log.info(f'Size of error list -- {len(data_list)}')
             with open(file, 'wb') as data_file:
-                writer = csv.DictWriter(data_file, data_list[0].keys())
-                writer.writeheader()
+                writer = csv.writer(data_file)
                 for row in data_list:
                     if isinstance(row, str):
                         row = json.loads(row)
+                    log.info(f'Row written')
                     writer.writerow(row)
+            data_file.close()
+            log.info(f'Reading the written file --- {file}')
+            with open(file, 'r') as read_file:
+                csvreader = csv.reader(read_file)
+                for row in csvreader:
+                    log.info(row)
+            read_file.close()
             return
         except Exception as e:
             log.exception(f'Exception in csv writer: {e}', e)

@@ -29,7 +29,7 @@ class Producer:
             if object_in:
                 if partition is None:
                     partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
-                producer.send(topic, value=object_in, partition=partition)
+                producer.send(topic, value=object_in, partition=0)
                 log.info(f'Pushing to topic: {topic}')
             producer.flush()
         except Exception as e:
