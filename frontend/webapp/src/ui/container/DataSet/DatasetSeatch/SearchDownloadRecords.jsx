@@ -208,17 +208,18 @@ const SearchAndDownloadRecords = (props) => {
 
         )
     }
-    const getTargetLang=()=>{
-        return Language.filter(lang=>lang.value!==languagePair.source)
+    const getTargetLang = () => {
+        return Language.filter(lang => lang.value !== languagePair.source)
     }
 
     return (
         <div className={classes.searchDivStyle}>
+            <div className={classes.breadcrum}>
+                <BreadCrum links={[url]} activeLink="Search & Download Records" />
+            </div>
             <Grid container spacing={3}>
-                <Grid className={(params==='inprogress'|| params==='published') && classes.blurOut} item xs={12} sm={5} md={4} lg={4} xl={4}>
-                    <div className={classes.breadcrum}>
-                        <BreadCrum links={[url]} activeLink="Search & Download Records" />
-                    </div>
+                <Grid className={(params === 'inprogress' || params === 'published') && classes.blurOut} item xs={12} sm={5} md={4} lg={4} xl={4}>
+
                     <Typography className={classes.subHeader} variant="h6">Select Dataset Type</Typography>
 
                     <div className={classes.buttonDiv} >
