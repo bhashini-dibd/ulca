@@ -103,7 +103,8 @@ public class DatasetIngestService {
 
 						vModel.put("currentRecordIndex", numberOfRecords);
 
-						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+						datasetValidateKafkaTemplate.send(validateTopic,0,null, vModel.toString());
+						
 
 					}
 					jsonToken = jsonParser.nextToken();
@@ -116,7 +117,7 @@ public class DatasetIngestService {
 
 				log.info("Eof reached");
 				jsonParser.close();
-				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+				datasetValidateKafkaTemplate.send(validateTopic,0,null, vModel.toString());
 
 			} catch (JsonProcessingException | JSONException e) {
 				// TODO Auto-generated catch block

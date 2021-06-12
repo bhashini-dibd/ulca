@@ -81,8 +81,8 @@ public class KafkaFileDownloadConsumer {
 			
 			
 			TaskTracker taskTracker = new TaskTracker();
-			taskTracker.setLastModified(new Date());
-			taskTracker.setEndTime(new Date());
+			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setEndTime(new Date().toString());
 			taskTracker.setTool(ToolEnum.download);
 			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
 			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
@@ -102,8 +102,8 @@ public class KafkaFileDownloadConsumer {
 					} catch(Exception e) {
 						 //update error
 						taskTracker = new TaskTracker();
-						taskTracker.setLastModified(new Date());
-						taskTracker.setEndTime(new Date());
+						taskTracker.setLastModified(new Date().toString());
+						taskTracker.setEndTime(new Date().toString());
 						taskTracker.setTool(ToolEnum.validate);
 						taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 						Error error = new Error();
@@ -133,8 +133,8 @@ public class KafkaFileDownloadConsumer {
 			datasetIngestService.datasetIngest(paramsSchema,file, fileMap);
 			
 			taskTracker = new TaskTracker();
-			taskTracker.setLastModified(new Date());
-			taskTracker.setEndTime(new Date());
+			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setEndTime(new Date().toString());
 			taskTracker.setTool(ToolEnum.ingest);
 			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
 			
@@ -147,8 +147,8 @@ public class KafkaFileDownloadConsumer {
 			// TODO Auto-generated catch block
 			//update error
 			TaskTracker taskTracker = new TaskTracker();
-			taskTracker.setLastModified(new Date());
-			taskTracker.setEndTime(new Date());
+			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setEndTime(new Date().toString());
 			taskTracker.setTool(ToolEnum.download);
 			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 			Error error = new Error();
