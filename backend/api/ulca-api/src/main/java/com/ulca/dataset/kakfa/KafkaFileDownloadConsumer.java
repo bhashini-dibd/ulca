@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -130,17 +131,20 @@ public class KafkaFileDownloadConsumer {
 
 			}
 			
-			datasetIngestService.datasetIngest(paramsSchema,file, fileMap);
+			JSONObject details = datasetIngestService.datasetIngest(paramsSchema,file, fileMap);
 			
-			taskTracker = new TaskTracker();
-			taskTracker.setLastModified(new Date().toString());
-			taskTracker.setEndTime(new Date().toString());
-			taskTracker.setTool(ToolEnum.ingest);
-			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
-			
-			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
+			if(details != null) {
+				taskTracker = new TaskTracker();
+				taskTracker.setLastModified(new Date().toString());
+				taskTracker.setEndTime(new Date().toString());
+				taskTracker.setTool(ToolEnum.ingest);
+				taskTracker.setDetails(details.toString());
+				taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
+				taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
 
-			taskTrackerDao.save(taskTracker);
+				taskTrackerDao.save(taskTracker);
+			}
+			
 			
 
 		} catch (IOException e) {

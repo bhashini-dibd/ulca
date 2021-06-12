@@ -106,19 +106,36 @@ public class DatasetService {
 				dataset.getCreatedOn());
 	}
 
-	public List<DatasetListByUserIdResponse> dataSetListByUserId(String userId) {
+	public List<DatasetListByUserIdResponse> datasetListByUserId(String userId) {
 
 		log.info("******** Entry DatasetService:: dataSetListByUserId *******");
 
 		List<DatasetListByUserIdResponse> list = new ArrayList<DatasetListByUserIdResponse>();
 
 		List<ProcessTracker> processList = processTrackerDao.findByUserId(userId);
+		
 		for (ProcessTracker p : processList) {
 			if (p.getDatasetId() != null && !p.getDatasetId().isEmpty()) {
+				
+				String status =  p.getStatus().toString();
 				Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
+				
+				List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(p.getServiceRequestNumber());
+				
+				HashMap<String, String> map = new HashMap<String, String>();
+				for(TaskTracker tTracker : taskTrackerList) {
+					map.put(tTracker.getTool().toString(),tTracker.getStatus().toString());
+				}
+				if(map.containsKey("publish")) {
+					status = map.get("publish");
+				} else if(map.containsKey("validate")) {
+					status = map.get("validate");
+				} 
+				
+				
 
 				list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
-						dataset.get().getDatasetName(), dataset.get().getCreatedOn(), p.getStatus().name()));
+						dataset.get().getDatasetName(), dataset.get().getCreatedOn(),status));
 			}
 
 		}
