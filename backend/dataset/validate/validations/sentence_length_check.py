@@ -12,6 +12,6 @@ class SentenceLengthCheck(BaseValidator):
         words_src = len(list(src_txt.split(" ")))
         words_tgt = len(list(tgt_txt.split(" ")))
         if words_src < 4 or words_tgt < 4:
-            return {"message": "Sentence Length too short", "status": "FAILED"}
+            return {"message": "Sentence Length too short", "code": "TEXT_LENGTH_TOO_SHORT", "status": "FAILED"}
         else:
             return super().execute(request)

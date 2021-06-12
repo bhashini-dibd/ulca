@@ -16,13 +16,13 @@ class WordLengthCheck(BaseValidator):
             sum_src = sum_src + len(word)
 
         if sum_src/len(words_src) < 3:
-            return {"message": "Source sentence:Average Word length too short", "status": "FAILED"}
+            return {"message": "Source sentence:Average Word length too short", "code": "WORD_LENGTH_TOO_SHORT", "status": "FAILED"}
 
         sum_t = 0
         for word in words_target:
             sum_t = sum_t + len(word)
 
         if sum_t/len(words_target) < 3:
-            return {"message": "Target sentence:Average Word length too short", "status": "FAILED"}
+            return {"message": "Target sentence:Average Word length too short", "code": "WORD_LENGTH_TOO_SHORT", "status": "FAILED"}
 
         return super().execute(request)

@@ -5,11 +5,13 @@ from kafkawrapper.producer import Producer
 from models.validation_pipeline import ValidationPipeline
 from configs.configs import validate_output_topic
 from processtracker.processtracker import ProcessTracker
+from events.error import ErrorEvent
 
 log = logging.getLogger('file')
 
 prod = Producer()
 pt = ProcessTracker()
+error_event = ErrorEvent()
 
 class ParallelValidate:
     def __init__(self):
@@ -24,6 +26,10 @@ class ParallelValidate:
             # Produce event for publish
             if res["status"] == "SUCCESS":
                 prod.produce(request, validate_output_topic, None)
+            else:
+                error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
+                         "message": res["message"], "code": res["code"], "record": request["record"]}
+                error_event.create_error_event(error)
 
             # Update task tracker
             tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"]}

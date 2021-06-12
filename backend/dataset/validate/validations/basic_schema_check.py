@@ -12,4 +12,4 @@ class BasicSchemaCheck(BaseValidator):
         if required_keys <= request["record"].keys():
             return super().execute(request)
         else:
-            return {"message": "Mandatory keys missing", "status": "FAILED"}
+            return {"message": "Mandatory keys missing", "code": "KEYS_MISSING", "status": "FAILED"}
