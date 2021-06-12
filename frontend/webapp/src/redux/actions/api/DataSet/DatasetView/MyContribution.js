@@ -15,7 +15,6 @@ export default class MyCOntribution extends API {
     }
 
     processResponse(res) {
-        debugger
         super.processResponse(res);
         if (res) {
             this.report = res;

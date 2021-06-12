@@ -34,7 +34,6 @@ const ResetPassword = (props) => {
     event.preventDefault();
   };
   const HandleSubmit = () => {
-    console.log(values);
   };
   const { classes } = props;
 

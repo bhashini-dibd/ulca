@@ -143,7 +143,6 @@ class ChartRender extends React.Component {
     }
 
     render() {
-        console.log(this.state.dataSetValues)
         const { classes } = this.props;
       
         this.getData()

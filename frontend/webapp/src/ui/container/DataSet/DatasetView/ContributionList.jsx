@@ -219,7 +219,6 @@ const ContributionList = (props) => {
         };
 
         const { classes } = props;
-        console.log(data)
         return (
                 <div className = {classes.divStyle}>
                         <div className = {classes.breadcrum}>

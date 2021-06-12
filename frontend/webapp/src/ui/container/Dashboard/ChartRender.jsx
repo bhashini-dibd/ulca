@@ -41,7 +41,6 @@ const ChartRender = (props) => {
 	}, []);
 
 	const fetchChartData = (dataType, value, criterions) =>{
-		debugger
 		const userObj 		= 	new FetchLanguageDataSets(dataType, value, criterions);
 		dispatch(APITransport(userObj));
 		
@@ -84,7 +83,6 @@ const ChartRender = (props) => {
 				
 				break;
 			case 2:
-				debugger
 				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage } }, { "type": "PARAMS", "value": event && event.hasOwnProperty("label") && event.label }])
 				setPage(value)
 				setFilterValue('domains')
@@ -116,7 +114,6 @@ const ChartRender = (props) => {
 	    }
 
 	const fetchLanuagePairButtons = () => {
-		console.log(filterValue)
 		return (
 		    <div className={classes.filterButton}>
 			<Button  color={filterValue ==="domains" ? "primary" :"default" } style={ filterValue === "domains" ? {backgroundColor: "#E8F5F8"} : {} } size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domains")}>Domain</Button>
@@ -148,9 +145,6 @@ const ChartRender = (props) => {
 
 		
 	}
-
-	console.log(DashboardReport)
-
      return (
         <>
             	{ !authenticate() &&

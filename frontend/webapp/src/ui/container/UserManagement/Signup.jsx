@@ -68,7 +68,6 @@ const SignUp = (props) => {
 
   
     const HandleSubmitValidate = () => {
-      debugger
       if(!(/^[A-Za-z ]+$/.test(values.name))){
         setError({...error, name:true})
       }
