@@ -94,15 +94,15 @@ const handleSubmit = async () => {
 
   let data = {
     "userKeys": {
-        "email": "sajish@gmail.com",
+        "email": "ulca@gmail.com",
         "publicKey": "31f8ed31-25a0-44a2-8da0-db42b5855d2a",
         "privateKey": "98541a718173430880f5ae13a4e79aa0"
     },
     "userDetails": {
         "userID": "9a3f534cd588410f95d68696dd06fa2b",
-        "email": "sajish@gmail.com",
-        "firstName": "sajish",
-        "lastName": "sasidharan",
+        "email": "ulca@gmail.com",
+        "firstName": "Ulca",
+        "lastName": "User",
         "phoneNo": "9446400000",
         "isVerified": true,
         "isActive": true,

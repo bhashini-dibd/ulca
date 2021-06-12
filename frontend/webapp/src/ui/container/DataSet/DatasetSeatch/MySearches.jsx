@@ -16,9 +16,9 @@ const MySearches = (props) => {
         const dispatch                  = useDispatch();
         const history                   = useHistory();
         useEffect(() => {
-            const userObj           = new MySearchReport(  "SAVE", "A_FBTTR-VWSge-1619075981554","241006445d1546dbb5db836c498be6381606221196566");
-            detailedReport.responseData.length === 0  &&dispatch(APITransport(userObj));   
-        }, [detailedReport.responseData, dispatch]);
+            const userObj           = new MySearchReport();
+            detailedReport.responseData.length === 0  && dispatch(APITransport(userObj));   
+        }, []);
 
         const getMuiTheme = () => createMuiTheme({
                 overrides: {
@@ -52,8 +52,10 @@ const MySearches = (props) => {
             )
     }
 
-    const renderAction = (rowData, rowMeta) =>{
-        console.log(rowData, rowMeta)
+    const renderAction = (rowData) =>{
+
+        const status = rowData[3].toLowerCase();
+        history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`)
     }
 
         
@@ -113,7 +115,8 @@ const MySearches = (props) => {
                 filter                  :       false,
                 selectableRows          :       "none",
 
-                onRowClick                 : (rowData, rowMeta) => {history.push(`${process.env.PUBLIC_URL}//${rowData[0]}/${rowData[4]}`)}
+
+                onRowClick                 : (rowData, rowMeta) => renderAction(rowData)
         };
 
         const { classes }               = props;

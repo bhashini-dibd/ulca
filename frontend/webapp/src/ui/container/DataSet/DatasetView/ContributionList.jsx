@@ -7,6 +7,7 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
+import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import Dialog from "../../../components/common/Dialog"
 import {Cached, DeleteOutline, VerticalAlignTop} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
@@ -15,7 +16,7 @@ import { useParams } from "react-router";
 const ContributionList = (props) => {
 
         const history                 = useHistory();
-        const dispatch                = useDispatch();
+        const dispatch                = useDispatch(ClearReport);
         const myContributionReport    = useSelector( (state) => state.myContributionReport);
         const [open, setOpen]         = useState(false)
         const [message, setMessage]   = useState("Do you want to delete")
@@ -29,6 +30,7 @@ const ContributionList = (props) => {
         }, []);
   
         const  MyContributionListApi  = () =>{
+                dispatch(ClearReport());
                 const userObj         = new MyContributionList( "SAVE", "A_FBTTR-VWSge-1619075981554", "241006445d1546dbb5db836c498be6381606221196566");
                 dispatch(APITransport(userObj));
         }
@@ -44,6 +46,7 @@ const ContributionList = (props) => {
                                 backgroundColor : "#c7c6c68a !important"
                         }
                 },
+                MUIDataTableBodyCell:{root : {textTransform: "capitalize"}},
                
                 MuiPaper: {
                         root:{
@@ -78,9 +81,9 @@ const ContributionList = (props) => {
                 setOpen         (true)
         }
 
-        const renderStatus = (id,value) => {
+        const renderStatus = (id,name,value) => {
                 if(value === "In-Progress"){
-                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${id}`)}}> In-Progress </Link>
+                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${name}/${id}`)}}> In-Progress </Link>
                 }
                 else{
                         return <span
@@ -105,10 +108,10 @@ const ContributionList = (props) => {
 
         const handleRowClick = ( rowMeta) => {
                 if(rowMeta.colIndex !== 6){
-                        debugger
                         const value = data[rowMeta.rowIndex].submitRefNumber;
                         const status = data[rowMeta.rowIndex].status.toLowerCase();
-                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${value}`)
+                        const name = data[rowMeta.rowIndex].datasetName;
+                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${value}`)
                 }
         };
 
@@ -171,7 +174,7 @@ const ContributionList = (props) => {
                         empty   : true,
                         customBodyRender: (value, tableMeta, updateValue) => {
                                         if (tableMeta.rowData) {
-                                                return <div>{renderStatus(tableMeta.rowData[0],tableMeta.rowData[4])}</div>;
+                                                return <div>{renderStatus(tableMeta.rowData[0],tableMeta.rowData[2],tableMeta.rowData[4])}</div>;
                                         }
                                 },
                         },
