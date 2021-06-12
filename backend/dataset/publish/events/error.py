@@ -53,8 +53,7 @@ class ErrorEvent:
                     if 'tool' in data.keys():
                         if data["eof"] and data["tool"] == pt_publish_tool:
                             log.info(f'Error List: {len(error_record["error_list"])} for SRN -- {data["serviceRequestNumber"]}')
-                            self.write_to_csv(error_record["error_list"], file)
-                            log.info(f'Errors written to csv for SRN -- {data["serviceRequestNumber"]}')
+                            self.write_to_csv(error_record["error_list"], file, data["serviceRequestNumber"])
                             path = file.split("/")[2]
                             aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
                             if aws_file:
@@ -84,15 +83,21 @@ class ErrorEvent:
             log.exception(f'Exception while writing errors: {e}', e)
             return
 
-    def write_to_csv(self, data_list, file):
+    def write_to_csv(self, data_list, file, srn):
         try:
-            with open(file, 'wb') as data_file:
-                writer = csv.writer(data_file)
-                for row in data_list:
-                    if isinstance(row, str):
-                        row = json.loads(row)
-                    writer.writerow(row)
-                data_file.close()
+            data_modified = []
+            for data in data_list:
+                if isinstance(data, str):
+                    data_modified.append(json.loads(data))
+                else:
+                    data_modified.append(data)
+            keys = list(data_modified[0].keys())
+            with open(file, 'w', newline='') as output_file:
+                dict_writer = csv.DictWriter(output_file, keys)
+                dict_writer.writeheader()
+                dict_writer.writerows(data_modified)
+                output_file.close()
+            log.info(f'{len(data_modified)} Errors written to csv for SRN -- {srn}')
             return
         except Exception as e:
             log.exception(f'Exception in csv writer: {e}', e)
