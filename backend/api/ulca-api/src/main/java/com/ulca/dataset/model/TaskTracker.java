@@ -31,17 +31,17 @@ public class TaskTracker   {
    * Tool updating this data
    */
   public enum ToolEnum {
-    DOWNLOAD("download"),
+    download("download"),
     
-    INGEST("ingest"),
+    ingest("ingest"),
     
-    VALIDATE("validate"),
+    validate("validate"),
     
-    PUBLISH("publish"),
+    publish("publish"),
     
-    SEARCH("search"),
+    search("search"),
     
-    DELETE("delete");
+    delete("delete");
 
     private String value;
 
@@ -72,13 +72,13 @@ public class TaskTracker   {
    * Status of the task
    */
   public enum StatusEnum {
-    NOTSTARTED("notstarted"),
+    notstarted("notstarted"),
     
-    INPROGRESS("inprogress"),
+    inprogress("inprogress"),
     
-    SUCCESSFUL("successful"),
+    successful("successful"),
     
-    FAILED("failed");
+    failed("failed");
 
     private String value;
 

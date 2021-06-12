@@ -72,7 +72,7 @@ public class KafkaFileDownloadConsumer {
 		log.info(processTracker.toString());
 		
 		try {
-			processTracker.setStatus(StatusEnum.INPROGRESS);
+			processTracker.setStatus(StatusEnum.inprogress);
 			processTrackerDao.save(processTracker);
 			
 			
@@ -83,8 +83,8 @@ public class KafkaFileDownloadConsumer {
 			TaskTracker taskTracker = new TaskTracker();
 			taskTracker.setLastModified(new Date());
 			taskTracker.setEndTime(new Date());
-			taskTracker.setTool(ToolEnum.DOWNLOAD);
-			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.SUCCESSFUL);
+			taskTracker.setTool(ToolEnum.download);
+			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
 			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
 			taskTrackerDao.save(taskTracker);
 			
@@ -104,8 +104,8 @@ public class KafkaFileDownloadConsumer {
 						taskTracker = new TaskTracker();
 						taskTracker.setLastModified(new Date());
 						taskTracker.setEndTime(new Date());
-						taskTracker.setTool(ToolEnum.VALIDATE);
-						taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.FAILED);
+						taskTracker.setTool(ToolEnum.validate);
+						taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 						Error error = new Error();
 						error.setCause("params validation failed");
 						error.setMessage("params validation failed");
@@ -114,7 +114,7 @@ public class KafkaFileDownloadConsumer {
 						taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
 
 						taskTrackerDao.save(taskTracker);
-						processTracker.setStatus(StatusEnum.FAILED);
+						processTracker.setStatus(StatusEnum.failed);
 						processTrackerDao.save(processTracker);
 						 return ;
 						
@@ -135,8 +135,8 @@ public class KafkaFileDownloadConsumer {
 			taskTracker = new TaskTracker();
 			taskTracker.setLastModified(new Date());
 			taskTracker.setEndTime(new Date());
-			taskTracker.setTool(ToolEnum.INGEST);
-			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.SUCCESSFUL);
+			taskTracker.setTool(ToolEnum.ingest);
+			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
 			
 			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
 
@@ -149,8 +149,8 @@ public class KafkaFileDownloadConsumer {
 			TaskTracker taskTracker = new TaskTracker();
 			taskTracker.setLastModified(new Date());
 			taskTracker.setEndTime(new Date());
-			taskTracker.setTool(ToolEnum.DOWNLOAD);
-			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.FAILED);
+			taskTracker.setTool(ToolEnum.download);
+			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 			Error error = new Error();
 			error.setCause("file download failed");
 			error.setMessage("file download failed");
@@ -158,7 +158,7 @@ public class KafkaFileDownloadConsumer {
 			taskTracker.setError(error);
 			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
 			taskTrackerDao.save(taskTracker);
-			processTracker.setStatus(StatusEnum.FAILED);
+			processTracker.setStatus(StatusEnum.failed);
 			processTrackerDao.save(processTracker);
 			
 			e.printStackTrace();

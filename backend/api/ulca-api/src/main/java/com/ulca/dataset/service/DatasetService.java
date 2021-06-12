@@ -87,9 +87,9 @@ public class DatasetService {
 		processTracker.setDatasetId(dataset.getDatasetId());
 		UUID uuid = UUID.randomUUID();
 		processTracker.setServiceRequestNumber(uuid.toString());
-		processTracker.setServiceRequestAction(ServiceRequestActionEnum.SUBMIT);
-		processTracker.setServiceRequestType(ServiceRequestTypeEnum.DATATSET);
-		processTracker.setStatus(StatusEnum.NOTSTARTED);
+		processTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
+		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
+		processTracker.setStatus(StatusEnum.notstarted);
 		processTracker.setStartTime(new Date());
 
 		processTrackerDao.insert(processTracker);

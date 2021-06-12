@@ -50,9 +50,9 @@ public class SearchKafkaPublish {
 		processTracker.setUserId(userId);
 		UUID uuid = UUID.randomUUID();
 		processTracker.setServiceRequestNumber(uuid.toString());
-		processTracker.setServiceRequestAction(ServiceRequestActionEnum.SEARCH);
-		processTracker.setServiceRequestType(ServiceRequestTypeEnum.DATATSET);
-		processTracker.setStatus(StatusEnum.NOTSTARTED);
+		processTracker.setServiceRequestAction(ServiceRequestActionEnum.search);
+		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
+		processTracker.setStatus(StatusEnum.notstarted);
 		processTracker.setStartTime(new Date());
 		
 		
@@ -76,7 +76,7 @@ public class SearchKafkaPublish {
 		
 		
 		processTracker.setSearchCriterion(searchCriteria);
-		processTracker.setStatus(StatusEnum.INPROGRESS);
+		processTracker.setStatus(StatusEnum.inprogress);
 		processTrackerDao.save(processTracker);
 		
 		
