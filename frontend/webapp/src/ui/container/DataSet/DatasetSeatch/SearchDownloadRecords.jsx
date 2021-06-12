@@ -42,7 +42,7 @@ const SearchAndDownloadRecords = (props) => {
     });
 
     const [datasetType, setDatasetType] = useState({
-        'parallel-dataset': true
+        'parallel-corpus': true
     })
 
     // const searchOptions = useSelector((state) => state.mySearchOptions);
@@ -80,10 +80,10 @@ const SearchAndDownloadRecords = (props) => {
     const [tgtError, setTgtError] = useState(false)
 
     const renderPage = () => {
-        const { params } = param
+        const { params, srno } = param
         switch (params) {
             case 'inprogress':
-                return <RequestNumberCreation reqno={"0005870"} />
+                return <RequestNumberCreation reqno={srno} />
             case 'published':
                 return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={"9.8 Million"} datasetsContributed={"29"} />
             default:
@@ -92,24 +92,25 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     const handleDatasetClick = (property) => {
+        history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
         clearfilter()
         setDatasetType({ [property]: true })
         setSrcError(false)
         setTgtError(false)
     }
     const getLabel = () => {
-        if (datasetType['parallel-dataset'])
+        if (datasetType['parallel-corpus'])
             return "Target Language *"
-        else if (datasetType['OCR-dataset'])
+        else if (datasetType['ocr-corpus'])
             return "Select Script *"
         else
             return "Select Language *"
     }
 
     const getTitle = () => {
-        if (datasetType['parallel-dataset'])
+        if (datasetType['parallel-corpus'])
             return "Select Language Pair"
-        else if (datasetType['OCR-dataset'])
+        else if (datasetType['ocr-corpus'])
             return "Select Script"
         else
             return "Select Language"
@@ -139,9 +140,10 @@ const SearchAndDownloadRecords = (props) => {
             headers: apiObj.getHeaders().headers,
             body: JSON.stringify(apiObj.getBody())
         })
-            .then(res => {
+            .then(async res => {
                 if (res.ok) {
-                    history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress`)
+                    let response = await res.json()
+                    history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.serviceRequestNumber}`)
                     handleSnackbarClose()
 
                 } else {
@@ -162,9 +164,12 @@ const SearchAndDownloadRecords = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const handleSubmitBtn = () => {
-        if (datasetType['parallel-dataset']) {
+        let tgt = languagePair.target.map(trgt => trgt.value)
+        let domain = filterBy.domain.map(domain => domain.value)
+        let collectionMethod = filterBy.collectionMethod.map(method => method.value)
+        if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
-                makeSubmitAPICall(languagePair.source, languagePair.target, filterBy.domain, filterBy.collectionMethod)
+                makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod)
             }
 
             else if (!languagePair.source && !languagePair.target.length) {
@@ -181,7 +186,7 @@ const SearchAndDownloadRecords = (props) => {
             if (!languagePair.target.length)
                 setTgtError(true)
             else {
-                makeSubmitAPICall(null, languagePair.target, filterBy.domain, filterBy.collectionMethod)
+                makeSubmitAPICall(null, tgt, domain, collectionMethod)
             }
 
         }
@@ -191,10 +196,11 @@ const SearchAndDownloadRecords = (props) => {
 
     const renderDatasetButtons = () => {
         return (
-            DatasetType.map((type) => {
+            DatasetType.map((type, i) => {
                 return (
                     <Button className={classes.innerButton} variant={datasetType[type.value] ? "contained" : "outlined"}
                         color="primary"
+                        key={i}
                         onClick={() => handleDatasetClick(type.value)}
                     >
                         {type.label}
@@ -243,7 +249,7 @@ const SearchAndDownloadRecords = (props) => {
 
                     <Typography className={classes.subHeader} variant="h6">{getTitle()}</Typography>
                     <div className={classes.subHeader}>
-                        {datasetType['parallel-dataset'] &&
+                        {datasetType['parallel-corpus'] &&
                             <TextField className={classes.subHeader}
                                 fullWidth
                                 error={srcError}
