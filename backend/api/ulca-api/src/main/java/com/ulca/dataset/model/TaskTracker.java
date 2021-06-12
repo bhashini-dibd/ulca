@@ -31,17 +31,17 @@ public class TaskTracker   {
    * Tool updating this data
    */
   public enum ToolEnum {
-    DOWNLOAD("download"),
+    download("download"),
     
-    INGEST("ingest"),
+    ingest("ingest"),
     
-    VALIDATE("validate"),
+    validate("validate"),
     
-    PUBLISH("publish"),
+    publish("publish"),
     
-    SEARCH("search"),
+    search("search"),
     
-    DELETE("delete");
+    delete("delete");
 
     private String value;
 
@@ -72,13 +72,13 @@ public class TaskTracker   {
    * Status of the task
    */
   public enum StatusEnum {
-    NOTSTARTED("notstarted"),
+    notstarted("notstarted"),
     
-    INPROGRESS("inprogress"),
+    inprogress("inprogress"),
     
-    SUCCESSFUL("successful"),
+    successful("successful"),
     
-    FAILED("failed");
+    failed("failed");
 
     private String value;
 
@@ -109,16 +109,16 @@ public class TaskTracker   {
   private String details = null;
 
   @JsonProperty("startTime")
-  @DateTimeFormat(iso=ISO.DATE_TIME)
-  private Date startTime = null;
+  //@DateTimeFormat(iso=ISO.DATE_TIME)
+  private String startTime = null;
 
   @JsonProperty("endTime")
-  @DateTimeFormat(iso=ISO.DATE_TIME)
-  private Date endTime = null;
+ // @DateTimeFormat(iso=ISO.DATE_TIME)
+  private String endTime = null;
 
   @JsonProperty("lastModified")
-  @DateTimeFormat(iso=ISO.DATE_TIME)
-  private Date lastModified = null;
+ // @DateTimeFormat(iso=ISO.DATE_TIME)
+  private String lastModified = null;
 
   @JsonProperty("error")
   private Error error = null;
@@ -191,7 +191,7 @@ public class TaskTracker   {
    **/
   @Schema(description = "Details of the current status of the task")
   
-    public Object getDetails() {
+    public String getDetails() {
     return details;
   }
 
@@ -199,7 +199,7 @@ public class TaskTracker   {
     this.details = details;
   }
 
-  public TaskTracker startTime(Date startTime) {
+  public TaskTracker startTime(String startTime) {
     this.startTime = startTime;
     return this;
   }
@@ -212,15 +212,15 @@ public class TaskTracker   {
   
     @Valid
     
-    public Date getStartTime() {
+    public String getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(Date startTime) {
+  public void setStartTime(String startTime) {
     this.startTime = startTime;
   }
 
-  public TaskTracker endTime(Date endTime) {
+  public TaskTracker endTime(String endTime) {
     this.endTime = endTime;
     return this;
   }
@@ -232,15 +232,15 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public Date getEndTime() {
+    public String getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(Date endTime) {
+  public void setEndTime(String endTime) {
     this.endTime = endTime;
   }
 
-  public TaskTracker lastModified(Date lastModified) {
+  public TaskTracker lastModified(String lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -252,11 +252,11 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public Date getLastModified() {
+    public String getLastModified() {
     return lastModified;
   }
 
-  public void setLastModified(Date lastModified) {
+  public void setLastModified(String lastModified) {
     this.lastModified = lastModified;
   }
 

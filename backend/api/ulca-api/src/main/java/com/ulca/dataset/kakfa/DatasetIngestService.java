@@ -1,6 +1,7 @@
 package com.ulca.dataset.kakfa;
 
 import java.io.File;
+import java.util.Date;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -9,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.UUID;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +44,7 @@ public class DatasetIngestService {
 	public static final String TARGET_TEXT = "targetText";
 	public static final String TARGET_TEXT_HASH = "targetTextHash";
 
-	public void datasetIngest(ParallelDatasetParamsSchema paramsSchema, FileDownload file,
+	public JSONObject datasetIngest(ParallelDatasetParamsSchema paramsSchema, FileDownload file,
 			Map<String, String> fileMap) {
 
 		log.info("************ Entry DatasetIngestService :: datasetIngest *********");
@@ -103,7 +105,8 @@ public class DatasetIngestService {
 
 						vModel.put("currentRecordIndex", numberOfRecords);
 
-						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+						datasetValidateKafkaTemplate.send(validateTopic,0,null, vModel.toString());
+						
 
 					}
 					jsonToken = jsonParser.nextToken();
@@ -116,7 +119,30 @@ public class DatasetIngestService {
 
 				log.info("Eof reached");
 				jsonParser.close();
-				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+				datasetValidateKafkaTemplate.send(validateTopic,0,null, vModel.toString());
+				
+
+				JSONObject details = new JSONObject();
+			    details.put("currentRecordIndex", numberOfRecords);
+			    
+			    JSONArray processedCount = new JSONArray();
+			   
+			    		
+			   JSONObject proCountSuccess = new JSONObject();
+			   proCountSuccess.put("type", "success");
+			   proCountSuccess.put("count", numberOfRecords);
+			   processedCount.put(proCountSuccess);
+			   
+			   JSONObject proCountFailure = new JSONObject();
+			   
+			   proCountFailure.put("type", "success");
+			   proCountFailure.put("count", 0);
+			   processedCount.put(proCountFailure);
+			   details.put("processedCount", processedCount);
+			   details.put("timeStamp", new Date().toString());
+			   
+			   return details;
+							
 
 			} catch (JsonProcessingException | JSONException e) {
 				// TODO Auto-generated catch block
@@ -133,6 +159,8 @@ public class DatasetIngestService {
 		} else {
 			log.info("paramsSchema object is null");
 		}
+		
+		return null;
 
 	}
 

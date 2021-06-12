@@ -58,7 +58,7 @@ public class DatasetController {
 	public List<DatasetListByUserIdResponse> listByUserId(@RequestParam String userId) {
 		log.info("******** Entry DatasetController:: listByUserId *******" );
 		
-		return datasetService.dataSetListByUserId(userId);
+		return datasetService.datasetListByUserId(userId);
 	}
 	
 	@GetMapping("/getByDatasetId")

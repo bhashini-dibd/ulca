@@ -49,11 +49,11 @@ public class ProcessTracker {
 	 * Type of the service request
 	 */
 	public enum ServiceRequestTypeEnum {
-		DATATSET("datatset"),
+		dataset("datatset"),
 
-		MODEL("model"),
+		model("model"),
 
-		BENCHMARK("benchmark");
+		benchmark("benchmark");
 
 		private String value;
 
@@ -86,15 +86,15 @@ public class ProcessTracker {
 	 * Action being performed on the service request type
 	 */
 	public enum ServiceRequestActionEnum {
-		SUBMIT("submit"),
+		submit("submit"),
 
-		SEARCH("search"),
+		search("search"),
 
-		ABORT("abort"),
+		abort("abort"),
 
-		DELETE("delete"),
+		delete("delete"),
 
-		UPDATE("update");
+		update("update");
 
 		private String value;
 
@@ -130,13 +130,13 @@ public class ProcessTracker {
 	 * Status of the process
 	 */
 	public enum StatusEnum {
-		NOTSTARTED("notstarted"),
+		notstarted("notstarted"),
 
-		INPROGRESS("inprogress"),
+		inprogress("inprogress"),
 
-		SUCCESSFUL("publish"),
+		successful("publish"),
 
-		FAILED("failed");
+		failed("failed");
 
 		private String value;
 

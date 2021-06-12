@@ -2,7 +2,7 @@ package com.ulca.dataset.request;
 
 import javax.validation.constraints.NotBlank;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import io.swagger.model.DatasetType;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class DatasetCorpusSearchRequest {
 	@NotBlank(message="criteria is required")
     private final SearchCriteria criteria;
 	
-	
+	@JsonInclude(JsonInclude.Include.NON_NULL)
     private final String[] groupby;
 
 }
