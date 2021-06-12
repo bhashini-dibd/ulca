@@ -7,6 +7,7 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
+import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import Dialog from "../../../components/common/Dialog"
 import {Cached, DeleteOutline, VerticalAlignTop} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
@@ -15,7 +16,7 @@ import { useParams } from "react-router";
 const ContributionList = (props) => {
 
         const history                 = useHistory();
-        const dispatch                = useDispatch();
+        const dispatch                = useDispatch(ClearReport);
         const myContributionReport    = useSelector( (state) => state.myContributionReport);
         const [open, setOpen]         = useState(false)
         const [message, setMessage]   = useState("Do you want to delete")
@@ -29,6 +30,7 @@ const ContributionList = (props) => {
         }, []);
   
         const  MyContributionListApi  = () =>{
+                dispatch(ClearReport());
                 const userObj         = new MyContributionList( "SAVE", "A_FBTTR-VWSge-1619075981554", "241006445d1546dbb5db836c498be6381606221196566");
                 dispatch(APITransport(userObj));
         }

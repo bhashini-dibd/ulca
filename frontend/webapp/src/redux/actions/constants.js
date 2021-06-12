@@ -20,7 +20,7 @@ const constants = {
    * action for Search report
    */
    GET_MY_REPORT        : "GET_MY_REPORT",
-
+   CLEAR_DETAILED_REPORT:"CLEAR_DETAILED_REPORT",
    /**
     * action for search and download report
     */

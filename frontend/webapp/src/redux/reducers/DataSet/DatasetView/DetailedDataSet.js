@@ -8,13 +8,14 @@ const initialState = {
 const getDetailedReport = (payload) => {
     let responseData = [];
     let refreshStatus = false;
+    debugger
     payload.forEach(element => {
         responseData.push(
             {
                     srNo                    : element.serviceRequestNumber,
                      datasetId              : element.datasetName,
                      recordCount            : element.details,
-                     failedCount            : element.error,
+                     
                      stage                  : element.tool,
                      status                 : element.status 
                     }
@@ -33,7 +34,7 @@ const reducer = (state = initialState, action) => {
         case C.GET_DETAILED_REPORT:
             return  getDetailedReport(action.payload)  
             
-        case C.CLEAR_USER_EVENT:
+        case C.CLEAR_DETAILED_REPORT:
             return {
                 ...initialState
             }
