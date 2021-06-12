@@ -225,7 +225,7 @@ class ParallelService:
         return list(utils.get_tags(tag_details))
 
     def get_parallel_dataset(self, query):
-        log.info(f'Fetching datasets..... | {datetime.now()}')
+        log.info(f'Fetching Parallel datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset

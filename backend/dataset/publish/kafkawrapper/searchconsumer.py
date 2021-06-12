@@ -42,7 +42,7 @@ def search_consume():
                 try:
                     data = msg.value
                     if data:
-                        log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
+                        log.info(f'{prefix} | Received on Topic: {msg.topic} | Partition: {str(msg.partition)}')
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.get_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:
@@ -52,6 +52,7 @@ def search_consume():
                         if data["datasetType"] == dataset_type_monolingual:
                             m_service.get_monolingual_dataset(data)
                     else:
+                        log.info(f'Inavlid search request -- {data}')
                         break
                 except Exception as e:
                     log.exception(f'{prefix} Exception in ds search consumer while consuming: {str(e)}', e)
