@@ -21,6 +21,7 @@ import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.DatasetSubmitRequest;
 import com.ulca.dataset.response.DatasetCorpusSearchResponse;
 import com.ulca.dataset.response.DatasetListByUserIdResponse;
+import com.ulca.dataset.response.DatasetSearchStatusResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
 import com.ulca.dataset.service.DatasetService;
 
@@ -78,13 +79,13 @@ public class DatasetController {
 	public DatasetCorpusSearchResponse corpusSearch(@RequestBody DatasetCorpusSearchRequest request, @RequestHeader("userId") String userId) throws JsonProcessingException {
 		
 		
-	    log.info("******** Entry DatasetController:: datasetSubmit *******" );
+	    log.info("******** Entry DatasetController:: corpusSearch *******" );
 	    return datasetService.corpusSearch(request, userId);
 	  }
 
 	@GetMapping("/corpus/search/status")
-	public List<TaskTracker> searchStatus(@RequestParam String serviceRequestNumber) {
-		log.info("******** Entry DatasetController:: listByUserId *******" );
+	public DatasetSearchStatusResponse searchStatus(@RequestParam String serviceRequestNumber) {
+		log.info("******** Entry DatasetController:: searchStatus *******" );
 		
 		return datasetService.searchStatus(serviceRequestNumber);
 	}

@@ -34,6 +34,7 @@ import com.ulca.dataset.request.DatasetSubmitRequest;
 import com.ulca.dataset.request.SearchCriteria;
 import com.ulca.dataset.response.DatasetCorpusSearchResponse;
 import com.ulca.dataset.response.DatasetListByUserIdResponse;
+import com.ulca.dataset.response.DatasetSearchStatusResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -168,8 +169,13 @@ public class DatasetService {
 		return taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 	}
 
-	public List<TaskTracker> searchStatus(String serviceRequestNumber) {
-		return taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+	public DatasetSearchStatusResponse searchStatus(String serviceRequestNumber) {
+		
+		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
+		
+		List<TaskTracker>  taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+		
+		return new DatasetSearchStatusResponse(processTracker.getServiceRequestNumber(),processTracker.getStartTime(),processTracker.getSearchCriterion(), taskTrackerList);
 	}
 
 }
