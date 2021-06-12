@@ -55,7 +55,8 @@ class ErrorEvent:
                             log.info(f'Error List: {len(error_record["error_list"])} for SRN -- {data["serviceRequestNumber"]}')
                             self.write_to_csv(error_record["error_list"], file)
                             path = file.split("/")[2]
-                            aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
+                            aws_file = None
+                            #aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
                             if aws_file:
                                 error_record["status"], error_record["file"] = pt_success_status, aws_file
                                 error_record["lastModifiedTime"] = str(datetime.now())
@@ -91,15 +92,15 @@ class ErrorEvent:
                 for row in data_list:
                     if isinstance(row, str):
                         row = json.loads(row)
-                    log.info(f'Row written')
                     writer.writerow(row)
-            data_file.close()
+                    log.info(f'Row written')
+                data_file.close()
             log.info(f'Reading the written file --- {file}')
             with open(file, 'r') as read_file:
                 csvreader = csv.reader(read_file)
                 for row in csvreader:
                     log.info(row)
-            read_file.close()
+                read_file.close()
             return
         except Exception as e:
             log.exception(f'Exception in csv writer: {e}', e)
