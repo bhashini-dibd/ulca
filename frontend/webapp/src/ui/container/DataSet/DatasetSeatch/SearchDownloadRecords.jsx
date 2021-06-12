@@ -29,6 +29,7 @@ import DatasetType from '../../../../configs/DatasetItems';
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
+    const urlMySearch= UrlConfig.mySearches;
     const param = useParams();
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
@@ -215,7 +216,8 @@ const SearchAndDownloadRecords = (props) => {
     return (
         <div className={classes.searchDivStyle}>
             <div className={classes.breadcrum}>
-                <BreadCrum links={[url]} activeLink="Search & Download Records" />
+                
+                <BreadCrum links={(params === 'inprogress' || params === 'published') ? [url,urlMySearch]:[url]} activeLink="Search & Download Records" />
             </div>
             <Grid container spacing={3}>
                 <Grid className={(params === 'inprogress' || params === 'published') && classes.blurOut} item xs={12} sm={5} md={4} lg={4} xl={4}>
