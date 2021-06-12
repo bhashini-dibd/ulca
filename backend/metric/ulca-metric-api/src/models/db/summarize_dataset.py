@@ -5,7 +5,7 @@ import pandas as pd
 from src.db import get_db, get_data_store
 import pymongo
 from sqlalchemy import text
-from config import DRUID_DB_SCHEMA 
+from config import DRUID_DB_SCHEMA ,LANG_CODES
 import logging
 
 log = logging.getLogger('file')
@@ -122,9 +122,11 @@ class SummarizeDatasetModel(object):
                 chart_data =[]
                 for val in aggs_parsed:
                     elem={}
-                    # elem["label"]=language_name(val)
+                    label = LANG_CODES.get(val)
+                    if label == None:
+                        label = val
                     elem["_id"]=val
-                    elem["label"]=val
+                    elem["label"]=label
                     elem["value"]=aggs_parsed.get(val)
                     chart_data.append(elem)
                     

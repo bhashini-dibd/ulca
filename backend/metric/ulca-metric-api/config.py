@@ -15,3 +15,31 @@ MONGO_CONNECTION_URL    = os.environ.get('MONGO_CLUSTER_URL', 'mongodb://localho
 
 DRUID_DB_SCHEMA         = os.environ.get('MATRIC_DRUID_DB_SCHEMA', 'dataset-training-v3')
 DRUID_CONNECTION_URL    = os.environ.get('DRUID_CLUSTER_URL', 'druid://localhost:8082/druid/v2/sql/')
+
+LANG_CODES        =    {'pa'        :'Punjabi', 
+                        'bn'        :'Bengali',
+                        'en'        :'English',
+                        'ta'        :'Tamil', 
+                        'ml'        :'Malayalam', 
+                        'te'        :'Telugu', 
+                        'kn'        :'Kannada', 
+                        'hi'        :'Hindi', 
+                        'mr'        :'Marathi',
+                        'gu'        :'Gujarati',
+                        'or'        :'Odia',
+                        'as'        :'Assamese',
+                        'kok'       :'Konkani',
+                        'sa'        :'Sanskrit',
+                        'ks'        :'Kashmiri',
+                        'ne'        :'Nepali',
+                        'ur'        :'Urdu',
+                        'doi'       :'Dogri',
+                        'mai'       :'Maithili',
+                        'mni'       :'Manipuri',
+                        'brx'       :'Bodo',
+                        'sat'       :'Santali'  ,
+                        'lus'       :'Lushai',
+                        'njz'       :'Ngungwel',
+                        'pnr'       :'Panim',
+                        'kha'       :'Khasi',
+                        'grt'       :'Garo'}
