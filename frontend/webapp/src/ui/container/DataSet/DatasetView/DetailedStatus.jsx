@@ -73,6 +73,10 @@ const DetailedStatus = (props) => {
                 );
         }
 
+        const handleAbort = ()  => {
+                alert ("Still in progress")
+        }
+
         
         const columns = [
                 {
@@ -166,7 +170,7 @@ const DetailedStatus = (props) => {
                                 />
                         </MuiThemeProvider>
                         {status !== "published" && <div className = {classes.footerButtons}>
-                                <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => this.handleLanguageChange("domain")}>Abort Process</Button>
+                                <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => this.handleAbort()}>Abort Process</Button>
                                 
                         </div>}
                 </div>
