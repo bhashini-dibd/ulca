@@ -6,6 +6,7 @@ const initialState = {
 
 
 const getDetailedReport = (payload) => {
+    debugger
     let responseData = [];
     let refreshStatus = false;
     payload.forEach(element => {
@@ -14,7 +15,6 @@ const getDetailedReport = (payload) => {
                     srNo                    : element.serviceRequestNumber,
                      datasetId              : element.datasetName,
                      recordCount            : element.details? element.details: 0,
-                     errorCount             : element.error.report ? element.error.reports : 0,
                      stage                  : element.tool,
                      status                 : element.status 
                     }

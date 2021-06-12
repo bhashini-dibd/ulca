@@ -5,6 +5,8 @@ import detailedReport from "./DataSet/DatasetView/DetailedDataSet";
 import dashboardReport from "./Dashboard/languageDatasets";
 import mySearchReport from "./DataSet/DatasetSearch/MySearches";
 import mySearchOptions from "./DataSet/DatasetSearch/SearchAndDownload";
+import errorData from "./DataSet/DatasetView/ErrorDownload";
+
 const index = {
 
     apiStatus,
@@ -12,7 +14,8 @@ const index = {
     detailedReport,
     dashboardReport,
     mySearchReport,
-    mySearchOptions
+    mySearchOptions,
+    errorData
 
    
 };
