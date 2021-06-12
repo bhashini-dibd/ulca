@@ -19,6 +19,7 @@ import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.SearchCriteria;
 
+import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -55,8 +56,6 @@ public class SearchKafkaPublish {
 		processTracker.setStartTime(new Date());
 		
 		
-		
-		//processTracker.setSearchCriterion(searchCriterion);
 
 		processTrackerDao.save(processTracker);
 		
@@ -65,22 +64,17 @@ public class SearchKafkaPublish {
 		
 
 		SearchCriteria searchCriteria = request.getCriteria();
-		if(searchCriteria == null) {
-			log.info(searchCriteria.toString());
-		}
-			
-			
+		
 			
 		searchCriteria.setServiceRequestNumber(processTracker.getServiceRequestNumber());
 		searchCriteria.setGroupBy(request.getGroupby());
+		searchCriteria.setDatasetType(request.getDatasetType().toString());
 		
 		log.info(searchCriteria.toString());
 		
 		datasetSearchKafkaTemplate.send(datasetSearchTopic, searchCriteria);
 		
-		//ObjectMapper mapper = new ObjectMapper();
 		
-		//String criteria = mapper.writeValueAsString(searchCriteria);
 		processTracker.setSearchCriterion(searchCriteria);
 		processTracker.setStatus(StatusEnum.INPROGRESS);
 		processTrackerDao.save(processTracker);

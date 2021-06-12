@@ -69,7 +69,7 @@ public class DatasetIngestService {
 				JSONObject vModel = new JSONObject();
 				vModel.put("record", record);
 				vModel.put("datasetId", datasetId);
-				vModel.put("datasetType", paramsSchema.getDatasetType().name());
+				vModel.put("datasetType", paramsSchema.getDatasetType().toString());
 				vModel.put("serviceRequestNumber", serviceRequestNumber);
 				vModel.put("userId", userId);
 				vModel.put("userMode", "real");

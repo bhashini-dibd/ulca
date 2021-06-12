@@ -2,6 +2,8 @@ package com.ulca.dataset.request;
 
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.model.DatasetType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
