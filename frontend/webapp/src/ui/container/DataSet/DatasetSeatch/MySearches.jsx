@@ -113,7 +113,8 @@ const MySearches = (props) => {
                 filter                  :       false,
                 selectableRows          :       "none",
 
-                onRowClick                 : (rowData, rowMeta) => {history.push(`${process.env.PUBLIC_URL}//${rowData[0]}/${rowData[4]}`)}
+
+                onRowClick                 : (rowData, rowMeta) => {history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${rowData[3]}/${rowData[0]}`)}
         };
 
         const { classes }               = props;

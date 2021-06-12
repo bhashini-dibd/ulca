@@ -20,7 +20,7 @@ var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447
 const ChartRender = (props) => {
         const [selectedOption, setSelectedOption]   	= 	useState(Dataset[0]);
         const [title, setTitle]                     	= 	useState("Number of parallel sentences per language with English");
-	const [filterValue, setFilterValue]		=	useState("domain");
+	const [filterValue, setFilterValue]		=	useState("domains");
 	const [selectedLanguage,setSelectedLanguage]	=	useState("");
 	const [page, setPage]				= 	useState(0);
         const history                               	= 	useHistory();
@@ -41,6 +41,7 @@ const ChartRender = (props) => {
 	}, []);
 
 	const fetchChartData = (dataType, value, criterions) =>{
+		debugger
 		const userObj 		= 	new FetchLanguageDataSets(dataType, value, criterions);
 		dispatch(APITransport(userObj));
 		
@@ -76,22 +77,23 @@ const ChartRender = (props) => {
 		    switch (value) {
 			case 1:
 				
-				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "English" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label } }])
+				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label } }])
 				setPage(value)
-				setTitle( `English-${selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label }  parallel corpus - Grouped by ${(filter === "domain") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod" ? "Collection Method" : "Domain"}`)
+				setTitle( `English-${selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label }  parallel corpus - Grouped by ${(filter === "domains") ? "Domains" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domains"}`)
 				setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label)
 				
 				break;
 			case 2:
-				fetchChartData(selectedOption.value, filter === "source" ? "domain" : "source", [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "English" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage } }, { "type": "PARAMS", "value": event && event.hasOwnProperty("label") && event.label }])
+				debugger
+				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage } }, { "type": "PARAMS", "value": event && event.hasOwnProperty("label") && event.label }])
 				setPage(value)
-				setFilterValue('domain')
+				setFilterValue('domains')
 				setTitle( `English-${selectedLanguage} parallel corpus`)
 				break;
 			case 0:
 				fetchChartData(selectedOption.value, "languagePairs", [])
 				setPage(value)
-				setFilterValue('domain')
+				setFilterValue('domains')
 				setTitle("English-Indic language parallel corpus")
 				setSelectedLanguage("")
 				
@@ -105,7 +107,7 @@ const ChartRender = (props) => {
 
 	const handleLanguageChange = (value) => {
 		setFilterValue(value)
-		setTitle( `English-${selectedLanguage }  parallel corpus - Grouped by ${(value === "domain") ? "Domain" : (value === "source") ? "Source" : value === "collectionMethod" ? "Collection Method" : "Domain"}`)
+		setTitle( `English-${selectedLanguage }  parallel corpus - Grouped by ${(value === "domains") ? "Domains" : (value === "source") ? "Source" : value === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 		handleOnClick(1, "", value)
 	    }
 	const  handleCardNavigation = () => {
@@ -117,9 +119,9 @@ const ChartRender = (props) => {
 		console.log(filterValue)
 		return (
 		    <div className={classes.filterButton}>
-			<Button  color={filterValue ==="domain" ? "primary" :"default" } style={ filterValue === "domain" ? {backgroundColor: "#E8F5F8"} : {} } size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domain")}>Domain</Button>
-			<Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button>
-			<Button  color={filterValue === "collectionMethod" ?"primary" :"default"} style={ filterValue === "collectionMethod" ? {backgroundColor: "#E8F5F8"} : {} } size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("collectionMethod")}>Collection Method</Button>
+			<Button  color={filterValue ==="domains" ? "primary" :"default" } style={ filterValue === "domains" ? {backgroundColor: "#E8F5F8"} : {} } size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domains")}>Domain</Button>
+			{/* <Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button> */}
+			<Button  color={filterValue === "collectionMethod_collectionDescriptions" ?"primary" :"default"} style={ filterValue === "collectionMethod_collectionDescriptions" ? {backgroundColor: "#E8F5F8"} : {} } size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>
 		   
 		    </div>
 		)

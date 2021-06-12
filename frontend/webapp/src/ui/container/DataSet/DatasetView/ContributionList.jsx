@@ -46,6 +46,7 @@ const ContributionList = (props) => {
                                 backgroundColor : "#c7c6c68a !important"
                         }
                 },
+                MUIDataTableBodyCell:{root : {textTransform: "capitalize"}},
                
                 MuiPaper: {
                         root:{
