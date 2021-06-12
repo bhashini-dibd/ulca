@@ -22,18 +22,19 @@ class ParallelValidate:
             log.info("Executing parallel dataset validation....  {}".format(datetime.now()))
             v_pipeline = ValidationPipeline.getInstance()
             res = v_pipeline.runParallelValidators(request)
-            log.info("Validation complete....  {}".format(res))
-            # Produce event for publish
-            if res["status"] == "SUCCESS":
-                prod.produce(request, validate_output_topic, None)
-            else:
-                error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
-                         "message": res["message"], "code": res["code"], "record": request["record"]}
-                error_event.create_error_event(error)
+            if res:
+                log.info("Validation complete....  {}".format(res))
+                # Produce event for publish
+                if res["status"] == "SUCCESS":
+                    prod.produce(request, validate_output_topic, None)
+                else:
+                    error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
+                             "message": res["message"], "code": res["code"], "record": request["record"]}
+                    error_event.create_error_event(error)
 
-            # Update task tracker
-            tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"]}
-            pt.create_task_event(tracker_data)
+                # Update task tracker
+                tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"]}
+                pt.create_task_event(tracker_data)
 
         except Exception as e:
             log.exception(e)
