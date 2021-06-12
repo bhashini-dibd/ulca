@@ -67,8 +67,9 @@ class MetricEvent:
                 if 'collectionDescription' in cm.keys():
                     event["collectionMethod_collectionDescriptions"] = cm["collectionDescription"]
                 if 'collectionDetails' in cm.keys():
-                    if 'alignmentTool' in cm["collectionDetails"].keys():
-                        event["collectionMethod_collectionDetails_alignmentTool"] = cm["collectionDetails"]["alignmentTool"]
+                    if cm["collectionDetails"]:
+                        if 'alignmentTool' in cm["collectionDetails"].keys():
+                            event["collectionMethod_collectionDetails_alignmentTool"] = cm["collectionDetails"]["alignmentTool"]
             if 'format' in data.keys():
                 event["format"] = data["format"]
             if 'channel' in data.keys():
