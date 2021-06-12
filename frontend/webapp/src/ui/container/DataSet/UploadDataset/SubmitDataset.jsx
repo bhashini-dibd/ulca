@@ -90,7 +90,6 @@ const SubmitDataset = (props) => {
     }
 
     const handleApicall = async () => {
-//         console.log(dataset)
 //         let apiObj = new SubmitDatasetApi(dataset)
 //         fetch(apiObj.apiEndPoint(), {
 //           method: 'post',
@@ -98,7 +97,6 @@ const SubmitDataset = (props) => {
 //           body: JSON.stringify(apiObj.getBody())
 //       })
 //   .then(async res => {
-//       debugger
 //       if (res.ok) {
           
 //         history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${5}`)
@@ -154,7 +152,6 @@ let apiObj = new SubmitDatasetApi(dataset)
     }
 
     const validURL = (str) => {
-        debugger
         var pattern = new RegExp('^((ft|htt)ps?:\\/\\/)?' + // protocol
             '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name and extension
             '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
@@ -166,7 +163,6 @@ let apiObj = new SubmitDatasetApi(dataset)
     }
 
     const handleSubmitDataset = (e) => {
-        debugger
         if(dataset.datasetName.trim() === "" || dataset.url.trim() === ""){
             setError({...error, name: !dataset.datasetName.trim() ? "Name cannot be empty":"",url:!dataset.url.trim() ?"URL cannot be empty" :"" })
             

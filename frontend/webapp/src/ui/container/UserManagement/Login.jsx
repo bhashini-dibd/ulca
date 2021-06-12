@@ -118,7 +118,6 @@ const handleSubmit = async () => {
         headers: apiObj.getHeaders().headers
       }).then(async response => {
         const rsp_data = await response.json();
-        console.log(rsp_data)
         setLoading(false)
         if (!response.ok) {
           

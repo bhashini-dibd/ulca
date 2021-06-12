@@ -21,7 +21,6 @@ const ForgotPassword = (props) => {
     setValues({ ...values, [prop]: event.target.value });
   };
   const HandleSubmit = () => {
-    console.log(values);
   };
   const { classes } = props;
 

@@ -51,7 +51,6 @@ const SearchAndDownloadRecords = (props) => {
     //     const userObj = new SearchAndDownload();
     //     searchOptions.result.length === 0 && dispatch(APITransport(userObj));
     // }, []);
-    // console.log(searchOptions)
 
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
@@ -78,9 +77,8 @@ const SearchAndDownloadRecords = (props) => {
     });
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
-
+    const { params, srno } = param
     const renderPage = () => {
-        const { params, srno } = param
         switch (params) {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
@@ -209,14 +207,18 @@ const SearchAndDownloadRecords = (props) => {
 
         )
     }
+    const getTargetLang = () => {
+        return Language.filter(lang => lang.value !== languagePair.source)
+    }
 
     return (
         <div className={classes.searchDivStyle}>
+            <div className={classes.breadcrum}>
+                <BreadCrum links={[url]} activeLink="Search & Download Records" />
+            </div>
             <Grid container spacing={3}>
-                <Grid item xs={12} sm={5} md={4} lg={4} xl={4}>
-                    <div className={classes.breadcrum}>
-                        <BreadCrum links={[url]} activeLink="Search & Download Records" />
-                    </div>
+                <Grid className={(params === 'inprogress' || params === 'published') && classes.blurOut} item xs={12} sm={5} md={4} lg={4} xl={4}>
+
                     <Typography className={classes.subHeader} variant="h6">Select Dataset Type</Typography>
 
                     <div className={classes.buttonDiv} >
@@ -269,7 +271,7 @@ const SearchAndDownloadRecords = (props) => {
 
                         <Autocomplete
                             id="language-target"
-                            options={Language}
+                            options={getTargetLang()}
                             filter='target'
                             value={languagePair.target}
                             handleOnChange={handleLanguagePairChange}
