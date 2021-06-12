@@ -47,6 +47,7 @@ def consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
+                        log.info(f'data received from ingest -- {data}')
                         if 'eof' in data.keys():
                             if data["eof"]:
                                 prod.produce(data, validate_output_topic, None)
