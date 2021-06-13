@@ -33,7 +33,7 @@ if isinstance(sample_size, str):
     sample_size = eval(sample_size)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/publish/')
 
-asr_immutable_keys = ["id", "audioFilename", "text", "audioFilePath", "audioHash", "textHash", "datasetType",
+asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType",
                       "sourceLanguage"]
 asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter"]
 
@@ -41,12 +41,13 @@ parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "
                            "targetLanguage", "datasetType"]
 parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
 
-ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageFilePath", "imageHash", "groundTruthHash",
+ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash",
                       "datasetType", "sourceLanguage"]
 ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter"]
 
 mono_immutable_keys = ["id", "text", "textHash", "datasetType", "sourceLanguage"]
 mono_non_tag_keys = ["id", "text", "submitter"]
+
 publish_error_code = "3000_XXX"
 
 pt_publish_tool = os.environ.get('PT_TOOL_PUBLISH', 'publish')

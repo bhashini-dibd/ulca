@@ -172,7 +172,7 @@ class MonolingualService:
                 db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
-            exclude = {"_id": False}
+            exclude = {"_id": False, "tags": False}
             data = repo.search(db_query, exclude, off, lim)
             result, query, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}')

@@ -108,7 +108,7 @@ class ParallelRepo:
                 else:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
-                pipeline.append({"$project": {"_id": 0}})
+                pipeline.append({"$project": {"_id": 0, "tags": 0}})
             if offset is not None and res_limit is not None:
                 pipeline.append({"$sort": {"_id": -1}})
                 pipeline.append({"$skip": offset})

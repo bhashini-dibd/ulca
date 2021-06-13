@@ -117,7 +117,7 @@ class OCRService:
             insert_data["tags"] = self.get_tags(insert_data)
             if metadata["datasetMode"] != 'pseudo':
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
-                file_path = f'{shared_storage_path}{data["imageFilePath"]}'
+                file_path = f'{shared_storage_path}{data["imageFilename"]}'
                 s3_file_name = f'{data["imageFilename"]}|{metadata["datasetId"]}|{epoch}'
                 object_store_path = utils.upload_file(file_path, f'{aws_ocr_prefix}{s3_file_name}')
                 if not object_store_path:
@@ -195,7 +195,7 @@ class OCRService:
                 db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
-            exclude = {"_id": False}
+            exclude = {"_id": False, "tags": False}
             data = repo.search(db_query, exclude, off, lim)
             result, query, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}')
