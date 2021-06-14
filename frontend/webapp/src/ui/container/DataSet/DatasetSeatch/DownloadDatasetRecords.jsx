@@ -4,18 +4,20 @@ import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
 
 const DownloadDatasetRecords = (props) => {
-    const {classes} = props
-    console.log(props.sentencePair)
-    debugger
+    const { classes } = props
     return (
         <div className={classes.searchResultFinal}>
             <Typography variant="h5">{`Search result for the ${props.datasetType} Dataset records`}</Typography>
             <Paper className={classes.downloadPaper}>
                 <Grid container>
-                    <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
-                        <Typography variant="h5">{`${props.sentencePair}`}</Typography>
-                        <Typography variant="subtitle1">#Sentence Pair</Typography>
-                    </Grid>
+                    {props.sentencePair ?
+                        <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
+                            <Typography variant="h5">{`${props.sentencePair}`}</Typography>
+                            <Typography variant="subtitle1">#Sentence Pair</Typography>
+                        </Grid> :
+                        <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
+                            <Typography variant="h5">Result not found.</Typography>
+                        </Grid>}
                     {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical" />
                     </Grid> */}
@@ -24,14 +26,14 @@ const DownloadDatasetRecords = (props) => {
                         <Typography variant="subtitle1">#Datasets Contributed</Typography>
                     </Grid> */}
                 </Grid>
-                <div className={classes.downloadBtnDiv}>
+                {props.sentencePair ? <div className={classes.downloadBtnDiv}>
                     <Button href={props.urls.downloadSample} target="_self" className={classes.downloadBtn} variant="contained" color="primary">
                         <GetAppOutlinedIcon /> Download Sample
                     </Button>
                     <Button href={props.urls.downloadAll} target="_self" className={classes.downloadBtn} variant="contained" color="primary">
                         <GetAppOutlinedIcon /> Download All
                     </Button>
-                </div>
+                </div> : " "}
             </Paper>
         </div>
 

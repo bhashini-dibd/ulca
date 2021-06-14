@@ -17,7 +17,7 @@ import UrlConfig from '../../../../configs/internalurlmapping';
 import SearchAndDownload from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
 import { useDispatch, useSelector } from "react-redux";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import DownloadDatasetRecords from "./DownloadDatasetRecords";
 import RequestNumberCreation from "./RequestNumberCreation";
 import { useHistory, useParams } from 'react-router';
@@ -52,6 +52,9 @@ const SearchAndDownloadRecords = (props) => {
         downloadAll: ''
     })
 
+    const previousUrl = useRef();
+
+
     const detailedReport = useSelector((state) => state.mySearchReport);
 
     // const searchOptions = useSelector((state) => state.mySearchOptions);
@@ -64,9 +67,9 @@ const SearchAndDownloadRecords = (props) => {
     const getObject = (value) => {
         let arr = []
         Language.forEach(val => {
-             value.forEach(data => {
+            value.forEach(data => {
                 if (val.value === data)
-                   arr.push(val)
+                    arr.push(val)
             })
 
         })
@@ -74,10 +77,13 @@ const SearchAndDownloadRecords = (props) => {
 
     }
     useEffect(() => {
+
+        previousUrl.current = params;
+
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
         })
-        //setCount(data[0] ? data[0].count : 0)
+
         if (data[0]) {
             setCount(data[0].count);
             setUrls({
@@ -89,7 +95,21 @@ const SearchAndDownloadRecords = (props) => {
         }
         else if (params === 'completed' && count === 0)
             history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+
     }, []);
+
+    useEffect(() => {
+        if (previousUrl.current !== params && previousUrl.current !== 'initiate') {
+            setLanguagePair({ target: [], source: "" })
+            setFilterBy({
+                domain: [],
+                source: [],
+                collectionMethod: []
+            })
+        }
+        previousUrl.current = params;
+    })
+
 
 
     const handleCheckboxChange = (event) => {
@@ -123,7 +143,7 @@ const SearchAndDownloadRecords = (props) => {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
             case 'completed':
-                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} urls={urls}/>
+                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} urls={urls} />
             default:
                 return <SearchResult />
         }
