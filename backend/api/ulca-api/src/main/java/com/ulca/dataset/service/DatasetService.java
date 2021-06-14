@@ -161,7 +161,6 @@ public class DatasetService {
 		Map<String, ArrayList<TaskTracker>> map = new HashMap<String, ArrayList<TaskTracker>>();
 
 		List<ProcessTracker> processTrackerList = processTrackerDao.findByDatasetId(datasetId);
-		Dataset dataset = datasetDao.findById(datasetId).get();
 
 		if (processTrackerList != null && processTrackerList.size() > 0) {
 
@@ -204,11 +203,13 @@ public class DatasetService {
 
 			for (ProcessTracker processTracker : processTrackerList) {
 				String serviceRequestNumber = processTracker.getServiceRequestNumber();
+				if (processTracker.getSearchCriterion() != null) {
+					List<TaskTracker> taskTrackerList = taskTrackerDao
+							.findAllByServiceRequestNumber(serviceRequestNumber);
 
-				List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
-
-				searchList.add(new DatasetSearchStatusResponse(processTracker.getServiceRequestNumber(),
-						processTracker.getStartTime(), processTracker.getSearchCriterion(), taskTrackerList));
+					searchList.add(new DatasetSearchStatusResponse(processTracker.getServiceRequestNumber(),
+							processTracker.getStartTime(), processTracker.getSearchCriterion(), taskTrackerList));
+				}
 
 			}
 

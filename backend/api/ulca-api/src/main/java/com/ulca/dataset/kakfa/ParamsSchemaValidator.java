@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.model.ParallelDatasetParamsSchema;
@@ -15,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ParamsSchemaValidator {
 	
 	
-	public ParallelDatasetParamsSchema validateParamsSchema(String filePath) {
+	public ParallelDatasetParamsSchema validateParamsSchema(String filePath) throws JsonParseException, JsonMappingException, IOException {
 		
 		log.info("************ Entry ParamsSchemaValidator :: validateParamsSchema *********");
 		log.info("validing file :: against params schema");
@@ -23,23 +25,10 @@ public class ParamsSchemaValidator {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.setDefaultTyping(null);
 
-	    //JSON file to Java object
-		try {
+	   
+			ParallelDatasetParamsSchema paramsSchema = mapper.readValue(new File(filePath), ParallelDatasetParamsSchema.class);
 			
-			ParallelDatasetParamsSchema obj = mapper.readValue(new File(filePath), ParallelDatasetParamsSchema.class);
-			
-			log.info("params validation success ");
-			if(obj == null) {
-				log.info("ParallelDatasetParamsSchema not created");
-			}
-			
-			return obj;
-		} catch (IOException e) {
-			
-			log.info("params validation failed ");
-			e.printStackTrace();
-		}
-		return null;
+			return paramsSchema;
 	}
 
 }
