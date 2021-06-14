@@ -57,6 +57,7 @@ class DatasetUtils:
             return False, False
 
     def delete_from_s3(self, file):
+        log.info(f'Deleting {file} from S3......')
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
         try:
             response = s3_client.delete_file(aws_bucket_name, file)

@@ -61,7 +61,7 @@ ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:2701
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
 error_db = os.environ.get('ULCA_ERROR_DB', "ulca-error")
-error_collection = os.environ.get('ULCA_ERROR_COL', "errors")
+error_collection = os.environ.get('ULCA_ERROR_COLxx', "errors-test")
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-publish-ip-v0')
