@@ -9,7 +9,7 @@ import secrets
 from utilities import MODULE_CONTEXT
 import config
 import json
-from datetime import datetime
+from datetime import datetime,timedelta
 import requests
 from flask_mail import Mail, Message
 from app import mail
@@ -29,6 +29,7 @@ json_file_name      =   config.ROLE_CODES_FILE_NAME
 mail_server         =   config.MAIL_SETTINGS["MAIL_USERNAME"]
 mail_ui_link        =   config.BASE_URL
 token_life          =   config.AUTH_TOKEN_EXPIRY_HRS
+verify_mail_expiry  =   config.USER_VERIFY_LINK_EXPIRY
 
 role_codes          =   []
 role_details        =   []
@@ -109,10 +110,18 @@ class UserUtils:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]  
             #searching username with verification status = True 
-            user_record = collections.find({"email": email,"isVerified":True})
+            user_record = collections.find({"email": email}) 
             if user_record.count() != 0:
-                log.info("Email is already taken")
-                return post_error("Data not valid", "Email already exists. Please use a different Email", None)
+                for usr in user_record:
+                    if usr["isVerified"] == True:
+                        log.info("Email is already taken")
+                        return post_error("Data not valid", "This email address is already with ULCA. Please use another email address.", None)
+                    register_time = usr["registeredTime"]
+                    #checking whether verfication link had expired or not
+                    if (datetime.utcnow() - register_time) < timedelta(hours=verify_mail_expiry):
+                        log.exception("{} already did a signup, asking them to revisit their mail for verification".format(email))
+                        return post_error("Data Not valid","This email address is already registered with ULCA. Please click on the verification link sent on your email address to complete the verification process.",None)
+                    
             log.info("Email is not already taken, validated")
         except Exception as e:
             log.exception("Database connection exception |{}".format(str(e)))

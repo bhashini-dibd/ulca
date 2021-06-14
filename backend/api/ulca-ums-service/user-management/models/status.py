@@ -5,7 +5,7 @@ class Status(enum.Enum):
 
     SUCCESS                 =   {"message" : "Request successful"}
     FAILURE_BAD_REQUEST     =   {"message" : "Request failed"}
-    SUCCESS_USR_CREATION    =   {"message" : "New users were created successfully"}
+    SUCCESS_USR_CREATION    =   {"message" : "User registration successful, Please visit your email to complete the verification process"}
     SUCCESS_ACTIVATE_USR    =   {"message" : "User account verified and activated successfully"}
     SUCCESS_USR_LOGIN       =   {"message" : "Logged in successfully"}
     SUCCESS_USR_TOKEN       =   {"message" : "Search is successful"}
