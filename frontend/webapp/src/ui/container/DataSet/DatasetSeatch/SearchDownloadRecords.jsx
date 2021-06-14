@@ -123,7 +123,11 @@ const SearchAndDownloadRecords = (props) => {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
             case 'completed':
+<<<<<<< HEAD
                 return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} datasetsContributed={"29"} />
+=======
+                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} urls={urls}/>
+>>>>>>> 12ae0afb971ce6f5e4d3e0656fb4c73b1d134ac5
             default:
                 return <SearchResult />
         }
