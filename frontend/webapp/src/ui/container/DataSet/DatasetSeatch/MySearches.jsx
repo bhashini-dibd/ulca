@@ -17,10 +17,15 @@ const MySearches = (props) => {
         const history                   = useHistory();
         
         useEffect(() => {
-            const userObj           = new MySearchReport();
-
-            detailedReport.responseData.length === 0  && dispatch(APITransport(userObj));   
+                MySearchListApi()   
         }, []);
+
+  
+        const  MySearchListApi  = () =>{
+                
+                const userObj         = new MySearchReport()
+                dispatch(APITransport(userObj));
+        }
 
         const getMuiTheme = () => createMuiTheme({
                 overrides: {
@@ -49,7 +54,7 @@ const MySearches = (props) => {
             return (
                     <div className={classes.headerButtons}>
                             <Typography  variant="h5" >My Searches</Typography>
-                            <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() =>{} }><Cached className ={classes.iconStyle}/>Refresh</Button>
+                            <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() =>MySearchListApi() }><Cached className ={classes.iconStyle}/>Refresh</Button>
                      </div>
             )
     }

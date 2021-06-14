@@ -5,7 +5,7 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 export default class LoginAPI extends API {
   constructor(userId, timeout = 2000) {
     super("POST", timeout, false);
-   this.userId = userId;
+   
    this.type = C.GET_ERROR_REPORT;
     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.errorReport}`;
   }
@@ -27,7 +27,7 @@ export default class LoginAPI extends API {
 }
 
   getBody() {
-    return {"serviceRequestNumber":this.userId}
+    return {"serviceRequestNumber":JSON.parse(localStorage.getItem('userDetails')).userID}
   }
 
   getHeaders() {
