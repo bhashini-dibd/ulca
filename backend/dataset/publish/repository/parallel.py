@@ -2,7 +2,7 @@ import logging
 from collections import OrderedDict
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import db_cluster, db, parallel_collection
+from configs.configs import db_cluster, db, parallel_collection, parallel_search_ignore_keys
 
 import pymongo
 log = logging.getLogger('file')
@@ -108,7 +108,10 @@ class ParallelRepo:
                 else:
                     pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
-                pipeline.append({"$project": {"_id": 0, "tags": 0}})
+                project = {"_id": 0}
+                for key in parallel_search_ignore_keys:
+                    project[key] = 0
+                pipeline.append({"$project": project})
             if offset is not None and res_limit is not None:
                 pipeline.append({"$sort": {"_id": -1}})
                 pipeline.append({"$skip": offset})
@@ -127,7 +130,10 @@ class ParallelRepo:
                                 hashes.append(record["_id"])
                     if hashes:
                         res_count = len(hashes)
-                        res = col.find({"sourceTextHash": {"$in": hashes}}, {"_id": False})
+                        project = {"_id": False}
+                        for key in parallel_search_ignore_keys:
+                            project[key] = False
+                        res = col.find({"sourceTextHash": {"$in": hashes}}, project)
                     map = {}
                     if not res:
                         return result, pipeline, res_count

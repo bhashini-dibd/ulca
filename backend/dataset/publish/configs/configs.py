@@ -40,6 +40,7 @@ asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage",
                            "targetLanguage", "datasetType"]
 parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
+parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain"]
 
 ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash",
                       "datasetType", "sourceLanguage"]
