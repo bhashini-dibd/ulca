@@ -38,7 +38,6 @@ class MetricEvent:
                 self.create_metric_event(record)
 
     def create_metric_event(self, data):
-        log.info(f'Publishing BI metric event for srn -- {data["serviceRequestNumber"]}')
         try:
             event = {"eventType": "dataset-training", "eventId": f'{data["serviceRequestNumber"]}_{data["id"]}',
                      "timestamp": str(datetime.datetime.utcnow().isoformat() + 'Z'), "submitterId": data["userId"], "datasetType": data["datasetType"],
@@ -86,15 +85,17 @@ class MetricEvent:
                 event["gender"] = data["gender"]
             if 'isDelete' in data.keys():
                 event["isDelete"] = True
-                prod.produce(data, metric_event_input_topic, None)
+                prod.produce(event, metric_event_input_topic, None)
             elif 'isUpdate' in data.keys():
                 event["isDelete"] = True
-                prod.produce(data, metric_event_input_topic, None)
+                prod.produce(event, metric_event_input_topic, None)
                 event["isDelete"] = False
-                prod.produce(data, metric_event_input_topic, None)
+                prod.produce(event, metric_event_input_topic, None)
             else:
                 event["isDelete"] = False
-                prod.produce(data, metric_event_input_topic, None)
+                prod.produce(event, metric_event_input_topic, None)
+            log.info(f'Publishing BI metric event for srn -- {data["serviceRequestNumber"]}')
+            log.info(event)
         except Exception as e:
             log.exception(e)
             return None
