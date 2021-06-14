@@ -9,7 +9,8 @@ const endpoints = {
   mySearches: "/dataset/corpus/search/listByUserId",
   submitSearchReq: '/dataset/corpus/search',
   errorReport: "/ulca/publish/v0/error/report",
-  register:"/ulca/user-mgmt/v1/users/signup"
+  register:"/ulca/user-mgmt/v1/users/signup",
+  activateUser :"/ulca/user-mgmt/v1/users/verify-user"
 };
 
 export default endpoints;
