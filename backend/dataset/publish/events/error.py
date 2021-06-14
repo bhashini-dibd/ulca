@@ -107,6 +107,7 @@ class ErrorEvent:
         error_record = error_repo.search(query, exclude, None, None)
         try:
             if error_record:
+                error_record = error_record[0]
                 if error_record["error_list"]:
                     file = error_record["internal_file"]
                     path = file.split("/")[2]
@@ -120,7 +121,7 @@ class ErrorEvent:
                     log.info(f'Error report uploaded to s3 for SRN -- {srn}')
                     os.remove(file)
                 error_record["error_list"] = None
-                return error_record
+                return [error_record]
             else:
                 return []
         except Exception as e:
