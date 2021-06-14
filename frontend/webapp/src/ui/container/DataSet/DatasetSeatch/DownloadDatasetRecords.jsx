@@ -14,13 +14,13 @@ const DownloadDatasetRecords = (props) => {
                         <Typography variant="h5">{`${props.sentencePair}`}</Typography>
                         <Typography variant="subtitle1">#Sentence Pair</Typography>
                     </Grid>
-                    <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
+                    {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical" />
-                    </Grid>
-                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                    </Grid> */}
+                    {/* <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <Typography variant="h5">{`${props.datasetsContributed}`}</Typography>
                         <Typography variant="subtitle1">#Datasets Contributed</Typography>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
                 <div className={classes.downloadBtnDiv}>
                     <Button className={classes.downloadBtn} variant="contained" color="primary">

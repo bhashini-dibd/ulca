@@ -143,7 +143,7 @@ const DataSet = (theme) => ({
         marginBottom: '3%'
     },
     clearNSubmit: {
-        marginTop: '2vh',
+        marginTop: '10vh',
         float: 'right'
     },
 

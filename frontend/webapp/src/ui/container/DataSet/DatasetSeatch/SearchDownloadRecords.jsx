@@ -29,7 +29,7 @@ import DatasetType from '../../../../configs/DatasetItems';
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
-    const urlMySearch= UrlConfig.mySearches;
+    const urlMySearch = UrlConfig.mySearches;
     const param = useParams();
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
@@ -46,7 +46,13 @@ const SearchAndDownloadRecords = (props) => {
         'parallel-corpus': true
     })
 
-    const detailedReport            =       useSelector((state) => state.mySearchReport);
+    const [count, setCount] = useState(0);
+    const [urls, setUrls] = useState({
+        downloadSample: '',
+        downloadAll: ''
+    })
+
+    const detailedReport = useSelector((state) => state.mySearchReport);
 
     // const searchOptions = useSelector((state) => state.mySearchOptions);
     // const dispatch = useDispatch();
@@ -54,6 +60,23 @@ const SearchAndDownloadRecords = (props) => {
     //     const userObj = new SearchAndDownload();
     //     searchOptions.result.length === 0 && dispatch(APITransport(userObj));
     // }, []);
+
+    useEffect(() => {
+        let data = detailedReport.responseData.filter((val) => {
+            return val.sr_no === srno
+        })
+        //setCount(data[0] ? data[0].count : 0)
+        if (data[0]) {
+            setCount(data[0].count);
+            setUrls({
+                downloadSample: data[0].sampleUrl,
+                downloadAll: data[0].downloadUrl
+            })
+        }
+        else if (params === 'completed' && count === 0)
+            history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+    }, []);
+
 
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
@@ -86,7 +109,7 @@ const SearchAndDownloadRecords = (props) => {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
             case 'completed':
-                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={"9.8 Million"} datasetsContributed={"29"} />
+                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} datasetsContributed={"29"}/>
             default:
                 return <SearchResult />
         }
@@ -217,11 +240,11 @@ const SearchAndDownloadRecords = (props) => {
     return (
         <div className={classes.searchDivStyle}>
             <div className={classes.breadcrum}>
-                
-                <BreadCrum links={(params === 'inprogress' || params === 'published') ? [url,urlMySearch]:[url]} activeLink="Search & Download Records" />
+
+                <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search & Download Records" />
             </div>
             <Grid container spacing={3}>
-                <Grid className={(params === 'inprogress' || params === 'published') && classes.blurOut} item xs={12} sm={5} md={4} lg={4} xl={4}>
+                <Grid className={(params === 'inprogress' || params === 'completed') && classes.blurOut} item xs={12} sm={5} md={4} lg={4} xl={4}>
 
                     <Typography className={classes.subHeader} variant="h6">Select Dataset Type</Typography>
 
