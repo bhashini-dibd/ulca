@@ -61,7 +61,7 @@ const MySearches = (props) => {
 
     const renderAction = (rowData) =>{
 
-        const status = rowData[3].toLowerCase();
+        const status = rowData[4].toLowerCase();
         history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`)
     }
 
@@ -91,7 +91,14 @@ const MySearches = (props) => {
                                 filter  : false,
                                 sort    : false,
                         },
-                },
+                },{
+                        name    : "count",
+                        label   : "Count",
+                        options : {
+                                filter  : false,
+                                sort    : false,
+                                
+                  }  },
                 {
                         name    : "status",
                         label   : "Status",
