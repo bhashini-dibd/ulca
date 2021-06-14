@@ -34,6 +34,7 @@ import com.ulca.dataset.request.DatasetSubmitRequest;
 import com.ulca.dataset.request.SearchCriteria;
 import com.ulca.dataset.response.DatasetCorpusSearchResponse;
 import com.ulca.dataset.response.DatasetListByUserIdResponse;
+import com.ulca.dataset.response.DatasetSearchListByUserIdResponse;
 import com.ulca.dataset.response.DatasetSearchStatusResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
 
@@ -113,29 +114,28 @@ public class DatasetService {
 		List<DatasetListByUserIdResponse> list = new ArrayList<DatasetListByUserIdResponse>();
 
 		List<ProcessTracker> processList = processTrackerDao.findByUserId(userId);
-		
+
 		for (ProcessTracker p : processList) {
 			if (p.getDatasetId() != null && !p.getDatasetId().isEmpty()) {
-				
-				String status =  p.getStatus().toString();
+
+				String status = p.getStatus().toString();
 				Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
-				
-				List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(p.getServiceRequestNumber());
-				
+
+				List<TaskTracker> taskTrackerList = taskTrackerDao
+						.findAllByServiceRequestNumber(p.getServiceRequestNumber());
+
 				HashMap<String, String> map = new HashMap<String, String>();
-				for(TaskTracker tTracker : taskTrackerList) {
-					map.put(tTracker.getTool().toString(),tTracker.getStatus().toString());
+				for (TaskTracker tTracker : taskTrackerList) {
+					map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
 				}
-				if(map.containsKey("publish")) {
+				if (map.containsKey("publish")) {
 					status = map.get("publish");
-				} else if(map.containsKey("validate")) {
+				} else if (map.containsKey("validate")) {
 					status = map.get("validate");
-				} 
-				
-				
+				}
 
 				list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
-						dataset.get().getDatasetName(), dataset.get().getCreatedOn(),status));
+						dataset.get().getDatasetName(), dataset.get().getCreatedOn(), status));
 			}
 
 		}
@@ -192,6 +192,30 @@ public class DatasetService {
 
 		return new DatasetSearchStatusResponse(processTracker.getServiceRequestNumber(), processTracker.getStartTime(),
 				processTracker.getSearchCriterion(), taskTrackerList);
+	}
+
+	public List<DatasetSearchStatusResponse> searchListByUserId(String userId) {
+
+		List<DatasetSearchStatusResponse> searchList = new ArrayList<DatasetSearchStatusResponse>();
+
+		List<ProcessTracker> processTrackerList = processTrackerDao.findByUserId(userId);
+
+		if (processTrackerList != null && processTrackerList.size() > 0) {
+
+			for (ProcessTracker processTracker : processTrackerList) {
+				String serviceRequestNumber = processTracker.getServiceRequestNumber();
+
+				List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+
+				searchList.add(new DatasetSearchStatusResponse(processTracker.getServiceRequestNumber(),
+						processTracker.getStartTime(), processTracker.getSearchCriterion(), taskTrackerList));
+
+			}
+
+		}
+
+		return searchList;
+
 	}
 
 }

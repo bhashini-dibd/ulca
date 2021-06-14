@@ -89,4 +89,10 @@ public class DatasetController {
 		
 		return datasetService.searchStatus(serviceRequestNumber);
 	}
+	@GetMapping("/corpus/search/listByUserId")
+	public List<DatasetSearchStatusResponse >searchListByUserId(@RequestParam String userId) {
+		log.info("******** Entry DatasetController:: searchStatus *******" );
+		
+		return datasetService.searchListByUserId(userId);
+	}
 }
