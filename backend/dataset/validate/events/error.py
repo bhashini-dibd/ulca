@@ -2,7 +2,7 @@ import logging
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import error_event_input_topic, validate_error_code
+from configs.configs import error_event_input_topic, validate_error_code, pt_publish_tool
 from kafkawrapper.producer import Producer
 
 log = logging.getLogger('file')
@@ -19,7 +19,7 @@ class ErrorEvent:
         try:
             event = {"eventType": "dataset-training", "messageType": "error", "code": validate_error_code.replace("XXX", error["code"]),
                      "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),
-                     "serviceRequestNumber": error["serviceRequestNumber"],
+                     "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool,
                      "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
             prod.produce(event, error_event_input_topic, None)
         except Exception as e:
