@@ -5,6 +5,8 @@ import DatasetStyle from '../../../styles/Dataset';
 
 const DownloadDatasetRecords = (props) => {
     const {classes} = props
+    console.log(props.sentencePair)
+    debugger
     return (
         <div className={classes.downloadDiv}>
             <Typography variant="h5">{`Search result for the ${props.datasetType} Dataset records`}</Typography>
@@ -23,10 +25,10 @@ const DownloadDatasetRecords = (props) => {
                     </Grid> */}
                 </Grid>
                 <div className={classes.downloadBtnDiv}>
-                    <Button className={classes.downloadBtn} variant="contained" color="primary">
+                    <Button href={props.urls.downloadSample} target="_self" className={classes.downloadBtn} variant="contained" color="primary">
                         <GetAppOutlinedIcon /> Download Sample
                     </Button>
-                    <Button className={classes.downloadBtn} variant="contained" color="primary">
+                    <Button href={props.urls.downloadAll} target="_self" className={classes.downloadBtn} variant="contained" color="primary">
                         <GetAppOutlinedIcon /> Download All
                     </Button>
                 </div>

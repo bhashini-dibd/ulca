@@ -73,6 +73,7 @@ const MySearches = (props) => {
                         options : {
                                 filter  : false,
                                 sort    : false,
+                                display : "excluded"
                                 
                         },
                 },
@@ -93,7 +94,7 @@ const MySearches = (props) => {
                         },
                 },{
                         name    : "count",
-                        label   : "Count",
+                        label   : "#Record",
                         options : {
                                 filter  : false,
                                 sort    : false,

@@ -16,7 +16,7 @@ import DatasetSubmission from './ui/container/DataSet/UploadDataset/DatasetSubmi
 import authenticateUser from './configs/authenticate';
 import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";
 import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/SearchDownloadRecords";
-
+import ActivateUser from "./ui/container/UserManagement/ActivateUser"
 const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) => {
   return (
     <Route
@@ -48,6 +48,13 @@ export default function App() {
             exact
             path={`${process.env.PUBLIC_URL}/user/:page`}
             component={Login}
+          />
+
+          <Route
+            path={`${process.env.PUBLIC_URL}/activate/:email/:userId/:time?`}
+          
+            component={ActivateUser}
+            
           />
           
           <Route exact path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard} />
@@ -104,6 +111,8 @@ export default function App() {
             currentMenu="dataset-submission"
             dontShowHeader={false}
           />
+
+
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/search-and-download-rec/:params/:srno`}
             userRoles={[""]}
@@ -112,6 +121,8 @@ export default function App() {
             currentMenu="search-and-download-rec"
             dontShowHeader={false}
           />
+
+
 
         </Switch>
       </div>
