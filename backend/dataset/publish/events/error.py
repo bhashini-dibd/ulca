@@ -1,6 +1,7 @@
 import csv
 import json
 import logging
+import os
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
@@ -45,26 +46,17 @@ class ErrorEvent:
     def write_error(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
-            error_record = self.get_error_report(data["serviceRequestNumber"], True)
+            error_record = self.get_error_report(data["serviceRequestNumber"])
             if error_record:
                 error_record = error_record[0]
-                file = error_record["file"]
-                if "eof" in data.keys():
-                    if 'tool' in data.keys():
-                        if data["eof"] and data["tool"] == pt_publish_tool:
-                            log.info(f'Error List: {len(error_record["error_list"])} for SRN -- {data["serviceRequestNumber"]}')
-                            self.write_to_csv(error_record["error_list"], file, data["serviceRequestNumber"])
-                            path = file.split("/")[2]
-                            aws_file = utils.upload_file(file, f'{aws_error_prefix}{path}')
-                            if aws_file:
-                                error_record["status"], error_record["file"] = pt_success_status, aws_file
-                                error_record["lastModifiedTime"] = str(datetime.now())
-                                error_record["endTime"] = error_record["lastModifiedTime"]
-                                error_repo.update(error_record)
-                            error_record["error_list"] = None
-                            error_repo.update(error_record)
-                            log.info(f'Error file UPLOADED to s3 for SRN -- {data["serviceRequestNumber"]}')
-                            return
+                if 'eof' in data.keys():
+                    if data["eof"]:
+                        log.info(f'EOF received for SRN -- {data["serviceRequestNumber"]}')
+                        error_record["status"] = pt_success_status
+                        error_record["lastModifiedTime"] = str(datetime.now())
+                        error_record["endTime"] = error_record["lastModifiedTime"]
+                        error_repo.update(error_record)
+                        return
                 if error_record["status"] == pt_inprogress_status:
                     log.info(f'Updating error file for SRN -- {data["serviceRequestNumber"]}')
                     error_list = error_record["error_list"]
@@ -77,8 +69,11 @@ class ErrorEvent:
                     log.info(f'Creating error file for SRN -- {data["serviceRequestNumber"]}')
                     file = f'{shared_storage_path}error-{data["serviceRequestNumber"]}.csv'
                     error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                             "file": file, "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now()), "error_list": [data]}
+                                 "internal_file": file, "file": None, "startTime": str(datetime.now()),
+                                 "lastModifiedTime": str(datetime.now()), "error_list": [data]}
                     error_repo.insert(error_rec)
+                else:
+                    log.info(f'No errors for SRN -- {data["serviceRequestNumber"]}')
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}', e)
             return
@@ -106,16 +101,30 @@ class ErrorEvent:
             log.exception(f'Exception in csv writer: {e}', e)
             return
 
-    def get_error_report(self, srn, internal):
+    def get_error_report(self, srn):
         query = {"serviceRequestNumber": srn}
-        if internal:
-            exclude = {"_id": False}
-        else:
-            exclude = {"_id": False, "error_list": False}
+        exclude = {"_id": False}
         error_record = error_repo.search(query, exclude, None, None)
-        if error_record:
-            return error_record
-        else:
+        try:
+            if error_record:
+                if error_record["error_list"]:
+                    file = error_record["internal_file"]
+                    path = file.split("/")[2]
+                    if 'file' in error_record.keys():
+                        if error_record["file"]:
+                            utils.delete_from_s3(f'{aws_error_prefix}{path}')
+                    log.info(f'Error List: {len(error_record["error_list"])} for SRN -- {srn}')
+                    self.write_to_csv(error_record["error_list"], file, srn)
+                    error_record["file"] = utils.upload_file(file, f'{aws_error_prefix}{path}')
+                    error_repo.update(error_record)
+                    log.info(f'Error report uploaded to s3 for SRN -- {srn}')
+                    os.remove(file)
+                error_record["error_list"] = None
+                return error_record
+            else:
+                return []
+        except Exception as e:
+            log.exception(f'Exception while fetching error report: {e}', e)
             return []
 
 
