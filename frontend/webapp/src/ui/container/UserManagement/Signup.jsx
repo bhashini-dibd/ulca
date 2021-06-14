@@ -239,7 +239,7 @@ const SignUp = (props) => {
                     }}
                     disabled={loading}>
                     {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                    Sign In
+                    Sign up
                 </Button>
       <div className={classes.createLogin}>
         <Typography className={classes.width}>

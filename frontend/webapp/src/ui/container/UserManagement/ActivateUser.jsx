@@ -45,8 +45,12 @@ const ContributionList = (props) => {
                   
                   return Promise.reject('');
                 } else {
-                  debugger
-                  
+                    setSnackbarInfo({
+                        ...snackbar,
+                        open: true,
+                        message: rsp_data.message ? rsp_data.message : "Verification completed successfully.",
+                        variant: 'success'
+                    })
                   setTimeout(() => {
                     history.push(`${process.env.PUBLIC_URL}/user/login`)
                 }, 4000)

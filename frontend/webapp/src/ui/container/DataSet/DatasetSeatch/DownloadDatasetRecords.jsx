@@ -8,7 +8,7 @@ const DownloadDatasetRecords = (props) => {
     console.log(props.sentencePair)
     debugger
     return (
-        <div className={classes.downloadDiv}>
+        <div className={classes.searchResultFinal}>
             <Typography variant="h5">{`Search result for the ${props.datasetType} Dataset records`}</Typography>
             <Paper className={classes.downloadPaper}>
                 <Grid container>

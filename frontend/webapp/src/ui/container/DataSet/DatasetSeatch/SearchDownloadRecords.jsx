@@ -389,7 +389,7 @@ const SearchAndDownloadRecords = (props) => {
                 <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                     <Divider className={classes.divider} orientation="vertical" />
                 </Grid>
-                <Grid item xs={12} sm={6} md={7} lg={7} xl={7}>
+                <Grid item xs={12} sm={6} md={7} lg={7} xl={7} className={classes.parent}>
                     {renderPage()}
                 </Grid>
 
