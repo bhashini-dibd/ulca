@@ -108,7 +108,7 @@ class ASRService:
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
             insert_data["tags"] = self.get_tags(insert_data)
-            if metadata["datasetMode"] != 'pseudo':
+            if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
                 file_path = f'{shared_storage_path}{data["audioFilename"]}'
                 s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
