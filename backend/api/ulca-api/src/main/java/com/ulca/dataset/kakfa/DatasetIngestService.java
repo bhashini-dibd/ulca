@@ -135,7 +135,7 @@ public class DatasetIngestService {
 			   
 			   JSONObject proCountFailure = new JSONObject();
 			   
-			   proCountFailure.put("type", "success");
+			   proCountFailure.put("type", "failed");
 			   proCountFailure.put("count", 0);
 			   processedCount.put(proCountFailure);
 			   details.put("processedCount", processedCount);
@@ -155,7 +155,7 @@ public class DatasetIngestService {
 				e.printStackTrace();
 			}
 
-			log.info("send record for validation ");
+			log.info("sent record for validation ");
 		} else {
 			log.info("paramsSchema object is null");
 		}

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
@@ -102,6 +103,11 @@ public class TaskTracker   {
       return null;
     }
   }
+  
+  @Id
+  @JsonProperty("id")
+  private String id = null;
+  
   @JsonProperty("status")
   private StatusEnum status = null;
 

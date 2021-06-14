@@ -143,7 +143,7 @@ const DataSet = (theme) => ({
         marginBottom: '3%'
     },
     clearNSubmit: {
-        marginTop: '10vh',
+        marginTop: '2vh',
         float: 'right'
     },
 
@@ -151,7 +151,8 @@ const DataSet = (theme) => ({
     FindInPageIcon: { fontSize: '8rem' },
     searchResult:{
         textAlign: 'center',
-        marginTop: '45%',
+        marginTop: '40%',
+
     },
     reqPaper:{
         // padding:'10%',

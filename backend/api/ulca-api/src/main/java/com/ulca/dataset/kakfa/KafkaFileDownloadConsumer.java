@@ -68,30 +68,41 @@ public class KafkaFileDownloadConsumer {
 
 		
 		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
+		processTracker.setStatus(StatusEnum.inprogress);
+		processTrackerDao.save(processTracker);
+		
+		TaskTracker taskTrackerDownload = new TaskTracker();
+		taskTrackerDownload.setStartTime(new Date().toString());
+		taskTrackerDownload.setTool(ToolEnum.download);
+		taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
+		taskTrackerDownload.setServiceRequestNumber(file.getServiceRequestNumber());
+		taskTrackerDao.save(taskTrackerDownload);
 		
 		
 		log.info(processTracker.toString());
 		
 		try {
-			processTracker.setStatus(StatusEnum.inprogress);
-			processTrackerDao.save(processTracker);
 			
 			
-			String filePath = downloadUsingNIO(fileUrl, downlaodFolder);
+			String fileName = serviceRequestNumber+".zip";
+			String filePath = downloadUsingNIO(fileUrl, downlaodFolder,fileName);
 			ArrayList<String> fileList = unzipUtility.unzip(filePath, downlaodFolder);
 			
-			
-			TaskTracker taskTracker = new TaskTracker();
-			taskTracker.setLastModified(new Date().toString());
-			taskTracker.setEndTime(new Date().toString());
-			taskTracker.setTool(ToolEnum.download);
-			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
-			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
-			taskTrackerDao.save(taskTracker);
+			taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
+			taskTrackerDownload.setEndTime(new Date().toString());
+			taskTrackerDao.save(taskTrackerDownload);
 			
 
 			Map<String, String> fileMap = new HashMap<String, String>();
 			ParallelDatasetParamsSchema paramsSchema = null;
+			
+			TaskTracker taskTrackerIngest = new TaskTracker();
+			taskTrackerIngest.setLastModified(new Date().toString());
+			taskTrackerIngest.setTool(ToolEnum.ingest);
+			taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
+			taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
+
+			taskTrackerDao.save(taskTrackerIngest);
 			
 			for (String filePathUnzipped : fileList) {
 				System.out.println("listing unzipped files :: " + filePathUnzipped);
@@ -102,22 +113,21 @@ public class KafkaFileDownloadConsumer {
 						
 					} catch(Exception e) {
 						 //update error
-						taskTracker = new TaskTracker();
-						taskTracker.setLastModified(new Date().toString());
-						taskTracker.setEndTime(new Date().toString());
-						taskTracker.setTool(ToolEnum.validate);
-						taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+						taskTrackerIngest.setLastModified(new Date().toString());
+						taskTrackerIngest.setEndTime(new Date().toString());
+						taskTrackerIngest.setTool(ToolEnum.ingest);
+						taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 						Error error = new Error();
-						error.setCause("params validation failed");
+						error.setCause(e.getMessage());
 						error.setMessage("params validation failed");
 						error.setCode("01_00000001");
-						taskTracker.setError(error);
-						taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
+						taskTrackerIngest.setError(error);
+						taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
 
-						taskTrackerDao.save(taskTracker);
+						taskTrackerDao.save(taskTrackerIngest);
 						processTracker.setStatus(StatusEnum.failed);
 						processTrackerDao.save(processTracker);
-						 return ;
+						return ;
 						
 					}
 					
@@ -134,34 +144,30 @@ public class KafkaFileDownloadConsumer {
 			JSONObject details = datasetIngestService.datasetIngest(paramsSchema,file, fileMap);
 			
 			if(details != null) {
-				taskTracker = new TaskTracker();
-				taskTracker.setLastModified(new Date().toString());
-				taskTracker.setEndTime(new Date().toString());
-				taskTracker.setTool(ToolEnum.ingest);
-				taskTracker.setDetails(details.toString());
-				taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
-				taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
+				taskTrackerIngest.setLastModified(new Date().toString());
+				taskTrackerIngest.setEndTime(new Date().toString());
+				taskTrackerIngest.setDetails(details.toString());
+				taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
+				taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
 
-				taskTrackerDao.save(taskTracker);
+				taskTrackerDao.save(taskTrackerIngest);
 			}
 			
 			
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			//update error
-			TaskTracker taskTracker = new TaskTracker();
-			taskTracker.setLastModified(new Date().toString());
-			taskTracker.setEndTime(new Date().toString());
-			taskTracker.setTool(ToolEnum.download);
-			taskTracker.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+			
+			taskTrackerDownload.setLastModified(new Date().toString());
+			taskTrackerDownload.setEndTime(new Date().toString());
+			taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 			Error error = new Error();
-			error.setCause("file download failed");
+			error.setCause(e.getMessage());
 			error.setMessage("file download failed");
 			error.setCode("01_00000000");
-			taskTracker.setError(error);
-			taskTracker.setServiceRequestNumber(file.getServiceRequestNumber());
-			taskTrackerDao.save(taskTracker);
+			taskTrackerDownload.setError(error);
+			taskTrackerDao.save(taskTrackerDownload);
+			
 			processTracker.setStatus(StatusEnum.failed);
 			processTrackerDao.save(processTracker);
 			
@@ -170,12 +176,12 @@ public class KafkaFileDownloadConsumer {
 		log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
 	}
 
-	private String downloadUsingNIO(String urlStr, String downloadFolder) throws IOException {
+	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {
 		log.info("************ Entry KafkaFileDownloadConsumer :: downloadUsingNIO *********");
 		URL url = new URL(urlStr);
 		log.info(url.getFile());
 
-		String file = downloadFolder + "/test.zip";
+		String file = downloadFolder +"/"+ fileName;
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 		System.out.println(rbc.toString());
 		FileOutputStream fos = new FileOutputStream(file);
