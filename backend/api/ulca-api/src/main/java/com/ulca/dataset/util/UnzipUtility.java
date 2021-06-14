@@ -30,11 +30,15 @@ public class UnzipUtility {
 	 * @throws IOException
 	 */
 	public ArrayList<String> unzip(String zipFilePath, String destDirectory) throws IOException {
+		
+		log.info("************ Entry UnzipUtility :: unzip *********");
+		
 		ArrayList<String> fileList = new ArrayList<String>();
 		File destDir = new File(destDirectory);
 		if (!destDir.exists()) {
 			destDir.mkdir();
 		}
+		
 		ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
 		ZipEntry entry = zipIn.getNextEntry();
 		// iterates over entries in the zip file
@@ -47,23 +51,36 @@ public class UnzipUtility {
 				String fileDetails[] = entryType.split("/");
 				int length = fileDetails.length;
 				String fileName = fileDetails[length-1];
-			log.info("file name :: " + fileName);
+				String dir = fileDetails[length-2];
+				String fileDirectory = destDirectory + "/"+ dir;
+				File fileDirect = new File(fileDirectory);
+				if(!fileDirect.exists()) {
+					fileDirect.mkdirs();
+				}
 				
+			log.info("file name :: " + fileName);
+			log.info("unzipping file  :: " + entryType);
 			if(fileName.equals("params.json") || fileName.equals("data.json")) {
+				
 				extractFile(zipIn, filePath);
-				System.out.println("filePath unzipped :: " + filePath);
+				log.info("filePath unzipped :: " + filePath);
 				fileList.add(filePath);
 			}
 				
-			} else {
+			}   else {
 				// if the entry is a directory, make the directory
+				log.info("folder created");
+				log.info(filePath);
 				File dir = new File(filePath);
+				if(!dir.exists())
 				dir.mkdirs();
-			}
+			} 
 			zipIn.closeEntry();
 			entry = zipIn.getNextEntry();
 		}
 		zipIn.close();
+		
+		log.info("************ Exit UnzipUtility :: unzip *********");
 		
 		return fileList;
 	}

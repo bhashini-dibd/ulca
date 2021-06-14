@@ -93,6 +93,7 @@ public class KafkaFileDownloadConsumer {
 			String fileName = serviceRequestNumber+".zip";
 			String filePath = downloadUsingNIO(fileUrl, downlaodFolder,fileName);
 			log.info("file download complete");
+			log.info("file path in downloadFile servide ::" + filePath);
 			
 			ArrayList<String> fileList = unzipUtility.unzip(filePath, downlaodFolder);
 			log.info("file unzip complete");
@@ -217,6 +218,8 @@ public class KafkaFileDownloadConsumer {
 		log.info("************ Entry KafkaFileDownloadConsumer :: downloadUsingNIO *********");
 		URL url = new URL(urlStr);
 		String file = downloadFolder +"/"+ fileName;
+		log.info("file path indownloadUsingNIO" );
+		log.info(file);
 		log.info(url.getPath());
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
 		log.info(url.getContent().toString());
