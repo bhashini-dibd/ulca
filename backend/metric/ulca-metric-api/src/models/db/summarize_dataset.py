@@ -131,15 +131,14 @@ class SummarizeDatasetModel(object):
                     chart_data.append(elem)
                     
                 return chart_data 
-
-
+           
             if len(criterions) == 1 :
                 dtype = dataset["type"]
                 src = criterions[0]["sourceLanguage"]["value"]
                 tgt = criterions[0]["targetLanguage"]["value"]
                 grp_val = grouping["value"]
                 query = "SELECT SUM(\"count\") as total, sourceLanguage , targetLanguage ,{group}, isDelete  FROM \"{schema}\" \
-                        WHERE ((datasetType = \'{type}\') AND (sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\'))\
+                        WHERE ((datasetType = \'{type}\') AND ((sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\')))\
                              GROUP BY sourceLanguage, targetLanguage, {group},isDelete".format(schema=DRUID_DB_SCHEMA,group=grp_val,type=dtype,srcl=src,tgtl=tgt)
 
                 log.info("Query executed : {}".format(query))
@@ -197,7 +196,7 @@ class SummarizeDatasetModel(object):
                 sub_q= criterions[1]["value"]
                 grp_val = grouping["value"]
                 query = "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,{group},isDelete FROM \"{schema}\" \
-                        WHERE (({match} = \'{val}\') AND (sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\'))\
+                        WHERE (({match} = \'{val}\') AND ((sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\')))\
                              GROUP BY sourceLanguage, targetLanguage, {group},isDelete".format(schema=DRUID_DB_SCHEMA,group=grp_val,val=sub_q,srcl=src,tgtl=tgt,match=add_field)
 
                 log.info("Query executed : {}".format(query))
