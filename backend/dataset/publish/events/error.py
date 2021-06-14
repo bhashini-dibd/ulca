@@ -85,15 +85,18 @@ class ErrorEvent:
 
     def write_to_csv(self, data_list, file, srn):
         try:
-            data_modified = []
+            data_modified, data_pub = [], None
             for data in data_list:
                 if isinstance(data, str):
-                    data_modified.append(json.loads(data))
-                else:
-                    data_modified.append(data)
-            keys = list(data_modified[0].keys())
+                    data = json.loads(data)
+                if 'stage' in data.keys():
+                    if data["stage"] == pt_publish_tool:
+                        data_pub = data
+                data_modified.append(data)
+            if not data_pub:
+                data_pub = data_modified[0]
             with open(file, 'w', newline='') as output_file:
-                dict_writer = csv.DictWriter(output_file, keys)
+                dict_writer = csv.DictWriter(output_file, list(data_pub.keys()))
                 dict_writer.writeheader()
                 dict_writer.writerows(data_modified)
                 output_file.close()
