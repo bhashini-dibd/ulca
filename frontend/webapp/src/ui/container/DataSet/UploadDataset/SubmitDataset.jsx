@@ -91,30 +91,6 @@ const SubmitDataset = (props) => {
     }
 
     const handleApicall = async () => {
-//         let apiObj = new SubmitDatasetApi(dataset)
-//         fetch(apiObj.apiEndPoint(), {
-//           method: 'post',
-//           headers: apiObj.getHeaders().headers,
-//           body: JSON.stringify(apiObj.getBody())
-//       })
-//   .then(async res => {
-//       if (res.ok) {
-          
-//         history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${5}`)
-//           return true;
-//       } else {
-//         setSnackbarInfo({
-//             ...snackbar,
-//             open: true,
-//             message: "something went wrong. PLease try again.",
-//             timeOut: 40000,
-//             variant: 'error'
-//         })
-          
-//       }
-//   })
-
-
 
 let apiObj = new SubmitDatasetApi(dataset)
     fetch(apiObj.apiEndPoint(), {

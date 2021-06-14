@@ -46,6 +46,8 @@ const SearchAndDownloadRecords = (props) => {
         'parallel-corpus': true
     })
 
+    const detailedReport            =       useSelector((state) => state.mySearchReport);
+
     // const searchOptions = useSelector((state) => state.mySearchOptions);
     // const dispatch = useDispatch();
     // useEffect(() => {
@@ -83,7 +85,7 @@ const SearchAndDownloadRecords = (props) => {
         switch (params) {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
-            case 'published':
+            case 'completed':
                 return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={"9.8 Million"} datasetsContributed={"29"} />
             default:
                 return <SearchResult />

@@ -92,51 +92,33 @@ const ValidatePassword = (password) =>{
 
 const handleSubmit = async () => {
 
-  let data = {
-    "userKeys": {
-        "email": "ulca@gmail.com",
-        "publicKey": "31f8ed31-25a0-44a2-8da0-db42b5855d2a",
-        "privateKey": "98541a718173430880f5ae13a4e79aa0"
-    },
-    "userDetails": {
-        "userID": "9a3f534cd588410f95d68696dd06fa2b",
-        "email": "ulca@gmail.com",
-        "firstName": "Ulca",
-        "lastName": "User",
-        "phoneNo": "9446400000",
-        "isVerified": true,
-        "isActive": true,
-        "registeredTime": "2021-06-07T16:19:13.532000",
-        "activatedTime": "2021-06-07T16:29:10.398000"
-    }
-  }
- 
   let apiObj = new LoginApi(values)
+    var rsp_data =[]
       fetch(apiObj.apiEndPoint(), {
         method: 'post',
         body: JSON.stringify(apiObj.getBody()),
         headers: apiObj.getHeaders().headers
       }).then(async response => {
-        const rsp_data = await response.json();
+        rsp_data = await response.json();
+        debugger
         setLoading(false)
         if (!response.ok) {
           
           return Promise.reject('');
         } else {
-          localStorage.setItem(`userInfo`, JSON.stringify(data.userKeys));
-        localStorage.setItem(`userDetails`, JSON.stringify(data.userDetails));
+          debugger
+          localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
+        localStorage.setItem(`userDetails`, JSON.stringify(rsp_data.data.userDetails));
           
           history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
         }
       }).catch((error) => {
         setLoading(false)
-        localStorage.setItem(`userInfo`, JSON.stringify(data.userKeys));
-        localStorage.setItem(`userDetails`, JSON.stringify(data.userDetails));
-        history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
+        
           setSnackbarInfo({
                           ...snackbar,
                           open: true,
-                          message: "Invalid email / password",
+                          message: rsp_data.message ? rsp_data.message : "Invalid email / password",
                           variant: 'error'
                       })
       });

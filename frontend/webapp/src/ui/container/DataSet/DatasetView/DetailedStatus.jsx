@@ -68,8 +68,8 @@ const DetailedStatus = (props) => {
                 return (
                         <div className={classes.headerButtons}>
                                 <Typography  variant="h5" >{name}</Typography>
-                                {(status !== "published") && <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined"  onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
-                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.status==="successful")? false:true} className={!(errorData.status!=="published")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
+                                { <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined" disabled={(status===("completed"))? true:false}   onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
+                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.status==="successful")? false:true} className={!(errorData.status!=="completed")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
                         
                         </div>
                 );
@@ -171,7 +171,7 @@ const DetailedStatus = (props) => {
                                         options ={options}
                                 />
                         </MuiThemeProvider>
-                        {status !== "published" && <div className = {classes.footerButtons}>
+                        {status !== "completed" && <div className = {classes.footerButtons}>
                                 <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => handleAbort()}>Abort Process</Button>
                                 
                         </div>}

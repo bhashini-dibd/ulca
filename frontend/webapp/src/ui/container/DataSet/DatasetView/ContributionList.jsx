@@ -55,11 +55,11 @@ const ContributionList = (props) => {
                                 border          : "1px solid rgb(224 224 224)"
                         }
                 },
-                MUIDataTableToolbar: {
-                        root: { 
-                                display: "none" 
-                               } 
-                       },
+                // MUIDataTableToolbar: {
+                //         root: { 
+                //                 display: "none" 
+                //                } 
+                //        },
                 
                 MuiTableRow:{root:{cursor: 'pointer'}}
                 }
@@ -69,7 +69,7 @@ const ContributionList = (props) => {
         const fetchHeaderButton= () => {
                 return (
                         <div className={classes.headerButtons}>
-                                <Typography variant="h5" >My Contribution</Typography>
+                                {/* <Typography variant="h5" >My Contribution</Typography> */}
                                 <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
                          </div>
                 )
@@ -137,6 +137,7 @@ const ContributionList = (props) => {
                 options : {
                                 filter  : false,
                                 sort    : false,
+                                display : "excluded",
                         },
                 },
                 {
@@ -180,20 +181,20 @@ const ContributionList = (props) => {
                         },
                 },
 
-                {
-                name    : "Action",
-                label   : "Action",
-                options: {
-                                filter  : true,
-                                sort    : false,
-                                empty   : true,
-                                customBodyRender: (value, tableMeta, updateValue) => {
-                                        if (tableMeta.rowData) {
-                                                return <div>{renderAction(tableMeta.rowData[2], tableMeta.rowData[4])}</div>;
-                                        }
-                        },
-                },
-                },
+                // {
+                // name    : "Action",
+                // label   : "Action",
+                // options: {
+                //                 filter  : true,
+                //                 sort    : false,
+                //                 empty   : true,
+                //                 customBodyRender: (value, tableMeta, updateValue) => {
+                //                         if (tableMeta.rowData) {
+                //                                 return <div>{renderAction(tableMeta.rowData[2], tableMeta.rowData[4])}</div>;
+                //                         }
+                //         },
+                // },
+                // },
         ];
 
         const options = {

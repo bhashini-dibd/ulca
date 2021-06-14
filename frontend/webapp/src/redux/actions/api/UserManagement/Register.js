@@ -6,11 +6,11 @@
  import CONFIGS from "../../../../configs/configs";
  import ENDPOINTS from "../../../../configs/apiendpoints";
  
- export default class LoginAPI extends API {
+ export default class RegisterAPI extends API {
    constructor(userLogin, timeout = 2000) {
      super("POST", timeout, false);
-    this.credentials = userLogin;
-     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.login}`;
+    this.details = userLogin;
+     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.register}`;
    }
  
  
@@ -19,8 +19,8 @@
    }
  
    getBody() {
-     let apiParam = {"authenticator": "ULCA",
-     "data": this.credentials}
+     let apiParam = {
+        "users": [this.details]}
      return apiParam;
    }
  

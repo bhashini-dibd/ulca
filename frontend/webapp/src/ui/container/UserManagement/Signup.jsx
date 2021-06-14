@@ -12,26 +12,36 @@ import {
   FormControl,
   Checkbox,
   FormControlLabel,
+  CircularProgress,
   FormHelperText,
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
 import {  useHistory } from "react-router-dom";
+import RegisterApi from "../../../redux/actions/api/UserManagement/Register"
+import Snackbar from '../../components/common/Snackbar';
 
 const SignUp = (props) => {
   const [values, setValues] = useState({
-    name: "",
+    firstName: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [error, setError] = useState({
-    name: false,
+    firstName: false,
     email: false,
     password: false,
     confirmPassword: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [snackbar, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    variant: 'success'
+})
+
   const history = useHistory();
 
   const handleChange = (prop) => (event) => {
@@ -51,7 +61,51 @@ const SignUp = (props) => {
     event.preventDefault();
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarInfo({ ...snackbar, open: false })
+}
+
   const handleSubmit = () =>{
+
+    let apiObj = new RegisterApi(values)
+    var rsp_data =[]
+      fetch(apiObj.apiEndPoint(), {
+        method: 'post',
+        body: JSON.stringify(apiObj.getBody()),
+        headers: apiObj.getHeaders().headers
+      }).then(async response => {
+        rsp_data = await response.json();
+        debugger
+        setLoading(false)
+        if (!response.ok) {
+          
+          return Promise.reject('');
+        } else {
+          setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: rsp_data.message ? rsp_data.message : "Invalid email / password",
+            variant: 'success'
+        })
+
+        setValues({
+          firstName: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+        })
+
+        }
+      }).catch((error) => {
+        setLoading(false)
+        debugger
+          setSnackbarInfo({
+                          ...snackbar,
+                          open: true,
+                          message: rsp_data.message ? rsp_data.message : "Invalid email / password",
+                          variant: 'error'
+                      })
+      });
 
   }
 
@@ -68,13 +122,13 @@ const SignUp = (props) => {
 
   
     const HandleSubmitValidate = () => {
-      if(!(/^[A-Za-z ]+$/.test(values.name))){
-        setError({...error, name:true})
+      if(!(/^[A-Za-z ]+$/.test(values.firstName))){
+        setError({...error, firstName:true})
       }
       else if(!ValidateEmail(values.email)){
       setError({...error, email:true})
       }
-      else if(!(values.password.length>8)){
+      else if(!(values.password.length>7)){
       setError({...error, password:true})
       }
       else if(values.password !== values.confirmPassword){
@@ -82,6 +136,7 @@ const SignUp = (props) => {
       }
       else{
         handleSubmit()
+        setLoading(true);
       }
   
   
@@ -98,12 +153,12 @@ const SignUp = (props) => {
       <TextField
         className={classes.textField}
         required
-        onChange={handleChange("name")}
+        onChange={handleChange("firstName")}
         id="outlined-required"
-        error  = {error.name ? true : false}
-        value={values.name}
+        error  = {error.firstName ? true : false}
+        value={values.firstName}
         label="Name"
-        helperText = {error.name ? "Name is not proper" : ""}
+        helperText = {error.firstName ? "Name is not proper" : ""}
         variant="outlined"
       />
       <TextField
@@ -157,7 +212,7 @@ const SignUp = (props) => {
       </FormControl>
       {error.confirmPassword && <FormHelperText error={true}>Both password must match.</FormHelperText>}
 
-      <div className={classes.privatePolicy}>
+      {/* <div className={classes.privatePolicy}>
         <FormControlLabel
           control={
             <Checkbox
@@ -174,18 +229,18 @@ const SignUp = (props) => {
             Privacy policy
           </Link>
         </Typography>
-      </div>
+      </div> */}
 
-      <Button
-        variant="contained"
-        color="primary"
-        className={classes.fullWidth}
-        onClick={() => {
-          HandleSubmitValidate();
-        }}
-      >
-        Sign up
-      </Button>
+<Button
+                    color="primary"
+                    size = "large"
+                    variant="contained" aria-label="edit"  className={classes.fullWidth} onClick={() => {
+                      HandleSubmitValidate();
+                    }}
+                    disabled={loading}>
+                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    Sign In
+                </Button>
       <div className={classes.createLogin}>
         <Typography className={classes.width}>
           Already have an account ?{" "}
@@ -198,6 +253,14 @@ const SignUp = (props) => {
           </Link>
         </Typography>
       </div>
+      {snackbar.open &&
+      <Snackbar
+          open={snackbar.open}
+          handleClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          message={snackbar.message}
+          variant={snackbar.variant}
+      />}
     </Grid>
   );
 };

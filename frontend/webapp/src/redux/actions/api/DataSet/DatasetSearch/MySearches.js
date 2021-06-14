@@ -8,6 +8,8 @@ export default class MyCOntribution extends API {
         this.user_id        = user_id
         this.type           = C.GET_MY_REPORT;
         this.endpoint       = `${super.apiEndPointAuto()}${ENDPOINTS.mySearches}`;
+        let userInf                     = localStorage.getItem("userDetails")
+        this.userId              = JSON.parse(userInf).userID
     }
 
     toString() {

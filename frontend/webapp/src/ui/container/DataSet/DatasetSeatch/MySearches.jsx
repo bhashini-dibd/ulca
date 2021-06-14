@@ -15,8 +15,10 @@ const MySearches = (props) => {
         const detailedReport            =       useSelector((state) => state.mySearchReport);
         const dispatch                  = useDispatch();
         const history                   = useHistory();
+        
         useEffect(() => {
             const userObj           = new MySearchReport();
+
             detailedReport.responseData.length === 0  && dispatch(APITransport(userObj));   
         }, []);
 
