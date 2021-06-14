@@ -1,6 +1,6 @@
+import datetime
 import logging
 import uuid
-from datetime import datetime
 from logging.config import dictConfig
 from configs.configs import metric_event_input_topic, user_mode_pseudo
 from kafkawrapper.producer import Producer
@@ -41,7 +41,7 @@ class MetricEvent:
         log.info(f'Publishing BI metric event for srn -- {data["serviceRequestNumber"]}')
         try:
             event = {"eventType": "dataset-training", "eventId": f'{data["serviceRequestNumber"]}_{data["id"]}',
-                     "timestamp": str(datetime.now()), "submitterId": data["userId"], "datasetType": data["datasetType"],
+                     "timestamp": str(datetime.datetime.utcnow().isoformat() + 'Z'), "submitterId": data["userId"], "datasetType": data["datasetType"],
                      "sourceLanguage": None, "targetLanguage": None, "domains": None, "license": None, "collectionSource": None,
                      "primarySubmitterId": None, "secondarySubmitterIds": None, "collectionMethod_collectionDescriptions": None,
                      "collectionMethod_collectionDetails_alignmentTool": None, "format": None, "channel": None, "samplingRate": None,
