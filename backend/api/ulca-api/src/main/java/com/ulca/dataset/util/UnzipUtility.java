@@ -11,6 +11,9 @@ import java.util.zip.ZipInputStream;
 
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class UnzipUtility {
 	/**
@@ -44,7 +47,7 @@ public class UnzipUtility {
 				String fileDetails[] = entryType.split("/");
 				int length = fileDetails.length;
 				String fileName = fileDetails[length-1];
-				
+			log.info("file name :: " + fileName);
 				
 			if(fileName.equals("params.json") || fileName.equals("data.json")) {
 				extractFile(zipIn, filePath);

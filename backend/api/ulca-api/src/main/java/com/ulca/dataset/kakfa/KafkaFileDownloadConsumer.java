@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +28,7 @@ import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.util.UnzipUtility;
 
+import io.swagger.model.DatasetType;
 import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,6 +50,9 @@ public class KafkaFileDownloadConsumer {
 	
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
+	
+	@Autowired
+	DatasetErrorPublishService datasetErrorPublishService;
 
 	@Value(value = "${FILE_DOWNLOAD_FOLDER}")
     private String downlaodFolder;
@@ -86,8 +92,10 @@ public class KafkaFileDownloadConsumer {
 			
 			String fileName = serviceRequestNumber+".zip";
 			String filePath = downloadUsingNIO(fileUrl, downlaodFolder,fileName);
-			ArrayList<String> fileList = unzipUtility.unzip(filePath, downlaodFolder);
+			log.info("file download complete");
 			
+			ArrayList<String> fileList = unzipUtility.unzip(filePath, downlaodFolder);
+			log.info("file unzip complete");
 			taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
 			taskTrackerDownload.setEndTime(new Date().toString());
 			taskTrackerDao.save(taskTrackerDownload);
@@ -120,25 +128,40 @@ public class KafkaFileDownloadConsumer {
 						Error error = new Error();
 						error.setCause(e.getMessage());
 						error.setMessage("params validation failed");
-						error.setCode("01_00000001");
+						error.setCode("1000_PARAMS_VALIDATION_FAILED");
 						taskTrackerIngest.setError(error);
 						taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
 
 						taskTrackerDao.save(taskTrackerIngest);
 						processTracker.setStatus(StatusEnum.failed);
 						processTrackerDao.save(processTracker);
+						
+						
+						
+						//send error event
+						JSONObject errorMessage = new JSONObject();
+						errorMessage.put("eventType", "dataset-training");
+						errorMessage.put("messageType", "error");
+						errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
+						errorMessage.put("eventId", "serviceRequestNumber|"+serviceRequestNumber);
+						Calendar cal = Calendar.getInstance();
+					    SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+					    Date date = cal.getTime();
+						errorMessage.put("timestamp", df2.format(date));
+						errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+						errorMessage.put("stage", "ingest");
+						errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+						errorMessage.put("message", e.getMessage());
+						datasetErrorPublishService.publishDatasetError(errorMessage);
+						
 						return ;
 						
 					}
-					
-
-					
 				}
 				if (filePathUnzipped.contains("data")) {
 
 					fileMap.put("data", filePathUnzipped);
 				}
-
 			}
 			
 			JSONObject details = datasetIngestService.datasetIngest(paramsSchema,file, fileMap);
@@ -152,8 +175,6 @@ public class KafkaFileDownloadConsumer {
 
 				taskTrackerDao.save(taskTrackerIngest);
 			}
-			
-			
 
 		} catch (IOException e) {
 			//update error
@@ -171,6 +192,22 @@ public class KafkaFileDownloadConsumer {
 			processTracker.setStatus(StatusEnum.failed);
 			processTrackerDao.save(processTracker);
 			
+			//send error event for download failure
+			JSONObject errorMessage = new JSONObject();
+			errorMessage.put("eventType", "dataset-training");
+			errorMessage.put("messageType", "error");
+			errorMessage.put("code", "1000_FILE_DOWNLOAD_FAILURE");
+			errorMessage.put("eventId", "serviceRequestNumber|"+serviceRequestNumber);
+			Calendar cal = Calendar.getInstance();
+		    SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+		    Date date = cal.getTime();
+			errorMessage.put("timestamp", df2.format(date));
+			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+			errorMessage.put("stage", "ingest");
+			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+			errorMessage.put("message", e.getMessage());
+			datasetErrorPublishService.publishDatasetError(errorMessage);
+			
 			e.printStackTrace();
 		}
 		log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
@@ -179,11 +216,11 @@ public class KafkaFileDownloadConsumer {
 	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {
 		log.info("************ Entry KafkaFileDownloadConsumer :: downloadUsingNIO *********");
 		URL url = new URL(urlStr);
-		log.info(url.getFile());
-
 		String file = downloadFolder +"/"+ fileName;
+		log.info(url.getPath());
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-		System.out.println(rbc.toString());
+		log.info(url.getContent().toString());
+		log.info(rbc.getClass().toString());
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
 		fos.close();
