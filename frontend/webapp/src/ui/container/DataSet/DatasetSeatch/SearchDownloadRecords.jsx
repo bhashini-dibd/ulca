@@ -61,6 +61,18 @@ const SearchAndDownloadRecords = (props) => {
     //     searchOptions.result.length === 0 && dispatch(APITransport(userObj));
     // }, []);
 
+    const getObject = (value) => {
+        let arr = []
+        Language.forEach(val => {
+             value.forEach(data => {
+                if (val.value === data)
+                   arr.push(val)
+            })
+
+        })
+        return arr
+
+    }
     useEffect(() => {
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
@@ -72,6 +84,8 @@ const SearchAndDownloadRecords = (props) => {
                 downloadSample: data[0].sampleUrl,
                 downloadAll: data[0].downloadUrl
             })
+            let target = getObject(data[0].targetLanguage)
+            setLanguagePair({ target, source: data[0].sourceLanguage })
         }
         else if (params === 'completed' && count === 0)
             history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
@@ -109,7 +123,7 @@ const SearchAndDownloadRecords = (props) => {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
             case 'completed':
-                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} datasetsContributed={"29"}/>
+                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} datasetsContributed={"29"} />
             default:
                 return <SearchResult />
         }
