@@ -5,7 +5,7 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 export default class MyCOntribution extends API {
     constructor(file_name, user_id, timeout = 200000) {
         super("GET", timeout, false);
-        this.user_id = user_id
+        this.user_id = JSON.parse(localStorage.getItem('userDetails')).userID
         this.type = C.GET_CONTRIBUTION_LIST;
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getContributionList}`;
     }
@@ -24,7 +24,7 @@ export default class MyCOntribution extends API {
     apiEndPoint() {
 
         
-        let url = `${this.endpoint}?userId=6491af71d71b4f1d9cff293522260838` 
+        let url = `${this.endpoint}?userId=${this.user_id}` 
         
          return url;
     }

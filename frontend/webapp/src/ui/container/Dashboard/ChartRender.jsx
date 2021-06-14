@@ -78,12 +78,12 @@ const ChartRender = (props) => {
 				
 				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id } }])
 				setPage(value)
-				setTitle( `English-${selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("label") && event.label }  parallel corpus - Grouped by ${(filter === "domains") ? "Domains" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domains"}`)
+				setTitle( `English-${selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id }  parallel corpus - Grouped by ${(filter === "domains") ? "Domains" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domains"}`)
 				setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 				
 				break;
 			case 2:
-				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage } }, { "type": "PARAMS", "value": event && event.hasOwnProperty("label") && event.label }])
+				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage } }, { "type": "PARAMS", "value": event && event.hasOwnProperty("_id") && event._id }])
 				setPage(value)
 				setFilterValue('domains')
 				setTitle( `English-${selectedLanguage} parallel corpus`)
