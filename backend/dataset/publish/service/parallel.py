@@ -100,7 +100,8 @@ class ParallelService:
                         else:
                             return data, record
                     derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
-                    new_records.append(derived_data)
+                    if derived_data:
+                        new_records.append(derived_data)
             new_records.append(data)
             for record in new_records:
                 if 'derived' not in record.keys():
@@ -175,7 +176,7 @@ class ParallelService:
                 return False
 
     def enrich_derived_data(self, data, record, src_hash, tgt_hash, metadata):
-        derived_data = {}
+        derived_data = None
         if src_hash == record["sourceTextHash"]:
             if data["targetLanguage"] != record["targetLanguage"]:
                 derived_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
@@ -196,6 +197,8 @@ class ParallelService:
                 derived_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
                                 "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["data"]["sourceTextHash"],
                             "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
+        if not derived_data:
+            return None
         for key in data.keys():
             if key not in parallel_immutable_keys:
                 if key not in record.keys():
@@ -207,14 +210,12 @@ class ParallelService:
                         if data[key] not in record[key]:
                             record[key].append(data[key])
                 derived_data[key] = record[key]
-        log.info(derived_data)
         derived_data["datasetId"] = [metadata["datasetId"]]
         derived_data["datasetId"].extend(record["datasetId"])
         derived_data["datasetType"] = metadata["datasetType"]
         derived_data["derived"] = True
         derived_data["tags"] = self.get_tags(derived_data)
         derived_data["id"] = str(uuid.uuid4())
-        log.info(derived_data)
         return derived_data
 
     def get_tags(self, insert_data):
