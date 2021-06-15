@@ -43,6 +43,7 @@ const ContributionList = (props) => {
                                 // background: "rgba(0,0,0,0.03) !important",
                                 // letterSpacing:"0.14px",
                                 // cursor: 'default'
+                                padding: '.5rem .5rem .5rem 1.5rem',
                                 backgroundColor : "#c7c6c68a !important",
                                 marginLeft:"25px"
                         }
@@ -61,7 +62,9 @@ const ContributionList = (props) => {
                                 fontWeight      :"bold"
                               }
                       },
-                MUIDataTableBodyCell:{root : {textTransform: "capitalize"}},
+                      
+                
+                MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform: "capitalize"}},
                
                 MuiPaper: {
                         root:{

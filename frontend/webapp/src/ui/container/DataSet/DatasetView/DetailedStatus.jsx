@@ -41,6 +41,7 @@ const DetailedStatus = (props) => {
                 overrides: {
                         MuiTableCell: {
                                 head    : {
+                                        
                                         backgroundColor : "#c7c6c68a !important",
                                         fontWeight      :"bold"
                                 }

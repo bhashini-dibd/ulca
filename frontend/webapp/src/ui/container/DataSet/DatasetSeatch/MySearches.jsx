@@ -32,10 +32,16 @@ const MySearches = (props) => {
                         MuiTableRow:{root:{cursor: 'pointer'}},
                         MuiTableCell: {
                                 head    : {
+                                        padding: '6px 6px 6px 24px',
                                         backgroundColor : "#c7c6c68a !important",
                                         fontWeight      :"bold",
-                                        marginLeft:"25px"
                                         
+                                        
+                                }
+                        },
+                        MUIDataTableBodyCell:{
+                                root:{
+                                        padding: '6px 6px 6px .8rem', 
                                 }
                         },
                         MUIDataTableHeadCell: {
