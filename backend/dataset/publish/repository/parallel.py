@@ -169,8 +169,6 @@ class ParallelRepo:
                     for src in temp_map.keys():
                         if len(temp_map[src]) > 1:
                             log.info(f'src: {src}, value: {temp_map[src]}')
-                        else:
-                            log.info(f'src: {src} --------- {temp_map[src]}')
                     if len(tgt_lang) == 1:
                         result = list(map.values())
                         res_count = len(map.keys())
