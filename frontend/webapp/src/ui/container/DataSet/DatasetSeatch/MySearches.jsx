@@ -31,14 +31,30 @@ const MySearches = (props) => {
                 overrides: {
                         MuiTableCell: {
                                 head    : {
-                                        backgroundColor : "#c7c6c68a !important"
+                                        backgroundColor : "#c7c6c68a !important",
+                                        fontWeight      :"bold",
+                                        marginLeft:"25px"
+                                        
                                 }
                         },
-                        MuiToolbar: {
-                                 root: { 
-                                         display: "none" 
-                                        } 
-                                },
+                        MUIDataTableHeadCell: {
+                                root: {
+                                        
+                                  '&:nth-child(1)': {
+                                    width: "50%"
+                                  }
+                                }
+                              },
+                              MuiButton :{
+                                root:{
+                                  fontWeight      :"bold"
+                                }
+                        },
+                        // MuiToolbar: {
+                        //          root: { 
+                        //                  display: "none" 
+                        //                 } 
+                        //         },
                         MuiPaper: {
                                 root:{
                                         boxShadow       : 'none !important',
@@ -53,7 +69,7 @@ const MySearches = (props) => {
         const fetchHeaderButton= () => {
             return (
                     <div className={classes.headerButtons}>
-                            <Typography  variant="h5" >My Searches</Typography>
+                            {/* <Typography  variant="h5" >My Searches</Typography> */}
                             <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() =>MySearchListApi() }><Cached className ={classes.iconStyle}/>Refresh</Button>
                      </div>
             )
@@ -114,7 +130,9 @@ const MySearches = (props) => {
 
         const options = {
                 textLabels              :       {
-                        body            :       {},
+                        body            :       {
+                                noMatch: "No records"
+                        },
                         toolbar         :       {
                                 search          : "Search",
                                 viewColumns     : "View Column",
@@ -143,7 +161,7 @@ const MySearches = (props) => {
                         {fetchHeaderButton()} 
                         <MuiThemeProvider theme = {getMuiTheme()}>  
                                 <MUIDataTable
-                                        title   =       {`My Contribution`}
+                                        title   =       {`My Searches`}
                                         data    =       {detailedReport.responseData}
                                         columns =               {columns}
                                         options ={options}
