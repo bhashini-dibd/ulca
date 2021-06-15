@@ -49,7 +49,7 @@ class ErrorEvent:
             error_record = self.get_error_report(data["serviceRequestNumber"], True)
             if error_record:
                 error_record = error_record[0]
-                if 'eof' in data.keys():
+                '''if 'eof' in data.keys():
                     if data["eof"]:
                         log.info(f'EOF received for SRN -- {data["serviceRequestNumber"]}')
                         error_record = self.upload_error_to_s3(error_record, data["serviceRequestNumber"])
@@ -58,7 +58,7 @@ class ErrorEvent:
                         error_record["endTime"] = error_record["lastModifiedTime"]
                         error_record["error_list"] = None
                         error_repo.update(error_record)
-                        return
+                        return'''
                 if error_record["status"] == pt_inprogress_status:
                     log.info(f'Updating error file for SRN -- {data["serviceRequestNumber"]}')
                     error_list = error_record["error_list"]
