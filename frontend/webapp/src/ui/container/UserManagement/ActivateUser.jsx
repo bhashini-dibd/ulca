@@ -39,7 +39,6 @@ const ContributionList = (props) => {
                 headers: apiObj.getHeaders().headers
               }).then(async response => {
                 rsp_data = await response.json();
-                debugger
                 setLoading(false)
                 if (!response.ok) {
                   
@@ -78,8 +77,6 @@ const ContributionList = (props) => {
                 setSnackbarInfo({ ...snackbar, open: false })
             }
 
-
-    debugger
         const { classes } = props;
         return (
                 <div >

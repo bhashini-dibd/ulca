@@ -14,7 +14,6 @@ const dateConversion = (value) =>{
 
 
 const getMySearches = (payload) => {
-    debugger
     let newArr = []
     payload.forEach(element =>{
         if(element.searchCriteria){

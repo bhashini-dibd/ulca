@@ -10,14 +10,9 @@ const initialState = {
 const getRecordCount = (value) =>
 {
 
-    debugger
-    console.log("----------------",value, typeof(value))
     let valueArray = value.processedCount;
-
-    console.log("-------",valueArray, typeof(valueArray))
     var countDetails = {}
     valueArray.length> 0 && valueArray.forEach(element =>{
-        debugger
         if(element.type==="success"){
             countDetails["success"] = element.count;
         }
@@ -37,7 +32,6 @@ const getDetailedReport = (payload) => {
     let responseData = [];
     let refreshStatus = false;
     payload.forEach(element => {
-        debugger
         let count = element.details ? getRecordCount( JSON.parse(element.details)):""
         responseData.push(
             {
@@ -53,8 +47,6 @@ const getDetailedReport = (payload) => {
             refreshStatus = true
         }
     }); 
-
-    debugger
     return {responseData , refreshStatus};
 }
 

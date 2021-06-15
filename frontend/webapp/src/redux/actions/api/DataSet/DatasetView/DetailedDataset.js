@@ -36,7 +36,6 @@ export default class MyCOntribution extends API {
     }
 
     getPayload() {
-        debugger
         return this.report;
     }
 }

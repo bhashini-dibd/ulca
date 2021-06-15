@@ -104,13 +104,11 @@ const handleSubmit = async () => {
         headers: apiObj.getHeaders().headers
       }).then(async response => {
         rsp_data = await response.json();
-        debugger
         setLoading(false)
         if (!response.ok) {
           
           return Promise.reject('');
         } else {
-          debugger
           localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
         localStorage.setItem(`userDetails`, JSON.stringify(rsp_data.data.userDetails));
           

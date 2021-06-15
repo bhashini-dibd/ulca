@@ -75,7 +75,6 @@ const SignUp = (props) => {
         headers: apiObj.getHeaders().headers
       }).then(async response => {
         rsp_data = await response.json();
-        debugger
         setLoading(false)
         if (!response.ok) {
           
@@ -98,7 +97,6 @@ const SignUp = (props) => {
         }
       }).catch((error) => {
         setLoading(false)
-        debugger
           setSnackbarInfo({
                           ...snackbar,
                           open: true,
@@ -239,7 +237,7 @@ const SignUp = (props) => {
                     }}
                     disabled={loading}>
                     {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                    Sign up
+                    Sign Up
                 </Button>
       <div className={classes.createLogin}>
         <Typography className={classes.width}>

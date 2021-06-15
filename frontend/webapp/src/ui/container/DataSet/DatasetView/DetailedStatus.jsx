@@ -14,8 +14,6 @@ import { useParams } from "react-router";
 const DetailedStatus = (props) => {
 
         const {detailedReport, errorData}         =       useSelector((state) => state);
-
-        console.log(detailedReport, errorData)
         const dispatch = useDispatch();
         const {status,name, id} = useParams();
 
@@ -69,7 +67,7 @@ const DetailedStatus = (props) => {
                         <div className={classes.headerButtons}>
                                 <Typography  variant="h5" >{name}</Typography>
                                 { <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined" disabled={(status==="in-progress")? false:true}   onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
-                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.length>0)? false:true} className={!(errorData.status!=="completed")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
+                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.hasOwnProperty("file"))? false:true} className={!(errorData.status!=="completed")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
                         
                         </div>
                 );
