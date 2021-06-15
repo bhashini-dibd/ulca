@@ -152,7 +152,7 @@ class UserAuthenticationModel(object):
             primary_record= collections.find({"email": user_email,"isVerified": True})
             if primary_record.count()!=0:
                 log.info("{} is already a verified user".format(user_email)) 
-                return post_error("Not allowed","This user already have a verified account",None)
+                return post_error("Not allowed","Your email has already been verified",None)
             #fetching user record matching userName and userID
             record = collections.find({"email": user_email,"userID":user_id})
             if record.count() ==1:
@@ -162,7 +162,7 @@ class UserAuthenticationModel(object):
                     #checking whether verfication link had expired or not
                     if (datetime.utcnow() - register_time) > timedelta(hours=verify_mail_expiry):
                         log.exception("Verification link expired for {}".format(user_email))
-                        return post_error("Data Not valid","Verification link expired",None)
+                        return post_error("Data Not valid","Verification link expired. Please register again.",None)
 
                     results = collections.update(user, {"$set": {"isVerified": True,"isActive": True,"activatedTime": datetime.utcnow()}})
                     if 'writeError' in list(results.keys()):
