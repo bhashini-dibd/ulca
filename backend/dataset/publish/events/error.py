@@ -111,6 +111,7 @@ class ErrorEvent:
         if internal:
             return error_record
         try:
+            log.info(f'Searching for error report of SRN -- {srn}')
             if error_record:
                 error_record = error_record[0]
                 if error_record["status"] == pt_inprogress_status:

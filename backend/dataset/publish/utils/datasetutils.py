@@ -60,7 +60,7 @@ class DatasetUtils:
         log.info(f'Deleting {file} from S3......')
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
         try:
-            response = s3_client.delete_file(aws_bucket_name, file)
+            response = s3_client.delete_object(aws_bucket_name, file)
             return response
         except Exception as e:
             log.exception(e)
