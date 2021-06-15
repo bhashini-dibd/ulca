@@ -3,35 +3,31 @@ import { MarkunreadMailbox } from "@material-ui/icons";
 import DraftsIcon from '@material-ui/icons/Drafts';
 import LoginStyles from "../../styles/Login";
 import MailboxIcon from "../../../assets/mailbox.svg";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 const ActiveUser = (props) => {
   const { classes } = props;
+  const history = useHistory();
   return (
-    <MuiThemeProvider>
-    <Paper style={{margin:'78px 324px 0 324px', height: '198px'}} >
-      <Grid container spacing={1}>
-      <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
-      <span className={classes.width}>
+    <Paper className={classes.ActiveUserPaper} >
+      <Grid container>
+      <Grid item xs={12} sm={4} md={3} lg={2} xl={2}>
             <img
               src={MailboxIcon}
-              alt=""
-            //   width='80%'
-            //   height="80%"
+              alt="Mail Box"
             />
-          </span>
           </Grid>
-          <Grid  item xs={12} sm={12} md={9} lg={9} xl={9}>
+          <Grid className={classes.congrats} item xs={12} sm={8}>
         <Typography variant="h6">
           Congratulations
         </Typography>
         <Typography >
-          Your email address has been verified. <Link>Proceed to login.</Link>
+          Your email address has been verified. <Link href="#"
+            onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`)}}>Proceed to login.</Link>
         </Typography>
         </Grid>
       </Grid>
     </Paper>
-    </MuiThemeProvider>
   );
 };
 

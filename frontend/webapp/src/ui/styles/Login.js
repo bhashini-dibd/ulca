@@ -205,7 +205,7 @@ const LoginStyle = (theme) => ({
       padding: "0",
     },
     "@media (max-height:750px)": {
-      display :"none"
+      display: "none"
     },
     "@media (max-width: 1000px) and (min-width: 600px)": {
       left: "34%",
@@ -231,5 +231,17 @@ const LoginStyle = (theme) => ({
   },
   typoFooter: { opacity: "0.5", marginTop: "10px" },
   typoBold: { fontWeight: "bold", marginLeft: "3px", marginTop: "10px" },
+  ActiveUserPaper: {
+    margin: 'auto',
+    marginTop: '5rem',
+    width: '70%',
+    minHeight: "3.5rem"
+  },
+
+  congrats: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+  },
 });
 export default LoginStyle;

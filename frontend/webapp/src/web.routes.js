@@ -17,7 +17,8 @@ import authenticateUser from './configs/authenticate';
 import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";
 import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/SearchDownloadRecords";
 import ActivateUser from "./ui/container/UserManagement/ActivateUser";
-import ActiveUser from "./ui/container/UserManagement/ActiveUser";
+import ActiveUser from "./ui/container/UserManagement/ActiveUser"
+
 const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) => {
   return (
     <Route
@@ -122,13 +123,13 @@ export default function App() {
             currentMenu="search-and-download-rec"
             dontShowHeader={false}
           />
+
           <Route
             path={`${process.env.PUBLIC_URL}/active-user`}
 
             component={ActiveUser}
 
           />
-
 
         </Switch>
       </div>
