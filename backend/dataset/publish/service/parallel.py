@@ -262,8 +262,8 @@ class ParallelService:
                 db_query["tags"] = tags
             if tgt_lang:
                 db_query["targetLanguage"] = tgt_lang
-                if len(tgt_lang) > 1:
-                    db_query["groupBy"] = True
+                '''if len(tgt_lang) > 1:
+                    db_query["groupBy"] = True'''
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
             if 'groupBy' in query.keys():
