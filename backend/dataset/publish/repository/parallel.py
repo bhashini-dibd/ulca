@@ -158,6 +158,7 @@ class ParallelRepo:
                                 map[record["sourceTextHash"]] = data_list
                             else:
                                 map[record["sourceTextHash"]] = [record]
+                    log.info(f'MAP SIZE: {len(map.keys())}')
                     if len(tgt_lang) == 1:
                         result = list(map.values())
                         res_count = len(map.keys())
@@ -165,9 +166,10 @@ class ParallelRepo:
                         res_count = 0
                         for srcHash in map.keys():
                             tgt = set([])
+                            log.info(f'REC SIZE: {len(map[srcHash])}')
                             for record in map[srcHash]:
                                 tgt.add(record["targetLanguage"])
-                                log.info(f'tgt: {len(tgt)}, tgt_lang: {len(tgt_lang)}')
+                                log.info(f'tgt: {tgt}, tgt_lang: {tgt_lang}')
                             if len(tgt) == len(tgt_lang):
                                 result.append(map[srcHash])
                                 res_count += 1
