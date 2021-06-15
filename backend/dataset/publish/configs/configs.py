@@ -31,7 +31,7 @@ if isinstance(no_of_parallel_processes, str):
 sample_size = os.environ.get('ULCA_DATASET_SAMPLE_SIZE', 10)
 if isinstance(sample_size, str):
     sample_size = eval(sample_size)
-shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/publish/')
+shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
 
 asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType",
                       "sourceLanguage"]

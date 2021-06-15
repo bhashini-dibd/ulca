@@ -51,8 +51,8 @@ def consume():
                         if 'eof' in data.keys():
                             if data["eof"]:
                                 end = pt.end_processing(data)
-                                if end:
-                                    error_event.publish_eof(data)
+                                '''if end:
+                                    error_event.publish_eof(data)'''
                                 break
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.load_parallel_dataset(data)
