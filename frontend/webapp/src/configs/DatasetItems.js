@@ -10,7 +10,7 @@ const DatasetItems = [
 export const Language = [
     { value: 'en', label: 'English' },
     { value: 'hi', label: 'Hindi' },
-    { value: 'be', label: 'Bengali' },
+    { value: 'bn', label: 'Bengali' },
     { value: 'ta', label: 'Tamil' },
     { value: 'mr',label: 'Marathi'},
     { value: 'ml', label: 'Malayalam' },
