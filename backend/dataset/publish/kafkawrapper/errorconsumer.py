@@ -44,6 +44,7 @@ def error_consume():
                         break
                 except Exception as e:
                     log.exception(f'{prefix} Exception in ds error consumer while consuming: {str(e)}', e)
+                    break
     except Exception as e:
         log.exception(f'Exception in ds error consumer while consuming: {str(e)}', e)
 

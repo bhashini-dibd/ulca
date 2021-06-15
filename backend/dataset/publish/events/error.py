@@ -76,9 +76,10 @@ class ErrorEvent:
                     error_repo.insert(error_rec)
                 else:
                     log.info(f'No errors for SRN -- {data["serviceRequestNumber"]}')
+            return True
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}', e)
-            return
+            return False
 
     def write_to_csv(self, data_list, file, srn):
         try:
