@@ -162,24 +162,24 @@ const ContributionList = (props) => {
                 label   : "Status",
                 options : {
                         filter  : false,
-                        sort    : false,
-                        display : "excluded",
+                        sort    : true,
+                       
                         },
                 },
-                {
-                name: "Status",
-                label: "Status",
-                options: {
-                        filter  : true,
-                        sort    : false,
-                        empty   : true,
-                        customBodyRender: (value, tableMeta, updateValue) => {
-                                        if (tableMeta.rowData) {
-                                                return <div>{renderStatus(tableMeta.rowData[0],tableMeta.rowData[2],tableMeta.rowData[4])}</div>;
-                                        }
-                                },
-                        },
-                },
+                // {
+                // name: "Status",
+                // label: "Status",
+                // options: {
+                //         filter  : true,
+                //         sort    : false,
+                //         empty   : true,
+                //         customBodyRender: (value, tableMeta, updateValue) => {
+                //                         if (tableMeta.rowData) {
+                //                                 return <div>{renderStatus(tableMeta.rowData[0],tableMeta.rowData[2],tableMeta.rowData[4])}</div>;
+                //                         }
+                //                 },
+                //         },
+                // },
 
                 // {
                 // name    : "Action",
