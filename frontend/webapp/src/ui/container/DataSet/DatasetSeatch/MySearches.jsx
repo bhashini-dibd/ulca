@@ -32,12 +32,14 @@ const MySearches = (props) => {
                         MuiTableCell: {
                                 head    : {
                                         backgroundColor : "#c7c6c68a !important",
-                                        fontWeight      :"bold"
+                                        fontWeight      :"bold",
+                                        marginLeft:"25px"
                                         
                                 }
                         },
                         MUIDataTableHeadCell: {
                                 root: {
+                                        
                                   '&:nth-child(1)': {
                                     width: "50%"
                                   }

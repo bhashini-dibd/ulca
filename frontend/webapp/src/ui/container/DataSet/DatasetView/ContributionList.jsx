@@ -44,7 +44,7 @@ const ContributionList = (props) => {
                                 // letterSpacing:"0.14px",
                                 // cursor: 'default'
                                 backgroundColor : "#c7c6c68a !important",
-                                fontWeight      :"bold"
+                                marginLeft:"25px"
                         }
                 },
                 MUIDataTableHeadCell: {
