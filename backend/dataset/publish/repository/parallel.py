@@ -108,7 +108,7 @@ class ParallelRepo:
             if "multipleContributors" in query.keys():
                 pipeline.append({"$match": {f'collectionMethod.{query["multipleContributors"]}': {"$exists": True}}})
             if 'groupBy' in query.keys():
-                pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash", "tgtLanguage": "$targetLanguage"}, "count": {"$sum": 1}}})
+                pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
                 count = 1
                 if 'countOfTranslations' in query.keys():
                     count = query["countOfTranslations"]
@@ -160,13 +160,17 @@ class ParallelRepo:
                                 map[record["sourceTextHash"]] = [record]
                     if len(tgt_lang) == 1:
                         result = list(map.values())
+                        res_count = len(map.keys())
                     else:
+                        res_count = 0
                         for srcHash in map.keys():
                             tgt = set([])
                             for record in map[srcHash]:
                                 tgt.add(record["targetLanguage"])
+                                log.info(f'tgt: {len(tgt)}, tgt_lang: {len(tgt_lang)}')
                             if len(tgt) == len(tgt_lang):
                                 result.append(map[srcHash])
+                                res_count += 1
             else:
                 if res:
                     for record in res:
