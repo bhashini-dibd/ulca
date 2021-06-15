@@ -52,10 +52,14 @@ const ContributionList = (props) => {
                   setSnackbarInfo({
                                   ...snackbar,
                                   open: true,
-                                  message: rsp_data.message ? rsp_data.message : "Verification failed. please try again",
+                                  message: rsp_data.message ? rsp_data.message : "Something went wrong. please try again",
                                   variant: 'error'
                               })
               });
+
+              setTimeout(() => {
+                history.push(`${process.env.PUBLIC_URL}/user/login`)
+            }, 4000)
             
               }
               const handleSnackbarClose = () => {
