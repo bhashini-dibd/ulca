@@ -40,7 +40,7 @@ const getDetailedReport = (payload) => {
                      recordCount            : count && count.success,
                      failedCount            : count && count.failed,
                      stage                  : element.tool,
-                     status                 : element.status==="successful" ? "Completed" :  element.status
+                     status                 : element.status==="successful" ? "Completed" :  element.status ==="Inprogress" ? "In-Progress": element.status
                     }
         )
         if(element.status === "successful" || "NOTSTARTED"){

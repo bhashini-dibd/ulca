@@ -20,7 +20,7 @@ const getContributionList = (payload) => {
                      submitRefNumber      : element.serviceRequestNumber,
                      datasetName          : element.datasetName,
                      submittedOn          : dateConversion(element.submittedOn),
-                     status               : element.status === "inprogress" ? "In-Progress" : element.status === "notstarted" ? "Not Started" : element.status === "successful"? "Completed" : element.status === "failed"? "Failed" : (element.status.toLowerCase())
+                     status               : element.status === "inprogress" ? "In-Progress" : element.status === "notstarted" ? "Not Started" : element.status === "successful"? "Completed" : (element.status.toLowerCase())
             }
         )
         if(element.status === "INPROGRESS" || "NOTSTARTED"){

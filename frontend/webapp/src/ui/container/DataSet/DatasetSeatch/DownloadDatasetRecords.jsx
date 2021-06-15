@@ -16,7 +16,7 @@ const DownloadDatasetRecords = (props) => {
                             <Typography variant="subtitle1">#Sentence Pair</Typography>
                         </Grid> :
                         <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
-                            <Typography variant="h5">Result not found.</Typography>
+                            <Typography variant="h5">No records found.</Typography>
                         </Grid>}
                     {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical" />

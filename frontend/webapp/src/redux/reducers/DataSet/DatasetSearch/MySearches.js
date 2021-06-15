@@ -27,12 +27,12 @@ const getMySearches = (payload) => {
                     sr_no : element.serviceRequestNumber,
                     search_criteria :`${dataSet} | ${langauge} | ${tLanguage}`,
                     searched_on   : dateConversion(element.timestamp),
-                    status      : element.status[0].status === "successful" ? "Completed" : element.status[0].status,
+                    status      : element.status[0].status === "successful" ? "Completed" : element.status[0].status === "inprogress" ? "In-Progress": element.status[0].status,
                     count : searchDetails.count,
                     sampleUrl : searchDetails.datasetSample,
                     downloadUrl : searchDetails.dataset,
-                    sourceLanguage : langauge,
-                    targetLanguage : tLanguage
+                    sourceLanguage : element.searchCriteria.sourceLanguage,
+                    targetLanguage : element.searchCriteria.targetLanguage
 
                 }
                 

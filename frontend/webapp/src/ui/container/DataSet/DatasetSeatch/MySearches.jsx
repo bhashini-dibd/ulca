@@ -29,6 +29,7 @@ const MySearches = (props) => {
 
         const getMuiTheme = () => createMuiTheme({
                 overrides: {
+                        MuiTableRow:{root:{cursor: 'pointer'}},
                         MuiTableCell: {
                                 head    : {
                                         backgroundColor : "#c7c6c68a !important",
