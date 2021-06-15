@@ -42,6 +42,7 @@ const DetailedStatus = (props) => {
                         MuiTableCell: {
                                 head    : {
                                         backgroundColor : "#c7c6c68a !important",
+                                        fontWeight      :"bold"
                                 }
                         },
                         MUIDataTableBodyCell:{root : {textTransform: "capitalize"}},
@@ -135,7 +136,9 @@ const DetailedStatus = (props) => {
 
         const options = {
                 textLabels              :       {
-                        body            :       {},
+                        body            :       {
+                                noMatch: "No records"
+                        },
                         toolbar         :       {
                                 search          : "Search",
                                 viewColumns     : "View Column",

@@ -31,7 +31,21 @@ const MySearches = (props) => {
                 overrides: {
                         MuiTableCell: {
                                 head    : {
-                                        backgroundColor : "#c7c6c68a !important"
+                                        backgroundColor : "#c7c6c68a !important",
+                                        fontWeight      :"bold"
+                                        
+                                }
+                        },
+                        MUIDataTableHeadCell: {
+                                root: {
+                                  '&:nth-child(1)': {
+                                    width: "50%"
+                                  }
+                                }
+                              },
+                              MuiButton :{
+                                root:{
+                                  fontWeight      :"bold"
                                 }
                         },
                         // MuiToolbar: {
@@ -114,7 +128,9 @@ const MySearches = (props) => {
 
         const options = {
                 textLabels              :       {
-                        body            :       {},
+                        body            :       {
+                                noMatch: "No records"
+                        },
                         toolbar         :       {
                                 search          : "Search",
                                 viewColumns     : "View Column",

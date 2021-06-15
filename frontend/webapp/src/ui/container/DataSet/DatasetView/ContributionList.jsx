@@ -43,9 +43,24 @@ const ContributionList = (props) => {
                                 // background: "rgba(0,0,0,0.03) !important",
                                 // letterSpacing:"0.14px",
                                 // cursor: 'default'
-                                backgroundColor : "#c7c6c68a !important"
+                                backgroundColor : "#c7c6c68a !important",
+                                fontWeight      :"bold"
                         }
                 },
+                MUIDataTableHeadCell: {
+                        root: {
+                                
+                          '&:nth-child(1)': {
+                            width: "60%"
+                          },
+                          
+                        }
+                      },
+                      MuiButton :{
+                              root:{
+                                fontWeight      :"bold"
+                              }
+                      },
                 MUIDataTableBodyCell:{root : {textTransform: "capitalize"}},
                
                 MuiPaper: {
@@ -198,8 +213,13 @@ const ContributionList = (props) => {
         ];
 
         const options = {
+
+                
                 textLabels: {
-                        body            : {},
+                        body            : {
+
+                                noMatch: "No records"
+                        },
                         toolbar         : {
                                 search          : "Search",
                                 viewColumns     : "View Column",
