@@ -262,8 +262,6 @@ class ParallelService:
                 db_query["tags"] = tags
             if tgt_lang:
                 db_query["targetLanguage"] = tgt_lang
-                '''if len(tgt_lang) > 1:
-                    db_query["groupBy"] = True'''
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
             if 'groupBy' in query.keys():
@@ -272,7 +270,7 @@ class ParallelService:
                     db_query["countOfTranslations"] = query["countOfTranslations"]
             data = repo.search(db_query, off, lim)
             result, pipeline, count = data[0], data[1], data[2]
-            log.info(f'Result --- Count: {count}, Query: {query}')
+            log.info(f'Result --- Count: {count}, Query: {query}, Pipeline: {pipeline}')
             if result:
                 size = sample_size if count > sample_size else count
                 path, path_sample = utils.push_result_to_s3(result, query["serviceRequestNumber"], size)

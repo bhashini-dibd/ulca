@@ -88,9 +88,15 @@ class ParallelRepo:
         try:
             col = self.get_mongo_instance()
             if 'sourceLanguage' in query.keys() and 'targetLanguage' in query.keys():
-                langs.append(query["sourceLanguage"])
-                langs.extend(query["targetLanguage"])
-                pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
+                if len(query["targetLanguage"]) == 1:
+                    if 'groupBy' not in query.keys():
+                        langs = [query["sourceLanguage"], query["targetLanguage"][0]]
+                        pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
+                    else:
+                        pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["targetLanguage"][0]}]}})
+                else:
+                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": {"$in": query["targetLanguage"]}}]}})
+                    query["groupBy"] = True
             elif 'sourceLanguage' in query.keys():
                 pipeline.append({"$match": {"$or": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["sourceLanguage"]}]}})
             if "derived" in query.keys():
@@ -102,11 +108,11 @@ class ParallelRepo:
             if "multipleContributors" in query.keys():
                 pipeline.append({"$match": {f'collectionMethod.{query["multipleContributors"]}': {"$exists": True}}})
             if 'groupBy' in query.keys():
-                pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
+                pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash", "tgtLanguage": "$targetLanguage"}, "count": {"$sum": 1}}})
+                count = 1
                 if 'countOfTranslations' in query.keys():
-                    pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", query["countOfTranslations"]]}, "$_id.sourceHash", "$$REMOVE"]}}})
-                else:
-                    pipeline.append({"$group": {"_id": {"$cond": [{"$gt": ["$count", 1]}, "$_id.sourceHash", "$$REMOVE"]}}})
+                    count = query["countOfTranslations"]
+                pipeline.append({"$group": {"_id": {"$cond": [{"$gte": ["$count", count]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
                 project = {"_id": 0}
                 for key in parallel_search_ignore_keys:
@@ -134,20 +140,33 @@ class ParallelRepo:
                         for key in parallel_search_ignore_keys:
                             project[key] = False
                         res = col.find({"sourceTextHash": {"$in": hashes}}, project)
-                    map = {}
                     if not res:
                         return result, pipeline, res_count
+                    map, tgt_lang = {}, []
+                    if isinstance(query["targetLanguage"], str):
+                        tgt_lang = [query["targetLanguage"]]
+                    else:
+                        tgt_lang = query["targetLanguage"]
+                    log.info(f'Grouping with {len(tgt_lang)} target languages')
                     for record in res:
                         if record:
                             if record["sourceTextHash"] in map.keys():
                                 data_list = map[record["sourceTextHash"]]
-                                if langs:
-                                    if record["sourceLanguage"] in langs and record["targetLanguage"] in langs:
+                                if record["sourceLanguage"] == query["sourceLanguage"]:
+                                    if record["targetLanguage"] in tgt_lang:
                                         data_list.append(record)
                                 map[record["sourceTextHash"]] = data_list
                             else:
                                 map[record["sourceTextHash"]] = [record]
-                    result = list(map.values())
+                    if len(tgt_lang) == 1:
+                        result = list(map.values())
+                    else:
+                        for srcHash in map.keys():
+                            tgt = set([])
+                            for record in map[srcHash]:
+                                tgt.add(record["targetLanguage"])
+                            if len(tgt) == len(tgt_lang):
+                                result.append(map[srcHash])
             else:
                 if res:
                     for record in res:
