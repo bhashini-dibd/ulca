@@ -1,4 +1,5 @@
 import C from '../../../actions/constants';
+import getLanguageLabel from '../../../../utils/getLabel';
 
 const initialState = {
     responseData: []
@@ -18,8 +19,8 @@ const getMySearches = (payload) => {
     payload.forEach(element =>{
         if(element.searchCriteria){
             let dataSet  = element.searchCriteria.datasetType === "parallel-corpus" ? "Parallel Dataset" : element.searchCriteria.datasetType;
-            let langauge = element.searchCriteria.sourceLanguage
-            let tLanguage = element.searchCriteria.targetLanguage
+            let langauge = getLanguageLabel([element.searchCriteria.sourceLanguage]).map(val=>val.label)[0]
+            let tLanguage = getLanguageLabel(element.searchCriteria.targetLanguage).map(val=>val.label).join(', ')
             let searchDetails = JSON.parse(element.status[0].details)
             newArr.push(
                 {

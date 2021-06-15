@@ -25,6 +25,7 @@ import Autocomplete from '../../../components/common/Autocomplete';
 import { Language, FilterBy } from '../../../../configs/DatasetItems';
 import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest';
 import DatasetType from '../../../../configs/DatasetItems';
+import getLanguageLabel from '../../../../utils/getLabel';
 
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
@@ -64,18 +65,6 @@ const SearchAndDownloadRecords = (props) => {
     //     searchOptions.result.length === 0 && dispatch(APITransport(userObj));
     // }, []);
 
-    const getObject = (value) => {
-        let arr = []
-        Language.forEach(val => {
-            value.forEach(data => {
-                if (val.value === data)
-                    arr.push(val)
-            })
-
-        })
-        return arr
-
-    }
     useEffect(() => {
 
         previousUrl.current = params;
@@ -90,7 +79,8 @@ const SearchAndDownloadRecords = (props) => {
                 downloadSample: data[0].sampleUrl,
                 downloadAll: data[0].downloadUrl
             })
-            let target = getObject(data[0].targetLanguage)
+            let target = getLanguageLabel(data[0].targetLanguage)
+            console.log(target)
             setLanguagePair({ target, source: data[0].sourceLanguage })
         }
         else if (params === 'completed' && count === 0)
