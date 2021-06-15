@@ -143,7 +143,6 @@ class ParallelRepo:
                     if not res:
                         return result, pipeline, res_count
                     map, tgt_lang = {}, []
-                    temp_map = {}
                     if isinstance(query["targetLanguage"], str):
                         tgt_lang = [query["targetLanguage"]]
                     else:
@@ -151,13 +150,6 @@ class ParallelRepo:
                     log.info(f'Grouping with {len(tgt_lang)} target languages')
                     for record in res:
                         if record:
-                            if record["sourceText"] in temp_map.keys():
-                                trans_list = temp_map[record["sourceText"]]
-                                trans_list.append({"srcHash": record["sourceTextHash"], "tgt": record["targetText"]})
-                                temp_map[record["sourceText"]] = trans_list
-                            else:
-                                temp_map[record["sourceText"]] = [{"srcHash": record["sourceTextHash"], "tgt": record["targetText"]}]
-
                             if record["sourceTextHash"] in map.keys():
                                 data_list = map[record["sourceTextHash"]]
                                 if record["sourceLanguage"] == query["sourceLanguage"]:
@@ -166,12 +158,6 @@ class ParallelRepo:
                                 map[record["sourceTextHash"]] = data_list
                             else:
                                 map[record["sourceTextHash"]] = [record]
-                    for src in temp_map.keys():
-                        if len(temp_map[src]) > 1:
-                            log.info(f'src: {src}, value: {temp_map[src]}')
-                    if len(tgt_lang) == 1:
-                        result = list(map.values())
-                        res_count = len(map.keys())
                     else:
                         res_count = 0
                         for srcHash in map.keys():
