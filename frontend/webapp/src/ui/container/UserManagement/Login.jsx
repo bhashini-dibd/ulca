@@ -44,11 +44,15 @@ const Login = (props) => {
     
   });
 
+  
+
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: '',
     variant: 'success'
 })
+
+
 
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -157,6 +161,7 @@ const handleSubmit = async () => {
         className={classes.textField}
         required
         onChange={handleChange("email")}
+        onKeyPress={(e) => e.key === 'Enter' && HandleSubmitCheck()}
         id="outlined-required"
         value={values.email}
         error = {error.email}
@@ -175,6 +180,7 @@ const handleSubmit = async () => {
           error = {error.password}
           helperText={error.password ? "Enter a password":""}
           onChange={handleChange("password")}
+          onKeyPress={(e) => e.key === 'Enter' && HandleSubmitCheck()}
           endAdornment={
             <InputAdornment position="end">
               <IconButton
