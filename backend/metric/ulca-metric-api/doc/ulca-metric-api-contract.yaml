@@ -1,149 +1,20 @@
 ---
 openapi: 3.0.0
 info:
-  title: Sangrah/Sankaln API proposal
+  title: ULCA Metric API Contract
   description: An API documentation describing about dataset
   contact:
     name: KD
     email: kumar.deepak@tarento.com
   version: 0.1.0
 servers:
-- url: /api
+- url: /ulca/data-metric
 paths:
-  /v0/dataset/parallel-corpus/submit:
+
+  /v0/store/search:
     post:
       tags:
-      - dataset
-      summary: to create parallel dataset entry.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ParallelDataset'
-        required: true
-      responses:
-        "200":
-          description: On successful completion of the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/HttpResponse'
-        "400":
-          description: On input errors causing a failure in the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorCode'
-      security:
-      - authToken: []
-  /v0/dataset/monolingual-corpus/submit:
-    post:
-      tags:
-      - dataset
-      summary: to create monolingual dataset entry.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MonolingualDataset'
-        required: true
-      responses:
-        "200":
-          description: On successful completion of the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/HttpResponse'
-        "400":
-          description: On input errors causing a failure in the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorCode'
-      security:
-      - authToken: []
-  /v0/dataset/asr-corpus/submit:
-    post:
-      tags:
-      - dataset
-      summary: to create asr dataset entry.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ASRDataset'
-        required: true
-      responses:
-        "200":
-          description: On successful completion of the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/HttpResponse'
-        "400":
-          description: On input errors causing a failure in the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorCode'
-      security:
-      - authToken: []
-  /v0/dataset/document-ocr-corpus/submit:
-    post:
-      tags:
-      - dataset
-      summary: to create document ocr dataset entry.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DocumentOCRDataset'
-        required: true
-      responses:
-        "200":
-          description: On successful completion of the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/HttpResponse'
-        "400":
-          description: On input errors causing a failure in the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorCode'
-      security:
-      - authToken: []
-  /v0/dataset/reference-corpus/submit:
-    post:
-      tags:
-      - dataset
-      summary: to create parallel dataset entry.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReferenceDatasetRequest'
-        required: true
-      responses:
-        "200":
-          description: On successful completion of the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/HttpResponse'
-        "400":
-          description: On input errors causing a failure in the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ErrorCode'
-      security:
-      - authToken: []
-  /v0/dataset/corpus/statistics/search:
-    post:
-      tags:
-      - dataset
+      - Data Statistics
       summary: to query available datasets, primarily used to display stats available to the user.
       requestBody:
         content:
