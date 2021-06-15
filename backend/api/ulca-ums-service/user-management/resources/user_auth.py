@@ -94,25 +94,25 @@ class ForgotPassword(Resource):
         
     def post(self):
         body = request.get_json()
-        if "userName" not in body or not body["userName"]:
-            return post_error("Data Missing","userName not found",None), 400
-        user_name = body["userName"]
+        if body.get("email") == None:
+            return post_error("Data Missing","email not found",None), 400
+        email=body["email"]
 
-        log.info("Request received for reset password link from {}".format(user_name),MODULE_CONTEXT)
-        validity = UserUtils.validate_username(user_name)
+        log.info("Request received for reset password link from {}".format(email),MODULE_CONTEXT)
+        validity = UserUtils.validate_username(email)
         if validity is not None:
-            log.info("Username/email validation failed  for generating reset password notification for {}".format(user_name), MODULE_CONTEXT)
+            log.info("Username/email validation failed  for generating reset password notification for {}".format(email), MODULE_CONTEXT)
             return validity, 400
-        log.info("Username/email is validated for generating reset password notification for {}".format(user_name), MODULE_CONTEXT)
+        log.info("Username/email is validated for generating reset password notification for {}".format(email), MODULE_CONTEXT)
         try:
-            result = authRepo.forgot_password(user_name)
+            result = authRepo.forgot_password(email)
             if result == True:
-                log.info("Successfully generated reset-password link for {}".format(user_name),MODULE_CONTEXT)
+                log.info("Successfully generated reset-password link for {}".format(email),MODULE_CONTEXT)
                 res = CustomResponse(
                         Status.SUCCESS_FORGOT_PWD.value, None)
                 return res.getresjson(), 200
             else:
-                log.info("Failed to generate reset-password link for {}".format(user_name),MODULE_CONTEXT)
+                log.info("Failed to generate reset-password link for {}".format(email),MODULE_CONTEXT)
                 return result, 400
         except Exception as e:
             log.exception("Exception while forgot password api call: " + str(e), MODULE_CONTEXT, e)

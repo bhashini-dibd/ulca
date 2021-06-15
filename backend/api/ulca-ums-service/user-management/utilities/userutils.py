@@ -115,7 +115,7 @@ class UserUtils:
                 for usr in user_record:
                     if usr["isVerified"] == True:
                         log.info("Email is already taken")
-                        return post_error("Data not valid", "This email address is already with ULCA. Please use another email address.", None)
+                        return post_error("Data not valid", "This email address is already registered with ULCA. Please use another email address.", None)
                     register_time = usr["registeredTime"]
                     #checking whether verfication link had expired or not
                     if (datetime.utcnow() - register_time) < timedelta(hours=verify_mail_expiry):
@@ -541,17 +541,17 @@ class UserUtils:
             return post_error("Exception while generating reset password notification","Exception occurred:{}".format(str(e)),None)
             
     @staticmethod
-    def validate_username(user_name):
+    def validate_username(user_email):
         """Validating userName/Email"""
 
         try:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
             #searching for record matching user_name
-            valid = collections.find({'userName':user_name,"is_verified":True})
+            valid = collections.find({"userName":user_email,"is_verified":True})
             if valid.count() == 0:
                 log.info("Not a valid email/username")
-                return post_error("Not Valid","Given email/username is not associated with any of the active Anuvaad accounts",None)
+                return post_error("Not Valid","Given email is not associated with any of the active ULCA accounts",None)
             for value in valid:
                 if value["is_active"]== False:
                     log.info("Given email/username is inactive")

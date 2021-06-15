@@ -58,7 +58,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Status'
+                $ref: '#/components/schemas/VerifyResponse'
         '400':
           description: On input errors causing failure in user verification.
           content:
@@ -71,6 +71,69 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/Error'
+  
+  /v1/users/api-key-search:
+    post:
+      tags:
+        - 'Api-key-search'
+      summary: 'REST API key for search'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKeySearchRequest'
+        required: true
+      responses:
+        '200':
+          description: apiKey search is successful.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors causing failure in auth token search.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in auth token search.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'   
+                
+  /v1/users/login:
+    post:
+      tags:
+        - 'Login'
+      summary: 'REST API to login'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+        required: true
+      responses:
+        '200':
+          description: Logged in successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserData'
+        '400':
+          description: On input errors causing failure in user login.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user login.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error' 
+                
   /v1/users/update:
     post:
       tags:
@@ -100,68 +163,8 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Error'          
-  
-  /v1/users/api-key-search:
-    post:
-      tags:
-        - 'Update User'
-      summary: 'REST API key for search'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ApiKeySearchRequest'
-        required: true
-      responses:
-        '200':
-          description: apiKey search is successful.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Status'
-        '400':
-          description: On input errors causing failure in auth token search.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: On system level errors causing failure in auth token search.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Error'            
-  /v1/users/login:
-    post:
-      tags:
-        - 'Login'
-      summary: 'REST API to login'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserLoginRequest'
-        required: true
-      responses:
-        '200':
-          description: Logged in successfully.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Status'
-        '400':
-          description: On input errors causing failure in user login.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: On system level errors causing failure in user login.
-          content:
-            '*/*':
-              schema:
                 $ref: '#/components/schemas/Error' 
+                
   /v1/users/logout:
     post:
       tags:
@@ -335,7 +338,7 @@ components:
     ApiKeySearchRequest:
       type: object
       properties:
-        apiKey:
+        key:
           type: string
           description: Unique auth token of verified user
       description: Request for user records.
@@ -389,40 +392,35 @@ components:
         lastName:
           type: string
           description: LastName of the user.
+        email:
+          type: string
+          description: email id of the user.
         oauthId:
           type: string
           description: oauthId of the user.
         oauthProvider:
           type: string
           description: oauthProvider of the user.
-        description:
+        registeredTime:
           type: string
-          description: description of the user.
-        createdOn:
-          type: number
-          description: 13 digit epoch timestamp
-        password:
+          description: UTC object indicating time of user signup. 
+        activatedTime:
           type: string
-          description: >-
-            Password for the user profile as chosen by the user abiding by the pwd
-            policy defined by the system. encrypted and stored.
-        lastLogin:
-          type: number
-          description: 13 digit epoch timestamp
-        email:
-          type: string
-          description: email id of the user.
+          description: UTC object indicating time of user verification.
+        isVerified:
+          type: boolean
+          description: status of user verification.
+        isActive:
+          type: boolean
+          description: status of user activation.
         phoneNo:
           type: string
           description: mobile number of the user
         roles:
           type: array
           items:
-            type: object
-            $ref: '#/components/schemas/Role'
-        apiKey:
-          type: string
-          description: apiKey
+            type: string
+            
           
   
     Role:
@@ -452,34 +450,68 @@ components:
       properties:
         email:
           type: string
-          description: email of the logged in user
-        apiKey:
+          description: email of the logged in user.
+        publicKey:
           type: string
-          description: apiKey for the logged in user
-        secretKey:
+          description: random uuid key to be used as public key for the logged in user.
+        privateKey:
           type: string
-          description: secretKey for the logged in user for encrypting request data
+          description: hexadecimal uuid key for the logged in user for encrypting request data.
+          
+    UserData:
+      type: object
+      properties:
+        userKeys:
+          type: object
+          $ref: '#/components/schemas/AuthData'
+          description: keys allotted for the user.
+        userDetails:
+          type: object
+          $ref: '#/components/schemas/User'
+          description: user record stored on db.
+        
           
           
     Status:
       type: object
       properties:
-        ok:
+        message:
           type: string
-          description: true or false 
-        http:
-          type: object
-          properties:
-            status:
-              type: string
-              description: status code of the request
-       
+          description: message returned after succesful request completion.
         data:
           type: object
-          description: data returned by the request
+          description: data returned by the request.
         count:
           type: integer
-          description: count of data items
+          description: count of data items.
+    
+    VerifyResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          type: object
+          $ref: '#/components/schemas/AuthData'
+          description: data returned by the request.
+        count:
+          type: integer
+          description: count of data items.
+    
+    LoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          type: object
+          $ref: '#/components/schemas/AuthData'
+          description: data returned by the request.
+        count:
+          type: integer
+          description: count of data items.
       
    
       
@@ -564,9 +596,6 @@ components:
         errorID:
           type: string
           description: Unique UUID for the error.
-        cause:
-          type: string
-          description: System generated cause of the error
         code:
           type: string
           description: Unique code signifying the category for the error.
