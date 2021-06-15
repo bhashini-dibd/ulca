@@ -169,10 +169,10 @@ const DetailedStatus = (props) => {
                                         options ={options}
                                 />
                         </MuiThemeProvider>
-                        {status === "in-progress" && <div className = {classes.footerButtons}>
+                        {/* {status === "in-progress" && <div className = {classes.footerButtons}>
                                 <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => handleAbort()}>Abort Process</Button>
                                 
-                        </div>}
+                        </div>} */}
                 </div>
         );
 };
