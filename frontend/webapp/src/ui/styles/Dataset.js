@@ -199,15 +199,18 @@ const DataSet = (theme) => ({
         marginTop:'4%',
         padding:'5% 14% 2% 4%',
         width:'70%',
+        minHeight: "3.5rem"
     },
     downloadBtnDiv:{
         margin:'10%',
+        marginLeft:"0",
         display:"flex",
         flexDirection:"row",
         
     },
     searchResultFinal:{
-        width:"90%"
+        width:"90%",
+        marginTop:"-20%"
     },
     downloadBtn:{
         
