@@ -40,6 +40,8 @@ const getMySearches = (payload) => {
         }
         
     })
+    newArr = newArr.reverse()
+    
     return newArr;
 }
 

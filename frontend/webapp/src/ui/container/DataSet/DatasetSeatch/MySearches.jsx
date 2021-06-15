@@ -82,7 +82,7 @@ const MySearches = (props) => {
                         label   : "Search Criteria",
                         options : {
                                 filter  : false,
-                                sort    : false,
+                                sort    : true,
                         },
                 },
                 {
@@ -90,14 +90,14 @@ const MySearches = (props) => {
                         label   : "Searched On",
                         options : {
                                 filter  : false,
-                                sort    : false,
+                                sort    : true,
                         },
                 },{
                         name    : "count",
                         label   : "#Record",
                         options : {
                                 filter  : false,
-                                sort    : false,
+                                sort    : true,
                                 
                   }  },
                 {

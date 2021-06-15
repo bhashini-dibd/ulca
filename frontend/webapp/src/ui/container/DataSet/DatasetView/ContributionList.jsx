@@ -145,7 +145,7 @@ const ContributionList = (props) => {
                 label   : "Dataset Name",
                 options: {
                         filter  : false,
-                        sort    : false,
+                        sort    : true,
                         },
                 },
                 {
@@ -153,7 +153,7 @@ const ContributionList = (props) => {
                 label   : "Submitted On",
                 options : {
                                 filter  : false,
-                                sort    : false,
+                                sort    : true,
                         
                         },
                 },
