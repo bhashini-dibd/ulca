@@ -90,7 +90,7 @@ public class DatasetAsrValidateIngest {
 		String paramsFilePath = fileMap.get("params.json");
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath);
-			ingest(paramsSchema, file, fileMap, taskTrackerIngest);
+			//ingest(paramsSchema, file, fileMap, taskTrackerIngest);
 
 		} catch (IOException e) {
 
