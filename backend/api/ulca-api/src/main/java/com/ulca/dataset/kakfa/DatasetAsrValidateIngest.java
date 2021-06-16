@@ -209,8 +209,16 @@ public class DatasetAsrValidateIngest {
 		        	
 		        	JSONObject target = new JSONObject(mapper.writeValueAsString(test));
 		        	
+		        	
+		        	
 		        	JSONObject finalRecord = deepMerge(source, target);
+		        	String sourceLanguage = finalRecord.getString("languages");
+		        	finalRecord.remove("languages");
+		        	finalRecord.put("sourceLanguage", sourceLanguage);
+		        	
 		        	finalRecord.put("fileLocation", fileMap.get(finalRecord.get("audioFilename")));
+		        	
+		        	
 		        	vModel.put("record", finalRecord);
 		        	vModel.put("currentRecordIndex", numberOfRecords);
 		        	
