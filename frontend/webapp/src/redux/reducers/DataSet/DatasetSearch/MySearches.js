@@ -19,7 +19,7 @@ const getMySearches = (payload) => {
     payload.forEach(element =>{
         if(element.searchCriteria){
             let dataSet  = element.searchCriteria.datasetType === "parallel-corpus" ? "Parallel Dataset" : element.searchCriteria.datasetType;
-            let langauge = getLanguageLabel([element.searchCriteria.sourceLanguage]).map(val=>val.label)[0]
+            let langauge = getLanguageLabel(element.searchCriteria.sourceLanguage).map(val=>val.label)[0]
             let tLanguage = getLanguageLabel(element.searchCriteria.targetLanguage).map(val=>val.label).join(', ')
             let searchDetails = JSON.parse(element.status[0].details)
             newArr.push(

@@ -73,6 +73,26 @@ const LoginStyle = (theme) => ({
     flexDirection: "column",
     justifyContent: "center",
   },
+sub:{
+  width: "95%",
+    height: "auto",
+    maxWidth: "300px",
+    margin: "20% 70px 0 39px",
+    fontSize: "1.3rem",
+    fontWeight: "500",
+    fontStretch: "normal",
+    fontStyle: "normal",
+    lineHeight: "1.5",
+    letterSpacing: "1.6px",
+    textAlign: "left",
+    color: theme.palette.primary.contrastText,
+    "@media (max-width:1040px)": {
+      fontSize: "1.2rem",
+      letterSpacing: "1px",
+      maxWidth: "280px",
+      width: "80%"}
+
+},
   loginGrid: {
     width: "33%",
     flexDirection: "column",
