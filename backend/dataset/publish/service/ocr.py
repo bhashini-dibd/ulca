@@ -197,8 +197,8 @@ class OCRService:
             exclude = {"_id": False}
             for key in ocr_search_ignore_keys:
                 exclude[key] = False
-            data = repo.search(db_query, exclude, off, lim)
-            result, query, count = data[0], data[1], data[2]
+            result = repo.search(db_query, exclude, off, lim)
+            count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')
             if result:
                 size = sample_size if count > sample_size else count
