@@ -32,7 +32,8 @@ const getMySearches = (payload) => {
                     sampleUrl : searchDetails.datasetSample,
                     downloadUrl : searchDetails.dataset,
                     sourceLanguage : element.searchCriteria.sourceLanguage,
-                    targetLanguage : element.searchCriteria.targetLanguage
+                    targetLanguage : element.searchCriteria.targetLanguage,
+                    datasetType : dataSet
 
                 }
                 

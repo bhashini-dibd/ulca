@@ -214,6 +214,7 @@ const SearchAndDownloadRecords = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const handleSubmitBtn = () => {
+        debugger
         let tgt = languagePair.target.map(trgt => trgt.value)
         let domain = filterBy.domain.map(domain => domain.value)
         let collectionMethod = filterBy.collectionMethod.map(method => method.value)
