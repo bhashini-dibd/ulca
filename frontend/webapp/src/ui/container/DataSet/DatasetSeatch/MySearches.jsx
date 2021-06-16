@@ -156,7 +156,7 @@ const MySearches = (props) => {
                 selectableRows          :       "none",
 
 
-                onRowClick                 : (rowData, rowMeta) => renderAction(rowData)
+                onRowClick                 : (rowData, rowMeta) =>rowData[3] &&  renderAction(rowData)
         };
 
         const { classes }               = props;

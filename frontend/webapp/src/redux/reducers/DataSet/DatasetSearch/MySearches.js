@@ -18,19 +18,21 @@ const getMySearches = (payload) => {
     let newArr = []
     payload.forEach(element =>{
         if(element.searchCriteria){
-            let dataSet  = element.searchCriteria.datasetType === "parallel-corpus" ? "Parallel Dataset" : element.searchCriteria.datasetType;
-            let langauge = getLanguageLabel(element.searchCriteria.sourceLanguage).map(val=>val.label)[0]
-            let tLanguage = getLanguageLabel(element.searchCriteria.targetLanguage).map(val=>val.label).join(', ')
+            let dataSet  = element.searchCriteria.datasetType === "parallel-corpus" ? "Parallel Dataset" : element.searchCriteria.datasetType === "asr-corpus" ? "ASR Dataset" :  element.searchCriteria.datasetType;
+            let langauge =element.searchCriteria.sourceLanguage && getLanguageLabel(element.searchCriteria.sourceLanguage).map(val=>val.label)[0]
+            let tLanguage = element.searchCriteria.targetLanguage && getLanguageLabel(element.searchCriteria.targetLanguage).map(val=>val.label).join(', ')
             let searchDetails = JSON.parse(element.status[0].details)
+
             newArr.push(
                 {
                     sr_no : element.serviceRequestNumber,
-                    search_criteria :`${dataSet} | ${langauge} | ${tLanguage}`,
+                    search_criteria :tLanguage ? `${dataSet} | ${langauge} | ${tLanguage}` : `${dataSet} | ${langauge}`,
                     searched_on   : dateConversion(element.timestamp),
                     status      : element.status[0].status === "successful" ? "Completed" : element.status[0].status === "inprogress" ? "In-Progress": element.status[0].status,
-                    count : searchDetails.count,
-                    sampleUrl : searchDetails.datasetSample,
-                    downloadUrl : searchDetails.dataset,
+                    
+                    count : searchDetails && searchDetails.count,
+                    sampleUrl : searchDetails && searchDetails.datasetSample,
+                    downloadUrl : searchDetails && searchDetails.dataset,
                     sourceLanguage : element.searchCriteria.sourceLanguage,
                     targetLanguage : element.searchCriteria.targetLanguage,
                     datasetType : dataSet
