@@ -118,7 +118,8 @@ public class DatasetAsrValidateIngest {
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
 			Date date = cal.getTime();
-			errorMessage.put("timestamp", df2.format(date));
+			//errorMessage.put("timestamp", df2.format(date));
+			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("stage", "ingest");
 			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());

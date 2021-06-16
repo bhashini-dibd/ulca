@@ -54,7 +54,7 @@ public class SearchKafkaPublish {
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.search);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.notstarted);
-		processTracker.setStartTime(DateUtil.getCurrentDate());
+		processTracker.setStartTime(new Date().toString());
 		
 		processTrackerDao.save(processTracker);
 		

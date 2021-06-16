@@ -42,7 +42,7 @@ public class SearchCriteria {
 
     private String datasetType;
 
-    private String sourceLanguage;
+    private String[] sourceLanguage;
     
     private String[] groupBy;
 
