@@ -174,7 +174,7 @@ class ASRService:
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
-                db_query["sourceLanguage"] = query["sourceLanguage"]
+                db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
             if 'collectionMode' in query.keys():
                 tags.extend(query["collectionMode"])
             if 'collectionSource' in query.keys():
