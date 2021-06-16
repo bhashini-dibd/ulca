@@ -212,7 +212,7 @@ public class DatasetAsrValidateIngest {
 		        	
 		        	
 		        	JSONObject finalRecord = deepMerge(source, target);
-		        	String sourceLanguage = finalRecord.getString("languages");
+		        	String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
 		        	finalRecord.remove("languages");
 		        	finalRecord.put("sourceLanguage", sourceLanguage);
 		        	
