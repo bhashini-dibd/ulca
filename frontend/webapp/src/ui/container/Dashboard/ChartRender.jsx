@@ -74,10 +74,11 @@ const ChartRender = (props) => {
 		// 	cardNavigation: true
 		//     })
 		// } else {
+			debugger
 		    switch (value) {
 			case 1:
 				
-				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id } }])
+				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : (event && event.hasOwnProperty("_id")) ? event._id : "" } }])
 				setPage(value)
 				setTitle( `English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label }  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 				setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
