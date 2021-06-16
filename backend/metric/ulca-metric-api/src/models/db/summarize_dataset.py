@@ -92,10 +92,12 @@ class SummarizeDatasetModel(object):
                 # log.info("Query Result : {}".format(result_parsed))
                 aggs ={}
                 for item in result_parsed:  
-                    if item["targetLanguage"] == "en" or dtype == "asr-corpus":
+                    if item["targetLanguage"] == "en":
                         check = "sourceLanguage" 
-                    if item["sourceLanguage"] == "en":
+                    if item["sourceLanguage"] == "en" :
                         check = "targetLanguage"
+                    if dtype == "asr-corpus":
+                        check = "sourceLanguage"
 
                     if aggs.get(item[check]) == None:
                         fields={}
@@ -114,7 +116,7 @@ class SummarizeDatasetModel(object):
                             aggs[item[check]][False] += 1
                         else:
                             aggs[item[check]][True] += 1
-
+                
                 aggs_parsed ={}
                 for val in aggs:
                     agg = aggs[val]
