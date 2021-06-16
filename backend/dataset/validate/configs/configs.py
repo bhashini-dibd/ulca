@@ -20,6 +20,7 @@ ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS',
 if isinstance(ulca_dataset_topic_partitions, str):
     ulca_dataset_topic_partitions = eval(ulca_dataset_topic_partitions)
 
+shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
 
 ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")

@@ -1,4 +1,5 @@
 from models.abstract_handler import BaseValidator
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -11,24 +12,21 @@ class WordLengthCheck(BaseValidator):
     def execute(self, request):
         log.info('----Executing the word length check----')
         try:
+            text_list = []
             record = request["record"]
-            src_txt = record['sourceText']
-            t_txt = record['targetText']
-            words_src = list(src_txt.split())
-            words_target = list(t_txt.split())
-            sum_src = 0
-            for word in words_src:
-                sum_src = sum_src + len(word)
+            if request["datasetType"] == dataset_type_parallel:
+                text_list.append(record['sourceText'])
+                text_list.append(record['targetText'])
+            if request["datasetType"] == dataset_type_asr:
+                text_list.append(record['text'])
 
-            if sum_src/len(words_src) < 3:
-                return {"message": "Source sentence:Average Word length too short", "code": "WORD_LENGTH_TOO_SHORT", "status": "FAILED"}
-
-            sum_t = 0
-            for word in words_target:
-                sum_t = sum_t + len(word)
-
-            if sum_t/len(words_target) < 3:
-                return {"message": "Target sentence:Average Word length too short", "code": "WORD_LENGTH_TOO_SHORT", "status": "FAILED"}
+            for text in text_list:
+                words = list(text.split())
+                word_sum = 0
+                for word in words:
+                    word_sum = word_sum + len(word)
+                if word_sum/len(words) < 3:
+                    return {"message": "Average Word length too short", "code": "WORD_LENGTH_TOO_SHORT", "status": "FAILED"}
 
             log.info('----word length check  -> Passed----')
             return super().execute(request)
