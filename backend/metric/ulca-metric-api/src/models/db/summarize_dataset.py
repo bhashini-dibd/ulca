@@ -2,7 +2,7 @@ from typing import Collection, Counter
 from src.utilities.app_context import LOG_WITHOUT_CONTEXT
 from src.utilities.pymongo_data_handling import normalize_bson_to_json
 import pandas as pd
-from src.db import get_db, get_data_store
+from src.db import get_data_store
 import pymongo
 from sqlalchemy import text
 from config import DRUID_DB_SCHEMA ,LANG_CODES
@@ -33,13 +33,7 @@ def get_key(val, lang_dict):
 
 class SummarizeDatasetModel(object):
     def __init__(self):
-        collections = get_db()[DB_SCHEMA_NAME]
-        try:
-            collections.create_index('datasetId')
-        except pymongo.errors.DuplicateKeyError as e:
-            log.info("duplicate key, ignoring")
-        except Exception as e:
-            log.exception("db connection exception :{} ".format(e))
+        pass
 
     def store(self, dataset):
         try:
@@ -80,9 +74,16 @@ class SummarizeDatasetModel(object):
             grouping        = dataset["groupby"]
 
             if len(criterions) == 0:
-                query = "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,isDelete FROM \"{}\" \
+                dtype = dataset["type"]
+                if dtype == "parallel-corpus":
+                    query = "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,isDelete FROM \"{}\" \
                         WHERE ((datasetType = \'{}\') AND (sourceLanguage != targetLanguage) AND (sourceLanguage = \'en\' \
-                             OR targetLanguage = \'en\')) GROUP BY sourceLanguage, targetLanguage,isDelete".format(DRUID_DB_SCHEMA,dataset["type"])
+                        OR targetLanguage = \'en\')) GROUP BY sourceLanguage, targetLanguage,isDelete".format(DRUID_DB_SCHEMA,dtype)
+                    
+                if dtype == "asr-corpus":
+                    query= "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,isDelete FROM \"{}\" \
+                        WHERE ((datasetType = \'{}\') AND (sourceLanguage != targetLanguage) AND (targetLanguage = '') AND (sourceLanguage != ''))\
+                        GROUP BY sourceLanguage, targetLanguage,isDelete".format(DRUID_DB_SCHEMA,dtype)
                 
                 log.info("Query executed : {}".format(query))
 
@@ -90,11 +91,11 @@ class SummarizeDatasetModel(object):
                 result_parsed   =([{**row} for row in result])
                 # log.info("Query Result : {}".format(result_parsed))
                 aggs ={}
-                for item in result_parsed:
-                    if item["sourceLanguage"] == "en":
-                        check = "targetLanguage"  
-                    if item["targetLanguage"] == "en":
+                for item in result_parsed:  
+                    if item["targetLanguage"] == "en" or dtype == "asr-corpus":
                         check = "sourceLanguage" 
+                    if item["sourceLanguage"] == "en":
+                        check = "targetLanguage"
 
                     if aggs.get(item[check]) == None:
                         fields={}
@@ -109,7 +110,7 @@ class SummarizeDatasetModel(object):
                         aggs[item[check]] = fields
                     else:
                         aggs[item[check]]["count"] += item["total"]
-                        if item["isDelete"] == 'false':
+                        if item["isDelete"] == "false":
                             aggs[item[check]][False] += 1
                         else:
                             aggs[item[check]][True] += 1
