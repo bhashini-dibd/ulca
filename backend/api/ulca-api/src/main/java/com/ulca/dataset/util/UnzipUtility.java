@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -37,7 +36,8 @@ public class UnzipUtility {
 		log.info("zipFilePath :: " + zipFilePath);
 
 		Map<String, String> fileMap = new HashMap<String, String>();
-		File destDir = new File(destDirectory);
+		String newDestDirectory = destDirectory + File.separator + serviceRequestNumber;
+		File destDir = new File(newDestDirectory);
 		if (!destDir.exists()) {
 			destDir.mkdir();
 		}
@@ -46,7 +46,7 @@ public class UnzipUtility {
 		ZipEntry entry = zipIn.getNextEntry();
 		// iterates over entries in the zip file
 		while (entry != null) {
-			String filePath = destDirectory + File.separator + entry.getName();
+			String filePath = newDestDirectory + File.separator + entry.getName();
 			if (!entry.isDirectory()) {
 				if (!filePath.contains("__MACOSX") && !filePath.contains("DS_Store")) {
 
@@ -54,19 +54,35 @@ public class UnzipUtility {
 
 					String entryType = entry.getName();
 
-					System.out.println("entryType ::" + entryType);
+					log.info("entryType ::" + entryType);
+					String fileName = "";
+					
 					String fileDetails[] = entryType.split("/");
-					int length = fileDetails.length;
-					String fileName = fileDetails[length - 1];
-					String dir = fileDetails[length - 2];
-					String fileDirectory = destDirectory + "/" + dir;
-					File fileDirect = new File(fileDirectory);
-					if (!fileDirect.exists()) {
-						fileDirect.mkdirs();
+					if(fileDetails.length > 1) {
+						String fileDest = "";
+						for(int i = 0 ; i< fileDetails.length -1; i++) {
+							fileDest = fileDest + fileDetails[i] +"/";
+						}
+						
+						fileDest = newDestDirectory + "/"+fileDest;
+						
+						log.info("fileDestination :: " + fileDest);
+						File fileDirect = new File(fileDest);
+						if (!fileDirect.exists()) {
+							log.info("fileDestination :: " + fileDest);
+							System.out.println("creating destination folder");
+							fileDirect.mkdirs();
+						}
+						fileName = fileDetails[fileDetails.length - 1];
+						log.info("file name :: " + fileName);
+						log.info("unzipping file  :: " + entryType);
+							
+					}else {
+						log.info("file destination is in current directory");
+						fileName = fileDetails[fileDetails.length - 1];
 					}
-
-					log.info("file name :: " + fileName);
-					log.info("unzipping file  :: " + entryType);
+					
+					
 					if (fileName.equals("params.json") || fileName.equals("data.json") || fileName.contains(".wav")) {
 
 						extractFile(zipIn, filePath);
@@ -78,8 +94,7 @@ public class UnzipUtility {
 
 			} else {
 				// if the entry is a directory, make the directory
-				log.info("folder created");
-				log.info(filePath);
+				log.info("folder created :: " +  filePath);
 				File dir = new File(filePath);
 				if (!dir.exists())
 					dir.mkdirs();
