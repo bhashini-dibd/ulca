@@ -1,4 +1,5 @@
 from models.abstract_handler import BaseValidator
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -11,8 +12,12 @@ class DuplicateWhitespaces(BaseValidator):
     def execute(self, request):
         log.info('----Removing extra whitespaces----')
         try:
-            request['record']['sourceText'] = " ".join(request['record']['sourceText'].split())
-            request['record']['targetText'] = " ".join(request['record']['targetText'].split())
+            if request["datasetType"] == dataset_type_parallel:
+                request['record']['sourceText'] = " ".join(request['record']['sourceText'].split())
+                request['record']['targetText'] = " ".join(request['record']['targetText'].split())
+
+            if request["datasetType"] == dataset_type_asr:
+                request['record']['text'] = " ".join(request['record']['text'].split())
 
             return super().execute(request)
         except Exception as e:

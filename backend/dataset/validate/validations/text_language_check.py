@@ -1,4 +1,5 @@
 from models.abstract_handler import BaseValidator
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from langdetect import detect_langs
 import logging
 from logging.config import dictConfig
@@ -12,23 +13,24 @@ class TextLanguageCheck(BaseValidator):
     def execute(self, request):
         log.info('----Executing the text language check----')
         try:
+            text_list = []
+            lang_list = []
             record = request["record"]
-            src_txt = record['sourceText']
-            tgt_txt = record['targetText']
+            if request["datasetType"] == dataset_type_parallel:
+                text_list.append(record['sourceText'])
+                text_list.append(record['targetText'])
+                lang_list.append(record['sourceLanguage'])
+                lang_list.append(record['targetLanguage'])
+            if request["datasetType"] == dataset_type_asr:
+                text_list.append(record['text'])
+                lang_list.append(record['sourceLanguage'])
 
-            src_lang, target_lang = record['sourceLanguage'], record['targetLanguage']
-
-            res = detect_langs(src_txt)
-            detected_lang = str(res[0]).split(':')[0]
-            prob = str(res[0]).split(':')[1]
-            if detected_lang != src_lang or float(prob) < 0.8:
-                return {"message": "Source sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
-
-            res = detect_langs(tgt_txt)
-            detected_lang = str(res[0]).split(':')[0]
-            prob = str(res[0]).split(':')[1]
-            if detected_lang != target_lang or float(prob) < 0.8:
-                return {"message": "Target sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
+            for text, lang in zip(text_list, lang_list):
+                res = detect_langs(text)
+                detected_lang = str(res[0]).split(':')[0]
+                prob = str(res[0]).split(':')[1]
+                if detected_lang != lang or float(prob) < 0.8:
+                    return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
 
             log.info('----text language check  -> Passed----')
             return super().execute(request)

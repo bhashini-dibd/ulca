@@ -1,4 +1,5 @@
 from models.abstract_handler import BaseValidator
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -11,16 +12,21 @@ class SentenceLengthCheck(BaseValidator):
     def execute(self, request):
         log.info('----Executing the sentence length check----')
         try:
+            text_list = []
             record = request["record"]
-            src_txt = record['sourceText']
-            tgt_txt = record['targetText']
-            words_src = len(list(src_txt.split(" ")))
-            words_tgt = len(list(tgt_txt.split(" ")))
-            if words_src < 4 or words_tgt < 4:
-                return {"message": "Sentence Length too short", "code": "TEXT_LENGTH_TOO_SHORT", "status": "FAILED"}
-            else:
-                log.info('----sentence length check  -> Passed----')
-                return super().execute(request)
+            if request["datasetType"] == dataset_type_parallel:
+                text_list.append(record['sourceText'])
+                text_list.append(record['targetText'])
+            if request["datasetType"] == dataset_type_asr:
+                text_list.append(record['text'])
+
+            for text in text_list:
+                words = len(list(text.split(" ")))
+                if words < 4:
+                    return {"message": "Sentence Length too short", "code": "TEXT_LENGTH_TOO_SHORT", "status": "FAILED"}
+
+            log.info('----sentence length check  -> Passed----')
+            return super().execute(request)
         except Exception as e:
             log.exception('Exception while executing sentence length check', e)
 

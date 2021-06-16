@@ -1,4 +1,5 @@
 from models.abstract_handler import BaseValidator
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 
 class BasicSchemaCheck(BaseValidator):
     """
@@ -7,8 +8,12 @@ class BasicSchemaCheck(BaseValidator):
 
     def execute(self, request):
         # check for mandatory keys in record
+        required_keys = set()
+        if request["datasetType"] == dataset_type_parallel:
+            required_keys = {'sourceText', 'targetText', 'sourceLanguage', 'targetLanguage'}
+        if request["datasetType"] == dataset_type_asr:
+            required_keys = {'text', 'sourceLanguage'}
 
-        required_keys = {'sourceText', 'targetText', 'sourceLanguage', 'targetLanguage'}
         if required_keys <= request["record"].keys():
             return super().execute(request)
         else:
