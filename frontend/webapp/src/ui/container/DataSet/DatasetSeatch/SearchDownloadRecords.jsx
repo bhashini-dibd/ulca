@@ -72,15 +72,17 @@ const SearchAndDownloadRecords = (props) => {
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
         })
-
+        debugger
         if (data[0]) {
             setCount(data[0].count);
             setUrls({
                 downloadSample: data[0].sampleUrl,
                 downloadAll: data[0].downloadUrl
             })
-            let target = getLanguageLabel(data[0].targetLanguage)
-            console.log(target)
+
+            debugger
+            let target = data[0].targetLanguage && getLanguageLabel(data[0].targetLanguage)
+            
             setLanguagePair({ target, source: data[0].sourceLanguage })
         }
         else if (params === 'completed' && count === 0)
@@ -176,6 +178,7 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type) => {
+        debugger
         const Dataset= Object.keys(type)[0]
         console.log(Dataset)
         setSnackbarInfo({
