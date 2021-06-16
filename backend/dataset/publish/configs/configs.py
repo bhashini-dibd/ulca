@@ -34,8 +34,8 @@ if isinstance(sample_size, str):
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
 
 asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType",
-                      "sourceLanguage"]
-asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter"]
+                      "sourceLanguage", "fileLocation"]
+asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation"]
 asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain"]
 
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage",
@@ -44,8 +44,8 @@ parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
 parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain"]
 
 ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash",
-                      "datasetType", "sourceLanguage"]
-ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter"]
+                      "datasetType", "sourceLanguage", "fileLocation"]
+ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation"]
 ocr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain"]
 
 mono_immutable_keys = ["id", "text", "textHash", "datasetType", "sourceLanguage"]
