@@ -1,18 +1,13 @@
 package com.ulca.dataset.kakfa;
 
 import java.io.FileOutputStream;
-import com.ulca.dataset.model.Error;
-import com.ulca.dataset.model.ProcessTracker;
-
 import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,14 +19,14 @@ import org.springframework.stereotype.Service;
 
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.model.Error;
+import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.util.DateUtil;
 import com.ulca.dataset.util.UnzipUtility;
 
 import io.swagger.model.DatasetType;
-import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -68,7 +63,11 @@ public class KafkaFileDownloadConsumer {
 	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
-	
+		ProcessTracker processTracker  = null;
+		TaskTracker taskTrackerDownload = null;
+		TaskTracker taskTrackerIngest = null;
+		
+		try {
 			log.info("************ Entry KafkaFileDownloadConsumer :: downloadFile *********");
 			String datasetId = file.getDatasetId();
 			String fileUrl = file.getFileUrl();
@@ -80,11 +79,11 @@ public class KafkaFileDownloadConsumer {
 			
 
 			
-			ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
+			processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
 			processTracker.setStatus(StatusEnum.inprogress);
 			processTrackerDao.save(processTracker);
 			
-			TaskTracker taskTrackerDownload = new TaskTracker();
+			taskTrackerDownload = new TaskTracker();
 			taskTrackerDownload.setStartTime(new Date().toString());
 			taskTrackerDownload.setTool(ToolEnum.download);
 			taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
@@ -119,7 +118,7 @@ public class KafkaFileDownloadConsumer {
 				
 
 				
-				TaskTracker taskTrackerIngest = new TaskTracker();
+				taskTrackerIngest = new TaskTracker();
 				taskTrackerIngest.setLastModified(new Date().toString());
 				taskTrackerIngest.setTool(ToolEnum.ingest);
 				taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
@@ -174,7 +173,31 @@ public class KafkaFileDownloadConsumer {
 				e.printStackTrace();
 			}
 			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
-		
+		}catch (Exception e) {
+			if(processTracker != null) {
+				processTracker.setStatus(StatusEnum.failed);
+				processTrackerDao.save(processTracker);
+			}
+			if(taskTrackerDownload != null) {
+				taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+				taskTrackerDownload.setEndTime(new Date().toString());
+				taskTrackerDownload.setLastModified(new Date().toString());
+				taskTrackerDao.save(taskTrackerDownload);
+			}
+			if(taskTrackerIngest != null) {
+				taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+				taskTrackerIngest.setEndTime(new Date().toString());
+				taskTrackerIngest.setLastModified(new Date().toString());
+				
+				taskTrackerDao.save(taskTrackerIngest);
+			}
+			
+			
+			
+			e.printStackTrace();
+			
+			
+		}
 		
 	}
 
