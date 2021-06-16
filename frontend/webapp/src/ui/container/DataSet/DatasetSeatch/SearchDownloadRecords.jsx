@@ -176,13 +176,15 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type) => {
+        const Dataset= Object.keys(type)[0]
+        console.log(Dataset)
         setSnackbarInfo({
             ...snackbar,
             open: true,
             message: 'Please wait while we process your request...',
             variant: 'info'
         })
-        const apiObj = new SubmitSearchRequest(type, tgt, src, domain, collectionMethod)
+        const apiObj = new SubmitSearchRequest(Dataset, tgt, src, domain, collectionMethod)
         fetch(apiObj.apiEndPoint(), {
             method: 'post',
             headers: apiObj.getHeaders().headers,
@@ -217,7 +219,7 @@ const SearchAndDownloadRecords = (props) => {
         let collectionMethod = filterBy.collectionMethod.map(method => method.value)
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
-                makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod)
+                makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
             }
 
             else if (!languagePair.source && !languagePair.target.length) {
@@ -234,7 +236,7 @@ const SearchAndDownloadRecords = (props) => {
             if (!languagePair.target.length)
                 setTgtError(true)
             else {
-                makeSubmitAPICall(null, tgt, domain, collectionMethod)
+                makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType)
             }
 
         }
