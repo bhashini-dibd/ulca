@@ -16,7 +16,9 @@ import DatasetSubmission from './ui/container/DataSet/UploadDataset/DatasetSubmi
 import authenticateUser from './configs/authenticate';
 import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";
 import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/SearchDownloadRecords";
-import ActivateUser from "./ui/container/UserManagement/ActivateUser"
+import ActivateUser from "./ui/container/UserManagement/ActivateUser";
+import ActiveUser from "./ui/container/UserManagement/ActiveUser"
+
 const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) => {
   return (
     <Route
@@ -52,11 +54,11 @@ export default function App() {
 
           <Route
             path={`${process.env.PUBLIC_URL}/activate/:email/:userId/:time?`}
-          
+
             component={ActivateUser}
-            
+
           />
-          
+
           <Route exact path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard} />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/dataset-status/:status/:name/:id`}
@@ -122,7 +124,12 @@ export default function App() {
             dontShowHeader={false}
           />
 
+          <Route
+            path={`${process.env.PUBLIC_URL}/active-user`}
 
+            component={ActiveUser}
+
+          />
 
         </Switch>
       </div>

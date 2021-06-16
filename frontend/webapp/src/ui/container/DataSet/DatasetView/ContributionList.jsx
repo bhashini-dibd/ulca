@@ -43,10 +43,28 @@ const ContributionList = (props) => {
                                 // background: "rgba(0,0,0,0.03) !important",
                                 // letterSpacing:"0.14px",
                                 // cursor: 'default'
-                                backgroundColor : "#c7c6c68a !important"
+                                padding: '.5rem .5rem .5rem 1.5rem',
+                                backgroundColor : "#c7c6c68a !important",
+                                marginLeft:"25px"
                         }
                 },
-                MUIDataTableBodyCell:{root : {textTransform: "capitalize"}},
+                MUIDataTableHeadCell: {
+                        root: {
+                                
+                          '&:nth-child(1)': {
+                            width: "60%"
+                          },
+                          
+                        }
+                      },
+                      MuiButton :{
+                              root:{
+                                fontWeight      :"bold"
+                              }
+                      },
+                      
+                
+                MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform: "capitalize"}},
                
                 MuiPaper: {
                         root:{
@@ -145,7 +163,7 @@ const ContributionList = (props) => {
                 label   : "Dataset Name",
                 options: {
                         filter  : false,
-                        sort    : false,
+                        sort    : true,
                         },
                 },
                 {
@@ -153,7 +171,7 @@ const ContributionList = (props) => {
                 label   : "Submitted On",
                 options : {
                                 filter  : false,
-                                sort    : false,
+                                sort    : true,
                         
                         },
                 },
@@ -162,24 +180,24 @@ const ContributionList = (props) => {
                 label   : "Status",
                 options : {
                         filter  : false,
-                        sort    : false,
-                        display : "excluded",
+                        sort    : true,
+                       
                         },
                 },
-                {
-                name: "Status",
-                label: "Status",
-                options: {
-                        filter  : true,
-                        sort    : false,
-                        empty   : true,
-                        customBodyRender: (value, tableMeta, updateValue) => {
-                                        if (tableMeta.rowData) {
-                                                return <div>{renderStatus(tableMeta.rowData[0],tableMeta.rowData[2],tableMeta.rowData[4])}</div>;
-                                        }
-                                },
-                        },
-                },
+                // {
+                // name: "Status",
+                // label: "Status",
+                // options: {
+                //         filter  : true,
+                //         sort    : false,
+                //         empty   : true,
+                //         customBodyRender: (value, tableMeta, updateValue) => {
+                //                         if (tableMeta.rowData) {
+                //                                 return <div>{renderStatus(tableMeta.rowData[0],tableMeta.rowData[2],tableMeta.rowData[4])}</div>;
+                //                         }
+                //                 },
+                //         },
+                // },
 
                 // {
                 // name    : "Action",
@@ -198,8 +216,13 @@ const ContributionList = (props) => {
         ];
 
         const options = {
+
+                
                 textLabels: {
-                        body            : {},
+                        body            : {
+
+                                noMatch: "No records"
+                        },
                         toolbar         : {
                                 search          : "Search",
                                 viewColumns     : "View Column",

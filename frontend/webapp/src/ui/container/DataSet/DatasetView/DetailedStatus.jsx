@@ -14,8 +14,6 @@ import { useParams } from "react-router";
 const DetailedStatus = (props) => {
 
         const {detailedReport, errorData}         =       useSelector((state) => state);
-
-        console.log(detailedReport, errorData)
         const dispatch = useDispatch();
         const {status,name, id} = useParams();
 
@@ -43,7 +41,9 @@ const DetailedStatus = (props) => {
                 overrides: {
                         MuiTableCell: {
                                 head    : {
+                                        
                                         backgroundColor : "#c7c6c68a !important",
+                                        fontWeight      :"bold"
                                 }
                         },
                         MUIDataTableBodyCell:{root : {textTransform: "capitalize"}},
@@ -69,7 +69,7 @@ const DetailedStatus = (props) => {
                         <div className={classes.headerButtons}>
                                 <Typography  variant="h5" >{name}</Typography>
                                 { <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined" disabled={(status==="in-progress")? false:true}   onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
-                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.status==="successful")? false:true} className={!(errorData.status!=="completed")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
+                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.hasOwnProperty("file"))? false:true} className={!(errorData.status!=="completed")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Logs</Button>
                         
                         </div>
                 );
@@ -137,7 +137,9 @@ const DetailedStatus = (props) => {
 
         const options = {
                 textLabels              :       {
-                        body            :       {},
+                        body            :       {
+                                noMatch: "No records"
+                        },
                         toolbar         :       {
                                 search          : "Search",
                                 viewColumns     : "View Column",
@@ -171,10 +173,10 @@ const DetailedStatus = (props) => {
                                         options ={options}
                                 />
                         </MuiThemeProvider>
-                        {status === "in-progress" && <div className = {classes.footerButtons}>
+                        {/* {status === "in-progress" && <div className = {classes.footerButtons}>
                                 <Button color = {"primary" } size = "medium" variant = "outlined" className = {classes.backButton} onClick = {() => handleAbort()}>Abort Process</Button>
                                 
-                        </div>}
+                        </div>} */}
                 </div>
         );
 };

@@ -17,7 +17,7 @@ import UrlConfig from '../../../../configs/internalurlmapping';
 import SearchAndDownload from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
 import { useDispatch, useSelector } from "react-redux";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import DownloadDatasetRecords from "./DownloadDatasetRecords";
 import RequestNumberCreation from "./RequestNumberCreation";
 import { useHistory, useParams } from 'react-router';
@@ -25,6 +25,7 @@ import Autocomplete from '../../../components/common/Autocomplete';
 import { Language, FilterBy } from '../../../../configs/DatasetItems';
 import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest';
 import DatasetType from '../../../../configs/DatasetItems';
+import getLanguageLabel from '../../../../utils/getLabel';
 
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
@@ -52,6 +53,9 @@ const SearchAndDownloadRecords = (props) => {
         downloadAll: ''
     })
 
+    const previousUrl = useRef();
+
+
     const detailedReport = useSelector((state) => state.mySearchReport);
 
     // const searchOptions = useSelector((state) => state.mySearchOptions);
@@ -61,35 +65,41 @@ const SearchAndDownloadRecords = (props) => {
     //     searchOptions.result.length === 0 && dispatch(APITransport(userObj));
     // }, []);
 
-    const getObject = (value) => {
-        let arr = []
-        Language.forEach(val => {
-             value.forEach(data => {
-                if (val.value === data)
-                   arr.push(val)
-            })
-
-        })
-        return arr
-
-    }
     useEffect(() => {
+
+        previousUrl.current = params;
+
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
         })
-        //setCount(data[0] ? data[0].count : 0)
+
         if (data[0]) {
             setCount(data[0].count);
             setUrls({
                 downloadSample: data[0].sampleUrl,
                 downloadAll: data[0].downloadUrl
             })
-            let target = getObject(data[0].targetLanguage)
+            let target = getLanguageLabel(data[0].targetLanguage)
+            console.log(target)
             setLanguagePair({ target, source: data[0].sourceLanguage })
         }
         else if (params === 'completed' && count === 0)
             history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+
     }, []);
+
+    useEffect(() => {
+        if (previousUrl.current !== params && previousUrl.current !== 'initiate') {
+            setLanguagePair({ target: [], source: "" })
+            setFilterBy({
+                domain: [],
+                source: [],
+                collectionMethod: []
+            })
+        }
+        previousUrl.current = params;
+    })
+
 
 
     const handleCheckboxChange = (event) => {
@@ -123,7 +133,7 @@ const SearchAndDownloadRecords = (props) => {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
             case 'completed':
-                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} urls={urls}/>
+                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} urls={urls} />
             default:
                 return <SearchResult />
         }
@@ -389,7 +399,7 @@ const SearchAndDownloadRecords = (props) => {
                 <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                     <Divider className={classes.divider} orientation="vertical" />
                 </Grid>
-                <Grid item xs={12} sm={6} md={7} lg={7} xl={7}>
+                <Grid item xs={12} sm={6} md={7} lg={7} xl={7} className={classes.parent}>
                     {renderPage()}
                 </Grid>
 

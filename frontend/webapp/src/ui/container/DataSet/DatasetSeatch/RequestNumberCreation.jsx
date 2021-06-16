@@ -10,12 +10,12 @@ const RequestNumberCreation = (props) => {
     const { reqno } = props
     const history = useHistory();
     return (
-        <Container className={classes.reqPaper}>
+        <Container className={classes.searchResult}>
             <Grid container>
                 <Grid className={classes.iconSub} item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <span className={classes.thumbsUpIconSpan}><ThumbUpIcon className={classes.thumbsUpIcon} /></span>
                 </Grid>
-                <Grid item xs={12} sm={12} md={10} lg={10} xl={10} className={classes.alignTypo}>
+                <Grid item xs={12} sm={12} md={10} lg={10} xl={10} >
                     <Typography className={classes.yourSearchQuery} color="primary" variant="h6">Your search query has been submitted.</Typography>
                     <Typography className={classes.serReqNoTypo} variant="h5">Your Service Request Number is {reqno}</Typography>
                     <Typography color="textSecondary" variant="subtitle1">The result will be displayed once it is ready.</Typography>

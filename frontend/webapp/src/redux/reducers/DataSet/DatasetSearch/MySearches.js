@@ -1,4 +1,5 @@
 import C from '../../../actions/constants';
+import getLanguageLabel from '../../../../utils/getLabel';
 
 const initialState = {
     responseData: []
@@ -14,25 +15,24 @@ const dateConversion = (value) =>{
 
 
 const getMySearches = (payload) => {
-    debugger
     let newArr = []
     payload.forEach(element =>{
         if(element.searchCriteria){
             let dataSet  = element.searchCriteria.datasetType === "parallel-corpus" ? "Parallel Dataset" : element.searchCriteria.datasetType;
-            let langauge = element.searchCriteria.sourceLanguage
-            let tLanguage = element.searchCriteria.targetLanguage
+            let langauge = getLanguageLabel([element.searchCriteria.sourceLanguage]).map(val=>val.label)[0]
+            let tLanguage = getLanguageLabel(element.searchCriteria.targetLanguage).map(val=>val.label).join(', ')
             let searchDetails = JSON.parse(element.status[0].details)
             newArr.push(
                 {
                     sr_no : element.serviceRequestNumber,
                     search_criteria :`${dataSet} | ${langauge} | ${tLanguage}`,
                     searched_on   : dateConversion(element.timestamp),
-                    status      : element.status[0].status === "successful" ? "Completed" : element.status[0].status,
+                    status      : element.status[0].status === "successful" ? "Completed" : element.status[0].status === "inprogress" ? "In-Progress": element.status[0].status,
                     count : searchDetails.count,
                     sampleUrl : searchDetails.datasetSample,
                     downloadUrl : searchDetails.dataset,
-                    sourceLanguage : langauge,
-                    targetLanguage : tLanguage
+                    sourceLanguage : element.searchCriteria.sourceLanguage,
+                    targetLanguage : element.searchCriteria.targetLanguage
 
                 }
                 
@@ -41,6 +41,8 @@ const getMySearches = (payload) => {
         }
         
     })
+    newArr = newArr.reverse()
+    
     return newArr;
 }
 

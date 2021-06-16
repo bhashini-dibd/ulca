@@ -6,7 +6,8 @@ import {  useHistory } from "react-router-dom";
 import Dialog from "../../components/common/Dialog"
 import Snackbar from '../../components/common/Snackbar';
 import UrlConfig from '../../../configs/internalurlmapping';
-import ActivateUserId from "../../../redux/actions/api/UserManagement/ActivateUser"
+import ActivateUserId from "../../../redux/actions/api/UserManagement/ActivateUser";
+import ActiveUser from "./ActiveUser";
 import { useParams } from "react-router";
 
 const ContributionList = (props) => {
@@ -28,8 +29,6 @@ const ContributionList = (props) => {
                  UserActivate()
         }, []);
 
-        
-  
         const  UserActivate  = () =>{
             let apiObj = new ActivateUserId(email, userId)
             var rsp_data =[]
@@ -39,17 +38,12 @@ const ContributionList = (props) => {
                 headers: apiObj.getHeaders().headers
               }).then(async response => {
                 rsp_data = await response.json();
-                debugger
                 setLoading(false)
                 if (!response.ok) {
                   
                   return Promise.reject('');
                 } else {
-                  debugger
-                  
-                  setTimeout(() => {
-                    history.push(`${process.env.PUBLIC_URL}/user/login`)
-                }, 4000)
+                    setOpen(true)
                  
                 }
               }).catch((error) => {
@@ -58,28 +52,22 @@ const ContributionList = (props) => {
                   setSnackbarInfo({
                                   ...snackbar,
                                   open: true,
-                                  message: rsp_data.message ? rsp_data.message : "Verification failed. please try again",
+                                  message: rsp_data.message ? rsp_data.message : "Something went wrong. please try again",
                                   variant: 'error'
                               })
               });
+
+              setTimeout(() => {
+                history.push(`${process.env.PUBLIC_URL}/user/login`)
+            }, 4000)
             
               }
-            
-        
-
-        
-
-
               const handleSnackbarClose = () => {
                 setSnackbarInfo({ ...snackbar, open: false })
             }
-
-
-    debugger
-        const { classes } = props;
         return (
                 <div >
-                       
+                       {open && <ActiveUser/>}
                         
                        {snackbar.open &&
       <Snackbar

@@ -206,7 +206,7 @@ let apiObj = new SubmitDatasetApi(dataset)
                                             <Grid item xl={5} lg={5} md={5} sm={12} xs={12}>
                                                 <Typography className={classes.typography} variant="subtitle1"><strong>{title}</strong></Typography>
                                             </Grid>
-                                            <Grid item xl={7} lg={7} md={7} sm={12} xs={12}>
+                                            {/* <Grid item xl={7} lg={7} md={7} sm={12} xs={12}>
                                                 <div>
                                                 <Button
                                                     size = "medium"
@@ -235,7 +235,7 @@ let apiObj = new SubmitDatasetApi(dataset)
                                                     children={renderUpdateDatasetSearch()}
                                                 />
                                                 </div>
-                                            </Grid>
+                                            </Grid> */}
                                         </Grid>
                                     </Grid>
                                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>

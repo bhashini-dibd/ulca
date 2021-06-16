@@ -9,8 +9,10 @@ const SearchResult = (props) => {
     const {classes}=props;
     return (
         <div className={classes.searchResult}>
+            <div>
             <SearchRoundedIcon className={classes.FindInPageIcon} color="primary" />
             <Typography color="primary" variant="h5">Your search result will appear here  </Typography>
+            </div>
         </div>
     )
 }

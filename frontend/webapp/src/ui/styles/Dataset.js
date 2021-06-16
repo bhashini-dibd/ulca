@@ -25,6 +25,8 @@ const DataSet = (theme) => ({
         paddingRight: '2vw'
     },
 
+    
+
     // typography:{fontSize:"1.1rem"},
 
     updateBtn: {
@@ -147,11 +149,25 @@ const DataSet = (theme) => ({
         float: 'right'
     },
 
+    parent: {
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "center",
+      },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
     searchResult:{
         textAlign: 'center',
-        marginTop: '40%',
+        justifyContent: "center",
+        flexDirection: "column",
+        display: "flex",
+        
+        verticalAlign: "middle",
+        "@media (max-width:850px)": {
+          minWidth: "270px",
+          width: "85%",
+        },
 
     },
     reqPaper:{
@@ -183,14 +199,24 @@ const DataSet = (theme) => ({
         marginTop:'4%',
         padding:'5% 14% 2% 4%',
         width:'70%',
+        minHeight: "3.5rem"
     },
     downloadBtnDiv:{
-        marginTop:'10%'
+        margin:'10%',
+        marginLeft:"0",
+        display:"flex",
+        flexDirection:"row",
+        
+    },
+    searchResultFinal:{
+        width:"90%",
+        marginTop:"-20%"
     },
     downloadBtn:{
-        fontSize:'0.8rem',
-        marginRight:'1%'
+        
+        marginRight:'2%'
     },
+    
     divider:{
         marginLeft:"10%"
     },
