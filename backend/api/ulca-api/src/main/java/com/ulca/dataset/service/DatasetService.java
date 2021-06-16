@@ -3,13 +3,11 @@ package com.ulca.dataset.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -31,12 +29,11 @@ import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.DatasetSubmitRequest;
-import com.ulca.dataset.request.SearchCriteria;
 import com.ulca.dataset.response.DatasetCorpusSearchResponse;
 import com.ulca.dataset.response.DatasetListByUserIdResponse;
-import com.ulca.dataset.response.DatasetSearchListByUserIdResponse;
 import com.ulca.dataset.response.DatasetSearchStatusResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
+import com.ulca.dataset.util.DateUtil;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,12 +68,12 @@ public class DatasetService {
 		Dataset dataset = new Dataset();
 		dataset.setDatasetName(request.getDatasetName());
 		dataset.setDatasetType(request.getType().name());
-		dataset.setCreatedOn(new Date());
+		dataset.setCreatedOn(DateUtil.getCurrentDate());
 
 		Fileidentifier fileIndetifier = new Fileidentifier();
 		fileIndetifier.setFileLocationURL(request.getUrl());
 
-		fileIndetifier.setCreatedOn(new Date());
+		fileIndetifier.setCreatedOn(DateUtil.getCurrentDate());
 		fileIdentifierDao.insert(fileIndetifier);
 
 		dataset.setDatasetFileIdentifier(fileIndetifier);
@@ -91,13 +88,14 @@ public class DatasetService {
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.notstarted);
-		processTracker.setStartTime(new Date());
+		processTracker.setStartTime(DateUtil.getCurrentDate());
 
 		processTrackerDao.insert(processTracker);
 
 		FileDownload fileDownload = new FileDownload();
 		fileDownload.setUserId(userId);
 		fileDownload.setDatasetId(dataset.getDatasetId());
+		fileDownload.setDatasetType(request.getType());
 		fileDownload.setFileUrl(request.getUrl());
 		fileDownload.setServiceRequestNumber(processTracker.getServiceRequestNumber());
 

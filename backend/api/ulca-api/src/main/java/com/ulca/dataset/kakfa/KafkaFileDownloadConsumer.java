@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
+import com.ulca.dataset.util.DateUtil;
 import com.ulca.dataset.util.UnzipUtility;
 
 import io.swagger.model.DatasetType;
@@ -57,7 +59,11 @@ public class KafkaFileDownloadConsumer {
 	@Value(value = "${FILE_DOWNLOAD_FOLDER}")
     private String downlaodFolder;
 	
+	@Autowired
+	DatasetAsrValidateIngest datasetAsrValidateIngest;
 	
+	@Autowired
+	DatasetParallelCorpusValidateIngest datasetParallelCorpusValidateIngest;
 	
 	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
@@ -78,7 +84,7 @@ public class KafkaFileDownloadConsumer {
 		processTrackerDao.save(processTracker);
 		
 		TaskTracker taskTrackerDownload = new TaskTracker();
-		taskTrackerDownload.setStartTime(new Date().toString());
+		taskTrackerDownload.setStartTime(DateUtil.getCurrentDate());
 		taskTrackerDownload.setTool(ToolEnum.download);
 		taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 		taskTrackerDownload.setServiceRequestNumber(file.getServiceRequestNumber());
@@ -89,93 +95,47 @@ public class KafkaFileDownloadConsumer {
 		
 		try {
 			
-			
 			String fileName = serviceRequestNumber+".zip";
+			
 			String filePath = downloadUsingNIO(fileUrl, downlaodFolder,fileName);
+			//String filePath = 
 			log.info("file download complete");
 			log.info("file path in downloadFile servide ::" + filePath);
 			
-			ArrayList<String> fileList = unzipUtility.unzip(filePath, downlaodFolder);
+			Map<String,String> fileMap = unzipUtility.unzip(filePath, downlaodFolder);
+			
+			Set<String> keys = fileMap.keySet();
+			log.info("logging the fileMap keys");
+			for(String key : keys) {
+				log.info("key :: "+key);
+				log.info("value :: " + fileMap.get(key));
+			}
+			
 			log.info("file unzip complete");
 			taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
 			taskTrackerDownload.setEndTime(new Date().toString());
 			taskTrackerDao.save(taskTrackerDownload);
 			
 
-			Map<String, String> fileMap = new HashMap<String, String>();
-			ParallelDatasetParamsSchema paramsSchema = null;
 			
 			TaskTracker taskTrackerIngest = new TaskTracker();
-			taskTrackerIngest.setLastModified(new Date().toString());
+			taskTrackerIngest.setLastModified(DateUtil.getCurrentDate());
 			taskTrackerIngest.setTool(ToolEnum.ingest);
 			taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 			taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
 
 			taskTrackerDao.save(taskTrackerIngest);
 			
-			for (String filePathUnzipped : fileList) {
-				System.out.println("listing unzipped files :: " + filePathUnzipped);
-				if (filePathUnzipped.contains("param")) {
-					try {
-						 paramsSchema = paramsSchemaValidator.validateParamsSchema(filePathUnzipped);
-						 fileMap.put("params", filePathUnzipped);
-						
-					} catch(Exception e) {
-						 //update error
-						taskTrackerIngest.setLastModified(new Date().toString());
-						taskTrackerIngest.setEndTime(new Date().toString());
-						taskTrackerIngest.setTool(ToolEnum.ingest);
-						taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
-						Error error = new Error();
-						error.setCause(e.getMessage());
-						error.setMessage("params validation failed");
-						error.setCode("1000_PARAMS_VALIDATION_FAILED");
-						taskTrackerIngest.setError(error);
-						taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
-
-						taskTrackerDao.save(taskTrackerIngest);
-						processTracker.setStatus(StatusEnum.failed);
-						processTrackerDao.save(processTracker);
-						
-						
-						
-						//send error event
-						JSONObject errorMessage = new JSONObject();
-						errorMessage.put("eventType", "dataset-training");
-						errorMessage.put("messageType", "error");
-						errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
-						errorMessage.put("eventId", "serviceRequestNumber|"+serviceRequestNumber);
-						Calendar cal = Calendar.getInstance();
-					    SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-					    Date date = cal.getTime();
-						errorMessage.put("timestamp", df2.format(date));
-						errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-						errorMessage.put("stage", "ingest");
-						errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
-						errorMessage.put("message", e.getMessage());
-						datasetErrorPublishService.publishDatasetError(errorMessage);
-						
-						return ;
-						
-					}
-				}
-				if (filePathUnzipped.contains("data")) {
-
-					fileMap.put("data", filePathUnzipped);
-				}
+			if(file.getDatasetType() == DatasetType.ASR_CORPUS) {
+				log.info("calling the asr validate service");
+				datasetAsrValidateIngest.validateIngest(fileMap,file, processTracker,taskTrackerIngest);
+			} else if(file.getDatasetType() == DatasetType.PARALLEL_CORPUS) {
+				log.info("calling the parallel-corpus validate service");
+				datasetParallelCorpusValidateIngest.validateIngest(fileMap,file,processTracker,taskTrackerIngest);
 			}
 			
-			JSONObject details = datasetIngestService.datasetIngest(paramsSchema,file, fileMap);
 			
-			if(details != null) {
-				taskTrackerIngest.setLastModified(new Date().toString());
-				taskTrackerIngest.setEndTime(new Date().toString());
-				taskTrackerIngest.setDetails(details.toString());
-				taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
-				taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
-
-				taskTrackerDao.save(taskTrackerIngest);
-			}
+			
 
 		} catch (IOException e) {
 			//update error

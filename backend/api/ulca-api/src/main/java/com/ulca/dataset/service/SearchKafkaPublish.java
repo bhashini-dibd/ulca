@@ -18,6 +18,7 @@ import com.ulca.dataset.model.ProcessTracker.ServiceRequestTypeEnum;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.SearchCriteria;
+import com.ulca.dataset.util.DateUtil;
 
 import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
@@ -53,19 +54,12 @@ public class SearchKafkaPublish {
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.search);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.notstarted);
-		processTracker.setStartTime(new Date());
+		processTracker.setStartTime(DateUtil.getCurrentDate());
 		
-		
-
 		processTrackerDao.save(processTracker);
 		
 		serviceRequestNumber = processTracker.getServiceRequestNumber();
-		
-		
-
 		SearchCriteria searchCriteria = request.getCriteria();
-		
-			
 		searchCriteria.setServiceRequestNumber(processTracker.getServiceRequestNumber());
 		searchCriteria.setGroupBy(request.getGroupby());
 		searchCriteria.setDatasetType(request.getDatasetType().toString());

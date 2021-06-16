@@ -13,6 +13,7 @@ import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.Setter;
 
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
 
 @Getter
+@Setter
 public class ParallelDatasetParamsSchema extends DatasetCommonParamsSchema implements OneOfDatasetParamsSchemaParams {
   @JsonProperty("collectionMethod")
   private ParallelDatasetCollectionMethod collectionMethod = null;
