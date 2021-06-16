@@ -1,15 +1,26 @@
-import {Language} from '../configs/DatasetItems';
+import { Language } from '../configs/DatasetItems';
+import DatasetItems from '../configs/DatasetItems';
 
 
-console.log("--------",Language)
-export default (value) => {
+console.log("--------", Language)
+export default (value, params = 'language') => {
     let arr = []
-    Language.forEach(val => {
-        value.forEach(data => {
-            if (val.value === data)
-                arr.push(val)
-        })
+    switch (params) {
+        case 'datasetType':
+            DatasetItems.forEach(val => {
+                if (val.value === value)
+                    arr.push(val.label)
+            })
+            return arr;
+        default:
+            Language.forEach(val => {
+                value.forEach(data => {
+                    if (val.value === data)
+                        arr.push(val)
+                })
 
-    })
-    return arr
+            })
+            return arr
+    }
+
 }

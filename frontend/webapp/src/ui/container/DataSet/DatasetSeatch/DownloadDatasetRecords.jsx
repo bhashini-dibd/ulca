@@ -7,7 +7,7 @@ const DownloadDatasetRecords = (props) => {
     const { classes } = props
     return (
         <div className={classes.searchResultFinal}>
-            <Typography variant="h5">{`Search result for the ${props.datasetType} Dataset records`}</Typography>
+            <Typography variant="h5">{`Search result for the ${props.datasetType} records`}</Typography>
             <Paper className={classes.downloadPaper}>
                 <Grid container>
                     {props.sentencePair ?

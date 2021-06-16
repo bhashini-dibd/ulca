@@ -134,11 +134,15 @@ const SearchAndDownloadRecords = (props) => {
     const [tgtError, setTgtError] = useState(false)
     const { params, srno } = param
     const renderPage = () => {
+        let data = detailedReport.responseData.filter((val) => {
+            return val.sr_no === srno
+        })
+        let datasetType=data.length && getLanguageLabel(data[0].datasetType, 'datasetType')[0]
         switch (params) {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
             case 'completed':
-                return <DownloadDatasetRecords datasetType={"Parallel"} sentencePair={count} urls={urls} />
+                return <DownloadDatasetRecords datasetType={datasetType ? datasetType:'Parallel' } sentencePair={count} urls={urls} />
             default:
                 return <SearchResult />
         }
@@ -220,7 +224,7 @@ const SearchAndDownloadRecords = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const handleSubmitBtn = () => {
-        debugger
+       // debugger
         let tgt = languagePair.target.map(trgt => trgt.value)
         let domain = filterBy.domain.map(domain => domain.value)
         let collectionMethod = filterBy.collectionMethod.map(method => method.value)
