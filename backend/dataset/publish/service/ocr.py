@@ -7,7 +7,7 @@ from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, user_mode_pseudo, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, shared_storage_path
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, ocr_search_ignore_keys
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -117,9 +117,8 @@ class OCRService:
             insert_data["tags"] = self.get_tags(insert_data)
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
-                file_path = f'{shared_storage_path}{data["imageFilename"]}'
-                s3_file_name = f'{data["imageFilename"]}|{metadata["datasetId"]}|{epoch}'
-                object_store_path = utils.upload_file(file_path, f'{aws_ocr_prefix}{s3_file_name}')
+                s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["imageFilename"]}'
+                object_store_path = utils.upload_file(data["fileLocation"], f'{aws_ocr_prefix}{s3_file_name}')
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
@@ -195,7 +194,9 @@ class OCRService:
                 db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
-            exclude = {"_id": False, "tags": False}
+            exclude = {"_id": False}
+            for key in ocr_search_ignore_keys:
+                exclude[key] = False
             data = repo.search(db_query, exclude, off, lim)
             result, query, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}')

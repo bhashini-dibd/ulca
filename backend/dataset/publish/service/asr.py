@@ -5,7 +5,7 @@ import time
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, aws_asr_prefix, \
-    sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, shared_storage_path
+    sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, asr_search_ignore_keys
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -110,9 +110,8 @@ class ASRService:
             insert_data["tags"] = self.get_tags(insert_data)
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
-                file_path = f'{shared_storage_path}{data["audioFilename"]}'
-                s3_file_name = f'{data["audioFilename"]}|{metadata["datasetId"]}|{epoch}'
-                object_store_path = utils.upload_file(file_path, f'{aws_asr_prefix}{s3_file_name}')
+                s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
+                object_store_path = utils.upload_file(data["fileLocation"], f'{aws_asr_prefix}{s3_file_name}')
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
@@ -194,7 +193,9 @@ class ASRService:
                 db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
-            exclude = {"_id": False, "tags": False}
+            exclude = {"_id": False}
+            for key in asr_search_ignore_keys:
+                exclude[key] = False
             data = repo.search(db_query, exclude, off, lim)
             result, query, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}')
