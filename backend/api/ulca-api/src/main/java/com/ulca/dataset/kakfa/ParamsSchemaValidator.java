@@ -23,7 +23,6 @@ public class ParamsSchemaValidator {
 		log.info("validing file :: against params schema");
 		log.info(filePath);
 		ObjectMapper mapper = new ObjectMapper();
-		mapper.setDefaultTyping(null);
 
 	   
 			ParallelDatasetParamsSchema paramsSchema = mapper.readValue(new File(filePath), ParallelDatasetParamsSchema.class);

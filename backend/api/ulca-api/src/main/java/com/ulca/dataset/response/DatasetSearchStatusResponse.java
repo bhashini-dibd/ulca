@@ -1,6 +1,5 @@
 package com.ulca.dataset.response;
 
-import java.util.Date;
 import java.util.List;
 
 import com.ulca.dataset.model.TaskTracker;
@@ -19,7 +18,7 @@ import lombok.Setter;
 public class DatasetSearchStatusResponse {
 	
 	private final String serviceRequestNumber;
-	private final Date timestamp;
+	private final String timestamp;
 	private final SearchCriteria searchCriteria;
 	private final List<TaskTracker> status;
 	

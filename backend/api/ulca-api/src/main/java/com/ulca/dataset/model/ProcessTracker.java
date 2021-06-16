@@ -1,24 +1,20 @@
 package com.ulca.dataset.model;
 
-import java.util.Date;
 import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.validation.Valid;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.validation.annotation.Validated;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.ulca.dataset.request.SearchCriteria;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
-
-import org.json.JSONObject;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
-import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
  * Process Tracker entity
@@ -168,16 +164,13 @@ public class ProcessTracker {
 	private Object details = null;
 
 	@JsonProperty("startTime")
-	@DateTimeFormat(iso=ISO.DATE_TIME)
-	private Date startTime = null;
+	private String startTime = null;
 
 	@JsonProperty("endTime")
-	@DateTimeFormat(iso=ISO.DATE_TIME)
-	private Date endTime = null;
+	private String endTime = null;
 
 	@JsonProperty("lastModified")
-	@DateTimeFormat(iso=ISO.DATE_TIME)
-	private Date lastModified = null;
+	private String lastModified = null;
 
 	@JsonProperty("error")
 	private Error error = null;
@@ -345,7 +338,7 @@ public class ProcessTracker {
 		this.details = details;
 	}
 
-	public ProcessTracker startTime(Date startTime) {
+	public ProcessTracker startTime(String startTime) {
 		this.startTime = startTime;
 		return this;
 	}
@@ -358,15 +351,15 @@ public class ProcessTracker {
 	@Schema(description = "ISO timestamp of the instance of the start of process")
 
 	@Valid
-	public Date getStartTime() {
+	public String getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(Date startTime) {
+	public void setStartTime(String startTime) {
 		this.startTime = startTime;
 	}
 
-	public ProcessTracker endTime(Date endTime) {
+	public ProcessTracker endTime(String endTime) {
 		this.endTime = endTime;
 		return this;
 	}
@@ -379,15 +372,15 @@ public class ProcessTracker {
 	@Schema(description = "ISO timestamp of the instance of the end of process")
 
 	@Valid
-	public Date getEndTime() {
+	public String getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(Date endTime) {
+	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
 
-	public ProcessTracker lastModified(Date lastModified) {
+	public ProcessTracker lastModified(String lastModified) {
 		this.lastModified = lastModified;
 		return this;
 	}
@@ -400,11 +393,11 @@ public class ProcessTracker {
 	@Schema(description = "ISO timestamp of the instance of the end of process")
 
 	@Valid
-	public Date getLastModified() {
+	public String getLastModified() {
 		return lastModified;
 	}
 
-	public void setLastModified(Date lastModified) {
+	public void setLastModified(String lastModified) {
 		this.lastModified = lastModified;
 	}
 

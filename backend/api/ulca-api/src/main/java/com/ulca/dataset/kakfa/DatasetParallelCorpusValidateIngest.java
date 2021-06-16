@@ -1,12 +1,16 @@
 package com.ulca.dataset.kakfa;
 
 import java.io.File;
-import java.util.Date;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,19 +23,36 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.model.Error;
+import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.TaskTracker;
+import com.ulca.dataset.model.ProcessTracker.StatusEnum;
+import com.ulca.dataset.model.TaskTracker.ToolEnum;
 
+import io.swagger.model.DatasetType;
 import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DatasetIngestService {
+public class DatasetParallelCorpusValidateIngest {
+
+	@Autowired
+	ProcessTrackerDao processTrackerDao;
+
+	@Autowired
+	TaskTrackerDao taskTrackerDao;
+
+	@Autowired
+	DatasetErrorPublishService datasetErrorPublishService;
 
 	@Autowired
 	private KafkaTemplate<String, String> datasetValidateKafkaTemplate;
@@ -39,18 +60,81 @@ public class DatasetIngestService {
 	@Value(value = "${KAFKA_ULCA_DS_VALIDATE_IP_TOPIC}")
 	private String validateTopic;
 
-	@Autowired
-	TaskTrackerDao taskTrackerDao;
-
 	public static final String SOURCE_TEXT = "sourceText";
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
 	public static final String TARGET_TEXT = "targetText";
 	public static final String TARGET_TEXT_HASH = "targetTextHash";
 
-	public void datasetIngest(ParallelDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap,
+	public void validateIngest(Map<String, String> fileMap, FileDownload file, ProcessTracker processTracker,
 			TaskTracker taskTrackerIngest) {
 
-		log.info("************ Entry DatasetIngestService :: datasetIngest *********");
+		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateIngest *********");
+		
+		String serviceRequestNumber = file.getServiceRequestNumber();
+		ParallelDatasetParamsSchema paramsSchema = null;
+
+		String paramsFilePath = fileMap.get("params.json");
+		try {
+			paramsSchema = validateParamsSchema(paramsFilePath);
+
+		} catch (IOException e) {
+
+			taskTrackerIngest.setLastModified(new Date().toString());
+			taskTrackerIngest.setEndTime(new Date().toString());
+			taskTrackerIngest.setTool(ToolEnum.ingest);
+			taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+			Error error = new Error();
+			error.setCause(e.getMessage());
+			error.setMessage("params validation failed");
+			error.setCode("1000_PARAMS_VALIDATION_FAILED");
+			taskTrackerIngest.setError(error);
+			taskTrackerIngest.setServiceRequestNumber(serviceRequestNumber);
+
+			taskTrackerDao.save(taskTrackerIngest);
+			processTracker.setStatus(StatusEnum.failed);
+			processTrackerDao.save(processTracker);
+
+			// send error event
+			JSONObject errorMessage = new JSONObject();
+			errorMessage.put("eventType", "dataset-training");
+			errorMessage.put("messageType", "error");
+			errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
+			errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+			Date date = cal.getTime();
+			errorMessage.put("timestamp", df2.format(date));
+			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+			errorMessage.put("stage", "ingest");
+			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+			errorMessage.put("message", e.getMessage());
+			datasetErrorPublishService.publishDatasetError(errorMessage);
+
+			e.printStackTrace();
+		}
+		ingest(paramsSchema, file, fileMap, taskTrackerIngest);
+
+	}
+
+	public ParallelDatasetParamsSchema validateParamsSchema(String filePath)
+			throws JsonParseException, JsonMappingException, IOException {
+
+		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateParamsSchema *********");
+		log.info("validing file :: against params schema");
+		log.info(filePath);
+		ObjectMapper mapper = new ObjectMapper();
+
+		ParallelDatasetParamsSchema paramsSchema = mapper.readValue(new File(filePath),
+				ParallelDatasetParamsSchema.class);
+
+		return paramsSchema;
+
+	}
+
+	public void ingest(ParallelDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap,
+			TaskTracker taskTrackerIngest) {
+
+		log.info("************ Entry DatasetParallelCorpusValidateIngest :: ingest *********");
 
 		String datasetId = file.getDatasetId();
 		String serviceRequestNumber = file.getServiceRequestNumber();
@@ -66,7 +150,11 @@ public class DatasetIngestService {
 			try {
 				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
-				File jsonFile = new File(fileMap.get("data"));
+				String dataFilePath = fileMap.get("data.json");
+				
+				log.info("data.json file path :: " + dataFilePath);
+				
+				File jsonFile = new File(dataFilePath);
 				JsonFactory jsonfactory = new JsonFactory(); // init factory
 				JsonParser jsonParser = jsonfactory.createParser(jsonFile); // create JSON parser
 				JsonToken jsonToken = jsonParser.nextToken();
@@ -222,7 +310,5 @@ public class DatasetIngestService {
 		String hashString = hexString.toString();
 		return hashString;
 	}
-	
-	
 
 }

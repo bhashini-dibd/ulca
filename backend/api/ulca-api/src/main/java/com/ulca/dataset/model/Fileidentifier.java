@@ -1,11 +1,7 @@
 package com.ulca.dataset.model;
 
-import java.util.Date;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,8 +16,8 @@ public class Fileidentifier {
 	private String fileType;
 	private String fileLocationURL;
 	private String fileUlcaUrl;
-	@DateTimeFormat(iso=ISO.DATE_TIME)
-	private Date createdOn;
+	
+	private String createdOn;
 	private String submitterId;
 
 }

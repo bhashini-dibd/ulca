@@ -1,7 +1,5 @@
 package com.ulca.dataset.response;
 
-import java.util.Date;
-
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +10,6 @@ public class DatasetSubmitResponse {
 	
 	 private final String serviceRequestNumber;
 	 private final String datasetId;
-	 private final Date timestamp;
+	 private final String timestamp;
 
 }
