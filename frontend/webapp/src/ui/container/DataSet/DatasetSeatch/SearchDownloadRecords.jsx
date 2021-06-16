@@ -176,6 +176,7 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type) => {
+        
         setSnackbarInfo({
             ...snackbar,
             open: true,
@@ -183,6 +184,7 @@ const SearchAndDownloadRecords = (props) => {
             variant: 'info'
         })
         const apiObj = new SubmitSearchRequest(type, tgt, src, domain, collectionMethod)
+        debugger
         fetch(apiObj.apiEndPoint(), {
             method: 'post',
             headers: apiObj.getHeaders().headers,
@@ -212,6 +214,7 @@ const SearchAndDownloadRecords = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const handleSubmitBtn = () => {
+        debugger
         let tgt = languagePair.target.map(trgt => trgt.value)
         let domain = filterBy.domain.map(domain => domain.value)
         let collectionMethod = filterBy.collectionMethod.map(method => method.value)
