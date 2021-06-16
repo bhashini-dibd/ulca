@@ -36,6 +36,7 @@ import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
+import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.DatasetType;
 import io.swagger.model.ParallelDatasetParamsSchema;
@@ -46,10 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 public class DatasetParallelCorpusValidateIngest {
 
 	@Autowired
-	ProcessTrackerDao processTrackerDao;
-
-	@Autowired
-	TaskTrackerDao taskTrackerDao;
+	ProcessTaskTrackerService processTaskTrackerService;
 
 	@Autowired
 	DatasetErrorPublishService datasetErrorPublishService;
@@ -65,11 +63,10 @@ public class DatasetParallelCorpusValidateIngest {
 	public static final String TARGET_TEXT = "targetText";
 	public static final String TARGET_TEXT_HASH = "targetTextHash";
 
-	public void validateIngest(Map<String, String> fileMap, FileDownload file, ProcessTracker processTracker,
-			TaskTracker taskTrackerIngest) {
+	public void validateIngest(Map<String, String> fileMap, FileDownload file, TaskTracker taskTrackerIngest) {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateIngest *********");
-		
+
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		ParallelDatasetParamsSchema paramsSchema = null;
 
@@ -79,20 +76,15 @@ public class DatasetParallelCorpusValidateIngest {
 
 		} catch (IOException e) {
 
-			taskTrackerIngest.setLastModified(new Date().toString());
-			taskTrackerIngest.setEndTime(new Date().toString());
-			taskTrackerIngest.setTool(ToolEnum.ingest);
-			taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("params validation failed");
 			error.setCode("1000_PARAMS_VALIDATION_FAILED");
-			taskTrackerIngest.setError(error);
-			taskTrackerIngest.setServiceRequestNumber(serviceRequestNumber);
 
-			taskTrackerDao.save(taskTrackerIngest);
-			processTracker.setStatus(StatusEnum.failed);
-			processTrackerDao.save(processTracker);
+			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+
+			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
 			JSONObject errorMessage = new JSONObject();
@@ -103,7 +95,7 @@ public class DatasetParallelCorpusValidateIngest {
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
 			Date date = cal.getTime();
-			//errorMessage.put("timestamp", df2.format(date));
+			// errorMessage.put("timestamp", df2.format(date));
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("stage", "ingest");
@@ -113,7 +105,14 @@ public class DatasetParallelCorpusValidateIngest {
 
 			e.printStackTrace();
 		}
-		ingest(paramsSchema, file, fileMap, taskTrackerIngest);
+		try {
+			ingest(paramsSchema, file, fileMap);
+		} catch (IOException | JSONException | NoSuchAlgorithmException e) {
+			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+
+			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
+		}
 
 	}
 
@@ -132,8 +131,8 @@ public class DatasetParallelCorpusValidateIngest {
 
 	}
 
-	public void ingest(ParallelDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap,
-			TaskTracker taskTrackerIngest) {
+	public void ingest(ParallelDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
+			throws JSONException, IOException, NoSuchAlgorithmException {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: ingest *********");
 
@@ -141,156 +140,128 @@ public class DatasetParallelCorpusValidateIngest {
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		String userId = file.getUserId();
 
-		if (paramsSchema != null) {
+		ObjectMapper objectMapper = new ObjectMapper();
 
-			log.info("got paramsSchema object");
+		JSONObject record;
 
-			ObjectMapper objectMapper = new ObjectMapper();
+		record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
-			JSONObject record;
-			try {
-				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+		String dataFilePath = fileMap.get("data.json");
 
-				String dataFilePath = fileMap.get("data.json");
-				
-				log.info("data.json file path :: " + dataFilePath);
-				
-				File jsonFile = new File(dataFilePath);
-				JsonFactory jsonfactory = new JsonFactory(); // init factory
-				JsonParser jsonParser = jsonfactory.createParser(jsonFile); // create JSON parser
-				JsonToken jsonToken = jsonParser.nextToken();
-				int numberOfRecords = 0;
-				JSONObject vModel = new JSONObject();
-				vModel.put("record", record);
-				vModel.put("datasetId", datasetId);
-				vModel.put("datasetType", paramsSchema.getDatasetType().toString());
-				vModel.put("serviceRequestNumber", serviceRequestNumber);
-				vModel.put("userId", userId);
-				vModel.put("userMode", "real");
-				int currentCount = 0;
-				int batchCount = 999;
+		log.info("data.json file path :: " + dataFilePath);
 
-				while (jsonToken != JsonToken.END_ARRAY) {
-					String fieldname = jsonParser.getCurrentName();
-					if (SOURCE_TEXT.equals(fieldname)) {
-						jsonToken = jsonParser.nextToken(); // read next token
-						record.put(SOURCE_TEXT, jsonParser.getText());
-						record.put(SOURCE_TEXT_HASH, getSha256Hash(jsonParser.getText()));
-					}
-					if (TARGET_TEXT.equals(fieldname)) {
-						jsonToken = jsonParser.nextToken();
-						record.put(TARGET_TEXT, jsonParser.getText());
-						record.put(TARGET_TEXT_HASH, getSha256Hash(jsonParser.getText()));
-					}
-					if (jsonToken == JsonToken.END_OBJECT) {
-						// do some processing, Indexing, saving in DB etc..
+		File jsonFile = new File(dataFilePath);
+		JsonFactory jsonfactory = new JsonFactory(); // init factory
+		JsonParser jsonParser = jsonfactory.createParser(jsonFile); // create JSON parser
+		JsonToken jsonToken = jsonParser.nextToken();
+		int numberOfRecords = 0;
+		JSONObject vModel = new JSONObject();
+		vModel.put("record", record);
+		vModel.put("datasetId", datasetId);
+		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
+		vModel.put("serviceRequestNumber", serviceRequestNumber);
+		vModel.put("userId", userId);
+		vModel.put("userMode", "real");
+		int currentCount = 0;
+		int batchCount = 999;
 
-						numberOfRecords++;
-						UUID uid = UUID.randomUUID();
-						record.put("id", uid);
-						if (record.has("languages")) {
-							JSONObject language = record.getJSONObject("languages");
-							String sourceLanguage = language.getString("sourceLanguage");
-							String targetLanguage = language.getString("targetLanguage");
-							record.put("sourceLanguage", sourceLanguage);
-							record.put("targetLanguage", targetLanguage);
-							record.remove("languages");
-						}
+		while (jsonToken != JsonToken.END_ARRAY) {
+			String fieldname = jsonParser.getCurrentName();
+			if (SOURCE_TEXT.equals(fieldname)) {
+				jsonToken = jsonParser.nextToken(); // read next token
+				record.put(SOURCE_TEXT, jsonParser.getText());
+				record.put(SOURCE_TEXT_HASH, getSha256Hash(jsonParser.getText()));
+			}
+			if (TARGET_TEXT.equals(fieldname)) {
+				jsonToken = jsonParser.nextToken();
+				record.put(TARGET_TEXT, jsonParser.getText());
+				record.put(TARGET_TEXT_HASH, getSha256Hash(jsonParser.getText()));
+			}
+			if (jsonToken == JsonToken.END_OBJECT) {
+				// do some processing, Indexing, saving in DB etc..
 
-						vModel.put("currentRecordIndex", numberOfRecords);
-						currentCount++;
-						// validate the current record
-						// if validation success then send to validate topic
-						// else
+				numberOfRecords++;
+				UUID uid = UUID.randomUUID();
+				record.put("id", uid);
+				if (record.has("languages")) {
+					JSONObject language = record.getJSONObject("languages");
+					String sourceLanguage = language.getString("sourceLanguage");
+					String targetLanguage = language.getString("targetLanguage");
+					record.put("sourceLanguage", sourceLanguage);
+					record.put("targetLanguage", targetLanguage);
+					record.remove("languages");
+				}
 
-						datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+				vModel.put("currentRecordIndex", numberOfRecords);
+				currentCount++;
+				// validate the current record
+				// if validation success then send to validate topic
+				// else
 
-						if (currentCount == batchCount) {
+				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
 
-							currentCount = 0;
-							// update the task tracker
-							JSONObject details = new JSONObject();
-							details.put("currentRecordIndex", currentCount);
+				if (currentCount == batchCount) {
 
-							JSONArray processedCount = new JSONArray();
+					currentCount = 0;
+					// update the task tracker
+					JSONObject details = new JSONObject();
+					details.put("currentRecordIndex", currentCount);
 
-							JSONObject proCountSuccess = new JSONObject();
-							proCountSuccess.put("type", "success");
-							proCountSuccess.put("count", currentCount);
-							processedCount.put(proCountSuccess);
+					JSONArray processedCount = new JSONArray();
 
-							JSONObject proCountFailure = new JSONObject();
+					JSONObject proCountSuccess = new JSONObject();
+					proCountSuccess.put("type", "success");
+					proCountSuccess.put("count", currentCount);
+					processedCount.put(proCountSuccess);
 
-							proCountFailure.put("type", "failed");
-							proCountFailure.put("count", 0);
-							processedCount.put(proCountFailure);
-							details.put("processedCount", processedCount);
-							details.put("timeStamp", new Date().toString());
+					JSONObject proCountFailure = new JSONObject();
 
-							taskTrackerIngest.setLastModified(new Date().toString());
-							taskTrackerIngest.setEndTime(new Date().toString());
-							taskTrackerIngest.setDetails(details.toString());
-							taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
-							taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
+					proCountFailure.put("type", "failed");
+					proCountFailure.put("count", 0);
+					processedCount.put(proCountFailure);
+					details.put("processedCount", processedCount);
+					details.put("timeStamp", new Date().toString());
 
-							taskTrackerDao.save(taskTrackerIngest);
-
-						}
-
-					}
-					jsonToken = jsonParser.nextToken();
+					processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
+							com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
 
 				}
 
-				vModel.put("eof", true);
-				vModel.remove("record");
-				vModel.remove("currentRecordIndex");
-
-				log.info("Eof reached");
-				jsonParser.close();
-				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
-
-				JSONObject details = new JSONObject();
-				details.put("currentRecordIndex", numberOfRecords);
-
-				JSONArray processedCount = new JSONArray();
-
-				JSONObject proCountSuccess = new JSONObject();
-				proCountSuccess.put("type", "success");
-				proCountSuccess.put("count", numberOfRecords);
-				processedCount.put(proCountSuccess);
-
-				JSONObject proCountFailure = new JSONObject();
-
-				proCountFailure.put("type", "failed");
-				proCountFailure.put("count", 0);
-				processedCount.put(proCountFailure);
-				details.put("processedCount", processedCount);
-				details.put("timeStamp", new Date().toString());
-
-				taskTrackerIngest.setLastModified(new Date().toString());
-				taskTrackerIngest.setEndTime(new Date().toString());
-				taskTrackerIngest.setDetails(details.toString());
-				taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
-				taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
-
-				taskTrackerDao.save(taskTrackerIngest);
-
-			} catch (JsonProcessingException | JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+			jsonToken = jsonParser.nextToken();
 
-			log.info("sent record for validation ");
-		} else {
-			log.info("paramsSchema object is null");
 		}
+
+		vModel.put("eof", true);
+		vModel.remove("record");
+		vModel.remove("currentRecordIndex");
+
+		log.info("Eof reached");
+		jsonParser.close();
+		datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+
+		JSONObject details = new JSONObject();
+		details.put("currentRecordIndex", numberOfRecords);
+
+		JSONArray processedCount = new JSONArray();
+
+		JSONObject proCountSuccess = new JSONObject();
+		proCountSuccess.put("type", "success");
+		proCountSuccess.put("count", numberOfRecords);
+		processedCount.put(proCountSuccess);
+
+		JSONObject proCountFailure = new JSONObject();
+
+		proCountFailure.put("type", "failed");
+		proCountFailure.put("count", 0);
+		processedCount.put(proCountFailure);
+		details.put("processedCount", processedCount);
+		details.put("timeStamp", new Date().toString());
+
+		processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
+				com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
+
+		log.info("sent record for validation ");
 
 	}
 
