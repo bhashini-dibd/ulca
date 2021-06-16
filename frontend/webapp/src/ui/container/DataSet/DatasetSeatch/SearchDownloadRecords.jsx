@@ -72,7 +72,7 @@ const SearchAndDownloadRecords = (props) => {
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
         })
-        debugger
+        // debugger
         if (data[0]) {
             setCount(data[0].count);
             setUrls({
@@ -80,11 +80,14 @@ const SearchAndDownloadRecords = (props) => {
                 downloadAll: data[0].downloadUrl
             })
 
-            debugger
-            let target = data[0].targetLanguage && getLanguageLabel(data[0].targetLanguage)
-            
+            //    debugger
+
+            let target = data[0].targetLanguage ? getLanguageLabel(data[0].targetLanguage) : getLanguageLabel(data[0].sourceLanguage)
+
             setLanguagePair({ target, source: data[0].sourceLanguage })
+            setDatasetType({ [data[0].datasetType]: true })
         }
+
         else if (params === 'completed' && count === 0)
             history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
 
@@ -179,7 +182,7 @@ const SearchAndDownloadRecords = (props) => {
 
     const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type) => {
         debugger
-        const Dataset= Object.keys(type)[0]
+        const Dataset = Object.keys(type)[0]
         console.log(Dataset)
         setSnackbarInfo({
             ...snackbar,
