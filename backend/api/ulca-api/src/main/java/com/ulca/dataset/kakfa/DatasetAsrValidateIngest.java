@@ -83,11 +83,11 @@ public class DatasetAsrValidateIngest {
 			return;
 		}
 		try {
-			paramsSchema = validateParamsSchema(paramsFilePath);
+			paramsSchema = validateParamsSchema(paramsFilePath,file);
 			// ingest(paramsSchema, file, fileMap, taskTrackerIngest);
 
-		} catch (IOException e) {
-
+		} catch (IOException | JSONException | NullPointerException e) {
+			log.info("Exception while validating params :: " + e.getMessage());
 			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 
@@ -115,7 +115,10 @@ public class DatasetAsrValidateIngest {
 		}
 		try {
 			ingest(paramsSchema, file, fileMap);
+			
 		} catch (IOException e) {
+			
+			log.info("Exception while validating params :: " + e.getMessage());
 			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 
@@ -125,22 +128,32 @@ public class DatasetAsrValidateIngest {
 
 	}
 
-	public ASRParamsSchema validateParamsSchema(String filePath)
+	public ASRParamsSchema validateParamsSchema(String filePath, FileDownload file)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		log.info("************ Entry DatasetAsrValidateIngest :: validateParamsSchema *********");
 		log.info("validing file :: against params schema");
 		log.info(filePath);
+		String serviceRequestNumber = file.getServiceRequestNumber();
+		log.info(serviceRequestNumber);
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
 		module.addDeserializer(ASRParamsSchema.class, new ASRParamsSchemaDeserializer());
 		mapper.registerModule(module);
 
 		ASRParamsSchema paramsSchema = mapper.readValue(new File(filePath), ASRParamsSchema.class);
-
-		if (paramsSchema != null) {
-			log.info("Asr params validated");
+		if(paramsSchema == null ) {
+			
+			log.info("params validation failed");
+			throw new IOException("paramsValidation failed");
+			
 		}
+		if(paramsSchema.getDatasetType() != file.getDatasetType()) {
+			log.info("params validation failed");
+			throw new IOException("params datasetType does not matches with submitted datasetType");
+		}
+
+		
 
 		return paramsSchema;
 

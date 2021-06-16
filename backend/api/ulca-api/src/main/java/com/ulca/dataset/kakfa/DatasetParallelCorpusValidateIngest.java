@@ -7,10 +7,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,16 +23,12 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ulca.dataset.dao.ProcessTrackerDao;
-import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.Error;
-import com.ulca.dataset.model.ProcessTracker;
-import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
+import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
@@ -63,7 +57,7 @@ public class DatasetParallelCorpusValidateIngest {
 	public static final String TARGET_TEXT = "targetText";
 	public static final String TARGET_TEXT_HASH = "targetTextHash";
 
-	public void validateIngest(Map<String, String> fileMap, FileDownload file, TaskTracker taskTrackerIngest) {
+	public void validateIngest(Map<String, String> fileMap, FileDownload file) {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateIngest *********");
 
@@ -71,11 +65,20 @@ public class DatasetParallelCorpusValidateIngest {
 		ParallelDatasetParamsSchema paramsSchema = null;
 
 		String paramsFilePath = fileMap.get("params.json");
+		if (paramsFilePath == null) {
+			log.info("params.json file not available");
+			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+
+			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
+			return;
+		}
 		try {
-			paramsSchema = validateParamsSchema(paramsFilePath);
+			paramsSchema = validateParamsSchema(paramsFilePath,file);
 
-		} catch (IOException e) {
+		} catch (IOException | JSONException | NullPointerException e) {
 
+			log.info("Exception while validating params :: " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("params validation failed");
@@ -104,10 +107,13 @@ public class DatasetParallelCorpusValidateIngest {
 			datasetErrorPublishService.publishDatasetError(errorMessage);
 
 			e.printStackTrace();
+			return;
 		}
 		try {
 			ingest(paramsSchema, file, fileMap);
-		} catch (IOException | JSONException | NoSuchAlgorithmException e) {
+		} catch (IOException | JSONException | NoSuchAlgorithmException | NullPointerException   e) {
+			
+			log.info("Exception while ingesting the dataset :: " + e.getMessage());
 			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 
@@ -116,7 +122,7 @@ public class DatasetParallelCorpusValidateIngest {
 
 	}
 
-	public ParallelDatasetParamsSchema validateParamsSchema(String filePath)
+	public ParallelDatasetParamsSchema validateParamsSchema(String filePath, FileDownload file)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateParamsSchema *********");
@@ -126,6 +132,16 @@ public class DatasetParallelCorpusValidateIngest {
 
 		ParallelDatasetParamsSchema paramsSchema = mapper.readValue(new File(filePath),
 				ParallelDatasetParamsSchema.class);
+		if (paramsSchema == null) {
+
+			log.info("params validation failed");
+			throw new JsonMappingException("paramsValidation failed");
+
+		}
+		if (paramsSchema.getDatasetType() != file.getDatasetType()) {
+			log.info("params validation failed");
+			throw new JsonMappingException("params datasetType does not matches with submitted datasetType");
+		}
 
 		return paramsSchema;
 

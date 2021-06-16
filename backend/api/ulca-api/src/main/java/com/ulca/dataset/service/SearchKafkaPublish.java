@@ -19,6 +19,7 @@ import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.SearchCriteria;
 import com.ulca.dataset.util.DateUtil;
+import com.ulca.dataset.util.Utility;
 
 import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
@@ -49,8 +50,7 @@ public class SearchKafkaPublish {
 
 		ProcessTracker processTracker = new ProcessTracker();
 		processTracker.setUserId(userId);
-		UUID uuid = UUID.randomUUID();
-		processTracker.setServiceRequestNumber(uuid.toString());
+		processTracker.setServiceRequestNumber(Utility.getDatasetSearchReferenceNumber());
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.search);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.notstarted);

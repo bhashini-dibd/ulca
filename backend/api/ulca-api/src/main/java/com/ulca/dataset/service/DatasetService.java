@@ -34,6 +34,7 @@ import com.ulca.dataset.response.DatasetListByUserIdResponse;
 import com.ulca.dataset.response.DatasetSearchStatusResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
 import com.ulca.dataset.util.DateUtil;
+import com.ulca.dataset.util.Utility;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -83,8 +84,7 @@ public class DatasetService {
 		ProcessTracker processTracker = new ProcessTracker();
 		processTracker.setUserId(userId);
 		processTracker.setDatasetId(dataset.getDatasetId());
-		UUID uuid = UUID.randomUUID();
-		processTracker.setServiceRequestNumber(uuid.toString());
+		processTracker.setServiceRequestNumber(Utility.getDatasetSubmitReferenceNumber());
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.notstarted);

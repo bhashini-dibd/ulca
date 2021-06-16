@@ -17,12 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import com.ulca.dataset.dao.ProcessTrackerDao;
-import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.Error;
-import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
-import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 import com.ulca.dataset.util.UnzipUtility;
@@ -38,15 +34,8 @@ public class KafkaFileDownloadConsumer {
 	UnzipUtility unzipUtility;
 
 	@Autowired
-	ParamsSchemaValidator paramsSchemaValidator;
-	
-	
-	
-	@Autowired
 	ProcessTaskTrackerService processTaskTrackerService;
 	
-	@Autowired
-	TaskTrackerDao taskTrackerDao;
 	
 	@Autowired
 	DatasetErrorPublishService datasetErrorPublishService;
@@ -63,8 +52,6 @@ public class KafkaFileDownloadConsumer {
 	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
-		TaskTracker taskTrackerDownload = null;
-		TaskTracker taskTrackerIngest = null;
 		
 		String datasetId = file.getDatasetId();
 		String fileUrl = file.getFileUrl();
@@ -82,12 +69,9 @@ public class KafkaFileDownloadConsumer {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.inprogress);
 			processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 			
-			
-			
 			try {
 				
 				String fileName = serviceRequestNumber+".zip";
-				
 				String filePath = downloadUsingNIO(fileUrl, downloadFolder,fileName);
 				//String filePath = 
 				log.info("file download complete");
@@ -103,11 +87,7 @@ public class KafkaFileDownloadConsumer {
 				}
 				
 				log.info("file unzip complete");
-				
 				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
-				
-				
-				
 				
 
 			} catch (IOException e) {
@@ -118,10 +98,7 @@ public class KafkaFileDownloadConsumer {
 				error.setCause(e.getMessage());
 				error.setMessage("file download failed");
 				error.setCode("01_00000000");
-				
-				
 				processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
-				
 				
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 				
@@ -155,7 +132,7 @@ public class KafkaFileDownloadConsumer {
 				datasetAsrValidateIngest.validateIngest(fileMap,file);
 			} else if(file.getDatasetType() == DatasetType.PARALLEL_CORPUS) {
 				log.info("calling the parallel-corpus validate service");
-				datasetParallelCorpusValidateIngest.validateIngest(fileMap,file,taskTrackerIngest);
+				datasetParallelCorpusValidateIngest.validateIngest(fileMap,file);
 			}
 			
 			
@@ -164,7 +141,8 @@ public class KafkaFileDownloadConsumer {
 		}catch (Exception e) {
 			
 			
-			
+			log.info("Unhadled Exception :: " + e.getMessage());
+			log.info("cause :: " + e.getClass());
 			e.printStackTrace();
 			
 			
