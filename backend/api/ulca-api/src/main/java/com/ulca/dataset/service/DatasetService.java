@@ -68,12 +68,12 @@ public class DatasetService {
 		Dataset dataset = new Dataset();
 		dataset.setDatasetName(request.getDatasetName());
 		dataset.setDatasetType(request.getType().name());
-		dataset.setCreatedOn(DateUtil.getCurrentDate());
+		dataset.setCreatedOn(new Date().toString());
 
 		Fileidentifier fileIndetifier = new Fileidentifier();
 		fileIndetifier.setFileLocationURL(request.getUrl());
 
-		fileIndetifier.setCreatedOn(DateUtil.getCurrentDate());
+		fileIndetifier.setCreatedOn(new Date().toString());
 		fileIdentifierDao.insert(fileIndetifier);
 
 		dataset.setDatasetFileIdentifier(fileIndetifier);
@@ -88,7 +88,7 @@ public class DatasetService {
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.notstarted);
-		processTracker.setStartTime(DateUtil.getCurrentDate());
+		processTracker.setStartTime(new Date().toString());
 
 		processTrackerDao.insert(processTracker);
 
