@@ -24,6 +24,7 @@ import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
+import com.ulca.dataset.service.ProcessTaskTrackerService;
 import com.ulca.dataset.util.UnzipUtility;
 
 import io.swagger.model.DatasetType;
@@ -39,11 +40,10 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	ParamsSchemaValidator paramsSchemaValidator;
 	
-	@Autowired
-	DatasetIngestService datasetIngestService;
+	
 	
 	@Autowired
-	ProcessTrackerDao processTrackerDao;
+	ProcessTaskTrackerService processTaskTrackerService;
 	
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
@@ -52,7 +52,7 @@ public class KafkaFileDownloadConsumer {
 	DatasetErrorPublishService datasetErrorPublishService;
 
 	@Value(value = "${FILE_DOWNLOAD_FOLDER}")
-    private String downlaodFolder;
+    private String downloadFolder;
 	
 	@Autowired
 	DatasetAsrValidateIngest datasetAsrValidateIngest;
@@ -63,46 +63,37 @@ public class KafkaFileDownloadConsumer {
 	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
-		ProcessTracker processTracker  = null;
 		TaskTracker taskTrackerDownload = null;
 		TaskTracker taskTrackerIngest = null;
 		
+		String datasetId = file.getDatasetId();
+		String fileUrl = file.getFileUrl();
+		String serviceRequestNumber = file.getServiceRequestNumber();
+		Map<String,String> fileMap = null;
+		
 		try {
 			log.info("************ Entry KafkaFileDownloadConsumer :: downloadFile *********");
-			String datasetId = file.getDatasetId();
-			String fileUrl = file.getFileUrl();
-			String serviceRequestNumber = file.getServiceRequestNumber();
+			
 			
 			log.info(" datasetId :: " + datasetId);
 			log.info("fileUrl :: " + fileUrl);
 			log.info("serviceRequestNumber :: " + serviceRequestNumber);
 			
-
-			
-			processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
-			processTracker.setStatus(StatusEnum.inprogress);
-			processTrackerDao.save(processTracker);
-			
-			taskTrackerDownload = new TaskTracker();
-			taskTrackerDownload.setStartTime(new Date().toString());
-			taskTrackerDownload.setTool(ToolEnum.download);
-			taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
-			taskTrackerDownload.setServiceRequestNumber(file.getServiceRequestNumber());
-			taskTrackerDao.save(taskTrackerDownload);
+			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.inprogress);
+			processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 			
 			
-			log.info(processTracker.toString());
 			
 			try {
 				
 				String fileName = serviceRequestNumber+".zip";
 				
-				String filePath = downloadUsingNIO(fileUrl, downlaodFolder,fileName);
+				String filePath = downloadUsingNIO(fileUrl, downloadFolder,fileName);
 				//String filePath = 
 				log.info("file download complete");
 				log.info("file path in downloadFile servide ::" + filePath);
 				
-				Map<String,String> fileMap = unzipUtility.unzip(filePath, downlaodFolder, serviceRequestNumber);
+				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
 				
 				Set<String> keys = fileMap.keySet();
 				log.info("logging the fileMap keys");
@@ -112,27 +103,9 @@ public class KafkaFileDownloadConsumer {
 				}
 				
 				log.info("file unzip complete");
-				taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
-				taskTrackerDownload.setEndTime(new Date().toString());
-				taskTrackerDao.save(taskTrackerDownload);
 				
-
+				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
 				
-				taskTrackerIngest = new TaskTracker();
-				taskTrackerIngest.setLastModified(new Date().toString());
-				taskTrackerIngest.setTool(ToolEnum.ingest);
-				taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
-				taskTrackerIngest.setServiceRequestNumber(file.getServiceRequestNumber());
-
-				taskTrackerDao.save(taskTrackerIngest);
-				
-				if(file.getDatasetType() == DatasetType.ASR_CORPUS) {
-					log.info("calling the asr validate service");
-					datasetAsrValidateIngest.validateIngest(fileMap,file, processTracker,taskTrackerIngest);
-				} else if(file.getDatasetType() == DatasetType.PARALLEL_CORPUS) {
-					log.info("calling the parallel-corpus validate service");
-					datasetParallelCorpusValidateIngest.validateIngest(fileMap,file,processTracker,taskTrackerIngest);
-				}
 				
 				
 				
@@ -140,18 +113,17 @@ public class KafkaFileDownloadConsumer {
 			} catch (IOException e) {
 				//update error
 				
-				taskTrackerDownload.setLastModified(new Date().toString());
-				taskTrackerDownload.setEndTime(new Date().toString());
-				taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+				
 				Error error = new Error();
 				error.setCause(e.getMessage());
 				error.setMessage("file download failed");
 				error.setCode("01_00000000");
-				taskTrackerDownload.setError(error);
-				taskTrackerDao.save(taskTrackerDownload);
 				
-				processTracker.setStatus(StatusEnum.failed);
-				processTrackerDao.save(processTracker);
+				
+				processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+				
+				
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 				
 				//send error event for download failure
 				JSONObject errorMessage = new JSONObject();
@@ -171,26 +143,25 @@ public class KafkaFileDownloadConsumer {
 				datasetErrorPublishService.publishDatasetError(errorMessage);
 				
 				e.printStackTrace();
+				
+				return;
 			}
+			
+			processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.ingest, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
+			
+			
+			if(file.getDatasetType() == DatasetType.ASR_CORPUS) {
+				log.info("calling the asr validate service");
+				datasetAsrValidateIngest.validateIngest(fileMap,file);
+			} else if(file.getDatasetType() == DatasetType.PARALLEL_CORPUS) {
+				log.info("calling the parallel-corpus validate service");
+				datasetParallelCorpusValidateIngest.validateIngest(fileMap,file,taskTrackerIngest);
+			}
+			
+			
+			
 			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
 		}catch (Exception e) {
-			if(processTracker != null) {
-				processTracker.setStatus(StatusEnum.failed);
-				processTrackerDao.save(processTracker);
-			}
-			if(taskTrackerDownload != null) {
-				taskTrackerDownload.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
-				taskTrackerDownload.setEndTime(new Date().toString());
-				taskTrackerDownload.setLastModified(new Date().toString());
-				taskTrackerDao.save(taskTrackerDownload);
-			}
-			if(taskTrackerIngest != null) {
-				taskTrackerIngest.setStatus(com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
-				taskTrackerIngest.setEndTime(new Date().toString());
-				taskTrackerIngest.setLastModified(new Date().toString());
-				
-				taskTrackerDao.save(taskTrackerIngest);
-			}
 			
 			
 			
