@@ -36,8 +36,8 @@ class CaseDedup(BaseValidator):
                 request['record']['targetTextHash'] = self.create_hash(request['record']['targetText'], request['record']['targetLanguage'])
             if request["datasetType"] == dataset_type_asr:
                 audio_file = request['record']['fileLocation']
-                file_path = f'{shared_storage_path}{audio_file}'
-                request['record']['audioHash'] = self.hash_file(file_path)
+                #file_path = f'{shared_storage_path}{audio_file}'
+                request['record']['audioHash'] = self.hash_file(audio_file)
                 request['record']['textHash'] = self.create_hash(request['record']['text'], request['record']['sourceLanguage'])
 
             return super().execute(request)
