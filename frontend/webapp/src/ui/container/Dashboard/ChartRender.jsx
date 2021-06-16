@@ -79,7 +79,7 @@ const ChartRender = (props) => {
 				
 				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id } }])
 				setPage(value)
-				setTitle( `English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label }  Parallel Dataset - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+				setTitle( `English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label }  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 				setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 				setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
 				break;
@@ -87,14 +87,14 @@ const ChartRender = (props) => {
 				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage } }, { "type": "PARAMS", "value": event && event.hasOwnProperty("_id") && event._id }])
 				setPage(value)
 				setFilterValue('domains')
-				setTitle( `English-${selectedLanguageName} Parallel Dataset`)
+				setTitle( `English-${selectedLanguageName} ${selectedOption.label} `)
 				
 				break;
 			case 0:
 				fetchChartData(selectedOption.value, "languagePairs", [])
 				setPage(value)
 				setFilterValue('domains')
-				setTitle("English-Indic language Parallel Dataset")
+				setTitle(`English-Indic language ${selectedOption.label} `)
 				setSelectedLanguage("")
 				setSelectedLanguageName("")
 				
@@ -108,7 +108,7 @@ const ChartRender = (props) => {
 
 	const handleLanguageChange = (value) => {
 		setFilterValue(value)
-		setTitle( `English-${selectedLanguageName }  Parallel Dataset - Grouped by ${(value === "domains") ? "Domain" : (value === "source") ? "Source" : value === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+		setTitle( `English-${selectedLanguageName }  ${selectedOption.value}- Grouped by ${(value === "domains") ? "Domain" : (value === "source") ? "Source" : value === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 		handleOnClick(1, "", value)
 	    }
 	const  handleCardNavigation = () => {
@@ -128,19 +128,20 @@ const ChartRender = (props) => {
 	    }
 
 	const handleSelectChange = (dataSet) =>{
+		fetchChartData(dataSet.value, "languagePairs", [])
 		setSelectedOption( dataSet)
 		switch (dataSet.value) {
-			case 'parallel-dataset':
+			case 'parallel-corpus':
 				 setTitle("Number of parallel sentences per language with English")
 				 break;
-			case 'monolingual-dataset':
+			case 'monolingual-corpus':
 				 setTitle('Number of sentences per language')
 				 break;
-			case 'ASR/TTS-dataset':
-				 setTitle("Numer of audio hours per language")
+			case 'asr-corpus':
+				 setTitle("Number of audio hours per language")
 				 break;
-			case 'OCR-dataset':
-				setTitle("Numer of images per script")
+			case 'ocr-corpus':
+				setTitle("Number of images per script")
 				break;
 			default:
 				setTitle("")
