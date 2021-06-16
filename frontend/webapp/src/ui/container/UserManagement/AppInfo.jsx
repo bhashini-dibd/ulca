@@ -16,14 +16,15 @@ function AppInfo(props) {
         <Typography className={classes.subTitle}>
           Universal Language Contribution APIs
         </Typography>
-        <Typography className={classes.body}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris .
+        <Typography className={classes.sub}>
+        A MeitY initiative.
         </Typography>
-        <Button variant="contained" className={classes.expButton}>
+        <Typography className={classes.body}>
+        ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with an user interface for interacting with the datasets.
+        </Typography>
+        {/* <Button variant="contained" className={classes.expButton}>
           Explore
-        </Button>
+        </Button> */}
       </Grid>
     </Hidden>
   );

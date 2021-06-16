@@ -22,7 +22,7 @@ export default class SubmitSearchRequest extends API {
         return {
             datasetType: this.datasetType,
             criteria: {
-                sourceLanguage: this.src !== null ? this.src : this.tgt,
+                sourceLanguage: this.src !== null ? [this.src] : this.tgt,
                 targetLanguage: this.src === null ? null : this.tgt,
                 domain: this.domain,
                 collectionMethod: this.collectionMethod
