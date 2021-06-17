@@ -11,6 +11,7 @@ const HeaderStyles = (theme) => ({
   },
   title: {
     color: 'white',
+    marginLeft:"-6px",
     "@media (max-width:670px)": {
       display: 'none'
     },

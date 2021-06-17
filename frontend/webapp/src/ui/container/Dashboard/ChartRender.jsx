@@ -96,9 +96,11 @@ const ChartRender = (props) => {
 			targetLanguage 	=	{ "type": "PARAMS", "value": "" };
 			
 		}
+
+		debugger
 		setSelectedLanguage(selectedLanguage ? selectedLanguage :event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "type": "PARAMS", "sourceLanguage" : sourceLanguage,"targetLanguage" : targetLanguage, event}])
+		return ([{ "type": "PARAMS", "sourceLanguage" : sourceLanguage,"targetLanguage" : targetLanguage},event])
 	}
 
 	const handleOnClick= (value, event, filter) =>  {
