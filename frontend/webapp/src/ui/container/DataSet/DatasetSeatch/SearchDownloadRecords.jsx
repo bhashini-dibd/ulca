@@ -259,6 +259,55 @@ const SearchAndDownloadRecords = (props) => {
 
         )
     }
+
+    const renderFilterByOptions = (id, options, filter, value, label) => {
+        return (
+            <Autocomplete
+                id={id}
+                options={options}
+                filter={filter}
+                value={value}
+                handleOnChange={handleFilterByChange}
+                label={label}
+            />
+
+        )
+    }
+    const renderTexfield = (id, label) => {
+        return (
+            <TextField className={classes.subHeader}
+                fullWidth
+                error={srcError}
+                helperText={srcError && "Source language is mandatory"}
+                select
+                id={id}
+                label={label}
+                value={languagePair.source}
+                onChange={(event) => handleLanguagePairChange(event.target.value, 'source')}
+            >
+                {Language.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                    </MenuItem>
+                ))}
+            </TextField>
+        )
+    }
+    const renderCheckBox = (name, color, label) => {
+        return (
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={state[name]}
+                        onChange={handleCheckboxChange}
+                        name={name}
+                        color={color}
+                    />
+                }
+                label={label}
+            />
+        )
+    }
     const getTargetLang = () => {
         return Language.filter(lang => lang.value !== languagePair.source)
     }
@@ -280,23 +329,7 @@ const SearchAndDownloadRecords = (props) => {
 
                     <Typography className={classes.subHeader} variant="h6">{getTitle()}</Typography>
                     <div className={classes.subHeader}>
-                        {datasetType['parallel-corpus'] &&
-                            <TextField className={classes.subHeader}
-                                fullWidth
-                                error={srcError}
-                                helperText={srcError && "Source language is mandatory"}
-                                select
-                                id="select-source-language"
-                                label="Source Language *"
-                                value={languagePair.source}
-                                onChange={(event) => handleLanguagePairChange(event.target.value, 'source')}
-                            >
-                                {Language.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>}
+                        {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
 
                         <Autocomplete
                             id="language-target"
@@ -313,49 +346,16 @@ const SearchAndDownloadRecords = (props) => {
                     <div className={classes.subHeader}>
                         <Grid container spacing={1}>
                             <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                <Autocomplete
-                                    id="domain"
-                                    options={FilterBy.domain}
-                                    filter="domain"
-                                    value={filterBy.domain}
-                                    handleOnChange={handleFilterByChange}
-                                    label="Select Domain"
-                                />
+                                {renderFilterByOptions("domain", FilterBy.domain, "domain", filterBy.domain, "Select Domain")}
                             </Grid>
 
                         </Grid>
-                        <Autocomplete
-                            id="collection-method"
-                            options={FilterBy.collectionMethod}
-                            filter="collectionMethod"
-                            value={filterBy.collectionMethod}
-                            handleOnChange={handleFilterByChange}
-                            label="Select Collection Method"
-                        />
+                        {renderFilterByOptions("collection-method", FilterBy.collectionMethod, "collectionMethod", filterBy.collectionMethod, "Select Collection Method")}
                     </div>
 
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={state.checkedA}
-                                onChange={handleCheckboxChange}
-                                name="checkedA"
-                                color="primary"
-                            />
-                        }
-                        label="Vetted by multiple annotators"
-                    />
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={state.checkedB}
-                                onChange={handleCheckboxChange}
-                                name="checkedB"
-                                color="primary"
-                            />
-                        }
-                        label="Source sentences manually translated by multiple translators"
-                    />
+                    {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
+                    {renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
+
                     <div className={classes.clearNSubmit}>
                         <Button color="primary" onClick={clearfilter}>
                             Clear
