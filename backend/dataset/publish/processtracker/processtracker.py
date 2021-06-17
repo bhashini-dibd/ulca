@@ -1,6 +1,8 @@
 import logging
 import uuid
 from datetime import datetime
+from logging.config import dictConfig
+
 from configs.configs import pt_publish_tool, pt_search_tool, pt_delete_tool, pt_update_batch, \
     pt_inprogress_status, pt_success_status, pt_failed_status
 from .ptrepo import PTRepo
@@ -34,6 +36,7 @@ class ProcessTracker:
                 processed_count = [{"type": "failed", "typeDetails": {data["code"]: 1}, "count": 1}, {"type": "success", "count": 0}]
             details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed_count, "timeStamp": str(datetime.now())}
             task_event["details"] = details
+            log.info(f'Creating PT event for SRN -- {data["serviceRequestNumber"]}')
             repo.insert(task_event)
             event_dict[data["serviceRequestNumber"]] = (task_event, 0)
             return
@@ -92,10 +95,13 @@ class ProcessTracker:
             task_event["lastModifiedTime"] = str(datetime.now())
             tup = event_dict[data["serviceRequestNumber"]]
             if tup[1] == pt_update_batch:
+                log.info(f'Updating PT event for SRN -- {data["serviceRequestNumber"]}')
+                log.info(f'PT event -- {tup}')
                 repo.update(tup[0])
                 event_dict[data["serviceRequestNumber"]] = (task_event, 0)
             else:
                 event_dict[data["serviceRequestNumber"]] = (task_event, tup[1] + 1)
+                log.info(f'PT event LOCAL -- {tup}')
             return
         except Exception as e:
             log.exception(f'Exception while updating publish stage status to process tracker, srn -- {data["serviceRequestNumber"]} | exc -- {e}', e)
@@ -154,3 +160,37 @@ class ProcessTracker:
         if result:
             return result[0]
         return result
+
+
+# Log config
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})

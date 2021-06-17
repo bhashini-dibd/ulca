@@ -1,6 +1,7 @@
 import json
 import logging
 import random
+from logging.config import dictConfig
 
 from kafka import KafkaProducer
 from configs.configs import kafka_bootstrap_server_host, ulca_dataset_topic_partitions
@@ -34,3 +35,37 @@ class Producer:
             producer.flush()
         except Exception as e:
             log.exception(f'Exception in dataset publish while producing: {str(e)}', e)
+
+
+# Log config
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})
