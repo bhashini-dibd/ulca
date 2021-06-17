@@ -87,18 +87,6 @@ class SummarizeDatasetModel(object):
                 
                 log.info("Query executed : {}".format(query))
 
-
-                """
-                [{'total': 3, 'sourceLanguage': 'en', 'targetLanguage': 'bn', 'isDelete': 'false'},
-                 {'total': 10, 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'isDelete': 'false'}, 
-                 {'total': 1, 'sourceLanguage': 'en', 'targetLanguage': 'hi', 'isDelete': 'true'},
-                  {'total': 1, 'sourceLanguage': 'en', 'targetLanguage': 'mr', 'isDelete': 'false'},
-                   {'total': 1, 'sourceLanguage': 'en', 'targetLanguage': 'pa', 'isDelete': 'false'},
-                    {'total': 1, 'sourceLanguage': 'en', 'targetLanguage': 'ta', 'isDelete': 'false'},
-                     {'total': 1, 'sourceLanguage': 'en', 'targetLanguage': 'te', 'isDelete': 'false'}, 
-                     {'total': 3, 'sourceLanguage': 'en', 'targetLanguage': 'ur', 'isDelete': 'false'}]
-                """
-
                 result          = collection.execute(text(query)).fetchall()
                 result_parsed   =([{**row} for row in result])
                 log.info("Query Result : {}".format(result_parsed))
@@ -128,7 +116,7 @@ class SummarizeDatasetModel(object):
                             aggs[item[check]][False] += item["total"]
                         else:
                             aggs[item[check]][True] += item["total"]
-                print(aggs,"AGGGGGGGGGGGGGGGG111111111")
+                # print(aggs)
                 aggs_parsed ={}
                 for val in aggs:
                     agg = aggs[val]
@@ -175,7 +163,7 @@ class SummarizeDatasetModel(object):
                         aggs[item[grp_val]] = fields
                     else:
                         aggs[item[grp_val]]["count"] += item["total"]
-                        if item["isDelete"] == 'false':
+                        if item["isDelete"] == "false":
                             aggs[item[grp_val]][False] += item["total"]
                         else:
                             aggs[item[grp_val]][True] += item["total"]
@@ -234,7 +222,7 @@ class SummarizeDatasetModel(object):
                         aggs[item[grp_val]] = fields
                     else:
                         aggs[item[grp_val]]["count"] += item["total"]
-                        if item["isDelete"] == 'false':
+                        if item["isDelete"] == "false":
                             aggs[item[grp_val]][False] += item["total"]
                         else:
                             aggs[item[grp_val]][True] += item["total"]
