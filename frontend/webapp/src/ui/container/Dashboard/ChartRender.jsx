@@ -222,7 +222,7 @@ const ChartRender = (props) => {
 						<YAxis type="number" dx	=	{0} />
 						<CartesianGrid horizontal = {true} vertical = {false} textAnchor = {"middle"} />
 						<Tooltip cursor={{fill: 'none'}}/>
-						<Bar dataKey = "value" cursor ="pointer" radius = {[4, 4, 0, 0]} maxBarSize = {30} onClick={(event) => { handleOnClick(page + 1, event) }}>
+						<Bar dataKey = "value" cursor ="pointer" radius = {[4, 4, 0, 0]} maxBarSize = {65} onClick={(event) => { handleOnClick(page + 1, event) }}>
 							{
 								DashboardReport.length > 0 && DashboardReport.map((entry, index) => {
 									const color 	= 	colors[index < 9 ? index : index % 10]
