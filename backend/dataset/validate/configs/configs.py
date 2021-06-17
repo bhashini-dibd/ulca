@@ -3,11 +3,18 @@ import os
 app_host = os.environ.get('ULCA_DS_VALIDATE_HOST', '0.0.0.0')
 app_port = os.environ.get('ULCA_DS_VALIDATE_PORT', 5001)
 
+redis_server_host = os.environ.get('REDIS_URL', 'localhost')
+redis_server_port = os.environ.get('REDIS_PORT', 6379)
+redis_server_pass = os.environ.get('REDIS_PASS', None)
+
 parallel_corpus_config_path = os.environ.get('ULCA_VALIDATE_PARALLEL_CONFIG', 'configs/parallel_corpus_config.json')
 asr_config_path = os.environ.get('ULCA_VALIDATE_ASR_CONFIG', 'configs/asr_config.json')
 ocr_config_path = os.environ.get('ULCA_VALIDATE_OCR_CONFIG', 'configs/ocr_config.json')
 monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', 'configs/monolingual_config.json')
 
+pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 100)
+if isinstance(pt_update_batch, str):
+    pt_update_batch = eval(pt_update_batch)
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
 validate_input_topic = os.environ.get('KAFKA_ULCA_DS_VALIDATE_IP_TOPIC', 'ulca-ds-validate-ip-v0')
