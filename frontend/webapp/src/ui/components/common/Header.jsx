@@ -174,7 +174,7 @@ const Header = (props) => {
                     className={classes.styledMenu}
                   >
                     <MenuItem
-                      className={classes.styledMenu}
+                     
                       onClick={() => {
                         localStorage.removeItem('userInfo')
                         handleMenuItemClick('/user/login')}}

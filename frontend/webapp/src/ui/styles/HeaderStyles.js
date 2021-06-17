@@ -46,7 +46,8 @@ const HeaderStyles = (theme) => ({
     color: 'white'
   },
   styledMenu: {
-    padding:"15px"
+    padding:"9px",
+    marginTop:"10px"
     // borderTop: "1px solid #D6D6D6"
   },
   profileName: {
