@@ -4,7 +4,7 @@ from logging.config import dictConfig
 
 import redis
 
-from configs.configs import ulca_db_cluster, pt_db, pt_task_collection, redis_server_host, redis_server_port
+from configs.configs import ulca_db_cluster, pt_db, pt_task_collection, redis_server_host, redis_server_port, redis_server_pass
 
 import pymongo
 log = logging.getLogger('file')
@@ -19,13 +19,14 @@ class PTRepo:
 
     def instantiate(self):
         global mongo_instance
-        log.info(f'getting mongo connection............')
         client = pymongo.MongoClient(ulca_db_cluster)
         mongo_instance = client[pt_db][pt_task_collection]
         return mongo_instance
 
     def get_mongo_instance(self):
+        global mongo_instance
         if not mongo_instance:
+            log.info(f'getting mongo connection............')
             return self.instantiate()
         else:
             return mongo_instance
@@ -63,12 +64,13 @@ class PTRepo:
     # Initialises and fetches redis client
     def redis_instantiate(self):
         global redis_client
-        log.info(f'getting redis connection............')
-        redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=3)
+        redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=0, password=redis_server_pass)
         return redis_client
 
     def get_redis_instance(self):
+        global redis_client
         if not redis_client:
+            log.info(f'getting redis connection............')
             return self.redis_instantiate()
         else:
             return redis_client
