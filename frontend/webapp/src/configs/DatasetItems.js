@@ -1,4 +1,4 @@
-const DatasetItems = [
+export const DatasetItems = [
 
     { value: 'parallel-corpus', label: 'Parallel Dataset' },
     { value: 'monolingual-corpus', label: 'Monolingual Dataset' },

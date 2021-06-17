@@ -27,59 +27,10 @@ const MySearches = (props) => {
                 dispatch(APITransport(userObj));
         }
 
-        const getMuiTheme = () => createMuiTheme({
-                overrides: {
-                        MuiTableRow:{root:{cursor: 'pointer'}},
-                        MuiTableCell: {
-                                head    : {
-                                        padding: '6px 6px 6px 24px',
-                                        backgroundColor : "#c7c6c68a !important",
-                                        fontWeight      :"bold",
-                                        
-                                        
-                                }
-                        },
-                        MUIDataTableBodyCell:{
-                                root:{
-                                        padding: '6px 6px 6px .8rem', 
-                                }
-                        },
-                        MUIDataTableHeadCell: {
-                                root: {
-                                        
-                                  '&:nth-child(1)': {
-                                    width: "50%"
-                                  }
-                                }
-                              },
-                              MuiButton :{
-                                root:{
-                                  fontWeight      :"bold"
-                                }
-                        },
-                        // MuiToolbar: {
-                        //          root: { 
-                        //                  display: "none" 
-                        //                 } 
-                        //         },
-                        MuiPaper: {
-                                root:{
-                                        boxShadow       : 'none !important',
-                                        borderRadius    : 0,
-                                        border          : "1px solid rgb(224 224 224)"
-                                }
-                        }
-                },
-        
-        });
+       
 
         const fetchHeaderButton= () => {
-            return (
-                    <div className={classes.headerButtons}>
-                            {/* <Typography  variant="h5" >My Searches</Typography> */}
-                            <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() =>MySearchListApi() }><Cached className ={classes.iconStyle}/>Refresh</Button>
-                     </div>
-            )
+            return <Button color={"primary" } size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() =>MySearchListApi() }><Cached className ={classes.iconStyle}/>Refresh</Button>
     }
 
     const renderAction = (rowData) =>{
@@ -147,12 +98,14 @@ const MySearches = (props) => {
                         pagination      :       { rowsPerPage     : "Rows per page"},
                         options         :       { sortDirection   : "desc" },
                 },
+                customToolbar: fetchHeaderButton,
                 displaySelectToolbar    :       false,
                 fixedHeader             :       false,
-                filterType              :       "checkbox",
+                filterType              :       false,
                 download                :       false,
                 print                   :       false,
                 filter                  :       false,
+                viewColumns     : false,
                 selectableRows          :       "none",
 
 
@@ -165,15 +118,14 @@ const MySearches = (props) => {
                         <div className  = {classes.breadcrum}>
                                 <BreadCrum links = {[UrlConfig.dataset]} activeLink = "My Searches" />
                         </div>
-                        {fetchHeaderButton()} 
-                        <MuiThemeProvider theme = {getMuiTheme()}>  
+
                                 <MUIDataTable
                                         title   =       {`My Searches`}
                                         data    =       {detailedReport.responseData}
                                         columns =               {columns}
                                         options ={options}
                                 />
-                        </MuiThemeProvider>
+
                         
                 </div>
         );

@@ -6,22 +6,53 @@ import { createMuiTheme } from "@material-ui/core/styles";
 const themeDefault = createMuiTheme({
   typography: {
     fontFamily: '"Lato"',
-    font: "normal normal normal 14px/17px Lato",
-    letterSpacing: "0px",
-    fontSize: 13,
+    fontWeight: "600",
+    
   },
   overrides: {
+    MuiTableRow:{root:{cursor: 'pointer'}},
+    MuiTableCell: {
+      head: {
+              padding: '.5rem .5rem .5rem 1.5rem',
+              backgroundColor : "#F8F8FA !important",
+              marginLeft:"25px",
+              letterSpacing:"0.74",
+              fontWeight      :"bold"
+             
+      }
+},
+MUIDataTableHeadCell: {
+  root: {
+          
+    '&:nth-child(1)': {
+      width: "50%"
+    },
+    
+  }
+},
+MuiPaper: {
+  root:{
+          boxShadow       : 'none !important',
+          borderRadius    : 0,
+          border          : "1px solid rgb(224 224 224)"
+  }
+},
+
+MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform: "capitalize"}},
     MuiButton: {
       label: {
         textTransform: "capitalize",
-        fontWeight: "normal",
+        fontWeight: "600",
         lineHeight: "1.14",
-        letterSpacing: "1.25px",
+        letterSpacing:"0.14px",
         textAlign: "center",
         height: "26px"
       },
     },
   },
+
+  
+  
 
   palette: {
     primary: {
