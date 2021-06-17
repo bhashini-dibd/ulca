@@ -4,9 +4,8 @@ import logging
 import os
 import uuid
 from datetime import datetime
-from logging.config import dictConfig
 from configs.configs import error_event_input_topic, publish_error_code, shared_storage_path, pt_inprogress_status, \
-    pt_success_status, aws_error_prefix, pt_publish_tool
+     aws_error_prefix, pt_publish_tool
 from kafkawrapper.producer import Producer
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
@@ -118,36 +117,3 @@ class ErrorEvent:
         log.info(f'Error report uploaded to s3 for SRN -- {srn}')
         os.remove(file)
         return error_record
-
-# Log config
-dictConfig({
-    'version': 1,
-    'formatters': {'default': {
-        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
-    }},
-    'handlers': {
-        'info': {
-            'class': 'logging.FileHandler',
-            'level': 'DEBUG',
-            'formatter': 'default',
-            'filename': 'info.log'
-        },
-        'console': {
-            'class': 'logging.StreamHandler',
-            'level': 'DEBUG',
-            'formatter': 'default',
-            'stream': 'ext://sys.stdout',
-        }
-    },
-    'loggers': {
-        'file': {
-            'level': 'DEBUG',
-            'handlers': ['info', 'console'],
-            'propagate': ''
-        }
-    },
-    'root': {
-        'level': 'DEBUG',
-        'handlers': ['info', 'console']
-    }
-})
