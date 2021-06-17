@@ -66,26 +66,55 @@ const ChartRender = (props) => {
 		})
 	}
 
+	const fetchParams = (event ) => {
+		var sourceLanguage = ""
+		let targetLanguage = ""
+		if(selectedOption.value ===	"parallel-corpus"){
+			 sourceLanguage =  	{ "type": "PARAMS", "value": "en" };
+			targetLanguage 	=	{ "type": "PARAMS", "value": (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)}
+		}
+		else{
+			sourceLanguage =  	{ "type": "PARAMS", "value": (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)};
+			targetLanguage 	=	{ "type": "PARAMS", "value": "" };
+			
+		}
+		setSelectedLanguage(selectedLanguage ? selectedLanguage :event && event.hasOwnProperty("_id") && event._id)
+		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
+		return ([{ "type": "PARAMS", "sourceLanguage" : sourceLanguage,"targetLanguage" : targetLanguage}])
+	}
+	
+	const fetchNextParams = (eventValue ) => {
+		var sourceLanguage = ""
+		let targetLanguage = ""
+		let event			=	{ "type": "PARAMS", "value": eventValue && eventValue.hasOwnProperty("_id") && eventValue._id } 
+		if(selectedOption.value ===	"parallel-corpus"){
+			 sourceLanguage =  	{ "type": "PARAMS", "value": "en" };
+			targetLanguage 	=	{ "type": "PARAMS", "value": selectedLanguage}
+			
+		}
+		else{
+			sourceLanguage =  	{ "type": "PARAMS", "value": selectedLanguage};
+			targetLanguage 	=	{ "type": "PARAMS", "value": "" };
+			
+		}
+		setSelectedLanguage(selectedLanguage ? selectedLanguage :event && event.hasOwnProperty("_id") && event._id)
+		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
+		return ([{ "type": "PARAMS", "sourceLanguage" : sourceLanguage,"targetLanguage" : targetLanguage, event : event}])
+	}
+
 	const handleOnClick= (value, event, filter) =>  {
-		// if (event && event.hasOwnProperty("label") && event.label === "Others") {
-		//     let others = this.props.dataValues.slice(7, this.props.dataValues.length)
-		//     this.setState({
-		// 	dataSetValues: others,
-		// 	cardNavigation: true
-		//     })
-		// } else {
-			debugger
+
 		    switch (value) {
 			case 1:
+				// fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : (event && event.hasOwnProperty("_id")) ? event._id : "" } }])
 				
-				fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : (event && event.hasOwnProperty("_id")) ? event._id : "" } }])
+				fetchChartData(selectedOption.value,filter ? filter : filterValue, fetchParams(event ))
 				setPage(value)
 				setTitle( `English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label }  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
-				setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
-				setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
+				
 				break;
 			case 2:
-				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage } }, { "type": "PARAMS", "value": event && event.hasOwnProperty("_id") && event._id }])
+				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", fetchNextParams(event))
 				setPage(value)
 				setFilterValue('domains')
 				setTitle( `English-${selectedLanguageName} ${selectedOption.label} `)
@@ -174,11 +203,10 @@ const ChartRender = (props) => {
 							value   	=	{selectedOption}
 							onChange	=	{(value)=>{handleSelectChange(value)}}
 							options		=	{options}
+							isDisabled	= {page!== 0 ? true : false}
 					/>
 					{page === 1 && fetchLanuagePairButtons()}
-					{/* <Button color={"primary" } size="medium" variant="outlined" className={classes.filterButton} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/>Filter</Button>
-					<Button color={"primary" } size="medium" variant="outlined" className={classes.filterButtonIcon} onClick={() => this.handleLanguageChange("domain")}><FilterList className ={classes.iconStyle}/></Button> */}
-				</div>
+					</div>
 				<div className={classes.title}>
 					<Typography value="" variant="h6"> {title} </Typography>
 				</div>
