@@ -1,12 +1,10 @@
-import hashlib
 import logging
 import multiprocessing
 import threading
 import time
-from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, offset, limit, aws_ocr_prefix, user_mode_pseudo, \
+from configs.configs import ds_batch_size, offset, limit, aws_ocr_prefix, user_mode_pseudo, \
     sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, ocr_search_ignore_keys
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
@@ -39,7 +37,7 @@ class OCRService:
             record = request["record"]
             ip_data = [record]
             batch_data, error_list, pt_list = [], [], []
-            total, count, updates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
+            total, count, updates, batch = len(ip_data), 0, 0, ds_batch_size
             if ip_data:
                 func = partial(self.get_enriched_ocr_data, metadata=metadata)
                 pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)

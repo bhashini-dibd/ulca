@@ -18,12 +18,14 @@ class PTRepo:
         pass
 
     def instantiate(self):
+        global mongo_instance
         client = pymongo.MongoClient(ulca_db_cluster)
         mongo_instance = client[pt_db][pt_task_collection]
         return mongo_instance
 
     def get_mongo_instance(self):
         if not mongo_instance:
+            log.info(f'getting mongo connection............')
             return self.instantiate()
         else:
             return mongo_instance
@@ -60,11 +62,13 @@ class PTRepo:
 
     # Initialises and fetches redis client
     def redis_instantiate(self):
+        global redis_client
         redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=3)
         return redis_client
 
     def get_redis_instance(self):
         if not redis_client:
+            log.info(f'getting redis connection............')
             return self.redis_instantiate()
         else:
             return redis_client
@@ -99,4 +103,37 @@ class PTRepo:
         except Exception as e:
             log.exception(f'Exception in redis search: {e}', e)
             return None
+
+# Log config
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})
 

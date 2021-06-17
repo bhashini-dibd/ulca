@@ -5,7 +5,7 @@ import threading
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import parallel_ds_batch_size, no_of_parallel_processes, offset, limit, \
+from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, \
     sample_size, mono_non_tag_keys, mono_immutable_keys, dataset_type_monolingual, user_mode_pseudo
 from repository.monolingual import MonolingualRepo
 from utils.datasetutils import DatasetUtils
@@ -35,7 +35,7 @@ class MonolingualService:
             record = request["record"]
             ip_data = [record]
             batch_data, error_list, pt_list = [], [], []
-            total, count, updates, batch = len(ip_data), 0, 0, parallel_ds_batch_size
+            total, count, updates, batch = len(ip_data), 0, 0, ds_batch_size
             if ip_data:
                 func = partial(self.get_enriched_data, metadata=metadata)
                 pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)

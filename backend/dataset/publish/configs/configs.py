@@ -18,24 +18,18 @@ if isinstance(offset, str):
 limit = os.environ.get('ULCA_DATASET_DEFAULT_LIMIT', None)
 if isinstance(limit, str):
     offset = eval(limit)
-parallel_ds_batch_size = os.environ.get('ULCA_PARALLEL_DS_BATCH_SIZE', 100000)
-if isinstance(parallel_ds_batch_size, str):
-    parallel_ds_batch_size = eval(parallel_ds_batch_size)
-asr_ds_batch_size = os.environ.get('ULCA_ASR_DS_BATCH_SIZE', 1000)
-if isinstance(asr_ds_batch_size, str):
-    asr_ds_batch_size = eval(asr_ds_batch_size)
-ocr_ds_batch_size = os.environ.get('ULCA_OCR_DS_BATCH_SIZE', 1000)
-if isinstance(ocr_ds_batch_size, str):
-    ocr_ds_batch_size = eval(ocr_ds_batch_size)
+ds_batch_size = os.environ.get('ULCA_DS_BATCH_SIZE', 1000)
+if isinstance(ds_batch_size, str):
+    ds_batch_size = eval(ds_batch_size)
+pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 100)
+if isinstance(pt_update_batch, str):
+    pt_update_batch = eval(pt_update_batch)
 no_of_parallel_processes = os.environ.get('PUBLISH_PARALLEL_PRC', 1)
 if isinstance(no_of_parallel_processes, str):
     no_of_parallel_processes = eval(no_of_parallel_processes)
 sample_size = os.environ.get('ULCA_DATASET_SAMPLE_SIZE', 10)
 if isinstance(sample_size, str):
     sample_size = eval(sample_size)
-pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 100)
-if isinstance(pt_update_batch, str):
-    pt_update_batch = eval(pt_update_batch)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
 
 asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType",
