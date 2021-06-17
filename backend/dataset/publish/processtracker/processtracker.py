@@ -21,9 +21,9 @@ class ProcessTracker:
         log.info(f'Publishing pt event for SUBMIT -- {data["serviceRequestNumber"]}')
         global event_dict
         try:
-            task_event = self.search_task_event(data, pt_publish_tool)
+            task_event = event_dict[data["serviceRequestNumber"]]
             if task_event:
-                if task_event["status"] == pt_inprogress_status:
+                if task_event[0]["status"] == pt_inprogress_status:
                     return self.update_task_event(data, task_event)
                 else:
                     log.error(f'Record received for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
@@ -52,9 +52,7 @@ class ProcessTracker:
             if task_event:
                 tup = event_dict[data["serviceRequestNumber"]]
                 if tup:
-                    if tup[1] != 0:
-                        task_event = tup[0]
-                        repo.update(tup[0])
+                    task_event = tup[0]
                 if task_event["status"] == pt_inprogress_status:
                     task_event["status"] = pt_success_status
                     task_event["endTime"] = task_event["lastModifiedTime"] = str(datetime.now())
@@ -70,9 +68,10 @@ class ProcessTracker:
             log.exception(f'Exception while updating eof at publish stage to process tracker, srn -- {data["serviceRequestNumber"]} | exc -- {e}', e)
             return None
 
-    def update_task_event(self, data, task_event):
+    def update_task_event(self, data, task_event_tup):
         global event_dict
         try:
+            task_event = task_event_tup[0]
             processed = task_event["details"]["processedCount"]
             if data["status"] == "SUCCESS":
                 for value in processed:
@@ -93,15 +92,13 @@ class ProcessTracker:
             details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed, "timeStamp": str(datetime.now())}
             task_event["details"] = details
             task_event["lastModifiedTime"] = str(datetime.now())
-            tup = event_dict[data["serviceRequestNumber"]]
-            if tup[1] == pt_update_batch:
+            task_event_tup[0] = task_event
+            if task_event_tup[1] == pt_update_batch:
                 log.info(f'Updating PT event for SRN -- {data["serviceRequestNumber"]}')
-                log.info(f'PT event -- {tup}')
-                repo.update(tup[0])
-                event_dict[data["serviceRequestNumber"]] = (task_event, 0)
+                repo.update(task_event_tup[0])
+                event_dict[data["serviceRequestNumber"]] = (task_event_tup, 0)
             else:
-                event_dict[data["serviceRequestNumber"]] = (task_event, tup[1] + 1)
-                log.info(f'PT event LOCAL -- {tup}')
+                event_dict[data["serviceRequestNumber"]] = (task_event_tup, task_event_tup[1] + 1)
             return
         except Exception as e:
             log.exception(f'Exception while updating publish stage status to process tracker, srn -- {data["serviceRequestNumber"]} | exc -- {e}', e)
