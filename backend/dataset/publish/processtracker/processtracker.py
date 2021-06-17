@@ -36,6 +36,7 @@ class ProcessTracker:
             task_event["details"] = details
             log.info(f'Creating PT event for SRN -- {data["serviceRequestNumber"]}')
             repo.insert(task_event)
+            del task_event["_id"]
             repo.redis_upsert(f'{data["serviceRequestNumber"]}|{pt_publish_tool}', {"taskEvent": task_event, "count": 1})
             return
         except Exception as e:
