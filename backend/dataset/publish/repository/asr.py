@@ -2,7 +2,7 @@ import logging
 from collections import OrderedDict
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import db_cluster, db, asr_collection, asr_ds_batch_size, offset, limit
+from configs.configs import db_cluster, db, asr_collection
 
 import pymongo
 log = logging.getLogger('file')
