@@ -18,6 +18,7 @@ const FileUploadStyles = (theme) => ({
   },
  
   select: {
+    marginLeft:"10px",
     width: "20%",
     minWidth: "10rem",
     color:"grey"

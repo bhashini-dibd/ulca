@@ -194,8 +194,8 @@ const ChartRender = (props) => {
 					{page!==0 && <><Button color="primary" size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
 					<div className={classes.seperator}></div></>}
 					
-					<Typography 	variant   	=	"h5" component = "h3" 
-							className 	= 	{classes.Typography}> Dataset Type :	</Typography>
+					<Typography 	variant   	=	"h5" 
+							> Dataset Type :	</Typography>
 					<Select 	className 	= 	{classes.select} 
 							styles 		= 	{customStyles} color= "primary"
 							value   	=	{selectedOption}
