@@ -2,6 +2,8 @@ import os
 
 app_host = os.environ.get('ULCA_DS_PUBLISH_HOST', '0.0.0.0')
 app_port = os.environ.get('ULCA_DS_PUBLISH_PORT', 5001)
+redis_server_host = os.environ.get('REDIS_URL', 'localhost')
+redis_server_port = os.environ.get('REDIS_PORT', 6379)
 
 db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://localhost:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")

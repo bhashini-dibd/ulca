@@ -11,7 +11,6 @@ log = logging.getLogger('file')
 
 mongo_instance = None
 repo = PTRepo()
-event_dict = {}
 
 class ProcessTracker:
     def __init__(self):
@@ -19,14 +18,13 @@ class ProcessTracker:
 
     def create_task_event(self, data):
         log.info(f'Publishing pt event for SUBMIT -- {data["serviceRequestNumber"]}')
-        global event_dict
         try:
-            if data["serviceRequestNumber"] in event_dict.keys():
-                task_event = event_dict[data["serviceRequestNumber"]]
-                if task_event[0]["status"] == pt_inprogress_status:
-                    return self.update_task_event(data, task_event)
+            task_event_entry = repo.redis_search([f'{data["serviceRequestNumber"]}|{pt_publish_tool}'])
+            if task_event_entry:
+                if task_event_entry["taskEvent"]["status"] == pt_inprogress_status:
+                    return self.update_task_event(data, task_event_entry)
                 else:
-                    log.error(f'Record received for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
+                    log.error(f'Record received for a {task_event_entry["taskEvent"]["status"]} SRN -- {data["serviceRequestNumber"]}')
                     return
             task_event = {"id": str(uuid.uuid4()), "tool": pt_publish_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
                           "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
@@ -38,21 +36,20 @@ class ProcessTracker:
             task_event["details"] = details
             log.info(f'Creating PT event for SRN -- {data["serviceRequestNumber"]}')
             repo.insert(task_event)
-            event_dict[data["serviceRequestNumber"]] = (task_event, 1)
+            repo.redis_upsert(f'{data["serviceRequestNumber"]}|{pt_publish_tool}', {"taskEvent": task_event, "count": 1})
             return
         except Exception as e:
             log.exception(e)
             return
 
     def end_processing(self, data):
-        global event_dict
         try:
             log.error(f'EOF received for SRN -- {data["serviceRequestNumber"]}')
             task_event = self.search_task_event(data, pt_publish_tool)
             if task_event:
-                tup = event_dict[data["serviceRequestNumber"]]
-                if tup:
-                    task_event = tup[0]
+                task_event_entry = repo.redis_search([f'{data["serviceRequestNumber"]}|{pt_publish_tool}'])
+                if task_event_entry:
+                    task_event = task_event_entry["taskEvent"]
                 if task_event["status"] == pt_inprogress_status:
                     task_event["status"] = pt_success_status
                     task_event["endTime"] = task_event["lastModifiedTime"] = str(datetime.now())
@@ -62,22 +59,21 @@ class ProcessTracker:
                     log.info(f'EOF received for a {task_event["status"]} SRN -- {data["serviceRequestNumber"]}')
             else:
                 log.error(f'EOF received for a non existent SRN -- {data["serviceRequestNumber"]}')
-            event_dict.pop(data["serviceRequestNumber"])
+            repo.redis_delete(f'{data["serviceRequestNumber"]}|{pt_publish_tool}')
             return None
         except Exception as e:
             log.exception(f'Exception while updating eof at publish stage to process tracker, srn -- {data["serviceRequestNumber"]} | exc -- {e}', e)
             return None
 
-    def update_task_event(self, data, task_event_tup):
-        global event_dict
+    def update_task_event(self, data, task_event_entry):
         try:
             count = 1
-            if task_event_tup[1] == pt_update_batch:
+            if task_event_entry["count"] == pt_update_batch:
                 log.info(f'Updating PT event for SRN -- {data["serviceRequestNumber"]}')
-                repo.update(task_event_tup[0])
+                repo.update(task_event_entry["taskEvent"])
             else:
-                count = task_event_tup[1] + 1
-            task_event = task_event_tup[0]
+                count = task_event_entry["count"] + 1
+            task_event = task_event_entry["taskEvent"]
             processed = task_event["details"]["processedCount"]
             if data["status"] == "SUCCESS":
                 for value in processed:
@@ -98,7 +94,7 @@ class ProcessTracker:
             details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed, "timeStamp": str(datetime.now())}
             task_event["details"] = details
             task_event["lastModifiedTime"] = str(datetime.now())
-            event_dict[data["serviceRequestNumber"]] = (task_event, count)
+            repo.redis_upsert(f'{data["serviceRequestNumber"]}|{pt_publish_tool}', {"taskEvent": task_event, "count": count})
             return
         except Exception as e:
             log.exception(f'Exception while updating publish stage status to process tracker, srn -- {data["serviceRequestNumber"]} | exc -- {e}', e)

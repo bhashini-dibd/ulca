@@ -1,11 +1,16 @@
+import json
 import logging
 from logging.config import dictConfig
-from configs.configs import ulca_db_cluster, pt_db, pt_task_collection
+
+import redis
+
+from configs.configs import ulca_db_cluster, pt_db, pt_task_collection, redis_server_host, redis_server_port
 
 import pymongo
 log = logging.getLogger('file')
 
 
+redis_client = None
 mongo_instance = None
 
 class PTRepo:
@@ -51,3 +56,47 @@ class PTRepo:
         for record in res:
             result.append(record)
         return result
+
+
+    # Initialises and fetches redis client
+    def redis_instantiate(self):
+        redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=3)
+        return redis_client
+
+    def get_redis_instance(self):
+        if not redis_client:
+            return self.redis_instantiate()
+        else:
+            return redis_client
+
+    def redis_upsert(self, key, value):
+        try:
+            client = self.get_redis_instance()
+            client.set(key, json.dumps(value))
+            return True
+        except Exception as e:
+            log.exception(f'Exception in redis upsert: {e}', e)
+            return None
+
+    def redis_delete(self, key):
+        try:
+            client = self.get_redis_instance()
+            client.delete(key)
+            return 1
+        except Exception as e:
+            log.exception(f'Exception in redis delete: {e}', e)
+            return None
+
+    def redis_search(self, key_list):
+        try:
+            client = self.get_redis_instance()
+            result = []
+            for key in key_list:
+                val = client.get(key)
+                if val:
+                    result.append(json.loads(val))
+            return result
+        except Exception as e:
+            log.exception(f'Exception in redis search: {e}', e)
+            return None
+
