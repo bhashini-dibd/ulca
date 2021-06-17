@@ -21,6 +21,7 @@ class ProcessTracker:
         try:
             task_event_entry = repo.redis_search([f'{data["serviceRequestNumber"]}|{pt_publish_tool}'])
             if task_event_entry:
+                task_event_entry = task_event_entry[0]
                 if task_event_entry["taskEvent"]["status"] == pt_inprogress_status:
                     return self.update_task_event(data, task_event_entry)
                 else:
@@ -50,6 +51,7 @@ class ProcessTracker:
             if task_event:
                 task_event_entry = repo.redis_search([f'{data["serviceRequestNumber"]}|{pt_publish_tool}'])
                 if task_event_entry:
+                    task_event_entry = task_event_entry[0]
                     task_event = task_event_entry["taskEvent"]
                 if task_event["status"] == pt_inprogress_status:
                     task_event["status"] = pt_success_status
