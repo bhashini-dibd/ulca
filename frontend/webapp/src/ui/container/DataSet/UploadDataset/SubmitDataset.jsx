@@ -182,12 +182,12 @@ let apiObj = new SubmitDatasetApi(dataset)
 
     return (
         <div>
-            <div className={classes.divStyle}>
+            <div >
                 <div className={classes.breadcrum}>
                     <BreadCrum links={[url]} activeLink="Submit Dataset" />
                 </div>
-                <Paper elevation={3} className={classes.paper}>
-                    <Grid container className={classes.title}>
+                <Paper elevation={3} className={classes.divStyle}>
+                    <Grid container >
                         <Grid item>
                             <Typography variant="h5"><strong>Submit Dataset</strong></Typography>
                         </Grid>

@@ -1,17 +1,13 @@
 const HeaderStyles = (theme) => ({
 
-  root: {
-    background: "#eeeeee",
-    height: window.innerHeight
-  },
-  drawerHeader: {
-    display: "flex",
-    flexDirection: "row",
-  },
   toolbar: {
-    minHeight: "56px",
-    color: '#000000',
-    padding: '0'
+    minHeight:"56px",
+    maxWidth: "1272px",
+    width : "100%",
+    margin :"0 auto",
+    display: 'flex',
+    alignItems: 'center',
+    padding:"0"
   },
   title: {
     color: 'white',
@@ -29,7 +25,6 @@ const HeaderStyles = (theme) => ({
     maxHeight: '100%'
   },
   menu: {
-    margin: '0% 2%',
     width: '100%',
     display: 'flex'
   },
@@ -51,7 +46,7 @@ const HeaderStyles = (theme) => ({
     color: 'white'
   },
   styledMenu: {
-    fontSize: '1rem',
+    padding:"15px"
     // borderTop: "1px solid #D6D6D6"
   },
   profileName: {

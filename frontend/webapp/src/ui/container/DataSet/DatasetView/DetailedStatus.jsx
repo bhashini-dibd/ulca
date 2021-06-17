@@ -158,7 +158,7 @@ const DetailedStatus = (props) => {
 
         const { classes }               = props;
         return (
-                <div className  =       {classes.divStyle}>
+                <div>
                         <div className  = {classes.breadcrum}>
                                 <BreadCrum links = {[UrlConfig.dataset,UrlConfig.myContribution]} activeLink = "Dataset details" />
                         </div>

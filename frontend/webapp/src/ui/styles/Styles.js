@@ -1,10 +1,15 @@
 const GlobalStyles = (theme) => ({
   container: {
-    margin: "4em 0em 0em 0em",
-    width: "100%",
+    
+    maxWidth: "1272px",
+    width : "100%",
+    margin :"5rem auto",
     // background: theme.palette.background.default,
-    fontFamily: theme.typography.fontFamily,
-    minHeight: "calc(100vh - 5em)",
+    fontFamily: theme.typography.fontFamily
+  },
+
+  headerContainer :{
+    height:"70px"
   },
   root: {
     background: "#F8F8F8",

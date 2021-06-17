@@ -1,31 +1,23 @@
 const DataSet = (theme) => ({
-    divStyle: {
-        // margin: "1.5rem 23rem 3% 17.5rem",
-        margin: '1.5rem 20% 3rem 15.5%',
-        overflow: 'auto'
-    },
-    root: {
-        padding: 0,
-        margin: "1.5rem 23rem 3% 17.5rem",
-        height: window.innerHeight,
-        overflow: 'auto'
-    },
-    paper: {
-        padding: '5%',
-    },
-    title: {
-        marginBottom: '3vh'
-    },
-    form: {
-        marginTop: '1vh',
-        width: '90%',
-    },
-    radioGroup: {
-        marginTop: '3vh',
-        paddingRight: '2vw'
-    },
-
     
+    // paper: {
+    //     padding: '5%',
+    // },
+    // title: {
+    //     marginBottom: '3vh'
+    // },
+    // form: {
+    //     marginTop: '1vh',
+    //     width: '90%',
+    // },
+    // radioGroup: {
+    //     marginTop: '3vh',
+    //     paddingRight: '2vw'
+    // },
+
+    divStyle:{
+        padding:"5% 10% 5% 10%"
+    },
 
     // typography:{fontSize:"1.1rem"},
 
@@ -110,13 +102,14 @@ const DataSet = (theme) => ({
         display: "block"
     },
     submissionIcon: {
+        
         "@media (max-width:1120px)": {
             display: 'none'
         }
     },
 
     dataSubmissionGrid: {
-        marginTop: '5%'
+        padding: '5%'
     },
     thankYouTypo: {
         marginBottom: '1.3%'

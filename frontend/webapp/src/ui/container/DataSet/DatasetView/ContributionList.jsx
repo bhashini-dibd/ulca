@@ -193,7 +193,7 @@ const ContributionList = (props) => {
 
         const { classes } = props;
         return (
-                <div className = {classes.divStyle}>
+                <div>
                         <div className = {classes.breadcrum}>
                                 <BreadCrum links={[UrlConfig.dataset]} activeLink="My Contribution" />
                         </div>

@@ -1,12 +1,5 @@
 const FileUploadStyles = (theme) => ({
-  container: {
-
-    margin: "1.5rem 20% 3rem 15.5%",
-    overflow: "auto",
-    "@media (max-width:800px)": {
-      margin: "auto"
-    }
-  },
+  
 
   breadcrum: {
     marginBottom: "1.5rem",

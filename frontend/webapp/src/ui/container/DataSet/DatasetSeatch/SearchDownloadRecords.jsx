@@ -264,7 +264,7 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     return (
-        <div className={classes.searchDivStyle}>
+        <div>
             <div className={classes.breadcrum}>
 
                 <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search & Download Records" />
