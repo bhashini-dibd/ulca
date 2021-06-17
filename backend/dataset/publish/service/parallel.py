@@ -178,23 +178,23 @@ class ParallelService:
         derived_data = None
         if src_hash == record["sourceTextHash"]:
             if data["targetLanguage"] != record["targetLanguage"]:
-                derived_data = {"sourceText": data["targetText"], "targetText": record["data"]["targetText"],
-                                "sourceTextHash": data["targetTextHash"], "targetTextHash": record["data"]["targetTextHash"],
+                derived_data = {"sourceText": data["targetText"], "targetText": record["targetText"],
+                                "sourceTextHash": data["targetTextHash"], "targetTextHash": record["targetTextHash"],
                             "sourceLanguage": data["targetLanguage"], "targetLanguage": record["targetLanguage"]}
         elif src_hash == record["targetTextHash"]:
             if data["targetLanguage"] != record["sourceLanguage"]:
-                derived_data = {"sourceText": data["targetText"], "targetText": record["data"]["sourceText"],
-                                "sourceTextHash": data["targetTextHash"], "targetTextHash": record["data"]["sourceTextHash"],
+                derived_data = {"sourceText": data["targetText"], "targetText": record["sourceText"],
+                                "sourceTextHash": data["targetTextHash"], "targetTextHash": record["sourceTextHash"],
                             "sourceLanguage": data["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
         elif tgt_hash == record["sourceTextHash"]:
             if data["sourceLanguage"] != record["targetLanguage"]:
-                derived_data = {"sourceText": data["sourceText"], "targetText": record["data"]["targetText"],
-                                "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["data"]["targetTextHash"],
+                derived_data = {"sourceText": data["sourceText"], "targetText": record["targetText"],
+                                "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["targetTextHash"],
                             "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
         elif tgt_hash == record["targetTextHash"]:
             if data["sourceLanguage"] != record["sourceLanguage"]:
-                derived_data = {"sourceText": data["sourceText"], "targetText": record["data"]["sourceText"],
-                                "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["data"]["sourceTextHash"],
+                derived_data = {"sourceText": data["sourceText"], "targetText": record["sourceText"],
+                                "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["sourceTextHash"],
                             "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
         if not derived_data:
             return None
