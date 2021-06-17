@@ -58,13 +58,6 @@ const SearchAndDownloadRecords = (props) => {
 
     const detailedReport = useSelector((state) => state.mySearchReport);
 
-    // const searchOptions = useSelector((state) => state.mySearchOptions);
-    // const dispatch = useDispatch();
-    // useEffect(() => {
-    //     const userObj = new SearchAndDownload();
-    //     searchOptions.result.length === 0 && dispatch(APITransport(userObj));
-    // }, []);
-
     useEffect(() => {
 
         previousUrl.current = params;
@@ -72,15 +65,12 @@ const SearchAndDownloadRecords = (props) => {
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
         })
-        // debugger
         if (data[0]) {
             setCount(data[0].count);
             setUrls({
                 downloadSample: data[0].sampleUrl,
                 downloadAll: data[0].downloadUrl
             })
-
-            //    debugger
 
             let target = data[0].targetLanguage ? getLanguageLabel(data[0].targetLanguage) : getLanguageLabel(data[0].sourceLanguage)
 
@@ -137,12 +127,12 @@ const SearchAndDownloadRecords = (props) => {
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
         })
-        let datasetType=data.length && getLanguageLabel(data[0].datasetType, 'datasetType')[0]
+        let datasetType = data.length && getLanguageLabel(data[0].datasetType, 'datasetType')[0]
         switch (params) {
             case 'inprogress':
                 return <RequestNumberCreation reqno={srno} />
             case 'completed':
-                return <DownloadDatasetRecords datasetType={datasetType ? datasetType:'Parallel' } sentencePair={count} urls={urls} />
+                return <DownloadDatasetRecords datasetType={datasetType ? datasetType : 'Parallel'} sentencePair={count} urls={urls} />
             default:
                 return <SearchResult />
         }
@@ -224,7 +214,6 @@ const SearchAndDownloadRecords = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const handleSubmitBtn = () => {
-       // debugger
         let tgt = languagePair.target.map(trgt => trgt.value)
         let domain = filterBy.domain.map(domain => domain.value)
         let collectionMethod = filterBy.collectionMethod.map(method => method.value)
@@ -287,30 +276,6 @@ const SearchAndDownloadRecords = (props) => {
 
                     <div className={classes.buttonDiv} >
                         {renderDatasetButtons()}
-                        {/* <Button className={classes.innerButton} variant={datasetType.pd ? "contained" : "outlined"}
-                            color="primary"
-                            onClick={() => handleDatasetClick('pd')}
-                        >
-                            Parallel Dataset
-                    </Button>
-                        <Button className={classes.innerButton} variant={datasetType.md ? "contained" : "outlined"}
-                            color="primary"
-                            onClick={() => handleDatasetClick('md')}
-                        >
-                            Monolingual Dataset
-                    </Button>
-                        <Button className={classes.innerButton} variant={datasetType.atd ? "contained" : "outlined"}
-                            color="primary"
-                            onClick={() => handleDatasetClick('atd')}
-                        >
-                            ASR/TTS Dataset
-                    </Button>
-                        <Button className={classes.innerButton} variant={datasetType.od ? "contained" : "outlined"}
-                            color="primary"
-                            onClick={() => handleDatasetClick('od')}
-                        >
-                            OCR Dataset
-                    </Button> */}
                     </div>
 
                     <Typography className={classes.subHeader} variant="h6">{getTitle()}</Typography>
@@ -357,16 +322,7 @@ const SearchAndDownloadRecords = (props) => {
                                     label="Select Domain"
                                 />
                             </Grid>
-                            {/* <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Autocomplete
-                                    id="source"
-                                    options={sourceLanguages}
-                                    filter="source"
-                                    value={filterBy.source}
-                                    handleOnChange={handleFilterByChange}
-                                    label="Select Source"
-                                />
-                            </Grid> */}
+
                         </Grid>
                         <Autocomplete
                             id="collection-method"
