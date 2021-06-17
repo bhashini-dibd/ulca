@@ -23,13 +23,7 @@ const FileUploadStyles = (theme) => ({
   paper: {
     padding: "3%",
   },
-  Typography: { 
-    margin: ".2rem 3% 0 0 ",
-    "@media (max-width:500px)": {
-      margin: ".7rem 0 0 0 ",
-      fontSize:"12px"
-    }
-   },
+ 
   select: {
     width: "20%",
     minWidth: "10rem",

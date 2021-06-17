@@ -7,7 +7,6 @@ const themeDefault = createMuiTheme({
   typography: {
     fontFamily: '"Lato"',
     fontWeight: "600",
-    
   },
   overrides: {
     MuiTableRow:{root:{cursor: 'pointer'}},
@@ -17,7 +16,8 @@ const themeDefault = createMuiTheme({
               backgroundColor : "#F8F8FA !important",
               marginLeft:"25px",
               letterSpacing:"0.74",
-              fontWeight      :"bold"
+              fontWeight      :"bold",
+              minHeight:"700px"
              
       }
 },
@@ -50,10 +50,6 @@ MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform:
       },
     },
   },
-
-  
-  
-
   palette: {
     primary: {
       light: "#60568d",
@@ -73,15 +69,57 @@ MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform:
   },
 });
 
-themeDefault.typography.h4 = {
-  fontSize: "1.875rem",
-  fontWeight: "500",
-
+themeDefault.typography.h1 = {
+  fontSize: "2.25rem",
   fontFamily: '"Poppins","lato" ,sans-serif',
-  textAlign: "Left",
-  "@media (min-width:600px)": {},
-  [themeDefault.breakpoints.up("md")]: {},
+  fontWeight: "500"
 };
+themeDefault.typography.h2 = {
+  fontSize: "2rem",
+  fontFamily: '"Poppins","lato" ,sans-serif',
+  fontWeight: "500"
+};
+themeDefault.typography.h3 = {
+  fontSize: "1.6875rem",
+  letterSpacing: "1.98px",
+  fontFamily: '"Poppins","lato" ,sans-serif',
+  fontWeight: "500"
+};
+themeDefault.typography.h4 = {
+  fontSize: "1.5rem",
+  letterSpacing: "1.98px",
+  fontFamily: '"Poppins","lato" ,sans-serif',
+  fontWeight: "500"
+};
+themeDefault.typography.h5 = {
+  fontSize: "1.3125rem",
+  
+  fontFamily: '"Poppins","lato" ,sans-serif',
+  fontWeight: "500"
+};
+themeDefault.typography.h6 = {
+  fontSize: "1.125rem",
+  fontFamily: '"Poppins","lato" ,sans-serif',
+  fontWeight: "500"
+};
+themeDefault.typography.body1 = {
+  fontSize: "1rem",
+  fontFamily: '"lato" ,sans-serif',
+  fontWeight: "400"
+};
+themeDefault.typography.body2 = {
+  fontSize: "0.875rem",
+  fontFamily: '"lato" ,sans-serif',
+  fontWeight: "400"
+};
+themeDefault.typography.caption = {
+  fontSize: "0.75rem",
+  fontFamily: '"lato" ,sans-serif',
+  fontWeight: "400"
+};
+
+
+
 
 
 export default themeDefault;

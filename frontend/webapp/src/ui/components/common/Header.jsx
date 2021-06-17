@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { withStyles, Button, Menu, MenuItem } from "@material-ui/core";
+import { withStyles, Button, Menu, MenuItem, MuiThemeProvider } from "@material-ui/core";
 import DownIcon from '@material-ui/icons/ArrowDropDown';
 import Avatar from '@material-ui/core/Avatar';
 import HeaderStyles from "../../styles/HeaderStyles"
@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom';
 import GroupIcon from '@material-ui/icons/Group';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import authenticate from '../../../configs/authenticate';
+import Theme from "../../theme/theme-default";
 
 const StyledMenu = withStyles({
   paper: {
@@ -56,19 +57,20 @@ const Header = (props) => {
   }
 
   const handleMenuItemClick = (url) => {
-    handleClose();
+    
     history.push(`${process.env.PUBLIC_URL}${url}`)
+    handleClose();
   }
   return (
-    <div>
+    <MuiThemeProvider theme={Theme}>
       <AppBar color="primary">
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
             <Button className={classes.title}
-              onClick={() => handleMenuItemClick('/dashboard')}
+              onClick={() => handleMenuItemClick('/private-dashboard')}
             >
-              <Typography variant="h5">
-                <strong>{"U L C A"}</strong>
+              <Typography variant="h4">
+                ULCA
               </Typography>
             </Button>
             {
@@ -222,7 +224,7 @@ const Header = (props) => {
           </div>
         </Toolbar>
       </AppBar>
-    </div >
+    </MuiThemeProvider>
   )
 }
 

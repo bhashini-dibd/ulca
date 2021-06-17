@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import Theme from "../../theme/theme-default";
 import { withStyles, Typography, MuiThemeProvider, Paper, Button } from "@material-ui/core";
 import ChartStyles from "../../styles/Dashboard";
 import { ResponsiveContainer, BarChart, Bar, Cell, CartesianGrid, XAxis, YAxis, Tooltip,} from 'recharts';
@@ -13,7 +12,7 @@ import {ArrowBack} from '@material-ui/icons';
 import Header from '../../components/common/Header';
 import Dataset from "../../../configs/DatasetItems";
 import authenticate from '../../../configs/authenticate';
-
+import Theme from "../../theme/theme-default";
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
 
@@ -180,11 +179,10 @@ const ChartRender = (props) => {
 		
 	}
      return (
-        <>
+        <MuiThemeProvider theme={Theme}>
             	{ !authenticate() &&
-			<MuiThemeProvider theme={Theme}>
-				<Header /><br /><br /><br /><br />
-			</MuiThemeProvider>
+			
+				<><Header /><br /><br /><br /><br /> </>
         	}
                 <div className	=	{classes.container}>
 			{/* <div className={classes.breadcrum}>
@@ -236,7 +234,7 @@ const ChartRender = (props) => {
 			</Paper>
 
 		</div>
-        </>
+        </MuiThemeProvider>
     )
 
 
