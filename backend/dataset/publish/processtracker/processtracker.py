@@ -38,7 +38,7 @@ class ProcessTracker:
             task_event["details"] = details
             log.info(f'Creating PT event for SRN -- {data["serviceRequestNumber"]}')
             repo.insert(task_event)
-            event_dict[data["serviceRequestNumber"]] = (task_event, 0)
+            event_dict[data["serviceRequestNumber"]] = (task_event, 1)
             return
         except Exception as e:
             log.exception(e)
@@ -71,6 +71,12 @@ class ProcessTracker:
     def update_task_event(self, data, task_event_tup):
         global event_dict
         try:
+            count = 1
+            if task_event_tup[1] == pt_update_batch:
+                log.info(f'Updating PT event for SRN -- {data["serviceRequestNumber"]}')
+                repo.update(task_event_tup[0])
+            else:
+                count = task_event_tup[1] + 1
             task_event = task_event_tup[0]
             processed = task_event["details"]["processedCount"]
             if data["status"] == "SUCCESS":
@@ -92,13 +98,7 @@ class ProcessTracker:
             details = {"currentRecordIndex": data["currentRecordIndex"], "processedCount": processed, "timeStamp": str(datetime.now())}
             task_event["details"] = details
             task_event["lastModifiedTime"] = str(datetime.now())
-            task_event_tup[0] = task_event
-            if task_event_tup[1] == pt_update_batch:
-                log.info(f'Updating PT event for SRN -- {data["serviceRequestNumber"]}')
-                repo.update(task_event_tup[0])
-                event_dict[data["serviceRequestNumber"]] = (task_event_tup, 0)
-            else:
-                event_dict[data["serviceRequestNumber"]] = (task_event_tup, task_event_tup[1] + 1)
+            event_dict[data["serviceRequestNumber"]] = (task_event, count)
             return
         except Exception as e:
             log.exception(f'Exception while updating publish stage status to process tracker, srn -- {data["serviceRequestNumber"]} | exc -- {e}', e)
