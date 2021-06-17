@@ -12,7 +12,7 @@ asr_config_path = os.environ.get('ULCA_VALIDATE_ASR_CONFIG', 'configs/asr_config
 ocr_config_path = os.environ.get('ULCA_VALIDATE_OCR_CONFIG', 'configs/ocr_config.json')
 monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', 'configs/monolingual_config.json')
 
-pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 100)
+pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 1000)
 if isinstance(pt_update_batch, str):
     pt_update_batch = eval(pt_update_batch)
 
