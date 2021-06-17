@@ -21,8 +21,8 @@ class ProcessTracker:
         log.info(f'Publishing pt event for SUBMIT -- {data["serviceRequestNumber"]}')
         global event_dict
         try:
-            task_event = event_dict[data["serviceRequestNumber"]]
-            if task_event:
+            if data["serviceRequestNumber"] in event_dict.keys():
+                task_event = event_dict[data["serviceRequestNumber"]]
                 if task_event[0]["status"] == pt_inprogress_status:
                     return self.update_task_event(data, task_event)
                 else:
