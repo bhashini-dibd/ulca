@@ -20,6 +20,7 @@ import Snackbar from '../../../components/common/Snackbar';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import SubmitDatasetApi from "../../../../redux/actions/api/UploadDataset/SubmitDataset"
 import DatasetItems from "../../../../configs/DatasetItems";
+import getTitleName from '../../../../utils/getDataset';
 const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
@@ -118,8 +119,15 @@ let apiObj = new SubmitDatasetApi(dataset)
   
     }
 
+    const handleSelectChange = (e) =>{
+        debugger
+        let title = getTitleName(e) 
+        setTitle(title)
+       setDatasetInfo({ ...dataset, type: e })
+    }
+
     const renderRadioIcons = ()   =>{
-        return <RadioGroup value={dataset.type} onChange={(e) => setDatasetInfo({ ...dataset, type: e })} className={classes.radioGroup} vertical="true">
+        return <RadioGroup value={dataset.type} onChange={(e) =>handleSelectChange(e)} className={classes.radioGroup} vertical="true">
                 {DatasetItems.map((item, index)=>(
                     <RadioButton key ={index} rootColor="grey" pointColor="black" value={item.value}>
                    {item.label}

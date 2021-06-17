@@ -39,7 +39,6 @@ const DataSet = (theme) => ({
     submitBtn: {
         marginTop: '6vh',
         color: 'white',
-        fontSize: '1rem'
     },
     breadcrum: {
         marginBottom: '1.5rem',

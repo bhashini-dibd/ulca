@@ -1,4 +1,4 @@
-import { withStyles, Typography,Link, MuiThemeProvider, createMuiTheme,Button } from "@material-ui/core";
+import { withStyles,Link, MuiThemeProvider, createMuiTheme,Button } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -35,62 +35,9 @@ const ContributionList = (props) => {
                 dispatch(APITransport(userObj));
         }
 
-        const getMuiTheme = () => createMuiTheme({
-                overrides: {
-                MuiTableCell: {
-                        head: {
-                                // color : "rgba(0,0,0,0.5) !important",
-                                // background: "rgba(0,0,0,0.03) !important",
-                                // letterSpacing:"0.14px",
-                                // cursor: 'default'
-                                padding: '.5rem .5rem .5rem 1.5rem',
-                                backgroundColor : "#c7c6c68a !important",
-                                marginLeft:"25px"
-                        }
-                },
-                MUIDataTableHeadCell: {
-                        root: {
-                                
-                          '&:nth-child(1)': {
-                            width: "60%"
-                          },
-                          
-                        }
-                      },
-                      MuiButton :{
-                              root:{
-                                fontWeight      :"bold"
-                              }
-                      },
-                      
-                
-                MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform: "capitalize"}},
-               
-                MuiPaper: {
-                        root:{
-                                boxShadow       : 'none !important',
-                                borderRadius    : 0,
-                                border          : "1px solid rgb(224 224 224)"
-                        }
-                },
-                // MUIDataTableToolbar: {
-                //         root: { 
-                //                 display: "none" 
-                //                } 
-                //        },
-                
-                MuiTableRow:{root:{cursor: 'pointer'}}
-                }
-        });
-
-
         const fetchHeaderButton= () => {
-                return (
-                        <div className={classes.headerButtons}>
-                                {/* <Typography variant="h5" >My Contribution</Typography> */}
-                                <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
-                         </div>
-                )
+                return <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                        
         }
 
         const handleSetValues = (name) => {
@@ -214,6 +161,7 @@ const ContributionList = (props) => {
                 // },
                 // },
         ];
+      
 
         const options = {
 
@@ -233,12 +181,13 @@ const ContributionList = (props) => {
                         options         : { sortDirection: "desc" },
                         },
                         onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
-               
+                        customToolbar: fetchHeaderButton,
                 filterType      : "checkbox",
                 download        : false,
                 print           : false,
                 fixedHeader     : true,
                 filter          : false,
+                viewColumns     : false,
                 selectableRows  : "none",
         };
 
@@ -248,19 +197,19 @@ const ContributionList = (props) => {
                         <div className = {classes.breadcrum}>
                                 <BreadCrum links={[UrlConfig.dataset]} activeLink="My Contribution" />
                         </div>
-                        {fetchHeaderButton()} 
+                       
                         {/* <div className={classes.title}>
                                 
                         </div> */}
 
-                        <MuiThemeProvider theme={getMuiTheme()}>  
+                         
                                 <MUIDataTable
                                         title           =       {`My Contribution`}
                                         data            =       {data}
                                         columns         =       {columns}
                                         options         =       {options}
                                 />
-                        </MuiThemeProvider>
+                        
                         {open && <Dialog
                                 message         =       {message}
                                 handleClose     ={() => {setOpen(false)}}
