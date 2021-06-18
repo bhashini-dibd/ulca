@@ -12,13 +12,13 @@ const FileUploadStyles = (theme) => ({
     margin: "0 0 1vh 1vh",
     display: "flex",
     flexDirection: "row",
-    padding:"3% 0 0 3%"
+    padding:"4% 0 0 3%"
   },
   paper: {
     minHeight:"56px",
     maxWidth: "1272px",
     width : "100%",
-    margin :"0 auto",
+    margin :"7px auto",
     padding:"0"
   },
  
