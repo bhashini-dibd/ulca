@@ -1,6 +1,6 @@
-from utilities import MODULE_CONTEXT
+from utilities import MODULE_CONTEXT, userutils
 from db import get_db
-from utilities import UserUtils
+from utilities import UserUtils,EnumVals
 from .response import post_error
 from config import USR_MONGO_COLLECTION
 import time
@@ -22,7 +22,7 @@ class UserManagementModel(object):
             if len(records) != len(results):
                 return post_error("Database exception", "Some of the users were not created due to databse error", None)
             #email notification for registered users
-            user_notified=UserUtils.generate_email_user_registeration(records)
+            user_notified   =  UserUtils.generate_email_notification(records,EnumVals.VerificationTaskId.value) 
             if user_notified is not None:
                 return user_notified
         except Exception as e:

@@ -1,3 +1,4 @@
+from os import name
 import uuid
 import time
 import re
@@ -7,6 +8,7 @@ from models.response import post_error
 import jwt
 import secrets
 from utilities import MODULE_CONTEXT
+from .app_enums import EnumVals
 import config
 import json
 from datetime import datetime,timedelta
@@ -317,7 +319,7 @@ class UserUtils:
                         log_exception("Token not valid for {}".format(user_name),  MODULE_CONTEXT, e)
                         return({"status": False, "data": None})
         except Exception as e:
-            log_exception("Database connection exception ",  MODULE_CONTEXT, e)
+            log.exception("Database connection exception ",  MODULE_CONTEXT, e)
             return({"status": "Database connection exception", "data": None})
 
 
@@ -492,53 +494,41 @@ class UserUtils:
 
 
     @staticmethod
-    def generate_email_user_registeration(users):
-        """Registered users are notified with email."""
+    def generate_email_notification(user_records,task_id):
 
-        try:
-            log.info("Generating email notification for user registration from {}".format(mail_server))
-            for user in users:
-                email       = user["email"]   
-                user_id     = user["userID"]
-                msg         = Message(subject="ULCA - Email verification link",
-                              sender=mail_server,
-                              recipients=[email])
-                msg.html    = render_template('usr_verification.html',verification_link=mail_ui_link+"activate/{}/{}/{}".format(email,user_id,eval(str(time.time()).replace('.', '')[0:13])))
+        for user_record in user_records:
+            email       =   user_record["email"]
+            timestamp   =   eval(str(time.time()).replace('.', '')[0:13])
+            name        =   None
+            user_id     =   None
+            rand_id     =   None
+            link        =   None
+
+            if task_id == EnumVals.VerificationTaskId.value:
+                email_subject   =   EnumVals.VerificationSubject.value
+                template        =   'usr_verification.html' 
+                user_id         =   user_record["userID"]
+                link            =   mail_ui_link+"activate/{}/{}/{}".format(email,user_id,timestamp)
+
+            if task_id == EnumVals.ConfirmationTaskId.value:
+                email_subject   =   EnumVals.ConfirmationSubject.value
+                template        =   'usr_confirm_registration.html'
+                name            =   user_record["name"]
+
+            if task_id == EnumVals.ForgotPwdTaskId.value:
+                email_subject   =   EnumVals.ForgotPwdSubject.value
+                template        =   'reset_mail_template.html'
+                rand_id         =   user_record["uuid"]
+                link            =   mail_ui_link+"set-password/{}/{}/{}".format(email,rand_id,timestamp)
+                
+            try:
+                msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
+                msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
                 mail.send(msg)
-                log.info("Generated email notification for user registration from {}".format(mail_server))
-        except Exception as e:
-            log.exception("Exception while generating email notification for user registration | {}".format(str(e)))
-            return post_error("Exception while generating email notification for user registration","Exception occurred:{}".format(str(e)),None)
-    
-    @staticmethod
-    def generate_email_confirmation(email,name):
-        """Confirmation email for successful user verification"""
-     
-        try: 
-            msg         = Message(subject="ULCA - Registration confirmed",
-                              sender=mail_server,
-                              recipients=[email])
-            msg.html    = render_template('usr_confirm_registration.html',ui_link=mail_ui_link,user_name=name)
-            mail.send(msg)
-            log.info("Generated email notification for user confirmation")
-        except Exception as e:
-            log.exception("Exception while generating email notification for user registration | {}".format(str(e)))
-            return post_error("Exception while generating email notification for user registration","Exception occurred:{}".format(str(e)),None)
-
-
-    @staticmethod
-    def generate_email_reset_password(user_name,rand_id):
-        try:
-            email = user_name
-            msg = Message(subject="[ULCA] Please reset your Password ",
-                              sender=mail_server,
-                              recipients=[email])
-            msg.html = render_template('reset_mail_template.html',ui_link=mail_ui_link,reset_link=mail_ui_link+"set-password/{}/{}/{}".format(email,rand_id,eval(str(time.time()).replace('.', '')[0:13])))
-            mail.send(msg)
-            log.info("Generated email notification for {} on reset password".format(email), MODULE_CONTEXT)
-        except Exception as e:
-            llog.exception("Exception while generating email notification for user registration | {}".format(str(e)))
-            return post_error("Exception while generating reset password notification","Exception occurred:{}".format(str(e)),None)
+                log.info("Generated email notification for {} ".format(email), MODULE_CONTEXT)
+            except Exception as e:
+                log.exception("Exception while generating email notification | {}".format(str(e)))
+                return post_error("Exception while generating email notification","Exception occurred:{}".format(str(e)),None)
             
     @staticmethod
     def validate_username(user_email):

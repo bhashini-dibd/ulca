@@ -9,6 +9,7 @@ import time
 import config
 from config import USR_MONGO_COLLECTION, USR_TEMP_TOKEN_MONGO_COLLECTION, USR_KEY_MONGO_COLLECTION
 import logging
+from utilities import EnumVals
 
 log = logging.getLogger('file')
 admin_role_key          =   config.ADMIN_ROLE_KEY
@@ -95,9 +96,9 @@ class UserAuthenticationModel(object):
         #connecting to mongo instance/collection
         collections = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION]
         #inserting new id generated onto temporary token collection
-        collections.insert({"user": user_name, "token": rand_id, "start_time": datetime.utcnow()})
+        collections.insert({"email": user_name, "token": rand_id, "createdOn": datetime.utcnow()})
         #generating email notification
-        result = UserUtils.generate_email_reset_password(user_name,rand_id)
+        result = UserUtils.generate_email_reset_password([{"email":user_name,"uuid":rand_id}],EnumVals.ForgotPwdTaskId.value)
         if result is not None:
             return result
         return True
@@ -176,7 +177,7 @@ class UserAuthenticationModel(object):
             new_keys   =   UserUtils.generate_api_keys(user_email)
            
             #email notification for registered users
-            user_notified=UserUtils.generate_email_confirmation(user_email,name)
+            user_notified=UserUtils.generate_email_notification([{"email":user_email,"name":name}],EnumVals.ConfirmationTaskId.value)
             if user_notified is not None:
                 return user_notified
             return new_keys
