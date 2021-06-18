@@ -2,8 +2,12 @@ package com.ulca.dataset.kakfa;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -27,14 +31,20 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
+import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
+import io.swagger.model.ASRParamsSchema;
 import io.swagger.model.DatasetType;
 import io.swagger.model.ParallelDatasetParamsSchema;
+import io.swagger.model.ParallelDatasetRowSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -149,8 +159,155 @@ public class DatasetParallelCorpusValidateIngest {
 		return paramsSchema;
 
 	}
-
 	public void ingest(ParallelDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
+			throws JSONException, IOException, NoSuchAlgorithmException {
+
+		log.info("************ Entry DatasetParallelCorpusValidateIngest :: ingest *********");
+
+		String datasetId = file.getDatasetId();
+		String serviceRequestNumber = file.getServiceRequestNumber();
+		String userId = file.getUserId();
+
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		JSONObject record;
+
+		record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+
+		String dataFilePath = fileMap.get("data.json");
+
+		log.info("data.json file path :: " + dataFilePath);
+		
+		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
+
+		log.info("inputStream file done ");
+
+		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+
+		log.info("json reader created ");
+		
+	
+		int numberOfRecords = 0;
+		int failedCount = 0;
+		int successCount = 0;
+		JSONObject vModel = new JSONObject();
+		vModel.put("record", record);
+		vModel.put("datasetId", datasetId);
+		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
+		vModel.put("serviceRequestNumber", serviceRequestNumber);
+		vModel.put("userId", userId);
+		vModel.put("userMode", "real");
+		
+
+		reader.beginArray();
+		while (reader.hasNext()) {
+
+			numberOfRecords++;
+
+			log.info("reading records :: " + numberOfRecords);
+			Object rowObj = new Gson().fromJson(reader, Object.class);
+			ObjectMapper mapper = new ObjectMapper();
+			String dataRow = mapper.writeValueAsString(rowObj);
+			SimpleModule module = new SimpleModule();
+			module.addDeserializer(ParallelDatasetRowSchema.class, new ParallelDatasetRowSchemaDeserializer());
+			mapper.registerModule(module);
+			
+			ParallelDatasetRowSchema rowSchema  = null;
+			
+			try {
+				
+				rowSchema = mapper.readValue(dataRow, ParallelDatasetRowSchema.class);
+				
+				
+			} catch(Exception e) {
+				
+				log.info("record :: " +numberOfRecords + "failed " );
+				log.info("tracing the error " );
+				e.printStackTrace();
+				
+				failedCount++;
+				// send error event
+				JSONObject errorMessage = new JSONObject();
+				errorMessage.put("eventType", "dataset-training");
+				errorMessage.put("messageType", "error");
+				errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
+				errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
+				Calendar cal = Calendar.getInstance();
+				SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+				Date date = cal.getTime();
+				// errorMessage.put("timestamp", df2.format(date));
+				errorMessage.put("timestamp", new Date().toString());
+				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+				errorMessage.put("stage", "ingest");
+				errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+				errorMessage.put("message", e.getMessage());
+				datasetErrorPublishService.publishDatasetError(errorMessage);
+				
+				
+				
+			}
+			if(rowSchema != null) {
+				
+				JSONObject target =  new JSONObject(mapper.writeValueAsString(rowSchema));
+				
+				JSONObject finalRecord = deepMerge(record, target);
+				
+				
+				UUID uid = UUID.randomUUID();
+				finalRecord.put("id", uid);
+
+				vModel.put("record", finalRecord);
+				vModel.put("currentRecordIndex", numberOfRecords);
+				
+				log.info("data sending for validation :: ");
+				log.info(vModel.toString());
+				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+				successCount++;
+			}
+			
+			log.info("data row " + numberOfRecords + " sent for validation ");
+			
+
+		}
+		reader.endArray();
+		reader.close();
+		inputStream.close();
+
+		vModel.put("eof", true);
+		vModel.remove("record");
+		vModel.remove("currentRecordIndex");
+
+		log.info("Eof reached");
+		
+		datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+
+		JSONObject details = new JSONObject();
+		details.put("currentRecordIndex", numberOfRecords);
+
+		JSONArray processedCount = new JSONArray();
+
+		JSONObject proCountSuccess = new JSONObject();
+		proCountSuccess.put("type", "success");
+		proCountSuccess.put("count", successCount);
+		processedCount.put(proCountSuccess);
+
+		JSONObject proCountFailure = new JSONObject();
+
+		proCountFailure.put("type", "failed");
+		proCountFailure.put("count", failedCount);
+		processedCount.put(proCountFailure);
+		details.put("processedCount", processedCount);
+		details.put("timeStamp", new Date().toString());
+
+		processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
+				com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
+
+		log.info("sent record for validation ");
+
+	}
+	
+
+	public void ingest_bkp(ParallelDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
 			throws JSONException, IOException, NoSuchAlgorithmException {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: ingest *********");
@@ -300,6 +457,25 @@ public class DatasetParallelCorpusValidateIngest {
 
 		String hashString = hexString.toString();
 		return hashString;
+	}
+	
+	public JSONObject deepMerge(JSONObject source, JSONObject target) throws JSONException {
+		for (String key : JSONObject.getNames(source)) {
+			Object value = source.get(key);
+			if (!target.has(key)) {
+				// new value for "key":
+				target.put(key, value);
+			} else {
+				// existing value for "key" - recursively deep merge:
+				if (value instanceof JSONObject) {
+					JSONObject valueJson = (JSONObject) value;
+					deepMerge(valueJson, target.getJSONObject(key));
+				} else {
+					target.put(key, value);
+				}
+			}
+		}
+		return target;
 	}
 
 }

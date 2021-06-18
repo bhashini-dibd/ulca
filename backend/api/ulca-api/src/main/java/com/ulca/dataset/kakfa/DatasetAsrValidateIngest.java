@@ -74,7 +74,7 @@ public class DatasetAsrValidateIngest {
 		}
 
 		String paramsFilePath = fileMap.get("params.json");
-		if(paramsFilePath == null) {
+		if (paramsFilePath == null) {
 			log.info("params.json file not available");
 			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
@@ -83,7 +83,7 @@ public class DatasetAsrValidateIngest {
 			return;
 		}
 		try {
-			paramsSchema = validateParamsSchema(paramsFilePath,file);
+			paramsSchema = validateParamsSchema(paramsFilePath, file);
 			// ingest(paramsSchema, file, fileMap, taskTrackerIngest);
 
 		} catch (IOException | JSONException | NullPointerException e) {
@@ -115,14 +115,32 @@ public class DatasetAsrValidateIngest {
 		}
 		try {
 			ingest(paramsSchema, file, fileMap);
-			
+
 		} catch (IOException e) {
-			
+
 			log.info("Exception while validating params :: " + e.getMessage());
 			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
+
+			// send error event
+			JSONObject errorMessage = new JSONObject();
+			errorMessage.put("eventType", "dataset-training");
+			errorMessage.put("messageType", "error");
+			errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
+			errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+			Date date = cal.getTime();
+			// errorMessage.put("timestamp", df2.format(date));
+			errorMessage.put("timestamp", new Date().toString());
+			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+			errorMessage.put("stage", "ingest");
+			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+			errorMessage.put("message", e.getMessage());
+			datasetErrorPublishService.publishDatasetError(errorMessage);
+
 			return;
 		}
 
@@ -142,18 +160,16 @@ public class DatasetAsrValidateIngest {
 		mapper.registerModule(module);
 
 		ASRParamsSchema paramsSchema = mapper.readValue(new File(filePath), ASRParamsSchema.class);
-		if(paramsSchema == null ) {
-			
+		if (paramsSchema == null) {
+
 			log.info("params validation failed");
 			throw new IOException("paramsValidation failed");
-			
+
 		}
-		if(paramsSchema.getDatasetType() != file.getDatasetType()) {
+		if (paramsSchema.getDatasetType() != file.getDatasetType()) {
 			log.info("params validation failed");
 			throw new IOException("params datasetType does not matches with submitted datasetType");
 		}
-
-		
 
 		return paramsSchema;
 
@@ -231,6 +247,8 @@ public class DatasetAsrValidateIngest {
 
 		}
 		reader.endArray();
+		reader.close();
+		inputStream.close();
 
 		log.info("Eof reached");
 		vModel.put("eof", true);
@@ -264,7 +282,6 @@ public class DatasetAsrValidateIngest {
 
 	}
 
-	
 	public JSONObject deepMerge(JSONObject source, JSONObject target) throws JSONException {
 		for (String key : JSONObject.getNames(source)) {
 			Object value = source.get(key);
