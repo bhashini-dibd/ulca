@@ -35,7 +35,7 @@ const UserManagement = (props) => {
         <AppInfo />
         <Grid item xs={12} sm={8} md={9} lg={9} className={classes.parent}>
           {renderPage()}
-          <Footer />
+          {/* <Footer /> */}
         </Grid>
       </Grid>
       

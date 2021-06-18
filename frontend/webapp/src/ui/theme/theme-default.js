@@ -48,6 +48,13 @@ MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform:
         textAlign: "center",
         height: "26px"
       },
+      sizeLarge: {
+        height:"48px"
+      },
+      sizeSmall: {
+        height:"36px"
+      }
+
     },
   },
   palette: {
@@ -61,7 +68,7 @@ MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform:
       light: "#FFFFFF",
       main: "#FFFFFF",
       dark: "#FFFFFF",
-      contrastText: "#FFFFFF",
+      contrastText: "#000000",
     },
     background: {
       default: "#2C2799",

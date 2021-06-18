@@ -26,10 +26,11 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
-import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
+import com.ulca.dataset.model.deserializer.ParallelDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.DatasetType;
@@ -128,19 +129,21 @@ public class DatasetParallelCorpusValidateIngest {
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateParamsSchema *********");
 		log.info("validing file :: against params schema");
 		log.info(filePath);
+		
 		ObjectMapper mapper = new ObjectMapper();
-
+		SimpleModule module = new SimpleModule();
+		module.addDeserializer(ParallelDatasetParamsSchema.class, new ParallelDatasetParamsSchemaDeserializer());
+		mapper.registerModule(module);
 		ParallelDatasetParamsSchema paramsSchema = mapper.readValue(new File(filePath),
 				ParallelDatasetParamsSchema.class);
 		if (paramsSchema == null) {
-
 			log.info("params validation failed");
-			throw new JsonMappingException("paramsValidation failed");
+			throw new IOException("paramsValidation failed");
 
 		}
 		if (paramsSchema.getDatasetType() != file.getDatasetType()) {
 			log.info("params validation failed");
-			throw new JsonMappingException("params datasetType does not matches with submitted datasetType");
+			throw new IOException("params datasetType does not matches with submitted datasetType");
 		}
 
 		return paramsSchema;

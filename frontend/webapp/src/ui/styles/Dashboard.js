@@ -12,16 +12,22 @@ const FileUploadStyles = (theme) => ({
     margin: "0 0 1vh 1vh",
     display: "flex",
     flexDirection: "row",
+    padding:"3% 0 0 3%"
   },
   paper: {
-    padding: "3%",
+    minHeight:"56px",
+    maxWidth: "1272px",
+    width : "100%",
+    margin :"0 auto",
+    padding:"0"
   },
  
   select: {
     marginLeft:"10px",
     width: "20%",
     minWidth: "10rem",
-    color:"grey"
+    color:"green",
+    cursor: "pointer"
   },
   filterButton:{
     marginLeft: 'auto',
@@ -29,6 +35,7 @@ const FileUploadStyles = (theme) => ({
     minWidth:"auto",
     display: "flex",
     flexDirection: "row",
+    cursor: "pointer"
 
     // "@media (max-width:800px)": {
     //   display: 'none'
@@ -85,6 +92,7 @@ const FileUploadStyles = (theme) => ({
   },
   title:{
     textAlign: "left",
+    paddingLeft:"3%",
     margin: "4.5vh 0 8.5vh 1vh",
     "@media (max-width:600px)": {textAlign: "center",}
   }

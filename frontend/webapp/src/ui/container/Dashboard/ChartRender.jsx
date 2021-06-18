@@ -53,6 +53,7 @@ const ChartRender = (props) => {
 			color		: 	'black',
 			padding		: 	20,
 			background	: 	state.isSelected && "#c7c6c68a !important",
+			cursor		:	"pointer"
 
 		}),
 		control: (base, state) => ({
@@ -61,7 +62,8 @@ const ChartRender = (props) => {
 			borderColor	:	"#392C71",
 			border 		: 	"1px solid rgba(57, 44, 113, 0.5)",
 			boxShadow	: 	state.isFocused ? 0 : 0,
-			fontFamily	: 	"Source Sans Pro, Arial, sans-serif "
+			fontFamily	: 	"Lato, sans-serif ",
+			cursor		:	"pointer"
 		})
 	}
 
@@ -96,8 +98,6 @@ const ChartRender = (props) => {
 			targetLanguage 	=	{ "type": "PARAMS", "value": "" };
 			
 		}
-
-		debugger
 		setSelectedLanguage(selectedLanguage ? selectedLanguage :event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
 		return ([{ "type": "PARAMS", "sourceLanguage" : sourceLanguage,"targetLanguage" : targetLanguage},event])
@@ -210,6 +210,7 @@ const ChartRender = (props) => {
 				<div className={classes.title}>
 					<Typography value="" variant="h6"> {title} </Typography>
 				</div>
+				<div className={classes.title}>
 				<ResponsiveContainer width = "95%" height = {450}>
 					<BarChart width = {900} height 	= 	{450} data={DashboardReport} maxBarSize = {100} >
 						<XAxis 	dataKey 	= 	"label"
@@ -232,6 +233,7 @@ const ChartRender = (props) => {
 						</Bar>
 					</BarChart>
 				</ResponsiveContainer>
+				</div>
 
 			</Paper>
 
