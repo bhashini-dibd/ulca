@@ -83,7 +83,11 @@ public class UnzipUtility {
 					}
 					
 					
-					if (fileName.equals("params.json") || fileName.equals("data.json") || fileName.contains(".wav")) {
+					if (fileName.equals("params.json") || fileName.equals("data.json") || fileName.contains(".wav")
+							|| fileName.contains(".pcm") || fileName.contains(".mp3") || fileName.contains(".flac") 
+							|| fileName.contains(".jpeg") || fileName.contains(".bmp") || fileName.contains(".png") 
+							|| fileName.contains(".tiff") 
+							) {
 
 						extractFile(zipIn, filePath);
 						log.info("filePath unzipped :: " + filePath);
