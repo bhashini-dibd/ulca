@@ -131,7 +131,7 @@ class UserUtils:
     def validate_rolecodes(roles):
         """Role Validation
 
-        roles should match roles defined on Anuvaad system,
+        roles should match roles defined on ULCA system,
         pre-defined roles are read from zuul (git) configs.
         """
 
@@ -356,7 +356,7 @@ class UserUtils:
         if user.get("roles") != None:
             rolecodes = user["roles"]
             if UserUtils.validate_rolecodes(rolecodes) == False:
-                og.info("Role validation failed")
+                log.info("Role validation failed")
                 return post_error("Invalid data", "Rolecode given is not valid", None) 
             log.info("Role/s validated")
 
