@@ -1,32 +1,33 @@
 {
-    "datasetType": "asr-corpus",
-    "languages": {
-        "sourceLanguage": "en"
+    "datasetType":"asr-corpus",
+    "languages":{
+        "sourceLanguage":"en"
     },
-    "collectionSource": [
-        "openslr", "https://www.youtube.com?v=121212121"
+    "collectionSource":[
+        "openslr",
+        "https://www.youtube.com?v=121212121"
     ],
     "domain":[
         "general"
     ],
-    "format": "wav",
-    "channel": "mono",
-    "samplingRate": 16000,
-    "bitsPerSample": "sixteen",
-    "numberOfSpeakers": 3,
-    "license":  "cc-by-4.0",
-    "submitter": {
-        "name": "Anirudh",
-        "oauthId": {
-            "oauthId": "anirudh.gupta@thoughtworks.com",
-            "provider": "google"
+    "format":"wav",
+    "channel":"mono",
+    "samplingRate":16000,
+    "bitsPerSample":"sixteen",
+    "numberOfSpeakers":3,
+    "license":"cc-by-4.0",
+    "submitter":{
+        "name":"Anirudh",
+        "oauthId":{
+            "oauthId":"anirudh.gupta@thoughtworks.com",
+            "provider":"google"
         },
-        "team": [
+        "team":[
             {
-                "name": "Harveen",
-                "oauthId": {
-                    "oauthId": "anirudh.gupta@thoughtworks.com",
-                    "provider": "google"
+                "name":"Harveen",
+                "oauthId":{
+                    "oauthId":"anirudh.gupta@thoughtworks.com",
+                    "provider":"google"
                 }
             }
         ]
