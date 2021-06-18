@@ -205,6 +205,7 @@ public class DatasetParallelCorpusValidateIngest {
 			numberOfRecords++;
 
 			log.info("reading records :: " + numberOfRecords);
+			
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
@@ -217,7 +218,7 @@ public class DatasetParallelCorpusValidateIngest {
 			try {
 				
 				rowSchema = mapper.readValue(dataRow, ParallelDatasetRowSchema.class);
-				
+				log.info("row schema created");				
 				
 			} catch(Exception e) {
 				
@@ -230,7 +231,7 @@ public class DatasetParallelCorpusValidateIngest {
 				JSONObject errorMessage = new JSONObject();
 				errorMessage.put("eventType", "dataset-training");
 				errorMessage.put("messageType", "error");
-				errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
+				errorMessage.put("code", "1000_ROW_DATA_VALIDATION_FAILED");
 				errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
 				Calendar cal = Calendar.getInstance();
 				SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
@@ -248,7 +249,8 @@ public class DatasetParallelCorpusValidateIngest {
 			}
 			if(rowSchema != null) {
 				
-				JSONObject target =  new JSONObject(mapper.writeValueAsString(rowSchema));
+				log.info("rowSchema is not null" );
+				JSONObject target =  new JSONObject(dataRow);
 				
 				JSONObject finalRecord = deepMerge(record, target);
 				
@@ -262,10 +264,11 @@ public class DatasetParallelCorpusValidateIngest {
 				log.info("data sending for validation :: ");
 				log.info(vModel.toString());
 				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+				log.info("data row " + numberOfRecords + " sent for validation ");
 				successCount++;
 			}
 			
-			log.info("data row " + numberOfRecords + " sent for validation ");
+			
 			
 
 		}
