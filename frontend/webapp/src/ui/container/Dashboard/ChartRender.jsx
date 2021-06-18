@@ -96,9 +96,11 @@ const ChartRender = (props) => {
 			targetLanguage 	=	{ "type": "PARAMS", "value": "" };
 			
 		}
+
+		debugger
 		setSelectedLanguage(selectedLanguage ? selectedLanguage :event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "type": "PARAMS", "sourceLanguage" : sourceLanguage,"targetLanguage" : targetLanguage, event : event}])
+		return ([{ "type": "PARAMS", "sourceLanguage" : sourceLanguage,"targetLanguage" : targetLanguage},event])
 	}
 
 	const handleOnClick= (value, event, filter) =>  {
@@ -194,8 +196,8 @@ const ChartRender = (props) => {
 					{page!==0 && <><Button color="primary" size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
 					<div className={classes.seperator}></div></>}
 					
-					<Typography 	variant   	=	"h5" component = "h3" 
-							className 	= 	{classes.Typography}> Dataset Type :	</Typography>
+					<Typography 	variant   	=	"h5" 
+							> Dataset Type :	</Typography>
 					<Select 	className 	= 	{classes.select} 
 							styles 		= 	{customStyles} color= "primary"
 							value   	=	{selectedOption}

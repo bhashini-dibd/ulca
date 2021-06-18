@@ -3,17 +3,17 @@ const DataSet = (theme) => ({
     // paper: {
     //     padding: '5%',
     // },
-    // title: {
-    //     marginBottom: '3vh'
-    // },
-    // form: {
-    //     marginTop: '1vh',
-    //     width: '90%',
-    // },
-    // radioGroup: {
-    //     marginTop: '3vh',
-    //     paddingRight: '2vw'
-    // },
+    title: {
+        marginBottom: '6vh'
+    },
+    form: {
+        marginTop: '1vh',
+        width: '90%',
+    },
+    radioGroup: {
+        marginTop: '1vh',
+        
+    },
 
     divStyle:{
         padding:"5% 10% 5% 10%"
