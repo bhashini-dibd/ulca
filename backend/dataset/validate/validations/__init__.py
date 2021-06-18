@@ -5,3 +5,4 @@ from .basic_schema_check import BasicSchemaCheck
 from .duplicate_whitespaces import DuplicateWhitespaces
 from .alphabet_case_dedup import CaseDedup
 from .special_characters import SpecialCharacterCheck
+from .audio_metadata_check import AudioMetadataCheck

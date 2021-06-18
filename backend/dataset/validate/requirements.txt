@@ -14,3 +14,5 @@ urllib3==1.25.8
 utils==1.0.1
 langdetect==1.0.9
 redis==3.5.3
+audio-metadata==0.11.1
+word2number==1.1
