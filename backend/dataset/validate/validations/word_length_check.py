@@ -19,6 +19,8 @@ class WordLengthCheck(BaseValidator):
                 text_list.append(record['targetText'])
             if request["datasetType"] == dataset_type_asr:
                 text_list.append(record['text'])
+            if request["datasetType"] == dataset_type_ocr:
+                text_list.append(record['groundTruth'])
 
             for text in text_list:
                 words = list(text.split())

@@ -1,24 +1,43 @@
 import logging
 from datetime import datetime
 from logging.config import dictConfig
-
+from kafkawrapper.producer import Producer
 from models.validation_pipeline import ValidationPipeline
+from configs.configs import validate_output_topic
+from processtracker.processtracker import ProcessTracker
+from events.error import ErrorEvent
 
 log = logging.getLogger('file')
+
+prod = Producer()
+pt = ProcessTracker()
+error_event = ErrorEvent()
 
 class OCRValidate:
     def __init__(self):
         pass
 
-    def execute_validation_pipeline(self, record):
+    def execute_validation_pipeline(self, request):
         try:
+            log.info("Executing OCR dataset validation....  {}".format(datetime.now()))
             v_pipeline = ValidationPipeline.getInstance()
-            res = v_pipeline.runOcrValidators(record)
-            if res == False:
-                return {"message": "Validation failed", "status": "FAILED"}
+            res = v_pipeline.runOcrValidators(request)
+            if res:
+                log.info("Validation complete....  {}".format(res))
+                # Produce event for publish
+                if res["status"] == "SUCCESS":
+                    prod.produce(request, validate_output_topic, None)
+                else:
+                    error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
+                             "message": res["message"], "code": res["code"], "record": request["record"]}
+                    error_event.create_error_event(error)
 
-            return {"message": "Validation successful", "status": "SUCCESS"}
+                # Update task tracker
+                tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"]}
+                pt.create_task_event(tracker_data)
+
         except Exception as e:
+            log.exception(e)
             return {"message": "EXCEPTION while validating dataset!!", "status": "FAILED"}
 
 

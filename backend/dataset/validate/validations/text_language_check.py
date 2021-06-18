@@ -24,6 +24,9 @@ class TextLanguageCheck(BaseValidator):
             if request["datasetType"] == dataset_type_asr:
                 text_list.append(record['text'])
                 lang_list.append(record['sourceLanguage'])
+            if request["datasetType"] == dataset_type_ocr:
+                text_list.append(record['groundTruth'])
+                lang_list.append(record['sourceLanguage'])
 
             for text, lang in zip(text_list, lang_list):
                 res = detect_langs(text)
