@@ -13,7 +13,7 @@ class AudioMetadataCheck(BaseValidator):
     def execute(self, request):
         log.info('----Executing the audio file metadata check----')
         try:
-            if request["datasetType"] == dataset_type_asr:
+            if request["datasetType"] == dataset_type_asr and 'samplingRate' in request['record'].keys() and 'bitsPerSample' in request['record'].keys():
                 audio_file = request['record']['fileLocation']
                 metadata = audio_metadata.load(audio_file)
                 if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:
