@@ -234,6 +234,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 
 		}
 
+		if(node.has("collectionMethod")) {
 		if (node.get("collectionMethod").has("collectionDescription")) {
 			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
 				errorList.add("collectionDescription field should be String Array");
@@ -306,6 +307,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				}
 
 			}
+		}
 		}
 		if(!errorList.isEmpty())
 			throw new IOException(errorList.toString());
