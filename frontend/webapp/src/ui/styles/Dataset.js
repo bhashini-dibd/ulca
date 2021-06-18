@@ -170,10 +170,6 @@ const DataSet = (theme) => ({
     alignTypo:{
         textAlign: 'center',
     },
-    iconSub:{
-        marginLeft:'34%',
-        marginBottom: '2%'
-    },
     yourSearchQuery:{
         marginBottom: '2%'
     },

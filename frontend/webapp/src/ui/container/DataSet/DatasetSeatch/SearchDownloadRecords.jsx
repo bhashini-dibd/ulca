@@ -78,7 +78,7 @@ const SearchAndDownloadRecords = (props) => {
             setDatasetType({ [data[0].datasetType]: true })
         }
 
-        else if (params === 'completed' && count === 0)
+        else if ((params === 'completed' || params === 'inprogress' ) && count === 0)
             history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
 
     }, []);
