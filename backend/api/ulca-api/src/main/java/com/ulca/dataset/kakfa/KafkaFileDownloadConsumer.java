@@ -73,7 +73,7 @@ public class KafkaFileDownloadConsumer {
 				
 				String fileName = serviceRequestNumber+".zip";
 				String filePath = downloadUsingNIO(fileUrl, downloadFolder,fileName);
-				//String filePath = 
+				
 				log.info("file download complete");
 				log.info("file path in downloadFile servide ::" + filePath);
 				

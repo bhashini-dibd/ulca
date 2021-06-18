@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
 
-@JsonDeserialize(as = CollectionDetailsManualTranslated.class)
+
 public class CollectionDetailsManualTranslated  implements OneOfParallelDatasetCollectionMethodCollectionDetails {
   @JsonProperty("editingTool")
   private String editingTool = null;
