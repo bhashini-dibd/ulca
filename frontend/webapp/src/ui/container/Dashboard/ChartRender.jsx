@@ -53,6 +53,7 @@ const ChartRender = (props) => {
 			color		: 	'black',
 			padding		: 	20,
 			background	: 	state.isSelected && "#c7c6c68a !important",
+			cursor		:	"pointer"
 
 		}),
 		control: (base, state) => ({
@@ -61,7 +62,8 @@ const ChartRender = (props) => {
 			borderColor	:	"#392C71",
 			border 		: 	"1px solid rgba(57, 44, 113, 0.5)",
 			boxShadow	: 	state.isFocused ? 0 : 0,
-			fontFamily	: 	"Source Sans Pro, Arial, sans-serif "
+			fontFamily	: 	"Lato, sans-serif ",
+			cursor		:	"pointer"
 		})
 	}
 

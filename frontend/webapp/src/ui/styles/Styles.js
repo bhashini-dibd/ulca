@@ -28,39 +28,9 @@ const GlobalStyles = (theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  content: {
-    background: theme.palette.background.default,
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3),
-    marginTop: "3%",
-  },
-  loaderStyle: {
-    position: 'fixed',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 1000,
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
+  
+  
 
-  },
-  progress: {
-    position: 'relative',
-    top: '40%',
-    left: '46%'
-
-  },
-  snackbar: {
-    width: '100%',
-    marginTop:"50px",
-    '& > * + *': {
-      marginTop: "50px",
-    },
-  },
-  snackbarFont: {
-    fontSize: '1rem'
-  }
 });
 
 export default GlobalStyles;

@@ -26,7 +26,8 @@ const FileUploadStyles = (theme) => ({
     marginLeft:"10px",
     width: "20%",
     minWidth: "10rem",
-    color:"grey"
+    color:"green",
+    cursor: "pointer"
   },
   filterButton:{
     marginLeft: 'auto',
@@ -34,6 +35,7 @@ const FileUploadStyles = (theme) => ({
     minWidth:"auto",
     display: "flex",
     flexDirection: "row",
+    cursor: "pointer"
 
     // "@media (max-width:800px)": {
     //   display: 'none'
