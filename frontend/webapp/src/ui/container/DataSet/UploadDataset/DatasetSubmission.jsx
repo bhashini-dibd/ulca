@@ -6,7 +6,7 @@ import DatasetStyle from '../../../styles/Dataset';
 import BreadCrum from '../../../components/common/Breadcrum';
 import { withRouter, useHistory } from "react-router-dom";
 import urlconfig from '../../../../configs/internalurlmapping';
-
+import thumbsUpIcon from "../../../../assets/thumbsUp.svg"
 
 const DatasetSubmission = (props) => {
     const { classes } = props
@@ -21,7 +21,11 @@ const DatasetSubmission = (props) => {
             <Paper>
                 <Grid container className={classes.dataSubmissionGrid}>
                     <Grid className={classes.submissionIcon} item xs={12} sm={12} md={2} lg={2} xl={2}>
-                        <span className={classes.thumbsUpIconSpan}><ThumbUpIcon className={classes.thumbsUpIcon} /></span>
+                        {/* <span className={classes.thumbsUpIconSpan}><ThumbUpIcon className={classes.thumbsUpIcon} /></span> */}
+                        <img className={classes.yourSearchQuery}
+                        src={thumbsUpIcon}
+                        alt="Success Icon"
+                    />
                     </Grid>
                     <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
                         <Typography className={classes.thankYouTypo} color="primary" variant="body1">Thank you, for the dataset submission.</Typography>
