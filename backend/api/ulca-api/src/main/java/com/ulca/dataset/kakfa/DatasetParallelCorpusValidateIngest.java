@@ -254,6 +254,15 @@ public class DatasetParallelCorpusValidateIngest {
 				
 				JSONObject finalRecord = deepMerge(record, target);
 				
+				if (finalRecord.has("languages")) {
+					JSONObject language = finalRecord.getJSONObject("languages");
+					String sourceLanguage = language.getString("sourceLanguage");
+					String targetLanguage = language.getString("targetLanguage");
+					finalRecord.put("sourceLanguage", sourceLanguage);
+					finalRecord.put("targetLanguage", targetLanguage);
+					finalRecord.remove("languages");
+				}
+				
 				
 				UUID uid = UUID.randomUUID();
 				finalRecord.put("id", uid);
