@@ -55,6 +55,9 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	DatasetMonolingualValidateIngest datasetMonolingualValidateIngest;
 	
+	@Autowired
+	DatasetDocumentLayoutValidateIngest datasetDocumentLayoutValidateIngest;
+	
 	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
@@ -140,11 +143,14 @@ public class KafkaFileDownloadConsumer {
 				log.info("calling the parallel-corpus validate service");
 				datasetParallelCorpusValidateIngest.validateIngest(fileMap,file);
 			}else if(file.getDatasetType() == DatasetType.OCR_CORPUS) {
-				log.info("calling the parallel-corpus validate service");
+				log.info("calling the ocr-corpus validate service");
 				datasetOcrValidateIngest.validateIngest(fileMap,file);
 			}if(file.getDatasetType() == DatasetType.MONOLINGUAL_CORPUS) {
-				log.info("calling the parallel-corpus validate service");
+				log.info("calling the monolingual-corpus validate service");
 				datasetMonolingualValidateIngest.validateIngest(fileMap,file);
+			}if(file.getDatasetType() == DatasetType.DOCUMENT_LAYOUT_CORPUS) {
+				log.info("calling the document-layout-corpus validate service");
+				datasetDocumentLayoutValidateIngest.validateIngest(fileMap,file);
 			}
 			
 			

@@ -343,9 +343,9 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowS
 						}
 
 					} catch (Exception e) {
-						System.out.println("collection method not proper");
+						log.info("collection method not proper");
 						errorList.add("collectionMethod field value not proper.");
-						System.out.println("tracing the error");
+						log.info("tracing the error");
 
 						e.printStackTrace();
 					}

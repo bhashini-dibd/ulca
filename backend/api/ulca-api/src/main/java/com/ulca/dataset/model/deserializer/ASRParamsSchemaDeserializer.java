@@ -133,7 +133,6 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 					lp.setSourceLanguageName(targetLanguageName);
 				}
 				
-				
 				asrParamsSchema.setLanguages(lp);
 			} catch (Exception e) {
 				errorList.add("languages field value not proper.");
@@ -155,7 +154,6 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 				}else {
 					asrParamsSchema.setCollectionSource(collectionSource);
 				}
-					
 				
 			} catch (Exception e) {
 				errorList.add("collectionSource field value not proper.");
@@ -211,7 +209,6 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 				}else {
 					errorList.add("license field value should be present in license list");
 				}
-
 				
 			} catch (Exception e) {
 				errorList.add("license field value not proper.");
@@ -248,7 +245,6 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 						}else {
 							errorList.add("format not among one of specified");
 						}
-						
 		    	  }
 					
 				} 
@@ -280,7 +276,6 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 		    		  asrParamsSchema.setSamplingRate(samplingRate);
 						
 		    	  }
-					
 				} 
 		      
 		      
@@ -297,7 +292,6 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 						}else {
 							errorList.add("bitsPerSample not among one of specified");
 						}
-						
 		    	  }
 					
 				} 
@@ -317,20 +311,14 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 		    	  }
 				} 
 		      
-		     
-		      
 		      if (node.has("gender")) {
 		    	  if(!node.get("gender").isTextual()) {
 		    		  errorList.add("gender field should be String");
 		    	  }else {
 		    		  String gender = node.get("gender").asText();
-		    		  
 		    		  Gender genderenum = Gender.fromValue(gender);
-		    		  
 						if(genderenum != null) {
 							asrParamsSchema.setGender(genderenum);
-							
-							
 						}else {
 							errorList.add("gender not among one of specified values");
 						}
@@ -343,12 +331,9 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 						errorList.add("age field should be String");
 					} else {
 						String age = node.get("age").asText();
-
 						AgeEnum ageEnum = AgeEnum.fromValue(age);
-
 						if (ageEnum != null) {
 							asrParamsSchema.setAge(ageEnum);
-
 						} else {
 							errorList.add("age not among one of specified values");
 						}
@@ -360,18 +345,14 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 					} else {
 						String dialect = node.get("dialect").asText();
 						DialectEnum dialectEnum = DialectEnum.fromValue(dialect);
-
 						if (dialectEnum != null) {
 							asrParamsSchema.setDialect(dialectEnum);
-
 						} else {
 							errorList.add("dialect not among one of specified values");
 						}
 					}
 				}
 		      
-				
-				
 				if (node.has("snr")) {
 					if(!node.get("snr").has("methodType")) {
 						errorList.add("methodType should be present");
@@ -389,9 +370,7 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 						}else {
 							errorList.add("methodType is not one of specified values");
 						}
-
 					}
-					
 				}
 				
 
@@ -471,42 +450,26 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 							.setAsrModelVersion(node.get("collectionMethod").get("collectionDetails").get("asrModelVersion").asText());
 							
 						}
-						
 						asrParamsSchema.setCollectionMethod(collectionMethodAudio);
-						
-						
-
 						log.info("machine-generated-transcript");
-						
-
 						break;
 
 					case MANUAL_TRANSCRIBED:
-						
 						
 						CollectionDetailsManualTranscribed collectionDetailsManualTranscribed = mapper.readValue(
 								node.get("collectionMethod").get("collectionDetails").toPrettyString(),
 								CollectionDetailsManualTranscribed.class);
 						collectionMethodAudio.setCollectionDetails(collectionDetailsManualTranscribed);
 						asrParamsSchema.setCollectionMethod(collectionMethodAudio);
-
-						
 						log.info("manual-transcribed");
-
-						
 						break;
-
-					
 					}
-
 				} catch (Exception e) {
-					System.out.println("collection method not proper");
+					log.info("collection method not proper");
 					errorList.add("collectionMethod field value not proper.");
-					System.out.println("tracing the error");
-					
+					log.info("tracing the error");
 					e.printStackTrace();
 				}
-
 			}
 		}
 	}
