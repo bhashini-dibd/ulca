@@ -149,9 +149,9 @@ const SearchAndDownloadRecords = (props) => {
         if (datasetType['parallel-corpus'])
             return "Target Language *"
         else if (datasetType['ocr-corpus'])
-            return "Select Script *"
+            return "Script *"
         else
-            return "Select Language *"
+            return "Language *"
     }
 
     const getTitle = () => {

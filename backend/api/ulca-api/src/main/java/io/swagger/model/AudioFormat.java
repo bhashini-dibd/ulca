@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  * audio format of the audio file
  */
 public enum AudioFormat {
-  WAV("wav"),
+	WAV("wav"),
     PCM("pcm"),
     MP3("mp3"),
     FLAC("flac");
