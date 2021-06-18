@@ -1,6 +1,6 @@
 package com.ulca.dataset.model.deserializer;
 
-public enum ParallelDatasetSchemaKeys {
+public enum AsrDatasetSchemaKeys {
 
 	//required
 	datasetType,
@@ -10,6 +10,15 @@ public enum ParallelDatasetSchemaKeys {
 	license,
 	submitter,
 	//optional
+	format,
+	channel,
+	samplingRate,
+	bitsPerSample,
+	numberOfSpeakers,
+	gender,
+	age,
+	dialect,
+	snr,
 	collectionMethod
 	
 }
