@@ -6,9 +6,6 @@ import { withStyles, Button, Menu, MenuItem, MuiThemeProvider } from "@material-
 import DownIcon from '@material-ui/icons/ArrowDropDown';
 import Avatar from '@material-ui/core/Avatar';
 import HeaderStyles from "../../styles/HeaderStyles"
-import HomeIcon from '@material-ui/icons/Home';
-import DescriptionIcon from '@material-ui/icons/Description';
-import ChromeReaderModeIcon from '@material-ui/icons/ChromeReaderMode';
 import { useHistory } from 'react-router-dom';
 import GroupIcon from '@material-ui/icons/Group';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
@@ -93,7 +90,7 @@ const Header = (props) => {
                   </Button>
                 </div> */}
                 <div className={classes.datasetOption}>
-                  <div className={classes.dataset}>
+                  <div>
                     <Button className={classes.menuBtn}
                       onClick={(e) => handleOpenMenu(e)}
                       variant="text"
@@ -102,15 +99,7 @@ const Header = (props) => {
                     <DownIcon />
                     </Button>
                   </div>
-                  <div className={classes.datasetMobile}>
-                    <Button className={classes.menuBtn}
-                      onClick={(e) => handleOpenMenu(e)}
-                      variant="text"
-                    >
-                      <DescriptionIcon fontSize="large" />
-                      <DownIcon />
-                    </Button>
-                  </div>
+                  
                   <StyledMenu id="data-set"
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
@@ -133,9 +122,10 @@ const Header = (props) => {
                     >
                       Search & Download Records
                     </MenuItem>
-                    {/* <MenuItem className={classes.styledMenu}>
+                    <MenuItem className={classes.styledMenu}
+                     onClick={() => alert("still in progress")}>
                       Explore Readymade Datasets
-                    </MenuItem> */}
+                    </MenuItem>
                     <MenuItem className={classes.styledMenu}
                       onClick={() => handleMenuItemClick('/submit-dataset/upload')}
                     >
@@ -143,27 +133,22 @@ const Header = (props) => {
                     </MenuItem>
                   </StyledMenu>
                 </div>
-                <div className={classes.options}>
+                {/* <div className={classes.options}>
                   <div className={classes.model}>
                     <Button className={classes.menuBtn} variant="text" onClick={() => alert("Still in progress")}>
                       Model
                     <DownIcon />
                     </Button>
                   </div>
-                  <div className={classes.modelMobile}>
-                    <Button className={classes.menuBtn} variant="text">
-                      <ChromeReaderModeIcon fontSize="large" />
-                      <DownIcon />
-                    </Button>
-                  </div>
-                </div>
+                 
+                </div> */}
               </>
             }
             {
               authenticate() ?
                 <div className={classes.profile}>
-                  <Button onClick={(e) => handleLogoutOption(e)} className={classes.menuBtn} variant="text">
-                    <Avatar >{`${firstName[0].toUpperCase()}`}</Avatar>
+                  <Button  onClick={(e) => handleLogoutOption(e)} className={classes.menuBtn} variant="text">
+                    <Avatar variant="contained" color= "transparent">{`${firstName[0].toUpperCase()}`}</Avatar>
                     <p className={classes.profileName}>{`${firstName}`}</p>
                     <DownIcon />
                   </Button>

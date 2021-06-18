@@ -9,6 +9,7 @@ const LoginStyle = (theme) => ({
     margin: "22% 294px 10% 39px",
     fontSize: "1.875rem",
     fontWeight: "600",
+    cursor:"pointer",
     fontStretch: "normal",
     fontStyle: "normal",
     lineHeight: "1.53",
@@ -106,6 +107,7 @@ sub:{
   },
   body2: {
     fontWeight: "550",
+    
     // fontFamily: "Poppins Medium",
     paddingBottom: "25px",
     opacity: "1",

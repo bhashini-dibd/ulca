@@ -96,8 +96,6 @@ const ChartRender = (props) => {
 			targetLanguage 	=	{ "type": "PARAMS", "value": "" };
 			
 		}
-
-		debugger
 		setSelectedLanguage(selectedLanguage ? selectedLanguage :event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
 		return ([{ "type": "PARAMS", "sourceLanguage" : sourceLanguage,"targetLanguage" : targetLanguage},event])
@@ -210,6 +208,7 @@ const ChartRender = (props) => {
 				<div className={classes.title}>
 					<Typography value="" variant="h6"> {title} </Typography>
 				</div>
+				<div className={classes.title}>
 				<ResponsiveContainer width = "95%" height = {450}>
 					<BarChart width = {900} height 	= 	{450} data={DashboardReport} maxBarSize = {100} >
 						<XAxis 	dataKey 	= 	"label"
@@ -232,6 +231,7 @@ const ChartRender = (props) => {
 						</Bar>
 					</BarChart>
 				</ResponsiveContainer>
+				</div>
 
 			</Paper>
 

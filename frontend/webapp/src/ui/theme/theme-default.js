@@ -61,7 +61,7 @@ MUIDataTableBodyCell:{root : {padding: '.5rem .5rem .5rem .8rem', textTransform:
       light: "#FFFFFF",
       main: "#FFFFFF",
       dark: "#FFFFFF",
-      contrastText: "#FFFFFF",
+      contrastText: "#000000",
     },
     background: {
       default: "#2C2799",
