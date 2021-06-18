@@ -173,6 +173,7 @@ const Header = (props) => {
                   <div className={classes.desktopAuth}>
                     <Button
                       className={classes.menuBtn}
+                      color = "primary"
                       onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
                       variant="text"
                     >
