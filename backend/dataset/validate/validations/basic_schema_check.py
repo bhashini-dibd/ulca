@@ -12,7 +12,9 @@ class BasicSchemaCheck(BaseValidator):
         if request["datasetType"] == dataset_type_parallel:
             required_keys = {'sourceText', 'targetText', 'sourceLanguage', 'targetLanguage'}
         if request["datasetType"] == dataset_type_asr:
-            required_keys = {'text', 'sourceLanguage'}
+            required_keys = {'text', 'sourceLanguage', 'samplingRate', 'bitsPerSample'}
+        if request["datasetType"] == dataset_type_ocr:
+            required_keys = {'groundTruth', 'sourceLanguage'}
 
         if required_keys <= request["record"].keys():
             return super().execute(request)
