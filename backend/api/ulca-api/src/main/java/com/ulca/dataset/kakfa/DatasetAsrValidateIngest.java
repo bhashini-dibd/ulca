@@ -31,11 +31,15 @@ import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
+import com.ulca.dataset.model.deserializer.ASRDatasetRowDataSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.ASRParamsSchema;
+import io.swagger.model.ASRRowSchema;
 import io.swagger.model.DatasetType;
+import io.swagger.model.ParallelDatasetRowSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -211,6 +215,8 @@ public class DatasetAsrValidateIngest {
 		log.info("json reader created ");
 
 		int numberOfRecords = 0;
+		int failedCount = 0;
+		int successCount = 0;
 		JSONObject vModel = new JSONObject();
 		vModel.put("datasetId", datasetId);
 		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
@@ -222,28 +228,71 @@ public class DatasetAsrValidateIngest {
 		while (reader.hasNext()) {
 
 			numberOfRecords++;
-
 			log.info("reading records :: " + numberOfRecords);
-
-			Object test = new Gson().fromJson(reader, Object.class);
+			Object rowObj = new Gson().fromJson(reader, Object.class);
 
 			ObjectMapper mapper = new ObjectMapper();
+			
+			String dataRow = mapper.writeValueAsString(rowObj);
+			SimpleModule module = new SimpleModule();
+			module.addDeserializer(ASRRowSchema.class, new ASRDatasetRowDataSchemaDeserializer());
+			mapper.registerModule(module);
+			
+			ASRRowSchema rowSchema = null;
+			try {
+				
+				rowSchema = mapper.readValue(dataRow, ASRRowSchema.class);
+				log.info("row schema created");				
+				
+			} catch(Exception e) {
+				
+				log.info("record :: " +numberOfRecords + "failed " );
+				log.info("tracing the error " );
+				e.printStackTrace();
+				
+				failedCount++;
+				// send error event
+				JSONObject errorMessage = new JSONObject();
+				errorMessage.put("eventType", "dataset-training");
+				errorMessage.put("messageType", "error");
+				errorMessage.put("code", "1000_ROW_DATA_VALIDATION_FAILED");
+				errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
+				Calendar cal = Calendar.getInstance();
+				SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
+				Date date = cal.getTime();
+				// errorMessage.put("timestamp", df2.format(date));
+				errorMessage.put("timestamp", new Date().toString());
+				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+				errorMessage.put("stage", "ingest");
+				errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
+				errorMessage.put("message", e.getMessage());
+				datasetErrorPublishService.publishDatasetError(errorMessage);
+				
+				
+				
+			}
+			if(rowSchema != null) {
+				log.info("rowSchema is not null" );
+				JSONObject target =  new JSONObject(dataRow);
+				
+				JSONObject finalRecord = deepMerge(source, target);
+				String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
+				finalRecord.remove("languages");
+				finalRecord.put("sourceLanguage", sourceLanguage);
 
-			JSONObject target = new JSONObject(mapper.writeValueAsString(test));
+				finalRecord.put("fileLocation", fileMap.get(finalRecord.get("audioFilename")));
+				UUID uid = UUID.randomUUID();
+				finalRecord.put("id", uid);
 
-			JSONObject finalRecord = deepMerge(source, target);
-			String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
-			finalRecord.remove("languages");
-			finalRecord.put("sourceLanguage", sourceLanguage);
+				vModel.put("record", finalRecord);
+				vModel.put("currentRecordIndex", numberOfRecords);
 
-			finalRecord.put("fileLocation", fileMap.get(finalRecord.get("audioFilename")));
-			UUID uid = UUID.randomUUID();
-			finalRecord.put("id", uid);
+				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+				successCount++;
+				log.info("data row " + numberOfRecords + " sent for validation ");
+			}
 
-			vModel.put("record", finalRecord);
-			vModel.put("currentRecordIndex", numberOfRecords);
-
-			datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+			
 
 		}
 		reader.endArray();
@@ -254,8 +303,10 @@ public class DatasetAsrValidateIngest {
 		vModel.put("eof", true);
 		vModel.remove("record");
 		vModel.remove("currentRecordIndex");
-
-		datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+		if(failedCount < numberOfRecords) {
+			datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+		}
+		
 
 		JSONObject details = new JSONObject();
 		details.put("currentRecordIndex", numberOfRecords);
@@ -264,13 +315,13 @@ public class DatasetAsrValidateIngest {
 
 		JSONObject proCountSuccess = new JSONObject();
 		proCountSuccess.put("type", "success");
-		proCountSuccess.put("count", numberOfRecords);
+		proCountSuccess.put("count", successCount);
 		processedCount.put(proCountSuccess);
 
 		JSONObject proCountFailure = new JSONObject();
 
 		proCountFailure.put("type", "failed");
-		proCountFailure.put("count", 0);
+		proCountFailure.put("count", failedCount);
 		processedCount.put(proCountFailure);
 		details.put("processedCount", processedCount);
 		details.put("timeStamp", new Date().toString());

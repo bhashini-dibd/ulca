@@ -276,9 +276,6 @@ public class DatasetParallelCorpusValidateIngest {
 				log.info("data row " + numberOfRecords + " sent for validation ");
 				successCount++;
 			}
-			
-			
-			
 
 		}
 		reader.endArray();

@@ -74,7 +74,7 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 		
 		for(String k : keys) {
 			try {
-				AsrDatasetSchemaKeys key = AsrDatasetSchemaKeys.valueOf(k) ;
+				AsrDatasetParamsSchemaKeys key = AsrDatasetParamsSchemaKeys.valueOf(k) ;
 			}catch (Exception ex) {
 				System.out.println("no enums found ");
 				errorList.add(k + " unknown property ");
@@ -121,17 +121,15 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 					lp.setSourceLanguageName(sourceLanguageName);
 				}
 				if(node.get("languages").has("targetLanguage")) {
-					String targetLanguage =  	node.get("languages").get("targetLanguage").asText();
+					String targetLanguage = node.get("languages").get("targetLanguage").asText();
 					
 					if(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage) != null) {
 						lp.setTargetLanguage(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage));
-					}else {
-						errorList.add("targetLanguage is not one of defined language pair");
 					}
 					
 				}
 				if(node.get("languages").has("targetLanguageName")) {
-					String targetLanguageName =  	node.get("languages").get("targetLanguageName").asText();
+					String targetLanguageName = node.get("languages").get("targetLanguageName").asText();
 					lp.setSourceLanguageName(targetLanguageName);
 				}
 				
@@ -239,9 +237,6 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 
 		//optional params
 		
-		
-		
-		      
 		      if (node.has("format")) {
 		    	  if(!node.get("format").isTextual()) {
 		    		  errorList.add("format field should be String");
@@ -400,7 +395,7 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 				}
 				
 
-
+	if(node.has("collectionMethod")) {
 		if (node.get("collectionMethod").has("collectionDescription")) {
 			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
 				errorList.add("collectionDescription field should be String Array");
@@ -451,24 +446,31 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 					case MACHINE_GENERATED_TRANSCRIPT:
 						
 						CollectionDetailsMachineGeneratedTranscript collectionDetailsMachineGeneratedTranscript = new CollectionDetailsMachineGeneratedTranscript();
+						
 						TranscriptionEvaluationMethod1 transcriptionEvaluationMethod1 = mapper.readValue(
 								node.get("collectionMethod").get("collectionDetails").get("evaluationMethod").toPrettyString(),
 								TranscriptionEvaluationMethod1.class);
 						
 						collectionDetailsMachineGeneratedTranscript.setEvaluationMethod(transcriptionEvaluationMethod1);
 						
-						collectionDetailsMachineGeneratedTranscript
-								.setAsrModel(node.get("collectionMethod").get("collectionDetails").get("asrModel").asText());
-						collectionMethodAudio.setCollectionDetails(collectionDetailsMachineGeneratedTranscript);
+						if(node.get("collectionMethod").get("collectionDetails").has("asrModel")) {
+							collectionDetailsMachineGeneratedTranscript
+							.setAsrModel(node.get("collectionMethod").get("collectionDetails").get("asrModel").asText());
+							collectionMethodAudio.setCollectionDetails(collectionDetailsMachineGeneratedTranscript);
+						}
 						
-
-						String evaluationMethodType = node.get("collectionMethod").get("collectionDetails").get("evaluationMethodType").asText();
-						
-						CollectionDetailsMachineGeneratedTranscript.EvaluationMethodTypeEnum evaluationMethodTypeEnum = CollectionDetailsMachineGeneratedTranscript.EvaluationMethodTypeEnum.fromValue(evaluationMethodType);
-						collectionDetailsMachineGeneratedTranscript.setEvaluationMethodType(evaluationMethodTypeEnum);
-						
-						collectionDetailsMachineGeneratedTranscript
-						.setAsrModelVersion(node.get("collectionMethod").get("collectionDetails").get("asrModelVersion").asText());
+						if(node.get("collectionMethod").get("collectionDetails").has("evaluationMethodType")) {
+							String evaluationMethodType = node.get("collectionMethod").get("collectionDetails").get("evaluationMethodType").asText();
+							
+							CollectionDetailsMachineGeneratedTranscript.EvaluationMethodTypeEnum evaluationMethodTypeEnum = CollectionDetailsMachineGeneratedTranscript.EvaluationMethodTypeEnum.fromValue(evaluationMethodType);
+							collectionDetailsMachineGeneratedTranscript.setEvaluationMethodType(evaluationMethodTypeEnum);
+							
+						}
+						if(node.get("collectionMethod").get("collectionDetails").has("asrModelVersion")) {
+							collectionDetailsMachineGeneratedTranscript
+							.setAsrModelVersion(node.get("collectionMethod").get("collectionDetails").get("asrModelVersion").asText());
+							
+						}
 						
 						asrParamsSchema.setCollectionMethod(collectionMethodAudio);
 						
@@ -507,7 +509,10 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 
 			}
 		}
-		
+	}
+
+	if(!errorList.isEmpty())
+		throw new IOException(errorList.toString());
 
 		log.info("******** Exiting deserializer ********");
 		return asrParamsSchema;
