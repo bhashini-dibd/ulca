@@ -191,8 +191,17 @@ const ChartRender = (props) => {
 				 
 				 break;
 			case 'ocr-corpus':
-				setTitle("Number of images per script")
-				break;
+				
+				if(page===0){
+					fetchChartData(dataSet.value, "languagePairs", [])
+					setTitle("Number of images per script")
+				}else if(page===1){
+					setTitle(`Number of images per script in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label } - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+				}else if(page===2){
+					setTitle(`Number of images per script in ${selectedLanguageName} `)
+				}
+				 
+				 break;
 			default:
 				setTitle("")
 		}
