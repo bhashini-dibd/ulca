@@ -40,9 +40,9 @@ class CaseDedup(BaseValidator):
                 request['record']['audioHash'] = self.hash_file(audio_file)
                 request['record']['textHash'] = self.create_hash(request['record']['text'], request['record']['sourceLanguage'])
             if request["datasetType"] == dataset_type_ocr:
-                image_file = request['record']['imageFilename']
+                image_file = request['record']['fileLocation']
                 request['record']['imageHash'] = self.hash_file(image_file)
-                request['record']['textHash'] = self.create_hash(request['record']['groundTruth'], request['record']['sourceLanguage'])
+                request['record']['groundTruthHash'] = self.create_hash(request['record']['groundTruth'], request['record']['sourceLanguage'])
 
             return super().execute(request)
         except Exception as e:
