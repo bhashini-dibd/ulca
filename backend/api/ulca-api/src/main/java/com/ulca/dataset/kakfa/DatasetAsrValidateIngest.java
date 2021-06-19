@@ -110,7 +110,7 @@ public class DatasetAsrValidateIngest {
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+			errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
 			datasetErrorPublishService.publishDatasetError(errorMessage);
 

@@ -117,7 +117,7 @@ public class DatasetDocumentLayoutValidateIngest {
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+			errorMessage.put("datasetType", DatasetType.DOCUMENT_LAYOUT_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
 			datasetErrorPublishService.publishDatasetError(errorMessage);
 

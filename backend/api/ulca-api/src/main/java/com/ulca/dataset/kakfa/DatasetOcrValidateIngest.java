@@ -113,7 +113,7 @@ public class DatasetOcrValidateIngest {
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+			errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
 			datasetErrorPublishService.publishDatasetError(errorMessage);
 
@@ -144,7 +144,7 @@ public class DatasetOcrValidateIngest {
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+			errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
 			datasetErrorPublishService.publishDatasetError(errorMessage);
 
@@ -267,7 +267,7 @@ public class DatasetOcrValidateIngest {
 				errorMessage.put("timestamp", new Date().toString());
 				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 				errorMessage.put("stage", "ingest");
-				errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
+				errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 				errorMessage.put("message", e.getMessage());
 				datasetErrorPublishService.publishDatasetError(errorMessage);
 				

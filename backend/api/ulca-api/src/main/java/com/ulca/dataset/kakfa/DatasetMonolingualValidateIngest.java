@@ -146,7 +146,7 @@ public class DatasetMonolingualValidateIngest {
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
+			errorMessage.put("datasetType", DatasetType.MONOLINGUAL_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
 			datasetErrorPublishService.publishDatasetError(errorMessage);
 
@@ -261,7 +261,7 @@ public class DatasetMonolingualValidateIngest {
 				errorMessage.put("timestamp", new Date().toString());
 				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 				errorMessage.put("stage", "ingest");
-				errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
+				errorMessage.put("datasetType", DatasetType.MONOLINGUAL_CORPUS.toString());
 				errorMessage.put("message", "data row does not contains text field");
 				datasetErrorPublishService.publishDatasetError(errorMessage);
 			}else {
@@ -284,7 +284,7 @@ public class DatasetMonolingualValidateIngest {
 					errorMessage.put("timestamp", new Date().toString());
 					errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 					errorMessage.put("stage", "ingest");
-					errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
+					errorMessage.put("datasetType", DatasetType.MONOLINGUAL_CORPUS.toString());
 					errorMessage.put("message", "data row does contains unkown fields");
 					datasetErrorPublishService.publishDatasetError(errorMessage);
 				}else {
