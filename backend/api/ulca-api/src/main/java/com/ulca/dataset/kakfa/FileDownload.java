@@ -14,6 +14,7 @@ public class FileDownload {
 	private String userId;
 	private String fileUrl;
 	private String datasetId;
+	private String datasetName;
 	private String serviceRequestNumber;
 	private DatasetType datasetType;
 

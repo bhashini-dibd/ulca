@@ -222,6 +222,7 @@ public class DatasetOcrValidateIngest {
 		int successCount = 0;
 		JSONObject vModel = new JSONObject();
 		vModel.put("datasetId", datasetId);
+		vModel.put("datasetName", file.getDatasetName());
 		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
 		vModel.put("serviceRequestNumber", serviceRequestNumber);
 		vModel.put("userId", userId);
