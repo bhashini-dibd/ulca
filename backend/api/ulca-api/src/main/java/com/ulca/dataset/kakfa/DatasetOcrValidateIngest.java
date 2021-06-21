@@ -112,6 +112,7 @@ public class DatasetOcrValidateIngest {
 			// errorMessage.put("timestamp", df2.format(date));
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+			errorMessage.put("datasetName", file.getDatasetName());
 			errorMessage.put("stage", "ingest");
 			errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
@@ -143,6 +144,7 @@ public class DatasetOcrValidateIngest {
 			// errorMessage.put("timestamp", df2.format(date));
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+			errorMessage.put("datasetName", file.getDatasetName());
 			errorMessage.put("stage", "ingest");
 			errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
@@ -267,6 +269,7 @@ public class DatasetOcrValidateIngest {
 				// errorMessage.put("timestamp", df2.format(date));
 				errorMessage.put("timestamp", new Date().toString());
 				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+				errorMessage.put("datasetName", file.getDatasetName());
 				errorMessage.put("stage", "ingest");
 				errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 				errorMessage.put("message", e.getMessage());

@@ -112,6 +112,7 @@ public class DatasetParallelCorpusValidateIngest {
 			// errorMessage.put("timestamp", df2.format(date));
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+			errorMessage.put("datasetName", file.getDatasetName());
 			errorMessage.put("stage", "ingest");
 			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
@@ -240,6 +241,7 @@ public class DatasetParallelCorpusValidateIngest {
 				// errorMessage.put("timestamp", df2.format(date));
 				errorMessage.put("timestamp", new Date().toString());
 				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+				errorMessage.put("datasetName", file.getDatasetName());
 				errorMessage.put("stage", "ingest");
 				errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
 				errorMessage.put("message", e.getMessage());
@@ -317,139 +319,6 @@ public class DatasetParallelCorpusValidateIngest {
 	}
 	
 
-	public void ingest_bkp(ParallelDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
-			throws JSONException, IOException, NoSuchAlgorithmException {
-
-		log.info("************ Entry DatasetParallelCorpusValidateIngest :: ingest *********");
-
-		String datasetId = file.getDatasetId();
-		String serviceRequestNumber = file.getServiceRequestNumber();
-		String userId = file.getUserId();
-
-		ObjectMapper objectMapper = new ObjectMapper();
-
-		JSONObject record;
-
-		record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-
-		String dataFilePath = fileMap.get("data.json");
-
-		log.info("data.json file path :: " + dataFilePath);
-
-		File jsonFile = new File(dataFilePath);
-		JsonFactory jsonfactory = new JsonFactory(); // init factory
-		JsonParser jsonParser = jsonfactory.createParser(jsonFile); // create JSON parser
-		JsonToken jsonToken = jsonParser.nextToken();
-		int numberOfRecords = 0;
-		JSONObject vModel = new JSONObject();
-		vModel.put("record", record);
-		vModel.put("datasetId", datasetId);
-		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
-		vModel.put("serviceRequestNumber", serviceRequestNumber);
-		vModel.put("userId", userId);
-		vModel.put("userMode", "real");
-		int currentCount = 0;
-		int batchCount = 999;
-
-		while (jsonToken != JsonToken.END_ARRAY) {
-			String fieldname = jsonParser.getCurrentName();
-			if (SOURCE_TEXT.equals(fieldname)) {
-				jsonToken = jsonParser.nextToken(); // read next token
-				record.put(SOURCE_TEXT, jsonParser.getText());
-				record.put(SOURCE_TEXT_HASH, getSha256Hash(jsonParser.getText()));
-			}
-			if (TARGET_TEXT.equals(fieldname)) {
-				jsonToken = jsonParser.nextToken();
-				record.put(TARGET_TEXT, jsonParser.getText());
-				record.put(TARGET_TEXT_HASH, getSha256Hash(jsonParser.getText()));
-			}
-			if (jsonToken == JsonToken.END_OBJECT) {
-				// do some processing, Indexing, saving in DB etc..
-
-				numberOfRecords++;
-				UUID uid = UUID.randomUUID();
-				record.put("id", uid);
-				if (record.has("languages")) {
-					JSONObject language = record.getJSONObject("languages");
-					String sourceLanguage = language.getString("sourceLanguage");
-					String targetLanguage = language.getString("targetLanguage");
-					record.put("sourceLanguage", sourceLanguage);
-					record.put("targetLanguage", targetLanguage);
-					record.remove("languages");
-				}
-
-				vModel.put("currentRecordIndex", numberOfRecords);
-				currentCount++;
-				// validate the current record
-				// if validation success then send to validate topic
-				// else
-
-				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
-
-				if (currentCount == batchCount) {
-
-					currentCount = 0;
-					// update the task tracker
-					JSONObject details = new JSONObject();
-					details.put("currentRecordIndex", currentCount);
-
-					JSONArray processedCount = new JSONArray();
-
-					JSONObject proCountSuccess = new JSONObject();
-					proCountSuccess.put("type", "success");
-					proCountSuccess.put("count", currentCount);
-					processedCount.put(proCountSuccess);
-
-					JSONObject proCountFailure = new JSONObject();
-
-					proCountFailure.put("type", "failed");
-					proCountFailure.put("count", 0);
-					processedCount.put(proCountFailure);
-					details.put("processedCount", processedCount);
-					details.put("timeStamp", new Date().toString());
-
-					processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
-							com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
-
-				}
-
-			}
-			jsonToken = jsonParser.nextToken();
-
-		}
-
-		vModel.put("eof", true);
-		vModel.remove("record");
-		vModel.remove("currentRecordIndex");
-
-		log.info("Eof reached");
-		jsonParser.close();
-		datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
-
-		JSONObject details = new JSONObject();
-		details.put("currentRecordIndex", numberOfRecords);
-
-		JSONArray processedCount = new JSONArray();
-
-		JSONObject proCountSuccess = new JSONObject();
-		proCountSuccess.put("type", "success");
-		proCountSuccess.put("count", numberOfRecords);
-		processedCount.put(proCountSuccess);
-
-		JSONObject proCountFailure = new JSONObject();
-
-		proCountFailure.put("type", "failed");
-		proCountFailure.put("count", 0);
-		processedCount.put(proCountFailure);
-		details.put("processedCount", processedCount);
-		details.put("timeStamp", new Date().toString());
-
-		processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
-				com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
-
-		log.info("sent record for validation ");
-
-	}
 
 	public String getSha256Hash(String input) throws NoSuchAlgorithmException {
 

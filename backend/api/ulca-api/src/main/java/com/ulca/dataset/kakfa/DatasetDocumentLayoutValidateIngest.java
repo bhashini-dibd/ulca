@@ -116,6 +116,7 @@ public class DatasetDocumentLayoutValidateIngest {
 			// errorMessage.put("timestamp", df2.format(date));
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+			errorMessage.put("datasetName", file.getDatasetName());
 			errorMessage.put("stage", "ingest");
 			errorMessage.put("datasetType", DatasetType.DOCUMENT_LAYOUT_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
@@ -147,6 +148,7 @@ public class DatasetDocumentLayoutValidateIngest {
 			// errorMessage.put("timestamp", df2.format(date));
 			errorMessage.put("timestamp", new Date().toString());
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+			errorMessage.put("datasetName", file.getDatasetName());
 			errorMessage.put("stage", "ingest");
 			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
@@ -271,6 +273,7 @@ public class DatasetDocumentLayoutValidateIngest {
 				// errorMessage.put("timestamp", df2.format(date));
 				errorMessage.put("timestamp", new Date().toString());
 				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
+				errorMessage.put("datasetName", file.getDatasetName());
 				errorMessage.put("stage", "ingest");
 				errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
 				errorMessage.put("message", e.getMessage());
