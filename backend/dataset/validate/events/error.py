@@ -19,7 +19,7 @@ class ErrorEvent:
         try:
             event = {"eventType": "dataset-training", "messageType": "error", "code": validate_error_code.replace("XXX", error["code"]),
                      "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),
-                     "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool,
+                     "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool, "datasetName": error["datasetName"],
                      "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
             prod.produce(event, error_event_input_topic, None)
         except Exception as e:

@@ -29,7 +29,7 @@ class OCRValidate:
                     prod.produce(request, validate_output_topic, None)
                 else:
                     error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
-                             "message": res["message"], "code": res["code"], "record": request["record"]}
+                             "message": res["message"], "code": res["code"], "record": request["record"], "datasetName": request["datasetName"]}
                     error_event.create_error_event(error)
 
                 # Update task tracker
