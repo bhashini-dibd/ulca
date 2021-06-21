@@ -9,16 +9,6 @@
             "code":"ADMIN",
             "active":true,
             "description":"Has access to user management related resources"
-        },
-        {
-            "code":"TRANSLATOR",
-            "active":true,
-            "description":"Has access to translation related resources"
-        },
-        {
-            "code":"ANNOTATOR",
-            "active":true,
-            "description":"Has access to translation related resources for an annotator"
         }
     ]
 }
