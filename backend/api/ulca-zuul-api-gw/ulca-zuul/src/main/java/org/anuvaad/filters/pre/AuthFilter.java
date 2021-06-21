@@ -70,8 +70,7 @@ public class AuthFilter extends ZuulFilter {
         String uri = getRequestURI();
         if (openEndpointsWhitelist.contains(uri)) {
             setShouldDoAuth(false);
-            if (!uri.contains("/telemetry"))
-                logger.info(SKIP_AUTH_CHECK, uri);
+            logger.info(SKIP_AUTH_CHECK, uri);
             ctx.set(REQ_URI, uri);
             return null;
         }
@@ -157,7 +156,7 @@ public class AuthFilter extends ZuulFilter {
     /**
      * Verifies if the authToken belongs to a valid user in the system.
      * @param ctx
-     * @param authToken
+     * @param publicKey
      * @return
      */
     public User verifyAuthenticity(RequestContext ctx, String publicKey) {
