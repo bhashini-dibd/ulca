@@ -47,9 +47,7 @@ class ParallelService:
                         if isinstance(result[0], list):
                             if len(batch_data) == batch:
                                 if metadata["userMode"] != user_mode_pseudo:
-                                    persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                                    persist_thread.start()
-                                    persist_thread.join()
+                                    repo.insert(batch_data)
                                 count += len(batch_data)
                                 batch_data = []
                             batch_data.extend(result[0])
@@ -63,7 +61,7 @@ class ParallelService:
                             updates += 1
                         else:
                             error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
-                                               "datasetType": dataset_type_parallel,
+                                               "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
                                                "serviceRequestNumber": metadata["serviceRequestNumber"],
                                                "message": "This record is already available in the system"})
                             pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD", "serviceRequestNumber": metadata["serviceRequestNumber"],
@@ -71,9 +69,7 @@ class ParallelService:
                 pool_enrichers.close()
                 if batch_data:
                     if metadata["userMode"] != user_mode_pseudo:
-                        persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                        persist_thread.start()
-                        persist_thread.join()
+                        repo.insert(batch_data)
                     count += len(batch_data)
             if error_list:
                 error_event.create_error_event(error_list)

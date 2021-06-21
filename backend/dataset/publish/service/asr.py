@@ -45,9 +45,7 @@ class ASRService:
                         if result[0] == "INSERT":
                             if len(batch_data) == batch:
                                 if metadata["userMode"] != user_mode_pseudo:
-                                    persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                                    persist_thread.start()
-                                    persist_thread.join()
+                                    repo.insert(batch_data)
                                 count += len(batch_data)
                                 batch_data = []
                             batch_data.append(result[1])
@@ -55,7 +53,7 @@ class ASRService:
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                             metrics.build_metric_event(result[1], metadata, None, None)
                         elif result[0] == "FAILED":
-                            error_list.append({"record": result[1], "code": "UPLOAD_FAILED",
+                            error_list.append({"record": result[1], "code": "UPLOAD_FAILED", "datasetName": metadata["datasetName"],
                                                "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
                                                "message": "Upload to s3 bucket failed"})
                             pt_list.append({"status": "FAILED", "code": "UPLOAD_FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
@@ -68,15 +66,13 @@ class ASRService:
                         else:
                             error_list.append({"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
                                                "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                               "message": "This record is already available in the system"})
+                                               "message": "This record is already available in the system", "datasetName": metadata["datasetName"]})
                             pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                 pool_enrichers.close()
                 if batch_data:
                     if metadata["userMode"] != user_mode_pseudo:
-                        persist_thread = threading.Thread(target=repo.insert, args=(batch_data,))
-                        persist_thread.start()
-                        persist_thread.join()
+                        repo.insert(batch_data)
                     count += len(batch_data)
             if error_list:
                 error_event.create_error_event(error_list)
