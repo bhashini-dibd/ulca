@@ -19,13 +19,13 @@ import java.util.*;
 public class ZuulConfigCache implements ApplicationRunner {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${anuvaad.role.configs}")
+    @Value("${ulca.role.configs}")
     private String roleConfigsUrl;
 
-    @Value("${anuvaad.action.configs}")
+    @Value("${ulca.action.configs}")
     private String actionConfigsUrl;
 
-    @Value("${anuvaad.role-action.configs}")
+    @Value("${ulca.role-action.configs}")
     private String roleActionConfigsUrl;
 
     public ResourceLoader resourceLoader;

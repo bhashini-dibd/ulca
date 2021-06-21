@@ -62,7 +62,7 @@ public class RbacFilter extends ZuulFilter {
         objectMapper = new ObjectMapper();
     }
 
-    @Value("${anuvaad.superuser.role.code}")
+    @Value("${ulca.superuser.role.code}")
     private String superUserCode;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

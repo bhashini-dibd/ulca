@@ -21,10 +21,10 @@ import static org.anuvaad.constants.RequestContextConstants.CORRELATION_ID_KEY;
 @Service
 public class UserUtils {
 
-    @Value("${anuvaad.ums.host}")
+    @Value("${ulca.ums.host}")
     private String umsHost;
 
-    @Value("${anuvaad.ums.token.search}")
+    @Value("${ulca.ums.key.search}")
     private String umsSearchWithToken;
 
     private final RestTemplate restTemplate;
