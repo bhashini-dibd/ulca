@@ -28,7 +28,7 @@ class ErrorEvent:
             try:
                 event = {"eventType": "dataset-training", "messageType": "error", "code": publish_error_code.replace("XXX", error["code"]),
                          "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),
-                         "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool,
+                         "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool,"datasetName": error["datasetName"],
                          "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
                 if 'originalRecord' in error.keys():
                     event["originalRecord"] = error["originalRecord"]
@@ -45,8 +45,8 @@ class ErrorEvent:
     def write_error(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
-            log.info(f'Creating error file for SRN -- {data["serviceRequestNumber"]}')
-            file = f'{shared_storage_path}error-{data["serviceRequestNumber"]}.csv'
+            log.info(f'Creating error file for Dataset: {data["datasetName"]} | SRN: {data["serviceRequestNumber"]}')
+            file = f'{shared_storage_path}error-{data["datasetName"]}.csv'
             error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"],
                          "internal_file": file, "file": file, "time_stamp": str(datetime.now()), "error": data}
             error_repo.insert(error_rec)
@@ -90,7 +90,7 @@ class ErrorEvent:
                 for error in error_records:
                     errors.append(error["error"])
                     if 'uploaded' in error.keys():
-                        error_rec = error  #??
+                        error_rec = error  
                 if not error_rec:
                     error_rec = error_records[0]
                 error_rec["errors"] = errors
