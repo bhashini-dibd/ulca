@@ -38,7 +38,8 @@ class ParallelValidate:
                 # Update task tracker
                 tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"]}
                 pt.update_task_details(tracker_data)
-
+            else:
+                log.info("Exception occured, validation result: {}".format(res))
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while validating dataset!!", "status": "FAILED"}
