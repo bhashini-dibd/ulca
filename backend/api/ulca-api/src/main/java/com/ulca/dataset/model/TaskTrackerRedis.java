@@ -23,6 +23,7 @@ public class TaskTrackerRedis implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@Id
     private String serviceRequestNumber;
+	private int ingestComplete;
 	private int count;
 	private int ingestError;
 	private int ingestSuccess;

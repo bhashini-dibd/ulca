@@ -347,6 +347,7 @@ public class DatasetParallelCorpusValidateIngest {
 			if(!taskTrackerRedisOp.isEmpty()) {
 				
 				TaskTrackerRedis  obj = taskTrackerRedisOp.get();
+				obj.setIngestComplete(1);
 				obj.setCount(numberOfRecords);
 				obj.setIngestError(failedCount);
 				obj.setIngestSuccess(successCount);

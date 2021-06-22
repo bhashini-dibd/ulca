@@ -110,7 +110,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			
 			System.out.println("************* ingest *********");
 			log.info(details.toString());
-			if(taskTrackerRedis.getCount() > 0 && (taskTrackerRedis.getIngestSuccess() + taskTrackerRedis.getIngestError() == taskTrackerRedis.getCount())) {
+			if(taskTrackerRedis.getIngestComplete() == 1 && (taskTrackerRedis.getIngestSuccess() + taskTrackerRedis.getIngestError() == taskTrackerRedis.getCount())) {
 	    		//update the end time for ingest
 	    		v1 = true;
 	    		log.info("updating end time");
@@ -127,7 +127,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			proCountFailure.put("count", taskTrackerRedis.getValidateError());
 			log.info(details.toString());
 			
-	    	if(taskTrackerRedis.getIngestSuccess() > 0 && (taskTrackerRedis.getValidateError() + taskTrackerRedis.getValidateSuccess() == taskTrackerRedis.getIngestSuccess())) {
+	    	if(v1 == true && (taskTrackerRedis.getValidateError() + taskTrackerRedis.getValidateSuccess() == taskTrackerRedis.getIngestSuccess())) {
 	    		//update the end time for validate
 	    		v2 = true;
 	    		log.info("updating end time validate");
@@ -144,7 +144,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			proCountSuccess.put("count", taskTrackerRedis.getPublishSuccess());
 			log.info(details.toString());
 			
-	    	if(taskTrackerRedis.getValidateSuccess() > 0 && (taskTrackerRedis.getPublishError() + taskTrackerRedis.getPublishSuccess() == taskTrackerRedis.getValidateSuccess())) {
+	    	if(v2 == true && (taskTrackerRedis.getPublishError() + taskTrackerRedis.getPublishSuccess() == taskTrackerRedis.getValidateSuccess())) {
 	    		//update the end time for publish
 	    		v3 = true;
 	    		log.info("updating end time for publish");
@@ -156,10 +156,10 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
 	    	}
 	    	
-	    	/*
+	    	
 	    	if(v1 && v2 & v3) {
 	    		taskTrackerRedisRepository.delete(taskTrackerRedis);
-	    	}*/
+	    	}
 	    	
 	    	
 	    }
