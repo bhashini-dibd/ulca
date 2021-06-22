@@ -37,10 +37,15 @@ const SearchAndDownloadRecords = (props) => {
         source: '',
         target: []
     });
+    // const [filterBy, setFilterBy] = useState({
+    //     domain: [],
+    //     source: [],
+    //     collectionMethod: []
+    // });
     const [filterBy, setFilterBy] = useState({
-        domain: [],
-        source: [],
-        collectionMethod: []
+        domain: '',
+        source: '',
+        collectionMethod: ''
     });
 
     const [datasetType, setDatasetType] = useState({
@@ -78,7 +83,7 @@ const SearchAndDownloadRecords = (props) => {
             setDatasetType({ [data[0].datasetType]: true })
         }
 
-        else if ((params === 'completed' || params === 'inprogress' ) && count === 0)
+        else if ((params === 'completed' || params === 'inprogress') && count === 0)
             history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
 
     }, []);
@@ -215,8 +220,10 @@ const SearchAndDownloadRecords = (props) => {
     }
     const handleSubmitBtn = () => {
         let tgt = languagePair.target.map(trgt => trgt.value)
-        let domain = filterBy.domain.map(domain => domain.value)
-        let collectionMethod = filterBy.collectionMethod.map(method => method.value)
+        //let domain = filterBy.domain.map(domain => domain.value)
+        //let collectionMethod = filterBy.collectionMethod.map(method => method.value)
+        let domain = [filterBy.domain]
+        let collectionMethod = [filterBy.collectionMethod]
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
                 makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
@@ -248,7 +255,7 @@ const SearchAndDownloadRecords = (props) => {
         return (
             DatasetType.map((type, i) => {
                 return (
-                    <Button className={classes.innerButton} variant={datasetType[type.value] ? "contained" : "outlined"}
+                    <Button size='small' className={classes.innerButton} variant={datasetType[type.value] ? "contained" : "outlined"}
                         color="primary"
                         key={i}
                         onClick={() => handleDatasetClick(type.value)}
@@ -271,6 +278,24 @@ const SearchAndDownloadRecords = (props) => {
                 label={label}
             />
 
+        )
+    }
+    const renderFilterByfield = (id, label, value, filter) => {
+        return (
+            <TextField className={classes.subHeader}
+                fullWidth
+                select
+                id={id}
+                label={label}
+                value={value}
+                onChange={(event) => handleFilterByChange(event.target.value, id)}
+            >
+                {filter.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                    </MenuItem>
+                ))}
+            </TextField>
         )
     }
     const renderTexfield = (id, label) => {
@@ -311,6 +336,36 @@ const SearchAndDownloadRecords = (props) => {
     const getTargetLang = () => {
         return Language.filter(lang => lang.value !== languagePair.source)
     }
+    const renderclearNsubmitButtons=()=>{
+        return(
+              /* <div className={classes.clearNSubmit}>
+                        <Button size="large"  variant="outlined" onClick={clearfilter}>
+                            Clear
+                    </Button>
+                        <Button size="large" className={classes.buttonStyle} variant="contained" color="primary" onClick={handleSubmitBtn}>
+                            Submit
+                    </Button>
+                    </div> */
+                    <Grid container className={classes.clearNSubmit}>
+                        <Grid item xs={3}></Grid>
+                        <Grid item xs={9}>
+                            <Grid container spacing={2} >
+                                <Grid item xs={6}>
+                                    <Button size="large" fullWidth variant="outlined" onClick={clearfilter}>
+                                        Clear
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Button fullWidth size="large" variant="contained" color="primary" onClick={handleSubmitBtn}>
+                                        Submit
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+        )
+    }
 
     return (
         <div>
@@ -346,27 +401,22 @@ const SearchAndDownloadRecords = (props) => {
                     <div className={classes.subHeader}>
                         <Grid container spacing={1}>
                             <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                {renderFilterByOptions("domain", FilterBy.domain, "domain", filterBy.domain, "Select Domain")}
+                                {/* {renderFilterByOptions("domain", FilterBy.domain, "domain", filterBy.domain, "Select Domain")} */}
+                                {renderFilterByfield("domain", "Select Domain", filterBy.domain, FilterBy.domain)}
                             </Grid>
 
                         </Grid>
-                        {renderFilterByOptions("collection-method", FilterBy.collectionMethod, "collectionMethod", filterBy.collectionMethod, "Select Collection Method")}
+                        {/* {renderFilterByOptions("collection-method", FilterBy.collectionMethod, "collectionMethod", filterBy.collectionMethod, "Select Collection Method")} */}
+                        {renderFilterByfield("collectionMethod", "Select Collection Method", filterBy.collectionMethod, FilterBy.collectionMethod)}
                     </div>
 
                     {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
                     {renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
 
-                    <div className={classes.clearNSubmit}>
-                        <Button color="primary" onClick={clearfilter}>
-                            Clear
-                    </Button>
-                        <Button variant="contained" color="primary" onClick={handleSubmitBtn}>
-                            Submit
-                    </Button>
-                    </div>
+                    {renderclearNsubmitButtons()}
                 </Grid>
                 <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
-                    <Divider className={classes.divider} orientation="vertical" />
+                    <Divider orientation="vertical" />
                 </Grid>
                 <Grid item xs={12} sm={6} md={7} lg={7} xl={7} className={classes.parent}>
                     {renderPage()}
