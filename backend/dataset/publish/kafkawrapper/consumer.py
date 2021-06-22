@@ -46,10 +46,6 @@ def consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
-                        '''if 'eof' in data.keys():
-                            if data["eof"]:
-                                pt.end_processing(data)
-                                break'''
                         if 'id' not in data["record"].keys():
                             data["record"]["id"] = str(uuid.uuid4())
                         if data["datasetType"] == dataset_type_parallel:
