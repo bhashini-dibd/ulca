@@ -221,6 +221,8 @@ public class DatasetParallelCorpusValidateIngest {
 		vModel.put("userMode", "real");
 		
 
+		 
+		 
 		reader.beginArray();
 		while (reader.hasNext()) {
 
@@ -249,6 +251,34 @@ public class DatasetParallelCorpusValidateIngest {
 				e.printStackTrace();
 				
 				failedCount++;
+				
+				try {
+					
+					Optional<TaskTrackerRedis> taskTrackerRedisOp = taskTrackerRedisRepository.findById(serviceRequestNumber);
+					if(!taskTrackerRedisOp.isEmpty()) {
+						
+						TaskTrackerRedis  obj = taskTrackerRedisOp.get();
+						obj.setCount(0);
+						obj.setIngestError(failedCount);
+						obj.setIngestSuccess(successCount);
+						taskTrackerRedisRepository.save(obj);
+						
+					}else {
+						TaskTrackerRedis taskTrackerRedis  = new TaskTrackerRedis();
+						 taskTrackerRedis.setCount(0);
+						 taskTrackerRedis.setServiceRequestNumber(serviceRequestNumber);
+						 taskTrackerRedis.setIngestError(failedCount);
+						 taskTrackerRedis.setIngestSuccess(successCount);
+						 
+						 taskTrackerRedisRepository.save(taskTrackerRedis);
+					}
+					
+					
+				}catch(Exception ex) {
+					ex.printStackTrace();
+				}
+				
+				
 				// send error event
 				JSONObject errorMessage = new JSONObject();
 				errorMessage.put("eventType", "dataset-training");
@@ -271,6 +301,36 @@ public class DatasetParallelCorpusValidateIngest {
 				
 			}
 			if(rowSchema != null) {
+				
+				successCount++;
+				
+				try {
+					
+					Optional<TaskTrackerRedis> taskTrackerRedisOp = taskTrackerRedisRepository.findById(serviceRequestNumber);
+					if(!taskTrackerRedisOp.isEmpty()) {
+						
+						TaskTrackerRedis  obj = taskTrackerRedisOp.get();
+						obj.setCount(0);
+						obj.setIngestError(failedCount);
+						obj.setIngestSuccess(successCount);
+						taskTrackerRedisRepository.save(obj);
+						
+					}else {
+						TaskTrackerRedis taskTrackerRedis  = new TaskTrackerRedis();
+						 taskTrackerRedis.setCount(0);
+						 taskTrackerRedis.setServiceRequestNumber(serviceRequestNumber);
+						 taskTrackerRedis.setIngestError(failedCount);
+						 taskTrackerRedis.setIngestSuccess(successCount);
+						 
+						 taskTrackerRedisRepository.save(taskTrackerRedis);
+					}
+					
+					
+				}catch(Exception ex) {
+					ex.printStackTrace();
+				}
+
+
 				
 				log.info("rowSchema is not null" );
 				JSONObject target =  new JSONObject(dataRow);
@@ -297,35 +357,12 @@ public class DatasetParallelCorpusValidateIngest {
 				log.info(vModel.toString());
 				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
 				log.info("data row " + numberOfRecords + " sent for validation ");
-				successCount++;
+				
 			}
 			
 			//update redis cache
 			
-			try {
-				
-				Optional<TaskTrackerRedis> taskTrackerRedisOp = taskTrackerRedisRepository.findById(serviceRequestNumber);
-				if(!taskTrackerRedisOp.isEmpty()) {
-					
-					TaskTrackerRedis  obj = taskTrackerRedisOp.get();
-					obj.setCount(0);
-					obj.setIngestError(failedCount);
-					obj.setIngestSuccess(successCount);
-					taskTrackerRedisRepository.save(obj);
-					
-				}else {
-					TaskTrackerRedis taskTrackerRedis  = new TaskTrackerRedis();
-					 taskTrackerRedis.setCount(0);
-					 taskTrackerRedis.setServiceRequestNumber(serviceRequestNumber);
-					 taskTrackerRedis.setIngestError(failedCount);
-					 taskTrackerRedis.setIngestSuccess(successCount);
-					 taskTrackerRedisRepository.save(taskTrackerRedis);
-				}
-				
-				
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
+			
 			
 		}
 		reader.endArray();

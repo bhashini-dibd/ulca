@@ -162,6 +162,20 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    		
 	    		log.info("deleting for serviceRequestNumber :: " + serviceRequestNumber);
 	    		
+	    		log.info("total count :: " + taskTrackerRedis.getCount()+"");
+		    	log.info("ingest success :: "+ taskTrackerRedis.getIngestSuccess()+"");
+		    	
+		    	log.info("ingest error " + taskTrackerRedis.getIngestError()+"");
+		    	
+		    	log.info("validate success" + taskTrackerRedis.getValidateSuccess()+"");
+		    	
+		    	log.info("validate error" + taskTrackerRedis.getValidateError()+"");
+		    
+		    	
+		    	log.info("publish success" + taskTrackerRedis.getPublishSuccess()+"");
+		    	
+		    	log.info("publish error" + taskTrackerRedis.getPublishError()+"");
+	    		
 	    		taskTrackerRedisRepository.delete(taskTrackerRedis);
 	    	}
 	    	
