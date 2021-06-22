@@ -18,18 +18,18 @@ class Producer:
     # Any other method that needs a producer will get it from here
     def instantiate(self):
         producer = KafkaProducer(bootstrap_servers=list(str(kafka_bootstrap_server_host).split(",")),
-                                 api_version=(1, 0, 0),
+                                 api_version=(1, 0, 0), key_serializer=str.encode,
                                  value_serializer=lambda x: json.dumps(x).encode('utf-8'))
         return producer
 
     # Method to push records to a topic in the kafka queue
-    def produce(self, object_in, topic, partition):
+    def produce(self, object_in, topic, key):
         producer = self.instantiate()
         try:
             if object_in:
-                if partition is None:
-                    partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
-                producer.send(topic, value=object_in, partition=partition)
+                #if partition is None:
+                 #   partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
+                producer.send(topic, value=object_in, key=key)
                 log.info(f'Pushing to topic: {topic}')
             producer.flush()
         except Exception as e:
