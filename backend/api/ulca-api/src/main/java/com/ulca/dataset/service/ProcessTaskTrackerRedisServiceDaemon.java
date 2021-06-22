@@ -153,7 +153,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    	}else {
 	    		if(taskTrackerRedis.getPublishSuccess() > 0 || taskTrackerRedis.getPublishError() > 0)
 	    		processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.publish,
-						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
+						com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
 	    	}
 	    	
 	    	
