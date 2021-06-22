@@ -114,7 +114,11 @@ class PTRepo:
             value = "publishSuccess"
             if error:
                 value = "publishError"
+            data = self.redis_search([key])
+            log.info(f'Data Before ------ {data}')
             client.hincrby(key, value, 1)
+            data = self.redis_search([key])
+            log.info(f'Data After ------ {data}')
         except Exception as e:
             log.exception(f'Exception in redis search: {e}', e)
             return None

@@ -17,6 +17,7 @@ class ProcessTracker:
         pass
 
     def update_task_details(self, data):
+        log.info(f'Updating PT redis db......')
         if data["status"] == "SUCCESS":
             repo.redis_key_inc(data["serviceRequestNumber"], False)
         else:
