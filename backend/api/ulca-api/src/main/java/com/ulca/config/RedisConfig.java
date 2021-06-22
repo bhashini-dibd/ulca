@@ -33,6 +33,7 @@ public class RedisConfig {
         configuration.setHostName(redisHost);
         configuration.setPort(new Integer(redisPort));
         configuration.setPassword(redisPass);
+        configuration.setDatabase(0);
         return new JedisConnectionFactory(configuration);
     }
 

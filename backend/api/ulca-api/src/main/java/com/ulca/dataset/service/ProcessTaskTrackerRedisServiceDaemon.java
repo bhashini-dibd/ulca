@@ -106,7 +106,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			proCountFailure.put("count", taskTrackerRedis.getValidateError());
 			log.info(details.toString());
 			
-	    	if(taskTrackerRedis.getValidateError() + taskTrackerRedis.getValidateSuccess() == taskTrackerRedis.getIngestSuccess()) {
+	    	if(taskTrackerRedis.getIngestSuccess() > 0 && (taskTrackerRedis.getValidateError() + taskTrackerRedis.getValidateSuccess() == taskTrackerRedis.getIngestSuccess())) {
 	    		//update the end time for validate
 	    		v2 = true;
 	    		processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
@@ -122,7 +122,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			proCountFailure.put("count", taskTrackerRedis.getPublishSuccess());
 			log.info(details.toString());
 			
-	    	if(taskTrackerRedis.getPublishError() + taskTrackerRedis.getPublishSuccess() == taskTrackerRedis.getValidateSuccess()) {
+	    	if(taskTrackerRedis.getValidateSuccess() > 0 && (taskTrackerRedis.getPublishError() + taskTrackerRedis.getPublishSuccess() == taskTrackerRedis.getValidateSuccess())) {
 	    		//update the end time for publish
 	    		v3 = true;
 	    		processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
