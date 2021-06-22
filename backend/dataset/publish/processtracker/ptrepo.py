@@ -117,13 +117,13 @@ class PTRepo:
             result = []
             val = client.hgetall(key)
             if val:
-                result.append(json.loads(val))
+                result.append(val)
             log.info(f'Data Before ------ {result}')
             client.hincrby(key, value, 1)
             result = []
             val = client.hgetall(key)
             if val:
-                result.append(json.loads(val))
+                result.append(val)
             log.info(f'Data After ------ {result}')
         except Exception as e:
             log.exception(f'Exception in redis search: {e}', e)
