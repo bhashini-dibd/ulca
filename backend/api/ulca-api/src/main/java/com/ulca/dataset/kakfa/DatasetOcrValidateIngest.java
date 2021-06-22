@@ -34,18 +34,22 @@ import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.ASRDatasetRowDataSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.OcrDatasetParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.OcrDatasetRowDataSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.ASRParamsSchema;
 import io.swagger.model.ASRRowSchema;
 import io.swagger.model.DatasetType;
+import io.swagger.model.OcrDatasetParamsSchema;
+import io.swagger.model.OcrDatasetRowSchema;
 import io.swagger.model.ParallelDatasetRowSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DatasetAsrValidateIngest {
+public class DatasetOcrValidateIngest {
 
 	@Autowired
 	ProcessTaskTrackerService processTaskTrackerService;
@@ -67,9 +71,9 @@ public class DatasetAsrValidateIngest {
 
 	public void validateIngest(Map<String, String> fileMap, FileDownload file) {
 
-		log.info("************ Entry DatasetAsrValidateIngest :: validateIngest *********");
+		log.info("************ Entry DatasetOcrValidateIngest :: validateIngest *********");
 		String serviceRequestNumber = file.getServiceRequestNumber();
-		ASRParamsSchema paramsSchema = null;
+		OcrDatasetParamsSchema paramsSchema = null;
 
 		Set<String> keys = fileMap.keySet();
 		log.info("logging the fileMap keys");
@@ -89,16 +93,15 @@ public class DatasetAsrValidateIngest {
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 			
+			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			return;
 		}
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath, file);
-			// ingest(paramsSchema, file, fileMap, taskTrackerIngest);
 
 		} catch (IOException | JSONException | NullPointerException e) {
-			
 			log.info("Exception while validating params :: " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
@@ -107,6 +110,7 @@ public class DatasetAsrValidateIngest {
 
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+			
 			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
@@ -125,7 +129,7 @@ public class DatasetAsrValidateIngest {
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("datasetName", file.getDatasetName());
 			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
+			errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
 			datasetErrorPublishService.publishDatasetError(errorMessage);
 
@@ -136,7 +140,7 @@ public class DatasetAsrValidateIngest {
 			ingest(paramsSchema, file, fileMap);
 
 		} catch (IOException e) {
-			
+
 			log.info("Exception while ingesting :: " + e.getMessage());
 			
 			Error error = new Error();
@@ -147,7 +151,7 @@ public class DatasetAsrValidateIngest {
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 			
-
+			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
@@ -165,7 +169,7 @@ public class DatasetAsrValidateIngest {
 			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 			errorMessage.put("datasetName", file.getDatasetName());
 			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
+			errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 			errorMessage.put("message", e.getMessage());
 			datasetErrorPublishService.publishDatasetError(errorMessage);
 
@@ -174,7 +178,7 @@ public class DatasetAsrValidateIngest {
 
 	}
 
-	public ASRParamsSchema validateParamsSchema(String filePath, FileDownload file)
+	public OcrDatasetParamsSchema validateParamsSchema(String filePath, FileDownload file)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		log.info("************ Entry DatasetAsrValidateIngest :: validateParamsSchema *********");
@@ -184,10 +188,10 @@ public class DatasetAsrValidateIngest {
 		log.info(serviceRequestNumber);
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
-		module.addDeserializer(ASRParamsSchema.class, new ASRParamsSchemaDeserializer());
+		module.addDeserializer(OcrDatasetParamsSchema.class, new OcrDatasetParamsSchemaDeserializer());
 		mapper.registerModule(module);
 
-		ASRParamsSchema paramsSchema = mapper.readValue(new File(filePath), ASRParamsSchema.class);
+		OcrDatasetParamsSchema paramsSchema = mapper.readValue(new File(filePath), OcrDatasetParamsSchema.class);
 		if (paramsSchema == null) {
 
 			log.info("params validation failed");
@@ -203,10 +207,10 @@ public class DatasetAsrValidateIngest {
 
 	}
 
-	public void ingest(ASRParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
+	public void ingest(OcrDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
 			throws IOException {
 
-		log.info("************ Entry DatasetAsrValidateIngest :: ingest *********");
+		log.info("************ Entry DatasetOcrValidateIngest :: ingest *********");
 
 		String datasetId = file.getDatasetId();
 		String serviceRequestNumber = file.getServiceRequestNumber();
@@ -260,13 +264,13 @@ public class DatasetAsrValidateIngest {
 			
 			String dataRow = mapper.writeValueAsString(rowObj);
 			SimpleModule module = new SimpleModule();
-			module.addDeserializer(ASRRowSchema.class, new ASRDatasetRowDataSchemaDeserializer());
+			module.addDeserializer(OcrDatasetRowSchema.class, new OcrDatasetRowDataSchemaDeserializer());
 			mapper.registerModule(module);
 			
-			ASRRowSchema rowSchema = null;
+			OcrDatasetRowSchema rowSchema = null;
 			try {
 				
-				rowSchema = mapper.readValue(dataRow, ASRRowSchema.class);
+				rowSchema = mapper.readValue(dataRow, OcrDatasetRowSchema.class);
 				log.info("row schema created");				
 				
 			} catch(Exception e) {
@@ -290,7 +294,7 @@ public class DatasetAsrValidateIngest {
 				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
 				errorMessage.put("datasetName", file.getDatasetName());
 				errorMessage.put("stage", "ingest");
-				errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
+				errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
 				errorMessage.put("message", e.getMessage());
 				datasetErrorPublishService.publishDatasetError(errorMessage);
 				
@@ -306,7 +310,7 @@ public class DatasetAsrValidateIngest {
 				finalRecord.remove("languages");
 				finalRecord.put("sourceLanguage", sourceLanguage);
 
-				finalRecord.put("fileLocation", fileMap.get(finalRecord.get("audioFilename")));
+				finalRecord.put("fileLocation", fileMap.get(finalRecord.get("imageFilename")));
 				UUID uid = UUID.randomUUID();
 				finalRecord.put("id", uid);
 

@@ -49,6 +49,15 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	DatasetParallelCorpusValidateIngest datasetParallelCorpusValidateIngest;
 	
+	@Autowired
+	DatasetOcrValidateIngest datasetOcrValidateIngest;
+	
+	@Autowired
+	DatasetMonolingualValidateIngest datasetMonolingualValidateIngest;
+	
+	@Autowired
+	DatasetDocumentLayoutValidateIngest datasetDocumentLayoutValidateIngest;
+	
 	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
@@ -97,7 +106,7 @@ public class KafkaFileDownloadConsumer {
 				Error error = new Error();
 				error.setCause(e.getMessage());
 				error.setMessage("file download failed");
-				error.setCode("01_00000000");
+				error.setCode("1000_FILE_DOWNLOAD_FAILURE");
 				processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 				
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
@@ -124,7 +133,7 @@ public class KafkaFileDownloadConsumer {
 				return;
 			}
 			
-			processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.ingest, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
+			//processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.ingest, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 			
 			
 			if(file.getDatasetType() == DatasetType.ASR_CORPUS) {
@@ -133,6 +142,15 @@ public class KafkaFileDownloadConsumer {
 			} else if(file.getDatasetType() == DatasetType.PARALLEL_CORPUS) {
 				log.info("calling the parallel-corpus validate service");
 				datasetParallelCorpusValidateIngest.validateIngest(fileMap,file);
+			}else if(file.getDatasetType() == DatasetType.OCR_CORPUS) {
+				log.info("calling the ocr-corpus validate service");
+				datasetOcrValidateIngest.validateIngest(fileMap,file);
+			}if(file.getDatasetType() == DatasetType.MONOLINGUAL_CORPUS) {
+				log.info("calling the monolingual-corpus validate service");
+				datasetMonolingualValidateIngest.validateIngest(fileMap,file);
+			}if(file.getDatasetType() == DatasetType.DOCUMENT_LAYOUT_CORPUS) {
+				log.info("calling the document-layout-corpus validate service");
+				datasetDocumentLayoutValidateIngest.validateIngest(fileMap,file);
 			}
 			
 			

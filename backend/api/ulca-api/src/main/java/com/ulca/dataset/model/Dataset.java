@@ -1,5 +1,6 @@
 package com.ulca.dataset.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -19,6 +20,7 @@ public class Dataset {
 	
 	@Indexed(unique=true)
 	private String datasetName;
+	
 	private String datasetType;
 	private String domain;
 	private String languages;

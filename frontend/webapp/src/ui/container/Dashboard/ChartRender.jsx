@@ -53,7 +53,8 @@ const ChartRender = (props) => {
 			color		: 	'black',
 			padding		: 	20,
 			background	: 	state.isSelected && "#c7c6c68a !important",
-			cursor		:	"pointer"
+			cursor		:	"pointer",
+			fontFamily	: 	"Lato, sans-serif ",
 
 		}),
 		control: (base, state) => ({
@@ -110,24 +111,25 @@ const ChartRender = (props) => {
 				// fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : (event && event.hasOwnProperty("_id")) ? event._id : "" } }])
 				
 				fetchChartData(selectedOption.value,filter ? filter : filterValue, fetchParams(event ))
+				handleSelectChange(selectedOption, event, filter, value)
 				setPage(value)
-				setTitle( `English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label }  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 				
 				break;
 			case 2:
 				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", fetchNextParams(event))
 				setPage(value)
 				setFilterValue('domains')
-				setTitle( `English-${selectedLanguageName} ${selectedOption.label} `)
+				handleSelectChange(selectedOption, event, filter, value)
 				
 				break;
 			case 0:
 				fetchChartData(selectedOption.value, "languagePairs", [])
 				setPage(value)
 				setFilterValue('domains')
-				setTitle(`English-Indic language ${selectedOption.label} `)
+				handleSelectChange(selectedOption,"","",value)
 				setSelectedLanguage("")
 				setSelectedLanguageName("")
+				
 				
 				
 				break;
@@ -158,22 +160,48 @@ const ChartRender = (props) => {
 		)
 	    }
 
-	const handleSelectChange = (dataSet) =>{
-		fetchChartData(dataSet.value, "languagePairs", [])
+	const handleSelectChange = (dataSet, event, filter, page) =>{
+
 		setSelectedOption( dataSet)
 		switch (dataSet.value) {
 			case 'parallel-corpus':
-				 setTitle("Number of parallel sentences per language with English")
+				if(page===0){
+					fetchChartData(dataSet.value, "languagePairs", [])
+					setTitle("Number of parallel sentences per language with English")
+				}else if(page===1){
+					setTitle( `English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label }  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+				
+				}else if(page===2){
+					setTitle( `English-${selectedLanguageName} ${selectedOption.label} `)
+				}
+				 
 				 break;
 			case 'monolingual-corpus':
 				 setTitle('Number of sentences per language')
 				 break;
 			case 'asr-corpus':
-				 setTitle("Number of audio hours per language")
+				if(page===0){
+					fetchChartData(dataSet.value, "languagePairs", [])
+					setTitle("Number of audio hours per language")
+				}else if(page===1){
+					setTitle(`Number of audio hours in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label } - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+				}else if(page===2){
+					setTitle(`Number of audio hours in ${selectedLanguageName} `)
+				}
+				 
 				 break;
 			case 'ocr-corpus':
-				setTitle("Number of images per script")
-				break;
+				
+				if(page===0){
+					fetchChartData(dataSet.value, "languagePairs", [])
+					setTitle("Number of images per script")
+				}else if(page===1){
+					setTitle(`Number of images per script in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label } - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+				}else if(page===2){
+					setTitle(`Number of images per script in ${selectedLanguageName} `)
+				}
+				 
+				 break;
 			default:
 				setTitle("")
 		}
@@ -184,7 +212,7 @@ const ChartRender = (props) => {
         <MuiThemeProvider theme={Theme}>
             	{ !authenticate() &&
 			
-				<><Header /><br /><br /><br /><br /> </>
+				<><Header style={{marginBottom:"10px"}}/><br /><br /><br /><br /> </>
         	}
                 <div className	=	{classes.container}>
 			{/* <div className={classes.breadcrum}>
@@ -193,7 +221,7 @@ const ChartRender = (props) => {
 			<Paper elevation  = {3} className  = {classes.paper}>
 			
 				<div className  =	{classes.titleBar}>
-					{page!==0 && <><Button color="primary" size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
+					{page!==0 && <><Button size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
 					<div className={classes.seperator}></div></>}
 					
 					<Typography 	variant   	=	"h5" 
@@ -201,7 +229,7 @@ const ChartRender = (props) => {
 					<Select 	className 	= 	{classes.select} 
 							styles 		= 	{customStyles} color= "primary"
 							value   	=	{selectedOption}
-							onChange	=	{(value)=>{handleSelectChange(value)}}
+							onChange	=	{(value)=>{handleSelectChange(value,"","",page)}}
 							options		=	{options}
 							isDisabled	= {page!== 0 ? true : false}
 					/>
@@ -212,7 +240,7 @@ const ChartRender = (props) => {
 				</div>
 				<div className={classes.title}>
 				<ResponsiveContainer width = "95%" height = {450}>
-					<BarChart width = {900} height 	= 	{450} data={DashboardReport} maxBarSize = {100} >
+					<BarChart width = {900} height 	= 	{450} data={DashboardReport} fontFamily="Lato" maxBarSize = {100} >
 						<XAxis 	dataKey 	= 	"label"
 							textAnchor	=	{isMobile ? "end" : "middle"}
 							tick		=	{{ angle: isMobile ? -60 : 0 }} 

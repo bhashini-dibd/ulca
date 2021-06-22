@@ -22,6 +22,7 @@ import io.swagger.model.DatasetType;
 import io.swagger.model.Domain;
 import io.swagger.model.DomainEnum;
 import io.swagger.model.LanguagePair;
+import io.swagger.model.MonolingualParamsSchema;
 import io.swagger.model.ParallelDatasetCollectionMethod;
 import io.swagger.model.ParallelDatasetParamsSchema;
 import io.swagger.model.Source;
@@ -29,14 +30,14 @@ import io.swagger.model.Submitter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<ParallelDatasetParamsSchema> {
+public class MonolingualDatasetParamsSchemaDeserializer extends StdDeserializer<MonolingualParamsSchema> {
 
-	protected ParallelDatasetParamsSchemaDeserializer(Class<?> vc) {
+	protected MonolingualDatasetParamsSchemaDeserializer(Class<?> vc) {
 		super(vc);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ParallelDatasetParamsSchemaDeserializer() {
+	public MonolingualDatasetParamsSchemaDeserializer() {
 		this(null);
 		// TODO Auto-generated constructor stub
 	}
@@ -47,18 +48,15 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public ParallelDatasetParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
+	public MonolingualParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		System.out.println("******** Entry ParallelDatasetParamsSchemaDeserializer :: deserializer ********");
-		
-		
-		
+		log.info("******** Entry ParallelDatasetParamsSchemaDeserializer :: deserializer ********");
 		
 
 		ObjectMapper mapper = new ObjectMapper();
 
-		ParallelDatasetParamsSchema parallelParamsSchema = new ParallelDatasetParamsSchema();
+		MonolingualParamsSchema monolingualParamsSchema = new MonolingualParamsSchema();
 		JsonNode node = p.readValueAsTree();
 		
 		ArrayList<String> errorList = new ArrayList<String>();
@@ -69,9 +67,9 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 		
 		for(String k : keys) {
 			try {
-				ParallelDatasetSchemaKeys key = ParallelDatasetSchemaKeys.valueOf(k) ;
+				MonolingualDatasetParamsSchemaKeys key = MonolingualDatasetParamsSchemaKeys.valueOf(k) ;
 			}catch (Exception ex) {
-				System.out.println("no enums found ");
+				log.info("MonolingualDatasetParamsSchemaKeys not in defined keys");
 				errorList.add(k + " unknown property ");
 			}
 			
@@ -85,10 +83,10 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 		} else {
 			String datasetType = node.get("datasetType").asText();
 			DatasetType type = DatasetType.fromValue(datasetType);
-			if (type != DatasetType.PARALLEL_CORPUS) {
-				errorList.add("datasetType field value " + DatasetType.PARALLEL_CORPUS.toString());
+			if (type != DatasetType.MONOLINGUAL_CORPUS) {
+				errorList.add("datasetType field value " + DatasetType.MONOLINGUAL_CORPUS.toString());
 			}
-			parallelParamsSchema.setDatasetType(type);
+			monolingualParamsSchema.setDatasetType(type);
 
 		}
 		if (!node.has("languages")) {
@@ -119,8 +117,6 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 					
 					if(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage) != null) {
 						lp.setTargetLanguage(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage));
-					}else {
-						errorList.add("targetLanguage is not one of defined language pair");
 					}
 					
 				}
@@ -130,7 +126,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				}
 				
 				
-				parallelParamsSchema.setLanguages(lp);
+				monolingualParamsSchema.setLanguages(lp);
 			} catch (Exception e) {
 				errorList.add("languages field value not proper.");
 				e.printStackTrace();
@@ -149,7 +145,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				if(collectionSource.size() > 10 || collectionSource.size() < 0) {
 					errorList.add("collectionSource array size should be > 0 and <= 10");
 				}else {
-					parallelParamsSchema.setCollectionSource(collectionSource);
+					monolingualParamsSchema.setCollectionSource(collectionSource);
 				}
 					
 				
@@ -166,18 +162,14 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 		} else {
 
 			try {
-				List<DomainEnum> list = new ArrayList<DomainEnum>();
 				Domain domain = new Domain();
 				int size = node.get("domain").size();
 				System.out.println("domain array size" + size);
 				
-				ArrayList<String> dominsList = new ArrayList<String>();
 				for(int i=0; i < size; i++) {
-					System.out.println("i value :: " + i);
 					
 					String enumValue = node.get("domain").get(i).asText();
 					
-					System.out.println(node.get("domain").get(i));
 					DomainEnum dEnum = DomainEnum.valueOf(enumValue);
 					if(dEnum == null) {
 						errorList.add("domain value not part of defined domains");
@@ -186,7 +178,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 					}
 				}
 				
-				parallelParamsSchema.setDomain(domain);
+				monolingualParamsSchema.setDomain(domain);
 			} catch (Exception e) {
 				errorList.add("domain field value not proper.");
 				e.printStackTrace();
@@ -205,7 +197,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				
 				io.swagger.model.License license = io.swagger.model.License.fromValue(licenseText);
 				if(license != null) {
-					parallelParamsSchema.setLicense(license);
+					monolingualParamsSchema.setLicense(license);
 				}else {
 					errorList.add("license field value should be present in license list");
 				}
@@ -218,7 +210,6 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 
 		}
 
-		System.out.println("submitter details :: " + node.get("submitter").isObject());
 		if (node.get("submitter").isEmpty()) {
 			errorList.add("submitter field should be present");
 		} else if (!node.get("submitter").isObject()) {
@@ -226,7 +217,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 		} else {
 			try {
 				Submitter submitter = mapper.readValue(node.get("submitter").toPrettyString(), Submitter.class);
-				parallelParamsSchema.setSubmitter(submitter);
+				monolingualParamsSchema.setSubmitter(submitter);
 			} catch (Exception e) {
 				errorList.add("submitter field value not proper.");
 				e.printStackTrace();
@@ -234,86 +225,12 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 
 		}
 
-		if(node.has("collectionMethod")) {
-		if (node.get("collectionMethod").has("collectionDescription")) {
-			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
-				errorList.add("collectionDescription field should be String Array");
-			} else {
-
-				try {
-					String collectionDescription = node.get("collectionMethod").get("collectionDescription").get(0)
-							.asText();
-					ParallelDatasetCollectionMethod.CollectionDescriptionEnum collectionDescriptionEnum = ParallelDatasetCollectionMethod.CollectionDescriptionEnum
-							.fromValue(collectionDescription);
-
-					ParallelDatasetCollectionMethod parallelDatasetCollectionMethod = new ParallelDatasetCollectionMethod();
-					List<ParallelDatasetCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<ParallelDatasetCollectionMethod.CollectionDescriptionEnum>();
-					list.add(collectionDescriptionEnum);
-					parallelDatasetCollectionMethod.setCollectionDescription(list);
-
-					switch (collectionDescriptionEnum) {
-					case AUTO_ALIGNED:
-						if(node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {
-							String alignmentTool = node.get("collectionMethod").get("collectionDetails").get("alignmentTool").asText();
-							if(CollectionDetailsAutoAligned.AlignmentToolEnum.fromValue(alignmentTool) == null ) {
-								errorList.add("alignmentTool is not one of defined alignmentTool");	
-							}else {
-								CollectionDetailsAutoAligned collectionDetailsAutoAligned = mapper.readValue(
-										node.get("collectionMethod").get("collectionDetails").toPrettyString(),
-										CollectionDetailsAutoAligned.class);
-								parallelDatasetCollectionMethod.setCollectionDetails(collectionDetailsAutoAligned);
-								parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
-							}
-						}
-						
-						break;
-
-					case MACHINE_TRANSLATED:
-
-						CollectionDetailsMachineTranslated collectionDetailsMachineTranslated = mapper.readValue(
-								node.get("collectionMethod").get("collectionDetails").toPrettyString(),
-								CollectionDetailsMachineTranslated.class);
-						parallelDatasetCollectionMethod.setCollectionDetails(collectionDetailsMachineTranslated);
-						parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
-						break;
-
-					case MACHINE_TRANSLATED_POST_EDITED:
-
-						CollectionDetailsMachineTranslatedPostEdited collectionDetailsMachineTranslatedPostEdited = mapper
-								.readValue(node.get("collectionMethod").get("collectionDetails").toPrettyString(),
-										CollectionDetailsMachineTranslatedPostEdited.class);
-						parallelDatasetCollectionMethod
-								.setCollectionDetails(collectionDetailsMachineTranslatedPostEdited);
-						parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
-						break;
-
-					case MANUAL_TRANSLATED:
-
-						CollectionDetailsManualTranslated collectionDetailsManualTranslated = mapper.readValue(
-								node.get("collectionMethod").get("collectionDetails").toPrettyString(),
-								CollectionDetailsManualTranslated.class);
-						parallelDatasetCollectionMethod.setCollectionDetails(collectionDetailsManualTranslated);
-						parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
-						break;
-
-					}
-
-				} catch (Exception e) {
-					System.out.println("collection method not proper");
-					errorList.add("collectionMethod field value not proper.");
-					System.out.println("tracing the error");
-					
-					e.printStackTrace();
-				}
-
-			}
-		}
-		}
+		
 		if(!errorList.isEmpty())
 			throw new IOException(errorList.toString());
 		
 
-		return parallelParamsSchema;
+		return monolingualParamsSchema;
 	}
 
 }

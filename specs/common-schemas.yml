@@ -121,6 +121,15 @@ components:
         - lifestyle
         - entertainment
         - parliamentary
+        - art-and-culture
+        - economy
+        - history
+        - philosophy
+        - religion
+        - national-security-and-defence
+        - literature
+        - geography
+
     License:
       type: string
       description: license under which information is published.
@@ -135,7 +144,7 @@ components:
       - mit
       - gpl-3.0
       - bsd-3-clause
-      - private-commerical
+      - private-commercial
       - unknown-license
     Contributor:
       required:
