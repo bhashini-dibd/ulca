@@ -118,7 +118,7 @@ class PTRepo:
             value = "publishSuccess"
             if error:
                 value = "publishError"
-            client.hincrby(key, value, 1)
+            client.incr(key, value)
             val = client.hgetall(key)
             log.info(f'Data After ----- {val}')
         except Exception as e:
