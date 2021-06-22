@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.ASRDatasetRowDataSchemaDeserializer;
@@ -88,8 +89,14 @@ public class DatasetDocumentLayoutValidateIngest {
 		String paramsFilePath = fileMap.get("params.json");
 		if (paramsFilePath == null) {
 			log.info("params.json file not available");
-			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+			Error error = new Error();
+			error.setCause("params.json file not available");
+			error.setMessage("params validation failed");
+			error.setCode("1000_PARAMS_JSON_FILE_NOT_AVAILABLE");
+
+			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			return;
@@ -99,8 +106,14 @@ public class DatasetDocumentLayoutValidateIngest {
 
 		} catch (IOException | JSONException | NullPointerException e) {
 			log.info("Exception while validating params :: " + e.getMessage());
-			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+			Error error = new Error();
+			error.setCause(e.getMessage());
+			error.setMessage("params validation failed");
+			error.setCode("1000_PARAMS_VALIDATION_FAILED");
+
+			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
@@ -130,9 +143,16 @@ public class DatasetDocumentLayoutValidateIngest {
 
 		} catch (IOException e) {
 
-			log.info("Exception while validating params :: " + e.getMessage());
-			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+			log.info("Exception while ingesting :: " + e.getMessage());
+			
+			Error error = new Error();
+			error.setCause(e.getMessage());
+			error.setMessage("INGEST FAILED");
+			error.setCode("1000_INGEST_FAILED");
+
+			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 

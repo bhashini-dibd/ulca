@@ -106,7 +106,7 @@ public class KafkaFileDownloadConsumer {
 				Error error = new Error();
 				error.setCause(e.getMessage());
 				error.setMessage("file download failed");
-				error.setCode("01_00000000");
+				error.setCode("1000_FILE_DOWNLOAD_FAILURE");
 				processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 				
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
@@ -133,7 +133,7 @@ public class KafkaFileDownloadConsumer {
 				return;
 			}
 			
-			processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.ingest, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
+			//processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.ingest, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 			
 			
 			if(file.getDatasetType() == DatasetType.ASR_CORPUS) {

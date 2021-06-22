@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.json.JSONArray;
@@ -33,9 +34,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.dataset.dao.TaskTrackerRedisDao;
+import com.ulca.dataset.dao.TaskTrackerRedisRepository;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
+import com.ulca.dataset.model.TaskTrackerRedis;
 import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
@@ -62,6 +66,10 @@ public class DatasetParallelCorpusValidateIngest {
 
 	@Value(value = "${KAFKA_ULCA_DS_VALIDATE_IP_TOPIC}")
 	private String validateTopic;
+	
+	
+	@Autowired
+	TaskTrackerRedisRepository taskTrackerRedisRepository;
 
 	public static final String SOURCE_TEXT = "sourceText";
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
@@ -78,8 +86,13 @@ public class DatasetParallelCorpusValidateIngest {
 		String paramsFilePath = fileMap.get("params.json");
 		if (paramsFilePath == null) {
 			log.info("params.json file not available");
-			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+			Error error = new Error();
+			error.setCause("params.json file not available");
+			error.setMessage("params validation failed");
+			error.setCode("1000_PARAMS_JSON_FILE_NOT_AVAILABLE");
+
+			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			return;
@@ -126,8 +139,15 @@ public class DatasetParallelCorpusValidateIngest {
 		} catch (IOException | JSONException | NoSuchAlgorithmException | NullPointerException   e) {
 			
 			log.info("Exception while ingesting the dataset :: " + e.getMessage());
-			processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.ingest,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.failed);
+			Error error = new Error();
+			error.setCause(e.getMessage());
+			error.setMessage("INGEST FAILED");
+			error.setCode("1000_INGEST_FAILED");
+
+			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+			
+			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 		}
@@ -279,7 +299,34 @@ public class DatasetParallelCorpusValidateIngest {
 				log.info("data row " + numberOfRecords + " sent for validation ");
 				successCount++;
 			}
-
+			
+			//update redis cache
+			
+			try {
+				
+				Optional<TaskTrackerRedis> taskTrackerRedisOp = taskTrackerRedisRepository.findById(serviceRequestNumber);
+				if(!taskTrackerRedisOp.isEmpty()) {
+					
+					TaskTrackerRedis  obj = taskTrackerRedisOp.get();
+					obj.setCount(0);
+					obj.setIngestError(failedCount);
+					obj.setIngestSuccess(successCount);
+					taskTrackerRedisRepository.save(obj);
+					
+				}else {
+					TaskTrackerRedis taskTrackerRedis  = new TaskTrackerRedis();
+					 taskTrackerRedis.setCount(0);
+					 taskTrackerRedis.setServiceRequestNumber(serviceRequestNumber);
+					 taskTrackerRedis.setIngestError(failedCount);
+					 taskTrackerRedis.setIngestSuccess(successCount);
+					 taskTrackerRedisRepository.save(taskTrackerRedis);
+				}
+				
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		reader.endArray();
 		reader.close();
@@ -292,8 +339,26 @@ public class DatasetParallelCorpusValidateIngest {
 		log.info("Eof reached");
 		
 		datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+		
+		try {
+			
+			Optional<TaskTrackerRedis> taskTrackerRedisOp = taskTrackerRedisRepository.findById(serviceRequestNumber);
+			if(!taskTrackerRedisOp.isEmpty()) {
+				
+				TaskTrackerRedis  obj = taskTrackerRedisOp.get();
+				obj.setCount(numberOfRecords);
+				obj.setIngestError(failedCount);
+				obj.setIngestSuccess(successCount);
+				taskTrackerRedisRepository.save(obj);
+				
+			}
+			
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 
-		JSONObject details = new JSONObject();
+		/*JSONObject details = new JSONObject();
 		details.put("currentRecordIndex", numberOfRecords);
 
 		JSONArray processedCount = new JSONArray();
@@ -313,6 +378,7 @@ public class DatasetParallelCorpusValidateIngest {
 
 		processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
 				com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
+				*/
 
 		log.info("sent record for validation ");
 
