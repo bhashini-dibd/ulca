@@ -157,7 +157,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    	}
 	    	
 	    	
-	    	if(v1 && v2 & v3) {
+	    	if(v1 && v2 && v3) {
 	    		
 	    		
 	    		log.info("deleting for serviceRequestNumber :: " + serviceRequestNumber);
