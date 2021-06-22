@@ -17,7 +17,7 @@ if isinstance(ulca_dataset_topic_partitions, str):
     ulca_dataset_topic_partitions    =  eval(ulca_dataset_topic_partitions)
 
 kafka_bootstrap_server_host          =  os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
-error_event_input_topic              =  os.environ.get('KAFKA_ULCA_ERROR_CONSUMER_IP_TOPIC', 'ulca-ds-error-ip-v1')
+error_event_input_topic              =  os.environ.get('KAFKA_ULCA_ERROR_CONSUMER_IP_TOPIC', 'ulca-ds-error-ip-v0')
 
 
 
