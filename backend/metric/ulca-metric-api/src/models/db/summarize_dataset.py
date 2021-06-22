@@ -80,7 +80,7 @@ class SummarizeDatasetModel(object):
                         WHERE ((datasetType = \'{}\') AND (sourceLanguage != targetLanguage) AND (sourceLanguage = \'en\' \
                         OR targetLanguage = \'en\')) GROUP BY sourceLanguage, targetLanguage,isDelete".format(DRUID_DB_SCHEMA,dtype)
                     
-                if dtype == "asr-corpus":
+                if dtype in ["asr-corpus","ocr-corpus","monolingual-corpus"] :
                     query= "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,isDelete FROM \"{}\" \
                         WHERE ((datasetType = \'{}\') AND (sourceLanguage != targetLanguage) AND (targetLanguage = '') AND (sourceLanguage != ''))\
                         GROUP BY sourceLanguage, targetLanguage,isDelete".format(DRUID_DB_SCHEMA,dtype)
@@ -96,7 +96,7 @@ class SummarizeDatasetModel(object):
                         check = "sourceLanguage" 
                     if item["sourceLanguage"] == "en" :
                         check = "targetLanguage"
-                    if dtype == "asr-corpus":
+                    if dtype in ["asr-corpus","ocr-corpus","monolingual-corpus"]:
                         check = "sourceLanguage"
 
                     if aggs.get(item[check]) == None:
