@@ -14,7 +14,8 @@ mongo_instance = None
 
 class DatasetUtils:
     def __init__(self):
-        self.blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
+        pass
+        # self.blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
 
     # Utility to get tags out of an object
     def get_tags(self, d):

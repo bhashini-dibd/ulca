@@ -1,6 +1,5 @@
 #!/bin/python
 import logging
-
 from multiprocessing import Process
 from api.apis import ulca_error_consumer
 from kafkawrapper.errorconsumer import error_consume

@@ -1,5 +1,6 @@
 import os
 
+
 app_host                =   os.environ.get('ULCA_ERROR_CONSUMER_HOST', '0.0.0.0')
 app_port                =   os.environ.get('ULCA_ERROR_CONSUMER_PORT', 5001)
 
@@ -23,6 +24,17 @@ error_event_input_topic              =  os.environ.get('KAFKA_ULCA_ERROR_CONSUME
 ulca_db_cluster         =   os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 error_db                =   os.environ.get('ULCA_ERROR_DB', "ulca-error")
 error_collection        =   os.environ.get('ULCA_ERROR_COL', "errors")
+
+aws_access_key          =   os.environ.get('ULCA_AWS_S3_ACCESS_KEY', 'access-key')
+aws_secret_key          =   os.environ.get('ULCA_AWS_S3_SECRET_KEY', 'secret-key')
+aws_bucket_name         =   os.environ.get('ULCA_AWS_BUCKET_NAME', 'ulca-datasets')
+aws_ocr_prefix          =   os.environ.get('ULCA_AWS_S3_OCR_PREFIX', 'ocr/')
+aws_asr_prefix          =   os.environ.get('ULCA_AWS_S3_ASR_PREFIX', 'asr/')
+aws_dataset_prefix      =   os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', 'datasets/')
+aws_error_prefix        =   os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
+aws_link_prefix         =   f'http://{aws_bucket_name}.s3.amazonaws.com/'
+
+
 
 azure_connection_string =   os.environ.get('ULCA_AZURE_CONNECTION_STRING',"XXXXXXXXXXXXX")
 azure_container_name    =   os.environ.get('ULCA_AZURE_FILE_CONTAINER',"error-files")
