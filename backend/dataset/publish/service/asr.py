@@ -77,7 +77,7 @@ class ASRService:
             if error_list:
                 error_event.create_error_event(error_list)
             for pt_rec in pt_list:
-                pt.create_task_event(pt_rec)
+                pt.update_task_details(pt_rec)
             log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
         except Exception as e:
             log.exception(e)
