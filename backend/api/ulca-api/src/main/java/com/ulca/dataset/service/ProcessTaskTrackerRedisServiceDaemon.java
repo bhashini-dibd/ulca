@@ -140,8 +140,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    	}
 	    	
 	    	log.info("************* published *********");
-			proCountSuccess.put("count", taskTrackerRedis.getPublishError());
-			proCountFailure.put("count", taskTrackerRedis.getPublishSuccess());
+	    	proCountFailure.put("count", taskTrackerRedis.getPublishError());
+			proCountSuccess.put("count", taskTrackerRedis.getPublishSuccess());
 			log.info(details.toString());
 			
 	    	if(taskTrackerRedis.getValidateSuccess() > 0 && (taskTrackerRedis.getPublishError() + taskTrackerRedis.getPublishSuccess() == taskTrackerRedis.getValidateSuccess())) {
@@ -156,10 +156,10 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
 	    	}
 	    	
-	    	
+	    	/*
 	    	if(v1 && v2 & v3) {
 	    		taskTrackerRedisRepository.delete(taskTrackerRedis);
-	    	}
+	    	}*/
 	    	
 	    	
 	    }
