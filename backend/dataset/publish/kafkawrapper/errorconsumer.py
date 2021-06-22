@@ -27,7 +27,7 @@ def instantiate(topics):
 # Method to read and process the requests from the kafka queue
 def error_consume():
     try:
-        topics = [error_event_input_topic]
+        topics = ["error_event_input_topic"]
         consumer = instantiate(topics)
         error_event = ErrorEvent()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))

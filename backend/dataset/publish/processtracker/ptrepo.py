@@ -4,7 +4,8 @@ from logging.config import dictConfig
 
 import redis
 
-from configs.configs import ulca_db_cluster, pt_db, pt_task_collection, redis_server_host, redis_server_port, redis_server_pass
+from configs.configs import ulca_db_cluster, pt_db, pt_task_collection, redis_server_host, \
+    redis_server_port, redis_server_pass, pt_redis_db
 
 import pymongo
 log = logging.getLogger('file')
@@ -64,7 +65,8 @@ class PTRepo:
     # Initialises and fetches redis client
     def redis_instantiate(self):
         global redis_client
-        redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=0, password=redis_server_pass)
+        redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=pt_redis_db,
+                                   password=redis_server_pass)
         return redis_client
 
     def get_redis_instance(self):
@@ -102,6 +104,17 @@ class PTRepo:
                 if val:
                     result.append(json.loads(val))
             return result
+        except Exception as e:
+            log.exception(f'Exception in redis search: {e}', e)
+            return None
+
+    def redis_key_inc(self, key, error):
+        try:
+            client = self.get_redis_instance()
+            value = "publishSuccess"
+            if error:
+                value = "publishError"
+            client.hincrby(key, value, 1)
         except Exception as e:
             log.exception(f'Exception in redis search: {e}', e)
             return None
