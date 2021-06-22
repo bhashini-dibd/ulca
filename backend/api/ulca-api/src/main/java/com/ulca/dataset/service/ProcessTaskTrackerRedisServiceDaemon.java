@@ -61,8 +61,19 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    	log.info("ingest success ");
 	    	log.info(taskTrackerRedis.getIngestSuccess()+"");
 	    	
-	    	log.info("ingest success ");
+	    	log.info("ingest error ");
 	    	log.info(taskTrackerRedis.getIngestError()+"");
+	    	
+	    	log.info("validate success");
+	    	log.info(taskTrackerRedis.getValidateSuccess()+"");
+	    	
+	    	log.info("validate error");
+	    	log.info(taskTrackerRedis.getValidateError()+"");
+	    	
+	    	log.info("validate success");
+	    	log.info(taskTrackerRedis.getValidateSuccess()+"");
+	    	
+	    	
 	    	
 	    	boolean v1 = false;
 	    	boolean v2 = false;
