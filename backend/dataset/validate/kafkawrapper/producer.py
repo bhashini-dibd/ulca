@@ -18,7 +18,7 @@ class Producer:
     # Any other method that needs a producer will get it from here
     def instantiate(self):
         producer = KafkaProducer(bootstrap_servers=list(str(kafka_bootstrap_server_host).split(",")),
-                                 api_version=(1, 0, 0), key_serializer=str.encode,
+                                 api_version=(1, 0, 0),
                                  value_serializer=lambda x: json.dumps(x).encode('utf-8'))
         return producer
 
@@ -30,6 +30,7 @@ class Producer:
                 #if partition is None:
                  #   partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
                 if key:
+                    key = str.encode(key)
                     producer.send(topic, value=object_in, key=key)
                 else:
                     producer.send(topic, value=object_in)
