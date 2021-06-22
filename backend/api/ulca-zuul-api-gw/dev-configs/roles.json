@@ -9,6 +9,16 @@
             "code":"ADMIN",
             "active":true,
             "description":"Has access to user management related resources"
+        },
+        {
+            "code":"CONTRIBUTOR-USER",
+            "active":true,
+            "description":"Has access to CRUD operations on all resources"
+        },
+        {
+            "code":"CONTRIBUTOR-SME",
+            "active":true,
+            "description":"Has access to CRUD operations on benchmark"
         }
     ]
 }

@@ -105,11 +105,16 @@ public class RbacFilter extends ZuulFilter {
     public Boolean verifyAuthorization(RequestContext ctx, String uri) {
         try {
             User user = (User) ctx.get(USER_INFO_KEY);
-            String charset = ctx.getRequest().getCharacterEncoding();
-            InputStream in = (InputStream) ctx.get("requestEntity");
-            if (null == in)
-                in = ctx.getRequest().getInputStream();
-            String requestEntityStr = StreamUtils.copyToString(in, Charset.forName(charset));
+            String requestEntityStr;
+            if(ctx.getRequest().getMethod().equals("POST") || ctx.getRequest().getMethod().equals("PUT")) {
+                String charset = ctx.getRequest().getCharacterEncoding();
+                InputStream in = (InputStream) ctx.get("requestEntity");
+                if (null == in)
+                    in = ctx.getRequest().getInputStream();
+                requestEntityStr = StreamUtils.copyToString(in, Charset.forName(charset));
+            }else {
+                requestEntityStr = ctx.get(REQ_URI).toString();
+            }
             Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), requestEntityStr);
             if(!sigVerify)
                 return false;
@@ -129,14 +134,14 @@ public class RbacFilter extends ZuulFilter {
      * Verifies signature with private key
      * @param signature
      * @param privateKey
-     * @param body
+     * @param sigValue
      * @return
      */
-    public Boolean verifySignature(String signature, String privateKey, String body) {
+    public Boolean verifySignature(String signature, String privateKey, String sigValue) {
         try{
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            String bodyHash  = bytesToHex(digest.digest(body.getBytes(StandardCharsets.UTF_8)));
-            String sigHash = bodyHash + "|" + privateKey;
+            String sigValueHash  = bytesToHex(digest.digest(sigValue.getBytes(StandardCharsets.UTF_8)));
+            String sigHash = sigValueHash + "|" + privateKey;
             String hash = bytesToHex(digest.digest(sigHash.getBytes(StandardCharsets.UTF_8)));
             return hash.equals(signature);
         }catch (Exception e) {

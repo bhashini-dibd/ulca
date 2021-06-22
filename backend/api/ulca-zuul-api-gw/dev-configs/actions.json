@@ -5,12 +5,12 @@
             "uri":"/ulca/apis/v0/dataset/corpus/submit",
             "module":"ULCA-API",
             "active":true,
-            "whiteList":true,
+            "whiteList":false,
             "description":"API to submit corpus"
         },
         {
             "id":"8cdac1f3-146c-4046-a00b-50fa3bc4fa63",
-            "uri":"/ulca/apis/v0/dataset/listByUserId",
+            "uri":"/ulca/apis/v0/dataset/listByUserId?*",
             "module":"ULCA-API",
             "active":true,
             "whiteList":false,
@@ -26,7 +26,7 @@
         },
         {
             "id":"9085ca30-ca0c-4b7e-81ba-0ca41568a372",
-            "uri":"/ulca/apis/v0/dataset/corpus/search/listByUserId",
+            "uri":"/ulca/apis/v0/dataset/corpus/search/listByUserId?*",
             "module":"ULCA-API",
             "active":true,
             "whiteList":false,
@@ -34,8 +34,8 @@
         },
         {
             "id":"b3d4b271-4de3-4781-8d03-8b3cee833f13",
-            "uri":"ulca/publish/v0/error/report",
-            "module":"PUBLISH",
+            "uri":"/ulca/error/v0/report",
+            "module":"ERROR-CONSUMER",
             "active":true,
             "whiteList":false,
             "description":"API to fetch error report for a service request"

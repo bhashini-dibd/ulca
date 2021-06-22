@@ -24,6 +24,31 @@
             "role":"ADMIN",
             "actionID": "b3d4b271-4de3-4781-8d03-8b3cee833f13",
             "active":true
+        },
+        {
+            "role":"CONTRIBUTOR-USER",
+            "actionID": "409c94af-2f8e-47ac-bc1f-4ba113cb96da",
+            "active":true
+        },
+        {
+            "role":"CONTRIBUTOR-USER",
+            "actionID": "8cdac1f3-146c-4046-a00b-50fa3bc4fa63",
+            "active":true
+        },
+        {
+            "role":"CONTRIBUTOR-USER",
+            "actionID": "573ddaef-daac-4479-a9f6-4b0bc272de20",
+            "active":true
+        },
+        {
+            "role":"CONTRIBUTOR-USER",
+            "actionID": "9085ca30-ca0c-4b7e-81ba-0ca41568a372",
+            "active":true
+        },
+        {
+            "role":"CONTRIBUTOR-USER",
+            "actionID": "b3d4b271-4de3-4781-8d03-8b3cee833f13",
+            "active":true
         }
     ]
 }
