@@ -11,12 +11,20 @@ log = logging.getLogger('file')
 
 mongo_instance = None
 repo = PTRepo()
+srn_map = {}
 
 class ProcessTracker:
     def __init__(self):
         pass
 
     def update_task_details(self, data):
+        global srn_map
+        if data["serviceRequestNumber"] in srn_map.keys():
+            count = srn_map[data["serviceRequestNumber"]]
+            srn_map[data["serviceRequestNumber"]] = count + 1
+        else:
+            srn_map[data["serviceRequestNumber"]] = 1
+        log.info(f'Updating PT redis, SRN --- {srn_map[data["serviceRequestNumber"]]} | Count: {data["serviceRequestNumber"]}')
         if data["status"] == "SUCCESS":
             repo.redis_key_inc(data["serviceRequestNumber"], False)
         else:
