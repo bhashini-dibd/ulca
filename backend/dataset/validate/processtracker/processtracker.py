@@ -16,9 +16,9 @@ class ProcessTracker:
 
     def update_task_details(self, data):
         if data["status"] == "SUCCESS":
-            repo.redis_key_inc(data["serviceRequestNumber"], False)
+            repo.redis_key_inc('ServiceRequestNumber:'+data["serviceRequestNumber"], False)
         else:
-            repo.redis_key_inc(data["serviceRequestNumber"], True)
+            repo.redis_key_inc('ServiceRequestNumber:'+data["serviceRequestNumber"], True)
 
     def create_task_event(self, data):
         log.info(f'Publishing pt event for SUBMIT -- {data["serviceRequestNumber"]}')
