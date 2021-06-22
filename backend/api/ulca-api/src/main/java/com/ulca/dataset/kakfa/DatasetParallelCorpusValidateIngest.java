@@ -332,13 +332,14 @@ public class DatasetParallelCorpusValidateIngest {
 		reader.close();
 		inputStream.close();
 
+		/*
 		vModel.put("eof", true);
 		vModel.remove("record");
 		vModel.remove("currentRecordIndex");
 
 		log.info("Eof reached");
 		
-		datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+		datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString()); */
 		
 		try {
 			
