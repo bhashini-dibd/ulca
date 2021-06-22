@@ -1,4 +1,5 @@
 import logging
+import hashlib
 from datetime import datetime
 from logging.config import dictConfig
 from kafkawrapper.producer import Producer
@@ -26,7 +27,9 @@ class ParallelValidate:
                 log.info("Validation complete....  {}".format(res))
                 # Produce event for publish
                 if res["status"] == "SUCCESS":
-                    prod.produce(request, validate_output_topic, None)
+                    unique_hash = request["record"]["sourceTextHash"] + request["record"]["targetTextHash"]
+                    partition_key = str(hashlib.sha256(unique_hash.encode('utf-16')).hexdigest())
+                    prod.produce(request, validate_output_topic, partition_key)
                 else:
                     error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
                              "message": res["message"], "code": res["code"], "record": request["record"], "datasetName": request["datasetName"]}
@@ -34,7 +37,7 @@ class ParallelValidate:
 
                 # Update task tracker
                 tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"]}
-                pt.create_task_event(tracker_data)
+                pt.update_task_details(tracker_data)
 
         except Exception as e:
             log.exception(e)
