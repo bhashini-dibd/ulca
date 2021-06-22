@@ -23,8 +23,8 @@ def start_consumer():
             search_consumer_process.start()
             delete_consumer_process = Process(target=delete_consume)
             delete_consumer_process.start()
-            error_consumer_process = Process(target=error_consume)
-            error_consumer_process.start()
+            '''error_consumer_process = Process(target=error_consume)
+            error_consumer_process.start()'''
         except Exception as e:
             log.exception(f'Exception while starting the ULCA DS Publish kafka consumer: {str(e)}')
 
