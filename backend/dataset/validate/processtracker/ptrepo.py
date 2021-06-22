@@ -9,7 +9,8 @@ from configs.configs import ulca_db_cluster, pt_db, pt_task_collection, redis_se
 import pymongo
 log = logging.getLogger('file')
 
-
+success_count=0
+fail_count=0
 redis_client = None
 mongo_instance = None
 
@@ -108,11 +109,17 @@ class PTRepo:
 
     def redis_key_inc(self, key, error):
         try:
+            global success_count
+            global fail_count
             client = self.get_redis_instance()
             value = "validateSuccess"
             if error:
+                fail_count = fail_count + 1
                 value = "validateError"
+            else:
+                success_count = success_count + 1
             client.hincrby(key, value, 1)
+            log.info(f'success records: {success_count} --- failed records: {fail_count}')
         except Exception as e:
             log.exception(f'Exception in redis search: {e}', e)
             return None
