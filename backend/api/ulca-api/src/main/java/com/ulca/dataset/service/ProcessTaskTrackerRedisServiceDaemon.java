@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.ulca.dataset.dao.TaskTrackerRedisDao;
 import com.ulca.dataset.dao.TaskTrackerRedisRepository;
 import com.ulca.dataset.model.TaskTrackerRedis;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
@@ -27,6 +28,9 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	
 	@Autowired
 	ProcessTaskTrackerService processTaskTrackerService;
+	
+	@Autowired
+	TaskTrackerRedisDao taskTrackerRedisDao;
 
 	
 	@Scheduled(cron = "*/10 * * * * *")
@@ -46,6 +50,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    log.info("in foramatted manner "+
 	                        formatedDateTime);
 	    
+	    
+	    
 	    List<TaskTrackerRedis> list = (List<TaskTrackerRedis>) taskTrackerRedisRepository.findAll();
 	    
 	   
@@ -57,7 +63,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    	
 	    	String serviceRequestNumber = taskTrackerRedis.getServiceRequestNumber();
 	    	log.info(taskTrackerRedis.getServiceRequestNumber());
-	    	log.info(taskTrackerRedis.getCount()+"");
+	    	
+	    	log.info("total count :: " + taskTrackerRedis.getCount()+"");
 	    	log.info("ingest success ");
 	    	log.info(taskTrackerRedis.getIngestSuccess()+"");
 	    	
@@ -70,8 +77,11 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    	log.info("validate error");
 	    	log.info(taskTrackerRedis.getValidateError()+"");
 	    	
-	    	log.info("validate success");
-	    	log.info(taskTrackerRedis.getValidateSuccess()+"");
+	    	log.info("publish error");
+	    	log.info(taskTrackerRedis.getPublishError()+"");
+	    	
+	    	log.info("publish success");
+	    	log.info(taskTrackerRedis.getPublishSuccess()+"");
 	    	
 	    	
 	    	
@@ -120,6 +130,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    	if(taskTrackerRedis.getIngestSuccess() > 0 && (taskTrackerRedis.getValidateError() + taskTrackerRedis.getValidateSuccess() == taskTrackerRedis.getIngestSuccess())) {
 	    		//update the end time for validate
 	    		v2 = true;
+	    		log.info("updating end time validate");
 	    		processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.validate,
 						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
 	    	}else {
@@ -128,7 +139,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 						com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
 	    	}
 	    	
-	    	System.out.println("************* published *********");
+	    	log.info("************* published *********");
 			proCountSuccess.put("count", taskTrackerRedis.getPublishError());
 			proCountFailure.put("count", taskTrackerRedis.getPublishSuccess());
 			log.info(details.toString());
@@ -136,6 +147,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	    	if(taskTrackerRedis.getValidateSuccess() > 0 && (taskTrackerRedis.getPublishError() + taskTrackerRedis.getPublishSuccess() == taskTrackerRedis.getValidateSuccess())) {
 	    		//update the end time for publish
 	    		v3 = true;
+	    		log.info("updating end time for publish");
 	    		processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
 						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
 	    	}else {

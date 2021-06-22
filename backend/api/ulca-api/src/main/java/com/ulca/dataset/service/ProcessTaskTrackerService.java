@@ -94,12 +94,14 @@ public void updateTaskTrackerWithDetailsAndEndTime(String serviceRequestNumber, 
 	List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool);
 	if(!taskTrackerList.isEmpty()) {
 		TaskTracker taskTracker = taskTrackerList.get(0);
-		taskTracker.setEndTime(new Date().toString());
-		taskTracker.setLastModified(new Date().toString());
-		taskTracker.setStatus(status);
-		taskTracker.setDetails(details);
-		if(taskTracker.getEndTime() == null || taskTracker.getEndTime().isEmpty())
-		taskTrackerDao.save(taskTracker);
+		if(taskTracker.getEndTime() == null || taskTracker.getEndTime().isEmpty()) {
+			taskTracker.setEndTime(new Date().toString());
+			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setStatus(status);
+			taskTracker.setDetails(details);
+			taskTrackerDao.save(taskTracker);
+		}
+		
 		
 	}else {
 		TaskTracker taskTracker = new TaskTracker();
