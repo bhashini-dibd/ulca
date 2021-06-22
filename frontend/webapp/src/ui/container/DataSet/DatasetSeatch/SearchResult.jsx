@@ -16,7 +16,7 @@ const SearchResult = (props) => {
                     alt="Search Icon"
                 />
                 {/* <SearchRoundedIcon className={classes.FindInPageIcon} color="primary" /> */}
-                <Typography color="primary" variant="h5">Your search result will appear here  </Typography>
+                <Typography variant="h5" color="textSecondary">Your search result will appear here  </Typography>
             </div>
         </div>
     )
