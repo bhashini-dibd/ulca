@@ -21,12 +21,10 @@ class ProcessTracker:
         global srn_map
         success = False
         if data["status"] == "SUCCESS":
-            #repo.redis_key_inc(data["serviceRequestNumber"], False)
+            repo.redis_key_inc(data["serviceRequestNumber"], False)
             success = True
         else:
-            success = False
-            #repo.redis_key_inc(data["serviceRequestNumber"], True)
-
+            repo.redis_key_inc(data["serviceRequestNumber"], True)
         if data["serviceRequestNumber"] in srn_map.keys():
             count_obj = srn_map[data["serviceRequestNumber"]]
             count_obj["count"] = count_obj["count"] + 1

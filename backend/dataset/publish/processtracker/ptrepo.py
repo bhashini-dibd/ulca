@@ -113,16 +113,12 @@ class PTRepo:
         try:
             key = f'ServiceRequestNumber:{key}'
             client = self.get_redis_instance()
-            val = client.hgetall(key)
-            log.info(f'Data Before ----- {val}')
             value = "publishSuccess"
             if error:
                 value = "publishError"
             client.incr(key, value)
-            val = client.hgetall(key)
-            log.info(f'Data After ----- {val}')
         except Exception as e:
-            log.exception(f'Exception in redis search: {e}', e)
+            log.exception(f'Exception in redis_key_inc: {e}', e)
             return None
 
 # Log config
