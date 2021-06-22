@@ -121,6 +121,15 @@ components:
         - lifestyle
         - entertainment
         - parliamentary
+        - art-and-culture
+        - economy
+        - history
+        - philosophy
+        - religion
+        - national-security-and-defence
+        - literature
+        - geography
+
     License:
       type: string
       description: license under which information is published.
