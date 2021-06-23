@@ -17,7 +17,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -40,12 +36,10 @@ import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.TaskTrackerRedis;
-import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
-import io.swagger.model.ASRParamsSchema;
 import io.swagger.model.DatasetType;
 import io.swagger.model.ParallelDatasetParamsSchema;
 import io.swagger.model.ParallelDatasetRowSchema;
@@ -68,8 +62,12 @@ public class DatasetParallelCorpusValidateIngest {
 	private String validateTopic;
 	
 	
+	//@Autowired
+	//TaskTrackerRedisRepository taskTrackerRedisRepository;
+	
+	
 	@Autowired
-	TaskTrackerRedisRepository taskTrackerRedisRepository;
+	TaskTrackerRedisDao taskTrackerRedisDao;
 
 	public static final String SOURCE_TEXT = "sourceText";
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
@@ -223,6 +221,10 @@ public class DatasetParallelCorpusValidateIngest {
 
 		 
 		 
+		 taskTrackerRedisDao.intialize(serviceRequestNumber);
+		 
+		 
+		 
 		reader.beginArray();
 		while (reader.hasNext()) {
 
@@ -252,31 +254,7 @@ public class DatasetParallelCorpusValidateIngest {
 				
 				failedCount++;
 				
-				try {
-					
-					Optional<TaskTrackerRedis> taskTrackerRedisOp = taskTrackerRedisRepository.findById(serviceRequestNumber);
-					if(!taskTrackerRedisOp.isEmpty()) {
-						
-						TaskTrackerRedis  obj = taskTrackerRedisOp.get();
-						obj.setCount(0);
-						obj.setIngestError(failedCount);
-						obj.setIngestSuccess(successCount);
-						taskTrackerRedisRepository.save(obj);
-						
-					}else {
-						TaskTrackerRedis taskTrackerRedis  = new TaskTrackerRedis();
-						 taskTrackerRedis.setCount(0);
-						 taskTrackerRedis.setServiceRequestNumber(serviceRequestNumber);
-						 taskTrackerRedis.setIngestError(failedCount);
-						 taskTrackerRedis.setIngestSuccess(successCount);
-						 
-						 taskTrackerRedisRepository.save(taskTrackerRedis);
-					}
-					
-					
-				}catch(Exception ex) {
-					ex.printStackTrace();
-				}
+				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				
 				
 				// send error event
@@ -304,33 +282,9 @@ public class DatasetParallelCorpusValidateIngest {
 				
 				successCount++;
 				
-				try {
-					
-					Optional<TaskTrackerRedis> taskTrackerRedisOp = taskTrackerRedisRepository.findById(serviceRequestNumber);
-					if(!taskTrackerRedisOp.isEmpty()) {
-						
-						TaskTrackerRedis  obj = taskTrackerRedisOp.get();
-						obj.setCount(0);
-						obj.setIngestError(failedCount);
-						obj.setIngestSuccess(successCount);
-						taskTrackerRedisRepository.save(obj);
-						
-					}else {
-						TaskTrackerRedis taskTrackerRedis  = new TaskTrackerRedis();
-						 taskTrackerRedis.setCount(0);
-						 taskTrackerRedis.setServiceRequestNumber(serviceRequestNumber);
-						 taskTrackerRedis.setIngestError(failedCount);
-						 taskTrackerRedis.setIngestSuccess(successCount);
-						 
-						 taskTrackerRedisRepository.save(taskTrackerRedis);
-					}
-					
-					
-				}catch(Exception ex) {
-					ex.printStackTrace();
-				}
-
-
+				
+				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+				
 				
 				log.info("rowSchema is not null" );
 				JSONObject target =  new JSONObject(dataRow);
@@ -355,69 +309,21 @@ public class DatasetParallelCorpusValidateIngest {
 				
 				log.info("data sending for validation :: ");
 				log.info(vModel.toString());
-				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 				log.info("data row " + numberOfRecords + " sent for validation ");
 				
 			}
-			
-			//update redis cache
-			
-			
 			
 		}
 		reader.endArray();
 		reader.close();
 		inputStream.close();
 
-		/*
-		vModel.put("eof", true);
-		vModel.remove("record");
-		vModel.remove("currentRecordIndex");
-
-		log.info("Eof reached");
 		
-		datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString()); */
+		taskTrackerRedisDao.setCountAndIngestComplete(serviceRequestNumber, numberOfRecords);
 		
-		try {
-			
-			Optional<TaskTrackerRedis> taskTrackerRedisOp = taskTrackerRedisRepository.findById(serviceRequestNumber);
-			if(!taskTrackerRedisOp.isEmpty()) {
-				
-				TaskTrackerRedis  obj = taskTrackerRedisOp.get();
-				obj.setIngestComplete(1);
-				obj.setCount(numberOfRecords);
-				obj.setIngestError(failedCount);
-				obj.setIngestSuccess(successCount);
-				taskTrackerRedisRepository.save(obj);
-				
-			}
-			
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		/*JSONObject details = new JSONObject();
-		details.put("currentRecordIndex", numberOfRecords);
-
-		JSONArray processedCount = new JSONArray();
-
-		JSONObject proCountSuccess = new JSONObject();
-		proCountSuccess.put("type", "success");
-		proCountSuccess.put("count", successCount);
-		processedCount.put(proCountSuccess);
-
-		JSONObject proCountFailure = new JSONObject();
-
-		proCountFailure.put("type", "failed");
-		proCountFailure.put("count", failedCount);
-		processedCount.put(proCountFailure);
-		details.put("processedCount", processedCount);
-		details.put("timeStamp", new Date().toString());
-
-		processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
-				com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
-				*/
+		
+		
 
 		log.info("sent record for validation ");
 
