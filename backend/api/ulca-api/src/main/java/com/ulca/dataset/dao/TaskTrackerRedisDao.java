@@ -35,7 +35,7 @@ public class TaskTrackerRedisDao {
 
    
    
-   public  Map<String,  Map< Object, Object >> findAll() {
+   public  Map<String,  Map< String, String >> findAll() {
 	   
 	   System.out.println("logging before fetching all entries ");
 	   
@@ -43,11 +43,12 @@ public class TaskTrackerRedisDao {
 	   
 	   
 	   
-	   Map<String,  Map< Object, Object >> map = new HashMap<String,  Map< Object, Object >>();
+	   Map<String,  Map<String, String >> map = new HashMap<String,  Map< String, String >>();
 	   
 	   
 	   for(String key : keyList) {
 		   
+		   String  serviceRequestNumber  = redisTemplate.opsForHash().get(key, "serviceRequestNumber")+"";
 		   
 		   String  ingestComplete  = redisTemplate.opsForHash().get(key, "ingestComplete")+"";
 		   
@@ -65,11 +66,26 @@ public class TaskTrackerRedisDao {
 		   String validateError  = redisTemplate.opsForHash().get(key, "validateError")+"";
 		   
 		   String validateSuccess  = redisTemplate.opsForHash().get(key, "validateSuccess")+"";
-		  
+		   
+		   Map<String, String > innerMap = new HashMap<String, String>();
+		   
+		   innerMap.put("serviceRequestNumber", serviceRequestNumber);
+		   innerMap.put("ingestComplete", ingestComplete);
+		   
+		   innerMap.put("count", count);
+		   innerMap.put("ingestSuccess", ingestSuccess);
+		   innerMap.put("ingestError", ingestError);
+		   innerMap.put("publishSuccess", publishSuccess);
+		   innerMap.put("publishError", publishError);
+		   innerMap.put("validateError", validateError);
+		   innerMap.put("validateSuccess", validateSuccess);
+		   
+		   map.put(serviceRequestNumber, innerMap);
+		   
 		   
 		   log.info("printing the values  ");
 		   
-		   log.info("serviceRequestNumber :: " + key);
+		 
 		   
 		   
 		   log.info("ingestComplete " + ingestComplete);
@@ -127,28 +143,12 @@ public class TaskTrackerRedisDao {
    
    public void setCountAndIngestComplete(String  serviceRequestNumber,int count ) {
 	   
-	   redisTemplate.opsForHash().put(Prefix+serviceRequestNumber, "count", count);
-	   redisTemplate.opsForHash().put(Prefix+serviceRequestNumber, "ingestComplete", 1);
+	   redisTemplate.opsForHash().put(Prefix+serviceRequestNumber, "count", String.valueOf(count));
+	   redisTemplate.opsForHash().put(Prefix+serviceRequestNumber, "ingestComplete", String.valueOf(1));
 	   
 	  }
    
-  public String getSuccess(String serviceRequestNumber) {
-	  
-	  System.out.println("get success value ");
-	  System.out.println(redisTemplate.opsForHash().get( Prefix+serviceRequestNumber, "ingestSuccess" ));
-	  String name = (String) redisTemplate.opsForHash().get( Prefix+serviceRequestNumber, "ingestSuccess" );
-	  
-	  
-	  System.out.println("getting list form redisTemplate");
-	  
-	  Set<String> list = redisTemplate.keys("*");
-	  
-	  System.out.println(list);
-	  
-	  
-	  
-	  return name;
-  }
+ 
    
    public void delete(String serviceRequestNumber) {
 	   log.info("calling the delete  operation"); 

@@ -198,25 +198,14 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		
 		log.info("inside the cronjob");
 		
-		/*
-		String serviceRequestNumberTest = "1132890302";
 		
-		taskTrackerRedisDao.increment(serviceRequestNumberTest, "ingestSuccess");
-		
-		
-		System.out.println("****** printing incremented value in cronjob ");
-		System.out.println(taskTrackerRedisDao.getSuccess(serviceRequestNumberTest));;
-		
-		System.out.println("calling for list of particular key");
-		
-		*/
-		 Map<String,  Map< Object, Object >> map = taskTrackerRedisDao.findAll();
+		 Map<String,  Map< String, String >> map = taskTrackerRedisDao.findAll();
 		 
-		 for (Map.Entry<String, Map< Object, Object >> entry : map.entrySet()) {
+		 for (Map.Entry<String, Map< String, String >> entry : map.entrySet()) {
 			 
 			 System.out.println(entry.getKey() + ":" + entry.getValue());
 			 
-			 Map< Object, Object > val = entry.getValue();
+			 Map< String, String > val = entry.getValue();
 			 
 			 String serviceRequestNumber =  val.containsKey("serviceRequestNumber")? val.get("serviceRequestNumber")+"":null;
 			 Integer  ingestComplete =  val.containsKey("ingestComplete")?  Integer.parseInt(val.get("ingestComplete")+"") : 0;
