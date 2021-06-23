@@ -153,7 +153,7 @@ const handleSubmit = async () => {
   return (
     <>
     <Grid container className={classes.loginGrid}>
-      <Typography className={classes.body2}>Login to ULCA</Typography>
+      <Typography variant = "h4">Sign in to ULCA</Typography>
       <form className={classes.root} autoComplete="off">
       <TextField
         className={classes.textField}

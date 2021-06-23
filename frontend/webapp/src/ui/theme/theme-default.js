@@ -89,7 +89,7 @@ themeDefault.typography.h3 = {
 };
 themeDefault.typography.h4 = {
   fontSize: "1.5rem",
-  letterSpacing: "1.98px",
+  // letterSpacing: "1.98px",
   fontFamily: '"Poppins","lato" ,sans-serif',
   fontWeight: "500",
 };

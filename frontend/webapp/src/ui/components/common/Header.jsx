@@ -123,7 +123,7 @@ const Header = (props) => {
                       Search & Download Records
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}
-                     onClick={() => alert("still in progress")}>
+                     onClick={() => handleMenuItemClick('/readymade-dataset')}>
                       Explore Readymade Datasets
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}
