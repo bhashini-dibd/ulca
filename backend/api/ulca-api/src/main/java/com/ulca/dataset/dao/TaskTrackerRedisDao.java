@@ -97,25 +97,26 @@ public class TaskTrackerRedisDao {
    public void intialize( final String  serviceRequestNumber ) {
 	   
 	   
-	   System.out.println("intialize values");
+	   log.info("intialize values");
 	   
 	   final String key = Prefix+serviceRequestNumber;
 	   
-	   final Map< String, Object > properties = new HashMap< String, Object >();
-
-	   properties.put( "serviceRequestNumber", serviceRequestNumber);
-	   properties.put( "ingestComplete", 0 );
-	   properties.put( "count", 0 );
+	  
+	   redisTemplate.opsForHash().put(key, "serviceRequestNumber", serviceRequestNumber);
+	   redisTemplate.opsForHash().put(key, "ingestComplete", 0);
+	   redisTemplate.opsForHash().put(key, "count", 0);
+	   redisTemplate.opsForHash().put(key, "ingestError", 0);
 	   
-	   properties.put( "ingestError", 0 );
-	   properties.put( "ingestSuccess", 0 );
-	   properties.put( "validateError", 0 );
+	   redisTemplate.opsForHash().put(key, "ingestSuccess", 0);
+	   redisTemplate.opsForHash().put(key, "validateError", 0);
 	   
-	   properties.put( "validateSuccess", 0 );
-	   properties.put( "publishError", 0 );
-	   properties.put( "publishSuccess", 0 );
-
-	   redisTemplate.opsForHash().putAll( key, properties);
+	   redisTemplate.opsForHash().put(key, "validateSuccess", 0);
+	   
+	   redisTemplate.opsForHash().put(key, "publishError", 0);
+	   
+	   redisTemplate.opsForHash().put(key, "publishSuccess", 0);
+	   
+	   
 	  }
    
    public void increment(String  serviceRequestNumber,String key ) {
