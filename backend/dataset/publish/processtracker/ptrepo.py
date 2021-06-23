@@ -111,7 +111,7 @@ class PTRepo:
 
     def redis_key_inc(self, key, error):
         try:
-            key = f'ServiceRequestNumber:{key}'
+            key = f'ServiceRequestNumber_{key}'
             client = self.get_redis_instance()
             value = "publishSuccess"
             if error:
