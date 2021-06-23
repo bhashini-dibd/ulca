@@ -19,27 +19,10 @@ class ProcessTracker:
 
     def update_task_details(self, data):
         global srn_map
-        success = False
         if data["status"] == "SUCCESS":
             repo.redis_key_inc(data["serviceRequestNumber"], False)
-            success = True
         else:
             repo.redis_key_inc(data["serviceRequestNumber"], True)
-        if data["serviceRequestNumber"] in srn_map.keys():
-            count_obj = srn_map[data["serviceRequestNumber"]]
-            count_obj["count"] = count_obj["count"] + 1
-            if success:
-                count_obj["success"] = count_obj["success"] + 1
-            else:
-                count_obj["failed"] = count_obj["failed"] + 1
-            srn_map[data["serviceRequestNumber"]] = count_obj
-        else:
-            if success:
-                srn_map[data["serviceRequestNumber"]] = {"count": 1, "success": 1, "failed": 0}
-            else:
-                srn_map[data["serviceRequestNumber"]] = {"count": 1, "success": 0, "failed": 1}
-        log.info(f'PT | SRN --- {data["serviceRequestNumber"]} | Count: {srn_map[data["serviceRequestNumber"]]}')
-
 
     def create_task_event(self, data):
         log.info(f'Publishing pt event for SUBMIT -- {data["serviceRequestNumber"]}')
