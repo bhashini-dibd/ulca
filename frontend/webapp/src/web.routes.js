@@ -20,7 +20,7 @@ import ActivateUser from "./ui/container/UserManagement/ActivateUser";
 import ActiveUser from "./ui/container/UserManagement/ActiveUser"
 import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/ReadymadeDataset";
 
-const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) => {
+const PrivateRoute = ({ path, component: Component, authenticate, token, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -28,7 +28,12 @@ const PrivateRoute = ({ component: Component, authenticate, token, ...rest }) =>
         authenticate() ? (
           <Layout component={Component} {...rest} />
         ) : (
-          <Redirect to={`${process.env.PUBLIC_URL}/dashboard`} />
+          // <Redirect to={`${process.env.PUBLIC_URL}/user/login`}/>
+          <Redirect to={{
+            pathname: `${process.env.PUBLIC_URL}/user/login`,
+            from: path 
+          }} />
+          
         )
       }
     />
@@ -43,8 +48,7 @@ export default function App() {
       <div>
 
         <Switch>
-          <PrivateRoute exact path={`${process.env.PUBLIC_URL}/`}
-            authenticate={authenticateUser}
+          <Route exact path={`${process.env.PUBLIC_URL}/`}
             component={Dashboard}
           />
           <Route
@@ -55,10 +59,9 @@ export default function App() {
 
           <Route
             path={`${process.env.PUBLIC_URL}/activate/:email/:userId/:time?`}
-
             component={ActivateUser}
-
           />
+
 
           <Route exact path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard} />
           <PrivateRoute

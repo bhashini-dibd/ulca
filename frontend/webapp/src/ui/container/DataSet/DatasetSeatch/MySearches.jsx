@@ -42,7 +42,12 @@ const MySearches = (props) => {
     const renderAction = (rowData) =>{
 
         const status = rowData[4].toLowerCase();
-        history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`)
+
+        history.push({ 
+                pathname: `/search-and-download-rec/${status}/${rowData[0]}`,
+                pageInfo: page
+               });
+        // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`)
     }
 
         
@@ -130,7 +135,6 @@ const MySearches = (props) => {
 
         const { classes }               = props;
 
-        console.log("page-----------",page)
         return (
                 <div >
                         <div className  = {classes.breadcrum}>
