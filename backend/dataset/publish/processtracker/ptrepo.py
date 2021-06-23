@@ -117,6 +117,8 @@ class PTRepo:
             if error:
                 value = "publishError"
             client.hincrby(key, value, 1)
+            val = client.get(key)
+            log.info(f"Redis Data ----- {val}")
         except Exception as e:
             log.exception(f'Exception in redis_key_inc: {e}', e)
             return None
