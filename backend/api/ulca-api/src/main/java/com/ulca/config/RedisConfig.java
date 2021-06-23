@@ -36,7 +36,7 @@ public class RedisConfig {
         configuration.setDatabase(0);
         return new JedisConnectionFactory(configuration);
     }
-
+/*
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -58,6 +58,38 @@ public class RedisConfig {
         //template.setEnableTransactionSupport(true);
        // template.afterPropertiesSet();
         return template;
+        
     }
+    */
+    /*
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate() {
+        final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+        redisTemplate.setConnectionFactory(connectionFactory());
+        //redisTemplate.setValueSerializer(new GenericToStringSerializer<Object>(Object.class));
+        return redisTemplate;
+    }
+    */
+    
+    
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate() {
+        final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+        redisTemplate.setConnectionFactory(connectionFactory());
+        
+    	redisTemplate.setKeySerializer( new StringRedisSerializer() );
+        redisTemplate.setValueSerializer(new StringRedisSerializer() );
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        
+        //redisTemplate.setHashValueSerializer( new GenericToStringSerializer< Object >( Object.class ) );
+        
+        redisTemplate.setHashValueSerializer( new StringRedisSerializer() );
+        
+        //redisTemplate.setValueSerializer( new GenericToStringSerializer< Object >( Object.class ) );
+        
+        return redisTemplate;
+    }
+    
+    
 
 }

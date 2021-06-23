@@ -64,15 +64,12 @@ const Header = (props) => {
       <AppBar color="primary">
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
-            <Button className={classes.title}
-              onClick={() => handleMenuItemClick('/private-dashboard')}
-            >
-              <Typography variant="h4">
+
+              <Typography variant="h4" onClick={() => handleMenuItemClick('/private-dashboard')}>
                 ULCA
               </Typography>
-            </Button>
+
             {
-              authenticate() &&
               <>
                 {/* <div className={classes.home}>
                   <Button
@@ -134,7 +131,7 @@ const Header = (props) => {
                       Search & Download Records
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}
-                     onClick={() => alert("still in progress")}>
+                     onClick={() => handleMenuItemClick('/readymade-dataset')}>
                       Explore Readymade Datasets
                     </MenuItem>
                     <MenuItem className={classes.styledMenu}

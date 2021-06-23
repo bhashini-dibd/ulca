@@ -33,6 +33,7 @@ import Snackbar from '../../components/common/Snackbar';
 
 
 const Login = (props) => {
+
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -112,7 +113,7 @@ const handleSubmit = async () => {
           localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
         localStorage.setItem(`userDetails`, JSON.stringify(rsp_data.data.userDetails));
           
-          history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
+          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from :'/private-dashboard'}`)
         }
       }).catch((error) => {
         setLoading(false)
@@ -153,7 +154,7 @@ const handleSubmit = async () => {
   return (
     <>
     <Grid container className={classes.loginGrid}>
-      <Typography className={classes.body2}>Login to ULCA</Typography>
+      <Typography variant = "h4">Sign in to ULCA</Typography>
       <form className={classes.root} autoComplete="off">
       <TextField
         className={classes.textField}

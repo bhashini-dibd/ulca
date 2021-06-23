@@ -25,9 +25,9 @@ function AppInfo(props) {
         <Typography className={classes.body}>
         ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with an user interface for interacting with the datasets.
         </Typography>
-        {/* <Button variant="contained" className={classes.expButton}>
+        <Button variant="contained" className={classes.expButton} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>
           Explore
-        </Button> */}
+        </Button>
       </Grid>
     </Hidden>
   );

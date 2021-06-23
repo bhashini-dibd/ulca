@@ -9,7 +9,6 @@ function App(props) {
   const Component = props.component;
   const { classes  } = props;
   const apiStatus = useSelector((state) => state.apiStatus);
-
   const renderSpinner = () => {
     if (apiStatus.progress) {
       return <Spinner />;
