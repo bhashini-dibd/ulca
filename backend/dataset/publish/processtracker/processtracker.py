@@ -38,7 +38,7 @@ class ProcessTracker:
                 srn_map[data["serviceRequestNumber"]] = {"count": 1, "success": 1, "failed": 0}
             else:
                 srn_map[data["serviceRequestNumber"]] = {"count": 1, "success": 0, "failed": 1}
-        log.info(f'Updating PT redis, SRN --- {data["serviceRequestNumber"]} | Count: {srn_map[data["serviceRequestNumber"]]}')
+        log.info(f'PT | SRN --- {data["serviceRequestNumber"]} | Count: {srn_map[data["serviceRequestNumber"]]}')
 
 
     def create_task_event(self, data):
