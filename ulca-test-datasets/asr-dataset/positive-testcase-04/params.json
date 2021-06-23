@@ -10,9 +10,17 @@
     "domain":[
         "general"
     ],
-    "collectionMethod": [
-        "web-scrapping-audio"
-    ],
+    "collectionMethod": {
+        "collectionDescription": [
+            "web-scrapping-audio"
+        ],
+        "collectionDetails": {
+            "contributers": [{
+                "name": "Harveen",
+                "aboutMe": "Member of thoughtworks asr team"
+            }]
+        }
+    },
     "format": "wav",
     "channel": "mono",
     "samplingRate": 16000,

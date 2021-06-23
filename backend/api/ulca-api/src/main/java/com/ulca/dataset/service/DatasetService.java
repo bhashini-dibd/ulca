@@ -95,6 +95,7 @@ public class DatasetService {
 		FileDownload fileDownload = new FileDownload();
 		fileDownload.setUserId(userId);
 		fileDownload.setDatasetId(dataset.getDatasetId());
+		fileDownload.setDatasetName(dataset.getDatasetName());
 		fileDownload.setDatasetType(request.getType());
 		fileDownload.setFileUrl(request.getUrl());
 		fileDownload.setServiceRequestNumber(processTracker.getServiceRequestNumber());

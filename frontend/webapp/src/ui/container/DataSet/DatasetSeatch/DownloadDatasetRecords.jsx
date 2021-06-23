@@ -2,6 +2,7 @@ import { Paper, Typography, Grid, Divider, Button, OutlinedInput, InputAdornment
 import GetAppOutlinedIcon from '@material-ui/icons/GetAppOutlined';
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
+import { SaveAlt} from '@material-ui/icons';
 
 const DownloadDatasetRecords = (props) => {
     const { classes } = props
@@ -27,12 +28,14 @@ const DownloadDatasetRecords = (props) => {
                     </Grid> */}
                 </Grid>
                 {props.sentencePair ? <div className={classes.downloadBtnDiv}>
-                    <Button href={props.urls.downloadSample} target="_self" className={classes.downloadBtn} variant="contained" color="primary">
-                        <GetAppOutlinedIcon /> Download Sample
-                    </Button>
-                    <Button href={props.urls.downloadAll} target="_self" className={classes.downloadBtn} variant="contained" color="primary">
-                        <GetAppOutlinedIcon /> Download All
-                    </Button>
+                <Button href={props.urls.downloadSample} target="_self" size="medium" variant="outlined" ><SaveAlt className ={classes.iconStyle}/>Download Sample</Button>
+                <Button href={props.urls.downloadAll} target="_self" size="medium" variant="outlined" className= {classes.buttonStyle} ><SaveAlt className ={classes.iconStyle}/>Download All</Button>
+                    {/* <Button href={props.urls.downloadSample} target="_self" className={classes.downloadBtn} variant="contained" color="primary"> */}     
+                        {/* <GetAppOutlinedIcon /> Download Sample */}
+                    {/* </Button> */}
+                    {/* <Button href={props.urls.downloadAll} target="_self" className={classes.downloadBtn} variant="contained" color="primary"> */}
+                        {/* <GetAppOutlinedIcon /> Download All */}
+                    {/* </Button> */}
                 </div> : " "}
             </Paper>
         </div>

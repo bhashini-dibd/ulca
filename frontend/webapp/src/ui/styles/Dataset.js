@@ -205,9 +205,6 @@ const DataSet = (theme) => ({
         marginRight:'2%'
     },
     
-    divider:{
-        marginLeft:"10%"
-    },
     blurOut:{
         zIndex: -1,
         opacity: '0.5'
