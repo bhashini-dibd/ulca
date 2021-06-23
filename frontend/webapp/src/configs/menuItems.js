@@ -14,7 +14,7 @@ export const menuItems = {
         },
         {
             name: 'Explore Readymade Datasets',
-            url: ''
+            url: '/readymade-dataset'
         },
         {
             name: 'Submit Datasets',
