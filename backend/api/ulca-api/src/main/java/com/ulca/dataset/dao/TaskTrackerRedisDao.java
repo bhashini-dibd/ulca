@@ -49,25 +49,29 @@ public class TaskTrackerRedisDao {
 	   for(String key : keyList) {
 		   
 		   
-		   Integer ingestComplete  = Integer.parseInt(redisTemplate.opsForHash().get(key, "ingestComplete").toString());
+		   String  ingestComplete  = redisTemplate.opsForHash().get(key, "ingestComplete").toString();
 		   
-		   Integer count  = Integer.parseInt(redisTemplate.opsForHash().get(key, "count").toString());
+		   String count  = redisTemplate.opsForHash().get(key, "count").toString();
 		   
-		   Integer ingestSuccess  = Integer.parseInt(redisTemplate.opsForHash().get(key, "ingestSuccess").toString());
+		   String ingestSuccess  = redisTemplate.opsForHash().get(key, "ingestSuccess").toString();
 		   
-		   Integer ingestError  = Integer.parseInt(redisTemplate.opsForHash().get(key, "ingestError").toString());
+		   String ingestError  = redisTemplate.opsForHash().get(key, "ingestError").toString();
 		   
-		   Integer publishSuccess  = Integer.parseInt(redisTemplate.opsForHash().get(key, "publishSuccess").toString());
+		   String publishSuccess  = redisTemplate.opsForHash().get(key, "publishSuccess").toString();
 		   
 		   
-		   Integer publishError  = Integer.parseInt(redisTemplate.opsForHash().get(key, "publishError").toString());
+		   String publishError  = redisTemplate.opsForHash().get(key, "publishError").toString();
 		   
-		   Integer validateError  = Integer.parseInt(redisTemplate.opsForHash().get(key, "validateError").toString());
+		   String validateError  = redisTemplate.opsForHash().get(key, "validateError").toString();
 		   
-		   Integer validateSuccess  = Integer.parseInt(redisTemplate.opsForHash().get(key, "validateSuccess").toString());
+		   String validateSuccess  = redisTemplate.opsForHash().get(key, "validateSuccess").toString();
 		  
 		   
-		   log.info("printing the vlues ");
+		   log.info("printing the values  ");
+		   
+		   log.info("serviceRequestNumber :: " + key);
+		   
+		   
 		   log.info("ingestComplete " + ingestComplete);
 		   
 		  log.info("count " + count);
