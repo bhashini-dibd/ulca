@@ -49,22 +49,22 @@ public class TaskTrackerRedisDao {
 	   for(String key : keyList) {
 		   
 		   
-		   String  ingestComplete  = redisTemplate.opsForHash().get(key, "ingestComplete").toString();
+		   String  ingestComplete  = redisTemplate.opsForHash().get(key, "ingestComplete")+"";
 		   
-		   String count  = redisTemplate.opsForHash().get(key, "count").toString();
+		   String count  = redisTemplate.opsForHash().get(key, "count")+"";
 		   
-		   String ingestSuccess  = redisTemplate.opsForHash().get(key, "ingestSuccess").toString();
+		   String ingestSuccess  = redisTemplate.opsForHash().get(key, "ingestSuccess")+"";
 		   
-		   String ingestError  = redisTemplate.opsForHash().get(key, "ingestError").toString();
+		   String ingestError  = redisTemplate.opsForHash().get(key, "ingestError")+"";
 		   
-		   String publishSuccess  = redisTemplate.opsForHash().get(key, "publishSuccess").toString();
+		   String publishSuccess  = redisTemplate.opsForHash().get(key, "publishSuccess")+"";
 		   
 		   
-		   String publishError  = redisTemplate.opsForHash().get(key, "publishError").toString();
+		   String publishError  = redisTemplate.opsForHash().get(key, "publishError")+"";
 		   
-		   String validateError  = redisTemplate.opsForHash().get(key, "validateError").toString();
+		   String validateError  = redisTemplate.opsForHash().get(key, "validateError")+"";
 		   
-		   String validateSuccess  = redisTemplate.opsForHash().get(key, "validateSuccess").toString();
+		   String validateSuccess  = redisTemplate.opsForHash().get(key, "validateSuccess")+"";
 		  
 		   
 		   log.info("printing the values  ");
@@ -103,18 +103,18 @@ public class TaskTrackerRedisDao {
 	   
 	  
 	   redisTemplate.opsForHash().put(key, "serviceRequestNumber", serviceRequestNumber);
-	   redisTemplate.opsForHash().put(key, "ingestComplete", 0);
-	   redisTemplate.opsForHash().put(key, "count", 0);
-	   redisTemplate.opsForHash().put(key, "ingestError", 0);
+	   redisTemplate.opsForHash().put(key, "ingestComplete", "0");
+	   redisTemplate.opsForHash().put(key, "count",  "0");
+	   redisTemplate.opsForHash().put(key, "ingestError",  "0");
 	   
-	   redisTemplate.opsForHash().put(key, "ingestSuccess", 0);
-	   redisTemplate.opsForHash().put(key, "validateError", 0);
+	   redisTemplate.opsForHash().put(key, "ingestSuccess",  "0");
+	   redisTemplate.opsForHash().put(key, "validateError",  "0");
 	   
-	   redisTemplate.opsForHash().put(key, "validateSuccess", 0);
+	   redisTemplate.opsForHash().put(key, "validateSuccess",  "0");
 	   
-	   redisTemplate.opsForHash().put(key, "publishError", 0);
+	   redisTemplate.opsForHash().put(key, "publishError",  "0");
 	   
-	   redisTemplate.opsForHash().put(key, "publishSuccess", 0);
+	   redisTemplate.opsForHash().put(key, "publishSuccess",  "0");
 	   
 	   
 	  }
