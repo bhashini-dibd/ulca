@@ -41,14 +41,45 @@ public class TaskTrackerRedisDao {
 	   
 	   Set<String> keyList = redisTemplate.keys(Prefix+"*");
 	   
+	   
+	   
 	   Map<String,  Map< Object, Object >> map = new HashMap<String,  Map< Object, Object >>();
 	   
 	   
 	   for(String key : keyList) {
 		   
-		   Map< Object, Object > obj = redisTemplate.opsForHash().entries(key);
 		   
-		   map.put(key, obj);
+		   Integer ingestComplete  = Integer.parseInt(redisTemplate.opsForHash().get(key, "ingestComplete").toString());
+		   
+		   Integer count  = Integer.parseInt(redisTemplate.opsForHash().get(key, "count").toString());
+		   
+		   Integer ingestSuccess  = Integer.parseInt(redisTemplate.opsForHash().get(key, "ingestSuccess").toString());
+		   
+		   Integer ingestError  = Integer.parseInt(redisTemplate.opsForHash().get(key, "ingestError").toString());
+		   
+		   Integer publishSuccess  = Integer.parseInt(redisTemplate.opsForHash().get(key, "publishSuccess").toString());
+		   
+		   
+		   Integer publishError  = Integer.parseInt(redisTemplate.opsForHash().get(key, "publishError").toString());
+		   
+		   Integer validateError  = Integer.parseInt(redisTemplate.opsForHash().get(key, "validateError").toString());
+		   
+		   Integer validateSuccess  = Integer.parseInt(redisTemplate.opsForHash().get(key, "validateSuccess").toString());
+		  
+		   
+		   log.info("printing the vlues ");
+		   log.info("ingestComplete " + ingestComplete);
+		   
+		  log.info("count " + count);
+		  log.info("ingestSuccess " + ingestSuccess);
+		  log.info("ingestError " + ingestError);
+		  log.info("publishSuccess " + publishSuccess);
+		  log.info("publishError " + publishError);
+		  log.info("validateError " + validateError);
+		  log.info("validateSuccess " + validateSuccess);
+		  
+		   
+		   
 	   }
 	   
 	   
