@@ -1,6 +1,6 @@
 import { withStyles, Typography, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
-import React, { useEffect,useState} from "react";
+import React, { useEffect} from "react";
 import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
@@ -10,12 +10,11 @@ import {Cached} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import {  useHistory } from "react-router-dom";
 
-const MySearches = (props) => {
+const ReadymadeDataset = (props) => {
 
         const detailedReport            =       useSelector((state) => state.mySearchReport);
         const dispatch                  = useDispatch();
         const history                   = useHistory();
-        const [page, setPage]           = useState(0);
         
         useEffect(() => {
                 MySearchListApi()   
@@ -28,11 +27,6 @@ const MySearches = (props) => {
                 dispatch(APITransport(userObj));
         }
 
-        const processTableClickedNextOrPrevious = (page, sortOrder) => {
-               setPage(page)
-                }
-              
-
        
 
         const fetchHeaderButton= () => {
@@ -42,12 +36,7 @@ const MySearches = (props) => {
     const renderAction = (rowData) =>{
 
         const status = rowData[4].toLowerCase();
-
-        history.push({ 
-                pathname: `/search-and-download-rec/${status}/${rowData[0]}`,
-                pageInfo: page
-               });
-        // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`)
+        history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`)
     }
 
         
@@ -116,33 +105,22 @@ const MySearches = (props) => {
                 download                :       false,
                 print                   :       false,
                 filter                  :       false,
-                page: page,
                 viewColumns     : false,
                 selectableRows          :       "none",
-                onTableChange: (action, tableState) => {
-                        switch (action) {
-                          case "changePage":
-                            processTableClickedNextOrPrevious(
-                              tableState.page
-                            );
-                            break;
-                          default:
-                        }
-                      },
+
 
                 onRowClick                 : (rowData, rowMeta) =>rowData[3] &&  renderAction(rowData)
         };
 
         const { classes }               = props;
-
         return (
                 <div >
                         <div className  = {classes.breadcrum}>
-                                <BreadCrum links = {[UrlConfig.dataset]} activeLink = "My Searches" />
+                                <BreadCrum links = {[UrlConfig.dataset]} activeLink = "Readymade Dataset" />
                         </div>
 
                                 <MUIDataTable
-                                        title   =       {`My Searches`}
+                                        title   =       {`Readymade Dataset`}
                                         data    =       {detailedReport.responseData}
                                         columns =               {columns}
                                         options ={options}
@@ -153,4 +131,4 @@ const MySearches = (props) => {
         );
 };
 
-export default withStyles(DataSet)(MySearches);
+export default withStyles(DataSet)(ReadymadeDataset);

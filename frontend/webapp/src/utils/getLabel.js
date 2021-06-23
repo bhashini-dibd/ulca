@@ -1,8 +1,6 @@
 import { Language } from '../configs/DatasetItems';
 import DatasetItems from '../configs/DatasetItems';
 
-
-console.log("--------", Language)
 export default (value, params = 'language') => {
     let arr = []
     switch (params) {

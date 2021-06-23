@@ -25,7 +25,7 @@ const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "", type: "parallel-corpus" })
-    const [title, setTitle]         = useState( "Parallel Corpus")
+    const [title, setTitle]         = useState( "Parallel Dataset")
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',

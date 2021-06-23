@@ -12,6 +12,7 @@ import LoginStyles from "../../styles/Login";
 
 const UserManagement = (props) => {
   const { classes } = props;
+
   const param = useParams();
   let history = useHistory();
   const renderPage = () => {
@@ -19,7 +20,7 @@ const UserManagement = (props) => {
       case "register":
         return <SignUp />;
       case "login":
-        return <Login />;
+        return <Login location  = {props.location}/>;
       case "forgot-password":
         return <ForgotPassword />;
       case "reset-password":

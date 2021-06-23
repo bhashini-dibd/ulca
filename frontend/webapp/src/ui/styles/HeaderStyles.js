@@ -27,7 +27,8 @@ const HeaderStyles = (theme) => ({
   },
   menu: {
     width: '100%',
-    display: 'flex'
+    display: 'flex',
+    cursor:"pointer"
   },
   datasetOption: {
     marginLeft: '8.4%',
