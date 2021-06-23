@@ -336,33 +336,33 @@ const SearchAndDownloadRecords = (props) => {
     const getTargetLang = () => {
         return Language.filter(lang => lang.value !== languagePair.source)
     }
-    const renderclearNsubmitButtons=()=>{
-        return(
-              /* <div className={classes.clearNSubmit}>
-                        <Button size="large"  variant="outlined" onClick={clearfilter}>
-                            Clear
-                    </Button>
-                        <Button size="large" className={classes.buttonStyle} variant="contained" color="primary" onClick={handleSubmitBtn}>
-                            Submit
-                    </Button>
-                    </div> */
-                    <Grid container className={classes.clearNSubmit}>
-                        <Grid item xs={3}></Grid>
-                        <Grid item xs={9}>
-                            <Grid container spacing={2} >
-                                <Grid item xs={6}>
-                                    <Button size="large" fullWidth variant="outlined" onClick={clearfilter}>
-                                        Clear
+    const renderclearNsubmitButtons = () => {
+        return (
+            /* <div className={classes.clearNSubmit}>
+                      <Button size="large"  variant="outlined" onClick={clearfilter}>
+                          Clear
+                  </Button>
+                      <Button size="large" className={classes.buttonStyle} variant="contained" color="primary" onClick={handleSubmitBtn}>
+                          Submit
+                  </Button>
+                  </div> */
+            <Grid container className={classes.clearNSubmit}>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={9}>
+                    <Grid container spacing={2} >
+                        <Grid item xs={6}>
+                            <Button size="large" fullWidth variant="outlined" onClick={clearfilter}>
+                                Clear
                                     </Button>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Button fullWidth size="large" variant="contained" color="primary" onClick={handleSubmitBtn}>
-                                        Submit
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Button fullWidth size="large" variant="contained" color="primary" onClick={handleSubmitBtn}>
+                                Submit
                                     </Button>
-                                </Grid>
-                            </Grid>
                         </Grid>
                     </Grid>
+                </Grid>
+            </Grid>
 
         )
     }
@@ -376,13 +376,13 @@ const SearchAndDownloadRecords = (props) => {
             <Grid container spacing={3}>
                 <Grid className={(params === 'inprogress' || params === 'completed') && classes.blurOut} item xs={12} sm={5} md={4} lg={4} xl={4}>
 
-                    <Typography className={classes.subHeader} variant="h6">Select Dataset Type</Typography>
+                    <Typography className={classes.subHeader} variant="body1">Select Dataset Type</Typography>
 
                     <div className={classes.buttonDiv} >
                         {renderDatasetButtons()}
                     </div>
 
-                    <Typography className={classes.subHeader} variant="h6">{getTitle()}</Typography>
+                    <Typography className={classes.subHeader} variant="body1">{getTitle()}</Typography>
                     <div className={classes.subHeader}>
                         {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
 
@@ -397,7 +397,7 @@ const SearchAndDownloadRecords = (props) => {
                             helperText="This field is mandatory"
                         />
                     </div>
-                    <Typography className={classes.subHeader} variant="h6">Filter by</Typography>
+                    <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
                     <div className={classes.subHeader}>
                         <Grid container spacing={1}>
                             <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>

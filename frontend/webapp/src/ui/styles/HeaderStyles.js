@@ -1,17 +1,17 @@
 const HeaderStyles = (theme) => ({
 
   toolbar: {
-    minHeight:"56px",
+    minHeight: "56px",
     maxWidth: "1272px",
-    width : "100%",
-    margin :"0 auto",
+    width: "100%",
+    margin: "0 auto",
     display: 'flex',
     alignItems: 'center',
-    padding:"0"
+    padding: "0"
   },
   title: {
     color: 'white',
-    marginLeft:"-6px",
+    marginLeft: "-6px",
     "@media (max-width:670px)": {
       display: 'none'
     },
@@ -47,9 +47,18 @@ const HeaderStyles = (theme) => ({
     color: 'white'
   },
   styledMenu: {
-    padding:"9px",
-    marginTop:"10px"
+    padding: "9px",
+    marginTop: "5px",
     // borderTop: "1px solid #D6D6D6"
+    "&:hover": {
+      color: '#2C2799',
+      backgroundColor: " rgba(44,39,153, .05)"
+    }
+  },
+  styledMenu1: {
+    padding: "9px",
+    marginTop: "10px",
+    boxShadow: "0px 3px 6px #00000029 !important" 
   },
   profileName: {
     marginLeft: '0.5rem',

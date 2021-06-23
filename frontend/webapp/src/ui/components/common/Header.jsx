@@ -11,20 +11,22 @@ import GroupIcon from '@material-ui/icons/Group';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import authenticate from '../../../configs/authenticate';
 import Theme from "../../theme/theme-default";
+import MenuItems from "../../components/common/MenuItem";
+import {menuItems} from '../../../configs/menuItems';
 
 const StyledMenu = withStyles({
  
 })((props) => (
   <Menu
-    elevation={4}
+     elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
-      horizontal: 'center',
+      horizontal: 'left',
     }}
     transformOrigin={{
       vertical: 'top',
-      horizontal: 'center',
+      horizontal: 'left',
     }}
     {...props}
   />
@@ -55,6 +57,8 @@ const Header = (props) => {
     history.push(`${process.env.PUBLIC_URL}${url}`)
     handleClose();
   }
+
+
   return (
     <MuiThemeProvider theme={Theme}>
       <AppBar color="primary">
@@ -100,11 +104,18 @@ const Header = (props) => {
                     </Button>
                   </div>
                   
-                  <StyledMenu id="data-set"
+                  <MenuItems
+                    id={"dataset-menu"}
+                    anchorEl={anchorEl}
+                    handleClose={handleClose}
+                    menuOptions={menuItems.dataset}
+                    handleMenuItemClick={handleMenuItemClick}
+                  />
+                  {/* <StyledMenu id="data-set"
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={(e) => handleClose(e)}
-                    className={classes.styledMenu}
+                     className={classes.styledMenu1}
                   >
                     <MenuItem
                       className={classes.styledMenu}
@@ -131,7 +142,7 @@ const Header = (props) => {
                     >
                       Submit Dataset
                     </MenuItem>
-                  </StyledMenu>
+                  </StyledMenu> */}
                 </div>
                 {/* <div className={classes.options}>
                   <div className={classes.model}>
@@ -156,16 +167,29 @@ const Header = (props) => {
                     anchorEl={logout}
                     open={Boolean(logout)}
                     onClose={(e) => handleClose(e)}
-                    className={classes.styledMenu}
+                    className={classes.styledMenu1}
                   >
+                     <MenuItem
+                     className={classes.styledMenu}
+                
+                    >
+                      Change Password
+                    </MenuItem>
                     <MenuItem
+                     className={classes.styledMenu}
                      
+                    >
+                      Feedback
+                    </MenuItem>
+                    <MenuItem
+                     className={classes.styledMenu}
                       onClick={() => {
                         localStorage.removeItem('userInfo')
                         handleMenuItemClick('/user/login')}}
                     >
                       Log out
                     </MenuItem>
+                   
                   </StyledMenu>
                 </div>
                 :
