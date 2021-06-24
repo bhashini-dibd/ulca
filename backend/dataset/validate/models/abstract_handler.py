@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-# from models.validation_error import ValidationError
 
 class BaseHandler(ABC):
     """
