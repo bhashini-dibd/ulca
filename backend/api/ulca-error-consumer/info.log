@@ -1544,3 +1544,101 @@ KeyError: 0
 [2021-06-11 18:55:51,151] {consumer.py:44} MainThread INFO in consumer: DS-CONS-(WaPc) -- Running..........
 [2021-06-11 18:55:51,157] {deleteconsumer.py:39} MainThread INFO in deleteconsumer: DS-DELETE-(wnmK) -- Running..........
 [2021-06-11 18:55:51,159] {errorconsumer.py:42} MainThread INFO in errorconsumer: DS-ERROR-(RuXH) -- Running..........
+[2021-06-24 19:27:11,093] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 19:27:11,094] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 19:27:11,097] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(BFIm) -- Running..........
+[2021-06-24 19:41:43,793] {errorconsumer.py:41} MainThread INFO in errorconsumer: DS-ERROR-(BFIm) | Received on Topic: ulca-ds-error-ip-v0 Partition: 0
+[2021-06-24 19:41:43,795] {error.py:46} MainThread INFO in error: Writing error for SRN -- AA1167
+[2021-06-24 19:41:43,795] {error.py:48} MainThread INFO in error: Creating error file for Dataset: abc.data | SRN: AA1167
+[2021-06-24 19:43:01,473] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 19:43:01,478] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 19:43:01,497] {datasetutils.py:111} Thread-1 INFO in datasetutils: Pushing /opt/error-abc.data.csv to azure at errors/error-abc.data.csv ......
+[2021-06-24 19:43:01,511] {error.py:117} Thread-1 INFO in error: Error report uploaded to s3 for SRN -- AA1167
+[2021-06-24 19:43:01,516] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 19:43:01] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
+[2021-06-24 19:46:29,901] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 19:46:29,901] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 19:46:29,904] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(LIEn) -- Running..........
+[2021-06-24 19:46:37,078] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 19:46:37,078] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 19:46:37,079] {error.py:74} Thread-1 INFO in error: 1 Errors written to csv for SRN -- AA1167
+[2021-06-24 19:46:37,079] {datasetutils.py:111} Thread-1 INFO in datasetutils: Pushing /home/jainy/Desktop/error-abc.data.csv to azure at errors/jainy ......
+[2021-06-24 19:46:37,095] {error.py:117} Thread-1 INFO in error: Error report uploaded to s3 for SRN -- AA1167
+[2021-06-24 19:46:37,100] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 19:46:37] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
+[2021-06-24 19:52:22,027] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 19:52:22,027] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 19:52:22,029] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(TbyK) -- Running..........
+[2021-06-24 19:52:26,427] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 19:52:26,428] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 19:52:26,428] {error.py:74} Thread-1 INFO in error: 1 Errors written to csv for SRN -- AA1167
+[2021-06-24 19:52:26,429] {datasetutils.py:111} Thread-1 INFO in datasetutils: Pushing /home/jainy/Desktop/error-abc.data.csv to azure at errors/test ......
+[2021-06-24 19:52:26,441] {error.py:118} Thread-1 INFO in error: Error report uploaded to s3 for SRN -- AA1167
+[2021-06-24 19:52:26,444] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 19:52:26] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
+[2021-06-24 19:55:49,613] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 19:55:49,614] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 19:55:49,617] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(Hjlg) -- Running..........
+[2021-06-24 19:55:53,503] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 19:55:53,503] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 19:55:53,504] {error.py:74} Thread-1 INFO in error: 1 Errors written to csv for SRN -- AA1167
+[2021-06-24 19:55:53,505] {datasetutils.py:111} Thread-1 INFO in datasetutils: Pushing /home/jainy/Desktop/error-abc.data.csv to azure at /home/jainy/Desktop/empty_csv.csv ......
+[2021-06-24 19:55:53,507] {datasetutils.py:116} Thread-1 INFO in datasetutils: uploading file - /home/jainy/Desktop/empty_csv.csv
+[2021-06-24 19:55:55,036] {error.py:118} Thread-1 INFO in error: Error report uploaded to s3 for SRN -- AA1167
+[2021-06-24 19:55:55,042] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 19:55:55] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
+[2021-06-24 20:00:37,968] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 20:00:37,968] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 20:00:37,971] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(CrDB) -- Running..........
+[2021-06-24 20:00:42,212] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 20:00:42,212] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 20:00:42,213] {error.py:74} Thread-1 INFO in error: 1 Errors written to csv for SRN -- AA1167
+[2021-06-24 20:00:42,213] {datasetutils.py:111} Thread-1 INFO in datasetutils: Pushing /home/jainy/Desktop/empty_csv.csv to azure at /home/jainy/Desktop/empty_csv.csv ......
+[2021-06-24 20:00:42,216] {datasetutils.py:116} Thread-1 INFO in datasetutils: uploading file - /home/jainy/Desktop/empty_csv.csv
+[2021-06-24 20:00:47,123] {error.py:118} Thread-1 INFO in error: Error report uploaded to s3 for SRN -- AA1167
+[2021-06-24 20:00:47,128] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 20:00:47] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
+[2021-06-24 20:08:56,755] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 20:08:56,756] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 20:08:56,762] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(XxdH) -- Running..........
+[2021-06-24 20:09:02,646] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 20:09:02,646] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 20:09:02,648] {error.py:74} Thread-1 INFO in error: 1 Errors written to csv for SRN -- AA1167
+[2021-06-24 20:09:02,649] {datasetutils.py:115} Thread-1 INFO in datasetutils: Pushing /home/jainy/Desktop/empty_csv.csv to azure at /home/jainy/Desktop/empty_csv.csv ......
+[2021-06-24 20:09:02,651] {datasetutils.py:120} Thread-1 INFO in datasetutils: uploading file - /home/jainy/Desktop/empty_csv.csv
+[2021-06-24 20:09:03,229] {error.py:118} Thread-1 INFO in error: Error report uploaded to s3 for SRN -- AA1167
+[2021-06-24 20:09:03,232] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 20:09:03] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
+[2021-06-24 20:13:48,798] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 20:13:48,801] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 20:13:48,816] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(rsWC) -- Running..........
+[2021-06-24 20:13:53,353] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 20:13:53,353] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 20:13:53,354] {error.py:74} Thread-1 INFO in error: 1 Errors written to csv for SRN -- AA1167
+[2021-06-24 20:13:53,354] {datasetutils.py:115} Thread-1 INFO in datasetutils: Pushing /home/jainy/Desktop/empty_csv.csv to azure at empty_csv.csv ......
+[2021-06-24 20:13:53,356] {datasetutils.py:120} Thread-1 INFO in datasetutils: uploading file - empty_csv.csv
+[2021-06-24 20:13:54,117] {error.py:119} Thread-1 INFO in error: Error report uploaded to s3 for SRN -- AA1167
+[2021-06-24 20:13:54,122] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 20:13:54] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
+[2021-06-24 20:24:24,411] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 20:24:24,412] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 20:24:24,419] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(dVGh) -- Running..........
+[2021-06-24 20:24:35,635] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 20:24:35,635] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 20:24:35,635] {error.py:74} Thread-1 INFO in error: 1 Errors written to csv for SRN -- AA1167
+[2021-06-24 20:24:35,635] {datasetutils.py:115} Thread-1 INFO in datasetutils: Pushing /home/jainy/Desktop/empty_csv.csv to azure at empty_csv.csv ......
+[2021-06-24 20:24:35,637] {datasetutils.py:120} Thread-1 INFO in datasetutils: uploading file - empty_csv.csv
+[2021-06-24 20:24:36,697] {error.py:119} Thread-1 INFO in error: Error report uploaded to s3 for SRN -- AA1167
+[2021-06-24 20:24:36,702] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 20:24:36] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
+[2021-06-24 20:46:50,311] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2021-06-24 20:46:50,311] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.43.57:5001/ (Press CTRL+C to quit)
+[2021-06-24 20:46:50,314] {errorconsumer.py:35} MainThread INFO in errorconsumer: DS-ERROR-(AxjI) -- Running..........
+[2021-06-24 20:47:04,706] {error.py:87} Thread-1 INFO in error: Searching for error report of SRN -- AA1167
+[2021-06-24 20:47:04,706] {error.py:112} Thread-1 INFO in error: Error List: 1 for SRN -- AA1167
+[2021-06-24 20:47:04,707] {error.py:74} Thread-1 INFO in error: 1 Errors written to csv for SRN -- AA1167
+[2021-06-24 20:47:04,707] {datasetutils.py:111} Thread-1 INFO in datasetutils: Pushing /home/jainy/Desktop/empty_csv.csv to azure at empty_csv1.csv ......
+[2021-06-24 20:47:04,710] {datasetutils.py:116} Thread-1 INFO in datasetutils: uploading file - empty_csv1.csv
+[2021-06-24 20:47:07,121] {error.py:119} Thread-1 INFO in error: Error report uploaded to azure-blob for SRN -- AA1167
+[2021-06-24 20:47:07,126] {_internal.py:225} Thread-1 INFO in _internal: 127.0.0.1 - - [24/Jun/2021 20:47:07] "POST //ulca/error-consumer/v0/error/report HTTP/1.1" 200 -
