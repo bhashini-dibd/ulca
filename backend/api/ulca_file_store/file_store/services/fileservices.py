@@ -15,21 +15,21 @@ class FileServices():
         if file_name.split('/')[1] != config.shared_storage_path:
             return post_error("Request Failed","filename received is corrupted")
         
-        if config.ojectStore == "AWS":
+        if config.object_store == "AWS":
             return awsrepo.upload_file_to_s3(file_name,folder)
-        elif config.ojectStore == "AZURE":
+        elif config.object_store == "AZURE":
             return  azurerepo.upload_file_to_blob(file_name,folder)
     
     def download_file(self,file_name):
-        if config.ojectStore == "AWS":
+        if config.object_store == "AWS":
             return awsrepo.download_file_from_s3(file_name)
-        elif config.ojectStore == "AZURE":
+        elif config.object_store == "AZURE":
             return  azurerepo.upload_file_to_blob(file_name)
 
     def remove_file(self,file_name):
-        if config.ojectStore == "AWS":
+        if config.object_store == "AWS":
             return awsrepo.remove_file_from_s3(file_name)
-        elif config.ojectStore == "AZURE":
+        elif config.object_store == "AZURE":
             return  azurerepo.remove_file_from_blob(file_name)
             
 
