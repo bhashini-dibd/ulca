@@ -5,7 +5,7 @@ import os
 from logging.config import dictConfig
 import boto3 as boto3
 from configs.configs import aws_access_key, aws_secret_key, aws_bucket_name, shared_storage_path, aws_dataset_prefix, aws_link_prefix
-from configs.configs import azure_connection_string,azure_container_name
+from configs.configs import azure_connection_string,azure_container_name, azure_link_prefix,error_prefix
 from azure.storage.blob import BlobServiceClient, BlobClient
 
 log = logging.getLogger('file')
@@ -14,8 +14,7 @@ mongo_instance = None
 
 class DatasetUtils:
     def __init__(self):
-        pass
-        # self.blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
+        self.blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
 
     # Utility to get tags out of an object
     def get_tags(self, d):
@@ -113,12 +112,14 @@ class DatasetUtils:
 
         blob_client = self.blob_service_client.get_blob_client(container=azure_container_name, blob=blob_file_name)
         try:
-            with open(blob_file_name, "rb") as data:
-                blob_client.upload_blob(data)
-            return f'{aws_link_prefix}{blob_file_name}'
+            with open(file_name, "rb") as data:
+                log.info(f"uploading file - {blob_file_name}")
+                blob_client.upload_blob(data,overwrite=True)
+            return f'{azure_link_prefix}{blob_file_name}'
         except Exception as e:
-            log.exception(f'Exception while pushing to s3: {e}', e)
+            log.exception(f'Exception while pushing to blob store: {e}', e)
         return False
+
 
 # Log config
 dictConfig({

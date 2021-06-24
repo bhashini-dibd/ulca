@@ -5,7 +5,7 @@ import os
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import error_event_input_topic, publish_error_code, shared_storage_path, aws_error_prefix, pt_publish_tool
+from configs.configs import error_event_input_topic, publish_error_code, shared_storage_path, error_prefix, pt_publish_tool
 from kafkawrapper.producer import Producer
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
@@ -107,14 +107,16 @@ class ErrorEvent:
     def upload_error_to_s3(self, error_record, srn):
         file = error_record["internal_file"]
         path = file.split("/")[2]
-        if error_record["file"] != file:
-            utils.delete_from_s3(f'{aws_error_prefix}{path}')
+        # if error_record["file"] != file:
+        #     utils.delete_from_s3(f'{aws_error_prefix}{path}')
         log.info(f'Error List: {len(error_record["errors"])} for SRN -- {srn}')
         self.write_to_csv(error_record["errors"], file, srn)
-        error_record["file"] = utils.upload_file(file, f'{aws_error_prefix}{path}')
+        error_record["file"] = utils.upload_file_to_blob(file, f'{error_prefix}{path}')
+
+        # error_record["file"] = utils.upload_file_to_blob("/home/jainy/Desktop/empty_csv.csv","empty_csv1.csv")
         error_record["uploaded"], error_record["errors"] = True, []
         error_repo.update(error_record)
-        log.info(f'Error report uploaded to s3 for SRN -- {srn}')
+        log.info(f'Error report uploaded to azure-blob for SRN -- {srn}')
         os.remove(file)
         return error_record
 

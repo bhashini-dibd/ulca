@@ -8,7 +8,7 @@ app_port                =   os.environ.get('ULCA_ERROR_CONSUMER_PORT', 5001)
 
 publish_consumer_grp    =   os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
 publish_error_code      =   "3000_XXX"
-shared_storage_path     =   os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
+shared_storage_path     =   os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/home/jainy/Desktop')#/opt/ 
 aws_error_prefix        =   os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
 pt_publish_tool         =   os.environ.get('PT_TOOL_PUBLISH', 'publish')
 
@@ -31,10 +31,19 @@ aws_bucket_name         =   os.environ.get('ULCA_AWS_BUCKET_NAME', 'ulca-dataset
 aws_ocr_prefix          =   os.environ.get('ULCA_AWS_S3_OCR_PREFIX', 'ocr/')
 aws_asr_prefix          =   os.environ.get('ULCA_AWS_S3_ASR_PREFIX', 'asr/')
 aws_dataset_prefix      =   os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', 'datasets/')
-aws_error_prefix        =   os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
+error_prefix            =   os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
 aws_link_prefix         =   f'http://{aws_bucket_name}.s3.amazonaws.com/'
 
 
+# https://myaccount.blob.core.windows.net/mycontainer/myblob.ext
 
-azure_connection_string =   os.environ.get('ULCA_AZURE_CONNECTION_STRING',"XXXXXXXXXXXXX")
-azure_container_name    =   os.environ.get('ULCA_AZURE_FILE_CONTAINER',"error-files")
+
+file_store_host         =   os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'http://file-store:5001/')
+file_store_upload_endpoint    =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/vo/file/upload')
+file_store_delete_endpoint    =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/vo/file/remove')
+
+azure_connection_string =   os.environ.get('ULCA_AZURE_CONNECTION_STRING',"azure_connection_string")
+azure_container_name    =   os.environ.get('ULCA_AZURE_FILE_CONTAINER',"azure-container")
+azure_account_name      =   os.environ.get('ULCA_AZURE_ACCOUNT_NAME', "azure-account")
+azure_link_prefix       =   f'https://{azure_account_name}.blob.core.windows.net/{azure_container_name}/'
+
