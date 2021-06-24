@@ -1,7 +1,36 @@
-import { Language } from '../configs/DatasetItems';
+import { Language, FilterBy } from '../configs/DatasetItems';
 import DatasetItems from '../configs/DatasetItems';
 
-export default (value, params = 'language') => {
+export const FilterByDomain =(value) =>{
+    let arr = []
+    FilterBy.domain.forEach(val => {
+        value.forEach(data => {
+            if (val.value === data)
+                arr.push(val)
+        })
+
+    })
+            return arr;
+        
+    
+}
+
+export const FilterByCollection =(value) =>{
+    let arr = []
+    FilterBy.collectionMethod.forEach(val => {
+        value.forEach(data => {
+            if (val.value === data)
+                arr.push(val)
+        })
+
+    })
+            return arr;
+        
+    
+}
+
+
+ export const getLanguageLabel= (value, params = 'language') => {
     let arr = []
     switch (params) {
         case 'datasetType':
@@ -22,5 +51,8 @@ export default (value, params = 'language') => {
     }
 
 }
+
+export default getLanguageLabel;
+
 
 
