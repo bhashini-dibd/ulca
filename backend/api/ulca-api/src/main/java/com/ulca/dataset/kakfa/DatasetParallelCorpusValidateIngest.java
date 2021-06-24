@@ -14,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -31,11 +30,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.dataset.dao.TaskTrackerRedisDao;
-import com.ulca.dataset.dao.TaskTrackerRedisRepository;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.model.TaskTrackerRedis;
 import com.ulca.dataset.model.deserializer.ParallelDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
@@ -199,11 +196,11 @@ public class DatasetParallelCorpusValidateIngest {
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 
-		log.info("inputStream file done ");
+		
 
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
-		log.info("json reader created ");
+		
 		
 	
 		int numberOfRecords = 0;
@@ -218,19 +215,18 @@ public class DatasetParallelCorpusValidateIngest {
 		vModel.put("userId", userId);
 		vModel.put("userMode", "real");
 		
-
 		 
 		 
-		 taskTrackerRedisDao.intialize(serviceRequestNumber);
+		taskTrackerRedisDao.intialize(serviceRequestNumber);
 		 
-		 
+		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 		 
 		reader.beginArray();
 		while (reader.hasNext()) {
 
 			numberOfRecords++;
 
-			log.info("reading records :: " + numberOfRecords);
+			
 			
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
@@ -244,7 +240,7 @@ public class DatasetParallelCorpusValidateIngest {
 			try {
 				
 				rowSchema = mapper.readValue(dataRow, ParallelDatasetRowSchema.class);
-				log.info("row schema created");				
+							
 				
 			} catch(Exception e) {
 				
@@ -286,7 +282,7 @@ public class DatasetParallelCorpusValidateIngest {
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 				
 				
-				log.info("rowSchema is not null" );
+				
 				JSONObject target =  new JSONObject(dataRow);
 				
 				JSONObject finalRecord = deepMerge(record, target);
@@ -307,10 +303,9 @@ public class DatasetParallelCorpusValidateIngest {
 				vModel.put("record", finalRecord);
 				vModel.put("currentRecordIndex", numberOfRecords);
 				
-				log.info("data sending for validation :: ");
-				log.info(vModel.toString());
+				
 				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
-				log.info("data row " + numberOfRecords + " sent for validation ");
+				
 				
 			}
 			
@@ -322,10 +317,9 @@ public class DatasetParallelCorpusValidateIngest {
 		
 		taskTrackerRedisDao.setCountAndIngestComplete(serviceRequestNumber, numberOfRecords);
 		
+		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
 		
 		
-
-		log.info("sent record for validation ");
 
 	}
 	

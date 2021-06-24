@@ -32,23 +32,13 @@ import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.model.deserializer.ASRDatasetRowDataSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.DocumentLayoutDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.DocumentLayoutDatasetRowDataSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.OcrDatasetParamsSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.OcrDatasetRowDataSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
-import io.swagger.model.ASRParamsSchema;
-import io.swagger.model.ASRRowSchema;
 import io.swagger.model.DatasetType;
 import io.swagger.model.DocumentLayoutParamsSchema;
 import io.swagger.model.DocumentLayoutRowSchema;
-import io.swagger.model.OcrDatasetParamsSchema;
-import io.swagger.model.OcrDatasetRowSchema;
-import io.swagger.model.ParallelDatasetRowSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

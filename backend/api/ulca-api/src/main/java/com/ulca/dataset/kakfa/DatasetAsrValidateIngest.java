@@ -95,7 +95,6 @@ public class DatasetAsrValidateIngest {
 		}
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath, file);
-			// ingest(paramsSchema, file, fileMap, taskTrackerIngest);
 
 		} catch (IOException | JSONException | NullPointerException e) {
 			
@@ -330,7 +329,7 @@ public class DatasetAsrValidateIngest {
 		vModel.remove("record");
 		vModel.remove("currentRecordIndex");
 		if(failedCount < numberOfRecords) {
-			datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+			datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 		}
 		
 
