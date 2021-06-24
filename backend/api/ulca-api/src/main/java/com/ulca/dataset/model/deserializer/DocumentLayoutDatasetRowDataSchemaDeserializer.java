@@ -66,7 +66,6 @@ public class DocumentLayoutDatasetRowDataSchemaDeserializer extends StdDeseriali
 	public DocumentLayoutRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		log.info("******** inside deserializer ********");
 		ObjectMapper mapper = new ObjectMapper();
 		DocumentLayoutRowSchema docLayoutRowSchema = new DocumentLayoutRowSchema();
 		JsonNode node = p.readValueAsTree();
@@ -139,7 +138,6 @@ public class DocumentLayoutDatasetRowDataSchemaDeserializer extends StdDeseriali
 		if (!errorList.isEmpty())
 			throw new IOException(errorList.toString());
 
-		log.info("******** Exiting deserializer ********");
 		return docLayoutRowSchema;
 	}
 

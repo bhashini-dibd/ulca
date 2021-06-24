@@ -61,7 +61,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowS
 	public ASRRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		log.info("******** inside deserializer ********");
+		
 		ObjectMapper mapper = new ObjectMapper();
 		ASRRowSchema asrRowSchema = new ASRRowSchema();
 		JsonNode node = p.readValueAsTree();
@@ -357,7 +357,6 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowS
 		if (!errorList.isEmpty())
 			throw new IOException(errorList.toString());
 
-		log.info("******** Exiting deserializer ********");
 		return asrRowSchema;
 	}
 

@@ -8,6 +8,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,7 +18,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.Error;
+import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
@@ -58,6 +61,9 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	DatasetDocumentLayoutValidateIngest datasetDocumentLayoutValidateIngest;
 	
+	@Autowired
+	TaskTrackerDao taskTrackerDao;
+	
 	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
@@ -65,6 +71,9 @@ public class KafkaFileDownloadConsumer {
 		String datasetId = file.getDatasetId();
 		String fileUrl = file.getFileUrl();
 		String serviceRequestNumber = file.getServiceRequestNumber();
+		String datasetName = file.getDatasetName();
+		DatasetType datasetType = file.getDatasetType();
+		
 		Map<String,String> fileMap = null;
 		
 		try {
@@ -75,6 +84,10 @@ public class KafkaFileDownloadConsumer {
 			log.info("fileUrl :: " + fileUrl);
 			log.info("serviceRequestNumber :: " + serviceRequestNumber);
 			
+			List<TaskTracker> list = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+			if(list.size() > 0) {
+				return;
+			}
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.inprogress);
 			processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 			
@@ -101,68 +114,60 @@ public class KafkaFileDownloadConsumer {
 
 			} catch (IOException e) {
 				//update error
-				
-				
 				Error error = new Error();
 				error.setCause(e.getMessage());
 				error.setMessage("file download failed");
 				error.setCode("1000_FILE_DOWNLOAD_FAILURE");
 				processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
-				
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 				
 				//send error event for download failure
-				JSONObject errorMessage = new JSONObject();
-				errorMessage.put("eventType", "dataset-training");
-				errorMessage.put("messageType", "error");
-				errorMessage.put("code", "1000_FILE_DOWNLOAD_FAILURE");
-				errorMessage.put("eventId", "serviceRequestNumber|"+serviceRequestNumber);
-				Calendar cal = Calendar.getInstance();
-			    SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-			    Date date = cal.getTime();
-				//errorMessage.put("timestamp", df2.format(date));
-			    errorMessage.put("timestamp", new Date().toString());
-				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-				errorMessage.put("stage", "ingest");
-				errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
-				errorMessage.put("message", e.getMessage());
-				datasetErrorPublishService.publishDatasetError(errorMessage);
-				
+				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
+					
 				e.printStackTrace();
 				
 				return;
 			}
 			
-			//processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.ingest, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 			
+			switch(datasetType) {
 			
-			if(file.getDatasetType() == DatasetType.ASR_CORPUS) {
-				log.info("calling the asr validate service");
-				datasetAsrValidateIngest.validateIngest(fileMap,file);
-			} else if(file.getDatasetType() == DatasetType.PARALLEL_CORPUS) {
+			case PARALLEL_CORPUS :
 				log.info("calling the parallel-corpus validate service");
 				datasetParallelCorpusValidateIngest.validateIngest(fileMap,file);
-			}else if(file.getDatasetType() == DatasetType.OCR_CORPUS) {
+				break;
+				
+			case ASR_CORPUS:
+				log.info("calling the asr validate service");
+				datasetAsrValidateIngest.validateIngest(fileMap,file);
+				break;
+				
+			case OCR_CORPUS: 
 				log.info("calling the ocr-corpus validate service");
 				datasetOcrValidateIngest.validateIngest(fileMap,file);
-			}if(file.getDatasetType() == DatasetType.MONOLINGUAL_CORPUS) {
+				break;
+				
+			case MONOLINGUAL_CORPUS:
 				log.info("calling the monolingual-corpus validate service");
 				datasetMonolingualValidateIngest.validateIngest(fileMap,file);
-			}if(file.getDatasetType() == DatasetType.DOCUMENT_LAYOUT_CORPUS) {
+				break;
+				
+			case DOCUMENT_LAYOUT_CORPUS:
 				log.info("calling the document-layout-corpus validate service");
 				datasetDocumentLayoutValidateIngest.validateIngest(fileMap,file);
+				break;
+				
+			default:
+				log.info("datasetType for serviceRequestNumber not one of defined datasetType");
+				break;
 			}
 			
-			
-			
 			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
+			
 		}catch (Exception e) {
-			
-			
 			log.info("Unhadled Exception :: " + e.getMessage());
 			log.info("cause :: " + e.getClass());
 			e.printStackTrace();
-			
 			
 		}
 		
