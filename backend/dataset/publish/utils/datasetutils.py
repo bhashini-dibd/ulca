@@ -16,17 +16,7 @@ mongo_instance = None
 
 class DatasetUtils:
     def __init__(self):
-        self.blob_service_client = BlobServiceClient.from_connection_string(azure_connection_string)
-        self.s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
-        try:
-            container_client = self.blob_service_client.create_container(azure_container_name)
-            if container_client:
-                log.info(f'Azure container: {azure_container_name} already exists!')
-            else:
-                log.info(f'Azure container: {azure_container_name} CREATED!')
-        except Exception as e:
-            log.exception(f'Exception while creating Azure container: {e}',e)
-            pass
+        pass
 
     # Utility to get tags out of an object
     def get_tags(self, d):
@@ -107,7 +97,8 @@ class DatasetUtils:
             s3_file_name = file_name
         log.info(f'Pushing {file_name} to S3 at {s3_file_name} ......')
         try:
-            self.s3_client.upload_file(file_name, aws_bucket_name, s3_file_name)
+            s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+            s3_client.upload_file(file_name, aws_bucket_name, s3_file_name)
             return f'{aws_link_prefix}{s3_file_name}'
         except Exception as e:
             log.exception(f'Exception while pushing to s3: {e}', e)
@@ -118,8 +109,9 @@ class DatasetUtils:
         if blob_file_name is None:
             blob_file_name = file_name
         log.info(f'Pushing {file_name} to Azure at {blob_file_name} ......')
-        blob_client = self.blob_service_client.get_blob_client(container=azure_container_name, blob=blob_file_name)
         try:
+            blob_service_client = BlobServiceClient.from_connection_string(azure_connection_string)
+            blob_client = blob_service_client.get_blob_client(container=azure_container_name, blob=blob_file_name)
             with open(file_name, "rb") as data:
                 blob_client.upload_blob(data, overwrite=True)
             return f'{azure_link_prefix}{blob_file_name}'

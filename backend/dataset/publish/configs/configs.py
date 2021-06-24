@@ -35,7 +35,7 @@ if isinstance(sample_size, str):
 pt_redis_db = os.environ.get('ULCA_PT_REDIS_DB', 0)
 if isinstance(pt_redis_db, str):
     pt_redis_db = eval(pt_redis_db)
-shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
+shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType",
                       "sourceLanguage", "fileLocation"]
