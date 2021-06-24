@@ -92,9 +92,9 @@ const SearchAndDownloadRecords = (props) => {
         if (previousUrl.current !== params && previousUrl.current !== 'initiate') {
             setLanguagePair({ target: [], source: "" })
             setFilterBy({
-                domain: [],
-                source: [],
-                collectionMethod: []
+                domain: "",
+                source: "",
+                collectionMethod: ""
             })
         }
         previousUrl.current = params;
@@ -169,9 +169,9 @@ const SearchAndDownloadRecords = (props) => {
     }
     const clearfilter = () => {
         setFilterBy({
-            domain: [],
-            source: [],
-            collectionMethod: []
+            domain: "",
+            source: "",
+            collectionMethod: ""
         });
         setLanguagePair({
             source: "",
@@ -221,8 +221,8 @@ const SearchAndDownloadRecords = (props) => {
         let tgt = languagePair.target.map(trgt => trgt.value)
         //let domain = filterBy.domain.map(domain => domain.value)
         //let collectionMethod = filterBy.collectionMethod.map(method => method.value)
-        let domain = [filterBy.domain]
-        let collectionMethod = [filterBy.collectionMethod]
+        let domain = filterBy.domain && [filterBy.domain]
+        let collectionMethod =filterBy.collectionMethod &&[filterBy.collectionMethod]
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
                 makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)

@@ -24,8 +24,8 @@ export default class SubmitSearchRequest extends API {
             criteria: {
                 sourceLanguage: this.src !== null ? [this.src] : this.tgt,
                 targetLanguage: this.src === null ? null : this.tgt,
-                domain: this.domain,
-                collectionMethod: this.collectionMethod
+                domain: this.domain.length>0 ? this.domain : null,
+                collectionMethod: this.collectionMethod.length>0 ? this.collectionMethod : null
             },
             // groupby: []
         }
