@@ -8,7 +8,7 @@ import pymongo
 log = logging.getLogger('file')
 
 
-mongo_instance = None
+mongo_instance_ocr = None
 
 class OCRRepo:
     def __init__(self):
@@ -38,15 +38,18 @@ class OCRRepo:
             log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):
+        global mongo_instance_ocr
         client = pymongo.MongoClient(db_cluster)
-        mongo_instance = client[db][ocr_collection]
-        return mongo_instance
+        mongo_instance_ocr = client[db][ocr_collection]
+        return mongo_instance_ocr
 
     def get_mongo_instance(self):
-        if not mongo_instance:
+        global mongo_instance_ocr
+        if not mongo_instance_ocr:
+            log.info(f'getting mongo ocr connection............')
             return self.instantiate()
         else:
-            return mongo_instance
+            return mongo_instance_ocr
 
     def insert(self, data):
         col = self.get_mongo_instance()

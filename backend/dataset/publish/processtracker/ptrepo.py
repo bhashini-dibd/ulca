@@ -12,25 +12,25 @@ log = logging.getLogger('file')
 
 
 redis_client = None
-mongo_instance = None
+mongo_instance_pt = None
 
 class PTRepo:
     def __init__(self):
         pass
 
     def instantiate(self):
-        global mongo_instance
+        global mongo_instance_pt
         client = pymongo.MongoClient(ulca_db_cluster)
-        mongo_instance = client[pt_db][pt_task_collection]
-        return mongo_instance
+        mongo_instance_pt = client[pt_db][pt_task_collection]
+        return mongo_instance_pt
 
     def get_mongo_instance(self):
-        global mongo_instance
-        if not mongo_instance:
-            log.info(f'getting mongo connection............')
+        global mongo_instance_pt
+        if not mongo_instance_pt:
+            log.info(f'getting mongo pt connection............')
             return self.instantiate()
         else:
-            return mongo_instance
+            return mongo_instance_pt
 
     def insert(self, data):
         col = self.get_mongo_instance()

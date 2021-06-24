@@ -7,7 +7,7 @@ import pymongo
 log = logging.getLogger('file')
 
 
-mongo_instance = None
+mongo_instance_mono = None
 
 class MonolingualRepo:
     def __init__(self):
@@ -37,15 +37,18 @@ class MonolingualRepo:
             log.info(f'Done!')
 
     def instantiate(self):
+        global mongo_instance_mono
         client = pymongo.MongoClient(db_cluster)
-        mongo_instance = client[db][monolingual_collection]
-        return mongo_instance
+        mongo_instance_mono = client[db][monolingual_collection]
+        return mongo_instance_mono
 
     def get_mongo_instance(self):
-        if not mongo_instance:
+        global mongo_instance_mono
+        if not mongo_instance_mono:
+            log.info(f'getting mongo mono connection............')
             return self.instantiate()
         else:
-            return mongo_instance
+            return mongo_instance_mono
 
     def insert(self, data):
         col = self.get_mongo_instance()

@@ -28,6 +28,40 @@ class MonolingualService:
     def __init__(self):
         pass
 
+    def load_monolingual_dataset_single(self, request):
+        log.info("Loading Dataset.....")
+        try:
+            metadata, record = request, request["record"]
+            error_list, pt_list, metric_list = [], [], []
+            count, updates, batch = 0, 0, ds_batch_size
+            if record:
+                result = self.get_enriched_data(record, metadata)
+                if result:
+                    if result[0] == "INSERT":
+                        if metadata["userMode"] != user_mode_pseudo:
+                            persister = threading.Thread(target=repo.insert, args=([result[1]],))
+                            persister.start()
+                            metrics.build_metric_event(result[1], metadata, None, None)
+                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                    elif result[0] == "UPDATE":
+                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                        metrics.build_metric_event(result[2], metadata, None, True)
+                        updates += 1
+                    else:
+                        error_list.append(
+                            {"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
+                             "datasetType": dataset_type_monolingual, "datasetName": metadata["datasetName"],
+                             "serviceRequestNumber": metadata["serviceRequestNumber"],
+                             "message": "This record is already available in the system"})
+                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+            if error_list:
+                error_event.create_error_event(error_list)
+            log.info(f'Done! -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
+        except Exception as e:
+            log.exception(e)
+            return {"message": "EXCEPTION while loading Monolingual dataset!!", "status": "FAILED"}
+        return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
+
     def load_monolingual_dataset(self, request):
         log.info("Loading Dataset..... | {}".format(datetime.now()))
         try:

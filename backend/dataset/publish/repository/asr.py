@@ -8,7 +8,7 @@ import pymongo
 log = logging.getLogger('file')
 
 
-mongo_instance = None
+mongo_instance_asr = None
 
 class ASRRepo:
     def __init__(self):
@@ -38,15 +38,18 @@ class ASRRepo:
             log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):
+        global mongo_instance_asr
         client = pymongo.MongoClient(db_cluster)
-        mongo_instance = client[db][asr_collection]
-        return mongo_instance
+        mongo_instance_asr = client[db][asr_collection]
+        return mongo_instance_asr
 
     def get_mongo_instance(self):
-        if not mongo_instance:
+        global mongo_instance_asr
+        if not mongo_instance_asr:
+            log.info(f'getting mongo asr connection............')
             return self.instantiate()
         else:
-            return mongo_instance
+            return mongo_instance_asr
 
     def insert(self, data):
         col = self.get_mongo_instance()

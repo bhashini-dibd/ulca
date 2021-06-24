@@ -9,7 +9,6 @@ from .ptrepo import PTRepo
 
 log = logging.getLogger('file')
 
-mongo_instance = None
 repo = PTRepo()
 srn_map = {}
 

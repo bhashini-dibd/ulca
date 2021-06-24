@@ -37,23 +37,6 @@ class ErrorEvent:
                 log.exception(e)
                 continue
 
-    def publish_eof(self, eof_event):
-        log.info(f'Publishing EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
-        eof_event["tool"] = pt_publish_tool
-        prod.produce(eof_event, error_event_input_topic, None)
-
-    def write_error(self, data):
-        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
-        try:
-            log.info(f'Creating error file for Dataset: {data["datasetName"]} | SRN: {data["serviceRequestNumber"]}')
-            file = f'{shared_storage_path}error-{data["datasetName"]}.csv'
-            error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"],
-                         "internal_file": file, "file": file, "time_stamp": str(datetime.now()), "error": data}
-            error_repo.insert(error_rec)
-        except Exception as e:
-            log.exception(f'Exception while writing errors: {e}', e)
-            return False
-
     def write_to_csv(self, data_list, file, srn):
         try:
             data_modified, data_pub = [], None

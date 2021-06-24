@@ -49,13 +49,13 @@ def consume():
                         if 'id' not in data["record"].keys():
                             data["record"]["id"] = str(uuid.uuid4())
                         if data["datasetType"] == dataset_type_parallel:
-                            p_service.load_parallel_dataset(data)
+                            p_service.load_parallel_dataset_single(data)
                         if data["datasetType"] == dataset_type_ocr:
-                            o_service.load_ocr_dataset(data)
+                            o_service.load_ocr_dataset_single(data)
                         if data["datasetType"] == dataset_type_asr:
-                            a_service.load_asr_dataset(data)
+                            a_service.load_asr_dataset_single(data)
                         if data["datasetType"] == dataset_type_monolingual:
-                            m_service.load_monolingual_dataset(data)
+                            m_service.load_monolingual_dataset_single(data)
                         break
                     else:
                         break

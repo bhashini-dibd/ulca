@@ -8,7 +8,7 @@ import pymongo
 log = logging.getLogger('file')
 
 
-mongo_instance = None
+mongo_instance_parallel = None
 
 class ParallelRepo:
     def __init__(self):
@@ -41,15 +41,18 @@ class ParallelRepo:
             log.info(f'Done! | {datetime.now()}')
 
     def instantiate(self):
+        global mongo_instance_parallel
         client = pymongo.MongoClient(db_cluster)
-        mongo_instance = client[db][parallel_collection]
-        return mongo_instance
+        mongo_instance_parallel = client[db][parallel_collection]
+        return mongo_instance_parallel
 
     def get_mongo_instance(self):
-        if not mongo_instance:
+        global mongo_instance_parallel
+        if not mongo_instance_parallel:
+            log.info(f'getting mongo parallel connection............')
             return self.instantiate()
         else:
-            return mongo_instance
+            return mongo_instance_parallel
 
     def insert(self, data):
         col = self.get_mongo_instance()
