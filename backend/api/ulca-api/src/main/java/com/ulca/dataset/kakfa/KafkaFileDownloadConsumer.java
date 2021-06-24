@@ -86,6 +86,7 @@ public class KafkaFileDownloadConsumer {
 			
 			List<TaskTracker> list = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 			if(list.size() > 0) {
+				log.info("duplicated processing of serviceRequestNumber :: " + serviceRequestNumber);
 				return;
 			}
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.inprogress);
