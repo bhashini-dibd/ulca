@@ -7,12 +7,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
-import org.springframework.data.redis.serializer.GenericToStringSerializer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import com.ulca.dataset.model.TaskTrackerRedis;
 
 @Configuration
 @EnableRedisRepositories
@@ -36,56 +31,16 @@ public class RedisConfig {
         configuration.setDatabase(0);
         return new JedisConnectionFactory(configuration);
     }
-/*
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory());
         
-        //template.setKeySerializer(new StringRedisSerializer());
-        //template.setHashKeySerializer(new StringRedisSerializer());
-        //template.setHashKeySerializer(new JdkSerializationRedisSerializer());
-        
-       // template.setValueSerializer(new JdkSerializationRedisSerializer());
-        
-        //template.setValueSerializer(new Jackson2JsonRedisSerializer(TaskTrackerRedis.class));
-        
-        template.setKeySerializer( new StringRedisSerializer() );
-        //template.setHashValueSerializer( new GenericToStringSerializer< Object >( Object.class ) );
-        template.setValueSerializer( new GenericToStringSerializer< Object >( Object.class ) );
-        
-        
-        //template.setEnableTransactionSupport(true);
-       // template.afterPropertiesSet();
-        return template;
-        
-    }
-    */
-    /*
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+    	final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
         redisTemplate.setConnectionFactory(connectionFactory());
-        //redisTemplate.setValueSerializer(new GenericToStringSerializer<Object>(Object.class));
-        return redisTemplate;
-    }
-    */
-    
-    
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        final RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
-        redisTemplate.setConnectionFactory(connectionFactory());
-        
     	redisTemplate.setKeySerializer( new StringRedisSerializer() );
         redisTemplate.setValueSerializer(new StringRedisSerializer() );
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-        
-        //redisTemplate.setHashValueSerializer( new GenericToStringSerializer< Object >( Object.class ) );
-        
         redisTemplate.setHashValueSerializer( new StringRedisSerializer() );
-        
-        //redisTemplate.setValueSerializer( new GenericToStringSerializer< Object >( Object.class ) );
         
         return redisTemplate;
     }

@@ -10,11 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -31,11 +27,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.dataset.dao.TaskTrackerRedisDao;
-import com.ulca.dataset.dao.TaskTrackerRedisRepository;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.model.TaskTrackerRedis;
 import com.ulca.dataset.model.deserializer.ParallelDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
@@ -62,10 +56,6 @@ public class DatasetParallelCorpusValidateIngest {
 	private String validateTopic;
 	
 	
-	//@Autowired
-	//TaskTrackerRedisRepository taskTrackerRedisRepository;
-	
-	
 	@Autowired
 	TaskTrackerRedisDao taskTrackerRedisDao;
 
@@ -79,6 +69,9 @@ public class DatasetParallelCorpusValidateIngest {
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateIngest *********");
 
 		String serviceRequestNumber = file.getServiceRequestNumber();
+		String datasetName = file.getDatasetName();
+		DatasetType datasetType = file.getDatasetType();
+		
 		ParallelDatasetParamsSchema paramsSchema = null;
 
 		String paramsFilePath = fileMap.get("params.json");
@@ -112,22 +105,8 @@ public class DatasetParallelCorpusValidateIngest {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
-			JSONObject errorMessage = new JSONObject();
-			errorMessage.put("eventType", "dataset-training");
-			errorMessage.put("messageType", "error");
-			errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
-			errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
-			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-			Date date = cal.getTime();
-			// errorMessage.put("timestamp", df2.format(date));
-			errorMessage.put("timestamp", new Date().toString());
-			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-			errorMessage.put("datasetName", file.getDatasetName());
-			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
-			errorMessage.put("message", e.getMessage());
-			datasetErrorPublishService.publishDatasetError(errorMessage);
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+			
 
 			e.printStackTrace();
 			return;
@@ -145,9 +124,12 @@ public class DatasetParallelCorpusValidateIngest {
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 			
-			
-
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
+			
+			// send error event
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+			
+			
 		}
 
 	}
@@ -186,6 +168,8 @@ public class DatasetParallelCorpusValidateIngest {
 		String datasetId = file.getDatasetId();
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		String userId = file.getUserId();
+		String datasetName = file.getDatasetName();
+		DatasetType datasetType = file.getDatasetType();
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
@@ -198,17 +182,13 @@ public class DatasetParallelCorpusValidateIngest {
 		log.info("data.json file path :: " + dataFilePath);
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
-
-		log.info("inputStream file done ");
-
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
-		log.info("json reader created ");
-		
 	
 		int numberOfRecords = 0;
 		int failedCount = 0;
 		int successCount = 0;
+		
 		JSONObject vModel = new JSONObject();
 		vModel.put("record", record);
 		vModel.put("datasetId", datasetId);
@@ -218,19 +198,15 @@ public class DatasetParallelCorpusValidateIngest {
 		vModel.put("userId", userId);
 		vModel.put("userMode", "real");
 		
-
 		 
 		 
-		 taskTrackerRedisDao.intialize(serviceRequestNumber);
-		 
-		 
+		taskTrackerRedisDao.intialize(serviceRequestNumber);
+		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 		 
 		reader.beginArray();
 		while (reader.hasNext()) {
 
 			numberOfRecords++;
-
-			log.info("reading records :: " + numberOfRecords);
 			
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
@@ -244,51 +220,25 @@ public class DatasetParallelCorpusValidateIngest {
 			try {
 				
 				rowSchema = mapper.readValue(dataRow, ParallelDatasetRowSchema.class);
-				log.info("row schema created");				
+							
 				
 			} catch(Exception e) {
+				
+				failedCount++;
+				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 				
 				log.info("record :: " +numberOfRecords + "failed " );
 				log.info("tracing the error " );
 				e.printStackTrace();
 				
-				failedCount++;
-				
-				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
-				
-				
-				// send error event
-				JSONObject errorMessage = new JSONObject();
-				errorMessage.put("eventType", "dataset-training");
-				errorMessage.put("messageType", "error");
-				errorMessage.put("code", "1000_ROW_DATA_VALIDATION_FAILED");
-				errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
-				Calendar cal = Calendar.getInstance();
-				SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-				Date date = cal.getTime();
-				// errorMessage.put("timestamp", df2.format(date));
-				errorMessage.put("timestamp", new Date().toString());
-				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-				errorMessage.put("datasetName", file.getDatasetName());
-				errorMessage.put("stage", "ingest");
-				errorMessage.put("datasetType", DatasetType.PARALLEL_CORPUS.toString());
-				errorMessage.put("message", e.getMessage());
-				datasetErrorPublishService.publishDatasetError(errorMessage);
-				
-				
-				
 			}
 			if(rowSchema != null) {
 				
 				successCount++;
-				
-				
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 				
-				
-				log.info("rowSchema is not null" );
 				JSONObject target =  new JSONObject(dataRow);
-				
 				JSONObject finalRecord = deepMerge(record, target);
 				
 				if (finalRecord.has("languages")) {
@@ -307,10 +257,9 @@ public class DatasetParallelCorpusValidateIngest {
 				vModel.put("record", finalRecord);
 				vModel.put("currentRecordIndex", numberOfRecords);
 				
-				log.info("data sending for validation :: ");
-				log.info(vModel.toString());
+				
 				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
-				log.info("data row " + numberOfRecords + " sent for validation ");
+				
 				
 			}
 			
@@ -322,10 +271,9 @@ public class DatasetParallelCorpusValidateIngest {
 		
 		taskTrackerRedisDao.setCountAndIngestComplete(serviceRequestNumber, numberOfRecords);
 		
+		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
 		
 		
-
-		log.info("sent record for validation ");
 
 	}
 	

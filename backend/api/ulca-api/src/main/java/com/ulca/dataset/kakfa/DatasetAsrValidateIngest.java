@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.dao.TaskTrackerRedisDao;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
@@ -64,11 +65,16 @@ public class DatasetAsrValidateIngest {
 
 	@Value(value = "${KAFKA_ULCA_DS_VALIDATE_IP_TOPIC}")
 	private String validateTopic;
+	
+	@Autowired
+	TaskTrackerRedisDao taskTrackerRedisDao;
 
 	public void validateIngest(Map<String, String> fileMap, FileDownload file) {
 
 		log.info("************ Entry DatasetAsrValidateIngest :: validateIngest *********");
 		String serviceRequestNumber = file.getServiceRequestNumber();
+		String datasetName = file.getDatasetName();
+		DatasetType datasetType = file.getDatasetType();
 		ASRParamsSchema paramsSchema = null;
 
 		Set<String> keys = fileMap.keySet();
@@ -95,7 +101,6 @@ public class DatasetAsrValidateIngest {
 		}
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath, file);
-			// ingest(paramsSchema, file, fileMap, taskTrackerIngest);
 
 		} catch (IOException | JSONException | NullPointerException e) {
 			
@@ -108,26 +113,10 @@ public class DatasetAsrValidateIngest {
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 			
-
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
-			JSONObject errorMessage = new JSONObject();
-			errorMessage.put("eventType", "dataset-training");
-			errorMessage.put("messageType", "error");
-			errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
-			errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
-			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-			Date date = cal.getTime();
-			// errorMessage.put("timestamp", df2.format(date));
-			errorMessage.put("timestamp", new Date().toString());
-			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-			errorMessage.put("datasetName", file.getDatasetName());
-			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
-			errorMessage.put("message", e.getMessage());
-			datasetErrorPublishService.publishDatasetError(errorMessage);
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 
 			e.printStackTrace();
 			return;
@@ -147,27 +136,10 @@ public class DatasetAsrValidateIngest {
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 			
-
-
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
-
+			
 			// send error event
-			JSONObject errorMessage = new JSONObject();
-			errorMessage.put("eventType", "dataset-training");
-			errorMessage.put("messageType", "error");
-			errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
-			errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
-			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-			Date date = cal.getTime();
-			// errorMessage.put("timestamp", df2.format(date));
-			errorMessage.put("timestamp", new Date().toString());
-			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-			errorMessage.put("datasetName", file.getDatasetName());
-			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
-			errorMessage.put("message", e.getMessage());
-			datasetErrorPublishService.publishDatasetError(errorMessage);
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 
 			return;
 		}
@@ -211,6 +183,8 @@ public class DatasetAsrValidateIngest {
 		String datasetId = file.getDatasetId();
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		String userId = file.getUserId();
+		String datasetName = file.getDatasetName();
+		DatasetType datasetType = file.getDatasetType();
 
 		Set<String> keys = fileMap.keySet();
 		log.info("logging the fileMap keys");
@@ -231,16 +205,13 @@ public class DatasetAsrValidateIngest {
 		source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
 		InputStream inputStream = Files.newInputStream(Path.of(path));
-
-		log.info("inputStream file done ");
-
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
-		log.info("json reader created ");
 
 		int numberOfRecords = 0;
 		int failedCount = 0;
 		int successCount = 0;
+		
 		JSONObject vModel = new JSONObject();
 		vModel.put("datasetId", datasetId);
 		vModel.put("datasetName", file.getDatasetName());
@@ -248,6 +219,11 @@ public class DatasetAsrValidateIngest {
 		vModel.put("serviceRequestNumber", serviceRequestNumber);
 		vModel.put("userId", userId);
 		vModel.put("userMode", "real");
+		
+		 
+		taskTrackerRedisDao.intialize(serviceRequestNumber);
+		 
+		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 
 		reader.beginArray();
 		while (reader.hasNext()) {
@@ -271,34 +247,23 @@ public class DatasetAsrValidateIngest {
 				
 			} catch(Exception e) {
 				
+				failedCount++;
+				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+				// send error event
+				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+				
 				log.info("record :: " +numberOfRecords + "failed " );
 				log.info("tracing the error " );
 				e.printStackTrace();
 				
-				failedCount++;
-				// send error event
-				JSONObject errorMessage = new JSONObject();
-				errorMessage.put("eventType", "dataset-training");
-				errorMessage.put("messageType", "error");
-				errorMessage.put("code", "1000_ROW_DATA_VALIDATION_FAILED");
-				errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
-				Calendar cal = Calendar.getInstance();
-				SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-				Date date = cal.getTime();
-				// errorMessage.put("timestamp", df2.format(date));
-				errorMessage.put("timestamp", new Date().toString());
-				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-				errorMessage.put("datasetName", file.getDatasetName());
-				errorMessage.put("stage", "ingest");
-				errorMessage.put("datasetType", DatasetType.ASR_CORPUS.toString());
-				errorMessage.put("message", e.getMessage());
-				datasetErrorPublishService.publishDatasetError(errorMessage);
-				
-				
 				
 			}
 			if(rowSchema != null) {
-				log.info("rowSchema is not null" );
+				
+				successCount++;
+				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+				
+				
 				JSONObject target =  new JSONObject(dataRow);
 				
 				JSONObject finalRecord = deepMerge(source, target);
@@ -313,9 +278,8 @@ public class DatasetAsrValidateIngest {
 				vModel.put("record", finalRecord);
 				vModel.put("currentRecordIndex", numberOfRecords);
 
-				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
-				successCount++;
-				log.info("data row " + numberOfRecords + " sent for validation ");
+				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+				
 			}
 
 			
@@ -324,38 +288,12 @@ public class DatasetAsrValidateIngest {
 		reader.endArray();
 		reader.close();
 		inputStream.close();
-
-		log.info("Eof reached");
-		vModel.put("eof", true);
-		vModel.remove("record");
-		vModel.remove("currentRecordIndex");
-		if(failedCount < numberOfRecords) {
-			datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
-		}
 		
-
-		JSONObject details = new JSONObject();
-		details.put("currentRecordIndex", numberOfRecords);
-
-		JSONArray processedCount = new JSONArray();
-
-		JSONObject proCountSuccess = new JSONObject();
-		proCountSuccess.put("type", "success");
-		proCountSuccess.put("count", successCount);
-		processedCount.put(proCountSuccess);
-
-		JSONObject proCountFailure = new JSONObject();
-
-		proCountFailure.put("type", "failed");
-		proCountFailure.put("count", failedCount);
-		processedCount.put(proCountFailure);
-		details.put("processedCount", processedCount);
-		details.put("timeStamp", new Date().toString());
-
-		processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
-				com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
-
-		log.info("sent record for validation ");
+		
+		taskTrackerRedisDao.setCountAndIngestComplete(serviceRequestNumber, numberOfRecords);
+		
+		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
+		
 
 	}
 
