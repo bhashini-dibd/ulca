@@ -254,8 +254,8 @@ const SearchAndDownloadRecords = (props) => {
         return (
             DatasetType.map((type, i) => {
                 return (
-                    <Button size='small' className={classes.innerButton} variant={datasetType[type.value] ? "contained" : "outlined"}
-                        color="primary"
+                    <Button size='small' className={classes.innerButton} variant="outlined"
+                        color={datasetType[type.value] && "primary"}
                         key={i}
                         onClick={() => handleDatasetClick(type.value)}
                     >
@@ -368,69 +368,73 @@ const SearchAndDownloadRecords = (props) => {
 
     return (
         <div>
-            <div className={classes.breadcrum}>
+            <Grid container spacing={3} className={classes.searchGrid}>
+                <Grid className={classes.leftSection} item xs={12} sm={5} md={4} lg={4} xl={4}>
+                    <div className={classes.breadcrum}>
 
-                <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search & Download Records" />
-            </div>
-            <Grid container spacing={3}>
-                <Grid className={(params === 'inprogress' || params === 'completed') && classes.blurOut} item xs={12} sm={5} md={4} lg={4} xl={4}>
-
-                    <Typography className={classes.subHeader} variant="body1">Select Dataset Type</Typography>
-
-                    <div className={classes.buttonDiv} >
-                        {renderDatasetButtons()}
+                        <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search & Download Records" />
                     </div>
+                    <div className={(params === 'inprogress' || params === 'completed') && classes.blurOut}>
+                        <Typography className={classes.subHeader} variant="body1">Select Dataset Type</Typography>
 
-                    <Typography className={classes.subHeader} variant="body1">{getTitle()}</Typography>
-                    <div className={classes.subHeader}>
-                        {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
+                        <div className={classes.buttonDiv} >
+                            {renderDatasetButtons()}
+                        </div>
 
-                        <Autocomplete
-                            id="language-target"
-                            options={getTargetLang()}
-                            filter='target'
-                            value={languagePair.target}
-                            handleOnChange={handleLanguagePairChange}
-                            label={getLabel()}
-                            error={tgtError}
-                            helperText="This field is mandatory"
-                        />
-                    </div>
-                    <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
-                    <div className={classes.subHeader}>
-                        <Grid container spacing={1}>
-                            <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                {/* {renderFilterByOptions("domain", FilterBy.domain, "domain", filterBy.domain, "Select Domain")} */}
-                                {renderFilterByfield("domain", "Select Domain", filterBy.domain, FilterBy.domain)}
+                        <Typography className={classes.subHeader} variant="body1">{getTitle()}</Typography>
+                        <div className={classes.subHeader}>
+                            {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
+
+                            <Autocomplete
+                                id="language-target"
+                                options={getTargetLang()}
+                                filter='target'
+                                value={languagePair.target}
+                                handleOnChange={handleLanguagePairChange}
+                                label={getLabel()}
+                                error={tgtError}
+                                helperText="This field is mandatory"
+                            />
+                        </div>
+                        <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
+                        <div className={classes.subHeader}>
+                            <Grid container spacing={1}>
+                                <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                    {/* {renderFilterByOptions("domain", FilterBy.domain, "domain", filterBy.domain, "Select Domain")} */}
+                                    {renderFilterByfield("domain", "Select Domain", filterBy.domain, FilterBy.domain)}
+                                </Grid>
+
                             </Grid>
+                            {/* {renderFilterByOptions("collection-method", FilterBy.collectionMethod, "collectionMethod", filterBy.collectionMethod, "Select Collection Method")} */}
+                            {renderFilterByfield("collectionMethod", "Select Collection Method", filterBy.collectionMethod, FilterBy.collectionMethod)}
+                        </div>
 
-                        </Grid>
-                        {/* {renderFilterByOptions("collection-method", FilterBy.collectionMethod, "collectionMethod", filterBy.collectionMethod, "Select Collection Method")} */}
-                        {renderFilterByfield("collectionMethod", "Select Collection Method", filterBy.collectionMethod, FilterBy.collectionMethod)}
-                    </div>
+                        {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
+                        {renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
 
-                    {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
-                    {renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
-
-                    {renderclearNsubmitButtons()}
+                        {renderclearNsubmitButtons()}
+                        </div>
                 </Grid>
-                <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
-                    <Divider orientation="vertical" />
-                </Grid>
-                <Grid item xs={12} sm={6} md={7} lg={7} xl={7} className={classes.parent}>
+                
+                {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
+                    <Divider orientation="vertical"/>
+                </Grid> */}
+                <Grid item xs={12} sm={7} md={8} lg={8} xl={8} className={classes.parent}>
                     {renderPage()}
                 </Grid>
 
             </Grid>
-            {snackbar.open &&
+            {
+                snackbar.open &&
                 <Snackbar
                     open={snackbar.open}
                     handleClose={handleSnackbarClose}
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                     message={snackbar.message}
                     variant={snackbar.variant}
-                />}
-        </div>
+                />
+            }
+        </div >
     )
 
 

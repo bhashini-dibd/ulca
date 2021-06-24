@@ -6,14 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,22 +25,17 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.dao.TaskTrackerRedisDao;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.model.deserializer.ASRDatasetRowDataSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.OcrDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.OcrDatasetRowDataSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
-import io.swagger.model.ASRParamsSchema;
-import io.swagger.model.ASRRowSchema;
 import io.swagger.model.DatasetType;
 import io.swagger.model.OcrDatasetParamsSchema;
 import io.swagger.model.OcrDatasetRowSchema;
-import io.swagger.model.ParallelDatasetRowSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -69,10 +60,16 @@ public class DatasetOcrValidateIngest {
 	@Value(value = "${KAFKA_ULCA_DS_VALIDATE_IP_TOPIC}")
 	private String validateTopic;
 
+	@Autowired
+	TaskTrackerRedisDao taskTrackerRedisDao;
+	
 	public void validateIngest(Map<String, String> fileMap, FileDownload file) {
 
 		log.info("************ Entry DatasetOcrValidateIngest :: validateIngest *********");
 		String serviceRequestNumber = file.getServiceRequestNumber();
+		String datasetName = file.getDatasetName();
+		DatasetType datasetType = file.getDatasetType();
+		
 		OcrDatasetParamsSchema paramsSchema = null;
 
 		Set<String> keys = fileMap.keySet();
@@ -92,8 +89,6 @@ public class DatasetOcrValidateIngest {
 
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
-			
-			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			return;
@@ -111,27 +106,11 @@ public class DatasetOcrValidateIngest {
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 			
-			
-
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
-			JSONObject errorMessage = new JSONObject();
-			errorMessage.put("eventType", "dataset-training");
-			errorMessage.put("messageType", "error");
-			errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
-			errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
-			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-			Date date = cal.getTime();
-			// errorMessage.put("timestamp", df2.format(date));
-			errorMessage.put("timestamp", new Date().toString());
-			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-			errorMessage.put("datasetName", file.getDatasetName());
-			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
-			errorMessage.put("message", e.getMessage());
-			datasetErrorPublishService.publishDatasetError(errorMessage);
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+						
 
 			e.printStackTrace();
 			return;
@@ -150,29 +129,12 @@ public class DatasetOcrValidateIngest {
 
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
-			
-			
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
-			JSONObject errorMessage = new JSONObject();
-			errorMessage.put("eventType", "dataset-training");
-			errorMessage.put("messageType", "error");
-			errorMessage.put("code", "1000_PARAMS_VALIDATION_FAILED");
-			errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
-			Calendar cal = Calendar.getInstance();
-			SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-			Date date = cal.getTime();
-			// errorMessage.put("timestamp", df2.format(date));
-			errorMessage.put("timestamp", new Date().toString());
-			errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-			errorMessage.put("datasetName", file.getDatasetName());
-			errorMessage.put("stage", "ingest");
-			errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
-			errorMessage.put("message", e.getMessage());
-			datasetErrorPublishService.publishDatasetError(errorMessage);
-
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+						
 			return;
 		}
 
@@ -215,6 +177,8 @@ public class DatasetOcrValidateIngest {
 		String datasetId = file.getDatasetId();
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		String userId = file.getUserId();
+		String datasetName = file.getDatasetName();
+		DatasetType datasetType = file.getDatasetType();
 
 		Set<String> keys = fileMap.keySet();
 		log.info("logging the fileMap keys");
@@ -235,16 +199,13 @@ public class DatasetOcrValidateIngest {
 		source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
 		InputStream inputStream = Files.newInputStream(Path.of(path));
-
-		log.info("inputStream file done ");
-
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
-		log.info("json reader created ");
 
 		int numberOfRecords = 0;
 		int failedCount = 0;
 		int successCount = 0;
+		
 		JSONObject vModel = new JSONObject();
 		vModel.put("datasetId", datasetId);
 		vModel.put("datasetName", file.getDatasetName());
@@ -252,16 +213,16 @@ public class DatasetOcrValidateIngest {
 		vModel.put("serviceRequestNumber", serviceRequestNumber);
 		vModel.put("userId", userId);
 		vModel.put("userMode", "real");
+		
+		taskTrackerRedisDao.intialize(serviceRequestNumber);
 
 		reader.beginArray();
 		while (reader.hasNext()) {
 
 			numberOfRecords++;
-			log.info("reading records :: " + numberOfRecords);
-			Object rowObj = new Gson().fromJson(reader, Object.class);
-
-			ObjectMapper mapper = new ObjectMapper();
 			
+			Object rowObj = new Gson().fromJson(reader, Object.class);
+			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
 			SimpleModule module = new SimpleModule();
 			module.addDeserializer(OcrDatasetRowSchema.class, new OcrDatasetRowDataSchemaDeserializer());
@@ -271,40 +232,27 @@ public class DatasetOcrValidateIngest {
 			try {
 				
 				rowSchema = mapper.readValue(dataRow, OcrDatasetRowSchema.class);
-				log.info("row schema created");				
 				
 			} catch(Exception e) {
+				
+				failedCount++;
+				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+				
+				// send error event
+				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 				
 				log.info("record :: " +numberOfRecords + "failed " );
 				log.info("tracing the error " );
 				e.printStackTrace();
 				
-				failedCount++;
-				// send error event
-				JSONObject errorMessage = new JSONObject();
-				errorMessage.put("eventType", "dataset-training");
-				errorMessage.put("messageType", "error");
-				errorMessage.put("code", "1000_ROW_DATA_VALIDATION_FAILED");
-				errorMessage.put("eventId", "serviceRequestNumber|" + serviceRequestNumber);
-				Calendar cal = Calendar.getInstance();
-				SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS");
-				Date date = cal.getTime();
-				// errorMessage.put("timestamp", df2.format(date));
-				errorMessage.put("timestamp", new Date().toString());
-				errorMessage.put("serviceRequestNumber", serviceRequestNumber);
-				errorMessage.put("datasetName", file.getDatasetName());
-				errorMessage.put("stage", "ingest");
-				errorMessage.put("datasetType", DatasetType.OCR_CORPUS.toString());
-				errorMessage.put("message", e.getMessage());
-				datasetErrorPublishService.publishDatasetError(errorMessage);
-				
-				
 				
 			}
 			if(rowSchema != null) {
-				log.info("rowSchema is not null" );
-				JSONObject target =  new JSONObject(dataRow);
 				
+				successCount++;
+				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+				
+				JSONObject target =  new JSONObject(dataRow);
 				JSONObject finalRecord = deepMerge(source, target);
 				String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
 				finalRecord.remove("languages");
@@ -317,49 +265,19 @@ public class DatasetOcrValidateIngest {
 				vModel.put("record", finalRecord);
 				vModel.put("currentRecordIndex", numberOfRecords);
 
-				datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
-				successCount++;
-				log.info("data row " + numberOfRecords + " sent for validation ");
+				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+				
 			}
-
-			
 
 		}
 		reader.endArray();
 		reader.close();
 		inputStream.close();
 
-		log.info("Eof reached");
-		vModel.put("eof", true);
-		vModel.remove("record");
-		vModel.remove("currentRecordIndex");
-		if(failedCount < numberOfRecords) {
-			datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
-		}
+		taskTrackerRedisDao.setCountAndIngestComplete(serviceRequestNumber, numberOfRecords);
 		
-
-		JSONObject details = new JSONObject();
-		details.put("currentRecordIndex", numberOfRecords);
-
-		JSONArray processedCount = new JSONArray();
-
-		JSONObject proCountSuccess = new JSONObject();
-		proCountSuccess.put("type", "success");
-		proCountSuccess.put("count", successCount);
-		processedCount.put(proCountSuccess);
-
-		JSONObject proCountFailure = new JSONObject();
-
-		proCountFailure.put("type", "failed");
-		proCountFailure.put("count", failedCount);
-		processedCount.put(proCountFailure);
-		details.put("processedCount", processedCount);
-		details.put("timeStamp", new Date().toString());
-
-		processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
-				com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
-
-		log.info("sent record for validation ");
+		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
+		
 
 	}
 

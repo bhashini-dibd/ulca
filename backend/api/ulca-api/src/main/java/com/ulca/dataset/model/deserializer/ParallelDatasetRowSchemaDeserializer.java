@@ -51,8 +51,6 @@ public class ParallelDatasetRowSchemaDeserializer extends StdDeserializer<Parall
 	public ParallelDatasetRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		System.out.println("******** Entry ParallelDatasetRowSchemaDeserializer :: deserializer ********");
-		
 		
 		ArrayList<String> keysList = new ArrayList<String>();
 		keysList.add("sourceText");
