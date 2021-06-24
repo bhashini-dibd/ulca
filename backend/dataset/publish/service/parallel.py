@@ -301,7 +301,7 @@ class ParallelService:
             log.info(f'Result --- Count: {count}, Query: {query}, Pipeline: {pipeline}')
             if result:
                 size = sample_size if count > sample_size else count
-                path, path_sample = utils.push_result_to_s3(result, query["serviceRequestNumber"], size)
+                path, path_sample = utils.push_result_to_object_store(result, query["serviceRequestNumber"], size)
                 if path:
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
                     pt.task_event_search(op, None)

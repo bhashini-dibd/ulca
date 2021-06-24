@@ -4,7 +4,7 @@ import threading
 import time
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import ds_batch_size, no_of_parallel_processes, aws_asr_prefix, \
+from configs.configs import ds_batch_size, no_of_parallel_processes, asr_prefix, \
     sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, asr_search_ignore_keys
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
@@ -147,7 +147,7 @@ class ASRService:
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
                 s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
-                object_store_path = utils.upload_file(data["fileLocation"], f'{aws_asr_prefix}{s3_file_name}')
+                object_store_path = utils.upload_file(data["fileLocation"], f'{asr_prefix}{s3_file_name}')
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
@@ -237,7 +237,7 @@ class ASRService:
             log.info(f'Result --- Count: {count}, Query: {query}')
             if result:
                 size = sample_size if count > sample_size else count
-                path, path_sample = utils.push_result_to_s3(result, query["serviceRequestNumber"], size)
+                path, path_sample = utils.push_result_to_object_store(result, query["serviceRequestNumber"], size)
                 if path:
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
                     pt.task_event_search(op, None)

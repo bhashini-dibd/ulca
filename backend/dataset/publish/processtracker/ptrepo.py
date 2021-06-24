@@ -61,7 +61,6 @@ class PTRepo:
             result.append(record)
         return result
 
-
     # Initialises and fetches redis client
     def redis_instantiate(self):
         global redis_client

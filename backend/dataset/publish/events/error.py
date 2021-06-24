@@ -4,8 +4,8 @@ import logging
 import os
 import uuid
 from datetime import datetime
-from configs.configs import error_event_input_topic, publish_error_code, shared_storage_path, pt_inprogress_status, \
-     aws_error_prefix, pt_publish_tool
+from configs.configs import error_event_input_topic, publish_error_code, \
+     error_prefix, pt_publish_tool
 from kafkawrapper.producer import Producer
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
@@ -36,67 +36,3 @@ class ErrorEvent:
             except Exception as e:
                 log.exception(e)
                 continue
-
-    def write_to_csv(self, data_list, file, srn):
-        try:
-            data_modified, data_pub = [], None
-            for data in data_list:
-                if isinstance(data, str):
-                    data = json.loads(data)
-                if 'stage' in data.keys():
-                    if data["stage"] == pt_publish_tool:
-                        data_pub = data
-                data_modified.append(data)
-            if not data_pub:
-                data_pub = data_modified[0]
-            with open(file, 'w', newline='') as output_file:
-                dict_writer = csv.DictWriter(output_file, list(data_pub.keys()))
-                dict_writer.writeheader()
-                dict_writer.writerows(data_modified)
-                output_file.close()
-            log.info(f'{len(data_modified)} Errors written to csv for SRN -- {srn}')
-            return
-        except Exception as e:
-            log.exception(f'Exception in csv writer: {e}', e)
-            return
-
-    def get_error_report(self, srn, internal):
-        query = {"serviceRequestNumber": srn}
-        exclude = {"_id": False}
-        error_records = error_repo.search(query, exclude, None, None)
-        if internal:
-            return error_records
-        try:
-            log.info(f'Searching for error report of SRN -- {srn}')
-            if error_records:
-                errors, error_rec = [], None
-                for error in error_records:
-                    errors.append(error["error"])
-                    if 'uploaded' in error.keys():
-                        error_rec = error
-                if not error_rec:
-                    error_rec = error_records[0]
-                error_rec["errors"] = errors
-                error_rec = self.upload_error_to_s3(error_rec, srn)
-                error_rec.pop("error")
-                error_rec.pop("errors")
-                return [error_rec]
-            else:
-                return []
-        except Exception as e:
-            log.exception(f'Exception while fetching error report: {e}', e)
-            return []
-
-    def upload_error_to_s3(self, error_record, srn):
-        file = error_record["internal_file"]
-        path = file.split("/")[2]
-        if error_record["file"] != file:
-            utils.delete_from_s3(f'{aws_error_prefix}{path}')
-        log.info(f'Error List: {len(error_record["errors"])} for SRN -- {srn}')
-        self.write_to_csv(error_record["errors"], file, srn)
-        error_record["file"] = utils.upload_file(file, f'{aws_error_prefix}{path}')
-        error_record["uploaded"], error_record["errors"] = True, []
-        error_repo.update(error_record)
-        log.info(f'Error report uploaded to s3 for SRN -- {srn}')
-        os.remove(file)
-        return error_record

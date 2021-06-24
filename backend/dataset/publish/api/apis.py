@@ -55,12 +55,3 @@ def set_cluster():
     service.set_dataset_db(req_criteria)
     response = {"message": "DONE"}
     return jsonify(response), 200
-
-
-# REST endpoint to fetch configs
-@ulca_dataset_publish.route('/ulca/publish/v0/error/report', methods=["POST"])
-def get_error_report():
-    service = ErrorEvent()
-    req_criteria = request.get_json()
-    result = service.get_error_report(req_criteria["serviceRequestNumber"], False)
-    return jsonify(result), 200

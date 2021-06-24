@@ -12,6 +12,7 @@ asr_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_COL', "asr-dataset")
 ocr_collection = os.environ.get('ULCA_DS_PUBLISH_OCR_COL', "ocr-dataset")
 parallel_collection = os.environ.get('ULCA_DS_PUBLISH_PARALLEL_COL', "parallel-dataset")
 monolingual_collection = os.environ.get('ULCA_DS_PUBLISH_MONOLINGUAL_COL', "monolingual-dataset")
+object_store = os.environ.get('ULCA_OBJECT_STORE', "AWS")
 
 offset = os.environ.get('ULCA_DATASET_DEFAULT_OFFSET', None)
 if isinstance(offset, str):
@@ -83,11 +84,17 @@ if isinstance(ulca_dataset_topic_partitions, str):
 aws_access_key = os.environ.get('ULCA_AWS_S3_ACCESS_KEY', 'access-key')
 aws_secret_key = os.environ.get('ULCA_AWS_S3_SECRET_KEY', 'secret-key')
 aws_bucket_name = os.environ.get('ULCA_AWS_BUCKET_NAME', 'ulca-datasets')
-aws_ocr_prefix = os.environ.get('ULCA_AWS_S3_OCR_PREFIX', 'ocr/')
-aws_asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', 'asr/')
-aws_dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', 'datasets/')
-aws_error_prefix = os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
 aws_link_prefix = f'http://{aws_bucket_name}.s3.amazonaws.com/'
+
+azure_connection_string = os.environ.get('ULCA_AZURE_CONNECTION_STRING', "azure_conn_string")
+azure_container_name = os.environ.get('ULCA_AZURE_FILE_CONTAINER', "ulca-prod-container")
+azure_account_name = os.environ.get('ULCA_AZURE_ACCOUNT_NAME', "azure_account")
+azure_link_prefix = f'https://{azure_account_name}.blob.core.windows.net/{azure_container_name}/'
+
+ocr_prefix = os.environ.get('ULCA_AWS_S3_OCR_PREFIX', 'ocr/')
+asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', 'asr/')
+dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', 'datasets/')
+error_prefix = os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
 
 dataset_type_parallel = os.environ.get('DS_TYPE_PARALLEL', 'parallel-corpus')
 dataset_type_asr = os.environ.get('DS_TYPE_ASR', 'asr-corpus')

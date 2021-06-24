@@ -4,7 +4,7 @@ import threading
 import time
 from functools import partial
 from logging.config import dictConfig
-from configs.configs import ds_batch_size, offset, limit, aws_ocr_prefix, user_mode_pseudo, \
+from configs.configs import ds_batch_size, offset, limit, ocr_prefix, user_mode_pseudo, \
     sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, ocr_search_ignore_keys
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
@@ -152,7 +152,7 @@ class OCRService:
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
                 s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["imageFilename"]}'
-                object_store_path = utils.upload_file(data["fileLocation"], f'{aws_ocr_prefix}{s3_file_name}')
+                object_store_path = utils.upload_file(data["fileLocation"], f'{ocr_prefix}{s3_file_name}')
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
@@ -236,7 +236,7 @@ class OCRService:
             log.info(f'Result --- Count: {count}, Query: {query}')
             if result:
                 size = sample_size if count > sample_size else count
-                path, path_sample = utils.push_result_to_s3(result, query["serviceRequestNumber"], size)
+                path, path_sample = utils.push_result_to_object_store(result, query["serviceRequestNumber"], size)
                 if path:
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
                     pt.task_event_search(op, None)
