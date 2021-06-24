@@ -1,13 +1,13 @@
 const LoginStyle = (theme) => ({
   appInfo: {
-    background: "#392C71",
+    background: "rgba(44, 39, 153, 1)",
     minHeight: "100vh",
   },
   title: {
     width: "20%",
     height: "auto",
     margin: "22% 294px 10% 39px",
-    fontSize: "1.875rem",
+    
     fontWeight: "600",
     cursor:"pointer",
     fontStretch: "normal",
@@ -22,7 +22,6 @@ const LoginStyle = (theme) => ({
     height: "auto",
     maxWidth: "300px",
     margin: "20% 70px 15% 39px",
-    fontSize: "1.9rem",
     fontWeight: "500",
     fontStretch: "normal",
     fontStyle: "normal",
@@ -37,7 +36,6 @@ const LoginStyle = (theme) => ({
       width: "80%",
     },
     "@media (min-width:1790px)": {
-      fontSize: "2rem",
       width: "68%",
     },
   },

@@ -3,7 +3,7 @@ const GlobalStyles = (theme) => ({
     
     maxWidth: "1272px",
     width : "100%",
-    margin :"5rem auto",
+    margin :"4.1rem auto",
     // background: theme.palette.background.default,
     fontFamily: theme.typography.fontFamily
   },
