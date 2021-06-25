@@ -8,7 +8,7 @@ app_port                =   os.environ.get('ULCA_ERROR_CONSUMER_PORT', 5001)
 
 publish_consumer_grp    =   os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
 publish_error_code      =   "3000_XXX"
-shared_storage_path     =   os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/home/jainy/Desktop')#/opt/ 
+shared_storage_path     =   os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')#
 aws_error_prefix        =   os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
 pt_publish_tool         =   os.environ.get('PT_TOOL_PUBLISH', 'publish')
 
