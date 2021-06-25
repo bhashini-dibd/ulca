@@ -7,6 +7,8 @@ import boto3 as boto3
 from configs.configs import aws_access_key, aws_secret_key, aws_bucket_name, shared_storage_path, aws_dataset_prefix, aws_link_prefix
 from configs.configs import azure_connection_string,azure_container_name, azure_link_prefix,error_prefix
 from azure.storage.blob import BlobServiceClient, BlobClient
+from configs.configs import file_store_host, file_store_upload_endpoint
+import requests
 
 log = logging.getLogger('file')
 
@@ -118,6 +120,21 @@ class DatasetUtils:
             return f'{azure_link_prefix}{blob_file_name}'
         except Exception as e:
             log.exception(f'Exception while pushing to blob store: {e}', e)
+        return False
+    
+    def file_store_upload_call(self, file_name, folder_name):
+        try:
+            headers = {"Content-Type": "application/json"}
+            body={"fileName":file_name,"storageFolder":folder_name}
+            request_url = file_store_host+file_store_upload_endpoint
+            log.info("Intiating request to store data on object store %s"%request_url)
+            response = requests.post(request_url, headers = headers, data = body)
+            response_data = response.content
+            log.info("Received data from upload end point of file store service")
+            response = json.loads(response_data)
+            return response["data"]
+        except Exception as e:
+            log.exception(f'Exception while pushing error file to object store: {e}', e)
         return False
 
 

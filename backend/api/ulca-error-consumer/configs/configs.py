@@ -31,16 +31,16 @@ aws_bucket_name         =   os.environ.get('ULCA_AWS_BUCKET_NAME', 'ulca-dataset
 aws_ocr_prefix          =   os.environ.get('ULCA_AWS_S3_OCR_PREFIX', 'ocr/')
 aws_asr_prefix          =   os.environ.get('ULCA_AWS_S3_ASR_PREFIX', 'asr/')
 aws_dataset_prefix      =   os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', 'datasets/')
-error_prefix            =   os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
+error_prefix            =   os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors')
 aws_link_prefix         =   f'http://{aws_bucket_name}.s3.amazonaws.com/'
 
 
 # https://myaccount.blob.core.windows.net/mycontainer/myblob.ext
 
 
-file_store_host         =   os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'http://file-store:5001/')
-file_store_upload_endpoint    =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/vo/file/upload')
-file_store_delete_endpoint    =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/vo/file/remove')
+file_store_host               =   os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'http://file-store:5001/')
+file_store_upload_endpoint    =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/v0/file/upload')
+file_store_delete_endpoint    =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/v0/file/remove')
 
 azure_connection_string =   os.environ.get('ULCA_AZURE_CONNECTION_STRING',"azure_connection_string")
 azure_container_name    =   os.environ.get('ULCA_AZURE_FILE_CONTAINER',"azure-container")

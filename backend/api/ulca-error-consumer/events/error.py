@@ -104,16 +104,25 @@ class ErrorEvent:
             log.exception(f'Exception while fetching error report: {e}', e)
             return []
 
-    def upload_error_to_s3(self, error_record, srn):
+    # def upload_error_to_s3(self, error_record, srn):
+    #     file = error_record["internal_file"]
+    #     path = file.split("/")[2]
+    #     # if error_record["file"] != file:
+    #     #     utils.delete_from_s3(f'{aws_error_prefix}{path}')
+    #     log.info(f'Error List: {len(error_record["errors"])} for SRN -- {srn}')
+    #     self.write_to_csv(error_record["errors"], file, srn)
+    #     error_record["file"] = utils.upload_file_to_blob(file, f'{error_prefix}{path}')
+    #     error_record["uploaded"], error_record["errors"] = True, []
+    #     error_repo.update(error_record)
+    #     log.info(f'Error report uploaded to azure-blob for SRN -- {srn}')
+    #     os.remove(file)
+    #     return error_record
+
+    def upload_error_to_object_store(self, error_record, srn):
         file = error_record["internal_file"]
-        path = file.split("/")[2]
-        # if error_record["file"] != file:
-        #     utils.delete_from_s3(f'{aws_error_prefix}{path}')
         log.info(f'Error List: {len(error_record["errors"])} for SRN -- {srn}')
         self.write_to_csv(error_record["errors"], file, srn)
-        error_record["file"] = utils.upload_file_to_blob(file, f'{error_prefix}{path}')
-
-        # error_record["file"] = utils.upload_file_to_blob("/home/jainy/Desktop/empty_csv.csv","empty_csv1.csv")
+        error_record["file"] = utils.file_store_upload_call(file, error_prefix)
         error_record["uploaded"], error_record["errors"] = True, []
         error_repo.update(error_record)
         log.info(f'Error report uploaded to azure-blob for SRN -- {srn}')
