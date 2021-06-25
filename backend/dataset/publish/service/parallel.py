@@ -43,10 +43,17 @@ class ParallelService:
                         if metadata["userMode"] != user_mode_pseudo:
                             persister = threading.Thread(target=repo.insert, args=(result[0],))
                             persister.start()
+                            debug = {"s": record["sourceText"], 't': record["targetText"], 'sh': record["sourceTextHash"], 'th': record["targetTextHash"]}
+                            log.info(f'INSERT')
+                            log.info(f'{debug}')
                             metrics.build_metric_event(result[0], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif isinstance(result[0], str):
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                        debug = {"s": record["sourceText"], 't': record["targetText"], 'sh': record["sourceTextHash"],
+                                 'th': record["targetTextHash"]}
+                        log.info(f'UPDATE')
+                        log.info(f'{debug}')
                         metrics.build_metric_event(result[1], metadata, None, True)
                         updates += 1
                     else:
