@@ -94,7 +94,7 @@ class ErrorEvent:
                 if not error_rec:
                     error_rec = error_records[0]
                 error_rec["errors"] = errors
-                error_rec = self.upload_error_to_s3(error_rec, srn)
+                error_rec = self.upload_error_to_object_store(error_rec, srn)
                 error_rec.pop("error")
                 error_rec.pop("errors")
                 return [error_rec]

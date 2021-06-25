@@ -124,8 +124,8 @@ class DatasetUtils:
     
     def file_store_upload_call(self, file_name, folder_name):
         try:
-            headers = {"Content-Type": "application/json"}
-            body={"fileName":file_name,"storageFolder":folder_name}
+            headers =   {"Content-Type": "application/json"}
+            body    =   {"fileName":file_name,"storageFolder":folder_name}
             request_url = file_store_host+file_store_upload_endpoint
             log.info("Intiating request to store data on object store %s"%request_url)
             response = requests.post(request_url, headers = headers, data = body)

@@ -8,8 +8,8 @@ ENABLE_CORS     =   False
 
 
   
-object_store            = os.environ.get('ULCA_OBJECT_STORE', "AZURE")      
-shared_storage_path     =   os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', "opt")
+object_store            =   os.environ.get('ULCA_OBJECT_STORE', "AZURE")      
+shared_storage_path     =   os.environ.get('ULCA_SHARED_STORAGE_PATH', "opt")
 
 aws_file_prefix         =   os.environ.get('ULCA_AWS_FILE_PREFIX',"errors/")
 aws_access_key          =   os.environ.get('ULCA_AWS_S3_ACCESS_KEY', 'access-key')
