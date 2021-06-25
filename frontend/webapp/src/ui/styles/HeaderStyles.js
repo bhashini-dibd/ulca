@@ -1,13 +1,13 @@
 const HeaderStyles = (theme) => ({
 
   toolbar: {
-    minHeight: "56px",
+    minHeight: "54px",
     maxWidth: "1272px",
-    width: "100%",
+    width: "98%",
     margin: "0 auto",
     display: 'flex',
     alignItems: 'center',
-    padding: "0"
+    padding:"0"
   },
   title: {
     color: 'white',
@@ -28,6 +28,7 @@ const HeaderStyles = (theme) => ({
   menu: {
     width: '100%',
     display: 'flex',
+    alignItems:"center",
     cursor:"pointer"
   },
   datasetOption: {
@@ -44,8 +45,19 @@ const HeaderStyles = (theme) => ({
     marginRight: '-1%'
   },
   menuBtn: {
-    fontSize: '1rem',
+    height:"54px",
+    width:"110px",
     color: 'white'
+  },
+  menuBtn2: {
+    height:"37px",
+    width:"88px",
+    marginRight:"10px",
+    backgroundColor: 'white',
+    "&:hover": {
+      
+      backgroundColor: 'white',
+    }
   },
   styledMenu: {
     padding: "9px",
@@ -97,11 +109,11 @@ const HeaderStyles = (theme) => ({
     }
   },
   signIn: {
-    fontSize: '1rem',
+    
     color: 'white'
   },
   signUp: {
-    fontSize: '1rem',
+    
     color: 'white'
   },
   desktopAuth: {

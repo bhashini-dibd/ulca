@@ -28,27 +28,27 @@ export const Language = [
 export const FilterBy = {
     collectionMethod: [
         {
-            value: 'web - scrapping - machine - readable',
+            value: 'web-scrapping-machine-readable',
             label: 'Web Scrapping Machine Readable'
         },
         {
-            value: 'web - scrapping - ocr',
+            value: 'web-scrapping-ocr',
             label: 'Web Scrapping Ocr'
         },
         {
-            value: 'manual - human - translated',
+            value: 'manual-human-translated',
             label: 'Manual Human Translated'
         },
         {
-            value: 'algorithm - auto - aligned',
+            value: 'algorithm-auto-aligned',
             label: 'Algorithm Auto Aligned'
         },
         {
-            value: 'algorithm - back - translated',
+            value: 'algorithm-back-translated',
             label: 'Algorithm Back Translated'
         },
         {
-            value: 'human - validated',
+            value: 'human-validated',
             label: 'Human Validated'
 
         },

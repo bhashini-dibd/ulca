@@ -15,8 +15,8 @@ function AppInfo(props) {
     <Hidden only="xs">
       <Grid item xs={12} sm={4} md={3} lg={3} color = {"primary"}className={classes.appInfo}>
         
-        <Typography className={classes.title} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>ULCA</Typography>
-        <Typography className={classes.subTitle}>
+        <Typography className={classes.title} variant={"h3"} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>ULCA</Typography>
+        <Typography variant={"h4"} className={classes.subTitle}>
           Universal Language Contribution APIs
         </Typography>
         <Typography className={classes.sub}>

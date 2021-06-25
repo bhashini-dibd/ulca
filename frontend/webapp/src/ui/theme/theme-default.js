@@ -6,10 +6,36 @@ const themeDefault = createMuiTheme({
     fontWeight: "600",
   },
   overrides: {
-    MuiTableRow: { root: { cursor: "pointer" } },
+    MuiTableRow: {
+      root: { cursor: "pointer" ,
+      '&.MuiTableRow-hover:hover': { 
+        
+        
+          backgroundColor: "#F4F4FA"
+        
+    }
+
+    
+
+    },
+      hover: {
+      //   "&:hover": {
+      //     color: '#2C2799',
+      // backgroundColor: " rgba(44,39,153, .05)"
+      // }
+       
+      }
+    },
+    MUIDataTable: {
+      paper: {
+        height: '670px',
+        boxShadow: "0px 0px 2px #00000029",
+border: "1px solid #0000001F"
+      }
+    },
     MuiTableCell: {
       head: {
-        padding: ".5rem .5rem .5rem 1.5rem",
+        padding: ".55rem .5rem .55rem 1.5rem",
         backgroundColor: "#F8F8FA !important",
         marginLeft: "25px",
         letterSpacing: "0.74",
@@ -31,6 +57,18 @@ const themeDefault = createMuiTheme({
         border: "1px solid rgb(224 224 224)",
       },
     },
+    MuiAppBar:{
+      root:{
+        boxSizing:"none",
+        margin:"-1px",
+        padding:"0px"
+      }
+    },
+    MuiToolbar:{
+      root:{
+        padding:0
+      }
+    },
 
     MUIDataTableBodyCell: {
       root: { padding: ".5rem .5rem .5rem .8rem", textTransform: "capitalize" },
@@ -50,7 +88,9 @@ const themeDefault = createMuiTheme({
       sizeSmall: {
         height: "36px",
       },
-    },
+    
+    }
+   
   },
   palette: {
     primary: {
