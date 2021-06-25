@@ -13,13 +13,13 @@ class AzureFileRepo():
     def __init__(self):
         pass
 
-    def upload_file_to_blob(self, file_name, folder):
-        blob_file_name = folder + "/" + file_name.split('/')[2]
+    def upload_file_to_blob(self,file_path, file_name, folder):
+        blob_file_name = folder + "/" + file_name
         blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
         blob_client = blob_service_client.get_blob_client(container=azure_container_name, blob=blob_file_name)
         try:
-            with open(file_name, "rb") as data:
-                log.info(f'Pushing {file_name} to azure at {blob_file_name} ......')
+            with open(file_path, "rb") as data:
+                log.info(f'Pushing {file_path} to azure at {blob_file_name} ......')
                 blob_client.upload_blob(data,overwrite=True)
             return f'{azure_link_prefix}{blob_file_name}'
         except Exception as e:

@@ -46,7 +46,7 @@ class ErrorEvent:
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
             log.info(f'Creating error file for Dataset: {data["datasetName"]} | SRN: {data["serviceRequestNumber"]}')
-            file = f'{shared_storage_path}error-{data["datasetName"]}.csv'
+            file = f'{shared_storage_path}error-{data["datasetName"].replace(" ","-")}-{data["serviceRequestNumber"]}.csv'
             error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"],
                          "internal_file": file, "file": file, "time_stamp": str(datetime.now()), "error": data}
             error_repo.insert(error_rec)
@@ -122,7 +122,8 @@ class ErrorEvent:
         file = error_record["internal_file"]
         log.info(f'Error List: {len(error_record["errors"])} for SRN -- {srn}')
         self.write_to_csv(error_record["errors"], file, srn)
-        error_record["file"] = utils.file_store_upload_call(file, error_prefix)
+        file_name = error_record["internal_file"].replace("/opt/","")
+        error_record["file"] = utils.file_store_upload_call(file,file_name,error_prefix)
         error_record["uploaded"], error_record["errors"] = True, []
         error_repo.update(error_record)
         log.info(f'Error report uploaded to azure-blob for SRN -- {srn}')

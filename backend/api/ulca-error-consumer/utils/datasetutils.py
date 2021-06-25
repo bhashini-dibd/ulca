@@ -123,13 +123,11 @@ class DatasetUtils:
             log.exception(f'Exception while pushing to blob store: {e}', e)
         return False
     
-    def file_store_upload_call(self, file_name, folder_name):
+    def file_store_upload_call(self, file,file_name ,folder_name):
         try:
             headers =   {"Content-Type": "application/json"}
-            body    =   {"fileName":file_name,"storageFolder":folder_name}
+            body    =   {"fileName":file_name,"storageFolder":folder_name,"fileLocation":file}
             request_url = file_store_host+file_store_upload_endpoint
-            body ={"fileName": "/opt/error-fac945a3-4fa0-49b1-9a2f-a61b72cd20b2.csv","storageFolder": "errors"}
-            request_url = "http://dev-auth.ulcacontrib.org/ulca/file-store/v0/file/upload"
             log.info("Intiating request to store data on object store %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body)
             response_data = response.content

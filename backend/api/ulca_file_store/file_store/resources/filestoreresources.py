@@ -15,13 +15,15 @@ class FileUploaderResource(Resource):
         body = request.get_json()
         if body.get("fileName") == None or body.get("storageFolder") == None:
             post_error("Request Failed","Data Missing-fileName and storageFolder are mandatory")
-        file_name   =   body["fileName"]
+        file_path   =   body["fileLocation"]
         folder      =   body["storageFolder"]
-        log.info(f"File upload request received for {file_name}")
+        file_name   =   body["fileName"]
+
+        log.info(f"File upload request received for {file_path}")
         try:
-            result = fileserve.upload_file(file_name,folder)
+            result = fileserve.upload_file(file_path,file_name,folder)
             if "errorID" not in result:
-                log.info(f"File upload request succesfull for {file_name}")
+                log.info(f"File upload request succesfull for {file_path}")
                 return CustomResponse(Status.SUCCESS.value,result).getresjson(), 200
             return result, 400
         except Exception as e:
