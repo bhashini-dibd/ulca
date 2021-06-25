@@ -16,7 +16,7 @@ from processtracker.processtracker import ProcessTracker
 from kafkawrapper.producer import Producer
 
 log = logging.getLogger('file')
-
+records_consumed = 0
 
 # Method to instantiate the kafka consumer
 def instantiate(topics):
@@ -54,6 +54,9 @@ def consume():
                            #     pt.end_processing(data)
                             #    break
                         if data["datasetType"] == dataset_type_parallel:
+                            global records_consumed
+                            records_consumed = records_consumed + 1
+                            log.info(f'Records consumed: {records_consumed}')
                             p_service.execute_validation_pipeline(data)
                         if data["datasetType"] == dataset_type_ocr:
                             o_service.execute_validation_pipeline(data)
