@@ -27,12 +27,15 @@ class TextLanguageCheck(BaseValidator):
             if request["datasetType"] == dataset_type_ocr:
                 text_list.append(record['groundTruth'])
                 lang_list.append(record['sourceLanguage'])
+            if request["datasetType"] == dataset_type_monolingual:
+                text_list.append(record['text'])
+                lang_list.append(record['sourceLanguage'])
 
             for text, lang in zip(text_list, lang_list):
                 res = detect_langs(text)
                 detected_lang = str(res[0]).split(':')[0]
                 prob = str(res[0]).split(':')[1]
-                if detected_lang != lang or float(prob) < 0.8:
+                if detected_lang != lang or float(prob) < 0.75:
                     return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
 
             log.info('----text language check  -> Passed----')

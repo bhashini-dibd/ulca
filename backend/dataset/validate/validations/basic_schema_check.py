@@ -20,6 +20,8 @@ class BasicSchemaCheck(BaseValidator):
                 required_keys = {'text', 'sourceLanguage'}
             if request["datasetType"] == dataset_type_ocr:
                 required_keys = {'groundTruth', 'sourceLanguage'}
+            if request["datasetType"] == dataset_type_monolingual:
+                required_keys = {'text', 'sourceLanguage'}
 
             if required_keys <= request["record"].keys():
                 return super().execute(request)

@@ -26,6 +26,8 @@ class SpecialCharacterCheck(BaseValidator):
                 request['record']['text'] = self.remove_special(request['record']['text'])
             if request["datasetType"] == dataset_type_ocr:
                 request['record']['groundTruth'] = self.remove_special(request['record']['groundTruth'])
+            if request["datasetType"] == dataset_type_monolingual:
+                request['record']['text'] = self.remove_special(request['record']['text'])
 
             return super().execute(request)
         except Exception as e:

@@ -22,6 +22,9 @@ class DuplicateWhitespaces(BaseValidator):
             if request["datasetType"] == dataset_type_ocr:
                 request['record']['groundTruth'] = " ".join(request['record']['groundTruth'].split())
 
+            if request["datasetType"] == dataset_type_monolingual:
+                request['record']['text'] = " ".join(request['record']['text'].split())
+
             return super().execute(request)
         except Exception as e:
             log.exception('Exception while removing extra whitespaces', e)

@@ -21,6 +21,8 @@ class SentenceLengthCheck(BaseValidator):
                 text_list.append(record['text'])
             if request["datasetType"] == dataset_type_ocr:
                 text_list.append(record['groundTruth'])
+            if request["datasetType"] == dataset_type_monolingual:
+                text_list.append(record['text'])
 
             for text in text_list:
                 words = len(list(text.split(" ")))

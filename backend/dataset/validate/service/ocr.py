@@ -38,9 +38,14 @@ class OCRValidate:
                 # Update task tracker
                 tracker_data = {"status": res["status"], "code": res["message"], "serviceRequestNumber": request["serviceRequestNumber"], "currentRecordIndex": request["currentRecordIndex"]}
                 pt.update_task_details(tracker_data)
-
+            else:
+                log.info("Exception occured, validation result: {}".format(res))
+                tracker_data = {"status": "FAILED"}
+                pt.update_task_details(tracker_data)
         except Exception as e:
             log.exception(e)
+            tracker_data = {"status": "FAILED"}
+            pt.update_task_details(tracker_data)
             return {"message": "EXCEPTION while validating dataset!!", "status": "FAILED"}
 
 
