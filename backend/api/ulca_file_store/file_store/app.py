@@ -22,5 +22,6 @@ for blueprint in vars(routes).values():
 
 
 if __name__ == "__main__":
+    log.info("File Store service has started")
     file_store_app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
     

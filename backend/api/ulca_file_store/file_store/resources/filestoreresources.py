@@ -15,16 +15,14 @@ class FileUploaderResource(Resource):
         body = request.get_json()
         if body.get("fileName") == None or body.get("storageFolder") == None:
             post_error("Request Failed","Data Missing-fileName and storageFolder are mandatory")
-
         file_name   =   body["fileName"]
         folder      =   body["storageFolder"]
-
         log.info(f"File upload request received for {file_name}")
         try:
             result = fileserve.upload_file(file_name,folder)
             if "errorID" not in result:
                 log.info(f"File upload request succesfull for {file_name}")
-                return CustomResponse(Status.SUCCESS.value,result), 200
+                return CustomResponse(Status.SUCCESS.value,result).getresjson(), 200
             return result, 400
         except Exception as e:
             log.error(f"File upload request failed due to  {e}")
@@ -44,7 +42,7 @@ class FileDownloaderResource(Resource):
             result = fileserve.download_file(file_name)
             if "errorID" not in result:
                 log.info(f"File download request succesfull for {file_name}")
-                return CustomResponse(Status.SUCCESS.value,None), 200
+                return CustomResponse(Status.SUCCESS.value,None).getresjson(), 200
             return result, 400
         except Exception as e:
             log.error(f"File download request failed due to  {e}")
@@ -64,7 +62,7 @@ class FileRemoverResource(Resource):
             result = fileserve.remove_file(file_name)
             if "errorID" not in result:
                 log.info(f"File delete request successfull for {file_name}")
-                return CustomResponse(Status.SUCCESS.value,None), 200
+                return CustomResponse(Status.SUCCESS.value,None).getresjson(), 200
             return result, 400
         except Exception as e:
             log.error(f"File delete request failed due to  {e}")

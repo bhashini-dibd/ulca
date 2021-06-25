@@ -15,16 +15,16 @@ class AzureFileRepo():
 
     def upload_file_to_blob(self, file_name, folder):
         blob_file_name = folder + "/" + file_name.split('/')[2]
-        log.info(f'Pushing {file_name} to azure at {blob_file_name} ......')
-
         blob_client = self.blob_service_client.get_blob_client(container=azure_container_name, blob=blob_file_name)
         try:
-            with open(blob_file_name, "rb") as data:
+            with open(file_name, "rb") as data:
+                log.info(f'Pushing {file_name} to azure at {blob_file_name} ......')
                 blob_client.upload_blob(data,overwrite=True)
             return f'{azure_link_prefix}{blob_file_name}'
         except Exception as e:
-            log.exception(f'Exception while pushing to s3: {e}', e)
+            log.exception(f'Exception while pushing to azure blob storage: {e}', e)
             return post_error("Service Exception",f"Exception occurred:{e}")
+
     
 
     def download_file_from_blob(self, blob_file_name):
