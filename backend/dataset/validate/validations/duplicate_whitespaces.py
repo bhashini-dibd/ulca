@@ -25,6 +25,7 @@ class DuplicateWhitespaces(BaseValidator):
             return super().execute(request)
         except Exception as e:
             log.exception('Exception while removing extra whitespaces', e)
+            return {"message": "Exception while removing extra whitespaces", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 # Log config
 dictConfig({

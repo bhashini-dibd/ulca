@@ -39,6 +39,7 @@ class TextLanguageCheck(BaseValidator):
             return super().execute(request)
         except Exception as e:
             log.exception('Exception while executing text language check', e)
+            return {"message": "Exception while executing text language check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 
 # Log config
