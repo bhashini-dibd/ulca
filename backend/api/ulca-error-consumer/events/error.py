@@ -2,6 +2,7 @@ import csv
 import json
 import logging
 import os
+import threading
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
@@ -9,6 +10,7 @@ from configs.configs import error_event_input_topic, publish_error_code, shared_
 from kafkawrapper.producer import Producer
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
+
 
 
 log = logging.getLogger('file')
@@ -125,8 +127,9 @@ class ErrorEvent:
         file_name = error_record["internal_file"].replace("/opt/","")
         error_record["file"] = utils.file_store_upload_call(file,file_name,error_prefix)
         error_record["uploaded"], error_record["errors"] = True, []
-        error_repo.update(error_record)
-        log.info(f'Error report uploaded to azure-blob for SRN -- {srn}')
+        persister = threading.Thread(target=error_repo.update, args=(error_record,))
+        persister.start()
+        log.info(f'Error report uploaded to object store for SRN -- {srn}')
         os.remove(file)
         return error_record
 

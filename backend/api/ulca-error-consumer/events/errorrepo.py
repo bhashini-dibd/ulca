@@ -13,11 +13,13 @@ class ErrorRepo:
         pass
 
     def instantiate(self):
+        global mongo_instance
         client = pymongo.MongoClient(ulca_db_cluster)
         mongo_instance = client[error_db][error_collection]
         return mongo_instance
 
     def get_mongo_instance(self):
+        global mongo_instance
         if not mongo_instance:
             return self.instantiate()
         else:
