@@ -36,7 +36,7 @@ aws_link_prefix         =   f'http://{aws_bucket_name}.s3.amazonaws.com/'
 
 error_prefix            =   os.environ.get('ULCA_ERROR_PREFIX', 'errors')
 
-file_store_host               =   os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'http://file-store:5001/')
+file_store_host               =   os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'http://file-store:5001')
 file_store_upload_endpoint    =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/v0/file/upload')
 file_store_delete_endpoint    =   os.environ.get('ULCA_FILE_STORE_REMOVE', '/ulca/file-store/v0/file/remove')
 
