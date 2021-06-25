@@ -18,6 +18,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -31,6 +32,7 @@ import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.OcrDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.OcrDatasetRowDataSchemaDeserializer;
+import com.ulca.dataset.service.DatasetService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.DatasetType;
@@ -40,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DatasetOcrValidateIngest {
+public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 
 	@Autowired
 	ProcessTaskTrackerService processTaskTrackerService;
@@ -63,36 +65,34 @@ public class DatasetOcrValidateIngest {
 	@Autowired
 	TaskTrackerRedisDao taskTrackerRedisDao;
 	
+	@Autowired
+	DatasetService datasetService;
+	
 	public void validateIngest(Map<String, String> fileMap, FileDownload file) {
 
 		log.info("************ Entry DatasetOcrValidateIngest :: validateIngest *********");
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		String datasetName = file.getDatasetName();
 		DatasetType datasetType = file.getDatasetType();
+		String userId = file.getUserId();
+		String datasetId = file.getDatasetId();
 		
 		OcrDatasetParamsSchema paramsSchema = null;
-
-		Set<String> keys = fileMap.keySet();
-		log.info("logging the fileMap keys");
-		for (String key : keys) {
-			log.info("key :: " + key);
-			log.info("value :: " + fileMap.get(key));
-		}
-
-		String paramsFilePath = fileMap.get("params.json");
-		if (paramsFilePath == null) {
-			log.info("params.json file not available");
-			Error error = new Error();
-			error.setCause("params.json file not available");
-			error.setMessage("params validation failed");
-			error.setCode("1000_PARAMS_JSON_FILE_NOT_AVAILABLE");
-
+		
+		Error fileError = validateFileExistence(fileMap);
+		
+		if (fileError != null) {
+			
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
-
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, fileError);
+			
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			return;
 		}
+		
+		
+		String paramsFilePath = fileMap.get("params.json");
+		
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath, file);
 
@@ -137,6 +137,22 @@ public class DatasetOcrValidateIngest {
 						
 			return;
 		}
+		
+		//update the dataset
+		
+				try {
+					
+					ObjectMapper objectMapper = new ObjectMapper();
+					JSONObject record;
+					record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+					
+					datasetService.updateDataset(datasetId, userId, record);
+					
+				} catch (JsonProcessingException | JSONException e) {
+					
+					log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+				}
+
 
 	}
 
@@ -278,26 +294,7 @@ public class DatasetOcrValidateIngest {
 		
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
 		
-
 	}
 
-	public JSONObject deepMerge(JSONObject source, JSONObject target) throws JSONException {
-		for (String key : JSONObject.getNames(source)) {
-			Object value = source.get(key);
-			if (!target.has(key)) {
-				// new value for "key":
-				target.put(key, value);
-			} else {
-				// existing value for "key" - recursively deep merge:
-				if (value instanceof JSONObject) {
-					JSONObject valueJson = (JSONObject) value;
-					deepMerge(valueJson, target.getJSONObject(key));
-				} else {
-					target.put(key, value);
-				}
-			}
-		}
-		return target;
-	}
 
 }

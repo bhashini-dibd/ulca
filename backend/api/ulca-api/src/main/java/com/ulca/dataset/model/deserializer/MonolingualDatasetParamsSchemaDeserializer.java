@@ -164,7 +164,6 @@ public class MonolingualDatasetParamsSchemaDeserializer extends StdDeserializer<
 			try {
 				Domain domain = new Domain();
 				int size = node.get("domain").size();
-				System.out.println("domain array size" + size);
 				
 				for(int i=0; i < size; i++) {
 					
