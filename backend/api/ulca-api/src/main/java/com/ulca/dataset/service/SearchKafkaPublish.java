@@ -1,16 +1,15 @@
 package com.ulca.dataset.service;
 
 import java.util.Date;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.ServiceRequestActionEnum;
@@ -18,12 +17,11 @@ import com.ulca.dataset.model.ProcessTracker.ServiceRequestTypeEnum;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.SearchCriteria;
-import com.ulca.dataset.util.DateUtil;
 import com.ulca.dataset.util.Utility;
 
-import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
+@Component
 @Slf4j
 @Service
 public class SearchKafkaPublish {
@@ -34,7 +32,7 @@ public class SearchKafkaPublish {
 										  
 	
 	
-	@Value(value = "${KAFKA_ULCA_DS_SEARCH_IP_TOPIC}")
+	@Value("${kafka.ulca.ds.search.ip.topic}")
 	private String datasetSearchTopic;
 	
 	

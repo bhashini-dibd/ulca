@@ -61,7 +61,7 @@ public class DatasetDocumentLayoutValidateIngest {
 	@Autowired
 	private KafkaTemplate<String, String> datasetValidateKafkaTemplate;
 
-	@Value(value = "${KAFKA_ULCA_DS_VALIDATE_IP_TOPIC}")
+	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
 
 	@Autowired
@@ -235,7 +235,6 @@ public class DatasetDocumentLayoutValidateIngest {
 			} catch(Exception e) {
 				
 				
-				
 				failedCount++;
 				
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
@@ -267,8 +266,6 @@ public class DatasetDocumentLayoutValidateIngest {
 				
 			}
 
-			
-
 		}
 		reader.endArray();
 		reader.close();
@@ -277,8 +274,6 @@ public class DatasetDocumentLayoutValidateIngest {
 		taskTrackerRedisDao.setCountAndIngestComplete(serviceRequestNumber, numberOfRecords);
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
 		
-		
-
 		
 
 	}

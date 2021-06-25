@@ -69,7 +69,7 @@ public class DatasetMonolingualValidateIngest {
 	@Autowired
 	private KafkaTemplate<String, String> datasetValidateKafkaTemplate;
 
-	@Value(value = "${KAFKA_ULCA_DS_VALIDATE_IP_TOPIC}")
+	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
 	
 	@Autowired

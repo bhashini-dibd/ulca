@@ -43,7 +43,7 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	DatasetErrorPublishService datasetErrorPublishService;
 
-	@Value(value = "${FILE_DOWNLOAD_FOLDER}")
+	@Value("${file.download.folder}")
     private String downloadFolder;
 	
 	@Autowired
@@ -64,7 +64,9 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
 	
-	@KafkaListener(groupId = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC_GROUP_ID}", topics = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
+	
+	
+	@KafkaListener(groupId = "${kafka.ulca.ds.ingest.ip.topic.group.id}", topics = "${kafka.ulca.ds.ingest.ip.topic}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
 		
@@ -101,13 +103,6 @@ public class KafkaFileDownloadConsumer {
 				log.info("file path in downloadFile servide ::" + filePath);
 				
 				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
-				
-				Set<String> keys = fileMap.keySet();
-				log.info("logging the fileMap keys");
-				for(String key : keys) {
-					log.info("key :: "+key);
-					log.info("value :: " + fileMap.get(key));
-				}
 				
 				log.info("file unzip complete");
 				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.successful);

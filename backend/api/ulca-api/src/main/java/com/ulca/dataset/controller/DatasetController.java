@@ -1,16 +1,12 @@
 package com.ulca.dataset.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -41,8 +37,6 @@ public class DatasetController {
 	@Autowired
 	DatasetService datasetService;
 	
-	@Autowired
-    RedisTemplate<String, Object> redisTemplate;
 	
 	@PostMapping("/corpus/submit")
 	public DatasetSubmitResponse datasetSubmit(@RequestBody DatasetSubmitRequest request, @RequestHeader("userId") String userId) {
@@ -52,35 +46,6 @@ public class DatasetController {
 	    return datasetService.datasetSubmit(request, userId);
 	  }
 
-	@GetMapping("/publish/{name}")
-	public String publishMessage(@PathVariable String name) {
-		//template.send(topic, "Hi " + name + " Welcome to java techie");
-		log.info("*********************");
-		log.info("test publishmessage");
-		
-		Set<String> redisKeys = redisTemplate.keys("*");
-		
-	
-		
-		log.info("printing keys size :: " + redisKeys.size())	;	// Store the keys in a List
-		List<String> keysList = new ArrayList<>();
-		Iterator<String> it = redisKeys.iterator();
-		while (it.hasNext()) {
-		       String data = it.next();
-		       keysList.add(data);
-		}
-		
-		for(String str : keysList) {
-			System.out.println(str);
-			System.out.println(redisTemplate.opsForValue().get(str));
-			
-		}
-		
-		
-        
-		return "Data published";
-	}
-	
 	@GetMapping("/listByUserId")
 	public List<DatasetListByUserIdResponse> listByUserId(@RequestParam String userId) {
 		log.info("******** Entry DatasetController:: listByUserId *******" );
