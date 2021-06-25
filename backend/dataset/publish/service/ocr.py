@@ -152,7 +152,7 @@ class OCRService:
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
                 s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["imageFilename"]}'
-                object_store_path = utils.upload_file(data["fileLocation"], f'{ocr_prefix}{s3_file_name}')
+                object_store_path = utils.upload_file(data["fileLocation"], ocr_prefix, s3_file_name)
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path

@@ -91,10 +91,10 @@ azure_container_name = os.environ.get('ULCA_AZURE_FILE_CONTAINER', "ulca-prod-co
 azure_account_name = os.environ.get('ULCA_AZURE_ACCOUNT_NAME', "azure_account")
 azure_link_prefix = f'https://{azure_account_name}.blob.core.windows.net/{azure_container_name}/'
 
-ocr_prefix = os.environ.get('ULCA_AWS_S3_OCR_PREFIX', 'ocr/')
-asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', 'asr/')
-dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', 'datasets/')
-error_prefix = os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors/')
+ocr_prefix = os.environ.get('ULCA_AWS_S3_OCR_PREFIX', 'ocr')
+asr_prefix = os.environ.get('ULCA_AWS_S3_ASR_PREFIX', 'asr')
+dataset_prefix = os.environ.get('ULCA_AWS_S3_DATASET_PREFIX', 'datasets')
+error_prefix = os.environ.get('ULCA_AWS_S3_ERROR_PREFIX', 'errors')
 
 dataset_type_parallel = os.environ.get('DS_TYPE_PARALLEL', 'parallel-corpus')
 dataset_type_asr = os.environ.get('DS_TYPE_ASR', 'asr-corpus')
@@ -103,3 +103,7 @@ dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-co
 
 user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'pseudo')
 user_mode_real = os.environ.get('USER_MODE_REAL', 'real')
+
+file_store_host = os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'http://file-store:5001')
+file_store_upload_endpoint = os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/v0/file/upload')
+file_store_delete_endpoint = os.environ.get('ULCA_FILE_STORE_REMOVE', '/ulca/file-store/v0/file/remove')
