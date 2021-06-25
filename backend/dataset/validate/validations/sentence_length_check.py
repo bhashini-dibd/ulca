@@ -25,7 +25,7 @@ class SentenceLengthCheck(BaseValidator):
                 text_list.append(record['text'])
 
             for text in text_list:
-                words = len(list(text.split(" ")))
+                words = len(list(text.split()))
                 if words < 4:
                     return {"message": "Sentence Length too short", "code": "TEXT_LENGTH_TOO_SHORT", "status": "FAILED"}
 

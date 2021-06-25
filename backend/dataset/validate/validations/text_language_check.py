@@ -32,6 +32,9 @@ class TextLanguageCheck(BaseValidator):
                 lang_list.append(record['sourceLanguage'])
 
             for text, lang in zip(text_list, lang_list):
+                # Skipping for Assamese(as) and Oriya(or) as the current model doesnt support them
+                if lang == 'as' or lang == 'or':
+                    continue
                 res = detect_langs(text)
                 detected_lang = str(res[0]).split(':')[0]
                 prob = str(res[0]).split(':')[1]
