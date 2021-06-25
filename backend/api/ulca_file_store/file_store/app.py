@@ -4,12 +4,45 @@ from flask_cors import CORS
 import routes
 import config
 import logging
+from logging.config import dictConfig
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})
+log1 = logging.getLogger("azure.core.pipeline.policies.http_logging_policy")
+log1.setLevel(logging.WARNING)
+log  =   logging.getLogger('file')
 
 
-logging.basicConfig(filename='info.log',level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
-log                 =   logging.getLogger('file')
 file_store_app      =   Flask(__name__)
 
 
