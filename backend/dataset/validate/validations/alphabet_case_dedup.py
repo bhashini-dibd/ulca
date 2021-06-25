@@ -47,6 +47,7 @@ class CaseDedup(BaseValidator):
             return super().execute(request)
         except Exception as e:
             log.exception('Exception while adding hash values for sentences', e)
+            return {"message": "Exception while adding hash values for sentences", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 
 # Log config
