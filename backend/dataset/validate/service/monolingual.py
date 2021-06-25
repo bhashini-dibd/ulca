@@ -27,8 +27,7 @@ class MonolingualValidate:
                 log.info("Validation complete....  {}".format(res))
                 # Produce event for publish
                 if res["status"] == "SUCCESS":
-                    unique_hash = request["record"]["sourceTextHash"] + request["record"]["targetTextHash"]
-                    partition_key = str(hashlib.sha256(unique_hash.encode('utf-16')).hexdigest())
+                    partition_key = request['record']['textHash']
                     prod.produce(request, validate_output_topic, partition_key)
                 else:
                     error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
