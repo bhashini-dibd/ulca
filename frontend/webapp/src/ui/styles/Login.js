@@ -161,7 +161,7 @@ sub:{
     width: "100%",
   },
   width: {
-    marginRight: "25px",
+    marginRight: "6px",
   },
   forgotPassword: {
     marginTop: "20px",
@@ -231,6 +231,11 @@ sub:{
       left: "34%",
       width: "66%",
     },
+  },
+
+  InputLabel:{
+    marginLeft:"-15px",
+    paddingBottom:"19px"
   },
 
   buttonProgress: {

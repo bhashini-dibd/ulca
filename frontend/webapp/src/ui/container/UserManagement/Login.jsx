@@ -349,7 +349,7 @@ const handleSubmit = async () => {
         </Button>
       </LoginSocialGithub> */}
       <div className={classes.createLogin}>
-        <Typography className={classes.width}>New to ULCA?</Typography>
+        <Typography className={classes.width}>New to ULCA ?</Typography>
         <Typography>
           <Link id="newaccount" className={classes.link}  href="#"
             onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/register`)}}>

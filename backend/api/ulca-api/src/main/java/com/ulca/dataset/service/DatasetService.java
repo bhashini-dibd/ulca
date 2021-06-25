@@ -8,8 +8,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +39,8 @@ import com.ulca.dataset.response.DatasetSubmitResponse;
 import com.ulca.dataset.util.DateUtil;
 import com.ulca.dataset.util.Utility;
 
+import io.swagger.model.ASRParamsSchema;
+import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -60,7 +65,7 @@ public class DatasetService {
 	@Autowired
 	private KafkaTemplate<String, Object> template;
 
-	@Value(value = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}")
+	@Value("${kafka.ulca.ds.ingest.ip.topic}")
 	private String fileDownloadTopic;
 
 	@Transactional
@@ -217,5 +222,32 @@ public class DatasetService {
 		return searchList;
 
 	}
+	
+
+	
+	public void updateDataset(String datasetId, String userId, JSONObject schema) {
+		
+		
+		Optional<Dataset> datasetOps = datasetDao.findById(datasetId);
+		if(!datasetOps.isEmpty()) {
+			Dataset dataset = datasetOps.get();
+			
+			
+			dataset.setCollectionSource(schema.get("collectionSource").toString());
+			dataset.setLanguages(schema.get("languages").toString());
+			dataset.setDomain(schema.get("domain").toString());
+			dataset.setContributors(schema.get("submitter").toString());	
+			dataset.setSubmitterId(userId);
+			dataset.setLicense(schema.get("license").toString());
+			
+			if(schema.has("collectionMethod")) {
+				dataset.setCollectionMethod(schema.get("collectionMethod").toString());
+			}
+			
+			datasetDao.save(dataset);		}
+		
+	}
+	
+	
 
 }

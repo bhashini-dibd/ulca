@@ -17,7 +17,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 public class KafkaFileDownloadPublisherConfig {
 
 	
-	@Value(value = "${KAFKA_ULCA_BOOTSTRAP_SERVER_HOST}")
+	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 	
 	@Bean

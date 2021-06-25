@@ -19,7 +19,7 @@ import com.ulca.dataset.request.SearchCriteria;
 @Configuration
 public class KafkaDatasetSearchPublisherConfig {
 	
-	@Value(value = "${KAFKA_ULCA_BOOTSTRAP_SERVER_HOST}")
+	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 
 	@Bean
