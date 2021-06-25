@@ -18,7 +18,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 @Configuration
 public class KafkaDatasetValidatorPublisherConfig {
 	
-	@Value(value = "${KAFKA_ULCA_BOOTSTRAP_SERVER_HOST}")
+	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 
 	@Bean

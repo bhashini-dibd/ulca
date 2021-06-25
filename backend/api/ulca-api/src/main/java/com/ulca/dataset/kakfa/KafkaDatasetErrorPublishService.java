@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class KafkaDatasetErrorPublishService {
 	
 
-	@Value(value = "${KAFKA_ULCA_BOOTSTRAP_SERVER_HOST}")
+	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 
 	@Bean

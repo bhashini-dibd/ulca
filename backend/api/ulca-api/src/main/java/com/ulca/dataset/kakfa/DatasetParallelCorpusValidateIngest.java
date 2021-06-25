@@ -52,7 +52,7 @@ public class DatasetParallelCorpusValidateIngest {
 	@Autowired
 	private KafkaTemplate<String, String> datasetValidateKafkaTemplate;
 
-	@Value(value = "${KAFKA_ULCA_DS_VALIDATE_IP_TOPIC}")
+	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
 	
 	
@@ -88,6 +88,7 @@ public class DatasetParallelCorpusValidateIngest {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			return;
 		}
+		
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath,file);
 
@@ -256,7 +257,6 @@ public class DatasetParallelCorpusValidateIngest {
 
 				vModel.put("record", finalRecord);
 				vModel.put("currentRecordIndex", numberOfRecords);
-				
 				
 				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 				

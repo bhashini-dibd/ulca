@@ -60,7 +60,7 @@ public class DatasetService {
 	@Autowired
 	private KafkaTemplate<String, Object> template;
 
-	@Value(value = "${KAFKA_ULCA_DS_INGEST_IP_TOPIC}")
+	@Value("${kafka.ulca.ds.ingest.ip.topic}")
 	private String fileDownloadTopic;
 
 	@Transactional

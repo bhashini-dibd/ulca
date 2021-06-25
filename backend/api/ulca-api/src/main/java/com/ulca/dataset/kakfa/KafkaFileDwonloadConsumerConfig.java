@@ -20,7 +20,7 @@ import org.springframework.kafka.support.serializer.JsonDeserializer;
 public class KafkaFileDwonloadConsumerConfig {
 
 	
-	@Value(value = "${KAFKA_ULCA_BOOTSTRAP_SERVER_HOST}")
+	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 
 	// config for json data

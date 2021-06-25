@@ -19,17 +19,12 @@ public class DatasetErrorPublishService {
 	@Autowired
 	private KafkaTemplate<String, String> datasetErrorKafkaTemplate;
 
-	@Value(value = "${KAFKA_ULCA_DS_ERROR_IP_TOPIC}")
+	@Value("${kafka.ulca.ds.error.ip.topic}")
 	private String errorTopic;
 	
-//	public void publishDatasetError(JSONObject message) {
-//		
-//		datasetErrorKafkaTemplate.send(errorTopic,0,null, message.toString());
-//	}
-//	
+
 	
 	public void publishDatasetError(String eventType, String code, String message, String serviceRequestNumber, String datasetName,String stage , String datasetType) {
-		
 		
 		JSONObject errorMessage = new JSONObject();
 		errorMessage.put("eventType", eventType);
@@ -46,9 +41,6 @@ public class DatasetErrorPublishService {
 		errorMessage.put("stage", stage);
 		errorMessage.put("datasetType", datasetType);
 		errorMessage.put("message", message);
-		
-		
-		
 		
 		datasetErrorKafkaTemplate.send(errorTopic,0,null, message.toString());
 	}
