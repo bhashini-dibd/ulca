@@ -1,4 +1,5 @@
 import logging
+import hashlib
 from datetime import datetime
 from logging.config import dictConfig
 from kafkawrapper.producer import Producer
