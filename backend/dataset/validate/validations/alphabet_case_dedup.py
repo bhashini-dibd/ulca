@@ -43,6 +43,8 @@ class CaseDedup(BaseValidator):
                 image_file = request['record']['fileLocation']
                 request['record']['imageHash'] = self.hash_file(image_file)
                 request['record']['groundTruthHash'] = self.create_hash(request['record']['groundTruth'], request['record']['sourceLanguage'])
+            if request["datasetType"] == dataset_type_monolingual:
+                request['record']['textHash'] = self.create_hash(request['record']['text'], request['record']['sourceLanguage'])
 
             return super().execute(request)
         except Exception as e:
