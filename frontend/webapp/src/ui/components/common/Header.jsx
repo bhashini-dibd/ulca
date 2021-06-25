@@ -156,7 +156,7 @@ const Header = (props) => {
               authenticate() ?
                 <div className={classes.profile}>
                   <Button  onClick={(e) => handleLogoutOption(e)} className={classes.menuBtn} variant="text">
-                    <Avatar variant="contained" color= "transparent">{`${firstName[0].toUpperCase()}`}</Avatar>
+                    <Avatar className={classes.avatar} variant="contained" color= "transparent">{`${firstName[0].toUpperCase()}`}</Avatar>
                     <p className={classes.profileName}>{`${firstName}`}</p>
                     <DownIcon />
                   </Button>

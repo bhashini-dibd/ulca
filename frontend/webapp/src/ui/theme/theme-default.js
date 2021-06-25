@@ -28,14 +28,14 @@ const themeDefault = createMuiTheme({
     },
     MUIDataTable: {
       paper: {
-        height: '670px',
+        minHeight: '674px',
         boxShadow: "0px 0px 2px #00000029",
 border: "1px solid #0000001F"
       }
     },
     MuiTableCell: {
       head: {
-        padding: ".55rem .5rem .55rem 1.5rem",
+        padding: ".6rem .5rem .6rem 1.5rem",
         backgroundColor: "#F8F8FA !important",
         marginLeft: "25px",
         letterSpacing: "0.74",
@@ -48,8 +48,31 @@ border: "1px solid #0000001F"
         "&:nth-child(1)": {
           width: "50%",
         },
+        "&:nth-child(2)": {
+          width: "20%",
+        },
+        "&:nth-child(3)": {
+          width: "15%",
+        },
+        "&:nth-child(4)": {
+          width: "15%",
+        },
       },
     },
+
+    // MuiTableFooter:{
+    //   root:{
+
+    //     "@media (min-width: 1050px)": {
+    //       position:"absolute",
+    //       right:"15%",
+    //       top:"46.5rem",
+    //       borderBottom:"1px"
+         
+    //     },
+      
+    //   }
+    // },
     MuiPaper: {
       root: {
         boxShadow: "none !important",

@@ -46,7 +46,7 @@ const HeaderStyles = (theme) => ({
   },
   menuBtn: {
     height:"54px",
-    width:"110px",
+    minWidth:"110px",
     color: 'white'
   },
   menuBtn2: {
@@ -84,6 +84,12 @@ const HeaderStyles = (theme) => ({
     "@media (max-width:425px)": {
       display: 'block'
     }
+  },
+  avatar:{
+    width:"36px",
+    height:"36px",
+    backgroundColor:"white",
+    fontSize:"14px"
   },
 
   dataset: {
