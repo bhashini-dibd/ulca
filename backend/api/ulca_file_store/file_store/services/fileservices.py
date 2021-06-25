@@ -12,7 +12,7 @@ class FileServices():
     #choosing upload mechanism as per config
     def upload_file(self,file_path,file_name,folder):
         #checking the file path received 
-        if file_name.split('/')[1] != config.shared_storage_path:
+        if file_path.split('/')[1] != config.shared_storage_path:
             return post_error("Request Failed","filename received is corrupted")
         log.info(config.object_store)
         if config.object_store == "AWS":
