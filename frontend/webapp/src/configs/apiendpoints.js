@@ -8,7 +8,7 @@ const endpoints = {
   getSearchOptions: '/ulca/user-mgmt/v1/users/login',
   mySearches: "/dataset/corpus/search/listByUserId",
   submitSearchReq: '/dataset/corpus/search',
-  errorReport: "/ulca/publish/v0/error/report",
+  errorReport:'/ulca/error-consumer/v0/error/report',
   register:"/ulca/user-mgmt/v1/users/signup",
   activateUser :"/ulca/user-mgmt/v1/users/verify-user"
 };
