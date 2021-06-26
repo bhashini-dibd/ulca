@@ -240,18 +240,22 @@ const ChartRender = (props) => {
 				</div>
 				<div className={classes.title}>
 				<ResponsiveContainer width = "95%" height = {450}>
-					<BarChart width = {900} height 	= 	{450} data={DashboardReport} fontFamily="Lato" maxBarSize = {100} >
+					<BarChart width = {900} height 	= 	{450} data={DashboardReport} fontSize="12px" fontFamily="Lato" maxBarSize = {100} >
 						<XAxis 	dataKey 	= 	"label"
-							textAnchor	=	{isMobile ? "end" : "middle"}
-							tick		=	{{ angle: isMobile ? -60 : 0 }} 
+							// textAnchor	=	{isMobile ? "end" : "middle"}
+							// tick		=	{{ angle: isMobile ? -60 : 0 }} 
+							// height		=	{isMobile ? 100 : 60}
+							textAnchor	=	{"end"}
+							tick		=	{{ angle:-60}} 
 							height		=	{isMobile ? 100 : 60}
 							interval	=	{0}
 							position	=	"insideLeft"
 						/>
-						<YAxis type="number" dx	=	{0} />
+						<YAxis type="number" dx	=	{0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact"}).format(value)} />
+
 						<CartesianGrid horizontal = {true} vertical = {false} textAnchor = {"middle"} />
-						<Tooltip cursor={{fill: 'none'}}/>
-						<Bar dataKey = "value" cursor ="pointer" radius = {[4, 4, 0, 0]} maxBarSize = {65} onClick={(event) => { handleOnClick(page + 1, event) }}>
+						<Tooltip formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{fill: 'none'}}/>
+						<Bar dataKey = "value" cursor ="pointer"  radius = {[4, 4, 0, 0]} maxBarSize = {65} onClick={(event) => { handleOnClick(page + 1, event) }}>
 							{
 								DashboardReport.length > 0 && DashboardReport.map((entry, index) => {
 									const color 	= 	colors[index < 9 ? index : index % 10]

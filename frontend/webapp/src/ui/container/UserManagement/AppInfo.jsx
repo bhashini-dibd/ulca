@@ -23,7 +23,7 @@ function AppInfo(props) {
         A MeitY initiative.
         </Typography>
         <Typography className={classes.body}>
-        ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with an user interface for interacting with the datasets.
+        ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with a user interface for interacting with the datasets.
         </Typography>
         <Button variant="contained" className={classes.expButton} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>
           Explore
