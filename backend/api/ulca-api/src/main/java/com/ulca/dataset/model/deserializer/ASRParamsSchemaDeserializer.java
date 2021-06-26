@@ -60,7 +60,7 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 	public ASRParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		log.info("******** inside deserializer ********");
+		log.info("******** Entry ASRParamsSchemaDeserializer :: deserialize ********");
 		ObjectMapper mapper = new ObjectMapper();
 		ASRParamsSchema asrParamsSchema = new ASRParamsSchema();
 		JsonNode node = p.readValueAsTree();
@@ -170,14 +170,11 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 			try {
 				Domain domain = new Domain();
 				int size = node.get("domain").size();
-				System.out.println("domain array size" + size);
 				
 				for(int i=0; i < size; i++) {
-					System.out.println("i value :: " + i);
 					
 					String enumValue = node.get("domain").get(i).asText();
 					
-					System.out.println(node.get("domain").get(i));
 					DomainEnum dEnum = DomainEnum.valueOf(enumValue);
 					if(dEnum == null) {
 						errorList.add("domain value not part of defined domains");

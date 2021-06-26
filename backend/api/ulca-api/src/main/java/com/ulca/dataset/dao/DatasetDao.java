@@ -12,5 +12,6 @@ public interface DatasetDao extends MongoRepository<Dataset, String>{
 
 
 	List<Dataset> findBySubmitterId(String userId);
+	Dataset findByDatasetId(String datasetId);
 
 }

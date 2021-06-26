@@ -207,15 +207,14 @@ const DataSet = (theme) => ({
     },
     
     blurOut:{
-        zIndex: -1,
+        zIndex: -2,
         opacity: '0.5'
     },
     leftSection: {
         boxShadow: '4px 0 4px -4px #00000029'
     },
     searchGrid: {
-        height: '100%',
-        marginTop: '-1.5%',
+        height: '100%'
     }
 });
 

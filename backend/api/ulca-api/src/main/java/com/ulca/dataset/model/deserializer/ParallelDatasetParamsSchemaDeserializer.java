@@ -71,7 +71,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 			try {
 				ParallelDatasetSchemaKeys key = ParallelDatasetSchemaKeys.valueOf(k) ;
 			}catch (Exception ex) {
-				System.out.println("no enums found ");
+				log.info("no enums found ");
 				errorList.add(k + " unknown property ");
 			}
 			
@@ -169,15 +169,12 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				List<DomainEnum> list = new ArrayList<DomainEnum>();
 				Domain domain = new Domain();
 				int size = node.get("domain").size();
-				System.out.println("domain array size" + size);
 				
 				ArrayList<String> dominsList = new ArrayList<String>();
 				for(int i=0; i < size; i++) {
-					System.out.println("i value :: " + i);
 					
 					String enumValue = node.get("domain").get(i).asText();
 					
-					System.out.println(node.get("domain").get(i));
 					DomainEnum dEnum = DomainEnum.valueOf(enumValue);
 					if(dEnum == null) {
 						errorList.add("domain value not part of defined domains");
@@ -218,7 +215,6 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 
 		}
 
-		System.out.println("submitter details :: " + node.get("submitter").isObject());
 		if (node.get("submitter").isEmpty()) {
 			errorList.add("submitter field should be present");
 		} else if (!node.get("submitter").isObject()) {
@@ -299,9 +295,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 					}
 
 				} catch (Exception e) {
-					System.out.println("collection method not proper");
 					errorList.add("collectionMethod field value not proper.");
-					System.out.println("tracing the error");
 					
 					e.printStackTrace();
 				}

@@ -21,6 +21,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -32,6 +33,7 @@ import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.ParallelDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
+import com.ulca.dataset.service.DatasetService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.DatasetType;
@@ -41,7 +43,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DatasetParallelCorpusValidateIngest {
+public class DatasetParallelCorpusValidateIngest implements DatasetValidateIngest {
 
 	@Autowired
 	ProcessTaskTrackerService processTaskTrackerService;
@@ -54,6 +56,9 @@ public class DatasetParallelCorpusValidateIngest {
 
 	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
+	
+	@Autowired
+	DatasetService datasetService;
 	
 	
 	@Autowired
@@ -71,24 +76,24 @@ public class DatasetParallelCorpusValidateIngest {
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		String datasetName = file.getDatasetName();
 		DatasetType datasetType = file.getDatasetType();
+		String userId = file.getUserId();
+		String datasetId = file.getDatasetId();
 		
 		ParallelDatasetParamsSchema paramsSchema = null;
 
-		String paramsFilePath = fileMap.get("params.json");
-		if (paramsFilePath == null) {
-			log.info("params.json file not available");
-			Error error = new Error();
-			error.setCause("params.json file not available");
-			error.setMessage("params validation failed");
-			error.setCode("1000_PARAMS_JSON_FILE_NOT_AVAILABLE");
-
+		Error fileError = validateFileExistence(fileMap);
+		
+		if (fileError != null) {
+			
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
-
+					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, fileError);
+			
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			return;
 		}
 		
+		
+		String paramsFilePath = fileMap.get("params.json");
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath,file);
 
@@ -114,6 +119,9 @@ public class DatasetParallelCorpusValidateIngest {
 		}
 		try {
 			ingest(paramsSchema, file, fileMap);
+			
+			
+			
 		} catch (IOException | JSONException | NoSuchAlgorithmException | NullPointerException   e) {
 			
 			log.info("Exception while ingesting the dataset :: " + e.getMessage());
@@ -130,8 +138,27 @@ public class DatasetParallelCorpusValidateIngest {
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 			
+			return;
 			
 		}
+		//update the dataset
+		
+		try {
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			JSONObject record;
+			record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+			
+			datasetService.updateDataset(datasetId, userId, record);
+			
+		} catch (JsonProcessingException | JSONException e) {
+			
+			log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+		}
+
+		
+		
+		
 
 	}
 
@@ -276,7 +303,6 @@ public class DatasetParallelCorpusValidateIngest {
 		
 
 	}
-	
 
 
 	public String getSha256Hash(String input) throws NoSuchAlgorithmException {
@@ -297,23 +323,5 @@ public class DatasetParallelCorpusValidateIngest {
 		return hashString;
 	}
 	
-	public JSONObject deepMerge(JSONObject source, JSONObject target) throws JSONException {
-		for (String key : JSONObject.getNames(source)) {
-			Object value = source.get(key);
-			if (!target.has(key)) {
-				// new value for "key":
-				target.put(key, value);
-			} else {
-				// existing value for "key" - recursively deep merge:
-				if (value instanceof JSONObject) {
-					JSONObject valueJson = (JSONObject) value;
-					deepMerge(valueJson, target.getJSONObject(key));
-				} else {
-					target.put(key, value);
-				}
-			}
-		}
-		return target;
-	}
 
 }
