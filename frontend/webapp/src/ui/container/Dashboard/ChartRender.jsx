@@ -239,15 +239,15 @@ const ChartRender = (props) => {
 					<Typography value="" variant="h6"> {title} </Typography>
 				</div>
 				<div className={classes.title}>
-				<ResponsiveContainer width = "95%" height = {450}>
-					<BarChart width = {900} height 	= 	{450} data={DashboardReport} fontSize="12px" fontFamily="Lato" maxBarSize = {100} >
+				<ResponsiveContainer width = "95%" height = {460}>
+					<BarChart width = {900} height 	= 	{460} data={DashboardReport} fontSize="12px" fontFamily="Lato" maxBarSize = {100} >
 						<XAxis 	dataKey 	= 	"label"
 							// textAnchor	=	{isMobile ? "end" : "middle"}
 							// tick		=	{{ angle: isMobile ? -60 : 0 }} 
 							// height		=	{isMobile ? 100 : 60}
 							textAnchor	=	{"end"}
 							tick		=	{{ angle:-60}} 
-							height		=	{isMobile ? 100 : 60}
+							height		=	{100}
 							interval	=	{0}
 							position	=	"insideLeft"
 						/>
