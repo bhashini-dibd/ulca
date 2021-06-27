@@ -28,7 +28,8 @@ class MonolingualValidate:
                 # Produce event for publish
                 if res["status"] == "SUCCESS":
                     partition_key = request['record']['textHash']
-                    prod.produce(request, validate_output_topic, partition_key)
+                    partition_no = int(partition_key[0],16)%16
+                    prod.produce(request, validate_output_topic, partition_no)
                 else:
                     error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
                              "message": res["message"], "code": res["code"], "record": request["record"], "datasetName": request["datasetName"]}
