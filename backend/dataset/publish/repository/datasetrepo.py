@@ -1,12 +1,17 @@
+import json
 import logging
 import pymongo
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import db_cluster, db
+
+import redis
+
+from configs.configs import db_cluster, db, redis_server_host, redis_server_port, redis_server_pass
 
 log = logging.getLogger('file')
 
 mongo_instance = None
+redis_client_datasets = None
 
 class DatasetRepo:
     def __init__(self):
@@ -23,6 +28,43 @@ class DatasetRepo:
             log.info(f'Done! | {datetime.now()}')
         else:
             log.info(f'Setting the Mongo DB Local...')
+
+    # Initialises and fetches redis client
+    def redis_instantiate(self):
+        global redis_client_datasets
+        redis_client_datasets = redis.Redis(host=redis_server_host, port=redis_server_port, db=3,
+                                   password=redis_server_pass)
+        return redis_client_datasets
+
+    def get_redis_instance(self):
+        global redis_client_datasets
+        if not redis_client_datasets:
+            log.info(f'getting redis datasets connection............')
+            return self.redis_instantiate()
+        else:
+            return redis_client_datasets
+
+    def upsert(self, key, value):
+        try:
+            client = self.get_redis_instance()
+            client.set(key, json.dumps(value))
+            return True
+        except Exception as e:
+            log.exception(f'Exception in redis upsert: {e}', e)
+            return None
+
+    def search(self, key_list):
+        try:
+            client = self.get_redis_instance()
+            result = []
+            for key in key_list:
+                val = client.get(key)
+                if val:
+                    result.append(json.loads(val))
+            return result
+        except Exception as e:
+            log.exception(f'Exception in redis search: {e}', e)
+            return None
 
 
 

@@ -2,7 +2,6 @@ import json
 import logging
 import random
 import string
-import uuid
 from logging.config import dictConfig
 
 from service.parallel import ParallelService
@@ -14,6 +13,7 @@ from configs.configs import kafka_bootstrap_server_host, publish_input_topic, pu
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from kafka import KafkaConsumer
 from processtracker.processtracker import ProcessTracker
+from repository.datasetrepo import DatasetRepo
 
 log = logging.getLogger('file')
 
@@ -36,7 +36,7 @@ def consume():
         topics = [publish_input_topic]
         consumer = instantiate(topics)
         p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
-        pt = ProcessTracker()
+        repo = DatasetRepo()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-CONS-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -46,8 +46,12 @@ def consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
-                        if 'id' not in data["record"].keys():
-                            data["record"]["id"] = str(uuid.uuid4())
+                        if repo.search([data["record"]["id"]]):
+                            log.info(f'RELAY found for record --- {data}')
+                            break
+                        else:
+                            rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "datasetType": data["datasetType"]}
+                            repo.upsert(data["record"]["id"], rec)
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.load_parallel_dataset_single(data)
                         if data["datasetType"] == dataset_type_ocr:
