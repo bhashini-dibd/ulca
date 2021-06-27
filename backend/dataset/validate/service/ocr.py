@@ -29,7 +29,7 @@ class OCRValidate:
                 if res["status"] == "SUCCESS":
                     unique_hash = request["record"]["groundTruthHash"] + request["record"]["imageHash"]
                     partition_key = str(hashlib.sha256(unique_hash.encode('utf-16')).hexdigest())
-                    partition_no = int(partition_key[0],16)%16
+                    partition_no = int(partition_key[:3],16)%16
                     prod.produce(request, validate_output_topic, partition_no)
                 else:
                     error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
