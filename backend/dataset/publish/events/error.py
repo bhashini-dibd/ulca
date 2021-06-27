@@ -24,7 +24,6 @@ class ErrorEvent:
 
     def create_error_event(self, error_list):
         for error in error_list:
-            log.info(f'Publishing error event for srn -- {error["serviceRequestNumber"]}')
             try:
                 event = {"eventType": "dataset-training", "messageType": "error", "code": publish_error_code.replace("XXX", error["code"]),
                          "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),

@@ -31,7 +31,6 @@ class ParallelService:
         pass
 
     def load_parallel_dataset_single(self, request):
-        log.info("Loading Parallel Dataset.....")
         try:
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
@@ -58,7 +57,7 @@ class ParallelService:
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'Done! -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
+            log.info(f'Parallel - Done! -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading Parallel dataset!!", "status": "FAILED"}

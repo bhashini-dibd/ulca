@@ -31,7 +31,7 @@ class Producer:
                 if partition is None:
                     partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
                 producer.send(topic, value=object_in, partition=partition)
-                log.info(f'Pushing to topic: {topic}')
+                #log.info(f'Pushing to topic: {topic}')
             producer.flush()
         except Exception as e:
             log.exception(f'Exception in dataset publish while producing: {str(e)}', e)

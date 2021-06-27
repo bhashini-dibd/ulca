@@ -24,7 +24,6 @@ class ProcessTracker:
             repo.redis_key_inc(data["serviceRequestNumber"], True)
 
     def create_task_event(self, data):
-        log.info(f'Publishing pt event for SUBMIT -- {data["serviceRequestNumber"]}')
         try:
             task_event_entry = repo.redis_search([f'{data["serviceRequestNumber"]}|{pt_publish_tool}'])
             if task_event_entry:

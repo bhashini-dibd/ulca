@@ -92,7 +92,6 @@ class MetricEvent:
             else:
                 event["isDelete"] = False
                 prod.produce(event, metric_event_input_topic, None)
-            log.info(f'Publishing BI metric event for srn -- {data["serviceRequestNumber"]}')
         except Exception as e:
             log.exception(e)
             return None
