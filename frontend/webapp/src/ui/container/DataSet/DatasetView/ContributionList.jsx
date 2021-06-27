@@ -184,7 +184,6 @@ const ContributionList = (props) => {
                         options         : { sortDirection: "desc" },
                         },
                         onRowClick: rowData => handleRowClick(rowData),
-                        rowsPerPageOptions: [5],
                         // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
                         customToolbar: fetchHeaderButton,
                 filterType      : "checkbox",
