@@ -30,7 +30,6 @@ export default class CreateGlossary extends API {
     }
 
     getBody() {
-        debugger
         let request = {}
         request["type"]        = this.dataType;
         request["criterions"]  = this.criterions;

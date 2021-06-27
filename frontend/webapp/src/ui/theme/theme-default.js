@@ -26,6 +26,12 @@ const themeDefault = createMuiTheme({
        
       }
     },
+    MUIDataTableFilter:{
+      root:{
+        backgroundColor :"white",
+        width:"80%"
+      }
+    },
     MUIDataTable: {
       paper: {
         minHeight: '674px',

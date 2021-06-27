@@ -184,7 +184,6 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type) => {
-        debugger
         const Dataset = Object.keys(type)[0]
         setSnackbarInfo({
             ...snackbar,

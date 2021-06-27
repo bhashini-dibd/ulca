@@ -89,8 +89,8 @@ const MySearches = (props) => {
                         name    : "status",
                         label   : "Status",
                         options : {
-                                filter  : false,
-                                sort    : false,
+                                filter  : true,
+                                sort    : true,
                                 
                         },
                 }
@@ -112,10 +112,10 @@ const MySearches = (props) => {
                 customToolbar: fetchHeaderButton,
                 displaySelectToolbar    :       false,
                 fixedHeader             :       false,
-                filterType              :       false,
+                filterType              :       "checkbox",
                 download                :       false,
                 print                   :       false,
-                filter                  :       false,
+                filter                  :       true,
                 page: page,
                 viewColumns     : false,
                 selectableRows          :       "none",

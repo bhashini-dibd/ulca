@@ -120,7 +120,6 @@ let apiObj = new SubmitDatasetApi(dataset)
     }
 
     const handleSelectChange = (e) =>{
-        debugger
         let title = getTitleName(e) 
         setTitle(title)
        setDatasetInfo({ ...dataset, type: e })

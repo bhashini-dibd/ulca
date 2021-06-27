@@ -71,13 +71,16 @@ const ContributionList = (props) => {
                 }
         }
 
-        const handleRowClick = ( rowMeta) => {
-                if(rowMeta.colIndex !== 6){
-                        const value = data[rowMeta.rowIndex].submitRefNumber;
-                        const status = data[rowMeta.rowIndex].status.toLowerCase();
-                        const name = data[rowMeta.rowIndex].datasetName;
-                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${value}`)
-                }
+        const handleRowClick = ( rowData) => {
+
+                history.push(`${process.env.PUBLIC_URL}/dataset-status/${rowData[4]}/${rowData[2]}/${rowData[0]}`)
+
+                // if(rowMeta.colIndex !== 6){
+                //         const value = data[rowMeta.rowIndex].submitRefNumber;
+                //         const status = data[rowMeta.rowIndex].status.toLowerCase();
+                //         const name = data[rowMeta.rowIndex].datasetName;
+                //         history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${value}`)
+                // }
         };
 
         const handleDialogSubmit = () =>{
@@ -126,7 +129,7 @@ const ContributionList = (props) => {
                 name    : "status",
                 label   : "Status",
                 options : {
-                        filter  : false,
+                        filter  : true,
                         sort    : true,
                        
                         },
@@ -180,13 +183,15 @@ const ContributionList = (props) => {
                         },
                         options         : { sortDirection: "desc" },
                         },
-                        onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
+                        onRowClick: rowData => handleRowClick(rowData),
+                        rowsPerPageOptions: [5],
+                        // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
                         customToolbar: fetchHeaderButton,
                 filterType      : "checkbox",
                 download        : false,
                 print           : false,
-                fixedHeader     : true,
-                filter          : false,
+                fixedHeader     : false,
+                filter          : true,
                 viewColumns     : false,
                 selectableRows  : "none",
         };
