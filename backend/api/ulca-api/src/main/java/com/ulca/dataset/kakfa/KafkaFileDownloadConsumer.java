@@ -109,6 +109,7 @@ public class KafkaFileDownloadConsumer {
 				
 
 			} catch (IOException e) {
+				
 				//update error
 				Error error = new Error();
 				error.setCause(e.getMessage());
