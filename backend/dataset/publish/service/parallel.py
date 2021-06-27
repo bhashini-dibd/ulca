@@ -6,7 +6,7 @@ import uuid
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, user_mode_pseudo, \
-    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel
+    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel, threads_threshold
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -25,6 +25,8 @@ error_event = ErrorEvent()
 pt = ProcessTracker()
 metrics = MetricEvent()
 
+threads = []
+
 
 class ParallelService:
     def __init__(self):
@@ -32,6 +34,7 @@ class ParallelService:
 
     def load_parallel_dataset_single(self, request):
         try:
+            global threads
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
@@ -40,9 +43,9 @@ class ParallelService:
                 if result:
                     if isinstance(result[0], list):
                         if metadata["userMode"] != user_mode_pseudo:
-                            '''persister = threading.Thread(target=repo.insert, args=(result[0],))
-                            persister.start()'''
-                            repo.insert(result[0])
+                            persist = threading.Thread(target=repo.insert, args=(result[0],))
+                            persist.start()
+                            threads.append(persist)
                             metrics.build_metric_event(result[0], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif isinstance(result[0], str):
@@ -57,7 +60,13 @@ class ParallelService:
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'Parallel - Done! -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
+            if len(threads) == threads_threshold:
+                log.info(f'Waiting for {threads_threshold} threads to finish.....')
+                for thread in threads:
+                    thread.join()
+                threads = []
+                log.info(f'Done!')
+            log.info(f'Parallel - {metadata["serviceRequestNumber"]} -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading Parallel dataset!!", "status": "FAILED"}

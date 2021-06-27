@@ -61,7 +61,7 @@ class ASRService:
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'ASR - Done! -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
+            log.info(f'ASR - {metadata["serviceRequestNumber"]} -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading ASR dataset!!", "status": "FAILED"}

@@ -62,6 +62,7 @@ mono_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "lice
                           "datasetType", "textHash"]
 
 publish_error_code = "3000_XXX"
+threads_threshold = 100
 
 pt_publish_tool = os.environ.get('PT_TOOL_PUBLISH', 'publish')
 pt_search_tool = os.environ.get('PT_TOOL_SEARCH', 'search')
