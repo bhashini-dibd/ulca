@@ -26,6 +26,7 @@ public class DatasetErrorPublishService {
 	
 	public void publishDatasetError(String eventType, String code, String message, String serviceRequestNumber, String datasetName,String stage , String datasetType) {
 		
+		
 		JSONObject errorMessage = new JSONObject();
 		errorMessage.put("eventType", eventType);
 		errorMessage.put("messageType", "error");
@@ -42,7 +43,7 @@ public class DatasetErrorPublishService {
 		errorMessage.put("datasetType", datasetType);
 		errorMessage.put("message", message);
 		
-		datasetErrorKafkaTemplate.send(errorTopic,0,null, message.toString());
+		datasetErrorKafkaTemplate.send(errorTopic,0,null, errorMessage.toString());
 	}
 
 }

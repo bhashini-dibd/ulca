@@ -89,6 +89,9 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, fileError);
 			
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
+			//send error event for download failure
+			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
+			
 			return;
 		}
 		

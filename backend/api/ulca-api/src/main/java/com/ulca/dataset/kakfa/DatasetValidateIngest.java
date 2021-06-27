@@ -19,7 +19,7 @@ public interface DatasetValidateIngest {
 
 			error = new Error();
 			error.setCause("params.json file not available");
-			error.setMessage("params validation failed");
+			error.setMessage("params.json file not available");
 			error.setCode("1000_PARAMS_JSON_FILE_NOT_AVAILABLE");
 			return error;
 
@@ -28,7 +28,7 @@ public interface DatasetValidateIngest {
 		if (!fileMap.containsKey("data.json") || fileMap.get("data.json").isBlank()) {
 			error = new Error();
 			error.setCause("data.json file not available");
-			error.setMessage("params validation failed");
+			error.setMessage("data.json file not available");
 			error.setCode("1000_DATA_JSON_FILE_NOT_AVAILABLE");
 
 			return error;
