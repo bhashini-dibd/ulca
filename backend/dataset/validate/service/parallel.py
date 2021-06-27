@@ -29,7 +29,8 @@ class ParallelValidate:
                 if res["status"] == "SUCCESS":
                     unique_hash = request["record"]["sourceTextHash"] + request["record"]["targetTextHash"]
                     partition_key = str(hashlib.sha256(unique_hash.encode('utf-16')).hexdigest())
-                    prod.produce(request, validate_output_topic, partition_key)
+                    partition_no = int(partition_key[0],16)%16
+                    prod.produce(request, validate_output_topic, partition_no)
                 else:
                     error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
                              "message": res["message"], "code": res["code"], "record": request["record"], "datasetName": request["datasetName"]}

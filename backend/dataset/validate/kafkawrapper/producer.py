@@ -23,17 +23,17 @@ class Producer:
         return producer
 
     # Method to push records to a topic in the kafka queue
-    def produce(self, object_in, topic, key):
+    def produce(self, object_in, topic, partition):
         producer = self.instantiate()
         try:
             if object_in:
-                #if partition is None:
-                 #   partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
-                if key:
-                    key = str.encode(key)
-                    producer.send(topic, value=object_in, key=key)
-                else:
-                    producer.send(topic, value=object_in)
+                if partition is None:
+                    partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
+                # if key:
+                #     key = str.encode(key)
+                #     producer.send(topic, value=object_in, key=key)
+                # else:
+                producer.send(topic, value=object_in, partition=partition)
                 log.info(f'Pushing to topic: {topic}')
             producer.flush()
         except Exception as e:
