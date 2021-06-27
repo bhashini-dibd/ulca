@@ -6,7 +6,8 @@ from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, \
-    sample_size, mono_non_tag_keys, mono_immutable_keys, dataset_type_monolingual, user_mode_pseudo
+    sample_size, mono_non_tag_keys, mono_immutable_keys, dataset_type_monolingual, user_mode_pseudo, \
+    mono_search_ignore_keys
 from repository.monolingual import MonolingualRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -202,7 +203,9 @@ class MonolingualService:
                 db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
-            exclude = {"_id": False, "tags": False}
+            exclude = {"_id": False}
+            for key in mono_search_ignore_keys:
+                exclude[key] = False
             result = repo.search(db_query, exclude, off, lim)
             count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')

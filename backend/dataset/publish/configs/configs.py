@@ -40,20 +40,26 @@ shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType",
                       "sourceLanguage", "fileLocation"]
 asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation"]
-asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain"]
+asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod",
+                          "datasetType", "audioHash", "textHash", "fileLocation"]
 
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage",
                            "targetLanguage", "datasetType"]
 parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
-parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain"]
+parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain",
+                               "collectionMethod", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash",
+                               "targetTextHash"]
 
 ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash",
                       "datasetType", "sourceLanguage", "fileLocation"]
 ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation"]
-ocr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain"]
+ocr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod",
+                          "datasetType", "imageHash", "groundTruthHash", "fileLocation"]
 
 mono_immutable_keys = ["id", "text", "textHash", "datasetType", "sourceLanguage"]
 mono_non_tag_keys = ["id", "text", "submitter"]
+mono_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod",
+                          "datasetType", "textHash"]
 
 publish_error_code = "3000_XXX"
 

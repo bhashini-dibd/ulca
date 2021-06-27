@@ -1,8 +1,9 @@
+import json
 import logging
 from collections import OrderedDict
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import db_cluster, db, parallel_collection, parallel_search_ignore_keys
+from configs.configs import db_cluster, db, parallel_collection, parallel_search_ignore_keys, shared_storage_path
 
 import pymongo
 log = logging.getLogger('file')
