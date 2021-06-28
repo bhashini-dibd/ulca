@@ -132,7 +132,7 @@ components:
           type: string
           description: textual data in source language
 
-    ASRParamsSchema:
+    AsrParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
         - type: object
@@ -171,7 +171,7 @@ components:
         collectionMethod: 
           $ref: '#/components/schemas/CollectionMethodAudio'
 
-    ASRRowSchema:
+    AsrRowSchema:
       required:
         - audioFilename
         - text
@@ -184,6 +184,55 @@ components:
         text:
           type: string
           description: textual output of the audio
+        channel:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioChannel'
+        samplingRate:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioSampleRate'
+        bitsPerSample:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample'      
+        gender:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Gender'
+        age:
+          type: string
+          description: age range
+          enum:
+            - "0-9"
+            - "10-20"
+            - "21-60"
+            - "60-100"
+        dialect:
+          type: string
+          description: valid dialact of the submitted language.
+          example: 'langaugeCode-<location or dialect name>'
+          enum:
+            - 'hi-thethi'
+            - 'hi-magahi'
+            - 'ta-madurai'
+        snr:
+          $ref: '#/components/schemas/AudioQualityEvaluation'
+        startTime:
+          type: string
+          description: "Time of the audio from where the processing starts. Format : hh-mm-ss"
+        endTime:
+          type: string
+          description: "Time of the audio where the processing end. Format : hh-mm-ss"
+        collectionMethod: 
+          $ref: '#/components/schemas/CollectionMethodAudio'
+
+    AsrUnlabeledParamsSchema:
+      allOf:
+        - $ref: '#/components/schemas/AsrParamsSchema'
+        - type: object
+
+    AsrUnlabeledRowSchema:
+      required:
+        - audioFilename
+      type: object
+      description: the schema defines the column name present in physical file that is being pointed by dataFilename key.
+      properties:
+        audioFilename:
+          type: string
+          description: filename of the audio file
         channel:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioChannel'
         samplingRate:
