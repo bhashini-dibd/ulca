@@ -46,7 +46,8 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ParallelDatasetParamsSchema'
             - $ref: '#/components/schemas/MonolingualParamsSchema'
-            - $ref: '#/components/schemas/ASRParamsSchema'
+            - $ref: '#/components/schemas/AsrParamsSchema'
+            - $ref: '#/components/schemas/AsrUnlabeledParamsSchema'
             - $ref: '#/components/schemas/OcrDatasetParamsSchema'
             - $ref: '#/components/schemas/DocumentLayoutParamsSchema'
 
@@ -59,7 +60,8 @@ components:
           oneOf:
             - $ref: '#/components/schemas/ParallelDatasetRowSchema'
             - $ref: '#/components/schemas/MonolingualRowSchema'
-            - $ref: '#/components/schemas/ASRRowSchema'
+            - $ref: '#/components/schemas/AsrRowSchema'
+            - $ref: '#/components/schemas/AsrUnlabeledRowSchema'
             - $ref: '#/components/schemas/OcrDatasetRowSchema'
             - $ref: '#/components/schemas/DocumentLayoutRowSchema'
 
