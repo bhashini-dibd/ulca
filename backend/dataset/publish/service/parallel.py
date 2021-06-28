@@ -170,10 +170,6 @@ class ParallelService:
             db_record[key] = record[key]
         is_derived = record["derived"]
         if is_derived:
-            log.info(f'REC -- Derived: {is_derived}')
-            log.info(f'REC -- Rec: {record}')
-            log.info(f'REC -- Data: {data}')
-            log.info(f'REC -- metadata: {metadata}')
             for key in data.keys():
                 if key in parallel_updatable_keys:
                     db_record[key] = data[key]
@@ -184,8 +180,8 @@ class ParallelService:
                     else:
                         db_record[key] = data[key]
             db_record["derived"] = False
+            db_record["datasetId"] = [metadata["datasetId"]]
             db_record["tags"] = self.get_tags(db_record)
-            log.info(f'REC -- DBRec: {db_record}')
             return db_record
         else:
             found = False
@@ -216,12 +212,9 @@ class ParallelService:
                             else:
                                 db_record[key] = [db_record[key]]
             if found:
-                log.info(f'REC -- Not Derived')
                 db_record["datasetId"].append(metadata["datasetId"])
+                db_record["derived"] = False
                 db_record["tags"] = self.get_tags(record)
-                log.info(f'REC -- Rec: {record}')
-                log.info(f'REC -- Data: {data}')
-                log.info(f'REC -- DB Rec: {db_record}')
                 return db_record
             else:
                 return False
