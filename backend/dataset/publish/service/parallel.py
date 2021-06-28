@@ -135,17 +135,17 @@ class ParallelService:
                     if derived_data:
                         new_records.append(derived_data)
             new_records.append(data)
-            for record in new_records:
-                if 'derived' not in record.keys():
-                    for key in record.keys():
+            for obj in new_records:
+                if 'derived' not in obj.keys():
+                    for key in obj.keys():
                         if key not in parallel_immutable_keys:
-                            if not isinstance(record[key], list):
-                                record[key] = [record[key]]
-                    record["datasetType"] = metadata["datasetType"]
-                    record["datasetId"] = [metadata["datasetId"]]
-                    record["derived"] = False
-                    record["tags"] = self.get_tags(record)
-                insert_records.append(record)
+                            if not isinstance(obj[key], list):
+                                obj[key] = [obj[key]]
+                    obj["datasetType"] = metadata["datasetType"]
+                    obj["datasetId"] = [metadata["datasetId"]]
+                    obj["derived"] = False
+                    obj["tags"] = self.get_tags(obj)
+                insert_records.append(obj)
             return insert_records, insert_records
         except Exception as e:
             log.exception(e)
@@ -165,10 +165,15 @@ class ParallelService:
             return None
 
     def enrich_duplicate_data(self, data, record, metadata):
-        db_record = record
-        is_derived = db_record["derived"]
+        db_record = {}
+        for key in record.keys():
+            db_record[key] = record[key]
+        is_derived = record["derived"]
         if is_derived:
             log.info(f'REC -- Derived: {is_derived}')
+            log.info(f'REC -- Rec: {record}')
+            log.info(f'REC -- Data: {data}')
+            log.info(f'REC -- metadata: {metadata}')
             for key in data.keys():
                 if key in parallel_updatable_keys:
                     db_record[key] = data[key]
@@ -180,10 +185,7 @@ class ParallelService:
                         db_record[key] = data[key]
             db_record["derived"] = False
             db_record["tags"] = self.get_tags(db_record)
-            log.info(f'REC -- Rec: {record}')
-            log.info(f'REC -- Data: {data}')
-            log.info(f'REC -- metadata: {metadata}')
-            log.info(f'REC -- DB Rec: {db_record}')
+            log.info(f'REC -- DBRec: {db_record}')
             return db_record
         else:
             found = False
