@@ -45,6 +45,8 @@ asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "licen
 
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage",
                            "targetLanguage", "datasetType"]
+parallel_updatable_keys = ["alignmentScore"]
+
 parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
 parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain",
                                "collectionMethod", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash",

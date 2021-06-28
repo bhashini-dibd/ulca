@@ -6,7 +6,7 @@ import uuid
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, user_mode_pseudo, \
-    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel, threads_threshold
+    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel, parallel_updatable_keys
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -167,18 +167,32 @@ class ParallelService:
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = record
         if db_record["derived"]:
+            log.info(f'REC -- Derived')
             for key in data.keys():
                 if key not in parallel_immutable_keys:
+                    log.info(f'REC -- key: {key}')
                     if not isinstance(db_record[key], list):
+                        log.info(f'REC -- LIST')
                         db_record[key] = [data[key]]
                     else:
                         db_record[key] = data[key]
+                elif key in parallel_updatable_keys:
+                    db_record[key] = data[key]
             db_record["derived"] = False
             db_record["tags"] = self.get_tags(db_record)
+            log.info(f'REC -- Rec: {record}')
+            log.info(f'REC -- Data: {data}')
+            log.info(f'REC -- DB Rec: {db_record}')
             return db_record
         else:
+            log.info(f'REC -- Not Derived')
             found = False
             for key in data.keys():
+                log.info(f'REC -- key: {key}')
+                if key in parallel_updatable_keys:
+                    found = True
+                    db_record[key] = data[key]
+                    continue
                 if key not in parallel_immutable_keys:
                     if key not in db_record.keys():
                         found = True
@@ -193,9 +207,19 @@ class ParallelService:
                             if data[key] not in db_record[key]:
                                 found = True
                                 db_record[key].append(data[key])
+                        else:
+                            if db_record[key] != data[key]:
+                                found = True
+                                db_record[key] = [db_record[key]]
+                                db_record[key].append(data[key])
+                            else:
+                                db_record[key] = [db_record[key]]
             if found:
                 db_record["datasetId"].append(metadata["datasetId"])
                 db_record["tags"] = self.get_tags(record)
+                log.info(f'REC -- Rec: {record}')
+                log.info(f'REC -- Data: {data}')
+                log.info(f'REC -- DB Rec: {db_record}')
                 return db_record
             else:
                 return False
