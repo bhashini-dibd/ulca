@@ -166,8 +166,9 @@ class ParallelService:
 
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = record
-        if db_record["derived"]:
-            log.info(f'REC -- Derived')
+        is_derived = db_record["derived"]
+        if is_derived:
+            log.info(f'REC -- Derived: {is_derived}')
             for key in data.keys():
                 if key in parallel_updatable_keys:
                     db_record[key] = data[key]
@@ -181,6 +182,7 @@ class ParallelService:
             db_record["tags"] = self.get_tags(db_record)
             log.info(f'REC -- Rec: {record}')
             log.info(f'REC -- Data: {data}')
+            log.info(f'REC -- metadata: {metadata}')
             log.info(f'REC -- DB Rec: {db_record}')
             return db_record
         else:
