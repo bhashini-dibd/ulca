@@ -40,6 +40,7 @@ class ParallelService:
                     if isinstance(result[0], list):
                         if metadata["userMode"] != user_mode_pseudo:
                             repo.insert(result[0])
+                            count += len(result[0])
                             metrics.build_metric_event(result[0], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif isinstance(result[0], str):
@@ -54,8 +55,7 @@ class ParallelService:
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-                log.info(f'Done!')
-            log.info(f'Parallel - {metadata["serviceRequestNumber"]} -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
+            log.info(f'Parallel - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading Parallel dataset!!", "status": "FAILED"}
