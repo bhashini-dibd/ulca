@@ -115,7 +115,7 @@ class ParallelService:
     def get_enriched_data(self, data, metadata):
         insert_records, new_records = [], []
         try:
-            records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]})
+            records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]}, False)
             if records:
                 for record in records:
                     if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
@@ -127,11 +127,10 @@ class ParallelService:
                             return data, record
                     derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
                     if derived_data:
-                        log.info(f'REC -- Data: {data}')
-                        log.info(f'REC -- Record: {record}')
-                        log.info(f'REC -- Derived: {derived_data}')
                         new_records.append(derived_data)
             new_records.append(data)
+            if len(new_records) > 1:
+                log.info(f'REC -- {new_records}')
             for obj in new_records:
                 if 'derived' not in obj.keys():
                     for key in obj.keys():
@@ -148,9 +147,12 @@ class ParallelService:
             log.exception(e)
             return None
 
-    def get_dataset_internal(self, query):
+    def get_dataset_internal(self, query, all):
         try:
-            db_query = {"tags": {"$in": query["hash"]}}
+            if all:
+                db_query = {"tags": {"$all": query["hash"]}}
+            else:
+                db_query = {"tags": {"$in": query["hash"]}}
             exclude = {"_id": False}
             data = repo.search_internal(db_query, exclude, None, None)
             if data:
@@ -167,8 +169,6 @@ class ParallelService:
             db_record[key] = record[key]
         is_derived = record["derived"]
         if is_derived:
-            log.info(f'REC -- Derived')
-            log.info(f'REC -- Record: {record}')
             for key in data.keys():
                 if key in parallel_updatable_keys:
                     db_record[key] = data[key]
@@ -181,7 +181,6 @@ class ParallelService:
             db_record["derived"] = False
             db_record["datasetId"] = [metadata["datasetId"]]
             db_record["tags"] = self.get_tags(db_record)
-            log.info(f'REC -- db_record: {db_record}')
             return db_record
         else:
             found = False
@@ -212,12 +211,9 @@ class ParallelService:
                             else:
                                 db_record[key] = [db_record[key]]
             if found:
-                log.info(f'REC -- No Derived')
-                log.info(f'REC -- Record: {record}')
                 db_record["datasetId"].append(metadata["datasetId"])
                 db_record["derived"] = False
                 db_record["tags"] = self.get_tags(record)
-                log.info(f'REC -- db_record: {db_record}')
                 return db_record
             else:
                 return False
@@ -245,6 +241,9 @@ class ParallelService:
                                 "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["sourceTextHash"],
                             "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
         if not derived_data:
+            return None
+        dup = self.get_dataset_internal({"hash": [derived_data["sourceTextHash"], derived_data["targetTextHash"]]}, True)
+        if dup:
             return None
         for key in data.keys():
             if key not in parallel_immutable_keys:
