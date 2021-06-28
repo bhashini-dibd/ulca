@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import { withStyles, Typography, MuiThemeProvider, Paper, Button } from "@material-ui/core";
 import ChartStyles from "../../styles/Dashboard";
-import { ResponsiveContainer, BarChart, Bar, Cell, CartesianGrid, XAxis,LabelList, YAxis, Tooltip,} from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, Cell, CartesianGrid, XAxis,Label,LabelList, YAxis, Tooltip,} from 'recharts';
 import Select from 'react-select';
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import FetchLanguageDataSets from "../../../redux/actions/api/Dashboard/languageDatasets";
@@ -161,13 +161,14 @@ const ChartRender = (props) => {
 	    }
 
 	const handleSelectChange = (dataSet, event, filter, page) =>{
-
+		debugger
+		console.log(selectedOption, dataSet)
 		setSelectedOption( dataSet)
 		switch (dataSet.value) {
 			case 'parallel-corpus':
 				if(page===0){
 					setTitle("Number of parallel sentences per language with English")
-					fetchChartData(dataSet.value, "languagePairs", [])
+					selectedOption.value!==dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
 					
 				}else if(page===1){
 					setTitle( `English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label }  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
@@ -182,7 +183,7 @@ const ChartRender = (props) => {
 				 break;
 			case 'asr-corpus':
 				if(page===0){
-					fetchChartData(dataSet.value, "languagePairs", [])
+					selectedOption.value!==dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
 					setTitle("Number of audio hours per language")
 				}else if(page===1){
 					setTitle(`Number of audio hours in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label } - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
@@ -194,7 +195,7 @@ const ChartRender = (props) => {
 			case 'ocr-corpus':
 				
 				if(page===0){
-					fetchChartData(dataSet.value, "languagePairs", [])
+					selectedOption.value!==dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
 					setTitle("Number of images per script")
 				}else if(page===1){
 					setTitle(`Number of images per script in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label } - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
@@ -240,29 +241,32 @@ const ChartRender = (props) => {
 					<Typography value="" variant="h6"> {title} </Typography>
 				</div>
 				<div className={classes.title}>
-				<ResponsiveContainer width = "95%" height = {550}>
-					<BarChart width = {900} height 	= 	{550} data={DashboardReport} fontSize="14px" fontFamily="Lato" maxBarSize = {100} >
+				<ResponsiveContainer width = "95%" height = {550} >
+					<BarChart width = {900} height 	= 	{350} data={DashboardReport} fontSize="14px" fontFamily="Lato" maxBarSize = {100} >
+						
 						<XAxis 	dataKey 	= 	"label"
 							// textAnchor	=	{isMobile ? "end" : "middle"}
 							// tick		=	{{ angle: isMobile ? -60 : 0 }} 
 							// height		=	{isMobile ? 100 : 60}
 							textAnchor	=	{"end"}
-							tick		=	{{ angle:-30}} 
+							tick		=	{{ angle:-30, marginTop: "8px"}} 
 							height		=	{130}
 							interval	=	{0}
 							position	=	"insideLeft"
-							 axisLine={false}
-						/>
-						<YAxis type="number" dx	=	{0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact"}).format(value)} />
+						>
+							</XAxis>
+						<YAxis padding={{ top: 10 }} tickInterval={10} allowDecimals={false} type="number" dx	=	{0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact"}).format(value)} />
 
-						<CartesianGrid horizontal = {true} vertical = {false} textAnchor = {"middle"} />
+						
 						<Tooltip fontFamily="Lato" formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{fill: 'none'}}/>
-						<Bar margin={{ top: 20, left: 0, right: 0, bottom: 0 }} dataKey = "value" cursor ="pointer"  radius = {[4, 4, 0, 0]} maxBarSize = {65} onClick={(event) => { handleOnClick(page + 1, event) }}>
+						<Bar margin={{ top: 40, left: 20, right: 20, bottom: 20 }}  dataKey = "value" cursor ="pointer"  radius = {[8, 8, 0, 0]} maxBarSize = {65} onClick={(event) => { handleOnClick(page + 1, event) }}>
 						<LabelList
+						formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{fill: 'none'}}
                     position="top"
                     dataKey="value"
                     fill="black"
-                  />
+					/>
+					
 							{
 								DashboardReport.length > 0 && DashboardReport.map((entry, index) => {
 									const color 	= 	colors[index < 9 ? index : index % 10]
