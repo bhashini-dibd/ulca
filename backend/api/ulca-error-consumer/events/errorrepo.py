@@ -9,8 +9,17 @@ log = logging.getLogger('file')
 mongo_instance = None
 
 class ErrorRepo:
+    
     def __init__(self):
-        pass
+        client = pymongo.MongoClient(ulca_db_cluster)
+        mongo_instance = client[error_db][error_collection]
+        try:
+            mongo_instance.create_index('serviceRequestNumber')
+        except pymongo.errors.DuplicateKeyError:
+            log.info("duplicate key, ignoring")
+        except Exception as e:
+            log.exception(f"Exception on index creation :{e}")
+        
 
     def instantiate(self):
         global mongo_instance

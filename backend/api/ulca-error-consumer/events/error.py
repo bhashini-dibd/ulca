@@ -22,7 +22,6 @@ class ErrorEvent:
     def __init__(self):
         pass
 
-
     def write_error(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
@@ -61,11 +60,12 @@ class ErrorEvent:
     def get_error_report(self, srn, internal):
         query = {"serviceRequestNumber": srn}
         exclude = {"_id": False}
+        log.info(f'Search for error reports of SRN -- {srn} from db started')
         error_records = error_repo.search(query, exclude, None, None)
+        log.info(f'Search for error reports of SRN -- {srn} from db completed')
         if internal:
             return error_records
         try:
-            log.info(f'Searching for error report of SRN -- {srn}')
             if error_records:
                 errors, error_rec = [], None
                 for error in error_records:
