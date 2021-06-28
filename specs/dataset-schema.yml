@@ -6,7 +6,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.0
+  version: 0.7.0
 servers:
   - url: /ulca
 paths: {}
@@ -554,6 +554,27 @@ components:
           type: number
           description: the alignment score between sourceText and targetText
 
+    CollectionDetailsAutoAlignedFromParallelDocs:
+      type: object
+      description: auto-aligned-from-parallel-docs collection details
+      required:
+        - alignmentTool
+      properties:
+        alignmentTool:
+          type: string
+          description: name of the alignment tool
+          example: "LaBSE"
+          enum:
+            - 'LaBSE'
+            - 'LASER'
+        alignmentToolVersion:
+          type: string
+          description: alignment tool version
+          example: "LaBSE version 3.0"
+        alignmentScore:
+          type: number
+          description: the alignment score between sourceText and targetText
+
     CollectionDetailsManualAligned:
       type: object
       description: manual aligned collection details. The pair was mapped manually from existing parallel documents. 
@@ -655,6 +676,7 @@ components:
             maxItems: 10
             enum:
               - auto-aligned
+              - auto-aligned-from-parallel-docs
               - manual-aligned
               - machine-translated
               - machine-translated-post-edited
@@ -662,6 +684,7 @@ components:
         collectionDetails:
           oneOf:
             - $ref: '#/components/schemas/CollectionDetailsAutoAligned'
+            - $ref: '#/components/schemas/CollectionDetailsAutoAlignedFromParallelDocs'
             - $ref: '#/components/schemas/CollectionDetailsManualAligned'
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslated'
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslatedPostEdited'
