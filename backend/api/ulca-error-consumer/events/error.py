@@ -24,21 +24,6 @@ class ErrorEvent:
     def __init__(self):
         pass
 
-    def create_error_event(self, error_list):
-        for error in error_list:
-            log.info(f'Publishing error event for srn -- {error["serviceRequestNumber"]}')
-            try:
-                event = {"eventType": "dataset-training", "messageType": "error", "code": publish_error_code.replace("XXX", error["code"]),
-                         "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),
-                         "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool,"datasetName": error["datasetName"],
-                         "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
-                if 'originalRecord' in error.keys():
-                    event["originalRecord"] = error["originalRecord"]
-                prod.produce(event, error_event_input_topic, None)
-            except Exception as e:
-                log.exception(e)
-                continue
-
     def publish_eof(self, eof_event):
         log.info(f'Publishing EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
         eof_event["tool"] = pt_publish_tool
@@ -105,20 +90,6 @@ class ErrorEvent:
         except Exception as e:
             log.exception(f'Exception while fetching error report: {e}', e)
             return []
-
-    # def upload_error_to_s3(self, error_record, srn):
-    #     file = error_record["internal_file"]
-    #     path = file.split("/")[2]
-    #     # if error_record["file"] != file:
-    #     #     utils.delete_from_s3(f'{aws_error_prefix}{path}')
-    #     log.info(f'Error List: {len(error_record["errors"])} for SRN -- {srn}')
-    #     self.write_to_csv(error_record["errors"], file, srn)
-    #     error_record["file"] = utils.upload_file_to_blob(file, f'{error_prefix}{path}')
-    #     error_record["uploaded"], error_record["errors"] = True, []
-    #     error_repo.update(error_record)
-    #     log.info(f'Error report uploaded to azure-blob for SRN -- {srn}')
-    #     os.remove(file)
-    #     return error_record
 
     def upload_error_to_object_store(self, error_record, srn):
         file = error_record["internal_file"]
