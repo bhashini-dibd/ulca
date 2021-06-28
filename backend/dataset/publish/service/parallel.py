@@ -167,6 +167,7 @@ class ParallelService:
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = record
         if db_record["derived"]:
+            log.info(f'REC -- Derived record!')
             for key in data.keys():
                 if key not in parallel_immutable_keys:
                     if not isinstance(record[key], list):
@@ -196,6 +197,9 @@ class ParallelService:
             if found:
                 db_record["datasetId"].append(metadata["datasetId"])
                 db_record["tags"] = self.get_tags(record)
+                log.info(f'REC -- DATA: {data}')
+                log.info(f'REC -- RECORD: {record}')
+                log.info(f'REC -- UPDATE Record: {db_record}')
                 return db_record
             else:
                 return False
