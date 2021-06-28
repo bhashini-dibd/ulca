@@ -19,6 +19,7 @@ import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/Searc
 import ActivateUser from "./ui/container/UserManagement/ActivateUser";
 import ActiveUser from "./ui/container/UserManagement/ActiveUser"
 import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/ReadymadeDataset";
+import TitleBar from "./ui/container/Dashboard/TitleBar";
 
 const PrivateRoute = ({ path, component: Component, authenticate, token, ...rest }) => {
   return (
@@ -140,6 +141,12 @@ export default function App() {
             path={`${process.env.PUBLIC_URL}/active-user`}
 
             component={ActiveUser}
+
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/title-bar`}
+
+            component={TitleBar}
 
           />
 
