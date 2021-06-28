@@ -43,9 +43,15 @@ class ParallelService:
                             count += len(result[0])
                             metrics.build_metric_event(result[0], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                        debug = {"s": record["sourceText"], 't': record["targetText"], 'sh': record["sourceTextHash"],
+                                 'th': record["targetTextHash"]}
+                        log.info(f'REC -- INSERT: {debug}')
                     elif isinstance(result[0], str):
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                         metrics.build_metric_event(result[1], metadata, None, True)
+                        debug = {"s": record["sourceText"], 't': record["targetText"], 'sh': record["sourceTextHash"],
+                                 'th': record["targetTextHash"]}
+                        log.info(f'REC -- UPDATE: {debug}')
                         updates += 1
                     else:
                         error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
