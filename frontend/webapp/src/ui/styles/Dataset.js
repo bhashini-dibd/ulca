@@ -1,5 +1,5 @@
 const DataSet = (theme) => ({
-    
+
     // paper: {
     //     padding: '5%',
     // },
@@ -12,17 +12,17 @@ const DataSet = (theme) => ({
     },
     radioGroup: {
         marginTop: '1vh',
-        
+
     },
 
-    divStyle:{
-        padding:"5% 10% 5% 10%"
+    divStyle: {
+        padding: "5% 10% 5% 10%"
     },
 
     // typography:{fontSize:"1.1rem"},
 
     updateBtn: {
-        
+
         display: 'flex',
         justifyItems: 'center',
         marginLeft: 'auto',
@@ -102,7 +102,7 @@ const DataSet = (theme) => ({
         display: "block"
     },
     submissionIcon: {
-        
+
         "@media (max-width:1120px)": {
             display: 'none'
         }
@@ -132,7 +132,7 @@ const DataSet = (theme) => ({
     },
     innerButton: {
         margin: '0 2% 2% 0',
-      //  backgroundColor:'red'
+        //  backgroundColor:'red'
     },
     subHeader: {
         marginBottom: '3%'
@@ -147,66 +147,66 @@ const DataSet = (theme) => ({
         alignItems: "center",
         flexDirection: "column",
         justifyContent: "center",
-      },
+    },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
-    searchResult:{
+    searchResult: {
         textAlign: 'center',
         justifyContent: "center",
         flexDirection: "column",
         display: "flex",
-        
+
         verticalAlign: "middle",
         "@media (max-width:850px)": {
-          minWidth: "270px",
-          width: "85%",
+            minWidth: "270px",
+            width: "85%",
         },
 
     },
-    reqPaper:{
+    reqPaper: {
         // padding:'10%',
         // width:'60%'
         marginTop: '25%'
     },
-    alignTypo:{
+    alignTypo: {
         textAlign: 'center',
     },
-    yourSearchQuery:{
+    yourSearchQuery: {
         marginBottom: '2%'
     },
-    serReqNoTypo:{
+    serReqNoTypo: {
         marginBottom: '7%'
     },
-    mySearches:{
-      marginTop:'1%',
-      width: '60%'
+    mySearches: {
+        marginTop: '1%',
+        width: '60%'
     },
-    downloadDiv:{
-        marginTop:'4%'
+    downloadDiv: {
+        marginTop: '4%'
     },
-    downloadPaper:{
-        marginTop:'4%',
-        padding:'5% 14% 2% 4%',
-        width:'70%',
+    downloadPaper: {
+        marginTop: '4%',
+        padding: '5% 14% 2% 4%',
+        width: '70%',
         minHeight: "3.5rem"
     },
-    downloadBtnDiv:{
-        margin:'10%',
-        marginLeft:"0",
-        display:"flex",
-        flexDirection:"row",
-        
+    downloadBtnDiv: {
+        margin: '10%',
+        marginLeft: "0",
+        display: "flex",
+        flexDirection: "row",
+
     },
-    searchResultFinal:{
-        width:"90%",
-        marginTop:"-20%"
+    searchResultFinal: {
+        width: "90%",
+        marginTop: "-20%"
     },
-    downloadBtn:{
-        
-        marginRight:'2%'
+    downloadBtn: {
+
+        marginRight: '2%'
     },
-    
-    blurOut:{
+
+    blurOut: {
         zIndex: -2,
         opacity: '0.5'
     },
