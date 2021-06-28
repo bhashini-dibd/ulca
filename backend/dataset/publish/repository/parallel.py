@@ -23,11 +23,8 @@ class ParallelRepo:
             ulca_db.drop_collection(parallel_collection)
             ulca_col = ulca_db[parallel_collection]
             ulca_col.create_index([("tags", -1)])
-            ulca_col.create_index([("sourceLanguage", -1)])
-            ulca_col.create_index([("targetLanguage", -1)])
-            ulca_col.create_index([("sk", "hashed")])
             db_cli = client.admin
-            key = OrderedDict([("sk", "hashed")])
+            key = OrderedDict([("_id", "hashed")])
             db_cli.command({'shardCollection': f'{db}.{parallel_collection}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:

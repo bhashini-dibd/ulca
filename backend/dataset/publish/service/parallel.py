@@ -25,16 +25,12 @@ error_event = ErrorEvent()
 pt = ProcessTracker()
 metrics = MetricEvent()
 
-threads = []
-
-
 class ParallelService:
     def __init__(self):
         pass
 
     def load_parallel_dataset_single(self, request):
         try:
-            global threads
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
@@ -43,9 +39,7 @@ class ParallelService:
                 if result:
                     if isinstance(result[0], list):
                         if metadata["userMode"] != user_mode_pseudo:
-                            persist = threading.Thread(target=repo.insert, args=(result[0],))
-                            persist.start()
-                            threads.append(persist)
+                            repo.insert(result[0])
                             metrics.build_metric_event(result[0], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif isinstance(result[0], str):
@@ -60,11 +54,6 @@ class ParallelService:
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            if len(threads) == threads_threshold:
-                log.info(f'Waiting for {threads_threshold} threads to finish.....')
-                for thread in threads:
-                    thread.join()
-                threads = []
                 log.info(f'Done!')
             log.info(f'Parallel - {metadata["serviceRequestNumber"]} -- INPUT: 1, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
         except Exception as e:
@@ -146,13 +135,6 @@ class ParallelService:
                         if key not in parallel_immutable_keys:
                             if not isinstance(record[key], list):
                                 record[key] = [record[key]]
-                    src_lang, tgt_lang = record["sourceLanguage"], record["targetLanguage"]
-                    lang_map = {src_lang: record["sourceText"], tgt_lang: record["targetText"]}
-                    hashed_key = ''
-                    for key in sorted(lang_map.keys()):
-                        hashed_key = hashed_key + str(lang_map[key])
-                    record["hashedKey"] = str(hashlib.sha256(hashed_key.encode('utf-16')).hexdigest())
-                    record["sk"] = ','.join(map(str, sorted([src_lang, tgt_lang])))
                     record["datasetType"] = metadata["datasetType"]
                     record["datasetId"] = [metadata["datasetId"]]
                     record["derived"] = False

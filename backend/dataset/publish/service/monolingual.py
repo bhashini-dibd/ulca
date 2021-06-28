@@ -39,8 +39,6 @@ class MonolingualService:
                 if result:
                     if result[0] == "INSERT":
                         if metadata["userMode"] != user_mode_pseudo:
-                            '''persister = threading.Thread(target=repo.insert, args=([result[1]],))
-                            persister.start()'''
                             repo.insert([result[1]])
                             metrics.build_metric_event(result[1], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
