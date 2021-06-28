@@ -6,8 +6,7 @@ import threading
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import error_event_input_topic, publish_error_code, shared_storage_path, error_prefix, pt_publish_tool
-from kafkawrapper.producer import Producer
+from configs.configs import shared_storage_path, error_prefix, pt_publish_tool
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
 
@@ -15,7 +14,6 @@ from utils.datasetutils import DatasetUtils
 
 log = logging.getLogger('file')
 mongo_instance = None
-prod = Producer()
 error_repo = ErrorRepo()
 utils = DatasetUtils()
 
@@ -24,10 +22,6 @@ class ErrorEvent:
     def __init__(self):
         pass
 
-    def publish_eof(self, eof_event):
-        log.info(f'Publishing EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
-        eof_event["tool"] = pt_publish_tool
-        prod.produce(eof_event, error_event_input_topic, None)
 
     def write_error(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
