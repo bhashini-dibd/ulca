@@ -173,9 +173,7 @@ class ParallelService:
                     db_record[key] = data[key]
                     continue
                 if key not in parallel_immutable_keys:
-                    log.info(f'REC -- key: {key}')
                     if not isinstance(db_record[key], list):
-                        log.info(f'REC -- LIST')
                         db_record[key] = [data[key]]
                     else:
                         db_record[key] = data[key]
@@ -186,10 +184,8 @@ class ParallelService:
             log.info(f'REC -- DB Rec: {db_record}')
             return db_record
         else:
-            log.info(f'REC -- Not Derived')
             found = False
             for key in data.keys():
-                log.info(f'REC -- key: {key}')
                 if key in parallel_updatable_keys:
                     found = True
                     db_record[key] = data[key]
@@ -216,6 +212,7 @@ class ParallelService:
                             else:
                                 db_record[key] = [db_record[key]]
             if found:
+                log.info(f'REC -- Not Derived')
                 db_record["datasetId"].append(metadata["datasetId"])
                 db_record["tags"] = self.get_tags(record)
                 log.info(f'REC -- Rec: {record}')
