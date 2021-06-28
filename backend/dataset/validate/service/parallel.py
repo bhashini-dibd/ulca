@@ -4,7 +4,7 @@ from datetime import datetime
 from logging.config import dictConfig
 from kafkawrapper.producer import Producer
 from models.validation_pipeline import ValidationPipeline
-from configs.configs import validate_output_topic
+from configs.configs import validate_output_topic, ulca_dataset_topic_partitions
 from processtracker.processtracker import ProcessTracker
 from events.error import ErrorEvent
 
@@ -29,7 +29,7 @@ class ParallelValidate:
                 if res["status"] == "SUCCESS":
                     unique_hash = request["record"]["sourceTextHash"] + request["record"]["targetTextHash"]
                     partition_key = str(hashlib.sha256(unique_hash.encode('utf-16')).hexdigest())
-                    partition_no = int(partition_key[:3],16)%16
+                    partition_no = int(partition_key,16)%ulca_dataset_topic_partitions
                     prod.produce(request, validate_output_topic, partition_no)
                 else:
                     error = {"serviceRequestNumber": request["serviceRequestNumber"], "datasetType": request["datasetType"],
