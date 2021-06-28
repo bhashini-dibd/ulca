@@ -113,7 +113,7 @@ class ParallelService:
         return {"status": "SUCCESS", "total": total, "inserts": count, "updates": updates, "invalid": error_list}
 
     def get_enriched_data(self, data, metadata):
-        insert_records, new_records = [], set([])
+        insert_records, new_records = [], []
         try:
             records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]})
             if records:
@@ -130,8 +130,8 @@ class ParallelService:
                         log.info(f'REC -- Data: {data}')
                         log.info(f'REC -- Record: {record}')
                         log.info(f'REC -- Derived: {derived_data}')
-                        new_records.add(derived_data)
-            new_records.add(data)
+                        new_records.append(derived_data)
+            new_records.append(data)
             for obj in new_records:
                 if 'derived' not in obj.keys():
                     for key in obj.keys():
