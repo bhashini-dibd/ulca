@@ -43,15 +43,9 @@ class ParallelService:
                             count += len(result[0])
                             metrics.build_metric_event(result[0], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
-                        debug = {"s": record["sourceText"], 't': record["targetText"], 'sh': record["sourceTextHash"],
-                                 'th': record["targetTextHash"]}
-                        log.info(f'REC -- INSERT: {debug}')
                     elif isinstance(result[0], str):
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                         metrics.build_metric_event(result[1], metadata, None, True)
-                        debug = {"s": record["sourceText"], 't': record["targetText"], 'sh': record["sourceTextHash"],
-                                 'th': record["targetTextHash"]}
-                        log.info(f'REC -- UPDATE: {debug}')
                         updates += 1
                     else:
                         error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
@@ -119,7 +113,7 @@ class ParallelService:
         return {"status": "SUCCESS", "total": total, "inserts": count, "updates": updates, "invalid": error_list}
 
     def get_enriched_data(self, data, metadata):
-        insert_records, new_records = [], []
+        insert_records, new_records = [], set([])
         try:
             records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]})
             if records:
@@ -133,8 +127,11 @@ class ParallelService:
                             return data, record
                     derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
                     if derived_data:
-                        new_records.append(derived_data)
-            new_records.append(data)
+                        log.info(f'REC -- Data: {data}')
+                        log.info(f'REC -- Record: {record}')
+                        log.info(f'REC -- Derived: {derived_data}')
+                        new_records.add(derived_data)
+            new_records.add(data)
             for obj in new_records:
                 if 'derived' not in obj.keys():
                     for key in obj.keys():
@@ -170,6 +167,8 @@ class ParallelService:
             db_record[key] = record[key]
         is_derived = record["derived"]
         if is_derived:
+            log.info(f'REC -- Derived')
+            log.info(f'REC -- Record: {record}')
             for key in data.keys():
                 if key in parallel_updatable_keys:
                     db_record[key] = data[key]
@@ -182,6 +181,7 @@ class ParallelService:
             db_record["derived"] = False
             db_record["datasetId"] = [metadata["datasetId"]]
             db_record["tags"] = self.get_tags(db_record)
+            log.info(f'REC -- db_record: {db_record}')
             return db_record
         else:
             found = False
@@ -212,9 +212,12 @@ class ParallelService:
                             else:
                                 db_record[key] = [db_record[key]]
             if found:
+                log.info(f'REC -- No Derived')
+                log.info(f'REC -- Record: {record}')
                 db_record["datasetId"].append(metadata["datasetId"])
                 db_record["derived"] = False
                 db_record["tags"] = self.get_tags(record)
+                log.info(f'REC -- db_record: {db_record}')
                 return db_record
             else:
                 return False
