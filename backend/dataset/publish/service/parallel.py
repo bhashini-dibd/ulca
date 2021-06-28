@@ -53,9 +53,8 @@ class ParallelService:
                              "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
                              "serviceRequestNumber": metadata["serviceRequestNumber"],
                              "message": "This record has the same value for src and tgt!"})
-                        pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD",
-                                        "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                        "currentRecordIndex": metadata["currentRecordIndex"]})
+                        pt.update_task_details(
+                            {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     else:
                         error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
                                            "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
@@ -149,9 +148,6 @@ class ParallelService:
                     if derived_data:
                         new_records.append(derived_data)
             new_records.append(data)
-            if len(new_records) > 1:
-                log.info(f'REC -- {new_records}')
-                log.info(f'REC -- records - {records}')
             for obj in new_records:
                 if 'derived' not in obj.keys():
                     for key in obj.keys():
@@ -166,7 +162,7 @@ class ParallelService:
             return insert_records, insert_records
         except Exception as e:
             log.exception(e)
-            return None
+            return "INVALID", data
 
     def get_dataset_internal(self, query, all):
         try:
