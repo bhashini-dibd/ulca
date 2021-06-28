@@ -80,6 +80,12 @@ const SearchAndDownloadRecords = (props) => {
 
             let target = data[0].targetLanguage ? getLanguageLabel(data[0].targetLanguage) : getLanguageLabel(data[0].sourceLanguage)
             let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
+            let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
+            let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
+           console.log(domain, collectionMethod, data[0])
+            setFilterBy({
+                ...filterBy, domain, collectionMethod
+            })
             setLanguagePair({ target, source })
             //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
             setDatasetType({ [data[0].datasetType]: true })
@@ -102,9 +108,6 @@ const SearchAndDownloadRecords = (props) => {
         previousUrl.current = params;
     })
 
-    const getValueForLabel = (label) => {
-        return Language.filter(val => val.label === label)[0]
-    }
 
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
@@ -220,12 +223,27 @@ const SearchAndDownloadRecords = (props) => {
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
+    const getValueForLabel = (label) => {
+        console.log(label, 'hiii')
+        console.log(Language.filter(val => val.label === label)[0])
+        return Language.filter(val => val.label === label)[0]
+
+    }
+    const getFilterValueForLabel = (data, label) => {
+        //  if (data === 'domain') {
+        return (FilterBy[data].filter(val => val.label === label)[0])
+        //  }
+        // else if (data === 'collectionMethod') {
+        //     return (FilterBy.collectionMethod.filter(val => val.label === label)[0])
+        // }
+    }
+
     const handleSubmitBtn = () => {
         let tgt = languagePair.target.map(trgt => trgt.value)
         //let domain = filterBy.domain.map(domain => domain.value)
         //let collectionMethod = filterBy.collectionMethod.map(method => method.value)
-        let domain = filterBy.domain && [filterBy.domain]
-        let collectionMethod = filterBy.collectionMethod && [filterBy.collectionMethod]
+        let domain = filterBy.domain && [getFilterValueForLabel('domain', filterBy.domain).value]
+        let collectionMethod = filterBy.collectionMethod && [getFilterValueForLabel('collectionMethod', filterBy.collectionMethod).value]
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
                 let source = getValueForLabel(languagePair.source).value
@@ -284,22 +302,35 @@ const SearchAndDownloadRecords = (props) => {
 
         )
     }
+    // const renderFilterByfield = (id, label, value, filter) => {
+    //     return (
+    //         <TextField className={classes.subHeader}
+    //             fullWidth
+    //             select
+    //             id={id}
+    //             label={label}
+    //             value={value}
+    //             onChange={(event) => handleFilterByChange(event.target.value, id)}
+    //         >
+    //             {filter.map((option) => (
+    //                 <MenuItem key={option.value} value={option.value}>
+    //                     {option.label}
+    //                 </MenuItem>
+    //             ))}
+    //         </TextField>
+    //     )
+    // }
     const renderFilterByfield = (id, label, value, filter) => {
+        let filterByOptions = FilterBy[id].map(data => data.label)
         return (
-            <TextField className={classes.subHeader}
-                fullWidth
-                select
+            <Autocomplete
+                value={filterBy[id] ? filterBy[id] : null}
                 id={id}
-                label={label}
-                value={value}
-                onChange={(event) => handleFilterByChange(event.target.value, id)}
-            >
-                {filter.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                    </MenuItem>
-                ))}
-            </TextField>
+                options={filterByOptions}
+                onChange={(event, data) => handleFilterByChange(data, id)}
+                renderInput={(params) => <TextField fullWidth {...params} label={label} variant="standard"
+                />}
+            />
         )
     }
     const renderTexfield = (id, label, value, options, filter) => {
@@ -388,16 +419,16 @@ const SearchAndDownloadRecords = (props) => {
                                 {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
                             </div>
                             <div className={classes.subHeader}>
-                            <MultiAutocomplete
-                                id="language-target"
-                                options={getTargetLang()}
-                                filter='target'
-                                value={languagePair.target}
-                                handleOnChange={handleLanguagePairChange}
-                                label={getLabel()}
-                                error={tgtError}
-                                helperText="This field is mandatory"
-                            />
+                                <MultiAutocomplete
+                                    id="language-target"
+                                    options={getTargetLang()}
+                                    filter='target'
+                                    value={languagePair.target}
+                                    handleOnChange={handleLanguagePairChange}
+                                    label={getLabel()}
+                                    error={tgtError}
+                                    helperText="This field is mandatory"
+                                />
                             </div>
                             <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
                             <Grid container spacing={1}>
