@@ -43,10 +43,19 @@ class ParallelService:
                             count += len(result[0])
                             metrics.build_metric_event(result[0], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
-                    elif isinstance(result[0], str):
+                    elif result[0] == "UPDATE":
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                         metrics.build_metric_event(result[1], metadata, None, True)
                         updates += 1
+                    elif result[0] == "INVALID":
+                        error_list.append(
+                            {"record": result[0], "originalRecord": result[0], "code": "INVALID_RECORD",
+                             "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
+                             "serviceRequestNumber": metadata["serviceRequestNumber"],
+                             "message": "This record has the same value for src and tgt!"})
+                        pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD",
+                                        "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                        "currentRecordIndex": metadata["currentRecordIndex"]})
                     else:
                         error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
                                            "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
@@ -85,11 +94,20 @@ class ParallelService:
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                             metrics.build_metric_event(result[0], metadata, None, None)
-                        elif isinstance(result[0], str):
+                        elif result[0] == "UPDATE":
                             pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                             metrics.build_metric_event(result[1], metadata, None, True)
                             updates += 1
+                        elif result[0] == "INVALID":
+                            error_list.append(
+                                {"record": result[0], "originalRecord": result[0], "code": "INVALID_RECORD",
+                                 "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
+                                 "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                 "message": "This record has the same value for src and tgt!"})
+                            pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD",
+                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                            "currentRecordIndex": metadata["currentRecordIndex"]})
                         else:
                             error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
                                                "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
@@ -115,6 +133,8 @@ class ParallelService:
     def get_enriched_data(self, data, metadata):
         insert_records, new_records = [], []
         try:
+            if data["sourceTextHash"] == data["targetTextHash"]:
+                return "INVALID", data
             records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]}, False)
             if records:
                 for record in records:
@@ -131,6 +151,7 @@ class ParallelService:
             new_records.append(data)
             if len(new_records) > 1:
                 log.info(f'REC -- {new_records}')
+                log.info(f'REC -- records - {records}')
             for obj in new_records:
                 if 'derived' not in obj.keys():
                     for key in obj.keys():
