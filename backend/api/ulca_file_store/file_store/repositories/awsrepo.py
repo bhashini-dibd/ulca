@@ -1,8 +1,8 @@
 import logging
 from utilities.response import post_error
 import boto3 
-from config import aws_access_key, aws_secret_key, aws_bucket_name,aws_link_prefix
-
+from config import aws_access_key, aws_secret_key, aws_bucket_name,aws_link_prefix,download_folder
+import os
 
 log = logging.getLogger('file')
 
@@ -23,9 +23,11 @@ class AwsFileRepo():
 
     def download_file_from_s3(self, s3_file_name):
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
+        output_filepath = os.path.join( download_folder, s3_file_name)
         try:
-            response = s3_client.download_file(aws_bucket_name, s3_file_name)
-            return response
+            log.info("\nDownloading file to \n\t" + output_filepath)
+            s3_client.download_file(aws_bucket_name, s3_file_name,output_filepath)
+            return output_filepath
         except Exception as e:
             log.exception(e)
             return post_error("Service Exception",f"Exception occurred:{e}")

@@ -22,4 +22,6 @@ azure_container_name    =   os.environ.get('ULCA_AZURE_FILE_CONTAINER',"containe
 azure_account_name      =   os.environ.get('ULCA_AZURE_ACCOUNT_NAME', "account_name")
 azure_link_prefix       =   f'https://{azure_account_name}.blob.core.windows.net/{azure_container_name}/'
 
+download_folder        =   'downloads/'
+
 
