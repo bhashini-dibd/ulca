@@ -15,6 +15,8 @@ import Snackbar from '../../../components/common/Snackbar';
 import BreadCrum from '../../../components/common/Breadcrum';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import SearchAndDownload from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
+import {PageChange} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
+import C from "../../../../redux/actions/constants";
 import { useDispatch, useSelector } from "react-redux";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import { useState, useEffect, useRef } from 'react';
@@ -32,6 +34,7 @@ const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
     const urlMySearch = UrlConfig.mySearches;
+    const dispatch                  = useDispatch();
     const param = useParams();
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
@@ -200,6 +203,7 @@ const SearchAndDownloadRecords = (props) => {
             .then(async res => {
                 if (res.ok) {
                     let response = await res.json()
+                    dispatch(PageChange(0, C.SEARCH_PAGE_NO));
                     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.serviceRequestNumber}`)
                     handleSnackbarClose()
 

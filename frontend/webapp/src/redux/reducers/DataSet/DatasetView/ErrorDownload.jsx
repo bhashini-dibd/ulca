@@ -17,6 +17,10 @@ const reducer = (state = initialState, action) => {
             return {
                 ...initialState
             }
+            case C.PAGE_CHANGE:
+                return {
+                    ...initialState
+                }
         default:
             return {
                 ...state

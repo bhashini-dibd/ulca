@@ -7,17 +7,19 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
+import {PageChange, RowChange} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
 import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import Dialog from "../../../components/common/Dialog"
 import {Cached, DeleteOutline, VerticalAlignTop} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import { useParams } from "react-router";
-
+import C from "../../../../redux/actions/constants";
 const ContributionList = (props) => {
 
         const history                 = useHistory();
         const dispatch                = useDispatch(ClearReport);
         const myContributionReport    = useSelector( (state) => state.myContributionReport);
+        const PageInfo                = useSelector((state) => state.pageChangeDetails);
         const [open, setOpen]         = useState(false)
         const [message, setMessage]   = useState("Do you want to delete")
         const [title, setTitle]       = useState("Delete")
@@ -86,6 +88,11 @@ const ContributionList = (props) => {
         const handleDialogSubmit = () =>{
 
         }
+
+        const processTableClickedNextOrPrevious = (page, sortOrder) => {
+                dispatch(PageChange(page, C.PAGE_CHANGE));
+               
+                }
 
 
     
@@ -193,6 +200,23 @@ const ContributionList = (props) => {
                 filter          : true,
                 viewColumns     : false,
                 selectableRows  : "none",
+                rowsPerPage:PageInfo.count,
+                page: PageInfo.page,
+                onTableChange: (action, tableState) => {
+                        switch (action) {
+                          case "changePage":
+                            processTableClickedNextOrPrevious(
+                              tableState.page
+                            );
+                            break;
+                            case "changeRowsPerPage":
+                                dispatch(RowChange(tableState.rowsPerPage , C.ROW_COUNT_CHANGE))
+                                break;
+                          default:
+                        }
+                      },
+
+                
         };
 
         const { classes } = props;
