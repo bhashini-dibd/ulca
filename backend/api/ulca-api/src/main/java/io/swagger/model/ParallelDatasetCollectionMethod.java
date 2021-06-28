@@ -4,8 +4,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "specifies how the dataset is curated.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-28T14:32:05.368Z[GMT]")
 
 
 public class ParallelDatasetCollectionMethod   {
@@ -27,6 +25,10 @@ public class ParallelDatasetCollectionMethod   {
    */
   public enum CollectionDescriptionEnum {
     AUTO_ALIGNED("auto-aligned"),
+    
+    AUTO_ALIGNED_FROM_PARALLEL_DOCS("auto-aligned-from-parallel-docs"),
+    
+    MANUAL_ALIGNED("manual-aligned"),
     
     MACHINE_TRANSLATED("machine-translated"),
     
@@ -56,20 +58,7 @@ public class ParallelDatasetCollectionMethod   {
       return null;
     }
   }
-  
-  
-  public ParallelDatasetCollectionMethod() {
-	super();
-}
-
-public ParallelDatasetCollectionMethod(@Valid List<CollectionDescriptionEnum> collectionDescription,
-		OneOfParallelDatasetCollectionMethodCollectionDetails collectionDetails) {
-	super();
-	this.collectionDescription = collectionDescription;
-	this.collectionDetails = collectionDetails;
-}
-
-@JsonProperty("collectionDescription")
+  @JsonProperty("collectionDescription")
   @Valid
   private List<CollectionDescriptionEnum> collectionDescription = new ArrayList<CollectionDescriptionEnum>();
 

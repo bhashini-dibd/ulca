@@ -15,8 +15,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import io.swagger.model.CollectionDetailsAutoAligned;
+import io.swagger.model.CollectionDetailsAutoAlignedFromParallelDocs;
 import io.swagger.model.CollectionDetailsMachineTranslated;
 import io.swagger.model.CollectionDetailsMachineTranslatedPostEdited;
+import io.swagger.model.CollectionDetailsManualAligned;
 import io.swagger.model.CollectionDetailsManualTranslated;
 import io.swagger.model.DatasetType;
 import io.swagger.model.Domain;
@@ -258,7 +260,37 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 								parallelDatasetCollectionMethod.setCollectionDetails(collectionDetailsAutoAligned);
 								parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
 							}
+						}else {
+							errorList.add("alignmentTool key has to be present");	
 						}
+						
+						break;
+					case AUTO_ALIGNED_FROM_PARALLEL_DOCS:
+						if(node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {
+							String alignmentTool = node.get("collectionMethod").get("collectionDetails").get("alignmentTool").asText();
+							if(CollectionDetailsAutoAlignedFromParallelDocs.AlignmentToolEnum.fromValue(alignmentTool) == null) {
+								errorList.add("alignmentTool is not one of defined alignmentTool");	
+							}else {
+								CollectionDetailsAutoAlignedFromParallelDocs collectionDetailsAutoAlignedFromParallelDocs = mapper.readValue(
+										node.get("collectionMethod").get("collectionDetails").toPrettyString(),CollectionDetailsAutoAlignedFromParallelDocs.class);
+							
+								parallelDatasetCollectionMethod.setCollectionDetails(collectionDetailsAutoAlignedFromParallelDocs);
+								parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
+							}
+						}else {
+							errorList.add("alignmentTool key has to be present");
+						}
+						
+						
+						break;
+						
+					case MANUAL_ALIGNED:
+						
+						CollectionDetailsManualAligned collectionDetailsManualAligned = mapper.readValue(
+								node.get("collectionMethod").get("collectionDetails").toPrettyString(),
+								CollectionDetailsManualAligned.class);
+						parallelDatasetCollectionMethod.setCollectionDetails(collectionDetailsManualAligned);
+						parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
 						
 						break;
 
