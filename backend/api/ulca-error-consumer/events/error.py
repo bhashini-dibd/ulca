@@ -92,17 +92,21 @@ class ErrorEvent:
             return []
 
     def upload_error_to_object_store(self, error_record, srn):
-        file = error_record["internal_file"]
-        log.info(f'Error List: {len(error_record["errors"])} for SRN -- {srn}')
-        self.write_to_csv(error_record["errors"], file, srn)
-        file_name = error_record["internal_file"].replace("/opt/","")
-        error_record["file"] = utils.file_store_upload_call(file,file_name,error_prefix)
-        error_record["uploaded"], error_record["errors"] = True, []
-        persister = threading.Thread(target=error_repo.update, args=(error_record,))
-        persister.start()
-        log.info(f'Error report uploaded to object store for SRN -- {srn}')
-        os.remove(file)
-        return error_record
+        try:
+            file = error_record["internal_file"]
+            log.info(f'Error List: {len(error_record["errors"])} for SRN -- {srn}')
+            self.write_to_csv(error_record["errors"], file, srn)
+            file_name = error_record["internal_file"].replace("/opt/","")
+            error_record["file"] = utils.file_store_upload_call(file,file_name,error_prefix)
+            error_record["uploaded"], error_record["errors"] = True, []
+            persister = threading.Thread(target=error_repo.update, args=(error_record,))
+            persister.start()
+            log.info(f'Error report uploaded to object store for SRN -- {srn}')
+            os.remove(file)
+            return error_record
+        except Exception as e:
+            log.exception(f'Exception while ingesting errors to object store: {e}', e)
+            return []
 
 # Log config
 dictConfig({

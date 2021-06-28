@@ -1,6 +1,9 @@
 import os
 
+DEBUG           =    False
+ENABLE_CORS     =   False
 
+context_path            =   os.environ.get('ERROR_CONSUMER_CONTEXT_PATH','/ulca/error-consumer')
 app_host                =   os.environ.get('ULCA_ERROR_CONSUMER_HOST', '0.0.0.0')
 app_port                =   os.environ.get('ULCA_ERROR_CONSUMER_PORT', 5001)
 

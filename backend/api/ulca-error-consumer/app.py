@@ -1,11 +1,23 @@
 #!/bin/python
+from flask import Flask
 import logging
 from multiprocessing import Process
-from api.apis import ulca_error_consumer
 from kafkawrapper.errorconsumer import error_consume
-from configs.configs import app_host, app_port
+from configs.configs import app_host, app_port,ENABLE_CORS,context_path
+from flask.blueprints import Blueprint
+from flask_cors import CORS
+import routes
 
 log = logging.getLogger('file')
+
+ulca_error_consumer = Flask(__name__)
+
+if ENABLE_CORS:
+    cors    =   CORS(ulca_error_consumer, resources={r"/api/*": {"origins": "*"}})
+
+for blueprint in vars(routes).values():
+    if isinstance(blueprint, Blueprint):
+        ulca_error_consumer.register_blueprint(blueprint, url_prefix=context_path)
 
 
 # Starts the kafka consumer in a different thread
@@ -19,5 +31,6 @@ def start_consumer():
 
 
 if __name__ == '__main__':
+    log.info("Error consumer service started <<<<<<<<<<<<>>>>>>>>>>>")
     start_consumer()
     ulca_error_consumer.run(host=app_host, port=app_port, threaded=True)
