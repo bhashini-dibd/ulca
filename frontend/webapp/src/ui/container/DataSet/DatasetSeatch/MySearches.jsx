@@ -5,6 +5,8 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MySearchReport from "../../../../redux/actions/api/DataSet/DatasetSearch/MySearches";
+import {PageChange, RowChange} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
+import C from "../../../../redux/actions/constants";
 import { useDispatch, useSelector } from "react-redux";
 import {Cached} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
@@ -13,6 +15,7 @@ import {  useHistory } from "react-router-dom";
 const MySearches = (props) => {
 
         const detailedReport            =       useSelector((state) => state.mySearchReport);
+        const PageInfo            =       useSelector((state) => state.searchPageDetails);
         const dispatch                  = useDispatch();
         const history                   = useHistory();
         const [page, setPage]           = useState(0);
@@ -21,7 +24,7 @@ const MySearches = (props) => {
                 MySearchListApi()   
         }, []);
 
-  
+        console.log(PageInfo)
         const  MySearchListApi  = () =>{
                 
                 const userObj         = new MySearchReport()
@@ -29,6 +32,7 @@ const MySearches = (props) => {
         }
 
         const processTableClickedNextOrPrevious = (page, sortOrder) => {
+                dispatch(PageChange(page, C.SEARCH_PAGE_NO));
                setPage(page)
                 }
               
@@ -115,8 +119,9 @@ const MySearches = (props) => {
                 filterType              :       "checkbox",
                 download                :       false,
                 print                   :       false,
+                rowsPerPage:PageInfo.count,
                 filter                  :       true,
-                page: page,
+                page: PageInfo.page,
                 viewColumns     : false,
                 selectableRows          :       "none",
                 onTableChange: (action, tableState) => {
@@ -126,6 +131,9 @@ const MySearches = (props) => {
                               tableState.page
                             );
                             break;
+                            case "changeRowsPerPage":
+                                dispatch(RowChange(tableState.rowsPerPage, C.SEARCH_ROW_COUNT_CHANGE))
+                                break;
                           default:
                         }
                       },

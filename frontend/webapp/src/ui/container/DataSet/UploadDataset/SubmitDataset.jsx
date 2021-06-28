@@ -21,11 +21,16 @@ import UrlConfig from '../../../../configs/internalurlmapping';
 import SubmitDatasetApi from "../../../../redux/actions/api/UploadDataset/SubmitDataset"
 import DatasetItems from "../../../../configs/DatasetItems";
 import getTitleName from '../../../../utils/getDataset';
+import C from "../../../../redux/actions/constants";
+import { useDispatch } from 'react-redux';
+import {PageChange} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
+
 const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "", type: "parallel-corpus" })
     const [title, setTitle]         = useState( "Parallel Dataset")
+    const dispatch                  = useDispatch();
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
@@ -104,6 +109,7 @@ let apiObj = new SubmitDatasetApi(dataset)
         
         return Promise.reject('');
       } else {
+        dispatch(PageChange(0, C.PAGE_CHANGE));
         history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.serviceRequestNumber}`)
 //           return true;
       }
