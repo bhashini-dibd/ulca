@@ -76,7 +76,7 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 			try {
 				AsrDatasetParamsSchemaKeys key = AsrDatasetParamsSchemaKeys.valueOf(k) ;
 			}catch (Exception ex) {
-				System.out.println("no enums found ");
+				log.info("no enums found ");
 				errorList.add(k + " unknown property ");
 			}
 			
@@ -175,7 +175,7 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 					
 					String enumValue = node.get("domain").get(i).asText();
 					
-					DomainEnum dEnum = DomainEnum.valueOf(enumValue);
+					DomainEnum dEnum = DomainEnum.fromValue(enumValue);
 					if(dEnum == null) {
 						errorList.add("domain value not part of defined domains");
 					}else {

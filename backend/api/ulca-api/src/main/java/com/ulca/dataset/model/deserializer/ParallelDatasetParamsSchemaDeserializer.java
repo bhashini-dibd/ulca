@@ -50,7 +50,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 	public ParallelDatasetParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		System.out.println("******** Entry ParallelDatasetParamsSchemaDeserializer :: deserializer ********");
+		log.info("******** Entry ParallelDatasetParamsSchemaDeserializer :: deserializer ********");
 		
 		
 		
@@ -166,16 +166,14 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 		} else {
 
 			try {
-				List<DomainEnum> list = new ArrayList<DomainEnum>();
 				Domain domain = new Domain();
 				int size = node.get("domain").size();
 				
-				ArrayList<String> dominsList = new ArrayList<String>();
 				for(int i=0; i < size; i++) {
 					
 					String enumValue = node.get("domain").get(i).asText();
 					
-					DomainEnum dEnum = DomainEnum.valueOf(enumValue);
+					DomainEnum dEnum = DomainEnum.fromValue(enumValue);
 					if(dEnum == null) {
 						errorList.add("domain value not part of defined domains");
 					}else {

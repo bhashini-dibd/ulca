@@ -169,7 +169,7 @@ public class MonolingualDatasetParamsSchemaDeserializer extends StdDeserializer<
 					
 					String enumValue = node.get("domain").get(i).asText();
 					
-					DomainEnum dEnum = DomainEnum.valueOf(enumValue);
+					DomainEnum dEnum = DomainEnum.fromValue(enumValue);
 					if(dEnum == null) {
 						errorList.add("domain value not part of defined domains");
 					}else {
