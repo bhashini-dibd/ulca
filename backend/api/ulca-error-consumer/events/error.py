@@ -103,8 +103,9 @@ class ErrorEvent:
             file_name = error_record["internal_file"].replace("/opt/","")
             error_record["file"] = utils.file_store_upload_call(file,file_name,error_prefix)
             error_record["uploaded"], error_record["errors"] = True, []
-            persister = threading.Thread(target=error_repo.update, args=(error_record,))
-            persister.start()
+            error_repo.update(error_record)
+            # persister = threading.Thread(target=error_repo.update, args=(error_record,))
+            # persister.start()
             log.info(f'Error report uploaded to object store for SRN -- {srn}')
             os.remove(file)
             return error_record
