@@ -62,7 +62,6 @@ const HeaderStyles = (theme) => ({
   styledMenu: {
     padding: "9px",
     marginTop: "5px",
-    // borderTop: "1px solid #D6D6D6"
     "&:hover": {
       color: '#2C2799',
       backgroundColor: " rgba(44,39,153, .05)"
@@ -148,6 +147,14 @@ const HeaderStyles = (theme) => ({
     height: '54px',
     alignContent: 'center',
     display: 'grid'
+  },
+  btnStyle: {
+    padding: '0px',
+    justifyContent: 'left',
+    "&:hover": {
+
+      backgroundColor: 'white',
+    }
   }
 });
 export default HeaderStyles;
