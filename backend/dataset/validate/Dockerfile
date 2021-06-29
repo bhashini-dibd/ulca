@@ -1,5 +1,5 @@
 #FROM python:3.7-slim
-FROM anuvaadio/validate:2
+FROM anuvaadio/validate:3
 COPY / /app
 WORKDIR /app
 #COPY install-pkg.sh /usr/bin/install-pkg.sh
