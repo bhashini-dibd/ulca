@@ -110,18 +110,22 @@ class ErrorEvent:
             return []
 
     def handle_eof(self, eof_event):
+        log.info('______________EOF__________________')
         log.info(f'Received EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
         try:
             response = self.get_error_report(eof_event["serviceRequestNumber"], False)
-            response= response[0]
-            response["eof"]= True
-            response["id"] = str(uuid.uuid4())
-            query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
-            log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
-            error_repo.remove(query)
-            log.info(f'Inserting eof record on daatabase')
-            log.info(f'Response -{response}')
-            error_repo.insert(response)
+            if response:
+                response= response[0]
+                response["eof"]= True
+                response["id"] = str(uuid.uuid4())
+                query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
+                log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
+                error_repo.remove(query)
+                log.info(f'Inserting eof record on daatabase')
+                log.info(f'Response -{response}')
+                error_repo.insert(response)
+            else:
+                log.info(f'EOF Received for srn with 0 errors srn -- {eof_event["serviceRequestNumber"]}')
         except Exception as e:
             log.info(f'Exception on eof handler : {e}')
             return False
@@ -133,6 +137,7 @@ class ErrorEvent:
             exclude = {"_id": False}
             log.info(f'Search for error reports of SRN -- {srn} from db started')
             error_records = error_repo.search(query, exclude, None, None)
+            log.info(f'Error report returned for {srn}')
             return error_records
         except Exception as e:
             log.exception(f'Exception while fetching error report: {e}', e)
