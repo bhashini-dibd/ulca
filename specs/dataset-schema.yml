@@ -186,6 +186,11 @@ components:
         text:
           type: string
           description: textual output of the audio
+        duration: 
+          type: number
+          description: audio duration in seconds
+        collectionSource:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Source'
         channel:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioChannel'
         samplingRate:
