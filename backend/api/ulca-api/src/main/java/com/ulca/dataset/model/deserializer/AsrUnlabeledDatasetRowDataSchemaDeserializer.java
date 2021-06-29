@@ -19,6 +19,7 @@ import io.swagger.model.AsrParamsSchema;
 import io.swagger.model.AsrParamsSchema.AgeEnum;
 import io.swagger.model.AsrParamsSchema.DialectEnum;
 import io.swagger.model.AsrRowSchema;
+import io.swagger.model.AsrUnlabeledRowSchema;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioFormat;
@@ -40,14 +41,14 @@ import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowSchema> {
+public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrUnlabeledRowSchema> {
 
-	protected ASRDatasetRowDataSchemaDeserializer(Class<?> vc) {
+	protected AsrUnlabeledDatasetRowDataSchemaDeserializer(Class<?> vc) {
 		super(vc);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ASRDatasetRowDataSchemaDeserializer() {
+	public AsrUnlabeledDatasetRowDataSchemaDeserializer() {
 		this(null);
 		// TODO Auto-generated constructor stub
 	}
@@ -58,12 +59,12 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public AsrRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
+	public AsrUnlabeledRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
 		
 		ObjectMapper mapper = new ObjectMapper();
-		AsrRowSchema asrRowSchema = new AsrRowSchema();
+		AsrUnlabeledRowSchema asrRowSchema = new AsrUnlabeledRowSchema();
 		JsonNode node = p.readValueAsTree();
 
 		ArrayList<String> errorList = new ArrayList<String>();
@@ -94,16 +95,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 
 		}
 
-		if (!node.has("text")) {
-			errorList.add("text field should be present");
-		} else if (!node.get("text").isTextual()) {
-			errorList.add("text field should be String");
-		} else {
-
-			String text = node.get("text").asText();
-			asrRowSchema.setText(text);
-
-		}
+		
 		
 		// optional params
 		
@@ -240,7 +232,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 			} else {
 				String age = node.get("age").asText();
 
-				AsrRowSchema.AgeEnum ageEnum = AsrRowSchema.AgeEnum.fromValue(age);
+				AsrUnlabeledRowSchema.AgeEnum ageEnum = AsrUnlabeledRowSchema.AgeEnum.fromValue(age);
 
 				if (ageEnum != null) {
 					asrRowSchema.setAge(ageEnum);
@@ -255,7 +247,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				errorList.add("dialect field should be String");
 			} else {
 				String dialect = node.get("dialect").asText();
-				AsrRowSchema.DialectEnum dialectEnum = AsrRowSchema.DialectEnum.fromValue(dialect);
+				AsrUnlabeledRowSchema.DialectEnum dialectEnum = AsrUnlabeledRowSchema.DialectEnum.fromValue(dialect);
 
 				if (dialectEnum != null) {
 					asrRowSchema.setDialect(dialectEnum);

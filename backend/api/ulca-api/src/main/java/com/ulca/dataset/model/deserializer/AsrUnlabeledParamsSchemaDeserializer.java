@@ -18,6 +18,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import io.swagger.model.AsrParamsSchema;
 import io.swagger.model.AsrParamsSchema.AgeEnum;
 import io.swagger.model.AsrParamsSchema.DialectEnum;
+import io.swagger.model.AsrUnlabeledParamsSchema;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioFormat;
@@ -39,14 +40,14 @@ import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ASRParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema> {
+public class AsrUnlabeledParamsSchemaDeserializer extends StdDeserializer<AsrUnlabeledParamsSchema> {
 
-	protected ASRParamsSchemaDeserializer(Class<?> vc) {
+	protected AsrUnlabeledParamsSchemaDeserializer(Class<?> vc) {
 		super(vc);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ASRParamsSchemaDeserializer() {
+	public AsrUnlabeledParamsSchemaDeserializer() {
 		this(null);
 		// TODO Auto-generated constructor stub
 	}
@@ -57,12 +58,12 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public AsrParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
+	public AsrUnlabeledParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
 		log.info("******** Entry ASRParamsSchemaDeserializer :: deserialize ********");
 		ObjectMapper mapper = new ObjectMapper();
-		AsrParamsSchema asrParamsSchema = new AsrParamsSchema();
+		AsrUnlabeledParamsSchema asrParamsSchema = new AsrUnlabeledParamsSchema();
 		JsonNode node = p.readValueAsTree();
 
 
@@ -91,8 +92,8 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 		} else {
 			String datasetType = node.get("datasetType").asText();
 			DatasetType type = DatasetType.fromValue(datasetType);
-			if (type != DatasetType.ASR_CORPUS) {
-				errorList.add("datasetType field value " + DatasetType.ASR_CORPUS.toString());
+			if (type != DatasetType.ASR_UNLABELED_CORPUS) {
+				errorList.add("datasetType field value should be " + DatasetType.ASR_UNLABELED_CORPUS.toString());
 			}
 			asrParamsSchema.setDatasetType(type);
 

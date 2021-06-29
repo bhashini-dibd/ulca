@@ -1,7 +1,6 @@
 package com.ulca.dataset.model.deserializer;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -15,34 +14,14 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import io.swagger.model.ASRParamsSchema;
-import io.swagger.model.ASRParamsSchema.AgeEnum;
-import io.swagger.model.ASRParamsSchema.DialectEnum;
-import io.swagger.model.AudioBitsPerSample;
-import io.swagger.model.AudioChannel;
-import io.swagger.model.AudioFormat;
-import io.swagger.model.AudioQualityEvaluation;
-import io.swagger.model.AudioQualityEvaluation.MethodTypeEnum;
-import io.swagger.model.CollectionDetailsAudioAutoAligned;
-import io.swagger.model.CollectionDetailsMachineGeneratedTranscript;
-import io.swagger.model.CollectionDetailsManualTranscribed;
 import io.swagger.model.CollectionDetailsOcr;
-import io.swagger.model.CollectionMethodAudio;
 import io.swagger.model.DatasetType;
 import io.swagger.model.DocumentLayoutParamsSchema;
-import io.swagger.model.Domain;
-import io.swagger.model.DomainEnum;
-import io.swagger.model.Gender;
 import io.swagger.model.ImageDPI;
 import io.swagger.model.ImageFormat;
-import io.swagger.model.ImageTextType;
-import io.swagger.model.LanguagePair;
 import io.swagger.model.OcrCollectionMethod;
-import io.swagger.model.OcrDatasetParamsSchema;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
-import io.swagger.model.TranscriptionEvaluationMethod1;
-import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

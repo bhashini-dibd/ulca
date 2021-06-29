@@ -2,7 +2,6 @@ package com.ulca.dataset.model.deserializer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.json.JSONObject;
@@ -14,17 +13,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import io.swagger.model.CollectionDetailsAutoAligned;
-import io.swagger.model.CollectionDetailsMachineTranslated;
-import io.swagger.model.CollectionDetailsMachineTranslatedPostEdited;
-import io.swagger.model.CollectionDetailsManualTranslated;
 import io.swagger.model.DatasetType;
 import io.swagger.model.Domain;
 import io.swagger.model.DomainEnum;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.MonolingualParamsSchema;
-import io.swagger.model.ParallelDatasetCollectionMethod;
-import io.swagger.model.ParallelDatasetParamsSchema;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import lombok.extern.slf4j.Slf4j;
