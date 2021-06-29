@@ -114,14 +114,21 @@ class ErrorEvent:
         self.get_error_report(eof_event["serviceRequestNumber"], False)
         query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
         exclude = {"_id": False}
-        offset= 0
-        limit = 1
         log.info(f'Searching for record on srn -- {eof_event["serviceRequestNumber"]}')
-        record = error_repo.search(query,exclude,offset,limit)
-        record[0]["eof"]=True
+        error_records = error_repo.search(query,exclude,None,None)
+        error_rec = None
+        if error_records:
+            for error in error_records:
+                if 'uploaded' in error.keys():
+                    error_rec = error 
+        log.info(error_rec)
+        error_rec["eof"]=True
+        error_rec.pop("error")
+        error_rec.pop("errors")
         log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
         error_repo.remove(query)
-        error_repo.insert(record[0])
+        log.info(f'Inserting eof record on daatabase')
+        error_repo.insert(error_rec)
 
 # Log config
 dictConfig({
