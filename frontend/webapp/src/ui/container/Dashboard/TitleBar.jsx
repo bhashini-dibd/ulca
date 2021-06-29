@@ -33,8 +33,8 @@ const TitleBar = (props) => {
     const handleChange = (event) => {
         const obj = {};
 
-        obj.value = event.target.value;
-        obj.label = options.reduce((acc, rem) => rem.value === event.target.value ? acc = rem.label : acc, "")
+        obj.value = event;
+        obj.label = options.reduce((acc, rem) => rem.value === event ? acc = rem.label : acc, "")
 
         handleSelectChange(obj, "", "", page)
 
@@ -66,7 +66,6 @@ const TitleBar = (props) => {
                                 anchorEl={anchorEl}
                                 open={Boolean(anchorEl)}
                                 onClose={(e) => handleClose(e)}
-                                onChange={(e) => handleChange(e)}
                                 className={classes.styledMenu1}
                             >
                                 {
@@ -74,7 +73,8 @@ const TitleBar = (props) => {
                                         return <MenuItem
                                             value={menu.value}
                                             className={classes.styledMenu}
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                                handleChange(menu.value)
                                                 handleClose()
                                                 setOptions(menu.value)
                                             }}
