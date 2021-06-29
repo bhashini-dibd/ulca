@@ -15,10 +15,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import io.swagger.model.ASRParamsSchema;
-import io.swagger.model.ASRParamsSchema.AgeEnum;
-import io.swagger.model.ASRParamsSchema.DialectEnum;
-import io.swagger.model.ASRRowSchema;
+import io.swagger.model.AsrParamsSchema;
+import io.swagger.model.AsrParamsSchema.AgeEnum;
+import io.swagger.model.AsrParamsSchema.DialectEnum;
+import io.swagger.model.AsrRowSchema;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioFormat;
@@ -40,7 +40,7 @@ import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowSchema> {
+public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowSchema> {
 
 	protected ASRDatasetRowDataSchemaDeserializer(Class<?> vc) {
 		super(vc);
@@ -58,12 +58,12 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowS
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public ASRRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
+	public AsrRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
 		
 		ObjectMapper mapper = new ObjectMapper();
-		ASRRowSchema asrRowSchema = new ASRRowSchema();
+		AsrRowSchema asrRowSchema = new AsrRowSchema();
 		JsonNode node = p.readValueAsTree();
 
 		ArrayList<String> errorList = new ArrayList<String>();
@@ -106,6 +106,49 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowS
 		}
 		
 		// optional params
+		
+		if (node.has("duration")) {
+			if (!node.get("duration").isNumber()) {
+				errorList.add("duration field should be Number");
+			} else {
+				BigDecimal duration = node.get("duration").decimalValue();
+				asrRowSchema.setDuration(duration);
+
+			}
+
+		}
+		if (node.has("speaker")) {
+			if (!node.get("speaker").isTextual()) {
+				errorList.add("speaker field should be String");
+			} else {
+				String speaker = node.get("speaker").asText();
+				asrRowSchema.setSpeaker(speaker);
+			}
+		} 
+		
+		if(node.has("collectionSource")) {
+			
+			if (!node.get("collectionSource").isArray()) {
+				errorList.add("collectionSource field should be String array");
+			} else {
+
+				try {
+					Source collectionSource = mapper.readValue(node.get("collectionSource").toPrettyString(), Source.class);
+					if(collectionSource.size() > 10 || collectionSource.size() < 0) {
+						errorList.add("collectionSource array size should be > 0 and <= 10");
+					}else {
+						asrRowSchema.setCollectionSource(collectionSource);
+					}
+					
+				} catch (Exception e) {
+					errorList.add("collectionSource field value not proper.");
+					e.printStackTrace();
+				}
+			}
+			
+		}
+
+		
 
 		if (node.has("endTime")) {
 			if (!node.get("endTime").isTextual()) {
@@ -197,7 +240,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowS
 			} else {
 				String age = node.get("age").asText();
 
-				ASRRowSchema.AgeEnum ageEnum = ASRRowSchema.AgeEnum.fromValue(age);
+				AsrRowSchema.AgeEnum ageEnum = AsrRowSchema.AgeEnum.fromValue(age);
 
 				if (ageEnum != null) {
 					asrRowSchema.setAge(ageEnum);
@@ -212,7 +255,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowS
 				errorList.add("dialect field should be String");
 			} else {
 				String dialect = node.get("dialect").asText();
-				ASRRowSchema.DialectEnum dialectEnum = ASRRowSchema.DialectEnum.fromValue(dialect);
+				AsrRowSchema.DialectEnum dialectEnum = AsrRowSchema.DialectEnum.fromValue(dialect);
 
 				if (dialectEnum != null) {
 					asrRowSchema.setDialect(dialectEnum);

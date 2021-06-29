@@ -17,6 +17,9 @@ public enum AsrRowDataSchemaKeys {
 		dialect,
 		snr,
 		startTime,
-		collectionMethod
+		collectionMethod,
+		speaker,
+		duration,
+		collectionSource
 	
 }

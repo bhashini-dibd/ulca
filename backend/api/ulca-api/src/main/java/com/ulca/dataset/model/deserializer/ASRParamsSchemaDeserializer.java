@@ -15,9 +15,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-import io.swagger.model.ASRParamsSchema;
-import io.swagger.model.ASRParamsSchema.AgeEnum;
-import io.swagger.model.ASRParamsSchema.DialectEnum;
+import io.swagger.model.AsrParamsSchema;
+import io.swagger.model.AsrParamsSchema.AgeEnum;
+import io.swagger.model.AsrParamsSchema.DialectEnum;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioFormat;
@@ -39,7 +39,7 @@ import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema> {
+public class ASRParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema> {
 
 	protected ASRParamsSchemaDeserializer(Class<?> vc) {
 		super(vc);
@@ -57,12 +57,12 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<ASRParamsSchema
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public ASRParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
+	public AsrParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
 		log.info("******** Entry ASRParamsSchemaDeserializer :: deserialize ********");
 		ObjectMapper mapper = new ObjectMapper();
-		ASRParamsSchema asrParamsSchema = new ASRParamsSchema();
+		AsrParamsSchema asrParamsSchema = new AsrParamsSchema();
 		JsonNode node = p.readValueAsTree();
 
 

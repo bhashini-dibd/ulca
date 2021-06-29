@@ -9,6 +9,7 @@ import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioQualityEvaluation;
 import io.swagger.model.CollectionMethodAudio;
 import io.swagger.model.Gender;
+import io.swagger.model.Source;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import org.springframework.validation.annotation.Validated;
@@ -20,15 +21,24 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the schema defines the column name present in physical file that is being pointed by dataFilename key.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-29T11:44:46.135Z[GMT]")
 
 
-public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
+public class AsrRowSchema  implements OneOfDatasetDataRowSchemaData {
   @JsonProperty("audioFilename")
   private String audioFilename = null;
 
   @JsonProperty("text")
   private String text = null;
+
+  @JsonProperty("speaker")
+  private String speaker = null;
+
+  @JsonProperty("duration")
+  private BigDecimal duration = null;
+
+  @JsonProperty("collectionSource")
+  private Source collectionSource = null;
 
   @JsonProperty("channel")
   private AudioChannel channel = null;
@@ -126,7 +136,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
   @JsonProperty("collectionMethod")
   private CollectionMethodAudio collectionMethod = null;
 
-  public ASRRowSchema audioFilename(String audioFilename) {
+  public AsrRowSchema audioFilename(String audioFilename) {
     this.audioFilename = audioFilename;
     return this;
   }
@@ -146,7 +156,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.audioFilename = audioFilename;
   }
 
-  public ASRRowSchema text(String text) {
+  public AsrRowSchema text(String text) {
     this.text = text;
     return this;
   }
@@ -166,7 +176,66 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.text = text;
   }
 
-  public ASRRowSchema channel(AudioChannel channel) {
+  public AsrRowSchema speaker(String speaker) {
+    this.speaker = speaker;
+    return this;
+  }
+
+  /**
+   * speaker name or id for the audio utterance
+   * @return speaker
+   **/
+  @Schema(description = "speaker name or id for the audio utterance")
+  
+    public String getSpeaker() {
+    return speaker;
+  }
+
+  public void setSpeaker(String speaker) {
+    this.speaker = speaker;
+  }
+
+  public AsrRowSchema duration(BigDecimal duration) {
+    this.duration = duration;
+    return this;
+  }
+
+  /**
+   * audio duration in seconds
+   * @return duration
+   **/
+  @Schema(description = "audio duration in seconds")
+  
+    @Valid
+    public BigDecimal getDuration() {
+    return duration;
+  }
+
+  public void setDuration(BigDecimal duration) {
+    this.duration = duration;
+  }
+
+  public AsrRowSchema collectionSource(Source collectionSource) {
+    this.collectionSource = collectionSource;
+    return this;
+  }
+
+  /**
+   * Get collectionSource
+   * @return collectionSource
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public Source getCollectionSource() {
+    return collectionSource;
+  }
+
+  public void setCollectionSource(Source collectionSource) {
+    this.collectionSource = collectionSource;
+  }
+
+  public AsrRowSchema channel(AudioChannel channel) {
     this.channel = channel;
     return this;
   }
@@ -186,7 +255,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.channel = channel;
   }
 
-  public ASRRowSchema samplingRate(BigDecimal samplingRate) {
+  public AsrRowSchema samplingRate(BigDecimal samplingRate) {
     this.samplingRate = samplingRate;
     return this;
   }
@@ -206,7 +275,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.samplingRate = samplingRate;
   }
 
-  public ASRRowSchema bitsPerSample(AudioBitsPerSample bitsPerSample) {
+  public AsrRowSchema bitsPerSample(AudioBitsPerSample bitsPerSample) {
     this.bitsPerSample = bitsPerSample;
     return this;
   }
@@ -226,7 +295,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.bitsPerSample = bitsPerSample;
   }
 
-  public ASRRowSchema gender(Gender gender) {
+  public AsrRowSchema gender(Gender gender) {
     this.gender = gender;
     return this;
   }
@@ -246,7 +315,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.gender = gender;
   }
 
-  public ASRRowSchema age(AgeEnum age) {
+  public AsrRowSchema age(AgeEnum age) {
     this.age = age;
     return this;
   }
@@ -265,7 +334,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.age = age;
   }
 
-  public ASRRowSchema dialect(DialectEnum dialect) {
+  public AsrRowSchema dialect(DialectEnum dialect) {
     this.dialect = dialect;
     return this;
   }
@@ -284,7 +353,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.dialect = dialect;
   }
 
-  public ASRRowSchema snr(AudioQualityEvaluation snr) {
+  public AsrRowSchema snr(AudioQualityEvaluation snr) {
     this.snr = snr;
     return this;
   }
@@ -304,7 +373,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.snr = snr;
   }
 
-  public ASRRowSchema startTime(String startTime) {
+  public AsrRowSchema startTime(String startTime) {
     this.startTime = startTime;
     return this;
   }
@@ -323,7 +392,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.startTime = startTime;
   }
 
-  public ASRRowSchema endTime(String endTime) {
+  public AsrRowSchema endTime(String endTime) {
     this.endTime = endTime;
     return this;
   }
@@ -342,7 +411,7 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     this.endTime = endTime;
   }
 
-  public ASRRowSchema collectionMethod(CollectionMethodAudio collectionMethod) {
+  public AsrRowSchema collectionMethod(CollectionMethodAudio collectionMethod) {
     this.collectionMethod = collectionMethod;
     return this;
   }
@@ -371,33 +440,39 @@ public class ASRRowSchema  implements OneOfDatasetDataRowSchemaData {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ASRRowSchema asRRowSchema = (ASRRowSchema) o;
-    return Objects.equals(this.audioFilename, asRRowSchema.audioFilename) &&
-        Objects.equals(this.text, asRRowSchema.text) &&
-        Objects.equals(this.channel, asRRowSchema.channel) &&
-        Objects.equals(this.samplingRate, asRRowSchema.samplingRate) &&
-        Objects.equals(this.bitsPerSample, asRRowSchema.bitsPerSample) &&
-        Objects.equals(this.gender, asRRowSchema.gender) &&
-        Objects.equals(this.age, asRRowSchema.age) &&
-        Objects.equals(this.dialect, asRRowSchema.dialect) &&
-        Objects.equals(this.snr, asRRowSchema.snr) &&
-        Objects.equals(this.startTime, asRRowSchema.startTime) &&
-        Objects.equals(this.endTime, asRRowSchema.endTime) &&
-        Objects.equals(this.collectionMethod, asRRowSchema.collectionMethod);
+    AsrRowSchema asrRowSchema = (AsrRowSchema) o;
+    return Objects.equals(this.audioFilename, asrRowSchema.audioFilename) &&
+        Objects.equals(this.text, asrRowSchema.text) &&
+        Objects.equals(this.speaker, asrRowSchema.speaker) &&
+        Objects.equals(this.duration, asrRowSchema.duration) &&
+        Objects.equals(this.collectionSource, asrRowSchema.collectionSource) &&
+        Objects.equals(this.channel, asrRowSchema.channel) &&
+        Objects.equals(this.samplingRate, asrRowSchema.samplingRate) &&
+        Objects.equals(this.bitsPerSample, asrRowSchema.bitsPerSample) &&
+        Objects.equals(this.gender, asrRowSchema.gender) &&
+        Objects.equals(this.age, asrRowSchema.age) &&
+        Objects.equals(this.dialect, asrRowSchema.dialect) &&
+        Objects.equals(this.snr, asrRowSchema.snr) &&
+        Objects.equals(this.startTime, asrRowSchema.startTime) &&
+        Objects.equals(this.endTime, asrRowSchema.endTime) &&
+        Objects.equals(this.collectionMethod, asrRowSchema.collectionMethod);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(audioFilename, text, channel, samplingRate, bitsPerSample, gender, age, dialect, snr, startTime, endTime, collectionMethod);
+    return Objects.hash(audioFilename, text, speaker, duration, collectionSource, channel, samplingRate, bitsPerSample, gender, age, dialect, snr, startTime, endTime, collectionMethod);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ASRRowSchema {\n");
+    sb.append("class AsrRowSchema {\n");
     
     sb.append("    audioFilename: ").append(toIndentedString(audioFilename)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
+    sb.append("    speaker: ").append(toIndentedString(speaker)).append("\n");
+    sb.append("    duration: ").append(toIndentedString(duration)).append("\n");
+    sb.append("    collectionSource: ").append(toIndentedString(collectionSource)).append("\n");
     sb.append("    channel: ").append(toIndentedString(channel)).append("\n");
     sb.append("    samplingRate: ").append(toIndentedString(samplingRate)).append("\n");
     sb.append("    bitsPerSample: ").append(toIndentedString(bitsPerSample)).append("\n");
