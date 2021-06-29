@@ -186,6 +186,9 @@ components:
         text:
           type: string
           description: textual output of the audio
+        speaker:
+          type: string
+          description: speaker name or id for the audio utterance
         duration: 
           type: number
           description: audio duration in seconds
