@@ -28,7 +28,6 @@ class ErrorEvent:
             self.handle_eof(data)
         else:
             try:
-                log.info(f'Creating error file for Dataset: {data["datasetName"]} | SRN: {data["serviceRequestNumber"]}')
                 file = f'{shared_storage_path}error-{data["datasetName"].replace(" ","-")}-{data["serviceRequestNumber"]}.csv'
                 error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"],
                             "internal_file": file, "file": file, "time_stamp": str(datetime.now()), "error": data}
@@ -66,11 +65,14 @@ class ErrorEvent:
         log.info(f'Search for error reports of SRN -- {srn} from db started')
         error_records = error_repo.search(query, exclude, None, None)
         log.info(f'Search for error reports of SRN -- {srn} from db completed')
+        log.info(error_records)
         if len(error_records) == 1:
             rec = error_records[0]
-            if "eof" in rec and rec["eof"] == True:
-                log.info(f"Returning error file for srn-{srn}")
-                return [rec]
+            log.info('Inside eof block!')
+            if "eof" in rec :
+                if rec["eof"]:
+                    log.info(f"Returning error file for srn-{srn}")
+                    return [rec]
         if internal:
             return error_records
         try:
@@ -120,6 +122,7 @@ class ErrorEvent:
             log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
             error_repo.remove(query)
             log.info(f'Inserting eof record on daatabase')
+            log.info(f'Response -{response}')
             error_repo.insert(response)
         except Exception as e:
             log.info(f'Exception on eof handler : {e}')
