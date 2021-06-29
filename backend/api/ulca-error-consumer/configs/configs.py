@@ -50,4 +50,4 @@ azure_link_prefix       =   f'https://{azure_account_name}.blob.core.windows.net
 
 error_batch_size        =   os.environ.get('ULCA_EEROR_BATCH_SIZE',10000)
 if isinstance(error_batch_size, str):
-    error_batch_size    =  eval(ulca_dataset_topic_partitions)
+    error_batch_size    =  eval(error_batch_size)
