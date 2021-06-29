@@ -113,7 +113,7 @@ const handleSubmit = async () => {
           localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
         localStorage.setItem(`userDetails`, JSON.stringify(rsp_data.data.userDetails));
           
-          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from :'/private-dashboard'}`)
+          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from :'/dashboard'}`)
         }
       }).catch((error) => {
         setLoading(false)

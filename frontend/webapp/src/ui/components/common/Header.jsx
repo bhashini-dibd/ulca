@@ -53,7 +53,7 @@ const Header = (props) => {
   }
 
   const handleMenuItemClick = (url) => {
-    
+    debugger
     history.push(`${process.env.PUBLIC_URL}${url}`)
     handleClose();
   }
@@ -65,7 +65,7 @@ const Header = (props) => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
 
-              <Typography variant="h6" onClick={() => handleMenuItemClick('/private-dashboard')}>
+              <Typography variant="h6" onClick={() => handleMenuItemClick('/dashboard')}>
                 ULCA
               </Typography>
 

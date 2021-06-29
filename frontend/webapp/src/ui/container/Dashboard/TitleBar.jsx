@@ -8,13 +8,21 @@ import Statistics from "./Statistics";
 import Theme from "../../theme/theme-default";
 
 const TitleBar = (props) => {
-    const { classes } = props;
-    const [options, setOptions] = useState('parallel-corpus');
+    const { classes, options, selectedOption,handleSelectChange, page, count } = props;
+    // const [options, setOptions] = useState('parallel-corpus');
+    console.log(selectedOption)
     const gridArray = [{ title: 'Title1', value: '35555' }, { title: 'Title2', value: '4000' }]
+
     const handleChange = (event) => {
-        const value = event.target.value;
-        setOptions(value);
+        const obj = {};
+        debugger
+        obj.value = event.target.value;
+        obj.label = options.reduce((acc,rem) => rem.value === event.target.value ? acc= rem.label : acc, "")
+            debugger
+        handleSelectChange(obj,"","",page) 
+        debugger
     };
+   
     return (
         <MuiThemeProvider theme={Theme}>
             <AppBar position="static" color="inherit" elevation={0} >
@@ -23,16 +31,16 @@ const TitleBar = (props) => {
                         < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.selectGrid}>
                             <FormControl className={classes.formControl}>
                                 <NativeSelect disableUnderline
-                                    value={options}
+                                    disabled = {page!==0 ? true : false}
+                                    value={selectedOption.value}
                                     onChange={handleChange}
                                 >
                                     {
-                                        DatasetItems.map(menu => {
+                                        options.map(menu => {
                                             return <option
                                                 value={menu.value}
                                                 className={classes.styledMenu}
                                             >
-
                                                 {menu.label}
                                             </option>
                                         })
@@ -43,11 +51,11 @@ const TitleBar = (props) => {
                         < Grid item xs={4} sm={4} md={2} lg={2} xl={2} className={classes.tempGrid}>
                         <Typography variant="body2" gutterBottom>
                             {/* {props.label} */}
-                            Total parallel sentences
+                            Total sentences count
                         </Typography>
                         <Typography variant="body1">
                             {/* {props.totValue} */}
-                            53645447
+                            {new Intl.NumberFormat('en').format(count)}
                         </Typography>
                     </Grid>
                         <Grid item xs={0} sm={0} md={3} lg={3} xl={3}></Grid>

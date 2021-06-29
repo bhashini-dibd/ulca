@@ -41,7 +41,10 @@ import C from '../../actions/constants';
     // }
 
 
-    const handleExpand = (data) =>{
+    const handleSum = (data) =>{
+      const count = data.reduce((acc,rem)=>(acc + Number(rem.value)),0)
+      debugger
+      return {data , count}
 
     }
       
@@ -49,7 +52,7 @@ import C from '../../actions/constants';
     switch (action.type) {
         
         case C.DASHBOARD_DATASETS:
-            return action.payload.data.sort( compare );
+            return handleSum(action.payload.data.sort( compare ));
 
         default:
             return state;

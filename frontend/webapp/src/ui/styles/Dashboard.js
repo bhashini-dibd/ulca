@@ -1,5 +1,4 @@
 const FileUploadStyles = (theme) => ({
-  
 
   breadcrum: {
     marginBottom: "1.5rem",
@@ -9,10 +8,10 @@ const FileUploadStyles = (theme) => ({
     cursor: "pointer",
   },
   titleBar: {
-    margin: "0 0 1vh 1vh",
+    
     display: "flex",
     flexDirection: "row",
-    padding:"4% 0 0 3%"
+    padding:"2.5rem 0 0 3%"
   },
   paper: {
     minHeight:"56px",
