@@ -116,21 +116,22 @@ class ParallelService:
 
     def get_enriched_data(self, data, metadata):
         insert_records, new_records = [], []
+        records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]}, False)
         try:
-            records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]}, False)
             if records:
                 for record in records:
-                    if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
-                        dup_data = self.enrich_duplicate_data(data, record, metadata)
-                        if dup_data:
-                            repo.update(dup_data)
-                            return "UPDATE", dup_data
-                        else:
-                            return data, record
-                    derived_data = self.enrich_derived_data(data, record, records, data["sourceTextHash"],
-                                                            data["targetTextHash"], metadata)
-                    if derived_data:
-                        new_records.append(derived_data)
+                    if record:
+                        if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
+                            dup_data = self.enrich_duplicate_data(data, record, metadata)
+                            if dup_data:
+                                repo.update(dup_data)
+                                return "UPDATE", dup_data
+                            else:
+                                return data, record
+                        derived_data = self.enrich_derived_data(data, record, records, data["sourceTextHash"],
+                                                                data["targetTextHash"], metadata)
+                        if derived_data:
+                            new_records.append(derived_data)
             new_records.append(data)
             for obj in new_records:
                 if 'derived' not in obj.keys():
@@ -146,6 +147,7 @@ class ParallelService:
             return insert_records, insert_records
         except Exception as e:
             log.exception(f'Exception while enriching record for insert record: {e}', e)
+            log.error(f'Data: {data}, Records: {records}')
             return None
 
     def get_dataset_internal(self, query, all):
@@ -221,7 +223,6 @@ class ParallelService:
 
     def enrich_derived_data(self, data, record, records, src_hash, tgt_hash, metadata):
         derived_data = None
-        records.append(data)
         try:
             if src_hash == record["sourceTextHash"]:
                 if data["targetLanguage"] != record["targetLanguage"]:
@@ -244,6 +245,9 @@ class ParallelService:
                                     "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["sourceTextHash"],
                                 "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
             if not derived_data:
+                return None
+            hashes = [data["sourceTextHash"], data["targetTextHash"]]
+            if (derived_data["sourceTextHash"] in hashes) and (derived_data["targetTextHash"] in hashes):
                 return None
             for rec in records:
                 hashes = [rec["sourceTextHash"], rec["targetTextHash"]]
