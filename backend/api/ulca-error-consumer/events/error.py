@@ -112,14 +112,18 @@ class ErrorEvent:
 
     def handle_eof(self, eof_event):
         log.info(f'Received EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
-        response = self.get_error_report(eof_event["serviceRequestNumber"], False)
-        response= response[0]
-        response["eof"]= True
-        query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
-        log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
-        error_repo.remove(query)
-        log.info(f'Inserting eof record on daatabase')
-        error_repo.insert(response)
+        try:
+            response = self.get_error_report(eof_event["serviceRequestNumber"], False)
+            response= response[0]
+            response["eof"]= True
+            query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
+            log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
+            error_repo.remove(query)
+            log.info(f'Inserting eof record on daatabase')
+            error_repo.insert(response)
+        except Exception as e:
+            log.info(f'Exception on eof handler : {e}')
+            return False
 
 # Log config
 dictConfig({
