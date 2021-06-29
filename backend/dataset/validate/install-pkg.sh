@@ -1,3 +1,3 @@
 #!/bin/bash
 apt-get update
-apt-get install pkg-config libicu-dev
+apt-get -y install pkg-config libicu-dev
