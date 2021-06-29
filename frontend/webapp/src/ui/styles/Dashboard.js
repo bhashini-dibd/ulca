@@ -72,6 +72,7 @@ const FileUploadStyles = (theme) => ({
     boxShadow: "none",
     paddingTop:"5px",
     marginLeft: "1.3rem",
+    marginRight: ".5rem"
     
   },
   titleText: {

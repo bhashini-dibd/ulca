@@ -54,35 +54,46 @@ const TitleBar = (props) => {
                 <Toolbar className={classes.toolbar}>
                     <Grid container className={classes.toolGrid}>
                         < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.selectGrid}>
-                            <FormControl className={classes.formControl}>
-                                <Select disableUnderline
-                                    disabled = {page!==0 ? true : false}
-                                    value={selectedOption.value}
-                                    onChange={handleChange}
-                                >
-                                    {
-                                        options.map(menu => {
-                                            return <option
-                                                value={menu.value}
-                                                className={classes.styledMenu}
-                                            >
-                                                {menu.label}
-                                            </option>
-                                        })
-                                    }
-                                </Select>
-                            </FormControl>
+                            <Button className={classes.btnStyle}
+                                disabled={page !== 0 ? true : false}
+                                color="inherit"
+                                onClick={(e) => openEl(e.currentTarget)}
+                                variant="text">
+                                {getLabel(dropDownOptions)}
+                                <DownIcon />
+                            </Button>
+                            <StyledMenu id="data-set"
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={(e) => handleClose(e)}
+                                
+                                className={classes.styledMenu1}
+                            >
+                                {
+                                    options.map(menu => {
+                                        return <MenuItem
+                                            value={menu.value}
+                                            className={classes.styledMenu}
+                                            onClick={(e) => {
+                                                handleChange(menu.value)
+                                            }}
+                                        >
+                                            {menu.label}
+                                        </MenuItem>
+                                    })
+                                }
+                            </StyledMenu>
                         </Grid>
                         < Grid item xs={4} sm={4} md={2} lg={2} xl={2} className={classes.tempGrid}>
-                        <Typography variant="body2" gutterBottom>
-                            {/* {props.label} */}
-                            Total Count
+                            <Typography variant="body2" gutterBottom>
+                                {/* {props.label} */}
+                            Total sentences count
                         </Typography>
-                        <Typography variant="body1">
-                            {/* {props.totValue} */}
-                            {count ? new Intl.NumberFormat('en').format(count) : 0}
-                        </Typography>
-                    </Grid>
+                            <Typography variant="body1">
+                                {/* {props.totValue} */}
+                                {new Intl.NumberFormat('en').format(count)}
+                            </Typography>
+                        </Grid>
                         <Grid item xs={0} sm={0} md={3} lg={3} xl={3}></Grid>
                         <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
                             <Grid container spacing={2}>

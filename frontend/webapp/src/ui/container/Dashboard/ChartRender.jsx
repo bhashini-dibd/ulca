@@ -237,7 +237,7 @@ const ChartRender = (props) => {
 				<Paper elevation={3} className={classes.paper}>
 
 					<div className={classes.iconStyle}>
-					 <><Button size="small" color="primary" className={classes.backButton} variant="contained" style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
+					 <><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
 							</>
 
 							<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
