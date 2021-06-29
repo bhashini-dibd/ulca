@@ -236,11 +236,11 @@ const ChartRender = (props) => {
 
 				<Paper elevation={3} className={classes.paper}>
 
-					<div className={classes.titleBar}>
-					 <><Button size="small" variant="contained" disabled = {page !== 0 ? false : true} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
-							<div className={classes.seperator}></div></>
+					<div className={classes.iconStyle}>
+					 <><Button size="small" color="primary" className={classes.backButton} variant="contained" style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
+							</>
 
-							<Typography value="" variant="h6"> {title} </Typography>
+							<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
 						{/* <Select className={classes.select}
 							styles={customStyles} color="primary"
 							value={selectedOption}
@@ -269,7 +269,7 @@ const ChartRender = (props) => {
 								<YAxis padding={{ top: 10 }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
 
 
-								<Tooltip fontFamily="Lato" formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
+								<Tooltip labelStyle={{fontFamily:"Lato"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
 								<Bar margin={{ top: 40, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
 									<LabelList
 										formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }}

@@ -7,9 +7,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * supported dataset type under language initiatives
  */
 public enum DatasetType {
-  PARALLEL_CORPUS("parallel-corpus"),
+    PARALLEL_CORPUS("parallel-corpus"),
     MONOLINGUAL_CORPUS("monolingual-corpus"),
     ASR_CORPUS("asr-corpus"),
+    ASR_UNLABELED_CORPUS("asr-unlabeled-corpus"),
     OCR_CORPUS("ocr-corpus"),
     DOCUMENT_LAYOUT_CORPUS("document-layout-corpus");
 
