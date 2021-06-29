@@ -65,8 +65,8 @@ class ErrorEvent:
         log.info(f'Search for error reports of SRN -- {srn} from db started')
         error_records = error_repo.search(query, exclude, None, None)
         log.info(f'Search for error reports of SRN -- {srn} from db completed')
-        log.info(error_records)
-        if len(error_records) == 1:
+        log.info(f'length of errors -{len(error_records)}')
+        if len(error_records) > 0:
             rec = error_records[0]
             log.info('Inside eof block!')
             if "eof" in rec :
@@ -118,6 +118,7 @@ class ErrorEvent:
             response = self.get_error_report(eof_event["serviceRequestNumber"], False)
             response= response[0]
             response["eof"]= True
+            response["id"] = str(uuid.uuid4())
             query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
             log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
             error_repo.remove(query)
