@@ -39,7 +39,7 @@ import com.ulca.dataset.response.DatasetSubmitResponse;
 import com.ulca.dataset.util.DateUtil;
 import com.ulca.dataset.util.Utility;
 
-import io.swagger.model.ASRParamsSchema;
+import io.swagger.model.AsrParamsSchema;
 import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 

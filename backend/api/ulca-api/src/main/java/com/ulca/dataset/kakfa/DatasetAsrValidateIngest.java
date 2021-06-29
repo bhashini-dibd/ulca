@@ -34,8 +34,8 @@ import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
-import io.swagger.model.ASRParamsSchema;
-import io.swagger.model.ASRRowSchema;
+import io.swagger.model.AsrParamsSchema;
+import io.swagger.model.AsrRowSchema;
 import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -76,7 +76,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		String userId = file.getUserId();
 		String datasetId = file.getDatasetId();
 		
-		ASRParamsSchema paramsSchema = null;
+		AsrParamsSchema paramsSchema = null;
 
 		Error fileError = validateFileExistence(fileMap);
 		
@@ -155,7 +155,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 	}
 
-	public ASRParamsSchema validateParamsSchema(String filePath, FileDownload file)
+	public AsrParamsSchema validateParamsSchema(String filePath, FileDownload file)
 			throws JsonParseException, JsonMappingException, IOException {
 
 		log.info("************ Entry DatasetAsrValidateIngest :: validateParamsSchema *********");
@@ -165,10 +165,10 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		log.info(serviceRequestNumber);
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
-		module.addDeserializer(ASRParamsSchema.class, new ASRParamsSchemaDeserializer());
+		module.addDeserializer(AsrParamsSchema.class, new ASRParamsSchemaDeserializer());
 		mapper.registerModule(module);
 
-		ASRParamsSchema paramsSchema = mapper.readValue(new File(filePath), ASRParamsSchema.class);
+		AsrParamsSchema paramsSchema = mapper.readValue(new File(filePath), AsrParamsSchema.class);
 		if (paramsSchema == null) {
 
 			log.info("params validation failed");
@@ -184,7 +184,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 	}
 
-	public void ingest(ASRParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
+	public void ingest(AsrParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
 			throws IOException {
 
 		log.info("************ Entry DatasetAsrValidateIngest :: ingest *********");
@@ -237,13 +237,13 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			
 			String dataRow = mapper.writeValueAsString(rowObj);
 			SimpleModule module = new SimpleModule();
-			module.addDeserializer(ASRRowSchema.class, new ASRDatasetRowDataSchemaDeserializer());
+			module.addDeserializer(AsrRowSchema.class, new ASRDatasetRowDataSchemaDeserializer());
 			mapper.registerModule(module);
 			
-			ASRRowSchema rowSchema = null;
+			AsrRowSchema rowSchema = null;
 			try {
 				
-				rowSchema = mapper.readValue(dataRow, ASRRowSchema.class);
+				rowSchema = mapper.readValue(dataRow, AsrRowSchema.class);
 				log.info("row schema created");				
 				
 			} catch(Exception e) {

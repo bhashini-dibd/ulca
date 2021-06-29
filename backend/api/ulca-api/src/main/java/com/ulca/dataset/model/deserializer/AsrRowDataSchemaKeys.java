@@ -2,12 +2,13 @@ package com.ulca.dataset.model.deserializer;
 
 public enum AsrRowDataSchemaKeys {
 
-	//required
+	    //required
 		audioFilename,
 		text,
-		endTime,
+		
 		
 		//optional
+		endTime,
 		channel,
 		samplingRate,
 		bitsPerSample,
@@ -16,6 +17,9 @@ public enum AsrRowDataSchemaKeys {
 		dialect,
 		snr,
 		startTime,
-		collectionMethod
+		collectionMethod,
+		speaker,
+		duration,
+		collectionSource
 	
 }

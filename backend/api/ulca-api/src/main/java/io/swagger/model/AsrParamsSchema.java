@@ -24,13 +24,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ASRParamsSchema
+ * AsrParamsSchema
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-29T11:44:46.135Z[GMT]")
 
 
-public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfDatasetParamsSchemaParams {
+public class AsrParamsSchema extends DatasetCommonParamsSchema implements OneOfDatasetParamsSchemaParams {
   @JsonProperty("format")
   private AudioFormat format = null;
 
@@ -127,7 +127,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
   @JsonProperty("collectionMethod")
   private CollectionMethodAudio collectionMethod = null;
 
-  public ASRParamsSchema format(AudioFormat format) {
+  public AsrParamsSchema format(AudioFormat format) {
     this.format = format;
     return this;
   }
@@ -147,7 +147,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.format = format;
   }
 
-  public ASRParamsSchema channel(AudioChannel channel) {
+  public AsrParamsSchema channel(AudioChannel channel) {
     this.channel = channel;
     return this;
   }
@@ -167,7 +167,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.channel = channel;
   }
 
-  public ASRParamsSchema samplingRate(BigDecimal samplingRate) {
+  public AsrParamsSchema samplingRate(BigDecimal samplingRate) {
     this.samplingRate = samplingRate;
     return this;
   }
@@ -187,7 +187,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.samplingRate = samplingRate;
   }
 
-  public ASRParamsSchema bitsPerSample(AudioBitsPerSample bitsPerSample) {
+  public AsrParamsSchema bitsPerSample(AudioBitsPerSample bitsPerSample) {
     this.bitsPerSample = bitsPerSample;
     return this;
   }
@@ -207,7 +207,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.bitsPerSample = bitsPerSample;
   }
 
-  public ASRParamsSchema numberOfSpeakers(BigDecimal numberOfSpeakers) {
+  public AsrParamsSchema numberOfSpeakers(BigDecimal numberOfSpeakers) {
     this.numberOfSpeakers = numberOfSpeakers;
     return this;
   }
@@ -227,7 +227,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.numberOfSpeakers = numberOfSpeakers;
   }
 
-  public ASRParamsSchema gender(Gender gender) {
+  public AsrParamsSchema gender(Gender gender) {
     this.gender = gender;
     return this;
   }
@@ -247,7 +247,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.gender = gender;
   }
 
-  public ASRParamsSchema age(AgeEnum age) {
+  public AsrParamsSchema age(AgeEnum age) {
     this.age = age;
     return this;
   }
@@ -266,7 +266,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.age = age;
   }
 
-  public ASRParamsSchema dialect(DialectEnum dialect) {
+  public AsrParamsSchema dialect(DialectEnum dialect) {
     this.dialect = dialect;
     return this;
   }
@@ -285,7 +285,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.dialect = dialect;
   }
 
-  public ASRParamsSchema snr(AudioQualityEvaluation snr) {
+  public AsrParamsSchema snr(AudioQualityEvaluation snr) {
     this.snr = snr;
     return this;
   }
@@ -305,7 +305,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     this.snr = snr;
   }
 
-  public ASRParamsSchema collectionMethod(CollectionMethodAudio collectionMethod) {
+  public AsrParamsSchema collectionMethod(CollectionMethodAudio collectionMethod) {
     this.collectionMethod = collectionMethod;
     return this;
   }
@@ -334,17 +334,17 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ASRParamsSchema asRParamsSchema = (ASRParamsSchema) o;
-    return Objects.equals(this.format, asRParamsSchema.format) &&
-        Objects.equals(this.channel, asRParamsSchema.channel) &&
-        Objects.equals(this.samplingRate, asRParamsSchema.samplingRate) &&
-        Objects.equals(this.bitsPerSample, asRParamsSchema.bitsPerSample) &&
-        Objects.equals(this.numberOfSpeakers, asRParamsSchema.numberOfSpeakers) &&
-        Objects.equals(this.gender, asRParamsSchema.gender) &&
-        Objects.equals(this.age, asRParamsSchema.age) &&
-        Objects.equals(this.dialect, asRParamsSchema.dialect) &&
-        Objects.equals(this.snr, asRParamsSchema.snr) &&
-        Objects.equals(this.collectionMethod, asRParamsSchema.collectionMethod) &&
+    AsrParamsSchema asrParamsSchema = (AsrParamsSchema) o;
+    return Objects.equals(this.format, asrParamsSchema.format) &&
+        Objects.equals(this.channel, asrParamsSchema.channel) &&
+        Objects.equals(this.samplingRate, asrParamsSchema.samplingRate) &&
+        Objects.equals(this.bitsPerSample, asrParamsSchema.bitsPerSample) &&
+        Objects.equals(this.numberOfSpeakers, asrParamsSchema.numberOfSpeakers) &&
+        Objects.equals(this.gender, asrParamsSchema.gender) &&
+        Objects.equals(this.age, asrParamsSchema.age) &&
+        Objects.equals(this.dialect, asrParamsSchema.dialect) &&
+        Objects.equals(this.snr, asrParamsSchema.snr) &&
+        Objects.equals(this.collectionMethod, asrParamsSchema.collectionMethod) &&
         super.equals(o);
   }
 
@@ -356,7 +356,7 @@ public class ASRParamsSchema extends DatasetCommonParamsSchema implements OneOfD
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ASRParamsSchema {\n");
+    sb.append("class AsrParamsSchema {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("    format: ").append(toIndentedString(format)).append("\n");
     sb.append("    channel: ").append(toIndentedString(channel)).append("\n");
