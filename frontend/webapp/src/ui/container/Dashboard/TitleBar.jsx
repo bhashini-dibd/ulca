@@ -8,7 +8,7 @@ import Statistics from "./Statistics";
 import Theme from "../../theme/theme-default";
 
 const TitleBar = (props) => {
-    const { classes, options, selectedOption,handleSelectChange, page } = props;
+    const { classes, options, selectedOption,handleSelectChange, page, count } = props;
     // const [options, setOptions] = useState('parallel-corpus');
     console.log(selectedOption)
     const gridArray = [{ title: 'Title1', value: '35555' }, { title: 'Title2', value: '4000' }]
@@ -56,7 +56,7 @@ const TitleBar = (props) => {
                         </Typography>
                         <Typography variant="body1">
                             {/* {props.totValue} */}
-                            53645447
+                            {new Intl.NumberFormat('en').format(count)}
                         </Typography>
                     </Grid>
                         <Grid item xs={0} sm={0} md={3} lg={3} xl={3}></Grid>
