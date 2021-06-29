@@ -7,7 +7,8 @@ const HeaderStyles = (theme) => ({
     margin: "0 auto",
     display: 'flex',
     alignItems: 'center',
-    padding:"0"
+    padding:"0",
+    boxSizing :"border-box"
   },
   title: {
     color: 'white',

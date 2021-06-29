@@ -32,6 +32,12 @@ const themeDefault = createMuiTheme({
         width:"80%"
       }
     },
+    MuiList:{
+      root:{
+        fontFamily: '"lato" ,sans-serif',
+      }
+      
+    },
     MUIDataTable: {
       paper: {
         minHeight: '674px',

@@ -17,7 +17,7 @@ const FileUploadStyles = (theme) => ({
     minHeight:"56px",
     maxWidth: "1272px",
     width : "100%",
-    margin :"7px auto",
+    margin :"17px auto",
     padding:"0"
   },
  
