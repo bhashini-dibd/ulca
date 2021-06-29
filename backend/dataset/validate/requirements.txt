@@ -16,3 +16,10 @@ langdetect==1.0.9
 redis==3.5.3
 audio-metadata==0.11.1
 word2number==1.1
+pyicu>=2.7.4
+wheel>=0.23.0
+pycld2>=0.3
+six>=1.7.3
+futures>=2.1.6
+morfessor>=2.0.2a1
+polyglot>=16.7.4
