@@ -127,7 +127,8 @@ class ParallelService:
                             return "UPDATE", dup_data
                         else:
                             return data, record
-                    derived_data = self.enrich_derived_data(data, record, data["sourceTextHash"], data["targetTextHash"], metadata)
+                    derived_data = self.enrich_derived_data(data, record, records, data["sourceTextHash"],
+                                                            data["targetTextHash"], metadata)
                     if derived_data:
                         new_records.append(derived_data)
             new_records.append(data)
@@ -218,8 +219,9 @@ class ParallelService:
             else:
                 return False
 
-    def enrich_derived_data(self, data, record, src_hash, tgt_hash, metadata):
+    def enrich_derived_data(self, data, record, records, src_hash, tgt_hash, metadata):
         derived_data = None
+        records.append(data)
         try:
             if src_hash == record["sourceTextHash"]:
                 if data["targetLanguage"] != record["targetLanguage"]:
@@ -243,9 +245,10 @@ class ParallelService:
                                 "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
             if not derived_data:
                 return None
-            dup = self.get_dataset_internal({"hash": [derived_data["sourceTextHash"], derived_data["targetTextHash"]]}, True)
-            if dup:
-                return None
+            for rec in records:
+                hashes = [rec["sourceTextHash"], rec["targetTextHash"]]
+                if (derived_data["sourceTextHash"] in hashes) and (derived_data["targetTextHash"] in hashes):
+                    return None
             for key in data.keys():
                 if key not in parallel_immutable_keys:
                     if key not in record.keys():
