@@ -104,17 +104,19 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<ASRRowS
 			asrRowSchema.setText(text);
 
 		}
-
-		if (!node.has("endTime")) {
-			errorList.add("endTime field should be present");
-		} else if (!node.get("endTime").isTextual()) {
-			errorList.add("endTime field should be String");
-		} else {
-			String endTime = node.get("endTime").asText();
-			asrRowSchema.setEndTime(endTime);
-		}
-
+		
 		// optional params
+
+		if (node.has("endTime")) {
+			if (!node.get("endTime").isTextual()) {
+				errorList.add("endTime field should be String");
+			} else {
+				String endTime = node.get("endTime").asText();
+				asrRowSchema.setEndTime(endTime);
+			}
+		} 
+
+		
 
 		if (node.has("startTime")) {
 			if (!node.get("startTime").isTextual()) {

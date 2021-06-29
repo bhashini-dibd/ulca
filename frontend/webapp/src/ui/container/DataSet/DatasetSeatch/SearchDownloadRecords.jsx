@@ -347,7 +347,7 @@ const SearchAndDownloadRecords = (props) => {
                 onChange={(event, data) => handleLanguagePairChange(data, 'source')}
                 renderInput={(params) => <TextField fullWidth {...params} label="Source Language *" variant="standard"
                     error={srcError}
-                    helperText={srcError && "Source language is mandatory"}
+                    helperText={srcError && "This field is mandatory"}
                 />}
             />
 
