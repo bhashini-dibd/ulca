@@ -47,20 +47,14 @@ class ParallelService:
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                         metrics.build_metric_event(result[1], metadata, None, True)
                         updates += 1
-                    elif result[0] == "INVALID":
-                        error_list.append(
-                            {"record": result[0], "originalRecord": result[0], "code": "INVALID_RECORD",
-                             "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
-                             "serviceRequestNumber": metadata["serviceRequestNumber"],
-                             "message": "This record has the same value for src and tgt!"})
-                        pt.update_task_details(
-                            {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     else:
                         error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
                                            "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
                                            "message": "This record is already available in the system"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                else:
+                    log.error(f'EXCEPTION - There was exception while processing record: {record}')
             if error_list:
                 error_event.create_error_event(error_list)
             log.info(f'Parallel - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
@@ -98,15 +92,6 @@ class ParallelService:
                                             "currentRecordIndex": metadata["currentRecordIndex"]})
                             metrics.build_metric_event(result[1], metadata, None, True)
                             updates += 1
-                        elif result[0] == "INVALID":
-                            error_list.append(
-                                {"record": result[0], "originalRecord": result[0], "code": "INVALID_RECORD",
-                                 "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
-                                 "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                 "message": "This record has the same value for src and tgt!"})
-                            pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD",
-                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                            "currentRecordIndex": metadata["currentRecordIndex"]})
                         else:
                             error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
                                                "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
@@ -132,8 +117,6 @@ class ParallelService:
     def get_enriched_data(self, data, metadata):
         insert_records, new_records = [], []
         try:
-            if data["sourceTextHash"] == data["targetTextHash"]:
-                return "INVALID", data
             records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]}, False)
             if records:
                 for record in records:
@@ -161,8 +144,8 @@ class ParallelService:
                 insert_records.append(obj)
             return insert_records, insert_records
         except Exception as e:
-            log.exception(e)
-            return "INVALID", data
+            log.exception(f'Exception while enriching record for insert record: {e}', e)
+            return None
 
     def get_dataset_internal(self, query, all):
         try:
@@ -237,49 +220,53 @@ class ParallelService:
 
     def enrich_derived_data(self, data, record, src_hash, tgt_hash, metadata):
         derived_data = None
-        if src_hash == record["sourceTextHash"]:
-            if data["targetLanguage"] != record["targetLanguage"]:
-                derived_data = {"sourceText": data["targetText"], "targetText": record["targetText"],
-                                "sourceTextHash": data["targetTextHash"], "targetTextHash": record["targetTextHash"],
-                            "sourceLanguage": data["targetLanguage"], "targetLanguage": record["targetLanguage"]}
-        elif src_hash == record["targetTextHash"]:
-            if data["targetLanguage"] != record["sourceLanguage"]:
-                derived_data = {"sourceText": data["targetText"], "targetText": record["sourceText"],
-                                "sourceTextHash": data["targetTextHash"], "targetTextHash": record["sourceTextHash"],
-                            "sourceLanguage": data["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
-        elif tgt_hash == record["sourceTextHash"]:
-            if data["sourceLanguage"] != record["targetLanguage"]:
-                derived_data = {"sourceText": data["sourceText"], "targetText": record["targetText"],
-                                "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["targetTextHash"],
-                            "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
-        elif tgt_hash == record["targetTextHash"]:
-            if data["sourceLanguage"] != record["sourceLanguage"]:
-                derived_data = {"sourceText": data["sourceText"], "targetText": record["sourceText"],
-                                "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["sourceTextHash"],
-                            "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
-        if not derived_data:
+        try:
+            if src_hash == record["sourceTextHash"]:
+                if data["targetLanguage"] != record["targetLanguage"]:
+                    derived_data = {"sourceText": data["targetText"], "targetText": record["targetText"],
+                                    "sourceTextHash": data["targetTextHash"], "targetTextHash": record["targetTextHash"],
+                                "sourceLanguage": data["targetLanguage"], "targetLanguage": record["targetLanguage"]}
+            elif src_hash == record["targetTextHash"]:
+                if data["targetLanguage"] != record["sourceLanguage"]:
+                    derived_data = {"sourceText": data["targetText"], "targetText": record["sourceText"],
+                                    "sourceTextHash": data["targetTextHash"], "targetTextHash": record["sourceTextHash"],
+                                "sourceLanguage": data["targetLanguage"], "targetLanguage": record["sourceLanguage"]}
+            elif tgt_hash == record["sourceTextHash"]:
+                if data["sourceLanguage"] != record["targetLanguage"]:
+                    derived_data = {"sourceText": data["sourceText"], "targetText": record["targetText"],
+                                    "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["targetTextHash"],
+                                "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["targetLanguage"]}
+            elif tgt_hash == record["targetTextHash"]:
+                if data["sourceLanguage"] != record["sourceLanguage"]:
+                    derived_data = {"sourceText": data["sourceText"], "targetText": record["sourceText"],
+                                    "sourceTextHash": data["sourceTextHash"], "targetTextHash": record["sourceTextHash"],
+                                "sourceLanguage": data["sourceLanguage"], "targetLanguage": record["sourceLanguage"]}
+            if not derived_data:
+                return None
+            dup = self.get_dataset_internal({"hash": [derived_data["sourceTextHash"], derived_data["targetTextHash"]]}, True)
+            if dup:
+                return None
+            for key in data.keys():
+                if key not in parallel_immutable_keys:
+                    if key not in record.keys():
+                        record[key] = [data[key]]
+                    elif isinstance(data[key], list):
+                        record[key] = list(set(data[key]) | set(record[key]))
+                    else:
+                        if isinstance(record[key], list):
+                            if data[key] not in record[key]:
+                                record[key].append(data[key])
+                    derived_data[key] = record[key]
+            derived_data["datasetId"] = [metadata["datasetId"]]
+            derived_data["datasetId"].extend(record["datasetId"])
+            derived_data["datasetType"] = metadata["datasetType"]
+            derived_data["derived"] = True
+            derived_data["tags"] = self.get_tags(derived_data)
+            derived_data["id"] = str(uuid.uuid4())
+            return derived_data
+        except Exception as e:
+            log.exception(f'Exception while creating derived data record: {e}', e)
             return None
-        dup = self.get_dataset_internal({"hash": [derived_data["sourceTextHash"], derived_data["targetTextHash"]]}, True)
-        if dup:
-            return None
-        for key in data.keys():
-            if key not in parallel_immutable_keys:
-                if key not in record.keys():
-                    record[key] = [data[key]]
-                elif isinstance(data[key], list):
-                    record[key] = list(set(data[key]) | set(record[key]))
-                else:
-                    if isinstance(record[key], list):
-                        if data[key] not in record[key]:
-                            record[key].append(data[key])
-                derived_data[key] = record[key]
-        derived_data["datasetId"] = [metadata["datasetId"]]
-        derived_data["datasetId"].extend(record["datasetId"])
-        derived_data["datasetType"] = metadata["datasetType"]
-        derived_data["derived"] = True
-        derived_data["tags"] = self.get_tags(derived_data)
-        derived_data["id"] = str(uuid.uuid4())
-        return derived_data
 
     def get_tags(self, insert_data):
         tag_details = {}
