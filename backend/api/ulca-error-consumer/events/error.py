@@ -68,7 +68,7 @@ class ErrorEvent:
         log.info(f'Search for error reports of SRN -- {srn} from db completed')
         if len(error_records) == 1:
             rec = error_records[0]
-            if rec["eof"] == True:
+            if "eof" in rec and rec["eof"] == True:
                 return [rec]
         if internal:
             return error_records
