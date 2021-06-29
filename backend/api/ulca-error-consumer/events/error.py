@@ -34,7 +34,10 @@ class ErrorEvent:
                 error_repo.insert(error_rec)
                 rec_count = error_repo.count({"serviceRequestNumber": data["serviceRequestNumber"]})
                 if rec_count % error_batch_size == 0:
-                    self.get_error_report(data["serviceRequestNumber"],False)
+                    log.info(f'Upload thread forked for {data["serviceRequestNumber"]}')
+                    persister = threading.Thread(target=self.get_error_report, args=(data["serviceRequestNumber"],False))
+                    persister.start()
+                    # self.get_error_report(data["serviceRequestNumber"],False)
             except Exception as e:
                 log.exception(f'Exception while writing errors: {e}', e)
                 return False
@@ -65,9 +68,7 @@ class ErrorEvent:
     def get_error_report(self, srn, internal):
         query = {"serviceRequestNumber": srn}
         exclude = {"_id": False}
-        log.info(f'Search for error reports of SRN -- {srn} from db started')
         error_records = error_repo.search(query, exclude, None, None)
-        log.info(f'Search for error reports of SRN -- {srn} from db completed')
 
         if internal:
             return error_records
@@ -81,6 +82,7 @@ class ErrorEvent:
                 if not error_rec:
                     error_rec = error_records[0]
                 error_rec["errors"] = errors
+                log.info(f"Uploading errors to Object Store for {srn}")
                 error_rec = self.upload_error_to_object_store(error_rec, srn)
                 error_rec.pop("error")
                 error_rec.pop("errors")
@@ -100,8 +102,6 @@ class ErrorEvent:
             error_record["file"] = utils.file_store_upload_call(file,file_name,error_prefix)
             error_record["uploaded"], error_record["errors"] = True, []
             error_repo.update(error_record)
-            # persister = threading.Thread(target=error_repo.update, args=(error_record,))
-            # persister.start()
             log.info(f'Error report uploaded to object store for SRN -- {srn}')
             os.remove(file)
             return error_record
