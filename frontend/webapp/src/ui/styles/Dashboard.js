@@ -31,11 +31,12 @@ const FileUploadStyles = (theme) => ({
   },
   filterButton:{
     marginLeft: 'auto',
-    paddingRight: '5%',
+    paddingRight: '1.5%',
     minWidth:"auto",
     display: "flex",
     flexDirection: "row",
-    cursor: "pointer"
+    cursor: "pointer",
+   
 
     // "@media (max-width:800px)": {
     //   display: 'none'

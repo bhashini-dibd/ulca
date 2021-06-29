@@ -7,33 +7,34 @@ import { DatasetItems } from "../../../configs/DatasetItems";
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { SaveAlt } from '@material-ui/icons';
+import HeaderStyles from "../../styles/HeaderStyles";
 
 
 const Statistics = (props) => {
     const { classes } = props;
     return (
-        <AppBar position="static" color="transparent" elevation={0} style={{ border: '1px solid #00000029' }}>
-            <Toolbar>
+        <AppBar position="static" color="inherit" elevation={0} style={{alignContent: 'center',display: 'grid'}}>
+            <Toolbar className={classes.toolbar}>
                 <Grid container style={{ alignItems: 'center' }}>
                     < Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                         <Typography variant="body2" gutterBottom>
                             {props.label}
                         </Typography>
-                        <Typography variant="h6" component="h5">
+                        <Typography variant="body1">
                             {props.totValue}
                         </Typography>
                     </Grid>
                     <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={4}>
                             {props.children}
                         </Grid>
                     </Grid>
-                    <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                    <Grid item xs={2} sm={2} md={2} lg={2} xl={2} >
                         <Button
                             size="medium"
                             color="primary"
                             variant="outlined"
-                            style={{ textTransform: 'none' }}
+                            style={{ textTransform: 'none', float:'right' }}
                             onClick={props.handleOnClick}
                         >
                             <SaveAlt className={classes.iconStyle} />Download
@@ -46,4 +47,4 @@ const Statistics = (props) => {
     )
 }
 
-export default withStyles(DatasetStyles)(Statistics);
+export default withStyles(HeaderStyles)(Statistics);
