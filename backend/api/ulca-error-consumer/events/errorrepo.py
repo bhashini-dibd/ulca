@@ -51,6 +51,10 @@ class ErrorRepo:
         col = self.get_mongo_instance()
         col.delete_one({"id": rec_id})
 
+    def remove(self, query):
+        col = self.get_mongo_instance()
+        col.remove(query)
+
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
         try:
@@ -66,6 +70,8 @@ class ErrorRepo:
         except Exception as e:
             log.exception(f'Exception in repo search: {e}', e)
             return []
+
+
 
 
 # Log config

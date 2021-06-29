@@ -24,15 +24,18 @@ class ErrorEvent:
 
     def write_error(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
-        try:
-            log.info(f'Creating error file for Dataset: {data["datasetName"]} | SRN: {data["serviceRequestNumber"]}')
-            file = f'{shared_storage_path}error-{data["datasetName"].replace(" ","-")}-{data["serviceRequestNumber"]}.csv'
-            error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"],
-                         "internal_file": file, "file": file, "time_stamp": str(datetime.now()), "error": data}
-            error_repo.insert(error_rec)
-        except Exception as e:
-            log.exception(f'Exception while writing errors: {e}', e)
-            return False
+        if "eof" in data:
+            self.handle_eof(data)
+        else:
+            try:
+                log.info(f'Creating error file for Dataset: {data["datasetName"]} | SRN: {data["serviceRequestNumber"]}')
+                file = f'{shared_storage_path}error-{data["datasetName"].replace(" ","-")}-{data["serviceRequestNumber"]}.csv'
+                error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"],
+                            "internal_file": file, "file": file, "time_stamp": str(datetime.now()), "error": data}
+                error_repo.insert(error_rec)
+            except Exception as e:
+                log.exception(f'Exception while writing errors: {e}', e)
+                return False
 
     def write_to_csv(self, data_list, file, srn):
         try:
@@ -101,6 +104,18 @@ class ErrorEvent:
         except Exception as e:
             log.exception(f'Exception while ingesting errors to object store: {e}', e)
             return []
+
+    def handle_eof(self, eof_event):
+        log.info(f'Received EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
+        query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
+        exclude = {"_id": False}
+        offset= 0
+        limit = 1
+        log.info(f'Searching for record on srn -- {eof_event["serviceRequestNumber"]}')
+        record = error_repo.search(query,exclude,offset,limit)
+        log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
+        error_repo.remove(query)
+        error_repo.insert(record[0])
 
 # Log config
 dictConfig({
