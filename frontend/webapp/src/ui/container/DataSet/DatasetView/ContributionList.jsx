@@ -145,7 +145,7 @@ const ContributionList = (props) => {
                 // name: "Status",
                 // label: "Status",
                 // options: {
-                //         filter  : true,
+                //         filter  : false,
                 //         sort    : false,
                 //         empty   : true,
                 //         customBodyRender: (value, tableMeta, updateValue) => {
@@ -160,7 +160,7 @@ const ContributionList = (props) => {
                 // name    : "Action",
                 // label   : "Action",
                 // options: {
-                //                 filter  : true,
+                //                 filter  : false,
                 //                 sort    : false,
                 //                 empty   : true,
                 //                 customBodyRender: (value, tableMeta, updateValue) => {
@@ -193,14 +193,16 @@ const ContributionList = (props) => {
                         onRowClick: rowData => handleRowClick(rowData),
                         // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
                         customToolbar: fetchHeaderButton,
-                filterType      : "checkbox",
-                download        : false,
-                print           : false,
-                fixedHeader     : false,
-                filter          : true,
-                viewColumns     : false,
-                selectableRows  : "none",
-                rowsPerPage:PageInfo.count,
+                        displaySelectToolbar    :       false,
+                        fixedHeader             :       false,
+                        filterType              :       "checkbox",
+                        download                :       false,
+                        print                   :       false,
+                        viewColumns     : false,
+                        rowsPerPage:PageInfo.count,
+                        filter                  :       true,
+                        rowsPerPageOptions      :       [10,25,50,100],
+                        selectableRows          :       "none",
                 page: PageInfo.page,
                 onTableChange: (action, tableState) => {
                         switch (action) {

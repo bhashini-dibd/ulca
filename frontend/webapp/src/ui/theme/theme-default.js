@@ -175,11 +175,13 @@ themeDefault.typography.h6 = {
   fontSize: "1.125rem",
   fontFamily: '"Poppins","lato" ,sans-serif',
   fontWeight: "500",
+  paddingTop:"4px"
 };
 themeDefault.typography.body1 = {
   fontSize: "1rem",
   fontFamily: '"lato" ,sans-serif',
   fontWeight: "400",
+
 };
 themeDefault.typography.body2 = {
   fontSize: "0.875rem",

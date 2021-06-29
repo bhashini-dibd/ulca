@@ -32,7 +32,7 @@ const ChartRender = (props) => {
 	useEffect(() => {
 		fetchChartData(selectedOption.value, "languagePairs", [])
 		if (authenticate()) {
-			history.push(`${process.env.PUBLIC_URL}/private-dashboard`)
+			history.push(`${process.env.PUBLIC_URL}/dashboard`)
 		}
 		else {
 			localStorage.clear()
@@ -150,7 +150,7 @@ const ChartRender = (props) => {
 		handleOnClick(page - 1)
 	}
 
-	const fetchLanuagePairButtons = () => {
+	const fetchFilterButtons = () => {
 		return (
 			<div className={classes.filterButton}>
 				<Button color={filterValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domains")}>Domain</Button>
@@ -180,7 +180,15 @@ const ChartRender = (props) => {
 
 				break;
 			case 'monolingual-corpus':
-				setTitle('Number of sentences per language')
+				if (page === 0) {
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
+					setTitle('Number of sentences per language')
+				} else if (page === 1) {
+					setTitle(`Number of sentences in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+				} else if (page === 2) {
+					setTitle(`Number of sentences in ${selectedLanguageName} `)
+				}
+				
 				break;
 			case 'asr-corpus':
 				if (page === 0) {
@@ -213,18 +221,21 @@ const ChartRender = (props) => {
 	}
 	return (
 		<MuiThemeProvider theme={Theme}>
-			{ !authenticate() &&
+			
 
-				<><Header style={{ marginBottom: "10px" }} /><br /><br /><br />
-				<TitleBar>
-				{fetchLanuagePairButtons()}
-			</ TitleBar>
-			<br /> </>
-			}
-			{/* <TitleBar>
-				{fetchLanuagePairButtons()}
-			</ TitleBar> */}
+				<><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
+			
+			
 			<div className={classes.container}>
+			<TitleBar selectedOption={selectedOption}
+							handleSelectChange={handleSelectChange}
+							options={options}
+							isDisabled={page !== 0 ? true : false}
+							page= {page}>
+
+				{page === 1 && fetchFilterButtons()}
+				
+			</ TitleBar>
 				{/* <div className={classes.breadcrum}>
 				<BreadCrum links={["Dataset"]} activeLink="Submit Dataset" />
 			</div> */}
@@ -232,23 +243,20 @@ const ChartRender = (props) => {
 				<Paper elevation={3} className={classes.paper}>
 
 					<div className={classes.titleBar}>
-						{page !== 0 && <><Button size="medium" variant="contained" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
-							<div className={classes.seperator}></div></>}
+					 <><Button size="small" variant="contained" disabled = {page !== 0 ? false : true} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
+							<div className={classes.seperator}></div></>
 
-						<Typography variant="h5"
-						> Dataset Type :	</Typography>
-						<Select className={classes.select}
+							<Typography value="" variant="h6"> {title} </Typography>
+						{/* <Select className={classes.select}
 							styles={customStyles} color="primary"
 							value={selectedOption}
 							onChange={(value) => { handleSelectChange(value, "", "", page) }}
 							options={options}
 							isDisabled={page !== 0 ? true : false}
-						/>
-						{page === 1 && fetchLanuagePairButtons()}
+						/> */}
+						
 					</div>
-					<div className={classes.title}>
-						<Typography value="" variant="h6"> {title} </Typography>
-					</div>
+					
 					<div className={classes.title}>
 						<ResponsiveContainer width="95%" height={550} >
 							<BarChart width={900} height={350} data={DashboardReport} fontSize="14px" fontFamily="Lato" maxBarSize={100} >

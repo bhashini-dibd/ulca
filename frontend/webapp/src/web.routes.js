@@ -21,12 +21,14 @@ import ActiveUser from "./ui/container/UserManagement/ActiveUser"
 import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/ReadymadeDataset";
 import TitleBar from "./ui/container/Dashboard/TitleBar";
 
-const PrivateRoute = ({ path, component: Component, authenticate, token, ...rest }) => {
+const PrivateRoute = ({ path, component: Component, authenticate,title, token, ...rest }) => {
   return (
     <Route
       {...rest}
       render={(props) =>
+        
         authenticate() ? (
+          title === "Dashboard" ? <Dashboard/>:
           <Layout component={Component} {...rest} />
         ) : (
           // <Redirect to={`${process.env.PUBLIC_URL}/user/login`}/>
@@ -91,8 +93,8 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/private-dashboard`}
-            title={"Submit Dataset"}
+            path={`${process.env.PUBLIC_URL}/dashboard`}
+            title={"Dashboard"}
             userRoles={[""]}
             component={Dashboard}
             authenticate={authenticateUser}

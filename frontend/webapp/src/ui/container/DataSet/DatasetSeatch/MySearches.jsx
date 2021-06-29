@@ -119,6 +119,7 @@ const MySearches = (props) => {
                 filterType              :       "checkbox",
                 download                :       false,
                 print                   :       false,
+                rowsPerPageOptions      :       [10,25,50,100],
                 rowsPerPage:PageInfo.count,
                 filter                  :       true,
                 page: PageInfo.page,

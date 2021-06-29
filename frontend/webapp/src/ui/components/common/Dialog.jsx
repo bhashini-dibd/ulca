@@ -46,7 +46,7 @@ export default function ResponsiveDialog(props) {
           <Button autoFocus onClick ={() =>{handleClose()}} color="primary">
             No
           </Button>
-          <Button onClick={() =>{handleSubmit()}} color="primary" autoFocus>
+          <Button variant="contained" onClick={() =>{handleSubmit()}} color="primary" autoFocus>
             Delete
           </Button>
         </DialogActions>

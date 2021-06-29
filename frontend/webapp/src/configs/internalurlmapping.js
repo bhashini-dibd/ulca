@@ -1,7 +1,7 @@
 const internalUrls = {
     dataset: {
         name: 'Dataset',
-        url: '/private-dashboard'
+        url: '/dashboard'
     },
     myContribution: {
         name: 'My Contribution',
