@@ -26,10 +26,18 @@ const themeDefault = createMuiTheme({
        
       }
     },
+    MUIDataTableFilterList: {
+      chip: {
+        display: 'none'
+      }
+    },
     MUIDataTableFilter:{
       root:{
         backgroundColor :"white",
         width:"80%"
+      },
+      checkboxFormControl:{
+        width:'200px'
       }
     },
     MuiList:{
@@ -48,6 +56,18 @@ border: "1px solid #0000001F"
         minHeight:"560px"
       }
     },
+    MUIDataTableToolbar:{
+      filterPaper:{
+      width: "220px"
+      },
+      MuiButton:{
+        root:{
+          display:"none"
+        }
+      }
+      
+      },
+
     MuiTableCell: {
       head: {
         padding: ".6rem .5rem .6rem 1.5rem",

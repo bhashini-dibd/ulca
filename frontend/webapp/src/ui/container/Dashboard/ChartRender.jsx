@@ -236,11 +236,11 @@ const ChartRender = (props) => {
 
 				<Paper elevation={3} className={classes.paper}>
 
-					<div className={classes.titleBar}>
-					 <><Button size="small" variant="contained" disabled = {page !== 0 ? false : true} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
-							<div className={classes.seperator}></div></>
+					<div className={classes.iconStyle}>
+					 <><Button size="small" color="primary" className={classes.backButton} variant="contained" style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
+							</>
 
-							<Typography value="" variant="h6"> {title} </Typography>
+							<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
 						{/* <Select className={classes.select}
 							styles={customStyles} color="primary"
 							value={selectedOption}

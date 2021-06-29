@@ -51,7 +51,7 @@ const TitleBar = (props) => {
                         < Grid item xs={4} sm={4} md={2} lg={2} xl={2} className={classes.tempGrid}>
                         <Typography variant="body2" gutterBottom>
                             {/* {props.label} */}
-                            Total Sentences Count
+                            Total Count
                         </Typography>
                         <Typography variant="body1">
                             {/* {props.totValue} */}
