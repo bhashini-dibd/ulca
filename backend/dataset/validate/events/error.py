@@ -21,7 +21,7 @@ class ErrorEvent:
                      "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),
                      "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool, "datasetName": error["datasetName"],
                      "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
-            prod.produce(event, error_event_input_topic, None)
+            prod.produce(event, error_event_input_topic, 0)
         except Exception as e:
             log.exception(e)
 

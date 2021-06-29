@@ -42,7 +42,7 @@ class TextLanguageCheck(BaseValidator):
                 # detected_lang = str(res[0]).split(':')[0]
                 # prob = str(res[0]).split(':')[1]
                 # if detected_lang != lang or float(prob) < 0.75:
-                    if detector.language.code != lang or detector.language.confidence<75:
+                    if detector.language.code != lang or detector.language.confidence<50:
                         return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
                 except Exception as e:
                     return {"message": "Unable to detect language, text snippet too small", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
