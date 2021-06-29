@@ -1,9 +1,9 @@
 [
     {
-        "test_name":"TextLanguageCheck", "active":"False"
+        "test_name":"TextLanguageCheck", "active":"True"
     },
     {
-        "test_name":"SentenceLengthCheck", "active":"False"
+        "test_name":"SentenceLengthCheck", "active":"True"
     },
     {
         "test_name":"WordLengthCheck", "active":"True"

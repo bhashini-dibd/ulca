@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, validate_text_length_threshold
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -26,7 +26,7 @@ class SentenceLengthCheck(BaseValidator):
 
             for text in text_list:
                 words = len(list(text.split()))
-                if words < 4:
+                if words < validate_text_length_threshold:
                     return {"message": "Sentence Length too short", "code": "TEXT_LENGTH_TOO_SHORT", "status": "FAILED"}
 
             log.info('----sentence length check  -> Passed----')

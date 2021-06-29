@@ -1,6 +1,7 @@
 from models.abstract_handler import BaseValidator
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
-from langdetect import detect_langs
+#from langdetect import detect_langs
+from polyglot.detect import Detector
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -33,13 +34,18 @@ class TextLanguageCheck(BaseValidator):
 
             for text, lang in zip(text_list, lang_list):
                 # Skipping for Assamese(as) and Oriya(or) as the current model doesnt support them
-                if lang == 'as' or lang == 'or':
-                    continue
-                res = detect_langs(text)
-                detected_lang = str(res[0]).split(':')[0]
-                prob = str(res[0]).split(':')[1]
-                if detected_lang != lang or float(prob) < 0.75:
-                    return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
+                #if lang == 'as' or lang == 'or':
+                 #   continue
+                #res = detect_langs(text)
+                try:
+                    detector = Detector(text)
+                # detected_lang = str(res[0]).split(':')[0]
+                # prob = str(res[0]).split(':')[1]
+                # if detected_lang != lang or float(prob) < 0.75:
+                    if detector.language.code != lang or detector.language.confidence<75:
+                        return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
+                except Exception as e:
+                    return {"message": "Unable to detect language, text snippet too small", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
             log.info('----text language check  -> Passed----')
             return super().execute(request)
