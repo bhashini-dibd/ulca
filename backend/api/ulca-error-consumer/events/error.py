@@ -24,7 +24,7 @@ class ErrorEvent:
 
     def write_error(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
-        if "eof" in data:
+        if "eof" in data and data["eof"] == True:
             self.handle_eof(data)
         else:
             try:
@@ -66,6 +66,10 @@ class ErrorEvent:
         log.info(f'Search for error reports of SRN -- {srn} from db started')
         error_records = error_repo.search(query, exclude, None, None)
         log.info(f'Search for error reports of SRN -- {srn} from db completed')
+        if len(error_records) == 1:
+            rec = error_records[0]
+            if rec["eof"] == True:
+                return [rec]
         if internal:
             return error_records
         try:
@@ -107,12 +111,14 @@ class ErrorEvent:
 
     def handle_eof(self, eof_event):
         log.info(f'Received EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
+        self.get_error_report(eof_event["serviceRequestNumber"], False)
         query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
         exclude = {"_id": False}
         offset= 0
         limit = 1
         log.info(f'Searching for record on srn -- {eof_event["serviceRequestNumber"]}')
         record = error_repo.search(query,exclude,offset,limit)
+        record[0]["eof"]=True
         log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
         error_repo.remove(query)
         error_repo.insert(record[0])
