@@ -69,6 +69,7 @@ class ErrorEvent:
         if len(error_records) == 1:
             rec = error_records[0]
             if "eof" in rec and rec["eof"] == True:
+                log.info(f"Returning error file for srn-{srn}")
                 return [rec]
         if internal:
             return error_records
@@ -111,24 +112,14 @@ class ErrorEvent:
 
     def handle_eof(self, eof_event):
         log.info(f'Received EOF event to error for srn -- {eof_event["serviceRequestNumber"]}')
-        self.get_error_report(eof_event["serviceRequestNumber"], False)
+        response = self.get_error_report(eof_event["serviceRequestNumber"], False)
+        response= response[0]
+        response["eof"]= True
         query = {"serviceRequestNumber": eof_event["serviceRequestNumber"]}
-        exclude = {"_id": False}
-        log.info(f'Searching for record on srn -- {eof_event["serviceRequestNumber"]}')
-        error_records = error_repo.search(query,exclude,None,None)
-        error_rec = None
-        if error_records:
-            for error in error_records:
-                if 'uploaded' in error.keys():
-                    error_rec = error 
-        log.info(error_rec)
-        error_rec["eof"]=True
-        error_rec.pop("error")
-        error_rec.pop("errors")
         log.info(f'Removing records on srn -- {eof_event["serviceRequestNumber"]}')
         error_repo.remove(query)
         log.info(f'Inserting eof record on daatabase')
-        error_repo.insert(error_rec)
+        error_repo.insert(response)
 
 # Log config
 dictConfig({
