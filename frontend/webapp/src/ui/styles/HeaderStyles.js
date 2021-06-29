@@ -7,7 +7,7 @@ const HeaderStyles = (theme) => ({
     margin: "0 auto",
     display: 'flex',
     alignItems: 'center',
-    padding:"0"
+    padding: "0"
   },
   title: {
     color: 'white',
@@ -28,8 +28,8 @@ const HeaderStyles = (theme) => ({
   menu: {
     width: '100%',
     display: 'flex',
-    alignItems:"center",
-    cursor:"pointer"
+    alignItems: "center",
+    cursor: "pointer"
   },
   datasetOption: {
     marginLeft: '8.4%',
@@ -45,17 +45,17 @@ const HeaderStyles = (theme) => ({
     marginRight: '-1%'
   },
   menuBtn: {
-    height:"54px",
-    minWidth:"110px",
+    height: "54px",
+    minWidth: "110px",
     color: 'white'
   },
   menuBtn2: {
-    height:"37px",
-    width:"88px",
-    marginRight:"10px",
+    height: "37px",
+    width: "88px",
+    marginRight: "10px",
     backgroundColor: 'white',
     "&:hover": {
-      
+
       backgroundColor: 'white',
     }
   },
@@ -71,7 +71,7 @@ const HeaderStyles = (theme) => ({
   styledMenu1: {
     padding: "9px",
     marginTop: "10px",
-    boxShadow: "0px 3px 6px #00000029 !important" 
+    boxShadow: "0px 3px 6px #00000029 !important"
   },
   profileName: {
     marginLeft: '0.5rem',
@@ -85,11 +85,11 @@ const HeaderStyles = (theme) => ({
       display: 'block'
     }
   },
-  avatar:{
-    width:"36px",
-    height:"36px",
-    backgroundColor:"white",
-    fontSize:"14px"
+  avatar: {
+    width: "36px",
+    height: "36px",
+    backgroundColor: "white",
+    fontSize: "14px"
   },
 
   dataset: {
@@ -115,11 +115,11 @@ const HeaderStyles = (theme) => ({
     }
   },
   signIn: {
-    
+
     color: 'white'
   },
   signUp: {
-    
+
     color: 'white'
   },
   desktopAuth: {
@@ -132,6 +132,22 @@ const HeaderStyles = (theme) => ({
     "@media (max-width:400px)": {
       display: 'block'
     }
+  },
+  selectGrid: {
+    boxShadow: '3px 0 2px -2px #00000029',
+    height: '54px',
+    alignContent: 'center',
+    display: 'grid'
+  },
+  toolGrid: {
+    alignItems: 'center'
+  },
+  tempGrid: {
+    paddingLeft: '1rem',
+    boxShadow: '3px 0 2px -2px #00000029',
+    height: '54px',
+    alignContent: 'center',
+    display: 'grid'
   }
 });
 export default HeaderStyles;

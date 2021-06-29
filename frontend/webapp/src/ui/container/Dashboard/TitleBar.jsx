@@ -16,12 +16,11 @@ const TitleBar = (props) => {
         setOptions(value);
     };
     return (
-        <>
         <MuiThemeProvider theme={Theme}>
             <AppBar position="static" color="inherit" elevation={0} >
                 <Toolbar className={classes.toolbar}>
-                    <Grid container style={{ alignItems: 'center' }}>
-                        < Grid item xs={3} sm={3} md={2} lg={2} xl={2} style={{ boxShadow: '3px 0 2px -2px #00000029', height:'54px', alignContent: 'center',display: 'grid'}}>
+                    <Grid container className={classes.toolGrid}>
+                        < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.selectGrid}>
                             <FormControl className={classes.formControl}>
                                 <NativeSelect disableUnderline
                                     value={options}
@@ -41,7 +40,7 @@ const TitleBar = (props) => {
                                 </NativeSelect>
                             </FormControl>
                         </Grid>
-                        < Grid item xs={4} sm={4} md={2} lg={2} xl={2} style={{paddingLeft:'1rem', boxShadow: '3px 0 2px -2px #00000029', height:'54px', alignContent: 'center',display: 'grid'}}>
+                        < Grid item xs={4} sm={4} md={2} lg={2} xl={2} className={classes.tempGrid}>
                         <Typography variant="body2" gutterBottom>
                             {/* {props.label} */}
                             Total parallel sentences
@@ -84,7 +83,6 @@ const TitleBar = (props) => {
                 </Grid> 
             </Statistics> */}
             </MuiThemeProvider>
-        </>
     )
 }
 
