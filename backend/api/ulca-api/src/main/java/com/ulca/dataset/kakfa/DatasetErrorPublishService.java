@@ -43,7 +43,14 @@ public class DatasetErrorPublishService {
 		errorMessage.put("datasetType", datasetType);
 		errorMessage.put("message", message);
 		
-		datasetErrorKafkaTemplate.send(errorTopic,0,null, errorMessage.toString());
+		datasetErrorKafkaTemplate.send(errorTopic, errorMessage.toString());
+	}
+	
+	public void publishEofStatus(String serviceRequestNumber) {
+		JSONObject errorMessage = new JSONObject();
+		errorMessage.put("serviceRequestNumber",  serviceRequestNumber);
+		errorMessage.put("eof", true);
+		datasetErrorKafkaTemplate.send(errorTopic, errorMessage.toString());
 	}
 
 }
