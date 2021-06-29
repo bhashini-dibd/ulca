@@ -48,3 +48,6 @@ azure_container_name    =   os.environ.get('ULCA_AZURE_FILE_CONTAINER',"azure-co
 azure_account_name      =   os.environ.get('ULCA_AZURE_ACCOUNT_NAME', "azure-account")
 azure_link_prefix       =   f'https://{azure_account_name}.blob.core.windows.net/{azure_container_name}/'
 
+error_batch_size        =   os.environ.get('ULCA_EEROR_BATCH_SIZE',1000)
+if isinstance(error_batch_size, str):
+    error_batch_size    =  eval(ulca_dataset_topic_partitions)

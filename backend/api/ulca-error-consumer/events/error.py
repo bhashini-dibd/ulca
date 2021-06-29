@@ -6,7 +6,7 @@ import threading
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import shared_storage_path, error_prefix, pt_publish_tool
+from configs.configs import shared_storage_path, error_prefix, pt_publish_tool, error_batch_size
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
 
@@ -32,6 +32,9 @@ class ErrorEvent:
                 error_rec = {"id": str(uuid.uuid4()), "serviceRequestNumber": data["serviceRequestNumber"],
                             "internal_file": file, "file": file, "time_stamp": str(datetime.now()), "error": data}
                 error_repo.insert(error_rec)
+                rec_count = error_repo.count({"serviceRequestNumber": data["serviceRequestNumber"]})
+                if rec_count % error_batch_size == 0:
+                    self.get_error_report(data["serviceRequestNumber"],False)
             except Exception as e:
                 log.exception(f'Exception while writing errors: {e}', e)
                 return False
@@ -65,14 +68,7 @@ class ErrorEvent:
         log.info(f'Search for error reports of SRN -- {srn} from db started')
         error_records = error_repo.search(query, exclude, None, None)
         log.info(f'Search for error reports of SRN -- {srn} from db completed')
-        log.info(f'length of errors -{len(error_records)}')
-        if len(error_records) > 0:
-            rec = error_records[0]
-            log.info('Inside eof block!')
-            if "eof" in rec :
-                if rec["eof"]:
-                    log.info(f"Returning error file for srn-{srn}")
-                    return [rec]
+
         if internal:
             return error_records
         try:
@@ -129,6 +125,18 @@ class ErrorEvent:
         except Exception as e:
             log.info(f'Exception on eof handler : {e}')
             return False
+
+
+    def search_error_report(self, srn, internal):
+        try:
+            query = {"serviceRequestNumber": srn,"uploaded":True}
+            exclude = {"_id": False}
+            log.info(f'Search for error reports of SRN -- {srn} from db started')
+            error_records = error_repo.search(query, exclude, None, None)
+            return error_records
+        except Exception as e:
+            log.exception(f'Exception while fetching error report: {e}', e)
+            return []
 
 # Log config
 dictConfig({

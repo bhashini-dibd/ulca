@@ -13,7 +13,7 @@ class FetchErrorReport(Resource):
         service = ErrorEvent()
         req_criteria = request.get_json()
         log.info(f'Request received for error report SRN-{req_criteria["serviceRequestNumber"]}')
-        result = service.get_error_report(req_criteria["serviceRequestNumber"], False)
+        result = service.search_error_report(req_criteria["serviceRequestNumber"], False)
         return jsonify(result)
 
 class Health(Resource):

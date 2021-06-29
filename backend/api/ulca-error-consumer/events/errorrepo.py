@@ -53,7 +53,8 @@ class ErrorRepo:
 
     def remove(self, query):
         col = self.get_mongo_instance()
-        col.remove(query)
+        # col.remove(query)
+        col.delete_many(query)
 
     # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
@@ -70,7 +71,14 @@ class ErrorRepo:
         except Exception as e:
             log.exception(f'Exception in repo search: {e}', e)
             return []
-
+            
+    def count(self,query):
+        try:
+            col = self.get_mongo_instance()
+            count = col.count(query)
+            return count
+        except Exception as e:
+            log.exception(f'Exception in repo count: {e}', e)
 
 
 
