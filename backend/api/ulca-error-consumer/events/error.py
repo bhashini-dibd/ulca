@@ -100,6 +100,7 @@ class ErrorEvent:
             self.write_to_csv(error_record["errors"], file, srn)
             file_name = error_record["internal_file"].replace("/opt/","")
             error_record["file"] = utils.file_store_upload_call(file,file_name,error_prefix)
+            error_record["count"] = len(error_record["errors"])
             error_record["uploaded"], error_record["errors"] = True, []
             error_repo.update(error_record)
             log.info(f'Error report uploaded to object store for SRN -- {srn}')
