@@ -50,6 +50,9 @@ public class KafkaFileDownloadConsumer {
 	DatasetAsrValidateIngest datasetAsrValidateIngest;
 	
 	@Autowired
+	DatasetAsrUnlabeledValidateIngest datasetAsrUnlabeledValidateIngest;
+	
+	@Autowired
 	DatasetParallelCorpusValidateIngest datasetParallelCorpusValidateIngest;
 	
 	@Autowired
@@ -139,6 +142,10 @@ public class KafkaFileDownloadConsumer {
 				datasetAsrValidateIngest.validateIngest(fileMap,file);
 				break;
 				
+			case ASR_UNLABELED_CORPUS:
+				log.info("calling the asr-unlabeled-corpus validate service");
+				datasetAsrUnlabeledValidateIngest.validateIngest(fileMap, file);
+				break;
 			case OCR_CORPUS: 
 				log.info("calling the ocr-corpus validate service");
 				datasetOcrValidateIngest.validateIngest(fileMap,file);
