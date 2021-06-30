@@ -126,13 +126,13 @@ public class ProcessTracker {
 	 * Status of the process
 	 */
 	public enum StatusEnum {
-		notstarted("notstarted"),
+		pending("Pending"),
 
-		inprogress("inprogress"),
+		inprogress("In-Progress"),
 
-		successful("publish"),
+		completed("Completed"),
 
-		failed("failed");
+		failed("Failed");
 
 		private String value;
 
@@ -158,7 +158,7 @@ public class ProcessTracker {
 	}
 
 	@JsonProperty("status")
-	private StatusEnum status = null;
+	private String status = null;
 
 	@JsonProperty("details")
 	private Object details = null;
@@ -298,7 +298,7 @@ public class ProcessTracker {
 		this.searchCriteria = searchCriteria;
 	}
 
-	public ProcessTracker status(StatusEnum status) {
+	public ProcessTracker status(String status) {
 		this.status = status;
 		return this;
 	}
@@ -310,11 +310,11 @@ public class ProcessTracker {
 	 **/
 	@Schema(description = "Status of the process")
 
-	public StatusEnum getStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(StatusEnum status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 

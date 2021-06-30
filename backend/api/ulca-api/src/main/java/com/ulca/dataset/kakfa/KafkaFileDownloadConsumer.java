@@ -108,7 +108,7 @@ public class KafkaFileDownloadConsumer {
 				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
 				
 				log.info("file unzip complete");
-				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
+				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.completed);
 				
 
 			} catch (IOException e) {
