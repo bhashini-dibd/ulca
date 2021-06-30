@@ -224,5 +224,10 @@ themeDefault.typography.caption = {
   fontFamily: '"lato" ,sans-serif',
   fontWeight: "400",
 };
+themeDefault.typography.subtitle1 = {
+  fontSize: "1.125rem",
+  fontFamily: '"lato" ,sans-serif',
+  fontWeight: "600"
+};
 
 export default themeDefault;
