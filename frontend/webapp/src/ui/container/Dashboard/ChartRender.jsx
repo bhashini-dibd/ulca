@@ -269,7 +269,7 @@ const ChartRender = (props) => {
 								<YAxis padding={{ top: 10 }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
 
 
-								<Tooltip labelStyle={{fontFamily:"Lato"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
+								<Tooltip contentStyle={{fontFamily:"Lato", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
 								<Bar margin={{ top: 40, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
 									<LabelList
 										formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }}
