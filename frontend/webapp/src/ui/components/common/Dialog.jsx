@@ -25,15 +25,15 @@ export default function ResponsiveDialog(props) {
 
   
 
-  const {title,message, open,handleSubmit, handleClose  } = props;
-
+  const {title,message, open,handleSubmit, handleClose,actionButton, actionButton2  } = props;
+  debugger
   return (
     
     <MuiThemeProvider theme={getMuiTheme()}> 
 
       <Dialog
         open={open}
-        onClose ={() =>{handleClose()}}
+        // onClose ={() =>{handleClose()}}
         
       >
         <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
@@ -44,10 +44,10 @@ export default function ResponsiveDialog(props) {
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick ={() =>{handleClose()}} color="primary">
-            No
+            {actionButton}
           </Button>
           <Button variant="contained" onClick={() =>{handleSubmit()}} color="primary" autoFocus>
-            Delete
+            {actionButton2}
           </Button>
         </DialogActions>
       </Dialog>
