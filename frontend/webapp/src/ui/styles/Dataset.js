@@ -215,6 +215,10 @@ const DataSet = (theme) => ({
     },
     searchGrid: {
         height: '100%'
+    },
+    popupDialog:{
+        maxWidth:'46.125rem',
+        height:'26.5rem'
     }
 });
 

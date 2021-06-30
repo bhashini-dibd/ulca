@@ -19,7 +19,7 @@ import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/Searc
 import ActivateUser from "./ui/container/UserManagement/ActivateUser";
 import ActiveUser from "./ui/container/UserManagement/ActiveUser"
 import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/ReadymadeDataset";
-import TitleBar from "./ui/container/Dashboard/TitleBar";
+import PopUp from "./ui/container/DataSet/ReadymadeDataset.jsx/PopUp";
 
 const PrivateRoute = ({ path, component: Component, authenticate,title, token, ...rest }) => {
   return (
@@ -145,12 +145,20 @@ export default function App() {
             component={ActiveUser}
 
           />
-          <Route
-            path={`${process.env.PUBLIC_URL}/title-bar`}
+          {/* <Route
+            path={`${process.env.PUBLIC_URL}/pop-up`}
 
-            component={TitleBar}
+            component={PopUp}
 
-          />
+          /> */}
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/pop-up`}
+            userRoles={[""]}
+            component={PopUp}
+            authenticate={authenticateUser}
+            currentMenu="pop-up"
+            dontShowHeader={false}
+            />
 
         </Switch>
       </div>

@@ -154,7 +154,7 @@ const HeaderStyles = (theme) => ({
     justifyContent: 'left',
     fontSize: "1.125rem",
  // fontFamily: '"Poppins","lato" ,sans-serif',
-  fontWeight: "500",
+  fontWeight: "500 !important",
     "&:hover": {
 
       backgroundColor: 'white',

@@ -86,7 +86,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				// update the end time for ingest
 				v1 = true;
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.ingest,
-						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
+						com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
 			} else {
 				
 				processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
@@ -101,7 +101,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				v2 = true;
 				
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber,
-						ToolEnum.validate, com.ulca.dataset.model.TaskTracker.StatusEnum.successful,
+						ToolEnum.validate, com.ulca.dataset.model.TaskTracker.StatusEnum.completed,
 						details.toString());
 			} else {
 				if (validateSuccess > 0 || validateError > 0)
@@ -118,7 +118,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				v3 = true;
 				
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
-						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
+						com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
 			} else {
 				if (publishSuccess > 0 || publishError > 0)
 					processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.publish,
