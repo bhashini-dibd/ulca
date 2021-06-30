@@ -90,11 +90,7 @@ class ParallelRepo:
             col = self.get_mongo_instance()
             if 'sourceLanguage' in query.keys() and 'targetLanguage' in query.keys():
                 if len(query["targetLanguage"]) == 1:
-                    if 'groupBy' not in query.keys():
-                        langs = [query["sourceLanguage"], query["targetLanguage"][0]]
-                        pipeline.append({"$match": {"$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
-                    else:
-                        pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["targetLanguage"][0]}]}})
+                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["targetLanguage"][0]}]}})
                 else:
                     pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": {"$in": query["targetLanguage"]}}]}})
                     query["groupBy"] = True

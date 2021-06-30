@@ -1,11 +1,7 @@
-import csv
-import json
 import logging
-import os
 import uuid
 from datetime import datetime
-from configs.configs import error_event_input_topic, publish_error_code, \
-     error_prefix, pt_publish_tool
+from configs.configs import error_event_input_topic, publish_error_code, pt_publish_tool
 from kafkawrapper.producer import Producer
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils

@@ -349,7 +349,10 @@ class ParallelService:
             op["pipeline"] = pipeline
             return op
         except Exception as e:
-            log.exception(e)
+            log.exception(f'Exception in search: {e}', e)
+            op = {"serviceRequestNumber": query["serviceRequestNumber"]}
+            error = {"code": "EXCEPTION", "serviceRequestNumber": query["serviceRequestNumber"], "message": f'Exception in search: {e}'}
+            pt.task_event_search(op, error)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
     def delete_parallel_dataset(self, delete_req):

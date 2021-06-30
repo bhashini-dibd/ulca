@@ -69,9 +69,9 @@ threads_threshold = 100
 pt_publish_tool = os.environ.get('PT_TOOL_PUBLISH', 'publish')
 pt_search_tool = os.environ.get('PT_TOOL_SEARCH', 'search')
 pt_delete_tool = os.environ.get('PT_TOOL_DELETE', 'delete')
-pt_inprogress_status = os.environ.get('PT_STATUS_INPROGRESS', 'inprogress')
-pt_success_status = os.environ.get('PT_STATUS_SUCCESS', 'successful')
-pt_failed_status = os.environ.get('PT_STATUS_FAILED', 'failed')
+pt_inprogress_status = os.environ.get('STATUS_INPROGRESS', 'In-Progress')
+pt_success_status = os.environ.get('STATUS_COMPLETED', 'Completed')
+pt_failed_status = os.environ.get('STATUS_FAILED', 'Failed')
 
 ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
