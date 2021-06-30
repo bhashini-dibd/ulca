@@ -39,7 +39,7 @@ const MenuItems = (props ) => {
                         className={classes.styledMenu}
                         onClick={() => props.handleMenuItemClick(menu.url)}
                     >
-                        <Typography variant={"body2"}>{menu.name}</Typography>
+                        {menu.name}
                     </MenuItem>
                 })
             }

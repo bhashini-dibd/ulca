@@ -62,7 +62,9 @@ const TitleBar = (props) => {
                                 variant="text">
 
                                 {/* {selectedOption&& getLabel(selectedOption)} */}
+                                <Typography variant ="subtitle1">
                                 {selectedOption.label}
+                                </Typography>
                                 <DownIcon />
                             </Button>
                             <StyledMenu id="data-set"
@@ -81,7 +83,7 @@ const TitleBar = (props) => {
                                                 handleClose()
                                             }}
                                         >
-                                            <Typography variant={"body2"}>
+                                            <Typography variant={"body1"}>
                                             {menu.label}
                                             </Typography>
                                         </MenuItem>
