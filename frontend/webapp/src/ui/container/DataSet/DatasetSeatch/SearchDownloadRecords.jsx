@@ -422,7 +422,7 @@ const SearchAndDownloadRecords = (props) => {
                             <div className={classes.subHeader}>
                                 {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
                             </div>
-                            <div className={classes.subHeader}>
+                            <div className={classes.autoComplete}>
                                 <MultiAutocomplete
                                     id="language-target"
                                     options={getTargetLang()}
