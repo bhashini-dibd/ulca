@@ -181,7 +181,21 @@ public class DatasetService {
 				for (TaskTracker tTracker : taskTrackerList) {
 					mapTemp.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
 				}
-				if(!mapTemp.containsKey("validate")) {
+				if(!mapTemp.containsKey(TaskTracker.ToolEnum.download.toString())) {
+					TaskTracker obj = new TaskTracker();
+					obj.serviceRequestNumber(serviceRequestNumber);
+					obj.setTool(ToolEnum.download);
+					obj.setStatus(TaskTracker.StatusEnum.notstarted);
+					taskTrackerList.add(obj);
+				}
+				if(!mapTemp.containsKey(TaskTracker.ToolEnum.ingest.toString())) {
+					TaskTracker obj = new TaskTracker();
+					obj.serviceRequestNumber(serviceRequestNumber);
+					obj.setTool(ToolEnum.ingest);
+					obj.setStatus(TaskTracker.StatusEnum.notstarted);
+					taskTrackerList.add(obj);
+				}
+				if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
 					TaskTracker obj = new TaskTracker();
 					obj.serviceRequestNumber(serviceRequestNumber);
 					obj.setTool(ToolEnum.validate);
@@ -189,7 +203,7 @@ public class DatasetService {
 					taskTrackerList.add(obj);
 				}
 				
-				if(!mapTemp.containsKey("publish")) {
+				if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
 					TaskTracker obj = new TaskTracker();
 					obj.serviceRequestNumber(serviceRequestNumber);
 					obj.setTool(ToolEnum.publish);
@@ -214,14 +228,29 @@ public class DatasetService {
 		for (TaskTracker tTracker : taskTrackerList) {
 			mapTemp.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
 		}
-		if(!mapTemp.containsKey("validate")) {
+		if(!mapTemp.containsKey(TaskTracker.ToolEnum.download.toString())) {
+			TaskTracker obj = new TaskTracker();
+			obj.serviceRequestNumber(serviceRequestNumber);
+			obj.setTool(ToolEnum.download);
+			obj.setStatus(TaskTracker.StatusEnum.notstarted);
+			taskTrackerList.add(obj);
+		}
+		if(!mapTemp.containsKey(TaskTracker.ToolEnum.ingest.toString())) {
+			TaskTracker obj = new TaskTracker();
+			obj.serviceRequestNumber(serviceRequestNumber);
+			obj.setTool(ToolEnum.ingest);
+			obj.setStatus(TaskTracker.StatusEnum.notstarted);
+			taskTrackerList.add(obj);
+		}
+		if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
 			TaskTracker obj = new TaskTracker();
 			obj.serviceRequestNumber(serviceRequestNumber);
 			obj.setTool(ToolEnum.validate);
 			obj.setStatus(TaskTracker.StatusEnum.notstarted);
 			taskTrackerList.add(obj);
 		}
-		if(!mapTemp.containsKey("publish")) {
+		
+		if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
 			TaskTracker obj = new TaskTracker();
 			obj.serviceRequestNumber(serviceRequestNumber);
 			obj.setTool(ToolEnum.publish);
