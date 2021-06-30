@@ -40,10 +40,10 @@ const getDetailedReport = (payload) => {
                      recordCount            : count && count.success,
                      failedCount            : count && count.failed,
                      stage                  : element.tool,
-                     status                 : element.status==="successful" ? "Completed" :  element.status ==="inprogress" ? "In-Progress": element.status
+                     status                 :  element.status
                     }
         )
-        if(element.status === "successful" || "NOTSTARTED"){
+        if(element.status === "Completed" || "Pending"){
             refreshStatus = true
         }
     }); 

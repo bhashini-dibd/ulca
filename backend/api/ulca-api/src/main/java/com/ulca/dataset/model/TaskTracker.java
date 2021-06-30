@@ -73,13 +73,14 @@ public class TaskTracker   {
    * Status of the task
    */
   public enum StatusEnum {
-    notstarted("notstarted"),
+    pending("Pending"),
     
-    inprogress("inprogress"),
+    inprogress("In-Progress"),
     
-    successful("successful"),
+    completed("Completed"),
     
-    failed("failed");
+    failed("Failed"),
+	na("N/A");
 
     private String value;
 
@@ -109,7 +110,7 @@ public class TaskTracker   {
   private String id = null;
   
   @JsonProperty("status")
-  private StatusEnum status = null;
+  private String status = null;
 
   @JsonProperty("details")
   private String details = null;
@@ -167,7 +168,7 @@ public class TaskTracker   {
     this.tool = tool;
   }
 
-  public TaskTracker status(StatusEnum status) {
+  public TaskTracker status(String status) {
     this.status = status;
     return this;
   }
@@ -178,11 +179,11 @@ public class TaskTracker   {
    **/
   @Schema(description = "Status of the task")
   
-    public StatusEnum getStatus() {
+    public String getStatus() {
     return status;
   }
 
-  public void setStatus(StatusEnum status) {
+  public void setStatus(String status) {
     this.status = status;
   }
 
