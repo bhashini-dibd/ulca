@@ -152,6 +152,9 @@ const HeaderStyles = (theme) => ({
   btnStyle: {
     padding: '0px',
     justifyContent: 'left',
+    fontSize: "1.125rem",
+ // fontFamily: '"Poppins","lato" ,sans-serif',
+  fontWeight: "500",
     "&:hover": {
 
       backgroundColor: 'white',
