@@ -247,6 +247,14 @@ components:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioChannel'
         samplingRate:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioSampleRate'
+        speaker:
+          type: string
+          description: speaker name or id for the audio utterance
+        duration: 
+          type: number
+          description: audio duration in seconds
+        collectionSource:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Source'
         bitsPerSample:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample'      
         gender:
@@ -275,8 +283,7 @@ components:
         endTime:
           type: string
           description: "Time of the audio where the processing end. Format : hh-mm-ss"
-        collectionMethod: 
-          $ref: '#/components/schemas/CollectionMethodAudio'
+          
 
     OcrDatasetParamsSchema:
       allOf:
