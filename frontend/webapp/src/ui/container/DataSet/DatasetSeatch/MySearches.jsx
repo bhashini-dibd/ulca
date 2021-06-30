@@ -113,11 +113,6 @@ const MySearches = (props) => {
                         pagination      :       { rowsPerPage     : "Rows per page"},
                         options         :       { sortDirection   : "desc" },
                 },
-                filter: {
-                        all: "All",
-                        title: "Status",
-                        reset:"Clear All"
-                 },
                 customToolbar: fetchHeaderButton,
                 displaySelectToolbar    :       false,
                 fixedHeader             :       false,
@@ -126,7 +121,7 @@ const MySearches = (props) => {
                 print                   :       false,
                 rowsPerPageOptions      :       [10,25,50,100],
                 rowsPerPage:PageInfo.count,
-               
+                filter                  :       true,
                 page: PageInfo.page,
                 viewColumns     : false,
                 selectableRows          :       "none",

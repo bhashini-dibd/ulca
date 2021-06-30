@@ -106,15 +106,7 @@ const ContributionList = (props) => {
                         display : "excluded",
                         },
                 },
-                {
-                name    : "submitRefNumber",
-                label   : "SR No.",
-                options : {
-                                filter  : false,
-                                sort    : false,
-                                display : "excluded",
-                        },
-                },
+               
                 {
                 name    : "datasetName",
                 label   : "Dataset Name",
@@ -123,6 +115,14 @@ const ContributionList = (props) => {
                         sort    : true,
                         },
                 },
+                {
+                        name    : "datasetType",
+                        label   : "Dataset Type",
+                        options: {
+                                filter  : true,
+                                sort    : true,
+                                },
+                        },
                 {
                 name    : "submittedOn",
                 label   : "Submitted On",
@@ -193,6 +193,7 @@ const ContributionList = (props) => {
                         onRowClick: rowData => handleRowClick(rowData),
                         // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
                         customToolbar: fetchHeaderButton,
+                        filter                  :       true,
                         displaySelectToolbar    :       false,
                         fixedHeader             :       false,
                         filterType              :       "checkbox",
@@ -200,7 +201,7 @@ const ContributionList = (props) => {
                         print                   :       false,
                         viewColumns     : false,
                         rowsPerPage:PageInfo.count,
-                        filter                  :       true,
+                    
                         rowsPerPageOptions      :       [10,25,50,100],
                         selectableRows          :       "none",
                 page: PageInfo.page,

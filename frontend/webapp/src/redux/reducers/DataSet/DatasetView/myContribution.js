@@ -1,5 +1,5 @@
 import C from '../../../actions/constants';
-
+import getDatasetName from '../../../../utils/getDataset';
 const initialState = {
     responseData: []
 }
@@ -21,11 +21,11 @@ const getContributionList = (payload) => {
                      submitRefNumber      : element.serviceRequestNumber,
                      datasetName          : element.datasetName,
                      submittedOn          : dateConversion(element.submittedOn),
-                     datasetType :          element.datasetType,
-                     status               : element.status === "inprogress" ? "In-Progress" : element.status === "notstarted" ? "Not Started" : element.status === "successful"? "Completed" : (element.status.toLowerCase())
+                     datasetType :          getDatasetName(element.datasetType),
+                     status               : element.status
             }
         )
-        if(element.status === "INPROGRESS" || "NOTSTARTED"){
+        if(element.status === "In-Progress" || "Pending"){
             refreshStatus = true
         }
     }); 
