@@ -43,7 +43,6 @@ class MonolingualRepo:
     def get_mongo_instance(self):
         global mongo_instance_mono
         if not mongo_instance_mono:
-            log.info(f'getting mongo mono connection............')
             return self.instantiate()
         else:
             return mongo_instance_mono

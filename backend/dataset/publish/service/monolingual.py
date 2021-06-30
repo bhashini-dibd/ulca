@@ -178,10 +178,15 @@ class MonolingualService:
             log.exception(e)
             return None
 
-    # Method for searching asr datasets
-    def get_monolingual_dataset(self, query):
+    def fetch_dataset(self, query):
         log.info(f'Fetching Monolingual datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)
+        search = threading.Thread(target=self.get_monolingual_dataset, args=(query,))
+        search.start()
+        return True
+
+    # Method for searching asr datasets
+    def get_monolingual_dataset(self, query):
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
