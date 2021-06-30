@@ -286,7 +286,7 @@ public class DatasetService {
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.validate);
+			publish.setTool(ToolEnum.publish);
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			
@@ -368,6 +368,8 @@ public class DatasetService {
 			publish.setTool(ToolEnum.publish);
 			publish.setStatus(TaskTracker.StatusEnum.na.toString());
 			taskTrackerList.add(publish);
+			return taskTrackerList;
+			
 		}else if(mapTemp.get(TaskTracker.ToolEnum.ingest.toString()).equals(TaskTracker.StatusEnum.pending.toString()) ) {
 				
 			TaskTracker validate = new TaskTracker();
@@ -381,6 +383,7 @@ public class DatasetService {
 			publish.setTool(ToolEnum.publish);
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
+			return taskTrackerList;
 			
 		} else if(mapTemp.get(TaskTracker.ToolEnum.ingest.toString()).equals(TaskTracker.StatusEnum.inprogress.toString())
 				|| mapTemp.get(TaskTracker.ToolEnum.ingest.toString()).equals(TaskTracker.StatusEnum.completed.toString())
