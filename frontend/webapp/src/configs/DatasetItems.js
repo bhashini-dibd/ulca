@@ -8,37 +8,26 @@ export const DatasetItems = [
 
 ];
 export const Language = [
-    { value: 'en', label: 'English' },
-    { value: 'hi', label: 'Hindi' },
-    { value: 'bn', label: 'Bengali' },
-    { value: 'ta', label: 'Tamil' },
-    { value: 'mr',label: 'Marathi'},
-    { value: 'ml', label: 'Malayalam' },
-    { value: 'te', label: 'Telugu' },
-    { value: 'kn', label: 'Kannada' },
-    { value: 'pa', label: 'Punjabi' },
-    { value: 'gu', label: 'Gujarati' },
     { value: 'as', label: 'Assamese' },
-    { value: 'ur', label: 'Urdu' },
+    { value: 'bn', label: 'Bengali' },
+    { value: 'en', label: 'English' },
+    { value: 'gu', label: 'Gujarati' },
+    { value: 'hi', label: 'Hindi' },
+    { value: 'kn', label: 'Kannada' },
+    { value: 'ml', label: 'Malayalam' },
+    { value: 'mr',label: 'Marathi'},
     { value: 'or', label: 'Odia' },
+    { value: 'pa', label: 'Punjabi' },
+    { value: 'ta', label: 'Tamil' },
+    { value: 'te', label: 'Telugu' },
+    { value: 'ur', label: 'Urdu' },
+    
 
 ];
 
 
 export const FilterBy = {
     collectionMethod: [
-        {
-            value: 'web-scrapping-machine-readable',
-            label: 'Web Scrapping Machine Readable'
-        },
-        {
-            value: 'web-scrapping-ocr',
-            label: 'Web Scrapping Ocr'
-        },
-        {
-            value: 'manual-human-translated',
-            label: 'Manual Human Translated'
-        },
         {
             value: 'algorithm-auto-aligned',
             label: 'Algorithm Auto Aligned'
@@ -48,40 +37,37 @@ export const FilterBy = {
             label: 'Algorithm Back Translated'
         },
         {
+            value: 'crowd-sourced',
+            label: 'Crowd Sourced'
+        },
+        {
             value: 'human-validated',
             label: 'Human Validated'
 
         },
+       
+        {
+            value: 'manual-human-translated',
+            label: 'Manual Human Translated'
+        },
+        
         {
             value: 'phone-recording',
             label: 'Phone Recording'
         },
+        
         {
-            value: 'crowd-sourced',
-            label: 'Crowd Sourced'
-        }],
+            value: 'web-scrapping-machine-readable',
+            label: 'Web Scrapping Machine Readable'
+        },
+        {
+            value: 'web-scrapping-ocr',
+            label: 'Web Scrapping Ocr'
+        },
+    ],
+
 
     domain: [
-        {
-            value: 'general',
-            label: 'General'
-        },
-        {
-            value: 'news',
-            label: 'News'
-        },
-        {
-            value: 'education',
-            label: 'Education'
-        },
-        {
-            value: 'legal',
-            label: 'Legal'
-        },
-        {
-            value: 'healthcare',
-            label: 'Healthcare'
-        },
         {
             value: 'agriculture',
             label: 'Agriculture'
@@ -90,6 +76,26 @@ export const FilterBy = {
         {
             value: 'automobile',
             label: 'Automobile'
+        },
+        {
+            value: 'education',
+            label: 'Education'
+        },
+        {
+            value: 'general',
+            label: 'General'
+        },
+        {
+            value: 'healthcare',
+            label: 'Healthcare'
+        },
+        {
+            value: 'legal',
+            label: 'Legal'
+        },
+        {
+            value: 'news',
+            label: 'News'
         },
         {
             value: 'tourism',

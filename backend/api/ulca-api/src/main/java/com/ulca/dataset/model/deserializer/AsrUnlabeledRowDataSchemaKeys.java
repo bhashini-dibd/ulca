@@ -1,11 +1,9 @@
 package com.ulca.dataset.model.deserializer;
 
-public enum AsrRowDataSchemaKeys {
+public enum AsrUnlabeledRowDataSchemaKeys {
 
 	    //required
 		audioFilename,
-		text,
-		
 		
 		//optional
 		endTime,

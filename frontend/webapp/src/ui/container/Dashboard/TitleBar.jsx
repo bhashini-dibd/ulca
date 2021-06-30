@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Toolbar, FormControl, InputLabel, NativeSelect, AppBar, Paper, Grid } from "@material-ui/core";
+import { Toolbar, FormControl, InputLabel, Select, AppBar, Paper, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { withStyles, Button, Menu, MenuItem, MuiThemeProvider } from "@material-ui/core";
 import HeaderStyles from "../../styles/HeaderStyles";
@@ -30,7 +30,7 @@ const TitleBar = (props) => {
                     <Grid container className={classes.toolGrid}>
                         < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.selectGrid}>
                             <FormControl className={classes.formControl}>
-                                <NativeSelect disableUnderline
+                                <Select disableUnderline
                                     disabled = {page!==0 ? true : false}
                                     value={selectedOption.value}
                                     onChange={handleChange}
@@ -45,17 +45,17 @@ const TitleBar = (props) => {
                                             </option>
                                         })
                                     }
-                                </NativeSelect>
+                                </Select>
                             </FormControl>
                         </Grid>
                         < Grid item xs={4} sm={4} md={2} lg={2} xl={2} className={classes.tempGrid}>
                         <Typography variant="body2" gutterBottom>
                             {/* {props.label} */}
-                            Total sentences count
+                            Total Count
                         </Typography>
                         <Typography variant="body1">
                             {/* {props.totValue} */}
-                            {new Intl.NumberFormat('en').format(count)}
+                            {count ? new Intl.NumberFormat('en').format(count) : 0}
                         </Typography>
                     </Grid>
                         <Grid item xs={0} sm={0} md={3} lg={3} xl={3}></Grid>

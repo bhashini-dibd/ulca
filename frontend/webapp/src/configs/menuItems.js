@@ -12,10 +12,10 @@ export const menuItems = {
             name: 'Search & Download Records',
             url: '/search-and-download-rec/initiate/-1'
         },
-        {
-            name: 'Explore Readymade Datasets',
-            url: '/readymade-dataset'
-        },
+        // {
+        //     name: 'Explore Readymade Datasets',
+        //     url: '/readymade-dataset'
+        // },
         {
             name: 'Submit Datasets',
             url: '/submit-dataset/upload'

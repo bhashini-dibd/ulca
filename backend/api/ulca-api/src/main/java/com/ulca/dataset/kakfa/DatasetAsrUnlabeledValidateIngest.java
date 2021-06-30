@@ -31,17 +31,21 @@ import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.ASRDatasetRowDataSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.AsrUnlabeledDatasetRowDataSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.AsrUnlabeledParamsSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.AsrParamsSchema;
 import io.swagger.model.AsrRowSchema;
+import io.swagger.model.AsrUnlabeledParamsSchema;
+import io.swagger.model.AsrUnlabeledRowSchema;
 import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DatasetAsrValidateIngest implements DatasetValidateIngest {
+public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest {
 
 	@Autowired
 	ProcessTaskTrackerService processTaskTrackerService;
@@ -69,14 +73,14 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 	public void validateIngest(Map<String, String> fileMap, FileDownload file)  {
 
-		log.info("************ Entry DatasetAsrValidateIngest :: validateIngest *********");
+		log.info("************ Entry DatasetAsrUnlabeledValidateIngest :: validateIngest *********");
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		String datasetName = file.getDatasetName();
 		DatasetType datasetType = file.getDatasetType();
 		String userId = file.getUserId();
 		String datasetId = file.getDatasetId();
 		
-		AsrParamsSchema paramsSchema = null;
+		AsrUnlabeledParamsSchema paramsSchema = null;
 
 		Error fileError = validateFileExistence(fileMap);
 		
@@ -155,20 +159,20 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 	}
 
-	public AsrParamsSchema validateParamsSchema(String filePath, FileDownload file)
+	public AsrUnlabeledParamsSchema validateParamsSchema(String filePath, FileDownload file)
 			throws JsonParseException, JsonMappingException, IOException {
 
-		log.info("************ Entry DatasetAsrValidateIngest :: validateParamsSchema *********");
+		log.info("************ Entry DatasetAsrUnlabeledValidateIngest :: validateParamsSchema *********");
 		log.info("validing file :: against params schema");
 		log.info(filePath);
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		log.info(serviceRequestNumber);
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
-		module.addDeserializer(AsrParamsSchema.class, new ASRParamsSchemaDeserializer());
+		module.addDeserializer(AsrUnlabeledParamsSchema.class, new AsrUnlabeledParamsSchemaDeserializer());
 		mapper.registerModule(module);
 
-		AsrParamsSchema paramsSchema = mapper.readValue(new File(filePath), AsrParamsSchema.class);
+		AsrUnlabeledParamsSchema paramsSchema = mapper.readValue(new File(filePath), AsrUnlabeledParamsSchema.class);
 		if (paramsSchema == null) {
 
 			log.info("params validation failed");
@@ -184,10 +188,10 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 	}
 
-	public void ingest(AsrParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
+	public void ingest(AsrUnlabeledParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
 			throws IOException {
 
-		log.info("************ Entry DatasetAsrValidateIngest :: ingest *********");
+		log.info("************ Entry DatasetAsrUnlabeledValidateIngest :: ingest *********");
 
 		String datasetId = file.getDatasetId();
 		String serviceRequestNumber = file.getServiceRequestNumber();
@@ -235,13 +239,13 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			
 			String dataRow = mapper.writeValueAsString(rowObj);
 			SimpleModule module = new SimpleModule();
-			module.addDeserializer(AsrRowSchema.class, new ASRDatasetRowDataSchemaDeserializer());
+			module.addDeserializer(AsrUnlabeledRowSchema.class, new AsrUnlabeledDatasetRowDataSchemaDeserializer());
 			mapper.registerModule(module);
 			
-			AsrRowSchema rowSchema = null;
+			AsrUnlabeledRowSchema rowSchema = null;
 			try {
 				
-				rowSchema = mapper.readValue(dataRow, AsrRowSchema.class);
+				rowSchema = mapper.readValue(dataRow, AsrUnlabeledRowSchema.class);
 				
 			} catch(Exception e) {
 				

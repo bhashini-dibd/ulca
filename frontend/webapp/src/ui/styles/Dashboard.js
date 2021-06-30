@@ -17,7 +17,7 @@ const FileUploadStyles = (theme) => ({
     minHeight:"56px",
     maxWidth: "1272px",
     width : "100%",
-    margin :"7px auto",
+    margin :"17px auto",
     padding:"0"
   },
  
@@ -70,9 +70,14 @@ const FileUploadStyles = (theme) => ({
   },
   backButton: {
     boxShadow: "none",
-    backgroundColor: "#F0F1F3",
-    color: "#0C0F0F",
-    marginRight: ".5rem",
+    paddingTop:"5px",
+    marginLeft: "1.3rem",
+    marginRight: ".5rem"
+    
+  },
+  titleText: {
+    marginLeft: "1.68rem",
+    
   },
   seperator: {
     width: "1px",
@@ -90,6 +95,7 @@ const FileUploadStyles = (theme) => ({
     marginRight:".7rem",
     "@media (max-width:800px)": {marginRight:"0"}
   },
+
   title:{
     textAlign: "left",
     paddingLeft:"3%",
