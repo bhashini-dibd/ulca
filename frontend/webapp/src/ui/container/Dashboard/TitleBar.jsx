@@ -27,7 +27,6 @@ const StyledMenu = withStyles({
 const TitleBar = (props) => {
     const { classes, options, selectedOption, handleSelectChange, page, count } = props;
     // const [options, setOptions] = useState('parallel-corpus');
-    console.log(selectedOption)
     const gridArray = [{ title: 'Title1', value: '35555' }, { title: 'Title2', value: '4000' }]
 
     const handleChange = (event) => {
@@ -39,14 +38,16 @@ const TitleBar = (props) => {
         handleSelectChange(obj, "", "", page)
 
     };
-    const [dropDownOptions, setOptions] = useState('parallel-corpus');
+    //const [dropDownOptions, setOptions] = useState('parallel-corpus');
     const [anchorEl, openEl] = useState(null);
     const handleClose = () => {
         openEl(false)
     }
 
-    const getLabel = (options) => {
-        return DatasetItems.filter(data => data.value === options)[0].label
+    const getLabel = (value) => {
+        debugger
+        return options.filter(data => data.value === value)[0].label
+        
     }
     return (
         <MuiThemeProvider theme={Theme}>
@@ -59,7 +60,9 @@ const TitleBar = (props) => {
                                 color="inherit"
                                 onClick={(e) => openEl(e.currentTarget)}
                                 variant="text">
-                                {getLabel(dropDownOptions)}
+
+                                {/* {selectedOption&& getLabel(selectedOption)} */}
+                                {selectedOption.label}
                                 <DownIcon />
                             </Button>
                             <StyledMenu id="data-set"
@@ -76,7 +79,6 @@ const TitleBar = (props) => {
                                             onClick={(e) => {
                                                 handleChange(menu.value)
                                                 handleClose()
-                                                setOptions(menu.value)
                                             }}
                                         >
                                             {menu.label}
