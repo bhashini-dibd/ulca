@@ -12,6 +12,7 @@ const dateConversion = (value) =>{
 }
 
 const getContributionList = (payload) => {
+    debugger
     let responseData = [];
     let refreshStatus = false;
     payload.forEach(element => {
@@ -20,6 +21,7 @@ const getContributionList = (payload) => {
                      submitRefNumber      : element.serviceRequestNumber,
                      datasetName          : element.datasetName,
                      submittedOn          : dateConversion(element.submittedOn),
+                     datasetType :          element.datasetType,
                      status               : element.status === "inprogress" ? "In-Progress" : element.status === "notstarted" ? "Not Started" : element.status === "successful"? "Completed" : (element.status.toLowerCase())
             }
         )

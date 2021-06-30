@@ -1,7 +1,8 @@
 import {
     MenuItem,
     Menu,
-    withStyles
+    withStyles,
+    Typography
 } from '@material-ui/core';
 import HeaderStyles from "../../styles/HeaderStyles";
 
