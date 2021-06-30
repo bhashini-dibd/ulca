@@ -31,6 +31,11 @@ const themeDefault = createMuiTheme({
         display: 'none'
       }
     },
+    MuiMenu:{
+      list:{
+        minWidth:"107px"
+      }
+    },
     MUIDataTableFilter:{
       root:{
         backgroundColor :"white",
