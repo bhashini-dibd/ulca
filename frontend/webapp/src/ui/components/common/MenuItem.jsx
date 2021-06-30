@@ -1,7 +1,8 @@
 import {
     MenuItem,
     Menu,
-    withStyles
+    withStyles,
+    Typography
 } from '@material-ui/core';
 import HeaderStyles from "../../styles/HeaderStyles";
 
@@ -38,7 +39,7 @@ const MenuItems = (props ) => {
                         className={classes.styledMenu}
                         onClick={() => props.handleMenuItemClick(menu.url)}
                     >
-                        {menu.name}
+                        <Typography variant={"body2"}>{menu.name}</Typography>
                     </MenuItem>
                 })
             }

@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {Dialog,Typography} from '@material-ui/core';
+import {Dialog,Typography,Divider} from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
@@ -34,17 +34,18 @@ export default function ResponsiveDialog(props) {
 
       <Dialog
         open={open}
-        // onClose ={() =>{handleClose()}}
+        onClose ={() =>{handleClose()}}
         
       >
         <DialogTitle id="responsive-dialog-title"> <Typography variant={"body1"}>{title}</Typography></DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <Typography variant={"body1"}>
+            <Typography variant={"body2"}>
             {message}
             </Typography>
           </DialogContentText>
-        </DialogContent>
+        </DialogContent >
+        <Divider light />
         <DialogActions>
           <Button size ={"small"} autoFocus onClick ={() =>{handleClose()}} color="default" variant={"outlined"}>
             {actionButton}

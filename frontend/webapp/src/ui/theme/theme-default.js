@@ -120,6 +120,9 @@ border: "1px solid #0000001F"
         border: "1px solid rgb(224 224 224)",
       },
     },
+    MuiDialog:{
+      paper:{minWidth:"360px", minHeight:"116px"}
+    },
     MuiAppBar:{
       root:{
         boxSizing:"none",
@@ -139,6 +142,8 @@ border: "1px solid #0000001F"
     MuiButton: {
       label: {
         textTransform: "capitalize",
+        fontFamily: '"Lato"',
+        fontSize:"14px",
         fontWeight: "600",
         lineHeight: "1.14",
         letterSpacing: "0.14px",
@@ -211,13 +216,14 @@ themeDefault.typography.h6 = {
 themeDefault.typography.body1 = {
   fontSize: "1rem",
   fontFamily: '"lato" ,sans-serif',
-  fontWeight: "600",
+  fontWeight: "400"
 
 };
 themeDefault.typography.body2 = {
   fontSize: "0.875rem",
   fontFamily: '"lato" ,sans-serif',
-  fontWeight: "500",
+  fontWeight: "400",
+  color: "#0C0F0F"
 };
 themeDefault.typography.caption = {
   fontSize: "0.75rem",

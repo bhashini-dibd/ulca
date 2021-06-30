@@ -81,7 +81,9 @@ const TitleBar = (props) => {
                                                 handleClose()
                                             }}
                                         >
+                                            <Typography variant={"body2"}>
                                             {menu.label}
+                                            </Typography>
                                         </MenuItem>
                                     })
                                 }

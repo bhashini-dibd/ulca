@@ -83,7 +83,7 @@ const Header = (props) => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
 
-              <Typography variant="h6" onClick={() => handleMenuItemClick('/dashboard')}>
+              <Typography variant="h6" onClick={() => history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
                 ULCA
               </Typography>
 
@@ -255,7 +255,7 @@ const Header = (props) => {
                                  message          =       {"Please sign in to continue."}
                                 handleSubmit    ={handleLogOut}
                                 actionButton    = {"Close"}
-                                actionButton2   = {"Submit"}
+                                actionButton2   = {"Sign In"}
                         /> }
     </MuiThemeProvider>
   )
