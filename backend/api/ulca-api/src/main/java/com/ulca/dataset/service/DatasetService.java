@@ -30,6 +30,7 @@ import com.ulca.dataset.model.ProcessTracker.ServiceRequestActionEnum;
 import com.ulca.dataset.model.ProcessTracker.ServiceRequestTypeEnum;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker;
+import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.DatasetSubmitRequest;
 import com.ulca.dataset.response.DatasetCorpusSearchResponse;
@@ -132,11 +133,13 @@ public class DatasetService {
 				for (TaskTracker tTracker : taskTrackerList) {
 					map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
 				}
-				if (map.containsKey("publish")) {
+				if(map.containsValue("failed")) {
+					status = "failed";
+				}else if(map.containsValue("inprogress")) {
+					status = "inprogress";
+				}else if (map.containsKey("publish")) {
 					status = map.get("publish");
-				} else if (map.containsKey("validate")) {
-					status = map.get("validate");
-				}
+				} 
 
 				list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
 						dataset.get().getDatasetName(), dataset.get().getCreatedOn(), status));
@@ -174,6 +177,41 @@ public class DatasetService {
 
 				List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 
+				HashMap<String, String> mapTemp = new HashMap<String, String>();
+				for (TaskTracker tTracker : taskTrackerList) {
+					mapTemp.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
+				}
+				if(!mapTemp.containsKey(TaskTracker.ToolEnum.download.toString())) {
+					TaskTracker obj = new TaskTracker();
+					obj.serviceRequestNumber(serviceRequestNumber);
+					obj.setTool(ToolEnum.download);
+					obj.setStatus(TaskTracker.StatusEnum.notstarted);
+					taskTrackerList.add(obj);
+				}
+				if(!mapTemp.containsKey(TaskTracker.ToolEnum.ingest.toString())) {
+					TaskTracker obj = new TaskTracker();
+					obj.serviceRequestNumber(serviceRequestNumber);
+					obj.setTool(ToolEnum.ingest);
+					obj.setStatus(TaskTracker.StatusEnum.notstarted);
+					taskTrackerList.add(obj);
+				}
+				if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
+					TaskTracker obj = new TaskTracker();
+					obj.serviceRequestNumber(serviceRequestNumber);
+					obj.setTool(ToolEnum.validate);
+					obj.setStatus(TaskTracker.StatusEnum.notstarted);
+					taskTrackerList.add(obj);
+				}
+				
+				if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
+					TaskTracker obj = new TaskTracker();
+					obj.serviceRequestNumber(serviceRequestNumber);
+					obj.setTool(ToolEnum.publish);
+					obj.setStatus(TaskTracker.StatusEnum.notstarted);
+					taskTrackerList.add(obj);
+				}
+				
+				
 				map.put(serviceRequestNumber, (ArrayList<TaskTracker>) taskTrackerList);
 			}
 
@@ -184,7 +222,43 @@ public class DatasetService {
 
 	public List<TaskTracker> datasetByServiceRequestNumber(String serviceRequestNumber) {
 
-		return taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
+		
+		HashMap<String, String> mapTemp = new HashMap<String, String>();
+		for (TaskTracker tTracker : taskTrackerList) {
+			mapTemp.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
+		}
+		if(!mapTemp.containsKey(TaskTracker.ToolEnum.download.toString())) {
+			TaskTracker obj = new TaskTracker();
+			obj.serviceRequestNumber(serviceRequestNumber);
+			obj.setTool(ToolEnum.download);
+			obj.setStatus(TaskTracker.StatusEnum.notstarted);
+			taskTrackerList.add(obj);
+		}
+		if(!mapTemp.containsKey(TaskTracker.ToolEnum.ingest.toString())) {
+			TaskTracker obj = new TaskTracker();
+			obj.serviceRequestNumber(serviceRequestNumber);
+			obj.setTool(ToolEnum.ingest);
+			obj.setStatus(TaskTracker.StatusEnum.notstarted);
+			taskTrackerList.add(obj);
+		}
+		if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
+			TaskTracker obj = new TaskTracker();
+			obj.serviceRequestNumber(serviceRequestNumber);
+			obj.setTool(ToolEnum.validate);
+			obj.setStatus(TaskTracker.StatusEnum.notstarted);
+			taskTrackerList.add(obj);
+		}
+		
+		if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
+			TaskTracker obj = new TaskTracker();
+			obj.serviceRequestNumber(serviceRequestNumber);
+			obj.setTool(ToolEnum.publish);
+			obj.setStatus(TaskTracker.StatusEnum.notstarted);
+			taskTrackerList.add(obj);
+		}
+		
+		return taskTrackerList;
 	}
 
 	public DatasetSearchStatusResponse searchStatus(String serviceRequestNumber) {
