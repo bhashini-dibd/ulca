@@ -1,27 +1,28 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
+import {Dialog,Typography} from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Theme from "../../theme/theme-default";
 
 export default function ResponsiveDialog(props) {
   
 
-  const getMuiTheme = () => createMuiTheme({
-    overrides: {
+//   const getMuiTheme = () => createMuiTheme({
+//     overrides: {
 
-      MuiDialog: {
-            paperWidthSm:{
-                    width:"30%",
-                    minWidth:"300px"
-            }
-    },
+//       MuiDialog: {
+//             paperWidthSm:{
+//                     width:"30%",
+//                     minWidth:"300px"
+//             }
+//     },
    
-    }
-});
+//     }
+// });
 
   
 
@@ -29,24 +30,26 @@ export default function ResponsiveDialog(props) {
   debugger
   return (
     
-    <MuiThemeProvider theme={getMuiTheme()}> 
+    <MuiThemeProvider theme={Theme}> 
 
       <Dialog
         open={open}
         // onClose ={() =>{handleClose()}}
         
       >
-        <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
+        <DialogTitle id="responsive-dialog-title"> <Typography variant={"body1"}>{title}</Typography></DialogTitle>
         <DialogContent>
           <DialogContentText>
+            <Typography variant={"body1"}>
             {message}
+            </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick ={() =>{handleClose()}} color="primary">
+          <Button size ={"small"} autoFocus onClick ={() =>{handleClose()}} color="default" variant={"outlined"}>
             {actionButton}
           </Button>
-          <Button variant="contained" onClick={() =>{handleSubmit()}} color="primary" autoFocus>
+          <Button size ={"small"} variant="contained" onClick={() =>{handleSubmit()}} color="primary" autoFocus>
             {actionButton2}
           </Button>
         </DialogActions>

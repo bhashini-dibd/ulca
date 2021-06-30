@@ -211,13 +211,13 @@ themeDefault.typography.h6 = {
 themeDefault.typography.body1 = {
   fontSize: "1rem",
   fontFamily: '"lato" ,sans-serif',
-  fontWeight: "400",
+  fontWeight: "600",
 
 };
 themeDefault.typography.body2 = {
   fontSize: "0.875rem",
   fontFamily: '"lato" ,sans-serif',
-  fontWeight: "400",
+  fontWeight: "500",
 };
 themeDefault.typography.caption = {
   fontSize: "0.75rem",
