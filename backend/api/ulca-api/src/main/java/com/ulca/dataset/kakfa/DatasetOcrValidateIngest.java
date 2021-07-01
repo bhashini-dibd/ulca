@@ -91,7 +91,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			//send error event for download failure
 			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
-			datasetErrorPublishService.publishEofStatus(serviceRequestNumber);
 			return;
 		}
 		
@@ -115,7 +114,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
-			datasetErrorPublishService.publishEofStatus(serviceRequestNumber);			
 
 			return;
 		}
@@ -138,7 +136,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
-			datasetErrorPublishService.publishEofStatus(serviceRequestNumber);			
 			return;
 		}
 		
