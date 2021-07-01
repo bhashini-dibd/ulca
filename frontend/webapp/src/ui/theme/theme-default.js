@@ -39,10 +39,11 @@ const themeDefault = createMuiTheme({
     MUIDataTableFilter:{
       root:{
         backgroundColor :"white",
-        width:"80%"
+        width:"80%",
+        fontFamily: '"lato" ,sans-serif',
       },
       checkboxFormControl:{
-        width:'200px'
+        minWidth:'200px'
       }
     },
     MuiList:{
@@ -63,7 +64,7 @@ border: "1px solid #0000001F"
     },
     MUIDataTableToolbar:{
       filterPaper:{
-      width: "220px"
+      width: "310px"
       },
       MuiButton:{
         root:{
@@ -71,6 +72,13 @@ border: "1px solid #0000001F"
         }
       }
       
+      },
+      MuiGrid:{
+        grid:{
+          
+            maxWidth:"100%"
+         
+        }
       },
 
     MuiTableCell: {
@@ -86,16 +94,16 @@ border: "1px solid #0000001F"
     MUIDataTableHeadCell: {
       root: {
         "&:nth-child(1)": {
-          width: "50%",
+          width: "46%",
         },
         "&:nth-child(2)": {
-          width: "20%",
+          width: "18%",
         },
         "&:nth-child(3)": {
-          width: "15%",
+          width: "18%",
         },
         "&:nth-child(4)": {
-          width: "15%",
+          width: "18%",
         },
       },
     },

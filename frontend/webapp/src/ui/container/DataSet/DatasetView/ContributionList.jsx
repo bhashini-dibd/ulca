@@ -75,7 +75,7 @@ const ContributionList = (props) => {
 
         const handleRowClick = ( rowData) => {
 
-                history.push(`${process.env.PUBLIC_URL}/dataset-status/${rowData[4]}/${rowData[2]}/${rowData[0]}`)
+                history.push(`${process.env.PUBLIC_URL}/dataset-status/${rowData[4]}/${rowData[1]}/${rowData[0]}`)
 
                 // if(rowMeta.colIndex !== 6){
                 //         const value = data[rowMeta.rowIndex].submitRefNumber;
@@ -106,15 +106,7 @@ const ContributionList = (props) => {
                         display : "excluded",
                         },
                 },
-                {
-                name    : "submitRefNumber",
-                label   : "SR No.",
-                options : {
-                                filter  : false,
-                                sort    : false,
-                                display : "excluded",
-                        },
-                },
+               
                 {
                 name    : "datasetName",
                 label   : "Dataset Name",
@@ -123,6 +115,14 @@ const ContributionList = (props) => {
                         sort    : true,
                         },
                 },
+                {
+                        name    : "datasetType",
+                        label   : "Dataset Type",
+                        options: {
+                                filter  : false,
+                                sort    : true,
+                                },
+                        },
                 {
                 name    : "submittedOn",
                 label   : "Submitted On",
@@ -193,6 +193,7 @@ const ContributionList = (props) => {
                         onRowClick: rowData => handleRowClick(rowData),
                         // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
                         customToolbar: fetchHeaderButton,
+                        filter                  :       true,
                         displaySelectToolbar    :       false,
                         fixedHeader             :       false,
                         filterType              :       "checkbox",
@@ -200,7 +201,7 @@ const ContributionList = (props) => {
                         print                   :       false,
                         viewColumns     : false,
                         rowsPerPage:PageInfo.count,
-                        filter                  :       true,
+                    
                         rowsPerPageOptions      :       [10,25,50,100],
                         selectableRows          :       "none",
                 page: PageInfo.page,

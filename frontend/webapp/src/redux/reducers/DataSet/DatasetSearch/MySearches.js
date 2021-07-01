@@ -1,5 +1,6 @@
 import C from '../../../actions/constants';
 import {getLanguageLabel,FilterByDomain,FilterByCollection } from '../../../../utils/getLabel';
+import getDatasetName from '../../../../utils/getDataset';
 
 const initialState = {
     responseData: []
@@ -19,7 +20,7 @@ const getMySearches = (payload) => {
     payload.forEach(element =>{
         console.log(element.searchCriteria)
         if(element.searchCriteria){
-            let dataSet  = element.searchCriteria.datasetType === "parallel-corpus" ? "Parallel Dataset" : element.searchCriteria.datasetType === "asr-corpus" ? "ASR Dataset" :  element.searchCriteria.datasetType;
+            let dataSet  = getDatasetName(element.searchCriteria.datasetType);
             let langauge =element.searchCriteria.sourceLanguage && getLanguageLabel(element.searchCriteria.sourceLanguage).map(val=>val.label)[0]
             let tLanguage = element.searchCriteria.targetLanguage && getLanguageLabel(element.searchCriteria.targetLanguage).map(val=>val.label).join(', ')
             let searchDetails = JSON.parse(element.status[0].details)

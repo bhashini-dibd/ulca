@@ -10,6 +10,9 @@ const HeaderStyles = (theme) => ({
     padding:"0",
     boxSizing :"border-box"
   },
+  appBar:{
+   boxSizing:"border-box"
+  },
   title: {
     color: 'white',
     marginLeft: "-6px",

@@ -51,7 +51,7 @@ const TitleBar = (props) => {
     }
     return (
         <MuiThemeProvider theme={Theme}>
-            <AppBar position="static" color="inherit" elevation={0} >
+            <AppBar position="static" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Grid container className={classes.toolGrid}>
                         < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.selectGrid}>

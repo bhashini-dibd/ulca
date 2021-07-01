@@ -128,20 +128,21 @@ const DataSet = (theme) => ({
         margin: '1% 2.5% 0 2.5%',
     },
     buttonDiv: {
-        margin: '0% 0 3% 0'
+        margin: '0% 0 1.5rem 0'
     },
     innerButton: {
-        margin: '0 2% 2% 0',
-        //  backgroundColor:'red'
+        margin: '0 0.938rem 0.625rem 0'
     },
     subHeader: {
-        marginBottom: '3%'
+        marginBottom: '1.313rem'
+    },
+    autoComplete:{
+        marginBottom: '1.938rem'
     },
     clearNSubmit: {
-        marginTop: '10vh',
+        marginTop: '4rem',
         float: 'right'
     },
-
     parent: {
         display: "flex",
         alignItems: "center",

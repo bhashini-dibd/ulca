@@ -163,8 +163,8 @@ const SearchAndDownloadRecords = (props) => {
     const getLabel = () => {
         if (datasetType['parallel-corpus'])
             return "Target Language *"
-        else if (datasetType['ocr-corpus'])
-            return "Script *"
+        // else if (datasetType['ocr-corpus'])
+        //     return "Script *"
         else
             return "Language *"
     }
@@ -172,8 +172,8 @@ const SearchAndDownloadRecords = (props) => {
     const getTitle = () => {
         if (datasetType['parallel-corpus'])
             return "Select Language Pair"
-        else if (datasetType['ocr-corpus'])
-            return "Select Script"
+        // else if (datasetType['ocr-corpus'])
+        //     return "Select Script"
         else
             return "Select Language"
     }
@@ -422,7 +422,7 @@ const SearchAndDownloadRecords = (props) => {
                             <div className={classes.subHeader}>
                                 {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
                             </div>
-                            <div className={classes.subHeader}>
+                            <div className={classes.autoComplete}>
                                 <MultiAutocomplete
                                     id="language-target"
                                     options={getTargetLang()}
