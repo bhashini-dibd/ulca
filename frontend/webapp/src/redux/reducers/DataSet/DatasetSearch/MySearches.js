@@ -23,7 +23,7 @@ const getMySearches = (payload) => {
             let dataSet  = getDatasetName(element.searchCriteria.datasetType);
             let langauge =element.searchCriteria.sourceLanguage && getLanguageLabel(element.searchCriteria.sourceLanguage).map(val=>val.label)[0]
             let tLanguage = element.searchCriteria.targetLanguage && getLanguageLabel(element.searchCriteria.targetLanguage).map(val=>val.label).join(', ')
-            let searchDetails = JSON.parse(element.status[0].details)
+            let searchDetails = JSON.parse(element.status.length> 0 && element.status[0].details)
             let domain = element.searchCriteria.domain && FilterByDomain(element.searchCriteria.domain).map(val=>val.label).join(', ')
             let collection = element.searchCriteria.collectionMethod && FilterByCollection(element.searchCriteria.collectionMethod).map(val=>val.label).join(', ')
 
@@ -34,7 +34,7 @@ const getMySearches = (payload) => {
                     sr_no : element.serviceRequestNumber,
                     search_criteria :`${dataSet} | ${langauge} ${tLanguage ? " | " + tLanguage : ""} ${domain ? " | " + domain : ""} ${collection ? " | " + collection : ""}` ,
                     searched_on   : dateConversion(element.timestamp),
-                    status      : element.status[0].status === "successful" ? "Completed" : element.status[0].status === "inprogress" ? "In-Progress": element.status[0].status,
+                    status      : element.status.length> 0 && element.status[0].status,
                     
                     count : searchDetails && searchDetails.count,
                     sampleUrl : searchDetails && searchDetails.datasetSample,
