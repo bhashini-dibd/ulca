@@ -125,11 +125,12 @@ class MonolingualService:
                 else:
                     return "DUPLICATE", data, record
             insert_data = data
-            insert_data["datasetType"] = metadata["datasetType"]
-            insert_data["datasetId"] = [metadata["datasetId"]]
             for key in insert_data.keys():
                 if key not in mono_immutable_keys:
-                    insert_data[key] = [insert_data[key]]
+                    if not isinstance(insert_data[key], list):
+                        insert_data[key] = [insert_data[key]]
+            insert_data["datasetType"] = metadata["datasetType"]
+            insert_data["datasetId"] = [metadata["datasetId"]]
             insert_data["tags"] = self.get_tags(insert_data)
             return "INSERT", insert_data, insert_data
         except Exception as e:
