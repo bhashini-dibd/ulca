@@ -80,7 +80,7 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 
 		}
 
-		if (node.get("collectionSource").isEmpty()) {
+		if (!node.has("collectionSource")) {
 			errorList.add("collectionSource field should be present");
 		} else if (!node.get("collectionSource").isArray()) {
 			errorList.add("collectionSource field should be String array");
