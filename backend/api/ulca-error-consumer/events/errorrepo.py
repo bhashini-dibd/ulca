@@ -80,6 +80,13 @@ class ErrorRepo:
         except Exception as e:
             log.exception(f'Exception in repo count: {e}', e)
 
+    def upsert(self, object_in):
+        try:
+            col = self.get_mongo_instance()
+            col.update({"serviceRequestNumber": object_in["serviceRequestNumber"]}, {'$set' : object_in}, upsert=True)
+        except Exception as e:
+            log.exception(f'Exception in repo upsert: {e}', e)
+
 
 
 # Log config

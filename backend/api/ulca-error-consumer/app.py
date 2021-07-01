@@ -1,4 +1,5 @@
 #!/bin/python
+import threading
 from flask import Flask
 import logging
 from multiprocessing import Process
@@ -7,7 +8,7 @@ from configs.configs import app_host, app_port,ENABLE_CORS,context_path
 from flask.blueprints import Blueprint
 from flask_cors import CORS
 import routes
-
+from service.cronerror import ErrorProcessor
 log = logging.getLogger('file')
 
 ulca_error_consumer = Flask(__name__)
@@ -26,6 +27,9 @@ def start_consumer():
         try:
             error_consumer_process = Process(target=error_consume)
             error_consumer_process.start()
+
+            error_processor_thread = ErrorProcessor(threading.Event())
+            error_processor_thread.start()
         except Exception as e:
             log.exception(f'Exception while starting the ULCA error-service kafka consumer: {str(e)}')
 
