@@ -200,9 +200,9 @@ const ChartRender = (props) => {
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
 					setTitle("Number of images per language")
 				} else if (page === 1) {
-					setTitle(`Number of images in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setTitle(`Number of images with ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} text - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 				} else if (page === 2) {
-					setTitle(`Number of images in ${selectedLanguageName} `)
+					setTitle(`Number of images with ${selectedLanguageName} text`)
 				}
 
 				break;

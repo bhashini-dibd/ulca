@@ -75,7 +75,7 @@ const ContributionList = (props) => {
 
         const handleRowClick = ( rowData) => {
 
-                history.push(`${process.env.PUBLIC_URL}/dataset-status/${rowData[4]}/${rowData[2]}/${rowData[0]}`)
+                history.push(`${process.env.PUBLIC_URL}/dataset-status/${rowData[4]}/${rowData[1]}/${rowData[0]}`)
 
                 // if(rowMeta.colIndex !== 6){
                 //         const value = data[rowMeta.rowIndex].submitRefNumber;
@@ -119,7 +119,7 @@ const ContributionList = (props) => {
                         name    : "datasetType",
                         label   : "Dataset Type",
                         options: {
-                                filter  : true,
+                                filter  : false,
                                 sort    : true,
                                 },
                         },

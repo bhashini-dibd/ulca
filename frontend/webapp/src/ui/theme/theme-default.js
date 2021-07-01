@@ -64,7 +64,7 @@ border: "1px solid #0000001F"
     },
     MUIDataTableToolbar:{
       filterPaper:{
-      width: "400px"
+      width: "310px"
       },
       MuiButton:{
         root:{
