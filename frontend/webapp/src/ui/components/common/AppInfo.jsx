@@ -13,14 +13,14 @@ import Theme from "../../theme/theme-default";
 import "../../../assets/appInfo.css"
 
 export default function ResponsiveDialog(props) {
-  
-
+	const { open, handleClose} = props;
     const Transition = React.forwardRef(function Transition(props, ref) {
-        return <Slide direction="left" ref={ref} {...props} />;
+        return <Slide direction="right" ref={ref} {...props} />;
       });
   const getMuiTheme = () => createMuiTheme({
     overrides: {
         MuiButton: {
+			
             label: {
               textTransform: "capitalize",
               fontFamily: '"Lato"',
@@ -30,12 +30,7 @@ export default function ResponsiveDialog(props) {
               letterSpacing: "0.14px",
               textAlign: "center",
               height: "26px",
-            },
-            sizeLarge: {
-              height: "48px",
-            },
-            sizeSmall: {
-              height: "36px",
+			  
             },
           
         },
@@ -48,10 +43,7 @@ export default function ResponsiveDialog(props) {
     }
 });
 
-  
 
-  const { open, handleClose} = props;
-  
   return (
     
     <MuiThemeProvider theme={getMuiTheme()}> 

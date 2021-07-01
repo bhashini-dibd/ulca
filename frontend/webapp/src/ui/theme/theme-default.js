@@ -148,7 +148,13 @@ border: "1px solid #0000001F"
       root: { padding: ".5rem .5rem .5rem .8rem", textTransform: "capitalize" },
     },
     MuiButton: {
+      root:{
+        minWidth:"25",
+        borderRadius:"0",
+        
+      },
       label: {
+        
         textTransform: "none",
         fontFamily: '"Lato"',
         fontSize:"14px",
@@ -164,6 +170,7 @@ border: "1px solid #0000001F"
       sizeSmall: {
         height: "36px",
       },
+      
     
     }
    

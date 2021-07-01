@@ -238,7 +238,7 @@ const ChartRender = (props) => {
 				{/* <div className={classes.breadcrum}>
 				<BreadCrum links={["Dataset"]} activeLink="Submit Dataset" />
 			</div> */}
-			<Fab onClick = {()=> setPopUp(true)} color= "primary" variant="contained" className={classes.infoBtn}><InfoOutlinedIcon/></Fab>
+			<Button onClick = {()=> setPopUp(true)} color= "primary" variant="contained" className={classes.infoBtn}><InfoOutlinedIcon/></Button>
 			{popUp && <AppInfo handleClose = {handleClosePopUp} open ={popUp}/>}
 
 				<Paper elevation={3} className={classes.paper}>
