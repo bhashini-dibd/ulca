@@ -272,7 +272,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 					vModel.put("record", finalRecord);
 					vModel.put("currentRecordIndex", numberOfRecords);
 
-					datasetValidateKafkaTemplate.send(validateTopic, 0, null, vModel.toString());
+					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 					
 				}
 			}
