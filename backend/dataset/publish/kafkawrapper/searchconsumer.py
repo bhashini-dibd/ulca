@@ -9,7 +9,7 @@ from service.asr import ASRService
 from service.ocr import OCRService
 from service.monolingual import MonolingualService
 
-from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_consumer_grp
+from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_search_consumer_grp
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from kafka import KafkaConsumer
 from repository.datasetrepo import DatasetRepo
@@ -22,7 +22,7 @@ def instantiate(topics):
     consumer = KafkaConsumer(*topics,
                              bootstrap_servers=list(str(kafka_bootstrap_server_host).split(",")),
                              api_version=(1, 0, 0),
-                             group_id=publish_consumer_grp,
+                             group_id=publish_search_consumer_grp,
                              auto_offset_reset='latest',
                              enable_auto_commit=True,
                              value_deserializer=lambda x: handle_json(x))

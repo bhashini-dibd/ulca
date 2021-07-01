@@ -37,8 +37,10 @@ class ProcessTracker:
                 task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
             else:
-                task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool, "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                              "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
+                task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool,
+                              "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
+                              "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now()),
+                              "details": {"count": 0}}
                 repo.insert(task_event)
             return
         except Exception as e:

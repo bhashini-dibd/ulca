@@ -90,6 +90,7 @@ publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-
 search_input_topic = os.environ.get('KAFKA_ULCA_DS_SEARCH_IP_TOPIC', 'ulca-ds-search-ip-v0')
 delete_input_topic = os.environ.get('KAFKA_ULCA_DS_DELETE_IP_TOPIC', 'ulca-ds-delete-ip-v0')
 publish_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
+publish_search_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_SEARCH_CONSUMER_GRP', 'ulca-ds-publish-search-consumer-group-v0')
 error_event_input_topic = os.environ.get('KAFKA_ULCA_DS_ERROR_IP_TOPIC', 'ulca-ds-error-ip-v0')
 metric_event_input_topic = os.environ.get('KAFKA_ULCA_DS_METRIC_IP_TOPIC', 'org-ulca-bievent-dataset-v3')
 ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 3)
