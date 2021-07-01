@@ -123,7 +123,7 @@ public class KafkaFileDownloadConsumer {
 				
 				//send error event for download failure
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
-					
+				datasetErrorPublishService.publishEofStatus(serviceRequestNumber);
 				e.printStackTrace();
 				
 				return;
