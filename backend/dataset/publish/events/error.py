@@ -3,14 +3,12 @@ import uuid
 from datetime import datetime
 from configs.configs import error_event_input_topic, publish_error_code, pt_publish_tool
 from kafkawrapper.producer import Producer
-from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
 
 
 log = logging.getLogger('file')
 mongo_instance = None
 prod = Producer()
-error_repo = ErrorRepo()
 utils = DatasetUtils()
 
 
@@ -27,7 +25,7 @@ class ErrorEvent:
                          "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
                 if 'originalRecord' in error.keys():
                     event["originalRecord"] = error["originalRecord"]
-                prod.produce(event, error_event_input_topic, 0)
+                prod.produce(event, error_event_input_topic, None)
             except Exception as e:
                 log.exception(e)
                 continue

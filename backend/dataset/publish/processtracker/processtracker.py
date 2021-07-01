@@ -39,8 +39,7 @@ class ProcessTracker:
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool,
                               "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                              "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now()),
-                              "details": {"count": 0}}
+                              "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
                 repo.insert(task_event)
             return
         except Exception as e:
