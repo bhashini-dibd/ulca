@@ -39,8 +39,7 @@ class StoreUtils:
         try:
             headers =   {"Content-Type": "application/json"}
             body    =   {"fileName":file_name,"storageFolder":folder_name,"fileLocation":file}
-            # request_url = file_store_host+file_store_upload_endpoint
-            request_url = "https://dev-auth.ulcacontrib.org/ulca/file-store/v0/file/upload"
+            request_url = file_store_host+file_store_upload_endpoint
             log.info("Intiating request to store data on object store %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body)
             response_data = response.content
