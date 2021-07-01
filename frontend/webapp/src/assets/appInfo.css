@@ -70,7 +70,7 @@
     justify-content: space-between;
 }
 .features p {
-	margin: 0 0 .8rem;
+	margin: 0 0 .4rem;
 }
 .features ul {
 	list-style: none;
@@ -87,6 +87,10 @@
 	width: 1.5rem;
 	height: 1.5rem;
 	margin-left: -1.5rem;
+}
+
+.typo {
+	color:white;margin-left:1.5rem; padding-top:-5px;
 }
 
 

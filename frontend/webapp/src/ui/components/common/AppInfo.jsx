@@ -120,10 +120,13 @@ export default function ResponsiveDialog(props) {
 					<Typography variant={"h6"}>Dataset</Typography>
 						<p>Language datasets</p>
 						<ul>
-							<li>Parallel corpus</li>
-							<li>Monolingual corpus</li>
-							<li>ASR / TTS corpus</li>
-							<li>OCR corpus</li>
+							<Typography style={{color:"white", marginLeft:"1.5rem", paddingTop:"-5px"}}>
+							Parallel corpus <br/>
+							Monolingual corpus <br/>
+							ASR / TTS corpus <br/>
+							OCR corpus<br/>
+							</Typography>
+							
 						</ul>
 					</div>
 					<div class="arrow-pointer naviBlueColor">Open sourced</div>
@@ -134,10 +137,12 @@ export default function ResponsiveDialog(props) {
 					<Typography variant={"h6"}>Model</Typography>
 						<p>Language specific tasks</p>
 						<ul>
-							<li>Translation</li>
-							<li>Speech recognition</li>
-							<li>Text to speech</li>
-							<li>Optical Character Recognition</li>
+						<Typography style={{color:"white", marginLeft:"1.5rem", paddingTop:"-5px"}}>
+						Translation <br/>
+						Speech recognition <br/>
+						Text to speech <br/>
+						Optical Character Recognition<br/>
+							</Typography>
 						</ul>
 					</div>
 					<div class="arrow-pointer skyBlueColor">Transparent</div>
@@ -148,8 +153,10 @@ export default function ResponsiveDialog(props) {
 					<Typography variant={"h6"}>Benchmark</Typography>
 					<p>Open benchmarking</p>
 						<ul>
-							<li>Large, diverse task specific benchmarks</li>
-							<li>Research community approved metric system</li>
+						<Typography style={{color:"white", marginLeft:"1.5rem", paddingTop:"-5px"}}>
+						Large, diverse task specific benchmarks <br/>
+						Research community approved metric system <br/>
+						</Typography>
 							
 						</ul>
 					</div>
