@@ -47,7 +47,7 @@ def consume():
                     if data:
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
                         if repo.search([data["record"]["id"]]):
-                            log.info(f'RELAY record --- {data["serviceRequestNumber"]}')
+                            log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
                             break
                         else:
                             rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "datasetType": data["datasetType"]}

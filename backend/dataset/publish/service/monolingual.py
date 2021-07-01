@@ -190,13 +190,6 @@ class MonolingualService:
             log.exception(e)
             return None
 
-    def fetch_dataset(self, query):
-        pt.task_event_search(query, None)
-        search = threading.Thread(target=self.get_monolingual_dataset, args=(query,))
-        search.start()
-        return True
-
-    # Method for searching asr datasets
     def get_monolingual_dataset(self, query):
         log.info(f'Fetching Monolingual datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)

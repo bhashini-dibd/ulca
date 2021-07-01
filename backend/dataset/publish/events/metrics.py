@@ -91,7 +91,6 @@ class MetricEvent:
                 prod.produce(event, metric_event_input_topic, None)
             else:
                 event["isDelete"] = False
-                #log.info(f'METRIC --- {event}')
                 prod.produce(event, metric_event_input_topic, None)
         except Exception as e:
             log.exception(e)

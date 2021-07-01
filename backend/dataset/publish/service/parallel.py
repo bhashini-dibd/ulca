@@ -282,12 +282,6 @@ class ParallelService:
                 tag_details[key] = insert_data[key]
         return list(utils.get_tags(tag_details))
 
-    def fetch_dataset(self, query):
-        pt.task_event_search(query, None)
-        search = threading.Thread(target=self.get_parallel_dataset, args=(query,))
-        search.start()
-        return True
-
     def get_parallel_dataset(self, query):
         log.info(f'Fetching Parallel datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)
