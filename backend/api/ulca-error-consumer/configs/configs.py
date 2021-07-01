@@ -26,8 +26,10 @@ file_store_delete_endpoint              =   os.environ.get('ULCA_FILE_STORE_REMO
 redis_server_host                       =   os.environ.get('REDIS_URL','localhost')
 redis_server_port                       =   os.environ.get('REDIS_PORT',6379)
 redis_server_db                         =   os.environ.get('ULCA_REDIS_DB',5)
+redis_server_password                   =   os.environ.get('REDIS_PASS','password')
 redis_key_expiry                        =   os.environ.get('ULCA_ERROR_RECORD_EXPRY_SECONDS',86400)
-
+if isinstance(redis_key_expiry, str):
+    redis_key_expiry  =  eval(redis_key_expiry)
 error_batch_size                        =   os.environ.get('ULCA_EEROR_BATCH_SIZE',10000)
 if isinstance(error_batch_size, str):
     error_batch_size  =  eval(error_batch_size)

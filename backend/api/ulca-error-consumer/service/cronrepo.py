@@ -1,6 +1,6 @@
 import json
 import redis
-from configs.configs import redis_server_host, redis_server_port, redis_server_db
+from configs.configs import redis_server_host, redis_server_port, redis_server_db, redis_server_password
 import logging
 log = logging.getLogger('file')
 
@@ -16,7 +16,7 @@ class StoreRepo:
 
     # Initialises and fetches redis client
     def redis_instantiate(self):
-        redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=redis_server_db)
+        redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=redis_server_db, password=redis_server_password)
         return redis_client
 
     def get_redis_instance(self):
