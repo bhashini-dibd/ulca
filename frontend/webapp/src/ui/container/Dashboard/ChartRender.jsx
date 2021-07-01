@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
-import { withStyles, Typography, MuiThemeProvider, Paper, Button } from "@material-ui/core";
+import { withStyles, Typography, MuiThemeProvider, Paper, Button,Fab } from "@material-ui/core";
 import ChartStyles from "../../styles/Dashboard";
 import { ResponsiveContainer, BarChart, Bar, Cell, CartesianGrid, XAxis, Label, LabelList, YAxis, Tooltip, } from 'recharts';
 import Select from 'react-select';
@@ -14,6 +14,8 @@ import Dataset from "../../../configs/DatasetItems";
 import authenticate from '../../../configs/authenticate';
 import Theme from "../../theme/theme-default";
 import TitleBar from "./TitleBar";
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import AppInfo from "../../components/common/AppInfo"
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
 
@@ -21,6 +23,7 @@ const ChartRender = (props) => {
 	const [selectedOption, setSelectedOption] = useState(Dataset[0]);
 	const [title, setTitle] = useState("Number of parallel dataset per language with English");
 	const [filterValue, setFilterValue] = useState("domains");
+	const [popUp, setPopUp] = useState(authenticate() ? false : true);
 	const [selectedLanguage, setSelectedLanguage] = useState("");
 	const [selectedLanguageName, setSelectedLanguageName] = useState("");
 	const [page, setPage] = useState(0);
@@ -143,6 +146,10 @@ const ChartRender = (props) => {
 		handleOnClick(page - 1)
 	}
 
+	const handleClosePopUp = () =>{
+		setPopUp (false)
+	}
+
 	const fetchFilterButtons = () => {
 		return (
 			<div className={classes.filterButton}>
@@ -155,8 +162,6 @@ const ChartRender = (props) => {
 	}
 
 	const handleSelectChange = (dataSet, event, filter, page) => {
-		debugger
-		console.log(selectedOption, dataSet)
 		setSelectedOption(dataSet)
 		switch (dataSet.value) {
 			case 'parallel-corpus':
@@ -215,7 +220,7 @@ const ChartRender = (props) => {
 	return (
 		<MuiThemeProvider theme={Theme}>
 			
-
+				
 				<><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
 			
 			
@@ -233,9 +238,11 @@ const ChartRender = (props) => {
 				{/* <div className={classes.breadcrum}>
 				<BreadCrum links={["Dataset"]} activeLink="Submit Dataset" />
 			</div> */}
+			<Fab onClick = {()=> setPopUp(true)} color= "primary" variant="contained" className={classes.infoBtn}><InfoOutlinedIcon/></Fab>
+			{popUp && <AppInfo handleClose = {handleClosePopUp} open ={popUp}/>}
 
 				<Paper elevation={3} className={classes.paper}>
-
+						
 					<div className={classes.iconStyle}>
 					 <><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
 							</>
