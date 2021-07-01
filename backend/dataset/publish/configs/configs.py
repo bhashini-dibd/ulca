@@ -42,6 +42,7 @@ asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "d
 asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation"]
 asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod",
                           "datasetType", "audioHash", "textHash", "fileLocation"]
+asr_updatable_keys = []
 
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage",
                            "targetLanguage", "datasetType"]
@@ -57,11 +58,13 @@ ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "ground
 ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation"]
 ocr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod",
                           "datasetType", "imageHash", "groundTruthHash", "fileLocation"]
+ocr_updatable_keys = []
 
 mono_immutable_keys = ["id", "text", "textHash", "datasetType", "sourceLanguage"]
 mono_non_tag_keys = ["id", "text", "submitter"]
 mono_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod",
                           "datasetType", "textHash"]
+mono_updatable_keys = []
 
 publish_error_code = "3000_XXX"
 threads_threshold = 100

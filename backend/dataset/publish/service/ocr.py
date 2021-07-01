@@ -5,7 +5,8 @@ import time
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, offset, limit, ocr_prefix, user_mode_pseudo, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, ocr_search_ignore_keys
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, \
+    ocr_search_ignore_keys, ocr_updatable_keys
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -164,6 +165,10 @@ class OCRService:
         db_record = record
         found = False
         for key in data.keys():
+            if key in ocr_updatable_keys:
+                found = True
+                db_record[key] = data[key]
+                continue
             if key not in ocr_immutable_keys:
                 if key not in db_record.keys():
                     found = True
@@ -178,6 +183,13 @@ class OCRService:
                         if data[key] not in db_record[key]:
                             found = True
                             db_record[key].append(data[key])
+                    else:
+                        if db_record[key] != data[key]:
+                            found = True
+                            db_record[key] = [db_record[key]]
+                            db_record[key].append(data[key])
+                        else:
+                            db_record[key] = [db_record[key]]
         if found:
             db_record["datasetId"].append(metadata["datasetId"])
             db_record["tags"] = self.get_tags(record)

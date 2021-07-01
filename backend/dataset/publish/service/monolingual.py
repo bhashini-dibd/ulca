@@ -7,7 +7,7 @@ from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, \
     sample_size, mono_non_tag_keys, mono_immutable_keys, dataset_type_monolingual, user_mode_pseudo, \
-    mono_search_ignore_keys
+    mono_search_ignore_keys, mono_updatable_keys
 from repository.monolingual import MonolingualRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -140,6 +140,10 @@ class MonolingualService:
         db_record = record
         found = False
         for key in data.keys():
+            if key in mono_updatable_keys:
+                found = True
+                db_record[key] = data[key]
+                continue
             if key not in mono_immutable_keys:
                 if key not in db_record.keys():
                     found = True
@@ -154,6 +158,13 @@ class MonolingualService:
                         if data[key] not in db_record[key]:
                             found = True
                             db_record[key].append(data[key])
+                    else:
+                        if db_record[key] != data[key]:
+                            found = True
+                            db_record[key] = [db_record[key]]
+                            db_record[key].append(data[key])
+                        else:
+                            db_record[key] = [db_record[key]]
         if found:
             db_record["datasetId"].append(metadata["datasetId"])
             db_record["tags"] = self.get_tags(record)
