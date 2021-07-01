@@ -25,7 +25,7 @@ class ErrorEvent:
                          "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
                 if 'originalRecord' in error.keys():
                     event["originalRecord"] = error["originalRecord"]
-                prod.produce(event, error_event_input_topic, None)
+                prod.produce(event, error_event_input_topic, 0)
             except Exception as e:
                 log.exception(e)
                 continue
