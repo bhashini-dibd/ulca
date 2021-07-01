@@ -35,6 +35,9 @@ if isinstance(sample_size, str):
 pt_redis_db = os.environ.get('ULCA_PT_REDIS_DB', 0)
 if isinstance(pt_redis_db, str):
     pt_redis_db = eval(pt_redis_db)
+record_expiry_in_sec = os.environ.get('ULCA_PUBLISH_RECORD_EXPIRY_IN_SEC', 86400)
+if isinstance(record_expiry_in_sec, str):
+    record_expiry_in_sec = eval(record_expiry_in_sec)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType",

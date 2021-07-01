@@ -12,6 +12,7 @@ from service.monolingual import MonolingualService
 from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_consumer_grp
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from kafka import KafkaConsumer
+from repository.datasetrepo import DatasetRepo
 
 log = logging.getLogger('file')
 
@@ -33,6 +34,7 @@ def search_consume():
     try:
         topics = [search_input_topic]
         consumer = instantiate(topics)
+        repo = DatasetRepo()
         p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-SEARCH-" + "(" + rand_str + ")"
@@ -43,14 +45,19 @@ def search_consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: {msg.topic} | Partition: {str(msg.partition)}')
+                        if repo.search([data["serviceRequestNumber"]]):
+                            log.info(f'RELAY record in SEARCH --- {data["serviceRequestNumber"]}')
+                            break
+                        else:
+                            repo.upsert(data["serviceRequestNumber"], {"query": data}, True)
                         if data["datasetType"] == dataset_type_parallel:
-                            p_service.fetch_dataset(data)
+                            p_service.get_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:
-                            o_service.fetch_dataset(data)
+                            o_service.get_ocr_dataset(data)
                         if data["datasetType"] == dataset_type_asr:
-                            a_service.fetch_dataset(data)
+                            a_service.get_asr_dataset(data)
                         if data["datasetType"] == dataset_type_monolingual:
-                            m_service.fetch_dataset(data)
+                            m_service.get_monolingual_dataset(data)
                         break
                 except Exception as e:
                     log.exception(f'{prefix} Exception in ds search consumer while consuming: {str(e)}', e)

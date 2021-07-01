@@ -51,7 +51,7 @@ def consume():
                             break
                         else:
                             rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "datasetType": data["datasetType"]}
-                            repo.upsert(data["record"]["id"], rec)
+                            repo.upsert(data["record"]["id"], rec, True)
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.load_parallel_dataset_single(data)
                         if data["datasetType"] == dataset_type_ocr:
