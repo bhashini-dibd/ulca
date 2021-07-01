@@ -213,7 +213,6 @@ class ASRService:
             return None
 
     def fetch_dataset(self, query):
-        log.info(f'Fetching ASR datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)
         search = threading.Thread(target=self.get_asr_dataset, args=(query,))
         search.start()
@@ -222,6 +221,7 @@ class ASRService:
     # Method for searching asr datasets
     def get_asr_dataset(self, query):
         try:
+            log.info(f'Fetching ASR datasets for SRN -- {query["serviceRequestNumber"]}')
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
