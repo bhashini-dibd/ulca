@@ -41,6 +41,8 @@ const FileUploadStyles = (theme) => ({
     //   display: 'none'
     // }
   },
+  infoBtn:{height:"60px",width:"40px", position:"absolute", marginTop:"17px"}
+  ,
   filterButtonIcon:{
     
     display: 'none',
