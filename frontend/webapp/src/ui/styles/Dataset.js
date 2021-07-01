@@ -180,7 +180,8 @@ const DataSet = (theme) => ({
     },
     mySearches: {
         marginTop: '1%',
-        width: '60%'
+        width: '60%',
+      //  textTransform:'inherit'
     },
     downloadDiv: {
         marginTop: '4%'
