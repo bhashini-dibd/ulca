@@ -149,7 +149,7 @@ border: "1px solid #0000001F"
     },
     MuiButton: {
       label: {
-        textTransform: "capitalize",
+        textTransform: "none",
         fontFamily: '"Lato"',
         fontSize:"14px",
         fontWeight: "600",

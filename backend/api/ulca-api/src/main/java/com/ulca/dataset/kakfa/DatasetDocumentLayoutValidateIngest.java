@@ -88,13 +88,16 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		
 		if (fileError != null) {
 			
+			log.info("params.json or data.json file missing :: serviceRequestNumber : "+ serviceRequestNumber );
+			
+			
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, fileError);
 			
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			//send error event for download failure
 			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
-			
+			datasetErrorPublishService.publishEofStatus(serviceRequestNumber);	
 			return;
 		}
 		
@@ -105,7 +108,9 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 			paramsSchema = validateParamsSchema(paramsFilePath, file);
 
 		} catch (IOException | JSONException | NullPointerException e) {
-			log.info("Exception while validating params :: " + e.getMessage());
+			
+			log.info("Exception while validating params  :: serviceRequestNumber : "+ serviceRequestNumber +" error :: " + e.getMessage());
+			
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("params validation failed");
@@ -120,8 +125,8 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 						
-
-			e.printStackTrace();
+			datasetErrorPublishService.publishEofStatus(serviceRequestNumber);	
+			
 			return;
 		}
 		try {
@@ -129,7 +134,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 
 		} catch (IOException e) {
 
-			log.info("Exception while ingesting :: " + e.getMessage());
+			log.info("Exception while ingesting :: serviceRequestNumber : "+ serviceRequestNumber +" error :: " + e.getMessage());
 			
 			Error error = new Error();
 			error.setCause(e.getMessage());
@@ -144,7 +149,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 			
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
-						
+			datasetErrorPublishService.publishEofStatus(serviceRequestNumber);				
 			return;
 		}
 		try {
@@ -254,11 +259,6 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 				
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
-				
-				
-				log.info("record :: " +numberOfRecords + "failed " );
-				log.info("tracing the error " );
-				e.printStackTrace();
 				
 				
 			}
