@@ -25,8 +25,12 @@ for blueprint in vars(routes).values():
 def start_consumer():
     with ulca_error_consumer.test_request_context():
         try:
-            error_consumer_process = Process(target=error_consume)
-            error_consumer_process.start()
+            error_consumer_process_1 = Process(target=error_consume)
+            error_consumer_process_1.start()
+            error_consumer_process_2 = Process(target=error_consume)
+            error_consumer_process_2.start()
+            error_consumer_process_3 = Process(target=error_consume)
+            error_consumer_process_3.start()
 
             error_processor_thread = ErrorProcessor(threading.Event())
             error_processor_thread.start()
