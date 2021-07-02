@@ -130,7 +130,6 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				log.info("deleting for serviceRequestNumber :: " + serviceRequestNumber);
 
 				taskTrackerRedisDao.delete(serviceRequestNumber);
-				datasetErrorPublishService.publishEofStatus(serviceRequestNumber);
 			}
 
 		}

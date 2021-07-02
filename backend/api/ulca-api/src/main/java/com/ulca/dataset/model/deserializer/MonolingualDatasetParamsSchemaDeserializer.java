@@ -127,7 +127,8 @@ public class MonolingualDatasetParamsSchemaDeserializer extends StdDeserializer<
 
 		}
 
-		if (node.get("collectionSource").isEmpty()) {
+		
+		if (!node.has("collectionSource")) {
 			errorList.add("collectionSource field should be present");
 		} else if (!node.get("collectionSource").isArray()) {
 			errorList.add("collectionSource field should be String array");
@@ -148,7 +149,7 @@ public class MonolingualDatasetParamsSchemaDeserializer extends StdDeserializer<
 			}
 		}
 
-		if (node.get("domain").isEmpty()) {
+		if (!node.has("domain")) {
 			errorList.add("domain field should be present");
 		} else if (!node.get("domain").isArray()) {
 			errorList.add("domain field should be String array");

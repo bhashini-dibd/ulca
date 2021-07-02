@@ -13,14 +13,15 @@ import Theme from "../../theme/theme-default";
 import "../../../assets/appInfo.css"
 
 export default function ResponsiveDialog(props) {
-  
-
+	const { open, handleClose} = props;
     const Transition = React.forwardRef(function Transition(props, ref) {
-        return <Slide direction="left" ref={ref} {...props} />;
+        return <Slide direction="right" ref={ref} {...props} />;
       });
   const getMuiTheme = () => createMuiTheme({
+	  
     overrides: {
         MuiButton: {
+			
             label: {
               textTransform: "capitalize",
               fontFamily: '"Lato"',
@@ -30,28 +31,69 @@ export default function ResponsiveDialog(props) {
               letterSpacing: "0.14px",
               textAlign: "center",
               height: "26px",
-            },
-            sizeLarge: {
-              height: "48px",
-            },
-            sizeSmall: {
-              height: "36px",
+			  
             },
           
         },
+		MuiTypography:{
+			colorTextSecondary:{
+				color:"black"
+			},
+			h4 : {
+				fontSize: "1.5rem",
+				// letterSpacing: "1.98px",
+				fontFamily: '"Poppins","lato" ,sans-serif',
+				fontWeight: "500",
+				color:"#292576",
+				margin: "0 0 .8rem"
+			  },
+			  h5 : {
+				fontSize: "1.3125rem",
+				padding:"10px 0 15px 0",
+				fontFamily: '"Poppins","lato" ,sans-serif',
+				fontWeight: "500",
+				color:"black"
+			  },
+			  h6 : {
+				fontSize: "1.125rem",
+				fontFamily: '"Poppins","lato" ,sans-serif',
+				fontWeight: "500",
+				paddingTop:"4px",
+				color:"black",
+				margin: "0 0 .8rem"
+			  },
+			  body1 : {
+				fontSize: "1rem",
+				fontFamily: '"lato" ,sans-serif',
+				fontWeight: "400",
+				color:"black",
+				padding:"10px 0 15px 0"
+			  
+			  },
+			  body2 :{
+				fontSize: "0.875rem",
+				fontFamily: '"lato" ,sans-serif',
+				fontWeight: "400",
+				color:"black",
+				padding:"10px 0 15px 0"
+			  }
+		},
          
         
         MuiDialog:{
-            paper:{minWidth:"52.4%", minHeight:"739px"}
+            paper:{
+				minWidth:"955px",
+				border: "4px solid #292576",
+	boxShadow: "0 0 2px rgba(0,0,0.5),0 0 8px rgba(0,0,0,.5)"
+				
+		},
+
           },
    
     }
 });
 
-  
 
-  const { open, handleClose} = props;
-  
   return (
     
     <MuiThemeProvider theme={getMuiTheme()}> 
@@ -62,22 +104,29 @@ export default function ResponsiveDialog(props) {
         // onClose ={() =>{handleClose()}}
         
       >
-          <div class="IntroSection">
-		<div class="close"><Button onClick ={() =>handleClose()} color= "primary" variant="outlined"><CloseIcon size={"small"}/>Close</Button></div>
+		  <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+           
+         
+         
+		
 		<div class="introdetails">
-			<h4>ULCA - Universal Language Contribution APIs</h4>
-			<h6>A MeitY initiative.</h6>
-			<p>ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with a user interface for interacting with the datasets.</p>
+			<div class = "titlerow"><Typography variant={"h4"}>ULCA - Universal Language Contribution APIs</Typography> <Button onClick ={() =>handleClose()} style={{margin:"auto", marginRight:"0"}} color= "primary" variant="outlined"><CloseIcon size={"small"}/></Button></div>
+			<Typography variant={"h6"}>A MeitY initiative.</Typography>
+			<Typography variant={"body1"}>ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with a user interface for interacting with the datasets.</Typography>
 			<div class="features">
 				<div class="featureColumn">
 					<div class="featureDetail naviBlueColor">
-						<h6 class="mb0">Dataset</h6>
+					<Typography variant={"h6"}>Dataset</Typography>
 						<p>Language datasets</p>
 						<ul>
-							<li>Parallel corpus</li>
-							<li>Monolingual corpus</li>
-							<li>ASR / TTS corpus</li>
-							<li>OCR corpus</li>
+							<Typography style={{color:"white", marginLeft:"1.5rem", paddingTop:"-5px"}}>
+							Parallel corpus <br/>
+							Monolingual corpus <br/>
+							ASR / TTS corpus <br/>
+							OCR corpus<br/>
+							</Typography>
+							
 						</ul>
 					</div>
 					<div class="arrow-pointer naviBlueColor">Open sourced</div>
@@ -85,13 +134,15 @@ export default function ResponsiveDialog(props) {
 				</div>
 				<div class="featureColumn">
 					<div class="featureDetail skyBlueColor">
-						<h6 class="mb0">Model</h6>
+					<Typography variant={"h6"}>Model</Typography>
 						<p>Language specific tasks</p>
 						<ul>
-							<li>Translation</li>
-							<li>Speech recognition</li>
-							<li>Text to speech</li>
-							<li>Optical Character Recognition</li>
+						<Typography style={{color:"white", marginLeft:"1.5rem", paddingTop:"-5px"}}>
+						Translation <br/>
+						Speech recognition <br/>
+						Text to speech <br/>
+						Optical Character Recognition<br/>
+							</Typography>
 						</ul>
 					</div>
 					<div class="arrow-pointer skyBlueColor">Transparent</div>
@@ -99,11 +150,13 @@ export default function ResponsiveDialog(props) {
 				</div>
 				<div class="featureColumn">
 					<div class="featureDetail purpleColor">
-						<h6 class="mb0">Benchmark</h6>
-						<p>Open benchmarking</p>
+					<Typography variant={"h6"}>Benchmark</Typography>
+					<p>Open benchmarking</p>
 						<ul>
-							<li>Large, diverse task specific benchmarks</li>
-							<li>Research community approved metric system</li>
+						<Typography style={{color:"white", marginLeft:"1.5rem", paddingTop:"-5px"}}>
+						Large, diverse task specific benchmarks <br/>
+						Research community approved metric system <br/>
+						</Typography>
 							
 						</ul>
 					</div>
@@ -112,7 +165,7 @@ export default function ResponsiveDialog(props) {
 				</div>
 			</div>
 			<div class="why mt16">
-				<h6>Why ULCA ?</h6>
+			<Typography variant={"h6"}>Why ULCA ?</Typography>
 				<ul class="mb0">
 					<li>Consolidate & share all the knowledge wealth related to Indic languages with various NLP projects/initiatives.</li>
 					<li>Single stop for working with multiple dataset types.</li>
@@ -128,7 +181,9 @@ export default function ResponsiveDialog(props) {
 			</div>
 
 		</div>
-	</div>
+	
+	</DialogContentText>
+        </DialogContent>
         
       </Dialog>
     </MuiThemeProvider>
