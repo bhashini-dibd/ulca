@@ -20,23 +20,24 @@ import ActivateUser from "./ui/container/UserManagement/ActivateUser";
 import ActiveUser from "./ui/container/UserManagement/ActiveUser"
 import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/ReadymadeDataset";
 import PopUp from "./ui/container/DataSet/ReadymadeDataset.jsx/PopUp";
+import FilterList from "./ui/container/DataSet/DatasetView/FilterList";
 
-const PrivateRoute = ({ path, component: Component, authenticate,title, token, ...rest }) => {
+const PrivateRoute = ({ path, component: Component, authenticate, title, token, ...rest }) => {
   return (
     <Route
       {...rest}
       render={(props) =>
-        
+
         authenticate() ? (
-          title === "Dashboard" ? <Dashboard/>:
-          <Layout component={Component} {...rest} />
+          title === "Dashboard" ? <Dashboard /> :
+            <Layout component={Component} {...rest} />
         ) : (
           // <Redirect to={`${process.env.PUBLIC_URL}/user/login`}/>
           <Redirect to={{
             pathname: `${process.env.PUBLIC_URL}/user/login`,
-            from: path 
+            from: path
           }} />
-          
+
         )
       }
     />
@@ -145,12 +146,7 @@ export default function App() {
             component={ActiveUser}
 
           />
-          {/* <Route
-            path={`${process.env.PUBLIC_URL}/pop-up`}
 
-            component={PopUp}
-
-          /> */}
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/pop-up`}
             userRoles={[""]}
@@ -158,7 +154,16 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="pop-up"
             dontShowHeader={false}
-            />
+          />
+
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/filter-list`}
+            userRoles={[""]}
+            component={FilterList}
+            authenticate={authenticateUser}
+            currentMenu="pop-up"
+            dontShowHeader={false}
+          />
 
         </Switch>
       </div>
