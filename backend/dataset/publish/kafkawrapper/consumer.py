@@ -52,6 +52,7 @@ def consume():
                         else:
                             rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "datasetType": data["datasetType"]}
                             repo.upsert(data["record"]["id"], rec, True)
+                        log.info(f'PROCESSING - start - ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.load_parallel_dataset_single(data)
                         if data["datasetType"] == dataset_type_ocr:
@@ -60,6 +61,7 @@ def consume():
                             a_service.load_asr_dataset_single(data)
                         if data["datasetType"] == dataset_type_monolingual:
                             m_service.load_monolingual_dataset_single(data)
+                        log.info(f'PROCESSING - end - ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
                         break
                     else:
                         break

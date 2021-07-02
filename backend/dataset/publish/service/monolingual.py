@@ -1,7 +1,5 @@
-import hashlib
 import logging
 import multiprocessing
-import threading
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
