@@ -136,7 +136,7 @@ const DataSet = (theme) => ({
     subHeader: {
         marginBottom: '1.313rem'
     },
-    autoComplete:{
+    autoComplete: {
         marginBottom: '1.938rem'
     },
     clearNSubmit: {
@@ -148,6 +148,7 @@ const DataSet = (theme) => ({
         alignItems: "center",
         flexDirection: "column",
         justifyContent: "center",
+       height: window.innerHeight - 80
     },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
@@ -181,7 +182,7 @@ const DataSet = (theme) => ({
     mySearches: {
         marginTop: '1%',
         width: '60%',
-      //  textTransform:'inherit'
+        //  textTransform:'inherit'
     },
     downloadDiv: {
         marginTop: '4%'
@@ -215,12 +216,9 @@ const DataSet = (theme) => ({
     leftSection: {
         boxShadow: '4px 0 4px -4px #00000029'
     },
-    searchGrid: {
-        height: '100%'
-    },
-    popupDialog:{
-        maxWidth:'46.125rem',
-        height:'26.5rem'
+    popupDialog: {
+        maxWidth: '46.125rem',
+        height: '26.5rem'
     }
 });
 
