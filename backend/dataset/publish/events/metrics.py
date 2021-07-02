@@ -42,7 +42,7 @@ class MetricEvent:
                      "sourceLanguage": None, "targetLanguage": None, "domains": None, "license": None, "collectionSource": None,
                      "primarySubmitterId": None, "secondarySubmitterIds": None, "collectionMethod_collectionDescriptions": None,
                      "collectionMethod_collectionDetails_alignmentTool": None, "format": None, "channel": None, "samplingRate": None,
-                     "bitsPerSample": None, "gender": None}
+                     "bitsPerSample": None, "gender": None, "durationInSeconds": None}
             if 'sourceLanguage' in data.keys():
                 event["sourceLanguage"] = data["sourceLanguage"]
             if 'targetLanguage' in data.keys():
@@ -81,6 +81,8 @@ class MetricEvent:
                 event["bitsPerSample"] = data["bitsPerSample"]
             if 'gender' in data.keys():
                 event["gender"] = data["gender"]
+            if 'durationInSeconds' in data.keys():
+                event["durationInSeconds"] = data["durationInSeconds"]
             if 'isDelete' in data.keys():
                 event["isDelete"] = True
                 prod.produce(event, metric_event_input_topic, None)

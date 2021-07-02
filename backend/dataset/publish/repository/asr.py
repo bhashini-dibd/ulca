@@ -44,7 +44,6 @@ class ASRRepo:
     def get_mongo_instance(self):
         global mongo_instance_asr
         if not mongo_instance_asr:
-            log.info(f'getting mongo asr connection............')
             return self.instantiate()
         else:
             return mongo_instance_asr

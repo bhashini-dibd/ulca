@@ -44,7 +44,6 @@ class OCRRepo:
     def get_mongo_instance(self):
         global mongo_instance_ocr
         if not mongo_instance_ocr:
-            log.info(f'getting mongo ocr connection............')
             return self.instantiate()
         else:
             return mongo_instance_ocr

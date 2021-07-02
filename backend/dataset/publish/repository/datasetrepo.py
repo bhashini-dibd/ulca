@@ -6,7 +6,8 @@ from logging.config import dictConfig
 
 import redis
 
-from configs.configs import db_cluster, db, redis_server_host, redis_server_port, redis_server_pass
+from configs.configs import db_cluster, db, redis_server_host, redis_server_port, redis_server_pass, \
+    record_expiry_in_sec
 
 log = logging.getLogger('file')
 
@@ -39,15 +40,17 @@ class DatasetRepo:
     def get_redis_instance(self):
         global redis_client_datasets
         if not redis_client_datasets:
-            log.info(f'getting redis datasets connection............')
             return self.redis_instantiate()
         else:
             return redis_client_datasets
 
-    def upsert(self, key, value):
+    def upsert(self, key, value, expiry):
         try:
             client = self.get_redis_instance()
-            client.set(key, json.dumps(value))
+            if expiry:
+                client.set(key, json.dumps(value), ex=record_expiry_in_sec)
+            else:
+                client.set(key, json.dumps(value))
             return True
         except Exception as e:
             log.exception(f'Exception in redis upsert: {e}', e)

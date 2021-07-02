@@ -47,7 +47,6 @@ class ParallelRepo:
     def get_mongo_instance(self):
         global mongo_instance_parallel
         if not mongo_instance_parallel:
-            log.info(f'getting mongo parallel connection............')
             return self.instantiate()
         else:
             return mongo_instance_parallel

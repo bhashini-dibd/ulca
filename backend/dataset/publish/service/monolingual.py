@@ -1,13 +1,11 @@
-import hashlib
 import logging
 import multiprocessing
-import threading
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, \
     sample_size, mono_non_tag_keys, mono_immutable_keys, dataset_type_monolingual, user_mode_pseudo, \
-    mono_search_ignore_keys
+    mono_search_ignore_keys, mono_updatable_keys
 from repository.monolingual import MonolingualRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -116,7 +114,7 @@ class MonolingualService:
 
     def get_enriched_data(self, data, metadata):
         try:
-            record = self.get_monolingual_dataset_internal({"textHash": data["textHash"]})
+            record = self.get_monolingual_dataset_internal({"tags": {"$all": [data["textHash"]]}})
             if record:
                 dup_data = self.enrich_duplicate_data(data, record, metadata)
                 if dup_data:
@@ -125,11 +123,12 @@ class MonolingualService:
                 else:
                     return "DUPLICATE", data, record
             insert_data = data
+            for key in insert_data.keys():
+                if key not in mono_immutable_keys and key not in mono_updatable_keys:
+                    if not isinstance(insert_data[key], list):
+                        insert_data[key] = [insert_data[key]]
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
-            for key in insert_data.keys():
-                if key not in mono_immutable_keys:
-                    insert_data[key] = [insert_data[key]]
             insert_data["tags"] = self.get_tags(insert_data)
             return "INSERT", insert_data, insert_data
         except Exception as e:
@@ -140,6 +139,10 @@ class MonolingualService:
         db_record = record
         found = False
         for key in data.keys():
+            if key in mono_updatable_keys:
+                found = True
+                db_record[key] = data[key]
+                continue
             if key not in mono_immutable_keys:
                 if key not in db_record.keys():
                     found = True
@@ -154,6 +157,13 @@ class MonolingualService:
                         if data[key] not in db_record[key]:
                             found = True
                             db_record[key].append(data[key])
+                    else:
+                        if db_record[key] != data[key]:
+                            found = True
+                            db_record[key] = [db_record[key]]
+                            db_record[key].append(data[key])
+                        else:
+                            db_record[key] = [db_record[key]]
         if found:
             db_record["datasetId"].append(metadata["datasetId"])
             db_record["tags"] = self.get_tags(record)
@@ -178,7 +188,6 @@ class MonolingualService:
             log.exception(e)
             return None
 
-    # Method for searching asr datasets
     def get_monolingual_dataset(self, query):
         log.info(f'Fetching Monolingual datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)
@@ -187,7 +196,7 @@ class MonolingualService:
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
-                db_query["sourceLanguage"] = query["sourceLanguage"]
+                db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
             if 'collectionMode' in query.keys():
                 tags.extend(query["collectionMode"])
             if 'collectionSource' in query.keys():

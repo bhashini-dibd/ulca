@@ -5,7 +5,8 @@ import time
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, offset, limit, ocr_prefix, user_mode_pseudo, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, ocr_search_ignore_keys
+    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, \
+    ocr_search_ignore_keys, ocr_updatable_keys
 from repository.ocr import OCRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -132,7 +133,8 @@ class OCRService:
     # Method to enrich asr dataset
     def get_enriched_ocr_data(self, data, metadata):
         try:
-            record = self.get_ocr_dataset_internal({"imageHash": data["imageHash"], "groundTruthHash": data["groundTruthHash"]})
+            hashes = {data["imageHash"], data["groundTruthHash"]}
+            record = self.get_ocr_dataset_internal({"tags": {"$all": hashes}})
             if record:
                 dup_data = self.enrich_duplicate_data(data, record, metadata)
                 if dup_data:
@@ -142,7 +144,7 @@ class OCRService:
                     return "DUPLICATE", data, record
             insert_data = data
             for key in insert_data.keys():
-                if key not in ocr_immutable_keys:
+                if key not in ocr_immutable_keys and key not in ocr_updatable_keys:
                     if not isinstance(insert_data[key], list):
                         insert_data[key] = [insert_data[key]]
             insert_data["datasetType"] = metadata["datasetType"]
@@ -164,6 +166,10 @@ class OCRService:
         db_record = record
         found = False
         for key in data.keys():
+            if key in ocr_updatable_keys:
+                found = True
+                db_record[key] = data[key]
+                continue
             if key not in ocr_immutable_keys:
                 if key not in db_record.keys():
                     found = True
@@ -178,6 +184,13 @@ class OCRService:
                         if data[key] not in db_record[key]:
                             found = True
                             db_record[key].append(data[key])
+                    else:
+                        if db_record[key] != data[key]:
+                            found = True
+                            db_record[key] = [db_record[key]]
+                            db_record[key].append(data[key])
+                        else:
+                            db_record[key] = [db_record[key]]
         if found:
             db_record["datasetId"].append(metadata["datasetId"])
             db_record["tags"] = self.get_tags(record)
@@ -203,7 +216,6 @@ class OCRService:
             log.exception(e)
             return None
 
-    # Method for searching asr datasets
     def get_ocr_dataset(self, query):
         log.info(f'Fetching OCR datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)

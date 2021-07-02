@@ -5,7 +5,8 @@ import time
 from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, asr_prefix, \
-    sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, asr_search_ignore_keys
+    sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, \
+    asr_search_ignore_keys, asr_updatable_keys
 from repository.asr import ASRRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -127,7 +128,8 @@ class ASRService:
     # Method to enrich asr dataset
     def get_enriched_asr_data(self, data, metadata):
         try:
-            record = self.get_asr_dataset_internal({"audioHash": data["audioHash"], "textHash": data["textHash"]})
+            hashes = {data["audioHash"], data["textHash"]}
+            record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
             if record:
                 dup_data = self.enrich_duplicate_data(data, record, metadata)
                 if dup_data:
@@ -137,7 +139,7 @@ class ASRService:
                     return "DUPLICATE", data, record
             insert_data = data
             for key in insert_data.keys():
-                if key not in asr_immutable_keys:
+                if key not in asr_immutable_keys and key not in asr_updatable_keys:
                     if not isinstance(insert_data[key], list):
                         insert_data[key] = [insert_data[key]]
             insert_data["datasetType"] = metadata["datasetType"]
@@ -159,6 +161,10 @@ class ASRService:
         db_record = record
         found = False
         for key in data.keys():
+            if key in asr_updatable_keys:
+                found = True
+                db_record[key] = data[key]
+                continue
             if key not in asr_immutable_keys:
                 if key not in db_record.keys():
                     found = True
@@ -173,6 +179,13 @@ class ASRService:
                         if data[key] not in db_record[key]:
                             found = True
                             db_record[key].append(data[key])
+                    else:
+                        if db_record[key] != data[key]:
+                            found = True
+                            db_record[key] = [db_record[key]]
+                            db_record[key].append(data[key])
+                        else:
+                            db_record[key] = [db_record[key]]
         if found:
             db_record["datasetId"].append(metadata["datasetId"])
             db_record["tags"] = self.get_tags(record)
