@@ -9,6 +9,7 @@ from flask.blueprints import Blueprint
 from flask_cors import CORS
 import routes
 from service.cronerror import ErrorProcessor
+from configs.configs import consumer_count
 log = logging.getLogger('file')
 
 ulca_error_consumer = Flask(__name__)
@@ -20,20 +21,16 @@ for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):
         ulca_error_consumer.register_blueprint(blueprint, url_prefix=context_path)
 
-
 # Starts the kafka consumer in a different thread
 def start_consumer():
     with ulca_error_consumer.test_request_context():
         try:
-            error_consumer_process_1 = Process(target=error_consume)
-            error_consumer_process_1.start()
-            error_consumer_process_2 = Process(target=error_consume)
-            error_consumer_process_2.start()
-            error_consumer_process_3 = Process(target=error_consume)
-            error_consumer_process_3.start()
-
-            error_processor_thread = ErrorProcessor(threading.Event())
-            error_processor_thread.start()
+            for i in range(1,consumer_count+1):
+                error_consumer = Process(target=error_consume)
+                error_consumer.start()
+           
+            error_processor_cron = ErrorProcessor(threading.Event())
+            error_processor_cron.start()
         except Exception as e:
             log.exception(f'Exception while starting the ULCA error-service kafka consumer: {str(e)}')
 
