@@ -45,7 +45,7 @@ asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "d
 asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation"]
 asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod",
                           "datasetType", "audioHash", "textHash", "fileLocation"]
-asr_updatable_keys = []
+asr_updatable_keys = ["durationInSeconds"]
 
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage",
                            "targetLanguage", "datasetType"]

@@ -144,7 +144,7 @@ class OCRService:
                     return "DUPLICATE", data, record
             insert_data = data
             for key in insert_data.keys():
-                if key not in ocr_immutable_keys:
+                if key not in ocr_immutable_keys and key not in ocr_updatable_keys:
                     if not isinstance(insert_data[key], list):
                         insert_data[key] = [insert_data[key]]
             insert_data["datasetType"] = metadata["datasetType"]

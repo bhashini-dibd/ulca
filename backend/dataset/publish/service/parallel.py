@@ -136,7 +136,7 @@ class ParallelService:
             for obj in new_records:
                 if 'derived' not in obj.keys():
                     for key in obj.keys():
-                        if key not in parallel_immutable_keys:
+                        if key not in parallel_immutable_keys and key not in parallel_updatable_keys:
                             if not isinstance(obj[key], list):
                                 obj[key] = [obj[key]]
                     obj["datasetType"] = metadata["datasetType"]
