@@ -128,7 +128,8 @@ class ASRService:
     # Method to enrich asr dataset
     def get_enriched_asr_data(self, data, metadata):
         try:
-            record = self.get_asr_dataset_internal({"audioHash": data["audioHash"], "textHash": data["textHash"]})
+            hashes = {data["audioHash"], data["textHash"]}
+            record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
             if record:
                 dup_data = self.enrich_duplicate_data(data, record, metadata)
                 if dup_data:

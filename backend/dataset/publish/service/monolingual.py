@@ -114,7 +114,7 @@ class MonolingualService:
 
     def get_enriched_data(self, data, metadata):
         try:
-            record = self.get_monolingual_dataset_internal({"textHash": data["textHash"]})
+            record = self.get_monolingual_dataset_internal({"tags": {"$all": [data["textHash"]]}})
             if record:
                 dup_data = self.enrich_duplicate_data(data, record, metadata)
                 if dup_data:
