@@ -52,17 +52,21 @@ class ErrorProcessor(Thread):
                     uploaded_count =uploaded_record[0]["count"]
                 log.info(f'{uploaded_count} record/s were uploaded previously on to object store for srn -- {srn}')
                 pattern = f'{srn}.*'
-                error_records = storerepo.get_all_records(None,pattern)
-                if error_records:
+                error_records_keys = storerepo.get_keys_matching_pattern(pattern)
+                error_records_count = len(error_records_keys)
+                log.info(f'{error_records_count} records found in redis store for srn -- {srn}')
+                if error_records_count > uploaded_count:
+                    error_records = storerepo.get_all_records(error_records_keys,pattern)
                     log.info(f'Received {len(error_records)} records from redis store for srn -- {srn}')
-                    if len(error_records) > uploaded_count:
+                    if error_records:
                         log.info(f'Initiating upload process for srn -- {srn} on a new fork')
                         persister = threading.Thread(target=self.upload_error_to_object_store, args=(error_records,srn))
                         persister.start()
-                    log.info(f'No new records left for uploading for srn -- {srn}')
-
+                else:
+                    log.info(f'No new records left for uploading, for srn -- {srn}')
         except Exception as e:
             log.exception(f"Exception on error processing {e}")
+
 
     def upload_error_to_object_store(self, error_records, srn):
         try:

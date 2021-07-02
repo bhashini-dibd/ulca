@@ -71,6 +71,17 @@ class StoreRepo:
         except Exception as e:
             log.exception("Exception in REPO: search | Cause: " + str(e), None, e)
             return []
+    
+    def get_keys_matching_pattern(self,pattern):
+        try:
+            client = self.get_redis_instance()
+            key_list = client.keys(pattern)
+            if key_list:
+                return key_list
+            return []
+        except Exception as e:
+            log.exception("Exception in REPO: search | Cause: " + str(e), None, e)
+            return []
 
     def get_unique_srns(self):
         try:
