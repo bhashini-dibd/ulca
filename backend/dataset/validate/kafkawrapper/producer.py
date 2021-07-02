@@ -7,7 +7,7 @@ from configs.configs import kafka_bootstrap_server_host, ulca_dataset_topic_part
 
 
 log = logging.getLogger('file')
-
+topic_partition_map = {}
 
 class Producer:
 
@@ -23,17 +23,21 @@ class Producer:
         return producer
 
     # Method to push records to a topic in the kafka queue
-    def produce(self, object_in, topic, partition):
+    def produce(self, object_in, topic, partition_in):
+        global topic_partition_map
         producer = self.instantiate()
         try:
             if object_in:
-                if partition is None:
+                if partition_in is None:
                     partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
-                # if key:
-                #     key = str.encode(key)
-                #     producer.send(topic, value=object_in, key=key)
-                # else:
-                producer.send(topic, value=object_in, partition=partition)
+                    if topic in topic_partition_map.keys():
+                        while partition == topic_partition_map[topic]:
+                            partition = random.choice(list(range(0, ulca_dataset_topic_partitions)))
+                    topic_partition_map[topic] = partition
+                    partition_push = partition
+                else:
+                    partition_push = partition_in
+                producer.send(topic, value=object_in, partition=partition_push)
                 log.info(f'Pushing to topic: {topic}')
             producer.flush()
         except Exception as e:
