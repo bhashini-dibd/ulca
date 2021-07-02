@@ -36,9 +36,11 @@ class Producer:
         try:
             if object_in:
                 if partition_in is None:
-                    producer.send(topic, value=object_in, partition=partition)
+                    partition_push = partition
                 else:
-                    producer.send(topic, value=object_in, partition=partition_in)
+                    partition_push = partition_in
+                producer.send(topic, value=object_in, partition=partition_push)
+                log.info(f'PRODUCER -- topic: {topic} | partition: {partition_push}')
             producer.flush()
         except Exception as e:
             log.exception(f'Exception in dataset publish while producing: {str(e)}', e)
