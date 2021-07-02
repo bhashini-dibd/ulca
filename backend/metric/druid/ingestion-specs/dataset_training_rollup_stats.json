@@ -38,7 +38,8 @@
             "secondarySubmitterIds",
             "sourceLanguage",
             "submitterId",
-            "targetLanguage"
+            "targetLanguage",
+            "durationInSeconds"
           ],
           "dimensionExclusions": [
             "eventId"
