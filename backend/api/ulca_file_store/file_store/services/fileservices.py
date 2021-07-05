@@ -21,7 +21,8 @@ class FileServices():
         elif config.object_store == "AZURE":
             log.info("objectStore ----------- AZURE")
             return  azurerepo.upload_file_to_blob(file_path,file_name,folder)
-    
+
+    #choosing donload mechanism as per config
     def download_file(self,file_name):
         if config.object_store == "AWS":
             log.info("objectStore ------------ AWS")
@@ -30,6 +31,7 @@ class FileServices():
             log.info("objectStore ----------- AZURE")
             return  azurerepo.upload_file_to_blob(file_name)
 
+    #choosing delete mechanism as per config
     def remove_file(self,file_name):
         if config.object_store == "AWS":
             log.info("objectStore ------------- AWS")

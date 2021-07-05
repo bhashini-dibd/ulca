@@ -7,7 +7,7 @@ from services import FileServices
 log = logging.getLogger('file')
 
 fileserve = FileServices()
-# rest request for block merging individual service
+
 class FileUploaderResource(Resource):
 
     # reading json request and reurnung final response

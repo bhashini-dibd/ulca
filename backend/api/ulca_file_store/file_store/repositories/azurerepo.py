@@ -12,7 +12,8 @@ class AzureFileRepo():
 
     def __init__(self):
         pass
-
+    
+    #uploading file to blob storage
     def upload_file_to_blob(self,file_path, file_name, folder):
         blob_file_name = folder + "/" + file_name
         blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
@@ -25,9 +26,8 @@ class AzureFileRepo():
         except Exception as e:
             log.exception(f'Exception while pushing to azure blob storage: {e}', e)
             return post_error("Service Exception",f"Exception occurred:{e}")
-
     
-
+    #downloadin file from blob storage
     def download_file_from_blob(self, blob_file_name):
         blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
         blob_client = blob_service_client.get_blob_client(container=azure_container_name, blob=blob_file_name)
@@ -41,7 +41,7 @@ class AzureFileRepo():
             log.exception(e)
             return post_error("Service Exception",f"Exception occurred:{e}")
 
-
+    #removing file from blob storage
     def remove_file_from_blob(self, blob_file_name):
         log.info(f'Deleting {blob_file_name} from blob storage......')
         container_client = ContainerClient.from_connection_string(conn_str=azure_connection_string, container_name=azure_container_name)

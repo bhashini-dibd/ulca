@@ -20,7 +20,7 @@ class AwsFileRepo():
             log.exception(f'Exception while pushing to s3: {e}', e)
             return post_error("Service Exception",f"Exception occurred:{e}")
 
-
+    #downloading file from S3 bucket
     def download_file_from_s3(self, s3_file_name):
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
         output_filepath = os.path.join( download_folder, s3_file_name)
@@ -32,7 +32,7 @@ class AwsFileRepo():
             log.exception(e)
             return post_error("Service Exception",f"Exception occurred:{e}")
             
-
+    #removing file from S3 bucket
     def remove_file_from_s3(self, s3_file_name):
         log.info(f'Deleting {s3_file_name} from S3......')
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
