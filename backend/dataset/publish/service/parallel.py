@@ -29,6 +29,10 @@ class ParallelService:
     def __init__(self):
         pass
 
+    '''
+    Method to load Parallel dataset into the mongo db
+    params: request (record to be inserted)
+    '''
     def load_parallel_dataset_single(self, request):
         try:
             metadata, record = request, request["record"]
@@ -63,6 +67,10 @@ class ParallelService:
             return {"message": "EXCEPTION while loading Parallel dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
 
+    '''
+    Method to load Parallel dataset into the mongo db in bulk -- currently not in use.
+    params: request (record to be inserted)
+    '''
     def load_parallel_dataset(self, request):
         log.info("Loading Dataset.....")
         try:
@@ -114,6 +122,11 @@ class ParallelService:
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": total, "inserts": count, "updates": updates, "invalid": error_list}
 
+    '''
+    Method to run dedup checks on the input record and enrich if needed.
+    params: data (record to be inserted)
+    params: metadata (metadata of record to be inserted)
+    '''
     def get_enriched_data(self, data, metadata):
         insert_records, new_records = [], []
         records = self.get_dataset_internal({"hash": [data["sourceTextHash"], data["targetTextHash"]]}, False)
@@ -128,8 +141,7 @@ class ParallelService:
                                 return "UPDATE", dup_data
                             else:
                                 return data, record
-                        derived_data = self.enrich_derived_data(data, record, records, data["sourceTextHash"],
-                                                                data["targetTextHash"], metadata)
+                        derived_data = self.enrich_derived_data(data, record, records, metadata)
                         if derived_data:
                             new_records.append(derived_data)
             new_records.append(data)
@@ -150,6 +162,10 @@ class ParallelService:
             log.error(f'Data: {data}, Records: {records}')
             return None
 
+    '''
+    Method to fetch records from the DB
+    params: query (query for search)
+    '''
     def get_dataset_internal(self, query, all):
         try:
             if all:
@@ -166,6 +182,12 @@ class ParallelService:
             log.exception(e)
             return None
 
+    '''
+    Method to check and process duplicate records.
+    params: data (record to be inserted)
+    params: record (duplicate record found in the DB)
+    params: data (record to be inserted)
+    '''
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = {}
         for key in record.keys():
@@ -221,8 +243,16 @@ class ParallelService:
             else:
                 return False
 
-    def enrich_derived_data(self, data, record, records, src_hash, tgt_hash, metadata):
+    '''
+    Method to derive records based on the input and the records already existing in the DB
+    params: data (input record)
+    params: record (matching record found in the database which is currently under processing)
+    params: records (All matching records for the input record)
+    params: metadata (metadata of the input record)
+    '''
+    def enrich_derived_data(self, data, record, records, metadata):
         derived_data = None
+        src_hash, tgt_hash = data["sourceTextHash"], data["targetTextHash"]
         try:
             if src_hash == record["sourceTextHash"]:
                 if data["targetLanguage"] != record["targetLanguage"]:
@@ -275,6 +305,10 @@ class ParallelService:
             log.exception(f'Exception while creating derived data record: {e}', e)
             return None
 
+    '''
+    Method to fetch tags for a record
+    params: insert_data (record to be used to fetch tags)
+    '''
     def get_tags(self, insert_data):
         tag_details = {}
         for key in insert_data:
@@ -282,6 +316,10 @@ class ParallelService:
                 tag_details[key] = insert_data[key]
         return list(utils.get_tags(tag_details))
 
+    '''
+    Method to fetch Parallel dataset from the DB based on various criteria
+    params: query (query for search)
+    '''
     def get_parallel_dataset(self, query):
         log.info(f'Fetching Parallel datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)
@@ -355,6 +393,10 @@ class ParallelService:
             pt.task_event_search(op, error)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
+    '''
+    Method to delete Parallel dataset from the DB based on various criteria
+    params: delete_req (request for deletion)
+    '''
     def delete_parallel_dataset(self, delete_req):
         log.info(f'Deleting PARALLEL datasets....')
         d, u = 0, 0

@@ -16,6 +16,7 @@ class ErrorEvent:
     def __init__(self):
         pass
 
+    # Method to post error events to the error consumer
     def create_error_event(self, error_list):
         for error in error_list:
             try:

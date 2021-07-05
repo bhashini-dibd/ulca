@@ -13,6 +13,7 @@ class MonolingualRepo:
     def __init__(self):
         pass
 
+    # Method to set Monolingual Mongo DB collection
     def set_monolingual_collection(self):
         if "localhost" not in db_cluster:
             log.info(f'Setting the Mongo Monolingual DS Shard Cluster up.....')
@@ -34,6 +35,7 @@ class MonolingualRepo:
             ulca_col.create_index([("tags", -1)])
             log.info(f'Done!')
 
+    # Initialises and fetches mongo db client
     def instantiate(self):
         global mongo_instance_mono
         client = pymongo.MongoClient(db_cluster)

@@ -23,6 +23,10 @@ class DatasetService:
     def __init__(self):
         pass
 
+    '''
+    Method to set the Dataset DB up based on the request
+    params: request (DB setup request)
+    '''
     def set_dataset_db(self, request):
         log.info("Setting Dataset DB.....")
         if request["all"]:

@@ -14,7 +14,10 @@ srn_map = {}
 class ProcessTracker:
     def __init__(self):
         pass
-
+    '''
+    Method to update the redis cache after processing every record of the submit flow
+    params: data (record to be processed)
+    '''
     def update_task_details(self, data):
         global srn_map
         if data["status"] == "SUCCESS":
@@ -22,6 +25,11 @@ class ProcessTracker:
         else:
             repo.redis_key_inc(data["serviceRequestNumber"], True)
 
+    '''
+    Method to update the process tracker for a dataset search event
+    params: data (record to be processed)
+    params: error (error if any)
+    '''
     def task_event_search(self, data, error):
         log.info(f'Publishing pt event for SEARCH -- {data["serviceRequestNumber"]}')
         task_event = self.search_task_event(data, pt_search_tool)
@@ -50,6 +58,11 @@ class ProcessTracker:
             repo.update(task_event)
             return None
 
+    '''
+    Method to update the process tracker for a dataset delete event
+    params: data (record to be processed)
+    params: error (error if any)
+    '''
     def task_event_delete(self, data, error):
         log.info(f'Publishing pt event for DELETE -- {data["serviceRequestNumber"]}')
         try:
@@ -73,6 +86,11 @@ class ProcessTracker:
             log.exception(e)
             return None
 
+    '''
+    Method to fetch details from the process tracker for a given srn and tool.
+    params: data (record to be processed)
+    params: tool (tool which is fetching)
+    '''
     def search_task_event(self, data, tool):
         query = {"serviceRequestNumber": data["serviceRequestNumber"], "tool": tool}
         exclude = {"_id": False}

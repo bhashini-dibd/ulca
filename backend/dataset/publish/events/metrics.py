@@ -13,6 +13,7 @@ class MetricEvent:
     def __init__(self):
         pass
 
+    # Method to construct metric event from the input
     def build_metric_event(self, records, metadata, is_del, is_upd):
         if metadata["userMode"] == user_mode_pseudo:
             return
@@ -35,6 +36,7 @@ class MetricEvent:
                     record["isUpdate"] = True
                 self.create_metric_event(record)
 
+    # Method to construct and post metric events to the bi event consumer
     def create_metric_event(self, data):
         try:
             event = {"eventType": "dataset-training", "eventId": f'{data["serviceRequestNumber"]}_{data["id"]}',

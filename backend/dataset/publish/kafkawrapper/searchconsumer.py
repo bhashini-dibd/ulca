@@ -29,7 +29,7 @@ def instantiate(topics):
     return consumer
 
 
-# Method to read and process the requests from the kafka queue
+# Method to read and process the requests from the kafka queue for dataset search action
 def search_consume():
     try:
         topics = [search_input_topic]

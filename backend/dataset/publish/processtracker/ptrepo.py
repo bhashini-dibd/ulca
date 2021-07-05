@@ -18,6 +18,7 @@ class PTRepo:
     def __init__(self):
         pass
 
+    # Initialises and fetches mongo db client
     def instantiate(self):
         global mongo_instance_pt
         client = pymongo.MongoClient(ulca_db_cluster)
@@ -27,7 +28,6 @@ class PTRepo:
     def get_mongo_instance(self):
         global mongo_instance_pt
         if not mongo_instance_pt:
-            log.info(f'getting mongo pt connection............')
             return self.instantiate()
         else:
             return mongo_instance_pt
@@ -39,17 +39,14 @@ class PTRepo:
         col.insert_many(data)
         return len(data)
 
-    # Updates the object in the mongo collection
     def update(self, object_in):
         col = self.get_mongo_instance()
         col.replace_one({"id": object_in["id"]}, object_in)
 
-    # Updates the object in the mongo collection
     def delete(self, rec_id):
         col = self.get_mongo_instance()
         col.delete_one({"id": rec_id})
 
-    # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
         col = self.get_mongo_instance()
         if offset is None and res_limit is None:
@@ -71,7 +68,6 @@ class PTRepo:
     def get_redis_instance(self):
         global redis_client
         if not redis_client:
-            log.info(f'getting redis connection............')
             return self.redis_instantiate()
         else:
             return redis_client
@@ -100,7 +96,7 @@ class PTRepo:
             result = []
             for key in key_list:
                 val = client.get(key)
-                #val = client.hgetall(key) incase value against the key is store as a hash/dict
+                #val = client.hgetall(key) incase value against the key is stored as a hash/dict
                 if val:
                     result.append(json.loads(val))
             return result
