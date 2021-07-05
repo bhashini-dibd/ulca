@@ -34,7 +34,6 @@ const getContributionList = (payload) => {
         )
         !statusFilter.includes(element.status) && statusFilter.push(element.status)
         !datatypeFilter.includes(element.datasetName) && datatypeFilter.push(getDatasetName(element.datasetType))
-        debugger
         if(element.status === "In-Progress" || element.status === "Pending"){
             refreshStatus = true
         }
