@@ -3,27 +3,8 @@ import DataSet from "../../../styles/Dataset";
 import { withStyles, Button, Divider, Grid, Typography, Popover, FormGroup, Checkbox, FormControlLabel } from "@material-ui/core";
 
 const FilterList = (props) => {
-    const classes = props;
-    // const [anchorEl, setAnchorEl] = React.useState(null);
-    // const handleChange = (event) => {
-    //     setState({ ...state, [event.target.name]: event.target.checked });
-    // };
-    // const handleClick = (event) => {
-    //     setAnchorEl(event.currentTarget);
-    // };
-
-    // const handleClose = () => {
-    //     setAnchorEl(null);
-    // };
-    // const open = Boolean(anchorEl);
-    // const id = open ? 'simple-popover' : undefined;
-    const data = {
-        datasetType: [{ name: 'Parallel', state: true }, { name: 'Monolingual', state: true }, { name: 'ASR', state: true }, { name: 'OCR', state: false }],
-        status: [{ name: 'Pending', state: true }, { name: 'In-Progress', state: true }, { name: 'Completed', state: true }, { name: 'Failed', state: false }]
-    };
-    const count = 0
+    const {classes} = props;
     const { filter, selectedFilter, clearAll, apply } = props
-
     const [selectedType, setSelectedType] = useState(selectedFilter.datasetType)
     const [selectedStatus, setSelectedStatus] = useState(selectedFilter.status)
 
@@ -66,7 +47,6 @@ const FilterList = (props) => {
         return false
     }
 
-    console.log('helloi', selectedType, selectedStatus)
     return (
         <div>
             <Popover
@@ -86,11 +66,11 @@ const FilterList = (props) => {
             >
                 <Button
                     onClick={handleClearAll}
-                    color="primary" size="small" style={{ float: "right", margin: '9px 16px 0px auto', padding: '0' }}> Clear All
+                    color="primary" size="small" className={classes.clearAllBtn}> Clear All
                 </Button>
-                <Grid container style={{ borderBottom: '1px solid #00000029', paddingLeft: '18.5px' }}>
+                <Grid container className={classes.filterContainer}>
                     <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
-                        <Typography style={{ marginBottom: '9px' }}>Dataset Type</Typography>
+                        <Typography className={classes.filterTypo}>Dataset Type</Typography>
                         <FormGroup>
                             {filter.datasetType.map((type) => {
                                 return (
@@ -112,7 +92,7 @@ const FilterList = (props) => {
                         <Divider orientation="vertical"></Divider>
                     </Grid>
                     <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <Typography style={{ marginBottom: '9px' }}>Status</Typography>
+                        <Typography className={classes.filterTypo}>Status</Typography>
                         <FormGroup>
                             {filter.status.map((type) => {
                                 return (
@@ -134,7 +114,7 @@ const FilterList = (props) => {
                 <Button
                     disabled={!(selectedType.length || selectedStatus.length)}
                     onClick={() => apply({ datasetType: selectedType, status: selectedStatus })}
-                    color="primary" size="small" variant="contained" style={{ float: "right", margin: '5px', borderRadius: '4px', margin: '9px 16px 9px auto' }}> Apply
+                    color="primary" size="small" variant="contained" className={classes.applyBtn}> Apply
                 </Button>
 
             </Popover>

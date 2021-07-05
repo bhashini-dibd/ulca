@@ -148,7 +148,7 @@ const DataSet = (theme) => ({
         alignItems: "center",
         flexDirection: "column",
         justifyContent: "center",
-       height: window.innerHeight - 80
+        height: window.innerHeight - 80
     },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
@@ -219,6 +219,24 @@ const DataSet = (theme) => ({
     popupDialog: {
         maxWidth: '46.125rem',
         height: '26.5rem'
+    },
+    clearAllBtn: {
+        float: "right",
+        margin: '9px 16px 0px auto',
+        padding: '0'
+    },
+    filterContainer: {
+        borderBottom: '1px solid #00000029',
+        paddingLeft: '18.5px'
+    },
+    filterTypo: {
+        marginBottom: '9px'
+    },
+    applyBtn: {
+        float: "right",
+        margin: '5px',
+        borderRadius: '4px',
+        margin: '9px 16px 9px auto'
     }
 });
 
