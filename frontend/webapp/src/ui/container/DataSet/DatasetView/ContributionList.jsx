@@ -1,10 +1,11 @@
-import { withStyles, Link, Button } from "@material-ui/core";
+import { withStyles,Link, MuiThemeProvider, createMuiTheme,Button,FilterList } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
+
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
 import { PageChange, RowChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
@@ -14,21 +15,22 @@ import { Cached, DeleteOutline, VerticalAlignTop } from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import { useParams } from "react-router";
 import C from "../../../../redux/actions/constants";
+import FilterListIcon from '@material-ui/icons/FilterList';
 const ContributionList = (props) => {
 
-        const history = useHistory();
-        const dispatch = useDispatch(ClearReport);
-        const myContributionReport = useSelector((state) => state.myContributionReport);
-        const PageInfo = useSelector((state) => state.pageChangeDetails);
-        const [open, setOpen] = useState(false)
-        const [message, setMessage] = useState("Do you want to delete")
-        const [title, setTitle] = useState("Delete")
-        const { added } = useParams()
-        const data = myContributionReport.responseData
+        const history                 = useHistory();
+        const dispatch                = useDispatch(ClearReport);
+        const myContributionReport    = useSelector( (state) => state.myContributionReport);
+        const PageInfo                = useSelector((state) => state.pageChangeDetails);
+        const [open, setOpen]         = useState(false)
+        const [message, setMessage]   = useState("Do you want to delete")
+        const [title, setTitle]       = useState("Delete")
+        const {added}                 = useParams()
+        const data                    = myContributionReport.filteredData
 
-
-        useEffect(() => {
-                (myContributionReport.responseData.length === 0 || myContributionReport.refreshStatus || added) && MyContributionListApi()
+        
+        useEffect(()                  => {
+                (myContributionReport.filteredData.length === 0 || myContributionReport.refreshStatus || added) && MyContributionListApi()
         }, []);
 
         const MyContributionListApi = () => {
@@ -37,9 +39,17 @@ const ContributionList = (props) => {
                 dispatch(APITransport(userObj));
         }
 
-        const fetchHeaderButton = () => {
-                return <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
+        const handleShowFilter = () =>{
+                debugger
+                console.log(myContributionReport.filter,myContributionReport.selectedFilter )
+        }
 
+        const fetchHeaderButton= () => {
+               return  <>
+                <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh}onClick={() => handleShowFilter()}> <FilterListIcon className ={classes.iconStyle}/>Filter</Button>
+                
+                <Button color={"primary"} size="medium" variant="outlined" className={ classes.buttonStyle}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                  </>      
         }
 
         const handleSetValues = (name) => {
@@ -188,22 +198,20 @@ const ContributionList = (props) => {
                         pagination: {
                                 rowsPerPage: "Rows per page",
                         },
-                        options: { sortDirection: "desc" },
-                },
-                onRowClick: rowData => handleRowClick(rowData),
-                // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
-                customToolbar: fetchHeaderButton,
-                filter: true,
-                displaySelectToolbar: false,
-                fixedHeader: false,
-                filterType: "checkbox",
-                download: false,
-                print: false,
-                viewColumns: false,
-                rowsPerPage: PageInfo.count,
-
-                rowsPerPageOptions: [10, 25, 50, 100],
-                selectableRows: "none",
+                        onRowClick: rowData => handleRowClick(rowData),
+                        // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
+                        customToolbar: fetchHeaderButton,
+                        filter                  :       false,
+                        displaySelectToolbar    :       false,
+                        fixedHeader             :       false,
+                        filterType              :       "checkbox",
+                        download                :       false,
+                        print                   :       false,
+                        viewColumns     : false,
+                        rowsPerPage:PageInfo.count,
+                    
+                        rowsPerPageOptions      :       [10,25,50,100],
+                        selectableRows          :       "none",
                 page: PageInfo.page,
                 onTableChange: (action, tableState) => {
                         switch (action) {
@@ -220,7 +228,8 @@ const ContributionList = (props) => {
                 },
 
 
-        };
+                }
+        }
 
         const { classes } = props;
         return (
