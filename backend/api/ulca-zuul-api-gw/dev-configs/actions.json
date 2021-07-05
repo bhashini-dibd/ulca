@@ -34,7 +34,7 @@
         },
         {
             "id":"b3d4b271-4de3-4781-8d03-8b3cee833f13",
-            "uri":"/ulca/error/v0/report",
+            "uri":"/ulca/error-consumer/v0/error/report",
             "module":"ERROR-CONSUMER",
             "active":true,
             "whiteList":false,
