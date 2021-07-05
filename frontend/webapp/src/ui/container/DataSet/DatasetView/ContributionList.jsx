@@ -48,7 +48,13 @@ const ContributionList = (props) => {
         const handleClose = () => {
                 setAnchorEl(null);
         };
-       
+        const clearAll = (data) => {
+                console.log("clearAll", data)
+        }
+        const apply = (data) => {
+                console.log("apply", data)
+        }
+
 
         const fetchHeaderButton = () => {
                 return <>
@@ -265,16 +271,18 @@ const ContributionList = (props) => {
                                 handleSubmit={() => { handleDialogSubmit() }}
                         />}
                         {popoverOpen && <FilterList
-                         id={id}
-                         open={popoverOpen}
-                         anchorEl={anchorEl}
-                         handleClose={handleClose}
-                         filter={myContributionReport.filter}
-                         selectedFilter={myContributionReport.selectedFilter}
+                                id={id}
+                                open={popoverOpen}
+                                anchorEl={anchorEl}
+                                handleClose={handleClose}
+                                filter={myContributionReport.filter}
+                                selectedFilter={myContributionReport.selectedFilter}
+                                clearAll={clearAll}
+                                apply={apply}
                         />
 
 
-                                }
+                        }
                 </div>
         );
 };

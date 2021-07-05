@@ -31,7 +31,7 @@ const FilterList = (props) => {
         if (e.target.checked)
             setSelectedType([...selectedType, e.target.name])
         else {
-            const selected = selectedType
+            const selected = Object.assign([], selectedType)
             const index = selected.indexOf(e.target.name);
 
             if (index > -1) {
@@ -45,7 +45,7 @@ const FilterList = (props) => {
         if (e.target.checked)
             setSelectedStatus([...selectedStatus, e.target.name])
         else {
-            const selected = selectedStatus
+            const selected = Object.assign([], selectedStatus)
             const index = selected.indexOf(e.target.name);
 
             if (index > -1) {
@@ -60,8 +60,7 @@ const FilterList = (props) => {
         clearAll({ datasetType: [], status: [] })
     }
     const isChecked = (type, param) => {
-        //   const index = param === 'status' ? selectedStatus.indexOf(type) : selectedType.indexOf(type);
-        const index = selectedStatus.indexOf(type)
+        const index = param === 'status' ? selectedStatus.indexOf(type) : selectedType.indexOf(type);
         if (index > -1)
             return true
         return false
@@ -86,7 +85,7 @@ const FilterList = (props) => {
                 }}
             >
                 <Button
-                    // onClick={clearAll}
+                    onClick={handleClearAll}
                     color="primary" size="small" style={{ float: "right", margin: '9px 16px 0px auto', padding: '0' }}> Clear All
                 </Button>
                 <Grid container style={{ borderBottom: '1px solid #00000029', paddingLeft: '18.5px' }}>
@@ -98,7 +97,7 @@ const FilterList = (props) => {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                              //  checked={isChecked(type, 'dataset')}
+                                                checked={isChecked(type, 'dataset')}
                                                 onChange={(e) => handleDatasetChange(e)}
                                                 name={type}
                                                 color="primary"
@@ -133,8 +132,8 @@ const FilterList = (props) => {
                     </Grid>
                 </Grid>
                 <Button
-                    disabled={count ? false : true}
-                    //  onClick={apply}
+                    disabled={!(selectedType.length || selectedStatus.length)}
+                    onClick={() => apply({ datasetType: selectedType, status: selectedStatus })}
                     color="primary" size="small" variant="contained" style={{ float: "right", margin: '5px', borderRadius: '4px', margin: '9px 16px 9px auto' }}> Apply
                 </Button>
 
