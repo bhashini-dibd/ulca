@@ -1,7 +1,11 @@
 import C from '../../../actions/constants';
 import getDatasetName from '../../../../utils/getDataset';
 const initialState = {
-    responseData: []
+    responseData: [],
+    filteredData:[],
+    refreshStatus:false,
+    filter : {status:[],datasetType:[]},
+    selectedFilter : {status:[],datasetType:[]},
 }
 
 const dateConversion = (value) =>{
@@ -13,6 +17,9 @@ const dateConversion = (value) =>{
 
 const getContributionList = (payload) => {
     let responseData = [];
+    let statusFilter = [];
+    let datatypeFilter = [];
+    let filter = {status:[],datasetType:[]}
     let refreshStatus = false;
     payload.forEach(element => {
         responseData.push(
@@ -23,13 +30,22 @@ const getContributionList = (payload) => {
                      datasetType :          getDatasetName(element.datasetType),
                      status               : element.status
             }
+            
         )
-        if(element.status === "In-Progress" || "Pending"){
+        !statusFilter.includes(element.status) && statusFilter.push(element.status)
+        !datatypeFilter.includes(element.datasetName) && datatypeFilter.push(getDatasetName(element.datasetType))
+        debugger
+        if(element.status === "In-Progress" || element.status === "Pending"){
             refreshStatus = true
         }
     }); 
+
+    filter.status = statusFilter;
+    filter.datasetType = datatypeFilter;
+
+
     responseData = responseData.reverse()
-    return {responseData , refreshStatus};
+    return {responseData ,filteredData:responseData, refreshStatus, filter, selectedFilter:{status:[],datasetType:[]}};
 }
 
 const reducer = (state = initialState, action) => {

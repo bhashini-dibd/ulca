@@ -46,7 +46,7 @@ const FilterList = (props) => {
                 }}
             >
                 <Button
-                    //onClick={clearAll}
+                    // onClick={clearAll}
                     color="primary" size="small" style={{ float: "right", margin: '9px 16px 0px auto', padding: '0' }}> Clear All
                 </Button>
                 <Grid container style={{ borderBottom: '1px solid #00000029', paddingLeft: '18.5px' }}>

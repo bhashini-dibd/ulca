@@ -1,4 +1,4 @@
-import { withStyles,Link, MuiThemeProvider, createMuiTheme,Button } from "@material-ui/core";
+import { withStyles,Link, MuiThemeProvider, createMuiTheme,Button,FilterList } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,7 @@ import {Cached, DeleteOutline, VerticalAlignTop} from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import { useParams } from "react-router";
 import C from "../../../../redux/actions/constants";
+import FilterListIcon from '@material-ui/icons/FilterList';
 const ContributionList = (props) => {
 
         const history                 = useHistory();
@@ -24,11 +25,11 @@ const ContributionList = (props) => {
         const [message, setMessage]   = useState("Do you want to delete")
         const [title, setTitle]       = useState("Delete")
         const {added}                 = useParams()
-        const data                    = myContributionReport.responseData
+        const data                    = myContributionReport.filteredData
 
         
         useEffect(()                  => {
-                (myContributionReport.responseData.length === 0 || myContributionReport.refreshStatus || added) && MyContributionListApi()
+                (myContributionReport.filteredData.length === 0 || myContributionReport.refreshStatus || added) && MyContributionListApi()
         }, []);
   
         const  MyContributionListApi  = () =>{
@@ -37,9 +38,17 @@ const ContributionList = (props) => {
                 dispatch(APITransport(userObj));
         }
 
+        const handleShowFilter = () =>{
+                debugger
+                console.log(myContributionReport.filter,myContributionReport.selectedFilter )
+        }
+
         const fetchHeaderButton= () => {
-                return <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
-                        
+               return  <>
+                <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh}onClick={() => handleShowFilter()}> <FilterListIcon className ={classes.iconStyle}/>Filter</Button>
+                
+                <Button color={"primary"} size="medium" variant="outlined" className={ classes.buttonStyle}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
+                  </>      
         }
 
         const handleSetValues = (name) => {
@@ -193,7 +202,7 @@ const ContributionList = (props) => {
                         onRowClick: rowData => handleRowClick(rowData),
                         // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
                         customToolbar: fetchHeaderButton,
-                        filter                  :       true,
+                        filter                  :       false,
                         displaySelectToolbar    :       false,
                         fixedHeader             :       false,
                         filterType              :       "checkbox",
