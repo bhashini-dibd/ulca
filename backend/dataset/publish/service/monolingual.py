@@ -27,6 +27,10 @@ class MonolingualService:
     def __init__(self):
         pass
 
+    '''
+    Method to load Monolingual dataset into the mongo db
+    params: request (record to be inserted)
+    '''
     def load_monolingual_dataset_single(self, request):
         try:
             metadata, record = request, request["record"]
@@ -60,6 +64,10 @@ class MonolingualService:
             return {"message": "EXCEPTION while loading Monolingual dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
 
+    '''
+    Method to load Monolingual dataset into the mongo db in bulk -- currently not in use.
+    params: request (record to be inserted)
+    '''
     def load_monolingual_dataset(self, request):
         log.info("Loading Dataset..... | {}".format(datetime.now()))
         try:
@@ -112,6 +120,11 @@ class MonolingualService:
             return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": total, "inserts": count, "updates": updates, "invalid": error_list}
 
+    '''
+    Method to run dedup checks on the input record and enrich if needed.
+    params: data (record to be inserted)
+    params: metadata (metadata of record to be inserted)
+    '''
     def get_enriched_data(self, data, metadata):
         try:
             record = self.get_monolingual_dataset_internal({"tags": {"$all": [data["textHash"]]}})
@@ -135,6 +148,12 @@ class MonolingualService:
             log.exception(e)
             return None
 
+    '''
+    Method to check and process duplicate records.
+    params: data (record to be inserted)
+    params: record (duplicate record found in the DB)
+    params: data (record to be inserted)
+    '''
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = record
         found = False
@@ -169,6 +188,10 @@ class MonolingualService:
             db_record["tags"] = self.get_tags(record)
             return db_record
 
+    '''
+    Method to fetch tags for a record
+    params: insert_data (record to be used to fetch tags)
+    '''
     def get_tags(self, insert_data):
         tag_details = {}
         for key in insert_data:
@@ -176,6 +199,10 @@ class MonolingualService:
                 tag_details[key] = insert_data[key]
         return list(utils.get_tags(tag_details))
 
+    '''
+    Method to fetch records from the DB
+    params: query (query for search)
+    '''
     def get_monolingual_dataset_internal(self, query):
         try:
             exclude = {"_id": False}
@@ -188,6 +215,10 @@ class MonolingualService:
             log.exception(e)
             return None
 
+    '''
+    Method to fetch Monolingual dataset from the DB based on various criteria
+    params: query (query for search)
+    '''
     def get_monolingual_dataset(self, query):
         log.info(f'Fetching Monolingual datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)
@@ -240,6 +271,10 @@ class MonolingualService:
             log.exception(e)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
+    '''
+    Method to delete Monolingual dataset from the DB based on various criteria
+    params: delete_req (request for deletion)
+    '''
     def delete_mono_dataset(self, delete_req):
         log.info(f'Deleting MONOLINGUAL datasets....')
         d, u = 0, 0

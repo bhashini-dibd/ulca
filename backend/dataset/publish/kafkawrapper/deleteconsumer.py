@@ -28,7 +28,7 @@ def instantiate(topics):
     return consumer
 
 
-# Method to read and process the requests from the kafka queue
+# Method to read and process the requests from the kafka queue for dataset deletion
 def delete_consume():
     try:
         topics = [delete_input_topic]

@@ -12,7 +12,7 @@ from configs.configs import app_host, app_port
 log = logging.getLogger('file')
 
 
-# Starts the kafka consumer in a different thread
+# Starts the kafka consumers in different processes
 def start_consumer():
     with ulca_dataset_publish.test_request_context():
         try:
@@ -23,7 +23,7 @@ def start_consumer():
             '''delete_consumer_process = Process(target=delete_consume)
             delete_consumer_process.start()'''
         except Exception as e:
-            log.exception(f'Exception while starting the ULCA DS Publish kafka consumer: {str(e)}')
+            log.exception(f'Exception while starting the ULCA DS Publish kafka consumers: {e}', e)
 
 
 if __name__ == '__main__':

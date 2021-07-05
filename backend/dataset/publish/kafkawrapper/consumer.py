@@ -30,7 +30,7 @@ def instantiate(topics):
     return consumer
 
 
-# Method to read and process the requests from the kafka queue
+# Method to read and process the requests from the kafka queue for submit dataset action
 def consume():
     try:
         topics = [publish_input_topic]
