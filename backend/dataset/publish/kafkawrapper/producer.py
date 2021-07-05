@@ -17,7 +17,7 @@ class Producer:
         pass
 
     # Method to instantiate producer
-    # Any other method that needs a producer will get it from her
+    # Any other method that needs a producer will get it from here
     def instantiate(self):
         producer = KafkaProducer(bootstrap_servers=list(str(kafka_bootstrap_server_host).split(",")),
                                  api_version=(1, 0, 0),
@@ -40,7 +40,7 @@ class Producer:
                 else:
                     partition_push = partition_in
                 producer.send(topic, value=object_in, partition=partition_push)
-                #log.info(f'PRODUCER -- topic: {topic} | partition: {partition_push}')
+                log.info(f'PRODUCER -- topic: {topic} | partition: {partition_push}')
             producer.flush()
         except Exception as e:
             log.exception(f'Exception in dataset publish while producing: {str(e)}', e)

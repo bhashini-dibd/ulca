@@ -15,6 +15,7 @@ class ParallelRepo:
     def __init__(self):
         pass
 
+    # Method to set Parallel Dataset Mongo DB collection
     def set_parallel_collection(self):
         if "localhost" not in db_cluster:
             log.info(f'Setting the Mongo Parallel DS Shard Cluster up..... | {datetime.now()}')
@@ -38,6 +39,7 @@ class ParallelRepo:
             ulca_col.create_index([("targetLanguage", -1)])
             log.info(f'Done! | {datetime.now()}')
 
+    # Initialises and fetches mongo db client
     def instantiate(self):
         global mongo_instance_parallel
         client = pymongo.MongoClient(db_cluster)
@@ -56,17 +58,14 @@ class ParallelRepo:
         col.insert_many(data)
         return len(data)
 
-    # Updates the object in the mongo collection
     def delete(self, rec_id):
         col = self.get_mongo_instance()
         col.delete_one({"id": rec_id})
 
-    # Updates the object in the mongo collection
     def update(self, object_in):
         col = self.get_mongo_instance()
         col.replace_one({"id": object_in["id"]}, object_in)
 
-    # Searches the object into mongo collection
     def search_internal(self, query, exclude, offset, res_limit):
         try:
             col = self.get_mongo_instance()
@@ -82,7 +81,6 @@ class ParallelRepo:
             log.exception(e)
             return []
 
-    # Searches the object into mongo collection
     def search(self, query, offset, res_limit):
         result, res_count, pipeline, langs = [], 0, [], []
         try:

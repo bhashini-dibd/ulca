@@ -47,7 +47,7 @@ def search_dataset():
     return jsonify(response), 200
 
 
-# REST endpoint to fetch configs
+# REST endpoint to reset the Dataset DB
 @ulca_dataset_publish.route('/ulca/publish/v0/cluster/set', methods=["POST"])
 def set_cluster():
     service = DatasetService()
