@@ -1,11 +1,8 @@
 
-import { withStyles, Typography,Link, MuiThemeProvider, createMuiTheme,Button } from "@material-ui/core";
 
 import React, { useEffect, useState } from "react";
 import {  useHistory } from "react-router-dom";
-import Dialog from "../../components/common/Dialog"
 import Snackbar from '../../components/common/Snackbar';
-import UrlConfig from '../../../configs/internalurlmapping';
 import ActivateUserId from "../../../redux/actions/api/UserManagement/ActivateUser";
 import ActiveUser from "./ActiveUser";
 import { useParams } from "react-router";
@@ -15,8 +12,8 @@ const ContributionList = (props) => {
         const history                 = useHistory();
        
         const [open, setOpen]         = useState(false)
-        const [message, setMessage]   = useState("Do you want to delete")
-        const [title, setTitle]       = useState("Delete")
+        // const [message, setMessage]   = useState("Do you want to delete")
+        //const [title, setTitle]       = useState("Delete")
         const {email, userId}                 = useParams()
         const [loading, setLoading] = useState(true);
         const [snackbar, setSnackbarInfo] = useState({

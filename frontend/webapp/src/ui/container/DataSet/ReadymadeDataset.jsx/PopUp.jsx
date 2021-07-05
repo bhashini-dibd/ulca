@@ -10,10 +10,9 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Grid } from '@material-ui/core';
 import { SaveAlt } from '@material-ui/icons';
 import DatasetStyle from '../../../styles/Dataset';
@@ -67,28 +66,28 @@ const PopUpDialog = (props) => {
                 maxWidth={maxWidth}
                 open={true}
                 onClose={handleClose}
-                // className={classes.popupDialog}
+            // className={classes.popupDialog}
             >
                 <Grid container style={{ alignItems: 'center' }}>
                     <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
                         <DialogTitle>English-Hindi Parallel Text Corpus</DialogTitle>
                     </Grid>
                     <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                        <Button variant='outlined' onClick={handleClose} style={{ float: 'right', marginRight: "21px" }}><CloseIcon fontSize='small' className={classes.iconStyle}/>
+                        <Button variant='outlined' onClick={handleClose} style={{ float: 'right', marginRight: "21px" }}><CloseIcon fontSize='small' className={classes.iconStyle} />
                             Close
-                    </Button>
+                        </Button>
                     </Grid>
                 </Grid>
                 <DialogContent>
                     <DialogContentText>
 
                     </DialogContentText>
-                    <TableContainer component={Paper} elevation={0} style={{border:'1px solid #00000029', borderRadius:'0'}}>
+                    <TableContainer component={Paper} elevation={0} style={{ border: '1px solid #00000029', borderRadius: '0' }}>
                         <Table>
                             <TableBody>
                                 {rows.map((row) => (
                                     <TableRow key={row.name}>
-                                        <TableCell style={{boxShadow:'4px 0 4px -4px #00000029', width:'140px'}} component="th" scope="row">
+                                        <TableCell style={{ boxShadow: '4px 0 4px -4px #00000029', width: '140px' }} component="th" scope="row">
                                             {row.name}
                                         </TableCell>
                                         <TableCell align="left">{row.calories}</TableCell>

@@ -1,79 +1,79 @@
-import { withStyles,Link, MuiThemeProvider, createMuiTheme,Button } from "@material-ui/core";
+import { withStyles, Link, Button } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
-import {PageChange, RowChange} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
+import { PageChange, RowChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
 import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import Dialog from "../../../components/common/Dialog"
-import {Cached, DeleteOutline, VerticalAlignTop} from '@material-ui/icons';
+import { Cached, DeleteOutline, VerticalAlignTop } from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import { useParams } from "react-router";
 import C from "../../../../redux/actions/constants";
 const ContributionList = (props) => {
 
-        const history                 = useHistory();
-        const dispatch                = useDispatch(ClearReport);
-        const myContributionReport    = useSelector( (state) => state.myContributionReport);
-        const PageInfo                = useSelector((state) => state.pageChangeDetails);
-        const [open, setOpen]         = useState(false)
-        const [message, setMessage]   = useState("Do you want to delete")
-        const [title, setTitle]       = useState("Delete")
-        const {added}                 = useParams()
-        const data                    = myContributionReport.responseData
+        const history = useHistory();
+        const dispatch = useDispatch(ClearReport);
+        const myContributionReport = useSelector((state) => state.myContributionReport);
+        const PageInfo = useSelector((state) => state.pageChangeDetails);
+        const [open, setOpen] = useState(false)
+        const [message, setMessage] = useState("Do you want to delete")
+        const [title, setTitle] = useState("Delete")
+        const { added } = useParams()
+        const data = myContributionReport.responseData
 
-        
-        useEffect(()                  => {
+
+        useEffect(() => {
                 (myContributionReport.responseData.length === 0 || myContributionReport.refreshStatus || added) && MyContributionListApi()
         }, []);
-  
-        const  MyContributionListApi  = () =>{
+
+        const MyContributionListApi = () => {
                 dispatch(ClearReport());
-                const userObj         = new MyContributionList( "SAVE", "A_FBTTR-VWSge-1619075981554", "241006445d1546dbb5db836c498be6381606221196566");
+                const userObj = new MyContributionList("SAVE", "A_FBTTR-VWSge-1619075981554", "241006445d1546dbb5db836c498be6381606221196566");
                 dispatch(APITransport(userObj));
         }
 
-        const fetchHeaderButton= () => {
-                return <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>
-                        
+        const fetchHeaderButton = () => {
+                return <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
+
         }
 
         const handleSetValues = (name) => {
-                setTitle        (`Delete ${name}  `)
-                setMessage      (`Do you want to delete ${name} ? `)
-                setOpen         (true)
+                setTitle(`Delete ${name}  `)
+                setMessage(`Do you want to delete ${name} ? `)
+                setOpen(true)
         }
 
-        const renderStatus = (id,name,value) => {
-                if(value === "In-Progress"){
-                        return  <Link className = {classes.link} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${name}/${id}`)}}> In-Progress </Link>
+        const renderStatus = (id, name, value) => {
+                if (value === "In-Progress") {
+                        return <Link className={classes.link} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${name}/${id}`) }}> In-Progress </Link>
                 }
-                else{
+                else {
                         return <span
                         >{value} </span>
                 }
         }
 
-        const renderAction = (name,value) => {
-                if(value === "In-Progress"){}
-                else{
-                        return (<div className = {classes.action}> 
-                                        <div className= {classes.link}>
-                                        <Link className= {classes.link} color={"primary"} onClick={()=>{history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`)}}> Update <div ><VerticalAlignTop style={{"height":"0.8em"}} onClick={()=>{handleSetValues(name)}}/>  </div></Link>
-                                                                              </div>
-                                        <div className = {classes.span
-                                        }>
-                                        <DeleteOutline onClick={()=>{handleSetValues(name)}}/> 
-                                        </div>
-                                </div>)
+        const renderAction = (name, value) => {
+                if (value === "In-Progress") { }
+                else {
+                        return (<div className={classes.action}>
+                                <div className={classes.link}>
+                                        <Link className={classes.link} color={"primary"} onClick={() => { history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`) }}> Update <div ><VerticalAlignTop style={{ "height": "0.8em" }} onClick={() => { handleSetValues(name) }} />  </div></Link>
+                                </div>
+                                <div className={classes.span
+                                }>
+                                        <DeleteOutline onClick={() => { handleSetValues(name) }} />
+                                </div>
+                        </div>)
                 }
         }
 
-        const handleRowClick = ( rowData) => {
+        const handleRowClick = (rowData) => {
 
                 history.push(`${process.env.PUBLIC_URL}/dataset-status/${rowData[4]}/${rowData[1]}/${rowData[0]}`)
 
@@ -85,60 +85,60 @@ const ContributionList = (props) => {
                 // }
         };
 
-        const handleDialogSubmit = () =>{
+        const handleDialogSubmit = () => {
 
         }
 
         const processTableClickedNextOrPrevious = (page, sortOrder) => {
                 dispatch(PageChange(page, C.PAGE_CHANGE));
-               
-                }
+
+        }
 
 
-    
+
         const columns = [
                 {
-                name: "submitRefNumber",
-                label: "s id",
-                options: {
-                        filter  : false,
-                        sort    : false,
-                        display : "excluded",
-                        },
-                },
-               
-                {
-                name    : "datasetName",
-                label   : "Dataset Name",
-                options: {
-                        filter  : false,
-                        sort    : true,
-                        },
-                },
-                {
-                        name    : "datasetType",
-                        label   : "Dataset Type",
+                        name: "submitRefNumber",
+                        label: "s id",
                         options: {
-                                filter  : false,
-                                sort    : true,
-                                },
+                                filter: false,
+                                sort: false,
+                                display: "excluded",
                         },
+                },
+
                 {
-                name    : "submittedOn",
-                label   : "Submitted On",
-                options : {
-                                filter  : false,
-                                sort    : true,
-                        
+                        name: "datasetName",
+                        label: "Dataset Name",
+                        options: {
+                                filter: false,
+                                sort: true,
                         },
                 },
                 {
-                name    : "status",
-                label   : "Status",
-                options : {
-                        filter  : true,
-                        sort    : true,
-                       
+                        name: "datasetType",
+                        label: "Dataset Type",
+                        options: {
+                                filter: false,
+                                sort: true,
+                        },
+                },
+                {
+                        name: "submittedOn",
+                        label: "Submitted On",
+                        options: {
+                                filter: false,
+                                sort: true,
+
+                        },
+                },
+                {
+                        name: "status",
+                        label: "Status",
+                        options: {
+                                filter: true,
+                                sort: true,
+
                         },
                 },
                 // {
@@ -171,83 +171,83 @@ const ContributionList = (props) => {
                 // },
                 // },
         ];
-      
+
 
         const options = {
 
-                
+
                 textLabels: {
-                        body            : {
+                        body: {
 
                                 noMatch: "No records"
                         },
-                        toolbar         : {
-                                search          : "Search",
-                                viewColumns     : "View Column",
+                        toolbar: {
+                                search: "Search",
+                                viewColumns: "View Column",
                         },
-                        pagination      : {
-                                rowsPerPage     : "Rows per page",
+                        pagination: {
+                                rowsPerPage: "Rows per page",
                         },
-                        options         : { sortDirection: "desc" },
-                        },
-                        onRowClick: rowData => handleRowClick(rowData),
-                        // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
-                        customToolbar: fetchHeaderButton,
-                        filter                  :       true,
-                        displaySelectToolbar    :       false,
-                        fixedHeader             :       false,
-                        filterType              :       "checkbox",
-                        download                :       false,
-                        print                   :       false,
-                        viewColumns     : false,
-                        rowsPerPage:PageInfo.count,
-                    
-                        rowsPerPageOptions      :       [10,25,50,100],
-                        selectableRows          :       "none",
+                        options: { sortDirection: "desc" },
+                },
+                onRowClick: rowData => handleRowClick(rowData),
+                // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
+                customToolbar: fetchHeaderButton,
+                filter: true,
+                displaySelectToolbar: false,
+                fixedHeader: false,
+                filterType: "checkbox",
+                download: false,
+                print: false,
+                viewColumns: false,
+                rowsPerPage: PageInfo.count,
+
+                rowsPerPageOptions: [10, 25, 50, 100],
+                selectableRows: "none",
                 page: PageInfo.page,
                 onTableChange: (action, tableState) => {
                         switch (action) {
-                          case "changePage":
-                            processTableClickedNextOrPrevious(
-                              tableState.page
-                            );
-                            break;
-                            case "changeRowsPerPage":
-                                dispatch(RowChange(tableState.rowsPerPage , C.ROW_COUNT_CHANGE))
-                                break;
-                          default:
+                                case "changePage":
+                                        processTableClickedNextOrPrevious(
+                                                tableState.page
+                                        );
+                                        break;
+                                case "changeRowsPerPage":
+                                        dispatch(RowChange(tableState.rowsPerPage, C.ROW_COUNT_CHANGE))
+                                        break;
+                                default:
                         }
-                      },
+                },
 
-                
+
         };
 
         const { classes } = props;
         return (
                 <div>
-                        <div className = {classes.breadcrum}>
+                        <div className={classes.breadcrum}>
                                 <BreadCrum links={[UrlConfig.dataset]} activeLink="My Contribution" />
                         </div>
-                       
+
                         {/* <div className={classes.title}>
                                 
                         </div> */}
 
-                         
-                                <MUIDataTable
-                                        title           =       {`My Contribution`}
-                                        data            =       {data}
-                                        columns         =       {columns}
-                                        options         =       {options}
-                                />
-                        
+
+                        <MUIDataTable
+                                title={`My Contribution`}
+                                data={data}
+                                columns={columns}
+                                options={options}
+                        />
+
                         {open && <Dialog
-                                message         =       {message}
-                                handleClose     ={() => {setOpen(false)}}
-                                open 
-                                title           =       {title}
-                                handleSubmit    ={() =>        {handleDialogSubmit()}}
-                        /> }
+                                message={message}
+                                handleClose={() => { setOpen(false) }}
+                                open
+                                title={title}
+                                handleSubmit={() => { handleDialogSubmit() }}
+                        />}
                 </div>
         );
 };

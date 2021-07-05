@@ -2,8 +2,6 @@
  * Login API
  */
  import API from "../../api";
- import C from "../../constants";
- import CONFIGS from "../../../../configs/configs";
  import ENDPOINTS from "../../../../configs/apiendpoints";
  
  export default class LoginAPI extends API {

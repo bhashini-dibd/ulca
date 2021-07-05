@@ -1,6 +1,6 @@
 import React from 'react';
 import DataSet from "../../../styles/Dataset";
-import { withStyles, MuiThemeProvider, makeStyles, Button, Divider, Grid, Typography, Popover, FormGroup, Checkbox, FormControlLabel } from "@material-ui/core";
+import { withStyles, Button, Divider, Grid, Typography, Popover, FormGroup, Checkbox, FormControlLabel } from "@material-ui/core";
 
 const FilterList = (props) => {
     const classes = props;
@@ -29,7 +29,7 @@ const FilterList = (props) => {
         <div>
             <Button aria-describedby={id} variant="outlined" color="primary" onClick={handleClick} style={{ float: 'right' }}>
                 Filter
-      </Button>
+            </Button>
             <Popover
                 // style={{ width: '399px', minHeight: '246px' }}
                 id={id}

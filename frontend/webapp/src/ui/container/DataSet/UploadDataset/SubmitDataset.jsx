@@ -6,10 +6,9 @@ import {
     FormControl,
     Button,
     TextField,
-    Hidden,
-    Popover
+    Hidden
 } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+// import Autocomplete from '@material-ui/lab/Autocomplete';
 import BreadCrum from '../../../components/common/Breadcrum';
 import { withStyles } from '@material-ui/core/styles';
 import { RadioButton, RadioGroup } from 'react-radio-buttons';
@@ -40,61 +39,61 @@ const SubmitDataset = (props) => {
     const [search, setSearch] = useState(false)
     const history = useHistory();
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
-    };
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget)
+    // };
 
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    const handleDone = () => {
-        if (dataset.filteredName) {
-            setDatasetInfo({ ...dataset, datasetName: dataset.filteredName })
-        }
-        handleClose();
-    }
+    // const handleDone = () => {
+    //     if (dataset.filteredName) {
+    //         setDatasetInfo({ ...dataset, datasetName: dataset.filteredName })
+    //     }
+    //     handleClose();
+    // }
 
-    const renderUpdateDatasetSearch = () => {
-        return (
-            <div>
-                <div className={classes.updateDataset}>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <Autocomplete
-                                id="tags-outlined"
-                                options={[]}
-                                getOptionLabel={(option) => option.name}
-                                filterSelectedOptions
-                                open={search}
-                                onChange={(e, value) => {
-                                    setDatasetInfo({ ...dataset, datasetName: value.name})
-                                    handleClose();
-                                }}
-                                onOpen={() => {
-                                    setTimeout(() => setSearch(true), 200)
-                                }}
-                                onClose={() => {
-                                    setSearch(false)
-                                }}
-                                openOnFocus
-                                renderInput={(params) => (
-                                    <TextField
-                                        id="search-dataset"
-                                        variant="outlined"
-                                        placeholder="Search Dataset"
-                                        autoFocus={true}
-                                        {...params}
-                                    />
-                                )}
-                            />
-                        </Grid>
-                    </Grid>
-                </div>
+    // const renderUpdateDatasetSearch = () => {
+    //     return (
+    //         <div>
+    //             <div className={classes.updateDataset}>
+    //                 <Grid container spacing={1}>
+    //                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    //                         <Autocomplete
+    //                             id="tags-outlined"
+    //                             options={[]}
+    //                             getOptionLabel={(option) => option.name}
+    //                             filterSelectedOptions
+    //                             open={search}
+    //                             onChange={(e, value) => {
+    //                                 setDatasetInfo({ ...dataset, datasetName: value.name})
+    //                                 handleClose();
+    //                             }}
+    //                             onOpen={() => {
+    //                                 setTimeout(() => setSearch(true), 200)
+    //                             }}
+    //                             onClose={() => {
+    //                                 setSearch(false)
+    //                             }}
+    //                             openOnFocus
+    //                             renderInput={(params) => (
+    //                                 <TextField
+    //                                     id="search-dataset"
+    //                                     variant="outlined"
+    //                                     placeholder="Search Dataset"
+    //                                     autoFocus={true}
+    //                                     {...params}
+    //                                 />
+    //                             )}
+    //                         />
+    //                     </Grid>
+    //                 </Grid>
+    //             </div>
                
-            </div>
-        )
-    }
+    //         </div>
+    //     )
+    // }
 
     const handleApicall = async () => {
 

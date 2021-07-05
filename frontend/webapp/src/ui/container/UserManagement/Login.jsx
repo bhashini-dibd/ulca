@@ -11,21 +11,14 @@ import {
   InputAdornment,
   FormHelperText,
   FormControl,
-  Checkbox,
-  FormControlLabel,
   CircularProgress,
 } from "@material-ui/core";
 
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
-import LoginApi from "../../../redux/actions/api/UserManagement/Login"
-import { LoginSocialGithub } from "reactjs-social-login";
-import GoogleLogin from "react-google-login";
-import Divider from "@material-ui/core/Divider";
+import LoginApi from "../../../redux/actions/api/UserManagement/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import {  useHistory } from "react-router-dom";
-import GmailIcon from "../../../assets/gmail.png";
-import GithubIcon from "../../../assets/github.png";
+import { useHistory } from "react-router-dom";
 import Snackbar from '../../components/common/Snackbar';
 // import {useReducer, useSelector} from "react-redux";
 // import { LoginSocialFacebook, LoginSocialGithub } from "reactjs-social-login";
@@ -42,29 +35,29 @@ const Login = (props) => {
   const [error, setError] = useState({
     email: false,
     password: false,
-    
+
   });
 
-  
+
 
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: '',
     variant: 'success'
-})
+  })
 
 
 
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   const handleChange = (prop) => (event) => {
-    setError({ ...error, password: false , email: false });
+    setError({ ...error, password: false, email: false });
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  const handleCheckChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.checked });
-  };
+  // const handleCheckChange = (prop) => (event) => {
+  //   setValues({ ...values, [prop]: event.target.checked });
+  // };
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
@@ -74,129 +67,127 @@ const Login = (props) => {
     event.preventDefault();
   };
 
-  const  ValidateEmail = (mail) => 
-{
- if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail))
-  {
-    return (true)
-  }
-  else{
-    return false;
-  }  
-}
+  // const ValidateEmail = (mail) => {
+  //   if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(mail)) {
+  //     return (true)
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
 
-const ValidatePassword = (password) =>{
-  if(password.length>7) {
-    return (true)
-  }
-  else{
-    return false;
-  } 
-}
+  // const ValidatePassword = (password) => {
+  //   if (password.length > 7) {
+  //     return (true)
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
 
 
-const handleSubmit = async () => {
+  const handleSubmit = async () => {
 
-  let apiObj = new LoginApi(values)
-    var rsp_data =[]
-      fetch(apiObj.apiEndPoint(), {
-        method: 'post',
-        body: JSON.stringify(apiObj.getBody()),
-        headers: apiObj.getHeaders().headers
-      }).then(async response => {
-        rsp_data = await response.json();
-        setLoading(false)
-        if (!response.ok) {
-          
-          return Promise.reject('');
-        } else {
-          localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
+    let apiObj = new LoginApi(values)
+    var rsp_data = []
+    fetch(apiObj.apiEndPoint(), {
+      method: 'post',
+      body: JSON.stringify(apiObj.getBody()),
+      headers: apiObj.getHeaders().headers
+    }).then(async response => {
+      rsp_data = await response.json();
+      setLoading(false)
+      if (!response.ok) {
+
+        return Promise.reject('');
+      } else {
+        localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
         localStorage.setItem(`userDetails`, JSON.stringify(rsp_data.data.userDetails));
-          
-          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from :'/dashboard'}`)
-        }
-      }).catch((error) => {
-        setLoading(false)
-        
-          setSnackbarInfo({
-                          ...snackbar,
-                          open: true,
-                          message: rsp_data.message ? rsp_data.message : "Invalid email / password",
-                          variant: 'error'
-                      })
-      });
-    
-      }
 
-  const responseGoogle = (data) => {
-    alert(JSON.stringify(data));
-  };
+        history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/dashboard'}`)
+      }
+    }).catch((error) => {
+      setLoading(false)
+
+      setSnackbarInfo({
+        ...snackbar,
+        open: true,
+        message: rsp_data.message ? rsp_data.message : "Invalid email / password",
+        variant: 'error'
+      })
+    });
+
+  }
+
+  // const responseGoogle = (data) => {
+  //   alert(JSON.stringify(data));
+  // };
 
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false })
-}
+  }
 
   const HandleSubmitCheck = () => {
-    if(!values.email.trim() || !values.password.trim() ){
-      
-      setError({ ...error, email: !values.email.trim() ? true : false, password : !values.password.trim() ? true : false });
+    if (!values.email.trim() || !values.password.trim()) {
+
+      setError({ ...error, email: !values.email.trim() ? true : false, password: !values.password.trim() ? true : false });
     }
-    
-    else{
+
+    else {
       handleSubmit();
       setLoading(true)
     }
-    
+
   };
   const { classes } = props;
-  const REDIRECT_URI = "http://localhost:3000";
+  // const REDIRECT_URI = "http://localhost:3000";
 
   return (
     <>
-    <Grid container className={classes.loginGrid}>
-      <Typography variant = "h4">Sign in to ULCA</Typography>
-      <form className={classes.root} autoComplete="off">
-      <TextField
-        className={classes.textField}
-        required
-        onChange={handleChange("email")}
-        onKeyPress={(e) => e.key === 'Enter' && HandleSubmitCheck()}
-        id="outlined-required"
-        value={values.email}
-        error = {error.email}
-        label="Email address"
-        helperText={error.email ? "Enter an email":" "}
-        variant="outlined"
-      />
-      <FormControl className={classes.fullWidth} variant="outlined">
-        <InputLabel error ={error.password} htmlFor="outlined-adornment-password">Password * </InputLabel>
-        
-        <OutlinedInput
-          id="outlined-adornment-password"
-          type={values.showPassword ? "text" : "password"}
-          value={values.password}
-          required
-          error = {error.password}
-          helperText={error.password ? "Enter a password":""}
-          onChange={handleChange("password")}
-          onKeyPress={(e) => e.key === 'Enter' && HandleSubmitCheck()}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {values.showPassword ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </InputAdornment>
-          }
-          labelWidth={80}
-        />
-        {error.password && <FormHelperText error={true}>Incorrect password</FormHelperText>}
-      </FormControl>
-      {/* <div className={classes.forgotPassword}>
+      <Grid container className={classes.loginGrid}>
+        <Typography variant="h4">Sign in to ULCA</Typography>
+        <form className={classes.root} autoComplete="off">
+          <TextField
+            className={classes.textField}
+            required
+            onChange={handleChange("email")}
+            onKeyPress={(e) => e.key === 'Enter' && HandleSubmitCheck()}
+            id="outlined-required"
+            value={values.email}
+            error={error.email}
+            label="Email address"
+            helperText={error.email ? "Enter an email" : " "}
+            variant="outlined"
+          />
+          <FormControl className={classes.fullWidth} variant="outlined">
+            <InputLabel error={error.password} htmlFor="outlined-adornment-password">Password * </InputLabel>
+
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={values.showPassword ? "text" : "password"}
+              value={values.password}
+              required
+              error={error.password}
+              helperText={error.password ? "Enter a password" : ""}
+              onChange={handleChange("password")}
+              onKeyPress={(e) => e.key === 'Enter' && HandleSubmitCheck()}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              labelWidth={80}
+            />
+            {error.password && <FormHelperText error={true}>Incorrect password</FormHelperText>}
+          </FormControl>
+          {/* <div className={classes.forgotPassword}>
         <FormControlLabel
           control={
             <Checkbox
@@ -220,17 +211,17 @@ const handleSubmit = async () => {
         </Typography>
       </div> */}
 
-<Button
-                    color="primary"
-                    size = "large"
-                    variant="contained" aria-label="edit"  className={classes.fullWidth} onClick={() => {
-                      HandleSubmitCheck();
-                    }}
-                    disabled={loading}>
-                    {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                    Sign In
-                </Button>
-      {/* <Button
+          <Button
+            color="primary"
+            size="large"
+            variant="contained" aria-label="edit" className={classes.fullWidth} onClick={() => {
+              HandleSubmitCheck();
+            }}
+            disabled={loading}>
+            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            Sign In
+          </Button>
+          {/* <Button
         
         color="primary"
         size = "large"
@@ -241,8 +232,8 @@ const handleSubmit = async () => {
       >
         Sign in
       </Button> */}
-      </form>
-      {/* <div className={classes.line}>
+        </form>
+        {/* <div className={classes.line}>
         <Divider className={classes.dividerFullWidth} />{" "}
         <Typography className={classes.divider}>Or</Typography>
         <Divider className={classes.dividerFullWidth} />
@@ -273,7 +264,7 @@ const handleSubmit = async () => {
         onFailure={responseGoogle}
         cookiePolicy={"single_host_origin"}
       /> */}
-      {/* <LinkedIn
+        {/* <LinkedIn
           clientId="7859u4ovb44uiu"
           onFailure={responseGoogle}
           onSuccess={responseGoogle}
@@ -322,7 +313,7 @@ const handleSubmit = async () => {
             Continue with Facebook
           </Button>
         </LoginSocialFacebook> */}
-      {/* <LoginSocialGithub
+        {/* <LoginSocialGithub
         client_id={"fc66013ca8d2c0bcf178"}
         className={classes.labelWidth}
         redirect={REDIRECT_URI}
@@ -348,27 +339,27 @@ const handleSubmit = async () => {
           <span>Continue with Github</span>
         </Button>
       </LoginSocialGithub> */}
-      <div className={classes.createLogin}>
-        <Typography className={classes.width}>New to ULCA ?</Typography>
-        <Typography>
-          <Link id="newaccount" className={classes.link}  href="#"
-            onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/register`)}}>
-            {" "}
-            Create an account
-          </Link>
-        </Typography>
-      </div>
-      
-    </Grid>
-    {snackbar.open &&
-      <Snackbar
+        <div className={classes.createLogin}>
+          <Typography className={classes.width}>New to ULCA ?</Typography>
+          <Typography>
+            <Link id="newaccount" className={classes.link} href="#"
+              onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/register`) }}>
+              {" "}
+              Create an account
+            </Link>
+          </Typography>
+        </div>
+
+      </Grid>
+      {snackbar.open &&
+        <Snackbar
           open={snackbar.open}
           handleClose={handleSnackbarClose}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
           message={snackbar.message}
           variant={snackbar.variant}
-      />}
-      </>
+        />}
+    </>
   );
 };
 
