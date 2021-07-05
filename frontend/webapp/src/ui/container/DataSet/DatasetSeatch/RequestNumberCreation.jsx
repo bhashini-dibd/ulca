@@ -1,6 +1,4 @@
-import { Button, Card, Container, Grid, Typography } from "@material-ui/core"
-import { Paper } from "@material-ui/core"
-import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { withStyles } from '@material-ui/core';
 import DatasetStyle from '../../../styles/Dataset';
 import { withRouter, useHistory } from "react-router-dom";

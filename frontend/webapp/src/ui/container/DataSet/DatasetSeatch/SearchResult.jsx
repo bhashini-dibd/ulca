@@ -1,7 +1,6 @@
-import FindInPageIcon from '@material-ui/icons/FindInPage';
+
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
-import SearchRoundedIcon from '@material-ui/icons/SearchRounded';
 import searchIcon from "../../../../assets/searchIcon.svg"
 import {
     Typography

@@ -1,8 +1,7 @@
 import {
     MenuItem,
     Menu,
-    withStyles,
-    Typography
+    withStyles
 } from '@material-ui/core';
 import HeaderStyles from "../../styles/HeaderStyles";
 
@@ -24,8 +23,8 @@ const StyledMenu = withStyles({
     />
 ));
 
-const MenuItems = (props ) => {
-    const {classes} = props
+const MenuItems = (props) => {
+    const { classes } = props
     return <>
         <StyledMenu id={props.id}
             anchorEl={props.anchorEl}

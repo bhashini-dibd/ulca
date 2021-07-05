@@ -14,6 +14,7 @@ class ASRRepo:
     def __init__(self):
         pass
 
+    # Method to set ASR Mongo DB collection
     def set_asr_collection(self):
         if "localhost" not in db_cluster:
             log.info(f'Setting the Mongo ASR DS Shard Cluster up..... | {datetime.now()}')
@@ -35,6 +36,7 @@ class ASRRepo:
             ulca_col.create_index([("tags", -1)])
             log.info(f'Done! | {datetime.now()}')
 
+    # Initialises and fetches mongo db client
     def instantiate(self):
         global mongo_instance_asr
         client = pymongo.MongoClient(db_cluster)
@@ -53,17 +55,14 @@ class ASRRepo:
         col.insert_many(data)
         return len(data)
 
-    # Updates the object in the mongo collection
     def update(self, object_in):
         col = self.get_mongo_instance()
         col.replace_one({"id": object_in["id"]}, object_in)
 
-    # Updates the object in the mongo collection
     def delete(self, rec_id):
         col = self.get_mongo_instance()
         col.delete_one({"id": rec_id})
 
-    # Searches the object into mongo collection
     def search(self, query, exclude, offset, res_limit):
         try:
             col = self.get_mongo_instance()

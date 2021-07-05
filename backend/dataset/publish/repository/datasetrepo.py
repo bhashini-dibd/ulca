@@ -18,6 +18,7 @@ class DatasetRepo:
     def __init__(self):
         pass
 
+    # Method to set Dataset Mongo DB
     def set_dataset_db(self):
         if "localhost" not in db_cluster:
             log.info(f'Setting the Mongo Sharded DB up.....')

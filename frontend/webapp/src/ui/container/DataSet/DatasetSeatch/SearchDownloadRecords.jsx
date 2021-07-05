@@ -3,10 +3,8 @@ import {
     Typography,
     Button,
     TextField,
-    MenuItem,
     Checkbox,
-    FormControlLabel,
-    Divider
+    FormControlLabel
 } from '@material-ui/core';
 import SearchResult from "./SearchResult";
 import { withStyles } from '@material-ui/core/styles';
@@ -14,11 +12,9 @@ import DatasetStyle from '../../../styles/Dataset';
 import Snackbar from '../../../components/common/Snackbar';
 import BreadCrum from '../../../components/common/Breadcrum';
 import UrlConfig from '../../../../configs/internalurlmapping';
-import SearchAndDownload from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
-import {PageChange} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
+import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import C from "../../../../redux/actions/constants";
 import { useDispatch, useSelector } from "react-redux";
-import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import { useState, useEffect, useRef } from 'react';
 import DownloadDatasetRecords from "./DownloadDatasetRecords";
 import RequestNumberCreation from "./RequestNumberCreation";
@@ -34,7 +30,7 @@ const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
     const urlMySearch = UrlConfig.mySearches;
-    const dispatch                  = useDispatch();
+    const dispatch = useDispatch();
     const param = useParams();
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
@@ -386,12 +382,12 @@ const SearchAndDownloadRecords = (props) => {
                         <Grid item xs={6}>
                             <Button size="large" fullWidth variant="outlined" onClick={clearfilter}>
                                 Clear
-                                    </Button>
+                            </Button>
                         </Grid>
                         <Grid item xs={6}>
                             <Button fullWidth size="large" variant="contained" color="primary" onClick={handleSubmitBtn}>
                                 Submit
-                                    </Button>
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>

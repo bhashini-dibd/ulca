@@ -1,0 +1,44 @@
+{
+    "actions":[
+        {
+            "id":"409c94af-2f8e-47ac-bc1f-4ba113cb96da",
+            "uri":"/ulca/apis/v0/dataset/corpus/submit",
+            "module":"ULCA-API",
+            "active":true,
+            "whiteList":false,
+            "description":"API to submit corpus"
+        },
+        {
+            "id":"8cdac1f3-146c-4046-a00b-50fa3bc4fa63",
+            "uri":"/ulca/apis/v0/dataset/listByUserId?*",
+            "module":"ULCA-API",
+            "active":true,
+            "whiteList":false,
+            "description":"API to get dataset contributions by user id"
+        },
+        {
+            "id":"573ddaef-daac-4479-a9f6-4b0bc272de20",
+            "uri":"/ulca/apis/v0/dataset/corpus/search",
+            "module":"ULCA-API",
+            "active":true,
+            "whiteList":false,
+            "description":"API to search corpus"
+        },
+        {
+            "id":"9085ca30-ca0c-4b7e-81ba-0ca41568a372",
+            "uri":"/ulca/apis/v0/dataset/corpus/search/listByUserId?*",
+            "module":"ULCA-API",
+            "active":true,
+            "whiteList":false,
+            "description":"API to fetch user searches by user id"
+        },
+        {
+            "id":"b3d4b271-4de3-4781-8d03-8b3cee833f13",
+            "uri":"/ulca/error-consumer/v0/error/report",
+            "module":"ERROR-CONSUMER",
+            "active":true,
+            "whiteList":false,
+            "description":"API to fetch error report for a service request"
+        }
+    ]
+}
