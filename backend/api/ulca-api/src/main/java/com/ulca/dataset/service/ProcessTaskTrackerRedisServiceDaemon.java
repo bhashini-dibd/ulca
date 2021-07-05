@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.ulca.dataset.dao.TaskTrackerRedisDao;
 import com.ulca.dataset.kakfa.DatasetErrorPublishService;
+import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +88,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				v1 = true;
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.ingest,
 						com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+				
 			} else {
 				
 				processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
@@ -130,6 +132,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				log.info("deleting for serviceRequestNumber :: " + serviceRequestNumber);
 
 				taskTrackerRedisDao.delete(serviceRequestNumber);
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			}
 
 		}

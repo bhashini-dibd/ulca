@@ -83,7 +83,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 		if (fileError != null) {
 			log.info("params.json or data.json file missing :: serviceRequestNumber : "+serviceRequestNumber );
 			
-			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+			processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, fileError);
 			
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
@@ -105,7 +105,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 			error.setMessage("params validation failed");
 			error.setCode("1000_PARAMS_VALIDATION_FAILED");
 
-			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+			processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
@@ -136,6 +136,8 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 
+			//update redis when ingest failed
+			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
 			return;
 		}
 		try {
@@ -281,7 +283,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 		inputStream.close();
 		
 
-		taskTrackerRedisDao.setCountAndIngestComplete(serviceRequestNumber, numberOfRecords);
+		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 		
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
 		

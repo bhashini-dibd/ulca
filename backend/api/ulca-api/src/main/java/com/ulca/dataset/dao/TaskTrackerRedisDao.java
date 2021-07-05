@@ -84,9 +84,20 @@ public class TaskTrackerRedisDao {
 
 	}
 
-	public void setCountAndIngestComplete(String serviceRequestNumber, int count) {
+	public void setCountOnIngestComplete(String serviceRequestNumber, int count) {
 
 		redisTemplate.opsForHash().put(Prefix + serviceRequestNumber, "count", String.valueOf(count));
+		redisTemplate.opsForHash().put(Prefix + serviceRequestNumber, "ingestComplete", String.valueOf(1));
+
+	}
+	public void updateCountOnIngestFailure(String serviceRequestNumber) {
+
+		String ingestError = (String) redisTemplate.opsForHash().get(Prefix + serviceRequestNumber, "ingestError");
+		String ingestSuccess = (String) redisTemplate.opsForHash().get(Prefix + serviceRequestNumber, "ingestSuccess");
+		
+		String count = String.valueOf(Integer.parseInt(ingestSuccess)+Integer.parseInt(ingestError));
+		
+		redisTemplate.opsForHash().put(Prefix + serviceRequestNumber, "count", count);
 		redisTemplate.opsForHash().put(Prefix + serviceRequestNumber, "ingestComplete", String.valueOf(1));
 
 	}

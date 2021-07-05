@@ -118,7 +118,7 @@ public class KafkaFileDownloadConsumer {
 				error.setCause(e.getMessage());
 				error.setMessage("file download failed");
 				error.setCode("1000_FILE_DOWNLOAD_FAILURE");
-				processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+				processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 				
 				//send error event for download failure
