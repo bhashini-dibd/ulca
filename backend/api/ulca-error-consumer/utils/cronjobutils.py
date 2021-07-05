@@ -1,10 +1,9 @@
 import logging
 import json
 import csv
-from flask.globals import request
 import requests
 from configs.configs import file_store_host,file_store_upload_endpoint,pt_publish_tool
-
+from logging.config import dictConfig
 log = logging.getLogger('file')
 
 
@@ -12,6 +11,7 @@ log = logging.getLogger('file')
 
 class StoreUtils:
 
+    #method to write on csv file
     def write_to_csv(self, data_list, file, srn):
         try:
             data_modified, data_pub = [], None
@@ -35,6 +35,7 @@ class StoreUtils:
             log.exception(f'Exception in csv writer: {e}', e)
             return
 
+    #triggering file-store api call 
     def file_store_upload_call(self, file,file_name ,folder_name):
         try:
             headers =   {"Content-Type": "application/json"}
@@ -49,3 +50,36 @@ class StoreUtils:
         except Exception as e:
             log.exception(f'Exception while pushing error file to object store: {e}', e)
         return False
+
+# Log config
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})

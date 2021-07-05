@@ -19,13 +19,14 @@ class StoreRepo:
         redis_client = redis.Redis(host=redis_server_host, port=redis_server_port, db=redis_server_db, password=redis_server_password)
         return redis_client
 
+    #geting the redis clent object
     def get_redis_instance(self):
         if not redis_client:
             return self.redis_instantiate()
         else:
             return redis_client
 
-
+    #storing records against keys
     def upsert(self, key, value, expiry_seconds):
         try:
             client = self.get_redis_instance()
@@ -35,6 +36,7 @@ class StoreRepo:
             log.exception("Exception in REPO: upsert | Cause: " + str(e), None, e)
             return None
 
+    #deleting record by key
     def delete(self, key):
         try:
             client = self.get_redis_instance()
@@ -44,6 +46,7 @@ class StoreRepo:
             log.exception("Exception in REPO: delete | Cause: " + str(e), None, e)
             return None
 
+    #searching record by key
     def search(self, key_list):
         try:
             client = self.get_redis_instance()
@@ -57,6 +60,7 @@ class StoreRepo:
             log.exception("Exception in REPO: search | Cause: " + str(e), None, e)
             return None
 
+    #searching all records 
     def get_all_records(self, key_list,pattern):
         try:
             client = self.get_redis_instance()
@@ -71,7 +75,8 @@ class StoreRepo:
         except Exception as e:
             log.exception("Exception in REPO: search | Cause: " + str(e), None, e)
             return []
-    
+
+    #searching for keys matching a pattern
     def get_keys_matching_pattern(self,pattern):
         try:
             client = self.get_redis_instance()
@@ -83,6 +88,7 @@ class StoreRepo:
             log.exception("Exception in REPO: search | Cause: " + str(e), None, e)
             return []
 
+    #unique srns present in store 
     def get_unique_srns(self):
         try:
             client = self.get_redis_instance()

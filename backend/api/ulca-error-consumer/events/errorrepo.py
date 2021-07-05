@@ -1,7 +1,6 @@
 import logging
 from logging.config import dictConfig
 from configs.configs import ulca_db_cluster, error_db, error_collection
-
 import pymongo
 log = logging.getLogger('file')
 
@@ -11,6 +10,7 @@ mongo_instance = None
 class ErrorRepo:
     
     def __init__(self):
+        #creating index on mongo for fast retrieval
         client = pymongo.MongoClient(ulca_db_cluster)
         mongo_instance = client[error_db][error_collection]
         try:
@@ -20,13 +20,14 @@ class ErrorRepo:
         except Exception as e:
             log.exception(f"Exception on index creation :{e}")
         
-
+    #method to instantiate mongo client object
     def instantiate(self):
         global mongo_instance
         client = pymongo.MongoClient(ulca_db_cluster)
         mongo_instance = client[error_db][error_collection]
         return mongo_instance
 
+    #geting the mongo clent object
     def get_mongo_instance(self):
         global mongo_instance
         if not mongo_instance:
@@ -34,6 +35,7 @@ class ErrorRepo:
         else:
             return mongo_instance
 
+    #insert operation on mongo
     def insert(self, data):
         col = self.get_mongo_instance()
         if isinstance(data, dict):
@@ -46,17 +48,17 @@ class ErrorRepo:
         col = self.get_mongo_instance()
         col.replace_one({"id": object_in["id"]}, object_in)
 
-    # Updates the object in the mongo collection
+    # delete a single object in the mongo collection
     def delete(self, rec_id):
         col = self.get_mongo_instance()
         col.delete_one({"id": rec_id})
 
+    # delete multiple objects in the mongo collection
     def remove(self, query):
         col = self.get_mongo_instance()
-        # col.remove(query)
         col.delete_many(query)
 
-    # Searches the object into mongo collection
+    # Searches the object from mongo collection
     def search(self, query, exclude, offset, res_limit):
         try:
             col = self.get_mongo_instance()
@@ -71,7 +73,8 @@ class ErrorRepo:
         except Exception as e:
             log.exception(f'Exception in repo search: {e}', e)
             return []
-            
+
+    #mongo record count     
     def count(self,query):
         try:
             col = self.get_mongo_instance()
@@ -80,6 +83,7 @@ class ErrorRepo:
         except Exception as e:
             log.exception(f'Exception in repo count: {e}', e)
 
+    #mongo upsert 
     def upsert(self, object_in):
         try:
             col = self.get_mongo_instance()

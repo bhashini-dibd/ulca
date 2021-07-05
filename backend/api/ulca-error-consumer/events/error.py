@@ -1,12 +1,7 @@
-import csv
-import json
 import logging
-import os
-import threading
 import uuid
-from datetime import datetime
 from logging.config import dictConfig
-from configs.configs import shared_storage_path, error_prefix, pt_publish_tool, redis_key_expiry
+from configs.configs import redis_key_expiry
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
 from service.cronrepo import StoreRepo
@@ -21,7 +16,8 @@ store_repo = StoreRepo()
 class ErrorEvent:
     def __init__(self):
         pass
-
+    
+    #dumping errors onto redis store
     def write_error(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
@@ -32,6 +28,7 @@ class ErrorEvent:
             log.exception(f'Exception while writing errors: {e}', e)
             return False
 
+    #fetches back error record (object store link) from db
     def search_error_report(self, srn, internal):
         try:
             query = {"serviceRequestNumber": srn,"uploaded":True}
