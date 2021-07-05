@@ -1,18 +1,17 @@
 package com.ulca.dataset.service;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
-import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.TaskTracker;
-
-import java.util.Date;
-import java.util.List;
+import com.ulca.dataset.model.TaskTracker.ToolEnum;
 
 @Service
 public class ProcessTaskTrackerService {
@@ -119,7 +118,6 @@ public void updateTaskTrackerWithDetailsAndEndTime(String serviceRequestNumber, 
 		TaskTracker taskTracker = taskTrackerList.get(0);
 		if(taskTracker.getEndTime() == null || taskTracker.getEndTime().isEmpty()) {
 			
-			System.out.println("endtime does not exist. updating the end time " +serviceRequestNumber );
 			taskTracker.setEndTime(new Date().toString());
 			taskTracker.setLastModified(new Date().toString());
 			
