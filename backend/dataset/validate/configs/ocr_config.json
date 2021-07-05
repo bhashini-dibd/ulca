@@ -14,6 +14,9 @@
     {
         "test_name":"SpecialCharacterCheck", "active":"True"
     },
+    {
+        "test_name":"ImageMetadataCheck", "active":"True"
+    },
 	{
         "test_name":"CaseDedup", "active":"True"
     }

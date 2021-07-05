@@ -48,6 +48,7 @@ dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 
 validate_text_length_threshold = os.environ.get('DS_VALIDATE_TEXT_LENGTH_THRESHOLD', 2)
+asr_minimum_words_per_min = os.environ.get('DS_VALIDATE_MINIMUM_WORDS_PER_MIN', 10)
 validate_parallel_labse_threshold = os.environ.get('VALIDATE_PARALLEL_LABSE_THRESHOLD', 0.75)
 
 
