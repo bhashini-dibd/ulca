@@ -41,7 +41,7 @@ class AudioMetadataCheck(BaseValidator):
                 num_words = len(list(request['record']['text'].split()))
                 words_per_minute = (num_words/request['record']['durationInSeconds'])*60
                 if words_per_minute < asr_minimum_words_per_min:
-                    {"message": "Number of words too less for the audio duration", "code": "AUDIO_TEXT_INVALID_CORRELATION", "status": "FAILED"}
+                    return {"message": "Number of words too less for the audio duration", "code": "AUDIO_TEXT_INVALID_CORRELATION", "status": "FAILED"}
 
                 log.info('----Audio metadata check -> Passed----')
                 return super().execute(request)
