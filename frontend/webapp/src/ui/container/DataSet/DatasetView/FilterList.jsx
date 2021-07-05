@@ -1,41 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DataSet from "../../../styles/Dataset";
 import { withStyles, Button, Divider, Grid, Typography, Popover, FormGroup, Checkbox, FormControlLabel } from "@material-ui/core";
 
 const FilterList = (props) => {
     const classes = props;
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    // const [anchorEl, setAnchorEl] = React.useState(null);
     // const handleChange = (event) => {
     //     setState({ ...state, [event.target.name]: event.target.checked });
     // };
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget);
+    // };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-    const open = Boolean(anchorEl);
-    const id = open ? 'simple-popover' : undefined;
+    // const handleClose = () => {
+    //     setAnchorEl(null);
+    // };
+    // const open = Boolean(anchorEl);
+    // const id = open ? 'simple-popover' : undefined;
     const data = {
         datasetType: [{ name: 'Parallel', state: true }, { name: 'Monolingual', state: true }, { name: 'ASR', state: true }, { name: 'OCR', state: false }],
         status: [{ name: 'Pending', state: true }, { name: 'In-Progress', state: true }, { name: 'Completed', state: true }, { name: 'Failed', state: false }]
     };
     const count = 0
-    //  const {data, handleDatasetChange, handleStatusChange, clearAll, apply, count} = props
+    const { filter, selectedFilter, clearAll, apply } = props
 
+    const [selectedType, setSelectedType] = useState(selectedFilter.datasetType)
+    const [selectedStatus, setSelectedStatus] = useState(selectedFilter.status)
 
+    const handleDatasetChange = (e) => {
+        if (e.target.checked)
+            setSelectedType([...selectedType, e.target.name])
+        else {
+            const selected = selectedType
+            const index = selected.indexOf(e.target.name);
+
+            if (index > -1) {
+                selected.splice(index, 1);
+                setSelectedType(selected)
+            }
+        }
+
+    }
+    const handleStatusChange = (e) => {
+        if (e.target.checked)
+            setSelectedStatus([...selectedStatus, e.target.name])
+        else {
+            const selected = selectedStatus
+            const index = selected.indexOf(e.target.name);
+
+            if (index > -1) {
+                selected.splice(index, 1);
+                setSelectedStatus(selected)
+            }
+        }
+    }
+    const handleClearAll = () => {
+        setSelectedStatus([])
+        setSelectedType([])
+        clearAll({ datasetType: [], status: [] })
+    }
+    const isChecked = (type, param) => {
+        //   const index = param === 'status' ? selectedStatus.indexOf(type) : selectedType.indexOf(type);
+        const index = selectedStatus.indexOf(type)
+        if (index > -1)
+            return true
+        return false
+    }
+
+    console.log('helloi', selectedType, selectedStatus)
     return (
         <div>
-            <Button aria-describedby={id} variant="outlined" color="primary" onClick={handleClick} style={{ float: 'right' }}>
-                Filter
-            </Button>
             <Popover
                 // style={{ width: '399px', minHeight: '246px' }}
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
+                id={props.id}
+                open={props.open}
+                anchorEl={props.anchorEl}
+                onClose={props.handleClose}
                 anchorOrigin={{
                     vertical: 'bottom',
                     horizontal: 'right',
@@ -53,18 +93,18 @@ const FilterList = (props) => {
                     <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
                         <Typography style={{ marginBottom: '9px' }}>Dataset Type</Typography>
                         <FormGroup>
-                            {data.datasetType.map((type) => {
+                            {filter.datasetType.map((type) => {
                                 return (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={type.state}
-                                                //  onChange={(e)=>handleDatasetChange(event.target.name)}
-                                                name={type.name}
+                                              //  checked={isChecked(type, 'dataset')}
+                                                onChange={(e) => handleDatasetChange(e)}
+                                                name={type}
                                                 color="primary"
                                             />
                                         }
-                                        label={type.name}
+                                        label={type}
                                     />)
                             })}
                         </FormGroup>
@@ -75,18 +115,18 @@ const FilterList = (props) => {
                     <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
                         <Typography style={{ marginBottom: '9px' }}>Status</Typography>
                         <FormGroup>
-                            {data.status.map((type) => {
+                            {filter.status.map((type) => {
                                 return (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={type.state}
-                                                //   onChange={(e)=>handleStatusChange(event.target.name)}
-                                                name={type.name}
+                                                checked={isChecked(type, 'status')}
+                                                onChange={(e) => handleStatusChange(e)}
+                                                name={type}
                                                 color="primary"
                                             />
                                         }
-                                        label={type.name}
+                                        label={type}
                                     />)
                             })}
                         </FormGroup>
