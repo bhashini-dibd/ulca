@@ -6,13 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +19,7 @@ import com.ulca.dataset.dao.DatasetDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.exception.ServiceRequestNumberNotFoundException;
 import com.ulca.dataset.kakfa.FileDownload;
 import com.ulca.dataset.model.Dataset;
 import com.ulca.dataset.model.Fileidentifier;
@@ -37,11 +35,8 @@ import com.ulca.dataset.response.DatasetCorpusSearchResponse;
 import com.ulca.dataset.response.DatasetListByUserIdResponse;
 import com.ulca.dataset.response.DatasetSearchStatusResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
-import com.ulca.dataset.util.DateUtil;
 import com.ulca.dataset.util.Utility;
 
-import io.swagger.model.AsrParamsSchema;
-import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -122,27 +117,34 @@ public class DatasetService {
 
 		for (ProcessTracker p : processList) {
 			if (p.getDatasetId() != null && !p.getDatasetId().isEmpty()) {
-
+				
 				String status = p.getStatus().toString();
 				Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
+				
+				if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
+					list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
+							dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
+				}else {
+					
+					List<TaskTracker> taskTrackerList = taskTrackerDao
+							.findAllByServiceRequestNumber(p.getServiceRequestNumber());
 
-				List<TaskTracker> taskTrackerList = taskTrackerDao
-						.findAllByServiceRequestNumber(p.getServiceRequestNumber());
+					HashMap<String, String> map = new HashMap<String, String>();
+					for (TaskTracker tTracker : taskTrackerList) {
+						map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
+					}
+					if(map.containsValue(TaskTracker.StatusEnum.failed.toString())) {
+						status = ProcessTracker.StatusEnum.failed.toString();
+					}else if(map.containsValue(ProcessTracker.StatusEnum.inprogress.toString())) {
+						status = ProcessTracker.StatusEnum.inprogress.toString();
+					}else if (map.containsKey(TaskTracker.ToolEnum.publish.toString())) {
+						status = map.get(TaskTracker.ToolEnum.publish.toString());
+					} 
 
-				HashMap<String, String> map = new HashMap<String, String>();
-				for (TaskTracker tTracker : taskTrackerList) {
-					map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
+					list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
+							dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
 				}
-				if(map.containsValue(TaskTracker.StatusEnum.failed.toString())) {
-					status = ProcessTracker.StatusEnum.failed.toString();
-				}else if(map.containsValue(ProcessTracker.StatusEnum.inprogress.toString())) {
-					status = ProcessTracker.StatusEnum.inprogress.toString();
-				}else if (map.containsKey(TaskTracker.ToolEnum.publish.toString())) {
-					status = map.get(TaskTracker.ToolEnum.publish.toString());
-				} 
-
-				list.add(new DatasetListByUserIdResponse(p.getDatasetId(), p.getServiceRequestNumber(),
-						dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
+				
 			}
 
 		}
@@ -188,6 +190,11 @@ public class DatasetService {
 	}
 
 	public List<TaskTracker> datasetByServiceRequestNumber(String serviceRequestNumber) {
+		
+		ProcessTracker processTrackerList = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
+		if(processTrackerList == null) {
+			throw new ServiceRequestNumberNotFoundException("serviceRequestNumber :: " + serviceRequestNumber + " not found");
+		}
 
 		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 		
