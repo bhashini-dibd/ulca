@@ -20,10 +20,10 @@ class AudioMetadataCheck(BaseValidator):
                 audio_file = request['record']['fileLocation']
                 metadata = audio_metadata.load(audio_file)
 
-                if 'samplingRate' in request['record'].keys():
+                if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
                     if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:
                         return {"message": "Sampling rate does not match the specified value", "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
-                if 'bitsPerSample' in request['record'].keys():
+                if 'bitsPerSample' in request['record'].keys() and request['record']['bitsPerSample'] != None:
                     if metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
                         return {"message": "Bits per sample does not match the specified value", "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
 
