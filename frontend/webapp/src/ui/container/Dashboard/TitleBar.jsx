@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { Toolbar, FormControl, InputLabel, Select, AppBar, Paper, Grid } from "@material-ui/core";
+import { Toolbar, AppBar, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import { withStyles, Button, Menu, MenuItem, MuiThemeProvider } from "@material-ui/core";
 import HeaderStyles from "../../styles/HeaderStyles";
-import { DatasetItems } from "../../../configs/DatasetItems";
-import Statistics from "./Statistics";
 import DownIcon from '@material-ui/icons/ArrowDropDown';
 import Theme from "../../theme/theme-default";
 
@@ -27,7 +25,6 @@ const StyledMenu = withStyles({
 const TitleBar = (props) => {
     const { classes, options, selectedOption, handleSelectChange, page, count } = props;
     // const [options, setOptions] = useState('parallel-corpus');
-    const gridArray = [{ title: 'Title1', value: '35555' }, { title: 'Title2', value: '4000' }]
 
     const handleChange = (event) => {
         const obj = {};
@@ -44,10 +41,10 @@ const TitleBar = (props) => {
         openEl(false)
     }
 
-    const getLabel = (value) => {
-        return options.filter(data => data.value === value)[0].label
-        
-    }
+    // const getLabel = (value) => {
+    //     return options.filter(data => data.value === value)[0].label
+
+    // }
     return (
         <MuiThemeProvider theme={Theme}>
             <AppBar position="static" color="inherit" elevation={0} className={classes.appBar}>
@@ -61,8 +58,8 @@ const TitleBar = (props) => {
                                 variant="text">
 
                                 {/* {selectedOption&& getLabel(selectedOption)} */}
-                                <Typography variant ="subtitle1">
-                                {selectedOption.label}
+                                <Typography variant="subtitle1">
+                                    {selectedOption.label}
                                 </Typography>
                                 <DownIcon />
                             </Button>
@@ -83,7 +80,7 @@ const TitleBar = (props) => {
                                             }}
                                         >
                                             <Typography variant={"body1"}>
-                                            {menu.label}
+                                                {menu.label}
                                             </Typography>
                                         </MenuItem>
                                     })
@@ -91,15 +88,15 @@ const TitleBar = (props) => {
                             </StyledMenu>
                         </Grid>
                         < Grid item xs={4} sm={4} md={2} lg={2} xl={2} className={classes.tempGrid}>
-                        <Typography variant="body2" gutterBottom>
-                            {/* {props.label} */}
-                            Total Count
-                        </Typography>
-                        <Typography variant="subtitle1">
-                            {/* {props.totValue} */}
-                            {count ? new Intl.NumberFormat('en').format(count) : 0}
-                        </Typography>
-                    </Grid>
+                            <Typography variant="body2" gutterBottom>
+                                {/* {props.label} */}
+                                Total Count
+                            </Typography>
+                            <Typography variant="subtitle1">
+                                {/* {props.totValue} */}
+                                {count ? new Intl.NumberFormat('en').format(count) : 0}
+                            </Typography>
+                        </Grid>
                         <Grid item xs={0} sm={0} md={3} lg={3} xl={3}></Grid>
                         <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
                             <Grid container spacing={2}>

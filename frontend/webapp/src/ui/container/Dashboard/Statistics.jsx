@@ -1,11 +1,7 @@
-import React, { useState } from "react";
-import { Toolbar, FormControl, InputLabel, NativeSelect, AppBar, Grid, Paper } from "@material-ui/core";
+import React from "react";
+import { Toolbar, AppBar, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import { withStyles, Button, Menu, MenuItem, MuiThemeProvider } from "@material-ui/core";
-import DatasetStyles  from "../../styles/Dataset";
-import { DatasetItems } from "../../../configs/DatasetItems";
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import { withStyles, Button } from "@material-ui/core";
 import { SaveAlt } from '@material-ui/icons';
 import HeaderStyles from "../../styles/HeaderStyles";
 
@@ -13,7 +9,7 @@ import HeaderStyles from "../../styles/HeaderStyles";
 const Statistics = (props) => {
     const { classes } = props;
     return (
-        <AppBar position="static" color="inherit" elevation={0} style={{alignContent: 'center',display: 'grid'}}>
+        <AppBar position="static" color="inherit" elevation={0} style={{ alignContent: 'center', display: 'grid' }}>
             <Toolbar className={classes.toolbar}>
                 <Grid container style={{ alignItems: 'center' }}>
                     < Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
@@ -34,7 +30,7 @@ const Statistics = (props) => {
                             size="medium"
                             color="primary"
                             variant="outlined"
-                            style={{ textTransform: 'none', float:'right' }}
+                            style={{ textTransform: 'none', float: 'right' }}
                             onClick={props.handleOnClick}
                         >
                             <SaveAlt className={classes.iconStyle} />Download
