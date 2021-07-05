@@ -111,7 +111,7 @@ export default function ResponsiveDialog(props) {
          
 		
 		<div class="introdetails">
-			<div class = "titlerow"><Typography variant={"h4"}>ULCA - Universal Language Contribution APIs</Typography> <Button onClick ={() =>handleClose()} style={{margin:"auto", marginRight:"0"}} color= "primary" variant="outlined"><CloseIcon size={"small"}/></Button></div>
+			<div class = "titlerow"><Typography variant={"h4"}>ULCA - Universal Language Contribution APIs</Typography> <Button onClick ={() =>handleClose()} style={{margin:"auto", marginRight:"0"}} color= "default"><CloseIcon size={"small"}/></Button></div>
 			<Typography variant={"h6"}>A MeitY initiative.</Typography>
 			<Typography variant={"body1"}>ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with a user interface for interacting with the datasets.</Typography>
 			<div class="features">

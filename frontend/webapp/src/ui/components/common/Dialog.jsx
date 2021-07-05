@@ -27,7 +27,6 @@ export default function ResponsiveDialog(props) {
   
 
   const {title,message, open,handleSubmit, handleClose,actionButton, actionButton2  } = props;
-  debugger
   return (
     
     <MuiThemeProvider theme={Theme}> 

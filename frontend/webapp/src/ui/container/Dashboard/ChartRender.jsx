@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
-import { withStyles, Typography, MuiThemeProvider, Paper, Button,Fab } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { withStyles, Typography, MuiThemeProvider, Paper, Button } from "@material-ui/core";
 import ChartStyles from "../../styles/Dashboard";
-import { ResponsiveContainer, BarChart, Bar, Cell, CartesianGrid, XAxis, Label, LabelList, YAxis, Tooltip, } from 'recharts';
-import Select from 'react-select';
+import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis, Tooltip } from 'recharts';
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import FetchLanguageDataSets from "../../../redux/actions/api/Dashboard/languageDatasets";
-import { isMobile } from 'react-device-detect';
 import { ArrowBack } from '@material-ui/icons';
 import Header from '../../components/common/Header';
 import Dataset from "../../../configs/DatasetItems";
@@ -42,29 +40,6 @@ const ChartRender = (props) => {
 		dispatch(APITransport(userObj));
 
 	}
-
-	const customStyles = {
-		option: (provided, state) => ({
-			...provided,
-			borderColor: "green",
-			color: 'black',
-			padding: 20,
-			background: state.isSelected && "#c7c6c68a !important",
-			cursor: "pointer",
-			fontFamily: "Lato, sans-serif ",
-
-		}),
-		control: (base, state) => ({
-			...base,
-			// This line disable the blue border
-			borderColor: "#392C71",
-			border: "1px solid rgba(57, 44, 113, 0.5)",
-			boxShadow: state.isFocused ? 0 : 0,
-			fontFamily: "Lato, sans-serif ",
-			cursor: "pointer"
-		})
-	}
-
 	const fetchParams = (event) => {
 		var sourceLanguage = ""
 		let targetLanguage = ""
@@ -105,8 +80,6 @@ const ChartRender = (props) => {
 
 		switch (value) {
 			case 1:
-				// fetchChartData(selectedOption.value, filter ? filter : filterValue, [{ "type": "PARAMS", "sourceLanguage": { "type": "PARAMS", "value": "en" }, "targetLanguage": { "type": "PARAMS", "value": selectedLanguage ? selectedLanguage : (event && event.hasOwnProperty("_id")) ? event._id : "" } }])
-
 				fetchChartData(selectedOption.value, filter ? filter : filterValue, fetchParams(event))
 				handleSelectChange(selectedOption, event, filter, value)
 				setPage(value)
@@ -126,9 +99,6 @@ const ChartRender = (props) => {
 				handleSelectChange(selectedOption, "", "", value)
 				setSelectedLanguage("")
 				setSelectedLanguageName("")
-
-
-
 				break;
 			default:
 
@@ -214,48 +184,28 @@ const ChartRender = (props) => {
 			default:
 				setTitle("")
 		}
-
-
 	}
 	return (
 		<MuiThemeProvider theme={Theme}>
-			
-				
-				<><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
-			
-			
+			<><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
 			<div className={classes.container}>
-			<TitleBar selectedOption={selectedOption}
-							handleSelectChange={handleSelectChange}
-							options={options}
-							isDisabled={page !== 0 ? true : false}
-							page= {page}
-							count = {DashboardReport.count}>
-
+			<TitleBar selectedOption=	{selectedOption}
+				handleSelectChange=	{handleSelectChange}
+				options		=	{options}
+				isDisabled	=	{page !== 0 ? true : false}
+				page		= 	{page}
+				count 		= 	{DashboardReport.count}>
 				{page === 1 && fetchFilterButtons()}
 				
 			</ TitleBar>
-				{/* <div className={classes.breadcrum}>
-				<BreadCrum links={["Dataset"]} activeLink="Submit Dataset" />
-			</div> */}
 			<Button onClick = {()=> setPopUp(true)} color= "primary" variant="contained" className={classes.infoBtn}><InfoOutlinedIcon/></Button>
 			{popUp && <AppInfo handleClose = {handleClosePopUp} open ={popUp}/>}
 
 				<Paper elevation={3} className={classes.paper}>
 						
 					<div className={classes.iconStyle}>
-					 <><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button>
-							</>
-
-							<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
-						{/* <Select className={classes.select}
-							styles={customStyles} color="primary"
-							value={selectedOption}
-							onChange={(value) => { handleSelectChange(value, "", "", page) }}
-							options={options}
-							isDisabled={page !== 0 ? true : false}
-						/> */}
-						
+					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button></>
+						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>	
 					</div>
 					
 					<div className={classes.title}>
@@ -263,9 +213,6 @@ const ChartRender = (props) => {
 							<BarChart width={900} height={350} data={DashboardReport.data} fontSize="14px" fontFamily="Lato" maxBarSize={100} >
 
 								<XAxis dataKey="label"
-									// textAnchor	=	{isMobile ? "end" : "middle"}
-									// tick		=	{{ angle: isMobile ? -60 : 0 }} 
-									// height		=	{isMobile ? 100 : 60}
 									textAnchor={"end"}
 									tick={{ angle: -30, marginTop: "8px" }}
 									height={130}
@@ -284,7 +231,6 @@ const ChartRender = (props) => {
 										dataKey="value"
 										fill="black"
 									/>
-
 									{
 										DashboardReport.hasOwnProperty("data") && DashboardReport.data.length > 0 && DashboardReport.data.map((entry, index) => {
 											const color = colors[index < 9 ? index : index % 10]

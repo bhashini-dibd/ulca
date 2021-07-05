@@ -85,7 +85,6 @@ const SearchAndDownloadRecords = (props) => {
             let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
             let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
             let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
-           console.log(domain, collectionMethod, data[0])
             setFilterBy({
                 ...filterBy, domain, collectionMethod
             })
@@ -228,8 +227,6 @@ const SearchAndDownloadRecords = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const getValueForLabel = (label) => {
-        console.log(label, 'hiii')
-        console.log(Language.filter(val => val.label === label)[0])
         return Language.filter(val => val.label === label)[0]
 
     }

@@ -12,7 +12,6 @@ const dateConversion = (value) =>{
 }
 
 const getContributionList = (payload) => {
-    debugger
     let responseData = [];
     let refreshStatus = false;
     payload.forEach(element => {

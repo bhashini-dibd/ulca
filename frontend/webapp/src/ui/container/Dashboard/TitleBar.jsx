@@ -45,7 +45,6 @@ const TitleBar = (props) => {
     }
 
     const getLabel = (value) => {
-        debugger
         return options.filter(data => data.value === value)[0].label
         
     }

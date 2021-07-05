@@ -18,7 +18,6 @@ const dateConversion = (value) =>{
 const getMySearches = (payload) => {
     let newArr = []
     payload.forEach(element =>{
-        console.log(element.searchCriteria)
         if(element.searchCriteria){
             let dataSet  = getDatasetName(element.searchCriteria.datasetType);
             let langauge =element.searchCriteria.sourceLanguage && getLanguageLabel(element.searchCriteria.sourceLanguage).map(val=>val.label)[0]
@@ -26,9 +25,6 @@ const getMySearches = (payload) => {
             let searchDetails = JSON.parse(element.status.length> 0 && element.status[0].details)
             let domain = element.searchCriteria.domain && FilterByDomain(element.searchCriteria.domain).map(val=>val.label).join(', ')
             let collection = element.searchCriteria.collectionMethod && FilterByCollection(element.searchCriteria.collectionMethod).map(val=>val.label).join(', ')
-
-            console.log(domain, collection)
-
             newArr.push(
                 {
                     sr_no : element.serviceRequestNumber,

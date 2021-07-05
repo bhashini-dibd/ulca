@@ -1,4 +1,4 @@
-import { withStyles, Typography, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
+import { withStyles, Button } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect,useState} from "react";
 import DataSet from "../../../styles/Dataset";
@@ -23,8 +23,6 @@ const MySearches = (props) => {
         useEffect(() => {
                 MySearchListApi()   
         }, []);
-
-        console.log(PageInfo)
         const  MySearchListApi  = () =>{
                 
                 const userObj         = new MySearchReport()
