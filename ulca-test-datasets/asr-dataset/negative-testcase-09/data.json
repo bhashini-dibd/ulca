@@ -1,0 +1,70 @@
+[
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "text": "में अपना आधा सफ़र अब पूरा कर लिया है",
+        "startTime": "00-00-00",
+        "endTime": "00-00-6.96",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "text": "मेइस दौरान हमने अनेक विषयों पर बात की",
+        "startTime": "00-00-6.96",
+        "endTime": "00-00-9.40",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "text": "मेस्वाभाविक है कि जो वैश्विक महामारी आयी मानव जाति पर जो संकट आया उस पर हमारी बातचीत कुछ ज्यादा ही रही लेकिन",
+        "startTime": "00-00-9.40",
+        "endTime": "00-00-20.00",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "text": "इन दिनों मैं देख रहा हूं लगातार लोगों में एक विषय पर चर्चा हो रही है कि आखिर ये साल कब बीतेगा",
+        "startTime": "00-00-20.00",
+        "endTime": "00-00-30.36",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    }
+]
