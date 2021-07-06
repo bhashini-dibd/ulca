@@ -33,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
-@RequestMapping(value= "/dataset")
+@RequestMapping(value= "/ulca/apis/v0/dataset")
 public class DatasetController {
 	
 	@Autowired
