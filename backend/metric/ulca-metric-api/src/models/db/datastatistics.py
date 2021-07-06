@@ -126,11 +126,12 @@ class AggregateDatasetModel(object):
             chart_data =[]
             for val in aggs_parsed:
                 elem={}
-                title=val.split('-')
-                if not val:
-                    title="Unlabeled"
                 elem["_id"]=val
-                elem["label"]=" ".join(title).title()
+                if not val:
+                    elem["label"]="Unlabeled"
+                else:
+                    title=val.split('-')
+                    elem["label"]=" ".join(title).title()
                 elem["value"]=aggs_parsed.get(val)
                 chart_data.append(elem)                 
             return chart_data
