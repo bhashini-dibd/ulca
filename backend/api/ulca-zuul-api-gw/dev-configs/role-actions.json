@@ -49,6 +49,16 @@
             "role":"CONTRIBUTOR-USER",
             "actionID": "b3d4b271-4de3-4781-8d03-8b3cee833f13",
             "active":true
+        },
+        {
+            "role":"CONTRIBUTOR-USER",
+            "actionID": "a854ad66-00f3-4d05-983c-2bcdbab6562c",
+            "active":true
+        },
+        {
+            "role":"ADMIN",
+            "actionID": "a854ad66-00f3-4d05-983c-2bcdbab6562c",
+            "active":true
         }
     ]
 }

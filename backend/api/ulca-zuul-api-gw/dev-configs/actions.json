@@ -33,6 +33,14 @@
             "description":"API to fetch user searches by user id"
         },
         {
+            "id":"a854ad66-00f3-4d05-983c-2bcdbab6562c",
+            "uri":"/ulca/apis/v0/dataset/getByServiceRequestNumber?*",
+            "module":"ULCA-API",
+            "active":true,
+            "whiteList":false,
+            "description":"API to fetch dataset details on srn"
+        },
+        {
             "id":"b3d4b271-4de3-4781-8d03-8b3cee833f13",
             "uri":"/ulca/error-consumer/v0/error/report",
             "module":"ERROR-CONSUMER",
@@ -47,6 +55,30 @@
             "active":true,
             "whiteList":true,
             "description":"API to fetch metrics from the ULCA platform"
+        },
+        {
+            "id":"bcef7afd-5477-4f04-9a6f-b84e4b9a491f",
+            "uri":"/ulca/user-mgmt/v1/users/login",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to login"
+        },
+        {
+            "id":"d6fbf062-8d1a-4ae3-a4b8-83466753efad",
+            "uri":"/ulca/user-mgmt/v1/users/signup",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to register"
+        },
+        {
+            "id":"6eae39c6-d705-4ee2-9ec6-c2eb445e9f02",
+            "uri":"/ulca/user-mgmt/v1/users/verify-user",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to verify the user"
         }
     ]
 }
