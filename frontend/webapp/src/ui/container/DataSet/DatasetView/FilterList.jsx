@@ -69,8 +69,8 @@ const FilterList = (props) => {
                     color="primary" size="small" className={classes.clearAllBtn}> Clear All
                 </Button>
                 <Grid container className={classes.filterContainer}>
-                    <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
-                        <Typography className={classes.filterTypo}>Dataset Type</Typography>
+                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                        <Typography variant="body2" className={classes.filterTypo}>Dataset Type</Typography>
                         <FormGroup>
                             {filter.datasetType.map((type) => {
                                 return (
@@ -91,8 +91,8 @@ const FilterList = (props) => {
                     <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical"></Divider>
                     </Grid>
-                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-                        <Typography className={classes.filterTypo}>Status</Typography>
+                    <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
+                        <Typography variant="body2" className={classes.filterTypo}>Status</Typography>
                         <FormGroup>
                             {filter.status.map((type) => {
                                 return (

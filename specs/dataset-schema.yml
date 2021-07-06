@@ -279,10 +279,10 @@ components:
           $ref: '#/components/schemas/AudioQualityEvaluation'
         startTime:
           type: string
-          description: "Time of the audio from where the processing starts. Format : hh-mm-ss"
+          description: "Time of the audio from where the processing starts. Format : hh:mm:ss"
         endTime:
           type: string
-          description: "Time of the audio where the processing end. Format : hh-mm-ss"
+          description: "Time of the audio where the processing end. Format : hh:mm:ss"
           
 
     OcrDatasetParamsSchema:
