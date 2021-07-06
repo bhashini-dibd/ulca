@@ -1,6 +1,7 @@
 import API from "../../../api";
 import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
+import { sha256 } from 'js-sha256';
 
 export default class MyCOntribution extends API {
     constructor( user_id, timeout = 200000) {
@@ -9,7 +10,8 @@ export default class MyCOntribution extends API {
         this.type           = C.GET_MY_REPORT;
         this.endpoint       = `${super.apiEndPointAuto()}${ENDPOINTS.mySearches}`;
         let userInf                     = localStorage.getItem("userDetails")
-        this.userId              = JSON.parse(userInf).userID
+        this.userId              = JSON.parse(userInf).userID;
+        this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
     }
 
     toString() {
@@ -37,7 +39,10 @@ export default class MyCOntribution extends API {
 
     getHeaders() {
         this.headers = {
-            headers: {  
+            headers: {
+                "key" :this.userDetails.publicKey,
+                "sig"  : sha256(this.userDetails.privateKey+"|"+sha256(this.apiEndPoint())),
+                "Content-Type": "application/json"
             }
         };
         return this.headers;
