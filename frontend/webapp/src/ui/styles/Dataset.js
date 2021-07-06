@@ -223,11 +223,13 @@ const DataSet = (theme) => ({
     clearAllBtn: {
         float: "right",
         margin: '9px 16px 0px auto',
-        padding: '0'
+        padding: '0',
+        height: '15px'
     },
     filterContainer: {
         borderBottom: '1px solid #00000029',
-        paddingLeft: '18.5px'
+        paddingLeft: '18.5px',
+        marginTop:'20px'
     },
     filterTypo: {
         marginBottom: '9px'
@@ -236,8 +238,9 @@ const DataSet = (theme) => ({
         float: "right",
         margin: '5px',
         borderRadius: '4px',
-        margin: '9px 16px 9px auto'
-    }
+        margin: '9px 16px 9px auto',
+        width: '80px'
+    },
 });
 
 export default DataSet;
