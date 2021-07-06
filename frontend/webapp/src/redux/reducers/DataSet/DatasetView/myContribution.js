@@ -15,6 +15,44 @@ const dateConversion = (value) =>{
     return result.toUpperCase();
 }
 
+const getFilterValue = (payload, data) =>{
+   
+    let {filterValues}= payload
+    let statusFilter = []
+    let filterResult = []
+    if(filterValues.hasOwnProperty("status") && filterValues.status.length>0){
+        statusFilter = data.responseData.filter(value =>{ 
+            if(filterValues.status.includes(value.status)){
+                return value
+            }
+    })
+    
+}else{
+    statusFilter = data.responseData
+}
+if(filterValues.hasOwnProperty("datasetType") && filterValues.datasetType.length>0){
+    filterResult = statusFilter.filter(value=>{
+        if(filterValues.datasetType.includes(value.datasetType)){
+            return value
+        }
+    })
+}
+else{
+    filterResult = statusFilter
+}
+data.filteredData = filterResult;
+data.selectedFilter = filterValues;
+
+return data;
+    
+}
+
+const getClearFilter = (data) =>{
+    data.filteredData = data.responseData;
+    data.selectedFilter = {status:[],datasetType:[]}
+    return data;
+}
+
 const getContributionList = (payload) => {
     let responseData = [];
     let statusFilter = [];
@@ -39,8 +77,8 @@ const getContributionList = (payload) => {
         }
     }); 
 
-    filter.status = statusFilter;
-    filter.datasetType = datatypeFilter;
+    filter.status = [...(new Set(statusFilter))];
+    filter.datasetType = [...(new Set(datatypeFilter))];
 
 
     responseData = responseData.reverse()
@@ -53,10 +91,14 @@ const reducer = (state = initialState, action) => {
 
         case C.GET_CONTRIBUTION_LIST:
             return getContributionList(action.payload);
+            case C.CONTRIBUTION_TABLE:
+                return getFilterValue(action.payload, state);
         case C.CLEAR_CONTRIBUTION_LIST:
             return {
                 ...initialState
             }
+            case C.CLEAR_FILTER:
+                return getClearFilter(state);
         default:
             return {
                 ...state
