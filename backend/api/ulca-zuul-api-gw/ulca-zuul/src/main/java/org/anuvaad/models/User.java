@@ -35,7 +35,7 @@ public class User {
     public String activatedTime;
 
     @JsonProperty("roles")
-    public List<UserRole> roles;
+    public List<String> roles;
 
     @JsonProperty("privateKey")
     public String privateKey;
@@ -112,13 +112,6 @@ public class User {
         this.activatedTime = activatedTime;
     }
 
-    public List<UserRole> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<UserRole> roles) {
-        this.roles = roles;
-    }
 
     public String getPrivateKey() {
         return privateKey;
@@ -128,7 +121,15 @@ public class User {
         this.privateKey = privateKey;
     }
 
-    public User(String userID, String email, String firstName, String lastName, String phoneNo, Boolean isVerified, Boolean isActive, String registeredTime, String activatedTime, List<UserRole> roles, String privateKey) {
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public User(String userID, String email, String firstName, String lastName, String phoneNo, Boolean isVerified, Boolean isActive, String registeredTime, String activatedTime, List<String> roles, String privateKey) {
         this.userID = userID;
         this.email = email;
         this.firstName = firstName;
@@ -141,5 +142,7 @@ public class User {
         this.roles = roles;
         this.privateKey = privateKey;
     }
+
+
 }
 

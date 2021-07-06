@@ -6,7 +6,6 @@ import com.netflix.zuul.context.RequestContext;
 import org.anuvaad.cache.ZuulConfigCache;
 import org.anuvaad.models.Action;
 import org.anuvaad.models.User;
-import org.anuvaad.models.UserRole;
 import org.anuvaad.utils.ExceptionUtils;
 import org.anuvaad.utils.UserUtils;
 import org.slf4j.Logger;
@@ -106,9 +105,7 @@ public class AuthFilter extends ZuulFilter {
             else {
                 logger.info(PROCEED_ROUTING_MESSAGE, uri);
                 ctx.addZuulRequestHeader(ZUUL_USER_ID_HEADER_KEY, user.getUserID());
-                List<String> roles = new ArrayList<>();
-                for(UserRole role: user.getRoles())
-                    roles.add(role.getRoleCode());
+                List<String> roles = new ArrayList<>(user.getRoles());
                 String roleCodes = String.join(",", roles);
                 ctx.addZuulRequestHeader(ZUUL_ROLES_HEADER_KEY, roleCodes);
                 setShouldDoAuth(true);

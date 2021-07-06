@@ -118,7 +118,7 @@ public class RbacFilter extends ZuulFilter {
             Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), requestEntityStr);
             if(!sigVerify)
                 return false;
-            List<String> roleCodes = user.getRoles().stream().map(UserRole::getRoleCode).collect(Collectors.toList());
+            List<String> roleCodes = user.getRoles();
             if(roleCodes.contains(superUserCode)) return true;
             Boolean isRolesCorrect = verifyRoles(user.getRoles());
             if(isRolesCorrect)
@@ -168,15 +168,14 @@ public class RbacFilter extends ZuulFilter {
      * @param userRoles
      * @return
      */
-    public Boolean verifyRoles(List<UserRole> userRoles) {
+    public Boolean verifyRoles(List<String> userRoles) {
         try{
             List<String> configRoles = ZuulConfigCache.roleCodes;
             if (CollectionUtils.isEmpty(configRoles)){
                 logger.info("Roles couldn't be fetched from config");
                 return false;
             }
-            List<String> roles = userRoles.stream().map(UserRole::getRoleCode).collect(Collectors.toList());
-            for(String role: roles){
+            for(String role: userRoles){
                 if (!configRoles.contains(role)) {
                     logger.info(INVALID_ROLES_MESSAGE);
                     return false;
@@ -196,12 +195,11 @@ public class RbacFilter extends ZuulFilter {
      * @param uri
      * @return
      */
-    public Boolean verifyRoleActions(List<UserRole> userRoles, String uri) {
+    public Boolean verifyRoleActions(List<String> userRoles, String uri) {
         try{
             Map<String, List<String>> roleActions = ZuulConfigCache.roleActionMap;
-            List<String> roles = userRoles.stream().map(UserRole::getRoleCode).collect(Collectors.toList());;
             int fail = 0;
-            for (String role: roles){
+            for (String role: userRoles){
                 List<String> actionList = roleActions.get(role);
                 if (CollectionUtils.isEmpty(actionList)) fail = fail + 1;
                 else{
@@ -209,7 +207,7 @@ public class RbacFilter extends ZuulFilter {
                     else break;
                 }
             }
-            if (fail == roles.size()){
+            if (fail == userRoles.size()){
                 logger.info(INVALID_ROLES_ACTIONS_MESSAGE);
                 return false;
             }
