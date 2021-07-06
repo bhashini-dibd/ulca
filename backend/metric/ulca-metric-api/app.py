@@ -3,14 +3,9 @@ from flask.blueprints import Blueprint
 from flask_cors import CORS
 from src import routes
 import logging
+from logging.config import dictConfig
 import config
-import threading
-import time
-from src.utilities.app_context import LOG_WITHOUT_CONTEXT
 
-logging.basicConfig(filename='info.log',
-level=logging.DEBUG,
-format='%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 log = logging.getLogger('file')
 
@@ -30,3 +25,35 @@ def info():
 if __name__ == "__main__":
     log.info("starting module")
     flask_app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})

@@ -1,78 +1,18 @@
-from typing import Collection, Counter
-from src.utilities.app_context import LOG_WITHOUT_CONTEXT
-from src.utilities.pymongo_data_handling import normalize_bson_to_json
-import pandas as pd
 from src.db import get_data_store
-import pymongo
 from sqlalchemy import text
 from config import DRUID_DB_SCHEMA ,LANG_CODES
 import logging
 
 log = logging.getLogger('file')
-DB_SCHEMA_NAME  = 'summary_dataset_v2'
-# tag_mapping = {'languagePairs':1, 'collectionSource':3, 'domain':4, 'collectionMethod':5}
 
-language_extension = {'pu':'Punjabi', 
-                      'be':'Bengali',
-                      'en':'English',
-                      'ta':'Tamil', 
-                      'ml':'Malayalam', 
-                      'te':'Telugu', 
-                      'ka':'Kannada', 
-                      'hi':'Hindi', 
-                      'ma':'Marathi',
-                      'gu':'Gujarati',
-                      'od':'Odia',
-                      'bh':'Bhojpuri',
-                      'as':'Assamese'}
-
-def get_key(val, lang_dict):
-    for key, value in lang_dict.items():
-         if val == value:
-             return key
 
 class SummarizeDatasetModel(object):
-    def __init__(self):
-        pass
-
-    def store(self, dataset):
-        try:
-            collections = get_db()[DB_SCHEMA_NAME]
-            result     = collections.insert_one(dataset)
-            if result != None and result.acknowledged == True:
-                return True
-        except Exception as e:
-            log.exception("db connection exception :{}".format(e))
-            return False
-
-    # def generate_grouping_query(self, group_param):
-    #     group_query = {}
-    #     tag_index = tag_mapping[group_param['value']]
-    #     group_query['$group'] = {"_id": {"$arrayElemAt": ["$tags", tag_index]}, "num_parallel_sentences": {"$sum": "$count"}}
-    #     return group_query
-    
-    def generate_match_query(self, criterions):
-        match_query = {}
-        match_params = []
-        for criteria in criterions:
-            if 'value' not in criteria.keys():
-                src_lang = get_key(criteria['sourceLanguage']['value'], language_extension)
-                tar_lang = get_key(criteria['targetLanguage']['value'], language_extension)
-                match_param = src_lang + '-' + tar_lang
-            else:
-                match_param = criteria['value']
-            match_params.append({"$in": [match_param, "$tags"]})
-        
-        match_query['$match'] = {"$expr": {"$and": match_params}}
-        return match_query
-
+    #data aggregation
     def search(self, dataset):
-        
         try:
             collection      = get_data_store()
             criterions      = dataset["criterions"]
             grouping        = dataset["groupby"]
-
             if len(criterions) == 0:
                 dtype = dataset["type"]
                 if dtype == "parallel-corpus":
