@@ -7,7 +7,7 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
-import { PageChange, RowChange,FilterTable,clearFilter } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
+import { PageChange, RowChange, FilterTable, clearFilter } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
 import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import Dialog from "../../../components/common/Dialog"
 import { Cached, DeleteOutline, VerticalAlignTop } from '@material-ui/icons';
@@ -50,21 +50,18 @@ const ContributionList = (props) => {
         };
         const clearAll = (data) => {
                 dispatch(clearFilter(data, C.CLEAR_FILTER))
-                console.log("clearAll", data)
         }
         const apply = (data) => {
-                
+                handleClose()
                 dispatch(FilterTable(data, C.CONTRIBUTION_TABLE))
-                debugger
-                console.log("apply", data)
         }
 
 
         const fetchHeaderButton = () => {
                 return <>
-                        
 
-                        <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh}  onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
+
+                        <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
                         <Button color={"default"} size="medium" variant="outlined" className={classes.buttonStyle} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button>
                 </>
         }
