@@ -1,6 +1,7 @@
 import API from "../../../api";
 import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
+import { sha256 } from 'js-sha256';
 
 export default class LoginAPI extends API {
   constructor(serviceRequestNumber, timeout = 2000) {
@@ -8,6 +9,7 @@ export default class LoginAPI extends API {
    this.serviceRequestNumber = serviceRequestNumber;
    this.type = C.GET_ERROR_REPORT;
     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.errorReport}`;
+    this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
   }
 
   toString() {
@@ -31,9 +33,12 @@ export default class LoginAPI extends API {
   }
 
   getHeaders() {
+    let urlSha = sha256(JSON.stringify(this.getBody()))
     this.headers = {
       headers: {
         "Content-Type": "application/json",
+        "key" :this.userDetails.publicKey,
+        "sig"  : sha256(this.userDetails.privateKey+"|"+urlSha)
       }
     };
     return this.headers;

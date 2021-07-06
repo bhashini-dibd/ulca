@@ -1,12 +1,13 @@
 import API from "../../../api";
 import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
-
+import { sha256 } from 'js-sha256';
 export default class MyCOntribution extends API {
     constructor(file_name, user_id, timeout = 200000) {
         super("GET", timeout, false);
         this.user_id = JSON.parse(localStorage.getItem('userDetails')).userID
         this.type = C.GET_CONTRIBUTION_LIST;
+        this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getContributionList}`;
     }
 
@@ -34,9 +35,12 @@ export default class MyCOntribution extends API {
     }
 
     getHeaders() {
+        let urlSha = sha256(this.endpoint)
+        
         this.headers = {
             headers: {
-                 
+                "key" :this.userDetails.publicKey,
+                "sig"  : sha256(this.userDetails.publicKey+"|"+urlSha)
             }
         };
         return this.headers;
