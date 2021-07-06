@@ -10,11 +10,13 @@ import java.util.Optional;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ulca.dataset.constants.DatasetConstants;
 import com.ulca.dataset.dao.DatasetDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
@@ -80,7 +82,14 @@ public class DatasetService {
 
 		dataset.setDatasetFileIdentifier(fileIndetifier);
 
-		datasetDao.insert(dataset);
+		try {
+			datasetDao.insert(dataset);
+		} catch(DuplicateKeyException ex) {
+			
+			throw new DuplicateKeyException(DatasetConstants.datasetNameUniqueErrorMsg);
+			
+		}
+		
 
 		ProcessTracker processTracker = new ProcessTracker();
 		processTracker.setUserId(userId);

@@ -2,7 +2,7 @@ package com.ulca.dataset.exception;
 
 import java.util.Date;
 
-
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +29,15 @@ public class DatasetControllerExceptionHandler {
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 	
+	@ExceptionHandler(DuplicateKeyException.class)
+	  public final ResponseEntity<Object> handleDuplicateKeyExceptions(DuplicateKeyException ex, WebRequest request) {
+		
+	    ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
+	        request.getDescription(false));
+	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
 
+	
 	  @ExceptionHandler(ServiceRequestNumberNotFoundException.class)
 	  public final ResponseEntity<Object> handleUserNotFoundException(ServiceRequestNumberNotFoundException ex, WebRequest request) {
 	    ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
