@@ -1,5 +1,5 @@
 {
-    "datasetType":"asr-corpus",
+    "datasetType":"asr-unlabeled-corpus",
     "languages":{
         "sourceLanguage":"hi"
     },
