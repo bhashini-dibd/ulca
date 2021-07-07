@@ -33,7 +33,9 @@ Refer to [datasetType schema](https://raw.githubusercontent.com/project-anuvaad/
 ## [negative-testcase-02](./negative-testcase-01)
 
 **Description** : 
-Incorrect dataset type is specified in the params file.
+
+'*collectionMethod*' field is not a part of schema for unlabled corpus. 
+
 > `params.json` : INVALID
 > `data.json`   : VALID
 
