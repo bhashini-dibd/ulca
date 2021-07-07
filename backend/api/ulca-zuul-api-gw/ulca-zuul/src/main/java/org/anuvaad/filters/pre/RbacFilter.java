@@ -42,6 +42,9 @@ public class RbacFilter extends ZuulFilter {
     @Autowired
     public UserUtils userUtils;
 
+    @Value("${ulca.app.host}")
+    private String appHost;
+
     @Override
     public String filterType() {
         return "pre";
@@ -111,12 +114,13 @@ public class RbacFilter extends ZuulFilter {
                 InputStream in = ctx.getRequest().getInputStream();
                 requestEntityStr = StreamUtils.copyToString(in, Charset.forName(charset));
             }else {
-                if((Boolean)ctx.get(PATH_PARAM_URI))
-                    requestEntityStr = (String) ctx.get(REQ_URI);
+                if((Boolean)ctx.get(PATH_PARAM_URI)){
+                    requestEntityStr = String.format("%s%s", appHost, ctx.get(REQ_URI));
+                }
                 else{
                     StringBuilder builder = new StringBuilder();
                     builder.append(uri);
-                    requestEntityStr = appendQueryParams(ctx, builder);
+                    requestEntityStr = String.format("%s%s", appHost, appendQueryParams(ctx, builder));
                 }
             }
             Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), requestEntityStr);
