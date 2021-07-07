@@ -57,10 +57,11 @@ public class UserUtils {
                 return userServiceRes.getData();
             }
             else{
-                logger.info("The UMS service is down.");
+                logger.info("The UMS service is down -- " + authURL);
                 return null;
             }
         }catch (Exception e){
+            logger.error("URI: " + authURL);
             logger.error(RETRIEVING_USER_FAILED_MESSAGE, e);
             return null;
         }
