@@ -165,14 +165,10 @@ public class RbacFilter extends ZuulFilter {
      */
     public Boolean verifySignature(String signature, String privateKey, String sigValue) {
         try{
-            logger.info("privateKey: {}", privateKey);
-            logger.info("sigValue: {}", sigValue);
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            MessageDigest digest = MessageDigest.getInstance("MD5");
             String sigValueHash  = bytesToHex(digest.digest(sigValue.getBytes(StandardCharsets.UTF_8)));
             String sigHash = privateKey + "|" + sigValueHash;
             String hash = bytesToHex(digest.digest(sigHash.getBytes(StandardCharsets.UTF_8)));
-            logger.info("hash: {}", hash);
-            logger.info("sig: {}", signature);
             return hash.equals(signature);
         }catch (Exception e) {
             logger.error("Exception while verifying signature: ", e);
