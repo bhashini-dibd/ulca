@@ -22,6 +22,7 @@ import static org.anuvaad.constants.RequestContextConstants.CORRELATION_ID_KEY;
 public class UserUtils {
 
     private static final String RETRIEVING_USER_FAILED_MESSAGE = "Retrieving user failed";
+    private static final String USER_UNAVAILABLE_MESSAGE = "There's no user associated with this public key: {}";
 
     @Value("${ulca.ums.host}")
     private String umsHost;
@@ -53,8 +54,15 @@ public class UserUtils {
         final HttpEntity<Object> httpEntity = new HttpEntity<>(req_body, headers);
         try{
             UMSResponse userServiceRes = restTemplate.postForObject(authURL, httpEntity, UMSResponse.class);
+            logger.error("userServiceRes: " + userServiceRes);
             if (null != userServiceRes){
-                return userServiceRes.getData();
+                if(null != userServiceRes.getData()){
+                    return userServiceRes.getData();
+                }
+                else{
+                    logger.info(USER_UNAVAILABLE_MESSAGE, publicKey);
+                    return null;
+                }
             }
             else{
                 logger.info("The UMS service is down -- " + authURL);

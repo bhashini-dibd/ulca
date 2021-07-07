@@ -143,6 +143,7 @@ public class User {
         this.privateKey = privateKey;
     }
 
-
+    public User() {
+    }
 }
 

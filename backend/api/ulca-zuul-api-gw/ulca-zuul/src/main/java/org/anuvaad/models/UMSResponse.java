@@ -21,6 +21,9 @@ public class UMSResponse {
         this.message = message;
     }
 
+    public UMSResponse() {
+    }
+
     public Integer getCount() {
         return count;
     }
