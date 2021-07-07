@@ -67,8 +67,9 @@ public class DatasetService {
 	private String fileDownloadTopic;
 
 	@Transactional
-	public DatasetSubmitResponse datasetSubmit(DatasetSubmitRequest request, String userId) {
+	public DatasetSubmitResponse datasetSubmit(DatasetSubmitRequest request) {
 
+		String userId = request.getUserId();
 		Dataset dataset = new Dataset();
 		dataset.setDatasetName(request.getDatasetName());
 		dataset.setDatasetType(request.getType().toString());
@@ -163,11 +164,12 @@ public class DatasetService {
 
 	}
 
-	public DatasetCorpusSearchResponse corpusSearch(DatasetCorpusSearchRequest request, String userId)
+	public DatasetCorpusSearchResponse corpusSearch(DatasetCorpusSearchRequest request)
 			throws JsonProcessingException {
 
 		log.info("******** Entry DatasetService:: corpusSearch *******");
-
+		
+		String userId = request.getUserId();
 		String serviceRequestNumber = searchKafkaPublish.searchPublish(request, userId);
 
 		DatasetCorpusSearchResponse response = new DatasetCorpusSearchResponse(serviceRequestNumber, new Date());
