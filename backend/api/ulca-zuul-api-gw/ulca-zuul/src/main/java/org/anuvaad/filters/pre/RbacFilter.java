@@ -108,9 +108,7 @@ public class RbacFilter extends ZuulFilter {
             String requestEntityStr;
             if(ctx.getRequest().getMethod().equals("POST") || ctx.getRequest().getMethod().equals("PUT")) {
                 String charset = ctx.getRequest().getCharacterEncoding();
-                InputStream in = (InputStream) ctx.get("requestEntity");
-                if (null == in)
-                    in = ctx.getRequest().getInputStream();
+                InputStream in = ctx.getRequest().getInputStream();
                 requestEntityStr = StreamUtils.copyToString(in, Charset.forName(charset));
             }else {
                 requestEntityStr = ctx.get(REQ_URI).toString();
@@ -141,10 +139,14 @@ public class RbacFilter extends ZuulFilter {
      */
     public Boolean verifySignature(String signature, String privateKey, String sigValue) {
         try{
+            logger.info("privateKey: {}", privateKey);
+            logger.info("sigValue: {}", sigValue);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             String sigValueHash  = bytesToHex(digest.digest(sigValue.getBytes(StandardCharsets.UTF_8)));
             String sigHash = privateKey + "|" + sigValueHash;
             String hash = bytesToHex(digest.digest(sigHash.getBytes(StandardCharsets.UTF_8)));
+            logger.info("hash: {}", hash);
+            logger.info("sig: {}", signature);
             return hash.equals(signature);
         }catch (Exception e) {
             logger.error("Exception while verifying signature: ", e);

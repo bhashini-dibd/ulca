@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -157,9 +158,17 @@ public class AuthFilter extends ZuulFilter {
      */
     public User verifyAuthenticity(RequestContext ctx, String publicKey) {
         User user = userUtils.getUser(publicKey, ctx);
-        if (null != user)
-            ctx.set(USER_INFO_KEY, user);
-        return user;
+        if (null != user){
+            if (!CollectionUtils.isEmpty(user.getRoles())) {
+                ctx.set(USER_INFO_KEY, user);
+                return user;
+            }
+            else{
+                logger.error("The user doesn't contain any roles!");
+                return null;
+            }
+        }
+        else return null;
     }
 
     /**
