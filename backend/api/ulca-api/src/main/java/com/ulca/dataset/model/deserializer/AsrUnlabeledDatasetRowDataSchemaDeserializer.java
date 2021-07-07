@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.ulca.dataset.util.DateUtil;
 
 import io.swagger.model.AsrParamsSchema;
 import io.swagger.model.AsrParamsSchema.AgeEnum;
@@ -94,8 +95,6 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 			asrRowSchema.setAudioFilename(audioFilename);
 
 		}
-
-		
 		
 		// optional params
 		
@@ -140,14 +139,16 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 			
 		}
 
-		
-
 		if (node.has("endTime")) {
 			if (!node.get("endTime").isTextual()) {
 				errorList.add("endTime field should be String");
 			} else {
 				String endTime = node.get("endTime").asText();
-				asrRowSchema.setEndTime(endTime);
+				if(DateUtil.timeInHhMmSsFormat(endTime)) {
+					asrRowSchema.setEndTime(endTime);
+				}else {
+					errorList.add("endTime should be in hh:mm:ss format");
+				}
 			}
 		} 
 
@@ -159,7 +160,11 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 			} else {
 
 				String startTime = node.get("startTime").asText();
-				asrRowSchema.setStartTime(startTime);
+				if(DateUtil.timeInHhMmSsFormat(startTime)) {
+					asrRowSchema.setStartTime(startTime);
+				}else {
+					errorList.add("startTime should be in hh:mm:ss format");
+				}
 
 			}
 		}
@@ -204,9 +209,7 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 				} else {
 					errorList.add("bitsPerSample not among one of specified");
 				}
-
 			}
-
 		}
 
 		if (node.has("gender")) {

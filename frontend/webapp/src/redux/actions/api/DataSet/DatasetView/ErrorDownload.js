@@ -1,7 +1,7 @@
 import API from "../../../api";
 import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
-import { sha256 } from 'js-sha256';
+import md5 from 'md5';
 
 export default class LoginAPI extends API {
   constructor(serviceRequestNumber, timeout = 2000) {
@@ -28,17 +28,23 @@ export default class LoginAPI extends API {
     }
 }
 
+
+
+
   getBody() {
     return {"serviceRequestNumber":this.serviceRequestNumber}
   }
 
+
+
   getHeaders() {
-    let urlSha = sha256(JSON.stringify(this.getBody()))
+    let urlSha = md5(JSON.stringify(this.getBody()))
+    let hash = md5(this.userDetails.privateKey+"|"+urlSha)
     this.headers = {
       headers: {
         "Content-Type": "application/json",
         "key" :this.userDetails.publicKey,
-        "sig"  : sha256(this.userDetails.privateKey+"|"+urlSha)
+        "sig"  : hash
       }
     };
     return this.headers;

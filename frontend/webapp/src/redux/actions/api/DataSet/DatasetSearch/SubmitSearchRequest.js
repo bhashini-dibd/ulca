@@ -1,6 +1,6 @@
 import API from "../../../api";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
-import { sha256 } from 'js-sha256';
+import md5 from 'md5';
 
 export default class SubmitSearchRequest extends API {
     constructor(type = 'parallel-corpus', tgt = [], src = null, domain = [], collectionMethod = [], timeout = 2000) {
@@ -22,6 +22,7 @@ export default class SubmitSearchRequest extends API {
 
     getBody() {
         return {
+            userId: JSON.parse(localStorage.getItem('userDetails')).userID,
             datasetType: this.datasetType,
             criteria: {
                 sourceLanguage: this.src !== null ? [this.src] : this.tgt,
@@ -34,17 +35,17 @@ export default class SubmitSearchRequest extends API {
     }
 
     getHeaders() {
-    let urlSha = sha256(JSON.stringify(this.getBody()))
-    this.headers = {
-      headers: {
-        "Content-Type": "application/json",
-        "key" :this.userDetails.publicKey,
-        "sig"  : sha256(this.userDetails.privateKey+"|"+urlSha),
-        "userId": JSON.parse(localStorage.getItem('userDetails')).userID
+        let urlSha = md5(JSON.stringify(this.getBody()))
+        let hash = md5(this.userDetails.privateKey+"|"+urlSha)
+        this.headers = {
+          headers: {
+            "Content-Type": "application/json",
+            "key" :this.userDetails.publicKey,
+            "sig"  : hash
+          }
+        };
+        return this.headers;
       }
-    };
-    return this.headers;
-  }
 
     getPayload() {
         return this.credentials;

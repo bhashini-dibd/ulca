@@ -1,0 +1,46 @@
+[
+    {
+        "audioFilename": "audios/chunk_01.wav",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "audios/chunk_02.wav",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "audios/chunk_03.wav",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "audios/chunk_04.wav",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    }
+]
