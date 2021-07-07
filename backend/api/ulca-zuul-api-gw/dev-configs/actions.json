@@ -10,7 +10,7 @@
         },
         {
             "id":"8cdac1f3-146c-4046-a00b-50fa3bc4fa63",
-            "uri":"/ulca/apis/v0/dataset/listByUserId?*",
+            "uri":"/ulca/apis/v0/dataset/listByUserId",
             "module":"ULCA-API",
             "active":true,
             "whiteList":false,
@@ -26,7 +26,7 @@
         },
         {
             "id":"9085ca30-ca0c-4b7e-81ba-0ca41568a372",
-            "uri":"/ulca/apis/v0/dataset/corpus/search/listByUserId?*",
+            "uri":"/ulca/apis/v0/dataset/corpus/search/listByUserId",
             "module":"ULCA-API",
             "active":true,
             "whiteList":false,
@@ -34,7 +34,7 @@
         },
         {
             "id":"a854ad66-00f3-4d05-983c-2bcdbab6562c",
-            "uri":"/ulca/apis/v0/dataset/getByServiceRequestNumber?*",
+            "uri":"/ulca/apis/v0/dataset/getByServiceRequestNumber",
             "module":"ULCA-API",
             "active":true,
             "whiteList":false,

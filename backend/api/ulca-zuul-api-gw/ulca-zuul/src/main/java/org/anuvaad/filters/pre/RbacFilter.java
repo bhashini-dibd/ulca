@@ -78,7 +78,7 @@ public class RbacFilter extends ZuulFilter {
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        String uri = (String) ctx.get(REQ_URI);
+        String uri = (String) ctx.get(ACTION_URI);
         List<String> openEndpointsWhitelist = ZuulConfigCache.whiteListEndpoints;
         if ((openEndpointsWhitelist.contains(uri))) {
             ctx.set(RBAC_BOOLEAN_FLAG_NAME, false);
@@ -111,7 +111,13 @@ public class RbacFilter extends ZuulFilter {
                 InputStream in = ctx.getRequest().getInputStream();
                 requestEntityStr = StreamUtils.copyToString(in, Charset.forName(charset));
             }else {
-                requestEntityStr = ctx.get(REQ_URI).toString();
+                if((Boolean)ctx.get(PATH_PARAM_URI))
+                    requestEntityStr = (String) ctx.get(REQ_URI);
+                else{
+                    StringBuilder builder = new StringBuilder();
+                    builder.append(uri);
+                    requestEntityStr = appendQueryParams(ctx, builder);
+                }
             }
             Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), requestEntityStr);
             if(!sigVerify) {
@@ -129,6 +135,22 @@ public class RbacFilter extends ZuulFilter {
             return false;
         }
     }
+
+    /**
+     * Formats the url with queryparam
+     * @param context
+     * @param builder
+     */
+    private String appendQueryParams(RequestContext context, StringBuilder builder) {
+        List<String> queryParams = new LinkedList<>();
+        context.getRequestQueryParams()
+                .forEach((key, values) -> values
+                        .forEach(value -> queryParams.add(key + "=" + value)));
+
+        builder.append("?").append(String.join("&", queryParams));
+        return builder.toString();
+    }
+
 
     /**
      * Verifies signature with private key

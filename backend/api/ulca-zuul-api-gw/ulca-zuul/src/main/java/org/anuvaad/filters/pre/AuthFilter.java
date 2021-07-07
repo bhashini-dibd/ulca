@@ -99,11 +99,11 @@ public class AuthFilter extends ZuulFilter {
             ctx.set(SIG_KEY, sig);
             User user = verifyAuthenticity(ctx, publicKey);
             if (null == user){
-                logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, uri);
+                logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, ctx.get(ACTION_URI));
                 ExceptionUtils.raiseCustomException(HttpStatus.UNAUTHORIZED, UNAUTH_USER_MESSAGE);
             }
             else {
-                logger.info(PROCEED_ROUTING_MESSAGE, uri);
+                logger.info(PROCEED_ROUTING_MESSAGE, ctx.get(ACTION_URI));
                 ctx.addZuulRequestHeader(ZUUL_USER_ID_HEADER_KEY, user.getUserID());
                 List<String> roles = new ArrayList<>(user.getRoles());
                 String roleCodes = String.join(",", roles);
@@ -128,21 +128,15 @@ public class AuthFilter extends ZuulFilter {
                     isValid = true;
                     ctx.set(PATH_PARAM_URI, false);
                     ctx.set(REQ_URI, uri);
+                    ctx.set(ACTION_URI, uri);
                 }
                 else if (action.getUri().endsWith("/*")){
                     String actionURI = action.getUri().substring(0, (action.getUri().length() - 2));
                     if (uri.contains(actionURI)){
                         isValid = true;
                         ctx.set(PATH_PARAM_URI, true);
-                        ctx.set(REQ_URI, action.getUri());
-                    }
-                }
-                else if (action.getUri().endsWith("?*")){
-                    String actionURI = action.getUri().substring(0, (action.getUri().length() - 2));
-                    if (uri.contains(actionURI)){
-                        isValid = true;
-                        ctx.set(QUERY_PARAM_URI, true);
-                        ctx.set(REQ_URI, action.getUri());
+                        ctx.set(REQ_URI, uri);
+                        ctx.set(ACTION_URI, action.getUri());
                     }
                 }
             }
