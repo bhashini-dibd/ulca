@@ -123,6 +123,9 @@ class UserUtils:
                     if (datetime.utcnow() - register_time) < timedelta(hours=verify_mail_expiry):
                         log.exception("{} already did a signup, asking them to revisit their mail for verification".format(email))
                         return post_error("Data Not valid","This email address is already registered with ULCA. Please click on the verification link sent on your email address to complete the verification process.",None)
+                    elif (datetime.utcnow() - register_time) > timedelta(hours=verify_mail_expiry):
+                        #Removing old records if any
+                        collections.delete_many({"email": email})
                     
             log.info("Email is not already taken, validated")
         except Exception as e:
@@ -444,12 +447,15 @@ class UserUtils:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
             #fetching the user details from db
-            result = collections.find({'email': user_email,"isVerified":True}, {
-                'password': 1, '_id': 0,'isActive':1})
+            result = collections.find({'email': user_email}, {
+                'password': 1, '_id': 0,'isActive':1,'isVerified':1})
             if result.count() == 0:
                 log.info("{} is not a verified user".format(user_email), MODULE_CONTEXT)
-                return post_error("Not verified", "User account is not verified", None)
+                return post_error("Not verified", "This email address is not registered with ULCA. Please sign up.", None)
             for value in result:
+                if value["isVerified"]== False:
+                    log.info("{} is not a verified user".format(user_email), MODULE_CONTEXT)
+                    return post_error("Not active", "User account is not verified. Please click on the verification link sent on your email address to complete the verification process.", None)
                 if value["isActive"]== False:
                     log.info("{} is not an active user".format(user_email), MODULE_CONTEXT)
                     return post_error("Not active", "This operation is not allowed for an inactive user", None)

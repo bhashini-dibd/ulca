@@ -163,7 +163,9 @@ class UserAuthenticationModel(object):
                     #checking whether verfication link had expired or not
                     if (datetime.utcnow() - register_time) > timedelta(hours=verify_mail_expiry):
                         log.exception("Verification link expired for {}".format(user_email))
-                        return post_error("Data Not valid","Verification link expired. Please register again.",None)
+                        #Removing previous record from db
+                        collections.delete_many({"email": user_email,"userID":user_id})
+                        return post_error("Data Not valid","Verification link expired. Please sign up again.",None)
 
                     results = collections.update(user, {"$set": {"isVerified": True,"isActive": True,"activatedTime": datetime.utcnow()}})
                     if 'writeError' in list(results.keys()):
