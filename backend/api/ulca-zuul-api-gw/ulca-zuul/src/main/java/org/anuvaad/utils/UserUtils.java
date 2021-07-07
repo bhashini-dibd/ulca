@@ -21,6 +21,8 @@ import static org.anuvaad.constants.RequestContextConstants.CORRELATION_ID_KEY;
 @Service
 public class UserUtils {
 
+    private static final String RETRIEVING_USER_FAILED_MESSAGE = "Retrieving user failed";
+
     @Value("${ulca.ums.host}")
     private String umsHost;
 
@@ -59,7 +61,7 @@ public class UserUtils {
                 return null;
             }
         }catch (Exception e){
-            logger.error("Auth Token invalid!");
+            logger.error(RETRIEVING_USER_FAILED_MESSAGE, e);
             return null;
         }
     }

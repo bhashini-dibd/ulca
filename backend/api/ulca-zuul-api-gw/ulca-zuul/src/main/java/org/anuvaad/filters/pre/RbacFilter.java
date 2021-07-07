@@ -67,7 +67,7 @@ public class RbacFilter extends ZuulFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted, due to authorization failure";
+    private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted -- authorization check failed!";
     private static final String UNAUTHORIZED_USER_MESSAGE = "You are not authorised to access this resource";
     private static final String PROCEED_ROUTING_MESSAGE = "Routing to protected endpoint: {} - authorization check passed!";
     private static final String INVALID_ROLES_MESSAGE = "This user contains an invalid/inactive role!";

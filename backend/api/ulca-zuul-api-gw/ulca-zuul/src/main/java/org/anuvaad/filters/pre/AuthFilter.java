@@ -39,8 +39,7 @@ public class AuthFilter extends ZuulFilter {
     private static final String PK_RETRIEVE_FAILURE_MESSAGE = "Couldn't find public key in the request.";
     private static final String SIG_RETRIEVE_FAILURE_MESSAGE = "Couldn't find signature in the request.";
     private static final String SKIP_AUTH_CHECK = "Auth check skipped - whitelisted endpoint | {}";
-    private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted - No auth token";
-    private static final String RETRIEVING_USER_FAILED_MESSAGE = "Retrieving user failed";
+    private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted - Invalid public key";
     private static final String PROCEED_ROUTING_MESSAGE = "Routing to protected endpoint: {} - authentication check passed!";
     private static final String UNAUTH_USER_MESSAGE = "You don't have access to this resource - authentication check failed.";
     private static final String INVALID_ENDPOINT_MSG = "You're trying to access an invalid/inactive resource";
@@ -157,15 +156,10 @@ public class AuthFilter extends ZuulFilter {
      * @return
      */
     public User verifyAuthenticity(RequestContext ctx, String publicKey) {
-        try {
-            User user = userUtils.getUser(publicKey, ctx);
-            if (null != user)
-                ctx.set(USER_INFO_KEY, user);
-            return user;
-        } catch (Exception ex) {
-            logger.error(RETRIEVING_USER_FAILED_MESSAGE, ex);
-            return null;
-        }
+        User user = userUtils.getUser(publicKey, ctx);
+        if (null != user)
+            ctx.set(USER_INFO_KEY, user);
+        return user;
     }
 
     /**
