@@ -282,8 +282,6 @@ const ContributionList = (props) => {
                                 clearAll={clearAll}
                                 apply={apply}
                         />
-
-
                         }
                 </div>
         );
