@@ -1,7 +1,7 @@
 import API from "../../../api";
 import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
-import { sha256 } from 'js-sha256';
+import md5 from 'md5';
 
 export default class MyCOntribution extends API {
     constructor(id, timeout = 200000) {
@@ -29,11 +29,13 @@ export default class MyCOntribution extends API {
          return url;
     }
     getHeaders() {
+        let res = this.apiEndPoint()
+        let urlSha = md5(res)
+        let hash = md5(this.userDetails.privateKey+"|"+urlSha)
         this.headers = {
             headers: {
                 "key" :this.userDetails.publicKey,
-                "sig"  : sha256(this.userDetails.privateKey +"|"+sha256(this.apiEndPoint())),
-                "Content-Type": "application/json"
+                "sig"  : hash
             }
         };
         return this.headers;
