@@ -38,7 +38,6 @@ export default class MyCOntribution extends API {
         let res = this.apiEndPoint()
         let urlSha = md5(res)
         let hash = md5(this.userDetails.privateKey+"|"+urlSha)
-        debugger
         this.headers = {
             headers: {
                 "key" :this.userDetails.publicKey,

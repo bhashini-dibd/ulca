@@ -21,7 +21,9 @@
    }
  
    getBody() {
-     return this.fileDetails;
+     let bodyData = this.fileDetails
+     bodyData.userId =  JSON.parse(localStorage.getItem('userDetails')).userID
+     return bodyData;
    }
  
 
@@ -32,8 +34,7 @@
       headers: {
         "Content-Type": "application/json",
         "key" :this.userDetails.publicKey,
-        "sig"  : hash,
-        "userId": JSON.parse(localStorage.getItem('userDetails')).userID
+        "sig"  : hash
       }
     };
     return this.headers;

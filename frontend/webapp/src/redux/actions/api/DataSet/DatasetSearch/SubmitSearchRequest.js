@@ -22,6 +22,7 @@ export default class SubmitSearchRequest extends API {
 
     getBody() {
         return {
+            userId: JSON.parse(localStorage.getItem('userDetails')).userID,
             datasetType: this.datasetType,
             criteria: {
                 sourceLanguage: this.src !== null ? [this.src] : this.tgt,
