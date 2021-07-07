@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.ulca.dataset.util.DateUtil;
 
 import io.swagger.model.AsrParamsSchema;
 import io.swagger.model.AsrParamsSchema.AgeEnum;
@@ -155,7 +156,12 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				errorList.add("endTime field should be String");
 			} else {
 				String endTime = node.get("endTime").asText();
-				asrRowSchema.setEndTime(endTime);
+				if(DateUtil.timeInHhMmSsFormat(endTime)) {
+					asrRowSchema.setEndTime(endTime);
+				}else {
+					errorList.add("endTime should be in hh:mm:ss format");
+				}
+				
 			}
 		} 
 
@@ -165,10 +171,12 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 			if (!node.get("startTime").isTextual()) {
 				errorList.add("startTime field should be String");
 			} else {
-
 				String startTime = node.get("startTime").asText();
-				asrRowSchema.setStartTime(startTime);
-
+				if(DateUtil.timeInHhMmSsFormat(startTime)) {
+					asrRowSchema.setStartTime(startTime);
+				}else {
+					errorList.add("startTime should be in hh:mm:ss format");
+				}
 			}
 		}
 
