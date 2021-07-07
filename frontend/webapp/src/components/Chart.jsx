@@ -183,7 +183,7 @@ const ChartRender = (props) => {
 				setTitle("")
 		}
 	}
-
+	debugger
 	return (
 			<div className={classes.container}>
 				<Paper elevation={0} className={classes.paper}>	
