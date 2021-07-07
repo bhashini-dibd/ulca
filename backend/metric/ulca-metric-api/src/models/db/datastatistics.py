@@ -60,7 +60,7 @@ class AggregateDatasetModel(object):
                 qry_for_lang_pair  = query+sub_query
 
                 result_parsed = self.query_runner(qry_for_lang_pair)
-                chart_data =  self.result_formater_for_lang_pairs(result_parsed,dtype)
+                chart_data =  self.result_formater_for_lang_pairs(result_parsed,dtype,value)
                 return chart_data
             #aggregate query for groupby field
             if grpby_params != None and len(match_params) ==2:
@@ -139,13 +139,13 @@ class AggregateDatasetModel(object):
             log.exception("Exception on result parsing : {}".format(str(e)))
             return []
     
-    def result_formater_for_lang_pairs(self,result_parsed,dtype):
+    def result_formater_for_lang_pairs(self,result_parsed,dtype,lang):
         try:
             aggs ={}
             for item in result_parsed:  
-                if item["targetLanguage"] == "en":
+                if item["targetLanguage"] == lang:
                     check = "sourceLanguage" 
-                if item["sourceLanguage"] == "en" :
+                if item["sourceLanguage"] == lang :
                     check = "targetLanguage"
                 if dtype in ["asr-corpus","ocr-corpus","monolingual-corpus"]:
                     check = "sourceLanguage"
