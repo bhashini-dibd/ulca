@@ -1,7 +1,7 @@
 import API from "../../../api";
 import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
-import { sha256 } from 'js-sha256';
+import md5 from 'md5';
 export default class MyCOntribution extends API {
     constructor(file_name, user_id, timeout = 200000) {
         super("GET", timeout, false);
@@ -35,12 +35,14 @@ export default class MyCOntribution extends API {
     }
 
     getHeaders() {
-        let urlSha = sha256(this.endpoint)
-        
+        let res = this.apiEndPoint()
+        let urlSha = md5(res)
+        let hash = md5(this.userDetails.privateKey+"|"+urlSha)
+        debugger
         this.headers = {
             headers: {
                 "key" :this.userDetails.publicKey,
-                "sig"  : sha256(this.userDetails.publicKey+"|"+urlSha)
+                "sig"  : hash
             }
         };
         return this.headers;
