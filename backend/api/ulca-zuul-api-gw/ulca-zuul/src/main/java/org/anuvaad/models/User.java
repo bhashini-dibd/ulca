@@ -145,5 +145,22 @@ public class User {
 
     public User() {
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID='" + userID + '\'' +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", phoneNo='" + phoneNo + '\'' +
+                ", isVerified=" + isVerified +
+                ", isActive=" + isActive +
+                ", registeredTime='" + registeredTime + '\'' +
+                ", activatedTime='" + activatedTime + '\'' +
+                ", roles=" + roles +
+                ", privateKey='" + privateKey + '\'' +
+                '}';
+    }
 }
 

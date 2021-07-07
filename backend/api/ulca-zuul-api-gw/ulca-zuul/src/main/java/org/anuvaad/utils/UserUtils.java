@@ -54,7 +54,6 @@ public class UserUtils {
         final HttpEntity<Object> httpEntity = new HttpEntity<>(req_body, headers);
         try{
             UMSResponse userServiceRes = restTemplate.postForObject(authURL, httpEntity, UMSResponse.class);
-            logger.error("userServiceRes: " + userServiceRes);
             if (null != userServiceRes){
                 if(null != userServiceRes.getData()){
                     return userServiceRes.getData();

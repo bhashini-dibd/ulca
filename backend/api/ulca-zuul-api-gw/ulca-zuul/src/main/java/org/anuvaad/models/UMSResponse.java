@@ -24,6 +24,15 @@ public class UMSResponse {
     public UMSResponse() {
     }
 
+    @Override
+    public String toString() {
+        return "UMSResponse{" +
+                "count=" + count +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
     public Integer getCount() {
         return count;
     }

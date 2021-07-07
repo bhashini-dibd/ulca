@@ -116,8 +116,10 @@ public class RbacFilter extends ZuulFilter {
                 requestEntityStr = ctx.get(REQ_URI).toString();
             }
             Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), requestEntityStr);
-            if(!sigVerify)
+            if(!sigVerify) {
+                logger.info("The signature doesn't match with the public key!");
                 return false;
+            }
             List<String> roleCodes = user.getRoles();
             if(roleCodes.contains(superUserCode)) return true;
             Boolean isRolesCorrect = verifyRoles(user.getRoles());
@@ -141,7 +143,7 @@ public class RbacFilter extends ZuulFilter {
         try{
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             String sigValueHash  = bytesToHex(digest.digest(sigValue.getBytes(StandardCharsets.UTF_8)));
-            String sigHash = sigValueHash + "|" + privateKey;
+            String sigHash = privateKey + "|" + sigValueHash;
             String hash = bytesToHex(digest.digest(sigHash.getBytes(StandardCharsets.UTF_8)));
             return hash.equals(signature);
         }catch (Exception e) {
