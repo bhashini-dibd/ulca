@@ -1,0 +1,196 @@
+* img {
+  -webkit-transition: all 300ms ease-in-out;
+  -moz-transition: all 300ms ease-in-out;
+  transition: all 300ms ease-in-out;
+}
+html, body {
+    max-width: 100%;
+    height: 100%;
+    font-size: 16px;
+
+}
+body {
+    font-family: 'Lato', sans-serif;
+    color: #0C0F0F;
+    background: #ffffff;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+}
+
+:focus,
+button:focus,
+.btn:focus,
+.form-control:focus {
+    outline: none;
+    box-shadow: none;
+}
+ul, li {
+    list-style: none;
+    padding-inline-start: 0;
+    padding: 0;
+    margin: 0;
+}
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid #4E6079;
+}
+a {
+    color: #ffffff;
+    /*     font-size: .875rem; */
+}
+a:hover { 
+   text-decoration: underline;
+   color: #ffffff;
+}
+img {
+  max-width: 100%;
+  height: auto;
+
+}
+/* css start here */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Poppins', sans-serif;
+}
+.primary-color {
+    background-color: #0F2749;
+}
+.yellowColor {
+  color: #FEBF2C;
+}
+.lighGrey {
+  color: #707E92;
+}
+
+header {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 1rem .75rem;
+}
+.mainBanner {
+    background-color: #DEECFF;
+    border-top: 1px solid #C8D5E6;
+    border-bottom: 1px solid #C8D5E6;
+    padding: 2rem 0;
+    position: relative;
+    overflow: hidden;
+}
+.mainBanner .roundShape {
+    width: 45%;
+    height: 160px;
+    border-radius: 0 8rem 8rem 0;
+    background-color: #2A61AE;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+  .shape1, .shape2{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.shape2 { left: 0; top:0;}
+
+.bannerImg img {
+    max-width: 120%;
+}
+
+.section {
+  padding: 50px 0;
+  position: relative;
+}
+
+.line {
+    width: 24px;
+    height: 4px;
+    background-color: #1DB5D8;
+    border-radius: 4px;
+    margin: 0 auto;
+}
+
+.ulcaInfo li {
+  border: 1px solid #E6E6E6;
+  padding: 1rem 1rem 1rem 3rem;
+  margin-top:-1px;
+}
+.ulcaInfo li::before {
+  content: '';
+  background: url('../img/fwd-arrow.svg') no-repeat 0 0;
+  width: 24px;
+  height: 24px;
+
+  position: absolute;
+  left: 2rem;
+}
+footer .footerBg {
+    
+    display: flex;
+    align-items: center;
+    padding: 30px 50px;
+    color: #16337B;
+}
+footer .bg1 {
+    background-color: #DFEAFB;
+}
+footer .bg2 {
+    background-color: #C6D9F4;
+}
+footer .bg3 {
+    background-color: #B3CAED;
+}
+footer .footerBg a {
+  color: #16337B;
+}
+footer .footerBg img {
+  margin-right: 1rem;
+}
+footer ul.link li {
+    padding: .875rem;
+}
+footer ul.link li:first-child {
+  padding-left: 0;
+}
+
+@media (max-width: 1199.98px) { 
+  .mainBanner .roundShape {
+      display: none;
+  }
+  .bannerImg img {
+    max-width: 120%;
+    margin-left: -15%;
+}
+footer .footerBg {
+    padding: 1rem;
+}
+footer .footerBg img {
+    margin-right: .5rem;
+    height: 48px;
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="92.5" height="36.5" viewBox="0 0 92.5 36.5">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="92.5" height="36.5" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Repeat_Grid_124" data-name="Repeat Grid 124" clip-path="url(#clip-path)">
+    <g transform="translate(-1317.5 -110.5)">
+      <g id="Light_Button_2._Outlined_B._Text_Icon_Enabled" data-name="Light 🌕/ Button/2. Outlined/B. Text + Icon/Enabled" transform="translate(1318 111)">
+        <g id="Container">
+          <g id="_Color" data-name="↳ 🎨 Color" fill="#fff" stroke="rgba(0,0,0,0.12)" stroke-miterlimit="10" stroke-width="1">
+            <rect width="92" height="36" rx="4" stroke="none"/>
+            <rect x="0.5" y="0.5" width="91" height="35" rx="3.5" fill="none"/>
+          </g>
+          <g id="_States" data-name="↳ 💡States">
+            <rect id="States_Light_Surface_containers_Primary_Content" data-name="States/Light 🌕/Surface containers/Primary Content" fill="rgba(98,0,238,0)" stroke="rgba(0,0,0,0.12)" stroke-width="1"/>
+          </g>
+        </g>
+        <text id="_Label" data-name="↳ ✏️ Label" transform="translate(37 23)" fill="#0c0f0f" font-size="14" font-family="Lato-Regular, Lato" letter-spacing="0.089em"><tspan x="0" y="0">Close</tspan></text>
+        <g id="icon_content_add_24px" data-name="icon/content/add_24px" transform="translate(8 6)">
+          <rect id="Boundary" width="24" height="24" fill="none"/>
+          <path id="_Color-2" data-name=" ↳Color" d="M14,1.41,12.59,0,7,5.59,1.41,0,0,1.41,5.59,7,0,12.59,1.41,14,7,8.41,12.59,14,14,12.59,8.41,7Z" transform="translate(5 5)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
