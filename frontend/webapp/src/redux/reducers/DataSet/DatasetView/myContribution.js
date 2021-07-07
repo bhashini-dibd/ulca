@@ -1,7 +1,11 @@
 import C from '../../../actions/constants';
-
+import getDatasetName from '../../../../utils/getDataset';
 const initialState = {
-    responseData: []
+    responseData: [],
+    filteredData:[],
+    refreshStatus:false,
+    filter : {status:[],datasetType:[]},
+    selectedFilter : {status:[],datasetType:[]},
 }
 
 const dateConversion = (value) =>{
@@ -11,8 +15,49 @@ const dateConversion = (value) =>{
     return result.toUpperCase();
 }
 
+const getFilterValue = (payload, data) =>{
+   
+    let {filterValues}= payload
+    let statusFilter = []
+    let filterResult = []
+    if(filterValues.hasOwnProperty("status") && filterValues.status.length>0){
+        statusFilter = data.responseData.filter(value =>{ 
+            if(filterValues.status.includes(value.status)){
+                return value
+            }
+    })
+    
+}else{
+    statusFilter = data.responseData
+}
+if(filterValues.hasOwnProperty("datasetType") && filterValues.datasetType.length>0){
+    filterResult = statusFilter.filter(value=>{
+        if(filterValues.datasetType.includes(value.datasetType)){
+            return value
+        }
+    })
+}
+else{
+    filterResult = statusFilter
+}
+data.filteredData = filterResult;
+data.selectedFilter = filterValues;
+
+return data;
+    
+}
+
+const getClearFilter = (data) =>{
+    data.filteredData = data.responseData;
+    data.selectedFilter = {status:[],datasetType:[]}
+    return data;
+}
+
 const getContributionList = (payload) => {
     let responseData = [];
+    let statusFilter = [];
+    let datatypeFilter = [];
+    let filter = {status:[],datasetType:[]}
     let refreshStatus = false;
     payload.forEach(element => {
         responseData.push(
@@ -20,15 +65,24 @@ const getContributionList = (payload) => {
                      submitRefNumber      : element.serviceRequestNumber,
                      datasetName          : element.datasetName,
                      submittedOn          : dateConversion(element.submittedOn),
-                     status               : element.status === "inprogress" ? "In-Progress" : element.status === "notstarted" ? "Not Started" : element.status === "successful"? "Completed" : (element.status.toLowerCase())
+                     datasetType :          getDatasetName(element.datasetType),
+                     status               : element.status
             }
+            
         )
-        if(element.status === "INPROGRESS" || "NOTSTARTED"){
+        !statusFilter.includes(element.status) && statusFilter.push(element.status)
+        !datatypeFilter.includes(element.datasetName) && datatypeFilter.push(getDatasetName(element.datasetType))
+        if(element.status === "In-Progress" || element.status === "Pending"){
             refreshStatus = true
         }
     }); 
+
+    filter.status = [...(new Set(statusFilter))];
+    filter.datasetType = [...(new Set(datatypeFilter))];
+
+
     responseData = responseData.reverse()
-    return {responseData , refreshStatus};
+    return {responseData ,filteredData:responseData, refreshStatus, filter, selectedFilter:{status:[],datasetType:[]}};
 }
 
 const reducer = (state = initialState, action) => {
@@ -37,10 +91,14 @@ const reducer = (state = initialState, action) => {
 
         case C.GET_CONTRIBUTION_LIST:
             return getContributionList(action.payload);
+            case C.CONTRIBUTION_TABLE:
+                return getFilterValue(action.payload, state);
         case C.CLEAR_CONTRIBUTION_LIST:
             return {
                 ...initialState
             }
+            case C.CLEAR_FILTER:
+                return getClearFilter(state);
         default:
             return {
                 ...state

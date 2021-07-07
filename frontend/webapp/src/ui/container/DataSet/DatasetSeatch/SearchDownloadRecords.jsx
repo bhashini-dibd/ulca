@@ -3,10 +3,8 @@ import {
     Typography,
     Button,
     TextField,
-    MenuItem,
     Checkbox,
-    FormControlLabel,
-    Divider
+    FormControlLabel
 } from '@material-ui/core';
 import SearchResult from "./SearchResult";
 import { withStyles } from '@material-ui/core/styles';
@@ -14,11 +12,9 @@ import DatasetStyle from '../../../styles/Dataset';
 import Snackbar from '../../../components/common/Snackbar';
 import BreadCrum from '../../../components/common/Breadcrum';
 import UrlConfig from '../../../../configs/internalurlmapping';
-import SearchAndDownload from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
-import {PageChange} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
+import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import C from "../../../../redux/actions/constants";
 import { useDispatch, useSelector } from "react-redux";
-import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import { useState, useEffect, useRef } from 'react';
 import DownloadDatasetRecords from "./DownloadDatasetRecords";
 import RequestNumberCreation from "./RequestNumberCreation";
@@ -34,7 +30,7 @@ const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
     const urlMySearch = UrlConfig.mySearches;
-    const dispatch                  = useDispatch();
+    const dispatch = useDispatch();
     const param = useParams();
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
@@ -85,7 +81,6 @@ const SearchAndDownloadRecords = (props) => {
             let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
             let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
             let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
-           console.log(domain, collectionMethod, data[0])
             setFilterBy({
                 ...filterBy, domain, collectionMethod
             })
@@ -163,8 +158,8 @@ const SearchAndDownloadRecords = (props) => {
     const getLabel = () => {
         if (datasetType['parallel-corpus'])
             return "Target Language *"
-        else if (datasetType['ocr-corpus'])
-            return "Script *"
+        // else if (datasetType['ocr-corpus'])
+        //     return "Script *"
         else
             return "Language *"
     }
@@ -172,8 +167,8 @@ const SearchAndDownloadRecords = (props) => {
     const getTitle = () => {
         if (datasetType['parallel-corpus'])
             return "Select Language Pair"
-        else if (datasetType['ocr-corpus'])
-            return "Select Script"
+        // else if (datasetType['ocr-corpus'])
+        //     return "Select Script"
         else
             return "Select Language"
     }
@@ -228,8 +223,6 @@ const SearchAndDownloadRecords = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const getValueForLabel = (label) => {
-        console.log(label, 'hiii')
-        console.log(Language.filter(val => val.label === label)[0])
         return Language.filter(val => val.label === label)[0]
 
     }
@@ -389,12 +382,12 @@ const SearchAndDownloadRecords = (props) => {
                         <Grid item xs={6}>
                             <Button size="large" fullWidth variant="outlined" onClick={clearfilter}>
                                 Clear
-                                    </Button>
+                            </Button>
                         </Grid>
                         <Grid item xs={6}>
                             <Button fullWidth size="large" variant="contained" color="primary" onClick={handleSubmitBtn}>
                                 Submit
-                                    </Button>
+                            </Button>
                         </Grid>
                     </Grid>
                 </Grid>
@@ -405,7 +398,7 @@ const SearchAndDownloadRecords = (props) => {
 
     return (
         <div>
-            <Grid container spacing={3} className={classes.searchGrid}>
+            <Grid container spacing={3}>
                 <Grid className={classes.leftSection} item xs={12} sm={5} md={4} lg={4} xl={4}>
                     <Grid container spacing={2}>
                         <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -422,7 +415,7 @@ const SearchAndDownloadRecords = (props) => {
                             <div className={classes.subHeader}>
                                 {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
                             </div>
-                            <div className={classes.subHeader}>
+                            <div className={classes.autoComplete}>
                                 <MultiAutocomplete
                                     id="language-target"
                                     options={getTargetLang()}

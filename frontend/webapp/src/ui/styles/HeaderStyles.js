@@ -10,6 +10,9 @@ const HeaderStyles = (theme) => ({
     padding:"0",
     boxSizing :"border-box"
   },
+  appBar:{
+   boxSizing:"border-box"
+  },
   title: {
     color: 'white',
     marginLeft: "-6px",
@@ -152,6 +155,9 @@ const HeaderStyles = (theme) => ({
   btnStyle: {
     padding: '0px',
     justifyContent: 'left',
+    fontSize: "1.125rem",
+ // fontFamily: '"Poppins","lato" ,sans-serif',
+  fontWeight: "500 !important",
     "&:hover": {
 
       backgroundColor: 'white',

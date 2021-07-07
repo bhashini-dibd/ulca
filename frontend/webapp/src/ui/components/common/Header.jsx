@@ -13,7 +13,7 @@ import authenticate from '../../../configs/authenticate';
 import Theme from "../../theme/theme-default";
 import MenuItems from "../../components/common/MenuItem";
 import {menuItems} from '../../../configs/menuItems';
-
+import Dialog from "./Dialog";
 const StyledMenu = withStyles({
  
 })((props) => (
@@ -35,6 +35,8 @@ const StyledMenu = withStyles({
 const Header = (props) => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null)
+  const [urlLink, setUrlLink] = useState(null)
+  const [open, setOpen] = useState(false)
   const [logout, setAnchorElLogout] = useState(null)
   const history = useHistory();
  
@@ -52,11 +54,25 @@ const Header = (props) => {
     setAnchorElLogout(e.currentTarget)
   }
 
-  const handleMenuItemClick = (url) => {
-    debugger
-    history.push(`${process.env.PUBLIC_URL}${url}`)
+  const handleLogOut = (url) =>{
+    history.push(`${process.env.PUBLIC_URL}${url ? url: urlLink }`)
     handleClose();
   }
+
+  const handleMenuItemClick = (url) => {
+    if(authenticate()){
+      history.push(`${process.env.PUBLIC_URL}${url}`)
+    handleClose();
+    }
+    else{
+      handleClose();
+      setUrlLink(url)
+      setOpen(true)
+    }
+    
+  }
+
+  
 
 
   return (
@@ -65,7 +81,7 @@ const Header = (props) => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
 
-              <Typography variant="h6" onClick={() => handleMenuItemClick('/dashboard')}>
+              <Typography variant="h5" onClick={() => history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
                 ULCA
               </Typography>
 
@@ -96,7 +112,9 @@ const Header = (props) => {
                       onClick={(e) => handleOpenMenu(e)}
                       variant="text"
                     >
+                      <Typography variant={"body1"}>
                       Dataset
+                      </Typography>
                     <DownIcon />
                     </Button>
                   </div>
@@ -182,7 +200,7 @@ const Header = (props) => {
                      className={classes.styledMenu}
                       onClick={() => {
                         localStorage.removeItem('userInfo')
-                        handleMenuItemClick('/user/login')}}
+                        handleLogOut('/user/login')}}
                     >
                       Log out
                     </MenuItem>
@@ -229,6 +247,16 @@ const Header = (props) => {
           </div>
         </Toolbar>
       </AppBar>
+
+      {open && <Dialog
+                                title         =       {"Not Signed In"}
+                                open            = {open}
+                                handleClose     ={()=> setOpen(false)}
+                                 message          =       {"Please sign in to continue."}
+                                handleSubmit    ={handleLogOut}
+                                actionButton    = {"Close"}
+                                actionButton2   = {"Sign In"}
+                        /> }
     </MuiThemeProvider>
   )
 }

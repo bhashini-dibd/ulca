@@ -108,7 +108,7 @@ public class KafkaFileDownloadConsumer {
 				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
 				
 				log.info("file unzip complete");
-				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.successful);
+				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.completed);
 				
 
 			} catch (IOException e) {
@@ -118,12 +118,11 @@ public class KafkaFileDownloadConsumer {
 				error.setCause(e.getMessage());
 				error.setMessage("file download failed");
 				error.setCode("1000_FILE_DOWNLOAD_FAILURE");
-				processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
+				processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 				
 				//send error event for download failure
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
-					
 				e.printStackTrace();
 				
 				return;

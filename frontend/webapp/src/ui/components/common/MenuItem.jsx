@@ -23,8 +23,8 @@ const StyledMenu = withStyles({
     />
 ));
 
-const MenuItems = (props ) => {
-    const {classes} = props
+const MenuItems = (props) => {
+    const { classes } = props
     return <>
         <StyledMenu id={props.id}
             anchorEl={props.anchorEl}

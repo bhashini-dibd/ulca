@@ -31,3 +31,21 @@ export  function ClearTableValue( constant) {
     }
 }
 
+export  function FilterTable( filterValues,constant) {
+    debugger
+    return {     
+        type: constant,
+        payload: {filterValues}
+    }
+}
+
+export  function clearFilter( filterValues,constant) {
+    debugger
+    return {     
+        type: constant,
+        payload: {filterValues}
+    }
+}
+
+
+

@@ -1,4 +1,4 @@
-import { withStyles, Typography, MuiThemeProvider, createMuiTheme, Button } from "@material-ui/core";
+import { withStyles, Button } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect,useState} from "react";
 import DataSet from "../../../styles/Dataset";
@@ -23,8 +23,6 @@ const MySearches = (props) => {
         useEffect(() => {
                 MySearchListApi()   
         }, []);
-
-        console.log(PageInfo)
         const  MySearchListApi  = () =>{
                 
                 const userObj         = new MySearchReport()
@@ -113,11 +111,6 @@ const MySearches = (props) => {
                         pagination      :       { rowsPerPage     : "Rows per page"},
                         options         :       { sortDirection   : "desc" },
                 },
-                filter: {
-                        all: "All",
-                        title: "Status",
-                        reset:"Clear All"
-                 },
                 customToolbar: fetchHeaderButton,
                 displaySelectToolbar    :       false,
                 fixedHeader             :       false,
@@ -126,7 +119,7 @@ const MySearches = (props) => {
                 print                   :       false,
                 rowsPerPageOptions      :       [10,25,50,100],
                 rowsPerPage:PageInfo.count,
-               
+                filter                  :       true,
                 page: PageInfo.page,
                 viewColumns     : false,
                 selectableRows          :       "none",

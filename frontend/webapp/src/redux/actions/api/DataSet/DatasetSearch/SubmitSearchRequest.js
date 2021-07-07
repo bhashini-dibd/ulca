@@ -1,5 +1,6 @@
 import API from "../../../api";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
+import { sha256 } from 'js-sha256';
 
 export default class SubmitSearchRequest extends API {
     constructor(type = 'parallel-corpus', tgt = [], src = null, domain = [], collectionMethod = [], timeout = 2000) {
@@ -10,6 +11,7 @@ export default class SubmitSearchRequest extends API {
         this.collectionMethod = collectionMethod
         this.datasetType = type
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.submitSearchReq}`;
+        this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
       
     }
 
@@ -24,22 +26,25 @@ export default class SubmitSearchRequest extends API {
             criteria: {
                 sourceLanguage: this.src !== null ? [this.src] : this.tgt,
                 targetLanguage: this.src === null ? null : this.tgt,
-                domain: this.domain.length>0 ? this.domain : null,
-                collectionMethod: this.collectionMethod.length>0 ? this.collectionMethod : null
+                domain: this.domain && this.domain.length>0 ? this.domain : null,
+                collectionMethod: this.collectionMethod && this.collectionMethod.length>0 ? this.collectionMethod : null
             },
             // groupby: []
         }
     }
 
     getHeaders() {
-        this.headers = {
-            headers: {
-                "Content-Type": "application/json",
-                "userId": JSON.parse(localStorage.getItem('userDetails')).userID
-            }
-        };
-        return this.headers;
-    }
+    let urlSha = sha256(JSON.stringify(this.getBody()))
+    this.headers = {
+      headers: {
+        "Content-Type": "application/json",
+        "key" :this.userDetails.publicKey,
+        "sig"  : sha256(this.userDetails.privateKey+"|"+urlSha),
+        "userId": JSON.parse(localStorage.getItem('userDetails')).userID
+      }
+    };
+    return this.headers;
+  }
 
     getPayload() {
         return this.credentials;

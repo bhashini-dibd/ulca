@@ -1,18 +1,17 @@
 package com.ulca.dataset.service;
 
+import java.util.Date;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
-import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.TaskTracker;
-
-import java.util.Date;
-import java.util.List;
+import com.ulca.dataset.model.TaskTracker.ToolEnum;
 
 @Service
 public class ProcessTaskTrackerService {
@@ -35,7 +34,20 @@ public class ProcessTaskTrackerService {
 	public void updateProcessTracker(String serviceRequestNumber, StatusEnum status) {
 
 		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
-		processTracker.setStatus(status);
+		processTracker.setStatus(status.toString());
+		
+		if(!(processTracker.getStatus().equals(ProcessTracker.StatusEnum.completed.toString())
+				|| processTracker.getStatus().equals(ProcessTracker.StatusEnum.failed.toString())
+				)) {
+			processTracker.setStatus(status.toString());
+			
+			if(status == StatusEnum.completed || status == StatusEnum.failed) {
+				processTracker.setEndTime(new Date().toString());
+			}
+			
+		}
+		
+		
 		processTrackerDao.save(processTracker);
 
 	}
@@ -48,7 +60,7 @@ public class ProcessTaskTrackerService {
 		
 		taskTracker.serviceRequestNumber(serviceRequestNumber);
 		taskTracker.setTool(tool);
-		taskTracker.setStatus(status);
+		taskTracker.setStatus(status.toString());
 		taskTracker.setStartTime(new Date().toString());
 		
 		taskTrackerDao.save(taskTracker);
@@ -59,8 +71,10 @@ public class ProcessTaskTrackerService {
 		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool);
 		if(!taskTrackerList.isEmpty()) {
 			TaskTracker taskTracker = taskTrackerList.get(0);
-			taskTracker.setEndTime(new Date().toString());
-			taskTracker.setStatus(status);
+			if(status == TaskTracker.StatusEnum.completed || status == TaskTracker.StatusEnum.failed) {
+				taskTracker.setEndTime(new Date().toString());
+			}
+			taskTracker.setStatus(status.toString());
 			taskTrackerDao.save(taskTracker);
 			
 		}
@@ -71,11 +85,19 @@ public void updateTaskTrackerWithDetails(String serviceRequestNumber, TaskTracke
 		
 		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool);
 		if(!taskTrackerList.isEmpty()) {
+			
 			TaskTracker taskTracker = taskTrackerList.get(0);
 			taskTracker.setLastModified(new Date().toString());
-			taskTracker.setStatus(status);
 			taskTracker.setDetails(details);
+			
+			if(!(taskTracker.getStatus().equals(TaskTracker.StatusEnum.completed.toString())
+					|| taskTracker.getStatus().equals(TaskTracker.StatusEnum.failed.toString())
+					)) {
+				taskTracker.setStatus(status.toString());
+				
+			}
 			taskTrackerDao.save(taskTracker);
+			
 			
 		}else {
 			TaskTracker taskTracker = new TaskTracker();
@@ -83,7 +105,7 @@ public void updateTaskTrackerWithDetails(String serviceRequestNumber, TaskTracke
 			taskTracker.setTool(tool);
 			taskTracker.setStartTime(new Date().toString());
 			taskTracker.setLastModified(new Date().toString());
-			taskTracker.setStatus(status);
+			taskTracker.setStatus(status.toString());
 			taskTracker.setDetails(details);
 			taskTrackerDao.save(taskTracker);
 		}
@@ -95,14 +117,20 @@ public void updateTaskTrackerWithDetailsAndEndTime(String serviceRequestNumber, 
 	if(!taskTrackerList.isEmpty()) {
 		TaskTracker taskTracker = taskTrackerList.get(0);
 		if(taskTracker.getEndTime() == null || taskTracker.getEndTime().isEmpty()) {
+			
 			taskTracker.setEndTime(new Date().toString());
 			taskTracker.setLastModified(new Date().toString());
-			taskTracker.setStatus(status);
+			
+			if(!(taskTracker.getStatus().equals(TaskTracker.StatusEnum.completed.toString())
+					|| taskTracker.getStatus().equals(TaskTracker.StatusEnum.failed.toString())
+					)) {
+				taskTracker.setStatus(status.toString());
+				
+			}
+			
 			taskTracker.setDetails(details);
 			taskTrackerDao.save(taskTracker);
 		}
-		
-		
 		
 	}else {
 		TaskTracker taskTracker = new TaskTracker();
@@ -111,7 +139,7 @@ public void updateTaskTrackerWithDetailsAndEndTime(String serviceRequestNumber, 
 		taskTracker.setStartTime(new Date().toString());
 		taskTracker.setEndTime(new Date().toString());
 		taskTracker.setLastModified(new Date().toString());
-		taskTracker.setStatus(status);
+		taskTracker.setStatus(status.toString());
 		taskTracker.setDetails(details);
 		taskTrackerDao.save(taskTracker);
 	}
@@ -122,9 +150,31 @@ public void updateTaskTrackerWithError(String serviceRequestNumber, TaskTracker.
 	List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool);
 	if(!taskTrackerList.isEmpty()) {
 		TaskTracker taskTracker = taskTrackerList.get(0);
+		taskTracker.setLastModified(new Date().toString());
+		taskTracker.setStatus(status.toString());
+		taskTracker.setError(error);
+		taskTrackerDao.save(taskTracker);
+		
+	}else {
+		TaskTracker taskTracker = new TaskTracker();
+		taskTracker.setServiceRequestNumber(serviceRequestNumber);
+		taskTracker.setTool(tool);
+		taskTracker.setStartTime(new Date().toString());
+		taskTracker.setLastModified(new Date().toString());
+		taskTracker.setStatus(status.toString());
+		taskTracker.setError(error);
+		taskTrackerDao.save(taskTracker);
+	}
+}
+
+public void updateTaskTrackerWithErrorAndEndTime(String serviceRequestNumber, TaskTracker.ToolEnum tool, com.ulca.dataset.model.TaskTracker.StatusEnum status, com.ulca.dataset.model.Error error) {
+	
+	List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool);
+	if(!taskTrackerList.isEmpty()) {
+		TaskTracker taskTracker = taskTrackerList.get(0);
 		taskTracker.setEndTime(new Date().toString());
 		taskTracker.setLastModified(new Date().toString());
-		taskTracker.setStatus(status);
+		taskTracker.setStatus(status.toString());
 		taskTracker.setError(error);
 		taskTrackerDao.save(taskTracker);
 		
@@ -135,7 +185,7 @@ public void updateTaskTrackerWithError(String serviceRequestNumber, TaskTracker.
 		taskTracker.setStartTime(new Date().toString());
 		taskTracker.setEndTime(new Date().toString());
 		taskTracker.setLastModified(new Date().toString());
-		taskTracker.setStatus(status);
+		taskTracker.setStatus(status.toString());
 		taskTracker.setError(error);
 		taskTrackerDao.save(taskTracker);
 	}

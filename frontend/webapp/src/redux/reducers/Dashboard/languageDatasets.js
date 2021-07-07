@@ -43,7 +43,6 @@ import C from '../../actions/constants';
 
     const handleSum = (data) =>{
       const count = data.reduce((acc,rem)=>(acc + Number(rem.value)),0)
-      debugger
       return {data , count}
 
     }

@@ -85,13 +85,13 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		
 		if (fileError != null) {
 			
-			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+			log.info("params.json or data.json file missing :: serviceRequestNumber : "+serviceRequestNumber ); 
+			processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, fileError);
 			
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			//send error event for download failure
 			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
-			
 			return;
 		}
 		
@@ -102,13 +102,13 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 		} catch (IOException | JSONException | NullPointerException e) {
 
-			log.info("Exception while validating params :: " + e.getMessage());
+			log.info("Exception while validating params :: "+serviceRequestNumber + " error : " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("params validation failed");
 			error.setCode("1000_PARAMS_VALIDATION_FAILED");
 
-			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
+			processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
@@ -116,8 +116,6 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 			
-
-			e.printStackTrace();
 			return;
 		}
 		try {
@@ -127,7 +125,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			
 		} catch (IOException | JSONException | NoSuchAlgorithmException | NullPointerException   e) {
 			
-			log.info("Exception while ingesting the dataset :: " + e.getMessage());
+			log.info("Exception while ingesting the dataset :: serviceRequestNumber : "+serviceRequestNumber + " error : " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("INGEST FAILED");
@@ -141,6 +139,8 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
 			
+			//update redis when ingest failed
+			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
 			return;
 			
 		}
@@ -299,7 +299,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		inputStream.close();
 
 		
-		taskTrackerRedisDao.setCountAndIngestComplete(serviceRequestNumber, numberOfRecords);
+		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 		
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
 		

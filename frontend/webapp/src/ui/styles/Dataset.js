@@ -128,25 +128,27 @@ const DataSet = (theme) => ({
         margin: '1% 2.5% 0 2.5%',
     },
     buttonDiv: {
-        margin: '0% 0 3% 0'
+        margin: '0% 0 1.5rem 0'
     },
     innerButton: {
-        margin: '0 2% 2% 0',
-        //  backgroundColor:'red'
+        margin: '0 0.938rem 0.625rem 0'
     },
     subHeader: {
-        marginBottom: '3%'
+        marginBottom: '1.313rem'
+    },
+    autoComplete: {
+        marginBottom: '1.938rem'
     },
     clearNSubmit: {
-        marginTop: '10vh',
+        marginTop: '4rem',
         float: 'right'
     },
-
     parent: {
         display: "flex",
         alignItems: "center",
         flexDirection: "column",
         justifyContent: "center",
+        height: window.innerHeight - 80
     },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
@@ -179,7 +181,8 @@ const DataSet = (theme) => ({
     },
     mySearches: {
         marginTop: '1%',
-        width: '60%'
+        width: '60%',
+        //  textTransform:'inherit'
     },
     downloadDiv: {
         marginTop: '4%'
@@ -213,9 +216,31 @@ const DataSet = (theme) => ({
     leftSection: {
         boxShadow: '4px 0 4px -4px #00000029'
     },
-    searchGrid: {
-        height: '100%'
-    }
+    popupDialog: {
+        maxWidth: '46.125rem',
+        height: '26.5rem'
+    },
+    clearAllBtn: {
+        float: "right",
+        margin: '9px 16px 0px auto',
+        padding: '0',
+        height: '15px'
+    },
+    filterContainer: {
+        borderBottom: '1px solid #00000029',
+        paddingLeft: '18.5px',
+        marginTop:'20px'
+    },
+    filterTypo: {
+        marginBottom: '9px'
+    },
+    applyBtn: {
+        float: "right",
+        margin: '5px',
+        borderRadius: '4px',
+        margin: '9px 16px 9px auto',
+        width: '80px'
+    },
 });
 
 export default DataSet;

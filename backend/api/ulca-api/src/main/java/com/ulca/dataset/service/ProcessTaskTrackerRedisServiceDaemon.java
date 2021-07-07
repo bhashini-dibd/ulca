@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.ulca.dataset.dao.TaskTrackerRedisDao;
 import com.ulca.dataset.kakfa.DatasetErrorPublishService;
+import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 
 import lombok.extern.slf4j.Slf4j;
@@ -86,7 +87,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				// update the end time for ingest
 				v1 = true;
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.ingest,
-						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
+						com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
+				
 			} else {
 				
 				processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
@@ -96,12 +98,12 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			proCountSuccess.put("count", validateSuccess);
 			proCountFailure.put("count", validateError);
 
-			if (v1 == true && (validateError + validateSuccess == ingestSuccess)) {
+			if (v1 == true && (validateError + validateSuccess >= ingestSuccess)) {
 				// update the end time for validate
 				v2 = true;
 				
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber,
-						ToolEnum.validate, com.ulca.dataset.model.TaskTracker.StatusEnum.successful,
+						ToolEnum.validate, com.ulca.dataset.model.TaskTracker.StatusEnum.completed,
 						details.toString());
 			} else {
 				if (validateSuccess > 0 || validateError > 0)
@@ -113,12 +115,12 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			proCountFailure.put("count", publishError);
 
 
-			if (v2 == true && (publishError + publishSuccess == validateSuccess)) {
+			if (v2 == true && (publishError + publishSuccess >= validateSuccess)) {
 				// update the end time for publish
 				v3 = true;
 				
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.publish,
-						com.ulca.dataset.model.TaskTracker.StatusEnum.successful, details.toString());
+						com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
 			} else {
 				if (publishSuccess > 0 || publishError > 0)
 					processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.publish,
@@ -130,7 +132,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				log.info("deleting for serviceRequestNumber :: " + serviceRequestNumber);
 
 				taskTrackerRedisDao.delete(serviceRequestNumber);
-				datasetErrorPublishService.publishEofStatus(serviceRequestNumber);
+				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			}
 
 		}

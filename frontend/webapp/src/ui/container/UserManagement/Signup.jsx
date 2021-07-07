@@ -10,8 +10,6 @@ import {
   IconButton,
   InputAdornment,
   FormControl,
-  Checkbox,
-  FormControlLabel,
   CircularProgress,
   FormHelperText,
 } from "@material-ui/core";
@@ -49,9 +47,9 @@ const SignUp = (props) => {
     setError({ ...error, [prop]: false });
   };
 
-  const handleCheckChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.checked });
-  };
+  // const handleCheckChange = (prop) => (event) => {
+  //   setValues({ ...values, [prop]: event.target.checked });
+  // };
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
