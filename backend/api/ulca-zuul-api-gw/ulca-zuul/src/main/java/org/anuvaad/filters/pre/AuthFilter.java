@@ -71,6 +71,7 @@ public class AuthFilter extends ZuulFilter {
             setShouldDoAuth(false);
             logger.info(SKIP_AUTH_CHECK, uri);
             ctx.set(REQ_URI, uri);
+            ctx.set(ACTION_URI, uri);
             return null;
         }
         if (!isURIValid(uri, ctx)){

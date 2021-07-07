@@ -83,7 +83,7 @@ public class RbacFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         String uri = (String) ctx.get(ACTION_URI);
         List<String> openEndpointsWhitelist = ZuulConfigCache.whiteListEndpoints;
-        if ((openEndpointsWhitelist.contains(uri))) {
+        if (openEndpointsWhitelist.contains(uri)) {
             ctx.set(RBAC_BOOLEAN_FLAG_NAME, false);
             logger.info(SKIP_RBAC, uri);
             return null;
