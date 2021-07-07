@@ -41,11 +41,11 @@ public class DatasetController {
 	
 	
 	@PostMapping("/corpus/submit")
-	public DatasetSubmitResponse datasetSubmit(@RequestBody DatasetSubmitRequest request, @RequestHeader("userId") String userId) {
+	public DatasetSubmitResponse datasetSubmit(@RequestBody DatasetSubmitRequest request) {
 		
 		
 	    log.info("******** Entry DatasetController:: datasetSubmit *******" );
-	    return datasetService.datasetSubmit(request, userId);
+	    return datasetService.datasetSubmit(request);
 	  }
 
 	@GetMapping("/listByUserId")
@@ -70,11 +70,11 @@ public class DatasetController {
 	}
 	
 	@PostMapping("/corpus/search")
-	public DatasetCorpusSearchResponse corpusSearch(@RequestBody DatasetCorpusSearchRequest request, @RequestHeader("userId") String userId) throws JsonProcessingException {
+	public DatasetCorpusSearchResponse corpusSearch(@RequestBody DatasetCorpusSearchRequest request) throws JsonProcessingException {
 		
 		
 	    log.info("******** Entry DatasetController:: corpusSearch *******" );
-	    return datasetService.corpusSearch(request, userId);
+	    return datasetService.corpusSearch(request);
 	  }
 
 	@GetMapping("/corpus/search/status")

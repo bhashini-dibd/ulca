@@ -18,6 +18,7 @@ import lombok.Setter;
 public class DatasetCorpusSearchRequest {
 	
 	
+	private final String userId;
 	private final DatasetType datasetType;
 	
 	@NotBlank(message="criteria is required")

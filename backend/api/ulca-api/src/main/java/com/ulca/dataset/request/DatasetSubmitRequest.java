@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DatasetSubmitRequest {
 	
+	private final String userId;
+	
 	@NotBlank(message="datasetType is required")
 	private final DatasetType type;
 	
