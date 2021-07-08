@@ -106,7 +106,13 @@ let apiObj = new SubmitDatasetApi(dataset)
       const rsp_data = await response.json();
       if (!response.ok) {
         
-        return Promise.reject('');
+        setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: rsp_data.message ? rsp_data.message: "something went wrong. PLease try again.",
+            timeOut: 40000,
+            variant: 'error'
+        })
       } else {
         dispatch(PageChange(0, C.PAGE_CHANGE));
         history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.serviceRequestNumber}`)
