@@ -181,10 +181,10 @@ const MySearches = (props) => {
                                 open={popoverOpen}
                                 anchorEl={anchorEl}
                                 handleClose={handleClose}
-                                //  filter={}
-                                //   selectedFilter={}
-                                filter={{ datasetType: [], status: ['completed', 'in-progress', 'failed'] }}
-                                selectedFilter={{ datasetType: [], status: ['completed', 'in-progress'] }}
+                                filter={{datasetType: [], status:[]} }
+                                selectedFilter={{datasetType: [], status:[]} }
+                                //  filter={{ datasetType: [], status: ['completed', 'in-progress', 'failed'] }}
+                                // selectedFilter={{ datasetType: [], status: ['completed', 'in-progress'] }}
                                 clearAll={clearAll}
                                 apply={apply}
                         />
