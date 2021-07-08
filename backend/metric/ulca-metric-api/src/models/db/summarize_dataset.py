@@ -63,7 +63,10 @@ class SummarizeDatasetModel(object):
                 aggs_parsed ={}
                 for val in aggs:
                     agg = aggs[val]
-                    aggs_parsed[val] = (agg[False]-agg[True])
+                    if dtype == "asr-corpus":
+                        aggs_parsed[val] = (agg[False]-agg[True])/3600
+                    else:
+                        aggs_parsed[val] = (agg[False]-agg[True])
                 log.info("Query Result : {}".format(aggs_parsed))
                 chart_data =[]
                 for val in aggs_parsed:
@@ -114,7 +117,10 @@ class SummarizeDatasetModel(object):
                 aggs_parsed ={}
                 for val in aggs:
                     agg = aggs[val]
-                    aggs_parsed[val] = (agg[False]-agg[True])
+                    if dtype == "asr-corpus":
+                        aggs_parsed[val] = (agg[False]-agg[True])/3600
+                    else:
+                        aggs_parsed[val] = (agg[False]-agg[True])
                 log.info("Query Result : {}".format(aggs_parsed))
 
                 chart_data =[]
@@ -176,7 +182,10 @@ class SummarizeDatasetModel(object):
                 aggs_parsed ={}
                 for val in aggs:
                     agg = aggs[val]
-                    aggs_parsed[val] = (agg[False]-agg[True])
+                    if dtype == "asr-corpus":
+                        aggs_parsed[val] = (agg[False]-agg[True])/3600
+                    else:
+                        aggs_parsed[val] = (agg[False]-agg[True])
                 log.info("Query Result : {}".format(aggs_parsed))
                 chart_data =[]
                 for val in aggs_parsed:
