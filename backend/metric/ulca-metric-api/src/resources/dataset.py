@@ -11,6 +11,7 @@ summarizeDatasetRepo = SummarizeDatasetRepo()
 
 
 class DatasetSearchResource(Resource):
+<<<<<<< Updated upstream
     def post(self):
         
         body = request.get_json()
@@ -31,6 +32,8 @@ class DatasetSearchResource(Resource):
         return res.getres()
 
 class DatasetAggregateResource(Resource):
+=======
+>>>>>>> Stashed changes
     def post(self):
         body = request.get_json()
         # appSummarizeDataset = AppSummarizeDataset()
