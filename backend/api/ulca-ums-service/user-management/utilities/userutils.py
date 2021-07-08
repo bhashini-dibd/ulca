@@ -1,4 +1,3 @@
-from os import name
 import uuid
 import time
 import re
@@ -32,7 +31,7 @@ mail_server         =   config.MAIL_SETTINGS["MAIL_USERNAME"]
 mail_ui_link        =   config.BASE_URL
 token_life          =   config.AUTH_TOKEN_EXPIRY_HRS
 verify_mail_expiry  =   config.USER_VERIFY_LINK_EXPIRY
-
+apikey_expiry       =   config.USER_API_KEY_EXPIRY  
 role_codes          =   []
 role_details        =   []
 
@@ -164,15 +163,15 @@ class UserUtils:
         
         try: 
             #creating payload for API Key storage
-            verification_payload = {"email": email, "publicKey":str(uuid.uuid4()), "privateKey": uuid.uuid4().hex, "createdOn": str(datetime.utcnow())}
+            key_payload = {"email": email, "publicKey":str(uuid.uuid4()), "privateKey": uuid.uuid4().hex, "createdOn": datetime.utcnow()}
             log.info("New API key issued for {}".format(email), MODULE_CONTEXT) 
             #connecting to mongo instance/collection
             collections = get_db()[USR_KEY_MONGO_COLLECTION]
             #inserting api-key records on db
-            collections.insert(verification_payload)
-            del verification_payload["_id"]
-            del verification_payload["createdOn"]
-            return verification_payload
+            collections.insert(key_payload)
+            del key_payload["_id"]
+            del key_payload["createdOn"]
+            return key_payload
 
         except Exception as e:
             log.exception("Database exception | {}".format(str(e)))
@@ -269,17 +268,23 @@ class UserUtils:
             if keys:
                 result = collections.find({"email":value},{"email":1,"publicKey":1,"privateKey":1,"_id":0})
                 if result.count() ==0:
-                    log.info("No keys found matching the request")
-                    return post_error("Invalid data", "Data received on request is not valid", None)
+                    new_keys   =   UserUtils.generate_api_keys(value)
+                    return new_keys
                 for key in result:
                     return key  
             if email:
-                result = collections.find({"publicKey":value},{"email":1,"privateKey":1,"_id":0})
+                result = collections.find({"publicKey":value},{"email":1,"privateKey":1,"createdOn":1,"_id":0})
                 if result.count() ==0:
                     log.info("No data found matching the request")
                     return post_error("Invalid key", "key received is invalid", None)
                 for key in result:
-                    return key
+                    if ((datetime.utcnow() - key["createdOn"]) > timedelta(days=apikey_expiry)):
+                        log.info("Keys expired for user : {}".format(key["email"]))
+                        #removing keys since they had expired
+                        collections.remove({"publicKey":value})
+                        return post_error("Invalid key", "key has expired", None)
+                    else:
+                        return key
 
         except Exception as e:
             log.exception("db connection exception | {}".format(str(e)))

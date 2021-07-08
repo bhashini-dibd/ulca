@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from utilities import UserUtils, normalize_bson_to_json
 import time
 import config
-from config import USR_MONGO_COLLECTION, USR_TEMP_TOKEN_MONGO_COLLECTION, USR_KEY_MONGO_COLLECTION
+from config import USR_MONGO_COLLECTION, USR_TEMP_TOKEN_MONGO_COLLECTION
 import logging
 from utilities import EnumVals
 
@@ -33,10 +33,6 @@ class UserAuthenticationModel(object):
                 return post_error("Data not valid","Error on fetching user details")
             for user in user_details:
                 return {"userKeys":user_keys,"userDetails": normalize_bson_to_json(user)}
-
-            # if (datetime.utcnow() - user_keys["createdOn"]) > timedelta(days=apikey_expiry):
-            #     log.info("api-keys expired for {}".format(user_email), MODULE_CONTEXT)
-            #     new_keys = userutils.renew_api_keys(user_email)
                 
         except Exception as e:
             log.exception("Database connection exception | {} ".format(str(e)))
@@ -79,6 +75,9 @@ class UserAuthenticationModel(object):
             email = result["email"]
             collections = get_db()[USR_MONGO_COLLECTION] 
             user = collections.find({"email":email,"isVerified":True,"isActive":True},{"password":0,"_id":0})
+            if user.count() == 0:
+                log.info("No user records found in db matching email: {}".format(email))
+                return post_error("Invalid data", "Data received on request is not valid", None)
             for record in user:
                 record["privateKey"] = result["privateKey"]
                 return normalize_bson_to_json(record)
