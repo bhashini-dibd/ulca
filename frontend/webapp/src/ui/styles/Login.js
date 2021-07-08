@@ -7,9 +7,9 @@ const LoginStyle = (theme) => ({
     width: "20%",
     height: "auto",
     margin: "22% 294px 10% 39px",
-    
+
     fontWeight: "600",
-    cursor:"pointer",
+    cursor: "pointer",
     fontStretch: "normal",
     fontStyle: "normal",
     lineHeight: "1.53",
@@ -72,8 +72,8 @@ const LoginStyle = (theme) => ({
     flexDirection: "column",
     justifyContent: "center",
   },
-sub:{
-  width: "95%",
+  sub: {
+    width: "95%",
     height: "auto",
     maxWidth: "300px",
     margin: "20% 70px 0 39px",
@@ -89,11 +89,12 @@ sub:{
       fontSize: "1.2rem",
       letterSpacing: "1px",
       maxWidth: "280px",
-      width: "80%"}
+      width: "80%"
+    }
 
-},
+  },
   loginGrid: {
-    width: "33%",
+    width: "462px",
     flexDirection: "column",
     display: "flex",
     height: "auto",
@@ -105,8 +106,6 @@ sub:{
   },
   body2: {
     fontWeight: "550",
-    
-    // fontFamily: "Poppins Medium",
     paddingBottom: "25px",
     opacity: "1",
     fontSize: "1.7rem",
@@ -115,7 +114,7 @@ sub:{
   },
   fullWidth: {
     width: "100%",
-    marginTop: "30px",
+    marginTop: "13px",
     textAlign: "Left",
   },
   line: {
@@ -168,32 +167,40 @@ sub:{
     width: "100%",
     display: "flex",
     justifyContent: "space-between",
+    float: 'right'
   },
   forgoLink: {
     textAlign: "right",
     paddingTop: "10px",
+    marginLeft:'auto'
   },
   link: {
     cursor: "pointer",
     width: "100%",
-    color: "#922D88",
+    color: "#2C2799",
     float: "right",
+    fontSize: "0.875rem",
+    fontFamily: '"lato" ,sans-serif',
+    fontWeight: "600",
   },
   subText: {
     marginTop: "-20px",
     opacity: "0.7",
   },
+  subTypo:{
+    marginTop:'15px'
+  },
   loginLink: {
     display: "flex",
     flexDirection: "column",
     flex: 1,
-    marginTop: "20px",
+    marginTop: "18px",
     alignItems: "flex-end",
   },
 
   textField: {
     width: "100%",
-    marginTop: "20px",
+    marginTop: "30px",
   },
   passwordHint: {
     opacity: "0.5",
@@ -233,9 +240,9 @@ sub:{
     },
   },
 
-  InputLabel:{
-    marginLeft:"-15px",
-    paddingBottom:"19px"
+  InputLabel: {
+    marginLeft: "-15px",
+    paddingBottom: "19px"
   },
 
   buttonProgress: {

@@ -9,7 +9,7 @@ import {
 
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
-import {  useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const ForgotPassword = (props) => {
   const [values, setValues] = useState({
@@ -26,8 +26,8 @@ const ForgotPassword = (props) => {
 
   return (
     <Grid container className={classes.loginGrid}>
-      <Typography className={classes.body2}>Forgot password?</Typography>
-      <Typography className={classes.subText}>
+      <Typography variant="h4">Forgot password?</Typography>
+      <Typography variant="body2" className={classes.subTypo}>
         Enter you email address and we will send a link to reset your password.
       </Typography>
       <TextField
@@ -37,14 +37,14 @@ const ForgotPassword = (props) => {
         id="outlined-required"
         value={values.email}
         label="Email address"
-        variant="outlined"
+      // variant="outlined"
       />
 
       <div className={classes.loginLink}>
         <Typography>
-          <Link id="newaccount" className={classes.link} href="#" onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`)}}>
+          <Link id="newaccount" className={classes.link} href="#" onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`) }}>
             {" "}
-            Back to Sign in
+            Back to Login
           </Link>
         </Typography>
       </div>
@@ -52,6 +52,7 @@ const ForgotPassword = (props) => {
       <Button
         variant="contained"
         color="primary"
+        size="large"
         className={classes.fullWidth}
         onClick={() => {
           HandleSubmit();
