@@ -317,7 +317,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 						switch (collectionDescriptionEnum) {
 						case AUTO_ALIGNED:
 							if (node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {
-								if (!node.get("collectionMethod").get("collectionDetails").get("alignmentTool")
+								if (node.get("collectionMethod").get("collectionDetails").get("alignmentTool")
 										.isTextual()) {
 									String alignmentTool = node.get("collectionMethod").get("collectionDetails")
 											.get("alignmentTool").asText();

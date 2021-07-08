@@ -391,7 +391,7 @@ public class ASRParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 					switch (collectionDescriptionEnum) {
 					case AUTO_ALIGNED:
 						if(node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {
-							if(!node.get("collectionMethod").get("collectionDetails").get("alignmentTool").isTextual()) {
+							if(node.get("collectionMethod").get("collectionDetails").get("alignmentTool").isTextual()) {
 								String alignmentTool = node.get("collectionMethod").get("collectionDetails").get("alignmentTool").asText();
 								CollectionDetailsAudioAutoAligned.AlignmentToolEnum alignmentToolEnum = CollectionDetailsAudioAutoAligned.AlignmentToolEnum.fromValue(alignmentTool);
 								if(alignmentToolEnum != null) {
