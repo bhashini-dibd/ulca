@@ -8,11 +8,11 @@ from service.parallel import ParallelService
 from service.asr import ASRService
 from service.ocr import OCRService
 from service.monolingual import MonolingualService
+from service.asrunlabeled import ASRUnlabeledService
 
 from configs.configs import kafka_bootstrap_server_host, publish_input_topic, publish_consumer_grp
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled
 from kafka import KafkaConsumer
-from processtracker.processtracker import ProcessTracker
 from repository.datasetrepo import DatasetRepo
 
 log = logging.getLogger('file')
@@ -35,7 +35,7 @@ def consume():
     try:
         topics = [publish_input_topic]
         consumer = instantiate(topics)
-        p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
+        p_service, m_service, a_service, o_service, au_service = ParallelService(), MonolingualService(), ASRService(), OCRService(), ASRUnlabeledService()
         repo = DatasetRepo()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-CONS-" + "(" + rand_str + ")"
@@ -54,13 +54,15 @@ def consume():
                             repo.upsert(data["record"]["id"], rec, True)
                         log.info(f'PROCESSING - start - ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
                         if data["datasetType"] == dataset_type_parallel:
-                            p_service.load_parallel_dataset_single(data)
+                            p_service.load_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:
-                            o_service.load_ocr_dataset_single(data)
+                            o_service.load_ocr_dataset(data)
                         if data["datasetType"] == dataset_type_asr:
-                            a_service.load_asr_dataset_single(data)
+                            a_service.load_asr_dataset(data)
                         if data["datasetType"] == dataset_type_monolingual:
-                            m_service.load_monolingual_dataset_single(data)
+                            m_service.load_monolingual_dataset(data)
+                        if data["datasetType"] == dataset_type_asr_unlabeled:
+                            au_service.load_asr_unlabeled_dataset(data)
                         log.info(f'PROCESSING - end - ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
                         break
                     else:

@@ -1,22 +1,24 @@
 import logging
+import multiprocessing
 import time
+from functools import partial
 from logging.config import dictConfig
-from configs.configs import ds_batch_size, offset, limit, ocr_prefix, user_mode_pseudo, \
-    sample_size, ocr_immutable_keys, ocr_non_tag_keys, dataset_type_ocr, no_of_parallel_processes, \
-    ocr_search_ignore_keys, ocr_updatable_keys
-from repository.ocr import OCRRepo
+from configs.configs import ds_batch_size, no_of_parallel_processes, asr_prefix, \
+    sample_size, offset, limit, asr_unlabeled_immutable_keys, asr_unlabeled_non_tag_keys, dataset_type_asr, \
+    user_mode_pseudo, \
+    asr_unlabeled_search_ignore_keys, asr_unlabeled_updatable_keys, dataset_type_asr_unlabeled
+from repository.asrunlabeled import ASRUnlabeledRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
 from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
 from events.metrics import MetricEvent
-from.datasetservice import DatasetService
-
+from .datasetservice import DatasetService
 
 log = logging.getLogger('file')
 
 mongo_instance = None
-repo = OCRRepo()
+repo = ASRUnlabeledRepo()
 utils = DatasetUtils()
 prod = Producer()
 error_event = ErrorEvent()
@@ -24,22 +26,21 @@ pt = ProcessTracker()
 metrics = MetricEvent()
 service = DatasetService()
 
-
-class OCRService:
+class ASRUnlabeledService:
     def __init__(self):
         pass
 
     '''
-    Method to load OCR dataset into the mongo db
+    Method to load ASR Unlabeled dataset into the mongo db
     params: request (record to be inserted)
     '''
-    def load_ocr_dataset(self, request):
+    def load_asr_unlabeled_dataset(self, request):
         try:
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
             if record:
-                result = self.get_enriched_ocr_data(record, metadata)
+                result = self.get_enriched_asr_unlabeled_data(record, metadata)
                 if result:
                     if result[0] == "INSERT":
                         if metadata["userMode"] != user_mode_pseudo:
@@ -54,22 +55,22 @@ class OCRService:
                     elif result[0] == "FAILED":
                         error_list.append(
                             {"record": result[1], "code": "UPLOAD_FAILED", "datasetName": metadata["datasetName"],
-                             "datasetType": dataset_type_ocr, "serviceRequestNumber": metadata["serviceRequestNumber"],
-                             "message": "Upload of image file to object store failed"})
+                             "datasetType": dataset_type_asr_unlabeled, "serviceRequestNumber": metadata["serviceRequestNumber"],
+                             "message": "Upload of audio file to object store failed"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     else:
                         error_list.append({"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
-                                           "datasetType": dataset_type_ocr,
+                                           "datasetType": dataset_type_asr_unlabeled,
                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
                                            "message": "This record is already available in the system",
                                            "datasetName": metadata["datasetName"]})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'OCR - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'ASR UNLABELED - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
-            return {"message": "EXCEPTION while loading OCR dataset!!", "status": "FAILED"}
+            return {"message": "EXCEPTION while loading ASR UNLABELED dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
 
     '''
@@ -77,12 +78,12 @@ class OCRService:
     params: data (record to be inserted)
     params: metadata (metadata of record to be inserted)
     '''
-    def get_enriched_ocr_data(self, data, metadata):
+    def get_enriched_asr_unlabeled_data(self, data, metadata):
         try:
-            hashes = {data["imageHash"], data["groundTruthHash"]}
-            record = self.get_ocr_dataset_internal({"tags": {"$all": hashes}})
+            record = self.get_asr_unlabeled_dataset_internal({"tags": {"$all": [data["audioHash"]]}})
             if record:
-                dup_data = service.enrich_duplicate_data(data, record, metadata, ocr_immutable_keys, ocr_updatable_keys, ocr_non_tag_keys)
+                dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
+                                                         asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
                 if dup_data:
                     repo.update(dup_data)
                     return "UPDATE", data, record
@@ -90,16 +91,16 @@ class OCRService:
                     return "DUPLICATE", data, record
             insert_data = data
             for key in insert_data.keys():
-                if key not in ocr_immutable_keys and key not in ocr_updatable_keys:
+                if key not in asr_unlabeled_immutable_keys and key not in asr_unlabeled_updatable_keys:
                     if not isinstance(insert_data[key], list):
                         insert_data[key] = [insert_data[key]]
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
-            insert_data["tags"] = service.get_tags(insert_data, ocr_non_tag_keys)
+            insert_data["tags"] = service.get_tags(insert_data, asr_unlabeled_non_tag_keys)
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
-                s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["imageFilename"]}'
-                object_store_path = utils.upload_file(data["fileLocation"], ocr_prefix, s3_file_name)
+                s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
+                object_store_path = utils.upload_file(data["fileLocation"], asr_prefix, s3_file_name)
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
@@ -107,11 +108,12 @@ class OCRService:
         except Exception as e:
             log.exception(e)
             return None
+
     '''
     Method to fetch records from the DB
     params: query (query for search)
     '''
-    def get_ocr_dataset_internal(self, query):
+    def get_asr_unlabeled_dataset_internal(self, query):
         try:
             exclude = {"_id": False}
             data = repo.search(query, exclude, None, None)
@@ -124,11 +126,11 @@ class OCRService:
             return None
 
     '''
-    Method to fetch OCR dataset from the DB based on various criteria
+    Method to fetch ASR Unlabeled dataset from the DB based on various criteria
     params: query (query for search)
     '''
-    def get_ocr_dataset(self, query):
-        log.info(f'Fetching OCR datasets for SRN -- {query["serviceRequestNumber"]}')
+    def get_asr_unlabeled_dataset(self, query):
+        log.info(f'Fetching ASR UNLABELED datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
@@ -144,6 +146,10 @@ class OCRService:
                 tags.append(query["licence"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
+            if 'channel' in query.keys():
+                tags.append(query["channel"])
+            if 'gender' in query.keys():
+                tags.append(query["gender"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
             if 'multipleContributors' in query.keys():
@@ -151,7 +157,7 @@ class OCRService:
             if tags:
                 db_query["tags"] = {"$all": tags}
             exclude = {"_id": False}
-            for key in ocr_search_ignore_keys:
+            for key in asr_unlabeled_search_ignore_keys:
                 exclude[key] = False
             result = repo.search(db_query, exclude, off, lim)
             count = len(result)
@@ -164,7 +170,7 @@ class OCRService:
                     pt.task_event_search(op, None)
                 else:
                     log.error(f'There was an error while pushing result to S3')
-                    error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_ocr, "serviceRequestNumber": query["serviceRequestNumber"],
+                    error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_asr_unlabeled, "serviceRequestNumber": query["serviceRequestNumber"],
                                                    "message": "There was an error while pushing result to object store"}
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
                     pt.task_event_search(op, error)
@@ -180,14 +186,14 @@ class OCRService:
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
     '''
-    Method to delete OCR dataset from the DB based on various criteria
+    Method to delete ASR Unlabeled dataset from the DB based on various criteria
     params: delete_req (request for deletion)
     '''
-    def delete_ocr_dataset(self, delete_req):
-        log.info(f'Deleting OCR datasets....')
+    def delete_asr_unlabeled_dataset(self, delete_req):
+        log.info(f'Deleting ASR Unlabeled datasets....')
         d, u = 0, 0
         try:
-            records = self.get_ocr_dataset({"datasetId": delete_req["datasetId"]})
+            records = self.get_asr_unlabeled_dataset({"datasetId": delete_req["datasetId"]})
             for record in records:
                 if len(record["datasetId"]) == 1:
                     repo.delete(record["id"])
@@ -207,13 +213,12 @@ class OCRService:
         except Exception as e:
             log.exception(e)
             log.error(f'There was an error while deleting records')
-            error = {"code": "DELETE_FAILED", "datasetType": dataset_type_ocr,
+            error = {"code": "DELETE_FAILED", "datasetType": dataset_type_asr,
                      "serviceRequestNumber": delete_req["serviceRequestNumber"],
                      "message": "There was an error while deleting records"}
             op = {"serviceRequestNumber": delete_req["serviceRequestNumber"], "deleted": d, "updated": u}
             pt.task_event_search(op, error)
             return None
-
 
 # Log config
 dictConfig({
