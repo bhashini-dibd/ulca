@@ -79,6 +79,14 @@
             "active":true,
             "whiteList":true,
             "description":"API to verify the user"
+        },
+        {
+            "id":"3ac962a1-de14-4609-91b0-6b4bcb87b856",
+            "uri":"/ulca/publish/v0/cluster/set",
+            "module":"ULCA-PUBLISH",
+            "active":true,
+            "whiteList":false,
+            "description":"API to set DB cluster up for ulca"
         }
     ]
 }
