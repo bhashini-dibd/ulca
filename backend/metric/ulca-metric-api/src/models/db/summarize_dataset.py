@@ -13,17 +13,20 @@ class SummarizeDatasetModel(object):
             collection      = get_data_store()
             criterions      = dataset["criterions"]
             grouping        = dataset["groupby"]
+            count           = "count"
             if len(criterions) == 0:
                 dtype = dataset["type"]
+                if dtype == "asr-corpus":
+                    count = "durationInSeconds"
                 if dtype == "parallel-corpus":
-                    query = "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,isDelete FROM \"{}\" \
+                    query = "SELECT SUM(\"{}\") as total, sourceLanguage, targetLanguage,isDelete FROM \"{}\" \
                         WHERE ((datasetType = \'{}\') AND (sourceLanguage != targetLanguage) AND (sourceLanguage = \'en\' \
-                        OR targetLanguage = \'en\')) GROUP BY sourceLanguage, targetLanguage,isDelete".format(DRUID_DB_SCHEMA,dtype)
+                        OR targetLanguage = \'en\')) GROUP BY sourceLanguage, targetLanguage,isDelete".format(count,DRUID_DB_SCHEMA,dtype)
                     
                 if dtype in ["asr-corpus","ocr-corpus","monolingual-corpus"] :
-                    query= "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,isDelete FROM \"{}\" \
+                    query= "SELECT SUM(\"{}\") as total, sourceLanguage, targetLanguage,isDelete FROM \"{}\" \
                         WHERE ((datasetType = \'{}\') AND (sourceLanguage != targetLanguage) AND (targetLanguage = '') AND (sourceLanguage != ''))\
-                        GROUP BY sourceLanguage, targetLanguage,isDelete".format(DRUID_DB_SCHEMA,dtype)
+                        GROUP BY sourceLanguage, targetLanguage,isDelete".format(count,DRUID_DB_SCHEMA,dtype)
                 
                 log.info("Query executed : {}".format(query))
 
@@ -80,9 +83,9 @@ class SummarizeDatasetModel(object):
                 src = criterions[0]["sourceLanguage"]["value"]
                 tgt = criterions[0]["targetLanguage"]["value"]
                 grp_val = grouping["value"]
-                query = "SELECT SUM(\"count\") as total, sourceLanguage , targetLanguage ,{group}, isDelete  FROM \"{schema}\" \
+                query = "SELECT SUM(\"{count}\") as total, sourceLanguage , targetLanguage ,{group}, isDelete  FROM \"{schema}\" \
                         WHERE ((datasetType = \'{type}\') AND ((sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\')))\
-                             GROUP BY sourceLanguage, targetLanguage, {group},isDelete".format(schema=DRUID_DB_SCHEMA,group=grp_val,type=dtype,srcl=src,tgtl=tgt)
+                             GROUP BY sourceLanguage, targetLanguage, {group},isDelete".format(schema=DRUID_DB_SCHEMA,group=grp_val,type=dtype,srcl=src,tgtl=tgt, count=count)
 
                 log.info("Query executed : {}".format(query))
                 result          = collection.execute(text(query)).fetchall()
@@ -141,9 +144,9 @@ class SummarizeDatasetModel(object):
                 tgt = criterions[0]["targetLanguage"]["value"]
                 sub_q= criterions[1]["value"]
                 grp_val = grouping["value"]
-                query = "SELECT SUM(\"count\") as total, sourceLanguage, targetLanguage,{group},isDelete FROM \"{schema}\" \
+                query = "SELECT SUM(\"{count}\") as total, sourceLanguage, targetLanguage,{group},isDelete FROM \"{schema}\" \
                         WHERE ((datasetType = \'{type}\') AND ({match} = \'{val}\') AND ((sourceLanguage =  \'{srcl}\' AND targetLanguage =  \'{tgtl}\') OR (sourceLanguage =  \'{tgtl}\' AND targetLanguage =  \'{srcl}\')))\
-                             GROUP BY sourceLanguage, targetLanguage, {group},isDelete".format(schema=DRUID_DB_SCHEMA,group=grp_val,val=sub_q,srcl=src,tgtl=tgt,match=add_field,type=dtype)
+                             GROUP BY sourceLanguage, targetLanguage, {group},isDelete".format(schema=DRUID_DB_SCHEMA,group=grp_val,val=sub_q,srcl=src,tgtl=tgt,match=add_field,type=dtype,count=count)
 
                 log.info("Query executed : {}".format(query))
                 result          = collection.execute(text(query)).fetchall()
