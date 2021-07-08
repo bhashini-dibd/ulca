@@ -7,7 +7,7 @@ import org.anuvaad.cache.ZuulConfigCache;
 import org.anuvaad.models.*;
 import org.anuvaad.utils.ExceptionUtils;
 import org.anuvaad.utils.UserUtils;
-import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +16,10 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.anuvaad.constants.RequestContextConstants.*;
 
@@ -167,14 +163,10 @@ public class RbacFilter extends ZuulFilter {
      */
     public Boolean verifySignature(String signature, String privateKey, String sigValue) {
         try{
-            logger.info("privateKey: {}", privateKey);
-            logger.info("sigValue: {}", sigValue);
-            MessageDigest digest = MessageDigest.getInstance("MD5");
-            String sigValueHash  = bytesToHex(digest.digest(sigValue.getBytes(StandardCharsets.UTF_8)));
-            String sigHash = privateKey + "|" + sigValueHash;
-            String hash = bytesToHex(digest.digest(sigHash.getBytes(StandardCharsets.UTF_8)));
-            logger.info("hash: {}", hash);
-            return hash.equals(signature);
+            String sigValueHash = DigestUtils.md5Hex(sigValue.trim());
+            String sigHash = privateKey.trim() + "|" + sigValueHash;
+            String hash = DigestUtils.md5Hex(sigHash.trim()).toUpperCase();
+            return hash.equals(signature.trim().toUpperCase());
         }catch (Exception e) {
             logger.error("Exception while verifying signature: ", e);
             return false;
