@@ -7,7 +7,7 @@ const FileUploadStyles = (theme) => ({
   cursor: {
     cursor: "pointer",
   },
-  barFont:{fontFamily:"Lato", fontSize:"14px"},
+  barFont:{fontFamily:"Roboto", fontSize:"14px"},
   titleBar: {
     
     display: "flex",

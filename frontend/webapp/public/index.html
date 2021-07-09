@@ -15,10 +15,9 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="/intro/css/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Lato&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="%PUBLIC_URL%/intro/css/bootstrap.min.css">
@@ -39,37 +38,71 @@
   </head>
   <body>
     <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                     <a href="" class="bhashini-logo"><img src="%PUBLIC_URL%/intro/img/Bhashini-Logo-English.svg" alt="bhashini logo"></a>
+                </div>
+                <div class="col-md-6">
+                   <a href="" class="brandLogo d-block text-right"><img src="%PUBLIC_URL%/intro/img/gov-logo-1.png" alt="NLTM logo"></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- navigation menu  -->
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
       <div class="container">
-          <div class="row">
-              <div class="col-md-6">
-                  <a href="" class="brandLogo"><img src="%PUBLIC_URL%/intro/img/logo.png" alt="NLTM logo"></a>
-              </div>
-              <div class="col-md-6">
-                  <a href="" class="bhashini d-block text-right"><img src="%PUBLIC_URL%/intro/img/bhashini.png" alt="bhashini logo"></a>
-              </div>
-          </div>
-      </div>
-  </header>
-  <div class="mainBanner">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <div class="roundShape"></div>
-      <div class="shape1"><img src="%PUBLIC_URL%/intro/img/shape1.svg" alt="shapes"></div>
-      <div class="container">
-
-         <div class="row align-items-center justify-content-between">
-              <div class="col-md-5">
-              <div class="bannerImg"><img src="%PUBLIC_URL%/intro/img/bannerImg@2x.jpg" alt="ULCA Img"></div>
-          </div>
-          <div class="col-md-7 col-xl-6">
-              <div class="bannerInfo">
-                  <h1 class="h3 mb-4">ULCA<span class="d-block">Universal Language Contribution API</span></h1>
-                  <h2 class="h6 mb-4">A MeitY initiative.</h2 class="h6">
-                  <p>ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with a user interface for interacting with the datasets.</p>
-              </div>
-          </div>
-         </div>
+        <div class="collapse navbar-collapse" id="navbarsExample07">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://bhashini.uniteframework.io/en/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://bhashini.uniteframework.io/en/about">About Bhashini</a>
+            </li>
+             <li class="nav-item">
+              <a class="nav-link" href="https://bhashini.uniteframework.io/en/ecosystem">Ecosystem</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="#">ULCA</a>
+            </li>
+          </ul>
+        </div>
+        <div class="join">
+            <a class="bh-btn-primary" href="https://uat.vakyansh.in/hi/home.html" target="_blank" rel="noopener noreferrer"> Join Bhasha<span class="yellowColor">&nbsp;Daan</span> </a>
+        </div>
       </div>
-  </div>
+    </nav>
+    <!-- end here -->
+    <div class="mainBanner">
+
+        <div class="roundShape"></div>
+        <div class="shape1"><img src="%PUBLIC_URL%/intro/img/shape1.svg" alt="shapes"></div>
+        <div class="container">
+
+           <div class="row align-items-center justify-content-between">
+                <div class="col-md-5">
+                <div class="bannerImg"><img src="%PUBLIC_URL%/intro/img/bannerImg@2x.jpg" alt="ULCA Img"></div>
+            </div>
+            <div class="col-md-7 col-xl-6">
+                <div class="bannerInfo">
+                    <h1 class="h1 text-primary mb-4">ULCA<span class="d-block">Universal Language Contribution API</span></h1>
+                    <!-- <h2 class="h7 text-black mb-4">A MeitY initiative.</h2> -->
+                    <p class="text-black">ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with a user interface for interacting with the datasets.</p>
+                    <div class="pt-4">
+                        <a href="https://dev.ulcacontrib.org/user/login" target="_blank">
+                        <button type="button" class="bh-btn-primary border-0 w-50">Sign In</button>
+                    </a>
+                    </div>
+                </div>
+            </div>
+           </div>
+        </div>
+    </div>
   <section class="section dashboard">
     <div class="container">
         <div class="row">
@@ -82,154 +115,206 @@
     </div>
 </section>
     <div id="root"></div>
-    <section class="section primary-color features">
-      <div class="container">
-          <div class="row justify-content-center">
-              <div class="col-md-12 col-lg-9">
-                  <h3 class="text-center mt-3 mb-4 yellowColor">Imagine... an inclusive future with ULCA</h3>
-                  <div class="featureContent">
-                      <img src="%PUBLIC_URL%/intro/img/featuresImg@2x.png" alt="ULCA featurs">
-                  </div>
-              </div>
-          </div>
-      </div>
-  </section>
-  <section class="section why">
-      <div class="shape2"><img src="%PUBLIC_URL%/intro/img/shape2.svg" alt="shapes"></div>
-      <div class="container">
-          <div class="row justify-content-center">
-              <div class="col-md-12 col-lg-10">
-                  <div class="line"></div>
-                  <h4 class="text-center mt-3 mb-4">Why ULCA?</h4>
-                  <div class="ulcaInfo">
-                      <ul>
-                          <li>Consolidate & share all the knowledge wealth related to Indic languages with various NLP projects/initiatives.</li>
-                          <li>Single stop for working with multiple dataset types. </li>
-                          <li>Streamlined data format for each of the dataset types.</li>
-                          <li>Collect all possible metadata along with the datasets.</li>
-                          <li>Attribute proper credits to every contributor of every record in the dataset.</li>
-                          <li>Handle canonical checks and deduplication for each submitted dataset.</li>
-                          <li>Provides simple user interface to enable anyone to search & download based on various filters.</li>
-                          <li>Open sourced for building a best ecosystem for Indian languages.</li>
-                          <li>Quality check of the submitted datasets.</li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </section>
-  <footer class="footer">
-      <div class="container-fluid">
-              <div class="footer-links row">
-          <div class="col-md-4 footerBg bg1">
-              
-              <img src="%PUBLIC_URL%/intro/img/web.png" alt="" class="">
-              <div class="">Web<br> 
-                  <a class="font-weight-bold" href="https://www.meity.gov.in" target="_blank" rel="noopener noreferrer">www.meity.gov.in</a>
-                  
-              </div>
-          </div>
-           <div class="col-md-4 footerBg bg2">
-              
-              <img src="%PUBLIC_URL%/intro/img/email-id.png" alt="" class="">
-              <div class="">Mail<br> 
-                  <a class="font-weight-bold" href="mailto:contact@bhashini.gov.in">contact@bhashini.gov.in</a>
-                  
-              </div>
-          </div>
-           <div class="col-md-4 footerBg bg3">
-              
-              <img src="%PUBLIC_URL%/intro/img/location.png" alt="" class="">
-              <div class="">Address<br> 
-                  <p class="font-weight-bold" href="">
+    <section class="section bg-gray about">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h5 class="text-primary text-uppercase h7">Universal Language Contribution API</h5>
+                    <div class="h1 text-black mt-4 mb-4 pt-1 pb-2">About ULCA</div>
+                    <p class="ft-20">ULCA is a standard API and open scalable data platform (supporting various types of datasets) for Indian language datasets and models.</p>
+                </div>
+                <div class="col-md-6">
+                    <div class="aboutImg"><img src="%PUBLIC_URL%/intro/img/about-ulca.png" alt="About ULCA"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 class="text-black fw-300 h2 mb-5 pb-3">Application Programming Interfaces</h3>
+                </div>
+            </div>
+            <div class="models">
+                <div class="row">
+                    <div class="col-sm-4 text-black">
+                        <div class="dataset-orange p-20">
+                            <div class="mb-4"><span class="h4 fw-300">Data Sets</span>&nbsp;&nbsp;<span class="font-italic">Language datasets</span></div>
+                            <ul>
+                                <li>Parallel text corpus in two or more languages</li>
+                                <li>Monolingual text corpus</li>
+                                <li>Automatic Speech Recognition (ASR) corpus</li>
+                                <li>Text to Speech (TTS) corpus</li>
+                                <li>Optical Character Recognition (OCR) corpus</li>
+                                <li>Natural Language Understanding (NLU) datasets</li>
+                            </ul>               
+                        </div>
+                                        
+                        <div class="text-center mt-5 mb-4 api-buttons">
+                            <button type="button" class="bh-btn-orange"> Open Sourced</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 text-black">
+                        <div class="dataset-orange p-20">
+                            <div class="mb-4"><span class="h4 fw-300">Models</span>&nbsp;&nbsp;<span class="font-italic">Language specific tasks</span></div>
+                            <ul>
+                            <li>Machine Translation (MT)</li>
+                            <li>Automatic Speech Recognition (ASR)</li>
+                            <li>Text to Speech (TTS)</li>
+                            <li>Optical Character Recognition (OCR)</li>
+                            </ul>               
+                        </div>
+                                    
+                        <div class="text-center mt-5 mb-4  api-buttons">
+                            <button type="button" class="bh-btn-orange"> Transparent</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 text-black">
+                        <div class="dataset-orange p-20">
+                            <div class="mb-4"><span class="h4 fw-300">Benchmarks</span>&nbsp;&nbsp;<span class="font-italic">Open benchmarking</span></div>
+                            <ul>
+                                <li>Large, diverse and task specific benchmarks</li>
+                                <li>Research community approved metric system</li>
+                                </ul>               
+                            </div>
+                        
+                        <div class="text-center mt-5 mb-4 api-buttons">
+                            <button type="button" class="bh-btn-orange"> Inclusive</button>
+                        </div>
+            </div>
+</div>
+            </div>
+        </div>
+    </section>
+    <section class="section why">
+        <div class="shape2"><img src="%PUBLIC_URL%/intro/img/shape2.svg" alt="shapes"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-10">
+                    <!-- <div class="line"></div> -->
+                      <h2 class="text-center text-black mt-3 mb-4">Why ULCA?</h2>
+                    <div class="ulcaInfo text-black">
+                        <ul>
+                            <li>Be the premier data repository for Indic language resources</li>
+                            <li>Collect datasets for MT, ASR, TTS, OCR and various NLP tasks in standardized but extensible formats</li>
+                            <li>Collect extensive metadata related to dataset for various analysis</li>
+                            <li>Proper attribution for every contributor at the record level</li>
+                            <li>Deduplication capability built-in</li>
+                            <li>Simple interface to search and download datasets based on various filters</li>
+                            <li>Perform various quality checks on the submitted datasets</li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container-fluid">
+                <div class="footer-links row">
+            <div class="col-md-4 footerBg bg1">
+                
+                <img src="%PUBLIC_URL%/intro/img/web.png" alt="" class="">
+                <div class="">Web<br> 
+                    <a class="font-weight-bold" href="https://www.meity.gov.in" target="_blank" rel="noopener noreferrer">www.meity.gov.in</a>
+                    
+                </div>
+            </div>
+             <div class="col-md-4 footerBg bg2">
+                
+                <img src="%PUBLIC_URL%/intro/img/email-id.png" alt="" class="">
+                <div class="">Mail<br> 
+                    <a class="font-weight-bold" href="mailto:contact@bhashini.gov.in">contact@bhashini.gov.in</a>
+                    
+                </div>
+            </div>
+             <div class="col-md-4 footerBg bg3">
+                
+                <img src="%PUBLIC_URL%/intro/img/location.png" alt="" class="">
+                <div class="">Address<br> 
+                    <p class="font-weight-bold" href="">
 Electronics Niketan, 6, CGO Complex,
 Lodhi Road, New Delhi - 110003</p>
+                    
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="section primary-color">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                 
+                            <ul class="d-sm-flex link">
+                                <li><a href="#">Whitepaper</a></li>
+                                
+                                <li><a href="https://bhashini.uniteframework.io/en/ecosystem">Ecosystem</a></li>
+                                <li>
+                                    <a href=""><div class="join">
+            <a class="bh-btn-primary" href="https://uat.vakyansh.in/hi/home.html" target="_blank" rel="noopener noreferrer"> Join Bhasha Daan </a>
+        </div></a>
+                                </li>
+                            </ul>
+             
+                    </div>
+                    <div class="col-md-6">
                   
-              </div>
-          </div>
-      </div>
-      </div>
-      <div class="section primary-color">
-          <div class="container">
-              <div class="row align-items-center">
-                  <div class="col-md-6">
-               
-                          <ul class="d-flex link">
-                              <li><a href="">Whitepaper.</a></li>
-                              <li><a href="">Join Bhasha Daan.</a></li>
-                              <li><a href="">Ecosystem</a></li>
-                          </ul>
-           
-                  </div>
-                  <div class="col-md-6">
-                
-                          <ul class="socialLink link d-flex justify-content-end">
-                              <li><a href="https://www.facebook.com/" target="_blank"><img src="%PUBLIC_URL%/intro/img/facebook.png" alt="facebook"></a></li>
-                              <li><a href="https://twitter.com/" target="_blank"><img src="%PUBLIC_URL%/intro/img/tw.png" alt="twitter"></a></li>
-                              <li><a href="https://www.instagram.com/" target="_blank"> <img src="%PUBLIC_URL%/intro/img/insta.png" alt="instagram"></a></li>
-                          </ul>
-    
-                  </div>
+                            <ul class="socialLink link d-flex justify-content-end">
+                                <li><a href="https://www.facebook.com/" target="_blank"><img src="%PUBLIC_URL%/intro/img/facebook.png" alt="facebook"></a></li>
+                                <li><a href="https://twitter.com/" target="_blank"><img src="%PUBLIC_URL%/intro/img/tw.png" alt="twitter"></a></li>
+                                <li><a href="https://www.instagram.com/" target="_blank"> <img src="%PUBLIC_URL%/intro/img/insta.png" alt="instagram"></a></li>
+                            </ul>
+      
+                    </div>
 
-              </div>
-              <hr>
-              <div class="row align-items-center mt-4 mb-4">
-                  <div class="col-md-6">
-               
-                          <p class="lighGrey mb-0">Copyright @2021 NLTM. All Rights Reserved.<br>
+                </div>
+                <hr>
+                <div class="row align-items-center mt-4 mb-4">
+                    <div class="col-md-6">
+                 
+                            <p class="lighGrey mb-0">Copyright @2021 NLTM. All Rights Reserved.<br>
 NLTM: National Language Translation Mission</p>
-           
-                  </div>
-                  <div class="col-md-6">
-                      <ul class="d-flex link d-flex justify-content-end">
-                          <li><a href="https://bhashini.uniteframework.io/en/web-information-manager" target="_blank">Web Information Manager</a></li>
-                          <li><a href="https://bhashini.uniteframework.io/en/privacy-policy" target="_blank">Privacy Policy</a></li>
-                          <li><a href="https://bhashini.uniteframework.io/en/terms-conditions" target="_blank"> Terms of Use</a></li>
-                      </ul>
-                  </div>
+             
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="d-sm-flex link justify-content-end">
+                            <li><a href="https://bhashini.uniteframework.io/en/web-information-manager" target="_blank">Web Information Manager</a></li>
+                            <li><a href="https://bhashini.uniteframework.io/en/privacy-policy" target="_blank">Privacy Policy</a></li>
+                            <li><a href="https://bhashini.uniteframework.io/en/terms-conditions" target="_blank"> Terms of Use</a></li>
+                        </ul>
+                    </div>
 
-              </div>
-               <div class="row align-items-center justify-content-between mt-5">
-                  <div class="col-md-3">
-                      <a href="" class="tdl-logo"><img src="%PUBLIC_URL%/intro/img/tdil.png" alt="TDIL logo"></a>
-                  </div>
-                  <div class="col-md-3 text-right">
-                       <a href="" class="dg-india-logo "><img src="%PUBLIC_URL%/intro/img/dg-india.png" alt="dg-india logo"></a>
-                  </div>
+                </div>
+                 <div class="row align-items-center justify-content-between mt-5">
+                    <div class="col-md-3">
+                        <a href="" class="tdl-logo"><img src="%PUBLIC_URL%/intro/img/tdil.png" alt="TDIL logo"></a>
+                    </div>
+                    <div class="col-md-3 text-right">
+                         <a href="" class="dg-india-logo "><img src="%PUBLIC_URL%/intro/img/dg-india.png" alt="dg-india logo"></a>
+                    </div>
 
-              </div>
-              <div class="row mt-4 pt-4">
-                  <div class="col-md-4">
-                     <p class="lighGrey text-center">Technology Development for Indian Languages Programme</p>
-                  </div>
-                  <div class="col-md-4">
-                     <p class="lighGrey text-center">JavaScript must be enabled to access this site.
-                        Supports : Firefox, Google Chrome, Internet Explorer 10.0+, Safari</p>
-                  </div>
-                  <div class="col-md-4">
-                     <p class="lighGrey text-center">Last reviewed and updated on:16–Jun-2021</p>
-                  </div>
-                  
+                </div>
+                <div class="row mt-4 pt-4">
+                    <div class="col-md-4">
+                       <p class="lighGrey text-center">Technology Development for Indian Languages Programme</p>
+                    </div>
+                    <div class="col-md-4">
+                       <p class="lighGrey text-center">JavaScript must be enabled to access this site.
+Supports : Firefox, Google Chrome, Internet Explorer 10.0+, Safari</p>
+                    </div>
+                    <div class="col-md-4">
+                       <p class="lighGrey text-center">Last reviewed and updated on:16–Jun-2021</p>
+                    </div>
+                    
 
-              </div>
-          </div>
-      </div>
-  </footer>
+                </div>
+            </div>
+        </div>
+    </footer>
 
- <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+   <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>

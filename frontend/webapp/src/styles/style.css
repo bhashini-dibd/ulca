@@ -23,7 +23,7 @@ html,body {
 	max-width: 900px;
 	width: 100%;
 	padding: 2rem;
-	font-family: 'Lato', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	border: 4px solid #292576;
 	font-size: .875rem;
 	line-height: 1.7;
@@ -41,7 +41,7 @@ html,body {
 }
 .IntroSection h4 {
 	color: #2C2799;
-	font-family: 'Poppins', sans-serif; 
+	font-family: 'Rowdies', cursive, sans-serif; 
 	font-weight: 500;
 	font-size: 1.5rem;
 	margin: 0 0 .8rem;
@@ -49,7 +49,7 @@ html,body {
 }
 .IntroSection h6 {
 	font-size: 1rem;
-	font-family: 'Poppins', sans-serif; 
+	font-family: 'Rowdies', cursive, sans-serif; 
 	font-weight: 500;
 	color: #0C0F0F;
 	margin: 0 0 .8rem;
