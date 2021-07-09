@@ -58,7 +58,7 @@ const MySearches = (props) => {
         const fetchHeaderButton = () => {
                 return <>
                         <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={() => MySearchListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
-                        <Button color={"default"} size="medium" variant="outlined" className={classes.buttonStyle} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button>
+                        {/* <Button color={"default"} size="medium" variant="outlined" className={classes.buttonStyle} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button> */}
                 </>
         }
 
