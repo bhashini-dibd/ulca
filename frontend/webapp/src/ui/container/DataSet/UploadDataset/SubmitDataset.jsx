@@ -22,20 +22,20 @@ import DatasetItems from "../../../../configs/DatasetItems";
 import getTitleName from '../../../../utils/getDataset';
 import C from "../../../../redux/actions/constants";
 import { useDispatch } from 'react-redux';
-import {PageChange} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
+import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
 
 const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "", type: "parallel-corpus" })
-    const [title, setTitle]         = useState( "Parallel Dataset")
-    const dispatch                  = useDispatch();
+    const [title, setTitle] = useState("Parallel Dataset")
+    const dispatch = useDispatch();
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
         variant: 'success'
     })
-    const [error, setError] = useState({datasetName: "", url: "", type: false})
+    const [error, setError] = useState({ datasetName: "", url: "", type: false })
     const [search, setSearch] = useState(false)
     const history = useHistory();
 
@@ -90,60 +90,62 @@ const SubmitDataset = (props) => {
     //                     </Grid>
     //                 </Grid>
     //             </div>
-               
+
     //         </div>
     //     )
     // }
 
     const handleApicall = async () => {
 
-let apiObj = new SubmitDatasetApi(dataset)
-    fetch(apiObj.apiEndPoint(), {
-      method: 'post',
-      body: JSON.stringify(apiObj.getBody()),
-      headers: apiObj.getHeaders().headers
-    }).then(async response => {
-      const rsp_data = await response.json();
-      if (!response.ok) {
-        
-        setSnackbarInfo({
-            ...snackbar,
-            open: true,
-            message: rsp_data.message ? rsp_data.message: "something went wrong. PLease try again.",
-            timeOut: 40000,
-            variant: 'error'
-        })
-      } else {
-        dispatch(PageChange(0, C.PAGE_CHANGE));
-        history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.serviceRequestNumber}`)
-//           return true;
-      }
-    }).catch((error) => {
-        setSnackbarInfo({
-                        ...snackbar,
-                        open: true,
-                        message: "something went wrong. PLease try again.",
-                        timeOut: 40000,
-                        variant: 'error'
-                    })
-    });
-  
+        let apiObj = new SubmitDatasetApi(dataset)
+        console.log(JSON.stringify(apiObj.getBody()))
+        console.log(apiObj.getHeaders().headers)
+        fetch(apiObj.apiEndPoint(), {
+            method: 'post',
+            body: JSON.stringify(apiObj.getBody()),
+            headers: apiObj.getHeaders().headers
+        }).then(async response => {
+            const rsp_data = await response.json();
+            if (!response.ok) {
+
+                setSnackbarInfo({
+                    ...snackbar,
+                    open: true,
+                    message: rsp_data.message ? rsp_data.message : "something went wrong. PLease try again.",
+                    timeOut: 40000,
+                    variant: 'error'
+                })
+            } else {
+                dispatch(PageChange(0, C.PAGE_CHANGE));
+                history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.serviceRequestNumber}`)
+                //           return true;
+            }
+        }).catch((error) => {
+            setSnackbarInfo({
+                ...snackbar,
+                open: true,
+                message: "something went wrong. PLease try again.",
+                timeOut: 40000,
+                variant: 'error'
+            })
+        });
+
     }
 
-    const handleSelectChange = (e) =>{
-        let title = getTitleName(e) 
+    const handleSelectChange = (e) => {
+        let title = getTitleName(e)
         setTitle(title)
-       setDatasetInfo({ ...dataset, type: e })
+        setDatasetInfo({ ...dataset, type: e })
     }
 
-    const renderRadioIcons = ()   =>{
-        return <RadioGroup value={dataset.type} onChange={(e) =>handleSelectChange(e)} className={classes.radioGroup} vertical="true">
-                {DatasetItems.map((item, index)=>(
-                    <RadioButton key ={index} rootColor="grey" pointColor="black" value={item.value}>
-                   {item.label}
+    const renderRadioIcons = () => {
+        return <RadioGroup value={dataset.type} onChange={(e) => handleSelectChange(e)} className={classes.radioGroup} vertical="true">
+            {DatasetItems.map((item, index) => (
+                <RadioButton key={index} rootColor="grey" pointColor="black" value={item.value}>
+                    {item.label}
                 </RadioButton>
-                ))}
-            </RadioGroup>
+            ))}
+        </RadioGroup>
     }
 
     const validURL = (str) => {
@@ -158,18 +160,18 @@ let apiObj = new SubmitDatasetApi(dataset)
     }
 
     const handleSubmitDataset = (e) => {
-        if(dataset.datasetName.trim() === "" || dataset.url.trim() === ""){
-            setError({...error, name: !dataset.datasetName.trim() ? "Name cannot be empty":"",url:!dataset.url.trim() ?"URL cannot be empty" :"" })
-            
+        if (dataset.datasetName.trim() === "" || dataset.url.trim() === "") {
+            setError({ ...error, name: !dataset.datasetName.trim() ? "Name cannot be empty" : "", url: !dataset.url.trim() ? "URL cannot be empty" : "" })
+
         }
-        else if(dataset.datasetName.length > 256) {
-            setError({...error, name:"Max 256 characters allowed"})
-            
+        else if (dataset.datasetName.length > 256) {
+            setError({ ...error, name: "Max 256 characters allowed" })
+
         }
-        else if(!validURL(dataset.url)){
-            setError({...error, url:"‘Invalid URL"})
+        else if (!validURL(dataset.url)) {
+            setError({ ...error, url: "‘Invalid URL" })
         }
-        else{
+        else {
 
             handleApicall()
             setSnackbarInfo({
@@ -180,8 +182,8 @@ let apiObj = new SubmitDatasetApi(dataset)
             })
         }
 
-       
-        
+
+
     }
 
     const handleSnackbarClose = () => {
@@ -207,7 +209,7 @@ let apiObj = new SubmitDatasetApi(dataset)
                             <Typography color="textSecondary" variant="subtitle1">STEP-1</Typography>
                             <FormControl className={classes.form}>
                                 <Typography className={classes.typography} variant="subtitle1"><strong>Select Dataset Type</strong></Typography>
-                                    {renderRadioIcons()}
+                                {renderRadioIcons()}
                             </FormControl>
                         </Grid>
                         <Hidden>
@@ -260,29 +262,29 @@ let apiObj = new SubmitDatasetApi(dataset)
                                         <Grid container spacing={3}>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                                 <TextField fullWidth
-                                                    
+
                                                     color="primary"
                                                     label="Dataset name"
                                                     value={dataset.datasetName}
-                                                    error={error.name? true : false}
+                                                    error={error.name ? true : false}
                                                     helperText={error.name}
                                                     onChange={(e) => {
                                                         setDatasetInfo({ ...dataset, datasetName: e.target.value })
-                                                        setError({...error, name:false})
-                                                }}
+                                                        setError({ ...error, name: false })
+                                                    }}
                                                 />
                                             </Grid>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                                 <TextField fullWidth
-                                                    
+
                                                     color="primary"
                                                     label="Paste the URL of the public repository"
                                                     value={dataset.url}
-                                                    error = {error.url? true : false}
+                                                    error={error.url ? true : false}
                                                     helperText={error.url}
                                                     onChange={(e) => {
                                                         setDatasetInfo({ ...dataset, url: e.target.value })
-                                                        setError({...error, url:false})
+                                                        setError({ ...error, url: false })
                                                     }}
                                                 />
                                             </Grid>
@@ -293,8 +295,8 @@ let apiObj = new SubmitDatasetApi(dataset)
                                     color="primary"
                                     className={classes.submitBtn}
                                     variant="contained"
-                                    size = {'large'}
-                                    
+                                    size={'large'}
+
                                     onClick={handleSubmitDataset}
                                 >
                                     Submit
@@ -305,13 +307,13 @@ let apiObj = new SubmitDatasetApi(dataset)
                 </Paper>
             </div>
             {snackbar.open &&
-            <Snackbar
-                open={snackbar.open}
-                handleClose={handleSnackbarClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                message={snackbar.message}
-                variant={snackbar.variant}
-            />}
+                <Snackbar
+                    open={snackbar.open}
+                    handleClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    message={snackbar.message}
+                    variant={snackbar.variant}
+                />}
         </div>
     )
 }

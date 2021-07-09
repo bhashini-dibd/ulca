@@ -85,7 +85,7 @@ const ResetPassword = (props) => {
           <Link id="newaccount" className={classes.link}  href="#"
             onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`)}}>
             {" "}
-            Back to Sign in
+            Back to Login
           </Link>
         </Typography>
       </div>
@@ -93,6 +93,7 @@ const ResetPassword = (props) => {
       <Button
         variant="contained"
         color="primary"
+        size="large"
         className={classes.fullWidth}
         onClick={() => {
           HandleSubmit();
