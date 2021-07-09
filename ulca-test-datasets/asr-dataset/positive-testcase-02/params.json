@@ -10,9 +10,6 @@
     "domain":[
         "general"
     ],
-    "collectionMethod": [
-        "web-scrapping-audio"
-    ],
     "license":  "cc-by-4.0",
     "submitter": {
         "name": "Anirudh",
@@ -49,9 +46,9 @@
         ],
         "collectionDetails": {
             "asrModel": "gogle asr",
-            "evaluationMethod": [{
-            "wer": 26.5
-        }]
+            "evaluationMethod": {
+                "wer": 26.5
+            }
         }
     }
 }

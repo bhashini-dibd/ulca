@@ -10,9 +10,6 @@
     "domain":[
         "general"
     ],
-    "collectionMethod": [
-        "web-scrapping-audio"
-    ],
     "license":  "cc-by-4.0",
     "submitter": {
         "name": "Anirudh",
@@ -43,13 +40,12 @@
             "snrToolVersion": "1.0.1"
         }
     },
-    
     "collectionMethod": {
         "collectionDescription": [
             "auto-aligned"
         ],
         "collectionDetails": {
-            "alignmentTool": "AENEAS",
+            "alignmentTool": "AENAES",
             "alignmentToolVersion": "1.4.0.0"
         }
     }

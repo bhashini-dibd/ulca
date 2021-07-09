@@ -275,7 +275,8 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 				vModel.put("record", finalRecord);
 				vModel.put("currentRecordIndex", numberOfRecords);
-
+				
+				log.info(vModel.toString());			
 				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 				
 			}
