@@ -528,7 +528,7 @@ class UserUtils:
 
             if task_id == EnumVals.ForgotPwdTaskId.value:
                 email_subject   =   EnumVals.ForgotPwdSubject.value
-                template        =   'reset_mail_template.html'
+                template        =   'reset_pwd_mail_template.html'
                 rand_id         =   user_record["uuid"]
                 link            =   mail_ui_link+"set-password/{}/{}/{}".format(email,rand_id,timestamp)
                 
@@ -549,12 +549,12 @@ class UserUtils:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
             #searching for record matching user_name
-            valid = collections.find({"userName":user_email,"is_verified":True})
+            valid = collections.find({"email":user_email,"isVerified":True})
             if valid.count() == 0:
                 log.info("Not a valid email/username")
                 return post_error("Not Valid","Given email is not associated with any of the active ULCA accounts",None)
             for value in valid:
-                if value["is_active"]== False:
+                if value["isActive"]== False:
                     log.info("Given email/username is inactive")
                     return post_error("Not active", "This operation is not allowed for an inactive user", None)
         except Exception as e:

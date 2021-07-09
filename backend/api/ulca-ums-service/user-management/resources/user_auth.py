@@ -77,7 +77,7 @@ class ApiKeySearch(Resource):
             return post_error("Data Missing","key not found",None), 400
         key = body["key"]
         try:
-            result = authRepo.token_search(key)
+            result = authRepo.key_search(key)
             if "errorID" in result:
                 log.exception("api-key search request failed")
                 return result, 400
@@ -215,3 +215,24 @@ class ActivateDeactivateUser(Resource):
         except Exception as e:
             log.exception("Exception while activate/deactivate user api call: " + str(e), MODULE_CONTEXT, e)
             return post_error("Exception occurred", "Exception while deactivate user api call:{}".format(str(e)), None), 400
+
+
+class VerifyToken(Resource):
+
+    def post(self):
+        body = request.get_json()    
+        if body.get("token") == None:
+            return post_error("Data Missing","key not found",None), 400
+        key = body["token"]
+        try:
+            result = authRepo.token_search(key)
+            if "errorID" in result:
+                log.exception("token search for reset password failed")
+                return result, 400
+            else:
+                log.info("token search for reset password  successsful")
+                res = CustomResponse(Status.SUCCESS_USR_TOKEN.value, result)
+            return res.getresjson(), 200
+        except Exception as e:
+            log.exception("Exception while token search for reset password | {}".format(str(e)))
+            return post_error("Exception occurred", "Exception while token search for reset password : {}".format(str(e)), None), 400

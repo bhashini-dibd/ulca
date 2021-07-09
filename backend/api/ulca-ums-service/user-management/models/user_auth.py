@@ -64,7 +64,7 @@ class UserAuthenticationModel(object):
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)
 
 
-    def token_search(self,key):
+    def key_search(self,key):
         """Token search for user details"""
 
         try:
@@ -97,13 +97,13 @@ class UserAuthenticationModel(object):
         #inserting new id generated onto temporary token collection
         collections.insert({"email": user_name, "token": rand_id, "createdOn": datetime.utcnow()})
         #generating email notification
-        result = UserUtils.generate_email_reset_password([{"email":user_name,"uuid":rand_id}],EnumVals.ForgotPwdTaskId.value)
+        result = UserUtils.generate_email_notification([{"email":user_name,"uuid":rand_id}],EnumVals.ForgotPwdTaskId.value)
         if result is not None:
             return result
         return True
     
 
-    def reset_password(self,user_id,user_name,password):
+    def reset_password(self,user_id,user_email,password):
         """Resetting password
         
         an active user can reset their own password,
@@ -121,15 +121,13 @@ class UserAuthenticationModel(object):
                 log.info("Record found matching the userID {}".format(user_id), MODULE_CONTEXT)
                 for user in record:
                     #fetching the user roles
-                    roles=[ rol['roleCode'] for rol in user["roles"] ] 
-                    #converting roles to upper keys
-                    role_keys=[x.upper() for x in roles]
+                    roles=user["roles"] 
                     #fetching user name
-                    username=user["userName"]
+                    email=user["email"]
                 #verifying the requested person, both admin and user can reset password   
-                if (admin_role_key in role_keys) or (username == user_name):
+                if (admin_role_key in roles) or (email == user_email):
                     log.info("Reset password request is checked against role permission and username")
-                    results = collections.update({"userName":user_name,"is_active":True}, {"$set": {"password": hashed}})
+                    results = collections.update({"email":user_email,"is_active":True}, {"$set": {"password": hashed}})
                     if 'writeError' in list(results.keys()):
                         return post_error("Database error", "writeError while updating record", None)
                     return True
@@ -219,3 +217,22 @@ class UserAuthenticationModel(object):
             return post_error("Database exception", "Exception:{}".format(str(e)), None)
            
            
+    def token_search(self,token):
+        """Token search for user details"""
+
+        try:
+            log.info("searching for the user, using token")
+            collections = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION] 
+            user = collections.find({"token":token})
+            if user.count() == 0:
+                log.info("Token has expired")
+                return post_error("Invalid data", "Data received on request is not valid", None) 
+            for record in user:
+                email = record["email"]
+            usr_collections = get_db()[USR_MONGO_COLLECTION] 
+            usr_record = usr_collections.find({"email":email},{"_id":0})
+            return normalize_bson_to_json(usr_record[0])
+
+        except Exception as e:
+            log.exception("Database connection exception | {}".format(str(e)))
+            return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)

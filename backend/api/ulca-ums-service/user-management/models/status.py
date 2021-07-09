@@ -9,6 +9,10 @@ class Status(enum.Enum):
     SUCCESS_ACTIVATE_USR    =   {"message" : "User account verified and activated successfully"}
     SUCCESS_USR_LOGIN       =   {"message" : "Logged in successfully"}
     SUCCESS_USR_TOKEN       =   {"message" : "Search is successful"}
+    SUCCESS_RESET_PWD       =   {"message" : "Password has resetted successfully"}
+    SUCCESS_FORGOT_PWD      =   {"message" : "Please check your email for reset password link"}
+
+
     SUCCESS_USR_UPDATION = {'ok': True, 'http': {'status': 200},
                             'why': "users were updated successfully"}
     
@@ -37,11 +41,9 @@ class Status(enum.Enum):
     FAILURE_USR_TOKEN = {'ok': False, 'http': {'status': 400},
                          'why': "On input errors causing failure in user search"}
 
-    SUCCESS_FORGOT_PWD = {'ok': True, 'http': {'status': 200},
-                            'why': "User is notified successfully"}
+    
    
-    SUCCESS_RESET_PWD = {'ok': True, 'http': {'status': 200},
-                            'why': "Password has resetted successfully"}
+    
     FAILURE_RESET_PWD  = {'ok': False, 'http': {'status': 400},
                          'why': "On input errors causing failure in password resetting"}
     
