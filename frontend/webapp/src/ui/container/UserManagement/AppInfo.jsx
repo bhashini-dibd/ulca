@@ -20,7 +20,7 @@ function AppInfo(props) {
           Universal Language Contribution API
         </Typography>
         <Typography variant={"body1"} className={classes.body}>
-        ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with a user interface for interacting with the datasets.
+        ULCA is an open-sourced API and data platform to collect, curate and discover datasets in Indian languages.
         </Typography>
       </Grid>
     </Hidden>
