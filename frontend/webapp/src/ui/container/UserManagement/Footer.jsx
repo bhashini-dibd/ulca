@@ -8,7 +8,7 @@ const Footer = (props) => {
         <Typography className={classes.typoFooter} style={{ opacity: "0.5" }}>
           By continuing, you agree to ULCA{" "}
         </Typography>
-        <Typography className={classes.typoBold}>
+        <Typography >
           Terms of Service, Privacy Policy.
         </Typography>
       </div>

@@ -37,6 +37,7 @@ public class UnzipUtility {
 
 		Map<String, String> fileMap = new HashMap<String, String>();
 		String newDestDirectory = destDirectory + File.separator + serviceRequestNumber;
+		fileMap.put("baseLocation", newDestDirectory);
 		File destDir = new File(newDestDirectory);
 		if (!destDir.exists()) {
 			destDir.mkdir();
@@ -69,11 +70,14 @@ public class UnzipUtility {
 						log.info("fileDestination :: " + fileDest);
 						File fileDirect = new File(fileDest);
 						if (!fileDirect.exists()) {
-							log.info("fileDestination :: " + fileDest);
-							System.out.println("creating destination folder");
+							
+							log.info("creating destination folder :: " + fileDest);
 							fileDirect.mkdirs();
 						}
 						fileName = fileDetails[fileDetails.length - 1];
+						if(fileName.equals("params.json")) {
+							fileMap.put("baseLocation", fileDest.substring(0, fileDest.length()-1));
+						}
 						log.info("file name :: " + fileName);
 						log.info("unzipping file  :: " + entryType);
 							
@@ -91,7 +95,7 @@ public class UnzipUtility {
 
 						extractFile(zipIn, filePath);
 						log.info("filePath unzipped :: " + filePath);
-						fileMap.put(fileName, filePath);
+						//fileMap.put(fileName, filePath);
 					}
 
 				}
@@ -108,6 +112,7 @@ public class UnzipUtility {
 		}
 		zipIn.close();
 
+		log.info(fileMap.toString());
 		log.info("************ Exit UnzipUtility :: unzip *********");
 
 		return fileMap;

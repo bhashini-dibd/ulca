@@ -340,8 +340,8 @@ const Login = (props) => {
         </Button>
       </LoginSocialGithub> */}
         <div className={classes.createLogin}>
-          <Typography className={classes.width}>New to ULCA ?</Typography>
-          <Typography>
+          <Typography variant={"body2"} className={classes.width}>New to ULCA ?</Typography>
+          <Typography variant={"body2"} >
             <Link id="newaccount" className={classes.link} href="#"
               onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/register`) }}>
               {" "}

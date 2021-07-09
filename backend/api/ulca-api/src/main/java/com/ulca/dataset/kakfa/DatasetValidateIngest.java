@@ -1,5 +1,6 @@
 package com.ulca.dataset.kakfa;
 
+import java.io.File;
 import java.util.Map;
 
 import org.json.JSONException;
@@ -14,8 +15,13 @@ public interface DatasetValidateIngest {
 	default Error validateFileExistence(Map<String, String> fileMap) {
 
 		Error error = null;
+		
+		String baseLocation = fileMap.get("baseLocation");
+		
+		String paramsFileLocation = baseLocation + File.separator + "params.json";
+		
 
-		if (!fileMap.containsKey("params.json") || fileMap.get("params.json").isBlank()) {
+		if (!isFileAvailable(paramsFileLocation)) {
 
 			error = new Error();
 			error.setCause("params.json file not available");
@@ -25,7 +31,8 @@ public interface DatasetValidateIngest {
 
 		}
 
-		if (!fileMap.containsKey("data.json") || fileMap.get("data.json").isBlank()) {
+		String dataFileLocation = baseLocation + File.separator + "data.json";
+		if (!isFileAvailable(dataFileLocation)) {
 			error = new Error();
 			error.setCause("data.json file not available");
 			error.setMessage("data.json file not available");
@@ -57,4 +64,15 @@ public interface DatasetValidateIngest {
 		return target;
 	}
 
+	public default boolean isFileAvailable(String filePath) {
+		File f = new File(filePath);
+		
+        // Check if the specified file
+        // Exists or not
+        if (f.exists()) {
+        	return true;
+        }
+        
+        return false;
+	}
 }

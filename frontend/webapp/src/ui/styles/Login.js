@@ -7,11 +7,7 @@ const LoginStyle = (theme) => ({
     width: "20%",
     height: "auto",
     margin: "22% 294px 10% 39px",
-
-    fontWeight: "600",
-    cursor: "pointer",
-    fontStretch: "normal",
-    fontStyle: "normal",
+    cursor:"pointer",
     lineHeight: "1.53",
     letterSpacing: "3.9px",
     textAlign: "left",
@@ -22,15 +18,11 @@ const LoginStyle = (theme) => ({
     height: "auto",
     maxWidth: "300px",
     margin: "20% 70px 15% 39px",
-    fontWeight: "500",
-    fontStretch: "normal",
-    fontStyle: "normal",
     lineHeight: "1.5",
     letterSpacing: "1.6px",
     textAlign: "left",
     color: theme.palette.primary.contrastText,
     "@media (max-width:1040px)": {
-      fontSize: "1.6rem",
       letterSpacing: "1px",
       maxWidth: "280px",
       width: "80%",
@@ -43,22 +35,17 @@ const LoginStyle = (theme) => ({
     width: "80%",
     height: "auto",
     margin: "30px 0px 50px 39px",
-    fontFamily: "Lato",
-    fontSize: "70%",
-    fontWeight: "normal",
-    fontStretch: "normal",
-    fontStyle: "normal",
     lineHeight: "1.5",
     letterSpacing: "1.6px",
     textAlign: "left",
     color: "#f2f2f4",
     "@media (max-width:1040px)": {
-      fontSize: "56%",
+      
       letterSpacing: "1px",
       maxWidth: "280px",
     },
     "@media (min-width:1790px)": {
-      fontSize: "90%",
+      
       width: "85%",
     },
   },
@@ -72,27 +59,6 @@ const LoginStyle = (theme) => ({
     flexDirection: "column",
     justifyContent: "center",
   },
-  sub: {
-    width: "95%",
-    height: "auto",
-    maxWidth: "300px",
-    margin: "20% 70px 0 39px",
-    fontSize: "1.3rem",
-    fontWeight: "500",
-    fontStretch: "normal",
-    fontStyle: "normal",
-    lineHeight: "1.5",
-    letterSpacing: "1.6px",
-    textAlign: "left",
-    color: theme.palette.primary.contrastText,
-    "@media (max-width:1040px)": {
-      fontSize: "1.2rem",
-      letterSpacing: "1px",
-      maxWidth: "280px",
-      width: "80%"
-    }
-
-  },
   loginGrid: {
     width: "462px",
     flexDirection: "column",
@@ -105,10 +71,10 @@ const LoginStyle = (theme) => ({
     },
   },
   body2: {
-    fontWeight: "550",
+   
     paddingBottom: "25px",
     opacity: "1",
-    fontSize: "1.7rem",
+    
     height: "37px",
     color: "0C0F0F",
   },
@@ -262,7 +228,7 @@ const LoginStyle = (theme) => ({
     },
   },
   typoFooter: { opacity: "0.5", marginTop: "10px" },
-  typoBold: { fontWeight: "bold", marginLeft: "3px", marginTop: "10px" },
+  typoBold: { marginLeft: "3px", marginTop: "10px" },
   ActiveUserPaper: {
     margin: 'auto',
     marginTop: '5rem',
