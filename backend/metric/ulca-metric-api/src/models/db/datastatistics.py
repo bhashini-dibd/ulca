@@ -1,15 +1,19 @@
+from logging import config
 from os import tcgetpgrp
 from src.db import get_data_store
 from sqlalchemy import text
-from config import DRUID_DB_SCHEMA ,LANG_CODES
+from config import DRUID_DB_SCHEMA ,LANG_CODES, TIME_CONVERSION_VAL
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
 
+
+time_unit  = TIME_CONVERSION_VAL
+
+
 class AggregateDatasetModel(object):
     def __init__(self):
         pass
-
 
     def query_runner(self,query):
         try:
@@ -36,8 +40,8 @@ class AggregateDatasetModel(object):
 
 
             dtype = request_object["type"]
-            # if dtype == "asr-corpus":
-            #     count = "durationInSeconds"
+            if dtype == "asr-corpus":
+                count = "durationInSeconds"
             match_params = None
             if "criterions" in request_object:
                 match_params = request_object["criterions"]
@@ -73,7 +77,7 @@ class AggregateDatasetModel(object):
                             GROUP BY {src}, {tgt}, {delete}, {grp_field}'
 
                 result_parsed = self.query_runner(query)
-                chart_data = self.result_formater(result_parsed,grp_field)
+                chart_data = self.result_formater(result_parsed,grp_field,dtype)
                 return chart_data
             #aggregate query for groupby,matching
             if grpby_params != None and len(match_params) ==3:
@@ -91,14 +95,14 @@ class AggregateDatasetModel(object):
                             AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
                 
                 result_parsed = self.query_runner(query)
-                chart_data = self.result_formater(result_parsed,grp_field)
+                chart_data = self.result_formater(result_parsed,grp_field,dtype)
                 return chart_data
         except Exception as e:
             log.exception("Exception on query aggregation : {}".format(str(e)))
             return []
 
     
-    def result_formater(self,result_parsed,group_by_field):
+    def result_formater(self,result_parsed,group_by_field,dtype):
         try:
             aggs={}
             for item in result_parsed:
@@ -121,7 +125,10 @@ class AggregateDatasetModel(object):
             aggs_parsed ={}
             for val in aggs:
                 agg = aggs[val]
-                aggs_parsed[val] = (agg[False]-agg[True])
+                if dtype == "asr-corpus":
+                    aggs_parsed[val] = (agg[False]-agg[True])/3600
+                else:
+                    aggs_parsed[val] = (agg[False]-agg[True])
             log.info("Query Result : {}".format(aggs_parsed))
             chart_data =[]
             for val in aggs_parsed:
@@ -169,7 +176,10 @@ class AggregateDatasetModel(object):
             aggs_parsed ={}
             for val in aggs:
                 agg = aggs[val]
-                aggs_parsed[val] = (agg[False]-agg[True])
+                if dtype == "asr-corpus":
+                    aggs_parsed[val] = (agg[False]-agg[True])/3600
+                else:
+                    aggs_parsed[val] = (agg[False]-agg[True])
             log.info("Query Result : {}".format(aggs_parsed))
             chart_data =[]
             for val in aggs_parsed:

@@ -13,6 +13,8 @@ MONGO_CONNECTION_URL    = os.environ.get('MONGO_CLUSTER_URL', 'mongodb://localho
 #druid store configs
 DRUID_DB_SCHEMA         = os.environ.get('MATRIC_DRUID_DB_SCHEMA', 'TEST4')
 DRUID_CONNECTION_URL    = os.environ.get('DRUID_CLUSTER_URL', 'druid://localhost:8082/druid/v2/sql/')
+
+TIME_CONVERSION_VAL     = os.environ.get('ASR_DATA_CONERSION_VAL',3600)
 #lang abbreviations
 LANG_CODES        =    {'pa'        :'Punjabi', 
                         'bn'        :'Bengali',
