@@ -93,7 +93,7 @@
             "uri":"/ulca/user-mgmt/v1/users/token-search",
             "module":"ULCA-UMS",
             "active":true,
-            "whiteList":false,
+            "whiteList":true,
             "description":"API for token search"
         },
         {
@@ -101,7 +101,7 @@
             "uri":"/ulca/user-mgmt/v1/users/reset-password",
             "module":"ULCA-UMS",
             "active":true,
-            "whiteList":false,
+            "whiteList":true,
             "description":"API to reset user pwd"
         },
         {
