@@ -9,31 +9,63 @@ import {
   IconButton,
   InputAdornment,
   FormControl,
+  FormHelperText,
+  Input
 } from "@material-ui/core";
 
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import {  useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const ResetPassword = (props) => {
   const [values, setValues] = useState({
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState({
+    password: false,
+    confirmPassword: false,
+  });
+
+  const [snackbar, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    variant: 'success'
+  })
+
   const history = useHistory();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
+    setError({ ...error, [prop]: false });
   };
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
+  const handleSnackbarClose = () => {
+    setSnackbarInfo({ ...snackbar, open: false })
+  }
+  const HandleSubmitValidate = () => {
+    if (!(values.password.length > 7)) {
+      setError({ ...error, password: true })
+    }
+    else if (values.password !== values.confirmPassword) {
+      setError({ ...error, confirmPassword: true })
+    }
+    else {
+      HandleSubmit()
+
+    }
+
+
+  }
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
   const HandleSubmit = () => {
+
   };
   const { classes } = props;
 
@@ -44,13 +76,14 @@ const ResetPassword = (props) => {
         Please choose your new password
       </Typography>
       <FormControl className={classes.fullWidth} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">
+        <InputLabel error={error.password} htmlFor="outlined-adornment-password">
           Enter new password
         </InputLabel>
-        <OutlinedInput
+        <Input
           id="outlined-adornment-password"
           type={values.showPassword ? "text" : "password"}
           value={values.password}
+          error={error.password}
           onChange={handleChange("password")}
           endAdornment={
             <InputAdornment position="end">
@@ -67,6 +100,7 @@ const ResetPassword = (props) => {
           labelWidth={70}
         />
       </FormControl>
+      {error.password && <FormHelperText error={true}>Length should be 8 chanracters and at least one uppercase letter, one lowercase letter and one number </FormHelperText>}
       <FormControl className={classes.fullWidth} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">
           Confirm new password
@@ -74,16 +108,17 @@ const ResetPassword = (props) => {
         <OutlinedInput
           id="outlined-adornment-password"
           type={"password"}
+          error  = {error.confirmPassword}
           value={values.confirm}
           onChange={handleChange("password")}
-          labelWidth={70}
+          // labelWidth={70}
         />
       </FormControl>
-
+      {error.confirmPassword && <FormHelperText error={true}>Both password must match.</FormHelperText>}
       <div className={classes.loginLink}>
         <Typography>
-          <Link id="newaccount" className={classes.link}  href="#"
-            onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`)}}>
+          <Link id="newaccount" className={classes.link} href="#"
+            onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`) }}>
             {" "}
             Back to Login
           </Link>
@@ -96,7 +131,7 @@ const ResetPassword = (props) => {
         size="large"
         className={classes.fullWidth}
         onClick={() => {
-          HandleSubmit();
+          HandleSubmitValidate();
         }}
       >
         Save new password

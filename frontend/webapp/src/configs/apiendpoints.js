@@ -10,7 +10,8 @@ const endpoints = {
   submitSearchReq: '/ulca/apis/v0/dataset/corpus/search',
   errorReport:'/ulca/error-consumer/v0/error/report',
   register:"/ulca/user-mgmt/v1/users/signup",
-  activateUser :"/ulca/user-mgmt/v1/users/verify-user"
+  activateUser :"/ulca/user-mgmt/v1/users/verify-user",
+  forgotPassword: "/ulca/user-mgmt/v1/users/forgot-password"
 };
 
 export default endpoints;

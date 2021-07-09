@@ -187,8 +187,8 @@ const Login = (props) => {
             />
             {error.password && <FormHelperText error={true}>Incorrect password</FormHelperText>}
           </FormControl>
-          <div className={classes.forgotPassword}>
-             {/* <FormControlLabel
+          {/* <div className={classes.forgotPassword}>
+            <FormControlLabel
               control={
                 <Checkbox
                   checked={values.checked}
@@ -197,7 +197,7 @@ const Login = (props) => {
                 />
               }
               label="Keep me logged in "
-            />  */}
+            />
             <Typography className={classes.forgoLink}>
               <Link
                 id="newaccount"
@@ -209,7 +209,7 @@ const Login = (props) => {
                 Forgot Password?
               </Link>
             </Typography>
-          </div>
+          </div> */}
 
           <Button
             color="primary"
