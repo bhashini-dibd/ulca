@@ -98,8 +98,6 @@ const SubmitDataset = (props) => {
     const handleApicall = async () => {
 
         let apiObj = new SubmitDatasetApi(dataset)
-        console.log(JSON.stringify(apiObj.getBody()))
-        console.log(apiObj.getHeaders().headers)
         fetch(apiObj.apiEndPoint(), {
             method: 'post',
             body: JSON.stringify(apiObj.getBody()),

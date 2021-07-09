@@ -43,7 +43,6 @@ const ContributionList = (props) => {
 
         const handleShowFilter = (event) => {
                 setAnchorEl(event.currentTarget);
-                console.log(myContributionReport.filter, myContributionReport.selectedFilter)
         }
         const handleClose = () => {
                 setAnchorEl(null);

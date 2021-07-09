@@ -163,7 +163,6 @@ const MySearches = (props) => {
         };
 
         const { classes } = props;
-        console.log("hiii", detailedReport)
         return (
                 <div >
                         <div className={classes.breadcrum}>
