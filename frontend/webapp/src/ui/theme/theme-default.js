@@ -2,8 +2,8 @@ import { createMuiTheme } from "@material-ui/core/styles";
 
 const themeDefault = createMuiTheme({
   typography: {
-    fontFamily: '"Lato"',
-    fontWeight: "600",
+    fontFamily: '"Roboto"',
+    fontWeight: "400",
   },
   overrides: {
     MuiTableRow: {
@@ -41,7 +41,7 @@ const themeDefault = createMuiTheme({
       root: {
         backgroundColor: "white",
         width: "80%",
-        fontFamily: '"lato" ,sans-serif',
+        fontFamily: '"Roboto" ,sans-serif',
       },
       checkboxFormControl: {
         minWidth: '200px'
@@ -49,7 +49,7 @@ const themeDefault = createMuiTheme({
     },
     MuiList: {
       root: {
-        fontFamily: '"lato" ,sans-serif',
+        fontFamily: '"Roboto" ,sans-serif',
       }
 
     },
@@ -149,7 +149,7 @@ const themeDefault = createMuiTheme({
         height: '36px'
       },
       label: {
-        fontFamily: '"lato" ,sans-serif',
+        fontFamily: '"Roboto" ,sans-serif',
         fontSize: '0.875rem'
       }
 
@@ -167,11 +167,11 @@ const themeDefault = createMuiTheme({
       label: {
 
         textTransform: "none",
-        fontFamily: '"Lato"',
-        fontSize: "14px",
-        fontWeight: "600",
+        fontFamily: '"Segoe UI","Roboto"',
+        fontSize: "15px",
+        fontWeight: "500",
         lineHeight: "1.14",
-        letterSpacing: "0.14px",
+        letterSpacing: "0.5px",
         textAlign: "center",
         height: "26px",
       },
@@ -207,59 +207,59 @@ const themeDefault = createMuiTheme({
 
 themeDefault.typography.h1 = {
   fontSize: "2.25rem",
-  fontFamily: '"Poppins","lato" ,sans-serif',
-  fontWeight: "500",
+  fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
+  fontWeight: "400",
 };
 themeDefault.typography.h2 = {
   fontSize: "2rem",
-  fontFamily: '"Poppins","lato" ,sans-serif',
-  fontWeight: "500",
+  fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
+  fontWeight: "400",
 };
 themeDefault.typography.h3 = {
   fontSize: "1.6875rem",
   letterSpacing: "1.98px",
-  fontFamily: '"Poppins","lato" ,sans-serif',
-  fontWeight: "500",
+  fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
+  fontWeight: "400",
 };
 themeDefault.typography.h4 = {
   fontSize: "1.5rem",
   // letterSpacing: "1.98px",
-  fontFamily: '"Poppins","lato" ,sans-serif',
-  fontWeight: "500",
+  fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
+  fontWeight: "300",
 };
 themeDefault.typography.h5 = {
   fontSize: "1.3125rem",
 
-  fontFamily: '"Poppins","lato" ,sans-serif',
-  fontWeight: "500",
+  fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
+  fontWeight: "300",
 };
 themeDefault.typography.h6 = {
-  fontSize: "1.125rem",
-  fontFamily: '"Poppins","lato" ,sans-serif',
-  fontWeight: "500",
+  fontSize: "1.3125rem",
+  fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
+  fontWeight: "300",
   paddingTop: "4px"
 };
 themeDefault.typography.body1 = {
   fontSize: "1rem",
-  fontFamily: '"lato" ,sans-serif',
-  fontWeight: "400"
+  fontFamily: '"Roboto", sans-serif ,sans-serif',
+  fontWeight: "300"
 
 };
 themeDefault.typography.body2 = {
   fontSize: "0.875rem",
-  fontFamily: '"lato" ,sans-serif',
+  fontFamily: '"Roboto", sans-serif',
   fontWeight: "400",
   color: "#0C0F0F"
 };
 themeDefault.typography.caption = {
   fontSize: "0.75rem",
-  fontFamily: '"lato" ,sans-serif',
+  fontFamily: "'Roboto', sans-serif",
   fontWeight: "400",
 };
 themeDefault.typography.subtitle1 = {
   fontSize: "1.125rem",
-  fontFamily: '"lato" ,sans-serif',
-  fontWeight: "600"
+  fontFamily: "'Roboto', sans-serif",
+  fontWeight: "400"
 };
 
 
