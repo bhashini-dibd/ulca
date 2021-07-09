@@ -90,7 +90,7 @@ const ChartRender = (props) => {
 				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", fetchNextParams(event))
 				setPage(value)
 				setFilterValue('domains')
-				handleSelectChange(selectedOption, event, filter, value)
+				handleSelectChange(selectedOption, event, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", value)
 
 				break;
 			case 0:
@@ -133,6 +133,7 @@ const ChartRender = (props) => {
 	}
 
 	const handleSelectChange = (dataSet, event, filter, page) => {
+		debugger
 		setSelectedOption(dataSet)
 		switch (dataSet.value) {
 			case 'parallel-corpus':
@@ -144,7 +145,7 @@ const ChartRender = (props) => {
 					setTitle(`English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 
 				} else if (page === 2) {
-					setTitle(`English-${selectedLanguageName} ${selectedOption.label} `)
+					setTitle(`English-${selectedLanguageName} ${selectedOption.label} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
 				}
 
 				break;
@@ -155,7 +156,7 @@ const ChartRender = (props) => {
 				} else if (page === 1) {
 					setTitle(`Number of sentences in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 				} else if (page === 2) {
-					setTitle(`Number of sentences in ${selectedLanguageName} `)
+					setTitle(`Number of sentences in ${selectedLanguageName} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
 				}
 				
 				break;
@@ -166,7 +167,7 @@ const ChartRender = (props) => {
 				} else if (page === 1) {
 					setTitle(`Number of audio hours in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 				} else if (page === 2) {
-					setTitle(`Number of audio hours in ${selectedLanguageName} `)
+					setTitle(`Number of audio hours in ${selectedLanguageName} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
 				}
 
 				break;
@@ -178,7 +179,7 @@ const ChartRender = (props) => {
 				} else if (page === 1) {
 					setTitle(`Number of images with ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} text - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 				} else if (page === 2) {
-					setTitle(`Number of images with ${selectedLanguageName} text`)
+					setTitle(`Number of images with ${selectedLanguageName} text of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
 				}
 
 				break;
