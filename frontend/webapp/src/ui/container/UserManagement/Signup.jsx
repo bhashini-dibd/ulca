@@ -142,8 +142,8 @@ const SignUp = (props) => {
 
   return (
     <Grid container className={classes.loginGrid}>
-      <Typography className={classes.body2}>Sign up to ULCA</Typography>
-      <Typography className={classes.subText}>
+      <Typography className={classes.body2} variant={"h6"}>Sign up to ULCA</Typography>
+      <Typography variant={"body2"} className={classes.subText}>
         Please enter the details to create an account with ULCA
       </Typography>
       <TextField
@@ -238,10 +238,10 @@ const SignUp = (props) => {
                     Sign Up
                 </Button>
       <div className={classes.createLogin}>
-        <Typography className={classes.width}>
+        <Typography variant="body2" className={classes.width}>
           Already have an account ?{" "}
         </Typography>
-        <Typography>
+        <Typography variant="body2">
           <Link id="newaccount" className={classes.link} href="#"
             onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`)}}>
             {" "}

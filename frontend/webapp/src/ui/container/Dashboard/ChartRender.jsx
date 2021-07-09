@@ -198,7 +198,7 @@ const ChartRender = (props) => {
 				{page === 1 && fetchFilterButtons()}
 				
 			</ TitleBar>
-			<Button onClick = {()=> setPopUp(true)} color= "primary" variant="contained" className={classes.infoBtn}><InfoOutlinedIcon/></Button>
+			{/* <Button onClick = {()=> setPopUp(true)} color= "primary" variant="contained" className={classes.infoBtn}><InfoOutlinedIcon/></Button> */}
 			{popUp && <AppInfo handleClose = {handleClosePopUp} open ={popUp}/>}
 
 				<Paper elevation={3} className={classes.paper}>
@@ -210,7 +210,7 @@ const ChartRender = (props) => {
 					
 					<div className={classes.title}>
 						<ResponsiveContainer width="95%" height={550} >
-							<BarChart width={900} height={350} data={DashboardReport.data} fontSize="14px" fontFamily="Lato" maxBarSize={100} >
+							<BarChart width={900} height={350} data={DashboardReport.data} fontSize="14px" fontFamily="Roboto" maxBarSize={100} >
 
 								<XAxis dataKey="label"
 									textAnchor={"end"}
@@ -223,7 +223,7 @@ const ChartRender = (props) => {
 								<YAxis padding={{ top: 10 }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
 
 
-								<Tooltip contentStyle={{fontFamily:"Lato", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
+								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
 								<Bar margin={{ top: 40, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
 									<LabelList
 										formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }}

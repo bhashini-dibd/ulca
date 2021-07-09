@@ -206,20 +206,20 @@ const themeDefault = createMuiTheme({
 });
 
 themeDefault.typography.h1 = {
-  fontSize: "2.25rem",
+  fontSize: "3.125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
-  fontWeight: "400",
+  fontWeight: "300",
 };
 themeDefault.typography.h2 = {
-  fontSize: "2rem",
+  fontSize: "2.5rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
-  fontWeight: "400",
+  fontWeight: "300",
 };
 themeDefault.typography.h3 = {
   fontSize: "1.6875rem",
   letterSpacing: "1.98px",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
-  fontWeight: "400",
+  fontWeight: "300",
 };
 themeDefault.typography.h4 = {
   fontSize: "1.5rem",
@@ -242,7 +242,7 @@ themeDefault.typography.h6 = {
 themeDefault.typography.body1 = {
   fontSize: "1rem",
   fontFamily: '"Roboto", sans-serif ,sans-serif',
-  fontWeight: "300"
+  fontWeight: "400"
 
 };
 themeDefault.typography.body2 = {

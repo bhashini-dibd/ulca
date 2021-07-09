@@ -23,7 +23,6 @@ const LoginStyle = (theme) => ({
     textAlign: "left",
     color: theme.palette.primary.contrastText,
     "@media (max-width:1040px)": {
-      fontSize: "1.6rem",
       letterSpacing: "1px",
       maxWidth: "280px",
       width: "80%",
@@ -41,12 +40,12 @@ const LoginStyle = (theme) => ({
     textAlign: "left",
     color: "#f2f2f4",
     "@media (max-width:1040px)": {
-      fontSize: "56%",
+      
       letterSpacing: "1px",
       maxWidth: "280px",
     },
     "@media (min-width:1790px)": {
-      fontSize: "90%",
+      
       width: "85%",
     },
   },
@@ -73,10 +72,10 @@ const LoginStyle = (theme) => ({
     },
   },
   body2: {
-    fontWeight: "550",
+   
     paddingBottom: "25px",
     opacity: "1",
-    fontSize: "1.7rem",
+    
     height: "37px",
     color: "0C0F0F",
   },
@@ -222,7 +221,7 @@ const LoginStyle = (theme) => ({
     },
   },
   typoFooter: { opacity: "0.5", marginTop: "10px" },
-  typoBold: { fontWeight: "bold", marginLeft: "3px", marginTop: "10px" },
+  typoBold: { marginLeft: "3px", marginTop: "10px" },
   ActiveUserPaper: {
     margin: 'auto',
     marginTop: '5rem',
