@@ -60,7 +60,7 @@ class AggregateDatasetModel(object):
                                     GROUP BY {src}, {tgt},{delete}'
 
                 elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus"]:
-                    sub_query = f'AND ({src} != {tgt}) GROUP BY {src}, {tgt},{delete}'
+                    sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
                 qry_for_lang_pair  = query+sub_query
 
                 result_parsed = self.query_runner(qry_for_lang_pair)
