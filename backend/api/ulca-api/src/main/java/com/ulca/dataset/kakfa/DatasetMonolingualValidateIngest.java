@@ -92,8 +92,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 			return;
 		}
 
-		
-		String paramsFilePath = fileMap.get("params.json");
+		String paramsFilePath = fileMap.get("baseLocation")  + File.separator + "params.json";
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath, file);
 
@@ -200,8 +199,9 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 
 		JSONObject source;
 
-		String path = fileMap.get("data.json");
-		log.info("json.data file path :: " + path);
+		String path = fileMap.get("baseLocation")  + File.separator + "data.json";
+		log.info("data.json file path :: " + path);
+		
 
 		source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 

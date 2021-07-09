@@ -94,8 +94,8 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			return;
 		}
 		
-		
-		String paramsFilePath = fileMap.get("params.json");
+		String paramsFilePath = fileMap.get("baseLocation")  + File.separator + "params.json";
+	
 		
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath, file);
@@ -211,9 +211,9 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		JSONObject source;
-
-		String path = fileMap.get("data.json");
-		log.info("json.data file path :: " + path);
+		
+		String path = fileMap.get("baseLocation")  + File.separator + "data.json";
+		log.info("data.json file path :: " + path);
 
 		source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
@@ -234,8 +234,12 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		vModel.put("userMode", "real");
 		
 		taskTrackerRedisDao.intialize(serviceRequestNumber);
-
+		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
+		
+		String basePath  = fileMap.get("baseLocation")  + File.separator;
+		
 		reader.beginArray();
+		
 		while (reader.hasNext()) {
 
 			numberOfRecords++;
@@ -268,23 +272,37 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			}
 			if(rowSchema != null) {
 				
-				successCount++;
-				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
-				
 				JSONObject target =  new JSONObject(dataRow);
 				JSONObject finalRecord = deepMerge(source, target);
 				String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
 				finalRecord.remove("languages");
 				finalRecord.put("sourceLanguage", sourceLanguage);
+				
+				String fileLocation = basePath + finalRecord.get("imageFilename");
+				
+				if(isFileAvailable(fileLocation)) {
+					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+					successCount++;
+					finalRecord.put("fileLocation", fileLocation);
+					UUID uid = UUID.randomUUID();
+					finalRecord.put("id", uid);
 
-				finalRecord.put("fileLocation", fileMap.get(finalRecord.get("imageFilename")));
-				UUID uid = UUID.randomUUID();
-				finalRecord.put("id", uid);
+					vModel.put("record", finalRecord);
+					vModel.put("currentRecordIndex", numberOfRecords);
 
-				vModel.put("record", finalRecord);
-				vModel.put("currentRecordIndex", numberOfRecords);
+					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+					
+				}else {
+					failedCount++;
+					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+					
+					// send error event
+					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+					
+					log.info("record :: " +numberOfRecords + "failed " );
+				}
 
-				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+				
 				
 			}
 
