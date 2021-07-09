@@ -59,9 +59,8 @@ const LoginStyle = (theme) => ({
     flexDirection: "column",
     justifyContent: "center",
   },
-
   loginGrid: {
-    width: "33%",
+    width: "462px",
     flexDirection: "column",
     display: "flex",
     height: "auto",
@@ -81,7 +80,7 @@ const LoginStyle = (theme) => ({
   },
   fullWidth: {
     width: "100%",
-    marginTop: "30px",
+    marginTop: "13px",
     textAlign: "Left",
   },
   line: {
@@ -134,32 +133,40 @@ const LoginStyle = (theme) => ({
     width: "100%",
     display: "flex",
     justifyContent: "space-between",
+    float: 'right'
   },
   forgoLink: {
     textAlign: "right",
     paddingTop: "10px",
+    marginLeft:'auto'
   },
   link: {
     cursor: "pointer",
     width: "100%",
-    color: "#922D88",
+    color: "#2C2799",
     float: "right",
+    fontSize: "0.875rem",
+    fontFamily: '"lato" ,sans-serif',
+    fontWeight: "600",
   },
   subText: {
     marginTop: "-20px",
     opacity: "0.7",
   },
+  subTypo:{
+    marginTop:'15px'
+  },
   loginLink: {
     display: "flex",
     flexDirection: "column",
     flex: 1,
-    marginTop: "20px",
+    marginTop: "18px",
     alignItems: "flex-end",
   },
 
   textField: {
     width: "100%",
-    marginTop: "20px",
+    marginTop: "30px",
   },
   passwordHint: {
     opacity: "0.5",
@@ -199,9 +206,9 @@ const LoginStyle = (theme) => ({
     },
   },
 
-  InputLabel:{
-    marginLeft:"-15px",
-    paddingBottom:"19px"
+  InputLabel: {
+    marginLeft: "-15px",
+    paddingBottom: "19px"
   },
 
   buttonProgress: {

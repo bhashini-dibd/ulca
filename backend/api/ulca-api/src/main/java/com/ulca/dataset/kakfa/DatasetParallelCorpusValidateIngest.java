@@ -95,8 +95,9 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			return;
 		}
 		
+		String paramsFilePath = fileMap.get("baseLocation")  + File.separator + "params.json";
 		
-		String paramsFilePath = fileMap.get("params.json");
+		
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath,file);
 
@@ -208,7 +209,8 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 		record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
-		String dataFilePath = fileMap.get("data.json");
+		String dataFilePath = fileMap.get("baseLocation")  + File.separator + "data.json";
+		
 
 		log.info("data.json file path :: " + dataFilePath);
 		

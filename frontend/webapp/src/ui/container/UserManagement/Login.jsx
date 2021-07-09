@@ -187,29 +187,29 @@ const Login = (props) => {
             />
             {error.password && <FormHelperText error={true}>Incorrect password</FormHelperText>}
           </FormControl>
-          {/* <div className={classes.forgotPassword}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={values.checked}
-              onChange={handleCheckChange("checked")}
-              inputProps={{ "aria-label": "primary checkbox" }}
-            />
-          }
-          label="Keep me logged in "
-        />
-        <Typography className={classes.forgoLink}>
-          <Link
-            id="newaccount"
-            className={classes.link}
-            href="#"
-            onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/forgot-password`)}}
-          >
-            {" "}
-            Forgot Password?
-          </Link>
-        </Typography>
-      </div> */}
+          <div className={classes.forgotPassword}>
+             {/* <FormControlLabel
+              control={
+                <Checkbox
+                  checked={values.checked}
+                  onChange={handleCheckChange("checked")}
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+              }
+              label="Keep me logged in "
+            />  */}
+            <Typography className={classes.forgoLink}>
+              <Link
+                id="newaccount"
+                className={classes.link}
+                href="#"
+                onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/forgot-password`) }}
+              >
+                {" "}
+                Forgot Password?
+              </Link>
+            </Typography>
+          </div>
 
           <Button
             color="primary"

@@ -96,8 +96,7 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 			return;
 		}
 		
-		
-		String paramsFilePath = fileMap.get("params.json");
+		String paramsFilePath = fileMap.get("baseLocation")  + File.separator + "params.json";
 		
 		try {
 			paramsSchema = validateParamsSchema(paramsFilePath, file);
@@ -198,19 +197,13 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 		String datasetName = file.getDatasetName();
 		DatasetType datasetType = file.getDatasetType();
 
+		String path = fileMap.get("baseLocation")  + File.separator + "data.json";
+		log.info("data.json file path :: " + path);
 
 		ObjectMapper objectMapper = new ObjectMapper();
-
-		JSONObject source;
-
-		String path = fileMap.get("data.json");
-		log.info("json.data file path :: " + path);
-
-		source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-
+		JSONObject source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 		InputStream inputStream = Files.newInputStream(Path.of(path));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
-
 
 		int numberOfRecords = 0;
 		int failedCount = 0;
@@ -224,10 +217,9 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 		vModel.put("userId", userId);
 		vModel.put("userMode", "real");
 		
-		 
-		taskTrackerRedisDao.intialize(serviceRequestNumber);
-		 
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
+		taskTrackerRedisDao.intialize(serviceRequestNumber);
+		String basePath  = fileMap.get("baseLocation")  + File.separator;
 
 		reader.beginArray();
 		while (reader.hasNext()) {
@@ -252,40 +244,41 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				// send error event
 				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
-				
-				
+			
 			}
 			if(rowSchema != null) {
 				
-				successCount++;
-				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
-				
-				
 				JSONObject target =  new JSONObject(dataRow);
-				
 				JSONObject finalRecord = deepMerge(source, target);
 				String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
 				finalRecord.remove("languages");
 				finalRecord.put("sourceLanguage", sourceLanguage);
-
-				finalRecord.put("fileLocation", fileMap.get(finalRecord.get("audioFilename")));
-				UUID uid = UUID.randomUUID();
-				finalRecord.put("id", uid);
-
-				vModel.put("record", finalRecord);
-				vModel.put("currentRecordIndex", numberOfRecords);
-
-				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 				
+				String fileLocation = basePath + finalRecord.get("audioFilename");
+				
+				if(isFileAvailable(fileLocation)) {
+					successCount++;
+					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+					
+					finalRecord.put("fileLocation", fileLocation);
+					UUID uid = UUID.randomUUID();
+					finalRecord.put("id", uid);
+					vModel.put("record", finalRecord);
+					vModel.put("currentRecordIndex", numberOfRecords);
+					
+					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+					
+				}else {
+					failedCount++;
+					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED",  finalRecord.get("audioFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+					
+				}
 			}
-
-			
-
 		}
 		reader.endArray();
 		reader.close();
 		inputStream.close();
-		
 		
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 		
