@@ -10,6 +10,7 @@ import {
 import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
 import { useHistory } from "react-router-dom";
+import ForgotPasswordAPI from "../../../redux/actions/api/UserManagement/ForgotPassword";
 
 const ForgotPassword = (props) => {
   const [values, setValues] = useState({
@@ -21,6 +22,24 @@ const ForgotPassword = (props) => {
     setValues({ ...values, [prop]: event.target.value });
   };
   const HandleSubmit = () => {
+    const obj = new ForgotPasswordAPI(values.email)
+    fetch(obj.apiEndPoint(), {
+      method: 'POST',
+      headers: obj.getHeaders().headers,
+      body: JSON.stringify(obj.getBody())
+    })
+      .then(response => {
+        if (response.ok) {
+          console.log('inside forgot password')
+        }
+        else {
+          console.log('inside forgot password else')
+          Promise.reject('Not a proper response')
+        }
+      })
+      .catch(error => {
+        console.log('error', error)
+      })
   };
   const { classes } = props;
 
