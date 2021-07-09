@@ -31,9 +31,9 @@ class AudioMetadataCheck(BaseValidator):
                     request['record']['durationInSeconds'] = request['record']['duration']
                 elif 'startTime' in request['record'].keys() and 'endTime' in request['record'].keys():
                     h, m, s = request['record']['startTime'].split(':')
-                    start_t = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                    start_t = timedelta(hours=int(h), minutes=int(m), seconds=float(s))
                     h, m, s = request['record']['endTime'].split(':')
-                    end_t = timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                    end_t = timedelta(hours=int(h), minutes=int(m), seconds=float(s))
                     request['record']['durationInSeconds'] = (end_t-start_t).total_seconds()
                 else:
                     request['record']['durationInSeconds'] = metadata.streaminfo.duration
