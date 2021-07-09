@@ -12,13 +12,13 @@
     ],
     "collectionMethod": {
         "collectionDescription": [
-            "web-scrapping-audio"
+            "auto-aligned"
         ],
         "collectionDetails": {
-            "contributers": [{
+            "contributor": {
                 "name": "Harveen",
                 "aboutMe": "Member of thoughtworks asr team"
-            }]
+            }
         }
     },
     "format": "wav",
