@@ -10,9 +10,6 @@
     "domain":[
         "general"
     ],
-    "collectionMethod": [
-        "web-scrapping-audio"
-    ],
     "license":  "cc-by-4.0",
     "submitter": {
         "name": "Anirudh",
@@ -48,10 +45,10 @@
             "manual-transcribed"
         ],
         "collectionDetails": {
-            "contributor": [{
+            "contributor": {
                 "name": "Harveen",
                 "aboutMe": "Member of thoughtworks asr team"
-            }]
+            }
         }
     }
 }
