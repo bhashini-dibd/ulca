@@ -81,6 +81,30 @@
             "description":"API to verify the user"
         },
         {
+            "id":"8a0abebe-e05a-4456-92ac-36f879ca9276",
+            "uri":"/ulca/user-mgmt/v1/users/forgot-password",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API for forgot pwd"
+        },
+        {
+            "id":"f0fdba5b-972e-4542-babd-716537def248",
+            "uri":"/ulca/user-mgmt/v1/users/token-search",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":false,
+            "description":"API for token search"
+        },
+        {
+            "id":"d7da02b7-248c-43ab-aa9a-dac8b6c3a66f",
+            "uri":"/ulca/user-mgmt/v1/users/reset-password",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":false,
+            "description":"API to reset user pwd"
+        },
+        {
             "id":"3ac962a1-de14-4609-91b0-6b4bcb87b856",
             "uri":"/ulca/publish/v0/cluster/set",
             "module":"ULCA-PUBLISH",
