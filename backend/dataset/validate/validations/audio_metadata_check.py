@@ -22,10 +22,12 @@ class AudioMetadataCheck(BaseValidator):
 
                 if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
                     if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:
-                        return {"message": "Sampling rate does not match the specified value", "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
+                        error_message = 'Sampling rate does not match the specified value: Expected Value - ' + str(metadata.streaminfo.sample_rate/1000) + ', Specified Value - ' + str(request['record']['samplingRate'])
+                        return {"message": error_message, "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
                 if 'bitsPerSample' in request['record'].keys() and request['record']['bitsPerSample'] != None:
                     if metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
-                        return {"message": "Bits per sample does not match the specified value", "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
+                        error_message = 'Bits per sample does not match the specified value: Expected Value - ' + str(metadata.streaminfo.bit_depth) + ', Specified Value - ' + str(request['record']['bitsPerSample'])
+                        return {"message": error_message, "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
 
                 if 'duration' in request['record'].keys():
                     request['record']['durationInSeconds'] = request['record']['duration']
