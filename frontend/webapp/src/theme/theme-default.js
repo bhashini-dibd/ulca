@@ -167,11 +167,11 @@ const themeDefault = createMuiTheme({
       label: {
 
         textTransform: "none",
-        fontFamily: '"Roboto"',
-        fontSize: "14px",
-        fontWeight: "400",
+        fontFamily: '"Segoe UI","Roboto"',
+        fontSize: "15px",
+        fontWeight: "500",
         lineHeight: "1.14",
-        letterSpacing: "0.14px",
+        letterSpacing: "0.5px",
         textAlign: "center",
         height: "26px",
       },
@@ -225,40 +225,40 @@ themeDefault.typography.h4 = {
   fontSize: "1.5rem",
   // letterSpacing: "1.98px",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
-  fontWeight: "400",
+  fontWeight: "300",
 };
 themeDefault.typography.h5 = {
   fontSize: "1.3125rem",
 
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
-  fontWeight: "400",
+  fontWeight: "300",
 };
 themeDefault.typography.h6 = {
-  fontSize: "1.8rem",
+  fontSize: "1.3125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
-  fontWeight: "400",
+  fontWeight: "300",
   paddingTop: "4px"
 };
 themeDefault.typography.body1 = {
   fontSize: "1rem",
-  fontFamily: '"Rowdies", cursive ,sans-serif',
-  fontWeight: "400"
+  fontFamily: '"Roboto", sans-serif ,sans-serif',
+  fontWeight: "300"
 
 };
 themeDefault.typography.body2 = {
   fontSize: "0.875rem",
-  fontFamily: '"Rowdies", cursive ,sans-serif',
+  fontFamily: '"Roboto", sans-serif',
   fontWeight: "400",
   color: "#0C0F0F"
 };
 themeDefault.typography.caption = {
   fontSize: "0.75rem",
-  fontFamily: '"Rowdies", cursive ,sans-serif',
+  fontFamily: "'Roboto', sans-serif",
   fontWeight: "400",
 };
 themeDefault.typography.subtitle1 = {
   fontSize: "1.125rem",
-  fontFamily: '"Rowdies", cursive ,sans-serif',
+  fontFamily: "'Roboto', sans-serif",
   fontWeight: "400"
 };
 
