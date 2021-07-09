@@ -201,7 +201,7 @@ const ChartRender = (props) => {
 				
 			</ TitleBar>
 			{/* <Button onClick = {()=> setPopUp(true)} color= "primary" variant="contained" className={classes.infoBtn}><InfoOutlinedIcon/></Button> */}
-			{popUp && <AppInfo handleClose = {handleClosePopUp} open ={popUp}/>}
+			{/* {popUp && <AppInfo handleClose = {handleClosePopUp} open ={popUp}/>} */}
 
 				<Paper elevation={3} className={classes.paper}>
 						
