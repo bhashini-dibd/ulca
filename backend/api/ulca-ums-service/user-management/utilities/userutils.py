@@ -531,7 +531,7 @@ class UserUtils:
                 template        =   'reset_pwd_mail_template.html'
                 rand_id         =   user_record["uuid"]
                 link            =   mail_ui_link+"set-password/{}/{}/{}".format(email,rand_id,timestamp)
-                
+                name            =   user_record["name"]
             try:
                 msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
                 msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
@@ -552,7 +552,7 @@ class UserUtils:
             valid = collections.find({"email":user_email,"isVerified":True})
             if valid.count() == 0:
                 log.info("Not a valid email/username")
-                return post_error("Not Valid","Given email is not associated with any of the active ULCA accounts",None)
+                return post_error("Not Valid","This email address is not registered",None)#Given email is not associated with any of the active ULCA accounts
             for value in valid:
                 if value["isActive"]== False:
                     log.info("Given email/username is inactive")
