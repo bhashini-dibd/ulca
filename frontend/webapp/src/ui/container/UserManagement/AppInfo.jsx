@@ -17,17 +17,11 @@ function AppInfo(props) {
         
         <Typography className={classes.title} variant={"h3"} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>ULCA</Typography>
         <Typography variant={"h4"} className={classes.subTitle}>
-          Universal Language Contribution APIs
-        </Typography>
-        <Typography className={classes.sub}>
-        A MeitY initiative.
+          Universal Language Contribution API
         </Typography>
         <Typography className={classes.body}>
         ULCA is an open-sourced scalable data platform, supporting various types of dataset for Indic languages, along with a user interface for interacting with the datasets.
         </Typography>
-        <Button variant="contained" className={classes.expButton} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>
-          Explore
-        </Button>
       </Grid>
     </Hidden>
   );
