@@ -31,7 +31,8 @@ const ChartRender = (props) => {
 	const { classes } = props;
 	const options = Dataset;
 	useEffect(() => {
-		fetchChartData(selectedOption.value, "languagePairs", [])
+		fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": "en"}])
+		
 			history.push(`${process.env.PUBLIC_URL}/dashboard`)
 	}, []);
 
@@ -44,36 +45,36 @@ const ChartRender = (props) => {
 		var sourceLanguage = ""
 		let targetLanguage = ""
 		if (selectedOption.value === "parallel-corpus") {
-			sourceLanguage = { "type": "PARAMS", "value": "en" };
-			targetLanguage = { "type": "PARAMS", "value": (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id) }
+			sourceLanguage = "en" ;
+			targetLanguage =   (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id) 
 		}
 		else {
-			sourceLanguage = { "type": "PARAMS", "value": (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id) };
-			targetLanguage = { "type": "PARAMS", "value": "" };
+			sourceLanguage = (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id);
+			targetLanguage =  "" ;
 
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "type": "PARAMS", "sourceLanguage": sourceLanguage, "targetLanguage": targetLanguage }])
+		return ([{ "field":"sourceLanguage", "value": sourceLanguage,},{ "field":"targetLanguage", "value": targetLanguage }])
 	}
 
 	const fetchNextParams = (eventValue) => {
 		var sourceLanguage = ""
 		let targetLanguage = ""
-		let event = { "type": "PARAMS", "value": eventValue && eventValue.hasOwnProperty("_id") && eventValue._id }
+		let event = { "field": null, "value": eventValue && eventValue.hasOwnProperty("_id") && eventValue._id }
 		if (selectedOption.value === "parallel-corpus") {
-			sourceLanguage = { "type": "PARAMS", "value": "en" };
-			targetLanguage = { "type": "PARAMS", "value": selectedLanguage }
+			sourceLanguage = "en"
+			targetLanguage =  selectedLanguage 
 
 		}
 		else {
-			sourceLanguage = { "type": "PARAMS", "value": selectedLanguage };
-			targetLanguage = { "type": "PARAMS", "value": "" };
+			sourceLanguage = selectedLanguage ;
+			targetLanguage = "";
 
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "type": "PARAMS", "sourceLanguage": sourceLanguage, "targetLanguage": targetLanguage }, event])
+		return ([{ "field":"sourceLanguage", "value": sourceLanguage,},{ "field":"targetLanguage", "value": targetLanguage }, event])
 	}
 
 	const handleOnClick = (value, event, filter) => {
@@ -93,7 +94,7 @@ const ChartRender = (props) => {
 
 				break;
 			case 0:
-				fetchChartData(selectedOption.value, "languagePairs", [])
+				fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value": "en"}])
 				setPage(value)
 				setFilterValue('domains')
 				handleSelectChange(selectedOption, "", "", value)
@@ -137,7 +138,7 @@ const ChartRender = (props) => {
 			case 'parallel-corpus':
 				if (page === 0) {
 					setTitle("Number of parallel sentences per language with English")
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
 
 				} else if (page === 1) {
 					setTitle(`English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
@@ -149,7 +150,7 @@ const ChartRender = (props) => {
 				break;
 			case 'monolingual-corpus':
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
 					setTitle('Number of sentences per language')
 				} else if (page === 1) {
 					setTitle(`Number of sentences in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
@@ -160,7 +161,7 @@ const ChartRender = (props) => {
 				break;
 			case 'asr-corpus':
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
 					setTitle("Number of audio hours per language")
 				} else if (page === 1) {
 					setTitle(`Number of audio hours in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
@@ -172,7 +173,7 @@ const ChartRender = (props) => {
 			case 'ocr-corpus':
 
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "languagePairs", [])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
 					setTitle("Number of images per language")
 				} else if (page === 1) {
 					setTitle(`Number of images with ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} text - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
