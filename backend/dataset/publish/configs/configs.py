@@ -36,6 +36,9 @@ if isinstance(sample_size, str):
 pt_redis_db = os.environ.get('ULCA_PT_REDIS_DB', 0)
 if isinstance(pt_redis_db, str):
     pt_redis_db = eval(pt_redis_db)
+pub_dedup_redis_db = os.environ.get('ULCA_PUBLISH_DEDUP_REDIS_DB', 3)
+if isinstance(pub_dedup_redis_db, str):
+    pub_dedup_redis_db = eval(pub_dedup_redis_db)
 record_expiry_in_sec = os.environ.get('ULCA_PUBLISH_RECORD_EXPIRY_IN_SEC', 86400)
 if isinstance(record_expiry_in_sec, str):
     record_expiry_in_sec = eval(record_expiry_in_sec)
