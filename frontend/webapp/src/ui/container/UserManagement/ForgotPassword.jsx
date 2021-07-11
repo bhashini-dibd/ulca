@@ -11,39 +11,68 @@ import React, { useState } from "react";
 import LoginStyles from "../../styles/Login";
 import { useHistory } from "react-router-dom";
 import ForgotPasswordAPI from "../../../redux/actions/api/UserManagement/ForgotPassword";
+import Snackbar from '../../components/common/Snackbar';
 
 const ForgotPassword = (props) => {
   const [values, setValues] = useState({
     email: "",
   });
+  const [snackbar, setSnackbarInfo] = useState({
+    open: false,
+    message: '',
+    variant: 'success'
+  })
   const history = useHistory();
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
+
+  const handleSnackbarClose = () => {
+    setSnackbarInfo({ ...snackbar, open: false })
+  }
+
   const HandleSubmit = () => {
     const obj = new ForgotPasswordAPI(values.email)
+    // setSnackbarInfo({
+    //   ...snackbar,
+    //   open: true,
+    //   message: "Sending forgot password link...",
+    //   variant: 'info'
+    // })
     fetch(obj.apiEndPoint(), {
       method: 'POST',
       headers: obj.getHeaders().headers,
       body: JSON.stringify(obj.getBody())
     })
-      .then(response => {
+      .then(async response => {
+        let rsp_data = await response.json()
         if (response.ok) {
-          console.log('inside forgot password')
+          setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: rsp_data.message,
+            variant: 'success'
+          })
         }
         else {
-          console.log('inside forgot password else')
-          Promise.reject('Not a proper response')
+          setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: rsp_data.message,
+            variant: 'error'
+          })
+          Promise.reject(rsp_data.message)
         }
       })
       .catch(error => {
-        console.log('error', error)
+        console.log(error)
       })
   };
   const { classes } = props;
 
   return (
+    <>
     <Grid container className={classes.loginGrid}>
       <Typography variant="h4">Forgot password?</Typography>
       <Typography variant="body2" className={classes.subTypo}>
@@ -80,6 +109,15 @@ const ForgotPassword = (props) => {
         Send Link
       </Button>
     </Grid>
+    {snackbar.open &&
+      <Snackbar
+        open={snackbar.open}
+        handleClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        message={snackbar.message}
+        variant={snackbar.variant}
+      />}
+      </>
   );
 };
 
