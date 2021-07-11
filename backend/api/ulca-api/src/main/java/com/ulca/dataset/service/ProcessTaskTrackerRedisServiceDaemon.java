@@ -39,6 +39,9 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		for (Map.Entry<String, Map<String, String>> entry : map.entrySet()) {
 
 
+			try {
+				
+			
 			Map<String, String> val = entry.getValue();
 
 			String serviceRequestNumber = val.containsKey("serviceRequestNumber") ? val.get("serviceRequestNumber") + ""
@@ -135,6 +138,10 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			}
 
+			}catch(Exception e) {
+				log.info("Exception while processing the fetched Redis map data :: " + entry.toString() );
+			}
+			
 		}
 
 		
