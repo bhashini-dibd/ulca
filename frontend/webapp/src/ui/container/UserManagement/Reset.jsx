@@ -13,10 +13,12 @@ import {
   Input
 } from "@material-ui/core";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LoginStyles from "../../styles/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
+import TokenSearch from "../../../redux/actions/api/UserManagement/TokenSearch";
+import ResetPasswordAPI from "../../../redux/actions/api/UserManagement/ResetPassword";
 
 const ResetPassword = (props) => {
   const [values, setValues] = useState({
@@ -28,11 +30,27 @@ const ResetPassword = (props) => {
     confirmPassword: false,
   });
 
+  const [xUserId, setXUserId] = useState("")
+
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: '',
     variant: 'success'
   })
+
+  useEffect(() => {
+    console.log(props.token, props.email)
+    const apiObj = new TokenSearch(props.token)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'POST',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+      .then(async response => {
+        let rsp_data = await response.json()
+        console.log(rsp_data)
+      })
+  }, [])
 
   const history = useHistory();
 
@@ -55,24 +73,30 @@ const ResetPassword = (props) => {
     }
     else {
       HandleSubmit()
-
     }
-
-
   }
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
   const HandleSubmit = () => {
-
+    const apiObj = new ResetPasswordAPI(props.email, values.confirmPassword, xUserId)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'POST',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+    .then(async response=>{
+      let rsp_data = await response.json()
+      console.log(rsp_data)
+    })
   };
   const { classes } = props;
 
   return (
     <Grid container className={classes.loginGrid}>
-       <Typography variant="h4">Reset Password</Typography>
-       <Typography variant="body2" className={classes.subTypo}>
+      <Typography variant="h4">Reset Password</Typography>
+      <Typography variant="body2" className={classes.subTypo}>
         Please choose your new password
       </Typography>
       <FormControl className={classes.textField} variant="outlined">
@@ -108,10 +132,10 @@ const ResetPassword = (props) => {
         <OutlinedInput
           id="outlined-adornment-password"
           type={"password"}
-          error  = {error.confirmPassword}
+          error={error.confirmPassword}
           value={values.confirmPassword}
           onChange={handleChange("confirmPassword")}
-           labelWidth={160}
+          labelWidth={160}
         />
       </FormControl>
       {error.confirmPassword && <FormHelperText error={true}>Both password must match.</FormHelperText>}

@@ -11,7 +11,9 @@ const endpoints = {
   errorReport:'/ulca/error-consumer/v0/error/report',
   register:"/ulca/user-mgmt/v1/users/signup",
   activateUser :"/ulca/user-mgmt/v1/users/verify-user",
-  forgotPassword: "/ulca/user-mgmt/v1/users/forgot-password"
+  forgotPassword: "/ulca/user-mgmt/v1/users/forgot-password",
+  tokenSearch:'/ulca/user-mgmt/v1/users/token-search',
+  resetPassword:'/ulca/user-mgmt/v1/users/reset-password'
 };
 
 export default endpoints;
