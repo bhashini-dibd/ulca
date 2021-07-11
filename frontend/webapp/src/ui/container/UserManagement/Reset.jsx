@@ -71,15 +71,15 @@ const ResetPassword = (props) => {
 
   return (
     <Grid container className={classes.loginGrid}>
-      <Typography className={classes.body2}>Reset Password</Typography>
-      <Typography className={classes.subText}>
+       <Typography variant="h4">Reset Password</Typography>
+       <Typography variant="body2" className={classes.subTypo}>
         Please choose your new password
       </Typography>
-      <FormControl className={classes.fullWidth} variant="outlined">
+      <FormControl className={classes.textField} variant="outlined">
         <InputLabel error={error.password} htmlFor="outlined-adornment-password">
           Enter new password
         </InputLabel>
-        <Input
+        <OutlinedInput
           id="outlined-adornment-password"
           type={values.showPassword ? "text" : "password"}
           value={values.password}
@@ -97,21 +97,21 @@ const ResetPassword = (props) => {
               </IconButton>
             </InputAdornment>
           }
-          labelWidth={70}
+          labelWidth={140}
         />
       </FormControl>
       {error.password && <FormHelperText error={true}>Length should be 8 chanracters and at least one uppercase letter, one lowercase letter and one number </FormHelperText>}
-      <FormControl className={classes.fullWidth} variant="outlined">
-        <InputLabel htmlFor="outlined-adornment-password">
+      <FormControl className={classes.textField} variant="outlined">
+        <InputLabel error={error.confirmPassword} htmlFor="outlined-adornment-password">
           Confirm new password
         </InputLabel>
         <OutlinedInput
           id="outlined-adornment-password"
           type={"password"}
           error  = {error.confirmPassword}
-          value={values.confirm}
-          onChange={handleChange("password")}
-          // labelWidth={70}
+          value={values.confirmPassword}
+          onChange={handleChange("confirmPassword")}
+           labelWidth={160}
         />
       </FormControl>
       {error.confirmPassword && <FormHelperText error={true}>Both password must match.</FormHelperText>}
