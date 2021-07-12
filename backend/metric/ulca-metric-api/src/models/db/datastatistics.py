@@ -40,7 +40,7 @@ class AggregateDatasetModel(object):
 
 
             dtype = request_object["type"]
-            if dtype == "asr-corpus":
+            if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
                 count = "durationInSeconds"
             match_params = None
             if "criterions" in request_object:
@@ -59,7 +59,7 @@ class AggregateDatasetModel(object):
                     sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
                                     GROUP BY {src}, {tgt},{delete}'
 
-                elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus"]:
+                elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus"]:
                     sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
                 qry_for_lang_pair  = query+sub_query
 
@@ -125,7 +125,7 @@ class AggregateDatasetModel(object):
             aggs_parsed ={}
             for val in aggs:
                 agg = aggs[val]
-                if dtype == "asr-corpus":
+                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
                     aggs_parsed[val] = (agg[False]-agg[True])/3600
                 else:
                     aggs_parsed[val] = (agg[False]-agg[True])
@@ -135,7 +135,7 @@ class AggregateDatasetModel(object):
                 elem={}
                 elem["_id"]=val
                 if not val:
-                    elem["label"]="Unlabeled"
+                    elem["label"]="Unspecified"
                 else:
                     title=val.split('-')
                     elem["label"]=" ".join(title).title()
@@ -154,7 +154,7 @@ class AggregateDatasetModel(object):
                     check = "sourceLanguage" 
                 if item["sourceLanguage"] == lang :
                     check = "targetLanguage"
-                if dtype in ["asr-corpus","ocr-corpus","monolingual-corpus"]:
+                if dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus"]:
                     check = "sourceLanguage"
 
                 if aggs.get(item[check]) == None:
@@ -176,7 +176,7 @@ class AggregateDatasetModel(object):
             aggs_parsed ={}
             for val in aggs:
                 agg = aggs[val]
-                if dtype == "asr-corpus":
+                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
                     aggs_parsed[val] = (agg[False]-agg[True])/3600
                 else:
                     aggs_parsed[val] = (agg[False]-agg[True])
