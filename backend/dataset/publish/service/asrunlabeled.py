@@ -1,10 +1,10 @@
 import logging
 import time
 from logging.config import dictConfig
-from configs.configs import ds_batch_size, asr_prefix, \
+from configs.configs import ds_batch_size, \
     sample_size, offset, limit, asr_unlabeled_immutable_keys, asr_unlabeled_non_tag_keys, dataset_type_asr, \
     user_mode_pseudo, \
-    asr_unlabeled_search_ignore_keys, asr_unlabeled_updatable_keys, dataset_type_asr_unlabeled
+    asr_unlabeled_search_ignore_keys, asr_unlabeled_updatable_keys, dataset_type_asr_unlabeled, asr_unlabeled_prefix
 from repository.asrunlabeled import ASRUnlabeledRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -98,7 +98,7 @@ class ASRUnlabeledService:
             if metadata["userMode"] != user_mode_pseudo:
                 epoch = eval(str(time.time()).replace('.', '')[0:13])
                 s3_file_name = f'{metadata["datasetId"]}|{epoch}|{data["audioFilename"]}'
-                object_store_path = utils.upload_file(data["fileLocation"], asr_prefix, s3_file_name)
+                object_store_path = utils.upload_file(data["fileLocation"], asr_unlabeled_prefix, s3_file_name)
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
