@@ -45,14 +45,14 @@ if isinstance(record_expiry_in_sec, str):
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation"]
-asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds"]
+asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration"]
 asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "audioHash", "textHash", "fileLocation"]
-asr_updatable_keys = ["durationInSeconds"]
+asr_updatable_keys = ["durationInSeconds", "duration"]
 
 asr_unlabeled_immutable_keys = ["id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation"]
-asr_unlabeled_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds"]
+asr_unlabeled_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration"]
 asr_unlabeled_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "audioHash", "fileLocation"]
-asr_unlabeled_updatable_keys = ["durationInSeconds"]
+asr_unlabeled_updatable_keys = ["durationInSeconds", "duration"]
 
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType"]
 parallel_updatable_keys = ["alignmentScore"]
