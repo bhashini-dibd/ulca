@@ -310,8 +310,8 @@ class ParallelService:
                     pt.task_event_search(op, None)
                 else:
                     log.error(f'There was an error while pushing result to S3')
-                    error = {"code": "S3_UPLOAD_FAILED", "datasetType": dataset_type_parallel, "serviceRequestNumber": query["serviceRequestNumber"],
-                                                   "message": "There was an error while pushing result to S3"}
+                    error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_parallel, "serviceRequestNumber": query["serviceRequestNumber"],
+                                                   "message": "There was an error while pushing result to object store"}
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
                     pt.task_event_search(op, error)
             else:

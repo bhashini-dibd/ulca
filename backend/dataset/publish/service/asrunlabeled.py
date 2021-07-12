@@ -1,9 +1,7 @@
 import logging
-import multiprocessing
 import time
-from functools import partial
 from logging.config import dictConfig
-from configs.configs import ds_batch_size, no_of_parallel_processes, asr_prefix, \
+from configs.configs import ds_batch_size, asr_prefix, \
     sample_size, offset, limit, asr_unlabeled_immutable_keys, asr_unlabeled_non_tag_keys, dataset_type_asr, \
     user_mode_pseudo, \
     asr_unlabeled_search_ignore_keys, asr_unlabeled_updatable_keys, dataset_type_asr_unlabeled
