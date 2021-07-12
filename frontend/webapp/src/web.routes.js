@@ -62,7 +62,7 @@ export default function App() {
             component={Login}
           />
            <Route
-            path={`${process.env.PUBLIC_URL}/user/:page/:email/:token/:time`}
+            path={`${process.env.PUBLIC_URL}/user/:page/:email/:public/:private/:time`}
             component={Login}
           />
 
