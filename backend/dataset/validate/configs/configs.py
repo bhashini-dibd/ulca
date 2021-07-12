@@ -11,6 +11,7 @@ parallel_corpus_config_path = os.environ.get('ULCA_VALIDATE_PARALLEL_CONFIG', 'c
 asr_config_path = os.environ.get('ULCA_VALIDATE_ASR_CONFIG', 'configs/asr_config.json')
 ocr_config_path = os.environ.get('ULCA_VALIDATE_OCR_CONFIG', 'configs/ocr_config.json')
 monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', 'configs/monolingual_config.json')
+asr_unlabeled_config_path = os.environ.get('ULCA_VALIDATE_ASR_UNLABELED_CONFIG', 'configs/asr_unlabeled_config.json')
 
 pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 1000)
 if isinstance(pt_update_batch, str):
@@ -46,6 +47,7 @@ dataset_type_parallel = os.environ.get('DS_TYPE_PARALLEL', 'parallel-corpus')
 dataset_type_asr = os.environ.get('DS_TYPE_ASR', 'asr-corpus')
 dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
+dataset_type_asr_unlabeled = os.environ.get('DS_TYPE_ASR_UNLABELED', 'asr-unlabeled-corpus')
 
 validate_text_length_threshold = os.environ.get('DS_VALIDATE_TEXT_LENGTH_THRESHOLD', 2)
 asr_minimum_words_per_min = os.environ.get('DS_VALIDATE_MINIMUM_WORDS_PER_MIN', 10)

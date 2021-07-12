@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, shared_storage_path
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, shared_storage_path
 import hashlib
 import logging
 from logging.config import dictConfig
@@ -45,6 +45,9 @@ class CaseDedup(BaseValidator):
                 request['record']['groundTruthHash'] = self.create_hash(request['record']['groundTruth'], request['record']['sourceLanguage'])
             if request["datasetType"] == dataset_type_monolingual:
                 request['record']['textHash'] = self.create_hash(request['record']['text'], request['record']['sourceLanguage'])
+            if request["datasetType"] == dataset_type_asr_unlabeled:
+                audio_file = request['record']['fileLocation']
+                request['record']['audioHash'] = self.hash_file(audio_file)
 
             return super().execute(request)
         except Exception as e:

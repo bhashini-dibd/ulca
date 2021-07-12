@@ -8,9 +8,10 @@ from service.parallel import ParallelValidate
 from service.asr import ASRValidate
 from service.ocr import OCRValidate
 from service.monolingual import MonolingualValidate
+from service.asr_unlabeled import ASRUnlabeledValidate
 
 from configs.configs import kafka_bootstrap_server_host, validate_input_topic, validate_consumer_grp, validate_output_topic
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled
 from kafka import KafkaConsumer
 from processtracker.processtracker import ProcessTracker
 from kafkawrapper.producer import Producer
@@ -35,7 +36,7 @@ def consume():
     try:
         topics = [validate_input_topic]
         consumer = instantiate(topics)
-        p_service, o_service, a_service, m_service = ParallelValidate(), OCRValidate(), ASRValidate(), MonolingualValidate()
+        p_service, o_service, a_service, m_service, au_service = ParallelValidate(), OCRValidate(), ASRValidate(), MonolingualValidate(), ASRUnlabeledValidate()
         pt = ProcessTracker()
         prod = Producer()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
@@ -64,6 +65,8 @@ def consume():
                             a_service.execute_validation_pipeline(data)
                         if data["datasetType"] == dataset_type_monolingual:
                             m_service.execute_validation_pipeline(data)
+                        if data["datasetType"] == dataset_type_asr_unlabeled:
+                            au_service.execute_validation_pipeline(data)
                     else:
                         break
                 except Exception as e:

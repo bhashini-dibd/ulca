@@ -1,4 +1,4 @@
-from configs.configs import parallel_corpus_config_path, asr_config_path, ocr_config_path, monolingual_config_path
+from configs.configs import parallel_corpus_config_path, asr_config_path, ocr_config_path, monolingual_config_path, asr_unlabeled_config_path
 import json
 import validations as validator_package
 from validations.basic_schema_check import BasicSchemaCheck
@@ -53,6 +53,14 @@ class ValidationPipeline:
     def monolingual_pipeline(self, value):
         self._monolingual_pipeline = value
 
+    @property
+    def asr_unlabeled_pipeline(self):
+        return self._asr_unlabeled_pipeline
+
+    @asr_unlabeled_pipeline.setter
+    def asr_unlabeled_pipeline(self, value):
+        self._asr_unlabeled_pipeline = value
+
     def getValidators(self, filepath):
         with open(filepath) as v_file:
             v_list = json.loads(v_file.read())
@@ -95,6 +103,12 @@ class ValidationPipeline:
         p_filepath = os.path.abspath(os.path.join(os.curdir, monolingual_config_path))
         self.initiate_validators(p_filepath, validation_p)
 
+        # load validation pipeline for asr unlabeled
+        self.asr_unlabeled_pipeline = BasicSchemaCheck()
+        validation_p = self.asr_unlabeled_pipeline
+        p_filepath = os.path.abspath(os.path.join(os.curdir, asr_unlabeled_config_path))
+        self.initiate_validators(p_filepath, validation_p)
+
 
     def runParallelValidators(self, record):
         return self.parallel_pipeline.execute(record)
@@ -107,3 +121,6 @@ class ValidationPipeline:
 
     def runMonolingualValidators(self, record):
         return self.monolingual_pipeline.execute(record)
+
+    def runAsrUnlabeledValidators(self, record):
+        return self.asr_unlabeled_pipeline.execute(record)
