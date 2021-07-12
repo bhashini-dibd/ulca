@@ -220,9 +220,11 @@ const ChartRender = (props) => {
 									height={130}
 									interval={0}
 									position="insideLeft"
+									type="category"
+									label={{ value: 'Languages', position: 'insideRight', offset: 0 }}
 								>
 								</XAxis>
-								<YAxis padding={{ top: 10 }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
+								<YAxis padding={{ top: 10 }} label={{ value: 'COunt', angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
