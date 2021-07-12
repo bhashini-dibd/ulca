@@ -124,13 +124,13 @@ class ResetPassword(Resource):
     def post(self):
         
         body = request.get_json()
-        if "userName" not in body or not body["userName"]:
+        if "email" not in body or not body["email"]:
             return post_error("Data Missing","userName not found",None), 400
         if "password" not in body or not body["password"]:
             return post_error("Data Missing","Password not found",None), 400
 
         user_id=request.headers["x-user-id"]
-        user_name = body["userName"]
+        user_name = body["email"]
         password = body["password"]
         
         log.info("Request received for password resetting from {}".format(user_name),MODULE_CONTEXT)
