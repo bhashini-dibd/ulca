@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from utilities import UserUtils, normalize_bson_to_json
 import time
 import config
-from config import USR_MONGO_COLLECTION, USR_TEMP_TOKEN_MONGO_COLLECTION
+from config import USR_KEY_MONGO_COLLECTION, USR_MONGO_COLLECTION, USR_TEMP_TOKEN_MONGO_COLLECTION
 import logging
 from utilities import EnumVals
 
@@ -23,6 +23,8 @@ class UserAuthenticationModel(object):
 
         try:
             user_keys = UserUtils.get_data_from_keybase(user_email,keys=True)
+            if not user_keys:
+                    user_keys   =   UserUtils.generate_api_keys(user_email)
             if "errorID" in user_keys:
                 return user_keys
 
@@ -90,8 +92,6 @@ class UserAuthenticationModel(object):
     def forgot_password(self,user_email):
         """Generaing forgot password notification"""
 
-        #generating random id
-        rand_id=UserUtils.generate_user_id()
         #connecting to mongo instance/collection
         user_collection = get_db()[USR_MONGO_COLLECTION]
         user_record = user_collection.find({"email":user_email})
@@ -99,11 +99,20 @@ class UserAuthenticationModel(object):
         collections = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION]
         record = collections.find({"email":user_email})
         if record.count() != 0:
-            return post_error("Request failed","Rest password link is already genrated for your account, please check your mail")
+            return post_error("Request failed","Reset password link is already genrated for your account, please check your mail")
+        user_keys = UserUtils.get_data_from_keybase(user_email,keys=True)
+        if not user_keys:
+            user_keys   =   UserUtils.generate_api_keys(user_email)
+        if "errorID" in user_keys:
+            return user_keys
+        user_keys["createdOn"] = datetime.utcnow()
         #inserting new id generated onto temporary token collection
-        collections.insert({"email": user_email, "token": rand_id, "createdOn": datetime.utcnow()})
+        collections.insert(user_keys)
+        #removing API keys from user record
+        # key_collection = get_db()[USR_KEY_MONGO_COLLECTION]
+        # key_collection.remove({"email":user_email})
         #generating email notification
-        result = UserUtils.generate_email_notification([{"email":user_email,"uuid":rand_id,"name":name}],EnumVals.ForgotPwdTaskId.value)
+        result = UserUtils.generate_email_notification([{"email":user_email,"pubKey":user_keys["publicKey"],"pvtKey":user_keys["privateKey"],"name":name}],EnumVals.ForgotPwdTaskId.value)
         if result is not None:
             return result
         return True
@@ -121,6 +130,8 @@ class UserAuthenticationModel(object):
         try:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
+            key_collection = get_db()[USR_KEY_MONGO_COLLECTION]
+            temp_collection = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION]
             #searching for valid record matching given user_id
             record = collections.find({"userID": user_id})
             if record.count() != 0:
@@ -130,12 +141,23 @@ class UserAuthenticationModel(object):
                     roles=user["roles"] 
                     #fetching user name
                     email=user["email"]
+                #Validate the request
+                if email == user_email:
+                    temp_keys = temp_collection.find({"email":user_email})
+                    if temp_keys.count() == 0:
+                        key_collection.remove({"email":user_email})
+                        return post_error("Request Failed","Reset password link has expired")
+
                 #verifying the requested person, both admin and user can reset password   
                 if (admin_role_key in roles) or (email == user_email):
                     log.info("Reset password request is checked against role permission and username")
                     results = collections.update({"email":user_email,"isActive":True}, {"$set": {"password": hashed}})
                     if 'writeError' in list(results.keys()):
                         return post_error("Database error", "writeError while updating record", None)
+                    # removing temp API keys from user record
+                    temp_collection.remove({"email":user_email})
+                    # removing API keys from user record
+                    key_collection.remove({"email":user_email})
                     return True
             else:
                 log.info("No record found matching the userID {}".format(user_id), MODULE_CONTEXT)

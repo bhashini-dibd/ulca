@@ -29,6 +29,7 @@ json_file_name      =   config.ROLE_CODES_FILE_NAME
 
 mail_server         =   config.MAIL_SETTINGS["MAIL_USERNAME"]
 mail_ui_link        =   config.BASE_URL
+reset_pwd_link      =   config.RESET_PWD_ENDPOINT
 token_life          =   config.AUTH_TOKEN_EXPIRY_HRS
 verify_mail_expiry  =   config.USER_VERIFY_LINK_EXPIRY
 apikey_expiry       =   config.USER_API_KEY_EXPIRY  
@@ -268,8 +269,7 @@ class UserUtils:
             if keys:
                 result = collections.find({"email":value},{"email":1,"publicKey":1,"privateKey":1,"_id":0})
                 if result.count() ==0:
-                    new_keys   =   UserUtils.generate_api_keys(value)
-                    return new_keys
+                    return None
                 for key in result:
                     return key  
             if email:
@@ -512,7 +512,8 @@ class UserUtils:
             timestamp   =   eval(str(time.time()).replace('.', '')[0:13])
             name        =   None
             user_id     =   None
-            rand_id     =   None
+            pubKey      =   None
+            pvtKey      =   None
             link        =   None
 
             if task_id == EnumVals.VerificationTaskId.value:
@@ -529,8 +530,9 @@ class UserUtils:
             if task_id == EnumVals.ForgotPwdTaskId.value:
                 email_subject   =   EnumVals.ForgotPwdSubject.value
                 template        =   'reset_pwd_mail_template.html'
-                rand_id         =   user_record["uuid"]
-                link            =   mail_ui_link+"set-password/{}/{}/{}".format(email,rand_id,timestamp)
+                pubKey          =   user_record["pubKey"]
+                pvtKey          =   user_record["pvtKey"]
+                link            =   mail_ui_link+reset_pwd_link+"{}/{}/{}/{}".format(email,pubKey,pvtKey,timestamp)
                 name            =   user_record["name"]
             try:
                 msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
