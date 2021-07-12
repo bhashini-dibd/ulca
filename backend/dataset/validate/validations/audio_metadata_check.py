@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_asr, asr_minimum_words_per_min
+from configs.configs import dataset_type_asr, dataset_type_asr_unlabeled, asr_minimum_words_per_min
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -16,7 +16,7 @@ class AudioMetadataCheck(BaseValidator):
     def execute(self, request):
         log.info('----Executing the audio file metadata check----')
         try:
-            if request["datasetType"] == dataset_type_asr:
+            if request["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled]:
                 audio_file = request['record']['fileLocation']
                 metadata = audio_metadata.load(audio_file)
 
@@ -40,10 +40,11 @@ class AudioMetadataCheck(BaseValidator):
                 else:
                     request['record']['durationInSeconds'] = metadata.streaminfo.duration
 
-                num_words = len(list(request['record']['text'].split()))
-                words_per_minute = (num_words/request['record']['durationInSeconds'])*60
-                if words_per_minute < asr_minimum_words_per_min:
-                    return {"message": "Number of words too less for the audio duration", "code": "AUDIO_TEXT_INVALID_CORRELATION", "status": "FAILED"}
+                if request["datasetType"] == dataset_type_asr:
+                    num_words = len(list(request['record']['text'].split()))
+                    words_per_minute = (num_words/request['record']['durationInSeconds'])*60
+                    if words_per_minute < asr_minimum_words_per_min:
+                        return {"message": "Number of words too less for the audio duration", "code": "AUDIO_TEXT_INVALID_CORRELATION", "status": "FAILED"}
 
                 log.info('----Audio metadata check -> Passed----')
                 return super().execute(request)

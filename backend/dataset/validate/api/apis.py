@@ -4,7 +4,8 @@ from service.parallel import ParallelValidate
 from service.monolingual import MonolingualValidate
 from service.asr import ASRValidate
 from service.ocr import OCRValidate
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from service.asr_unlabeled import ASRUnlabeledValidate
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled
 
 ulca_dataset_validate = Flask(__name__)
 
@@ -31,5 +32,9 @@ def execute_validation():
     if dataset_type == dataset_type_monolingual:
         m_service = MonolingualValidate()
         res = m_service.execute_validation_pipeline(req_data)
+
+    if dataset_type == dataset_type_asr_unlabeled:
+        asr_ul_service = ASRUnlabeledValidate()
+        res = asr_ul_service.execute_validation_pipeline(req_data)
 
     return jsonify(res)
