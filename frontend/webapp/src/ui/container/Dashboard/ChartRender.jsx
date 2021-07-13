@@ -273,7 +273,7 @@ const ChartRender = (props) => {
 				options		=	{options}
 				isDisabled	=	{page !== 0 ? true : false}
 				page		= 	{page}
-				count 		= 	{DashboardReport.count}>
+				count 		= 	{DashboardReport.totalCount}>
 				{page === 1 && fetchFilterButtons()}
 				
 			</ TitleBar>

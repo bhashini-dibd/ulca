@@ -6,6 +6,7 @@ import {
     FormControl,
     Button,
     TextField,
+    Link,
     Hidden
 } from '@material-ui/core';
 // import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -133,13 +134,16 @@ const SubmitDataset = (props) => {
    
 
     const renderInstrructions = () => {
-        return <div>
-            <Typography className={classes.marginValue} variant="body2">Step 1. <span className={classes.spanColor}>Enter the specific dataset name.</span></Typography>
-            <Typography className={classes.marginValue} variant="body2">Step 2. <span className={classes.spanColor}>Add/Paste the dataset URL where you want to upload it.</span></Typography>
-            <Typography className={classes.marginValue} variant="body2">Step 3. <span className={classes.spanColor}>Click on submit button to upload the dataset.</span></Typography>
-            <Typography className={classes.marginValue} variant="body2">Step 4. <span className={classes.spanColor}>Once the dataset submission is completed then you will get the service request number.</span></Typography>
-            <Typography className={classes.marginValue} variant="body2">Step 5. <span className={classes.spanColor}>In the My Contribution pages, The User will get the dataset table which is in progress.</span></Typography>
-            <Typography className={classes.marginValue} variant="body2">Step 6. <span className={classes.spanColor}>Click on the in-progress link, User will get the status for uploaded dataset.</span></Typography>
+        return <div className={classes.list} >
+            <ul>
+            <li><Typography className={classes.marginValue} variant="body2">Provide a meaningful name to your dataset.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Provide the URL where the dataset is stored at.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Make sure the URL is a direct download link.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">If your dataset is stored in Google Drive, use<Link id="newaccount" href="https://sites.google.com/site/gdocs2direct/home">{" "}
+              https://sites.google.com/site/gdocs2direct/home {" "}
+            </Link>to generate a direct download link.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Make sure the dataset is available in .zip format.</Typography></li>
+            </ul>
         </div>
     }
 
@@ -197,7 +201,7 @@ const SubmitDataset = (props) => {
                    
                     <Grid container spacing={5}>
                         <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-                            <Typography color="textSecondary" variant="subtitle1">Instructions</Typography>
+                           
                             <FormControl className={classes.form}>
                                 <Typography className={classes.typography} variant="subtitle1">How to submit dataset?</Typography>
                                     {renderInstrructions()}
@@ -209,13 +213,13 @@ const SubmitDataset = (props) => {
                             </Grid>
                         </Hidden>
                         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                        <Typography style={{visibility:"hidden"}} color="textSecondary" variant="subtitle1">|</Typography>
+                        
                             <FormControl className={classes.form}>
                                 <Grid container spacing={6}>
                                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                         <Grid container spacing={5}>
                                             <Grid item xl={5} lg={5} md={5} sm={12} xs={12}>
-                                                <Typography className={classes.typography} variant="subtitle1">{title}</Typography>
+                                                <Typography className={classes.typography} variant="subtitle1">Submit dataset</Typography>
                                             </Grid>
                                             {/* <Grid item xl={7} lg={7} md={7} sm={12} xs={12}>
                                                 <div>
