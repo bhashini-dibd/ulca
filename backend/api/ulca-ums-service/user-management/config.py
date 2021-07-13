@@ -51,4 +51,4 @@ USER_VERIFY_LINK_EXPIRY =   os.environ.get('ULCA_VERIFY_LINK_EXP_HRS',48)
 USER_API_KEY_EXPIRY     =   os.environ.get('ULCA_API_KEY_EXP_DAYS',30)
 #React-app base url
 BASE_URL                =   os.environ.get('ULCA_REACT_APP_BASE_URL','https://dev.ulcacontrib.org/')
-RESET_PWD_ENDPOINT      =   os.environ.get('ULCA_RESET_PWD_ENDPOINT','/user/reset-password/')
+RESET_PWD_ENDPOINT      =   os.environ.get('ULCA_RESET_PWD_ENDPOINT','user/reset-password/')
