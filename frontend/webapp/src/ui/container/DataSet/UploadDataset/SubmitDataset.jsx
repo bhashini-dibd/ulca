@@ -27,7 +27,7 @@ import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/Da
 const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
-    const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "", type: "parallel-corpus" })
+    const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "" })
     const [title, setTitle] = useState("Parallel Dataset")
     const dispatch = useDispatch();
     const [snackbar, setSnackbarInfo] = useState({
@@ -98,8 +98,6 @@ const SubmitDataset = (props) => {
     const handleApicall = async () => {
 
         let apiObj = new SubmitDatasetApi(dataset)
-        console.log(JSON.stringify(apiObj.getBody()))
-        console.log(apiObj.getHeaders().headers)
         fetch(apiObj.apiEndPoint(), {
             method: 'post',
             body: JSON.stringify(apiObj.getBody()),
@@ -111,7 +109,7 @@ const SubmitDataset = (props) => {
                 setSnackbarInfo({
                     ...snackbar,
                     open: true,
-                    message: rsp_data.message ? rsp_data.message : "something went wrong. PLease try again.",
+                    message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
                     timeOut: 40000,
                     variant: 'error'
                 })
@@ -124,7 +122,7 @@ const SubmitDataset = (props) => {
             setSnackbarInfo({
                 ...snackbar,
                 open: true,
-                message: "something went wrong. PLease try again.",
+                message: "Something went wrong. Please try again.",
                 timeOut: 40000,
                 variant: 'error'
             })
@@ -132,20 +130,17 @@ const SubmitDataset = (props) => {
 
     }
 
-    const handleSelectChange = (e) => {
-        let title = getTitleName(e)
-        setTitle(title)
-        setDatasetInfo({ ...dataset, type: e })
-    }
+   
 
-    const renderRadioIcons = () => {
-        return <RadioGroup value={dataset.type} onChange={(e) => handleSelectChange(e)} className={classes.radioGroup} vertical="true">
-            {DatasetItems.map((item, index) => (
-                <RadioButton key={index} rootColor="grey" pointColor="black" value={item.value}>
-                    {item.label}
-                </RadioButton>
-            ))}
-        </RadioGroup>
+    const renderInstrructions = () => {
+        return <div>
+            <Typography className={classes.marginValue} variant="body2">Step 1. <span className={classes.spanColor}>Enter the specific dataset name.</span></Typography>
+            <Typography className={classes.marginValue} variant="body2">Step 2. <span className={classes.spanColor}>Add/Paste the dataset URL where you want to upload it.</span></Typography>
+            <Typography className={classes.marginValue} variant="body2">Step 3. <span className={classes.spanColor}>Click on submit button to upload the dataset.</span></Typography>
+            <Typography className={classes.marginValue} variant="body2">Step 4. <span className={classes.spanColor}>Once the dataset submission is completed then you will get the service request number.</span></Typography>
+            <Typography className={classes.marginValue} variant="body2">Step 5. <span className={classes.spanColor}>In the My Contribution pages, The User will get the dataset table which is in progress.</span></Typography>
+            <Typography className={classes.marginValue} variant="body2">Step 6. <span className={classes.spanColor}>Click on the in-progress link, User will get the status for uploaded dataset.</span></Typography>
+        </div>
     }
 
     const validURL = (str) => {
@@ -199,17 +194,13 @@ const SubmitDataset = (props) => {
                     <BreadCrum links={[url]} activeLink="Submit Dataset" />
                 </div>
                 <Paper elevation={3} className={classes.divStyle}>
-                    <Grid container >
-                        <Grid item>
-                            <Typography variant="h5">Submit Dataset</Typography>
-                        </Grid>
-                    </Grid>
+                   
                     <Grid container spacing={5}>
                         <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-                            <Typography color="textSecondary" variant="subtitle1">STEP-1</Typography>
+                            <Typography color="textSecondary" variant="subtitle1">Instructions</Typography>
                             <FormControl className={classes.form}>
-                                <Typography className={classes.typography} variant="subtitle1">Select Dataset Type</Typography>
-                                    {renderRadioIcons()}
+                                <Typography className={classes.typography} variant="subtitle1">How to submit dataset?</Typography>
+                                    {renderInstrructions()}
                             </FormControl>
                         </Grid>
                         <Hidden>
@@ -218,7 +209,7 @@ const SubmitDataset = (props) => {
                             </Grid>
                         </Hidden>
                         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                            <Typography color="textSecondary" variant="subtitle1">STEP-2</Typography>
+                        <Typography style={{visibility:"hidden"}} color="textSecondary" variant="subtitle1">|</Typography>
                             <FormControl className={classes.form}>
                                 <Grid container spacing={6}>
                                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>

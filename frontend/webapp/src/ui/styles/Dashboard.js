@@ -97,6 +97,9 @@ const FileUploadStyles = (theme) => ({
     marginRight:".7rem",
     "@media (max-width:800px)": {marginRight:"0"}
   },
+  titleDropdown:
+    {marginLeft:"1rem",minWidth:"10rem"}
+  ,
 
   title:{
     textAlign: "left",

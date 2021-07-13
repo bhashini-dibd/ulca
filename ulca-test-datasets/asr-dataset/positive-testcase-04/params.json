@@ -1,8 +1,7 @@
 {
     "datasetType": "asr-corpus",
     "languages": {
-        "sourceLanguage": "en",
-        "targetLanguage": null
+        "sourceLanguage": "en"
     },
     "collectionSource": [
         "openslr", "https://www.youtube.com?v=121212121"
@@ -12,7 +11,7 @@
     ],
     "collectionMethod": {
         "collectionDescription": [
-            "auto-aligned"
+            "manual-transcribed"
         ],
         "collectionDetails": {
             "contributor": {
@@ -23,7 +22,7 @@
     },
     "format": "wav",
     "channel": "mono",
-    "samplingRate": 16000,
+    "samplingRate": 48,
     "bitsPerSample": "sixteen",
     "numberOfSpeakers": 3,
     "license":  "cc-by-4.0",
