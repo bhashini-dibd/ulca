@@ -15,31 +15,3 @@ DRUID_DB_SCHEMA         = os.environ.get('MATRIC_DRUID_DB_SCHEMA', 'TEST4')
 DRUID_CONNECTION_URL    = os.environ.get('DRUID_CLUSTER_URL', 'druid://localhost:8082/druid/v2/sql/')
 
 TIME_CONVERSION_VAL     = os.environ.get('ASR_DATA_CONERSION_VAL',3600)
-#lang abbreviations
-LANG_CODES        =    {'pa'        :'Punjabi', 
-                        'bn'        :'Bengali',
-                        'en'        :'English',
-                        'ta'        :'Tamil', 
-                        'ml'        :'Malayalam', 
-                        'te'        :'Telugu', 
-                        'kn'        :'Kannada', 
-                        'hi'        :'Hindi', 
-                        'mr'        :'Marathi',
-                        'gu'        :'Gujarati',
-                        'or'        :'Odia',
-                        'as'        :'Assamese',
-                        'kok'       :'Konkani',
-                        'sa'        :'Sanskrit',
-                        'ks'        :'Kashmiri',
-                        'ne'        :'Nepali',
-                        'ur'        :'Urdu',
-                        'doi'       :'Dogri',
-                        'mai'       :'Maithili',
-                        'mni'       :'Manipuri',
-                        'brx'       :'Bodo',
-                        'sat'       :'Santali'  ,
-                        'lus'       :'Lushai',
-                        'njz'       :'Ngungwel',
-                        'pnr'       :'Panim',
-                        'kha'       :'Khasi',
-                        'grt'       :'Garo'}

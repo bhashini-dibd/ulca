@@ -1,8 +1,11 @@
 from logging import config
 from os import tcgetpgrp
+
+from sqlalchemy.sql.expression import false
 from src.db import get_data_store
 from sqlalchemy import text
-from config import DRUID_DB_SCHEMA ,LANG_CODES, TIME_CONVERSION_VAL
+from config import DRUID_DB_SCHEMA , TIME_CONVERSION_VAL
+from src.models.api_enums import LANG_CODES
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -49,6 +52,17 @@ class AggregateDatasetModel(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]
 
+            sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
+            sumtotal_result = self.query_runner(sumtotal_query)
+            true_count = 0
+            false_count = 0
+            for val in sumtotal_result:
+                if val[delete] == "false":
+                    true_count = val[total]
+                else:
+                    false_count = val[total]
+            sumtotal = true_count - false_count
+
             #aggregate query for language pairs
             if grpby_params == None and len(match_params) ==1:
                 query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
@@ -65,7 +79,8 @@ class AggregateDatasetModel(object):
 
                 result_parsed = self.query_runner(qry_for_lang_pair)
                 chart_data =  self.result_formater_for_lang_pairs(result_parsed,dtype,value)
-                return chart_data
+
+                return chart_data,sumtotal
             #aggregate query for groupby field
             if grpby_params != None and len(match_params) ==2:
                 params = grpby_params[0]
@@ -78,7 +93,7 @@ class AggregateDatasetModel(object):
 
                 result_parsed = self.query_runner(query)
                 chart_data = self.result_formater(result_parsed,grp_field,dtype)
-                return chart_data
+                return chart_data,sumtotal
             #aggregate query for groupby,matching
             if grpby_params != None and len(match_params) ==3:
                 params = grpby_params[0]
@@ -96,10 +111,10 @@ class AggregateDatasetModel(object):
                 
                 result_parsed = self.query_runner(query)
                 chart_data = self.result_formater(result_parsed,grp_field,dtype)
-                return chart_data
+                return chart_data,sumtotal
         except Exception as e:
             log.exception("Exception on query aggregation : {}".format(str(e)))
-            return []
+            return [],0
 
     
     def result_formater(self,result_parsed,group_by_field,dtype):
@@ -132,6 +147,9 @@ class AggregateDatasetModel(object):
             log.info("Query Result : {}".format(aggs_parsed))
             chart_data =[]
             for val in aggs_parsed:
+                value = aggs_parsed.get(val) 
+                if value == 0:
+                    continue
                 elem={}
                 elem["_id"]=val
                 if not val:
@@ -139,7 +157,7 @@ class AggregateDatasetModel(object):
                 else:
                     title=val.split('-')
                     elem["label"]=" ".join(title).title()
-                elem["value"]=aggs_parsed.get(val)
+                elem["value"]=value
                 chart_data.append(elem)                 
             return chart_data
         except Exception as e:
@@ -183,13 +201,16 @@ class AggregateDatasetModel(object):
             log.info("Query Result : {}".format(aggs_parsed))
             chart_data =[]
             for val in aggs_parsed:
+                value = aggs_parsed.get(val) 
+                if value == 0:
+                    continue
                 elem={}
                 label = LANG_CODES.get(val)
                 if label == None:
                     label = val
                 elem["_id"]=val
                 elem["label"]=label
-                elem["value"]=aggs_parsed.get(val)
+                elem["value"]=value
                 chart_data.append(elem)     
             return chart_data
         except Exception as e:

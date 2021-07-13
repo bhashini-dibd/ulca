@@ -7,7 +7,7 @@ CORPUS_BLUEPRINT = Blueprint("corpus", __name__)
 
 
 Api(CORPUS_BLUEPRINT).add_resource(
-    DatasetSearchResource, "/v0/store/find"
+    DatasetSearchResource, "/v0/store/attributes"
 )
 
 Api(CORPUS_BLUEPRINT).add_resource(
