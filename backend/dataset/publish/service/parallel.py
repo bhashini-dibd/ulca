@@ -60,7 +60,13 @@ class ParallelService:
                                            "message": "This record is already available in the system"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                 else:
-                    log.error(f'EXCEPTION - There was exception while processing record: {record}')
+                    error_list.append(
+                        {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
+                         "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
+                         "serviceRequestNumber": metadata["serviceRequestNumber"],
+                         "message": "There was an exception while processing this record!"})
+                    pt.update_task_details(
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
             log.info(f'Parallel - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
@@ -105,8 +111,7 @@ class ParallelService:
                 insert_records.append(obj)
             return insert_records, insert_records
         except Exception as e:
-            log.exception(f'Exception while enriching record for insert record: {e}', e)
-            log.error(f'Data: {data}, Records: {records}')
+            log.exception(f'Exception while getting enriched data: {e}', e)
             return None
 
     '''

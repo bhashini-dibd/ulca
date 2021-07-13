@@ -63,6 +63,14 @@ class ASRUnlabeledService:
                                            "message": "This record is already available in the system",
                                            "datasetName": metadata["datasetName"]})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                else:
+                    error_list.append(
+                        {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
+                         "datasetType": dataset_type_asr_unlabeled, "datasetName": metadata["datasetName"],
+                         "serviceRequestNumber": metadata["serviceRequestNumber"],
+                         "message": "There was an exception while processing this record!"})
+                    pt.update_task_details(
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
             log.info(f'ASR UNLABELED - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
@@ -104,7 +112,7 @@ class ASRUnlabeledService:
                 insert_data["objStorePath"] = object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
-            log.exception(e)
+            log.exception(f'Exception while getting enriched data: {e}', e)
             return None
 
     '''

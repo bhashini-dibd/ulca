@@ -64,6 +64,14 @@ class OCRService:
                                            "message": "This record is already available in the system",
                                            "datasetName": metadata["datasetName"]})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                else:
+                    error_list.append(
+                        {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
+                         "datasetType": dataset_type_ocr, "datasetName": metadata["datasetName"],
+                         "serviceRequestNumber": metadata["serviceRequestNumber"],
+                         "message": "There was an exception while processing this record!"})
+                    pt.update_task_details(
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
             log.info(f'OCR - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
@@ -79,7 +87,7 @@ class OCRService:
     '''
     def get_enriched_ocr_data(self, data, metadata):
         try:
-            hashes = {data["imageHash"], data["groundTruthHash"]}
+            hashes = [data["imageHash"], data["groundTruthHash"]]
             record = self.get_ocr_dataset_internal({"tags": {"$all": hashes}})
             if record:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, ocr_immutable_keys, ocr_updatable_keys, ocr_non_tag_keys)
@@ -105,7 +113,7 @@ class OCRService:
                 insert_data["objStorePath"] = object_store_path
             return "INSERT", insert_data, insert_data
         except Exception as e:
-            log.exception(e)
+            log.exception(f'Exception while getting enriched data: {e}', e)
             return None
     '''
     Method to fetch records from the DB

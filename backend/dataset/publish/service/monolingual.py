@@ -58,6 +58,14 @@ class MonolingualService:
                              "serviceRequestNumber": metadata["serviceRequestNumber"],
                              "message": "This record is already available in the system"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                else:
+                    error_list.append(
+                        {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
+                         "datasetType": dataset_type_monolingual, "datasetName": metadata["datasetName"],
+                         "serviceRequestNumber": metadata["serviceRequestNumber"],
+                         "message": "There was an exception while processing this record!"})
+                    pt.update_task_details(
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
             log.info(f'Mono - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
@@ -91,7 +99,7 @@ class MonolingualService:
             insert_data["tags"] = service.get_tags(insert_data, mono_non_tag_keys)
             return "INSERT", insert_data, insert_data
         except Exception as e:
-            log.exception(e)
+            log.exception(f'Exception while getting enriched data: {e}', e)
             return None
 
     '''
