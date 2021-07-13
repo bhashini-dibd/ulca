@@ -8,4 +8,6 @@ import com.ulca.dataset.model.Fileidentifier;
 @Repository
 public interface FileIdentifierDao extends MongoRepository<Fileidentifier, String>{
 
+	Fileidentifier findByMd5hash(String myChecksum);
+
 }

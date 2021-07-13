@@ -22,7 +22,7 @@ const UserManagement = (props) => {
       case "forgot-password":
         return <ForgotPassword />;
       case "reset-password":
-        return <ResetPassword />;
+        return <ResetPassword email={param.email} public={param.public} private={param.private}/>;
 
       default:
         return <Dashboard />;

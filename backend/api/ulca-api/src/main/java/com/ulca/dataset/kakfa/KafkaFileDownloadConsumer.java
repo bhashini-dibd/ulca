@@ -1,6 +1,8 @@
 package com.ulca.dataset.kakfa;
 
+import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -18,8 +20,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+import com.google.gson.Gson;
+import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.model.Error;
+import com.ulca.dataset.model.Fileidentifier;
 import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
@@ -67,7 +76,8 @@ public class KafkaFileDownloadConsumer {
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
 	
-	
+	@Autowired
+	FileIdentifierDao fileIdentifierDao;
 	
 	@KafkaListener(groupId = "${kafka.ulca.ds.ingest.ip.topic.group.id}", topics = "${kafka.ulca.ds.ingest.ip.topic}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
@@ -77,7 +87,8 @@ public class KafkaFileDownloadConsumer {
 		String fileUrl = file.getFileUrl();
 		String serviceRequestNumber = file.getServiceRequestNumber();
 		String datasetName = file.getDatasetName();
-		DatasetType datasetType = file.getDatasetType();
+		//DatasetType datasetType = file.getDatasetType();
+		DatasetType datasetType = null;
 		
 		Map<String,String> fileMap = null;
 		
@@ -85,7 +96,7 @@ public class KafkaFileDownloadConsumer {
 			log.info("************ Entry KafkaFileDownloadConsumer :: downloadFile *********");
 			
 			
-			log.info(" datasetId :: " + datasetId);
+			log.info("datasetId :: " + datasetId);
 			log.info("fileUrl :: " + fileUrl);
 			log.info("serviceRequestNumber :: " + serviceRequestNumber);
 			
@@ -105,7 +116,14 @@ public class KafkaFileDownloadConsumer {
 				log.info("file download complete");
 				log.info("file path in downloadFile servide ::" + filePath);
 				
+				String md5hash = downloadFileSanityCheck(filePath);
+				
 				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
+				
+				fileMap.put("md5hash",md5hash);
+				
+				datasetType = getDatasetType(fileMap);
+				file.setDatasetType(datasetType);
 				
 				log.info("file unzip complete");
 				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.completed);
@@ -193,5 +211,76 @@ public class KafkaFileDownloadConsumer {
 
 		log.info("************ Exit KafkaFileDownloadConsumer :: downloadUsingNIO *********");
 		return file;
+	}
+	
+	private String downloadFileSanityCheck(String filePath) throws IOException {
+		File f = new File(filePath);
+		
+		//check if file is executable
+		if(f.canExecute()) {
+			throw new IOException("Executable File Not allowed");
+			
+		}
+		//check if md5hash of file exist
+		String md5hash = fileMD5hash(filePath);
+		
+		
+		return md5hash;
+	}
+	
+	private String fileMD5hash(String filePath) throws IOException {
+		
+		 HashCode hash = null;
+		 String myChecksum  = null;
+		try {
+			hash = com.google.common.io.Files
+				      .hash(new File(filePath), Hashing.md5());
+			
+			
+			 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			 
+		if( hash != null) {
+			
+			 myChecksum = hash.toString()
+				      .toUpperCase();
+			 Fileidentifier  fileIdentifier = fileIdentifierDao.findByMd5hash(myChecksum);
+			 if(fileIdentifier != null) {
+				 throw new IOException("Same File Already exists in system");
+			 }
+			 return myChecksum;
+		}
+		
+		return myChecksum;
+	}
+	
+	private DatasetType getDatasetType(Map<String,String> fileMap) throws IOException {
+		DatasetType datasetType = null;
+		String paramsFilePath = fileMap.get("baseLocation")  + File.separator + "params.json";
+		Object rowObj = new Gson().fromJson(new FileReader(paramsFilePath), Object.class);
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			String dataRow = mapper.writeValueAsString(rowObj);
+			JSONObject params =  new JSONObject(dataRow);
+			
+			if(params.isEmpty() || !params.has("datasetType")) {
+				 throw new IOException("params.json does not contain datasetType");
+			}
+			String type = params.getString("datasetType");
+			datasetType = DatasetType.fromValue(type);
+			
+			return datasetType;
+			
+			
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			 throw new IOException("params.json not valid");
+			
+		}
+		
 	}
 }

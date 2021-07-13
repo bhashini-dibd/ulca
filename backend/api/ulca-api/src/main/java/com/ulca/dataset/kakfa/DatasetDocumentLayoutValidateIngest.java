@@ -81,6 +81,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		DatasetType datasetType = file.getDatasetType();
 		String userId = file.getUserId();
 		String datasetId = file.getDatasetId();
+		String md5hash = fileMap.get("md5hash");
 		
 		DocumentLayoutParamsSchema paramsSchema = null;
 
@@ -157,7 +158,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 			JSONObject record;
 			record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
-			datasetService.updateDataset(datasetId, userId, record);
+			datasetService.updateDataset(datasetId, userId, record,md5hash);
 
 		} catch (JsonProcessingException | JSONException e) {
 

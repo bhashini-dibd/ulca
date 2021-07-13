@@ -21,6 +21,7 @@ import ActiveUser from "./ui/container/UserManagement/ActiveUser"
 import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/ReadymadeDataset";
 import PopUp from "./ui/container/DataSet/ReadymadeDataset.jsx/PopUp";
 import FilterList from "./ui/container/DataSet/DatasetView/FilterList";
+import Reset from "./ui/container/UserManagement/Reset";
 
 const PrivateRoute = ({ path, component: Component, authenticate, title, token, ...rest }) => {
   return (
@@ -56,8 +57,12 @@ export default function App() {
             component={Dashboard}
           />
           <Route
-            exact
+          exact
             path={`${process.env.PUBLIC_URL}/user/:page`}
+            component={Login}
+          />
+           <Route
+            path={`${process.env.PUBLIC_URL}/user/:page/:email/:public/:private/:time`}
             component={Login}
           />
 
@@ -164,6 +169,11 @@ export default function App() {
             currentMenu="pop-up"
             dontShowHeader={false}
           />
+
+          {/* <Route
+            path={`${process.env.PUBLIC_URL}/user/reset-password/:email/:userId/:time`}
+            component={Reset}
+          /> */}
 
         </Switch>
       </div>
