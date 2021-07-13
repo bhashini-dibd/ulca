@@ -10,6 +10,7 @@ import {
   InputAdornment,
   FormControl,
   FormHelperText,
+  CircularProgress,
 } from "@material-ui/core";
 import Snackbar from '../../components/common/Snackbar';
 import React, { useState, useEffect } from "react";
@@ -34,7 +35,7 @@ const ResetPassword = (props) => {
     message: '',
     variant: 'success'
   })
-
+  const [loading, setLoading] = useState(false);
   // useEffect(() => {
   //   console.log(props.token, props.email)
   //   const apiObj = new TokenSearch(props.token)
@@ -70,6 +71,7 @@ const ResetPassword = (props) => {
     }
     else {
       HandleSubmit()
+      setLoading(true);
     }
   }
 
@@ -85,7 +87,7 @@ const ResetPassword = (props) => {
     })
       .then(async response => {
         let rsp_data = await response.json()
-        console.log(rsp_data)
+        setLoading(false)
         if (response.ok) {
           setSnackbarInfo({
             ...snackbar,
@@ -105,6 +107,7 @@ const ResetPassword = (props) => {
         }
       })
       .catch(error => {
+        setLoading(false)
         console.log(error)
       })
   };
@@ -175,7 +178,8 @@ const ResetPassword = (props) => {
           onClick={() => {
             HandleSubmitValidate();
           }}
-        >
+          disabled={loading}>
+          {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           Save new password
         </Button>
       </Grid>
