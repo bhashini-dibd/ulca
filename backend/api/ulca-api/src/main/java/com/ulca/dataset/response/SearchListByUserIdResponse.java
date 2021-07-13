@@ -9,15 +9,15 @@ import lombok.Setter;
 @Data
 @Setter
 @Getter
-public class DatasetListByUserIdResponse {
+public class SearchListByUserIdResponse {
 	
 	
 	String message;
-	List<DatasetListByUserIdResponseDto> data;
+	List<SearchListByUserIdResponseDto> data;
 	int count;
 	Integer startPage;
 	Integer endPage;
-	public DatasetListByUserIdResponse(String message, List<DatasetListByUserIdResponseDto> data, Integer startPage, Integer endPage) {
+	public SearchListByUserIdResponse(String message, List<SearchListByUserIdResponseDto> data, Integer startPage, Integer endPage) {
 		super();
 		this.message = message;
 		this.data = data;
@@ -31,7 +31,7 @@ public class DatasetListByUserIdResponse {
 		}
 	}
 	
-	public DatasetListByUserIdResponse(String message, List<DatasetListByUserIdResponseDto> data) {
+	public SearchListByUserIdResponse(String message, List<SearchListByUserIdResponseDto> data) {
 		super();
 		this.message = message;
 		this.data = data;

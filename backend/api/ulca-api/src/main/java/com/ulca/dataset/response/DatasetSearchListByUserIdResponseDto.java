@@ -15,7 +15,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 
-public class DatasetSearchListByUserIdResponse {
+public class DatasetSearchListByUserIdResponseDto {
 	
 	private String serviceRequestNumber;
 	

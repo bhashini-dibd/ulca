@@ -1,29 +1,26 @@
 package com.ulca.dataset.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.request.DatasetCorpusSearchRequest;
 import com.ulca.dataset.request.DatasetSubmitRequest;
+import com.ulca.dataset.response.DatasetByIdResponse;
+import com.ulca.dataset.response.DatasetByServiceReqNrResponse;
 import com.ulca.dataset.response.DatasetCorpusSearchResponse;
 import com.ulca.dataset.response.DatasetListByUserIdResponse;
 import com.ulca.dataset.response.DatasetSearchStatusResponse;
 import com.ulca.dataset.response.DatasetSubmitResponse;
+import com.ulca.dataset.response.SearchListByUserIdResponse;
 import com.ulca.dataset.service.DatasetService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(value= "/ulca/apis/v0/dataset")
 public class DatasetController {
@@ -49,21 +46,21 @@ public class DatasetController {
 	  }
 
 	@GetMapping("/listByUserId")
-	public List<DatasetListByUserIdResponse> listByUserId(@RequestParam String userId) {
+	public DatasetListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage) {
 		log.info("******** Entry DatasetController:: listByUserId *******" );
 		
-		return datasetService.datasetListByUserId(userId);
+		return datasetService.datasetListByUserId(userId, startPage, endPage);
 	}
 	
 	@GetMapping("/getByDatasetId")
-	public Map<String, ArrayList<TaskTracker>> datasetById(@RequestParam String datasetId) {
+	public DatasetByIdResponse datasetById(@RequestParam String datasetId) {
 		log.info("******** Entry DatasetController:: listByUserId *******" );
 		
 		return datasetService.datasetById(datasetId);
 	}
 	
 	@GetMapping("/getByServiceRequestNumber")
-	public List<TaskTracker> datasetByServiceRequestNumber(@RequestParam String serviceRequestNumber) {
+	public DatasetByServiceReqNrResponse datasetByServiceRequestNumber(@RequestParam String serviceRequestNumber) {
 		log.info("******** Entry DatasetController:: listByUserId *******" );
 		
 		return datasetService.datasetByServiceRequestNumber(serviceRequestNumber);
@@ -84,9 +81,9 @@ public class DatasetController {
 		return datasetService.searchStatus(serviceRequestNumber);
 	}
 	@GetMapping("/corpus/search/listByUserId")
-	public List<DatasetSearchStatusResponse >searchListByUserId(@RequestParam String userId) {
-		log.info("******** Entry DatasetController:: searchStatus *******" );
+	public SearchListByUserIdResponse searchListByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage) {
+		log.info("******** Entry DatasetController:: searchListByUserId *******" );
 		
-		return datasetService.searchListByUserId(userId);
+		return datasetService.searchListByUserId(userId,startPage, endPage );
 	}
 }

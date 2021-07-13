@@ -12,8 +12,8 @@ public class DatasetSubmitRequest {
 	
 	private final String userId;
 	
-	@NotBlank(message="datasetType is required")
-	private final DatasetType type;
+	//@NotBlank(message="datasetType is required")
+	//private final DatasetType type;
 	
 	@NotBlank(message="datasetName is required")
     private final String datasetName;

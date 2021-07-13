@@ -75,6 +75,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 		DatasetType datasetType = file.getDatasetType();
 		String userId = file.getUserId();
 		String datasetId = file.getDatasetId();
+		String md5hash = fileMap.get("md5hash");
 		
 		MonolingualParamsSchema paramsSchema = null;
 
@@ -145,7 +146,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 			JSONObject record;
 			record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 			
-			datasetService.updateDataset(datasetId, userId, record);
+			datasetService.updateDataset(datasetId, userId, record,md5hash);
 			
 		} catch (JsonProcessingException | JSONException e) {
 			
