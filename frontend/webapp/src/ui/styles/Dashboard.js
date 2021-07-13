@@ -79,6 +79,7 @@ const FileUploadStyles = (theme) => ({
   },
   titleText: {
     marginLeft: "1.68rem",
+    marginRight:".5rem"
     
   },
   seperator: {

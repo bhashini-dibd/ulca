@@ -137,6 +137,10 @@ const SignUp = (props) => {
   
   
     }
+
+    const handlePrevent = (e) =>{
+      e.preventDefault()
+    }
   
   const { classes } = props;
 
@@ -175,6 +179,10 @@ const SignUp = (props) => {
           type={values.showPassword ? "text" : "password"}
           value={values.password}
           onChange={handleChange("password")}
+          
+      onCut={handlePrevent}
+      onCopy={handlePrevent}
+      onPaste={handlePrevent}
           error  = {error.password ? true :false }
           endAdornment={
             <InputAdornment position="end">
@@ -200,6 +208,10 @@ const SignUp = (props) => {
         <OutlinedInput
           id="outlined-adornment-password"
           type={"password"}
+          
+      onCut={handlePrevent}
+      onCopy={handlePrevent}
+      onPaste={handlePrevent}
           error  = {error.confirmPassword ? true :false }
           value={values.confirmPassword}
           onChange={handleChange("confirmPassword")}
