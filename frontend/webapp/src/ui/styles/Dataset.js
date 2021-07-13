@@ -16,11 +16,12 @@ const DataSet = (theme) => ({
     },
 
     divStyle: {
-        padding: "5% 10% 5% 10%"
+        padding: "5% 10% 5% 3.125rem"
     },
 
-    // typography:{fontSize:"1.1rem"},
-
+    typography:{marginBottom:"14px"},
+    marginValue:{marginTop:"14px"},
+    spanColor:{color:"#0C0F0FB3"},
     updateBtn: {
 
         display: 'flex',
@@ -236,7 +237,7 @@ const DataSet = (theme) => ({
     },
     applyBtn: {
         float: "right",
-        margin: '5px',
+        
         borderRadius: '4px',
         margin: '9px 16px 9px auto',
         width: '80px'

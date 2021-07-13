@@ -19,6 +19,7 @@ var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447
 
 const ChartRender = (props) => {
 	const [selectedOption, setSelectedOption] = useState(Dataset[0]);
+	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Languages"});
 	const [title, setTitle] = useState("Number of parallel dataset per language with English");
 	const [filterValue, setFilterValue] = useState("domains");
 	const [popUp, setPopUp] = useState(authenticate() ? false : true);
@@ -100,6 +101,7 @@ const ChartRender = (props) => {
 				handleSelectChange(selectedOption, "", "", value)
 				setSelectedLanguage("")
 				setSelectedLanguageName("")
+				
 				break;
 			default:
 
@@ -140,12 +142,19 @@ const ChartRender = (props) => {
 				if (page === 0) {
 					setTitle("Number of parallel sentences per language with English")
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					setAxisValue({xAxis:"Languages",yAxis:"Count"})
+					
 
 				} else if (page === 1) {
 					setTitle(`English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
+					
 
 				} else if (page === 2) {
 					setTitle(`English-${selectedLanguageName} ${selectedOption.label} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
+					
+					
 				}
 
 				break;
@@ -153,21 +162,33 @@ const ChartRender = (props) => {
 				if (page === 0) {
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
 					setTitle('Number of sentences per language')
+					
+					setAxisValue({xAxis:"Languages",yAxis:"Count"})
+					
 				} else if (page === 1) {
 					setTitle(`Number of sentences in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
+					
 				} else if (page === 2) {
 					setTitle(`Number of sentences in ${selectedLanguageName} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
+					
 				}
 				
 				break;
 			case 'asr-corpus':
 				if (page === 0) {
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					setAxisValue({xAxis:"Languages",yAxis:"Hours"})
 					setTitle("Number of audio hours per language")
 				} else if (page === 1) {
 					setTitle(`Number of audio hours in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
+					
 				} else if (page === 2) {
 					setTitle(`Number of audio hours in ${selectedLanguageName} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
+					
 				}
 
 				break;
@@ -176,10 +197,15 @@ const ChartRender = (props) => {
 				if (page === 0) {
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
 					setTitle("Number of images per language")
+					setAxisValue({xAxis:"Languages",yAxis:"Count"})
 				} else if (page === 1) {
 					setTitle(`Number of images with ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} text - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
+					
 				} else if (page === 2) {
 					setTitle(`Number of images with ${selectedLanguageName} text of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
+					
 				}
 
 				break;
@@ -221,10 +247,10 @@ const ChartRender = (props) => {
 									interval={0}
 									position="insideLeft"
 									type="category"
-									label={{ value: 'Languages', position: 'insideRight', offset: 0 }}
+									label={{ value: axisValue.xAxis, position: 'insideRight', offset: 0 }}
 								>
 								</XAxis>
-								<YAxis padding={{ top: 10 }} label={{ value: 'COunt', angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
+								<YAxis padding={{ top: 10 }} label={{ value: axisValue.yAxis, angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
