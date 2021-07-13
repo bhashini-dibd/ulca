@@ -93,7 +93,7 @@
             "uri":"/ulca/user-mgmt/v1/users/token-search",
             "module":"ULCA-UMS",
             "active":true,
-            "whiteList":true,
+            "whiteList":false,
             "description":"API for token search"
         },
         {
@@ -101,8 +101,16 @@
             "uri":"/ulca/user-mgmt/v1/users/reset-password",
             "module":"ULCA-UMS",
             "active":true,
-            "whiteList":true,
+            "whiteList":false,
             "description":"API to reset user pwd"
+        },
+        {
+            "id":"2c3ea074-fc02-498f-9b45-4f7c8ebc36d2",
+            "uri":"ulca/data-metric/v0/store/attributes",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to get metrics attributes"
         },
         {
             "id":"3ac962a1-de14-4609-91b0-6b4bcb87b856",
