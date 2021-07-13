@@ -75,7 +75,7 @@ public class DatasetService {
 	private String fileDownloadTopic;
 	
 	
-	private int  PAGE_SIZE = 3;
+	private int  PAGE_SIZE = 10;
 
 	@Transactional
 	public DatasetSubmitResponse datasetSubmit(DatasetSubmitRequest request) {
@@ -285,7 +285,7 @@ public class DatasetService {
 		String serviceRequestNumber = searchKafkaPublish.searchPublish(request, userId);
 
 		String message = "Search has been initiated";
-		DatasetCorpusSearchResponse response = new DatasetCorpusSearchResponse(serviceRequestNumber,message);
+		DatasetCorpusSearchResponse response = new DatasetCorpusSearchResponse(message, serviceRequestNumber);
 				
 		return response;
 	}
