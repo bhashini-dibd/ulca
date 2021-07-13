@@ -106,7 +106,7 @@
         },
         {
             "id":"2c3ea074-fc02-498f-9b45-4f7c8ebc36d2",
-            "uri":"ulca/data-metric/v0/store/attributes",
+            "uri":"/ulca/data-metric/v0/store/attributes",
             "module":"ULCA-UMS",
             "active":true,
             "whiteList":true,
