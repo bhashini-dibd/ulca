@@ -29,7 +29,7 @@ export default class CreateGlossary {
         let request = {}
         request["type"]        = this.dataType;
         request["criterions"]  = this.criterions;
-        request["groupby"]     = {"type":"PARAMS", "value": this.value}
+         request["groupby"]     = this.value ? [{"field":this.value, "value": null}]: null
         return request;
     }
 
