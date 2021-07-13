@@ -8,9 +8,9 @@ import ENDPOINTS from "../../../../configs/apiendpoints";
 import md5 from 'md5';
 
 export default class ResetPassword extends API {
-    constructor(userName, password, publicKey, privateKey, timeout = 2000) {
+    constructor(email, password, publicKey, privateKey, timeout = 2000) {
         super("POST", timeout, false);
-        this.userName = userName;
+        this.email = email;
         this.password = password;
         this.publicKey = publicKey;
         this.privateKey = privateKey;
@@ -24,7 +24,7 @@ export default class ResetPassword extends API {
 
     getBody() {
         let apiParam = {
-            "userName": this.userName,
+            "email": this.email,
             "password": this.password
         }
         return apiParam;
