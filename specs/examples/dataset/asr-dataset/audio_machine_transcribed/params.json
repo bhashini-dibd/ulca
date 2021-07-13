@@ -1,53 +1,52 @@
-{
-    "datasetType":"asr-corpus",
-    "languages":{
-        "sourceLanguage":"hi"
+{   
+    "datasetType": "asr-corpus",
+    "languages": {
+        "sourceLanguage": "hi"
     },
-    "collectionSource":[
-        "YouTube",
-        "https://www.youtube.com/watch?v=UIkSFSHX9AU"
+    "collectionSource": [
+        "YouTube", "https://www.youtube.com/watch?v=UIkSFSHX9AU"
     ],
     "domain":[
         "general"
     ],
-    "license":"cc-by-4.0",
-    "submitter":{
-        "name":"Anirudh",
-        "oauthId":{
-            "oauthId":"anirudh.gupta@thoughtworks.com",
-            "provider":"google"
+    "license":  "cc-by-4.0",
+    "submitter": {
+        "name": "Anirudh",
+        "oauthId": {
+            "oauthId": "anirudh.gupta@thoughtworks.com",
+            "provider": "google"
         },
-        "team":[
+        "team": [
             {
-                "name":"Harveen",
-                "oauthId":{
-                    "oauthId":"anirudh.gupta@thoughtworks.com",
-                    "provider":"google"
+                "name": "Harveen",
+                "oauthId": {
+                    "oauthId": "anirudh.gupta@thoughtworks.com",
+                    "provider": "google"
                 }
             }
         ]
     },
-    "format":"wav",
-    "channel":"mono",
-    "samplingRate":44.1,
-    "bitsPerSample":"sixteen",
-    "numberOfSpeakers":1,
-    "gender":"male",
-    "snr":{
-        "methodType":"WadaSnr",
-        "methodDetails":{
-            "snrTool":"WADASNR",
-            "snrToolVersion":"1.0.1"
+    "format": "wav",
+    "channel": "mono",
+    "samplingRate": 44.1,
+    "bitsPerSample": "sixteen",
+    "numberOfSpeakers": 1,
+    "gender": "male",
+    "snr": {
+        "methodType": "WadaSnr",
+        "methodDetails": {
+            "snrTool": "WADASNR",
+            "snrToolVersion": "1.0.1"
         }
     },
-    "collectionMethod":{
-        "collectionDescription":[
+    "collectionMethod": {
+        "collectionDescription": [
             "machine-generated-transcript"
         ],
-        "collectionDetails":{
-            "asrModel":"gogle asr",
-            "evaluationMethod":{
-                "wer":26.5
+        "collectionDetails": {
+            "asrModel": "gogle asr",
+            "evaluationMethod": {
+                "wer": 26.5
             }
         }
     }

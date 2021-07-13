@@ -27,29 +27,35 @@ public class TaskTrackerRedisDao {
 
 		for (String key : keyList) {
 
-			String serviceRequestNumber = redisTemplate.opsForHash().get(key, "serviceRequestNumber") + "";
-			String ingestComplete = redisTemplate.opsForHash().get(key, "ingestComplete") + "";
-			String count = redisTemplate.opsForHash().get(key, "count") + "";
-			String ingestSuccess = redisTemplate.opsForHash().get(key, "ingestSuccess") + "";
-			String ingestError = redisTemplate.opsForHash().get(key, "ingestError") + "";
-			String publishSuccess = redisTemplate.opsForHash().get(key, "publishSuccess") + "";
-			String publishError = redisTemplate.opsForHash().get(key, "publishError") + "";
-			String validateError = redisTemplate.opsForHash().get(key, "validateError") + "";
-			String validateSuccess = redisTemplate.opsForHash().get(key, "validateSuccess") + "";
+			try {
+				String serviceRequestNumber = redisTemplate.opsForHash().get(key, "serviceRequestNumber") + "";
+				String ingestComplete = redisTemplate.opsForHash().get(key, "ingestComplete") + "";
+				String count = redisTemplate.opsForHash().get(key, "count") + "";
+				String ingestSuccess = redisTemplate.opsForHash().get(key, "ingestSuccess") + "";
+				String ingestError = redisTemplate.opsForHash().get(key, "ingestError") + "";
+				String publishSuccess = redisTemplate.opsForHash().get(key, "publishSuccess") + "";
+				String publishError = redisTemplate.opsForHash().get(key, "publishError") + "";
+				String validateError = redisTemplate.opsForHash().get(key, "validateError") + "";
+				String validateSuccess = redisTemplate.opsForHash().get(key, "validateSuccess") + "";
 
-			Map<String, String> innerMap = new HashMap<String, String>();
+				Map<String, String> innerMap = new HashMap<String, String>();
 
-			innerMap.put("serviceRequestNumber", serviceRequestNumber);
-			innerMap.put("ingestComplete", ingestComplete);
-			innerMap.put("count", count);
-			innerMap.put("ingestSuccess", ingestSuccess);
-			innerMap.put("ingestError", ingestError);
-			innerMap.put("publishSuccess", publishSuccess);
-			innerMap.put("publishError", publishError);
-			innerMap.put("validateError", validateError);
-			innerMap.put("validateSuccess", validateSuccess);
+				innerMap.put("serviceRequestNumber", serviceRequestNumber);
+				innerMap.put("ingestComplete", ingestComplete);
+				innerMap.put("count", count);
+				innerMap.put("ingestSuccess", ingestSuccess);
+				innerMap.put("ingestError", ingestError);
+				innerMap.put("publishSuccess", publishSuccess);
+				innerMap.put("publishError", publishError);
+				innerMap.put("validateError", validateError);
+				innerMap.put("validateSuccess", validateSuccess);
 
-			map.put(serviceRequestNumber, innerMap);
+				map.put(serviceRequestNumber, innerMap);
+			} catch( Exception e) {
+				log.info("Problem while retrieving data from redis. Please check the redis. key :: " + key);
+				log.info("Exception occured :: " + e.getMessage());
+			}
+			
 
 
 		}

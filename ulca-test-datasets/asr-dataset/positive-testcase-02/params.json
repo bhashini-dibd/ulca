@@ -1,8 +1,7 @@
 {   
     "datasetType": "asr-corpus",
     "languages": {
-        "sourceLanguage": "hi",
-        "targetLanguage": null
+        "sourceLanguage": "hi"
     },
     "collectionSource": [
         "YouTube", "https://www.youtube.com/watch?v=UIkSFSHX9AU"
