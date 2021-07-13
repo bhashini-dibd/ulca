@@ -62,6 +62,8 @@ class AggregateDatasetModel(object):
                 else:
                     false_count = val[total]
             sumtotal = true_count - false_count
+            if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                sumtotal = sumtotal/TIME_CONVERSION_VAL
 
             #aggregate query for language pairs
             if grpby_params == None and len(match_params) ==1:
