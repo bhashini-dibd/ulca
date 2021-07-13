@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { withStyles, Typography, MuiThemeProvider, Paper, Button } from "@material-ui/core";
+import { withStyles, Typography, MuiThemeProvider, Paper, Button ,TextField} from "@material-ui/core";
 import ChartStyles from "../../styles/Dashboard";
 import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis, Tooltip } from 'recharts';
 import APITransport from "../../../redux/actions/apitransport/apitransport";
@@ -12,17 +12,20 @@ import Dataset from "../../../configs/DatasetItems";
 import authenticate from '../../../configs/authenticate';
 import Theme from "../../theme/theme-default";
 import TitleBar from "./TitleBar";
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
-import AppInfo from "../../components/common/AppInfo"
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Language, FilterBy } from '../../../configs/DatasetItems';
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
 
 const ChartRender = (props) => {
 	const [selectedOption, setSelectedOption] = useState(Dataset[0]);
 	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Languages"});
-	const [title, setTitle] = useState("Number of parallel dataset per language with English");
+	const [title, setTitle] = useState("Number of parallel dataset per language with");
 	const [filterValue, setFilterValue] = useState("domains");
 	const [popUp, setPopUp] = useState(authenticate() ? false : true);
+	const [sourceLanguage, setSourceLanguage] = useState(
+        { value: 'en', label: 'English' }
+    );
 	const [selectedLanguage, setSelectedLanguage] = useState("");
 	const [selectedLanguageName, setSelectedLanguageName] = useState("");
 	const [page, setPage] = useState(0);
@@ -32,7 +35,7 @@ const ChartRender = (props) => {
 	const { classes } = props;
 	const options = Dataset;
 	useEffect(() => {
-		fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": "en"}])
+		fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 		
 			history.push(`${process.env.PUBLIC_URL}/dashboard`)
 	}, []);
@@ -43,39 +46,41 @@ const ChartRender = (props) => {
 
 	}
 	const fetchParams = (event) => {
-		var sourceLanguage = ""
+		debugger
+		var source = ""
 		let targetLanguage = ""
 		if (selectedOption.value === "parallel-corpus") {
-			sourceLanguage = "en" ;
+			source =sourceLanguage.value ;
 			targetLanguage =   (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id) 
 		}
 		else {
-			sourceLanguage = (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id);
+			source = (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id);
 			targetLanguage =  "" ;
 
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": sourceLanguage,},{ "field":"targetLanguage", "value": targetLanguage }])
+		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }])
 	}
 
 	const fetchNextParams = (eventValue) => {
-		var sourceLanguage = ""
+		debugger
+		var source = ""
 		let targetLanguage = ""
 		let event = { "field": null, "value": eventValue && eventValue.hasOwnProperty("_id") && eventValue._id }
 		if (selectedOption.value === "parallel-corpus") {
-			sourceLanguage = "en"
+			source = sourceLanguage.value
 			targetLanguage =  selectedLanguage 
 
 		}
 		else {
-			sourceLanguage = selectedLanguage ;
+			source = selectedLanguage ;
 			targetLanguage = "";
 
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": sourceLanguage,},{ "field":"targetLanguage", "value": targetLanguage }, event])
+		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }, event])
 	}
 
 	const handleOnClick = (value, event, filter) => {
@@ -95,7 +100,7 @@ const ChartRender = (props) => {
 
 				break;
 			case 0:
-				fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value": "en"}])
+				fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 				setPage(value)
 				setFilterValue('domains')
 				handleSelectChange(selectedOption, "", "", value)
@@ -108,6 +113,34 @@ const ChartRender = (props) => {
 		}
 
 	}
+
+	const renderTexfield = (id, label, value, options, filter) => {
+        let labels = Language.map(lang => lang.label)
+        return (
+            <Autocomplete
+				className={classes.titleDropdown}
+				
+                value={sourceLanguage.label}
+                id="source"
+                options={labels}
+                onChange={(event, data) => handleLanguagePairChange(data, 'source')}
+                renderInput={(params) => <TextField fullWidth {...params}  variant="standard"
+                    // error={srcError}
+                    // helperText={srcError && "This field is mandatory"}
+                />}
+            />
+
+
+        )
+    }
+
+	const handleLanguagePairChange = (value, property) => {
+		let sLang =  Language.filter(val => val.label ===value )[0]
+		fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
+        setSourceLanguage(sLang);
+
+
+    };
 
 	const handleLanguageChange = (value) => {
 		setFilterValue(value)
@@ -140,18 +173,18 @@ const ChartRender = (props) => {
 		switch (dataSet.value) {
 			case 'parallel-corpus':
 				if (page === 0) {
-					setTitle("Number of parallel sentences per language with English")
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					setTitle("Number of parallel sentences per language with ")
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 					setAxisValue({xAxis:"Languages",yAxis:"Count"})
 					
 
 				} else if (page === 1) {
-					setTitle(`English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setTitle(`${sourceLanguage.label}-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
 					
 
 				} else if (page === 2) {
-					setTitle(`English-${selectedLanguageName} ${selectedOption.label} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setTitle(`${sourceLanguage.label}-${selectedLanguageName} ${selectedOption.label} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 					
 					
@@ -160,7 +193,7 @@ const ChartRender = (props) => {
 				break;
 			case 'monolingual-corpus':
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": null}])
 					setTitle('Number of sentences per language')
 					
 					setAxisValue({xAxis:"Languages",yAxis:"Count"})
@@ -178,7 +211,7 @@ const ChartRender = (props) => {
 				break;
 			case 'asr-corpus':
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": null}])
 					setAxisValue({xAxis:"Languages",yAxis:"Hours"})
 					setTitle("Number of audio hours per language")
 				} else if (page === 1) {
@@ -195,7 +228,7 @@ const ChartRender = (props) => {
 			case 'ocr-corpus':
 
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": null}])
 					setTitle("Number of images per language")
 					setAxisValue({xAxis:"Languages",yAxis:"Count"})
 				} else if (page === 1) {
@@ -207,8 +240,26 @@ const ChartRender = (props) => {
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 					
 				}
+				
 
 				break;
+				case 'asr-unlabeled-corpus':
+
+					if (page === 0) {
+						selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": null}])
+						setAxisValue({xAxis:"Languages",yAxis:"Hours"})
+						setTitle("Number of audio hours per language")
+					} else if (page === 1) {
+						setTitle(`Number of audio hours in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+						setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
+						
+					} else if (page === 2) {
+						setTitle(`Number of audio hours in ${selectedLanguageName} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+						setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
+						
+					}
+	
+					break;
 			default:
 				setTitle("")
 		}
@@ -233,7 +284,10 @@ const ChartRender = (props) => {
 						
 					<div className={classes.iconStyle}>
 					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button></>
-						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>	
+						<div style={{display:"flex",flexDirection:"row", }}>
+						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
+						{selectedOption.value ==="parallel-corpus"&&page===0 && renderTexfield("select-source-language", "Source Language *")}
+						</div>	
 					</div>
 					
 					<div className={classes.title}>
