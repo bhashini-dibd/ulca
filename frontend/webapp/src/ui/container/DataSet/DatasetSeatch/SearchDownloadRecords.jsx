@@ -221,7 +221,7 @@ const SearchAndDownloadRecords = (props) => {
                 let response = await res.json()
                 if (res.ok) {
                     dispatch(PageChange(0, C.SEARCH_PAGE_NO));
-                    history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.serviceRequestNumber}`)
+                    history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.data.serviceRequestNumber}`)
                     handleSnackbarClose()
 
                 } else {

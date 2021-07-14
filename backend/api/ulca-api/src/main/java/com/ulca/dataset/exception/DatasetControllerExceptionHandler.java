@@ -23,26 +23,30 @@ public class DatasetControllerExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	  public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 		
+		String errorCode = "something went wrong";
 		log.info("inside DatasetControllerExceptionHandler :: handleAllExceptions ");
-	    ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
-	        request.getDescription(false));
+		ex.printStackTrace();
+	    ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+	    		
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 	
 	@ExceptionHandler(DuplicateKeyException.class)
 	  public final ResponseEntity<Object> handleDuplicateKeyExceptions(DuplicateKeyException ex, WebRequest request) {
 		
-	    ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
-	        request.getDescription(false));
+		String errorCode = "Duplicate Key Error"; 
+		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 
 	
 	  @ExceptionHandler(ServiceRequestNumberNotFoundException.class)
 	  public final ResponseEntity<Object> handleUserNotFoundException(ServiceRequestNumberNotFoundException ex, WebRequest request) {
-	    ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
-	        request.getDescription(false));
-	    return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
+	    
+		  String errorCode = "ServiceRequestNumber Not Found"; 
+		  ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+		  
+	      return new ResponseEntity(errorDetails, HttpStatus.NOT_FOUND);
 	  }
 
 	  

@@ -18,7 +18,7 @@ export default class MyCOntribution extends API {
     processResponse(res) {
         super.processResponse(res);
         if (res) {
-            this.report = res;
+            this.report = res.data;
         }
     }
 

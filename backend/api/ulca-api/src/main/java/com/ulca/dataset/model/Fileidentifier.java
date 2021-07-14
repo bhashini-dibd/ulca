@@ -16,6 +16,7 @@ public class Fileidentifier {
 	private String fileType;
 	private String fileLocationURL;
 	private String fileUlcaUrl;
+	private String md5hash;
 	
 	private String createdOn;
 	private String submitterId;

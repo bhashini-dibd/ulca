@@ -41,9 +41,13 @@ import C from '../../actions/constants';
     // }
 
 
-    const handleSum = (data) =>{
-      const count = data.reduce((acc,rem)=>(acc + Number(rem.value)),0)
-      return {data , count}
+    const handleSum = (data,totalCount) =>{
+      let count = data.reduce((acc,rem)=>(acc + Number(rem.value)),0)
+      debugger
+      if(count%1!==0) {
+        count = Number(count).toFixed(3)
+      }
+      return {data , count, totalCount}
 
     }
       
@@ -51,7 +55,7 @@ import C from '../../actions/constants';
     switch (action.type) {
         
         case C.DASHBOARD_DATASETS:
-            return handleSum(action.payload.data.sort( compare ));
+            return handleSum(action.payload.data.sort( compare ),action.payload.count);
 
         default:
             return state;
