@@ -15,7 +15,7 @@ const ChartRender = (props) => {
 	const [count, setCount] = useState(0);
 	const [total, setTotal] = useState(0);
 	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Languages"});
-	const [title, setTitle] = useState("Number of parallel dataset per language with English");
+	const [title, setTitle] = useState("Number of parallel sentences per language with");
 	const [filterValue, setFilterValue] = useState("domains");
   const [data, setData] = useState([]);
 	const [selectedLanguage, setSelectedLanguage] = useState("");
@@ -180,18 +180,18 @@ const ChartRender = (props) => {
 		switch (dataSet.value) {
 			case 'parallel-corpus':
 				if (page === 0) {
-					setTitle("Number of parallel sentences per language with English")
+					setTitle("Number of parallel sentences per language with ")
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 					setAxisValue({xAxis:"Languages",yAxis:"Count"})
 					
 
 				} else if (page === 1) {
-					setTitle(`English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setTitle(`English-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  parallel sentences - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
 					
 
 				} else if (page === 2) {
-					setTitle(`English-${selectedLanguageName} ${selectedOption.label} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setTitle(`English-${selectedLanguageName} parallel sentences of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 					
 					
