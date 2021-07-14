@@ -249,7 +249,8 @@ themeDefault.typography.body2 = {
   fontSize: "0.875rem",
   fontFamily: '"Roboto", sans-serif',
   fontWeight: "400",
-  color: "#0C0F0F"
+  color: "#0C0F0F",
+  lineHeight:"22px"
 };
 themeDefault.typography.caption = {
   fontSize: "0.75rem",

@@ -20,8 +20,12 @@ const DataSet = (theme) => ({
     },
 
     typography:{marginBottom:"14px"},
-    marginValue:{marginTop:"14px"},
-    spanColor:{color:"#0C0F0FB3"},
+    marginValue:{marginTop:"18px",color:"#0C0F0FB3"},
+
+    list:{
+        marginLeft:"-20px"
+    },
+    
     updateBtn: {
 
         display: 'flex',
