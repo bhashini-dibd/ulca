@@ -7,7 +7,6 @@ const FileUploadStyles = (theme) => ({
   cursor: {
     cursor: "pointer",
   },
-  barFont:{fontFamily:"Roboto", fontSize:"14px"},
   titleBar: {
     
     display: "flex",
@@ -18,7 +17,7 @@ const FileUploadStyles = (theme) => ({
     minHeight:"56px",
     maxWidth: "1272px",
     width : "100%",
-    margin :"0px auto 17px auto",
+    margin :"17px auto",
     padding:"0"
   },
  
@@ -80,6 +79,7 @@ const FileUploadStyles = (theme) => ({
   },
   titleText: {
     marginLeft: "1.68rem",
+    marginRight:".5rem"
     
   },
   seperator: {
@@ -98,6 +98,9 @@ const FileUploadStyles = (theme) => ({
     marginRight:".7rem",
     "@media (max-width:800px)": {marginRight:"0"}
   },
+  titleDropdown:
+    {marginLeft:"1rem",minWidth:"10rem"}
+  ,
 
   title:{
     textAlign: "left",

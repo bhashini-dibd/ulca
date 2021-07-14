@@ -14,6 +14,7 @@ var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447
 const ChartRender = (props) => {
 	const [selectedOption, setSelectedOption] = useState(DatasetItems[0]);
 	const [count, setCount] = useState(0);
+	const [total, setTotal] = useState(0);
 	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Languages"});
 	const [title, setTitle] = useState("Number of parallel dataset per language with English");
 	const [filterValue, setFilterValue] = useState("domains");
@@ -26,7 +27,7 @@ const ChartRender = (props) => {
     );
 
   useEffect(() => {
-    fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": "en"}])
+    fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
       
   }, []);
 
@@ -48,7 +49,8 @@ const ChartRender = (props) => {
             let res = rsp_data.data.sort((a,b)=>b.value-a.value)
             setData(res)
 			let total = rsp_data.data.reduce((acc,rem)=> acc= acc+Number(rem.value),0)
-			setCount(total)
+			setCount(total%1===0 ? total : total.toFixed(3))
+			setTotal(rsp_data.count)
           }
         }).catch((error) => { 
         }); 
@@ -82,40 +84,42 @@ const ChartRender = (props) => {
         )
     }
 
+	
+
 	const fetchParams = (event) => {
-		var sourceLanguage = ""
+		var source = ""
 		let targetLanguage = ""
 		if (selectedOption.value === "parallel-corpus") {
-			sourceLanguage = "en" ;
+			source =sourceLanguage.value ;
 			targetLanguage =   (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id) 
 		}
 		else {
-			sourceLanguage = (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id);
+			source = (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id);
 			targetLanguage =  "" ;
 
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": sourceLanguage,},{ "field":"targetLanguage", "value": targetLanguage }])
+		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }])
 	}
 
 	const fetchNextParams = (eventValue) => {
-		var sourceLanguage = ""
+		var source = ""
 		let targetLanguage = ""
 		let event = { "field": null, "value": eventValue && eventValue.hasOwnProperty("_id") && eventValue._id }
 		if (selectedOption.value === "parallel-corpus") {
-			sourceLanguage = "en"
+			source = sourceLanguage.value
 			targetLanguage =  selectedLanguage 
 
 		}
 		else {
-			sourceLanguage = selectedLanguage ;
+			source = selectedLanguage ;
 			targetLanguage = "";
 
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": sourceLanguage,},{ "field":"targetLanguage", "value": targetLanguage }, event])
+		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }, event])
 	}
 
 	const handleOnClick = (value, event, filter) => {
@@ -135,7 +139,7 @@ const ChartRender = (props) => {
 
 				break;
 			case 0:
-				fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value": "en"}])
+				fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 				setPage(value)
 				setFilterValue('domains')
 				handleSelectChange(selectedOption, "", "", value)
@@ -178,7 +182,7 @@ const ChartRender = (props) => {
 			case 'parallel-corpus':
 				if (page === 0) {
 					setTitle("Number of parallel sentences per language with English")
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 					setAxisValue({xAxis:"Languages",yAxis:"Count"})
 					
 
@@ -197,7 +201,7 @@ const ChartRender = (props) => {
 				break;
 			case 'monolingual-corpus':
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 					setTitle('Number of sentences per language')
 					
 					setAxisValue({xAxis:"Languages",yAxis:"Count"})
@@ -215,7 +219,7 @@ const ChartRender = (props) => {
 				break;
 			case 'asr-corpus':
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 					setAxisValue({xAxis:"Languages",yAxis:"Hours"})
 					setTitle("Number of audio hours per language")
 				} else if (page === 1) {
@@ -232,7 +236,7 @@ const ChartRender = (props) => {
 			case 'ocr-corpus':
 
 				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 					setTitle("Number of images per language")
 					setAxisValue({xAxis:"Languages",yAxis:"Count"})
 				} else if (page === 1) {
@@ -259,7 +263,7 @@ const ChartRender = (props) => {
 				options		=	{options}
 				isDisabled	=	{page !== 0 ? true : false}
 				page		= 	{page}
-				count 		= 	{count}
+				count 		= 	{total}
 				>
 				{page === 1 && fetchFilterButtons()}
 				
