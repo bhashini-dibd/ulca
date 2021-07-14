@@ -18,6 +18,7 @@ const MySearches = (props) => {
 
         const detailedReport = useSelector((state) => state.mySearchReport);
         const PageInfo = useSelector((state) => state.searchPageDetails);
+        const ApiStatus = useSelector((state) => state.apiStatus);
         const dispatch = useDispatch();
         const history = useHistory();
         const [page, setPage] = useState(0);
@@ -28,6 +29,7 @@ const MySearches = (props) => {
 
         useEffect(() => {
                 MySearchListApi()
+                console.log(ApiStatus)
         }, []);
         const MySearchListApi = () => {
 
