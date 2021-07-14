@@ -217,10 +217,10 @@ public class KafkaFileDownloadConsumer {
 		File f = new File(filePath);
 		
 		//check if file is executable
-		if(f.canExecute()) {
+		/*if(f.canExecute()) {
 			throw new IOException("Executable File Not allowed");
 			
-		}
+		}*/
 		//check if md5hash of file exist
 		String md5hash = fileMD5hash(filePath);
 		
