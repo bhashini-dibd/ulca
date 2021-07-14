@@ -105,6 +105,7 @@ const SubmitDataset = (props) => {
             headers: apiObj.getHeaders().headers
         }).then(async response => {
             const rsp_data = await response.json();
+            debugger
             if (!response.ok) {
 
                 setSnackbarInfo({
@@ -219,7 +220,7 @@ const SubmitDataset = (props) => {
                                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                         <Grid container spacing={5}>
                                             <Grid item xl={5} lg={5} md={5} sm={12} xs={12}>
-                                                <Typography className={classes.typography} variant="subtitle1">Submit dataset</Typography>
+                                                <Typography className={classes.typography} variant="subtitle1">Submit Dataset</Typography>
                                             </Grid>
                                             {/* <Grid item xl={7} lg={7} md={7} sm={12} xs={12}>
                                                 <div>
