@@ -99,12 +99,16 @@ const SearchAndDownloadRecords = (props) => {
             let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
             let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
             let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
+            let label=data[0].search_criteria && data[0].search_criteria.split('|')[0]
             setFilterBy({
                 ...filterBy, domain, collectionMethod
             })
             setLanguagePair({ target, source })
             //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
             setDatasetType({ [data[0].datasetType]: true })
+            console.log(label)
+            
+            setLabel(label)
         }
 
         else if ((params === 'completed' || params === 'inprogress') && count === 0)
@@ -120,6 +124,8 @@ const SearchAndDownloadRecords = (props) => {
                 source: "",
                 collectionMethod: ""
             })
+            setLabel('Parallel Dataset')
+            setDatasetType({'parallel-corpus': true})
         }
         previousUrl.current = params;
     })
