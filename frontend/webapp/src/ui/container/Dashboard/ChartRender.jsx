@@ -20,7 +20,7 @@ var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447
 const ChartRender = (props) => {
 	const [selectedOption, setSelectedOption] = useState(Dataset[0]);
 	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Languages"});
-	const [title, setTitle] = useState("Number of parallel dataset per language with");
+	const [title, setTitle] = useState("Number of parallel sentences per language with");
 	const [filterValue, setFilterValue] = useState("domains");
 	const [popUp, setPopUp] = useState(authenticate() ? false : true);
 	const [sourceLanguage, setSourceLanguage] = useState(
@@ -179,12 +179,12 @@ const ChartRender = (props) => {
 					
 
 				} else if (page === 1) {
-					setTitle(`${sourceLanguage.label}-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  ${selectedOption.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setTitle(`${sourceLanguage.label}-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  parallel sentences - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
 					
 
 				} else if (page === 2) {
-					setTitle(`${sourceLanguage.label}-${selectedLanguageName} ${selectedOption.label} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setTitle(`${sourceLanguage.label}-${selectedLanguageName} parallel sentences of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 					
 					
