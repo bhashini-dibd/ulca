@@ -4,8 +4,11 @@ import {
     Button,
     TextField,
     Checkbox,
-    FormControlLabel
+    FormControlLabel,
+    Menu,
+    MenuItem
 } from '@material-ui/core';
+import DownIcon from '@material-ui/icons/ArrowDropDown';
 import SearchResult from "./SearchResult";
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
@@ -25,7 +28,22 @@ import { Language, FilterBy } from '../../../../configs/DatasetItems';
 import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest';
 import DatasetType from '../../../../configs/DatasetItems';
 import getLanguageLabel from '../../../../utils/getLabel';
-
+const StyledMenu = withStyles({
+})((props) => (
+    <Menu
+        elevation={0}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+        }}
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: '',
+        }}
+        {...props}
+    />
+));
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
@@ -130,6 +148,7 @@ const SearchAndDownloadRecords = (props) => {
         checkedA: false,
         checkedB: false,
     });
+    const [label, setLabel] = useState('Parallel Dataset')
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
     const { params, srno } = param
@@ -199,8 +218,8 @@ const SearchAndDownloadRecords = (props) => {
             body: JSON.stringify(apiObj.getBody())
         })
             .then(async res => {
+                let response = await res.json()
                 if (res.ok) {
-                    let response = await res.json()
                     dispatch(PageChange(0, C.SEARCH_PAGE_NO));
                     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.serviceRequestNumber}`)
                     handleSnackbarClose()
@@ -269,21 +288,69 @@ const SearchAndDownloadRecords = (props) => {
 
 
     }
+    const handleChange = (label, value) => {
+        setLabel(label)
+        handleDatasetClick(value)
+    };
+    const [anchorEl, openEl] = useState(null);
+    const handleClose = () => {
+        openEl(false)
+    }
 
     const renderDatasetButtons = () => {
         return (
-            DatasetType.map((type, i) => {
-                return (
-                    <Button size='small' className={classes.innerButton} variant="outlined"
-                        color={datasetType[type.value] && "primary"}
-                        key={i}
-                        onClick={() => handleDatasetClick(type.value)}
-                    >
-                        {type.label}
-                    </Button>)
-            })
+            // DatasetType.map((type, i) => {
+            //     return (
+            // <Button size='small' className={classes.innerButton} variant="outlined"
+            //     color={datasetType[type.value] && "primary"}
+            //     key={i}
+            //     onClick={() => handleDatasetClick(type.value)}
+            // >
+            //     {type.label}
+            // </Button>
+            <>
+                <Button className={classes.btnStyle}
+                    // disabled={page !== 0 ? true : false}
+                    color="inherit"
+                    onClick={(e) => openEl(e.currentTarget)}
+                    variant="text">
+                    <Typography variant="subtitle1">
+                        {label}
+                    </Typography>
+                    <DownIcon />
+                </Button>
+                <StyledMenu id="data-set"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={(e) => handleClose(e)}
+                    className={classes.styledMenu1}
+                >
+                    {
+                        DatasetType.map(menu => {
 
+                            return <MenuItem
+                                value={menu.value}
+                                name={menu.label}
+                                className={classes.styledMenu}
+                                onClick={() => {
+                                    handleChange(menu.label, menu.value)
+                                    handleClose()
+                                }}
+                            >
+                                <Typography variant={"body1"}>
+                                    {menu.label}
+                                </Typography>
+                            </MenuItem>
+                        })
+                    }
+                </StyledMenu>
+            </>
+
+            // )
+            // }
         )
+
+        // )
     }
 
     const renderFilterByOptions = (id, options, filter, value, label) => {
