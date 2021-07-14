@@ -8,4 +8,20 @@ export const DatasetItems = [
 
 ];
 
+export const Language = [
+    { value: 'as', label: 'Assamese' },
+    { value: 'bn', label: 'Bengali' },
+    { value: 'en', label: 'English' },
+    { value: 'gu', label: 'Gujarati' },
+    { value: 'hi', label: 'Hindi' },
+    { value: 'kn', label: 'Kannada' },
+    { value: 'ml', label: 'Malayalam' },
+    { value: 'mr',label: 'Marathi'},
+    { value: 'or', label: 'Odia' },
+    { value: 'pa', label: 'Punjabi' },
+    { value: 'ta', label: 'Tamil' },
+    { value: 'te', label: 'Telugu' },
+    { value: 'ur', label: 'Urdu' },
+];
+
 export default DatasetItems;
