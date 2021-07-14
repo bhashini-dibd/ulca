@@ -19,13 +19,13 @@ const DataSet = (theme) => ({
         padding: "5% 10% 5% 3.125rem"
     },
 
-    typography:{marginBottom:"14px"},
-    marginValue:{marginTop:"18px",color:"#0C0F0FB3"},
+    typography: { marginBottom: "14px" },
+    marginValue: { marginTop: "18px", color: "#0C0F0FB3" },
 
-    list:{
-        marginLeft:"-20px"
+    list: {
+        marginLeft: "-20px"
     },
-    
+
     updateBtn: {
 
         display: 'flex',
@@ -234,18 +234,29 @@ const DataSet = (theme) => ({
     filterContainer: {
         borderBottom: '1px solid #00000029',
         paddingLeft: '18.5px',
-        marginTop:'20px'
+        marginTop: '20px'
     },
     filterTypo: {
         marginBottom: '9px'
     },
     applyBtn: {
         float: "right",
-        
+
         borderRadius: '4px',
         margin: '9px 16px 9px auto',
         width: '80px'
     },
+    menuStyle: {
+        padding: '0px',
+        justifyContent: 'left',
+        fontSize: "1.125rem",
+        fontWeight: "500 !important",
+        "&:hover": {
+
+            backgroundColor: 'white',
+        }
+    }
+
 });
 
 export default DataSet;
