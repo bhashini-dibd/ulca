@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { withStyles, Typography, MuiThemeProvider, Paper, Button,TextField } from "@material-ui/core";
+import { withStyles, Typography, Paper, Button,TextField } from "@material-ui/core";
 import ChartStyles from "../styles/Dashboard";
 import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis, Tooltip } from 'recharts';
 import FetchLanguageDataSets from "../actions/FetchLanguageDataSets";
