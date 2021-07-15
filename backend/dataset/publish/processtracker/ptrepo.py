@@ -96,7 +96,6 @@ class PTRepo:
             result = []
             for key in key_list:
                 val = client.get(key)
-                #val = client.hgetall(key) incase value against the key is stored as a hash/dict
                 if val:
                     result.append(json.loads(val))
             return result
@@ -111,7 +110,9 @@ class PTRepo:
             value = "publishSuccess"
             if error:
                 value = "publishError"
-            client.hincrby(key, value, 1)
+            val = client.hgetall(key)
+            if val:
+                client.hincrby(key, value, 1)
         except Exception as e:
             log.exception(f'Exception in redis_key_inc: {e}', e)
             return None
