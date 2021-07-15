@@ -2,7 +2,8 @@ package com.ulca.dataset.request;
 
 import javax.validation.constraints.NotBlank;
 
-import io.swagger.model.DatasetType;
+import org.hibernate.validator.constraints.URL;
+
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -10,15 +11,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DatasetSubmitRequest {
 	
+	@NotBlank(message="datasetName is required")
 	private final String userId;
-	
-	//@NotBlank(message="datasetType is required")
-	//private final DatasetType type;
 	
 	@NotBlank(message="datasetName is required")
     private final String datasetName;
 	
 	@NotBlank(message="url is required")
+	@URL
     private final String url;
 	
 	
