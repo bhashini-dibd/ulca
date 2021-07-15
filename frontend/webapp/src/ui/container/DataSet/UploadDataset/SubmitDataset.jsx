@@ -106,15 +106,20 @@ const SubmitDataset = (props) => {
         }).then(async response => {
             const rsp_data = await response.json();
             if (!response.ok) {
-
-                setSnackbarInfo({
+                debugger
+                setSnackbarInfo ({
                     ...snackbar,
                     open: true,
                     message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
                     timeOut: 40000,
                     variant: 'error'
                 })
-            } else {
+                if(response.status===401){
+                    setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
+                }
+                
+                
+             else {
                 dispatch(PageChange(0, C.PAGE_CHANGE));
                 history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.data.serviceRequestNumber}`)
                 //           return true;

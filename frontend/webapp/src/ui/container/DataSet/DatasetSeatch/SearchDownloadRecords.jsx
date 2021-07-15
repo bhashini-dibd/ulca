@@ -214,7 +214,7 @@ const SearchAndDownloadRecords = (props) => {
         setSnackbarInfo({
             ...snackbar,
             open: true,
-            message: 'Please wait while we process your request...',
+            message: 'Please wait while we process your request.',
             variant: 'info'
         })
         const apiObj = new SubmitSearchRequest(Dataset, tgt, src, domain, collectionMethod)
@@ -225,20 +225,29 @@ const SearchAndDownloadRecords = (props) => {
         })
             .then(async res => {
                 let response = await res.json()
-                if (res.ok) {
+                if (response.ok) {
                     dispatch(PageChange(0, C.SEARCH_PAGE_NO));
                     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.data.serviceRequestNumber}`)
                     handleSnackbarClose()
 
                 } else {
-                    new Promise.reject("")
+                    setSnackbarInfo({
+                        ...snackbar,
+                        open: true,
+                        message: response.message ? response.message : "Something went wrong. Please try again.",
+                        variant: 'error'
+                    })
+                    if(response.status===401){
+                        setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)
+                        
+                    }                    
                 }
             })
             .catch(err => {
                 setSnackbarInfo({
                     ...snackbar,
                     open: true,
-                    message: 'Failed to submit your search request...',
+                    message: "Something went wrong. Please try again.",
                     variant: 'error'
                 })
             })
