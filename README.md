@@ -1,6 +1,8 @@
 # ULCA
 Universal Language Contribution APIs (ULCA) defines underlying open interface for language contributions toward Indian languages.
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 | Service | Build Status |
 |---------| ----------- |
 |  Ingest  |  [![Build Status](http://jenkins.idc.tarento.com/buildStatus/icon?job=ULCA%2FBuild%2Fingest)](http://jenkins.idc.tarento.com/job/ULCA/job/Build/job/ingest/) |
