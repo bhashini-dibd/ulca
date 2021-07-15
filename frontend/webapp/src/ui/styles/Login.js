@@ -40,7 +40,6 @@ const LoginStyle = (theme) => ({
     textAlign: "left",
     color: "#f2f2f4",
     "@media (max-width:1040px)": {
-      
       letterSpacing: "1px",
       maxWidth: "280px",
     },

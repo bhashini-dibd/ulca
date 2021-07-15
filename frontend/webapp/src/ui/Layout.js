@@ -18,7 +18,6 @@ function App(props) {
   };
 
   const renderError = () => {
-    debugger
     if (apiStatus.unauthrized) {
       
       setTimeout(() => history.push(`${process.env.PUBLIC_URL}/user/login`), 3000)

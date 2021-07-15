@@ -46,7 +46,6 @@ const ChartRender = (props) => {
 
 	}
 	const fetchParams = (event) => {
-		debugger
 		var source = ""
 		let targetLanguage = ""
 		if (selectedOption.value === "parallel-corpus") {
@@ -64,7 +63,6 @@ const ChartRender = (props) => {
 	}
 
 	const fetchNextParams = (eventValue) => {
-		debugger
 		var source = ""
 		let targetLanguage = ""
 		let event = { "field": null, "value": eventValue && eventValue.hasOwnProperty("_id") && eventValue._id }
@@ -136,8 +134,11 @@ const ChartRender = (props) => {
 
 	const handleLanguagePairChange = (value, property) => {
 		let sLang =  Language.filter(val => val.label ===value )[0]
-		fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
+		if(sLang){
+			fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
         setSourceLanguage(sLang);
+		}
+		
 
 
     };
@@ -168,7 +169,6 @@ const ChartRender = (props) => {
 	}
 
 	const handleSelectChange = (dataSet, event, filter, page) => {
-		debugger
 		setSelectedOption(dataSet)
 		switch (dataSet.value) {
 			case 'parallel-corpus':
@@ -287,7 +287,7 @@ const ChartRender = (props) => {
 						<div style={{display:"flex",flexDirection:"row", }}>
 						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
 						{selectedOption.value ==="parallel-corpus"&&page===0 && renderTexfield("select-source-language", "Source Language *")}
-						<Typography  value="" variant="h6">({DashboardReport.count})</Typography>
+						<Typography  value="" variant="h6">({new Intl.NumberFormat('en').format(DashboardReport.count)})</Typography>
 						</div>	
 					</div>
 					

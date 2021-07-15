@@ -10,7 +10,6 @@ function dispatchAPIAsync(api) {
 }
 
 function apiStatusAsync(progress, errors, message, res = null, unauthrized = false, loading = false) {
-  debugger
   if (res === null || !(res.status && res.status.statusCode && res.status.statusCode !== 200 && res.status.statusCode !== 201)) {
     return {
       type: C.APISTATUS,
@@ -48,7 +47,6 @@ function success(res, api, dispatch) {
 }
 
 function error(err, api, dispatch) {
-  debugger
   let errorMsg = err.response && err.response.data && err.response.data.why ? err.response.data.why : err.response.status ? Strings.error.message.http[err.response.status]:Strings.error.message.http.default;
   if (api.errorMsg || api.errorMsg === null) {
     errorMsg = api.errorMsg === null ? "" : api.errorMsg;
@@ -62,7 +60,6 @@ function error(err, api, dispatch) {
 export const updateMessage = apiStatusAsync;
 
 export default function dispatchAPI(api) {
-  debugger
   if (api.reqType === "MULTIPART") {
     return dispatch => {
       dispatch(apiStatusAsync(api.dontShowApiLoader() ? false : true, false, ""));

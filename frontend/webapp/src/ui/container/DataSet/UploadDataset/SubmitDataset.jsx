@@ -105,7 +105,6 @@ const SubmitDataset = (props) => {
             headers: apiObj.getHeaders().headers
         }).then(async response => {
             const rsp_data = await response.json();
-            debugger
             if (!response.ok) {
 
                 setSnackbarInfo({
