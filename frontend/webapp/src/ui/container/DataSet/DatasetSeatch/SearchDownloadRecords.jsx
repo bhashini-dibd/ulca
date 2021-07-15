@@ -4,8 +4,11 @@ import {
     Button,
     TextField,
     Checkbox,
-    FormControlLabel
+    FormControlLabel,
+    Menu,
+    MenuItem
 } from '@material-ui/core';
+import DownIcon from '@material-ui/icons/ArrowDropDown';
 import SearchResult from "./SearchResult";
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
@@ -25,7 +28,22 @@ import { Language, FilterBy } from '../../../../configs/DatasetItems';
 import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest';
 import DatasetType from '../../../../configs/DatasetItems';
 import getLanguageLabel from '../../../../utils/getLabel';
-
+const StyledMenu = withStyles({
+})((props) => (
+    <Menu
+        elevation={0}
+        getContentAnchorEl={null}
+        anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+        }}
+        transformOrigin={{
+            vertical: 'top',
+            horizontal: '',
+        }}
+        {...props}
+    />
+));
 const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
@@ -81,12 +99,16 @@ const SearchAndDownloadRecords = (props) => {
             let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
             let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
             let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
+            let label=data[0].search_criteria && data[0].search_criteria.split('|')[0]
             setFilterBy({
                 ...filterBy, domain, collectionMethod
             })
             setLanguagePair({ target, source })
             //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
             setDatasetType({ [data[0].datasetType]: true })
+            console.log(label)
+            
+            setLabel(label)
         }
 
         else if ((params === 'completed' || params === 'inprogress') && count === 0)
@@ -102,6 +124,8 @@ const SearchAndDownloadRecords = (props) => {
                 source: "",
                 collectionMethod: ""
             })
+            setLabel('Parallel Dataset')
+            setDatasetType({'parallel-corpus': true})
         }
         previousUrl.current = params;
     })
@@ -130,6 +154,7 @@ const SearchAndDownloadRecords = (props) => {
         checkedA: false,
         checkedB: false,
     });
+    const [label, setLabel] = useState('Parallel Dataset')
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
     const { params, srno } = param
@@ -199,8 +224,8 @@ const SearchAndDownloadRecords = (props) => {
             body: JSON.stringify(apiObj.getBody())
         })
             .then(async res => {
+                let response = await res.json()
                 if (res.ok) {
-                    let response = await res.json()
                     dispatch(PageChange(0, C.SEARCH_PAGE_NO));
                     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.data.serviceRequestNumber}`)
                     handleSnackbarClose()
@@ -269,21 +294,69 @@ const SearchAndDownloadRecords = (props) => {
 
 
     }
+    const handleChange = (label, value) => {
+        setLabel(label)
+        handleDatasetClick(value)
+    };
+    const [anchorEl, openEl] = useState(null);
+    const handleClose = () => {
+        openEl(false)
+    }
 
     const renderDatasetButtons = () => {
         return (
-            DatasetType.map((type, i) => {
-                return (
-                    <Button size='small' className={classes.innerButton} variant="outlined"
-                        color={datasetType[type.value] && "primary"}
-                        key={i}
-                        onClick={() => handleDatasetClick(type.value)}
-                    >
-                        {type.label}
-                    </Button>)
-            })
+            // DatasetType.map((type, i) => {
+            //     return (
+            // <Button size='small' className={classes.innerButton} variant="outlined"
+            //     color={datasetType[type.value] && "primary"}
+            //     key={i}
+            //     onClick={() => handleDatasetClick(type.value)}
+            // >
+            //     {type.label}
+            // </Button>
+            <>
+                <Button className={classes.menuStyle}
+                    // disabled={page !== 0 ? true : false}
+                    color="inherit"
+                    onClick={(e) => openEl(e.currentTarget)}
+                    variant="text">
+                    <Typography variant="subtitle1">
+                        {label}
+                    </Typography>
+                    <DownIcon />
+                </Button>
+                <StyledMenu id="data-set"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={(e) => handleClose(e)}
+                    className={classes.styledMenu1}
+                >
+                    {
+                        DatasetType.map(menu => {
 
+                            return <MenuItem
+                                value={menu.value}
+                                name={menu.label}
+                                className={classes.styledMenu}
+                                onClick={() => {
+                                    handleChange(menu.label, menu.value)
+                                    handleClose()
+                                }}
+                            >
+                                <Typography variant={"body1"}>
+                                    {menu.label}
+                                </Typography>
+                            </MenuItem>
+                        })
+                    }
+                </StyledMenu>
+            </>
+
+            // )
+            // }
         )
+
+        // )
     }
 
     const renderFilterByOptions = (id, options, filter, value, label) => {
