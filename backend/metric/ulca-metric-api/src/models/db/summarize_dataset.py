@@ -29,7 +29,7 @@ class SummarizeDatasetModel(object):
             result          = collection.execute(text(query)).fetchall()
             result_parsed   =([{**row} for row in result])
             # log.info("Query Result : {}".format(result_parsed))
-            result=[]
+            result={}
             columns =["sourceLanguage","targetLanguage","datasetType","domains","collectionMethod_collectionDescriptions"]
 
             for attribute in columns:
@@ -83,8 +83,8 @@ class SummarizeDatasetModel(object):
                     elem["label"]=label
 
                     chart_data.append(elem)
-
-                result.append(chart_data)
+                
+                result[attribute] = chart_data
             collection.close()
             return result  
             
