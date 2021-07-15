@@ -225,7 +225,8 @@ const SearchAndDownloadRecords = (props) => {
         })
             .then(async res => {
                 let response = await res.json()
-                if (response.ok) {
+                debugger
+                if (res.ok) {
                     dispatch(PageChange(0, C.SEARCH_PAGE_NO));
                     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.data.serviceRequestNumber}`)
                     handleSnackbarClose()
@@ -237,7 +238,7 @@ const SearchAndDownloadRecords = (props) => {
                         message: response.message ? response.message : "Something went wrong. Please try again.",
                         variant: 'error'
                     })
-                    if(response.status===401){
+                    if(res.status===401){
                         setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)
                         
                     }                    
