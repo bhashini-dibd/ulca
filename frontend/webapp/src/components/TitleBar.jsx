@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Toolbar, AppBar, Grid } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import { withStyles, Button, Menu, MenuItem, MuiThemeProvider } from "@material-ui/core";
+import { withStyles, Button, Menu, MenuItem } from "@material-ui/core";
 import HeaderStyles from "../styles/HeaderStyles";
 import DownIcon from '@material-ui/icons/ArrowDropDown';
 

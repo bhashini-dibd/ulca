@@ -28,7 +28,7 @@ const ChartRender = (props) => {
   useEffect(() => {
     fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
       
-  }, []);
+  }, [selectedOption,sourceLanguage]);
 
 	const { classes } = props;
 	const options = DatasetItems;
@@ -57,8 +57,10 @@ const ChartRender = (props) => {
 
 	const handleLanguagePairChange = (value, property) => {
 		let sLang =  Language.filter(val => val.label ===value )[0]
+		if(sLang){
 		fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
         setSourceLanguage(sLang);
+		}
 
 
     };
@@ -272,7 +274,7 @@ const ChartRender = (props) => {
 						<div style={{display:"flex",flexDirection:"row", }}>
 						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
 						{selectedOption.value ==="parallel-corpus"&&page===0 && renderTexfield("select-source-language", "Source Language *")}
-						<Typography  value="" variant="h6">({count})</Typography>
+						<Typography  value="" variant="h6">({new Intl.NumberFormat('en').format(count)})</Typography>
 						</div>	
 					</div>
 					
