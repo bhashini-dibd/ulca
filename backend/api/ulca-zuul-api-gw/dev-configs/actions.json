@@ -10,7 +10,7 @@
         },
         {
             "id":"8cdac1f3-146c-4046-a00b-50fa3bc4fa63",
-            "uri":"/ulca/apis/v0/dataset/listByUserId?*",
+            "uri":"/ulca/apis/v0/dataset/listByUserId",
             "module":"ULCA-API",
             "active":true,
             "whiteList":false,
@@ -26,11 +26,19 @@
         },
         {
             "id":"9085ca30-ca0c-4b7e-81ba-0ca41568a372",
-            "uri":"/ulca/apis/v0/dataset/corpus/search/listByUserId?*",
+            "uri":"/ulca/apis/v0/dataset/corpus/search/listByUserId",
             "module":"ULCA-API",
             "active":true,
             "whiteList":false,
             "description":"API to fetch user searches by user id"
+        },
+        {
+            "id":"a854ad66-00f3-4d05-983c-2bcdbab6562c",
+            "uri":"/ulca/apis/v0/dataset/getByServiceRequestNumber",
+            "module":"ULCA-API",
+            "active":true,
+            "whiteList":false,
+            "description":"API to fetch dataset details on srn"
         },
         {
             "id":"b3d4b271-4de3-4781-8d03-8b3cee833f13",
@@ -39,6 +47,78 @@
             "active":true,
             "whiteList":false,
             "description":"API to fetch error report for a service request"
+        },
+        {
+            "id":"db24a2b7-07bf-4522-a23d-a77f4b8f5ad3",
+            "uri":"/ulca/data-metric/v0/store/search",
+            "module":"ULCA-METRICS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to fetch metrics from the ULCA platform"
+        },
+        {
+            "id":"bcef7afd-5477-4f04-9a6f-b84e4b9a491f",
+            "uri":"/ulca/user-mgmt/v1/users/login",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to login"
+        },
+        {
+            "id":"d6fbf062-8d1a-4ae3-a4b8-83466753efad",
+            "uri":"/ulca/user-mgmt/v1/users/signup",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to register"
+        },
+        {
+            "id":"6eae39c6-d705-4ee2-9ec6-c2eb445e9f02",
+            "uri":"/ulca/user-mgmt/v1/users/verify-user",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to verify the user"
+        },
+        {
+            "id":"8a0abebe-e05a-4456-92ac-36f879ca9276",
+            "uri":"/ulca/user-mgmt/v1/users/forgot-password",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API for forgot pwd"
+        },
+        {
+            "id":"f0fdba5b-972e-4542-babd-716537def248",
+            "uri":"/ulca/user-mgmt/v1/users/token-search",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":false,
+            "description":"API for token search"
+        },
+        {
+            "id":"d7da02b7-248c-43ab-aa9a-dac8b6c3a66f",
+            "uri":"/ulca/user-mgmt/v1/users/reset-password",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":false,
+            "description":"API to reset user pwd"
+        },
+        {
+            "id":"2c3ea074-fc02-498f-9b45-4f7c8ebc36d2",
+            "uri":"/ulca/data-metric/v0/store/attributes",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to get metrics attributes"
+        },
+        {
+            "id":"3ac962a1-de14-4609-91b0-6b4bcb87b856",
+            "uri":"/ulca/publish/v0/cluster/set",
+            "module":"ULCA-PUBLISH",
+            "active":true,
+            "whiteList":false,
+            "description":"API to set DB cluster up for ulca"
         }
     ]
 }
