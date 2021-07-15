@@ -1,0 +1,27 @@
+{
+    "datasetType": "monolingual-corpus",
+    "languages": {
+        "sourceLanguage": "Hindi"
+    },
+    "collectionSource": [
+        "http://pib.gov.in/"
+    ],
+    "domain":[
+        "news"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation",
+        "team": [
+            {
+                "name": "Navneet Kumar",
+                "aboutMe": "NLP team lead at Project Anuvaad"
+            },
+            {
+                "name": "Aswin Pradeep",
+                "aboutMe": "Backend team lead at Project Anuvaad"
+            }
+        ]
+    }
+}

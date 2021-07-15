@@ -1,0 +1,41 @@
+{
+    "datasetType":"ocr-corpus",
+    "languages":{
+        "sourceLanguage":"ta",
+        "targetLanguage":null
+    },
+    "collectionSource":[
+        "3522_2009_13_1501_15302_Judgement_24-Jul-2019_TAM.pdf",
+        "https://main.sci.gov.in"
+    ],
+    "domain":[
+        "legal"
+    ],
+    "license":"cc-by-4.0",
+    "submitter":{
+        "name":"Project Anuvaad",
+        "aboutMe":"Open source project run by ekStep foundation, part of Sunbird project",
+        "team":[
+            {
+                "name":"Naresh Kumar Saini",
+                "aboutMe":"I am working as AI Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad. "
+            },
+            {
+                "name":"Srihari M N",
+                "aboutMe":"I am working as Associate Software Engineer at Tarento Technologies PVT LTD, I'm part of the OCR Team in project Anuvaad "
+            }
+        ]
+    },
+    "format":"png",
+    "dpi":"72_dpi",
+    "imageTextType":"computer-typed-text",
+    "collectionMethod":{
+        "collectionDescription":[
+            "web-scraping-ocr"
+        ],
+        "collectionDetails":{
+            "ocrTool":"anuvaad ocr",
+            "ocrToolVersion":"1.5"
+        }
+    }
+}

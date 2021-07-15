@@ -1,0 +1,61 @@
+{
+    "type": "kafka",
+    "spec": {
+      "ioConfig": {
+        "type": "kafka",
+        "consumerProperties": {
+          "bootstrap.servers": "{{kafka_brokers}}"
+        },
+        "topic": "{{env}}.events.dataset_training",
+        "inputFormat": {
+          "type": "json"
+        },
+        "taskCount": 4,
+        "pollTimeout": 10,
+        "useEarliestOffset": true
+      },
+      "tuningConfig": {
+        "type": "kafka"
+      },
+      "dataSchema": {
+        "dataSource": "dataset-training-v3",
+        "timestampSpec": {
+          "column": "time",
+          "format": "iso"
+        },
+        "dimensionsSpec": {
+          "dimensions": [
+            "channel",
+            "collectionMethod_collectionDescriptions",
+            "collectionMethod_collectionDetails_alignmentTool",
+            "datasetType",
+            "domains",
+            "eventType",
+            "format",
+            "isDelete",
+            "license",
+            "primarySubmitterId",
+            "secondarySubmitterIds",
+            "sourceLanguage",
+            "submitterId",
+            "targetLanguage",
+            "durationInSeconds"
+          ],
+          "dimensionExclusions": [
+            "eventId"
+          ]
+        },
+        "granularitySpec": {
+          "queryGranularity": "hour",
+          "rollup": true,
+          "segmentGranularity": "day"
+        },
+        "metricsSpec": [
+          {
+            "name": "count",
+            "type": "count"
+          }
+        ]
+      }
+    }
+  }

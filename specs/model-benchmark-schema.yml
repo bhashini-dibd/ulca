@@ -1,0 +1,451 @@
+openapi: 3.0.0
+info:
+  version: 0.1.0
+  title: ULCA - model and its benchmark schema
+  description: >-
+    The documentation defines the model, benchmark and creating benchmark for newly submitted models.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+servers:
+  - url: /umca
+
+paths: {}
+
+components:
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header
+
+  schemas:
+
+    Model:
+      type: object
+      required: 
+        - modelId
+        - name
+        - description
+        - task
+        - languages
+        - domain
+        - license
+        - submiter
+        - contributors
+        - inferenceEndPoint
+        - stage
+        - trainingDataset
+        
+      properties:
+        modelId:
+          type: string
+          description: system generated unique identification of model
+          format: uuidv4
+        name:
+          type: string
+          description: model name that you want your users to see
+        description:
+          type: string
+          description: brief description about model, its goal, basically something sweet about it
+          minLength: 50
+          maxLength: 200
+          example: Speech recognition model for classroom lecture
+        task:
+          type: object
+          description: what kind of task model achieves
+          $ref: '#/components/schemas/ModelTask'
+        languages:
+          type: object
+          description: what all languages it supports
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePairs'
+        license:
+          type: object
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/License'
+        domain:
+          description: what domain your model cater to and its only search purposes.
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain'
+        submitter:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Contributor'
+        contributors:
+          type: array
+          description: users' or teams' who are part of the dataset curation exercise.
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Contributor'
+        inferenceEndPoint:
+          type: object
+          description: hosted location of model. Model can be hosted on submitter's infrastructure and must following respective API contract so that UMCA can make API callback to execute benchmarks
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        fileUploadEndPoint:
+          type: object
+          description: hosted location of model. Model can be hosted on submitter's infrastructure and must following respective API contract so that UMCA can make API callback to execute benchmarks
+          $ref: '#/components/schemas/FileUploadAPIEndPoint'
+        benchmarksPerformance:
+          type: object
+          description: ULCA will execute various benchmarks on the model, it holds all benchmarking score that model has received.
+          oneOf:
+            - $ref: '#/components/schemas/TranslationBenchmarkResult'
+            - $ref: '#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: '#/components/schemas/DocumentOCRBenchmark'
+            - $ref: '#/components/schemas/ASRBenchmarkResult'
+        stage:
+          description: after submission model goes through a process before it gets listed.
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/ProcessStage'
+        trainingDataset:
+          $ref: '#/components/schemas/TrainingDataset'
+  
+    InferenceAPIEndPoint:
+      type: object
+      description: hosted location defines the end point of the model inference. 
+      required: 
+        - callbackUrl
+        - schema
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        schema:
+          type: object
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/translation-schemas.yml#/components/schemas/TranslateRequest'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/audio-schema.yml#/components/schemas/SpeechRecognitionRequest'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRRequest'
+            
+    FileUploadAPIEndPoint:
+      type: object
+      description: hosted location defines the end point of the model inference. 
+      required: 
+        - callbackUrl
+        - schema
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        schema:
+          type: object
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/file-upload-schema.yml#/components/schemas/FileUploadRequest'
+    
+    Benchmarks:
+      type: array
+      items:
+        oneOf:
+          - $ref: '#/components/schemas/TranslationBenchmark'
+          - $ref: '#/components/schemas/DocumentLayoutBenchmark'
+          - $ref: '#/components/schemas/DocumentOCRBenchmark'
+          - $ref: '#/components/schemas/ASRBenchmark'
+        minLength: 1
+  
+    Benchmark:
+      type: object
+      description: the benchmark dataset for model task.
+      required: 
+        - name
+        - description
+        - domain
+      properties:
+        benchmarkId:
+          type: string
+          description: auto-generated unique identification of benchmark data
+          format: uuid4
+        name:
+          type: string
+          description: name of the benchmark
+        description:
+          type: string
+          description: description of the benchmark including how it has been curated
+          minLength: 50
+          maxLength: 200
+          example: benchmark sentences for government press release domain
+        domain:
+          type: object
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain'
+        createdOn:
+          type: string
+          description: timestamp when benchmark is created
+          format: datetime
+        submittedOn:
+          type: string
+          description: timestamp when benchmark is submitted/published
+          format: datetime
+    
+    TranslationBenchmark:
+      allOf:
+        - $ref: '#/components/schemas/Benchmark'
+        - type: object
+      type: object
+      description: Translation benchmark representation
+      properties:
+        languages:
+          type: object
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+        score:
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
+            minItems: 1
+    
+    DocumentLayoutBenchmark:
+      allOf:
+        - $ref: '#/components/schemas/Benchmark'
+        - type: object
+      type: object
+      description: Document layout benchmark representation
+      properties:
+        score:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
+            minItems: 1
+            
+    DocumentOCRBenchmark:
+      allOf:
+        - $ref: '#/components/schemas/Benchmark'
+        - type: object
+      type: object
+      description: Document layout benchmark representation
+      properties:
+        languages:
+          type: object
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+        score:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
+            minItems: 1
+    
+    ASRBenchmark:
+      allOf:
+        - $ref: '#/components/schemas/Benchmark'
+        - type: object
+      type: object
+      description: Document layout benchmark representation
+      properties:
+        languages:
+          type: object
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+        score:
+          type: array
+          items:
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
+            minItems: 1
+    
+    TranslationBenchmarkMetric:
+      type: object
+      description: translation benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
+            - bleu
+            - sacrebleu
+            - meteor
+            - lepor
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+          
+    ASRBenchmarkMetric:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
+            - wer
+            - cer
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+    
+    DocumentLayoutBenchmarkMetric:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
+            - precision
+            - recall
+            - h1-mean
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+          
+    DocumentOCRBenchmarkMetric:
+      type: object
+      description: ASR/TTS benchmark score
+      required: 
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum: 
+            - wer
+            - cer
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+  
+    TranslationIndividualBenchmarkResult:
+      allOf:
+        - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/translation-schemas.yml#/components/schemas/Sentence'
+        - type: object
+      type: object
+      properties:
+        scores:
+          type: array
+          description: score calculated for each metric mentioned in selected benchmark
+          items:
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
+            minItems: 1
+  
+    TranslationBenchmarkResult:
+      type: object
+      description: describes the translation benchmark result
+      properties:
+        benchmarkId:
+          type: string
+          description: auto-generated unique identification of benchmark data
+          format: uuid4
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslationIndividualBenchmarkResult'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/TranslationBenchmarkMetric'
+            minItems: 1
+  
+    DocumentLayoutIndividualPageBenchmarkResult:
+      type: object
+      properties:
+        class:
+          type: string
+          description: supported type of document layout 
+        scores:
+          type: array
+          description: score calculated for each metric mentioned in selected benchmark
+          items:
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
+            minItems: 1
+    
+    DocumentLayoutBenchmarkResult:
+      type: object
+      description: describes the document layout benchmark result
+      properties:
+        benchmarkId:
+          type: string
+          description: auto-generated unique identification of benchmark data
+          format: uuid4
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentLayoutIndividualPageBenchmarkResult'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentLayoutBenchmarkMetric'
+            minItems: 1
+    
+    DocumentOCRIndividualPageBenchmarkResult:
+      type: object
+      properties:
+        scores:
+          type: array
+          description: score calculated for each metric mentioned in selected benchmark
+          items:
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
+            minItems: 1
+    
+    DocumentOCRBenchmarkResult:
+      type: object
+      description: describes the document ocr benchmark result
+      properties:
+        benchmarkId:
+          type: string
+          description: auto-generated unique identification of benchmark data
+          format: uuid4
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentOCRIndividualPageBenchmarkResult'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentOCRBenchmarkMetric'
+            minItems: 1
+    
+    ASRIndividualBenchmarkResult:
+      allOf:
+        - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/audio-schema.yml#/components/schemas/SpeechRecognitionResult'
+        - type: object
+      type: object
+      properties:
+        scores:
+          type: array
+          description: score calculated for each metric mentioned in selected benchmark
+          items:
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
+            minItems: 1
+      
+    ASRBenchmarkResult:
+      type: object
+      description: describes the document ocr benchmark result
+      properties:
+        benchmarkId:
+          type: string
+          description: auto-generated unique identification of benchmark data
+          format: uuid4
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ASRIndividualBenchmarkResult'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ASRBenchmarkMetric'
+            minItems: 1
+  
+    ModelTask:
+      type: object
+      description: the category of model under which it has been released or trained
+      properties:
+        type:
+          type: string
+          enum: 
+            - translation
+            - tts
+            - asr
+            - document-layout
+            - ocr
+
+    TrainingDataset:
+      type: object
+      description: training dataset metadata used to train the model
+      required: 
+        - description
+      properties:
+        datasetId:
+          type: string
+          description: dataset identifier that has been exported from ULCA system, passing this information makes your model enriched with further information for the community
+        description:
+          type: string
+          description: explain your dataset that you have used for training your model
+  

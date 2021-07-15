@@ -1,0 +1,38 @@
+{
+    "datasetType": "ASR Corpus",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": null
+    },
+    "collectionSource": [
+        "openslr", "https://www.youtube.com?v=121212121"
+    ],
+    "domain":[
+        "general"
+    ],
+    "collectionMethod": [
+        "web-scrapping-audio"
+    ],
+    "format": "wav",
+    "channel": "mono",
+    "samplingRate": 16000,
+    "bitsPerSample": "sixteen",
+    "numberOfSpeakers": 3,
+    "license":  "cc-by-4.0",
+    "submitter": {
+        "name": "Anirudh",
+        "oauthId": {
+            "oauthId": "anirudh.gupta@thoughtworks.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Harveen",
+                "oauthId": {
+                    "oauthId": "anirudh.gupta@thoughtworks.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    }
+}

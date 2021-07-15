@@ -1,0 +1,279 @@
+  data_model_parallel:
+    type: object
+    description: ULCA Data Model for Parallel Dataset
+    properties:
+      id: 
+        type: uuid
+        description: Unique ID of the record
+      sourceText: 
+        type: string
+        description: Source Text of the input record
+      sourceLanguage: 
+        type: string
+        description: Source Language of the input record
+      sourceHash: 
+        type: string
+        description: SHA256 hash of the source text
+      targetText: 
+        type: string
+        description: Target Text of the input record
+      targetLanguage: 
+        type: string
+        description: Target Language of the input record
+      targetHash: 
+        type: string
+        description: SHA256 hash of the target text
+      alignmentScore: 
+        type: number
+        description: Alignment score of the record -- IP
+      derived: 
+        type: boolean
+        description: TRUE if it is derived record, FALSE otherwise.
+      datasetId:
+        type: array
+        description: IDs of the dataset this record belongs to
+        items:
+          type: string
+      contributors:
+        type: array
+        description: Details of the contributors
+        items:
+          type: object
+      submitter:
+        type: object
+        description: Details of the submitter
+      collectionMethod:
+        type: array
+        description: List of collection modes
+        items:
+          type: object
+      collectionSource:
+        type: array
+        description: List of collection sources
+        items:
+          type: string
+      domain:
+        type: array
+        description: List of domains the record belongs to
+        items:
+          type: string
+      license:
+        type: string
+        description: List of licenses the record belongs to
+        items:
+          type: string
+      tags:
+        type: array
+        description: Dervived list of tags
+        items:
+          type: string
+
+
+
+  data_model_asr:
+    type: object
+    description: ULCA Data Model for ASR Dataset
+    properties:
+      id: 
+        type: uuid
+        description: Unique ID of the record
+      audioFilename: 
+        type: string
+        description: Name of the audio file
+      audioFilePath: 
+        type: string
+        description: Path of the audio file from the shared storage
+      text: 
+        type: string
+        description: Text format of the audio content
+      audioHash: 
+        type: string
+        description: Hash of the audio file
+      textHash: 
+        type: string
+        description: Hash of the text content
+      startTime: 
+        type: datetime
+        description: Start time of the audio
+      endTime: 
+        type: datetime
+        description: End time of the audio
+      channel: 
+        type: string
+        description: Channel of collection of the audio file
+      samplingRate: 
+        type: string
+        description: Sampling rate
+      bitsPerSample: 
+        type: number
+        description: Alignment score of the record
+      gender:
+        type: string
+        description: Gender of the speaker
+      age: 
+        type: string
+        description: Age of the speaker
+      snr: 
+        type: object
+        description: SNR details
+      datasetId:
+        type: array
+        description: IDs of the dataset this record belongs to
+        items:
+          type: string
+      contributors:
+        type: array
+        description: Details of the contributors
+        items:
+          type: object
+      submitter:
+        type: object
+        description: Details of the submitter
+      collectionMethod:
+        type: array
+        description: List of collection modes
+        items:
+          type: string
+      collectionSource:
+        type: array
+        description: List of collection sources
+        items:
+          type: string
+      domain:
+        type: array
+        description: List of domains the record belongs to
+        items:
+          type: string
+      license:
+        type: string
+        description: List of licenses the record belongs to
+        items:
+          type: string
+      tags:
+        type: array
+        description: Dervived list of tags
+        items:
+          type: string
+
+
+  data_model_ocr:
+    type: object
+    description: ULCA Data Model for OCR Dataset
+    properties:
+      id: 
+        type: uuid
+        description: Unique ID of the record
+      groundTruth: 
+        type: string
+        description: Content of the image
+      imageFilename: 
+        type: string
+        description: Name of the image file
+      groundTruthHash: 
+        type: string
+        description: Hash of the ground truth
+      imageHash: 
+        type: string
+        description: Hash of the image
+      imageFilePath: 
+        type: string
+        description: Path of the image file from the shared storage
+      boundingBox: 
+        type: array
+        description: Bounding box details
+        items:
+          type: object
+      datasetId:
+        type: array
+        description: IDs of the dataset this record belongs to
+        items:
+          type: string
+      contributors:
+        type: array
+        description: Details of the contributors -- IP
+        items:
+          type: object
+      submitter:
+        type: object
+        description: Details of the submitter -- IP
+      collectionMethod:
+        type: array
+        description: List of collection modes -- IP
+        items:
+          type: string
+      collectionSource:
+        type: array
+        description: List of collection sources -- IP
+        items:
+          type: string
+      domain:
+        type: array
+        description: List of domains the record belongs to -- IP
+        items:
+          type: string
+      license:
+        type: string
+        description: List of licenses the record belongs to
+        items:
+          type: string
+      tags:
+        type: array
+        description: Dervived list of tags
+        items:
+          type: string
+
+
+  data_model_monolingual:
+    type: object
+    description: ULCA Data Model for Monolingual Dataset
+    properties:
+      id: 
+        type: uuid
+        description: Unique ID of the record
+      text: 
+        type: string
+        description: Text of the input record
+      language: 
+        type: string
+        description: Language of the input record
+      textHash: 
+        type: string
+        description: SHA256 hash of the source text
+      datasetId:
+        type: array
+        description: IDs of the dataset this record belongs to
+        items:
+          type: string
+      contributors:
+        type: array
+        description: Details of the contributors
+        items:
+          type: object
+      submitter:
+        type: object
+        description: Details of the submitter
+      collectionMethod:
+        type: array
+        description: List of collection modes
+        items:
+          type: string
+      collectionSource:
+        type: array
+        description: List of collection sources
+        items:
+          type: string
+      domain:
+        type: array
+        description: List of domains the record belongs to
+        items:
+          type: string
+      license:
+        type: string
+        description: List of licenses the record belongs to
+        items:
+          type: string
+      tags:
+        type: array
+        description: Dervived list of tags
+        items:
+          type: string

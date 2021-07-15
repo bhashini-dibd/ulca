@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  version: 0.5.0
+  title: Document OCR API and schema definitions
+  description: >-
+    Contributor developing models under document layout and OCR task, should implement following schema and API contract for their end point. This will enable ULCA to make inference callback for benchmark and try me functionalities.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+    
+paths: {}
+
+components:
+  securitySchemes:
+      authToken:
+        type: apiKey
+        description: token issued by authenticating the user
+        name: auth-token
+        in: header
+  
+  schemas:
+  
+    DocumentOCRRequest:
+      type: object
+      required:
+        - fileId
+      properties:
+        fileId:
+          type: string
+          description: fileId should be same as returned in the response of file-upload
+        language:
+          description: indicate only sourceLanguage key with respective ISO code.
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          
+    DocumentOCRResponse:
+      type: object
+      properties:
+        fileId:
+          type: string
+        pages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Page'
+            minItems: 1
+  
+    Page:
+      type: object
+      required:
+        - boundingbox
+        - regions
+        
+      properties:
+        identifier:
+          type: string
+          description: unique page identifier
+        boundingbox:
+          type: object
+          $ref:  "#/components/schemas/Vertices"
+          description: page coordinates
+        resolution:
+          type: integer
+          description: dpi of the page image
+        regions:
+          type: array
+          description: coordinates of extracted regions
+          items:
+            $ref: "#/components/schemas/Region"
+    
+    Region:
+      type: object
+      properties:
+        boundingbox:
+          type: object
+          $ref:  "#/components/schemas/Vertices"
+          description: region coordinates
+        identifier:
+          type: string
+          description: unique identifier for region
+          format: uuid4
+        class:
+          type: string
+          description: class of detected region
+          enum:
+            - paragraph
+            - line
+            - word
+            - signatureImage
+
+        regions:
+          type: array
+          description: various visual objects present on the page
+          items:
+              oneOf:
+                - $ref: '#/components/schemas/Region'
+                - $ref: '#/components/schemas/DataRegion'
+      required:
+        - boundingbox
+        - identifier
+        - class
+        - regions
+    
+    DataRegion:
+      type: object
+      required:
+        - boundingbox
+        - identifier
+        - confidence
+        - class
+        - text
+      properties:
+        boundingbox:
+          type: object
+          $ref:  "#/components/schemas/Vertices"
+          description: region coordinates extracted
+        identifier:
+          type: string
+          description: unique identifier for region
+          format: uuid4
+        language:
+          type: string
+          description: language of the extracted text
+        confidence:
+          type: number
+          description: confidence of the extracted text
+        class:
+          type: string
+          description: class of detected region
+          enum:
+            - symbol
+        text:
+          type: string
+          description: collated text at region level or class specific metadata
+  
+    Vertices:
+      type: array
+      description: list of vertex object
+      items:
+        $ref: '#/components/schemas/Vertex'
+        minItems: 4
+    
+    Vertex:
+      type: object
+      description: coordinate of a point, X & Y
+      required:
+        - x
+        - y
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+  

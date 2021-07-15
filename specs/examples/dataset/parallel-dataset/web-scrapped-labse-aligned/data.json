@@ -1,0 +1,50 @@
+[
+    {
+        "sourceText": "But, India offers many more opportunities",
+        "targetText": "लेकिन, भारत कई और अवसर प्रदान करता है",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentScore": 0.91784
+            }
+        }
+    },
+    {
+        "sourceText": "In the last 24 hours, 4,987 new confirmed cases have been added.",
+        "targetText": "उन्होंने बताया कि पिछले 24 घंटे में 4987 नए मामलों की पुष्टि हुई है।",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentScore": 0.79782
+            }
+        }
+    },
+    {
+        "sourceText": "PM addresses nation on International Day of Yoga",
+        "targetText": "प्रधानमंत्री ने अंतर्राष्ट्रीय योग दिवस के अवसर पर राष्ट्र को संबोधित किया",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentScore": 0.69784
+            }
+        }
+    },
+    {
+        "sourceText": "I appreciate their efforts in ensuring India successfully defeats COVID-19",
+        "targetText": "मैं कोविड-19 को हराने में भारत की सफलता सुनिश्चित करने के उनके प्रयासों की सराहना करता हूंsss                                                                                                                                                                                                                                                                                                                                                                                            ß",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentScore": 0.7884
+            }
+        }
+    },
+    {
+        "sourceText": "This bridge is of strategic importance along the India-Nepal border",
+        "targetText": "भारत-नेपाल सीमा के करीब होने के चलते इस पुल का रणनीतिक महत्व भी है",
+        "collectionMethod": {
+            "collectionDetails": {
+                "alignmentTool": "LASER",
+                "alignmentToolVersion": "1.0",
+                "alignmentScore": 0.84906
+            }
+        }
+    }
+]
+

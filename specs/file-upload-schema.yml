@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  version: 0.5.0
+  title: File upload API definition
+  description: >-
+    ASR, TTS, OCR model provider wanted to benchmark their model against existing model present in ULCA system, submitter should upload the binary file to receive the response before starting the respective benchmarking of their models.
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+    
+paths:
+  /v0.2/file/upload:
+    post:
+      tags:
+        - file-upload
+      summary: Maximum file upload size accepted is 5 MB
+      description: to upload the audio/image file refer the returned "fileId" should be used to execute subsequent inference request.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+      responses:
+        "200":
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/StatusCode'
+      security:
+      - authToken: []
+
+components:
+  securitySchemes:
+      authToken:
+        type: apiKey
+        description: token issued by authenticating the user
+        name: auth-token
+        in: header
+  
+  schemas:
+  
+    FileUploadRequest:
+      type: object
+      properties:
+        fileName:
+          type: string
+          format: binary
+  
+    FileUploadResponse:
+      type: object
+      properties:
+        fileId:
+          type: string
+          format: uuidv4
+        fileName:
+          type: string
+          description: provided filename
+        timestamp:
+          type: string
+          format: datetime
+          description: uploaded file timestamp
+
+    StatusCode:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: status code as encountered in the processing life-cycle
+          enum:
+            - file-size-limit-exceeded
+            - missing-mandatory-parameters
+            - authorization-failed
+        message:
+          type: string
+          description: human understandable format
+    
+    HttpResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          description: request successful indicator.
+        why:
+          type: string
+          description: Response message.
+        status:
+          type: object
+          description: status code as returned
+          $ref: '#/components/schemas/StatusCode'
+        data:
+          type: object
+          description: response object based upon the submitted request
+          oneOf:
+            - $ref: '#/components/schemas/FileUploadResponse'

@@ -1,0 +1,742 @@
+openapi: 3.0.0
+info:
+  title: Unified Language Contribution API (ULCA) documentation
+  description: 'The ULCA API documentation defines a core set of interfaces that enables users and communities to contribute AI/ML datasets to build a large, open Indic languages resource ecosystem. The dataset contributions are primarily geared toward the area of NLP, ASR/TTS and OCR. The documentation proposes core set of interfaces where various AI based models can be hosted, referenced and benchmarked. The interfaces enables entire community to participate, collaborate and track key benchmark parameters.'
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 0.7.0
+servers:
+  - url: /ulca
+paths:
+  /v0.2/dataset/corpus/submit:
+    post:
+      tags:
+        - 'dataset, core-api'
+      summary: 'to starts submission of dataset creation process, the submission goes through stage life-cycle before it gets contributed to the ecosystem'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetSubmitRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+      security:
+        - authToken: []
+  /v0.2/dataset/corpus/label:
+    post:
+      tags:
+        - 'dataset, core-api'
+      summary: 'to submit referenced dataset or additional label in the dataset, primarily to enhance existing dataset by adding additional attribute(s) thus increasing existing dataset quality and coverage.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReferenceDatasetRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+      security:
+        - authToken: []
+  /v0.2/dataset/corpus/status-check:
+    post:
+      tags:
+        - 'dataset, core-api'
+      summary: 'check the status of submitted dataset request, user can track the status by using the provided acknowledgment identifier'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetStatusRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+  /v0.2/dataset/statistics/search:
+    post:
+      tags:
+        - 'dataset, core-api'
+      summary: 'to query analytical information for the available datasets, primarily used to get statistical count of records count present in the ULCA ecosystem. The queries can be done based upon the PARAMS like languages, domain, etc.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetSearchRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+  /v0.2/dataset/ingest:
+    post:
+      tags:
+        - 'dataset, peripheral-api'
+      summary: peripheral internal api that will actually transform the ingested dataset and push to the store after running business flow pertaining to individual dataset validation flow.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetIngestRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+      security:
+        - authToken: []
+  /v0.2/model/submit:
+    post:
+      tags:
+        - 'model, core-api'
+      summary: 'submit model to ULCA, from here benchmarking would be next stop'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelSubmitRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+      security:
+        - authToken: []
+  /v0.2/model/status-check:
+    post:
+      tags:
+        - 'model, core-api'
+      summary: check the status of submitted model
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelStatusRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+  /v0.2/model/search:
+    post:
+      tags:
+        - 'model, core-api'
+      summary: to query analytical information for the available model for a task that is define at ULCA
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelSearchRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+  /v0.2/model/try-me:
+    post:
+      tags:
+        - 'model, core-api'
+      summary: to provide any interface to try out the model
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelTryMeRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+  /v0.2/model/benchmark/start:
+    post:
+      tags:
+        - 'model, core-api'
+      summary: 'starts the benchmarking process of the submitted model, benchmarking can be done on all available benchmark or on the user supplied subset. Benchmarking can be a long running operation, status-check should be used to'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelBenchmarkRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+  /v0.2/model/benchmark/status-check:
+    post:
+      tags:
+        - 'model, core-api'
+      summary: returns the benchmark progress status check.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelBenchmarkStatusRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+  /v0.2/model/benchmark/publish:
+    post:
+      tags:
+        - 'model, core-api'
+      summary: starts the benchmark publishing process of the submitted model
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelBenchmarkPublishRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+  /v0.2/model/benchmark/detailed-result:
+    post:
+      tags:
+        - 'model, core-api'
+      summary: returns the record level score of the mentioned metric
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelBenchmarkDetailResultRequest'
+        required: true
+      responses:
+        '200':
+          description: On successful completion of the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpSuccessResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+components:
+  schemas:
+    DatasetSubmitRequest:
+      allOf:
+        - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/Dataset'
+        - type: object
+      type: object
+      description: request to submit the dataset
+      required:
+        - type
+      properties:
+        type:
+          description: one of the defined possible values
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetType'
+    ReferenceDatasetRequest:
+      allOf:
+        - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/Dataset'
+        - type: object
+      required:
+        - type
+        - referenceDatasetId
+      type: object
+      properties:
+        type:
+          description: one of the defined possible values
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetType'
+        referenceDatasetId:
+          type: string
+          description: original dataset identifier from which referenced dataset is drived.
+          format: uuidv4
+    DatasetSubmitResponse:
+      type: object
+      properties:
+        acknowlegmentId:
+          type: string
+          description: 'auto generated identifier to identify the internal representation, user can check the status of dataset stage using this acknowlegment identifier'
+          format: uuidv4
+        timestamp:
+          type: string
+          format: datetime
+          description: dataset submission timestamp
+      description: 'uploaded dataset goes through series of validation checks, automated or human-in-the-loop before it gets listed'
+    DatasetSearchRequest:
+      required:
+        - criterions
+        - groupby
+        - type
+      type: object
+      properties:
+        type:
+          description: one of the defined possible values
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetType'
+        criterions:
+          type: array
+          description: comma separted system defined tags
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/SearchParams'
+        groupby:
+          type: array
+          description: groupby based upon the entity
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/SearchParams'
+            minItems: 1
+        starttime:
+          type: string
+          description: start of timestamp
+          format: datetime
+        endtime:
+          type: string
+          description: end of timestamp
+          format: datetime
+    DatasetSearchResponse:
+      required:
+        - data
+      type: object
+      properties:
+        data:
+          type: array
+          description: collection of value and label
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/DataPoint'
+    DatasetStatusRequest:
+      type: object
+      required:
+        - acknowlegmentId
+      properties:
+        acknowlegmentId:
+          type: string
+          description: provided acknowledgment identifier at the time of dataset submission
+    
+    DatasetStatusResponse:
+      type: object
+      required:
+        - acknowledgmentId
+        - status
+        - progress
+      properties:
+        acknowlegmentId:
+          type: string
+          description: user provided identifier
+        dataset:
+          type: object
+          description: uploaded dataset and its system representation
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/Dataset'
+        status:
+          type: string
+          description: status of each stage
+          enum:
+            - in-progress
+            - status-with-errors
+            - success
+            - failed
+        progress:
+          type: object
+          description: detailed for the dataset as it can be longer running operation
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetProgressInformation'
+    
+    DatasetIngestRequest:
+      type: object
+      required:
+        - acknowlegmentId
+        - params
+        - rows
+      properties:
+        acknowlegmentId:
+          type: string
+          description: the acknowlegment identifier should be same as returned to the user in the body of DatasetSubmitResponse.
+          format: uuidv4
+        referenceDatasetId:
+          type: string
+          description: original dataset identifier from which referenced dataset is drived.
+          format: uuidv4
+        params:
+          type: object
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ParallelDatasetParamsSchema'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/MonolingualParamsSchema'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRParamsSchema'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DocumentOCRParamsSchema'
+        rows:
+          type: array
+          items:
+            oneOf:
+              - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ParallelDatasetRowSchema'
+              - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/MonolingualRowSchema'
+              - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRRowSchema'
+              - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DocumentOCRRowSchema'
+            minItems: 100
+  
+    ModelSubmitRequest:
+      type: object
+      description: starting the workflow for model life-cycle
+      properties:
+        model:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/Model'
+    ModelSubmitResponse:
+      type: object
+      description: 'ULCA will acknowledge the submission, however model is not published yet'
+      properties:
+        acknowlegmentId:
+          type: string
+          description: auto generated identifier to identify the internal submission
+          format: uuidv4
+        timestamp:
+          type: string
+          format: datetime
+          description: submission timestamp
+    ModelStatusRequest:
+      type: object
+      required:
+        - acknowlegmentId
+      properties:
+        acknowlegmentId:
+          type: string
+          description: provided acknowledgment identifier at the time of submission
+    ModelStatusResponse:
+      type: object
+      required:
+        - acknowledgmentId
+        - contributor
+        - timelines
+      properties:
+        acknowlegmentId:
+          type: string
+          description: ULCA provided identifier
+        contributor:
+          type: object
+          description: submitter of the dataset
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Contributor'
+        timelines:
+          type: array
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Timeline'
+    ModelSearchRequest:
+      required:
+        - criterions
+        - groupby
+        - type
+      type: object
+      properties:
+        type:
+          description: one of the defined possible values
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ModelTask'
+        criterions:
+          type: array
+          description: comma separted system defined tags
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/SearchParams'
+        groupby:
+          type: array
+          description: groupby based upon the entity
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/SearchParams'
+            minItems: 1
+        starttime:
+          type: string
+          description: start of timestamp
+          format: datetime
+        endtime:
+          type: string
+          description: end of timestamp
+          format: datetime
+    ModelSearchResponse:
+      required:
+        - data
+      type: object
+      properties:
+        data:
+          type: array
+          description: collection of model
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/Model'
+    ModelTryMeRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: model identifier allocated by ULCA
+        requestSchema:
+          type: object
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/translation-schemas.yml#/components/schemas/TranslateRequest'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/audio-schema.yml#/components/schemas/SpeechRecognitionRequest'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRRequest'
+    ModelTryMeResponse:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: model identifier allocated by ULCA
+        requestSchema:
+          type: object
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/translation-schemas.yml#/components/schemas/TranslateResponse'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/audio-schema.yml#/components/schemas/SpeechRecognitionResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRResponse'
+    ModelBenchmarkRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: model identifier allocated by ULCA
+        benchmarks:
+          type: array
+          description: you can run benchmarking on subset of available benchmarks
+          items:
+            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/Benchmarks'
+    ModelBenchmarkStatusRequest:
+      type: object
+      required:
+        - acknowlegmentId
+      properties:
+        acknowlegmentId:
+          type: string
+          description: provided acknowledgment identifier at the time of starting benchmark operation
+    ModelBenchmarkResponse:
+      type: object
+      properties:
+        acknowlegmentId:
+          type: string
+          description: ULCA provided identifier
+        timestamp:
+          type: string
+          format: datetime
+          description: submission timestamp
+        status:
+          type: string
+          enum:
+            - in-progress
+            - completed
+        results:
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
+    ModelBenchmarkPublishRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: identifier provided by ULCA system
+        results:
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
+    ModelBenchmarkPublishResponse:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: identifier provided by ULCA system
+        results:
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
+    ModelBenchmarkDetailResultRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: identifier provided by ULCA system
+    ModelBenchmarkDetailResultResponse:
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: identifier provided by ULCA system
+        results:
+          oneOf:
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
+    
+    HttpSuccessResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          description: request successful indicator.
+        why:
+          type: string
+          description: Response message.
+        status:
+          type: object
+          description: status code as returned
+          oneOf:
+            - $ref: '#/components/schemas/StatusCode'
+        data:
+          type: object
+          description: response object based upon the submitted request
+          oneOf:
+            - $ref: '#/components/schemas/ModelSubmitResponse'
+            - $ref: '#/components/schemas/ModelStatusResponse'
+            - $ref: '#/components/schemas/ModelSearchResponse'
+            - $ref: '#/components/schemas/ModelBenchmarkResponse'
+            - $ref: '#/components/schemas/ModelBenchmarkPublishResponse'
+            - $ref: '#/components/schemas/ModelBenchmarkDetailResultResponse'
+            - $ref: '#/components/schemas/ModelTryMeResponse'
+            - $ref: '#/components/schemas/DatasetSubmitResponse'
+            - $ref: '#/components/schemas/DatasetStatusResponse'
+            - $ref: '#/components/schemas/DatasetSearchResponse'
+    
+    HttpErrorResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          description: request successful indicator.
+        why:
+          type: string
+          description: Response message.
+        status:
+          type: object
+          description: status code as returned
+          oneOf:
+            - $ref: '#/components/schemas/StatusCode'
+    
+    StatusCode:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: status code as encountered in the processing life-cycle
+          enum:
+            - insufficent-dataset-rows-provided
+            - searched-query-not-supported
+            - missing-mandatory-parameters
+            - authorization-failed
+            - schema-validation-failed
+            - object-validation-failed
+            - benchmark-failed
+            - invalid-callback-url
+        message:
+          type: string
+          description: human understandable format
+    
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header

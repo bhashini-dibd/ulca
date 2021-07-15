@@ -1,0 +1,40 @@
+[
+    {
+        "sourceText": "Cabinet approves MoU of Cooperation between India and Morocco",
+        "targetText": "मंत्रिमंडल ने भारत और मोरक्को के बीच सहयोग के लिए समझौता ज्ञापन को मंजूरी दी",
+        "collectionMethod": {
+            "collectionDetails": {
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
+            }
+        }
+    },
+    {
+        "sourceText": "TThe example of Rajendra Yadav of Nasik is very interesting",
+        "targetText": "जैसे, नासिक के राजेन्द्र यादव का उदाहरण बहुत दिलचस्प है",
+        "collectionMethod": {
+            "collectionDetails": {
+                "editingTool": "CDAC_Editor",
+                "editingToolVersion": "1.3",
+                "contributor": {
+                    "name": "Amarjeet Singh",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
+            }
+        }
+    },
+    {
+        "sourceText": "Update on COVID-19: Advisories and Guidelines for Containment and Prevention",
+        "targetText": "कोविड-19 पर अपडेट: रोकथाम और निवारण के लिए सलाह और दिशानिर्देश",
+        "collectionMethod": {
+            "collectionDetails": {
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
+            }
+        }
+    }
+]

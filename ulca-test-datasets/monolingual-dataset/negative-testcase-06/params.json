@@ -1,0 +1,38 @@
+{
+    "datasetType": "monolingual-corpus",
+    "languages": {
+        "sourceLanguage": "hi"
+    },
+    "collectionSource": [
+        "http://pib.gov.in/",
+        "https://www.mykhel.com/",
+        "https://www.drivespark.com/",
+        "https://www.goodreturns.in/",
+        "https://indianexpress.com/",
+        "http://www.catchnews.com/",
+        "https://dw.com/",
+        "http://ddnews.gov.in/",
+        "https://www.financialexpress.com/",
+        "https://www.zeebiz.com/",
+        "https://www.sakshi.com/",
+        "https://marketfeed.news/"
+    ],
+    "domain":[
+        "news"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation",
+        "team": [
+            {
+                "name": "Navneet Kumar",
+                "aboutMe": "NLP team lead at Project Anuvaad"
+            },
+            {
+                "name": "Aswin Pradeep",
+                "aboutMe": "Backend team lead at Project Anuvaad"
+            }
+        ]
+    }
+}
