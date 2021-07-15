@@ -10,6 +10,7 @@ public class RequestContextConstants {
     public static final String PATH_PARAM_URI = "pathParamUri";
     public static final String QUERY_PARAM_URI = "queryParamUri";
     public static final String REQ_URI = "reqUri";
+    public static final String ACTION_URI = "actionUri";
     public static final String USER_INFO_KEY = "USER_INFO";
     public static final String CORRELATION_ID_HEADER_NAME = "x-correlation-id";
     public static final String CORRELATION_ID_KEY = "CORRELATION_ID";

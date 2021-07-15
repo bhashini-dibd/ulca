@@ -12,6 +12,7 @@ from kafkawrapper.producer import Producer
 from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
 from events.metrics import MetricEvent
+from .datasetservice import DatasetService
 
 log = logging.getLogger('file')
 
@@ -21,6 +22,7 @@ prod = Producer()
 error_event = ErrorEvent()
 pt = ProcessTracker()
 metrics = MetricEvent()
+service = DatasetService()
 
 
 class MonolingualService:
@@ -31,7 +33,7 @@ class MonolingualService:
     Method to load Monolingual dataset into the mongo db
     params: request (record to be inserted)
     '''
-    def load_monolingual_dataset_single(self, request):
+    def load_monolingual_dataset(self, request):
         try:
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
@@ -56,6 +58,14 @@ class MonolingualService:
                              "serviceRequestNumber": metadata["serviceRequestNumber"],
                              "message": "This record is already available in the system"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
+                else:
+                    error_list.append(
+                        {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
+                         "datasetType": dataset_type_monolingual, "datasetName": metadata["datasetName"],
+                         "serviceRequestNumber": metadata["serviceRequestNumber"],
+                         "message": "There was an exception while processing this record!"})
+                    pt.update_task_details(
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
             log.info(f'Mono - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
@@ -63,62 +73,6 @@ class MonolingualService:
             log.exception(e)
             return {"message": "EXCEPTION while loading Monolingual dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
-
-    '''
-    Method to load Monolingual dataset into the mongo db in bulk -- currently not in use.
-    params: request (record to be inserted)
-    '''
-    def load_monolingual_dataset(self, request):
-        log.info("Loading Dataset..... | {}".format(datetime.now()))
-        try:
-            metadata = request
-            record = request["record"]
-            ip_data = [record]
-            batch_data, error_list, pt_list = [], [], []
-            total, count, updates, batch = len(ip_data), 0, 0, ds_batch_size
-            if ip_data:
-                func = partial(self.get_enriched_data, metadata=metadata)
-                pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
-                enrichment_processors = pool_enrichers.map_async(func, ip_data).get()
-                for result in enrichment_processors:
-                    if result:
-                        if result[0] == "INSERT":
-                            if len(batch_data) == batch:
-                                if metadata["userMode"] != user_mode_pseudo:
-                                    repo.insert(batch_data)
-                                count += len(batch_data)
-                                batch_data = []
-                            batch_data.append(result[1])
-                            pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                            "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[1], metadata, None, None)
-                        elif result[0] == "UPDATE":
-                            pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                            "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[2], metadata, None, True)
-                            updates += 1
-                        else:
-                            error_list.append(
-                                {"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
-                                 "datasetType": dataset_type_monolingual, "datasetName": metadata["datasetName"],
-                                 "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                 "message": "This record is already available in the system"})
-                            pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD", "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                            "currentRecordIndex": metadata["currentRecordIndex"]})
-                pool_enrichers.close()
-                if batch_data:
-                    if metadata["userMode"] != user_mode_pseudo:
-                        repo.insert(batch_data)
-                    count += len(batch_data)
-            if error_list:
-                error_event.create_error_event(error_list)
-            for pt_rec in pt_list:
-                pt.update_task_details(pt_rec)
-            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
-        except Exception as e:
-            log.exception(e)
-            return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"status": "SUCCESS", "total": total, "inserts": count, "updates": updates, "invalid": error_list}
 
     '''
     Method to run dedup checks on the input record and enrich if needed.
@@ -129,7 +83,7 @@ class MonolingualService:
         try:
             record = self.get_monolingual_dataset_internal({"tags": {"$all": [data["textHash"]]}})
             if record:
-                dup_data = self.enrich_duplicate_data(data, record, metadata)
+                dup_data = service.enrich_duplicate_data(data, record, metadata, mono_immutable_keys, mono_updatable_keys, mono_non_tag_keys)
                 if dup_data:
                     repo.update(dup_data)
                     return "UPDATE", data, dup_data
@@ -142,62 +96,11 @@ class MonolingualService:
                         insert_data[key] = [insert_data[key]]
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
-            insert_data["tags"] = self.get_tags(insert_data)
+            insert_data["tags"] = service.get_tags(insert_data, mono_non_tag_keys)
             return "INSERT", insert_data, insert_data
         except Exception as e:
-            log.exception(e)
+            log.exception(f'Exception while getting enriched data: {e}', e)
             return None
-
-    '''
-    Method to check and process duplicate records.
-    params: data (record to be inserted)
-    params: record (duplicate record found in the DB)
-    params: data (record to be inserted)
-    '''
-    def enrich_duplicate_data(self, data, record, metadata):
-        db_record = record
-        found = False
-        for key in data.keys():
-            if key in mono_updatable_keys:
-                found = True
-                db_record[key] = data[key]
-                continue
-            if key not in mono_immutable_keys:
-                if key not in db_record.keys():
-                    found = True
-                    db_record[key] = [data[key]]
-                elif isinstance(data[key], list):
-                    pairs = zip(data[key], db_record[key])
-                    if any(x != y for x, y in pairs):
-                        found = True
-                        db_record[key].extend(data[key])
-                else:
-                    if isinstance(db_record[key], list):
-                        if data[key] not in db_record[key]:
-                            found = True
-                            db_record[key].append(data[key])
-                    else:
-                        if db_record[key] != data[key]:
-                            found = True
-                            db_record[key] = [db_record[key]]
-                            db_record[key].append(data[key])
-                        else:
-                            db_record[key] = [db_record[key]]
-        if found:
-            db_record["datasetId"].append(metadata["datasetId"])
-            db_record["tags"] = self.get_tags(record)
-            return db_record
-
-    '''
-    Method to fetch tags for a record
-    params: insert_data (record to be used to fetch tags)
-    '''
-    def get_tags(self, insert_data):
-        tag_details = {}
-        for key in insert_data:
-            if key not in mono_non_tag_keys:
-                tag_details[key] = insert_data[key]
-        return list(utils.get_tags(tag_details))
 
     '''
     Method to fetch records from the DB

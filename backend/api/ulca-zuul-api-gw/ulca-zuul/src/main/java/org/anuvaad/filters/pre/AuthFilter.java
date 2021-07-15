@@ -6,7 +6,6 @@ import com.netflix.zuul.context.RequestContext;
 import org.anuvaad.cache.ZuulConfigCache;
 import org.anuvaad.models.Action;
 import org.anuvaad.models.User;
-import org.anuvaad.models.UserRole;
 import org.anuvaad.utils.ExceptionUtils;
 import org.anuvaad.utils.UserUtils;
 import org.slf4j.Logger;
@@ -14,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 
@@ -40,8 +40,7 @@ public class AuthFilter extends ZuulFilter {
     private static final String PK_RETRIEVE_FAILURE_MESSAGE = "Couldn't find public key in the request.";
     private static final String SIG_RETRIEVE_FAILURE_MESSAGE = "Couldn't find signature in the request.";
     private static final String SKIP_AUTH_CHECK = "Auth check skipped - whitelisted endpoint | {}";
-    private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted - No auth token";
-    private static final String RETRIEVING_USER_FAILED_MESSAGE = "Retrieving user failed";
+    private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted - Invalid public key";
     private static final String PROCEED_ROUTING_MESSAGE = "Routing to protected endpoint: {} - authentication check passed!";
     private static final String UNAUTH_USER_MESSAGE = "You don't have access to this resource - authentication check failed.";
     private static final String INVALID_ENDPOINT_MSG = "You're trying to access an invalid/inactive resource";
@@ -72,6 +71,7 @@ public class AuthFilter extends ZuulFilter {
             setShouldDoAuth(false);
             logger.info(SKIP_AUTH_CHECK, uri);
             ctx.set(REQ_URI, uri);
+            ctx.set(ACTION_URI, uri);
             return null;
         }
         if (!isURIValid(uri, ctx)){
@@ -100,15 +100,13 @@ public class AuthFilter extends ZuulFilter {
             ctx.set(SIG_KEY, sig);
             User user = verifyAuthenticity(ctx, publicKey);
             if (null == user){
-                logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, uri);
+                logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, ctx.get(ACTION_URI));
                 ExceptionUtils.raiseCustomException(HttpStatus.UNAUTHORIZED, UNAUTH_USER_MESSAGE);
             }
             else {
-                logger.info(PROCEED_ROUTING_MESSAGE, uri);
+                logger.info(PROCEED_ROUTING_MESSAGE, ctx.get(ACTION_URI));
                 ctx.addZuulRequestHeader(ZUUL_USER_ID_HEADER_KEY, user.getUserID());
-                List<String> roles = new ArrayList<>();
-                for(UserRole role: user.getRoles())
-                    roles.add(role.getRoleCode());
+                List<String> roles = new ArrayList<>(user.getRoles());
                 String roleCodes = String.join(",", roles);
                 ctx.addZuulRequestHeader(ZUUL_ROLES_HEADER_KEY, roleCodes);
                 setShouldDoAuth(true);
@@ -131,21 +129,15 @@ public class AuthFilter extends ZuulFilter {
                     isValid = true;
                     ctx.set(PATH_PARAM_URI, false);
                     ctx.set(REQ_URI, uri);
+                    ctx.set(ACTION_URI, uri);
                 }
                 else if (action.getUri().endsWith("/*")){
                     String actionURI = action.getUri().substring(0, (action.getUri().length() - 2));
                     if (uri.contains(actionURI)){
                         isValid = true;
                         ctx.set(PATH_PARAM_URI, true);
-                        ctx.set(REQ_URI, action.getUri());
-                    }
-                }
-                else if (action.getUri().endsWith("?*")){
-                    String actionURI = action.getUri().substring(0, (action.getUri().length() - 2));
-                    if (uri.contains(actionURI)){
-                        isValid = true;
-                        ctx.set(QUERY_PARAM_URI, true);
-                        ctx.set(REQ_URI, action.getUri());
+                        ctx.set(REQ_URI, uri);
+                        ctx.set(ACTION_URI, action.getUri());
                     }
                 }
             }
@@ -160,15 +152,18 @@ public class AuthFilter extends ZuulFilter {
      * @return
      */
     public User verifyAuthenticity(RequestContext ctx, String publicKey) {
-        try {
-            User user = userUtils.getUser(publicKey, ctx);
-            if (null != user)
+        User user = userUtils.getUser(publicKey, ctx);
+        if (null != user){
+            if (!CollectionUtils.isEmpty(user.getRoles())) {
                 ctx.set(USER_INFO_KEY, user);
-            return user;
-        } catch (Exception ex) {
-            logger.error(RETRIEVING_USER_FAILED_MESSAGE, ex);
-            return null;
+                return user;
+            }
+            else{
+                logger.error("The user doesn't contain any roles!");
+                return null;
+            }
         }
+        else return null;
     }
 
     /**

@@ -1,0 +1,282 @@
+openapi: 3.0.0
+info:
+  title: ULCA - model schema
+  description: "The documentation defines the model."
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 0.1.0
+servers:
+- url: /umca
+paths: {}
+components:
+  schemas:
+    Model:
+      required:
+      - name
+      - description
+      - task
+      - languages
+      - license
+      - domain
+      - submitter
+      - inferenceEndPoint
+      - trainingDataset
+      type: object
+      properties:
+        name:
+          type: string
+          description: model name that you want your users to see
+        description:
+          maxLength: 200
+          minLength: 50
+          type: string
+          description: "brief description about model, its goal, basically something\
+            \ sweet about it"
+          example: Speech recognition model for classroom lecture
+        task:
+          $ref: '#/components/schemas/ModelTask'
+        languages:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePairs'
+        license:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/License'
+        domain:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain'
+        submitter:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Submitter'
+        inferenceEndPoint:
+          $ref: '#/components/schemas/InferenceAPIEndPoint'
+        trainingDataset:
+          $ref: '#/components/schemas/TrainingDataset'
+
+    InferenceAPIEndPoint:
+      required:
+      - callbackUrl
+      - schema
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        schema:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/TranslationRequest'
+          - $ref: '#/components/schemas/ASRRequest'
+          - $ref: '#/components/schemas/OCRRequest'
+      description: hosted location defines the end point of the model inference.
+
+    FileUploadAPIEndPoint:
+      required:
+      - callbackUrl
+      - schema
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          format: url
+        schema:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/FileUploadRequest'
+      description: hosted location of the file which would be sent for the validation
+        of the Inference API endpoint.
+
+    ModelTask:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - translation
+          - tts
+          - asr
+          - document-layout
+          - ocr
+      description: the category of model under which it has been released or trained
+
+    TrainingDataset:
+      required:
+      - description
+      type: object
+      properties:
+        datasetId:
+          type: string
+          description: "dataset identifier that has been exported from ULCA system,\
+            \ passing this information makes your model enriched with further information\
+            \ for the community"
+        description:
+          type: string
+          description: explain your dataset that you have used for training your model
+      description: training dataset metadata used to train the model
+
+    TranslationRequest:
+      required:
+      - languages
+      - sentences
+      type: object
+      properties:
+        languages:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+        sentences:
+          $ref: '#/components/schemas/Sentences'
+
+    ASRRequest:
+      required:
+      - audioUri
+      - config
+      type: object
+      properties:
+        audioUri:
+          type: string
+          description: path on gcp/s3 bucket or https url
+          example: gs://bucket/audio.wav
+        config:
+          $ref: '#/components/schemas/ASRConfig'
+
+    OCRRequest:
+      required:
+      - imageUri
+      type: object
+      properties:
+        imageUri:
+          type: string
+          description: path on gcp/s3 bucket or https url
+          example: gs://bucket/testimg.jpeg
+        language:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+
+    FileUploadRequest:
+      type: object
+      properties:
+        fileName:
+          type: string
+          format: binary
+
+    Sentences:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/Sentence'
+
+    Sentence:
+      required:
+      - source
+      type: object
+      properties:
+        source:
+          minLength: 1
+          type: string
+          description: actual textual data that needs to be translated.
+        target:
+          minLength: 1
+          type: string
+          description: expected translated sentence, for reference.
+
+    ASRConfig:
+      required:
+      - language
+      type: object
+      properties:
+        language:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+        audioFormat:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioFormat'
+        channel:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioChannel'
+        samplingRate:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioSampleRate'
+        bitsPerSample:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample'
+        transcriptionFormat:
+          $ref: '#/components/schemas/TranscriptionFormat'
+        profanityFilter:
+          type: boolean
+          example: true
+        domain:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain'
+        detailed:
+          type: boolean
+          description: "to specify whether details are required in output like SNR,\
+            \ sampling rate"
+        punctuation:
+          type: boolean
+          example: true
+        model:
+          type: string
+          enum:
+          - command_and_search
+          - phone_call
+          - video
+          - default
+
+    TranscriptionFormat:
+      type: object
+      properties:
+        value:
+          type: string
+          description: format of ASR output
+          enum:
+          - srt
+          - transcript
+          - alternatives
+  
+    ASRFile:
+      required:
+      - audioContent|audioUri|fileId
+      type: object
+      properties:
+        audioContent:
+          type: string
+          description: audio content with audio duration <= 1min
+          format: byte
+        audioUri:
+          type: string
+          description: path on gcp/s3 bucket or https url
+          example: gs://bucket/audio.wav
+        fileId:
+          type: string
+          description: fileId should be same as returned in the response of file-upload
+
+    ASRRecognitionStatus:
+      type: object
+      properties:
+        value:
+          type: string
+          description: status of ASR response
+          enum:
+          - success
+          - no-match
+          - initial-silence-timeout
+          - babble-timeout
+          - error
+
+    ASRRecognitionDetails:
+      type: object
+      properties:
+        channelTag:
+          type: integer
+          description: "For multi-channel audio, this is the channel number corresponding\
+            \ to the recognized result for the audio from that channel. For audioChannelCount\
+            \ = N, its output values can range from '1' to 'N'"
+        languageCode:
+          type: string
+          description: This language code was detected to have the most likelihood
+            of being spoken in the audio
+        snr:
+          type: integer
+          description: sound to noise ratio of audio
+        samplingRate:
+          type: integer
+          description: sampling rate of audio
+        bitsPerSample:
+          type: integer
+          description: bitsPerSample rate of audio
+
+  securitySchemes:
+    authToken:
+      type: apiKey
+      description: token issued by authenticating the user
+      name: auth-token
+      in: header
+

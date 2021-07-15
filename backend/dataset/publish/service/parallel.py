@@ -13,6 +13,7 @@ from kafkawrapper.producer import Producer
 from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
 from events.metrics import MetricEvent
+from .datasetservice import DatasetService
 
 
 log = logging.getLogger('file')
@@ -24,6 +25,7 @@ prod = Producer()
 error_event = ErrorEvent()
 pt = ProcessTracker()
 metrics = MetricEvent()
+service = DatasetService()
 
 class ParallelService:
     def __init__(self):
@@ -33,7 +35,7 @@ class ParallelService:
     Method to load Parallel dataset into the mongo db
     params: request (record to be inserted)
     '''
-    def load_parallel_dataset_single(self, request):
+    def load_parallel_dataset(self, request):
         try:
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
@@ -58,7 +60,13 @@ class ParallelService:
                                            "message": "This record is already available in the system"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                 else:
-                    log.error(f'EXCEPTION - There was exception while processing record: {record}')
+                    error_list.append(
+                        {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
+                         "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
+                         "serviceRequestNumber": metadata["serviceRequestNumber"],
+                         "message": "There was an exception while processing this record!"})
+                    pt.update_task_details(
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
             log.info(f'Parallel - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
@@ -66,61 +74,6 @@ class ParallelService:
             log.exception(e)
             return {"message": "EXCEPTION while loading Parallel dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
-
-    '''
-    Method to load Parallel dataset into the mongo db in bulk -- currently not in use.
-    params: request (record to be inserted)
-    '''
-    def load_parallel_dataset(self, request):
-        log.info("Loading Dataset.....")
-        try:
-            metadata = request
-            record = request["record"]
-            ip_data = [record]
-            batch_data, error_list, pt_list, metric_list = [], [], [], []
-            total, count, updates, batch = len(ip_data), 0, 0, ds_batch_size
-            if ip_data:
-                func = partial(self.get_enriched_data, metadata=metadata)
-                pool_enrichers = multiprocessing.Pool(no_of_parallel_processes)
-                enrichment_processors = pool_enrichers.map_async(func, ip_data).get()
-                for result in enrichment_processors:
-                    if result:
-                        if isinstance(result[0], list):
-                            if len(batch_data) == batch:
-                                if metadata["userMode"] != user_mode_pseudo:
-                                    repo.insert(batch_data)
-                                count += len(batch_data)
-                                batch_data = []
-                            batch_data.extend(result[0])
-                            pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                            "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[0], metadata, None, None)
-                        elif result[0] == "UPDATE":
-                            pt_list.append({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                            "currentRecordIndex": metadata["currentRecordIndex"]})
-                            metrics.build_metric_event(result[1], metadata, None, True)
-                            updates += 1
-                        else:
-                            error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
-                                               "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
-                                               "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                               "message": "This record is already available in the system"})
-                            pt_list.append({"status": "FAILED", "code": "DUPLICATE_RECORD", "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                            "currentRecordIndex": metadata["currentRecordIndex"]})
-                pool_enrichers.close()
-                if batch_data:
-                    if metadata["userMode"] != user_mode_pseudo:
-                        repo.insert(batch_data)
-                    count += len(batch_data)
-            if error_list:
-                error_event.create_error_event(error_list)
-            for pt_rec in pt_list:
-                pt.update_task_details(pt_rec)
-            log.info(f'Done! -- INPUT: {total}, INSERTS: {count}, UPDATES: {updates}, "ERROR_LIST": {len(error_list)}')
-        except Exception as e:
-            log.exception(e)
-            return {"message": "EXCEPTION while loading dataset!!", "status": "FAILED"}
-        return {"status": "SUCCESS", "total": total, "inserts": count, "updates": updates, "invalid": error_list}
 
     '''
     Method to run dedup checks on the input record and enrich if needed.
@@ -154,12 +107,11 @@ class ParallelService:
                     obj["datasetType"] = metadata["datasetType"]
                     obj["datasetId"] = [metadata["datasetId"]]
                     obj["derived"] = False
-                    obj["tags"] = self.get_tags(obj)
+                    obj["tags"] = service.get_tags(obj, parallel_non_tag_keys)
                 insert_records.append(obj)
             return insert_records, insert_records
         except Exception as e:
-            log.exception(f'Exception while enriching record for insert record: {e}', e)
-            log.error(f'Data: {data}, Records: {records}')
+            log.exception(f'Exception while getting enriched data: {e}', e)
             return None
 
     '''
@@ -205,7 +157,7 @@ class ParallelService:
                         db_record[key] = data[key]
             db_record["derived"] = False
             db_record["datasetId"] = [metadata["datasetId"]]
-            db_record["tags"] = self.get_tags(db_record)
+            db_record["tags"] = service.get_tags(db_record, parallel_non_tag_keys)
             return db_record
         else:
             found = False
@@ -238,7 +190,7 @@ class ParallelService:
             if found:
                 db_record["datasetId"].append(metadata["datasetId"])
                 db_record["derived"] = False
-                db_record["tags"] = self.get_tags(record)
+                db_record["tags"] = service.get_tags(record, parallel_non_tag_keys)
                 return db_record
             else:
                 return False
@@ -298,23 +250,12 @@ class ParallelService:
             derived_data["datasetId"].extend(record["datasetId"])
             derived_data["datasetType"] = metadata["datasetType"]
             derived_data["derived"] = True
-            derived_data["tags"] = self.get_tags(derived_data)
+            derived_data["tags"] = service.get_tags(derived_data, parallel_non_tag_keys)
             derived_data["id"] = str(uuid.uuid4())
             return derived_data
         except Exception as e:
             log.exception(f'Exception while creating derived data record: {e}', e)
             return None
-
-    '''
-    Method to fetch tags for a record
-    params: insert_data (record to be used to fetch tags)
-    '''
-    def get_tags(self, insert_data):
-        tag_details = {}
-        for key in insert_data:
-            if key not in parallel_non_tag_keys:
-                tag_details[key] = insert_data[key]
-        return list(utils.get_tags(tag_details))
 
     '''
     Method to fetch Parallel dataset from the DB based on various criteria
@@ -374,8 +315,8 @@ class ParallelService:
                     pt.task_event_search(op, None)
                 else:
                     log.error(f'There was an error while pushing result to S3')
-                    error = {"code": "S3_UPLOAD_FAILED", "datasetType": dataset_type_parallel, "serviceRequestNumber": query["serviceRequestNumber"],
-                                                   "message": "There was an error while pushing result to S3"}
+                    error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_parallel, "serviceRequestNumber": query["serviceRequestNumber"],
+                                                   "message": "There was an error while pushing result to object store"}
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
                     pt.task_event_search(op, error)
             else:

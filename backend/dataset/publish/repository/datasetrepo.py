@@ -7,7 +7,7 @@ from logging.config import dictConfig
 import redis
 
 from configs.configs import db_cluster, db, redis_server_host, redis_server_port, redis_server_pass, \
-    record_expiry_in_sec
+    record_expiry_in_sec, pub_dedup_redis_db
 
 log = logging.getLogger('file')
 
@@ -34,7 +34,7 @@ class DatasetRepo:
     # Initialises and fetches redis client
     def redis_instantiate(self):
         global redis_client_datasets
-        redis_client_datasets = redis.Redis(host=redis_server_host, port=redis_server_port, db=3,
+        redis_client_datasets = redis.Redis(host=redis_server_host, port=redis_server_port, db=pub_dedup_redis_db,
                                    password=redis_server_pass)
         return redis_client_datasets
 

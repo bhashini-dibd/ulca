@@ -42,6 +42,9 @@ public class RbacFilter extends ZuulFilter {
     @Autowired
     public UserUtils userUtils;
 
+    @Value("${ulca.app.host}")
+    private String appHost;
+
     @Override
     public String filterType() {
         return "pre";
@@ -67,7 +70,7 @@ public class RbacFilter extends ZuulFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted, due to authorization failure";
+    private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted -- authorization check failed!";
     private static final String UNAUTHORIZED_USER_MESSAGE = "You are not authorised to access this resource";
     private static final String PROCEED_ROUTING_MESSAGE = "Routing to protected endpoint: {} - authorization check passed!";
     private static final String INVALID_ROLES_MESSAGE = "This user contains an invalid/inactive role!";
@@ -78,9 +81,9 @@ public class RbacFilter extends ZuulFilter {
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        String uri = (String) ctx.get(REQ_URI);
+        String uri = (String) ctx.get(ACTION_URI);
         List<String> openEndpointsWhitelist = ZuulConfigCache.whiteListEndpoints;
-        if ((openEndpointsWhitelist.contains(uri))) {
+        if (openEndpointsWhitelist.contains(uri)) {
             ctx.set(RBAC_BOOLEAN_FLAG_NAME, false);
             logger.info(SKIP_RBAC, uri);
             return null;
@@ -109,16 +112,25 @@ public class RbacFilter extends ZuulFilter {
             if(ctx.getRequest().getMethod().equals("POST") || ctx.getRequest().getMethod().equals("PUT")) {
                 String charset = ctx.getRequest().getCharacterEncoding();
                 InputStream in = (InputStream) ctx.get("requestEntity");
-                if (null == in)
+                if(null == in)
                     in = ctx.getRequest().getInputStream();
                 requestEntityStr = StreamUtils.copyToString(in, Charset.forName(charset));
             }else {
-                requestEntityStr = ctx.get(REQ_URI).toString();
+                if((Boolean)ctx.get(PATH_PARAM_URI)){
+                    requestEntityStr = String.format("%s%s", appHost, ctx.get(REQ_URI));
+                }
+                else{
+                    StringBuilder builder = new StringBuilder();
+                    builder.append(uri);
+                    requestEntityStr = String.format("%s%s", appHost, appendQueryParams(ctx, builder));
+                }
             }
             Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), requestEntityStr);
-            if(!sigVerify)
+            if(!sigVerify) {
+                logger.info("The signature doesn't match with the public key!");
                 return false;
-            List<String> roleCodes = user.getRoles().stream().map(UserRole::getRoleCode).collect(Collectors.toList());
+            }
+            List<String> roleCodes = user.getRoles();
             if(roleCodes.contains(superUserCode)) return true;
             Boolean isRolesCorrect = verifyRoles(user.getRoles());
             if(isRolesCorrect)
@@ -131,6 +143,22 @@ public class RbacFilter extends ZuulFilter {
     }
 
     /**
+     * Formats the url with queryparam
+     * @param context
+     * @param builder
+     */
+    private String appendQueryParams(RequestContext context, StringBuilder builder) {
+        List<String> queryParams = new LinkedList<>();
+        context.getRequestQueryParams()
+                .forEach((key, values) -> values
+                        .forEach(value -> queryParams.add(key + "=" + value)));
+
+        builder.append("?").append(String.join("&", queryParams));
+        return builder.toString();
+    }
+
+
+    /**
      * Verifies signature with private key
      * @param signature
      * @param privateKey
@@ -139,11 +167,11 @@ public class RbacFilter extends ZuulFilter {
      */
     public Boolean verifySignature(String signature, String privateKey, String sigValue) {
         try{
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            String sigValueHash  = bytesToHex(digest.digest(sigValue.getBytes(StandardCharsets.UTF_8)));
-            String sigHash = sigValueHash + "|" + privateKey;
-            String hash = bytesToHex(digest.digest(sigHash.getBytes(StandardCharsets.UTF_8)));
-            return hash.equals(signature);
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            String sigValueHash  = bytesToHex(digest.digest(sigValue.trim().getBytes(StandardCharsets.UTF_8)));
+            String sigHash = privateKey.trim() + "|" + sigValueHash;
+            String hash = bytesToHex(digest.digest(sigHash.trim().getBytes(StandardCharsets.UTF_8)));
+            return hash.equals(signature.trim());
         }catch (Exception e) {
             logger.error("Exception while verifying signature: ", e);
             return false;
@@ -168,15 +196,14 @@ public class RbacFilter extends ZuulFilter {
      * @param userRoles
      * @return
      */
-    public Boolean verifyRoles(List<UserRole> userRoles) {
+    public Boolean verifyRoles(List<String> userRoles) {
         try{
             List<String> configRoles = ZuulConfigCache.roleCodes;
             if (CollectionUtils.isEmpty(configRoles)){
                 logger.info("Roles couldn't be fetched from config");
                 return false;
             }
-            List<String> roles = userRoles.stream().map(UserRole::getRoleCode).collect(Collectors.toList());
-            for(String role: roles){
+            for(String role: userRoles){
                 if (!configRoles.contains(role)) {
                     logger.info(INVALID_ROLES_MESSAGE);
                     return false;
@@ -196,12 +223,11 @@ public class RbacFilter extends ZuulFilter {
      * @param uri
      * @return
      */
-    public Boolean verifyRoleActions(List<UserRole> userRoles, String uri) {
+    public Boolean verifyRoleActions(List<String> userRoles, String uri) {
         try{
             Map<String, List<String>> roleActions = ZuulConfigCache.roleActionMap;
-            List<String> roles = userRoles.stream().map(UserRole::getRoleCode).collect(Collectors.toList());;
             int fail = 0;
-            for (String role: roles){
+            for (String role: userRoles){
                 List<String> actionList = roleActions.get(role);
                 if (CollectionUtils.isEmpty(actionList)) fail = fail + 1;
                 else{
@@ -209,7 +235,7 @@ public class RbacFilter extends ZuulFilter {
                     else break;
                 }
             }
-            if (fail == roles.size()){
+            if (fail == userRoles.size()){
                 logger.info(INVALID_ROLES_ACTIONS_MESSAGE);
                 return false;
             }
