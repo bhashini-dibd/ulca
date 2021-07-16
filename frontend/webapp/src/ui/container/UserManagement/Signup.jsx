@@ -199,7 +199,8 @@ const SignUp = (props) => {
           labelWidth={70}
         />
       </FormControl>
-      {error.password && <FormHelperText error={true}>Length should be 8 chanracters and at least one uppercase letter, one lowercase letter and one number </FormHelperText>}
+      {error.password && <FormHelperText error={true}>
+Minimum length is 8 characters with combination of uppercase, lowercase, number and a special character</FormHelperText>}
 
       <FormControl className={classes.fullWidth} variant="outlined">
         <InputLabel htmlFor="outlined-adornment-password">
