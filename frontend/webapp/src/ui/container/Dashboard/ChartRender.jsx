@@ -287,7 +287,7 @@ const ChartRender = (props) => {
 						<div style={{display:"flex",flexDirection:"row", }}>
 						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
 						{selectedOption.value ==="parallel-corpus"&&page===0 && renderTexfield("select-source-language", "Source Language *")}
-						<Typography  value="" variant="h6">({new Intl.NumberFormat('en').format(DashboardReport.count)})</Typography>
+						 <Typography  value="" variant="h6">{DashboardReport.count ? (new Intl.NumberFormat('en').format(DashboardReport.count)):"(0)"}</Typography>
 						</div>	
 					</div>
 					
