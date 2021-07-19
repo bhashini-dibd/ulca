@@ -1,4 +1,3 @@
-import json
 import logging
 from collections import OrderedDict
 from datetime import datetime
@@ -6,10 +5,11 @@ from logging.config import dictConfig
 from configs.configs import db_cluster, db, parallel_collection, parallel_search_ignore_keys, shared_storage_path
 
 import pymongo
+
 log = logging.getLogger('file')
 
-
 mongo_instance_parallel = None
+
 
 class ParallelRepo:
     def __init__(self):
@@ -83,16 +83,32 @@ class ParallelRepo:
 
     def search(self, query, offset, res_limit):
         result, res_count, pipeline, langs = [], 0, [], []
+        if not query:
+            return result, pipeline, res_count
         try:
             col = self.get_mongo_instance()
             if 'sourceLanguage' in query.keys() and 'targetLanguage' in query.keys():
                 if len(query["targetLanguage"]) == 1:
-                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["targetLanguage"][0]}]}})
+                    if not query['groupBy']:
+                        if query['originalSourceSentence']:
+                            pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]},
+                                                                 {"targetLanguage": query["targetLanguage"][0]}]}})
+                            query["derived"] = False
+                        else:
+                            langs = [query["sourceLanguage"], query["targetLanguage"][0]]
+                            pipeline.append({"$match": {
+                                "$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
+                    else:
+                        pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]},
+                                                             {"targetLanguage": query["targetLanguage"][0]}]}})
+                        if query['originalSourceSentence']:
+                            query["derived"] = False
                 else:
-                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": {"$in": query["targetLanguage"]}}]}})
+                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]},
+                                                         {"targetLanguage": {"$in": query["targetLanguage"]}}]}})
                     query["groupBy"] = True
-            elif 'sourceLanguage' in query.keys():
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["sourceLanguage"]}]}})
+                    if query['originalSourceSentence']:
+                        query["derived"] = False
             if "derived" in query.keys():
                 pipeline.append({"$match": {"derived": query["derived"]}})
             if "tags" in query.keys():
@@ -106,7 +122,8 @@ class ParallelRepo:
                 count = 1
                 if 'countOfTranslations' in query.keys():
                     count = query["countOfTranslations"]
-                pipeline.append({"$group": {"_id": {"$cond": [{"$gte": ["$count", count]}, "$_id.sourceHash", "$$REMOVE"]}}})
+                pipeline.append(
+                    {"$group": {"_id": {"$cond": [{"$gte": ["$count", count]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
                 project = {"_id": 0}
                 for key in parallel_search_ignore_keys:

@@ -112,6 +112,8 @@ class ParallelService:
             return insert_records, insert_records
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
+            log.info(f'Data: {data}')
+            log.info(f'Data: {records}')
             return None
 
     '''
@@ -267,8 +269,18 @@ class ParallelService:
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
-            db_query = {}
-            score_query = {}
+            db_query, score_query = {}, {}
+            tags, tgt_lang = [], []
+            if 'sourceLanguage' in query.keys():
+                db_query["sourceLanguage"] = query["sourceLanguage"][0] #source is always single
+            if 'targetLanguage' in query.keys():
+                for tgt in query["targetLanguage"]:
+                    tgt_lang.append(tgt)
+            if 'originalSourceSentence' in query.keys():
+                if query['originalSourceSentence']:
+                    db_query['originalSourceSentence'] = query['originalSourceSentence']
+            else:
+                db_query['originalSourceSentence'] = False
             if 'minScore' in query.keys():
                 score_query["$gte"] = query["minScore"]
             if 'maxScore' in query.keys():
@@ -277,12 +289,6 @@ class ParallelService:
                 db_query["scoreQuery"] = {"data.score": score_query}
             if 'score' in query.keys():
                 db_query["scoreQuery"] = {"data.score": query["score"]}
-            tags, tgt_lang = [], []
-            if 'sourceLanguage' in query.keys():
-                db_query["sourceLanguage"] = query["sourceLanguage"][0]
-            if 'targetLanguage' in query.keys():
-                for tgt in query["targetLanguage"]:
-                    tgt_lang.append(tgt)
             if 'collectionSource' in query.keys():
                 tags.extend(query["collectionSource"])
             if 'collectionMode' in query.keys():
@@ -301,9 +307,11 @@ class ParallelService:
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
             if 'groupBy' in query.keys():
-                db_query["groupBy"] = True
+                db_query["groupBy"] = query["groupBy"]
                 if 'countOfTranslations' in query.keys():
                     db_query["countOfTranslations"] = query["countOfTranslations"]
+            else:
+                db_query["groupBy"] = False
             data = repo.search(db_query, off, lim)
             result, pipeline, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}, Pipeline: {pipeline}')
