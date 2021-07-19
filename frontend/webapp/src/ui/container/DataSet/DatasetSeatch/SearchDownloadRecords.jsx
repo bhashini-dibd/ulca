@@ -239,10 +239,10 @@ const SearchAndDownloadRecords = (props) => {
                         message: response.message ? response.message : "Something went wrong. Please try again.",
                         variant: 'error'
                     })
-                    if (response.status === 401) {
-                        setTimeout(() => history.push(`${process.env.PUBLIC_URL}/user/login`), 3000)
-
-                    }
+                    if(res.status===401){
+                        setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)
+                        
+                    }                    
                 }
             })
             .catch(err => {

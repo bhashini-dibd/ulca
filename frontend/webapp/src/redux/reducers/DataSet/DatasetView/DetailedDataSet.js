@@ -47,6 +47,7 @@ const getDetailedReport = (payload) => {
             refreshStatus = true
         }
     }); 
+
     return {responseData , refreshStatus};
 }
 

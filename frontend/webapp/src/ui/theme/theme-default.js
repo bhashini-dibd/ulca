@@ -174,6 +174,7 @@ const themeDefault = createMuiTheme({
         letterSpacing: "0.5px",
         textAlign: "center",
         height: "26px",
+        
       },
       sizeLarge: {
         height: "48px",
@@ -237,7 +238,10 @@ themeDefault.typography.h6 = {
   fontSize: "1.3125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
-  paddingTop: "4px"
+  paddingTop: "4px",
+  "@media (max-width:550px)": {
+    fontSize: "1rem",
+  }
 };
 themeDefault.typography.body1 = {
   fontSize: "1rem",
@@ -260,7 +264,10 @@ themeDefault.typography.caption = {
 themeDefault.typography.subtitle1 = {
   fontSize: "1.125rem",
   fontFamily: "'Roboto', sans-serif",
-  fontWeight: "400"
+  fontWeight: "400",
+  "@media (max-width:550px)": {
+    fontSize: ".9rem",
+  }
 };
 
 
