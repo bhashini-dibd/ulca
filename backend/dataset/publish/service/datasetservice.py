@@ -67,12 +67,14 @@ class DatasetService:
             if key not in immutable:
                 if key not in db_record.keys():
                     found = True
-                    db_record[key] = [data[key]]
+                    db_record[key] = [db_record[key]]
                 elif isinstance(data[key], list):
                     pairs = zip(data[key], db_record[key])
                     if any(x != y for x, y in pairs):
                         found = True
-                        db_record[key].extend(data[key])
+                        for entry in data[key].keys():
+                            if entry not in db_record[key]:
+                                db_record[key].append(entry)
                 else:
                     if isinstance(db_record[key], list):
                         if data[key] not in db_record[key]:
@@ -83,6 +85,7 @@ class DatasetService:
                             found = True
                             db_record[key] = [db_record[key]]
                             db_record[key].append(data[key])
+                            db_record[key] = list(set(db_record[key]))
                         else:
                             db_record[key] = [db_record[key]]
         if found:
@@ -101,7 +104,8 @@ class DatasetService:
         for key in insert_data:
             if key not in non_tag:
                 tag_details[key] = insert_data[key]
-        return list(utils.get_tags(tag_details))
+        tags = list(utils.get_tags(tag_details))
+        return list(set(tags))
 
 
 # Log config

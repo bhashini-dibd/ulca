@@ -113,7 +113,10 @@ class ParallelService:
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
             log.info(f'Data: {data}')
-            log.info(f'Data: {records}')
+            i = 0
+            for rec in records:
+                log.info(f'Records {i}: {rec}')
+                i += 1
             return None
 
     '''
@@ -171,12 +174,14 @@ class ParallelService:
                 if key not in parallel_immutable_keys:
                     if key not in db_record.keys():
                         found = True
-                        db_record[key] = [data[key]]
+                        db_record[key] = [db_record[key]]
                     elif isinstance(data[key], list):
                         pairs = zip(data[key], db_record[key])
                         if any(x != y for x, y in pairs):
                             found = True
-                            db_record[key].extend(data[key])
+                            for entry in data[key].keys():
+                                if entry not in db_record[key]:
+                                    db_record[key].append(entry)
                     else:
                         if isinstance(db_record[key], list):
                             if data[key] not in db_record[key]:
@@ -187,6 +192,7 @@ class ParallelService:
                                 found = True
                                 db_record[key] = [db_record[key]]
                                 db_record[key].append(data[key])
+                                db_record[key] = list(set(db_record[key]))
                             else:
                                 db_record[key] = [db_record[key]]
             if found:
@@ -238,7 +244,7 @@ class ParallelService:
                 if (derived_data["sourceTextHash"] in hashes) and (derived_data["targetTextHash"] in hashes):
                     return None
             for key in data.keys():
-                if key not in parallel_immutable_keys:
+                if key not in parallel_immutable_keys and key not in parallel_updatable_keys:
                     if key not in record.keys():
                         record[key] = [data[key]]
                     elif isinstance(data[key], list):
@@ -250,6 +256,7 @@ class ParallelService:
                     derived_data[key] = record[key]
             derived_data["datasetId"] = [metadata["datasetId"]]
             derived_data["datasetId"].extend(record["datasetId"])
+            derived_data["datasetId"] = list(set(derived_data["datasetId"]))
             derived_data["datasetType"] = metadata["datasetType"]
             derived_data["derived"] = True
             derived_data["tags"] = service.get_tags(derived_data, parallel_non_tag_keys)
