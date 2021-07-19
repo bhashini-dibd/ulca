@@ -141,7 +141,7 @@ header {
     font-size: 15px;
     color: #ffffff;
     font-weight: 500;
-    
+
 }
 
 .mainBanner {
@@ -324,12 +324,48 @@ footer .footerBg img {
     margin-right: .5rem;
     height: 48px;
 }
+.models .dataset-orange {
+  min-height: 560px;
+}
+footer ul.link li {
+    padding-left: 0;
+}
 }
 @media (max-width: 767.98px) { 
 footer ul.link li {
     padding-left: 0;
 }
+header {
+    padding: .6rem 0;
+}
+.navbar .join {
+  display: none;
  }
+ .navbar-light .navbar-nav .nav-link {
+
+    margin-left: .5rem;
+    margin-right: .5rem;
+    font-size: .9375rem;
+}
+h1, .h1 {
+  font-size: 3.125rem;
+  font-weight: 300;
+}
+h2,.h2 {
+  font-size: 2rem;
+  font-weight: 400;
+}
+h6, .h6 {
+  font-weight: 300;
+}
+.models .dataset-orange {
+  min-height: auto;
+}
+.dashboard .row .col-md-12 {
+  padding-left: 0;
+  padding-right: 0;
+}
+}
 
 
 

@@ -285,7 +285,7 @@ const ChartRender = (props) => {
 					</div>
 					
 					<div className={classes.title}>
-						<ResponsiveContainer width="95%" height={550} >
+						<ResponsiveContainer width="95%" height={550} margin={0}>
 							<BarChart width={900} height={350} data={data} fontSize="14px" fontFamily="Roboto" maxBarSize={100} >
 
 								<XAxis dataKey="label"

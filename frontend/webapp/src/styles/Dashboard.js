@@ -18,8 +18,7 @@ const FileUploadStyles = (theme) => ({
     maxWidth: "1272px",
     width : "100%",
     margin :"17px auto",
-    padding:"0",
-    minWidth:"360px"
+    padding:"0"
   },
  
   select: {
@@ -111,7 +110,7 @@ dropDownStyle:{display:"flex",marginLeft:".68rem"},
     textAlign: "left",
     paddingLeft:"3%",
     margin: "4.5vh 0 0vh 1vh",
-    "@media (max-width:600px)": {textAlign: "center",}
+    "@media (max-width:600px)": {textAlign: "center", margin: "4.5vh 0 0vh 0vh",paddingLeft:"0"}
   }
 });
 
