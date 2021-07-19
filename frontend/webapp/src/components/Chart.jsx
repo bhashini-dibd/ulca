@@ -58,7 +58,7 @@ const ChartRender = (props) => {
 	const handleLanguagePairChange = (value, property) => {
 		let sLang =  Language.filter(val => val.label ===value )[0]
 		if(sLang){
-		fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
+		// fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
         setSourceLanguage(sLang);
 		}
 
