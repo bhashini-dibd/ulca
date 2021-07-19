@@ -176,12 +176,18 @@ class ParallelService:
                         found = True
                         db_record[key] = [db_record[key]]
                     elif isinstance(data[key], list):
-                        pairs = zip(data[key], db_record[key])
-                        if any(x != y for x, y in pairs):
-                            found = True
-                            for entry in data[key].keys():
+                        val = data[key][0]
+                        if isinstance(val, dict):
+                            pairs = zip(data[key], db_record[key])
+                            if any(x != y for x, y in pairs):
+                                found = True
+                                db_record[key].extend(data[key])
+                        else:
+                            for entry in data[key]:
                                 if entry not in db_record[key]:
+                                    found = True
                                     db_record[key].append(entry)
+                                db_record[key] = list(set(db_record[key]))
                     else:
                         if isinstance(db_record[key], list):
                             if data[key] not in db_record[key]:
