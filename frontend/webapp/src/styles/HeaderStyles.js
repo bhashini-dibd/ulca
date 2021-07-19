@@ -8,7 +8,8 @@ const HeaderStyles = (theme) => ({
     display: 'flex',
     alignItems: 'center',
     padding:"0",
-    boxSizing :"border-box"
+    boxSizing :"border-box",
+  
   },
   appBar:{
    boxSizing:"border-box",

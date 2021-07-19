@@ -271,11 +271,17 @@ const ChartRender = (props) => {
 			</ TitleBar>
 			<div className={classes.iconStyle}>
 					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button></>
-						<div style={{display:"flex",flexDirection:"row", }}>
+						 {(selectedOption.value ==="parallel-corpus" && page===0 )? 
+						<div className= {classes.titleStyle}>
+						
 						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
-						{selectedOption.value ==="parallel-corpus"&&page===0 && renderTexfield("select-source-language", "Source Language *")}
-						<Typography  value="" variant="h6">({new Intl.NumberFormat('en').format(count)})</Typography>
-						</div>	
+						<div className={classes.dropDownStyle}>
+						{renderTexfield("select-source-language", "Source Language *")}
+						<Typography  value="" variant="h6">({count ? (new Intl.NumberFormat('en').format(count)):0})</Typography>
+						</div> 
+						</div>
+						:
+						<Typography className={classes.titleText} value="" variant="h6"> {title} <span>({count ? (new Intl.NumberFormat('en').format(count)):0})</span></Typography>}		
 					</div>
 					
 					<div className={classes.title}>
@@ -290,9 +296,10 @@ const ChartRender = (props) => {
 									position="insideLeft"
 									type="category"
 									label={{ value: axisValue.xAxis, position: 'insideRight', offset: 0 }}
+									padding={{ right: 20 }}
 								>
 								</XAxis>
-								<YAxis padding={{ top: 10 }} label={{ value: axisValue.yAxis, angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
+								<YAxis padding={{ top: 30 }} label={{ value: axisValue.yAxis, angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dy={0} dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
@@ -300,8 +307,12 @@ const ChartRender = (props) => {
 									<LabelList
 										formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }}
 										position="top"
+										
 										dataKey="value"
 										fill="black"
+										style={{textAnchor:"start"}}
+										angle={-30}
+										clockWise={4}
 									/>
 									{
 										data.length > 0 &&data.map((entry, index) => {

@@ -8,7 +8,7 @@ const FileUploadStyles = (theme) => ({
     cursor: "pointer",
   },
   titleBar: {
-    
+    minWidth:"375px",
     display: "flex",
     flexDirection: "row",
     padding:"2.5rem 0 0 3%"
@@ -18,7 +18,8 @@ const FileUploadStyles = (theme) => ({
     maxWidth: "1272px",
     width : "100%",
     margin :"17px auto",
-    padding:"0"
+    padding:"0",
+    minWidth:"360px"
   },
  
   select: {
@@ -102,6 +103,10 @@ const FileUploadStyles = (theme) => ({
     {marginLeft:"1rem",minWidth:"10rem"}
   ,
 
+  titleStyle :{display:"flex",
+  "@media (max-width:740px)": {marginRight:"0",display:"flex",flexDirection:"column"} 
+},
+dropDownStyle:{display:"flex",marginLeft:".68rem"},
   title:{
     textAlign: "left",
     paddingLeft:"3%",
