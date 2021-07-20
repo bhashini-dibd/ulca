@@ -87,7 +87,7 @@ const TitleBar = (props) => {
                                 }
                             </StyledMenu>
                         </Grid>
-                        < Grid item xs={4} sm={4} md={2} lg={2} xl={2} className={classes.tempGrid}>
+                        < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.tempGrid}>
                             <Typography variant="body2" gutterBottom>
                                 {/* {props.label} */}
                                 Total Count
@@ -98,7 +98,7 @@ const TitleBar = (props) => {
                             </Typography>
                         </Grid>
                         <Grid item xs={0} sm={0} md={3} lg={3} xl={3}></Grid>
-                        <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
+                        <Grid item xs={6} sm={6} md={5} lg={5} xl={5}>
                             <Grid container spacing={2}>
                                 {props.children}
                             </Grid>

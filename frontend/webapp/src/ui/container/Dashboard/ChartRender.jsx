@@ -284,11 +284,17 @@ const ChartRender = (props) => {
 						
 					<div className={classes.iconStyle}>
 					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button></>
-						<div style={{display:"flex",flexDirection:"row", }}>
+						 {(selectedOption.value ==="parallel-corpus" && page===0 )? 
+						<div className= {classes.titleStyle}>
+						
 						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>
-						{selectedOption.value ==="parallel-corpus"&&page===0 && renderTexfield("select-source-language", "Source Language *")}
-						 <Typography  value="" variant="h6">{DashboardReport.count ? (new Intl.NumberFormat('en').format(DashboardReport.count)):"(0)"}</Typography>
-						</div>	
+						<div className={classes.dropDownStyle}>
+						{renderTexfield("select-source-language", "Source Language *")}
+						<Typography  value="" variant="h6">({DashboardReport.count ? (new Intl.NumberFormat('en').format(DashboardReport.count)):0})</Typography>
+						</div> 
+						</div>
+						:
+						<Typography className={classes.titleText} value="" variant="h6"> {title} <span>({DashboardReport.count ? (new Intl.NumberFormat('en').format(DashboardReport.count)):0})</span></Typography>}	
 					</div>
 					
 					<div className={classes.title}>
@@ -305,16 +311,22 @@ const ChartRender = (props) => {
 									label={{ value: axisValue.xAxis, position: 'insideRight', offset: 0 }}
 								>
 								</XAxis>
-								<YAxis padding={{ top: 10 }} label={{ value: axisValue.yAxis, angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
+								<YAxis padding={{ top: 30 }} label={{ value: axisValue.yAxis, angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
-								<Bar margin={{ top: 40, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
+								<Bar margin={{ top: 140, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
+									{console.log()}
 									<LabelList
 										formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }}
 										position="top"
+										
 										dataKey="value"
 										fill="black"
+										style={{textAnchor:"start"}}
+										angle={-30}
+										clockWise={4}
+										
 									/>
 									{
 										DashboardReport.hasOwnProperty("data") && DashboardReport.data.length > 0 && DashboardReport.data.map((entry, index) => {

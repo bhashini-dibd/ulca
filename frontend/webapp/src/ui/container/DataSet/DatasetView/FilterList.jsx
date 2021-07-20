@@ -7,7 +7,7 @@ const FilterList = (props) => {
     const { filter, selectedFilter, clearAll, apply } = props
     const [selectedType, setSelectedType] = useState(selectedFilter.datasetType)
     const [selectedStatus, setSelectedStatus] = useState(selectedFilter.status)
-
+    console.log("",selectedFilter)
     const handleDatasetChange = (e) => {
         if (e.target.checked)
             setSelectedType([...selectedType, e.target.name])
