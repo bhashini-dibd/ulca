@@ -30,5 +30,5 @@ Api(USER_SUPPORT_BLUEPRINT).add_resource(
 )
 
 Api(USER_SUPPORT_BLUEPRINT).add_resource(
-    VerifyToken,"/v1/users/token-search"
+    VerifyToken,"/v1/users/get/token/status"
 )
