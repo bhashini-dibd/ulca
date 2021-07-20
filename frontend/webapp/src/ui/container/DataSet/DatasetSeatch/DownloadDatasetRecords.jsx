@@ -4,6 +4,15 @@ import DatasetStyle from '../../../styles/Dataset';
 import { SaveAlt } from '@material-ui/icons';
 
 const DownloadDatasetRecords = (props) => {
+    const renderSentence = () => {
+        console.log(props.datasetType)
+        if (props.datasetType === 'ASR / TTS Dataset' || props.datasetType === 'ASR Unlabeled Dataset')
+            return "#Hours"
+        else if (props.datasetType === 'OCR Dataset')
+            return "#Images"
+        else
+            return "#Sentences"
+    }
     const { classes } = props
     return (
         <div className={classes.searchResultFinal}>
@@ -13,7 +22,7 @@ const DownloadDatasetRecords = (props) => {
                     {props.sentencePair ?
                         <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
                             <Typography variant="h5">{`${props.sentencePair}`}</Typography>
-                            <Typography variant="subtitle1">#Sentences</Typography>
+                            <Typography variant="subtitle1">{renderSentence()}</Typography>
                         </Grid> :
                         <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
                             <Typography variant="h5">No records found.</Typography>
