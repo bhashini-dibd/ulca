@@ -16,8 +16,6 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
     * -l    (--login) : flag for login credentials.
 
-    NOTE : update USERNAME/PASSWORD in config.py file.
-
 * ### For Submitting
 
     1. **Single Dataset:**
@@ -38,8 +36,6 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
         * -s (--submit) : Flag for Submitting Dataset
         * -i (--input) : input csv file (default-encoding: utf-8)
-
-        NOTE : default column names are ["Dataset Name"], ["Dataset URL"]
 
 * ### For Search and Download
 
@@ -83,7 +79,9 @@ To install necessary packages for the script, run:
 
 ## Notes
 
+- update username/password [`ULCA_USERNAME` / `ULCA_PASSWORD`] in config.py file.
 - For changing the Browser and Driver path, Update the config.py file
+- default column names are ["Dataset Name"], ["Dataset URL"]
 - Required Drivers for Browser:
     - Google Chrome - chromedriver
     - Mozilla Firefox - geckodriver
