@@ -64,7 +64,8 @@ class ParallelRepo:
 
     def update(self, object_in):
         col = self.get_mongo_instance()
-        col.replace_one({"id": object_in["id"]}, object_in)
+        query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
+        col.replace_one(query, object_in)
 
     def search_internal(self, query, exclude, offset, res_limit):
         try:
