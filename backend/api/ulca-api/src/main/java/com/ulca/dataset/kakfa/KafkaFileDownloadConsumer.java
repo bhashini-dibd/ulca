@@ -140,7 +140,7 @@ public class KafkaFileDownloadConsumer {
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 				
 				//send error event for download failure
-				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
+				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , null) ;
 				e.printStackTrace();
 				
 				return;

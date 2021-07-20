@@ -18,7 +18,7 @@ public class SearchCriteria {
 	
 	private String licence;
 
-    private float minScore;
+    private Float minScore;
 
     private String serviceRequestNumber;
 
@@ -28,15 +28,15 @@ public class SearchCriteria {
 
     private String multipleContributors;
 
-    private float maxScore;
+    private Float maxScore;
 
     private String[] collectionSource;
 
-    private float score;
+    private Float score;
 
     private String[] domain;
 
-    private int limit;
+    private Integer limit;
 
     private String datasetId;
 
@@ -46,6 +46,7 @@ public class SearchCriteria {
     
     private String[] groupBy;
     
-    private boolean originalSourceSentence;
+    private Boolean originalSourceSentence;
+    
 
 }
