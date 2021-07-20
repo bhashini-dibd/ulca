@@ -247,10 +247,11 @@ public class KafkaFileDownloadConsumer {
 			
 			 myChecksum = hash.toString()
 				      .toUpperCase();
+			 /*
 			 Fileidentifier  fileIdentifier = fileIdentifierDao.findByMd5hash(myChecksum);
 			 if(fileIdentifier != null) {
 				 throw new IOException("Same File Already exists in system");
-			 }
+			 }*/
 			 return myChecksum;
 		}
 		
