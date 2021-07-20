@@ -25,6 +25,7 @@ def instantiate(topics):
                              api_version=(1, 0, 0),
                              group_id=publish_consumer_grp,
                              auto_offset_reset='latest',
+                             max_poll_interval_ms=300000,
                              enable_auto_commit=True,
                              value_deserializer=lambda x: handle_json(x))
     return consumer
