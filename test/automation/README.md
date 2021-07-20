@@ -1,19 +1,12 @@
 # ULCA-AUTOMATION
 
+## Overview 
+
 The code in this repo could be utilized to automate procedures for submitting,searching and downloading datasets from ULCA website.
-
-To install necessary packages for the script, run:
-
-    pip install -r requirements.txt
-
-To view script usage help from terminal, run:
-
-    python3 automate.py -h
 
 >IMPORTANT : This Script requires Browser and its Respective Driver [Supported Browsers - Chrome, Firefox, Opera].
 
-
-## automate.py
+## Usage
 
 * ### For Login
 
@@ -71,6 +64,23 @@ To view script usage help from terminal, run:
 
     * --support : Flag for printing supported
 
+To view script usage help from terminal, run:
+
+    python3 automate.py -h
+
+### Content
+
+1. config.py - contains data used for automation.
+2. driver_script.py - contains code for loading browsers/driver.
+3. core_script.py - contains core functions for automation.
+4. automate.py - main file for automation.
+
+### Requirements
+
+To install necessary packages for the script, run:
+
+    pip install -r requirements.txt
+
 ## Notes
 
 - For changing the Browser and Driver path, Update the config.py file
@@ -79,5 +89,5 @@ To view script usage help from terminal, run:
     - Mozilla Firefox - geckodriver
     - Opera - operadriver
 
-## Useful Resources
+## Resources
 
