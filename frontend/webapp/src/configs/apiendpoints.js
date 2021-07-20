@@ -12,7 +12,7 @@ const endpoints = {
   register:"/ulca/user-mgmt/v1/users/signup",
   activateUser :"/ulca/user-mgmt/v1/users/verify-user",
   forgotPassword: "/ulca/user-mgmt/v1/users/forgot-password",
-  tokenSearch:'/ulca/user-mgmt/v1/users/token-search',
+  tokenSearch:'/ulca/user-mgmt/v1/users/get/token/status',  
   resetPassword:'/ulca/user-mgmt/v1/users/reset-password'
 };
 
