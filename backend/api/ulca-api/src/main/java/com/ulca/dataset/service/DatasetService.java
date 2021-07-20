@@ -400,13 +400,14 @@ public class DatasetService {
 			dataset.setSubmitterId(userId);
 			dataset.setLicense(schema.get("license").toString());
 			
-			Fileidentifier fileidentifier = dataset.getDatasetFileIdentifier();
+			/*Fileidentifier fileidentifier = dataset.getDatasetFileIdentifier();
 			fileidentifier.setMd5hash(md5hash);
+			*/
 			
 			if(schema.has("collectionMethod")) {
 				dataset.setCollectionMethod(schema.get("collectionMethod").toString());
 			}
-			fileIdentifierDao.save(fileidentifier);
+			//fileIdentifierDao.save(fileidentifier);
 			datasetDao.save(dataset);	
 			
 			
