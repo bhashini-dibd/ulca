@@ -113,6 +113,14 @@
             "description":"API to get metrics attributes"
         },
         {
+            "id":"ae66dde8-5b4b-4320-8ed8-1716a0f88747",
+            "uri":"/ulca/user-mgmt/v1/users/get/token/status",
+            "module":"ULCA-UMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to get token status"
+        },
+        {
             "id":"3ac962a1-de14-4609-91b0-6b4bcb87b856",
             "uri":"/ulca/publish/v0/cluster/set",
             "module":"ULCA-PUBLISH",
