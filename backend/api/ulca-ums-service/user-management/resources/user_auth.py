@@ -222,7 +222,7 @@ class VerifyToken(Resource):
     def post(self):
         body = request.get_json()    
         if body.get("token") == None:
-            return post_error("Data Missing","key not found",None), 400
+            return post_error("Data Missing","token not found",None), 400
         key = body["token"]
         try:
             result = authRepo.token_search(key)

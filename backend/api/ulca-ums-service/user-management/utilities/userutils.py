@@ -554,7 +554,7 @@ class UserUtils:
             valid = collections.find({"email":user_email,"isVerified":True})
             if valid.count() == 0:
                 log.info("Not a valid email/username")
-                return post_error("Not Valid","This email address is not registered",None)#Given email is not associated with any of the active ULCA accounts
+                return post_error("Not Valid","This email address is not registered with ULCA",None)#Given email is not associated with any of the active ULCA accounts
             for value in valid:
                 if value["isActive"]== False:
                     log.info("Given email/username is inactive")

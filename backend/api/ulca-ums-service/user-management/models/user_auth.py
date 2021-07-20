@@ -16,6 +16,8 @@ admin_role_key          =   config.ADMIN_ROLE_KEY
 verify_mail_expiry      =   config.USER_VERIFY_LINK_EXPIRY
 apikey_expiry           =   config.USER_API_KEY_EXPIRY  
 
+
+
 class UserAuthenticationModel(object):
 
     def user_login(self,user_email, password=None):
@@ -93,13 +95,17 @@ class UserAuthenticationModel(object):
         """Generaing forgot password notification"""
 
         #connecting to mongo instance/collection
-        user_collection = get_db()[USR_MONGO_COLLECTION]
+        user_collection         =   get_db()[USR_MONGO_COLLECTION]
+        key_collection          =   get_db()[USR_KEY_MONGO_COLLECTION]
+        token_collection        =   get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION]
         user_record = user_collection.find({"email":user_email})
         name = user_record[0]["firstName"]
-        collections = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION]
-        record = collections.find({"email":user_email})
+        record = token_collection.find({"email":user_email})
+        #removing previous records if any
         if record.count() != 0:
-            return post_error("Request failed","Reset password link is already genrated for your account, please check your mail")
+            key_collection.remove({"email":user_email})
+            token_collection.remove({"email":user_email})
+            
         user_keys = UserUtils.get_data_from_keybase(user_email,keys=True)
         if not user_keys:
             user_keys   =   UserUtils.generate_api_keys(user_email)
@@ -107,10 +113,7 @@ class UserAuthenticationModel(object):
             return user_keys
         user_keys["createdOn"] = datetime.utcnow()
         #inserting new id generated onto temporary token collection
-        collections.insert(user_keys)
-        #removing API keys from user record
-        # key_collection = get_db()[USR_KEY_MONGO_COLLECTION]
-        # key_collection.remove({"email":user_email})
+        token_collection.insert(user_keys)
         #generating email notification
         result = UserUtils.generate_email_notification([{"email":user_email,"pubKey":user_keys["publicKey"],"pvtKey":user_keys["privateKey"],"name":name}],EnumVals.ForgotPwdTaskId.value)
         if result is not None:
@@ -141,12 +144,6 @@ class UserAuthenticationModel(object):
                     roles=user["roles"] 
                     #fetching user name
                     email=user["email"]
-                #Validate the request
-                if email == user_email:
-                    temp_keys = temp_collection.find({"email":user_email})
-                    if temp_keys.count() == 0:
-                        key_collection.remove({"email":user_email})
-                        return post_error("Request Failed","Reset password link has expired")
 
                 #verifying the requested person, both admin and user can reset password   
                 if (admin_role_key in roles) or (email == user_email):
@@ -161,7 +158,7 @@ class UserAuthenticationModel(object):
                     return True
             else:
                 log.info("No record found matching the userID {}".format(user_id), MODULE_CONTEXT)
-                return post_error("Data Not valid","Invalid Credential",None)              
+                return post_error("Data Not valid","Invalid user details",None)              
         except Exception as e:
             log.exception("Database  exception ",  MODULE_CONTEXT, e)
             return post_error("Database exception", "Exception:{}".format(str(e)), None)         
@@ -249,17 +246,13 @@ class UserAuthenticationModel(object):
         """Token search for user details"""
 
         try:
-            log.info("searching for the user, using token")
+            log.info("searching for the keys")
             collections = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION] 
-            user = collections.find({"token":token})
+            user = collections.find({"publicKey":token})
             if user.count() == 0:
                 log.info("Token has expired")
-                return post_error("Invalid data", "Token expired,please request again", None) 
-            for record in user:
-                email = record["email"]
-            usr_collections = get_db()[USR_MONGO_COLLECTION] 
-            usr_record = usr_collections.find({"email":email},{"_id":0,"password":0})
-            return normalize_bson_to_json(usr_record[0])
+                return {"active": False}
+            return {"active": True}
 
         except Exception as e:
             log.exception("Database connection exception | {}".format(str(e)))
