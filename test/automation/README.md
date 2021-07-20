@@ -1,0 +1,83 @@
+# ULCA-AUTOMATION
+
+The code in this repo could be utilized to automate procedures for submitting,searching and downloading datasets from ULCA website.
+
+To install necessary packages for the script, run:
+
+    pip install -r requirements.txt
+
+To view script usage help from terminal, run:
+
+    python3 automate.py -h
+
+>IMPORTANT : This Script requires Browser and its Respective Driver [Supported Browsers - Chrome, Firefox, Opera].
+
+
+## automate.py
+
+* ### For Login
+
+        python3 automate.py -l
+
+    Arguments:
+
+    * -l    (--login) : flag for login credentials.
+
+    >NOTE : update USERNAME/PASSWORD in config.py file.
+
+* ### For Submitting
+
+    1. **Single Dataset:**
+
+            python3 automate.py -s -n "dataset-1" -url "https://example.com/dataset-01.zip"
+
+        Arguments:
+
+        * -s (--submit) : Flag for Submitting Dataset
+        * -n (--name) : Dataset Name
+        * -url (--url)  : Valid Dataset URL
+
+     2. **Multiple Datasets (using csv):**
+
+            python3 automate.py -s -i "1.csv"
+
+        Arguments:
+
+        * -s (--submit) : Flag for Submitting Dataset
+        * -i (--input) : input csv file (default-encoding: utf-8)
+
+        >NOTE : default column names are ["Dataset Name"], ["Dataset URL"]
+
+* ### For Search and Download
+
+        python3 automate.py -d -src english -tgt tamil,telugu -t parallel
+
+    Arguments:
+
+    * -d (--download) : Flag for Searching and Downloading Dataset
+    * -t (--type) : Valid Dataset Type
+    * -src (--source) : Valid Source Language
+    * -tgt (--target) : Valid Target Language
+    * [optional] -dom (--domain) : domain of the dataset
+    * [optional] -col (--collection-method) : collection method for the dataset
+    * [optional] -ma (--m-annotators) : flag for Vetted by multiple annotators
+    * [optional] -mt (--m-translators) : flag for manually translated by multiple translators
+
+* ### For Supported stuff
+
+        python3 automate.py --support
+
+    Arguments:
+
+    * --support : Flag for printing supported
+
+## Notes
+
+- For changing the Browser and Driver path, Update the config.py file
+- Required Drivers for Browser:
+    - Google Chrome - chromedriver
+    - Mozilla Firefox - geckodriver
+    - Opera - operadriver
+
+## Useful Resources
+
