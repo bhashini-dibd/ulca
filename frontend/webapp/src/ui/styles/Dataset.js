@@ -255,6 +255,19 @@ const DataSet = (theme) => ({
 
             backgroundColor: 'white',
         }
+    },
+    container: {
+        margin: '12.75px 0px 18px 15px'
+    },
+    contriCard: {
+        width: '392px',
+        height: '98px'
+    },
+    nameTypo: {
+        marginTop: '6.25px',
+    },
+    dateTypo: {
+        marginTop: '10px',
     }
 
 });
