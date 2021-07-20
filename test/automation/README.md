@@ -16,7 +16,7 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
     * -l    (--login) : flag for login credentials.
 
-    >NOTE : update USERNAME/PASSWORD in config.py file.
+    NOTE : update USERNAME/PASSWORD in config.py file.
 
 * ### For Submitting
 
@@ -39,7 +39,7 @@ The code in this repo could be utilized to automate procedures for submitting,se
         * -s (--submit) : Flag for Submitting Dataset
         * -i (--input) : input csv file (default-encoding: utf-8)
 
-        >NOTE : default column names are ["Dataset Name"], ["Dataset URL"]
+        NOTE : default column names are ["Dataset Name"], ["Dataset URL"]
 
 * ### For Search and Download
 
