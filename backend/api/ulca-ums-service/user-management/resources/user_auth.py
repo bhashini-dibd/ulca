@@ -229,6 +229,8 @@ class VerifyToken(Resource):
             if "errorID" in result:
                 log.exception("token search for reset password failed")
                 return result, 400
+            if result["active"] == False:
+                return post_error("Invalid Data","Link expired",None), 400
             else:
                 log.info("token search for reset password  successsful")
                 res = CustomResponse(Status.SUCCESS_USR_TOKEN.value, result)
