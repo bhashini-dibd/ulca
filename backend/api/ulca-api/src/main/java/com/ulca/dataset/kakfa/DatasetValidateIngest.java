@@ -11,24 +11,21 @@ import com.ulca.dataset.model.Error;
 
 @Service
 public interface DatasetValidateIngest {
+	
+	  long MB_50 =  52428800;
+	  long MB_300 =  314572800;
 
-	default Error validateFileExistence(Map<String, String> fileMap) {
+	default Error validateFileExistence(String baseLocation) {
 
 		Error error = null;
-		
-		String baseLocation = fileMap.get("baseLocation");
-		
 		String paramsFileLocation = baseLocation + File.separator + "params.json";
 		
-
 		if (!isFileAvailable(paramsFileLocation)) {
-
 			error = new Error();
 			error.setCause("params.json file not available");
 			error.setMessage("params.json file not available");
 			error.setCode("1000_PARAMS_JSON_FILE_NOT_AVAILABLE");
 			return error;
-
 		}
 
 		String dataFileLocation = baseLocation + File.separator + "data.json";
@@ -37,11 +34,8 @@ public interface DatasetValidateIngest {
 			error.setCause("data.json file not available");
 			error.setMessage("data.json file not available");
 			error.setCode("1000_DATA_JSON_FILE_NOT_AVAILABLE");
-
 			return error;
-
 		}
-
 		return error;
 	}
 

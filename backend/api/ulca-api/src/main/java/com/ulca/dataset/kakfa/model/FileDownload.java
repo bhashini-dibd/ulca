@@ -1,4 +1,4 @@
-package com.ulca.dataset.kakfa;
+package com.ulca.dataset.kakfa.model;
 
 
 import io.swagger.model.DatasetType;
