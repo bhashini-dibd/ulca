@@ -106,7 +106,6 @@ const SearchAndDownloadRecords = (props) => {
             setLanguagePair({ target, source })
             //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
             setDatasetType({ [data[0].datasetType]: true })
-            console.log(label)
 
             setLabel(label)
         }

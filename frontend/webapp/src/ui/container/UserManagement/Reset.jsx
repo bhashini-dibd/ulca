@@ -113,7 +113,6 @@ const ResetPassword = (props) => {
       })
       .catch(error => {
         setLoading(false)
-        console.log(error)
       })
   };
   const handlePrevent = (e) => {
