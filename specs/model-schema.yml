@@ -161,9 +161,13 @@ components:
       type: object
       properties:
         audioUri:
-          type: string
-          description: path on gcp/s3 bucket or https url
+          type: array
+          description: list of paths on gcp/s3 bucket or https url
           example: gs://bucket/audio.wav
+          items:
+            maxItems: 10
+            minItems: 1
+            type: string
         config:
           $ref: '#/components/schemas/ASRConfig'
 
@@ -230,9 +234,13 @@ components:
       type: object
       properties:
         imageUri:
-          type: string
-          description: path on gcp/s3 bucket or https url
+          type: array
+          description: list of paths on gcp/s3 bucket or https url
           example: gs://bucket/testimg.jpeg
+          items:
+            maxItems: 10
+            minItems: 1
+            type: string
         config:
           $ref: '#/components/schemas/OCRConfig'
 
