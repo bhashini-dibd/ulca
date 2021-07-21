@@ -186,7 +186,6 @@ class ParallelService:
                             pairs = zip(data[key], db_record[key])
                             if any(x != y for x, y in pairs):
                                 found = True
-                                log.info("FOUND")
                                 db_record[key].extend(data[key])
                         else:
                             for entry in data[key]:
@@ -194,7 +193,9 @@ class ParallelService:
                                     found = True
                                     log.info(f"FOUND: {entry}, {db_record[key]}")
                                     db_record[key].append(entry)
+                                    log.info(f"FOUND: {db_record[key]}")
                             db_record[key] = list(set(db_record[key]))
+                            log.info(f"FOUND: {db_record[key]}")
                     else:
                         if isinstance(db_record[key], list):
                             if data[key] not in db_record[key]:
@@ -204,7 +205,6 @@ class ParallelService:
                         else:
                             if db_record[key] != data[key]:
                                 found = True
-                                log.info(f"FOUND: {data[key]}, {db_record[key]}")
                                 db_record[key] = [db_record[key]]
                                 db_record[key].append(data[key])
                                 db_record[key] = list(set(db_record[key]))
@@ -215,6 +215,7 @@ class ParallelService:
                 db_record["datasetId"] = list(set(db_record["datasetId"]))
                 db_record["derived"] = False
                 db_record["tags"] = service.get_tags(record, parallel_non_tag_keys)
+                log.info(f"FOUND: {db_record['domain']}")
                 return db_record
             else:
                 return False
