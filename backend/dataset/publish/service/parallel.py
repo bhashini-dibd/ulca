@@ -90,7 +90,7 @@ class ParallelService:
                             if dup_data:
                                 log.info(f"DATA: {data}")
                                 dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                                log.info(f"DATA DUP: {dup_data}")
+                                log.info(f"DATA REC: {record}")
                                 repo.update(dup_data)
                                 return "UPDATE", dup_data
                             else:
