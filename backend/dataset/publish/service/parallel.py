@@ -186,21 +186,25 @@ class ParallelService:
                             pairs = zip(data[key], db_record[key])
                             if any(x != y for x, y in pairs):
                                 found = True
+                                log.info("FOUND")
                                 db_record[key].extend(data[key])
                         else:
                             for entry in data[key]:
                                 if entry not in db_record[key]:
                                     found = True
+                                    log.info(f"FOUND: {entry}, {db_record[key]}")
                                     db_record[key].append(entry)
                             db_record[key] = list(set(db_record[key]))
                     else:
                         if isinstance(db_record[key], list):
                             if data[key] not in db_record[key]:
                                 found = True
+                                log.info(f"FOUND: {data[key]}, {db_record[key]}")
                                 db_record[key].append(data[key])
                         else:
                             if db_record[key] != data[key]:
                                 found = True
+                                log.info(f"FOUND: {data[key]}, {db_record[key]}")
                                 db_record[key] = [db_record[key]]
                                 db_record[key].append(data[key])
                                 db_record[key] = list(set(db_record[key]))
