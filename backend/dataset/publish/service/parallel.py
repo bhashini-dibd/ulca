@@ -88,9 +88,7 @@ class ParallelService:
                         if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
-                                log.info(f"FOUND: {record}")
                                 dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                                log.info(f"FOUND: {dup_data}")
                                 repo.update(dup_data)
                                 return "UPDATE", dup_data
                             else:
@@ -149,8 +147,10 @@ class ParallelService:
     '''
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = {}
+        log.info(f"FOUND: {record}")
         for key in record.keys():
             db_record[key] = record[key]
+        log.info(f"FOUND: {db_record}")
         is_derived = record["derived"]
         if is_derived:
             for key in data.keys():
@@ -191,9 +191,9 @@ class ParallelService:
                                 db_record[key].extend(data[key])
                         else:
                             for entry in data[key]:
+                                log.info(f"FOUND: {db_record[key]}")
                                 if entry not in db_record[key]:
                                     found = True
-                                    log.info(f"FOUND: {db_record[key]}")
                                     db_record[key].append(entry)
                             db_record[key] = list(set(db_record[key]))
                     else:
@@ -210,12 +210,10 @@ class ParallelService:
                             else:
                                 db_record[key] = [db_record[key]]
             if found:
-                log.info(f"FOUND: {record}")
                 db_record["datasetId"].append(metadata["datasetId"])
                 db_record["datasetId"] = list(set(db_record["datasetId"]))
                 db_record["derived"] = False
                 db_record["tags"] = service.get_tags(record, parallel_non_tag_keys)
-                log.info(f"FOUND: {db_record}")
                 return db_record
             else:
                 return False
