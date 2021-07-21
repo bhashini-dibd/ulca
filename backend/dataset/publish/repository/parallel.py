@@ -64,14 +64,12 @@ class ParallelRepo:
 
     def update(self, object_in):
         col = self.get_mongo_instance()
-        query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
-        result_before = self.search_internal(query, {"_id": False}, None, None)
-        log.info(f"RESULT len bef {object_in['id']}: {len(result_before)}")
-        log.info(f"RESULT BEF {object_in['id']}: {result_before[0]}")
-        col.replace_one(query, object_in)
-        result_after = self.search_internal(query, {"_id": False}, None, None)
-        log.info(f"RESULT AF {object_in['id']}: {result_after[0]}")
-        log.info(f"RESULT len af {object_in['id']}: {len(result_before)}")
+        try:
+            #query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
+            query = {"id": object_in["id"]}
+            col.replace_one(query, object_in)
+        except Exception as e:
+            log.exception(f"Exception while updating: {e}", e)
 
     def search_internal(self, query, exclude, offset, res_limit):
         try:
