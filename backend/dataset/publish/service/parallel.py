@@ -88,7 +88,9 @@ class ParallelService:
                         if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
+                                log.info(f"DATA: {data}")
                                 dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                                log.info(f"DATA DUP: {dup_data}")
                                 repo.update(dup_data)
                                 return "UPDATE", dup_data
                             else:
@@ -191,11 +193,8 @@ class ParallelService:
                             for entry in data[key]:
                                 if entry not in db_record[key]:
                                     found = True
-                                    log.info(f"FOUND: {entry}, {db_record[key]}")
                                     db_record[key].append(entry)
-                                    log.info(f"FOUND: {db_record[key]}")
                             db_record[key] = list(set(db_record[key]))
-                            log.info(f"FOUND: {db_record[key]}")
                     else:
                         if isinstance(db_record[key], list):
                             if data[key] not in db_record[key]:
@@ -215,7 +214,6 @@ class ParallelService:
                 db_record["datasetId"] = list(set(db_record["datasetId"]))
                 db_record["derived"] = False
                 db_record["tags"] = service.get_tags(record, parallel_non_tag_keys)
-                log.info(f"FOUND: {db_record['domain']}")
                 return db_record
             else:
                 return False
