@@ -304,7 +304,7 @@ class ParallelService:
             if 'collectionMode' in query.keys():
                 tags.extend(query["collectionMode"])
             if 'license' in query.keys():
-                tags.append(query["licence"])
+                tags.extend(query["licence"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
@@ -316,6 +316,8 @@ class ParallelService:
                 db_query["targetLanguage"] = tgt_lang
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
+            else:
+                db_query["multipleContributors"] = False
             if 'groupBy' in query.keys():
                 db_query["groupBy"] = query["groupBy"]
                 if 'countOfTranslations' in query.keys():

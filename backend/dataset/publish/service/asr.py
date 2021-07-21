@@ -152,7 +152,7 @@ class ASRService:
             if 'collectionSource' in query.keys():
                 tags.extend(query["collectionMode"])
             if 'license' in query.keys():
-                tags.append(query["licence"])
+                tags.extend(query["licence"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'channel' in query.keys():
@@ -162,7 +162,8 @@ class ASRService:
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
             if 'multipleContributors' in query.keys():
-                db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
+                if query['multipleContributors']:
+                    db_query[f'collectionMethod.1'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
             exclude = {"_id": False}

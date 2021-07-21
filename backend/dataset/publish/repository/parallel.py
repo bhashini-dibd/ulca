@@ -116,8 +116,8 @@ class ParallelRepo:
                 pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
-            if "multipleContributors" in query.keys():
-                pipeline.append({"$match": {f'collectionMethod.{query["multipleContributors"]}': {"$exists": True}}})
+            if query['multipleContributors']:
+                pipeline.append({"$match": {f'collectionMethod.1': {"$exists": True}}})
             if query['groupBy']:
                 pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
                 count = 1
