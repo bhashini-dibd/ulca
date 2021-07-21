@@ -147,10 +147,8 @@ class ParallelService:
     '''
     def enrich_duplicate_data(self, data, record, metadata):
         db_record = {}
-        log.info(f"FOUND: {record}")
         for key in record.keys():
             db_record[key] = record[key]
-        log.info(f"FOUND: {db_record}")
         is_derived = record["derived"]
         if is_derived:
             for key in data.keys():
@@ -191,7 +189,6 @@ class ParallelService:
                                 db_record[key].extend(data[key])
                         else:
                             for entry in data[key]:
-                                log.info(f"FOUND: {db_record[key]}")
                                 if entry not in db_record[key]:
                                     found = True
                                     db_record[key].append(entry)
