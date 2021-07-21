@@ -61,13 +61,18 @@ class DatasetService:
         found = False
         for key in data.keys():
             if key in updatable:
-                found = True
-                db_record[key] = data[key]
+                if key not in db_record.keys():
+                    found = True
+                    db_record[key] = data[key]
+                else:
+                    if db_record[key] != data[key]:
+                        found = True
+                        db_record[key] = data[key]
                 continue
             if key not in immutable:
                 if key not in db_record.keys():
                     found = True
-                    db_record[key] = [db_record[key]]
+                    db_record[key] = [data[key]]
                 elif isinstance(data[key], list):
                     val = data[key][0]
                     if isinstance(val, dict):
@@ -80,7 +85,7 @@ class DatasetService:
                             if entry not in db_record[key]:
                                 found = True
                                 db_record[key].append(entry)
-                            db_record[key] = list(set(db_record[key]))
+                        db_record[key] = list(set(db_record[key]))
                 else:
                     if isinstance(db_record[key], list):
                         if data[key] not in db_record[key]:
@@ -96,6 +101,7 @@ class DatasetService:
                             db_record[key] = [db_record[key]]
         if found:
             db_record["datasetId"].append(metadata["datasetId"])
+            db_record["datasetId"] = list(set(db_record["datasetId"]))
             db_record["tags"] = self.get_tags(record, non_tag)
             return db_record
         else:

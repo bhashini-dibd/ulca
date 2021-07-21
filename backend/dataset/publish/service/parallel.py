@@ -156,7 +156,7 @@ class ParallelService:
                     db_record[key] = data[key]
                     continue
                 if key not in parallel_immutable_keys:
-                    if not isinstance(db_record[key], list):
+                    if not isinstance(data[key], list):
                         db_record[key] = [data[key]]
                     else:
                         db_record[key] = data[key]
@@ -168,13 +168,18 @@ class ParallelService:
             found = False
             for key in data.keys():
                 if key in parallel_updatable_keys:
-                    found = True
-                    db_record[key] = data[key]
+                    if key not in db_record.keys():
+                        found = True
+                        db_record[key] = data[key]
+                    else:
+                        if db_record[key] != data[key]:
+                            found = True
+                            db_record[key] = data[key]
                     continue
                 if key not in parallel_immutable_keys:
                     if key not in db_record.keys():
                         found = True
-                        db_record[key] = [db_record[key]]
+                        db_record[key] = [data[key]]
                     elif isinstance(data[key], list):
                         val = data[key][0]
                         if isinstance(val, dict):
@@ -187,7 +192,7 @@ class ParallelService:
                                 if entry not in db_record[key]:
                                     found = True
                                     db_record[key].append(entry)
-                                db_record[key] = list(set(db_record[key]))
+                            db_record[key] = list(set(db_record[key]))
                     else:
                         if isinstance(db_record[key], list):
                             if data[key] not in db_record[key]:
@@ -203,6 +208,7 @@ class ParallelService:
                                 db_record[key] = [db_record[key]]
             if found:
                 db_record["datasetId"].append(metadata["datasetId"])
+                db_record["datasetId"] = list(set(db_record["datasetId"]))
                 db_record["derived"] = False
                 db_record["tags"] = service.get_tags(record, parallel_non_tag_keys)
                 return db_record
