@@ -16,7 +16,7 @@ import lombok.Setter;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SearchCriteria {
 	
-	private String licence;
+	private String[] licence;
 
     private Float minScore;
 
@@ -26,7 +26,7 @@ public class SearchCriteria {
 
     private String[] collectionMode;
 
-    private String multipleContributors;
+    private Boolean multipleContributors;
 
     private Float maxScore;
 
@@ -47,6 +47,7 @@ public class SearchCriteria {
     private String[] groupBy;
     
     private Boolean originalSourceSentence;
+    
     
 
 }
