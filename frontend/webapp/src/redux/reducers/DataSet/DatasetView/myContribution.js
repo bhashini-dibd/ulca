@@ -64,7 +64,8 @@ const getContributionList = (state, payload) => {
                      datasetName          : element.datasetName,
                      submittedOn          : dateConversion(element.submittedOn),
                      datasetType :          getDatasetName(element.datasetType),
-                     status               : element.status
+                     status               : element.status,
+                     color : element.status === "Completed" ? "#139D60" :  element.status === "In-Progress" ? "#2C2799" : element.status === "Failed" ? "#F54336" : "#FEA52C"
             }
             
         )

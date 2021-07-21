@@ -7,15 +7,17 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
-import { PageChange, RowChange, FilterTable, clearFilter } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
+import { PageChange, RowChange, FilterTable, clearFilter,tableView } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
 import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import Dialog from "../../../components/common/Dialog"
-import { Cached, DeleteOutline, VerticalAlignTop } from '@material-ui/icons';
+import { Cached, DeleteOutline, VerticalAlignTop,GridOn,List } from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import { useParams } from "react-router";
 import C from "../../../../redux/actions/constants";
 import FilterListIcon from '@material-ui/icons/FilterList';
 import FilterList from "./FilterList";
+import GridView from "./GridView";
+
 const ContributionList = (props) => {
 
         const history = useHistory();
@@ -23,6 +25,7 @@ const ContributionList = (props) => {
         const myContributionReport = useSelector((state) => state.myContributionReport);
         const PageInfo = useSelector((state) => state.pageChangeDetails);
         const [open, setOpen] = useState(false)
+        const view = useSelector((state) => state.tableView.view);
         const [message, setMessage] = useState("Do you want to delete")
         const [title, setTitle] = useState("Delete")
         const { added } = useParams()
@@ -55,68 +58,54 @@ const ContributionList = (props) => {
                 dispatch(FilterTable(data, C.CONTRIBUTION_TABLE))
         }
 
+        const handleViewChange = () =>{
+                dispatch(tableView(!view, C.CONTRIBUTION_TABLE_VIEW))      
+        }
+        const handleCardClick = (event) =>{
+               let sId = event.currentTarget.id;
+               data.forEach((element)=>{
+                       if(element.submitRefNumber== sId){
+                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${element.status}/${element.datasetName}/${element.submitRefNumber}`)    
+                       }
+               })
+        }
+
+
+
 
         const fetchHeaderButton = () => {
+
                 return <>
-
-
-                        <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
-                        <Button color={"default"} size="medium" variant="outlined" className={classes.buttonStyle} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button>
+                        
+                        <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button>
+                        <Button color={"primary"} size="medium" variant="outlined" className={classes.buttonStyle} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
+                        <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button>
+                       
+                        
                 </>
         }
-
-        const handleSetValues = (name) => {
-                setTitle(`Delete ${name}  `)
-                setMessage(`Do you want to delete ${name} ? `)
-                setOpen(true)
-        }
-
-        const renderStatus = (id, name, value) => {
-                if (value === "In-Progress") {
-                        return <Link className={classes.link} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dataset-status/${value}/${name}/${id}`) }}> In-Progress </Link>
-                }
-                else {
-                        return <span
-                        >{value} </span>
-                }
-        }
-
-        const renderAction = (name, value) => {
-                if (value === "In-Progress") { }
-                else {
-                        return (<div className={classes.action}>
-                                <div className={classes.link}>
-                                        <Link className={classes.link} color={"primary"} onClick={() => { history.push(`${process.env.PUBLIC_URL}/submit-dataset/upload`) }}> Update <div ><VerticalAlignTop style={{ "height": "0.8em" }} onClick={() => { handleSetValues(name) }} />  </div></Link>
-                                </div>
-                                <div className={classes.span
-                                }>
-                                        <DeleteOutline onClick={() => { handleSetValues(name) }} />
-                                </div>
-                        </div>)
-                }
-        }
-
-        const handleRowClick = (rowData) => {
-
-                history.push(`${process.env.PUBLIC_URL}/dataset-status/${rowData[4]}/${rowData[1]}/${rowData[0]}`)
-
-                // if(rowMeta.colIndex !== 6){
-                //         const value = data[rowMeta.rowIndex].submitRefNumber;
-                //         const status = data[rowMeta.rowIndex].status.toLowerCase();
-                //         const name = data[rowMeta.rowIndex].datasetName;
-                //         history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${value}`)
-                // }
+        const handleRowClick = (id,name,status) => {
+                history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${id}`)
         };
 
         const handleDialogSubmit = () => {
 
         }
 
-        const processTableClickedNextOrPrevious = (page, sortOrder) => {
+        const processTableClickedNextOrPrevious = ( sortOrder,page) => {
                 dispatch(PageChange(page, C.PAGE_CHANGE));
 
         }
 
+        const tableRowchange = (event) =>{
+                rowChange(event.target.value)
+        }
+
+        const rowChange=(rowsPerPage)=>{
+                dispatch(RowChange(rowsPerPage, C.ROW_COUNT_CHANGE))
+        }
+
+    
 
 
         const columns = [
@@ -136,6 +125,7 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
+                                display: view ? "excluded": true,
                         },
                 },
                 {
@@ -144,6 +134,7 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
+                                display: view ? "excluded": true,
                         },
                 },
                 {
@@ -152,6 +143,7 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
+                                display: view ? "excluded": true,
 
                         },
                 },
@@ -161,47 +153,18 @@ const ContributionList = (props) => {
                         options: {
                                 filter: true,
                                 sort: true,
+                                display: view ? "excluded": true,
 
                         },
-                },
-                // {
-                // name: "Status",
-                // label: "Status",
-                // options: {
-                //         filter  : false,
-                //         sort    : false,
-                //         empty   : true,
-                //         customBodyRender: (value, tableMeta, updateValue) => {
-                //                         if (tableMeta.rowData) {
-                //                                 return <div>{renderStatus(tableMeta.rowData[0],tableMeta.rowData[2],tableMeta.rowData[4])}</div>;
-                //                         }
-                //                 },
-                //         },
-                // },
-
-                // {
-                // name    : "Action",
-                // label   : "Action",
-                // options: {
-                //                 filter  : false,
-                //                 sort    : false,
-                //                 empty   : true,
-                //                 customBodyRender: (value, tableMeta, updateValue) => {
-                //                         if (tableMeta.rowData) {
-                //                                 return <div>{renderAction(tableMeta.rowData[2], tableMeta.rowData[4])}</div>;
-                //                         }
-                //         },
-                // },
-                // },
+                }
         ];
+
+        
 
 
         const options = {
-
-
                 textLabels: {
                         body: {
-
                                 noMatch: "No records"
                         },
                         toolbar: {
@@ -213,7 +176,7 @@ const ContributionList = (props) => {
                         },
                         options: { sortDirection: "desc" },
                 },
-                onRowClick: rowData => handleRowClick(rowData),
+                onRowClick: rowData => handleRowClick(rowData[0],rowData[1],rowData[4]),
                 // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
                 customToolbar: fetchHeaderButton,
                 filter: false,
@@ -224,7 +187,6 @@ const ContributionList = (props) => {
                 print: false,
                 viewColumns: false,
                 rowsPerPage: PageInfo.count,
-
                 rowsPerPageOptions: [10, 25, 50, 100],
                 selectableRows: "none",
                 page: PageInfo.page,
@@ -232,11 +194,11 @@ const ContributionList = (props) => {
                         switch (action) {
                                 case "changePage":
                                         processTableClickedNextOrPrevious(
-                                                tableState.page
+                                                "", tableState.page
                                         );
                                         break;
                                 case "changeRowsPerPage":
-                                        dispatch(RowChange(tableState.rowsPerPage, C.ROW_COUNT_CHANGE))
+                                        rowChange(tableState.rowsPerPage)
                                         break;
                                 default:
                         }
@@ -257,12 +219,13 @@ const ContributionList = (props) => {
                         </div> */}
 
 
-                        <MUIDataTable
+                        {view ? (data.length>0 && <GridView data= {data} rowChange={tableRowchange} handleRowClick = {handleRowClick} handleViewChange = {handleViewChange} handleShowFilter = {handleShowFilter} MyContributionListApi= {MyContributionListApi} view= {view} page ={PageInfo.page}handleCardClick = {handleCardClick} handleChangePage = {processTableClickedNextOrPrevious} rowsPerPage = {PageInfo.count}></GridView>)
+                        : <MUIDataTable
                                 title={`My Contribution`}
                                 data={data}
                                 columns={columns}
-                                options={options}
-                        />
+                                options= {options}
+                        /> }
 
                         {open && <Dialog
                                 message={message}

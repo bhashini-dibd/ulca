@@ -158,6 +158,7 @@ const themeDefault = createMuiTheme({
     MUIDataTableBodyCell: {
       root: { padding: ".5rem .5rem .5rem .8rem", textTransform: "capitalize" },
     },
+    
     MuiButton: {
       root: {
         minWidth: "25",

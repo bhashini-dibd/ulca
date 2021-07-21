@@ -17,7 +17,6 @@ const CustomizedSnackbars = (props) => {
         }
     });
     let { classes } = props
-    console.log(props.hide)
     return (
         <MuiThemeProvider theme={getMuiTheme()}>
             <div className={classes.snackbar}>

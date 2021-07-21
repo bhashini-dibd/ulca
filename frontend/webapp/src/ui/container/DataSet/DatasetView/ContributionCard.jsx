@@ -1,27 +1,35 @@
-import { withStyles, Typography, Card, Grid } from "@material-ui/core";
+import { withStyles, Typography, Card, Grid,ButtonBase } from "@material-ui/core";
 import DataSet from "../../../styles/Dataset";
 
 const ContributionCard = (props) => {
 
-    const { classes } = props;
+    const { classes,data,handleCardClick } = props;
+    
+
     return (
         <div>
-            <Card className={classes.contriCard}>
-                <Grid container className={classes.container}>
+            {data && data.hasOwnProperty("datasetName")&&
+            
+            <Card className={classes.contriCard} id = {data.submitRefNumber} style={{cursor:"pointer"}} onClick ={handleCardClick}>
+                 
+                <Grid container className={classes.container} >
+                    
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
-                        <Typography variant="body2" className={classes.countTypo}>{props.sid}</Typography>
+                        <Typography value = {data} variant="body2" className={classes.typeTypo}>{data.datasetType}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
-                        <Typography variant="body2" className={classes.nameTypo}>{props.name}</Typography>
+                        <Typography value = {data} variant="body2" className={classes.nameTypo}>{data.datasetName}</Typography>
                     </Grid>
-                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4} >
-                        <Typography variant="body2" className={classes.dateTypo}>{props.date}</Typography>
+                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6} >
+                        <Typography value = {data} variant="body2" className={classes.Typo}>{data.submittedOn}</Typography>
                     </Grid>
-                    <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-                        <Typography variant="body2" className={classes.dateTypo}>{props.status}</Typography>
+                    <Grid item xs={5} sm={5} md={5} lg={5} xl={5}>
+                        <Typography value = {"1"} variant="body2" style={{textAlign:"end", color:data.color}} className={classes.Typo}>{data.status}</Typography>
                     </Grid>
                 </Grid>
+                
             </Card>
+    }
         </div>
 
     );

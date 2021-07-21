@@ -5,7 +5,6 @@ import { SaveAlt } from '@material-ui/icons';
 
 const DownloadDatasetRecords = (props) => {
     const renderSentence = () => {
-        console.log(props.datasetType)
         if (props.datasetType === 'ASR / TTS Dataset' || props.datasetType === 'ASR Unlabeled Dataset')
             return "#Hours"
         else if (props.datasetType === 'OCR Dataset')
