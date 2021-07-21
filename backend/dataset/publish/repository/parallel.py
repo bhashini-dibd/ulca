@@ -65,8 +65,7 @@ class ParallelRepo:
     def update(self, object_in):
         col = self.get_mongo_instance()
         try:
-            #query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
-            query = {"id": object_in["id"]}
+            query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
             col.replace_one(query, object_in)
         except Exception as e:
             log.exception(f"Exception while updating: {e}", e)
