@@ -66,11 +66,12 @@ class ParallelRepo:
         col = self.get_mongo_instance()
         query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
         result_before = self.search_internal(query, {"_id": False}, None, None)
+        log.info(f"RESULT len bef {object_in['id']}: {len(result_before)}")
         log.info(f"RESULT BEF {object_in['id']}: {result_before[0]}")
-        log.info(f"RESULT DUP {object_in['id']}: {object_in}")
         col.replace_one(query, object_in)
         result_after = self.search_internal(query, {"_id": False}, None, None)
         log.info(f"RESULT AF {object_in['id']}: {result_after[0]}")
+        log.info(f"RESULT len af {object_in['id']}: {len(result_before)}")
 
     def search_internal(self, query, exclude, offset, res_limit):
         try:
