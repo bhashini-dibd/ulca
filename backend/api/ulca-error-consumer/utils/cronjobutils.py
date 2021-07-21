@@ -23,7 +23,7 @@ class StoreUtils:
                         data_pub = data
                 data_modified.append(data)
             if not data_pub:
-                data_pub = data_modified[0]
+                data_pub = data_modified[-1]
             with open(file, 'w', newline='') as output_file:
                 dict_writer = csv.DictWriter(output_file, list(data_pub.keys()))
                 dict_writer.writeheader()
@@ -32,7 +32,7 @@ class StoreUtils:
             log.info(f'{len(data_modified)} Errors written to csv for SRN -- {srn}')
             return
         except Exception as e:
-            log.exception(f'Exception in csv writer: {e}', e)
+            log.exception(f'Exception in csv writer: {e}')
             return
 
     #triggering file-store api call 
@@ -46,9 +46,11 @@ class StoreUtils:
             response_data = response.content
             log.info("Received data from upload end point of file store service")
             response = json.loads(response_data)
+            if "data" not in response:
+                return False
             return response["data"]
         except Exception as e:
-            log.exception(f'Exception while pushing error file to object store: {e}', e)
+            log.exception(f'Exception while pushing error file to object store: {e}')
         return False
 
 # Log config

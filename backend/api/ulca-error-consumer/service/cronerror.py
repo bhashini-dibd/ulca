@@ -87,6 +87,8 @@ class ErrorProcessor(Thread):
             print(file, file_name)
             #initiating upload API call
             error_object_path = storeutils.file_store_upload_call(file,file_name,error_prefix)
+            if error_object_path == False:
+                return  None
             log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
             error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "internal_file": file, "file": error_object_path, "count": len(error_records)}
             #updating record on mongo with uploaded error count
@@ -95,7 +97,7 @@ class ErrorProcessor(Thread):
             os.remove(file)
             return error_record
         except Exception as e:
-            log.exception(f'Exception while ingesting errors to object store: {e}', e)
+            log.exception(f'Exception while ingesting errors to object store: {e}')
             return []
 
 

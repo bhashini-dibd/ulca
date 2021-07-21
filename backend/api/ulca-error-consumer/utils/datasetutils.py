@@ -24,7 +24,7 @@ class DatasetUtils:
             response = json.loads(response_data)
             return response["data"]
         except Exception as e:
-            log.exception(f'Exception while pushing error file to object store: {e}', e)
+            log.exception(f'Exception while pushing error file to object store: {e}')
         return False
 
 

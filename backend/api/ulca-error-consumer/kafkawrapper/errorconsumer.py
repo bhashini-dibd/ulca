@@ -46,7 +46,7 @@ def error_consume():
                     log.exception(f'{prefix} Exception in ds error consumer while consuming: {str(e)}', e)
                     break
     except Exception as e:
-        log.exception(f'Exception in ds error consumer while consuming: {str(e)}', e)
+        log.exception(f'Exception in ds error consumer while consuming: {str(e)}')
 
 
 # Method that provides a deserialiser for the kafka record.
@@ -54,7 +54,7 @@ def handle_json(x):
     try:
         return json.loads(x.decode('utf-8'))
     except Exception as e:
-        log.exception(f'Exception while deserialising: {str(e)}', e)
+        log.exception(f'Exception while deserialising: {str(e)}')
         return {}
 
 # Log config
