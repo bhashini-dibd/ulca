@@ -1,5 +1,6 @@
 import logging
 import multiprocessing
+import time
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
@@ -86,6 +87,7 @@ class MonolingualService:
             if record:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, mono_immutable_keys, mono_updatable_keys, mono_non_tag_keys)
                 if dup_data:
+                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                     repo.update(dup_data)
                     return "UPDATE", data, dup_data
                 else:
@@ -98,6 +100,7 @@ class MonolingualService:
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
             insert_data["tags"] = service.get_tags(insert_data, mono_non_tag_keys)
+            insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)

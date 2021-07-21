@@ -44,29 +44,29 @@ if isinstance(record_expiry_in_sec, str):
     record_expiry_in_sec = eval(record_expiry_in_sec)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
-asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation"]
-asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration"]
-asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "audioHash", "textHash", "fileLocation"]
+asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
+asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn"]
 asr_updatable_keys = ["durationInSeconds", "duration"]
 
-asr_unlabeled_immutable_keys = ["id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation"]
-asr_unlabeled_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration"]
-asr_unlabeled_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "audioHash", "fileLocation"]
+asr_unlabeled_immutable_keys = ["id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+asr_unlabeled_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
+asr_unlabeled_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "audioHash", "fileLocation", "lastModifiedOn", "createdOn"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration"]
 
-parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType"]
+parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
 parallel_updatable_keys = ["alignmentScore"]
-parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter"]
-parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash", "targetTextHash"]
+parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter", "lastModifiedOn", "createdOn"]
+parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn"]
 
-ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType", "sourceLanguage", "fileLocation"]
-ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation"]
-ocr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "imageHash", "groundTruthHash", "fileLocation"]
+ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation", "lastModifiedOn", "createdOn"]
+ocr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "imageHash", "groundTruthHash", "fileLocation", "lastModifiedOn", "createdOn"]
 ocr_updatable_keys = []
 
-mono_immutable_keys = ["id", "text", "textHash", "datasetType", "sourceLanguage"]
-mono_non_tag_keys = ["id", "text", "submitter"]
-mono_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "textHash"]
+mono_immutable_keys = ["id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn"]
+mono_non_tag_keys = ["id", "text", "submitter", "lastModifiedOn", "createdOn"]
+mono_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "textHash", "lastModifiedOn", "createdOn"]
 mono_updatable_keys = []
 
 publish_error_code = "3000_XXX"

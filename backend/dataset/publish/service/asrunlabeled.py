@@ -92,6 +92,7 @@ class ASRUnlabeledService:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
                                                          asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
                 if dup_data:
+                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                     repo.update(dup_data)
                     return "UPDATE", data, record
                 else:
@@ -111,6 +112,7 @@ class ASRUnlabeledService:
                 if not object_store_path:
                     return "FAILED", insert_data, insert_data
                 insert_data["objStorePath"] = object_store_path
+                insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)

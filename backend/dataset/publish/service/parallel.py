@@ -1,4 +1,5 @@
 import logging
+import time
 import uuid
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, user_mode_pseudo, \
@@ -87,6 +88,7 @@ class ParallelService:
                         if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
+                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                                 repo.update(dup_data)
                                 return "UPDATE", dup_data
                             else:
@@ -105,6 +107,7 @@ class ParallelService:
                     obj["datasetId"] = [metadata["datasetId"]]
                     obj["derived"] = False
                     obj["tags"] = service.get_tags(obj, parallel_non_tag_keys)
+                obj["lastModifiedOn"] = obj["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
                 insert_records.append(obj)
             return insert_records, insert_records
         except Exception as e:
