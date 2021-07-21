@@ -24,6 +24,7 @@ class StoreUtils:
                 data_modified.append(data)
             if not data_pub:
                 data_pub = data_modified[-1]
+            log.info(f'csv headers are obtained from entry : {data_pub}')
             with open(file, 'w', newline='') as output_file:
                 dict_writer = csv.DictWriter(output_file, list(data_pub.keys()))
                 dict_writer.writeheader()
