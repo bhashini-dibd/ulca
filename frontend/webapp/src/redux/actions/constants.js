@@ -1,7 +1,7 @@
 const constants = {
   APISTATUS             : "APISTATUS",
   GET_ERROR_REPORT      : "GET_ERROR_REPORT",
-
+  LOGOUT                : "LOGOUT",
   /**
    * action for Dataset report
    */
