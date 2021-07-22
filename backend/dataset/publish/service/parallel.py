@@ -333,6 +333,7 @@ class ParallelService:
                     db_query["countOfTranslations"] = query["countOfTranslations"]
             else:
                 db_query["groupBy"] = False
+            log.info(f"DB QUERY: {db_query}")
             data = repo.search(db_query, off, lim)
             result, pipeline, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}, Pipeline: {pipeline}')
