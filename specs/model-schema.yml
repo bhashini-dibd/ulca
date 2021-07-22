@@ -25,6 +25,8 @@ components:
       type: object
       properties:
         name:
+          maxLength: 100
+          minLength: 10
           type: string
           description: model name that you want your users to see
         description:

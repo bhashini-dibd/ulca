@@ -42,12 +42,9 @@ public class OcrDatasetRowDataSchemaDeserializer extends StdDeserializer<OcrData
 	public OcrDatasetRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		log.info("******** inside deserializer ********");
 		ObjectMapper mapper = new ObjectMapper();
 		OcrDatasetRowSchema asrRowSchema = new OcrDatasetRowSchema();
 		JsonNode node = p.readValueAsTree();
-
-		
 		
 		ArrayList<String> keysList = new ArrayList<String>();
 		keysList.add("imageFilename");
@@ -170,12 +167,9 @@ public class OcrDatasetRowDataSchemaDeserializer extends StdDeserializer<OcrData
 			}
 		}
 
-	
-
 		if (!errorList.isEmpty())
 			throw new IOException(errorList.toString());
 
-		log.info("******** Exiting deserializer ********");
 		return asrRowSchema;
 	}
 
