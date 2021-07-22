@@ -16,26 +16,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.ulca.dataset.util.DateUtil;
 
-import io.swagger.model.AsrParamsSchema;
-import io.swagger.model.AsrParamsSchema.AgeEnum;
-import io.swagger.model.AsrParamsSchema.DialectEnum;
 import io.swagger.model.AsrRowSchema;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
-import io.swagger.model.AudioFormat;
 import io.swagger.model.AudioQualityEvaluation;
 import io.swagger.model.AudioQualityEvaluation.MethodTypeEnum;
 import io.swagger.model.CollectionDetailsAudioAutoAligned;
 import io.swagger.model.CollectionDetailsMachineGeneratedTranscript;
 import io.swagger.model.CollectionDetailsManualTranscribed;
 import io.swagger.model.CollectionMethodAudio;
-import io.swagger.model.DatasetType;
-import io.swagger.model.Domain;
-import io.swagger.model.DomainEnum;
 import io.swagger.model.Gender;
-import io.swagger.model.LanguagePair;
 import io.swagger.model.Source;
-import io.swagger.model.Submitter;
 import io.swagger.model.TranscriptionEvaluationMethod1;
 import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
@@ -146,10 +137,7 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 					e.printStackTrace();
 				}
 			}
-			
 		}
-
-		
 
 		if (node.has("endTime")) {
 			if (!node.get("endTime").isTextual()) {
@@ -161,11 +149,8 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				}else {
 					errorList.add("endTime should be in hh:mm:ss format");
 				}
-				
 			}
 		} 
-
-		
 
 		if (node.has("startTime")) {
 			if (!node.get("startTime").isTextual()) {
@@ -191,9 +176,7 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				} else {
 					errorList.add("channel not among one of specified");
 				}
-
 			}
-
 		}
 
 		if (node.has("samplingRate")) {
@@ -202,9 +185,7 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 			} else {
 				BigDecimal samplingRate = node.get("samplingRate").decimalValue();
 				asrRowSchema.setSamplingRate(samplingRate);
-
 			}
-
 		}
 
 		if (node.has("bitsPerSample")) {
@@ -220,9 +201,7 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				} else {
 					errorList.add("bitsPerSample not among one of specified");
 				}
-
 			}
-
 		}
 
 		if (node.has("gender")) {
@@ -292,9 +271,7 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				} else {
 					errorList.add("methodType is not one of specified values");
 				}
-
 			}
-
 		}
 
 		if (node.has("collectionMethod")) {
@@ -402,7 +379,6 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 
 						e.printStackTrace();
 					}
-
 				}
 			}
 		}
