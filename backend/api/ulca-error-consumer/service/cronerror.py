@@ -88,7 +88,7 @@ class ErrorProcessor(Thread):
             log.info(f"zip file created :{zipfile}, for srn -- {srn} ")
             file_name = zipfile.replace("/opt/","")
             #initiating upload API call
-            error_object_path = storeutils.file_store_upload_call(file,file_name,error_prefix)
+            error_object_path = storeutils.file_store_upload_call(zipfile,file_name,error_prefix)
             if error_object_path == False:
                 return  None
             log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
