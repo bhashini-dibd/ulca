@@ -9,6 +9,7 @@ import os
 from datetime import datetime
 from logging.config import dictConfig
 
+
 log         =   logging.getLogger('file')
 storerepo   =   StoreRepo()
 errorepo    =   ErrorRepo()
@@ -83,8 +84,9 @@ class ErrorProcessor(Thread):
             log.info(f'Writing {len(error_records)} errors to {file} for srn -- {srn}')
             #writing to csv locally
             storeutils.write_to_csv(error_records,file,srn)
-            file_name = file.replace("/opt/","")
-            print(file, file_name)
+            zipfile = storeutils.zipfile_creation(file)
+            log.info(f"zip file created :{zipfile}, for srn -- {srn} ")
+            file_name = zipfile.replace("/opt/","")
             #initiating upload API call
             error_object_path = storeutils.file_store_upload_call(file,file_name,error_prefix)
             if error_object_path == False:

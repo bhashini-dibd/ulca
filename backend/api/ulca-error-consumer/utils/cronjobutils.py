@@ -5,8 +5,8 @@ import requests
 from configs.configs import file_store_host,file_store_upload_endpoint,pt_publish_tool
 from logging.config import dictConfig
 log = logging.getLogger('file')
-
-
+from zipfile import ZipFile
+import os
 
 
 class StoreUtils:
@@ -54,6 +54,14 @@ class StoreUtils:
             log.exception(f'Exception while pushing error file to object store: {e}')
         return False
 
+    #zipping error file 
+    def zipfile_creation(self,filepath):
+        zip_file = filepath.split('.')[0] + '.zip'
+        with ZipFile(zip_file, 'w') as myzip:
+            myzip.write(filepath)
+            myzip.close()
+        os.remove(filepath)
+        return zip_file #.split('/')[-1]
 # Log config
 dictConfig({
     'version': 1,
