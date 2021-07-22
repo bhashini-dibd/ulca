@@ -29,8 +29,8 @@ import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.model.deserializer.ASRDatasetRowDataSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.ASRParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.AsrDatasetRowDataSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.AsrParamsSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
@@ -170,7 +170,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		log.info(serviceRequestNumber);
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
-		module.addDeserializer(AsrParamsSchema.class, new ASRParamsSchemaDeserializer());
+		module.addDeserializer(AsrParamsSchema.class, new AsrParamsSchemaDeserializer());
 		mapper.registerModule(module);
 
 		AsrParamsSchema paramsSchema = mapper.readValue(new File(paramsFilePath), AsrParamsSchema.class);
@@ -235,7 +235,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			
 			String dataRow = mapper.writeValueAsString(rowObj);
 			SimpleModule module = new SimpleModule();
-			module.addDeserializer(AsrRowSchema.class, new ASRDatasetRowDataSchemaDeserializer());
+			module.addDeserializer(AsrRowSchema.class, new AsrDatasetRowDataSchemaDeserializer());
 			mapper.registerModule(module);
 			
 			AsrRowSchema rowSchema = null;
@@ -365,7 +365,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 				
 				String dataRow = mapper.writeValueAsString(rowObj);
 				SimpleModule module = new SimpleModule();
-				module.addDeserializer(AsrRowSchema.class, new ASRDatasetRowDataSchemaDeserializer());
+				module.addDeserializer(AsrRowSchema.class, new AsrDatasetRowDataSchemaDeserializer());
 				mapper.registerModule(module);
 				
 				AsrRowSchema rowSchema = null;
