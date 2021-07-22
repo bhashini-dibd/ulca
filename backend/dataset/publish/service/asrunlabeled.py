@@ -93,7 +93,8 @@ class ASRUnlabeledService:
                                                          asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
                 if dup_data:
                     dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                    repo.update(dup_data)
+                    if metadata["userMode"] != user_mode_pseudo:
+                        repo.update(dup_data)
                     return "UPDATE", data, record
                 else:
                     return "DUPLICATE", data, record

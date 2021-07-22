@@ -95,7 +95,8 @@ class ASRService:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
                 if dup_data:
                     dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                    repo.update(dup_data)
+                    if metadata["userMode"] != user_mode_pseudo:
+                        repo.update(dup_data)
                     return "UPDATE", data, record
                 else:
                     return "DUPLICATE", data, record

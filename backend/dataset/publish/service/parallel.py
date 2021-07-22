@@ -89,7 +89,8 @@ class ParallelService:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
                                 dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
-                                repo.update(dup_data)
+                                if metadata["userMode"] != user_mode_pseudo:
+                                    repo.update(dup_data)
                                 return "UPDATE", dup_data
                             else:
                                 return data, record
@@ -296,8 +297,7 @@ class ParallelService:
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
             if 'originalSourceSentence' in query.keys():
-                if query['originalSourceSentence']:
-                    db_query['originalSourceSentence'] = query['originalSourceSentence']
+                db_query['originalSourceSentence'] = query['originalSourceSentence']
             else:
                 db_query['originalSourceSentence'] = False
             if 'minScore' in query.keys():
@@ -333,7 +333,6 @@ class ParallelService:
                     db_query["countOfTranslations"] = query["countOfTranslations"]
             else:
                 db_query["groupBy"] = False
-            log.info(f"DB QUERY: {db_query}")
             data = repo.search(db_query, off, lim)
             result, pipeline, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}, Pipeline: {pipeline}')
