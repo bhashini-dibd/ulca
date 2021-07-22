@@ -86,7 +86,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 			
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			//send error event for download failure
-			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
+			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString(), null) ;
 			return;
 		}
 
@@ -108,7 +108,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			
 			// send error event
-			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(),null) ;
 
 			return;
 		}
@@ -136,7 +136,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
-			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(),null) ;
 
 			//update redis when ingest failed
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
@@ -238,7 +238,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 				failedCount++;
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				// send error event
-				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED","data row does not contains text field", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED","data row does not contains text field", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 				
 				
 				
@@ -251,7 +251,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 					failedCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					// send error event
-					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", "data row does contains unkown fields", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", "data row does contains unkown fields", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 					
 					
 				}else {
@@ -364,7 +364,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 					failedCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					// send error event
-					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED","data row does not contains text field", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED","data row does not contains text field", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 					
 				}else {
 					Set<String> rowKeys = target.keySet();
@@ -375,7 +375,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 						failedCount++;
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 						// send error event
-						datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", "data row does contains unkown fields", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+						datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", "data row does contains unkown fields", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 						
 						
 					}else {

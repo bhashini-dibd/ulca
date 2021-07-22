@@ -24,8 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.ulca.dataset.dao.ProcessTrackerDao;
-import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerRedisDao;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.Error;
@@ -89,7 +87,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			//send error event for download failure
-			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
+			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString(), null) ;
 			return;
 		}
 	
@@ -111,7 +109,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
-			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(),null) ;
 
 			return;
 		}
@@ -137,7 +135,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
-			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(),null) ;
 			//update redis when ingest failed
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
 			return;
@@ -253,7 +251,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				
 				// send error event
-				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(),dataRow) ;
 				
 				log.info("record :: " +numberOfRecords + "failed " );
 				log.info("tracing the error " );
@@ -288,7 +286,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					
 					// send error event
-					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 					
 					log.info("record :: " +numberOfRecords + "failed " );
 				}
@@ -397,7 +395,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					
 					// send error event
-					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 					
 					log.info("record :: " +numberOfRecords + "failed " );
 					log.info("tracing the error " );
@@ -432,7 +430,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 						
 						// send error event
-						datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+						datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 						
 						log.info("record :: " +numberOfRecords + "failed " );
 					}
