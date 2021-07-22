@@ -79,6 +79,7 @@ public class KafkaFileDownloadConsumer {
 		String datasetName = file.getDatasetName();
 		//DatasetType datasetType = file.getDatasetType();
 		DatasetType datasetType = null;
+		String userId = file.getUserId();
 		
 		DatasetIngest datasetIngest = new DatasetIngest();
 		datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
@@ -123,6 +124,7 @@ public class KafkaFileDownloadConsumer {
 				datasetIngest.setBaseLocation(fileMap.get("baseLocation"));
 				datasetIngest.setMd5hash(md5hash);
 				datasetIngest.setDatasetType(datasetType);
+				datasetIngest.setUserId(userId);
 
 			} catch (IOException e) {
 				

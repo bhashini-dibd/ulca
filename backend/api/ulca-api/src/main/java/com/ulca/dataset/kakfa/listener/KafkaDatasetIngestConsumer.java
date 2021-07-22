@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import com.ulca.dataset.constants.DatasetConstants;
 import com.ulca.dataset.dao.DatasetDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
@@ -58,7 +59,7 @@ public class KafkaDatasetIngestConsumer {
 
 	@KafkaListener(groupId = "${kafka.ulca.ds.ingest.ip.topic.group.id}", topics = "${kafka.ulca.ds.ingest.ip.topic}", containerFactory = "datasetIngestKafkaListenerContainerFactory")
 	public void datasetIngest(DatasetIngest datasetIngest) {
-
+		 
 		log.info("************ Exit KafkaDatasetIngestConsumer :: datasetIngest *********");
 		try {
 			String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
@@ -70,6 +71,8 @@ public class KafkaDatasetIngestConsumer {
 				String userId = processTracker.getUserId();
 				Dataset dataset = datasetDao.findByDatasetId(processTracker.getDatasetId());
 				datasetIngest.setUserId(userId);
+				datasetIngest.setDatasetId(processTracker.getDatasetId());
+				datasetIngest.setDatasetName(dataset.getDatasetName());
 				datasetIngest.setDatasetType(DatasetType.fromValue(dataset.getDatasetType()));
 
 			}
