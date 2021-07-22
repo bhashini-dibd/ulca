@@ -167,7 +167,11 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			
 			double successRate = (publishSuccess/count)*100 ;
 			
+			log.info("serviceRequestNumber :: " + serviceRequestNumber + "success rate :: " + successRate);
+			
 			if(successRate <= successThreshold) {
+				
+				log.info(" pseudo ingest failed serviceRequestNumber :: " + serviceRequestNumber);
 				taskStatus = com.ulca.dataset.model.TaskTracker.StatusEnum.failed;
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
 						taskStatus, details.toString());
