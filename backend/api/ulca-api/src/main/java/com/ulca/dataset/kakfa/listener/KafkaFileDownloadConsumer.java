@@ -1,4 +1,4 @@
-package com.ulca.dataset.kakfa;
+package com.ulca.dataset.kakfa.listener;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -7,17 +7,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,12 +22,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
+import com.ulca.dataset.constants.DatasetConstants;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
+import com.ulca.dataset.kakfa.DatasetErrorPublishService;
+import com.ulca.dataset.kakfa.model.DatasetIngest;
+import com.ulca.dataset.kakfa.model.FileDownload;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.Fileidentifier;
-import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
+import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 import com.ulca.dataset.util.UnzipUtility;
@@ -56,33 +57,22 @@ public class KafkaFileDownloadConsumer {
     private String downloadFolder;
 	
 	@Autowired
-	DatasetAsrValidateIngest datasetAsrValidateIngest;
-	
-	@Autowired
-	DatasetAsrUnlabeledValidateIngest datasetAsrUnlabeledValidateIngest;
-	
-	@Autowired
-	DatasetParallelCorpusValidateIngest datasetParallelCorpusValidateIngest;
-	
-	@Autowired
-	DatasetOcrValidateIngest datasetOcrValidateIngest;
-	
-	@Autowired
-	DatasetMonolingualValidateIngest datasetMonolingualValidateIngest;
-	
-	@Autowired
-	DatasetDocumentLayoutValidateIngest datasetDocumentLayoutValidateIngest;
-	
-	@Autowired
 	TaskTrackerDao taskTrackerDao;
 	
 	@Autowired
 	FileIdentifierDao fileIdentifierDao;
 	
-	@KafkaListener(groupId = "${kafka.ulca.ds.ingest.ip.topic.group.id}", topics = "${kafka.ulca.ds.ingest.ip.topic}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
+	@Autowired
+	private KafkaTemplate<String, DatasetIngest> datasetIngestKafkaTemplate;
+
+	@Value("${kafka.ulca.ds.ingest.ip.topic}")
+	private String datasetIngestTopic;
+	
+	
+																																						
+	@KafkaListener(groupId = "${kafka.ulca.ds.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.ds.filedownload.ip.topic}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
 
-		
 		String datasetId = file.getDatasetId();
 		String fileUrl = file.getFileUrl();
 		String serviceRequestNumber = file.getServiceRequestNumber();
@@ -90,12 +80,14 @@ public class KafkaFileDownloadConsumer {
 		//DatasetType datasetType = file.getDatasetType();
 		DatasetType datasetType = null;
 		
+		DatasetIngest datasetIngest = new DatasetIngest();
+		datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
+		
+		
 		Map<String,String> fileMap = null;
 		
 		try {
 			log.info("************ Entry KafkaFileDownloadConsumer :: downloadFile *********");
-			
-			
 			log.info("datasetId :: " + datasetId);
 			log.info("fileUrl :: " + fileUrl);
 			log.info("serviceRequestNumber :: " + serviceRequestNumber);
@@ -120,14 +112,17 @@ public class KafkaFileDownloadConsumer {
 				
 				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
 				
-				fileMap.put("md5hash",md5hash);
-				
 				datasetType = getDatasetType(fileMap);
-				file.setDatasetType(datasetType);
 				
 				log.info("file unzip complete");
 				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.completed);
 				
+				datasetIngest.setDatasetId(datasetId);
+				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
+				datasetIngest.setDatasetName(datasetName);
+				datasetIngest.setBaseLocation(fileMap.get("baseLocation"));
+				datasetIngest.setMd5hash(md5hash);
+				datasetIngest.setDatasetType(datasetType);
 
 			} catch (IOException e) {
 				
@@ -145,43 +140,8 @@ public class KafkaFileDownloadConsumer {
 				
 				return;
 			}
+			datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
 			
-			
-			switch(datasetType) {
-			
-			case PARALLEL_CORPUS :
-				log.info("calling the parallel-corpus validate service");
-				datasetParallelCorpusValidateIngest.validateIngest(fileMap,file);
-				break;
-				
-			case ASR_CORPUS:
-				log.info("calling the asr validate service");
-				datasetAsrValidateIngest.validateIngest(fileMap,file);
-				break;
-				
-			case ASR_UNLABELED_CORPUS:
-				log.info("calling the asr-unlabeled-corpus validate service");
-				datasetAsrUnlabeledValidateIngest.validateIngest(fileMap, file);
-				break;
-			case OCR_CORPUS: 
-				log.info("calling the ocr-corpus validate service");
-				datasetOcrValidateIngest.validateIngest(fileMap,file);
-				break;
-				
-			case MONOLINGUAL_CORPUS:
-				log.info("calling the monolingual-corpus validate service");
-				datasetMonolingualValidateIngest.validateIngest(fileMap,file);
-				break;
-				
-			case DOCUMENT_LAYOUT_CORPUS:
-				log.info("calling the document-layout-corpus validate service");
-				datasetDocumentLayoutValidateIngest.validateIngest(fileMap,file);
-				break;
-				
-			default:
-				log.info("datasetType for serviceRequestNumber not one of defined datasetType");
-				break;
-			}
 			
 			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
 			

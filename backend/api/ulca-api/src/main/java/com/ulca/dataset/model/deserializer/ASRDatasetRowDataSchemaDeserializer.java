@@ -41,14 +41,14 @@ import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowSchema> {
+public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowSchema> {
 
-	protected ASRDatasetRowDataSchemaDeserializer(Class<?> vc) {
+	protected AsrDatasetRowDataSchemaDeserializer(Class<?> vc) {
 		super(vc);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ASRDatasetRowDataSchemaDeserializer() {
+	public AsrDatasetRowDataSchemaDeserializer() {
 		this(null);
 		// TODO Auto-generated constructor stub
 	}

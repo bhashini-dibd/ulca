@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
-import java.util.Set;
+import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -27,6 +27,7 @@ import com.google.gson.stream.JsonReader;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerRedisDao;
+import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
@@ -48,12 +49,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 	ProcessTaskTrackerService processTaskTrackerService;
 
 	@Autowired
-	ProcessTrackerDao processTrackerDao;
-
-	@Autowired
-	TaskTrackerDao taskTrackerDao;
-
-	@Autowired
 	DatasetErrorPublishService datasetErrorPublishService;
 
 	@Autowired
@@ -68,19 +63,22 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 	@Autowired
 	DatasetService datasetService;
 	
-	public void validateIngest(Map<String, String> fileMap, FileDownload file) {
+	public void validateIngest(DatasetIngest datasetIngest) {
 
 		log.info("************ Entry DatasetOcrValidateIngest :: validateIngest *********");
-		String serviceRequestNumber = file.getServiceRequestNumber();
-		String datasetName = file.getDatasetName();
-		DatasetType datasetType = file.getDatasetType();
-		String userId = file.getUserId();
-		String datasetId = file.getDatasetId();
-		String md5hash = fileMap.get("md5hash");
+		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
+		String datasetName = datasetIngest.getDatasetName();
+		DatasetType datasetType = datasetIngest.getDatasetType();
+		String userId = datasetIngest.getUserId();
+		String datasetId = datasetIngest.getDatasetId();
+		String md5hash = datasetIngest.getMd5hash();
+		String baseLocation = datasetIngest.getBaseLocation();
+		String mode = datasetIngest.getMode();
+		
 		
 		OcrDatasetParamsSchema paramsSchema = null;
 		
-		Error fileError = validateFileExistence(fileMap);
+		Error fileError = validateFileExistence(baseLocation);
 		
 		if (fileError != null) {
 			
@@ -94,12 +92,11 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString()) ;
 			return;
 		}
-		
-		String paramsFilePath = fileMap.get("baseLocation")  + File.separator + "params.json";
 	
 		
 		try {
-			paramsSchema = validateParamsSchema(paramsFilePath, file);
+			
+			paramsSchema = validateParamsSchema(datasetIngest);
 
 		} catch (IOException | JSONException | NullPointerException e) {
 			log.info("Exception while validating params :: serviceRequestNumber : "+serviceRequestNumber + " error : " + e.getMessage());
@@ -119,7 +116,11 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			return;
 		}
 		try {
-			ingest(paramsSchema, file, fileMap);
+			if(mode.equalsIgnoreCase("real")) {
+				ingest(paramsSchema, datasetIngest);
+			}else {
+				pseudoIngest(paramsSchema, datasetIngest);
+			}
 
 		} catch (IOException e) {
 
@@ -143,69 +144,58 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		}
 		
 		//update the dataset
-		
-				try {
-					
-					ObjectMapper objectMapper = new ObjectMapper();
-					JSONObject record;
-					record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-					
-					datasetService.updateDataset(datasetId, userId, record,md5hash);
-					
-				} catch (JsonProcessingException | JSONException e) {
-					
-					log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
-				}
-
+		if(mode.equalsIgnoreCase("pseudo")) {
+			try {
+				ObjectMapper objectMapper = new ObjectMapper();
+				JSONObject record;
+				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+				
+				datasetService.updateDataset(datasetId, userId, record,md5hash);
+				
+			} catch (JsonProcessingException | JSONException e) {
+				
+				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+			}
+		}
 
 	}
 
-	public OcrDatasetParamsSchema validateParamsSchema(String filePath, FileDownload file)
+	public OcrDatasetParamsSchema validateParamsSchema(DatasetIngest datasetIngest)
 			throws JsonParseException, JsonMappingException, IOException {
+		
+		String paramsFilePath = datasetIngest.getBaseLocation()  + File.separator + "params.json";
 
 		log.info("************ Entry DatasetAsrValidateIngest :: validateParamsSchema *********");
 		log.info("validing file :: against params schema");
-		log.info(filePath);
-		String serviceRequestNumber = file.getServiceRequestNumber();
+		log.info(paramsFilePath);
+		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
 		log.info(serviceRequestNumber);
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
 		module.addDeserializer(OcrDatasetParamsSchema.class, new OcrDatasetParamsSchemaDeserializer());
 		mapper.registerModule(module);
 
-		OcrDatasetParamsSchema paramsSchema = mapper.readValue(new File(filePath), OcrDatasetParamsSchema.class);
+		OcrDatasetParamsSchema paramsSchema = mapper.readValue(new File(paramsFilePath), OcrDatasetParamsSchema.class);
 		if (paramsSchema == null) {
-
 			log.info("params validation failed");
 			throw new IOException("paramsValidation failed");
-
 		}
-		if (paramsSchema.getDatasetType() != file.getDatasetType()) {
-			log.info("params validation failed");
-			throw new IOException("params datasetType does not matches with submitted datasetType");
-		}
-
 		return paramsSchema;
 
 	}
 
-	public void ingest(OcrDatasetParamsSchema paramsSchema, FileDownload file, Map<String, String> fileMap)
+	public void ingest(OcrDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
 			throws IOException {
 
 		log.info("************ Entry DatasetOcrValidateIngest :: ingest *********");
 
-		String datasetId = file.getDatasetId();
-		String serviceRequestNumber = file.getServiceRequestNumber();
-		String userId = file.getUserId();
-		String datasetName = file.getDatasetName();
-		DatasetType datasetType = file.getDatasetType();
+		String datasetId = datasetIngest.getDatasetId();
+		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
+		String userId = datasetIngest.getUserId();
+		String datasetName = datasetIngest.getDatasetName();
+		String mode = datasetIngest.getMode();
+		DatasetType datasetType = datasetIngest.getDatasetType();
 
-		Set<String> keys = fileMap.keySet();
-		log.info("logging the fileMap keys");
-		for (String key : keys) {
-			log.info("key :: " + key);
-			log.info("value :: " + fileMap.get(key));
-		}
 
 		log.info("got paramsSchema object");
 
@@ -213,7 +203,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 
 		JSONObject source;
 		
-		String path = fileMap.get("baseLocation")  + File.separator + "data.json";
+		String path = datasetIngest.getBaseLocation()  + File.separator + "data.json";
 		log.info("data.json file path :: " + path);
 
 		source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
@@ -228,16 +218,16 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		
 		JSONObject vModel = new JSONObject();
 		vModel.put("datasetId", datasetId);
-		vModel.put("datasetName", file.getDatasetName());
+		vModel.put("datasetName", datasetName);
 		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
 		vModel.put("serviceRequestNumber", serviceRequestNumber);
 		vModel.put("userId", userId);
-		vModel.put("userMode", "real");
+		vModel.put("userMode", mode);
 		
 		taskTrackerRedisDao.intialize(serviceRequestNumber);
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 		
-		String basePath  = fileMap.get("baseLocation")  + File.separator;
+		String basePath  = datasetIngest.getBaseLocation()  + File.separator;
 		
 		reader.beginArray();
 		
@@ -317,6 +307,151 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
 		
 	}
+	
+	public void pseudoIngest(OcrDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
+			throws IOException {
+
+		log.info("************ Entry DatasetOcrValidateIngest :: pseudoIngest *********");
+
+		String datasetId = datasetIngest.getDatasetId();
+		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
+		String userId = datasetIngest.getUserId();
+		String datasetName = datasetIngest.getDatasetName();
+		String mode = datasetIngest.getMode();
+		String baseLocation = datasetIngest.getBaseLocation();
+		String md5hash = datasetIngest.getMd5hash();
+		DatasetType datasetType = datasetIngest.getDatasetType();
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		JSONObject source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+		
+		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
+		FileChannel dataFileChannel = FileChannel.open(Paths.get(dataFilePath));
+	    long fileSize = dataFileChannel.size();
+	    long min = 1; 
+	    long max = 10;
+	    long buffer = 10;
+	    if(fileSize > MB_50 && fileSize <= MB_300) {
+	    	buffer = 100;
+	    	max = 100;
+	    }
+	    if(fileSize > MB_300) {
+	    	buffer = 1000;
+	    	max = 1000;
+	    }
+	    long counter = min;
+	    
+		log.info("data.json file path :: " + dataFilePath);
+		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
+		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+
+
+		int numberOfRecords = 0;
+		int failedCount = 0;
+		int successCount = 0;
+		int pseudoNumberOfRecords = 0;
+		
+		JSONObject vModel = new JSONObject();
+		vModel.put("datasetId", datasetId);
+		vModel.put("datasetName", datasetName);
+		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
+		vModel.put("serviceRequestNumber", serviceRequestNumber);
+		vModel.put("userId", userId);
+		vModel.put("userMode", mode);
+		
+		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash);
+		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
+		
+		String basePath  = datasetIngest.getBaseLocation()  + File.separator;
+		
+		reader.beginArray();
+		
+		while (reader.hasNext()) {
+			
+
+			numberOfRecords++;
+			
+			if(numberOfRecords == counter) {
+				
+				pseudoNumberOfRecords++;
+				min = min+buffer;
+				max = max + buffer;
+				counter = (long)(Math.random()*(max-min+1)+min);
+				
+				
+				Object rowObj = new Gson().fromJson(reader, Object.class);
+				ObjectMapper mapper = new ObjectMapper();
+				String dataRow = mapper.writeValueAsString(rowObj);
+				SimpleModule module = new SimpleModule();
+				module.addDeserializer(OcrDatasetRowSchema.class, new OcrDatasetRowDataSchemaDeserializer());
+				mapper.registerModule(module);
+				
+				OcrDatasetRowSchema rowSchema = null;
+				try {
+					
+					rowSchema = mapper.readValue(dataRow, OcrDatasetRowSchema.class);
+					
+				} catch(Exception e) {
+					
+					failedCount++;
+					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+					
+					// send error event
+					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+					
+					log.info("record :: " +numberOfRecords + "failed " );
+					log.info("tracing the error " );
+					e.printStackTrace();
+					
+					
+				}
+				if(rowSchema != null) {
+					
+					JSONObject target =  new JSONObject(dataRow);
+					JSONObject finalRecord = deepMerge(source, target);
+					String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
+					finalRecord.remove("languages");
+					finalRecord.put("sourceLanguage", sourceLanguage);
+					
+					String fileLocation = basePath + finalRecord.get("imageFilename");
+					
+					if(isFileAvailable(fileLocation)) {
+						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+						successCount++;
+						finalRecord.put("fileLocation", fileLocation);
+						UUID uid = UUID.randomUUID();
+						finalRecord.put("id", uid);
+
+						vModel.put("record", finalRecord);
+						vModel.put("currentRecordIndex", pseudoNumberOfRecords);
+
+						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+						
+					}else {
+						failedCount++;
+						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+						
+						// send error event
+						datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString()) ;
+						
+						log.info("record :: " +numberOfRecords + "failed " );
+					}
+				}
+			
+			}else {
+				Object rowObj = new Gson().fromJson(reader, Object.class);
+			}
+		}
+		reader.endArray();
+		reader.close();
+		inputStream.close();
+
+		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
+		
+		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount) ;
+		
+	}
+	
 
 
 }
