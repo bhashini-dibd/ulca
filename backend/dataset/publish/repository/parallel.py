@@ -88,6 +88,7 @@ class ParallelRepo:
     def search(self, query, offset, res_limit):
         result, res_count, pipeline, langs = [], 0, [], []
         if not query:
+            log.info(f'Empty Query: {query}')
             return result, pipeline, res_count
         try:
             col = self.get_mongo_instance()
