@@ -1,2 +1,0 @@
-type,datasetName,url
-parallel-corpus,parallel dataset : wikipedia en-gu,https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca_wikipedia_en-gu.zip

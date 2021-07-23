@@ -1,4 +1,0 @@
-type,datasetName,url
-parallel-corpus,parallel dataset : pib_2017_2020_en_as,https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca_pib_2017_2020_en_as.zip
-,,https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca_lokmat-entertainment_20210501_en_mr.zip
-,,https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca_lokmat-financial_20210501_en_mr.zip
