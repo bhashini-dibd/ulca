@@ -55,11 +55,7 @@ const SearchAndDownloadRecords = (props) => {
         source: '',
         target: []
     });
-    // const [filterBy, setFilterBy] = useState({
-    //     domain: [],
-    //     source: [],
-    //     collectionMethod: []
-    // });
+
     const [filterBy, setFilterBy] = useState({
         domain: '',
         source: '',
@@ -404,7 +400,7 @@ const SearchAndDownloadRecords = (props) => {
         let filterByOptions = FilterBy[id].map(data => data.label)
         return (
             <Autocomplete
-            disabled={!languagePair.target.length}
+                disabled={!languagePair.target.length}
                 value={filterBy[id] ? filterBy[id] : null}
                 id={id}
                 options={filterByOptions}
@@ -479,6 +475,16 @@ const SearchAndDownloadRecords = (props) => {
 
         )
     }
+    const renderAdvanceFilter = () => {
+        return (
+            <div>
+                {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
+                {datasetType['parallel-corpus'] && renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
+                {datasetType['parallel-corpus'] && renderCheckBox("checkedC", "primary", " Original sentence in source language")}
+
+            </div>
+        )
+    }
 
     return (
         <div>
@@ -521,10 +527,10 @@ const SearchAndDownloadRecords = (props) => {
                                     {renderFilterByfield("collectionMethod", "Select Collection Method", filterBy.collectionMethod, FilterBy.collectionMethod)}
                                 </Grid>
                             </Grid>
+                            <div className={classes.advanceFilter}>
+                                <Button disabled={!languagePair.target.length} variant="outlined" size="small" color="primary" onClick={renderAdvanceFilter()}>Advance filter</Button>
+                            </div>
 
-                            {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
-                            {datasetType['parallel-corpus'] && renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
-                            {datasetType['parallel-corpus'] && renderCheckBox("checkedC", "primary", " Original sentence in source language")}
                             {renderclearNsubmitButtons()}
                         </Grid>
                     </Grid>
