@@ -82,7 +82,9 @@ public class KafkaFileDownloadConsumer {
 		String userId = file.getUserId();
 		
 		DatasetIngest datasetIngest = new DatasetIngest();
-		datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
+		//disabling pseudo ingest
+		//datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
+		datasetIngest.setMode(DatasetConstants.INGEST_REAL_MODE);
 		
 		
 		Map<String,String> fileMap = null;

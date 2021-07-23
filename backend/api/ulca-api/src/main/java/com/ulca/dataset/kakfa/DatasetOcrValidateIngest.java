@@ -142,7 +142,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		}
 		
 		//update the dataset
-		if(mode.equalsIgnoreCase("pseudo")) {
+		if(mode.equalsIgnoreCase("real")) {
 			try {
 				ObjectMapper objectMapper = new ObjectMapper();
 				JSONObject record;

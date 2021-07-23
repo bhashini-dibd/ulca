@@ -148,7 +148,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 			return;
 		}
 		
-		if(mode.equalsIgnoreCase("pseudo")) {
+		if(mode.equalsIgnoreCase("real")) {
 			try {
 
 				ObjectMapper objectMapper = new ObjectMapper();

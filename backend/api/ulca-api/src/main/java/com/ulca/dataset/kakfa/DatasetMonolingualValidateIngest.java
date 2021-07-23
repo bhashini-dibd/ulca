@@ -142,7 +142,7 @@ public class DatasetMonolingualValidateIngest implements DatasetValidateIngest {
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
 			return;
 		}
-		if(mode.equalsIgnoreCase("pseudo")) {
+		if(mode.equalsIgnoreCase("real")) {
 			try {
 				ObjectMapper objectMapper = new ObjectMapper();
 				JSONObject record;
