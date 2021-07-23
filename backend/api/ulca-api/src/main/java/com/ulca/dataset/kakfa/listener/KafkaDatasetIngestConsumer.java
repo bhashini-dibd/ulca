@@ -66,6 +66,8 @@ public class KafkaDatasetIngestConsumer {
 			String mode = datasetIngest.getMode();
 			log.info("serviceRequestNumber :: " + serviceRequestNumber);
 			log.info("mode :: " + mode);
+			
+			/*
 			if (mode.equalsIgnoreCase("real")) {
 				ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
 				String userId = processTracker.getUserId();
@@ -76,6 +78,7 @@ public class KafkaDatasetIngestConsumer {
 				datasetIngest.setDatasetType(DatasetType.fromValue(dataset.getDatasetType()));
 
 			}
+			*/
 
 			DatasetType datasetType = datasetIngest.getDatasetType();
 
