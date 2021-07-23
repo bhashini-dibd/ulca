@@ -144,7 +144,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			
 			return;
 		}
-		if(mode.equalsIgnoreCase("pseudo")) {
+		if(mode.equalsIgnoreCase("real")) {
 			try {
 				ObjectMapper objectMapper = new ObjectMapper();
 				JSONObject record;
