@@ -84,9 +84,9 @@ class ErrorProcessor(Thread):
             log.info(f'Writing {len(error_records)} errors to {file} for srn -- {srn}')
             #writing to csv locally
             storeutils.write_to_csv(error_records,file,srn)
-            zipfile,file_name = storeutils.zipfile_creation(file)
-            log.info(f"zip file created :{zipfile}, for srn -- {srn} ")
-            # file_name = zipfile.replace("/opt/","")
+            zipfile = storeutils.zipfile_creation(file)
+            log.info(f"zip file created :{zipfile} , for srn -- {srn}, ")
+            file_name = zipfile.replace("/opt/","")
             #initiating upload API call
             error_object_path = storeutils.file_store_upload_call(zipfile,file_name,error_prefix)
             if error_object_path == False:

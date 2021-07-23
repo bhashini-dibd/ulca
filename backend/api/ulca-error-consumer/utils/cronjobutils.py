@@ -56,16 +56,16 @@ class StoreUtils:
 
     #zipping error file 
     def zipfile_creation(self,filepath):
+        arcname = filepath.replace("/opt/","")
         zip_file = filepath.split('.')[0] + '.zip'
-        arcname = zip_file.replace("/opt/","")
         with ZipFile(zip_file, 'w') as myzip:
             myzip.write(filepath,arcname)
             myzip.close()
         os.remove(filepath)
-        return zip_file , arcname
+        return zip_file 
 
 
-        
+
 # Log config
 dictConfig({
     'version': 1,
