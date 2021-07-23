@@ -1,4 +1,7 @@
+import React, { useEffect, useState } from "react";
+
 import { useSelector } from "react-redux";
+
 import { useHistory } from "react-router-dom";
 import Header from "./components/common/Header";
 import Theme from "./theme/theme-default";
@@ -9,6 +12,7 @@ import Snackbar from './components/common/Snackbar';
 function App(props) {
   const Component = props.component;
   const { classes  } = props;
+  const [popUp, setPopup] =  useState(true)
   const apiStatus = useSelector((state) => state.apiStatus);
   const history = useHistory();
   const renderSpinner = () => {
@@ -17,17 +21,20 @@ function App(props) {
     }
   };
 
+  const handleClose = () =>{
+    setPopup(false)
+  }
+
   const renderError = () => {
+   
     if (apiStatus.unauthrized) {
-      
       setTimeout(() => history.push(`${process.env.PUBLIC_URL}/user/login`), 3000)
-      
     }
-    if (apiStatus.error) {
+    if (apiStatus.error&& apiStatus.message && popUp) {
 
       return <Snackbar
       open={true}
-      handleClose={false}
+      handleClose={handleClose}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       message={apiStatus.message}
       variant={"error"}
