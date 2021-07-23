@@ -1,5 +1,7 @@
 package com.ulca.dataset.kakfa.listener;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -20,6 +22,7 @@ import com.ulca.dataset.kakfa.DatasetParallelCorpusValidateIngest;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.Dataset;
 import com.ulca.dataset.model.ProcessTracker;
+import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 import com.ulca.dataset.util.UnzipUtility;
 
@@ -66,6 +69,12 @@ public class KafkaDatasetIngestConsumer {
 			String mode = datasetIngest.getMode();
 			log.info("serviceRequestNumber :: " + serviceRequestNumber);
 			log.info("mode :: " + mode);
+			TaskTracker.ToolEnum tool = (mode.equalsIgnoreCase("real"))? TaskTracker.ToolEnum.ingest : TaskTracker.ToolEnum.pseudo;
+			List<TaskTracker> list = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool);
+			if(list.size() > 0) {
+				log.info("Duplicate ingest processing of serviceRequestNumber :: " + serviceRequestNumber + " and mode :: " + mode);
+				return;
+			}
 			
 			/*
 			if (mode.equalsIgnoreCase("real")) {
