@@ -404,6 +404,7 @@ const SearchAndDownloadRecords = (props) => {
         let filterByOptions = FilterBy[id].map(data => data.label)
         return (
             <Autocomplete
+            disabled={!languagePair.target.length}
                 value={filterBy[id] ? filterBy[id] : null}
                 id={id}
                 options={filterByOptions}
@@ -468,7 +469,7 @@ const SearchAndDownloadRecords = (props) => {
                             </Button>
                         </Grid>
                         <Grid item xs={6}>
-                            <Button fullWidth size="large" variant="contained" color="primary" onClick={handleSubmitBtn}>
+                            <Button disabled={!languagePair.target.length} fullWidth size="large" variant="contained" color="primary" onClick={handleSubmitBtn}>
                                 Submit
                             </Button>
                         </Grid>
@@ -508,6 +509,7 @@ const SearchAndDownloadRecords = (props) => {
                                     label={getLabel()}
                                     error={tgtError}
                                     helperText="This field is mandatory"
+                                    disabled={!languagePair.source && datasetType['parallel-corpus']}
                                 />
                             </div>
                             <Typography className={classes.subHeader} variant="body1">Filter by</Typography>

@@ -13,6 +13,7 @@ export default function CheckboxesTags(props) {
   return (
     <Autocomplete
       multiple
+      disabled={props.disabled}
       id={props.id}
       options={props.options}
       disableCloseOnSelect
