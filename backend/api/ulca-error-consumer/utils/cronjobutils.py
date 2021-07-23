@@ -57,11 +57,15 @@ class StoreUtils:
     #zipping error file 
     def zipfile_creation(self,filepath):
         zip_file = filepath.split('.')[0] + '.zip'
+        arcname = zip_file.replace("/opt/","")
         with ZipFile(zip_file, 'w') as myzip:
-            myzip.write(filepath)
+            myzip.write(filepath,arcname)
             myzip.close()
         os.remove(filepath)
-        return zip_file #.split('/')[-1]
+        return zip_file , arcname
+
+
+        
 # Log config
 dictConfig({
     'version': 1,
