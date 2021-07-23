@@ -79,6 +79,7 @@ public class KafkaFileDownloadConsumer {
 		String datasetName = file.getDatasetName();
 		//DatasetType datasetType = file.getDatasetType();
 		DatasetType datasetType = null;
+		String userId = file.getUserId();
 		
 		DatasetIngest datasetIngest = new DatasetIngest();
 		datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
@@ -123,6 +124,7 @@ public class KafkaFileDownloadConsumer {
 				datasetIngest.setBaseLocation(fileMap.get("baseLocation"));
 				datasetIngest.setMd5hash(md5hash);
 				datasetIngest.setDatasetType(datasetType);
+				datasetIngest.setUserId(userId);
 
 			} catch (IOException e) {
 				
@@ -135,7 +137,7 @@ public class KafkaFileDownloadConsumer {
 				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 				
 				//send error event for download failure
-				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , null) ;
+				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , null, null) ;
 				e.printStackTrace();
 				
 				return;

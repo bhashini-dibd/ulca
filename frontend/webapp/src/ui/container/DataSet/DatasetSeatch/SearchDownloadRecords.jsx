@@ -238,10 +238,10 @@ const SearchAndDownloadRecords = (props) => {
                         message: response.message ? response.message : "Something went wrong. Please try again.",
                         variant: 'error'
                     })
-                    if(res.status===401){
-                        setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)
-                        
-                    }                    
+                    if (res.status === 401) {
+                        setTimeout(() => history.push(`${process.env.PUBLIC_URL}/user/login`), 3000)
+
+                    }
                 }
             })
             .catch(err => {
@@ -521,7 +521,7 @@ const SearchAndDownloadRecords = (props) => {
                             </Grid>
 
                             {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
-                            {renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
+                            {datasetType['parallel-corpus'] && renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
                             {datasetType['parallel-corpus'] && renderCheckBox("checkedC", "primary", " Original sentence in source language")}
                             {renderclearNsubmitButtons()}
                         </Grid>

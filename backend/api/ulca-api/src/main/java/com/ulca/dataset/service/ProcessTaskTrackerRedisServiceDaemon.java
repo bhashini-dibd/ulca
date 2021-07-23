@@ -16,6 +16,7 @@ import com.ulca.dataset.dao.TaskTrackerRedisDao;
 import com.ulca.dataset.kakfa.DatasetErrorPublishService;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.ProcessTracker;
+import com.ulca.dataset.model.TaskTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,9 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 	@Value("${kafka.ulca.ds.ingest.ip.topic}")
 	private String datasetIngestTopic;
+	
+	@Value("${pseudo.ingest.success.threshold}")
+	private Integer successThreshold;
 	
 
 	@Scheduled(cron = "*/10 * * * * *")
@@ -70,6 +74,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	}
 
 	public void pseudoIngestUpdate(Map<String, String> val) {
+		
+		
 
 		String serviceRequestNumber = val.containsKey("serviceRequestNumber") ? val.get("serviceRequestNumber") + ""
 				: null;
@@ -91,6 +97,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		boolean v1 = false;
 		boolean v2 = false;
 		boolean v3 = false;
+		
 		
 		JSONObject details = new JSONObject();
 
@@ -153,21 +160,34 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 		if (v1 && v2 && v3) {
 
+			StatusEnum taskStatus = StatusEnum.completed;
+			
 			log.info("deleting redis entry for pseudo ingest : serviceRequestNumber :: " + serviceRequestNumber);
-			processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
-					com.ulca.dataset.model.TaskTracker.StatusEnum.completed, details.toString());
-
 			taskTrackerRedisDao.delete(serviceRequestNumber);
-
-			// trigger the real publish
 			
-			DatasetIngest datasetIngest = new DatasetIngest();
-			datasetIngest.setMode(DatasetConstants.INGEST_REAL_MODE);
-			datasetIngest.setBaseLocation(baseLocation);
-			datasetIngest.setMd5hash(md5hash);
-			datasetIngest.setServiceRequestNumber(serviceRequestNumber);
+			double successRate = (publishSuccess/count)*100 ;
 			
-			datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
+			log.info("serviceRequestNumber :: " + serviceRequestNumber + "success rate :: " + successRate);
+			
+			if(successRate <= successThreshold) {
+				
+				log.info(" pseudo ingest failed serviceRequestNumber :: " + serviceRequestNumber);
+				taskStatus = com.ulca.dataset.model.TaskTracker.StatusEnum.failed;
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
+						taskStatus, details.toString());
+				
+			}else {
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
+						taskStatus, details.toString());
+				
+				DatasetIngest datasetIngest = new DatasetIngest();
+				datasetIngest.setMode(DatasetConstants.INGEST_REAL_MODE);
+				datasetIngest.setBaseLocation(baseLocation);
+				datasetIngest.setMd5hash(md5hash);
+				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
+				
+				datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
+			}
 
 		} else {
 			processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.pseudo,
