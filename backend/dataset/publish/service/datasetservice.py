@@ -85,7 +85,8 @@ class DatasetService:
                             if entry not in db_record[key]:
                                 found = True
                                 db_record[key].append(entry)
-                        db_record[key] = list(set(db_record[key]))
+                        if not isinstance(val, list):
+                            db_record[key] = list(set(db_record[key]))
                 else:
                     if isinstance(db_record[key], list):
                         if data[key] not in db_record[key]:
