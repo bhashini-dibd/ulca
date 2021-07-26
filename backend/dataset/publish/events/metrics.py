@@ -66,13 +66,15 @@ class MetricEvent:
                     if secondary_submitters:
                         event["secondarySubmitterIds"] = secondary_submitters
             if 'collectionMethod' in data.keys():
-                cm = data["collectionMethod"][0]
-                if 'collectionDescription' in cm.keys():
-                    event["collectionMethod_collectionDescriptions"] = cm["collectionDescription"]
-                if 'collectionDetails' in cm.keys():
-                    if cm["collectionDetails"]:
-                        if 'alignmentTool' in cm["collectionDetails"].keys():
-                            event["collectionMethod_collectionDetails_alignmentTool"] = cm["collectionDetails"]["alignmentTool"]
+                if data["collectionMethod"]:
+                    cm = data["collectionMethod"][0]
+                    if cm:
+                        if 'collectionDescription' in cm.keys():
+                            event["collectionMethod_collectionDescriptions"] = cm["collectionDescription"]
+                        if 'collectionDetails' in cm.keys():
+                            if cm["collectionDetails"]:
+                                if 'alignmentTool' in cm["collectionDetails"].keys():
+                                    event["collectionMethod_collectionDetails_alignmentTool"] = cm["collectionDetails"]["alignmentTool"]
             if 'format' in data.keys():
                 event["format"] = data["format"]
             if 'channel' in data.keys():
