@@ -2,7 +2,7 @@ export const menuItems = {
     dataset: [
         {
             name: 'My Contribution',
-            url: '/my-contribution'
+            url: '/dataset/my-contribution'
         },
         {
             name: 'My Searches',
@@ -18,13 +18,13 @@ export const menuItems = {
         // },
         {
             name: 'Submit Dataset',
-            url: '/submit-dataset/upload'
+            url: '/dataset/upload'
         }],
 
     models: [
         {
             name: 'My Contribution',
-            url: '/model-contribution'
+            url: '/model/my-contribution'
         },
         {
             name: 'Benchmark',
@@ -32,7 +32,7 @@ export const menuItems = {
         },
         {
             name: 'Submit Model',
-            url: '/submit-model/upload'
+            url: '/model/upload'
         }],
     profile: [
         {
