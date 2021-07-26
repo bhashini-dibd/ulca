@@ -112,6 +112,22 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), null) ;
 			return;
 		}
+		
+		if(mode.equalsIgnoreCase("real")) {
+			try {
+
+				ObjectMapper objectMapper = new ObjectMapper();
+				JSONObject record;
+				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+
+				datasetService.updateDataset(datasetId, userId, record,md5hash);
+
+			} catch (JsonProcessingException | JSONException e) {
+
+				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+			}
+		}
+		
 		try {
 			if(mode.equalsIgnoreCase("real")) {
 				ingest(paramsSchema, datasetIngest);
@@ -141,20 +157,7 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 			return;
 		}
 		
-		if(mode.equalsIgnoreCase("pseudo")) {
-			try {
-
-				ObjectMapper objectMapper = new ObjectMapper();
-				JSONObject record;
-				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-
-				datasetService.updateDataset(datasetId, userId, record,md5hash);
-
-			} catch (JsonProcessingException | JSONException e) {
-
-				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
-			}
-		}
+		
 
 	}
 

@@ -23,12 +23,16 @@ export const menuItems = {
 
     models: [
         {
-            name: '',
-            url: ''
+            name: 'My Contribution',
+            url: '/model-contribution'
         },
         {
-            name: '',
-            url: ''
+            name: 'Benchmark',
+            url: '/benchmark'
+        },
+        {
+            name: 'Submit Model',
+            url: '/submit-model/upload'
         }],
     profile: [
         {

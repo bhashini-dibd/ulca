@@ -48,6 +48,7 @@ import com.ulca.dataset.response.SearchListByUserIdResponse;
 import com.ulca.dataset.response.SearchListByUserIdResponseDto;
 import com.ulca.dataset.util.Utility;
 
+import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -390,12 +391,16 @@ public class DatasetService {
 	public void updateDataset(String datasetId, String userId, JSONObject schema, String md5hash) {
 		
 		
+				
 		Optional<Dataset> datasetOps = datasetDao.findById(datasetId);
 		if(!datasetOps.isEmpty()) {
 			Dataset dataset = datasetOps.get();
 			dataset.setDatasetType(schema.get("datasetType").toString());
 			dataset.setCollectionSource(schema.get("collectionSource").toString());
-			dataset.setLanguages(schema.get("languages").toString());
+			if(!schema.get("datasetType").toString().equalsIgnoreCase(DatasetType.DOCUMENT_LAYOUT_CORPUS.toString())) {
+				dataset.setLanguages(schema.get("languages").toString());
+			}
+			
 			dataset.setDomain(schema.get("domain").toString());
 			dataset.setContributors(schema.get("submitter").toString());	
 			dataset.setSubmitterId(userId);
