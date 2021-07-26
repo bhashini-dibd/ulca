@@ -100,7 +100,11 @@ class DatasetService:
                             db_record[key] = [db_record[key]]
         if found:
             db_record["datasetId"].append(metadata["datasetId"])
-            db_record["datasetId"] = list(set(db_record["datasetId"]))
+            dataset_ids = []
+            for entry in db_record["datasetId"]:
+                if entry not in dataset_ids:
+                    dataset_ids.append(entry)
+            db_record["datasetId"] = dataset_ids
             db_record["tags"] = self.get_tags(record, non_tag)
             return db_record
         else:

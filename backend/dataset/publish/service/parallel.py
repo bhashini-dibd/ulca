@@ -208,7 +208,11 @@ class ParallelService:
                                 db_record[key] = [db_record[key]]
             if found:
                 db_record["datasetId"].append(metadata["datasetId"])
-                db_record["datasetId"] = list(set(db_record["datasetId"]))
+                dataset_ids = []
+                for entry in db_record["datasetId"]:
+                    if entry not in dataset_ids:
+                        dataset_ids.append(entry)
+                db_record["datasetId"] = dataset_ids
                 db_record["derived"] = False
                 db_record["tags"] = service.get_tags(record, parallel_non_tag_keys)
                 return db_record
