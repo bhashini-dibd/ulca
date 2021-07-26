@@ -8,6 +8,7 @@ import history from "./web.history";
 import Layout from "./ui/Layout";
 import Login from "./ui/container/UserManagement/UserManagement";
 import SubmitDataset from './ui/container/DataSet/UploadDataset/SubmitDataset';
+import SubmitModel from './ui/container/Model/UploadModel/SubmitModel';
 import ContributionList from "./ui/container/DataSet/DatasetView/ContributionList";
 import DetailedStatus from "./ui/container/DataSet/DatasetView/DetailedStatus";
 import Dashboard from "./ui/container/Dashboard/ChartRender";
@@ -96,6 +97,15 @@ export default function App() {
             component={SubmitDataset}
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
+            dontShowHeader={false}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/submit-model/upload`}
+            title={"Submit Dataset"}
+            userRoles={[""]}
+            component={SubmitModel}
+            authenticate={authenticateUser}
+            currentMenu="submit-model"
             dontShowHeader={false}
           />
           <PrivateRoute

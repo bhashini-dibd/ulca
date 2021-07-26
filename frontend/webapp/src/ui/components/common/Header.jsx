@@ -35,6 +35,7 @@ const StyledMenu = withStyles({
 const Header = (props) => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null)
+  const [anchorModel, setAnchorModel] = useState(null)
   const [urlLink, setUrlLink] = useState(null)
   const [open, setOpen] = useState(false)
   const [logout, setAnchorElLogout] = useState(null)
@@ -44,10 +45,15 @@ const Header = (props) => {
   const handleClose = (e) => {
     setAnchorEl(null)
     setAnchorElLogout(null)
+    setAnchorModel(null)
   }
 
   const handleOpenMenu = (e) => {
     setAnchorEl(e.currentTarget)
+  }
+
+  const handleOpenModel = (e) => {
+    setAnchorModel(e.currentTarget)
   }
 
   const handleLogoutOption = (e) => {
@@ -60,6 +66,7 @@ const Header = (props) => {
   }
 
   const handleMenuItemClick = (url) => {
+    debugger
     if(authenticate()){
       history.push(`${process.env.PUBLIC_URL}${url}`)
     handleClose();
@@ -159,15 +166,21 @@ const Header = (props) => {
                     </MenuItem>
                   </StyledMenu> */}
                 </div>
-                {/* <div className={classes.options}>
+                <div className={classes.options}>
                   <div className={classes.model}>
-                    <Button className={classes.menuBtn} variant="text" onClick={() => alert("Still in progress")}>
+                    <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
                       Model
                     <DownIcon />
                     </Button>
                   </div>
-                 
-                </div> */}
+                  <MenuItems
+                    id={"dataset-menu"}
+                    anchorEl={anchorModel}
+                    handleClose={handleClose}
+                    menuOptions={menuItems.models}
+                    handleMenuItemClick={handleMenuItemClick}
+                  />
+                </div>
               </>
             }
             {
