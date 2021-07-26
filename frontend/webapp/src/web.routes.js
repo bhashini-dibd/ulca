@@ -22,6 +22,7 @@ import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/Readym
 import PopUp from "./ui/container/DataSet/ReadymadeDataset.jsx/PopUp";
 import FilterList from "./ui/container/DataSet/DatasetView/FilterList";
 import Reset from "./ui/container/UserManagement/Reset";
+import Benchmark from './ui/container/ULCA_Model/Benchmark/Benchmark';
 
 const PrivateRoute = ({ path, component: Component, authenticate, title, token, ...rest }) => {
   return (
@@ -167,6 +168,14 @@ export default function App() {
             component={FilterList}
             authenticate={authenticateUser}
             currentMenu="pop-up"
+            dontShowHeader={false}
+          />
+           <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/benchmark/:params/:srno`}
+            userRoles={[""]}
+            component={Benchmark}
+            authenticate={authenticateUser}
+            currentMenu="benchmark"
             dontShowHeader={false}
           />
 
