@@ -120,7 +120,7 @@ const SubmitDataset = (props) => {
                 
              else {
                 dispatch(PageChange(0, C.PAGE_CHANGE));
-                history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.data.serviceRequestNumber}`)
+                history.push(`${process.env.PUBLIC_URL}/dataset/submission/${rsp_data.data.serviceRequestNumber}`)
                 //           return true;
             }
         }).catch((error) => {

@@ -29,7 +29,6 @@ const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
     const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "" })
-    const [title, setTitle] = useState("Parallel Dataset")
     const dispatch = useDispatch();
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
@@ -97,56 +96,57 @@ const SubmitDataset = (props) => {
     // }
 
     const handleApicall = async () => {
+        history.push(`${process.env.PUBLIC_URL}/model/submission/1111`)
 
-        let apiObj = new SubmitDatasetApi(dataset)
-        fetch(apiObj.apiEndPoint(), {
-            method: 'post',
-            body: JSON.stringify(apiObj.getBody()),
-            headers: apiObj.getHeaders().headers
-        }).then(async response => {
-            const rsp_data = await response.json();
-            if (!response.ok) {
-                setSnackbarInfo ({
-                    ...snackbar,
-                    open: true,
-                    message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
-                    timeOut: 40000,
-                    variant: 'error'
-                })
-                if(response.status===401){
-                    setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
-                }
+        // let apiObj = new SubmitDatasetApi(dataset)
+        // fetch(apiObj.apiEndPoint(), {
+        //     method: 'post',
+        //     body: JSON.stringify(apiObj.getBody()),
+        //     headers: apiObj.getHeaders().headers
+        // }).then(async response => {
+        //     const rsp_data = await response.json();
+        //     if (!response.ok) {
+        //         setSnackbarInfo ({
+        //             ...snackbar,
+        //             open: true,
+        //             message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
+        //             timeOut: 40000,
+        //             variant: 'error'
+        //         })
+        //         if(response.status===401){
+        //             setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
+        //         }
                 
                 
-             else {
-                dispatch(PageChange(0, C.PAGE_CHANGE));
-                history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.data.serviceRequestNumber}`)
-                //           return true;
-            }
-        }).catch((error) => {
-            setSnackbarInfo({
-                ...snackbar,
-                open: true,
-                message: "Something went wrong. Please try again.",
-                timeOut: 40000,
-                variant: 'error'
-            })
-        });
+        //      else {
+        //         dispatch(PageChange(0, C.PAGE_CHANGE));
+        //         history.push(`${process.env.PUBLIC_URL}/model/submission/${rsp_data.data.serviceRequestNumber}`)
+        //         //           return true;
+        //     }
+        // }).catch((error) => {
+        //     setSnackbarInfo({
+        //         ...snackbar,
+        //         open: true,
+        //         message: "Something went wrong. Please try again.",
+        //         timeOut: 40000,
+        //         variant: 'error'
+        //     })
+        // });
 
     }
 
    
 
-    const renderInstrructions = () => {
+    const renderInstructions = () => {
         return <div className={classes.list} >
             <ul>
-            <li><Typography className={classes.marginValue} variant="body2">Provide a meaningful name to your dataset.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">Provide the URL where the dataset is stored at.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Provide a meaningful name to your model.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Provide the URL where the model is stored at.</Typography></li>
             <li><Typography className={classes.marginValue} variant="body2">Make sure the URL is a direct download link.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">If your dataset is stored in Google Drive, use<Link id="newaccount" href="https://sites.google.com/site/gdocs2direct/home">{" "}
+            <li><Typography className={classes.marginValue} variant="body2">If your model is stored in Google Drive, use<Link id="newaccount" href="https://sites.google.com/site/gdocs2direct/home">{" "}
               https://sites.google.com/site/gdocs2direct/home {" "}
             </Link>to generate a direct download link.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">Make sure the dataset is available in .zip format.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Make sure the model is available in .zip format.</Typography></li>
             </ul>
         </div>
     }
@@ -199,7 +199,7 @@ const SubmitDataset = (props) => {
         <div>
             <div >
                 <div className={classes.breadcrum}>
-                    <BreadCrum links={[url]} activeLink="Submit Dataset" />
+                    <BreadCrum links={[url]} activeLink="Submit Model" />
                 </div>
                 <Paper elevation={3} className={classes.divStyle}>
                    
@@ -207,8 +207,8 @@ const SubmitDataset = (props) => {
                         <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
                            
                             <FormControl className={classes.form}>
-                                <Typography className={classes.typography} variant="subtitle1">How to submit dataset?</Typography>
-                                    {renderInstrructions()}
+                                <Typography className={classes.typography} variant="subtitle1">How to submit Model?</Typography>
+                                    {renderInstructions()}
                             </FormControl>
                         </Grid>
                         <Hidden>
@@ -223,7 +223,7 @@ const SubmitDataset = (props) => {
                                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                         <Grid container spacing={5}>
                                             <Grid item xl={5} lg={5} md={5} sm={12} xs={12}>
-                                                <Typography className={classes.typography} variant="subtitle1">Submit Dataset</Typography>
+                                                <Typography className={classes.typography} variant="subtitle1">Submit Model</Typography>
                                             </Grid>
                                             {/* <Grid item xl={7} lg={7} md={7} sm={12} xs={12}>
                                                 <div>
@@ -263,7 +263,7 @@ const SubmitDataset = (props) => {
                                                 <TextField fullWidth
 
                                                     color="primary"
-                                                    label="Dataset name"
+                                                    label="Model name"
                                                     value={dataset.datasetName}
                                                     error={error.name ? true : false}
                                                     helperText={error.name}

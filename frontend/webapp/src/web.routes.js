@@ -10,10 +10,11 @@ import Login from "./ui/container/UserManagement/UserManagement";
 import SubmitDataset from './ui/container/DataSet/UploadDataset/SubmitDataset';
 import SubmitModel from './ui/container/Model/UploadModel/SubmitModel';
 import ContributionList from "./ui/container/DataSet/DatasetView/ContributionList";
+import ModelContributionList from "./ui/container/Model/ModelView/ContributionList";
 import DetailedStatus from "./ui/container/DataSet/DatasetView/DetailedStatus";
 import Dashboard from "./ui/container/Dashboard/ChartRender";
 // import Dashboard from "./ui/container/Dashboard/Dashboard";
-import DatasetSubmission from './ui/container/DataSet/UploadDataset/DatasetSubmission';
+import SubmissionSubmission from './ui/components/Datasets&Model/SubmissionStatus';
 import authenticateUser from './configs/authenticate';
 import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";
 import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/SearchDownloadRecords";
@@ -84,15 +85,23 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/my-contribution/:added?`}
+            path={`${process.env.PUBLIC_URL}/dataset/my-contribution/:added?`}
             title={"My Contribution"}
             authenticate={authenticateUser}
             component={ContributionList}
             currentMenu="contribution-list"
             dontShowHeader={false}
           />
+           <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/model/my-contribution/:added?`}
+            title={"My Contribution"}
+            authenticate={authenticateUser}
+            component={ModelContributionList}
+            currentMenu="contribution-list"
+            dontShowHeader={false}
+          />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/submit-dataset/upload`}
+            path={`${process.env.PUBLIC_URL}/dataset/upload`}
             title={"Submit Dataset"}
             userRoles={[""]}
             component={SubmitDataset}
@@ -101,7 +110,7 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/submit-model/upload`}
+            path={`${process.env.PUBLIC_URL}/model/upload`}
             title={"Submit Dataset"}
             userRoles={[""]}
             component={SubmitModel}
@@ -137,12 +146,12 @@ export default function App() {
 
 
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/submit-dataset/submission/:reqno`}
-            title={"Dataset Submission"}
+            path={`${process.env.PUBLIC_URL}/:type/submission/:reqno`}
+            title={"Submission status"}
             userRoles={[""]}
-            component={DatasetSubmission}
+            component={SubmissionSubmission}
             authenticate={authenticateUser}
-            currentMenu="dataset-submission"
+            currentMenu="submission-status"
             dontShowHeader={false}
           />
 
