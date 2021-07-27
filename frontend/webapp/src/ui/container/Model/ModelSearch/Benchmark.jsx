@@ -317,21 +317,19 @@ const Benchmark = (props) => {
         let filterByOptions = FilterBy['domain'].map(data => data.label)
         return (
             // DatasetType.map((type, i) => {
-            //     return (
-            // <Button size='small' className={classes.innerButton} variant="outlined"
-            //     color={datasetType[type.value] && "primary"}
-            //     key={i}
-            //     onClick={() => handleDatasetClick(type.value)}
-            // >
-            //     {type.label}
-            // </Button>
-             <Autocomplete
-                value={'General'}
-                id={'domain'}
-                options={filterByOptions}
-                onChange={(event, data) => handleFilterByChange(data, 'domain')}
-                renderInput={(params) => <TextField fullWidth {...params} label={label} variant="standard"/>} />
-                /* <Button className={classes.menuStyle}
+                // return (
+
+            //  <Autocomplete
+            //  disableClearable
+            //  disabledItemsFocusable
+            //     value={'General'}
+            //     id={'domain'}
+            //     options={filterByOptions}
+            //     onChange={(event, data) => handleFilterByChange(data, 'domain')}
+            //     renderInput={(params) => <TextField fullWidth {...params} variant="standard"/>} />
+                <> 
+                <div style={{maxHeight:'24px',maxWidth:"4px",backgroundColor:'green'}}>Test</div>
+                <Button className={classes.menuStyle}
                     // disabled={page !== 0 ? true : false}
                     color="inherit"
                     fullWidth
@@ -366,13 +364,12 @@ const Benchmark = (props) => {
                             </MenuItem>
                         })
                     }
-                </StyledMenu> */
+                </StyledMenu></>
 
-            // )
+                // )
             // }
+            // )
         )
-
-        // )
     }
 
     const renderFilterByOptions = (id, options, filter, value, label) => {

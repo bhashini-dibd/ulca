@@ -328,6 +328,7 @@ const SearchAndDownloadRecords = (props) => {
                 <Button className={classes.menuStyle}
                     // disabled={page !== 0 ? true : false}
                     color="inherit"
+                    fullWidth
                     onClick={(e) => openEl(e.currentTarget)}
                     variant="text">
                     <Typography variant="subtitle1">

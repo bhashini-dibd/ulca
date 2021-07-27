@@ -28,7 +28,7 @@ export const menuItems = {
         },
         {
             name: 'Benchmark',
-            url: '/benchmark'
+            url: '/benchmark/initiate/-1'
         },
         {
             name: 'Submit Model',

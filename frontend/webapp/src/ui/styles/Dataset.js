@@ -255,8 +255,13 @@ const DataSet = (theme) => ({
         fontSize: "1.125rem",
         fontWeight: "500 !important",
         "&:hover": {
-
             backgroundColor: 'white',
+        },
+        borderBottom:"1px solid rgba(0, 0, 0, 0.42)",
+        // borderTop:"3px solid green",
+        '& svg':{
+            marginLeft:'auto',
+            color:"rgba(0, 0, 0, 0.42)"
         }
     },
     container: {
