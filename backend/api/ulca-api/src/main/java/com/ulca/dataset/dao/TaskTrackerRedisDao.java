@@ -29,6 +29,10 @@ public class TaskTrackerRedisDao {
 
 			try {
 				String serviceRequestNumber = redisTemplate.opsForHash().get(key, "serviceRequestNumber") + "";
+				String mode = redisTemplate.opsForHash().get(key, "mode") + "";
+				String baseLocation = redisTemplate.opsForHash().get(key, "baseLocation") + "";
+				String md5hash = redisTemplate.opsForHash().get(key, "md5hash") + "";
+				
 				String ingestComplete = redisTemplate.opsForHash().get(key, "ingestComplete") + "";
 				String count = redisTemplate.opsForHash().get(key, "count") + "";
 				String ingestSuccess = redisTemplate.opsForHash().get(key, "ingestSuccess") + "";
@@ -41,6 +45,10 @@ public class TaskTrackerRedisDao {
 				Map<String, String> innerMap = new HashMap<String, String>();
 
 				innerMap.put("serviceRequestNumber", serviceRequestNumber);
+				innerMap.put("mode", mode);
+				innerMap.put("baseLocation", baseLocation);
+				innerMap.put("md5hash", md5hash);
+				
 				innerMap.put("ingestComplete", ingestComplete);
 				innerMap.put("count", count);
 				innerMap.put("ingestSuccess", ingestSuccess);
@@ -71,6 +79,29 @@ public class TaskTrackerRedisDao {
 		final String key = Prefix + serviceRequestNumber;
 
 		redisTemplate.opsForHash().put(key, "serviceRequestNumber", serviceRequestNumber);
+		redisTemplate.opsForHash().put(key, "mode", "real");
+		redisTemplate.opsForHash().put(key, "ingestComplete", "0");
+		redisTemplate.opsForHash().put(key, "count", "0");
+		redisTemplate.opsForHash().put(key, "ingestError", "0");
+		redisTemplate.opsForHash().put(key, "ingestSuccess", "0");
+		redisTemplate.opsForHash().put(key, "validateError", "0");
+		redisTemplate.opsForHash().put(key, "validateSuccess", "0");
+		redisTemplate.opsForHash().put(key, "publishError", "0");
+		redisTemplate.opsForHash().put(key, "publishSuccess", "0");
+		
+		log.info("******* Exit TaskTrackerRedisDao : intialize ******* ");
+
+	}
+	public void intializePseudoIngest(final String serviceRequestNumber, String baseLocation, String md5hash) {
+
+		log.info("******* Entry TaskTrackerRedisDao : intialize ******* ");
+
+		final String key = Prefix + serviceRequestNumber;
+
+		redisTemplate.opsForHash().put(key, "serviceRequestNumber", serviceRequestNumber);
+		redisTemplate.opsForHash().put(key, "baseLocation", baseLocation);
+		redisTemplate.opsForHash().put(key, "md5hash", md5hash);
+		redisTemplate.opsForHash().put(key, "mode", "pseudo");
 		redisTemplate.opsForHash().put(key, "ingestComplete", "0");
 		redisTemplate.opsForHash().put(key, "count", "0");
 		redisTemplate.opsForHash().put(key, "ingestError", "0");

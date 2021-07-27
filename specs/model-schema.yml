@@ -25,6 +25,8 @@ components:
       type: object
       properties:
         name:
+          maxLength: 100
+          minLength: 10
           type: string
           description: model name that you want your users to see
         description:
@@ -61,9 +63,10 @@ components:
         schema:
           type: object
           oneOf:
-          - $ref: '#/components/schemas/TranslationRequest'
-          - $ref: '#/components/schemas/ASRRequest'
-          - $ref: '#/components/schemas/OCRRequest'
+          - $ref: '#/components/schemas/TranslationInference'
+          - $ref: '#/components/schemas/ASRInference'
+          - $ref: '#/components/schemas/TTSInference'
+          - $ref: '#/components/schemas/OCRInference'
       description: hosted location defines the end point of the model inference.
 
     FileUploadAPIEndPoint:
@@ -110,18 +113,100 @@ components:
           description: explain your dataset that you have used for training your model
       description: training dataset metadata used to train the model
 
-    TranslationRequest:
+    TranslationInference:
       required:
-      - languages
-      - sentences
+      - request
       type: object
       properties:
-        languages:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
-        sentences:
+        request:
+          $ref: '#/components/schemas/TranslationRequest'
+        response:
+          $ref: '#/components/schemas/TranslationResponse'
+    
+    TranslationRequest:
+      required:
+      - input
+      - config
+      type: object
+      properties:
+        input:
           $ref: '#/components/schemas/Sentences'
+        config:
+          $ref: '#/components/schemas/TranslationConfig'
+
+
+    TranslationResponse:
+      required:
+      - output
+      - config
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/Sentences'
+        config:
+          $ref: '#/components/schemas/TranslationConfig'  
+
+    ASRInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/ASRRequest'
+        response:
+          $ref: '#/components/schemas/ASRResponse'
 
     ASRRequest:
+      required:
+      - audioUri
+      - config
+      type: object
+      properties:
+        audioUri:
+          type: array
+          description: list of paths on gcp/s3 bucket or https url
+          example: gs://bucket/audio.wav
+          items:
+            maxItems: 10
+            minItems: 1
+            type: string
+        config:
+          $ref: '#/components/schemas/ASRConfig'
+
+    ASRResponse:
+      required:
+      - output
+      - config
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/Sentences'
+        config:
+          $ref: '#/components/schemas/TranslationConfig' 
+
+    TTSInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/TTSRequest'
+        response:
+          $ref: '#/components/schemas/TTSResponse'
+    
+    TTSRequest:
+      required:
+      - input
+      - config
+      type: object
+      properties:
+        input:
+          $ref: '#/components/schemas/Sentences'
+        config:
+          $ref: '#/components/schemas/TTSConfig'
+
+
+    TTSResponse:
       required:
       - audioUri
       - config
@@ -134,18 +219,44 @@ components:
         config:
           $ref: '#/components/schemas/ASRConfig'
 
+    OCRInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/OCRRequest'
+        response:
+          $ref: '#/components/schemas/OCRResponse'
+
     OCRRequest:
       required:
       - imageUri
+      - config
       type: object
       properties:
         imageUri:
-          type: string
-          description: path on gcp/s3 bucket or https url
+          type: array
+          description: list of paths on gcp/s3 bucket or https url
           example: gs://bucket/testimg.jpeg
-        language:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          items:
+            maxItems: 10
+            minItems: 1
+            type: string
+        config:
+          $ref: '#/components/schemas/OCRConfig'
 
+    OCRResponse:
+      required:
+      - output
+      - config
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/Sentences'
+        config:
+          $ref: '#/components/schemas/TranslationConfig' 
+          
     FileUploadRequest:
       type: object
       properties:
@@ -172,6 +283,30 @@ components:
           minLength: 1
           type: string
           description: expected translated sentence, for reference.
+
+    TranslationConfig:
+      required:
+      - language
+      type: object
+      properties:
+        language:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+
+    OCRConfig:
+      required:
+      - language
+      type: object
+      properties:
+        language:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+
+    TTSConfig:
+      required:
+      - language
+      type: object
+      properties:
+        language:
+          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
     ASRConfig:
       required:

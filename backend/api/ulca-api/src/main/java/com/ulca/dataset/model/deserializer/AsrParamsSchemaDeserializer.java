@@ -14,12 +14,10 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.ulca.dataset.util.DateUtil;
 
 import io.swagger.model.AsrParamsSchema;
 import io.swagger.model.AsrParamsSchema.AgeEnum;
 import io.swagger.model.AsrParamsSchema.DialectEnum;
-import io.swagger.model.AsrRowSchema;
 import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioFormat;
@@ -41,14 +39,14 @@ import io.swagger.model.WadaSnr;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowSchema> {
+public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema> {
 
-	protected ASRDatasetRowDataSchemaDeserializer(Class<?> vc) {
+	protected AsrParamsSchemaDeserializer(Class<?> vc) {
 		super(vc);
 		// TODO Auto-generated constructor stub
 	}
 
-	public ASRDatasetRowDataSchemaDeserializer() {
+	public AsrParamsSchemaDeserializer() {
 		this(null);
 		// TODO Auto-generated constructor stub
 	}
@@ -59,125 +57,186 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 	private static final long serialVersionUID = 1L;
 
 	@Override
-	public AsrRowSchema deserialize(JsonParser p, DeserializationContext ctxt)
+	public AsrParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		
+		log.info("******** Entry ASRParamsSchemaDeserializer :: deserialize ********");
 		ObjectMapper mapper = new ObjectMapper();
-		AsrRowSchema asrRowSchema = new AsrRowSchema();
+		AsrParamsSchema asrParamsSchema = new AsrParamsSchema();
 		JsonNode node = p.readValueAsTree();
 
 		ArrayList<String> errorList = new ArrayList<String>();
-
 		JSONObject obj = new JSONObject(node.toPrettyString());
 
 		Set<String> keys = obj.keySet();
-
 		for (String k : keys) {
 			try {
-				AsrRowDataSchemaKeys key = AsrRowDataSchemaKeys.valueOf(k);
+				AsrDatasetParamsSchemaKeys key = AsrDatasetParamsSchemaKeys.valueOf(k);
 			} catch (Exception ex) {
-				log.info("AsrRowDataSchemaKeys not valid ");
+				log.info("no enums found ");
 				errorList.add(k + " unknown property ");
 			}
-
 		}
+
 		// required
 
-		if (!node.has("audioFilename")) {
-			errorList.add("audioFilename field should be present");
-		} else if (!node.get("audioFilename").isTextual()) {
-			errorList.add("audioFilename field should be String");
+		if (!node.has("datasetType")) {
+			errorList.add("datasetType field should be present");
+		} else if (!node.get("datasetType").isTextual()) {
+			errorList.add("datasetType field should be String");
 		} else {
-
-			String audioFilename = node.get("audioFilename").asText();
-			asrRowSchema.setAudioFilename(audioFilename);
+			String datasetType = node.get("datasetType").asText();
+			DatasetType type = DatasetType.fromValue(datasetType);
+			if (type != DatasetType.ASR_CORPUS) {
+				errorList.add("datasetType field value " + DatasetType.ASR_CORPUS.toString());
+			}
+			asrParamsSchema.setDatasetType(type);
 
 		}
-
-		if (!node.has("text")) {
-			errorList.add("text field should be present");
-		} else if (!node.get("text").isTextual()) {
-			errorList.add("text field should be String");
+		if (!node.has("languages")) {
+			errorList.add("languages field should be present");
+		} else if (!node.get("languages").isObject()) {
+			errorList.add("languages field should be JSON");
 		} else {
+			try {
+				LanguagePair lp = new LanguagePair();
 
-			String text = node.get("text").asText();
-			asrRowSchema.setText(text);
-
-		}
-		
-		// optional params
-		
-		if (node.has("duration")) {
-			if (!node.get("duration").isNumber()) {
-				errorList.add("duration field should be Number");
-			} else {
-				BigDecimal duration = node.get("duration").decimalValue();
-				asrRowSchema.setDuration(duration);
-
-			}
-
-		}
-		if (node.has("speaker")) {
-			if (!node.get("speaker").isTextual()) {
-				errorList.add("speaker field should be String");
-			} else {
-				String speaker = node.get("speaker").asText();
-				asrRowSchema.setSpeaker(speaker);
-			}
-		} 
-		
-		if(node.has("collectionSource")) {
-			
-			if (!node.get("collectionSource").isArray()) {
-				errorList.add("collectionSource field should be String array");
-			} else {
-
-				try {
-					Source collectionSource = mapper.readValue(node.get("collectionSource").toPrettyString(), Source.class);
-					if(collectionSource.size() > 10 || collectionSource.size() < 0) {
-						errorList.add("collectionSource array size should be > 0 and <= 10");
-					}else {
-						asrRowSchema.setCollectionSource(collectionSource);
+				if (node.get("languages").has("sourceLanguage")) {
+					String sourceLanguage = node.get("languages").get("sourceLanguage").asText();
+					if (LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage) != null) {
+						lp.setSourceLanguage(LanguagePair.SourceLanguageEnum.fromValue(sourceLanguage));
+					} else {
+						errorList.add("sourceLanguage is not one of defined language pair");
 					}
-					
-				} catch (Exception e) {
-					errorList.add("collectionSource field value not proper.");
-					e.printStackTrace();
+
+				} else {
+					errorList.add("sourceLanguage should be present");
 				}
+				if (node.get("languages").has("sourceLanguageName")) {
+					String sourceLanguageName = node.get("languages").get("sourceLanguageName").asText();
+					lp.setSourceLanguageName(sourceLanguageName);
+				}
+				if (node.get("languages").has("targetLanguage")) {
+					String targetLanguage = node.get("languages").get("targetLanguage").asText();
+
+					if (LanguagePair.TargetLanguageEnum.fromValue(targetLanguage) != null) {
+						lp.setTargetLanguage(LanguagePair.TargetLanguageEnum.fromValue(targetLanguage));
+					}
+
+				}
+				if (node.get("languages").has("targetLanguageName")) {
+					String targetLanguageName = node.get("languages").get("targetLanguageName").asText();
+					lp.setSourceLanguageName(targetLanguageName);
+				}
+
+				asrParamsSchema.setLanguages(lp);
+			} catch (Exception e) {
+				errorList.add("languages field value not proper.");
+				e.printStackTrace();
 			}
-			
+
 		}
 
-		
+		if (!node.has("collectionSource")) {
+			errorList.add("collectionSource field should be present");
+		} else if (!node.get("collectionSource").isArray()) {
+			errorList.add("collectionSource field should be String array");
+		} else {
 
-		if (node.has("endTime")) {
-			if (!node.get("endTime").isTextual()) {
-				errorList.add("endTime field should be String");
-			} else {
-				String endTime = node.get("endTime").asText();
-				if(DateUtil.timeInHhMmSsFormat(endTime)) {
-					asrRowSchema.setEndTime(endTime);
-				}else {
-					errorList.add("endTime should be in hh:mm:ss format");
+			try {
+				Source collectionSource = mapper.readValue(node.get("collectionSource").toPrettyString(), Source.class);
+				if (collectionSource.size() > 10 || collectionSource.size() < 0) {
+					errorList.add("collectionSource array size should be > 0 and <= 10");
+				} else {
+					asrParamsSchema.setCollectionSource(collectionSource);
 				}
-				
+
+			} catch (Exception e) {
+				errorList.add("collectionSource field value not proper.");
+				e.printStackTrace();
 			}
-		} 
+		}
 
-		
+		if (!node.has("domain")) {
+			errorList.add("domain field should be present");
+		} else if (!node.get("domain").isArray()) {
+			errorList.add("domain field should be String array");
+		} else {
 
-		if (node.has("startTime")) {
-			if (!node.get("startTime").isTextual()) {
-				errorList.add("startTime field should be String");
+			try {
+				Domain domain = new Domain();
+				int size = node.get("domain").size();
+
+				for (int i = 0; i < size; i++) {
+
+					String enumValue = node.get("domain").get(i).asText();
+
+					DomainEnum dEnum = DomainEnum.fromValue(enumValue);
+					if (dEnum == null) {
+						errorList.add("domain value not part of defined domains");
+					} else {
+						domain.add(enumValue);
+					}
+				}
+				asrParamsSchema.setDomain(domain);
+			} catch (Exception e) {
+				errorList.add("domain field value not proper.");
+				e.printStackTrace();
+			}
+		}
+
+		if (!node.has("license")) {
+			errorList.add("license field should be present");
+		} else if (!node.get("license").isTextual()) {
+			errorList.add("license field should be String");
+		} else {
+			try {
+
+				String licenseText = node.get("license").asText();
+
+				io.swagger.model.License license = io.swagger.model.License.fromValue(licenseText);
+				if (license != null) {
+					asrParamsSchema.setLicense(license);
+				} else {
+					errorList.add("license field value should be present in license list");
+				}
+
+			} catch (Exception e) {
+				errorList.add("license field value not proper.");
+				e.printStackTrace();
+			}
+
+		}
+
+		if (node.get("submitter").isEmpty()) {
+			errorList.add("submitter field should be present");
+		} else if (!node.get("submitter").isObject()) {
+			errorList.add("submitter field should be JSON");
+		} else {
+			try {
+				Submitter submitter = mapper.readValue(node.get("submitter").toPrettyString(), Submitter.class);
+				asrParamsSchema.setSubmitter(submitter);
+			} catch (Exception e) {
+				errorList.add("submitter field value not proper.");
+				e.printStackTrace();
+			}
+		}
+
+		// optional params
+
+		if (node.has("format")) {
+			if (!node.get("format").isTextual()) {
+				errorList.add("format field should be String");
 			} else {
-				String startTime = node.get("startTime").asText();
-				if(DateUtil.timeInHhMmSsFormat(startTime)) {
-					asrRowSchema.setStartTime(startTime);
-				}else {
-					errorList.add("startTime should be in hh:mm:ss format");
+				String format = node.get("format").asText();
+				AudioFormat audioFormat = AudioFormat.fromValue(format);
+				if (audioFormat != null) {
+					asrParamsSchema.setFormat(audioFormat);
+				} else {
+					errorList.add("format not among one of specified");
 				}
 			}
+
 		}
 
 		if (node.has("channel")) {
@@ -187,7 +246,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				String channel = node.get("channel").asText();
 				AudioChannel audioChannel = AudioChannel.fromValue(channel);
 				if (audioChannel != null) {
-					asrRowSchema.setChannel(audioChannel);
+					asrParamsSchema.setChannel(audioChannel);
 				} else {
 					errorList.add("channel not among one of specified");
 				}
@@ -201,10 +260,8 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				errorList.add("samplingRate field should be Number");
 			} else {
 				BigDecimal samplingRate = node.get("samplingRate").decimalValue();
-				asrRowSchema.setSamplingRate(samplingRate);
-
+				asrParamsSchema.setSamplingRate(samplingRate);
 			}
-
 		}
 
 		if (node.has("bitsPerSample")) {
@@ -215,14 +272,26 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 
 				AudioBitsPerSample audioBitsPerSample = AudioBitsPerSample.fromValue(bitsPerSample);
 				if (audioBitsPerSample != null) {
-					asrRowSchema.setBitsPerSample(audioBitsPerSample);
+					asrParamsSchema.setBitsPerSample(audioBitsPerSample);
 
 				} else {
 					errorList.add("bitsPerSample not among one of specified");
 				}
-
 			}
 
+		}
+
+		if (node.has("numberOfSpeakers")) {
+			if (!node.get("numberOfSpeakers").isNumber()) {
+				errorList.add("numberOfSpeakers field should be Number");
+			} else {
+				Integer numberOfSpeakers = node.get("numberOfSpeakers").asInt();
+				if (numberOfSpeakers < 1) {
+					errorList.add("numberOfSpeakers should be atleast 1");
+				} else {
+					asrParamsSchema.setNumberOfSpeakers(new BigDecimal(numberOfSpeakers));
+				}
+			}
 		}
 
 		if (node.has("gender")) {
@@ -230,12 +299,9 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				errorList.add("gender field should be String");
 			} else {
 				String gender = node.get("gender").asText();
-
 				Gender genderenum = Gender.fromValue(gender);
-
 				if (genderenum != null) {
-					asrRowSchema.setGender(genderenum);
-
+					asrParamsSchema.setGender(genderenum);
 				} else {
 					errorList.add("gender not among one of specified values");
 				}
@@ -247,12 +313,9 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				errorList.add("age field should be String");
 			} else {
 				String age = node.get("age").asText();
-
-				AsrRowSchema.AgeEnum ageEnum = AsrRowSchema.AgeEnum.fromValue(age);
-
+				AgeEnum ageEnum = AgeEnum.fromValue(age);
 				if (ageEnum != null) {
-					asrRowSchema.setAge(ageEnum);
-
+					asrParamsSchema.setAge(ageEnum);
 				} else {
 					errorList.add("age not among one of specified values");
 				}
@@ -263,11 +326,9 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 				errorList.add("dialect field should be String");
 			} else {
 				String dialect = node.get("dialect").asText();
-				AsrRowSchema.DialectEnum dialectEnum = AsrRowSchema.DialectEnum.fromValue(dialect);
-
+				DialectEnum dialectEnum = DialectEnum.fromValue(dialect);
 				if (dialectEnum != null) {
-					asrRowSchema.setDialect(dialectEnum);
-
+					asrParamsSchema.setDialect(dialectEnum);
 				} else {
 					errorList.add("dialect not among one of specified values");
 				}
@@ -287,14 +348,12 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 					AudioQualityEvaluation audioQualityEvaluation = new AudioQualityEvaluation();
 					audioQualityEvaluation.setMethodType(MethodTypeEnum.WADASNR);
 					audioQualityEvaluation.setMethodDetails(wadaSnr);
-					asrRowSchema.setSnr(audioQualityEvaluation);
+					asrParamsSchema.setSnr(audioQualityEvaluation);
 
 				} else {
 					errorList.add("methodType is not one of specified values");
 				}
-
 			}
-
 		}
 
 		if (node.has("collectionMethod")) {
@@ -332,7 +391,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 														CollectionDetailsAudioAutoAligned.class);
 
 										collectionMethodAudio.setCollectionDetails(collectionDetailsAudioAutoAligned);
-										asrRowSchema.setCollectionMethod(collectionMethodAudio);
+										asrParamsSchema.setCollectionMethod(collectionMethodAudio);
 
 									} else {
 										errorList.add("alignmentTool should be from one of specified values");
@@ -351,6 +410,7 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 						case MACHINE_GENERATED_TRANSCRIPT:
 
 							CollectionDetailsMachineGeneratedTranscript collectionDetailsMachineGeneratedTranscript = new CollectionDetailsMachineGeneratedTranscript();
+
 							TranscriptionEvaluationMethod1 transcriptionEvaluationMethod1 = mapper
 									.readValue(
 											node.get("collectionMethod").get("collectionDetails")
@@ -360,25 +420,30 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 							collectionDetailsMachineGeneratedTranscript
 									.setEvaluationMethod(transcriptionEvaluationMethod1);
 
-							collectionDetailsMachineGeneratedTranscript.setAsrModel(
-									node.get("collectionMethod").get("collectionDetails").get("asrModel").asText());
-							collectionMethodAudio.setCollectionDetails(collectionDetailsMachineGeneratedTranscript);
+							if (node.get("collectionMethod").get("collectionDetails").has("asrModel")) {
+								collectionDetailsMachineGeneratedTranscript.setAsrModel(
+										node.get("collectionMethod").get("collectionDetails").get("asrModel").asText());
+								collectionMethodAudio.setCollectionDetails(collectionDetailsMachineGeneratedTranscript);
+							}
 
-							String evaluationMethodType = node.get("collectionMethod").get("collectionDetails")
-									.get("evaluationMethodType").asText();
+							if (node.get("collectionMethod").get("collectionDetails").has("evaluationMethodType")) {
+								String evaluationMethodType = node.get("collectionMethod").get("collectionDetails")
+										.get("evaluationMethodType").asText();
 
-							CollectionDetailsMachineGeneratedTranscript.EvaluationMethodTypeEnum evaluationMethodTypeEnum = CollectionDetailsMachineGeneratedTranscript.EvaluationMethodTypeEnum
-									.fromValue(evaluationMethodType);
-							collectionDetailsMachineGeneratedTranscript
-									.setEvaluationMethodType(evaluationMethodTypeEnum);
+								CollectionDetailsMachineGeneratedTranscript.EvaluationMethodTypeEnum evaluationMethodTypeEnum = CollectionDetailsMachineGeneratedTranscript.EvaluationMethodTypeEnum
+										.fromValue(evaluationMethodType);
+								collectionDetailsMachineGeneratedTranscript
+										.setEvaluationMethodType(evaluationMethodTypeEnum);
 
-							collectionDetailsMachineGeneratedTranscript.setAsrModelVersion(node.get("collectionMethod")
-									.get("collectionDetails").get("asrModelVersion").asText());
+							}
+							if (node.get("collectionMethod").get("collectionDetails").has("asrModelVersion")) {
+								collectionDetailsMachineGeneratedTranscript
+										.setAsrModelVersion(node.get("collectionMethod").get("collectionDetails")
+												.get("asrModelVersion").asText());
 
-							asrRowSchema.setCollectionMethod(collectionMethodAudio);
-
+							}
+							asrParamsSchema.setCollectionMethod(collectionMethodAudio);
 							log.info("machine-generated-transcript");
-
 							break;
 
 						case MANUAL_TRANSCRIBED:
@@ -387,22 +452,16 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 									node.get("collectionMethod").get("collectionDetails").toPrettyString(),
 									CollectionDetailsManualTranscribed.class);
 							collectionMethodAudio.setCollectionDetails(collectionDetailsManualTranscribed);
-							asrRowSchema.setCollectionMethod(collectionMethodAudio);
-
+							asrParamsSchema.setCollectionMethod(collectionMethodAudio);
 							log.info("manual-transcribed");
-
 							break;
-
 						}
-
 					} catch (Exception e) {
 						log.info("collection method not proper");
 						errorList.add("collectionMethod field value not proper.");
 						log.info("tracing the error");
-
 						e.printStackTrace();
 					}
-
 				}
 			}
 		}
@@ -410,7 +469,8 @@ public class ASRDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 		if (!errorList.isEmpty())
 			throw new IOException(errorList.toString());
 
-		return asrRowSchema;
+		log.info("******** Exiting deserializer ********");
+		return asrParamsSchema;
 	}
 
 }

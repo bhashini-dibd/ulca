@@ -25,7 +25,8 @@ import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.exception.ServiceRequestNumberNotFoundException;
-import com.ulca.dataset.kakfa.FileDownload;
+import com.ulca.dataset.kakfa.model.DatasetIngest;
+import com.ulca.dataset.kakfa.model.FileDownload;
 import com.ulca.dataset.model.Dataset;
 import com.ulca.dataset.model.Fileidentifier;
 import com.ulca.dataset.model.ProcessTracker;
@@ -47,12 +48,15 @@ import com.ulca.dataset.response.SearchListByUserIdResponse;
 import com.ulca.dataset.response.SearchListByUserIdResponseDto;
 import com.ulca.dataset.util.Utility;
 
+import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class DatasetService {
 
+	private int  PAGE_SIZE = 10;
+	
 	@Autowired
 	DatasetDao datasetDao;
 
@@ -66,16 +70,13 @@ public class DatasetService {
 	TaskTrackerDao taskTrackerDao;
 
 	@Autowired
-	SearchKafkaPublish searchKafkaPublish;
+	SearchKafkaPublishService searchKafkaPublish;
 
 	@Autowired
-	private KafkaTemplate<String, Object> template;
+	private KafkaTemplate<String, FileDownload> datasetFiledownloadKafkaTemplate;
 
-	@Value("${kafka.ulca.ds.ingest.ip.topic}")
+	@Value("${kafka.ulca.ds.filedownload.ip.topic}")
 	private String fileDownloadTopic;
-	
-	
-	private int  PAGE_SIZE = 10;
 
 	@Transactional
 	public DatasetSubmitResponse datasetSubmit(DatasetSubmitRequest request) {
@@ -120,8 +121,9 @@ public class DatasetService {
 		//fileDownload.setDatasetType(request.getType());
 		fileDownload.setFileUrl(request.getUrl());
 		fileDownload.setServiceRequestNumber(processTracker.getServiceRequestNumber());
-
-		template.send(fileDownloadTopic, fileDownload);
+		
+		datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
+		
 		String message = "Dataset Submit success";
 		return new DatasetSubmitResponse(message,processTracker.getServiceRequestNumber(), dataset.getDatasetId(),
 				dataset.getCreatedOn());
@@ -389,24 +391,29 @@ public class DatasetService {
 	public void updateDataset(String datasetId, String userId, JSONObject schema, String md5hash) {
 		
 		
+				
 		Optional<Dataset> datasetOps = datasetDao.findById(datasetId);
 		if(!datasetOps.isEmpty()) {
 			Dataset dataset = datasetOps.get();
 			dataset.setDatasetType(schema.get("datasetType").toString());
 			dataset.setCollectionSource(schema.get("collectionSource").toString());
-			dataset.setLanguages(schema.get("languages").toString());
+			if(!schema.get("datasetType").toString().equalsIgnoreCase(DatasetType.DOCUMENT_LAYOUT_CORPUS.toString())) {
+				dataset.setLanguages(schema.get("languages").toString());
+			}
+			
 			dataset.setDomain(schema.get("domain").toString());
 			dataset.setContributors(schema.get("submitter").toString());	
 			dataset.setSubmitterId(userId);
 			dataset.setLicense(schema.get("license").toString());
 			
-			Fileidentifier fileidentifier = dataset.getDatasetFileIdentifier();
+			/*Fileidentifier fileidentifier = dataset.getDatasetFileIdentifier();
 			fileidentifier.setMd5hash(md5hash);
+			*/
 			
 			if(schema.has("collectionMethod")) {
 				dataset.setCollectionMethod(schema.get("collectionMethod").toString());
 			}
-			fileIdentifierDao.save(fileidentifier);
+			//fileIdentifierDao.save(fileidentifier);
 			datasetDao.save(dataset);	
 			
 			

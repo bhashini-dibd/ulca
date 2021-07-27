@@ -1,4 +1,4 @@
-package com.ulca.dataset.kakfa;
+package com.ulca.dataset.kakfa.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +13,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import com.ulca.dataset.kakfa.model.FileDownload;
+import com.ulca.dataset.request.SearchCriteria;
+
 @Configuration
 public class KafkaFileDownloadPublisherConfig {
 
@@ -21,17 +24,17 @@ public class KafkaFileDownloadPublisherConfig {
     private String bootstrapAddress;
 	
 	@Bean
-	public ProducerFactory<String, Object> producerFactory() {
+	public ProducerFactory<String, FileDownload> datasetFiledownloadProducerFactory() {
 		Map<String, Object> configs = new HashMap<>();
 		configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
 		configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-		return new DefaultKafkaProducerFactory<String, Object>(configs);
+		return new DefaultKafkaProducerFactory<String, FileDownload>(configs);
 	}
 
 	@Bean
-	public KafkaTemplate<String, Object> kafkaTemplate() {
-		return new KafkaTemplate<>(producerFactory());
+	public KafkaTemplate<String, FileDownload> datasetFiledownloadKafkaTemplate() {
+		return new KafkaTemplate<>(datasetFiledownloadProducerFactory());
 	}
 
 }

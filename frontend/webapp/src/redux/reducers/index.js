@@ -7,7 +7,8 @@ import mySearchReport from "./DataSet/DatasetSearch/MySearches";
 import mySearchOptions from "./DataSet/DatasetSearch/SearchAndDownload";
 import errorData from "./DataSet/DatasetView/ErrorDownload";
 import pageChangeDetails from "./DataSet/DatasetView/PageInfo";
-import searchPageDetails from "./DataSet/DatasetSearch/SearchPageInfo"
+import searchPageDetails from "./DataSet/DatasetSearch/SearchPageInfo";
+import tableView from "./DataSet/DatasetView/TableStatus";
 const index = {
 
     apiStatus,
@@ -18,7 +19,8 @@ const index = {
     mySearchOptions,
     errorData,
     pageChangeDetails,
-    searchPageDetails
+    searchPageDetails,
+    tableView
 
 
    

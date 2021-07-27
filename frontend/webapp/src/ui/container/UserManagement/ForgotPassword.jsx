@@ -96,7 +96,6 @@ const ForgotPassword = (props) => {
       })
       .catch(error => {
         setLoading(false)
-        console.log(error)
       })
   };
   const { classes } = props;

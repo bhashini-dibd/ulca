@@ -28,6 +28,9 @@ const FileUploadStyles = (theme) => ({
     color:"green",
     cursor: "pointer"
   },
+  titleStyle :{display:"flex",
+  "@media (max-width:740px)": {marginRight:"0",display:"flex",flexDirection:"column"} 
+},
   filterButton:{
     marginLeft: 'auto',
     paddingRight: '1.5%',
@@ -101,6 +104,7 @@ const FileUploadStyles = (theme) => ({
   titleDropdown:
     {marginLeft:"1rem",minWidth:"10rem"}
   ,
+  dropDownStyle:{display:"flex",marginLeft:".68rem"},
 
   title:{
     textAlign: "left",

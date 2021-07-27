@@ -17,7 +17,7 @@ import React, { useState, useEffect } from "react";
 import LoginStyles from "../../styles/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
-// import TokenSearch from "../../../redux/actions/api/UserManagement/TokenSearch";
+import TokenSearch from "../../../redux/actions/api/UserManagement/TokenSearch";
 import ResetPasswordAPI from "../../../redux/actions/api/UserManagement/ResetPassword";
 
 const ResetPassword = (props) => {
@@ -36,19 +36,23 @@ const ResetPassword = (props) => {
     variant: 'success'
   })
   const [loading, setLoading] = useState(false);
-  // useEffect(() => {
-  //   console.log(props.token, props.email)
-  //   const apiObj = new TokenSearch(props.token)
-  //   fetch(apiObj.apiEndPoint(), {
-  //     method: 'POST',
-  //     headers: apiObj.getHeaders().headers,
-  //     body: JSON.stringify(apiObj.getBody())
-  //   })
-  //     .then(async response => {
-  //       let rsp_data = await response.json()
-  //       console.log(rsp_data)
-  //     })
-  // }, [])
+  useEffect(() => {
+    const apiObj = new TokenSearch(props.public)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'POST',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+      .then(async response => {
+        let rsp_data = await response.json()
+        if (!response.ok) {
+          setSnackbarInfo({ ...snackbar, open: true, message: rsp_data.message, variant: 'error' })
+          setTimeout(() => {
+            history.push(`${process.env.PUBLIC_URL}/user/login`)
+          }, 3000)
+        }
+      })
+  }, [])
 
   const history = useHistory();
 
@@ -109,7 +113,6 @@ const ResetPassword = (props) => {
       })
       .catch(error => {
         setLoading(false)
-        console.log(error)
       })
   };
   const handlePrevent = (e) => {
