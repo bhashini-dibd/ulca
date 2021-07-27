@@ -1,17 +1,19 @@
 package com.ulca.dataset.exception;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +32,17 @@ public class DatasetControllerExceptionHandler {
 	    		
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public  ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, WebRequest request) {
+       
+		List<String> details = new ArrayList<>();
+        for(ObjectError error : ex.getBindingResult().getAllErrors()) {
+            details.add(error.getDefaultMessage());
+        }
+        ErrorDetails errorDetails = new ErrorDetails("Validation Failed",details.toString(), new Date());
+        return new ResponseEntity(errorDetails, HttpStatus.BAD_REQUEST);
+    }
 	
 	@ExceptionHandler(DuplicateKeyException.class)
 	  public final ResponseEntity<Object> handleDuplicateKeyExceptions(DuplicateKeyException ex, WebRequest request) {

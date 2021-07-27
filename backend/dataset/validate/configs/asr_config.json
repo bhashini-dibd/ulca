@@ -1,0 +1,23 @@
+[
+    {
+        "test_name":"TextLanguageCheck", "active":"True"
+    },
+    {
+        "test_name":"SentenceLengthCheck", "active":"False"
+    },
+    {
+        "test_name":"WordLengthCheck", "active":"True"
+    },
+    {
+        "test_name":"DuplicateWhitespaces", "active":"True"
+    },
+    {
+        "test_name":"AudioMetadataCheck", "active":"True"
+    },
+	{
+        "test_name":"SpecialCharacterCheck", "active":"True"
+    },
+	{
+        "test_name": "CaseDedup", "active":"True"
+    }
+]

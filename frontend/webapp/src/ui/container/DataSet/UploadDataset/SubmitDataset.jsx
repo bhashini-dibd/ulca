@@ -106,7 +106,6 @@ const SubmitDataset = (props) => {
         }).then(async response => {
             const rsp_data = await response.json();
             if (!response.ok) {
-                debugger
                 setSnackbarInfo ({
                     ...snackbar,
                     open: true,

@@ -29,7 +29,6 @@ const MySearches = (props) => {
 
         useEffect(() => {
                 MySearchListApi()
-                console.log(ApiStatus)
         }, []);
         const MySearchListApi = () => {
 

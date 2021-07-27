@@ -57,11 +57,11 @@ export default function App() {
             component={Dashboard}
           />
           <Route
-          exact
+            exact
             path={`${process.env.PUBLIC_URL}/user/:page`}
             component={Login}
           />
-           <Route
+          <Route
             path={`${process.env.PUBLIC_URL}/user/:page/:email/:public/:private/:time`}
             component={Login}
           />

@@ -99,15 +99,14 @@ const SearchAndDownloadRecords = (props) => {
             let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
             let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
             let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
-            let label=data[0].search_criteria && data[0].search_criteria.split('|')[0]
+            let label = data[0].search_criteria && data[0].search_criteria.split('|')[0]
             setFilterBy({
                 ...filterBy, domain, collectionMethod
             })
             setLanguagePair({ target, source })
             //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
             setDatasetType({ [data[0].datasetType]: true })
-            console.log(label)
-            
+
             setLabel(label)
         }
 
@@ -125,7 +124,7 @@ const SearchAndDownloadRecords = (props) => {
                 collectionMethod: ""
             })
             setLabel('Parallel Dataset')
-            setDatasetType({'parallel-corpus': true})
+            setDatasetType({ 'parallel-corpus': true })
         }
         previousUrl.current = params;
     })
@@ -153,6 +152,8 @@ const SearchAndDownloadRecords = (props) => {
     const [state, setState] = useState({
         checkedA: false,
         checkedB: false,
+        checkedC: false,
+
     });
     const [label, setLabel] = useState('Parallel Dataset')
     const [srcError, setSrcError] = useState(false)
@@ -209,7 +210,7 @@ const SearchAndDownloadRecords = (props) => {
         });
     }
 
-    const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type) => {
+    const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type, originalSourceSentence = false) => {
         const Dataset = Object.keys(type)[0]
         setSnackbarInfo({
             ...snackbar,
@@ -217,7 +218,7 @@ const SearchAndDownloadRecords = (props) => {
             message: 'Please wait while we process your request.',
             variant: 'info'
         })
-        const apiObj = new SubmitSearchRequest(Dataset, tgt, src, domain, collectionMethod)
+        const apiObj = new SubmitSearchRequest(Dataset, tgt, src, domain, collectionMethod, originalSourceSentence)
         fetch(apiObj.apiEndPoint(), {
             method: 'post',
             headers: apiObj.getHeaders().headers,
@@ -225,7 +226,6 @@ const SearchAndDownloadRecords = (props) => {
         })
             .then(async res => {
                 let response = await res.json()
-                debugger
                 if (res.ok) {
                     dispatch(PageChange(0, C.SEARCH_PAGE_NO));
                     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.data.serviceRequestNumber}`)
@@ -238,10 +238,10 @@ const SearchAndDownloadRecords = (props) => {
                         message: response.message ? response.message : "Something went wrong. Please try again.",
                         variant: 'error'
                     })
-                    if(res.status===401){
-                        setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)
-                        
-                    }                    
+                    if (res.status === 401) {
+                        setTimeout(() => history.push(`${process.env.PUBLIC_URL}/user/login`), 3000)
+
+                    }
                 }
             })
             .catch(err => {
@@ -279,7 +279,7 @@ const SearchAndDownloadRecords = (props) => {
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
                 let source = getValueForLabel(languagePair.source).value
-                makeSubmitAPICall(source, tgt, domain, collectionMethod, datasetType)
+                makeSubmitAPICall(source, tgt, domain, collectionMethod, datasetType, state.checkedC)
                 //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
             }
 
@@ -521,7 +521,8 @@ const SearchAndDownloadRecords = (props) => {
                             </Grid>
 
                             {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
-                            {renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
+                            {datasetType['parallel-corpus'] && renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
+                            {datasetType['parallel-corpus'] && renderCheckBox("checkedC", "primary", " Original sentence in source language")}
                             {renderclearNsubmitButtons()}
                         </Grid>
                     </Grid>

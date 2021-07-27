@@ -33,7 +33,7 @@ public class TaskTracker   {
    */
   public enum ToolEnum {
     download("download"),
-    
+    pseudo("pseudo"),
     ingest("ingest"),
     
     validate("validate"),

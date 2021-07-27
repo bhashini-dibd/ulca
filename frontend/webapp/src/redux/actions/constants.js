@@ -1,7 +1,7 @@
 const constants = {
   APISTATUS             : "APISTATUS",
   GET_ERROR_REPORT      : "GET_ERROR_REPORT",
-
+  LOGOUT                : "LOGOUT",
   /**
    * action for Dataset report
    */
@@ -33,7 +33,8 @@ const constants = {
    TABLE_PAGINATION_RESET:"TABLE_PAGINATION_RESET",
    SEARCH_TABLE_PAGINATION_RESET:"SEARCH_TABLE_PAGINATION_RESET",
    CONTRIBUTION_TABLE:"CONTRIBUTION_TABLE",
-   CLEAR_FILTER :"CLEAR_FILTER"
+   CLEAR_FILTER :"CLEAR_FILTER",
+   CONTRIBUTION_TABLE_VIEW:"CONTRIBUTION_TABLE_VIEW"
 };
 
 export default constants;

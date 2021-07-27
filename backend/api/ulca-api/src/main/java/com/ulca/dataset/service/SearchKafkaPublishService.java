@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 @Service
-public class SearchKafkaPublish {
+public class SearchKafkaPublishService {
 	
 	
 	@Autowired

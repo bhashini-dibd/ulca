@@ -38,6 +38,13 @@ export  function FilterTable( filterValues,constant) {
     }
 }
 
+export function tableView (token,constant){
+    return {     
+        type: constant,
+        payload: {token}
+    }
+}
+
 export  function clearFilter( filterValues,constant) {
     return {     
         type: constant,

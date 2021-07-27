@@ -16,11 +16,10 @@ const dateConversion = (value) =>{
 }
 
 const getFilterValue = (payload, data) =>{
-   
     let {filterValues}= payload
     let statusFilter = []
     let filterResult = []
-    if(filterValues.hasOwnProperty("status") && filterValues.status.length>0){
+    if(filterValues && filterValues.hasOwnProperty("status") && filterValues.status.length>0){
         statusFilter = data.responseData.filter(value =>{ 
             if(filterValues.status.includes(value.status)){
                 return value
@@ -30,7 +29,7 @@ const getFilterValue = (payload, data) =>{
 }else{
     statusFilter = data.responseData
 }
-if(filterValues.hasOwnProperty("datasetType") && filterValues.datasetType.length>0){
+if(filterValues && filterValues.hasOwnProperty("datasetType") && filterValues.datasetType.length>0){
     filterResult = statusFilter.filter(value=>{
         if(filterValues.datasetType.includes(value.datasetType)){
             return value
@@ -42,7 +41,6 @@ else{
 }
 data.filteredData = filterResult;
 data.selectedFilter = filterValues;
-
 return data;
     
 }
@@ -53,7 +51,7 @@ const getClearFilter = (data) =>{
     return data;
 }
 
-const getContributionList = (payload) => {
+const getContributionList = (state, payload) => {
     let responseData = [];
     let statusFilter = [];
     let datatypeFilter = [];
@@ -66,7 +64,8 @@ const getContributionList = (payload) => {
                      datasetName          : element.datasetName,
                      submittedOn          : dateConversion(element.submittedOn),
                      datasetType :          getDatasetName(element.datasetType),
-                     status               : element.status
+                     status               : element.status,
+                     color : element.status === "Completed" ? "#139D60" :  element.status === "In-Progress" ? "#2C2799" : element.status === "Failed" ? "#F54336" : "#FEA52C"
             }
             
         )
@@ -82,7 +81,9 @@ const getContributionList = (payload) => {
 
 
     responseData = responseData.reverse()
-    return {responseData ,filteredData:responseData, refreshStatus, filter, selectedFilter:{status:[],datasetType:[]}};
+    let filteredData = getFilterValue({"filterValues":state.selectedFilter},{"responseData":responseData})
+    filteredData.filter = filter
+    return filteredData
 }
 
 const reducer = (state = initialState, action) => {
@@ -90,14 +91,14 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
 
         case C.GET_CONTRIBUTION_LIST:
-            return getContributionList(action.payload);
-            case C.CONTRIBUTION_TABLE:
+            return getContributionList(state,action.payload);
+        case C.CONTRIBUTION_TABLE:
                 return getFilterValue(action.payload, state);
         case C.CLEAR_CONTRIBUTION_LIST:
             return {
                 ...initialState
             }
-            case C.CLEAR_FILTER:
+        case C.CLEAR_FILTER:
                 return getClearFilter(state);
         default:
             return {

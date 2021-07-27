@@ -2,6 +2,8 @@ package com.ulca.dataset.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping(value= "/ulca/apis/v0/dataset")
 public class DatasetController {
@@ -38,7 +40,7 @@ public class DatasetController {
 	
 	
 	@PostMapping("/corpus/submit")
-	public DatasetSubmitResponse datasetSubmit(@RequestBody DatasetSubmitRequest request) {
+	public DatasetSubmitResponse datasetSubmit(@Valid  @RequestBody DatasetSubmitRequest request) {
 		
 		
 	    log.info("******** Entry DatasetController:: datasetSubmit *******" );
