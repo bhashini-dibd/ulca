@@ -497,10 +497,10 @@ const Benchmark = (props) => {
                             <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
                             <Grid container spacing={1}>
                                 <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    {renderFilterByfield("domain", "Select Domain", filterBy.domain, FilterBy.domain)}
+                                    {renderFilterByfield("domain", "Domain", filterBy.domain, FilterBy.domain)}
                                 </Grid>
                                 <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    {renderFilterByfield("collectionMethod", "Select Submitter", filterBy.collectionMethod, FilterBy.collectionMethod)}
+                                    {renderFilterByfield("collectionMethod", "Submitter", filterBy.collectionMethod, FilterBy.collectionMethod)}
                                 </Grid>
                                 {/* <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                     {renderFilterByfield("collectionMethod", "Select Metric", filterBy.collectionMethod, FilterBy.collectionMethod)}
