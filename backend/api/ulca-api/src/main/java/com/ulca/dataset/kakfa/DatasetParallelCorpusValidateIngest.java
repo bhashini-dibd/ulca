@@ -122,6 +122,20 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			
 			return;
 		}
+		//update the dataset
+				if(mode.equalsIgnoreCase("real")) {
+					try {
+						ObjectMapper objectMapper = new ObjectMapper();
+						JSONObject record;
+						record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+						datasetService.updateDataset(datasetId, userId, record,md5hash);
+						
+					} catch (JsonProcessingException | JSONException e) {
+						
+						log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+					}
+				}
+				
 		try {
 			if(mode.equalsIgnoreCase("real")) {
 				ingest(paramsSchema, datasetIngest);
@@ -150,19 +164,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			return;
 			
 		}
-		//update the dataset
-		if(mode.equalsIgnoreCase("pseudo")) {
-			try {
-				ObjectMapper objectMapper = new ObjectMapper();
-				JSONObject record;
-				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-				datasetService.updateDataset(datasetId, userId, record,md5hash);
-				
-			} catch (JsonProcessingException | JSONException e) {
-				
-				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
-			}
-		}
+		
 		
 
 	}

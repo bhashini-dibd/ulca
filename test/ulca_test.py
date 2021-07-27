@@ -10,14 +10,18 @@ import time
 from typing import NewType, final
 sys.path.append("C:\GITLOCUSTCODE\Locust")
 import hashlib
-from utilities.csvreader import CSVreader
-my_reader=CSVreader.read_data(r"C:\Users\Test\Downloads\data\json.csv")
+import boto3
+import s3fs
 
+## s3 bucket
+key = 'bucket/json.csv'
 
-fill = r'C:\Users\Test\Desktop\ULCA-develop\python_auto\outtt.csv'
-
-print(my_reader)
-print(type(my_reader))
+s3 = boto3.client('s3')
+obj = s3.get_object(Bucket= 'anuvaad-raw-datasets', Key ='json.csv')
+pd_reader = pd.read_csv(obj['Body'])
+my_reader = pd_reader.to_dict('records')
+###
+s33 = s3fs.S3FileSystem(anon=False)
 
 class  UserBehaviour(SequentialTaskSet):
     def __init__(self,parent):
@@ -150,10 +154,14 @@ class  UserBehaviour(SequentialTaskSet):
                                 ### print timestamp
                                 print(new_emptylist)
                                 print(new_list)
-                                with open(fill, 'w',newline='') as filee:
-                                    writer = csv.writer(filee)
+                                with s33.open('anuvaad-raw-datasets/json_output.csv','w',newline='') as ff:
+                                    writer = csv.writer(ff)
                                     writer.writerow(new_list)
                                     writer.writerow(new_emptylist)
+                                #with open(fill, 'w',newline='') as filee:
+                                #    writer = csv.writer(filee)
+                                #    writer.writerow(new_list)
+                                #    writer.writerow(new_emptylist)
                                 break
                             elif newvari[3]['tool'] == 'publish' and newvari[3]['status'] == 'Pending':
                                 print("publish  pending")
