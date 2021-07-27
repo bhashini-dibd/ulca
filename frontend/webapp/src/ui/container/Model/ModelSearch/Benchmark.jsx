@@ -316,19 +316,8 @@ const Benchmark = (props) => {
     const renderDatasetButtons = () => {
         let filterByOptions = FilterBy['domain'].map(data => data.label)
         return (
-            // DatasetType.map((type, i) => {
-                // return (
-
-            //  <Autocomplete
-            //  disableClearable
-            //  disabledItemsFocusable
-            //     value={'General'}
-            //     id={'domain'}
-            //     options={filterByOptions}
-            //     onChange={(event, data) => handleFilterByChange(data, 'domain')}
-            //     renderInput={(params) => <TextField fullWidth {...params} variant="standard"/>} />
-                <> 
-                <div style={{maxHeight:'24px',maxWidth:"4px",backgroundColor:'green'}}>Test</div>
+            <>
+                {/* <div style={{ maxHeight: '4px', maxWidth: "44px", backgroundColor: 'green' }}> A</div> */}
                 <Button className={classes.menuStyle}
                     // disabled={page !== 0 ? true : false}
                     color="inherit"
@@ -366,7 +355,7 @@ const Benchmark = (props) => {
                     }
                 </StyledMenu></>
 
-                // )
+            // )
             // }
             // )
         )
