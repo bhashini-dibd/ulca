@@ -110,8 +110,8 @@ const Benchmark = (props) => {
             setLabel(label)
         }
 
-        else if ((params === 'completed' || params === 'inprogress') && count === 0)
-            history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+        // else if ((params === 'completed' || params === 'inprogress') && count === 0)
+        //     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
 
     }, []);
 
@@ -175,7 +175,7 @@ const Benchmark = (props) => {
     }
 
     const handleDatasetClick = (property) => {
-        history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+        // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
         clearfilter()
         setDatasetType({ [property]: true })
         setSrcError(false)
@@ -279,7 +279,7 @@ const Benchmark = (props) => {
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
                 let source = getValueForLabel(languagePair.source).value
-                makeSubmitAPICall(source, tgt, domain, collectionMethod, datasetType, state.checkedC)
+                //  makeSubmitAPICall(source, tgt, domain, collectionMethod, datasetType, state.checkedC)
                 //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
             }
 
@@ -297,7 +297,7 @@ const Benchmark = (props) => {
             if (!languagePair.target.length)
                 setTgtError(true)
             else {
-                makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType)
+                // makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType)
             }
 
         }
@@ -442,14 +442,6 @@ const Benchmark = (props) => {
     }
     const renderclearNsubmitButtons = () => {
         return (
-            /* <div className={classes.clearNSubmit}>
-                      <Button size="large"  variant="outlined" onClick={clearfilter}>
-                          Clear
-                  </Button>
-                      <Button size="large" className={classes.buttonStyle} variant="contained" color="primary" onClick={handleSubmitBtn}>
-                          Submit
-                  </Button>
-                  </div> */
             <Grid container className={classes.clearNSubmit}>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
