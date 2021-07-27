@@ -306,6 +306,22 @@ const DataSet = (theme) => ({
         alignContent: "flex-start",
         marginLeft: "14px", minHeight: "550px"
     },
+    styleHr: {
+        maxWidth: "24px",
+        justifyItems: "flex-start",
+        display: "inline-flex",
+        width: "100%",
+        margin: 0,
+        marginBottom: '7.5px',
+        // border:"4px solid #1DB5D8",
+        borderRadius: "3px",
+        height: '4px',
+        border: 'none',
+        background: '#1DB5D8'
+    },
+    subType: {
+        marginBottom: '18.5px'
+    }
 
 });
 

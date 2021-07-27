@@ -317,7 +317,6 @@ const Benchmark = (props) => {
         let filterByOptions = FilterBy['domain'].map(data => data.label)
         return (
             <>
-                {/* <div style={{ maxHeight: '4px', maxWidth: "44px", backgroundColor: 'green' }}> A</div> */}
                 <Button className={classes.menuStyle}
                     // disabled={page !== 0 ? true : false}
                     color="inherit"
@@ -469,12 +468,13 @@ const Benchmark = (props) => {
                 <Grid className={classes.leftSection} item xs={12} sm={5} md={4} lg={4} xl={4}>
                     <Grid container spacing={2}>
                         <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Benchmark" />
+                            <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search Model" />
                         </Grid>
                         <Grid item className={(params === 'inprogress' || params === 'completed') && classes.blurOut}
                             xs={12} sm={12} md={12} lg={12} xl={12}
                         >
-                            <Typography className={classes.subHeader} variant="body1">Select Model Task</Typography>
+                            <Typography className={classes.subType} variant="body1">Select Model Task</Typography>
+                            <hr className={classes.styleHr} />
                             <div className={classes.buttonDiv}>
                                 {renderDatasetButtons()}
                             </div>
@@ -502,9 +502,9 @@ const Benchmark = (props) => {
                                 <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                     {renderFilterByfield("collectionMethod", "Select Submitter", filterBy.collectionMethod, FilterBy.collectionMethod)}
                                 </Grid>
-                                <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                {/* <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                     {renderFilterByfield("collectionMethod", "Select Metric", filterBy.collectionMethod, FilterBy.collectionMethod)}
-                                </Grid>
+                                </Grid> */}
                             </Grid>
 
                             {renderclearNsubmitButtons()}
