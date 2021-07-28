@@ -3,6 +3,6 @@ RUN groupadd -r appgroup
 RUN useradd -r appuser -G appgroup
 RUN mkdir /app
 USER appuser
-COPY target/ulca-api.jar /app/ulca-model-api.jar
+COPY target/ulca-model-api.jar /app/ulca-model-api.jar
 ENTRYPOINT ["java","-jar","/app/ulca-model-api.jar"]
 
