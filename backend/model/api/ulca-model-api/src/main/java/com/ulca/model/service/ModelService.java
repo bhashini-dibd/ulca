@@ -29,6 +29,9 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.request.ModelSearchRequest;
+import com.ulca.model.response.ModelListByUserIdResponse;
+import com.ulca.model.response.ModelSearchResponse;
+import com.ulca.model.response.UploadModelResponse;
 
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
@@ -54,7 +57,7 @@ public class ModelService {
 		return model;
 	}
 
-	public List<Model> modelListByUserId(String userId, Integer startPage, Integer endPage) {
+	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage) {
 		log.info("******** Entry ModelService:: modelListByUserId *******" );
 		List<Model> list = new ArrayList<Model>(); 
 		
@@ -70,7 +73,7 @@ public class ModelService {
 		}
 		
 		
-		return list;
+		return new ModelListByUserIdResponse("Model list by UserId", list, list.size());
 	}
 	
 	
@@ -107,8 +110,8 @@ public class ModelService {
         }
     }
 	
-	public void uploadModel(MultipartFile file, String modelName, String userId) {
-		try {
+	public UploadModelResponse uploadModel(MultipartFile file, String modelName, String userId) throws Exception {
+		
 			String modelFilePath = storeModelFile(file);
 			
 			Model modelObj = getModel(modelFilePath);
@@ -119,11 +122,9 @@ public class ModelService {
 				
 			}
 			
+			return new UploadModelResponse("Model Saved Successfully", modelObj);
 			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		
 	}
 	
@@ -148,7 +149,7 @@ public class ModelService {
 		
 	}
 
-	public List<Model> searchModel( ModelSearchRequest request) {
+	public ModelSearchResponse searchModel( ModelSearchRequest request) {
 		
 		Model model = new Model();
 		if(!request.getTask().isBlank()) {
@@ -169,7 +170,9 @@ public class ModelService {
 		}
 		
 		Example<Model> example = Example.of(model);
-		return modelDao.findAll(example);
+		List<Model> list = modelDao.findAll(example);
+		
+		return new ModelSearchResponse("Model Search Result", list, list.size());
 		
 
 	}

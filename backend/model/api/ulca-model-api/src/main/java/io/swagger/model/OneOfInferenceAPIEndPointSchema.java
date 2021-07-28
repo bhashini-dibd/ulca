@@ -10,13 +10,14 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(
 		  use = JsonTypeInfo.Id.NAME, 
 		  include = JsonTypeInfo.As.PROPERTY, 
-		  property = "name")
+		  property = "taskType")
 		@JsonSubTypes({ 
-		  @Type(value = ASRInference.class, name = "ASRInference"), 
-		  @Type(value = OCRInference.class, name = "OCRInference"),
-		  @Type(value = TranslationInference.class, name = "TranslationInference"), 
-		  @Type(value = TTSInference.class, name = "TTSInference")
+		  @Type(value = ASRInference.class, name = "asr"), 
+		  @Type(value = OCRInference.class, name = "ocr"),
+		  @Type(value = TranslationInference.class, name = "translation"), 
+		  @Type(value = TTSInference.class, name = "tts")
 		})
+
 public interface OneOfInferenceAPIEndPointSchema {
 
 }

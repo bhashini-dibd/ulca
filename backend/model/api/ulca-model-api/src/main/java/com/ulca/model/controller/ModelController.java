@@ -15,6 +15,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.ulca.model.request.ModelSearchRequest;
+import com.ulca.model.response.ModelListByUserIdResponse;
+import com.ulca.model.response.ModelSearchResponse;
+import com.ulca.model.response.UploadModelResponse;
 import com.ulca.model.service.ModelService;
 
 import io.swagger.model.Model;
@@ -37,7 +40,7 @@ public class ModelController {
 	}
 
 	@GetMapping("/listByUserId")
-	public List<Model> listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
+	public ModelListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
 			@RequestParam(required = false) Integer endPage) {
 		log.info("******** Entry ModelController:: listByUserId *******");
 
@@ -45,15 +48,14 @@ public class ModelController {
 	}
 
 	@PostMapping("/upload")
-	public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam(required = true) String modelName,@RequestParam(required = true) String userId) throws Exception {
-		 modelService.uploadModel(file, modelName, userId);
+	public UploadModelResponse uploadModel(@RequestParam("file") MultipartFile file, @RequestParam(required = true) String modelName,@RequestParam(required = true) String userId) throws Exception {
 
-		return "success";
+		return modelService.uploadModel(file, modelName, userId);
 
 	}
 	
 	@PostMapping("/search")
-	public List<Model> searchModel(@Valid @RequestBody ModelSearchRequest request) {
+	public ModelSearchResponse searchModel(@Valid @RequestBody ModelSearchRequest request) {
 
 		log.info("******** Entry ModelController:: modelSeach *******");
 		return modelService.searchModel(request);
