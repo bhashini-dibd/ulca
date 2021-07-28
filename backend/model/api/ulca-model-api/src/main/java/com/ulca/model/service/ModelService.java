@@ -11,7 +11,10 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +28,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.ulca.model.dao.ModelDao;
+import com.ulca.model.request.ModelSearchRequest;
 
+import io.swagger.model.LanguagePair;
+import io.swagger.model.LanguagePair.SourceLanguageEnum;
+import io.swagger.model.LanguagePair.TargetLanguageEnum;
+import io.swagger.model.LanguagePairs;
 import io.swagger.model.Model;
+import io.swagger.model.ModelTask;
+import io.swagger.model.ModelTask.TypeEnum;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -106,6 +116,7 @@ public class ModelService {
 			modelObj.setSubmitterId(userId);
 			if(modelObj != null) {
 				modelDao.save(modelObj);
+				
 			}
 			
 			
@@ -132,11 +143,35 @@ public class ModelService {
 				e.printStackTrace();
 			}
 			
-			
-			
 		
 		return modelObj;
 		
+	}
+
+	public List<Model> searchModel( ModelSearchRequest request) {
+		
+		Model model = new Model();
+		if(!request.getTask().isBlank()) {
+			ModelTask modelTask = new ModelTask();
+			modelTask.setType(TypeEnum.fromValue(request.getTask()));
+			model.setTask(modelTask);
+		}
+		if(!request.getSourceLanguage().isBlank()) {
+			LanguagePairs lprs = new LanguagePairs();
+			LanguagePair lp = new LanguagePair();
+			lp.setSourceLanguage(SourceLanguageEnum.fromValue(request.getSourceLanguage()));
+			
+			if(!request.getTargetLanguage().isBlank()) {
+				lp.setTargetLanguage(TargetLanguageEnum.fromValue(request.getTargetLanguage()));
+			}
+			lprs.add(lp);
+			model.setLanguages(lprs);
+		}
+		
+		Example<Model> example = Example.of(model);
+		return modelDao.findAll(example);
+		
+
 	}
 
 }

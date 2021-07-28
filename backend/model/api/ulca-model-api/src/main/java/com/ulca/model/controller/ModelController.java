@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.service.ModelService;
 
 import io.swagger.model.Model;
@@ -29,7 +30,7 @@ public class ModelController {
 	ModelService modelService;
 
 	@PostMapping("/submit")
-	public Model modelSubmit(@Valid @RequestBody Model request) {
+	public Model submitModel(@Valid @RequestBody Model request) {
 
 		log.info("******** Entry ModelController:: modelSubmit *******");
 		return modelService.modelSubmit(request);
@@ -49,6 +50,13 @@ public class ModelController {
 
 		return "success";
 
+	}
+	
+	@PostMapping("/search")
+	public List<Model> searchModel(@Valid @RequestBody ModelSearchRequest request) {
+
+		log.info("******** Entry ModelController:: modelSeach *******");
+		return modelService.searchModel(request);
 	}
 
 }
