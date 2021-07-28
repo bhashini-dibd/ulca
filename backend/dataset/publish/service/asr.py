@@ -169,14 +169,15 @@ class ASRService:
             exclude = {"_id": False}
             for key in asr_search_ignore_keys:
                 exclude[key] = False
-            result = repo.search(db_query, exclude, off, lim)
+            result, hours = repo.search(db_query, exclude, off, lim)
             count = len(result)
             log.info(f'Result --- Count: {count}, Query: {query}')
+            log.info(f'Result --- Hours: {hours}, Query: {query}')
             if result:
                 size = sample_size if count > sample_size else count
                 path, path_sample = utils.push_result_to_object_store(result, query["serviceRequestNumber"], size)
                 if path:
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": hours, "dataset": path, "datasetSample": path_sample}
                     pt.task_event_search(op, None)
                 else:
                     log.error(f'There was an error while pushing result to S3')

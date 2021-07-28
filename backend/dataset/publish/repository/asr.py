@@ -65,6 +65,7 @@ class ASRRepo:
 
     def search(self, query, exclude, offset, res_limit):
         try:
+            seconds, hours = 0, 0
             col = self.get_mongo_instance()
             if offset is None and res_limit is None:
                 res = col.find(query, exclude).sort([('_id', 1)])
@@ -72,11 +73,16 @@ class ASRRepo:
                 res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
             result = []
             for record in res:
+                if 'durationInSeconds' in record.keys():
+                    seconds += record["durationInSeconds"]
                 result.append(record)
-            return result
+            if seconds != 0:
+                min, sec = divmod(seconds, 60)
+                hours, min = divmod(min, 60)
+            return result, hours
         except Exception as e:
             log.exception(e)
-            return []
+            return [], 0
 
 
 # Log config
