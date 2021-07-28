@@ -4,7 +4,7 @@ class EnumVals(enum.Enum):
 
     VerificationSubject     =   "ULCA - Email verification link"
     ConfirmationSubject     =   "ULCA - Registration confirmed"
-    ForgotPwdSubject        =   "ULCA - Please reset your Password"
+    ForgotPwdSubject        =   "ULCA - Reset password link"
 
 
     VerificationTaskId      =   1
