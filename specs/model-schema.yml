@@ -26,12 +26,12 @@ components:
       properties:
         name:
           maxLength: 100
-          minLength: 10
+          minLength: 5
           type: string
           description: model name that you want your users to see
         description:
-          maxLength: 200
-          minLength: 50
+          maxLength: 1000
+          minLength: 25
           type: string
           description: "brief description about model, its goal, basically something\
             \ sweet about it"
