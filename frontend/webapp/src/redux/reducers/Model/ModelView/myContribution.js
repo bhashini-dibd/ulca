@@ -4,8 +4,8 @@ const initialState = {
     responseData: [],
     filteredData:[],
     refreshStatus:false,
-    filter : {status:[],datasetType:[]},
-    selectedFilter : {status:[],datasetType:[]},
+    filter : {status:[],modelType:[]},
+    selectedFilter : {status:[],modelType:[]},
 }
 
 const dateConversion = (value) =>{
@@ -29,9 +29,9 @@ const getFilterValue = (payload, data) =>{
 }else{
     statusFilter = data.responseData
 }
-if(filterValues && filterValues.hasOwnProperty("datasetType") && filterValues.datasetType.length>0){
+if(filterValues && filterValues.hasOwnProperty("modelType") && filterValues.modelType.length>0){
     filterResult = statusFilter.filter(value=>{
-        if(filterValues.datasetType.includes(value.datasetType)){
+        if(filterValues.modelType.includes(value.modelType)){
             return value
         }
     })
@@ -47,7 +47,7 @@ return data;
 
 const getClearFilter = (data) =>{
     data.filteredData = data.responseData;
-    data.selectedFilter = {status:[],datasetType:[]}
+    data.selectedFilter = {status:[],modelType:[]}
     return data;
 }
 
@@ -55,30 +55,34 @@ const getContributionList = (state, payload) => {
     debugger
     let responseData = [];
     let statusFilter = [];
-    let datatypeFilter = [];
-    let filter = {status:[],datasetType:[]}
+    let modelFilter = [];
+    let filter = {status:[],modelType:[]}
     let refreshStatus = false;
+    debugger
     payload.forEach(element => {
         responseData.push(
             {
                      submitRefNumber      : element.serviceRequestNumber,
-                     datasetName          : element.datasetName,
+                     modelName          : element.datasetName,
                      submittedOn          : dateConversion(element.submittedOn),
-                     datasetType :          getDatasetName(element.datasetType),
+                     task :          getDatasetName(element.datasetType),
+                     domain :          getDatasetName(element.datasetType),
                      status               : element.status,
+                     licence      : element.serviceRequestNumber,
+                     action :"View Result",
                      color : element.status === "Completed" ? "#139D60" :  element.status === "In-Progress" ? "#2C2799" : element.status === "Failed" ? "#F54336" : "#FEA52C"
             }
             
         )
         !statusFilter.includes(element.status) && statusFilter.push(element.status)
-        !datatypeFilter.includes(element.datasetName) && datatypeFilter.push(getDatasetName(element.datasetType))
+        !modelFilter.includes(element.datasetName) && modelFilter.push(getDatasetName(element.datasetType))
         if(element.status === "In-Progress" || element.status === "Pending"){
             refreshStatus = true
         }
     }); 
 
     filter.status = [...(new Set(statusFilter))];
-    filter.datasetType = [...(new Set(datatypeFilter))];
+    filter.modelType = [...(new Set(modelFilter))];
 
 
     responseData = responseData.reverse()
@@ -88,18 +92,18 @@ const getContributionList = (state, payload) => {
 }
 
 const reducer = (state = initialState, action) => {
-    
+        debugger
     switch (action.type) {
 
-        case C.GET_CONTRIBUTION_LIST:
+        case C.GET_MODEL_CONTRIBUTION_LIST:
             return getContributionList(state,action.payload);
-        case C.CONTRIBUTION_TABLE:
+        case C.MODEL_CONTRIBUTION_TABLE:
                 return getFilterValue(action.payload, state);
-        case C.CLEAR_CONTRIBUTION_LIST:
+        case C.CLEAR_MODEL_CONTRIBUTION_LIST:
             return {
                 ...initialState
             }
-        case C.CLEAR_FILTER:
+        case C.CLEAR_MODEL_FILTER:
                 return getClearFilter(state);
         default:
             return {
@@ -109,3 +113,6 @@ const reducer = (state = initialState, action) => {
 }
 
 export default reducer;
+
+
+

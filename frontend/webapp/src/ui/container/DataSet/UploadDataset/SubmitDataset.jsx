@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Snackbar from '../../../components/common/Snackbar';
 import UrlConfig from '../../../../configs/internalurlmapping';
-import SubmitDatasetApi from "../../../../redux/actions/api/UploadDataset/SubmitDataset"
+import SubmitDatasetApi from "../../../../redux/actions/api/DataSet/UploadDataset/SubmitDataset"
 import DatasetItems from "../../../../configs/DatasetItems";
 import getTitleName from '../../../../utils/getDataset';
 import C from "../../../../redux/actions/constants";

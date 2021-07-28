@@ -13,7 +13,8 @@ const endpoints = {
   activateUser :"/ulca/user-mgmt/v1/users/verify-user",
   forgotPassword: "/ulca/user-mgmt/v1/users/forgot-password",
   tokenSearch:'/ulca/user-mgmt/v1/users/get/token/status',  
-  resetPassword:'/ulca/user-mgmt/v1/users/reset-password'
+  resetPassword:'/ulca/user-mgmt/v1/users/reset-password',
+  modelSubmit : '/ulca/apis/v0/dataset/corpus/submit'
 };
 
 export default endpoints;

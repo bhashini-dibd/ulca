@@ -9,6 +9,10 @@ import errorData from "./DataSet/DatasetView/ErrorDownload";
 import pageChangeDetails from "./DataSet/DatasetView/PageInfo";
 import searchPageDetails from "./DataSet/DatasetSearch/SearchPageInfo";
 import tableView from "./DataSet/DatasetView/TableStatus";
+import modelContributionReport from './Model/ModelView/myContribution';
+import modelPageChangeDetails from './Model/ModelView/PageInfo';
+import modelTableView from './Model/ModelView/TableStatus';
+
 const index = {
 
     apiStatus,
@@ -20,7 +24,11 @@ const index = {
     errorData,
     pageChangeDetails,
     searchPageDetails,
-    tableView
+    tableView,
+    modelContributionReport,
+    modelPageChangeDetails,
+    modelTableView
+
 
 
    

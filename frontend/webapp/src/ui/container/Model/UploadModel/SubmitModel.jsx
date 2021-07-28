@@ -18,24 +18,22 @@ import { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Snackbar from '../../../components/common/Snackbar';
 import UrlConfig from '../../../../configs/internalurlmapping';
-import SubmitDatasetApi from "../../../../redux/actions/api/UploadDataset/SubmitDataset"
-import DatasetItems from "../../../../configs/DatasetItems";
-import getTitleName from '../../../../utils/getDataset';
+import SubmitModelApi from "../../../../redux/actions/api/Model/UploadModel/SubmitModel"
 import C from "../../../../redux/actions/constants";
 import { useDispatch } from 'react-redux';
 import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
 
-const SubmitDataset = (props) => {
+const SubmitModel = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
-    const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "" })
+    const [model, setModelInfo] = useState({ modelName: "", url: "" })
     const dispatch = useDispatch();
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
         variant: 'success'
     })
-    const [error, setError] = useState({ datasetName: "", url: "", type: false })
+    const [error, setError] = useState({ modelName: "", url: "", type: false })
     const [search, setSearch] = useState(false)
     const history = useHistory();
 
@@ -96,42 +94,42 @@ const SubmitDataset = (props) => {
     // }
 
     const handleApicall = async () => {
-        history.push(`${process.env.PUBLIC_URL}/model/submission/1111`)
+        
 
-        // let apiObj = new SubmitDatasetApi(dataset)
-        // fetch(apiObj.apiEndPoint(), {
-        //     method: 'post',
-        //     body: JSON.stringify(apiObj.getBody()),
-        //     headers: apiObj.getHeaders().headers
-        // }).then(async response => {
-        //     const rsp_data = await response.json();
-        //     if (!response.ok) {
-        //         setSnackbarInfo ({
-        //             ...snackbar,
-        //             open: true,
-        //             message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
-        //             timeOut: 40000,
-        //             variant: 'error'
-        //         })
-        //         if(response.status===401){
-        //             setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
-        //         }
+        let apiObj = new SubmitModelApi(model)
+        fetch(apiObj.apiEndPoint(), {
+            method: 'post',
+            body: JSON.stringify(apiObj.getBody()),
+            headers: apiObj.getHeaders().headers
+        }).then(async response => {
+            const rsp_data = await response.json();
+            if (!response.ok) {
+                setSnackbarInfo ({
+                    ...snackbar,
+                    open: true,
+                    message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
+                    timeOut: 40000,
+                    variant: 'error'
+                })
+                if(response.status===401){
+                    setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
+                }
                 
                 
-        //      else {
-        //         dispatch(PageChange(0, C.PAGE_CHANGE));
-        //         history.push(`${process.env.PUBLIC_URL}/model/submission/${rsp_data.data.serviceRequestNumber}`)
-        //         //           return true;
-        //     }
-        // }).catch((error) => {
-        //     setSnackbarInfo({
-        //         ...snackbar,
-        //         open: true,
-        //         message: "Something went wrong. Please try again.",
-        //         timeOut: 40000,
-        //         variant: 'error'
-        //     })
-        // });
+             else {
+                dispatch(PageChange(0, C.PAGE_CHANGE));
+                history.push(`${process.env.PUBLIC_URL}/model/submission/${rsp_data.data.serviceRequestNumber}`)
+                //           return true;
+            }
+        }).catch((error) => {
+            setSnackbarInfo({
+                ...snackbar,
+                open: true,
+                message: "Something went wrong. Please try again.",
+                timeOut: 40000,
+                variant: 'error'
+            })
+        });
 
     }
 
@@ -162,16 +160,16 @@ const SubmitDataset = (props) => {
         return pattern.test(str);
     }
 
-    const handleSubmitDataset = (e) => {
-        if (dataset.datasetName.trim() === "" || dataset.url.trim() === "") {
-            setError({ ...error, name: !dataset.datasetName.trim() ? "Name cannot be empty" : "", url: !dataset.url.trim() ? "URL cannot be empty" : "" })
+    const handleSubmitModel = (e) => {
+        if (model.modelName.trim() === "" || model.url.trim() === "") {
+            setError({ ...error, name: !model.modelName.trim() ? "Name cannot be empty" : "", url: !model.url.trim() ? "URL cannot be empty" : "" })
 
         }
-        else if (dataset.datasetName.length > 256) {
+        else if (model.modelName.length > 256) {
             setError({ ...error, name: "Max 256 characters allowed" })
 
         }
-        else if (!validURL(dataset.url)) {
+        else if (!validURL(model.url)) {
             setError({ ...error, url: "‘Invalid URL" })
         }
         else {
@@ -193,13 +191,11 @@ const SubmitDataset = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
 
-    const url = UrlConfig.dataset
-
     return (
         <div>
             <div >
                 <div className={classes.breadcrum}>
-                    <BreadCrum links={[url]} activeLink="Submit Model" />
+                    <BreadCrum links={[UrlConfig.model]} activeLink="Submit Model" />
                 </div>
                 <Paper elevation={3} className={classes.divStyle}>
                    
@@ -264,11 +260,11 @@ const SubmitDataset = (props) => {
 
                                                     color="primary"
                                                     label="Model name"
-                                                    value={dataset.datasetName}
+                                                    value={model.modelName}
                                                     error={error.name ? true : false}
                                                     helperText={error.name}
                                                     onChange={(e) => {
-                                                        setDatasetInfo({ ...dataset, datasetName: e.target.value })
+                                                        setModelInfo({ ...model, modelName: e.target.value })
                                                         setError({ ...error, name: false })
                                                     }}
                                                 />
@@ -278,11 +274,11 @@ const SubmitDataset = (props) => {
 
                                                     color="primary"
                                                     label="Paste the URL of the public repository"
-                                                    value={dataset.url}
+                                                    value={model.url}
                                                     error={error.url ? true : false}
                                                     helperText={error.url}
                                                     onChange={(e) => {
-                                                        setDatasetInfo({ ...dataset, url: e.target.value })
+                                                        setModelInfo({ ...model, url: e.target.value })
                                                         setError({ ...error, url: false })
                                                     }}
                                                 />
@@ -296,7 +292,7 @@ const SubmitDataset = (props) => {
                                     variant="contained"
                                     size={'large'}
 
-                                    onClick={handleSubmitDataset}
+                                    onClick={handleSubmitModel}
                                 >
                                     Submit
                                 </Button>
@@ -317,4 +313,4 @@ const SubmitDataset = (props) => {
     )
 }
 
-export default withStyles(DatasetStyle)(SubmitDataset);
+export default withStyles(DatasetStyle)(SubmitModel);

@@ -8,17 +8,17 @@ const ContributionCard = (props) => {
 
     return (
         <div>
-            {data && data.hasOwnProperty("datasetName")&&
+            {data && data.hasOwnProperty("modelName")&&
             
             <Card className={classes.contriCard} id = {data.submitRefNumber} style={{cursor:"pointer"}} onClick ={handleCardClick}>
                  
                 <Grid container className={classes.container} >
                     
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
-                        <Typography value = {data} variant="body2" className={classes.typeTypo}>{data.datasetType}</Typography>
+                        <Typography value = {data} variant="body2" className={classes.typeTypo}>{data.type}</Typography>
                     </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
-                        <Typography value = {data} variant="body2" className={classes.nameTypo}>{data.datasetName}</Typography>
+                        <Typography value = {data} variant="body2" className={classes.nameTypo}>{data.modelName}</Typography>
                     </Grid>
                     <Grid item xs={6} sm={6} md={6} lg={6} xl={6} >
                         <Typography value = {data} variant="body2" className={classes.Typo}>{data.submittedOn}</Typography>
