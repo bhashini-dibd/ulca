@@ -38,7 +38,6 @@ def consume():
         topics = [publish_input_topic]
         consumer = instantiate(topics)
         p_service, m_service, a_service, o_service, au_service = ParallelService(), MonolingualService(), ASRService(), OCRService(), ASRUnlabeledService()
-        repo = DatasetRepo()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-CONS-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
