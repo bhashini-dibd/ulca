@@ -1,0 +1,829 @@
+{
+  "dataset": {
+    "parallel-corpus": {
+      "filters": [
+        {
+          "filter": "languagepair",
+          "values": [
+            {
+              "value": "kn",
+              "label": "Kannada",
+              "targets": [
+                {
+                  "value": "sd",
+                  "label": "Sindhi"
+                },
+                {
+                  "value": "en",
+                  "label": "English"
+                }
+              ]
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi",
+              "targets": [
+                {
+                  "value": "kn",
+                  "label": "Kannada"
+                },
+                {
+                  "value": "kok",
+                  "label": "Konkani"
+                }
+              ]
+            },
+            {
+              "value": "bn",
+              "label": "Bengali",
+              "targets": [
+                {
+                  "value": "mr",
+                  "label": "Marathi"
+                },
+                {
+                  "value": "en",
+                  "label": "English"
+                },
+                {
+                  "value": "ml",
+                  "label": "Malayalam"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "gu",
+                  "label": "Gujarati"
+                },
+                {
+                  "value": "as",
+                  "label": "Assamese"
+                },
+                {
+                  "value": "te",
+                  "label": "Telugu"
+                }
+              ]
+            },
+            {
+              "value": "en",
+              "label": "English",
+              "targets": [
+                {
+                  "value": "mr",
+                  "label": "Marathi"
+                },
+                {
+                  "value": "ml",
+                  "label": "Malayalam"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "gu",
+                  "label": "Gujarati"
+                },
+                {
+                  "value": "as",
+                  "label": "Assamese"
+                },
+                {
+                  "value": "te",
+                  "label": "Telugu"
+                },
+                {
+                  "value": "kn",
+                  "label": "Kannada"
+                },
+                {
+                  "value": "bn",
+                  "label": "Bengali"
+                },
+                {
+                  "value": "ta",
+                  "label": "Tamil"
+                },
+                {
+                  "value": "pa",
+                  "label": "Punjabi"
+                }
+              ]
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati",
+              "targets": [
+                {
+                  "value": "mr",
+                  "label": "Marathi"
+                },
+                {
+                  "value": "ml",
+                  "label": "Malayalam"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "as",
+                  "label": "Assamese"
+                },
+                {
+                  "value": "te",
+                  "label": "Telugu"
+                },
+                {
+                  "value": "bn",
+                  "label": "Bengali"
+                },
+                {
+                  "value": "en",
+                  "label": "English"
+                }
+              ]
+            },
+            {
+              "value": "hi",
+              "label": "Hindi",
+              "targets": [
+                {
+                  "value": "mr",
+                  "label": "Marathi"
+                },
+                {
+                  "value": "ml",
+                  "label": "Malayalam"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "gu",
+                  "label": "Gujarati"
+                },
+                {
+                  "value": "as",
+                  "label": "Assamese"
+                },
+                {
+                  "value": "te",
+                  "label": "Telugu"
+                },
+                {
+                  "value": "bn",
+                  "label": "Bengali"
+                },
+                {
+                  "value": "ta",
+                  "label": "Tamil"
+                },
+                {
+                  "value": "pa",
+                  "label": "Punjabi"
+                },
+                {
+                  "value": "en",
+                  "label": "English"
+                }
+              ]
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam",
+              "targets": [
+                {
+                  "value": "mr",
+                  "label": "Marathi"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "gu",
+                  "label": "Gujarati"
+                },
+                {
+                  "value": "as",
+                  "label": "Assamese"
+                },
+                {
+                  "value": "te",
+                  "label": "Telugu"
+                },
+                {
+                  "value": "bn",
+                  "label": "Bengali"
+                },
+                {
+                  "value": "ta",
+                  "label": "Tamil"
+                },
+                {
+                  "value": "en",
+                  "label": "English"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                }
+              ]
+            },
+            {
+              "value": "mr",
+              "label": "Marathi",
+              "targets": [
+                {
+                  "value": "ml",
+                  "label": "Malayalam"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "gu",
+                  "label": "Gujarati"
+                },
+                {
+                  "value": "as",
+                  "label": "Assamese"
+                },
+                {
+                  "value": "te",
+                  "label": "Telugu"
+                },
+                {
+                  "value": "bn",
+                  "label": "Bengali"
+                },
+                {
+                  "value": "pa",
+                  "label": "Punjabi"
+                },
+                {
+                  "value": "en",
+                  "label": "English"
+                }
+              ]
+            },
+            {
+              "value": "ta",
+              "label": "Tamil",
+              "targets": [
+                {
+                  "value": "en",
+                  "label": "English"
+                },
+                {
+                  "value": "ml",
+                  "label": "Malayalam"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "te",
+                  "label": "Telugu"
+                }
+              ]
+            },
+            {
+              "value": "as",
+              "label": "Assamese",
+              "targets": [
+                {
+                  "value": "en",
+                  "label": "English"
+                },
+                {
+                  "value": "ml",
+                  "label": "Malayalam"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "te",
+                  "label": "Telugu"
+                },
+                {
+                  "value": "mr",
+                  "label": "Marathi"
+                },
+                {
+                  "value": "gu",
+                  "label": "Gujarati"
+                },
+                {
+                  "value": "bn",
+                  "label": "Bengali"
+                }
+              ]
+            },
+            {
+              "value": "pa",
+              "label": "Punjabi",
+              "targets": [
+                {
+                  "value": "bn",
+                  "label": "Bengali"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "mr",
+                  "label": "Marathi"
+                },
+                {
+                  "value": "en",
+                  "label": "English"
+                }
+              ]
+            },
+            {
+              "value": "te",
+              "label": "Telugu",
+              "targets": [
+                {
+                  "value": "en",
+                  "label": "English"
+                },
+                {
+                  "value": "ml",
+                  "label": "Malayalam"
+                },
+                {
+                  "value": "hi",
+                  "label": "Hindi"
+                },
+                {
+                  "value": "mr",
+                  "label": "Marathi"
+                },
+                {
+                  "value": "gu",
+                  "label": "Gujarati"
+                },
+                {
+                  "value": "bn",
+                  "label": "Bengali"
+                },
+                {
+                  "value": "as",
+                  "label": "Assamese"
+                },
+                {
+                  "value": "ta",
+                  "label": "Tamil"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod",
+          "values": [
+            {
+              "value": "machine-translated",
+              "label": "Machine Translated"
+            },
+            {
+              "value": "auto-aligned",
+              "label": "Auto Aligned"
+            },
+            {
+              "value": "machine-translated-post-edited",
+              "label": "Machine Translated Post Edited"
+            },
+            {
+              "value": "manual-translated",
+              "label": "Manual Translated"
+            },
+            {
+              "value": "auto-aligned-from-parallel-docs",
+              "label": "Auto Aligned From Parallel Docs"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "values": [
+            {
+              "value": "education",
+              "label": "Education"
+            },
+            {
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
+            },
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            },
+            {
+              "value": "science",
+              "label": "Science"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "values": []
+        },
+        {
+          "filter": "submitter",
+          "values": []
+        },
+        {
+          "filter": "collectionMethodSpecific",
+          "values": [
+            {
+              "filter": "alignmentTool",
+              "values": []
+            },
+            {
+              "filter": "alignmentScoreRange",
+              "values": []
+            },
+            {
+              "filter": "editingTool",
+              "values": []
+            },
+            {
+              "filter": "translationModel",
+              "values": []
+            },
+            {
+              "filter": "evaluationMethod",
+              "values": []
+            }
+          ]
+        }
+      ]
+    },
+    "monolingual-corpus": {
+      "filters": [
+        {
+          "filter": "sourceLanguage",
+          "values": [
+            {
+              "value": "hi",
+              "label": "Hindi"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "values": [
+            {
+              "value": "news",
+              "label": "News"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod",
+          "values": [
+            {
+              "value": "",
+              "label": "Unspecified"
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "values": []
+        },
+        {
+          "filter": "submitter",
+          "values": []
+        }
+      ]
+    },
+    "asr-unlabeled-corpus": {
+      "filters": [
+        {
+          "filter": "sourceLanguage",
+          "values": [
+            {
+              "value": "hi",
+              "label": "Hindi"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "values": [
+            {
+              "value": "general",
+              "label": "General"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod",
+          "values": [
+            {
+              "value": "machine-generated-transcript",
+              "label": "Machine Generated Transcript"
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "values": []
+        },
+        {
+          "filter": "submitter",
+          "values": []
+        },
+        {
+          "filter": "format",
+          "values": []
+        },
+        {
+          "filter": "channel",
+          "values": []
+        },
+        {
+          "filter": "samplingRate",
+          "values": []
+        },
+        {
+          "filter": "bpsRate",
+          "values": []
+        },
+        {
+          "filter": "countOfSpeakers",
+          "values": []
+        },
+        {
+          "filter": "gender",
+          "values": []
+        },
+        {
+          "filter": "age",
+          "values": []
+        },
+        {
+          "filter": "dialect",
+          "values": []
+        },
+        {
+          "filter": "snrTool",
+          "values": []
+        },
+        {
+          "filter": "snrRatio",
+          "values": []
+        }
+      ]
+    },
+    "ocr-corpus": {
+      "filters": [
+        {
+          "filter": "sourceLanguage",
+          "values": [
+            {
+              "value": "en",
+              "label": "English"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
+              "value": "bn",
+              "label": "Bengali"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "ta",
+              "label": "Tamil"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "values": [
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "government-press-release",
+              "label": "Government Press Release"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod",
+          "values": [
+            {
+              "value": "web-scraping-ocr",
+              "label": "Web Scraping Ocr"
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "values": []
+        },
+        {
+          "filter": "submitter",
+          "values": []
+        },
+        {
+          "filter": "format",
+          "values": []
+        },
+        {
+          "filter": "format",
+          "values": []
+        },
+        {
+          "filter": "dpiRange",
+          "values": []
+        },
+        {
+          "filter": "imageTextType",
+          "values": []
+        },
+        {
+          "filter": "collectionMethodSpecific",
+          "values": [
+            {
+              "filter": "methodDescription",
+              "values": []
+            },
+            {
+              "filter": "ocrTool",
+              "values": []
+            }
+          ]
+        }
+      ]
+    },
+    "asr-corpus": {
+      "filters": [
+        {
+          "filter": "sourceLanguage",
+          "values": [
+            {
+              "value": "en",
+              "label": "English"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "values": [
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod",
+          "values": [
+            {
+              "value": "machine-generated-transcript",
+              "label": "Machine Generated Transcript"
+            },
+            {
+              "value": "manual-transcribed",
+              "label": "Manual Transcribed"
+            },
+            {
+              "value": "auto-aligned",
+              "label": "Auto Aligned"
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "values": []
+        },
+        {
+          "filter": "submitter",
+          "values": []
+        },
+        {
+          "filter": "format",
+          "values": []
+        },
+        {
+          "filter": "channel",
+          "values": []
+        },
+        {
+          "filter": "samplingRate",
+          "values": []
+        },
+        {
+          "filter": "bpsRate",
+          "values": []
+        },
+        {
+          "filter": "countOfSpeakers",
+          "values": []
+        },
+        {
+          "filter": "gender",
+          "values": []
+        },
+        {
+          "filter": "age",
+          "values": []
+        },
+        {
+          "filter": "dialect",
+          "values": []
+        },
+        {
+          "filter": "snrTool",
+          "values": []
+        },
+        {
+          "filter": "snrRatio",
+          "values": []
+        }
+      ]
+    }
+  }
+}
