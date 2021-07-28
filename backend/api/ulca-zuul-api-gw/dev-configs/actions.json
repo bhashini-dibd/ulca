@@ -127,6 +127,30 @@
             "active":true,
             "whiteList":false,
             "description":"API to set DB cluster up for ulca"
+        },
+        {
+            "id":"edcb16f8-3c8c-41b1-8e7e-1b2f3bf09145",
+            "uri":"/ulca/apis/v0/model/upload",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to upload models"
+        },
+        {
+            "id":"19d4bc9c-0c90-45d1-a992-78ae21b37d12",
+            "uri":"/ulca/apis/v0/model/search",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to fetch models"
+        },
+        {
+            "id":"a4c9f08d-0968-403d-ab1f-008b1b1aff44",
+            "uri":"/ulca/apis/v0/model/listByUserId",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to fetch models"
         }
     ]
 }
