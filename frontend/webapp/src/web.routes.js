@@ -25,6 +25,7 @@ import PopUp from "./ui/container/DataSet/ReadymadeDataset.jsx/PopUp";
 import FilterList from "./ui/container/DataSet/DatasetView/FilterList";
 import Reset from "./ui/container/UserManagement/Reset";
 import Benchmark from './ui/container/Model/ModelSearch/Benchmark';
+import SearchModelDetail from './ui/container/Model/ModelSearch/ModelDetail/SearchModelDetail';
 
 const PrivateRoute = ({ path, component: Component, authenticate, title, token, ...rest }) => {
   return (
@@ -92,7 +93,7 @@ export default function App() {
             currentMenu="contribution-list"
             dontShowHeader={false}
           />
-           <PrivateRoute
+          <PrivateRoute
             path={`${process.env.PUBLIC_URL}/model/my-contribution/:added?`}
             title={"My Contribution"}
             authenticate={authenticateUser}
@@ -189,12 +190,20 @@ export default function App() {
             currentMenu="pop-up"
             dontShowHeader={false}
           />
-           <PrivateRoute
+          <PrivateRoute
             path={`${process.env.PUBLIC_URL}/benchmark/:params/:srno`}
             userRoles={[""]}
             component={Benchmark}
             authenticate={authenticateUser}
             currentMenu="benchmark"
+            dontShowHeader={false}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/searchModel`}
+            userRoles={[""]}
+            component={SearchModelDetail}
+            authenticate={authenticateUser}
+            currentMenu="searchModel"
             dontShowHeader={false}
           />
 

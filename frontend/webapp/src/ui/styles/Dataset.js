@@ -321,6 +321,11 @@ const DataSet = (theme) => ({
     },
     subType: {
         marginBottom: '18.5px'
+    },
+    computeGrid: {
+        display: 'flex',
+        alignItems: 'flex-end',
+
     }
 
 });
