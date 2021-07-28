@@ -9,7 +9,7 @@ import {
     MenuItem
 } from '@material-ui/core';
 import DownIcon from '@material-ui/icons/ArrowDropDown';
-import SearchResult from "./SearchResult";
+import SearchResult from "../../DataSet/DatasetSeatch/SearchResult";
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
 import Snackbar from '../../../components/common/Snackbar';
@@ -19,8 +19,8 @@ import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/Da
 import C from "../../../../redux/actions/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
-import DownloadDatasetRecords from "./DownloadDatasetRecords";
-import RequestNumberCreation from "./RequestNumberCreation";
+import DownloadDatasetRecords from "../../DataSet/DatasetSeatch/DownloadDatasetRecords";
+import RequestNumberCreation from "../../DataSet/DatasetSeatch/RequestNumberCreation";
 import { useHistory, useParams } from 'react-router';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import MultiAutocomplete from '../../../components/common/Autocomplete';
@@ -44,7 +44,7 @@ const StyledMenu = withStyles({
         {...props}
     />
 ));
-const SearchAndDownloadRecords = (props) => {
+const Benchmark = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
     const urlMySearch = UrlConfig.mySearches;
@@ -110,8 +110,8 @@ const SearchAndDownloadRecords = (props) => {
             setLabel(label)
         }
 
-        else if ((params === 'completed' || params === 'inprogress') && count === 0)
-            history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+        // else if ((params === 'completed' || params === 'inprogress') && count === 0)
+        //     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
 
     }, []);
 
@@ -175,7 +175,7 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     const handleDatasetClick = (property) => {
-        history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+        // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
         clearfilter()
         setDatasetType({ [property]: true })
         setSrcError(false)
@@ -279,7 +279,7 @@ const SearchAndDownloadRecords = (props) => {
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
                 let source = getValueForLabel(languagePair.source).value
-                makeSubmitAPICall(source, tgt, domain, collectionMethod, datasetType, state.checkedC)
+                //  makeSubmitAPICall(source, tgt, domain, collectionMethod, datasetType, state.checkedC)
                 //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
             }
 
@@ -297,7 +297,7 @@ const SearchAndDownloadRecords = (props) => {
             if (!languagePair.target.length)
                 setTgtError(true)
             else {
-                makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType)
+                // makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType)
             }
 
         }
@@ -314,16 +314,8 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     const renderDatasetButtons = () => {
+        let filterByOptions = FilterBy['domain'].map(data => data.label)
         return (
-            // DatasetType.map((type, i) => {
-            //     return (
-            // <Button size='small' className={classes.innerButton} variant="outlined"
-            //     color={datasetType[type.value] && "primary"}
-            //     key={i}
-            //     onClick={() => handleDatasetClick(type.value)}
-            // >
-            //     {type.label}
-            // </Button>
             <>
                 <Button className={classes.menuStyle}
                     // disabled={page !== 0 ? true : false}
@@ -360,14 +352,12 @@ const SearchAndDownloadRecords = (props) => {
                             </MenuItem>
                         })
                     }
-                </StyledMenu>
-            </>
+                </StyledMenu></>
 
             // )
             // }
+            // )
         )
-
-        // )
     }
 
     const renderFilterByOptions = (id, options, filter, value, label) => {
@@ -451,14 +441,6 @@ const SearchAndDownloadRecords = (props) => {
     }
     const renderclearNsubmitButtons = () => {
         return (
-            /* <div className={classes.clearNSubmit}>
-                      <Button size="large"  variant="outlined" onClick={clearfilter}>
-                          Clear
-                  </Button>
-                      <Button size="large" className={classes.buttonStyle} variant="contained" color="primary" onClick={handleSubmitBtn}>
-                          Submit
-                  </Button>
-                  </div> */
             <Grid container className={classes.clearNSubmit}>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
@@ -486,12 +468,12 @@ const SearchAndDownloadRecords = (props) => {
                 <Grid className={classes.leftSection} item xs={12} sm={5} md={4} lg={4} xl={4}>
                     <Grid container spacing={2}>
                         <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search & Download Records" />
+                            <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search Model" />
                         </Grid>
                         <Grid item className={(params === 'inprogress' || params === 'completed') && classes.blurOut}
                             xs={12} sm={12} md={12} lg={12} xl={12}
                         >
-                            <Typography className={classes.subType} variant="body1">Select Dataset Type</Typography>
+                            <Typography className={classes.subType} variant="body1">Select Model Task</Typography>
                             <hr className={classes.styleHr} />
                             <div className={classes.buttonDiv}>
                                 {renderDatasetButtons()}
@@ -515,16 +497,16 @@ const SearchAndDownloadRecords = (props) => {
                             <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
                             <Grid container spacing={1}>
                                 <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    {renderFilterByfield("domain", "Select Domain", filterBy.domain, FilterBy.domain)}
+                                    {renderFilterByfield("domain", "Domain", filterBy.domain, FilterBy.domain)}
                                 </Grid>
                                 <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    {renderFilterByfield("collectionMethod", "Select Collection Method", filterBy.collectionMethod, FilterBy.collectionMethod)}
+                                    {renderFilterByfield("collectionMethod", "Submitter", filterBy.collectionMethod, FilterBy.collectionMethod)}
                                 </Grid>
+                                {/* <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                    {renderFilterByfield("collectionMethod", "Select Metric", filterBy.collectionMethod, FilterBy.collectionMethod)}
+                                </Grid> */}
                             </Grid>
 
-                            {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
-                            {datasetType['parallel-corpus'] && renderCheckBox("checkedB", "primary", "Source sentences manually translated by multiple translators")}
-                            {datasetType['parallel-corpus'] && renderCheckBox("checkedC", "primary", " Original sentence in source language")}
                             {renderclearNsubmitButtons()}
                         </Grid>
                     </Grid>
@@ -551,4 +533,4 @@ const SearchAndDownloadRecords = (props) => {
 
 }
 
-export default withStyles(DatasetStyle)(SearchAndDownloadRecords);
+export default withStyles(DatasetStyle)(Benchmark);
