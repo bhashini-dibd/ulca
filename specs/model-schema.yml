@@ -74,7 +74,15 @@ components:
           - $ref: '#/components/schemas/ASRInference'
           - $ref: '#/components/schemas/TTSInference'
           - $ref: '#/components/schemas/OCRInference'
-      description: hosted location defines the end point of the model inference.
+          discriminator:
+            propertyName: taskType
+            mapping: {
+              translation: TranslationInference,
+              asr: ASRInference,
+              tts: TTSInference,
+              ocr: OCRInference
+            }
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
 
     FileUploadAPIEndPoint:
       required:
