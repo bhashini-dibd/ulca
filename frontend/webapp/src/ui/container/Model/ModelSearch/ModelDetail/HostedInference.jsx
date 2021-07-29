@@ -1,6 +1,7 @@
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../../styles/Dataset';
 import { useHistory } from 'react-router';
+import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import {
     Grid,
     Typography,
@@ -14,9 +15,9 @@ const HostedInference = (props) => {
 
     return (
         <div>
-            <Typography>Hosted inference API</Typography>
+            <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
             <Grid container spacing={2}>
-                <Grid item xl={8} lg={8} md={8} sm={8} xs={8}>
+                <Grid className={classes.gridCompute} item xl={8} lg={8} md={8} sm={8} xs={8}>
                     <TextField fullWidth
                         color="primary"
                         label="Enter Text"

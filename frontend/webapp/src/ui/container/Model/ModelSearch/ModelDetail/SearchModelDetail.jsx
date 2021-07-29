@@ -8,7 +8,7 @@ import {
     Grid,
     Typography,
     Button,
-    TextField
+    Divider
 } from '@material-ui/core';
 
 const SearchModelDetail = (props) => {
@@ -45,9 +45,11 @@ const SearchModelDetail = (props) => {
     }
     return (
         <div>
-            <><Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back to model list</Button></>
-            <Typography>Reliiance_Jio_AICOE</Typography>
-            <hr></hr>
+
+            <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back to model list</Button>
+            <Typography className={classes.mainTitle}>Reliiance_Jio_AICOE</Typography>
+            {/* <hr style={{marginTop: "19px",opacity:'0.3' }}></hr> */}
+            <Divider className={classes.gridCompute} />
             <Grid container>
                 <Grid className={classes.leftSection} item xs={7} sm={7} md={7} lg={7} xl={7}>
                     {description.map(des => <ModelDescription title={des.title} para={des.para} />)}
