@@ -14,6 +14,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,6 +52,9 @@ public class ModelService {
 	@Autowired
 	ModelDao modelDao;
 	
+	@Value("${ulca.model.upload.folder}")
+    private String modelUploadFolder;
+	
 	public Model modelSubmit(Model model) {
 		
 		modelDao.save(model);
@@ -81,6 +85,7 @@ public class ModelService {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         
+        String uploadFolder = modelUploadFolder + "/model";
         
 
         try {
@@ -90,7 +95,7 @@ public class ModelService {
             }
 
             // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = Paths.get("/tmp/saroj/model")
+            Path targetLocation = Paths.get(uploadFolder)
                     .toAbsolutePath().normalize();
             
             try {
