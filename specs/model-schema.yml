@@ -29,6 +29,7 @@ components:
           minLength: 5
           type: string
           description: model name that you want your users to see
+          example: vakyansh asr model
         description:
           maxLength: 1000
           minLength: 25
@@ -36,6 +37,12 @@ components:
           description: "brief description about model, its goal, basically something\
             \ sweet about it"
           example: Speech recognition model for classroom lecture
+        refUrl:
+          maxLength: 200
+          minLength: 5
+          type: string
+          description: github link or url giving further info about the model
+          example: https://github.com/Open-Speech-EkStep/vakyansh-models
         task:
           $ref: '#/components/schemas/ModelTask'
         languages:
@@ -138,7 +145,6 @@ components:
     TranslationResponse:
       required:
       - output
-      - config
       type: object
       properties:
         output:
@@ -176,7 +182,6 @@ components:
     ASRResponse:
       required:
       - output
-      - config
       type: object
       properties:
         output:
@@ -209,7 +214,6 @@ components:
     TTSResponse:
       required:
       - audioUri
-      - config
       type: object
       properties:
         audioUri:
@@ -249,7 +253,6 @@ components:
     OCRResponse:
       required:
       - output
-      - config
       type: object
       properties:
         output:
@@ -278,17 +281,21 @@ components:
         source:
           minLength: 1
           type: string
-          description: actual textual data that needs to be translated.
+          description: input sentence for the model
         target:
           minLength: 1
           type: string
-          description: expected translated sentence, for reference.
+          description: to be used along with translation model. expected translated sentence, for reference
 
     TranslationConfig:
       required:
       - language
       type: object
       properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
@@ -297,6 +304,10 @@ components:
       - language
       type: object
       properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
@@ -305,6 +316,10 @@ components:
       - language
       type: object
       properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
@@ -313,6 +328,10 @@ components:
       - language
       type: object
       properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
         audioFormat:
