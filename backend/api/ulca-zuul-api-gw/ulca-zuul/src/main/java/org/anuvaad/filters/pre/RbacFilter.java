@@ -171,7 +171,13 @@ public class RbacFilter extends ZuulFilter {
             String sigValueHash  = bytesToHex(digest.digest(sigValue.trim().getBytes(StandardCharsets.UTF_8)));
             String sigHash = privateKey.trim() + "|" + sigValueHash;
             String hash = bytesToHex(digest.digest(sigHash.trim().getBytes(StandardCharsets.UTF_8)));
-            return hash.equals(signature.trim());
+            Boolean sig = hash.equals(signature.trim());
+            if(!sig){
+                logger.info("SigValue: {}", sigValue);
+                logger.info("Signature: {}", signature);
+                logger.info("Hash: {}", hash);
+            }
+            return sig;
         }catch (Exception e) {
             logger.error("Exception while verifying signature: ", e);
             return false;
