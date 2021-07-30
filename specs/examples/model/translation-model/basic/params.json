@@ -28,7 +28,7 @@
       ]
    },
    "inferenceEndPoint": {
-      "callbackUrl": "https://users-auth.anuvaad.org/aai4b-nmt-inference/v1/translate",
+      "callbackUrl": "https://users-auth.anuvaad.org/aai4b-nmt-inference/v0/translate",
       "schema": {
          "taskType": "translation",
          "request": {
