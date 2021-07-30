@@ -27,7 +27,10 @@ import MultiAutocomplete from '../../../components/common/Autocomplete';
 import { Language, FilterBy } from '../../../../configs/DatasetItems';
 import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest';
 import DatasetType from '../../../../configs/DatasetItems';
+import { ModelTask } from '../../../../configs/DatasetItems';
 import getLanguageLabel from '../../../../utils/getLabel';
+import SearchModel from '../../../../redux/actions/api/Model/ModelSearch/SearchModel';
+import APITransport from '../../../../redux/actions/apitransport/apitransport';
 const StyledMenu = withStyles({
 })((props) => (
     <Menu
@@ -67,8 +70,12 @@ const Benchmark = (props) => {
     });
 
     const [datasetType, setDatasetType] = useState({
-        'parallel-corpus': true
+        'translation': true
     })
+
+    // const [modelTask, setModelTask]=useState({
+    //     'translation': true
+    // })
 
     const [count, setCount] = useState(0);
     const [urls, setUrls] = useState({
@@ -106,6 +113,8 @@ const Benchmark = (props) => {
             setLanguagePair({ target, source })
             //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
             setDatasetType({ [data[0].datasetType]: true })
+            // setModelTask({ [data[0].modelTask]: true })
+
 
             setLabel(label)
         }
@@ -123,8 +132,10 @@ const Benchmark = (props) => {
                 source: "",
                 collectionMethod: ""
             })
-            setLabel('Parallel Dataset')
-            setDatasetType({ 'parallel-corpus': true })
+            setLabel('Machine Translation')
+            setDatasetType({ 'translation': true })
+            // setLabel('Machine Translation')
+            // setModelTask({ 'translation': true })
         }
         previousUrl.current = params;
     })
@@ -155,7 +166,7 @@ const Benchmark = (props) => {
         checkedC: false,
 
     });
-    const [label, setLabel] = useState('Parallel Dataset')
+    const [label, setLabel] = useState('Machine Translation')
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
     const { params, srno } = param
@@ -165,10 +176,6 @@ const Benchmark = (props) => {
         })
         let datasetType = data.length && getLanguageLabel(data[0].datasetType, 'datasetType')[0]
         switch (params) {
-            case 'inprogress':
-                return <RequestNumberCreation reqno={srno} />
-            case 'completed':
-                return <DownloadDatasetRecords datasetType={datasetType ? datasetType : 'Parallel'} sentencePair={count} urls={urls} />
             default:
                 return <SearchResult />
         }
@@ -178,11 +185,12 @@ const Benchmark = (props) => {
         history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
         clearfilter()
         setDatasetType({ [property]: true })
+        // setModelTask({ [property]: true })
         setSrcError(false)
         setTgtError(false)
     }
     const getLabel = () => {
-        if (datasetType['parallel-corpus'])
+        if (datasetType['translation'])
             return "Target Language *"
         // else if (datasetType['ocr-corpus'])
         //     return "Script *"
@@ -191,7 +199,7 @@ const Benchmark = (props) => {
     }
 
     const getTitle = () => {
-        if (datasetType['parallel-corpus'])
+        if (datasetType['translation'])
             return "Select Language Pair"
         // else if (datasetType['ocr-corpus'])
         //     return "Select Script"
@@ -210,7 +218,7 @@ const Benchmark = (props) => {
         });
     }
 
-    const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type, originalSourceSentence = false) => {
+    const makeSubmitAPICall = (src, tgt, type) => {
         const Dataset = Object.keys(type)[0]
         setSnackbarInfo({
             ...snackbar,
@@ -218,40 +226,8 @@ const Benchmark = (props) => {
             message: 'Please wait while we process your request.',
             variant: 'info'
         })
-        const apiObj = new SubmitSearchRequest(Dataset, tgt, src, domain, collectionMethod, originalSourceSentence)
-        fetch(apiObj.apiEndPoint(), {
-            method: 'post',
-            headers: apiObj.getHeaders().headers,
-            body: JSON.stringify(apiObj.getBody())
-        })
-            .then(async res => {
-                let response = await res.json()
-                if (res.ok) {
-                    dispatch(PageChange(0, C.SEARCH_PAGE_NO));
-                    history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/inprogress/${response.data.serviceRequestNumber}`)
-                    handleSnackbarClose()
-
-                } else {
-                    setSnackbarInfo({
-                        ...snackbar,
-                        open: true,
-                        message: response.message ? response.message : "Something went wrong. Please try again.",
-                        variant: 'error'
-                    })
-                    if (res.status === 401) {
-                        setTimeout(() => history.push(`${process.env.PUBLIC_URL}/user/login`), 3000)
-
-                    }
-                }
-            })
-            .catch(err => {
-                setSnackbarInfo({
-                    ...snackbar,
-                    open: true,
-                    message: "Something went wrong. Please try again.",
-                    variant: 'error'
-                })
-            })
+        const apiObj = new SearchModel(Dataset, src, tgt)
+        dispatch(APITransport(apiObj));
 
     }
     const handleSnackbarClose = () => {
@@ -276,10 +252,10 @@ const Benchmark = (props) => {
         //let collectionMethod = filterBy.collectionMethod.map(method => method.value)
         let domain = filterBy.domain && [getFilterValueForLabel('domain', filterBy.domain).value]
         let collectionMethod = filterBy.collectionMethod && [getFilterValueForLabel('collectionMethod', filterBy.collectionMethod).value]
-        if (datasetType['parallel-corpus']) {
+        if (datasetType['translation']) {
             if (languagePair.source && languagePair.target.length) {
                 let source = getValueForLabel(languagePair.source).value
-                //  makeSubmitAPICall(source, tgt, domain, collectionMethod, datasetType, state.checkedC)
+                makeSubmitAPICall(source, tgt, datasetType)
                 //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
             }
 
@@ -335,7 +311,7 @@ const Benchmark = (props) => {
                     className={classes.styledMenu1}
                 >
                     {
-                        DatasetType.map(menu => {
+                        ModelTask.map(menu => {
 
                             return <MenuItem
                                 value={menu.value}
@@ -394,7 +370,7 @@ const Benchmark = (props) => {
     const renderFilterByfield = (id, label, value, filter) => {
         let filterByOptions = FilterBy[id].map(data => data.label)
         return (
-            <Autocomplete
+            <Autocomplete disabled
                 value={filterBy[id] ? filterBy[id] : null}
                 id={id}
                 options={filterByOptions}
@@ -480,7 +456,7 @@ const Benchmark = (props) => {
                             </div>
                             <Typography className={classes.subHeader} variant="body1">{getTitle()}</Typography>
                             <div className={classes.subHeader}>
-                                {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
+                                {datasetType['translation'] && renderTexfield("select-source-language", "Source Language *")}
                             </div>
                             <div className={classes.autoComplete}>
                                 <MultiAutocomplete

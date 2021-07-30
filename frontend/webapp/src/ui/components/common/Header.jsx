@@ -66,7 +66,6 @@ const Header = (props) => {
   }
 
   const handleMenuItemClick = (url) => {
-    debugger
     if(authenticate()){
       history.push(`${process.env.PUBLIC_URL}${url}`)
     handleClose();

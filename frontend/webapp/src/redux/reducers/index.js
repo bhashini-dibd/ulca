@@ -14,8 +14,8 @@ import modelPageChangeDetails from './Model/ModelView/PageInfo';
 import modelTableView from './Model/ModelView/TableStatus';
 import modelStatus from './Model/ModelSubmit/SubmitModel';
 
+import searchModel from './Model/ModelSearch/SearchModel';
 const index = {
-
     apiStatus,
     myContributionReport,
     detailedReport,
@@ -29,11 +29,8 @@ const index = {
     modelContributionReport,
     modelPageChangeDetails,
     modelTableView,
-    modelStatus
-
-
-
-   
+    modelStatus,
+    searchModel
 };
 
 export default index;
