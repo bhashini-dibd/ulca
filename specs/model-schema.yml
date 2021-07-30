@@ -313,7 +313,7 @@ components:
       type: object
       properties:
         modelId:
-          type: string
+          type: integer
           description: Unique identifier of model
           example: 103
         language:
@@ -325,7 +325,7 @@ components:
       type: object
       properties:
         modelId:
-          type: string
+          type: integer
           description: Unique identifier of model
           example: 103
         language:
@@ -337,7 +337,7 @@ components:
       type: object
       properties:
         modelId:
-          type: string
+          type: integer
           description: Unique identifier of model
           example: 103
         language:
