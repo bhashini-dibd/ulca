@@ -63,6 +63,7 @@ class ErrorProcessor(Thread):
                 error_records_count = len(error_records_keys)
                 log.info(f'{error_records_count} records found in redis store for srn -- {srn}')
                 #if both mongo and redis store count matches, no upload; Else if redis-count > mongo-count start uploading
+                """
                 if error_records_count > uploaded_count:
                     #fetching back all the records from redis store using the srn keys
                     error_records = storerepo.get_all_records(error_records_keys,pattern)
@@ -74,6 +75,7 @@ class ErrorProcessor(Thread):
                         persister.start()
                 else:
                     log.info(f'No new records left for uploading, for srn -- {srn}')
+                """
         except Exception as e:
             log.exception(f"Exception on error processing {e}")
 
