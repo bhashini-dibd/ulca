@@ -173,18 +173,12 @@ components:
 
     ASRRequest:
       required:
-      - audioUri
+      - audio
       - config
       type: object
       properties:
-        audioUri:
-          type: array
-          description: list of paths on gcp/s3 bucket or https url
-          example: gs://bucket/audio.wav
-          items:
-            maxItems: 10
-            minItems: 1
-            type: string
+        audio:
+          $ref: '#/components/schemas/ASRFile'
         config:
           $ref: '#/components/schemas/ASRConfig'
 
@@ -389,7 +383,7 @@ components:
   
     ASRFile:
       required:
-      - audioContent|audioUri|fileId
+      - audioContent | audioUri
       type: object
       properties:
         audioContent:
@@ -400,9 +394,7 @@ components:
           type: string
           description: path on gcp/s3 bucket or https url
           example: gs://bucket/audio.wav
-        fileId:
-          type: string
-          description: fileId should be same as returned in the response of file-upload
+
 
     ASRRecognitionStatus:
       type: object
