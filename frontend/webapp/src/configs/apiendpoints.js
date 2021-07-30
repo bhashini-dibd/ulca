@@ -12,17 +12,11 @@ const endpoints = {
   register: "/ulca/user-mgmt/v1/users/signup",
   activateUser: "/ulca/user-mgmt/v1/users/verify-user",
   forgotPassword: "/ulca/user-mgmt/v1/users/forgot-password",
-<<<<<<< HEAD
-  tokenSearch:'/ulca/user-mgmt/v1/users/get/token/status',  
-  resetPassword:'/ulca/user-mgmt/v1/users/reset-password',
-  modelSubmit : '/ulca/apis/v0/model/upload',
-  getModelContributionList :"/ulca/apis/v0/model/listByUserId"
-=======
   tokenSearch: '/ulca/user-mgmt/v1/users/get/token/status',
   resetPassword: '/ulca/user-mgmt/v1/users/reset-password',
   modelSubmit: '/ulca/apis/v0/dataset/corpus/submit',
-  modelSearch: '/ulca/apis/v0/model/search'
->>>>>>> e51413d0411020c0ec8d87e8cbb006270e1bbe70
+  modelSearch: '/ulca/apis/v0/model/search',
+  getModelContributionList :"/ulca/apis/v0/model/listByUserId"
 };
 
 export default endpoints;

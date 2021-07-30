@@ -8,7 +8,7 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from 'md5';
 
 export default class SearchModel extends API {
-    constructor(task = "translation", sourceLanguage = null, targetLanguage = [], domain, submitter, timeout = 2000) {
+    constructor(task = "translation", sourceLanguage = null, targetLanguage = [], domain = 'All', submitter = 'All', timeout = 2000) {
         super("POST", timeout, false);
         this.task = task;
         this.sourceLanguage = sourceLanguage;

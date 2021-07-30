@@ -56,7 +56,7 @@ const Benchmark = (props) => {
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
         source: 'English',
-        target: { label: 'Hindi', value: 'hi'},
+        target: { label: 'Hindi', value: 'hi' },
         // target:[{ label: 'Hindi', value: 'hi'}]
     });
     // const [filterBy, setFilterBy] = useState({
@@ -90,39 +90,9 @@ const Benchmark = (props) => {
     const detailedReport = useSelector((state) => state.mySearchReport);
 
     useEffect(() => {
-
+        const apiObj = new SearchModel('translation', 'en', 'hi');
+        dispatch(APITransport(apiObj));
         previousUrl.current = params;
-
-        let data = detailedReport.responseData.filter((val) => {
-            return val.sr_no === srno
-        })
-        if (data[0]) {
-            setCount(data[0].count);
-            setUrls({
-                downloadSample: data[0].sampleUrl,
-                downloadAll: data[0].downloadUrl
-            })
-
-            let target = data[0].targetLanguage ? getLanguageLabel(data[0].targetLanguage) : getLanguageLabel(data[0].sourceLanguage)
-            let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
-            let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
-            let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
-            let label = data[0].search_criteria && data[0].search_criteria.split('|')[0]
-            setFilterBy({
-                ...filterBy, domain, collectionMethod
-            })
-            setLanguagePair({ target, source })
-            //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
-            setDatasetType({ [data[0].datasetType]: true })
-            // setModelTask({ [data[0].modelTask]: true })
-
-
-            setLabel(label)
-        }
-
-        // else if ((params === 'completed' || params === 'inprogress') && count === 0)
-        //     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
-
     }, []);
 
     useEffect(() => {
@@ -219,7 +189,7 @@ const Benchmark = (props) => {
         });
     }
 
-    const makeSubmitAPICall = (src, tgt, type,domain,submitter) => {
+    const makeSubmitAPICall = (src, tgt, type, domain, submitter) => {
         const Dataset = Object.keys(type)[0]
         setSnackbarInfo({
             ...snackbar,
@@ -227,7 +197,7 @@ const Benchmark = (props) => {
             message: 'Please wait while we process your request.',
             variant: 'info'
         })
-        const apiObj = new SearchModel(Dataset, src, tgt,domain,submitter)
+        const apiObj = new SearchModel(Dataset, src, tgt, domain, submitter)
         dispatch(APITransport(apiObj));
 
     }
@@ -249,16 +219,16 @@ const Benchmark = (props) => {
 
     const handleSubmitBtn = () => {
         // let tgt = languagePair.target.map(trgt => trgt.value)
-        let tgt =languagePair.target && languagePair.target.value
+        let tgt = languagePair.target && languagePair.target.value
         let domain = "All"
         let submitter = "All"
         // let domain = filterBy.domain && [getFilterValueForLabel('domain', filterBy.domain).value]
         // let collectionMethod = filterBy.collectionMethod && [getFilterValueForLabel('collectionMethod', filterBy.collectionMethod).value]
-        
+
         if (datasetType['translation']) {
             if (languagePair.source && languagePair.target) {
                 let source = getValueForLabel(languagePair.source).value
-                makeSubmitAPICall(source, tgt, datasetType,domain,submitter)
+                makeSubmitAPICall(source, tgt, datasetType, domain, submitter)
                 //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
             }
 
