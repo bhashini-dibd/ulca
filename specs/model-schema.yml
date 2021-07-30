@@ -151,6 +151,7 @@ components:
 
 
     TranslationResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
       - output
       type: object
@@ -188,6 +189,7 @@ components:
           $ref: '#/components/schemas/ASRConfig'
 
     ASRResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
       - output
       type: object
@@ -220,6 +222,7 @@ components:
 
 
     TTSResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
       - audioUri
       type: object
@@ -259,6 +262,7 @@ components:
           $ref: '#/components/schemas/OCRConfig'
 
     OCRResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
       - output
       type: object
@@ -313,7 +317,7 @@ components:
       type: object
       properties:
         modelId:
-          type: integer
+          type: string
           description: Unique identifier of model
           example: 103
         language:
@@ -325,7 +329,7 @@ components:
       type: object
       properties:
         modelId:
-          type: integer
+          type: string
           description: Unique identifier of model
           example: 103
         language:
@@ -337,7 +341,7 @@ components:
       type: object
       properties:
         modelId:
-          type: integer
+          type: string
           description: Unique identifier of model
           example: 103
         language:
