@@ -28,7 +28,7 @@
       ]
    },
    "inferenceEndPoint": {
-      "callbackUrl": "https://users-auth.anuvaad.org/aai4b-nmt-inference/v1/translate",
+      "callbackUrl": "https://users-auth.anuvaad.org/aai4b-nmt-inference/v0/translate",
       "schema": {
          "taskType": "translation",
          "request": {
@@ -39,7 +39,7 @@
             ],
             "config": {
                "model_id":103,
-               "languages": {
+               "language": {
                   "sourceLanguage": "en",
                   "targetLanguage": "hi"
                }
