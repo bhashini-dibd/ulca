@@ -8,11 +8,13 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from 'md5';
 
 export default class SearchModel extends API {
-    constructor(task = "translation", sourceLanguage = null, targetLanguage = [], timeout = 2000) {
+    constructor(task = "translation", sourceLanguage = null, targetLanguage = [], domain, submitter, timeout = 2000) {
         super("POST", timeout, false);
         this.task = task;
         this.sourceLanguage = sourceLanguage;
-        this.targetLanguage = targetLanguage[0];
+        this.targetLanguage = targetLanguage;
+        this.domain = domain;
+        this.submitter = submitter
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.modelSearch}`;
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'));
         this.type = C.SUBMIT_MODEL_SEARCH;
@@ -24,7 +26,6 @@ export default class SearchModel extends API {
         if (res) {
             this.report = res;
         }
-        console.log('inside processResponse', res)
     }
 
     apiEndPoint() {
@@ -35,7 +36,9 @@ export default class SearchModel extends API {
         let bodyData = {
             task: this.task,
             sourceLanguage: this.sourceLanguage,
-            targetLanguage: this.targetLanguage
+            targetLanguage: this.targetLanguage,
+            domain: this.domain,
+            submitter: this.submitter
         }
         bodyData.userId = JSON.parse(localStorage.getItem('userDetails')).userID
         return bodyData;
