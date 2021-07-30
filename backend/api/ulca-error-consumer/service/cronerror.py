@@ -84,11 +84,11 @@ class ErrorProcessor(Thread):
             log.info(f'Writing {len(error_records)} errors to {file} for srn -- {srn}')
             #writing to csv locally
             storeutils.write_to_csv(error_records,file,srn)
-            zipfile = storeutils.zipfile_creation(file)
-            log.info(f"zip file created :{zipfile} , for srn -- {srn}, ")
-            file_name = zipfile.replace("/opt/","")
+            # zipfile = storeutils.zipfile_creation(file)
+            # log.info(f"zip file created :{zipfile} , for srn -- {srn}, ")
+            file_name = file.replace("/opt/","")
             #initiating upload API call
-            error_object_path = storeutils.file_store_upload_call(zipfile,file_name,error_prefix)
+            error_object_path = storeutils.file_store_upload_call(file,file_name,error_prefix)
             if error_object_path == False:
                 return  None
             log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
@@ -96,7 +96,7 @@ class ErrorProcessor(Thread):
             #updating record on mongo with uploaded error count
             errorepo.upsert(error_record)
             log.info(f'Updated db record for SRN -- {srn}')
-            os.remove(zipfile)
+            os.remove(file)
             return error_record
         except Exception as e:
             log.exception(f'Exception while ingesting errors to object store: {e}')
