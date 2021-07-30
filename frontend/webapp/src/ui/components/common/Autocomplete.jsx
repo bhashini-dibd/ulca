@@ -12,7 +12,7 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function CheckboxesTags(props) {
   return (
     <Autocomplete
-      multiple
+      multiple={!props.single}
       id={props.id}
       options={props.options}
       disableCloseOnSelect

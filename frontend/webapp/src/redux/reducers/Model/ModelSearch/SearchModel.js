@@ -92,7 +92,7 @@ const getContributionList = (state, payload) => {
                     language: lang,
                      licence      : element.license,
                      submitter :element.submitter.name,
-                     trainingDataset:"",
+                     trainingDataset:element.trainingDataset,
                      color : element.status === "Completed" ? "#139D60" :  element.status === "In-Progress" ? "#139D60" : element.status === "Failed" ? "#139D60" : "green"
             }
 

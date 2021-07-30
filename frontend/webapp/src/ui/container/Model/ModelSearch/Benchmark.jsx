@@ -56,7 +56,12 @@ const Benchmark = (props) => {
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
         source: 'English',
+<<<<<<< HEAD
         target: [{value: "hi", label: "Hindi"}]
+=======
+        target: { label: 'Hindi', value: 'hi' },
+        // target:[{ label: 'Hindi', value: 'hi'}]
+>>>>>>> 2c3c8365c3645d56891e608b5f27195c6dc83bfa
     });
     // const [filterBy, setFilterBy] = useState({
     //     domain: [],
@@ -83,6 +88,7 @@ const Benchmark = (props) => {
         downloadAll: ''
     })
 
+<<<<<<< HEAD
     const makeSubmitAPICall = (src, tgt, type) => {
         const Dataset = Object.keys(type)[0]
         const apiObj = new SearchModel(Dataset, src, tgt)
@@ -90,6 +96,18 @@ const Benchmark = (props) => {
 
     }
     
+=======
+    const previousUrl = useRef();
+
+
+    const detailedReport = useSelector((state) => state.mySearchReport);
+
+    useEffect(() => {
+        const apiObj = new SearchModel('translation', 'en', 'hi');
+        dispatch(APITransport(apiObj));
+        previousUrl.current = params;
+    }, []);
+>>>>>>> 2c3c8365c3645d56891e608b5f27195c6dc83bfa
 
     useEffect(() => {
         makeSubmitAPICall("en",["hi"],{})
@@ -165,7 +183,20 @@ const Benchmark = (props) => {
         });
     }
 
+<<<<<<< HEAD
     
+=======
+    const makeSubmitAPICall = (src, tgt, type, domain, submitter) => {
+        const Dataset = Object.keys(type)[0]
+        setSnackbarInfo({
+            ...snackbar,
+            open: true,
+            message: 'Please wait while we process your request.',
+            variant: 'info'
+        })
+        const apiObj = new SearchModel(Dataset, src, tgt, domain, submitter)
+        dispatch(APITransport(apiObj));
+>>>>>>> 2c3c8365c3645d56891e608b5f27195c6dc83bfa
 
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
@@ -184,30 +215,32 @@ const Benchmark = (props) => {
     }
 
     const handleSubmitBtn = () => {
-        let tgt = languagePair.target.map(trgt => trgt.value)
-        //let domain = filterBy.domain.map(domain => domain.value)
-        //let collectionMethod = filterBy.collectionMethod.map(method => method.value)
-        let domain = filterBy.domain && [getFilterValueForLabel('domain', filterBy.domain).value]
-        let collectionMethod = filterBy.collectionMethod && [getFilterValueForLabel('collectionMethod', filterBy.collectionMethod).value]
+        // let tgt = languagePair.target.map(trgt => trgt.value)
+        let tgt = languagePair.target && languagePair.target.value
+        let domain = "All"
+        let submitter = "All"
+        // let domain = filterBy.domain && [getFilterValueForLabel('domain', filterBy.domain).value]
+        // let collectionMethod = filterBy.collectionMethod && [getFilterValueForLabel('collectionMethod', filterBy.collectionMethod).value]
+
         if (datasetType['translation']) {
-            if (languagePair.source && languagePair.target.length) {
+            if (languagePair.source && languagePair.target) {
                 let source = getValueForLabel(languagePair.source).value
-                makeSubmitAPICall(source, tgt, datasetType)
+                makeSubmitAPICall(source, tgt, datasetType, domain, submitter)
                 //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
             }
 
-            else if (!languagePair.source && !languagePair.target.length) {
+            else if (!languagePair.source && !languagePair.target) {
                 setSrcError(true)
                 setTgtError(true)
             }
 
             else if (!languagePair.source)
                 setSrcError(true)
-            else if (!languagePair.target.length)
+            else if (!languagePair.target)
                 setTgtError(true)
         }
         else {
-            if (!languagePair.target.length)
+            if (!languagePair.target)
                 setTgtError(true)
             else {
                 // makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType)
@@ -305,13 +338,14 @@ const Benchmark = (props) => {
     //     )
     // }
     const renderFilterByfield = (id, label, value, filter) => {
-        let filterByOptions = FilterBy[id].map(data => data.label)
+        let filterByOptions = ["All"]
         return (
-            <Autocomplete disabled
-                value={filterBy[id] ? filterBy[id] : null}
+            <Autocomplete
+                disableClearable
+                value="All"
                 id={id}
                 options={filterByOptions}
-                onChange={(event, data) => handleFilterByChange(data, id)}
+                //  onChange={(event, data) => handleFilterByChange(data, id)}
                 renderInput={(params) => <TextField fullWidth {...params} label={label} variant="standard"
                 />}
             />
@@ -397,6 +431,7 @@ const Benchmark = (props) => {
                             </div>
                             <div className={classes.autoComplete}>
                                 <MultiAutocomplete
+                                    single={true}
                                     id="language-target"
                                     options={getTargetLang()}
                                     filter='target'
