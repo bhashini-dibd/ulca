@@ -7,15 +7,7 @@ const initialState = {
 const getSearchOptions = (payload) => {
     return [
         {
-
-            "sourceLang": [],
-            "targetLang": [],
-
-            // "filterBy": {
-            //     "domain": [],
-            //     "source": [],
-            //     "collectionMethods": []
-            // }
+           ...payload
         }
 
     ]
@@ -25,7 +17,7 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case C.SUBMIT_MODEL_SEARCH:
             return {
-                result: getSearchOptions(action.payload.responseData)
+                result: action.payload.data
             }
         default:
             return {

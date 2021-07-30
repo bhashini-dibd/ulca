@@ -24,6 +24,7 @@ export default class SearchModel extends API {
         if (res) {
             this.report = res;
         }
+        console.log('inside processResponse', res)
     }
 
     apiEndPoint() {
@@ -56,6 +57,8 @@ export default class SearchModel extends API {
 
 
     getPayload() {
+        console.log(this.report)
         return this.report;
+
     }
 }

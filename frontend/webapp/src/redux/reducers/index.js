@@ -12,9 +12,8 @@ import tableView from "./DataSet/DatasetView/TableStatus";
 import modelContributionReport from './Model/ModelView/myContribution';
 import modelPageChangeDetails from './Model/ModelView/PageInfo';
 import modelTableView from './Model/ModelView/TableStatus';
-
+import searchModel from './Model/ModelSearch/SearchModel';
 const index = {
-
     apiStatus,
     myContributionReport,
     detailedReport,
@@ -27,11 +26,8 @@ const index = {
     tableView,
     modelContributionReport,
     modelPageChangeDetails,
-    modelTableView
-
-
-
-   
+    modelTableView,
+    searchModel
 };
 
 export default index;
