@@ -158,6 +158,9 @@ const DataSet = (theme) => ({
         justifyContent: "center",
         height: window.innerHeight - 80
     },
+    modelTable: {
+        marginTop:"2rem"
+    },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
     searchResult: {

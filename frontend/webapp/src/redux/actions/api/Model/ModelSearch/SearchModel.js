@@ -18,12 +18,18 @@ export default class SearchModel extends API {
         this.type = C.SUBMIT_MODEL_SEARCH;
     }
 
+    toString() {
+        return `${super.toString()} email: ${this.email} token: ${this.token} expires: ${this.expires} userid: ${this.userid}, type: ${this.type}`;
+    }
+
+
 
     processResponse(res) {
         super.processResponse(res);
         if (res) {
-            this.report = res;
+            this.report = res.data;
         }
+        debugger
         console.log('inside processResponse', res)
     }
 
@@ -57,7 +63,6 @@ export default class SearchModel extends API {
 
 
     getPayload() {
-        console.log(this.report)
         return this.report;
 
     }

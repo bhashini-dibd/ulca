@@ -1,5 +1,6 @@
 import C from '../../../actions/constants';
 import getDatasetName from '../../../../utils/getDataset';
+import {getLanguageName,FilterByDomain,FilterByCollection } from '../../../../utils/getLabel';
 const initialState = {
     responseData: [],
     filteredData: [],
@@ -75,17 +76,24 @@ const getContributionList = (state, payload) => {
     let filter = { status: [], modelType: [] }
     let refreshStatus = false;
     payload.forEach(element => {
+        let sLanguage =element.languages.length>0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
+        let tLanguage = element.languages && element.languages.length>0&& element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
+            let lang = sLanguage +" - " +tLanguage
         responseData.push(
             {
                      submitRefNumber      : element.modelId,
                      modelName          : element.name,
+                     description : element.description,
                     // submittedOn          : dateConversion(element.submittedOn),
                      task :          element.task.type,
                      domain :          getDomainDetails(element.domain),
                     status               : "Published",
+                    language: lang,
                      licence      : element.license,
+                     submitter :element.submitter.name,
+                     trainingDataset:element.trainingDataset,
                      action :"View Result",
-                     color : element.status === "Completed" ? "#139D60" :  element.status === "In-Progress" ? "#2C2799" : element.status === "Failed" ? "#F54336" : "#FEA52C"
+                     color : element.status === "Completed" ? "#139D60" :  element.status === "In-Progress" ? "#2C2799" : element.status === "Failed" ? "#F54336" : "green"
             }
 
         )

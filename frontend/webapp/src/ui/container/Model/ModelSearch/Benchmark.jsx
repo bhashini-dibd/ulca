@@ -9,7 +9,7 @@ import {
     MenuItem
 } from '@material-ui/core';
 import DownIcon from '@material-ui/icons/ArrowDropDown';
-import SearchResult from "../../DataSet/DatasetSeatch/SearchResult";
+import SearchModels from "./SearchModels";
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
 import Snackbar from '../../../components/common/Snackbar';
@@ -55,8 +55,8 @@ const Benchmark = (props) => {
     const param = useParams();
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
-        source: '',
-        target: []
+        source: 'English',
+        target: [{value: "hi", label: "Hindi"}]
     });
     // const [filterBy, setFilterBy] = useState({
     //     domain: [],
@@ -83,68 +83,24 @@ const Benchmark = (props) => {
         downloadAll: ''
     })
 
-    const previousUrl = useRef();
+    const makeSubmitAPICall = (src, tgt, type) => {
+        const Dataset = Object.keys(type)[0]
+        const apiObj = new SearchModel(Dataset, src, tgt)
+        dispatch(APITransport(apiObj));
 
-
-    const detailedReport = useSelector((state) => state.mySearchReport);
-
-    useEffect(() => {
-
-        previousUrl.current = params;
-
-        let data = detailedReport.responseData.filter((val) => {
-            return val.sr_no === srno
-        })
-        if (data[0]) {
-            setCount(data[0].count);
-            setUrls({
-                downloadSample: data[0].sampleUrl,
-                downloadAll: data[0].downloadUrl
-            })
-
-            let target = data[0].targetLanguage ? getLanguageLabel(data[0].targetLanguage) : getLanguageLabel(data[0].sourceLanguage)
-            let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
-            let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
-            let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
-            let label = data[0].search_criteria && data[0].search_criteria.split('|')[0]
-            setFilterBy({
-                ...filterBy, domain, collectionMethod
-            })
-            setLanguagePair({ target, source })
-            //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
-            setDatasetType({ [data[0].datasetType]: true })
-            // setModelTask({ [data[0].modelTask]: true })
-
-
-            setLabel(label)
-        }
-
-        // else if ((params === 'completed' || params === 'inprogress') && count === 0)
-        //     history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
-
-    }, []);
+    }
+    
 
     useEffect(() => {
-        if (previousUrl.current !== params && previousUrl.current !== 'initiate') {
-            setLanguagePair({ target: [], source: "" })
-            setFilterBy({
-                domain: "",
-                source: "",
-                collectionMethod: ""
-            })
-            setLabel('Machine Translation')
-            setDatasetType({ 'translation': true })
-            // setLabel('Machine Translation')
-            // setModelTask({ 'translation': true })
-        }
-        previousUrl.current = params;
-    })
+        makeSubmitAPICall("en",["hi"],{})
+    },[])
 
 
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
     const handleLanguagePairChange = (value, property) => {
+        debugger
         setLanguagePair({ ...languagePair, [property]: value });
 
         if (property === 'source')
@@ -170,19 +126,10 @@ const Benchmark = (props) => {
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
     const { params, srno } = param
-    const renderPage = () => {
-        let data = detailedReport.responseData.filter((val) => {
-            return val.sr_no === srno
-        })
-        let datasetType = data.length && getLanguageLabel(data[0].datasetType, 'datasetType')[0]
-        switch (params) {
-            default:
-                return <SearchResult />
-        }
-    }
+   
 
     const handleDatasetClick = (property) => {
-        history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+        // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
         clearfilter()
         setDatasetType({ [property]: true })
         // setModelTask({ [property]: true })
@@ -218,18 +165,8 @@ const Benchmark = (props) => {
         });
     }
 
-    const makeSubmitAPICall = (src, tgt, type) => {
-        const Dataset = Object.keys(type)[0]
-        setSnackbarInfo({
-            ...snackbar,
-            open: true,
-            message: 'Please wait while we process your request.',
-            variant: 'info'
-        })
-        const apiObj = new SearchModel(Dataset, src, tgt)
-        dispatch(APITransport(apiObj));
+    
 
-    }
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
@@ -441,7 +378,7 @@ const Benchmark = (props) => {
     return (
         <div>
             <Grid container spacing={3}>
-                <Grid className={classes.leftSection} item xs={12} sm={5} md={4} lg={4} xl={4}>
+                <Grid className={classes.leftSection} item xs={12} sm={4} md={3} lg={3} xl={3}>
                     <Grid container spacing={2}>
                         <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
                             <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search Model" />
@@ -488,21 +425,12 @@ const Benchmark = (props) => {
                     </Grid>
                 </Grid>
 
-                <Grid item xs={12} sm={7} md={8} lg={8} xl={8} className={classes.parent}>
-                    {renderPage()}
+                <Grid item xs={12} sm={7} md={9} lg={9} xl={9} className={classes.modelTable}>
+                <SearchModels />
                 </Grid>
 
             </Grid>
-            {
-                snackbar.open &&
-                <Snackbar
-                    open={snackbar.open}
-                    handleClose={handleSnackbarClose}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                    message={snackbar.message}
-                    variant={snackbar.variant}
-                />
-            }
+            
         </div >
     )
 
