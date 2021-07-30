@@ -4,6 +4,8 @@ import { ArrowBack } from '@material-ui/icons';
 import { useHistory, useParams } from 'react-router';
 import ModelDescription from "./ModelDescription";
 import HostedInference from "./HostedInference";
+import { useLocation } from "react-router-dom";
+import React, { useEffect,useState } from "react";
 import {
     Grid,
     Typography,
@@ -14,40 +16,47 @@ import {
 const SearchModelDetail = (props) => {
     const { classes } = props;
     const history = useHistory();
+    const [data,setData] = useState("")
+    const location = useLocation();
+
+    useEffect(() => {
+      
+        setData(location.state)
+    }, [location]);
+
     const description = [
         {
             title: "Description",
-            para: ["Pretrained model on English language using a masked language modeling (MLM) objective. It was introduced in this paper and first released in this repository. This model is uncased: it does not make a difference between English and English. Disclaimer: The team releasing BERT did not write a model card for this model so this model card has been written by the Hugging Face team."]
+            para: data.description
         },
         {
             title: "Task",
-            para: ["Pretrained model on English language using a masked language modeling (MLM) objective. It was introduced in this paper and first released in this repository. This model is uncased: it does not make a difference between English and English."]
+            para: data.task
         },
         {
             title: "Languages",
-            para: ["Pretrained model on English language using a masked language modeling (MLM) objective. It was introduced in this paper and first released in this repository."]
+            para: data.language
         },
         {
             title: "Domain",
-            para: ["Pretrained model on English language using a masked language modeling (MLM) objective. It was introduced in this paper and first released in this repository."]
+            para: data.domain
         },
         {
             title: "Submitter",
-            para: ["Pretrained model on English language using a masked language modeling (MLM) objective. It was introduced in this paper and first released in this repository. This model is uncased: it does not make a difference between English and English."]
-        },
-        {
-            title: "Training Dataset",
-            para: ["ABC", "XYZ"]
+            para: data.submitter
         }
     ]
     const handleCardNavigation = () => {
         history.push(`${process.env.PUBLIC_URL}/benchmark/initiate/-1`)
     }
-    return (
-        <div>
 
-            <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back to model list</Button>
-            <Typography className={classes.mainTitle}>Reliiance_Jio_AICOE</Typography>
+    console.log(data)
+    return (
+        <>
+        {data && <div>
+                    
+            
+            <Typography className={classes.mainTitle}>{data.modelName}</Typography>
             {/* <hr style={{marginTop: "19px",opacity:'0.3' }}></hr> */}
             <Divider className={classes.gridCompute} />
             <Grid container>
@@ -60,7 +69,8 @@ const SearchModelDetail = (props) => {
                     <HostedInference />
                 </Grid>
             </Grid>
-        </div>
+        </div>}
+        </>
     )
 }
 

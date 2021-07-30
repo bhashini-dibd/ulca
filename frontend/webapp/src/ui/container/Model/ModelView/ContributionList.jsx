@@ -1,4 +1,4 @@
-import { withStyles, Button } from "@material-ui/core";
+import { withStyles, Button, Typography } from "@material-ui/core";
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import createMuiTheme from "../../../styles/Datatable"
 import BreadCrum from '../../../components/common/Breadcrum';
@@ -64,12 +64,17 @@ const ContributionList = (props) => {
                 dispatch(tableView(!view, C.MODEL_CONTRIBUTION_TABLE_VIEW))      
         }
         const handleCardClick = (event) =>{
-               let sId = event.currentTarget.id;
-               data.forEach((element)=>{
-                       if(element.submitRefNumber== sId){
-                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${element.status}/${element.datasetName}/${element.submitRefNumber}`)    
+                let result = ""
+                let sId = event.currentTarget.id;
+                myContributionReport.filteredData.forEach(item =>{
+                       if( item.submitRefNumber === sId){
+                               result = item
                        }
-               })
+                })
+
+               result && history.push({
+                pathname: `${process.env.PUBLIC_URL}/searchModel/${sId}`,
+                state: result }) 
         }
 
 
@@ -105,6 +110,23 @@ const ContributionList = (props) => {
 
         const rowChange=(rowsPerPage)=>{
                 dispatch(RowChange(rowsPerPage, C.MODEL_ROW_COUNT_CHANGE))
+        }
+
+        const handleDocumentView = (srNo) =>{
+                let result = ""
+                myContributionReport.filteredData.forEach(item =>{
+                       if( item.submitRefNumber === srNo){
+                               result = item
+                       }
+                })
+
+               result && history.push({
+                pathname: `${process.env.PUBLIC_URL}/searchModel/${srNo}`,
+                state: result }) 
+                  
+        }
+        const renderEventList = (srNo) =>{
+                return <Typography style={{cursor:"pointer"}}color="primary" onClick={() => handleDocumentView(srNo)}>View Card</Typography>
         }
 
     
@@ -186,11 +208,12 @@ const ContributionList = (props) => {
                           empty: true,
                           customBodyRender: (value, tableMeta, updateValue) => {
                             if (tableMeta.rowData) {
-                              return <div>{this.renderEventList(tableMeta.rowData[0], tableMeta.rowData[5])}</div>;
+                              return <div>{renderEventList(tableMeta.rowData[0])}</div>;
                             }
                           },
                         },
-                      },
+                }
+                     
         ];
 
         

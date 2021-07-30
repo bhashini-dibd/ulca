@@ -13,7 +13,7 @@ const ModelDescription = (props) => {
     return (
         <div style={{maxWidth:'624px'}}>
             <Typography className={classes.modelTitle}>{title}</Typography>
-            {para.map(paragraph => <Typography className={classes.modelPara}>{paragraph}</Typography>)}
+            <Typography className={classes.modelPara}>{para}</Typography>
 
         </div>
     )

@@ -74,7 +74,16 @@ const ContributionList = (props) => {
                 </>
         }
         const handleRowClick = (id,name,status) => {
-                // history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${id}`)
+                let result = ""
+                myContributionReport.filteredData.forEach(item =>{
+                       if( item.submitRefNumber === id){
+                               result = item
+                       }
+                })
+
+               result && history.push({
+                pathname: `${process.env.PUBLIC_URL}/searchModel/${id}`,
+                state: result }) 
         };
 
         const handleDialogSubmit = () => {
@@ -113,7 +122,7 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
-                                display: view ? "excluded": true,
+                               
                         },
                 },
 
@@ -123,7 +132,7 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
-                                display: view ? "excluded": true,
+                               
                         },
                 },
                 {
@@ -132,7 +141,7 @@ const ContributionList = (props) => {
                     options: {
                             filter: false,
                             sort: true,
-                            display: view ? "excluded": true,
+                           
                     },
             },
                 {
@@ -141,7 +150,7 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
-                                display: view ? "excluded": true,
+                                
                         },
                 },
                 {
@@ -150,7 +159,7 @@ const ContributionList = (props) => {
                     options: {
                             filter: false,
                             sort: true,
-                            display: view ? "excluded": true,
+                            
 
               
                     }},
@@ -160,7 +169,7 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
-                                display: view ? "excluded": true,
+                                
 
                         },
                 }
@@ -183,6 +192,7 @@ const ContributionList = (props) => {
                         },
                         options: { sortDirection: "desc" },
                 },
+                onRowClick: rowData => handleRowClick(rowData[0],rowData[1],rowData[4]),
                 customToolbar: fetchHeaderButton,
                 filter: false,
                 displaySelectToolbar: false,

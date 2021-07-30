@@ -31,7 +31,7 @@ const getMySearches = (payload) => {
                     search_criteria :`${dataSet} | ${langauge} ${tLanguage ? " | " + tLanguage : ""} ${domain ? " | " + domain : ""} ${collection ? " | " + collection : ""}` ,
                     searched_on   : dateConversion(element.timestamp),
                     status      : element.status.length> 0 && element.status[0].status,
-                    
+                    endPoint:element.inferenceEndPoint,
                     count : searchDetails && searchDetails.count,
                     sampleUrl : searchDetails && searchDetails.datasetSample,
                     downloadUrl : searchDetails && searchDetails.dataset,

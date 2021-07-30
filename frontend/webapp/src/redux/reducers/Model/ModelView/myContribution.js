@@ -88,6 +88,7 @@ const getContributionList = (state, payload) => {
                      task :          element.task.type,
                      domain :          getDomainDetails(element.domain),
                     status               : "Published",
+                    endPoint:element.inferenceEndPoint,
                     language: lang,
                      licence      : element.license,
                      submitter :element.submitter.name,
