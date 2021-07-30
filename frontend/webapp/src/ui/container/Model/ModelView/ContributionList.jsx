@@ -178,15 +178,19 @@ const ContributionList = (props) => {
                         },
                 },
                 {
-                        name: "action",
+                        name: "Action",
                         label: "Action",
                         options: {
-                                filter: true,
-                                sort: true,
-                                display: view ? "excluded": true,
-
+                          filter: true,
+                          sort: false,
+                          empty: true,
+                          customBodyRender: (value, tableMeta, updateValue) => {
+                            if (tableMeta.rowData) {
+                              return <div>{this.renderEventList(tableMeta.rowData[0], tableMeta.rowData[5])}</div>;
+                            }
+                          },
                         },
-                }
+                      },
         ];
 
         

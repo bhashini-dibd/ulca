@@ -56,12 +56,7 @@ const Benchmark = (props) => {
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
         source: 'English',
-<<<<<<< HEAD
-        target: [{value: "hi", label: "Hindi"}]
-=======
-        target: { label: 'Hindi', value: 'hi' },
-        // target:[{ label: 'Hindi', value: 'hi'}]
->>>>>>> 2c3c8365c3645d56891e608b5f27195c6dc83bfa
+        target: {value: "hi", label: "Hindi"}
     });
     // const [filterBy, setFilterBy] = useState({
     //     domain: [],
@@ -88,7 +83,6 @@ const Benchmark = (props) => {
         downloadAll: ''
     })
 
-<<<<<<< HEAD
     const makeSubmitAPICall = (src, tgt, type) => {
         const Dataset = Object.keys(type)[0]
         const apiObj = new SearchModel(Dataset, src, tgt)
@@ -96,21 +90,9 @@ const Benchmark = (props) => {
 
     }
     
-=======
-    const previousUrl = useRef();
-
-
-    const detailedReport = useSelector((state) => state.mySearchReport);
 
     useEffect(() => {
-        const apiObj = new SearchModel('translation', 'en', 'hi');
-        dispatch(APITransport(apiObj));
-        previousUrl.current = params;
-    }, []);
->>>>>>> 2c3c8365c3645d56891e608b5f27195c6dc83bfa
-
-    useEffect(() => {
-        makeSubmitAPICall("en",["hi"],{})
+        makeSubmitAPICall("en","hi",{})
     },[])
 
 
@@ -183,20 +165,7 @@ const Benchmark = (props) => {
         });
     }
 
-<<<<<<< HEAD
     
-=======
-    const makeSubmitAPICall = (src, tgt, type, domain, submitter) => {
-        const Dataset = Object.keys(type)[0]
-        setSnackbarInfo({
-            ...snackbar,
-            open: true,
-            message: 'Please wait while we process your request.',
-            variant: 'info'
-        })
-        const apiObj = new SearchModel(Dataset, src, tgt, domain, submitter)
-        dispatch(APITransport(apiObj));
->>>>>>> 2c3c8365c3645d56891e608b5f27195c6dc83bfa
 
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
