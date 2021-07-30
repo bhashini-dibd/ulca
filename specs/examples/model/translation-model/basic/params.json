@@ -39,7 +39,7 @@
             ],
             "config": {
                "model_id":103,
-               "languages": {
+               "language": {
                   "sourceLanguage": "en",
                   "targetLanguage": "hi"
                }
