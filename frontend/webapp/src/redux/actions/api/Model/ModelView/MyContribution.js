@@ -8,7 +8,7 @@ export default class MyContribution extends API {
         this.user_id = JSON.parse(localStorage.getItem('userDetails')).userID
         this.type = C.GET_MODEL_CONTRIBUTION_LIST;
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
-        this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getContributionList}`;
+        this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getModelContributionList}`;
     }
 
     toString() {

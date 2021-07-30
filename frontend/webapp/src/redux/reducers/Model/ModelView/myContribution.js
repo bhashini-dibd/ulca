@@ -45,6 +45,23 @@ return data;
     
 }
 
+const getDomainDetails = (data) =>{
+if(data.length===1){
+    return data[0]
+}else{
+    let result =""
+    data.length>1 && data.forEach((element,i)=>{
+        if(i!==data.length){
+            result = result + element + "|"
+        }else{
+            result = result + element
+        }
+        
+    }) 
+    return result;
+}
+}
+
 const getClearFilter = (data) =>{
     data.filteredData = data.responseData;
     data.selectedFilter = {status:[],modelType:[]}
@@ -62,13 +79,13 @@ const getContributionList = (state, payload) => {
     payload.forEach(element => {
         responseData.push(
             {
-                     submitRefNumber      : element.serviceRequestNumber,
-                     modelName          : element.datasetName,
-                     submittedOn          : dateConversion(element.submittedOn),
-                     task :          getDatasetName(element.datasetType),
-                     domain :          getDatasetName(element.datasetType),
-                     status               : element.status,
-                     licence      : element.serviceRequestNumber,
+                     submitRefNumber      : element.modelId,
+                     modelName          : element.name,
+                    // submittedOn          : dateConversion(element.submittedOn),
+                     task :          element.task.type,
+                     domain :          getDomainDetails(element.domain),
+                    status               : "Published",
+                     licence      : element.license,
                      action :"View Result",
                      color : element.status === "Completed" ? "#139D60" :  element.status === "In-Progress" ? "#2C2799" : element.status === "Failed" ? "#F54336" : "#FEA52C"
             }
@@ -92,7 +109,6 @@ const getContributionList = (state, payload) => {
 }
 
 const reducer = (state = initialState, action) => {
-        debugger
     switch (action.type) {
 
         case C.GET_MODEL_CONTRIBUTION_LIST:

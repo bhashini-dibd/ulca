@@ -12,6 +12,7 @@ import tableView from "./DataSet/DatasetView/TableStatus";
 import modelContributionReport from './Model/ModelView/myContribution';
 import modelPageChangeDetails from './Model/ModelView/PageInfo';
 import modelTableView from './Model/ModelView/TableStatus';
+import modelStatus from './Model/ModelSubmit/SubmitModel';
 
 const index = {
 
@@ -27,7 +28,8 @@ const index = {
     tableView,
     modelContributionReport,
     modelPageChangeDetails,
-    modelTableView
+    modelTableView,
+    modelStatus
 
 
 

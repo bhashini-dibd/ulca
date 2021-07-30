@@ -101,7 +101,7 @@ const SubmitDataset = (props) => {
         let apiObj = new SubmitDatasetApi(dataset)
         fetch(apiObj.apiEndPoint(), {
             method: 'post',
-            body: JSON.stringify(apiObj.getBody()),
+            body: (apiObj.getBody()),
             headers: apiObj.getHeaders().headers
         }).then(async response => {
             const rsp_data = await response.json();

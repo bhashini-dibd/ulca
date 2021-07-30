@@ -267,6 +267,9 @@ const DataSet = (theme) => ({
     container: {
         margin: '12.75px 0px 18px 15px'
     },
+    browseBtn:{
+        marginTop:"-20px"
+    },
     contriCard: {
         width: '578px',
         minHeight: '100px',

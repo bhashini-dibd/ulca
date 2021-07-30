@@ -13,7 +13,15 @@ const ContributionCard = (props) => {
             <Card className={classes.contriCard} id = {data.submitRefNumber} style={{cursor:"pointer"}} onClick ={handleCardClick}>
                  
                 <Grid container className={classes.container} >
-                    
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+                        <Typography value = {data} variant="body2" className={classes.typeTypo}>{data.type}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+                        <Typography value = {data} variant="body2" className={classes.typeTypo}>{data.type}</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
+                        <Typography value = {data} variant="body2" className={classes.typeTypo}>{data.type}</Typography>
+                    </Grid>
                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12} >
                         <Typography value = {data} variant="body2" className={classes.typeTypo}>{data.type}</Typography>
                     </Grid>
