@@ -5,7 +5,7 @@ import requests
 from configs.configs import file_store_host,file_store_upload_endpoint,pt_publish_tool
 from logging.config import dictConfig
 log = logging.getLogger('file')
-from zipfile import ZipFile
+from zipfile import ZipFile, ZIP_DEFLATED
 import os
 
 
@@ -59,7 +59,7 @@ class StoreUtils:
         arcname = filepath.replace("/opt/","")
         zip_file = filepath.split('.')[0] + '.zip'
         with ZipFile(zip_file, 'w') as myzip:
-            myzip.write(filepath,arcname)
+            myzip.write(filepath,arcname,ZIP_DEFLATED)
             myzip.close()
         os.remove(filepath)
         return zip_file 

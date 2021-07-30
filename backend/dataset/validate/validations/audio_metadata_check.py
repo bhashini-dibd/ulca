@@ -6,6 +6,7 @@ log = logging.getLogger('file')
 import audio_metadata
 from word2number import w2n
 from datetime import timedelta
+import os
 
 class AudioMetadataCheck(BaseValidator):
     """
@@ -18,7 +19,15 @@ class AudioMetadataCheck(BaseValidator):
         try:
             if request["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled]:
                 audio_file = request['record']['fileLocation']
-                metadata = audio_metadata.load(audio_file)
+                file_size = os.path.getsize(audio_file)
+                if file_size == 0:
+                    return {"message": "The audio file is unplayable, the filesize is 0 bytes", "code": "ZERO_BYTES_FILE", "status": "FAILED"}
+
+                try:
+                    metadata = audio_metadata.load(audio_file)
+                except Exception as e:
+                    log.exception('Exception while loading the audio file', e)
+                    return {"message": "Unable to load the audio file, file format is unsupported or the file is corrupt", "code": "INVALID_AUDIO_FILE", "status": "FAILED"}
 
                 if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
                     if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:

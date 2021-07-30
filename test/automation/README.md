@@ -39,7 +39,7 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
 * ### For Search and Download
 
-        python3 automate.py -d -src english -tgt tamil,telugu -t parallel
+        python3 automate.py -d -src en -tgt ta,te -t parallel
 
     Arguments:
 
@@ -51,14 +51,23 @@ The code in this repo could be utilized to automate procedures for submitting,se
     * [optional] -col (--collection-method) : collection method for the dataset
     * [optional] -ma (--m-annotators) : flag for Vetted by multiple annotators
     * [optional] -mt (--m-translators) : flag for manually translated by multiple translators
+    * [optional] -org (--org-source) : flag for original sentencence in source language
 
-* ### For Supported stuff
+* ### For Updating Schema
 
-        python3 automate.py --support
+        python3 automate.py --update-schema
 
     Arguments:
 
-    * --support : Flag for printing supported
+    * --update-schema : Flag for updating schema 
+
+* ### For Chart Data
+
+        python3 automate.py --chart-data
+
+    Arguments:
+
+    * --chart-data : Flag for getting chart data[languages with its counts] 
 
 To view script usage help from terminal, run:
 
@@ -69,7 +78,11 @@ To view script usage help from terminal, run:
 1. config.py - contains data used for automation.
 2. driver_script.py - contains code for loading browsers/driver.
 3. core_script.py - contains core functions for automation.
-4. automate.py - main file for automation.
+4. download_script.py - contains functions for downloading dataset automation.
+5. submit_script.py - contains functions for submitting dataset automation.
+6. automate.py - main file for automation.
+7. schema.yml - contains the schema used for automation.
+8. requirements.txt - contains python-packages required to run automation. 
 
 ### Requirements
 
@@ -81,7 +94,7 @@ To install necessary packages for the script, run:
 
 - update username/password [`ULCA_USERNAME` / `ULCA_PASSWORD`] in config.py file.
 - For changing the Browser and Driver path, Update the config.py file
-- default column names are ["Dataset Name"], ["Dataset URL"]
+- default column names for CSV file are ["Dataset Name"], ["Dataset URL"]
 - Required Drivers for Browser:
     - Google Chrome - chromedriver
     - Mozilla Firefox - geckodriver
