@@ -1,0 +1,54 @@
+{
+   "name": "anuvaad-translation_en-hi",
+   "description": "An en-indic and indic-en model finetuned on ai4bhart parallel corpora (SAMANANTAR)",
+   "refUrl": "https://github.com/project-anuvaad/anuvaad",
+   "task": "translation",
+   "languages": [
+      {
+         "sourceLanguage": "en",
+         "targetLanguage": "hi"
+      }
+   ],
+   "license": "cc-by-4.0",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "Project Anuvaad",
+      "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
+      "team": [
+         {
+            "name": "Ajitesh Sharma",
+            "aboutMe": "NLP team lead at Project Anuvaad"
+         },
+         {
+            "name": "Sujith Kumar",
+            "aboutMe": "AI Engineer at Project Anuvaad"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "https://users-auth.anuvaad.org/aai4b-nmt-inference/v1/translate",
+      "schema": {
+         "taskType": "translation",
+         "request": {
+            "input": [
+               {
+                  "source": "How are you?"
+               }
+            ],
+            "config": {
+               "model_id":103,
+               "languages": {
+                  "sourceLanguage": "en",
+                  "targetLanguage": "hi"
+               }
+            }
+         }
+      }
+   },
+   "trainingDataset": {
+      "datasetId": "123456789",
+      "description": "trained on the general & legal datasets from ULCA"
+   }
+}

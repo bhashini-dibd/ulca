@@ -7,39 +7,57 @@ import {
     Button,
     TextField,
     Link,
-    Hidden
+    Hidden,
+    InputAdornment,
+    IconButton
 } from '@material-ui/core';
 // import Autocomplete from '@material-ui/lab/Autocomplete';
 import BreadCrum from '../../../components/common/Breadcrum';
 import { withStyles } from '@material-ui/core/styles';
 import { RadioButton, RadioGroup } from 'react-radio-buttons';
 import DatasetStyle from '../../../styles/Dataset';
-import { useState } from 'react';
+import { useState,useRef,useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Snackbar from '../../../components/common/Snackbar';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import SubmitModelApi from "../../../../redux/actions/api/Model/UploadModel/SubmitModel"
 import C from "../../../../redux/actions/constants";
-import { useDispatch } from 'react-redux';
-import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
+import { useDispatch,useSelector,shallowEqual } from 'react-redux'
+import {usePrevious } from 'react-hanger';
+import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
+import APITransport from "../../../../redux/actions/apitransport/apitransport";
+import Files from 'react-files'
 
 const SubmitModel = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
-    const [model, setModelInfo] = useState({ modelName: "", url: "" })
+    const [label, setLabel] = useState("");
+    const [model, setModelInfo] = useState({ modelName: "", file: "" })
     const dispatch = useDispatch();
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
         variant: 'success'
     })
-    const [error, setError] = useState({ modelName: "", url: "", type: false })
+    const submitStatus = useSelector((state) => state.modelStatus.modelId,shallowEqual);
+    const [error, setError] = useState({ modelName: "", file: "", type: false })
     const [search, setSearch] = useState(false)
     const history = useHistory();
-
+    const modelIdStatus = usePrevious(submitStatus)
     // const handleClick = (event) => {
     //     setAnchorEl(event.currentTarget)
     // };
+
+    console.log(submitStatus)
+
+    useEffect(() => {
+        console.log(modelIdStatus,submitStatus)
+        debugger
+        if ( submitStatus && modelIdStatus!==submitStatus) {
+            history.push(`${process.env.PUBLIC_URL}/model/submission/${submitStatus}`)
+        }
+      },[submitStatus]);
+    
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -99,7 +117,7 @@ const SubmitModel = (props) => {
         let apiObj = new SubmitModelApi(model)
         fetch(apiObj.apiEndPoint(), {
             method: 'post',
-            body: JSON.stringify(apiObj.getBody()),
+            body: apiObj.getFormData(),
             headers: apiObj.getHeaders().headers
         }).then(async response => {
             const rsp_data = await response.json();
@@ -114,12 +132,10 @@ const SubmitModel = (props) => {
                 if(response.status===401){
                     setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
                 }
-                
-                
              else {
                 dispatch(PageChange(0, C.PAGE_CHANGE));
-                history.push(`${process.env.PUBLIC_URL}/model/submission/${rsp_data.data.serviceRequestNumber}`)
-                //           return true;
+                debugger
+                history.push(`${process.env.PUBLIC_URL}/model/submission/${rsp_data.data.modelId}`)
             }
         }).catch((error) => {
             setSnackbarInfo({
@@ -130,7 +146,6 @@ const SubmitModel = (props) => {
                 variant: 'error'
             })
         });
-
     }
 
    
@@ -139,39 +154,24 @@ const SubmitModel = (props) => {
         return <div className={classes.list} >
             <ul>
             <li><Typography className={classes.marginValue} variant="body2">Provide a meaningful name to your model.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">Provide the URL where the model is stored at.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">Make sure the URL is a direct download link.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">If your model is stored in Google Drive, use<Link id="newaccount" href="https://sites.google.com/site/gdocs2direct/home">{" "}
-              https://sites.google.com/site/gdocs2direct/home {" "}
-            </Link>to generate a direct download link.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">Make sure the model is available in .zip format.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Browse the file containing the parameters of the model.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Make sure the file should be in JSON format.</Typography></li>
             </ul>
         </div>
     }
 
-    const validURL = (str) => {
-        var pattern = new RegExp('^((ft|htt)ps?:\\/\\/)?' + // protocol
-            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name and extension
-            '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-            '(\\:\\d+)?' + // port
-            '(\\/[-a-z\\d%@_.~+&:]*)*' + // path
-            '(\\?[;&a-z\\d%@_.,~+&:=-]*)?' + // query string
-            '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-        return pattern.test(str);
-    }
+    
 
     const handleSubmitModel = (e) => {
-        if (model.modelName.trim() === "" || model.url.trim() === "") {
-            setError({ ...error, name: !model.modelName.trim() ? "Name cannot be empty" : "", url: !model.url.trim() ? "URL cannot be empty" : "" })
+        if (model.modelName === "") {
+            setError({ ...error, name: !model.modelName ? "Name cannot be empty" : "", file: !model.file ? "URL cannot be empty" : "" })
 
         }
         else if (model.modelName.length > 256) {
             setError({ ...error, name: "Max 256 characters allowed" })
 
         }
-        else if (!validURL(model.url)) {
-            setError({ ...error, url: "‘Invalid URL" })
-        }
+        
         else {
 
             handleApicall()
@@ -187,9 +187,20 @@ const SubmitModel = (props) => {
 
     }
 
+
+    const handleChange = files => {
+
+        if (files.length > 0) {
+          setModelInfo({ ...model, file: files[0] })
+          setLabel (files[0].name)
+        }
+      };
+
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
+
+    console.log(submitStatus)
 
     return (
         <div>
@@ -200,10 +211,10 @@ const SubmitModel = (props) => {
                 <Paper elevation={3} className={classes.divStyle}>
                    
                     <Grid container spacing={5}>
-                        <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+                        <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
                            
                             <FormControl className={classes.form}>
-                                <Typography className={classes.typography} variant="subtitle1">How to submit Model?</Typography>
+                                <Typography className={classes.typography} variant="subtitle1">How to submit model?</Typography>
                                     {renderInstructions()}
                             </FormControl>
                         </Grid>
@@ -212,7 +223,7 @@ const SubmitModel = (props) => {
                                 <Divider orientation="vertical" />
                             </Grid>
                         </Hidden>
-                        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+                        <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
                         
                             <FormControl className={classes.form}>
                                 <Grid container spacing={6}>
@@ -253,7 +264,7 @@ const SubmitModel = (props) => {
                                             </Grid> */}
                                         </Grid>
                                     </Grid>
-                                    <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                                    <Grid item xl={12} lg={12} md={12} sm={12} xs={12} style={{paddingTop:"0px"}}>
                                         <Grid container spacing={3}>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                                 <TextField fullWidth
@@ -270,18 +281,50 @@ const SubmitModel = (props) => {
                                                 />
                                             </Grid>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                                                <div ondrop={handleChange} >
                                                 <TextField fullWidth
-
+                                                    
                                                     color="primary"
-                                                    label="Paste the URL of the public repository"
-                                                    value={model.url}
-                                                    error={error.url ? true : false}
-                                                    helperText={error.url}
-                                                    onChange={(e) => {
-                                                        setModelInfo({ ...model, url: e.target.value })
-                                                        setError({ ...error, url: false })
-                                                    }}
+                                                    label="Upload the file"
+                                                    value={label}
+                                                    error={error.file ? true : false}
+                                                    helperText={error.file}
+                                                    
+                                                    InputProps={{
+                                                        endAdornment: (
+                                                          <InputAdornment>
+                                                          <Files
+        onChange={handleChange}
+        //   onError={this.onFilesError}
+          accepts={['.json', 'audio/*']}
+          multiple
+          
+          clickable
+        >
+          <Button
+                                                color="primary"
+                                                className={classes.browseBtn}
+                                                variant="outlined"
+                                                
+                                               
+                                              >
+                                                Browse
+                                                <input
+                                                  type="file"
+                                                  hidden
                                                 />
+                                              </Button>
+        </Files>
+                                                            
+                                                          </InputAdornment>
+                                                        )
+                                                      }}
+                                                    
+                                                />
+                                                </div>
+
+
+                                                
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -290,7 +333,7 @@ const SubmitModel = (props) => {
                                     color="primary"
                                     className={classes.submitBtn}
                                     variant="contained"
-                                    size={'large'}
+                                    size={'small'}
 
                                     onClick={handleSubmitModel}
                                 >

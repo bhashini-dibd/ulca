@@ -183,7 +183,7 @@ const Benchmark = (props) => {
     }
 
     const handleDatasetClick = (property) => {
-        // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+        history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
         clearfilter()
         setDatasetType({ [property]: true })
         // setModelTask({ [property]: true })
