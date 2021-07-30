@@ -1,3 +1,11 @@
+export const ModelTask = [
+
+    { value: 'translation', label: 'Machine Translation' },
+    { value: 'tts', label: 'Text To Speech' },
+    { value: 'asr', label: 'Automatic Speech Recognition' },
+    { value: 'ocr', label: 'Optical Character Recognition' },
+    { value: 'document-layout', label: 'Document Layout' }
+];
 export const DatasetItems = [
 
     { value: 'parallel-corpus', label: 'Parallel Dataset' },

@@ -6,13 +6,16 @@ import {
     Grid,
     Typography,
     TextField,
-    Button
+    Button,
+    CardContent,Card
 } from '@material-ui/core';
+import { useState } from 'react';
 
 const HostedInference = (props) => {
     const { classes, title, para } = props;
     const history = useHistory();
-
+    const [translation, setTranslationState] = useState(false)
+    const handleCompute = ()=>setTranslationState(true);
     return (
         <div>
             <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
@@ -37,11 +40,21 @@ const HostedInference = (props) => {
                         variant="contained"
                         size={'small'}
 
-                    // onClick={handleCompute}
+                    onClick={handleCompute}
                     >
                         Compute
                     </Button>
                 </Grid>
+
+                {translation &&
+                    // <Grid item xl={11} lg={11} md={12} sm={12} xs={12}>
+                        <Card style={{backgroundColor:'#139D601A',color:'black',heigth:'50px',width:'440px'}}>
+                            <CardContent style={{paddingBottom:'16px'}}>
+                                This is my translated text
+                            </CardContent>
+                        </Card>
+                    // </Grid>
+                }
             </Grid>
         </div>
 
