@@ -6,6 +6,8 @@ import ModelDescription from "./ModelDescription";
 import HostedInference from "./HostedInference";
 import { useLocation } from "react-router-dom";
 import React, { useEffect,useState } from "react";
+import Header from '../../../../components/common/Header';
+
 import {
     Grid,
     Typography,
@@ -47,13 +49,14 @@ const SearchModelDetail = (props) => {
         }
     ]
     const handleCardNavigation = () => {
-        history.push(`${process.env.PUBLIC_URL}/benchmark/initiate/-1`)
+        history.push(`${process.env.PUBLIC_URL}/benchmark/initiate`)
     }
 
     console.log(data)
     return (
         <>
-        {data && <div>
+        <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
+        {data && <div className = {classes.parentPaper}>
                     
             
             <Typography className={classes.mainTitle}>{data.modelName}</Typography>

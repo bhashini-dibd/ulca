@@ -75,6 +75,20 @@ export default function App() {
             component={ActivateUser}
           />
 
+<Route
+            path={`${process.env.PUBLIC_URL}/benchmark/:params/:srno?`}
+            
+            component={Benchmark}
+            
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/search-model/:srno?`}
+           
+            component={SearchModelDetail}
+           
+          />
+
+
 
           <Route exact path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard} />
           <PrivateRoute
@@ -190,22 +204,7 @@ export default function App() {
             currentMenu="pop-up"
             dontShowHeader={false}
           />
-          <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/benchmark/:params/:srno`}
-            userRoles={[""]}
-            component={Benchmark}
-            authenticate={authenticateUser}
-            currentMenu="benchmark"
-            dontShowHeader={false}
-          />
-          <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/searchModel`}
-            userRoles={[""]}
-            component={SearchModelDetail}
-            authenticate={authenticateUser}
-            currentMenu="searchModel"
-            dontShowHeader={false}
-          />
+         
 
           {/* <Route
             path={`${process.env.PUBLIC_URL}/user/reset-password/:email/:userId/:time`}

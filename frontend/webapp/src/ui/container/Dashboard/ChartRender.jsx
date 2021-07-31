@@ -326,7 +326,6 @@ const ChartRender = (props) => {
 										style={{textAnchor:"start"}}
 										angle={-30}
 										clockWise={4}
-										
 									/>
 									{
 										DashboardReport.hasOwnProperty("data") && DashboardReport.data.length > 0 && DashboardReport.data.map((entry, index) => {

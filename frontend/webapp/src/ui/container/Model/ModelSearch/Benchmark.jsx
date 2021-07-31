@@ -31,6 +31,7 @@ import { ModelTask } from '../../../../configs/DatasetItems';
 import getLanguageLabel from '../../../../utils/getLabel';
 import SearchModel from '../../../../redux/actions/api/Model/ModelSearch/SearchModel';
 import APITransport from '../../../../redux/actions/apitransport/apitransport';
+import Header from '../../../components/common/Header';
 const StyledMenu = withStyles({
 })((props) => (
     <Menu
@@ -122,7 +123,7 @@ const Benchmark = (props) => {
         checkedC: false,
 
     });
-    const [label, setLabel] = useState('Machine Translation')
+    const [label, setLabel] = useState('Translation')
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
     const { params, srno } = param
@@ -380,7 +381,9 @@ const Benchmark = (props) => {
 
     return (
         <div>
-            <Grid container spacing={3}>
+            <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
+            <div className ={classes.parentPaper}>
+            <Grid container spacing={3} >
                 <Grid className={classes.leftSection} item xs={12} sm={4} md={3} lg={3} xl={3}>
                     <Grid container spacing={2}>
                         <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -434,7 +437,7 @@ const Benchmark = (props) => {
                 </Grid>
 
             </Grid>
-            
+            </div>
         </div >
     )
 

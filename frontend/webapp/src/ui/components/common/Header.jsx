@@ -66,7 +66,8 @@ const Header = (props) => {
   }
 
   const handleMenuItemClick = (url) => {
-    if(authenticate()){
+    debugger
+    if(authenticate() || url ==="/benchmark/initiate"){
       history.push(`${process.env.PUBLIC_URL}${url}`)
     handleClose();
     }

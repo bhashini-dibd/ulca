@@ -6,6 +6,13 @@ const DataSet = (theme) => ({
         border: "1px solid #0000001F",
 
     },
+    parentPaper: {
+        minHeight:"56px",
+        maxWidth: "1272px",
+        width : "100%",
+        margin :"17px auto",
+        padding:"0"
+      },
     title: {
         marginBottom: '6vh'
     },

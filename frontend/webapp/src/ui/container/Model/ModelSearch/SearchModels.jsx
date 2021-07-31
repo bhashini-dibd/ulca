@@ -19,6 +19,7 @@ import C from "../../../../redux/actions/constants";
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 
+
 const ContributionList = (props) => {
 
         const history = useHistory();
@@ -82,7 +83,7 @@ const ContributionList = (props) => {
                 })
 
                result && history.push({
-                pathname: `${process.env.PUBLIC_URL}/searchModel/${id}`,
+                pathname: `${process.env.PUBLIC_URL}/search-model/${id}`,
                 state: result }) 
         };
 

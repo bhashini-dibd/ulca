@@ -53,13 +53,10 @@ export default class SearchModel extends API {
 
 
     getHeaders() {
-        let urlSha = md5(JSON.stringify(this.getBody()))
-        let hash = md5(this.userDetails.privateKey + "|" + urlSha)
         this.headers = {
             headers: {
                 "Content-Type": "application/json",
-                "key": this.userDetails.publicKey,
-                "sig": hash
+                
             }
         };
         return this.headers;

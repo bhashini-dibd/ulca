@@ -73,7 +73,7 @@ const ContributionList = (props) => {
                 })
 
                result && history.push({
-                pathname: `${process.env.PUBLIC_URL}/searchModel/${sId}`,
+                pathname: `${process.env.PUBLIC_URL}/search-model/${sId}`,
                 state: result }) 
         }
 
@@ -121,7 +121,7 @@ const ContributionList = (props) => {
                 })
 
                result && history.push({
-                pathname: `${process.env.PUBLIC_URL}/searchModel/${srNo}`,
+                pathname: `${process.env.PUBLIC_URL}/search-model/${srNo}`,
                 state: result }) 
                   
         }

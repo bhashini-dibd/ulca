@@ -1,9 +1,9 @@
 export const ModelTask = [
 
-    { value: 'translation', label: 'Machine Translation' },
-    { value: 'tts', label: 'Text To Speech' },
-    { value: 'asr', label: 'Automatic Speech Recognition' },
-    { value: 'ocr', label: 'Optical Character Recognition' },
+    { value: 'translation', label: 'Translation' },
+    { value: 'tts', label: 'TTS' },
+    { value: 'asr', label: 'ASR' },
+    { value: 'ocr', label: 'OCR' },
     { value: 'document-layout', label: 'Document Layout' }
 ];
 export const DatasetItems = [
