@@ -81,7 +81,6 @@ const ContributionList = (props) => {
                                 result = item
                         }
                 })
-                console.log(result)
                 result && history.push({
                         pathname: `${process.env.PUBLIC_URL}/search-model/${id}`,
                         state: result
