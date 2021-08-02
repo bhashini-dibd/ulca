@@ -151,6 +151,14 @@
             "active":true,
             "whiteList":true,
             "description":"API to fetch models"
+        },
+        {
+            "id":"5c3038d9-17fc-452d-9e01-967dcc2e876e",
+            "uri":"/ulca/apis/v0/model/compute",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to compute models"
         }
     ]
 }
