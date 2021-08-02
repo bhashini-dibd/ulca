@@ -17,8 +17,12 @@ public class ModelExtended extends Model {
 	@JsonProperty("userId")
 	private String userId;
 	
-	@JsonProperty("createdOn")
-	private String createdOn;
+	@JsonProperty("submittedOn")
+	private String submittedOn;
+	
+	@JsonProperty("publishedOn")
+	private String publishedOn;
+	
 	
 	@JsonProperty("status")
 	private String status;
@@ -49,18 +53,35 @@ public class ModelExtended extends Model {
 		this.userId = userId;
 	}
 
-	public ModelExtended createdOn(String createdOn) {
-		this.createdOn = createdOn;
+
+	public ModelExtended submittedOn(String submittedOn) {
+		this.submittedOn = submittedOn;
 		return this;
 	}
 	
-	public String getCreatedOn() {
-		return createdOn;
+	
+	public String getSubmittedOn() {
+		return submittedOn;
 	}
 
-	public void setCreatedOn(String createdOn) {
-		this.createdOn = createdOn;
+	public void setSubmittedOn(String submittedOn) {
+		this.submittedOn = submittedOn;
 	}
+	
+	public ModelExtended publishedOn(String publishedOn) {
+		this.publishedOn = publishedOn;
+		return this;
+	}
+
+	public String getPublishedOn() {
+		return publishedOn;
+	}
+
+	public void setPublishedOn(String publishedOn) {
+		this.publishedOn = publishedOn;
+	}
+	
+	
 
 	public ModelExtended status(String status) {
 		this.status = status;

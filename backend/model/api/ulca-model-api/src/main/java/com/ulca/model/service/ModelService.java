@@ -127,7 +127,8 @@ public class ModelService {
 			
 			ModelExtended modelObj = getModel(modelFilePath);
 			modelObj.setUserId(userId);
-			modelObj.setCreatedOn(new Date().toString());
+			modelObj.setSubmittedOn(new Date().toString());
+			modelObj.setPublishedOn(new Date().toString());
 			modelObj.setStatus("published");
 			if(modelObj != null) {
 				modelDao.save(modelObj);
