@@ -166,7 +166,7 @@ const ContributionList = (props) => {
                         }
                 },
                 {
-                        name: "submittedOn",
+                        name: "publishedOn",
                         label: "Published On",
                         options: {
                                 filter: false,
