@@ -34,11 +34,9 @@
       "schema": {
          "taskType": "asr",
          "request": {
-            "audio": [
-               {
-                  "audioUri": "https://codmento.com/ekstep/test/changed.wav"
-               }
-            ],
+            "audio": {
+               "audioUri": "https://codmento.com/ekstep/test/changed.wav"
+            },
             "config": {
                "audioFormat": "wav",
                "transcriptionFormat": "transcript",
