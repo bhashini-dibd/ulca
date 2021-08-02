@@ -29,6 +29,7 @@ import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelSearchRequest;
+import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.UploadModelResponse;
@@ -174,11 +175,14 @@ public class ModelService {
 	public ModelSearchResponse searchModel( ModelSearchRequest request) {
 		
 		ModelExtended model = new ModelExtended();
+		
 		if(!request.getTask().isBlank()) {
 			ModelTask modelTask = new ModelTask();
 			modelTask.setType(TypeEnum.fromValue(request.getTask()));
 			model.setTask(modelTask);
 		}
+		
+		
 		if(!request.getSourceLanguage().isBlank()) {
 			LanguagePairs lprs = new LanguagePairs();
 			LanguagePair lp = new LanguagePair();
@@ -196,12 +200,11 @@ public class ModelService {
 		
 		return new ModelSearchResponse("Model Search Result", list, list.size());
 		
-
 	}
 	
-	public TranslationResponse computeModel(ModelComputeRequest request) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
+	public ModelComputeResponse computeModel(ModelComputeRequest compute) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 		
-		String modelId = request.getModelId();
+		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();
 		
 		InferenceAPIEndPoint  inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
@@ -210,7 +213,7 @@ public class ModelService {
 		
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 		
-		return  modelInferenceEndPointService.compute(callBackUrl, schema, request.getInput());
+		return  modelInferenceEndPointService.compute(callBackUrl, schema, compute);
 	
 	}
 

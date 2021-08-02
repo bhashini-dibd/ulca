@@ -7,19 +7,25 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
+import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelSearchRequest;
+import com.ulca.model.response.ModelComputeResponse;
 
+import io.swagger.model.ASRRequest;
+import io.swagger.model.ASRResponse;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.Sentence;
 import io.swagger.model.Sentences;
@@ -33,33 +39,6 @@ import java.net.URL;
 public class ModelInferenceEndPointService {
 	
 	
-	/*
-	
-	public void test(ModelSearchRequest obj) throws MalformedURLException, URISyntaxException {
-		String urlStr = "http://localhost:8080/ulca/apis/v0/model/search";
-		
-		URL url = new URL(urlStr);
-		
-		System.out.println(url.getHost());
-		System.out.println(url.toURI().toString());
-		System.out.println(url.getPath());
-		
-		WebClient.Builder builder = WebClient.builder();
-		
-		String responseStr = builder.build().post()
-		.uri(urlStr)
-		.body(Mono.just(obj), ModelSearchRequest.class)
-		.retrieve().bodyToMono(String.class)
-		.block();
-		
-		
-		System.out.println(responseStr);
-		
-	}
-	*/
-	
-	
-	
 	
 	public OneOfInferenceAPIEndPointSchema validateCallBackUrl(String callBackUrl, OneOfInferenceAPIEndPointSchema schema) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 		
@@ -68,11 +47,8 @@ public class ModelInferenceEndPointService {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference)schema;
 			TranslationRequest request = translationInference.getRequest();
 			
-			URL url = new URL(callBackUrl);
+			//URL url = new URL(callBackUrl);
 			
-			System.out.println(url.getHost());
-			System.out.println(url.toURI().toString());
-			System.out.println(url.getPath());
 			
 			WebClient.Builder builder = WebClient.builder();
 			
@@ -90,17 +66,77 @@ public class ModelInferenceEndPointService {
 					 
 		}
 		
+		if(schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference)schema;
+			ASRRequest request = asrInference.getRequest();
+			
+			
+			System.out.println(request.toString());
+			
+			AsrCallBackRequest asrCallBackRequest = new AsrCallBackRequest();
+			AsrCallBackRequest.Config config = asrCallBackRequest.getConfig();
+			
+			System.out.println("audio format");
+			System.out.println(request.getConfig().getAudioFormat().toString().toUpperCase());
+			
+			System.out.println("config");
+			System.out.println(config);
+			config.setAudioFormat(request.getConfig().getAudioFormat().toString().toUpperCase());
+			config.setTranscriptionFormat(request.getConfig().getTranscriptionFormat().getValue().toString().toUpperCase());
+			AsrCallBackRequest.Language lang = config.getLanguage();
+			lang.setValue(request.getConfig().getLanguage().getSourceLanguage().toString());
+			config.setLanguage(lang);
+			asrCallBackRequest.setConfig(config);
+			AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
+			audio.setAudioUri(request.getAudio().getAudioUri());
+			asrCallBackRequest.setAudio(audio);
+			
+			
+			
+			WebClient.Builder builder = WebClient.builder();
+			
+			
+			String responseStr = builder.build().post()
+			.uri(callBackUrl).accept(MediaType.APPLICATION_JSON)
+			.body(Mono.just(asrCallBackRequest), AsrCallBackRequest.class)
+			.retrieve().bodyToMono(String.class)
+			.block();
+			
+			
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
+			
+			System.out.println("response :: ");
+			System.out.println(responseStr);
+			ASRResponse asrResponse = new ASRResponse();
+			Sentences sentences = new Sentences();
+			Sentence sentence = new Sentence();
+			sentence.setTarget(jsonNode.get("transcript").asText());
+			sentences.add(sentence);
+			asrResponse.setOutput(sentences);
+			
+			asrResponse.setOutput(null);
+			asrInference.setResponse(asrResponse);
+			schema = asrInference;
+					 
+		}
+		
 		return schema;
 		
 	}
 	
-	public TranslationResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema, List<Input> input ) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
+	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema, ModelComputeRequest compute ) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 		
-		TranslationResponse response = null;
+		ModelComputeResponse response = new ModelComputeResponse();
+		
+		
 		if(schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference)schema;
 			TranslationRequest request = translationInference.getRequest();
 			
+			 List<Input> input = compute.getInput();
 			Sentences sentences = new Sentences();
 			for(Input ip : input) {
 				Sentence sentense = new Sentence();
@@ -125,10 +161,64 @@ public class ModelInferenceEndPointService {
 			
 			ObjectMapper objectMapper = new ObjectMapper();
 			
-			response = objectMapper.readValue(responseStr, TranslationResponse.class);
-					 
-		}
+			TranslationResponse translation = objectMapper.readValue(responseStr, TranslationResponse.class);
 		
+			response.setTranslation(translation);		}
+		if(schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+			
+
+			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference)schema;
+			ASRRequest request = asrInference.getRequest();
+			
+			
+			System.out.println(request.toString());
+			
+			AsrCallBackRequest asrCallBackRequest = new AsrCallBackRequest();
+			AsrCallBackRequest.Config config = asrCallBackRequest.getConfig();
+			
+			System.out.println("audio format");
+			System.out.println(request.getConfig().getAudioFormat().toString().toUpperCase());
+			
+			System.out.println("config");
+			System.out.println(config);
+			config.setAudioFormat(request.getConfig().getAudioFormat().toString().toUpperCase());
+			config.setTranscriptionFormat(request.getConfig().getTranscriptionFormat().getValue().toString().toUpperCase());
+			AsrCallBackRequest.Language lang = config.getLanguage();
+			lang.setValue(request.getConfig().getLanguage().getSourceLanguage().toString());
+			config.setLanguage(lang);
+			asrCallBackRequest.setConfig(config);
+			AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
+			audio.setAudioUri(request.getAudio().getAudioUri());
+			asrCallBackRequest.setAudio(audio);
+			
+			
+			
+			WebClient.Builder builder = WebClient.builder();
+			
+			
+			String responseStr = builder.build().post()
+			.uri(callBackUrl).accept(MediaType.APPLICATION_JSON)
+			.body(Mono.just(asrCallBackRequest), AsrCallBackRequest.class)
+			.retrieve().bodyToMono(String.class)
+			.block();
+			
+			
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			
+			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
+			
+			System.out.println("response :: ");
+			System.out.println(responseStr);
+			ASRResponse asrResponse = new ASRResponse();
+			Sentences sentences = new Sentences();
+			Sentence sentence = new Sentence();
+			sentence.setTarget(jsonNode.get("transcript").asText());
+			sentences.add(sentence);
+			asrResponse.setOutput(sentences);
+			response.setAsr(asrResponse);
+			
+		}
 		return response;
 	}
 

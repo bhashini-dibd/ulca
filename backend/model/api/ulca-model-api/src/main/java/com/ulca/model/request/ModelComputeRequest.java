@@ -16,6 +16,8 @@ import lombok.Setter;
 public class ModelComputeRequest {
 
 	public String modelId;
+	public String task;
     public List<Input> input;
+    public String audioUri;
 	  
 }

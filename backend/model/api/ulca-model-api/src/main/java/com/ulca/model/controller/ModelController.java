@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelSearchRequest;
+import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.UploadModelResponse;
@@ -71,7 +72,7 @@ public class ModelController {
 	
 	
 	@PostMapping("/compute")
-	public TranslationResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
+	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 
 		log.info("******** Entry ModelController:: computeModel *******");
 		return modelService.computeModel(request);
