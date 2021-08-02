@@ -15,7 +15,7 @@ import { identifier } from '@babel/types';
 import Snackbar from '../../../../components/common/Snackbar';
 
 const HostedInference = (props) => {
-    const { classes, title, para, modelId } = props;
+    const { classes, title, para, modelId, task } = props;
     const history = useHistory();
     const [translation, setTranslationState] = useState(false)
     const [sourceText, setSourceText] = useState("");
@@ -29,7 +29,7 @@ const HostedInference = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const handleCompute = () => {
-        const apiObj = new HostedInferenceAPI(modelId, sourceText);
+        const apiObj = new HostedInferenceAPI(modelId, sourceText, task);
         fetch(apiObj.apiEndPoint(), {
             method: 'POST',
             headers: apiObj.getHeaders().headers,

@@ -8,10 +8,11 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from 'md5';
 
 export default class HostedInference extends API {
-    constructor(modelId, input, timeout = 2000) {
+    constructor(modelId, input, task, timeout = 2000) {
         super("POST", timeout, false);
         this.modelId = modelId;
         this.input = input;
+        this.task = task;
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.hostedInference}`;
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'));
     }
@@ -36,11 +37,13 @@ export default class HostedInference extends API {
     getBody() {
         let bodyData = {
             modelId: this.modelId,
-            input: [
-                {
-                    source: this.input
-                }
-            ]
+            task: this.task
+        }
+        if (this.task === 'translation') {
+            bodyData.input = [{ source: this.input }]
+        } else if (this.task === 'asr') {
+            console.log(this.input,this.task)
+            bodyData.audioUri = this.input
         }
         bodyData.userId = JSON.parse(localStorage.getItem('userDetails')).userID
         return bodyData;

@@ -3,6 +3,8 @@ import DatasetStyle from '../../../../styles/Dataset';
 import { useHistory } from 'react-router';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import UrlConfig from '../../../../../configs/internalurlmapping';
+import HostedInferenceAPI from '../../../../../redux/actions/api/Model/ModelSearch/HostedInference';
+
 import {
     Grid,
     Typography,
@@ -13,18 +15,19 @@ import {
 import { useState } from 'react';
 
 const HostedInferASR = (props) => {
-    const { classes, title, para } = props;
+    const { classes, title, para, modelId, task } = props;
     const history = useHistory();
-    const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "" })
-    const [error, setError] = useState({ datasetName: "", url: "", type: false })
+    const [url, setUrl] = useState("");
+    const [error, setError] = useState({ url: "" })
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
         variant: 'success'
     })
-    const [translation, setTranslationState] = useState(false)
+    const [translation, setTranslationState] = useState(false);
+    const [target,setTarget] = useState("");
     const handleCompute = () => setTranslationState(true);
-    const url = UrlConfig.dataset
+    // const url = UrlConfig.dataset
     const handleClose = () => {
         // setAnchorEl(null);
     };
@@ -39,12 +42,12 @@ const HostedInferASR = (props) => {
         return pattern.test(str);
     }
     const handleSubmit = (e) => {
-        if (!validURL(dataset.url)) {
+        if (!validURL(url)) {
             setError({ ...error, url: "‘Invalid URL" })
         }
         else {
 
-            // handleApicall()
+            handleApicall()
             setSnackbarInfo({
                 ...snackbar,
                 open: true,
@@ -53,44 +56,40 @@ const HostedInferASR = (props) => {
             })
         }
     }
-    // const handleApicall = async () => {
+    const handleApicall = async () => {
+        let apiObj = new HostedInferenceAPI(modelId, url, task)
+        fetch(apiObj.apiEndPoint(), {
+            method: 'post',
+            body: JSON.stringify(apiObj.getBody()),
+            headers: apiObj.getHeaders().headers
+        }).then(async response => {
+            const rsp_data = await response.json();
+            if (!response.ok) {
+                setSnackbarInfo({
+                    ...snackbar,
+                    open: true,
+                    message:"The model is not accessible currently. Please try again later",
+                    timeOut: 40000,
+                    variant: 'error'
+                })
+            }
+            else {
+                if(rsp_data.hasOwnProperty('asr') && rsp_data.asr){
+                    setTarget(rsp_data.asr.output[0].target)
+                    setTranslationState(true)
+                }
+            }
+        }).catch((error) => {
+            setSnackbarInfo({
+                ...snackbar,
+                open: true,
+                message: "The model is not accessible currently. Please try again later",
+                timeOut: 40000,
+                variant: 'error'
+            })
+        });
 
-    //     let apiObj = new SubmitDatasetApi(dataset)
-    //     fetch(apiObj.apiEndPoint(), {
-    //         method: 'post',
-    //         body: (apiObj.getBody()),
-    //         headers: apiObj.getHeaders().headers
-    //     }).then(async response => {
-    //         const rsp_data = await response.json();
-    //         if (!response.ok) {
-    //             setSnackbarInfo ({
-    //                 ...snackbar,
-    //                 open: true,
-    //                 message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
-    //                 timeOut: 40000,
-    //                 variant: 'error'
-    //             })
-    //             if(response.status===401){
-    //                 setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
-    //             }
-                
-                
-    //          else {
-    //             dispatch(PageChange(0, C.PAGE_CHANGE));
-    //             history.push(`${process.env.PUBLIC_URL}/dataset/submission/${rsp_data.data.serviceRequestNumber}`)
-    //             //           return true;
-    //         }
-    //     }).catch((error) => {
-    //         setSnackbarInfo({
-    //             ...snackbar,
-    //             open: true,
-    //             message: "Something went wrong. Please try again.",
-    //             timeOut: 40000,
-    //             variant: 'error'
-    //         })
-    //     });
-
-    // }
+    }
 
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
@@ -105,11 +104,11 @@ const HostedInferASR = (props) => {
 
                         color="primary"
                         label="Paste the URL of the public repository"
-                        value={dataset.url}
+                        value={url}
                         error={error.url ? true : false}
                         helperText={error.url}
                         onChange={(e) => {
-                            setDatasetInfo({ ...dataset, url: e.target.value })
+                            setUrl(e.target.value)
                             setError({ ...error, url: false })
                         }}
                     />
@@ -131,7 +130,7 @@ const HostedInferASR = (props) => {
                     // <Grid item xl={11} lg={11} md={12} sm={12} xs={12}>
                     <Card style={{ backgroundColor: '#139D601A', color: 'black', heigth: '50px', width: '440px' }}>
                         <CardContent style={{ paddingBottom: '16px' }}>
-                            This is my translated text
+                            {target}
                         </CardContent>
                     </Card>
                     // </Grid>
