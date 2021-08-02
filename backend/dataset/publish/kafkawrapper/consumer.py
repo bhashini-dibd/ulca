@@ -85,6 +85,7 @@ def check_relay(data):
     repo = DatasetRepo()
     record = repo.search([data["record"]["id"]])
     if record:
+        record = record[0]
         if 'mode' in record.keys():
             if record['mode'] == user_mode_real:
                 log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
