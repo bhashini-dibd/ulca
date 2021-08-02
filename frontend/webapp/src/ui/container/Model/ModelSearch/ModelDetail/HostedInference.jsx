@@ -2,6 +2,7 @@ import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../../styles/Dataset';
 import { useHistory } from 'react-router';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
+import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import {
     Grid,
     Typography,
@@ -12,10 +13,27 @@ import {
 import { useState } from 'react';
 
 const HostedInference = (props) => {
-    const { classes, title, para } = props;
+    const { classes, title, para, modelId } = props;
     const history = useHistory();
     const [translation, setTranslationState] = useState(false)
-    const handleCompute = () => setTranslationState(true);
+    const [sourceText, setSourceText] = useState("");
+    const handleCompute = () => {
+        const apiObj = new HostedInferenceAPI(modelId, sourceText);
+        fetch(apiObj.apiEndPoint(), {
+            method: 'POST',
+            headers: apiObj.getHeaders().headers,
+            body: JSON.stringify(apiObj.getBody())
+        }).then(async resp => {
+            let rsp_data = await resp.json();
+            if (resp.ok) {
+                setTranslationState(true)
+            } else {
+                new Promise.reject(rsp_data);
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    };
     return (
         <div>
             <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
@@ -24,13 +42,12 @@ const HostedInference = (props) => {
                     <TextField fullWidth
                         color="primary"
                         label="Enter Text"
-                    // value={model.modelName}
-                    // error={error.name ? true : false}
-                    // helperText={error.name}
-                    // onChange={(e) => {
-                    //     setModelInfo({ ...model, modelName: e.target.value })
-                    //     setError({ ...error, name: false })
-                    // }}
+                        value={sourceText}
+                        // error={error.name ? true : false}
+                        // helperText={error.name}
+                        onChange={(e) => {
+                            setSourceText(e.target.value);
+                        }}
                     />
                     {/* <textarea
                     rows={4}

@@ -16,7 +16,8 @@ const endpoints = {
   resetPassword:'/ulca/user-mgmt/v1/users/reset-password',
   modelSubmit : '/ulca/apis/v0/model/upload',
   getModelContributionList :"/ulca/apis/v0/model/listByUserId",
-  modelSearch: '/ulca/apis/v0/model/search'
+  modelSearch: '/ulca/apis/v0/model/search',
+  hostedInference: '/ulca/apis/v0/model/compute'
 };
 
 export default endpoints;

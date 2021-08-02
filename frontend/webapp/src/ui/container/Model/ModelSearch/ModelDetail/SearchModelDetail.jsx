@@ -21,7 +21,7 @@ const SearchModelDetail = (props) => {
     const history = useHistory();
     const [data, setData] = useState("")
     const location = useLocation();
-
+    const params = useParams();
     useEffect(() => {
 
         setData(location.state)
@@ -69,9 +69,9 @@ const SearchModelDetail = (props) => {
                     </Grid>
 
                     <Grid item xs={5} sm={5} md={5} lg={5} xl={5} style={{ paddingLeft: '24px' }}>
-                        {/* {data.task !== 'asr' ? <HostedInference /> : <HostedInferASR />} */}
-                        <HostedInference />
-                        <HostedInferASR />
+                        {data.task !== 'asr' ? <HostedInference modelId ={params.srno}/> : <HostedInferASR modelId ={params.srno}/>}
+                        {/* <HostedInference modelId ={params.srno}/> */}
+                        {/* <HostedInferASR /> */}
                     </Grid>
                 </Grid>
             </div>}
