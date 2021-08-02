@@ -1,6 +1,6 @@
 import C from '../../../actions/constants';
 import getDatasetName from '../../../../utils/getDataset';
-import {getLanguageName,FilterByDomain,FilterByCollection } from '../../../../utils/getLabel';
+import { getLanguageName, FilterByDomain, FilterByCollection } from '../../../../utils/getLabel';
 
 const initialState = {
     responseData: [],
@@ -47,24 +47,24 @@ const getFilterValue = (payload, data) => {
 
 }
 
-const getDomainDetails = (data) =>{
-if(data.length===1){
-    return data[0]
-}else{
-    let result =""
-    data.length>1 && data.forEach((element,i)=>{
-        if(i!==data.length){
-            result = result + element + "|"
-        }else{
-            result = result + element
-        }
-        
-    }) 
-    return result;
-}
+const getDomainDetails = (data) => {
+    if (data.length === 1) {
+        return data[0]
+    } else {
+        let result = ""
+        data.length > 1 && data.forEach((element, i) => {
+            if (i !== data.length) {
+                result = result + element + "|"
+            } else {
+                result = result + element
+            }
+
+        })
+        return result;
+    }
 }
 
-const getClearFilter = (data) =>{
+const getClearFilter = (data) => {
     data.filteredData = data.responseData;
     data.selectedFilter = { status: [], modelType: [] }
     return data;
@@ -78,22 +78,23 @@ const getContributionList = (state, payload) => {
     let refreshStatus = false;
     payload.forEach(element => {
 
-        let sLanguage =element.languages.length>0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
-        let tLanguage = element.languages && element.languages.length>0&& element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
-            let lang = sLanguage +" - " +tLanguage
+        let sLanguage = element.languages.length > 0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
+        let tLanguage = element.languages && element.languages.length > 0 && element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
+        let lang = sLanguage + " - " + tLanguage
         responseData.push(
             {
-                     submitRefNumber      : element.modelId,
-                     modelName          : element.name,
-                    //  submittedOn          : dateConversion(element.submittedOn),
-                     task :          element.task.type,
-                     domain :          getDomainDetails(element.domain),
-                    status               : "Published",
-                    language: lang,
-                     licence      : element.license,
-                     submitter :element.submitter.name,
-                     trainingDataset:element.trainingDataset,
-                     color : element.status === "Completed" ? "#139D60" :  element.status === "In-Progress" ? "#139D60" : element.status === "Failed" ? "#139D60" : "green"
+                description: element.description,
+                submitRefNumber: element.modelId,
+                modelName: element.name,
+                //  submittedOn          : dateConversion(element.submittedOn),
+                task: element.task.type,
+                domain: getDomainDetails(element.domain),
+                status: "Published",
+                language: lang,
+                licence: element.license,
+                submitter: element.submitter.name,
+                trainingDataset: element.trainingDataset,
+                color: element.status === "Completed" ? "#139D60" : element.status === "In-Progress" ? "#139D60" : element.status === "Failed" ? "#139D60" : "green"
             }
 
         )
