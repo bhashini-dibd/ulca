@@ -37,8 +37,8 @@ const HostedInference = (props) => {
         }).then(async resp => {
             let rsp_data = await resp.json();
             if (resp.ok) {
-                if (rsp_data.hasOwnProperty('output') && rsp_data.output.length) {
-                    setTarget(rsp_data.output[0].target)
+                if (rsp_data.hasOwnProperty('translation') && rsp_data.translation) {
+                    setTarget(rsp_data.translation.output[0].target)
                     setTranslationState(true)
                 }
             } else {
