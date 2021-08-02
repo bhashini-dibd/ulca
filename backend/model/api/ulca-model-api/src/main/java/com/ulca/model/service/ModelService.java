@@ -176,25 +176,30 @@ public class ModelService {
 		
 		ModelExtended model = new ModelExtended();
 		
-		if(!request.getTask().isBlank()) {
+		if(request.getTask() != null && !request.getTask().isBlank()) {
 			ModelTask modelTask = new ModelTask();
 			modelTask.setType(TypeEnum.fromValue(request.getTask()));
+			
+			System.out.println(TypeEnum.fromValue(request.getTask()));
+			
+			System.out.println(modelTask);
 			model.setTask(modelTask);
 		}
 		
 		
-		if(!request.getSourceLanguage().isBlank()) {
+		if(request.getSourceLanguage()!= null && !request.getSourceLanguage().isBlank()) {
 			LanguagePairs lprs = new LanguagePairs();
 			LanguagePair lp = new LanguagePair();
 			lp.setSourceLanguage(SourceLanguageEnum.fromValue(request.getSourceLanguage()));
 			
-			if(!request.getTargetLanguage().isBlank()) {
+			if(request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
 				lp.setTargetLanguage(TargetLanguageEnum.fromValue(request.getTargetLanguage()));
 			}
 			lprs.add(lp);
 			model.setLanguages(lprs);
 		}
 		
+		System.out.println(model);
 		Example<ModelExtended> example = Example.of(model);
 		List<ModelExtended> list = modelDao.findAll(example);
 		
