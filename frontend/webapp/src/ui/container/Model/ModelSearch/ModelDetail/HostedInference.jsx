@@ -29,7 +29,7 @@ const HostedInference = (props) => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
     const handleCompute = () => {
-        const apiObj = new HostedInferenceAPI(modelId + 1, sourceText);
+        const apiObj = new HostedInferenceAPI(modelId, sourceText);
         fetch(apiObj.apiEndPoint(), {
             method: 'POST',
             headers: apiObj.getHeaders().headers,
