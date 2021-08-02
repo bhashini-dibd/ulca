@@ -9,11 +9,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * hosted location defines the end point of the model inference.
+ * hosted location defines the end point of the model inference. specify a taskType along with Inference type
  */
-@Schema(description = "hosted location defines the end point of the model inference.")
+@Schema(description = "hosted location defines the end point of the model inference. specify a taskType along with Inference type")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class InferenceAPIEndPoint   {

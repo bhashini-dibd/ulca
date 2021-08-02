@@ -13,12 +13,34 @@ import javax.validation.constraints.*;
  * TranslationConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class TranslationConfig   {
+  @JsonProperty("modelId")
+  private Integer modelId = null;
+
   @JsonProperty("language")
   private LanguagePair language = null;
+
+  public TranslationConfig modelId(Integer modelId) {
+    this.modelId = modelId;
+    return this;
+  }
+
+  /**
+   * Unique identifier of model
+   * @return modelId
+   **/
+  @Schema(example = "103", description = "Unique identifier of model")
+  
+    public Integer getModelId() {
+    return modelId;
+  }
+
+  public void setModelId(Integer modelId) {
+    this.modelId = modelId;
+  }
 
   public TranslationConfig language(LanguagePair language) {
     this.language = language;
@@ -51,12 +73,13 @@ public class TranslationConfig   {
       return false;
     }
     TranslationConfig translationConfig = (TranslationConfig) o;
-    return Objects.equals(this.language, translationConfig.language);
+    return Objects.equals(this.modelId, translationConfig.modelId) &&
+        Objects.equals(this.language, translationConfig.language);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(language);
+    return Objects.hash(modelId, language);
   }
 
   @Override
@@ -64,6 +87,7 @@ public class TranslationConfig   {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranslationConfig {\n");
     
+    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("}");
     return sb.toString();

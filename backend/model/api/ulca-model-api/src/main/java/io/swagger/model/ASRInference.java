@@ -3,7 +3,6 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,40 +14,12 @@ import javax.validation.constraints.*;
  * ASRInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
-  /**
-   * Gets or Sets name
-   */
-  public enum NameEnum {
-    ASRINFERENCE("ASRInference");
-
-    private String value;
-
-    NameEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static NameEnum fromValue(String text) {
-      for (NameEnum b : NameEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("name")
-  private NameEnum name = null;
+  @JsonProperty("taskType")
+  private String taskType = null;
 
   @JsonProperty("request")
   private ASRRequest request = null;
@@ -56,24 +27,24 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private ASRResponse response = null;
 
-  public ASRInference name(NameEnum name) {
-    this.name = name;
+  public ASRInference taskType(String taskType) {
+    this.taskType = taskType;
     return this;
   }
 
   /**
-   * Get name
-   * @return name
+   * Get taskType
+   * @return taskType
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public NameEnum getName() {
-    return name;
+    public String getTaskType() {
+    return taskType;
   }
 
-  public void setName(NameEnum name) {
-    this.name = name;
+  public void setTaskType(String taskType) {
+    this.taskType = taskType;
   }
 
   public ASRInference request(ASRRequest request) {
@@ -127,14 +98,14 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
       return false;
     }
     ASRInference asRInference = (ASRInference) o;
-    return Objects.equals(this.name, asRInference.name) &&
+    return Objects.equals(this.taskType, asRInference.taskType) &&
         Objects.equals(this.request, asRInference.request) &&
         Objects.equals(this.response, asRInference.response);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, request, response);
+    return Objects.hash(taskType, request, response);
   }
 
   @Override
@@ -142,7 +113,7 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
     StringBuilder sb = new StringBuilder();
     sb.append("class ASRInference {\n");
     
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("}");

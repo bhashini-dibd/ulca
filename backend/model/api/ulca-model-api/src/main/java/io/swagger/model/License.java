@@ -17,6 +17,7 @@ public enum License {
     CC_BY_SA_4_0("cc-by-sa-4.0"),
     CC_BY_ND_2_0("cc-by-nd-2.0"),
     CC_BY_ND_4_0("cc-by-nd-4.0"),
+    CC_BY_NC_3_0("cc-by-nc-3.0"),
     CC_BY_NC_4_0("cc-by-nc-4.0"),
     CC_BY_NC_SA_4_0("cc-by-nc-sa-4.0"),
     MIT("mit"),

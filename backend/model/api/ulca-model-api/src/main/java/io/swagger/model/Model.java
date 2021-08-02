@@ -1,42 +1,40 @@
 package io.swagger.model;
 
 import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.validation.annotation.Validated;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.Domain;
+import io.swagger.model.InferenceAPIEndPoint;
+import io.swagger.model.LanguagePairs;
+import io.swagger.model.License;
+import io.swagger.model.ModelTask;
+import io.swagger.model.Submitter;
+import io.swagger.model.TrainingDataset;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.validation.annotation.Validated;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 /**
  * Model
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
-@Document(collection= "model")
+
 public class Model   {
-	
-   @Id
-   @JsonProperty("modelId")
-   private String modelId;
-   
-   @JsonProperty("submitterId")
-   private String submitterId;
-   
+
   @Indexed(unique=true)
   @JsonProperty("name")
   private String name = null;
 
   @JsonProperty("description")
   private String description = null;
+
+  @JsonProperty("refUrl")
+  private String refUrl = null;
 
   @JsonProperty("task")
   private ModelTask task = null;
@@ -58,31 +56,6 @@ public class Model   {
 
   @JsonProperty("trainingDataset")
   private TrainingDataset trainingDataset = null;
-  
-  public Model modelId(String modelId) {
-	    this.modelId = modelId;
-	    return this;
-	  }
-  
-  public String getModelId() {
-	    return modelId;
-	  }
-  public void setModelId(String modelId) {
-	    this.modelId = modelId;
-	  }
-  
-  public Model submitterId(String submitterId) {
-	    this.submitterId = submitterId;
-	    return this;
-	  }
-
-  public String getSubmitterId() {
-	    return submitterId;
-	  }
-  public void setSubmitterId(String submitterId) {
-	    this.submitterId = submitterId;
-	  }
-
 
   public Model name(String name) {
     this.name = name;
@@ -93,10 +66,10 @@ public class Model   {
    * model name that you want your users to see
    * @return name
    **/
-  @Schema(required = true, description = "model name that you want your users to see")
+  @Schema(example = "vakyansh asr model", required = true, description = "model name that you want your users to see")
       @NotNull
 
-  @Size(min=10,max=100)   public String getName() {
+  @Size(min=5,max=100)   public String getName() {
     return name;
   }
 
@@ -104,7 +77,6 @@ public class Model   {
     this.name = name;
   }
 
-  
   public Model description(String description) {
     this.description = description;
     return this;
@@ -117,12 +89,31 @@ public class Model   {
   @Schema(example = "Speech recognition model for classroom lecture", required = true, description = "brief description about model, its goal, basically something sweet about it")
       @NotNull
 
-  @Size(min=50,max=200)   public String getDescription() {
+  @Size(min=25,max=1000)   public String getDescription() {
     return description;
   }
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Model refUrl(String refUrl) {
+    this.refUrl = refUrl;
+    return this;
+  }
+
+  /**
+   * github link or url giving further info about the model
+   * @return refUrl
+   **/
+  @Schema(example = "https://github.com/Open-Speech-EkStep/vakyansh-models", description = "github link or url giving further info about the model")
+  
+  @Size(min=5,max=200)   public String getRefUrl() {
+    return refUrl;
+  }
+
+  public void setRefUrl(String refUrl) {
+    this.refUrl = refUrl;
   }
 
   public Model task(ModelTask task) {
@@ -284,6 +275,7 @@ public class Model   {
     Model model = (Model) o;
     return Objects.equals(this.name, model.name) &&
         Objects.equals(this.description, model.description) &&
+        Objects.equals(this.refUrl, model.refUrl) &&
         Objects.equals(this.task, model.task) &&
         Objects.equals(this.languages, model.languages) &&
         Objects.equals(this.license, model.license) &&
@@ -295,7 +287,7 @@ public class Model   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, task, languages, license, domain, submitter, inferenceEndPoint, trainingDataset);
+    return Objects.hash(name, description, refUrl, task, languages, license, domain, submitter, inferenceEndPoint, trainingDataset);
   }
 
   @Override
@@ -305,6 +297,7 @@ public class Model   {
     
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    refUrl: ").append(toIndentedString(refUrl)).append("\n");
     sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
     sb.append("    license: ").append(toIndentedString(license)).append("\n");

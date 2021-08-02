@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
  * Sentence
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class Sentence   {
@@ -28,10 +28,10 @@ public class Sentence   {
   }
 
   /**
-   * actual textual data that needs to be translated.
+   * input sentence for the model
    * @return source
    **/
-  @Schema(required = true, description = "actual textual data that needs to be translated.")
+  @Schema(required = true, description = "input sentence for the model")
       @NotNull
 
   @Size(min=1)   public String getSource() {
@@ -48,10 +48,10 @@ public class Sentence   {
   }
 
   /**
-   * expected translated sentence, for reference.
+   * to be used along with translation model. expected translated sentence, for reference
    * @return target
    **/
-  @Schema(description = "expected translated sentence, for reference.")
+  @Schema(description = "to be used along with translation model. expected translated sentence, for reference")
   
   @Size(min=1)   public String getTarget() {
     return target;

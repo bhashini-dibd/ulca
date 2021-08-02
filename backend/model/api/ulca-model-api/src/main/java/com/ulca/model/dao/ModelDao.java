@@ -7,13 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import io.swagger.model.Model;
 
 @Repository
-public interface ModelDao extends MongoRepository<Model, String> {
+public interface ModelDao extends MongoRepository<ModelExtended, String> {
 
-	Page<Model> findBySubmitterId(String submitterId, Pageable paging);
+	Page<ModelExtended> findByUserId(String userId, Pageable paging);
 
-	List<Model> findBySubmitterId(String userId);
+	List<ModelExtended> findByUserId(String userId);
 
 }

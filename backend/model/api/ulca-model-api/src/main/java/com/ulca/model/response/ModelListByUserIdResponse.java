@@ -2,7 +2,8 @@ package com.ulca.model.response;
 
 import java.util.List;
 
-import io.swagger.model.Model;
+import com.ulca.model.dao.ModelExtended;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import lombok.Data;
 public class ModelListByUserIdResponse {
 	
 	String message;
-	List<Model> data;
+	List<ModelExtended> data;
 	int count;
 
 }

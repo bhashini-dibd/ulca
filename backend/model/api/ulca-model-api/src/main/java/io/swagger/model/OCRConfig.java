@@ -13,12 +13,34 @@ import javax.validation.constraints.*;
  * OCRConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class OCRConfig   {
+  @JsonProperty("modelId")
+  private String modelId = null;
+
   @JsonProperty("language")
   private LanguagePair language = null;
+
+  public OCRConfig modelId(String modelId) {
+    this.modelId = modelId;
+    return this;
+  }
+
+  /**
+   * Unique identifier of model
+   * @return modelId
+   **/
+  @Schema(example = "103", description = "Unique identifier of model")
+  
+    public String getModelId() {
+    return modelId;
+  }
+
+  public void setModelId(String modelId) {
+    this.modelId = modelId;
+  }
 
   public OCRConfig language(LanguagePair language) {
     this.language = language;
@@ -51,12 +73,13 @@ public class OCRConfig   {
       return false;
     }
     OCRConfig ocRConfig = (OCRConfig) o;
-    return Objects.equals(this.language, ocRConfig.language);
+    return Objects.equals(this.modelId, ocRConfig.modelId) &&
+        Objects.equals(this.language, ocRConfig.language);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(language);
+    return Objects.hash(modelId, language);
   }
 
   @Override
@@ -64,6 +87,7 @@ public class OCRConfig   {
     StringBuilder sb = new StringBuilder();
     sb.append("class OCRConfig {\n");
     
+    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("}");
     return sb.toString();

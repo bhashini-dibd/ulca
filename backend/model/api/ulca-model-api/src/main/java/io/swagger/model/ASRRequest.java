@@ -4,9 +4,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.ASRConfig;
+import io.swagger.model.ASRFile;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -15,40 +14,35 @@ import javax.validation.constraints.*;
  * ASRRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class ASRRequest   {
-  @JsonProperty("audioUri")
-  @Valid
-  private List<String> audioUri = new ArrayList<String>();
+  @JsonProperty("audio")
+  private ASRFile audio = null;
 
   @JsonProperty("config")
   private ASRConfig config = null;
 
-  public ASRRequest audioUri(List<String> audioUri) {
-    this.audioUri = audioUri;
-    return this;
-  }
-
-  public ASRRequest addAudioUriItem(String audioUriItem) {
-    this.audioUri.add(audioUriItem);
+  public ASRRequest audio(ASRFile audio) {
+    this.audio = audio;
     return this;
   }
 
   /**
-   * list of paths on gcp/s3 bucket or https url
-   * @return audioUri
+   * Get audio
+   * @return audio
    **/
-  @Schema(example = "gs://bucket/audio.wav", required = true, description = "list of paths on gcp/s3 bucket or https url")
+  @Schema(required = true, description = "")
       @NotNull
 
-    public List<String> getAudioUri() {
-    return audioUri;
+    @Valid
+    public ASRFile getAudio() {
+    return audio;
   }
 
-  public void setAudioUri(List<String> audioUri) {
-    this.audioUri = audioUri;
+  public void setAudio(ASRFile audio) {
+    this.audio = audio;
   }
 
   public ASRRequest config(ASRConfig config) {
@@ -82,13 +76,13 @@ public class ASRRequest   {
       return false;
     }
     ASRRequest asRRequest = (ASRRequest) o;
-    return Objects.equals(this.audioUri, asRRequest.audioUri) &&
+    return Objects.equals(this.audio, asRRequest.audio) &&
         Objects.equals(this.config, asRRequest.config);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(audioUri, config);
+    return Objects.hash(audio, config);
   }
 
   @Override
@@ -96,7 +90,7 @@ public class ASRRequest   {
     StringBuilder sb = new StringBuilder();
     sb.append("class ASRRequest {\n");
     
-    sb.append("    audioUri: ").append(toIndentedString(audioUri)).append("\n");
+    sb.append("    audio: ").append(toIndentedString(audio)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
     sb.append("}");
     return sb.toString();

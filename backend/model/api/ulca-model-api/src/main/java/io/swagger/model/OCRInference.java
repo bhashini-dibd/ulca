@@ -3,7 +3,6 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.OCRRequest;
 import io.swagger.model.OCRResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,40 +14,12 @@ import javax.validation.constraints.*;
  * OCRInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class OCRInference  implements OneOfInferenceAPIEndPointSchema {
-  /**
-   * Gets or Sets name
-   */
-  public enum NameEnum {
-    OCRINFERENCE("OCRInference");
-
-    private String value;
-
-    NameEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static NameEnum fromValue(String text) {
-      for (NameEnum b : NameEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("name")
-  private NameEnum name = null;
+  @JsonProperty("taskType")
+  private String taskType = null;
 
   @JsonProperty("request")
   private OCRRequest request = null;
@@ -56,24 +27,24 @@ public class OCRInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private OCRResponse response = null;
 
-  public OCRInference name(NameEnum name) {
-    this.name = name;
+  public OCRInference taskType(String taskType) {
+    this.taskType = taskType;
     return this;
   }
 
   /**
-   * Get name
-   * @return name
+   * Get taskType
+   * @return taskType
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public NameEnum getName() {
-    return name;
+    public String getTaskType() {
+    return taskType;
   }
 
-  public void setName(NameEnum name) {
-    this.name = name;
+  public void setTaskType(String taskType) {
+    this.taskType = taskType;
   }
 
   public OCRInference request(OCRRequest request) {
@@ -127,14 +98,14 @@ public class OCRInference  implements OneOfInferenceAPIEndPointSchema {
       return false;
     }
     OCRInference ocRInference = (OCRInference) o;
-    return Objects.equals(this.name, ocRInference.name) &&
+    return Objects.equals(this.taskType, ocRInference.taskType) &&
         Objects.equals(this.request, ocRInference.request) &&
         Objects.equals(this.response, ocRInference.response);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, request, response);
+    return Objects.hash(taskType, request, response);
   }
 
   @Override
@@ -142,7 +113,7 @@ public class OCRInference  implements OneOfInferenceAPIEndPointSchema {
     StringBuilder sb = new StringBuilder();
     sb.append("class OCRInference {\n");
     
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("}");

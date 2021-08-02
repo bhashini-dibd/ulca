@@ -11,10 +11,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ASRResponse
+ * the response for translation.  Standard http status codes to be used.
  */
+@Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class ASRResponse   {
@@ -54,9 +55,8 @@ public class ASRResponse   {
    * Get config
    * @return config
    **/
-  @Schema(required = true, description = "")
-      @NotNull
-
+  @Schema(description = "")
+  
     @Valid
     public TranslationConfig getConfig() {
     return config;

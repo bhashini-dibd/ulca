@@ -1,5 +1,7 @@
 package com.ulca.model.request;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -11,10 +13,9 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModelSearchRequest {
+public class ModelComputeRequest {
 
-	  private String task;
-	  private String sourceLanguage;
-	  private String targetLanguage;
+	public String modelId;
+    public List<Input> input;
 	  
 }

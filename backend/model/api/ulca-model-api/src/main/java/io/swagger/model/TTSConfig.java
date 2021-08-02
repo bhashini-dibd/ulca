@@ -13,12 +13,34 @@ import javax.validation.constraints.*;
  * TTSConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class TTSConfig   {
+  @JsonProperty("modelId")
+  private String modelId = null;
+
   @JsonProperty("language")
   private LanguagePair language = null;
+
+  public TTSConfig modelId(String modelId) {
+    this.modelId = modelId;
+    return this;
+  }
+
+  /**
+   * Unique identifier of model
+   * @return modelId
+   **/
+  @Schema(example = "103", description = "Unique identifier of model")
+  
+    public String getModelId() {
+    return modelId;
+  }
+
+  public void setModelId(String modelId) {
+    this.modelId = modelId;
+  }
 
   public TTSConfig language(LanguagePair language) {
     this.language = language;
@@ -51,12 +73,13 @@ public class TTSConfig   {
       return false;
     }
     TTSConfig ttSConfig = (TTSConfig) o;
-    return Objects.equals(this.language, ttSConfig.language);
+    return Objects.equals(this.modelId, ttSConfig.modelId) &&
+        Objects.equals(this.language, ttSConfig.language);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(language);
+    return Objects.hash(modelId, language);
   }
 
   @Override
@@ -64,6 +87,7 @@ public class TTSConfig   {
     StringBuilder sb = new StringBuilder();
     sb.append("class TTSConfig {\n");
     
+    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("}");
     return sb.toString();

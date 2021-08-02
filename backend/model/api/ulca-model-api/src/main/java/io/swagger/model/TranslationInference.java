@@ -3,7 +3,6 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,40 +14,12 @@ import javax.validation.constraints.*;
  * TranslationInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class TranslationInference  implements OneOfInferenceAPIEndPointSchema {
-  /**
-   * Gets or Sets name
-   */
-  public enum NameEnum {
-    TRANSLATIONINFERENCE("TranslationInference");
-
-    private String value;
-
-    NameEnum(String value) {
-      this.value = value;
-    }
-
-    @Override
-    @JsonValue
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static NameEnum fromValue(String text) {
-      for (NameEnum b : NameEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
-          return b;
-        }
-      }
-      return null;
-    }
-  }
-  @JsonProperty("name")
-  private NameEnum name = null;
+  @JsonProperty("taskType")
+  private String taskType = null;
 
   @JsonProperty("request")
   private TranslationRequest request = null;
@@ -56,24 +27,24 @@ public class TranslationInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private TranslationResponse response = null;
 
-  public TranslationInference name(NameEnum name) {
-    this.name = name;
+  public TranslationInference taskType(String taskType) {
+    this.taskType = taskType;
     return this;
   }
 
   /**
-   * Get name
-   * @return name
+   * Get taskType
+   * @return taskType
    **/
   @Schema(required = true, description = "")
       @NotNull
 
-    public NameEnum getName() {
-    return name;
+    public String getTaskType() {
+    return taskType;
   }
 
-  public void setName(NameEnum name) {
-    this.name = name;
+  public void setTaskType(String taskType) {
+    this.taskType = taskType;
   }
 
   public TranslationInference request(TranslationRequest request) {
@@ -127,14 +98,14 @@ public class TranslationInference  implements OneOfInferenceAPIEndPointSchema {
       return false;
     }
     TranslationInference translationInference = (TranslationInference) o;
-    return Objects.equals(this.name, translationInference.name) &&
+    return Objects.equals(this.taskType, translationInference.taskType) &&
         Objects.equals(this.request, translationInference.request) &&
         Objects.equals(this.response, translationInference.response);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, request, response);
+    return Objects.hash(taskType, request, response);
   }
 
   @Override
@@ -142,7 +113,7 @@ public class TranslationInference  implements OneOfInferenceAPIEndPointSchema {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranslationInference {\n");
     
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("}");

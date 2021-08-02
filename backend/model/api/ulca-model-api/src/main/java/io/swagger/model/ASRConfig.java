@@ -20,10 +20,13 @@ import javax.validation.constraints.*;
  * ASRConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class ASRConfig   {
+  @JsonProperty("modelId")
+  private String modelId = null;
+
   @JsonProperty("language")
   private LanguagePair language = null;
 
@@ -90,6 +93,25 @@ public class ASRConfig   {
   }
   @JsonProperty("model")
   private ModelEnum model = null;
+
+  public ASRConfig modelId(String modelId) {
+    this.modelId = modelId;
+    return this;
+  }
+
+  /**
+   * Unique identifier of model
+   * @return modelId
+   **/
+  @Schema(example = "103", description = "Unique identifier of model")
+  
+    public String getModelId() {
+    return modelId;
+  }
+
+  public void setModelId(String modelId) {
+    this.modelId = modelId;
+  }
 
   public ASRConfig language(LanguagePair language) {
     this.language = language;
@@ -318,7 +340,8 @@ public class ASRConfig   {
       return false;
     }
     ASRConfig asRConfig = (ASRConfig) o;
-    return Objects.equals(this.language, asRConfig.language) &&
+    return Objects.equals(this.modelId, asRConfig.modelId) &&
+        Objects.equals(this.language, asRConfig.language) &&
         Objects.equals(this.audioFormat, asRConfig.audioFormat) &&
         Objects.equals(this.channel, asRConfig.channel) &&
         Objects.equals(this.samplingRate, asRConfig.samplingRate) &&
@@ -333,7 +356,7 @@ public class ASRConfig   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, profanityFilter, domain, detailed, punctuation, model);
+    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, profanityFilter, domain, detailed, punctuation, model);
   }
 
   @Override
@@ -341,6 +364,7 @@ public class ASRConfig   {
     StringBuilder sb = new StringBuilder();
     sb.append("class ASRConfig {\n");
     
+    sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
     sb.append("    audioFormat: ").append(toIndentedString(audioFormat)).append("\n");
     sb.append("    channel: ").append(toIndentedString(channel)).append("\n");

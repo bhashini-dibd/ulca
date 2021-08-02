@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
  * ASRFile
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-07-26T10:42:04.802Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
 
 
 public class ASRFile   {
@@ -21,9 +21,6 @@ public class ASRFile   {
 
   @JsonProperty("audioUri")
   private String audioUri = null;
-
-  @JsonProperty("fileId")
-  private String fileId = null;
 
   public ASRFile audioContent(byte[] audioContent) {
     this.audioContent = audioContent;
@@ -63,25 +60,6 @@ public class ASRFile   {
     this.audioUri = audioUri;
   }
 
-  public ASRFile fileId(String fileId) {
-    this.fileId = fileId;
-    return this;
-  }
-
-  /**
-   * fileId should be same as returned in the response of file-upload
-   * @return fileId
-   **/
-  @Schema(description = "fileId should be same as returned in the response of file-upload")
-  
-    public String getFileId() {
-    return fileId;
-  }
-
-  public void setFileId(String fileId) {
-    this.fileId = fileId;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -93,13 +71,12 @@ public class ASRFile   {
     }
     ASRFile asRFile = (ASRFile) o;
     return Objects.equals(this.audioContent, asRFile.audioContent) &&
-        Objects.equals(this.audioUri, asRFile.audioUri) &&
-        Objects.equals(this.fileId, asRFile.fileId);
+        Objects.equals(this.audioUri, asRFile.audioUri);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(audioContent, audioUri, fileId);
+    return Objects.hash(audioContent, audioUri);
   }
 
   @Override
@@ -109,7 +86,6 @@ public class ASRFile   {
     
     sb.append("    audioContent: ").append(toIndentedString(audioContent)).append("\n");
     sb.append("    audioUri: ").append(toIndentedString(audioUri)).append("\n");
-    sb.append("    fileId: ").append(toIndentedString(fileId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

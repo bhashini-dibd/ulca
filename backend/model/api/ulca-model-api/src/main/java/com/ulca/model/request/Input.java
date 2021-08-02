@@ -11,10 +11,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModelSearchRequest {
+public class Input {
 
-	  private String task;
-	  private String sourceLanguage;
-	  private String targetLanguage;
-	  
+	public String source;
+	
 }
