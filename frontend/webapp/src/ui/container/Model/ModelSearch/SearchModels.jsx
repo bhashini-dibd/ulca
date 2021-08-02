@@ -9,10 +9,10 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/Model/ModelView/MyContribution";
-import { PageChange, RowChange, FilterTable, clearFilter,tableView } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
+import { PageChange, RowChange, FilterTable, clearFilter, tableView } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
 import ClearReport from "../../../../redux/actions/api/Model/ModelView/DatasetAction";
 import Dialog from "../../../components/common/Dialog"
-import { Cached, GridOn,List } from '@material-ui/icons';
+import { Cached, GridOn, List } from '@material-ui/icons';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import { useParams } from "react-router";
 import C from "../../../../redux/actions/constants";
@@ -36,7 +36,7 @@ const ContributionList = (props) => {
         const popoverOpen = Boolean(anchorEl);
         const id = popoverOpen ? 'simple-popover' : undefined;
 
-       
+
 
         const handleShowFilter = (event) => {
                 setAnchorEl(event.currentTarget);
@@ -52,59 +52,60 @@ const ContributionList = (props) => {
                 dispatch(FilterTable(data, C.MODEL_CONTRIBUTION_TABLE))
         }
 
-        const handleViewChange = () =>{
-                dispatch(tableView(!view, C.MODEL_CONTRIBUTION_TABLE_VIEW))      
+        const handleViewChange = () => {
+                dispatch(tableView(!view, C.MODEL_CONTRIBUTION_TABLE_VIEW))
         }
-        const handleCardClick = (event) =>{
-               let sId = event.currentTarget.id;
-               data.forEach((element)=>{
-                       if(element.submitRefNumber== sId){
-                        history.push(`${process.env.PUBLIC_URL}/dataset-status/${element.status}/${element.datasetName}/${element.submitRefNumber}`)    
-                       }
-               })
+        const handleCardClick = (event) => {
+                let sId = event.currentTarget.id;
+                data.forEach((element) => {
+                        if (element.submitRefNumber == sId) {
+                                history.push(`${process.env.PUBLIC_URL}/dataset-status/${element.status}/${element.datasetName}/${element.submitRefNumber}`)
+                        }
+                })
         }
         const fetchHeaderButton = () => {
 
                 return <>
-                        
+
                         {/* <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button> */}
                         {/* <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
                         <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button> */}
-                       
-                        
+
+
                 </>
         }
-        const handleRowClick = (id,name,status) => {
+        const handleRowClick = (id, name, status) => {
                 let result = ""
-                myContributionReport.filteredData.forEach(item =>{
-                       if( item.submitRefNumber === id){
-                               result = item
-                       }
+                myContributionReport.filteredData.forEach(item => {
+                        if (item.submitRefNumber === id) {
+                                result = item
+                        }
                 })
-
-               result && history.push({
-                pathname: `${process.env.PUBLIC_URL}/search-model/${id}`,
-                state: result }) 
+                console.log(result)
+                result && history.push({
+                        pathname: `${process.env.PUBLIC_URL}/search-model/${id}`,
+                        state: result
+                })
         };
 
         const handleDialogSubmit = () => {
 
         }
 
-        const processTableClickedNextOrPrevious = ( sortOrder,page) => {
+        const processTableClickedNextOrPrevious = (sortOrder, page) => {
                 dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
 
         }
 
-        const tableRowchange = (event) =>{
+        const tableRowchange = (event) => {
                 rowChange(event.target.value)
         }
 
-        const rowChange=(rowsPerPage)=>{
+        const rowChange = (rowsPerPage) => {
                 dispatch(RowChange(rowsPerPage, C.MODEL_ROW_COUNT_CHANGE))
         }
 
-    
+
 
 
         const columns = [
@@ -123,7 +124,7 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
-                               
+
                         },
                 },
 
@@ -133,50 +134,51 @@ const ContributionList = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
-                               
+
                         },
                 },
                 {
-                    name: "language",
-                    label: "Language",
-                    options: {
-                            filter: false,
-                            sort: true,
-                           
-                    },
-            },
+                        name: "language",
+                        label: "Language",
+                        options: {
+                                filter: false,
+                                sort: true,
+
+                        },
+                },
                 {
                         name: "domain",
                         label: "Domain",
                         options: {
                                 filter: false,
                                 sort: true,
-                                
+
                         },
                 },
                 {
-                    name: "submitter",
-                    label: "Submitter",
-                    options: {
-                            filter: false,
-                            sort: true,
-                            
+                        name: "submitter",
+                        label: "Submitter",
+                        options: {
+                                filter: false,
+                                sort: true,
 
-              
-                    }},
+
+
+                        }
+                },
                 {
                         name: "submittedOn",
                         label: "Published On",
                         options: {
                                 filter: false,
                                 sort: true,
-                                
+
 
                         },
                 }
         ];
 
-        
+
 
 
         const options = {
@@ -193,7 +195,7 @@ const ContributionList = (props) => {
                         },
                         options: { sortDirection: "desc" },
                 },
-                onRowClick: rowData => handleRowClick(rowData[0],rowData[1],rowData[4]),
+                onRowClick: rowData => handleRowClick(rowData[0], rowData[1], rowData[4]),
                 customToolbar: fetchHeaderButton,
                 filter: false,
                 displaySelectToolbar: false,
@@ -202,21 +204,21 @@ const ContributionList = (props) => {
                 download: false,
                 print: false,
                 viewColumns: false,
-                
+
                 rowsPerPageOptions: [10, 25, 50, 100],
                 selectableRows: "none",
-                
+
 
 
         };
         return (
-               
+
                 <div>
-                         <MuiThemeProvider theme={createMuiTheme}><MUIDataTable
+                        <MuiThemeProvider theme={createMuiTheme}><MUIDataTable
                                 title={`Search result for Models`}
                                 data={data}
                                 columns={columns}
-                                options= {options}
+                                options={options}
                         /> </MuiThemeProvider>
 
                         {open && <Dialog
@@ -226,9 +228,9 @@ const ContributionList = (props) => {
                                 title={title}
                                 handleSubmit={() => { handleDialogSubmit() }}
                         />}
-                     
+
                 </div>
-                
+
         );
 };
 

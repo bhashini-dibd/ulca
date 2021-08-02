@@ -12,13 +12,13 @@ import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import authenticate from '../../../configs/authenticate';
 import Theme from "../../theme/theme-default";
 import MenuItems from "../../components/common/MenuItem";
-import {menuItems} from '../../../configs/menuItems';
+import { menuItems } from '../../../configs/menuItems';
 import Dialog from "./Dialog";
 const StyledMenu = withStyles({
- 
+
 })((props) => (
   <Menu
-     elevation={0}
+    elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',
@@ -40,8 +40,8 @@ const Header = (props) => {
   const [open, setOpen] = useState(false)
   const [logout, setAnchorElLogout] = useState(null)
   const history = useHistory();
- 
-  const {firstName,lastName} = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : {firstName:"",lastName:""}
+
+  const { firstName, lastName } = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : { firstName: "", lastName: "" }
   const handleClose = (e) => {
     setAnchorEl(null)
     setAnchorElLogout(null)
@@ -60,26 +60,25 @@ const Header = (props) => {
     setAnchorElLogout(e.currentTarget)
   }
 
-  const handleLogOut = (url) =>{
-    history.push(`${process.env.PUBLIC_URL}${url ? url: urlLink }`)
+  const handleLogOut = (url) => {
+    history.push(`${process.env.PUBLIC_URL}${url ? url : urlLink}`)
     handleClose();
   }
 
   const handleMenuItemClick = (url) => {
-    debugger
-    if(authenticate() || url ==="/benchmark/initiate"){
+    if (authenticate() || url === "/benchmark/initiate") {
       history.push(`${process.env.PUBLIC_URL}${url}`)
-    handleClose();
+      handleClose();
     }
-    else{
+    else {
       handleClose();
       setUrlLink(url)
       setOpen(true)
     }
-    
+
   }
 
-  
+
 
 
   return (
@@ -88,9 +87,9 @@ const Header = (props) => {
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
 
-              <Typography variant="h5" onClick={() => history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
-                ULCA
-              </Typography>
+            <Typography variant="h5" onClick={() => history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
+              ULCA
+            </Typography>
 
             {
               <>
@@ -120,12 +119,12 @@ const Header = (props) => {
                       variant="text"
                     >
                       <Typography variant={"body1"}>
-                      Dataset
+                        Dataset
                       </Typography>
-                    <DownIcon />
+                      <DownIcon />
                     </Button>
                   </div>
-                  
+
                   <MenuItems
                     id={"dataset-menu"}
                     anchorEl={anchorEl}
@@ -170,7 +169,7 @@ const Header = (props) => {
                   <div className={classes.model}>
                     <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
                       Model
-                    <DownIcon />
+                      <DownIcon />
                     </Button>
                   </div>
                   <MenuItems
@@ -186,8 +185,8 @@ const Header = (props) => {
             {
               authenticate() ?
                 <div className={classes.profile}>
-                  <Button  onClick={(e) => handleLogoutOption(e)} className={classes.menuBtn} variant="text">
-                    <Avatar className={classes.avatar} variant="contained" color= "transparent">{`${firstName[0].toUpperCase()}`}</Avatar>
+                  <Button onClick={(e) => handleLogoutOption(e)} className={classes.menuBtn} variant="text">
+                    <Avatar className={classes.avatar} variant="contained" color="transparent">{`${firstName[0].toUpperCase()}`}</Avatar>
                     <p className={classes.profileName}>{`${firstName}`}</p>
                     <DownIcon />
                   </Button>
@@ -197,7 +196,7 @@ const Header = (props) => {
                     onClose={(e) => handleClose(e)}
                     className={classes.styledMenu1}
                   >
-                     {/* <MenuItem
+                    {/* <MenuItem
                      className={classes.styledMenu}
                 
                     >
@@ -210,14 +209,15 @@ const Header = (props) => {
                       Feedback
                     </MenuItem> */}
                     <MenuItem
-                     className={classes.styledMenu}
+                      className={classes.styledMenu}
                       onClick={() => {
                         localStorage.removeItem('userInfo')
-                        handleLogOut('/user/login')}}
+                        handleLogOut('/user/login')
+                      }}
                     >
                       Log out
                     </MenuItem>
-                   
+
                   </StyledMenu>
                 </div>
                 :
@@ -225,7 +225,7 @@ const Header = (props) => {
                   <div className={classes.desktopAuth}>
                     <Button
                       className={classes.menuBtn}
-                      color = "primary"
+                      color="primary"
                       onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
                       variant="text"
                     >
@@ -262,14 +262,14 @@ const Header = (props) => {
       </AppBar>
 
       {open && <Dialog
-                                title         =       {"Not Signed In"}
-                                open            = {open}
-                                handleClose     ={()=> setOpen(false)}
-                                 message          =       {"Please sign in to continue."}
-                                handleSubmit    ={handleLogOut}
-                                actionButton    = {"Close"}
-                                actionButton2   = {"Sign In"}
-                        /> }
+        title={"Not Signed In"}
+        open={open}
+        handleClose={() => setOpen(false)}
+        message={"Please sign in to continue."}
+        handleSubmit={handleLogOut}
+        actionButton={"Close"}
+        actionButton2={"Sign In"}
+      />}
     </MuiThemeProvider>
   )
 }

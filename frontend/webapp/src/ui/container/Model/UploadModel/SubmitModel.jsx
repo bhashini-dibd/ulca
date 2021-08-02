@@ -16,14 +16,14 @@ import BreadCrum from '../../../components/common/Breadcrum';
 import { withStyles } from '@material-ui/core/styles';
 import { RadioButton, RadioGroup } from 'react-radio-buttons';
 import DatasetStyle from '../../../styles/Dataset';
-import { useState,useRef,useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import Snackbar from '../../../components/common/Snackbar';
 import UrlConfig from '../../../../configs/internalurlmapping';
 import SubmitModelApi from "../../../../redux/actions/api/Model/UploadModel/SubmitModel"
 import C from "../../../../redux/actions/constants";
-import { useDispatch,useSelector,shallowEqual } from 'react-redux'
-import {usePrevious } from 'react-hanger';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux'
+import { usePrevious } from 'react-hanger';
 import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import Files from 'react-files'
@@ -39,7 +39,7 @@ const SubmitModel = (props) => {
         message: '',
         variant: 'success'
     })
-    const submitStatus = useSelector((state) => state.modelStatus.modelId,shallowEqual);
+    const submitStatus = useSelector((state) => state.modelStatus.modelId, shallowEqual);
     const [error, setError] = useState({ modelName: "", file: "", type: false })
     const [search, setSearch] = useState(false)
     const history = useHistory();
@@ -51,13 +51,12 @@ const SubmitModel = (props) => {
     console.log(submitStatus)
 
     useEffect(() => {
-        console.log(modelIdStatus,submitStatus)
-        debugger
-        if ( submitStatus && modelIdStatus!==submitStatus) {
+        console.log(modelIdStatus, submitStatus)
+        if (submitStatus && modelIdStatus !== submitStatus) {
             history.push(`${process.env.PUBLIC_URL}/model/submission/${submitStatus}`)
         }
-      },[submitStatus]);
-    
+    }, [submitStatus]);
+
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -112,7 +111,7 @@ const SubmitModel = (props) => {
     // }
 
     const handleApicall = async () => {
-        
+
 
         let apiObj = new SubmitModelApi(model)
         fetch(apiObj.apiEndPoint(), {
@@ -122,19 +121,19 @@ const SubmitModel = (props) => {
         }).then(async response => {
             const rsp_data = await response.json();
             if (!response.ok) {
-                setSnackbarInfo ({
+                setSnackbarInfo({
                     ...snackbar,
                     open: true,
                     message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
                     timeOut: 40000,
                     variant: 'error'
                 })
-                if(response.status===401){
-                    setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
+                if (response.status === 401) {
+                    setTimeout(() => history.push(`${process.env.PUBLIC_URL}/user/login`), 3000)
                 }
-             else {
+            }
+            else {
                 dispatch(PageChange(0, C.PAGE_CHANGE));
-                debugger
                 history.push(`${process.env.PUBLIC_URL}/model/submission/${rsp_data.data.modelId}`)
             }
         }).catch((error) => {
@@ -148,19 +147,19 @@ const SubmitModel = (props) => {
         });
     }
 
-   
+
 
     const renderInstructions = () => {
         return <div className={classes.list} >
             <ul>
-            <li><Typography className={classes.marginValue} variant="body2">Provide a meaningful name to your model.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">Browse the file containing the parameters of the model.</Typography></li>
-            <li><Typography className={classes.marginValue} variant="body2">Make sure the file should be in JSON format.</Typography></li>
+                <li><Typography className={classes.marginValue} variant="body2">Provide a meaningful name to your model.</Typography></li>
+                <li><Typography className={classes.marginValue} variant="body2">Browse the file containing the parameters of the model.</Typography></li>
+                <li><Typography className={classes.marginValue} variant="body2">Make sure the file should be in JSON format.</Typography></li>
             </ul>
         </div>
     }
 
-    
+
 
     const handleSubmitModel = (e) => {
         if (model.modelName === "") {
@@ -171,7 +170,7 @@ const SubmitModel = (props) => {
             setError({ ...error, name: "Max 256 characters allowed" })
 
         }
-        
+
         else {
 
             handleApicall()
@@ -191,10 +190,10 @@ const SubmitModel = (props) => {
     const handleChange = files => {
 
         if (files.length > 0) {
-          setModelInfo({ ...model, file: files[0] })
-          setLabel (files[0].name)
+            setModelInfo({ ...model, file: files[0] })
+            setLabel(files[0].name)
         }
-      };
+    };
 
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
@@ -209,13 +208,13 @@ const SubmitModel = (props) => {
                     <BreadCrum links={[UrlConfig.model]} activeLink="Submit Model" />
                 </div>
                 <Paper elevation={3} className={classes.divStyle}>
-                   
+
                     <Grid container spacing={5}>
                         <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
-                           
+
                             <FormControl className={classes.form}>
                                 <Typography className={classes.typography} variant="subtitle1">How to submit model?</Typography>
-                                    {renderInstructions()}
+                                {renderInstructions()}
                             </FormControl>
                         </Grid>
                         <Hidden>
@@ -224,7 +223,7 @@ const SubmitModel = (props) => {
                             </Grid>
                         </Hidden>
                         <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
-                        
+
                             <FormControl className={classes.form}>
                                 <Grid container spacing={6}>
                                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
@@ -264,7 +263,7 @@ const SubmitModel = (props) => {
                                             </Grid> */}
                                         </Grid>
                                     </Grid>
-                                    <Grid item xl={12} lg={12} md={12} sm={12} xs={12} style={{paddingTop:"0px"}}>
+                                    <Grid item xl={12} lg={12} md={12} sm={12} xs={12} style={{ paddingTop: "0px" }}>
                                         <Grid container spacing={3}>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                                 <TextField fullWidth
@@ -282,49 +281,49 @@ const SubmitModel = (props) => {
                                             </Grid>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                                 <div ondrop={handleChange} >
-                                                <TextField fullWidth
-                                                    
-                                                    color="primary"
-                                                    label="Upload the file"
-                                                    value={label}
-                                                    error={error.file ? true : false}
-                                                    helperText={error.file}
-                                                    
-                                                    InputProps={{
-                                                        endAdornment: (
-                                                          <InputAdornment>
-                                                          <Files
-        onChange={handleChange}
-        //   onError={this.onFilesError}
-          accepts={['.json', 'audio/*']}
-          multiple
-          
-          clickable
-        >
-          <Button
-                                                color="primary"
-                                                className={classes.browseBtn}
-                                                variant="outlined"
-                                                
-                                               
-                                              >
-                                                Browse
-                                                <input
-                                                  type="file"
-                                                  hidden
-                                                />
-                                              </Button>
-        </Files>
-                                                            
-                                                          </InputAdornment>
-                                                        )
-                                                      }}
-                                                    
-                                                />
+                                                    <TextField fullWidth
+
+                                                        color="primary"
+                                                        label="Upload the file"
+                                                        value={label}
+                                                        error={error.file ? true : false}
+                                                        helperText={error.file}
+
+                                                        InputProps={{
+                                                            endAdornment: (
+                                                                <InputAdornment>
+                                                                    <Files
+                                                                        onChange={handleChange}
+                                                                        //   onError={this.onFilesError}
+                                                                        accepts={['.json', 'audio/*']}
+                                                                        multiple
+
+                                                                        clickable
+                                                                    >
+                                                                        <Button
+                                                                            color="primary"
+                                                                            className={classes.browseBtn}
+                                                                            variant="outlined"
+
+
+                                                                        >
+                                                                            Browse
+                                                                            <input
+                                                                                type="file"
+                                                                                hidden
+                                                                            />
+                                                                        </Button>
+                                                                    </Files>
+
+                                                                </InputAdornment>
+                                                            )
+                                                        }}
+
+                                                    />
                                                 </div>
 
 
-                                                
+
                                             </Grid>
                                         </Grid>
                                     </Grid>

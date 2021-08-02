@@ -7,7 +7,7 @@ import {
     Typography,
     TextField,
     Button,
-    CardContent,Card
+    CardContent, Card
 } from '@material-ui/core';
 import { useState } from 'react';
 
@@ -15,7 +15,7 @@ const HostedInference = (props) => {
     const { classes, title, para } = props;
     const history = useHistory();
     const [translation, setTranslationState] = useState(false)
-    const handleCompute = ()=>setTranslationState(true);
+    const handleCompute = () => setTranslationState(true);
     return (
         <div>
             <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
@@ -32,6 +32,21 @@ const HostedInference = (props) => {
                     //     setError({ ...error, name: false })
                     // }}
                     />
+                    {/* <textarea
+                    rows={4}
+                    cols={40}
+                    placeholder="Enter Text"
+                    //  rowsMax={4}
+                    //     color="primary"
+                    //     label="Enter Text"
+                    // value={model.modelName}
+                    // error={error.name ? true : false}
+                    // helperText={error.name}
+                    onChange={(e) => {
+                        setModelInfo({ ...model, modelName: e.target.value })
+                        setError({ ...error, name: false })
+                    }}
+                    /> */}
                 </Grid>
                 <Grid item xl={4} lg={4} md={4} sm={4} xs={4} className={classes.computeGrid}>
                     <Button
@@ -40,19 +55,19 @@ const HostedInference = (props) => {
                         variant="contained"
                         size={'small'}
 
-                    onClick={handleCompute}
+                        onClick={handleCompute}
                     >
-                        Compute
+                        Translate
                     </Button>
                 </Grid>
 
                 {translation &&
                     // <Grid item xl={11} lg={11} md={12} sm={12} xs={12}>
-                        <Card style={{backgroundColor:'#139D601A',color:'black',heigth:'50px',width:'440px'}}>
-                            <CardContent style={{paddingBottom:'16px'}}>
-                                This is my translated text
-                            </CardContent>
-                        </Card>
+                    <Card style={{ backgroundColor: '#139D601A', color: 'black', heigth: '50px', width: '440px' }}>
+                        <CardContent style={{ paddingBottom: '16px' }}>
+                            This is my translated text
+                        </CardContent>
+                    </Card>
                     // </Grid>
                 }
             </Grid>

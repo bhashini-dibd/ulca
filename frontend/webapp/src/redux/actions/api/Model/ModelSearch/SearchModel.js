@@ -31,7 +31,6 @@ export default class SearchModel extends API {
         if (res) {
             this.report = res.data;
         }
-        debugger
         console.log('inside processResponse', res)
     }
 
@@ -56,7 +55,7 @@ export default class SearchModel extends API {
         this.headers = {
             headers: {
                 "Content-Type": "application/json",
-                
+
             }
         };
         return this.headers;

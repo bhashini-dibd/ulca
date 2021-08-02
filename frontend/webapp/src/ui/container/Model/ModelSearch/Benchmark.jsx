@@ -57,7 +57,7 @@ const Benchmark = (props) => {
     const history = useHistory();
     const [languagePair, setLanguagePair] = useState({
         source: 'English',
-        target: {value: "hi", label: "Hindi"}
+        target: { value: "hi", label: "Hindi" }
     });
     // const [filterBy, setFilterBy] = useState({
     //     domain: [],
@@ -88,20 +88,18 @@ const Benchmark = (props) => {
         const Dataset = Object.keys(type)[0]
         const apiObj = new SearchModel(Dataset, src, tgt)
         dispatch(APITransport(apiObj));
-
     }
-    
+
 
     useEffect(() => {
-        makeSubmitAPICall("en","hi",{})
-    },[])
+        makeSubmitAPICall("en", "hi", {})
+    }, [])
 
 
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
     const handleLanguagePairChange = (value, property) => {
-        debugger
         setLanguagePair({ ...languagePair, [property]: value });
 
         if (property === 'source')
@@ -127,7 +125,7 @@ const Benchmark = (props) => {
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
     const { params, srno } = param
-   
+
 
     const handleDatasetClick = (property) => {
         // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
@@ -166,7 +164,7 @@ const Benchmark = (props) => {
         });
     }
 
-    
+
 
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
@@ -213,7 +211,7 @@ const Benchmark = (props) => {
             if (!languagePair.target)
                 setTgtError(true)
             else {
-                // makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType)
+                makeSubmitAPICall(tgt, null, datasetType, domain, submitter)
             }
 
         }
@@ -382,61 +380,61 @@ const Benchmark = (props) => {
     return (
         <div>
             <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
-            <div className ={classes.parentPaper}>
-            <Grid container spacing={3} >
-                <Grid className={classes.leftSection} item xs={12} sm={4} md={3} lg={3} xl={3}>
-                    <Grid container spacing={2}>
-                        <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search Model" />
-                        </Grid>
-                        <Grid item className={(params === 'inprogress' || params === 'completed') && classes.blurOut}
-                            xs={12} sm={12} md={12} lg={12} xl={12}
-                        >
-                            <Typography className={classes.subType} variant="body1">Select Model Task</Typography>
-                            <hr className={classes.styleHr} />
-                            <div className={classes.buttonDiv}>
-                                {renderDatasetButtons()}
-                            </div>
-                            <Typography className={classes.subHeader} variant="body1">{getTitle()}</Typography>
-                            <div className={classes.subHeader}>
-                                {datasetType['translation'] && renderTexfield("select-source-language", "Source Language *")}
-                            </div>
-                            <div className={classes.autoComplete}>
-                                <MultiAutocomplete
-                                    single={true}
-                                    id="language-target"
-                                    options={getTargetLang()}
-                                    filter='target'
-                                    value={languagePair.target}
-                                    handleOnChange={handleLanguagePairChange}
-                                    label={getLabel()}
-                                    error={tgtError}
-                                    helperText="This field is mandatory"
-                                />
-                            </div>
-                            <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
-                            <Grid container spacing={1}>
-                                <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    {renderFilterByfield("domain", "Domain", filterBy.domain, FilterBy.domain)}
-                                </Grid>
-                                <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    {renderFilterByfield("collectionMethod", "Submitter", filterBy.collectionMethod, FilterBy.collectionMethod)}
-                                </Grid>
-                                {/* <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <div className={classes.parentPaper}>
+                <Grid container spacing={3} >
+                    <Grid className={classes.leftSection} item xs={12} sm={4} md={3} lg={3} xl={3}>
+                        <Grid container spacing={2}>
+                            <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search Model" />
+                            </Grid>
+                            <Grid item className={(params === 'inprogress' || params === 'completed') && classes.blurOut}
+                                xs={12} sm={12} md={12} lg={12} xl={12}
+                            >
+                                <Typography className={classes.subType} variant="body1">Select Model Task</Typography>
+                                <hr className={classes.styleHr} />
+                                <div className={classes.buttonDiv}>
+                                    {renderDatasetButtons()}
+                                </div>
+                                <Typography className={classes.subHeader} variant="body1">{getTitle()}</Typography>
+                                <div className={classes.subHeader}>
+                                    {datasetType['translation'] && renderTexfield("select-source-language", "Source Language *")}
+                                </div>
+                                <div className={classes.autoComplete}>
+                                    <MultiAutocomplete
+                                        single={true}
+                                        id="language-target"
+                                        options={getTargetLang()}
+                                        filter='target'
+                                        value={languagePair.target}
+                                        handleOnChange={handleLanguagePairChange}
+                                        label={getLabel()}
+                                        error={tgtError}
+                                        helperText="This field is mandatory"
+                                    />
+                                </div>
+                                <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
+                                <Grid container spacing={1}>
+                                    <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                        {renderFilterByfield("domain", "Domain", filterBy.domain, FilterBy.domain)}
+                                    </Grid>
+                                    <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                        {renderFilterByfield("collectionMethod", "Submitter", filterBy.collectionMethod, FilterBy.collectionMethod)}
+                                    </Grid>
+                                    {/* <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                     {renderFilterByfield("collectionMethod", "Select Metric", filterBy.collectionMethod, FilterBy.collectionMethod)}
                                 </Grid> */}
-                            </Grid>
+                                </Grid>
 
-                            {renderclearNsubmitButtons()}
+                                {renderclearNsubmitButtons()}
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
 
-                <Grid item xs={12} sm={7} md={9} lg={9} xl={9} className={classes.modelTable}>
-                <SearchModels />
-                </Grid>
+                    <Grid item xs={12} sm={7} md={9} lg={9} xl={9} className={classes.modelTable}>
+                        <SearchModels />
+                    </Grid>
 
-            </Grid>
+                </Grid>
             </div>
         </div >
     )

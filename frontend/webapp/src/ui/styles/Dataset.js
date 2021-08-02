@@ -7,12 +7,12 @@ const DataSet = (theme) => ({
 
     },
     parentPaper: {
-        minHeight:"56px",
+        minHeight: "56px",
         maxWidth: "1272px",
-        width : "100%",
-        margin :"17px auto",
-        padding:"0"
-      },
+        width: "100%",
+        margin: "17px auto",
+        padding: "0"
+    },
     title: {
         marginBottom: '6vh'
     },
@@ -166,7 +166,7 @@ const DataSet = (theme) => ({
         height: window.innerHeight - 80
     },
     modelTable: {
-        marginTop:"2rem"
+        marginTop: "2rem"
     },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
@@ -277,8 +277,8 @@ const DataSet = (theme) => ({
     container: {
         margin: '12.75px 0px 18px 15px'
     },
-    browseBtn:{
-        marginTop:"-20px"
+    browseBtn: {
+        marginTop: "-20px"
     },
     contriCard: {
         width: '578px',
@@ -338,6 +338,7 @@ const DataSet = (theme) => ({
     computeGrid: {
         display: 'flex',
         alignItems: 'flex-end',
+        // alignItems: 'center'
     },
     modelTitle: {
         marginTop: '34px'
@@ -352,7 +353,8 @@ const DataSet = (theme) => ({
     hosted: {
         marginTop: '34px',
         display: 'flex',
-        alignItems: 'flex-end'
+        // alignItems: 'flex-end'
+        alignItems: 'center'
     }
 
 });
