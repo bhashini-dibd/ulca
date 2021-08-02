@@ -39,7 +39,9 @@
             },
             "config": {
                "audioFormat": "wav",
-               "transcriptionFormat": "transcript",
+               "transcriptionFormat": {
+                  "value" : "transcript"
+               },
                "language": {
                   "sourceLanguage": "bn"
                }
