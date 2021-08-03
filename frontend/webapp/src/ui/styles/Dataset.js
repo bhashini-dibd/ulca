@@ -349,13 +349,35 @@ const DataSet = (theme) => ({
         padding: "0",
     },
     modelPara: { marginTop: '15px' },
-    gridCompute: { marginTop: '19px' },
+    gridCompute: { marginTop: '15px' },
     hosted: {
         display: 'flex',
         // alignItems: 'flex-end'
-       // alignItems: 'center'
+        // alignItems: 'center'
+    },
+    translatedCard: {
+        height: '300px',
+        width: '146%',
+        borderColor: '#2D63AB',
+        borderRadius: '8px',
+        marginTop: '20px'
+    },
+    textArea: {
+        backgroundColor: 'inherit',
+        border: 'none',
+        width: "100%",
+        resize: 'none',
+        outline: 'none',
+        fontSize: '18px',
+        lineHeight: '32px',
+        color: 'black'
+    },
+    hostedCard: {
+        height: '300px',
+        width: '146%',
+        borderColor: '#2D63AB',
+        borderRadius: '8px'
     }
-
 });
 
 export default DataSet;

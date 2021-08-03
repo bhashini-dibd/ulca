@@ -39,6 +39,7 @@ const HostedInference = (props) => {
             if (resp.ok) {
                 if (rsp_data.hasOwnProperty('translation') && rsp_data.translation) {
                     setTarget(rsp_data.translation.output[0].target)
+                    //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
                     setTranslationState(true)
                 }
             } else {
@@ -64,42 +65,55 @@ const HostedInference = (props) => {
         <div>
             <Grid container spacing={2}>
                 <Grid className={classes.gridCompute} item xl={8} lg={8} md={8} sm={8} xs={8}>
-                    <Card style={{ width: '145%', height: '300px', borderColor: '#2D63AB', borderRadius: '8px' }}>
-                        <CardContent style={{ padding: '16px' }}>
+                    <Card className={classes.hostedCard}>
+                        <CardContent>
                             <Typography variant='body1' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
                             <textarea
                                 rows={6}
                                 // cols={40}
+                                className={classes.textArea}
                                 placeholder="Enter Text"
                                 onChange={(e) => {
                                     setSourceText(e.target.value);
                                 }}
-                                style={{ border: 'none', width: "100%", resize: 'none', outline: 'none', fontSize: '18px', lineHeight: '32px' }}
                             />
-                            <Button
-                            style={{float:'right'}}
-                                color="primary"
-                                className={classes.computeBtn}
-                                variant="contained"
-                                size={'small'}
+                            <div style={{ float: 'right' }}>
+                                <Grid container spacing={2}>
+                                    <Grid item>
+                                        <Button size="small" variant="outlined"
+                                        >
+                                            Clear
+                                        </Button>
+                                    </Grid>
+                                    <Grid item>
+                                        <Button
+                                            color="primary"
+                                            className={classes.computeBtn}
+                                            variant="contained"
+                                            size={'small'}
 
-                                onClick={handleCompute}
-                            >
-                                Translate
-                            </Button>
+                                            onClick={handleCompute}
+                                        >
+                                            Translate
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            </div>
+
+
                         </CardContent>
                     </Card>
-                    <Card style={{ width: '145%', height: '300px', marginTop: '20px', borderColor: '#2D63AB', borderRadius: '8px' }}>
-                        <CardContent style={{ paddingBottom: '16px' }}>
+                    <Card className={classes.translatedCard}>
+                        <CardContent>
                             <textarea
+                                disabled
                                 rows={6}
-                                // cols={40}
-                                placeholder={target}
-                                style={{ border: 'none', width: "100%", resize: 'none', outline: 'none', fontSize: '18px', lineHeight: '32px' }}
+                                value={target}
+                                className={classes.textArea}
                             />
                         </CardContent>
                     </Card>
-                    <TextField fullWidth
+                    {/* <TextField fullWidth
                         color="primary"
                         label="Enter Text"
                         value={sourceText}
@@ -108,45 +122,9 @@ const HostedInference = (props) => {
                         onChange={(e) => {
                             setSourceText(e.target.value);
                         }}
-                    />
-                    {/* <textarea
-                    rows={4}
-                    cols={40}
-                    placeholder="Enter Text"
-                    //  rowsMax={4}
-                    //     color="primary"
-                    //     label="Enter Text"
-                    // value={model.modelName}
-                    // error={error.name ? true : false}
-                    // helperText={error.name}
-                    onChange={(e) => {
-                        setModelInfo({ ...model, modelName: e.target.value })
-                        setError({ ...error, name: false })
-                    }}
                     /> */}
+
                 </Grid>
-                {/* <Grid item xl={4} lg={4} md={4} sm={4} xs={4} className={classes.computeGrid}>
-                    <Button
-                        color="primary"
-                        className={classes.computeBtn}
-                        variant="contained"
-                        size={'small'}
-
-                        onClick={handleCompute}
-                    >
-                        Translate
-                    </Button>
-                </Grid> */}
-
-                {/* {translation &&
-                    // <Grid item xl={11} lg={11} md={12} sm={12} xs={12}>
-                    <Card style={{ backgroundColor: '#139D601A', color: 'black', heigth: '50px', width: '440px' }}>
-                        <CardContent style={{ paddingBottom: '16px' }}>
-                            {target}
-                        </CardContent>
-                    </Card>
-                    // </Grid>
-                } */}
             </Grid>
 
             {snackbar.open &&
