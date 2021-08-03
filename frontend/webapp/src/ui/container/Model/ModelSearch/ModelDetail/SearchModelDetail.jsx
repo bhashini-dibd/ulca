@@ -63,16 +63,16 @@ const SearchModelDetail = (props) => {
                 {/* <hr style={{marginTop: "19px",opacity:'0.3' }}></hr> */}
                 <Divider className={classes.gridCompute} />
                 <Grid container>
-                    <Grid className={classes.leftSection} item xs={7} sm={7} md={7} lg={7} xl={7}>
+                    <Grid className={classes.leftSection} item xs={12} sm={7} md={8} lg={8} xl={8}>
+
+                        {data.task !== 'asr' ? <HostedInference task={data.task} modelId={params.srno} /> : <HostedInferASR task={data.task} modelId={params.srno} />}
+                    </Grid>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4} style={{ paddingLeft: '24px' }}>
                         {description.map(des => <ModelDescription title={des.title} para={des.para} />)}
 
                     </Grid>
 
-                    <Grid item xs={5} sm={5} md={5} lg={5} xl={5} style={{ paddingLeft: '24px' }}>
-                        {data.task !== 'asr' ? <HostedInference task={data.task} modelId={params.srno} /> : <HostedInferASR task={data.task} modelId={params.srno} />}
-                        {/* <HostedInference modelId ={params.srno}/> */}
-                        {/* <HostedInferASR /> */}
-                    </Grid>
+
                 </Grid>
             </div>}
         </>
