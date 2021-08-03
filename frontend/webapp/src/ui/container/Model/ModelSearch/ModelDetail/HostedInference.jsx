@@ -62,9 +62,43 @@ const HostedInference = (props) => {
     };
     return (
         <div>
-            <Typography variant='h6' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
             <Grid container spacing={2}>
                 <Grid className={classes.gridCompute} item xl={8} lg={8} md={8} sm={8} xs={8}>
+                    <Card style={{ width: '145%', height: '300px', borderColor: '#2D63AB', borderRadius: '8px' }}>
+                        <CardContent style={{ padding: '16px' }}>
+                            <Typography variant='body1' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
+                            <textarea
+                                rows={6}
+                                // cols={40}
+                                placeholder="Enter Text"
+                                onChange={(e) => {
+                                    setSourceText(e.target.value);
+                                }}
+                                style={{ border: 'none', width: "100%", resize: 'none', outline: 'none', fontSize: '18px', lineHeight: '32px' }}
+                            />
+                            <Button
+                            style={{float:'right'}}
+                                color="primary"
+                                className={classes.computeBtn}
+                                variant="contained"
+                                size={'small'}
+
+                                onClick={handleCompute}
+                            >
+                                Translate
+                            </Button>
+                        </CardContent>
+                    </Card>
+                    <Card style={{ width: '145%', height: '300px', marginTop: '20px', borderColor: '#2D63AB', borderRadius: '8px' }}>
+                        <CardContent style={{ paddingBottom: '16px' }}>
+                            <textarea
+                                rows={6}
+                                // cols={40}
+                                placeholder={target}
+                                style={{ border: 'none', width: "100%", resize: 'none', outline: 'none', fontSize: '18px', lineHeight: '32px' }}
+                            />
+                        </CardContent>
+                    </Card>
                     <TextField fullWidth
                         color="primary"
                         label="Enter Text"
@@ -91,7 +125,7 @@ const HostedInference = (props) => {
                     }}
                     /> */}
                 </Grid>
-                <Grid item xl={4} lg={4} md={4} sm={4} xs={4} className={classes.computeGrid}>
+                {/* <Grid item xl={4} lg={4} md={4} sm={4} xs={4} className={classes.computeGrid}>
                     <Button
                         color="primary"
                         className={classes.computeBtn}
@@ -102,9 +136,9 @@ const HostedInference = (props) => {
                     >
                         Translate
                     </Button>
-                </Grid>
+                </Grid> */}
 
-                {translation &&
+                {/* {translation &&
                     // <Grid item xl={11} lg={11} md={12} sm={12} xs={12}>
                     <Card style={{ backgroundColor: '#139D601A', color: 'black', heigth: '50px', width: '440px' }}>
                         <CardContent style={{ paddingBottom: '16px' }}>
@@ -112,7 +146,7 @@ const HostedInference = (props) => {
                         </CardContent>
                     </Card>
                     // </Grid>
-                }
+                } */}
             </Grid>
 
             {snackbar.open &&

@@ -343,7 +343,7 @@ const DataSet = (theme) => ({
     modelTitle: {
         marginTop: '34px'
     },
-    mainTitle: { marginTop: '29px' },
+    mainTitle: { marginTop: '10px' },
     backButton: {
         boxShadow: "none",
         padding: "0",
@@ -351,10 +351,9 @@ const DataSet = (theme) => ({
     modelPara: { marginTop: '15px' },
     gridCompute: { marginTop: '19px' },
     hosted: {
-        marginTop: '34px',
         display: 'flex',
         // alignItems: 'flex-end'
-        alignItems: 'center'
+       // alignItems: 'center'
     }
 
 });
