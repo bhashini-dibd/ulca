@@ -1,7 +1,6 @@
 from collections import Counter
 from flask_restful import  Resource
 from flask import request
-from src.models.application.summarize_dataset import SummarizeDataset as AppSummarizeDataset
 from src.models.api_response import APIResponse, post_error
 from src.models.api_enums import APIStatus
 from src.repositories import SummarizeDatasetRepo
