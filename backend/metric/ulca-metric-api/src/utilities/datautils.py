@@ -1,19 +1,27 @@
-from src.utilities import DataUtils
+import requests
+from config import DATA_FILTER_SET_FILE_PATH,FILTER_DIR_NAME,FILTER_FILE_NAME
+import json
 import logging
 from logging.config import dictConfig
-from .queryutils import QueryUtils
 log = logging.getLogger('file')
 
-utils = QueryUtils()
+class DataUtils:
 
-
-class FetchFilterParams(object):
-    #data aggregation
-    def search(self):
-        params = DataUtils.read_filter_params(self)
-        return params
-
-    
+    def read_filter_params(self):
+        """Reading roles from git config."""
+        
+        try:
+            file = requests.get(DATA_FILTER_SET_FILE_PATH, allow_redirects=True)
+            file_path = FILTER_DIR_NAME + FILTER_FILE_NAME
+            open(file_path, 'wb').write(file.content)
+            log.info("Filters read from git and pushed to local")
+            with open(file_path, 'r') as stream:
+                parsed = json.load(stream)
+                filterconfigs = parsed['dataset']
+            return filterconfigs
+        except Exception as exc:
+            log.exception("Exception while reading filters: " +str(exc))
+            return []
 
 
 

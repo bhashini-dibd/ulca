@@ -1,13 +1,13 @@
-from src.models.db import SummarizeDatasetModel
+from src.models.db import FetchFilterParams
 from src.models.db import AggregateDatasetModel
 
 class SummarizeDatasetRepo(object):
     def __init__(self):
-        self.summarizeDatasetModel       = SummarizeDatasetModel()
+        self.fetchFilterParams       = FetchFilterParams()
         self.aggregateDatasetModel       = AggregateDatasetModel()
 
     def search(self):
-        corpus_stats = self.summarizeDatasetModel.search()
+        corpus_stats = self.fetchFilterParams.search()
         return  corpus_stats
 
     def aggregate(self, search_data):

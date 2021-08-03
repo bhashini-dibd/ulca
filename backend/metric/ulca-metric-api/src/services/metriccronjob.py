@@ -1,19 +1,35 @@
-from src.utilities import DataUtils
+from threading import Thread
+from config import error_cron_interval_sec
 import logging
+import os
+from datetime import datetime
 from logging.config import dictConfig
-from .queryutils import QueryUtils
-log = logging.getLogger('file')
 
-utils = QueryUtils()
+log         =   logging.getLogger('file')
 
 
-class FetchFilterParams(object):
-    #data aggregation
-    def search(self):
-        params = DataUtils.read_filter_params(self)
-        return params
+class MetricFilterProcessor(Thread):
+    def __init__(self, event):
+        Thread.__init__(self)
+        self.stopped = event
+
+    # Cron JOB to update filter set params
+    def run(self):
+        run = 0
+        while not self.stopped.wait(eval(str(error_cron_interval_sec))):
+            log.info(f'Metric Cron Processor run :{run}')
+            try:
+                self.initiate_filter_processing
+                
+                run += 1
+            except Exception as e:
+                run += 1
+                log.exception(f'Exception on Metric Cron Processor on run : {run} , exception : {e}')
 
     
+
+   
+
 
 
 
