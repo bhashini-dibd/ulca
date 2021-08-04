@@ -58,13 +58,14 @@ class MetricEvent:
             if 'submitter' in data.keys():
                 primary_submitter_ids, primary_submitter_names, secondary_submitters = [], [], []
                 for submitter in data["submitter"]:
-                    if 'id' in submitter.keys():
-                        primary_submitter_ids.append(submitter["id"])
-                    if 'name' in submitter.keys():
-                        primary_submitter_names.append(submitter["name"])
-                    if 'team' in submitter.keys():
-                        for team in submitter["team"]:
-                            secondary_submitters.append(team["name"])
+                    if submitter:
+                        if 'id' in submitter.keys():
+                            primary_submitter_ids.append(submitter["id"])
+                        if 'name' in submitter.keys():
+                            primary_submitter_names.append(submitter["name"])
+                        if 'team' in submitter.keys():
+                            for team in submitter["team"]:
+                                secondary_submitters.append(team["name"])
                 if primary_submitter_ids:
                     event["primarySubmitterId"] = primary_submitter_ids
                 if primary_submitter_names:
@@ -75,12 +76,13 @@ class MetricEvent:
                 coll_desc, coll_details = [], []
                 if data["collectionMethod"]:
                     for cm in data["collectionMethod"]:
-                        if 'collectionDescription' in cm.keys():
-                            coll_desc.append(cm["collectionDescription"])
-                        if 'collectionDetails' in cm.keys():
-                            if cm["collectionDetails"]:
-                                if 'alignmentTool' in cm["collectionDetails"].keys():
-                                    coll_details.append(cm["collectionDetails"]["alignmentTool"])
+                        if cm:
+                            if 'collectionDescription' in cm.keys():
+                                coll_desc.append(cm["collectionDescription"])
+                            if 'collectionDetails' in cm.keys():
+                                if cm["collectionDetails"]:
+                                    if 'alignmentTool' in cm["collectionDetails"].keys():
+                                        coll_details.append(cm["collectionDetails"]["alignmentTool"])
                 if coll_desc:
                     event["collectionMethod_collectionDescriptions"] = coll_desc
                 if coll_details:
