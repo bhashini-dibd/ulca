@@ -355,6 +355,7 @@ const DataSet = (theme) => ({
         padding: "0",
     },
     gridCompute: { marginTop: '15px ' },
+    grid: { marginRight: '15px ' },
     hosted: {
         display: 'flex',
         // alignItems: 'flex-end'

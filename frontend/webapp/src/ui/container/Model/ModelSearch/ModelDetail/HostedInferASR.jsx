@@ -112,7 +112,7 @@ const HostedInferASR = (props) => {
       {/* <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
 
       <Grid
-        className={classes.gridCompute}
+        className={classes.grid}
         item
         xl={5}
         lg={5}
@@ -123,7 +123,7 @@ const HostedInferASR = (props) => {
         <AudioRecord modelId = {modelId}/>
       </Grid>
       <Grid
-        className={classes.gridCompute}
+        className={classes.grid}
         item
         xl={6}
         lg={6}
@@ -148,7 +148,7 @@ const HostedInferASR = (props) => {
       <Typography variant={"caption"}>Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.</Typography>
         
       <Grid
-        className={classes.gridCompute}
+        className={classes.grid}
         item
         xl={5}
         lg={5}
