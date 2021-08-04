@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import Spinner from "../../../../components/common/Spinner";
 import {
     Grid,
     Typography,
@@ -102,6 +103,7 @@ const HostedInference = (props) => {
         // <div>
         //<Grid container spacing={2}>
         <Grid className={classes.gridCompute} item xl={12} lg={12} md={12} sm={12} xs={12}>
+            {loading && <Spinner />}
             <Card className={classes.hostedCard}>
                 <CardContent className={classes.translateCard}>
                     <Grid container className={classes.cardHeader}>
@@ -109,12 +111,13 @@ const HostedInference = (props) => {
                             <Typography variant='h6' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
                         </Grid>
                         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-                            <Autocomplete
+                            {/* <Autocomplete
                                 disabled
                                 options={['English']}
                                 value={'English'}
                                 renderInput={(params) => <TextField {...params} variant="standard" />}
-                            />
+                            /> */}
+                            <Typography variant='h6' className={classes.hosted}>English</Typography>
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -146,7 +149,6 @@ const HostedInference = (props) => {
                                 size={'small'}
                                 onClick={handleCompute}
                                 disabled={loading}>
-                                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                 Translate
                             </Button>
                         </Grid>
@@ -157,18 +159,20 @@ const HostedInference = (props) => {
                 <CardContent className={classes.translateCard}>
                     <Grid container className={classes.cardHeader}>
                         <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.headerContent}>
-                            <Autocomplete
+                            {/* <Autocomplete
                                 disabled
                                 options={['Hindi']}
                                 value={'Hindi'}
                                 renderInput={(params) => <TextField {...params} variant="standard" />}
-                            />
+                            /> */}
+                            <Typography variant='h6' className={classes.hosted}>Hindi</Typography>
                         </Grid>
                     </Grid>
                 </CardContent>
                 <CardContent>
                     <textarea
                         disabled
+                        placeholder='Output'
                         rows={6}
                         value={target}
                         className={classes.textArea}

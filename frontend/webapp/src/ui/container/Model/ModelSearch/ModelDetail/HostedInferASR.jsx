@@ -38,14 +38,14 @@ const HostedInferASR = (props) => {
   const validURL = (str) => {
     var pattern = new RegExp(
       "^((ft|htt)ps?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?" + // port
-        "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
-        "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?" + // port
+      "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
+      "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
       "i"
-    ); // fragment locator
+    );
     return pattern.test(str);
   };
   const handleSubmit = (e) => {
@@ -108,7 +108,7 @@ const HostedInferASR = (props) => {
   return (
     <Grid container>
 
-{apiCall && <Spinner />}
+      {apiCall && <Spinner />}
       {/* <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
 
       <Grid
@@ -120,7 +120,7 @@ const HostedInferASR = (props) => {
         sm={5}
         xs={5}
       >
-        <AudioRecord modelId = {modelId}/>
+        <AudioRecord modelId={modelId} />
       </Grid>
       <Grid
         className={classes.grid}
@@ -132,9 +132,9 @@ const HostedInferASR = (props) => {
         xs={6}
       >
         <Card className={classes.asrCard}>
-        <Grid container className={classes.cardHeader}>
-                <Typography variant='h6' className={classes.hosted}>Output</Typography>
-        </Grid>
+          <Grid container className={classes.cardHeader}>
+            <Typography variant='h6' className={classes.hosted}>Output</Typography>
+          </Grid>
           <CardContent>
             <textarea
               disabled
@@ -145,11 +145,11 @@ const HostedInferASR = (props) => {
           </CardContent>
         </Card>
       </Grid>
-      
+
       <Typography variant={"body1"}>Disclaimer : </Typography>
-      
+
       <Typography variant={"caption"}>Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.</Typography>
-        
+
       <Grid
         className={classes.grid}
         item
@@ -160,13 +160,13 @@ const HostedInferASR = (props) => {
         xs={5}
       >
         <Card className={classes.hostedCard}>
-        <Grid container className={classes.cardHeader}>
-                <Typography variant='h6' className={classes.hosted}>Notes</Typography>
-        </Grid>
+          <Grid container className={classes.cardHeader}>
+            <Typography variant='h6' className={classes.hosted}>Notes</Typography>
+          </Grid>
           <CardContent>
-              <Typography  variant={"caption"}>Max duration: 15 mins (If more, transcript of first 15 mins only will be given)</Typography>
+            <Typography variant={"caption"}>Max duration: 15 mins (If more, transcript of first 15 mins only will be given)</Typography>
             <TextField
-            style={{marginTop:"15px",marginBottom:"10px"}}
+              style={{ marginTop: "15px", marginBottom: "10px" }}
               fullWidth
               color="primary"
               label="Paste the URL of the public repository"
@@ -203,12 +203,12 @@ const HostedInferASR = (props) => {
         sm={6}
         xs={6}
       >
-      <Card className={classes.asrCard}>
-      <Grid container className={classes.cardHeader}>
-                <Typography variant='h6' className={classes.hosted}>Output</Typography>
-        </Grid>
-        <CardContent>{target}</CardContent>
-      </Card>
+        <Card className={classes.asrCard}>
+          <Grid container className={classes.cardHeader}>
+            <Typography variant='h6' className={classes.hosted}>Output</Typography>
+          </Grid>
+          <CardContent>{target}</CardContent>
+        </Card>
       </Grid>
     </Grid>
   );

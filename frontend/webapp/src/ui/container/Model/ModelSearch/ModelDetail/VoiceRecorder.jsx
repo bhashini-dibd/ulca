@@ -44,7 +44,6 @@ const AudioRecord = (props) => {
    
 
     const handleCompute = () => {
-        debugger
         const apiObj = new HostedInferenceAPI(modelId,base,"asr",true);
         fetch(apiObj.apiEndPoint(), {
             method: 'POST',

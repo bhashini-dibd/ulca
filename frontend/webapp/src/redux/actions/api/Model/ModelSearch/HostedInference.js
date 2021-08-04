@@ -40,7 +40,6 @@ export default class HostedInference extends API {
             modelId: this.modelId,
             task: this.task
         }
-        debugger
         if (this.task === 'translation') {
             bodyData.input = [{ source: this.input }]
         } else if (this.task === 'asr') {
@@ -48,7 +47,7 @@ export default class HostedInference extends API {
                 bodyData.audioContent = this.input
             }else{
                 bodyData.audioContent = this.input
-            }gi
+            }
             
         }
         bodyData.userId = JSON.parse(localStorage.getItem('userDetails')).userID
