@@ -93,6 +93,8 @@ const getContributionList = (state, payload) => {
                 domain: getDomainDetails(element.domain),
                 status: "Published",
                 language: lang,
+                source: element.languages.length > 0 && element.languages[0].sourceLanguage,
+                target:element.languages && element.languages.length > 0 && element.languages[0].targetLanguage,
                 licence: element.license,
                 submitter: element.submitter.name,
                 trainingDataset: element.trainingDataset,

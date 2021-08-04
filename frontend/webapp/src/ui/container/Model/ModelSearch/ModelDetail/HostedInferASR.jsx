@@ -132,6 +132,9 @@ const HostedInferASR = (props) => {
         xs={6}
       >
         <Card className={classes.asrCard}>
+        <Grid container className={classes.cardHeader}>
+                <Typography variant='h6' className={classes.hosted}>Output</Typography>
+        </Grid>
           <CardContent>
             <textarea
               disabled
@@ -156,7 +159,10 @@ const HostedInferASR = (props) => {
         sm={5}
         xs={5}
       >
-        <Card className={classes.asrCard}>
+        <Card className={classes.hostedCard}>
+        <Grid container className={classes.cardHeader}>
+                <Typography variant='h6' className={classes.hosted}>Notes</Typography>
+        </Grid>
           <CardContent>
               <Typography  variant={"caption"}>Max duration: 15 mins (If more, transcript of first 15 mins only will be given)</Typography>
             <TextField
@@ -189,7 +195,7 @@ const HostedInferASR = (props) => {
         </Card>
       </Grid>
       <Grid
-        className={classes.gridCompute}
+        className={classes.grid}
         item
         xl={6}
         lg={6}
@@ -198,6 +204,9 @@ const HostedInferASR = (props) => {
         xs={6}
       >
       <Card className={classes.asrCard}>
+      <Grid container className={classes.cardHeader}>
+                <Typography variant='h6' className={classes.hosted}>Output</Typography>
+        </Grid>
         <CardContent>{target}</CardContent>
       </Card>
       </Grid>
