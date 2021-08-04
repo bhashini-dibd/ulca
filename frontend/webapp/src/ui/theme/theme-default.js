@@ -34,7 +34,7 @@ const themeDefault = createMuiTheme({
     },
     MuiMenu: {
       list: {
-        minWidth: "210px"
+        minWidth: "269px"
       }
     },
     MUIDataTableFilter: {

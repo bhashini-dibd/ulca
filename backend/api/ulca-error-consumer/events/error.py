@@ -25,7 +25,7 @@ class ErrorEvent:
             expiry_time = redis_key_expiry
             store_repo.upsert(error_id,data,expiry_time)
         except Exception as e:
-            log.exception(f'Exception while writing errors: {e}', e)
+            log.exception(f'Exception while writing errors: {e}')
             return False
 
     #fetches back error record (object store link) from db
@@ -38,7 +38,7 @@ class ErrorEvent:
             log.info(f'Error report returned for {srn}')
             return error_records
         except Exception as e:
-            log.exception(f'Exception while fetching error report: {e}', e)
+            log.exception(f'Exception while fetching error report: {e}')
             return []
 
 # Log config

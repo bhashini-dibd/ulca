@@ -1,10 +1,10 @@
 /**
  * Login API
  */
- import API from "../../api";
- import C from "../../constants";
- import CONFIGS from "../../../../configs/configs";
- import ENDPOINTS from "../../../../configs/apiendpoints";
+ import API from "../../../api";
+ import C from "../../../constants";
+ import CONFIGS from "../../../../../configs/configs";
+ import ENDPOINTS from "../../../../../configs/apiendpoints";
  import md5 from 'md5';
 
  export default class LoginAPI extends API {

@@ -29,6 +29,17 @@ export const FilterByCollection =(value) =>{
     
 }
 
+export const getLanguageName = (value)=>{
+    let result =""
+    Language.forEach(val => {
+        if(val.value===value){
+            result =  val.label
+        }
+    })
+    return result;
+   
+}
+
 
  export const getLanguageLabel= (value, params = 'language') => {
     let arr = []

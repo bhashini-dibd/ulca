@@ -328,6 +328,7 @@ const SearchAndDownloadRecords = (props) => {
                 <Button className={classes.menuStyle}
                     // disabled={page !== 0 ? true : false}
                     color="inherit"
+                    fullWidth
                     onClick={(e) => openEl(e.currentTarget)}
                     variant="text">
                     <Typography variant="subtitle1">
@@ -490,7 +491,8 @@ const SearchAndDownloadRecords = (props) => {
                         <Grid item className={(params === 'inprogress' || params === 'completed') && classes.blurOut}
                             xs={12} sm={12} md={12} lg={12} xl={12}
                         >
-                            <Typography className={classes.subHeader} variant="body1">Select Dataset Type</Typography>
+                            <Typography className={classes.subType} variant="body1">Select Dataset Type</Typography>
+                            <hr className={classes.styleHr} />
                             <div className={classes.buttonDiv}>
                                 {renderDatasetButtons()}
                             </div>

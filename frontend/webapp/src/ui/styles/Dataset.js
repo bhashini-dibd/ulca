@@ -4,8 +4,15 @@ const DataSet = (theme) => ({
         minHeight: '674px',
         boxShadow: "0px 0px 2px #00000029",
         border: "1px solid #0000001F",
-        
-      },
+
+    },
+    parentPaper: {
+        minHeight: "56px",
+        maxWidth: "1272px",
+        width: "100%",
+        margin: "17px auto",
+        padding: "0"
+    },
     title: {
         marginBottom: '6vh'
     },
@@ -158,6 +165,9 @@ const DataSet = (theme) => ({
         justifyContent: "center",
         height: window.innerHeight - 80
     },
+    modelTable: {
+        marginTop: "2rem"
+    },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
     searchResult: {
@@ -255,50 +265,97 @@ const DataSet = (theme) => ({
         fontSize: "1.125rem",
         fontWeight: "500 !important",
         "&:hover": {
-
             backgroundColor: 'white',
+        },
+        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+        // borderTop:"3px solid green",
+        '& svg': {
+            marginLeft: 'auto',
+            color: "rgba(0, 0, 0, 0.42)"
         }
     },
     container: {
         margin: '12.75px 0px 18px 15px'
     },
+    browseBtn: {
+        marginTop: "-20px"
+    },
     contriCard: {
         width: '578px',
         minHeight: '100px',
-        margin : "10px",
-        padding:"0px 10px",
+        margin: "10px",
+        padding: "0px 10px",
         "@media (max-width:1250px)": {
             width: '500px',
-            
+
         },
         "@media (max-width:900px)": {
             width: '350px',
-            
+
         },
         "@media (max-width:700px)": {
             width: '350px',
-            
+
         },
-        
+
     },
     typeTypo: {
         marginTop: '6.25px',
-        opacity:".5"
+        opacity: ".5"
     },
     Typo: {
         marginTop: '6.25px',
     },
-    nameTypo:{
+    nameTypo: {
         marginTop: '6.25px',
-        fontWeight:"500"
+        fontWeight: "500"
     },
 
-    gridHeader:{padding:"13px 24px 14px 24px",display:"flex"},
-    gridTypo:{marginTop:"4px"},
-    gridData:{display: "flex",
-    flexWrap: "wrap",
-    alignContent:"flex-start",
-    marginLeft: "14px",minHeight:"550px"}
+    gridHeader: { padding: "13px 24px 14px 24px", display: "flex" },
+    gridTypo: { marginTop: "4px" },
+    gridData: {
+        display: "flex",
+        flexWrap: "wrap",
+        alignContent: "flex-start",
+        marginLeft: "14px", minHeight: "550px"
+    },
+    styleHr: {
+        maxWidth: "24px",
+        justifyItems: "flex-start",
+        display: "inline-flex",
+        width: "100%",
+        margin: 0,
+        marginBottom: '7.5px',
+        // border:"4px solid #1DB5D8",
+        borderRadius: "3px",
+        height: '4px',
+        border: 'none',
+        background: '#1DB5D8'
+    },
+    subType: {
+        marginBottom: '18.5px'
+    },
+    computeGrid: {
+        display: 'flex',
+        alignItems: 'flex-end',
+        // alignItems: 'center'
+    },
+    modelTitle: {
+        marginTop: '34px'
+    },
+    mainTitle: { marginTop: '29px' },
+    backButton: {
+        boxShadow: "none",
+        padding: "0",
+    },
+    modelPara: { marginTop: '15px' },
+    gridCompute: { marginTop: '19px' },
+    hosted: {
+        marginTop: '34px',
+        display: 'flex',
+        // alignItems: 'flex-end'
+        alignItems: 'center'
+    }
 
 });
 

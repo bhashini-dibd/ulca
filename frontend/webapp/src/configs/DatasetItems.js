@@ -1,3 +1,11 @@
+export const ModelTask = [
+
+    { value: 'translation', label: 'Translation' },
+    { value: 'tts', label: 'TTS' },
+    { value: 'asr', label: 'ASR' },
+    { value: 'ocr', label: 'OCR' },
+    { value: 'document-layout', label: 'Document Layout' }
+];
 export const DatasetItems = [
 
     { value: 'parallel-corpus', label: 'Parallel Dataset' },

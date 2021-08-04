@@ -26,16 +26,23 @@ components:
       properties:
         name:
           maxLength: 100
-          minLength: 10
+          minLength: 5
           type: string
           description: model name that you want your users to see
+          example: vakyansh asr model
         description:
-          maxLength: 200
-          minLength: 50
+          maxLength: 1000
+          minLength: 25
           type: string
           description: "brief description about model, its goal, basically something\
             \ sweet about it"
           example: Speech recognition model for classroom lecture
+        refUrl:
+          maxLength: 200
+          minLength: 5
+          type: string
+          description: github link or url giving further info about the model
+          example: https://github.com/Open-Speech-EkStep/vakyansh-models
         task:
           $ref: '#/components/schemas/ModelTask'
         languages:
@@ -67,7 +74,15 @@ components:
           - $ref: '#/components/schemas/ASRInference'
           - $ref: '#/components/schemas/TTSInference'
           - $ref: '#/components/schemas/OCRInference'
-      description: hosted location defines the end point of the model inference.
+          discriminator:
+            propertyName: taskType
+            mapping: {
+              translation: TranslationInference,
+              asr: ASRInference,
+              tts: TTSInference,
+              ocr: OCRInference
+            }
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
 
     FileUploadAPIEndPoint:
       required:
@@ -136,9 +151,9 @@ components:
 
 
     TranslationResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
       - output
-      - config
       type: object
       properties:
         output:
@@ -158,25 +173,19 @@ components:
 
     ASRRequest:
       required:
-      - audioUri
+      - audio
       - config
       type: object
       properties:
-        audioUri:
-          type: array
-          description: list of paths on gcp/s3 bucket or https url
-          example: gs://bucket/audio.wav
-          items:
-            maxItems: 10
-            minItems: 1
-            type: string
+        audio:
+          $ref: '#/components/schemas/ASRFile'
         config:
           $ref: '#/components/schemas/ASRConfig'
 
     ASRResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
       - output
-      - config
       type: object
       properties:
         output:
@@ -207,9 +216,9 @@ components:
 
 
     TTSResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
       - audioUri
-      - config
       type: object
       properties:
         audioUri:
@@ -247,9 +256,9 @@ components:
           $ref: '#/components/schemas/OCRConfig'
 
     OCRResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
       - output
-      - config
       type: object
       properties:
         output:
@@ -278,17 +287,21 @@ components:
         source:
           minLength: 1
           type: string
-          description: actual textual data that needs to be translated.
+          description: input sentence for the model
         target:
           minLength: 1
           type: string
-          description: expected translated sentence, for reference.
+          description: to be used along with translation model. expected translated sentence, for reference
 
     TranslationConfig:
       required:
       - language
       type: object
       properties:
+        modelId:
+          type: integer
+          description: Unique identifier of model
+          example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
@@ -297,6 +310,10 @@ components:
       - language
       type: object
       properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
@@ -305,6 +322,10 @@ components:
       - language
       type: object
       properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
@@ -313,6 +334,10 @@ components:
       - language
       type: object
       properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
         audioFormat:
@@ -358,7 +383,7 @@ components:
   
     ASRFile:
       required:
-      - audioContent|audioUri|fileId
+      - audioContent | audioUri
       type: object
       properties:
         audioContent:
@@ -369,9 +394,7 @@ components:
           type: string
           description: path on gcp/s3 bucket or https url
           example: gs://bucket/audio.wav
-        fileId:
-          type: string
-          description: fileId should be same as returned in the response of file-upload
+
 
     ASRRecognitionStatus:
       type: object

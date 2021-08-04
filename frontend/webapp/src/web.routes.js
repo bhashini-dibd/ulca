@@ -8,11 +8,13 @@ import history from "./web.history";
 import Layout from "./ui/Layout";
 import Login from "./ui/container/UserManagement/UserManagement";
 import SubmitDataset from './ui/container/DataSet/UploadDataset/SubmitDataset';
+import SubmitModel from './ui/container/Model/UploadModel/SubmitModel';
 import ContributionList from "./ui/container/DataSet/DatasetView/ContributionList";
+import ModelContributionList from "./ui/container/Model/ModelView/ContributionList";
 import DetailedStatus from "./ui/container/DataSet/DatasetView/DetailedStatus";
 import Dashboard from "./ui/container/Dashboard/ChartRender";
 // import Dashboard from "./ui/container/Dashboard/Dashboard";
-import DatasetSubmission from './ui/container/DataSet/UploadDataset/DatasetSubmission';
+import SubmissionSubmission from './ui/components/Datasets&Model/SubmissionStatus';
 import authenticateUser from './configs/authenticate';
 import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";
 import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/SearchDownloadRecords";
@@ -22,6 +24,8 @@ import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/Readym
 import PopUp from "./ui/container/DataSet/ReadymadeDataset.jsx/PopUp";
 import FilterList from "./ui/container/DataSet/DatasetView/FilterList";
 import Reset from "./ui/container/UserManagement/Reset";
+import Benchmark from './ui/container/Model/ModelSearch/Benchmark';
+import SearchModelDetail from './ui/container/Model/ModelSearch/ModelDetail/SearchModelDetail';
 
 const PrivateRoute = ({ path, component: Component, authenticate, title, token, ...rest }) => {
   return (
@@ -71,6 +75,20 @@ export default function App() {
             component={ActivateUser}
           />
 
+<Route
+            path={`${process.env.PUBLIC_URL}/benchmark/:params/:srno?`}
+            
+            component={Benchmark}
+            
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/search-model/:srno?`}
+           
+            component={SearchModelDetail}
+           
+          />
+
+
 
           <Route exact path={`${process.env.PUBLIC_URL}/dashboard`} component={Dashboard} />
           <PrivateRoute
@@ -82,7 +100,7 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/my-contribution/:added?`}
+            path={`${process.env.PUBLIC_URL}/dataset/my-contribution/:added?`}
             title={"My Contribution"}
             authenticate={authenticateUser}
             component={ContributionList}
@@ -90,12 +108,29 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/submit-dataset/upload`}
+            path={`${process.env.PUBLIC_URL}/model/my-contribution/:added?`}
+            title={"My Contribution"}
+            authenticate={authenticateUser}
+            component={ModelContributionList}
+            currentMenu="contribution-list"
+            dontShowHeader={false}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/dataset/upload`}
             title={"Submit Dataset"}
             userRoles={[""]}
             component={SubmitDataset}
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
+            dontShowHeader={false}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/model/upload`}
+            title={"Submit Dataset"}
+            userRoles={[""]}
+            component={SubmitModel}
+            authenticate={authenticateUser}
+            currentMenu="submit-model"
             dontShowHeader={false}
           />
           <PrivateRoute
@@ -126,12 +161,12 @@ export default function App() {
 
 
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/submit-dataset/submission/:reqno`}
-            title={"Dataset Submission"}
+            path={`${process.env.PUBLIC_URL}/:type/submission/:reqno`}
+            title={"Submission status"}
             userRoles={[""]}
-            component={DatasetSubmission}
+            component={SubmissionSubmission}
             authenticate={authenticateUser}
-            currentMenu="dataset-submission"
+            currentMenu="submission-status"
             dontShowHeader={false}
           />
 
@@ -169,6 +204,7 @@ export default function App() {
             currentMenu="pop-up"
             dontShowHeader={false}
           />
+         
 
           {/* <Route
             path={`${process.env.PUBLIC_URL}/user/reset-password/:email/:userId/:time`}
