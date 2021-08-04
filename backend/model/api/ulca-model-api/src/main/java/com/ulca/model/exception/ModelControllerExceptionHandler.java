@@ -25,7 +25,7 @@ public class ModelControllerExceptionHandler {
 	  public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 		
 		String errorCode = "something went wrong";
-		log.info("inside DatasetControllerExceptionHandler :: handleAllExceptions ");
+		log.info("Inside ModelControllerExceptionHandler :: handleAllExceptions ");
 		ex.printStackTrace();
 	    ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
 	    		

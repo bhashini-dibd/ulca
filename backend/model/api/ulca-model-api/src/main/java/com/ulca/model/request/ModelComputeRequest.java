@@ -23,5 +23,6 @@ public class ModelComputeRequest {
 	public String task;
     public List<Input> input;
     public String audioUri;
+    public byte[] audioContent;
 	  
 }

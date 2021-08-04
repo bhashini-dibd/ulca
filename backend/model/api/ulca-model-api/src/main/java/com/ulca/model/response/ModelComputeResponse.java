@@ -20,8 +20,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ModelComputeResponse {
 	
-	TranslationResponse translation;
-	
-	ASRResponse asr;
+	private String outputText;
 
 }

@@ -74,8 +74,17 @@ public class AsrCallBackRequest {
     }
      
      public class Audio {
+    	 
     	    private String audioUri;
-    	    public String getAudioUri() {
+    	    private byte[] audioContent;
+    	    
+    	    public byte[] getAudioContent() {
+				return audioContent;
+			}
+			public void setAudioContent(byte[] audioContent) {
+				this.audioContent = audioContent;
+			}
+			public String getAudioUri() {
     	        return audioUri;
     	    }
     	    public void setAudioUri(String audioUri) {
