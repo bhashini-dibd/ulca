@@ -388,6 +388,9 @@ const DataSet = (theme) => ({
         borderRadius: '8px',
         margin: '20px 20px 20px 0px',
     },
+    computeBtnUrl:{
+        marginTop:"40px"
+    },
     textArea: {
         backgroundColor: 'inherit',
         border: 'none',

@@ -30,6 +30,7 @@ const HostedInferASR = (props) => {
   });
   const [translation, setTranslationState] = useState(false);
   const [target, setTarget] = useState("");
+  const [targetAudio, setTargetAudio] = useState("");
   const handleCompute = () => setTranslationState(true);
   // const url = UrlConfig.dataset
   const handleClose = () => {
@@ -52,7 +53,7 @@ const HostedInferASR = (props) => {
     if (!validURL(url)) {
       setError({ ...error, url: "‘Invalid URL" });
     } else {
-      handleApicall();
+      handleApicall(modelId, url, task);
       setSnackbarInfo({
         ...snackbar,
         open: true,
@@ -61,8 +62,9 @@ const HostedInferASR = (props) => {
       });
     }
   };
-  const handleApicall = async () => {
-    let apiObj = new HostedInferenceAPI(modelId, url, task, false);
+  const handleApicall = async (modelId, url, task, status= false) => {
+      
+    let apiObj = new HostedInferenceAPI(modelId, url, task, status);
     setApiCall(true)
     fetch(apiObj.apiEndPoint(), {
       method: "post",
@@ -71,7 +73,6 @@ const HostedInferASR = (props) => {
     })
       .then(async (response) => {
         const rsp_data = await response.json();
-        debugger
         setApiCall(false)
         if (!response.ok) {
           setSnackbarInfo({
@@ -84,7 +85,12 @@ const HostedInferASR = (props) => {
           });
         } else {
           if (rsp_data.hasOwnProperty("outputText") ) {
-            setTarget(rsp_data.outputText);
+              if(status){
+                setTarget(rsp_data.outputText);
+              }else{
+                setTargetAudio(rsp_data.outputText);
+              }
+            
             setTranslationState(true);
           }
         }
@@ -178,7 +184,7 @@ const HostedInferASR = (props) => {
           >
             <Button
               color="primary"
-              className={classes.computeBtn}
+              className={classes.computeBtnUrl}
               variant="contained"
               size={"small"}
               onClick={handleSubmit}
@@ -201,7 +207,7 @@ const HostedInferASR = (props) => {
           <Grid container className={classes.cardHeader}>
             <Typography variant='h6' className={classes.titleCard}>Output</Typography>
           </Grid>
-          <CardContent>{target}</CardContent>
+          <CardContent>{targetAudio}</CardContent>
         </Card>
       </Grid>
     </Grid>
