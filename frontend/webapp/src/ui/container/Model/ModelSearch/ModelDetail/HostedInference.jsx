@@ -3,6 +3,7 @@ import DatasetStyle from '../../../../styles/Dataset';
 import { useHistory } from 'react-router';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
+
 import {
     Grid,
     Typography,
@@ -63,11 +64,14 @@ const HostedInference = (props) => {
     };
     return (
         <div>
+
             <Grid container spacing={2}>
+            
                 <Grid className={classes.gridCompute} item xl={8} lg={8} md={8} sm={8} xs={8}>
                     <Card className={classes.hostedCard}>
                         <CardContent>
                             <Typography variant='body1' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
+                            
                             <textarea
                                 rows={6}
                                 // cols={40}

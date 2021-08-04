@@ -35,12 +35,17 @@ const DataSet = (theme) => ({
     list: {
         marginLeft: "-20px"
     },
+    center:{
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: 'auto',
+        marginTop: '20px',
+    },
 
     updateBtn: {
 
         display: 'flex',
         justifyItems: 'center',
-        marginLeft: 'auto',
         marginTop: '-4%',
     },
     submitBtn: {
@@ -349,7 +354,7 @@ const DataSet = (theme) => ({
         padding: "0",
     },
     modelPara: { marginTop: '15px' },
-    gridCompute: { marginTop: '15px' },
+    gridCompute: { margin: '15px 10px' },
     hosted: {
         display: 'flex',
         // alignItems: 'flex-end'
@@ -360,7 +365,14 @@ const DataSet = (theme) => ({
         width: '146%',
         borderColor: '#2D63AB',
         borderRadius: '8px',
-        marginTop: '20px'
+        marginTop: '20px 20px'
+    },
+    asrCard: {
+        height: '300px',
+        width: '100%',
+        borderColor: '#2D63AB',
+        borderRadius: '8px',
+        margin: '20px 20px 20px 0px',
     },
     textArea: {
         backgroundColor: 'inherit',
