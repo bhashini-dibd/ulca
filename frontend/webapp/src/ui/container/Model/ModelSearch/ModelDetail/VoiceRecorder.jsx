@@ -148,7 +148,7 @@ import Stop from "../../../../../assets/stopIcon.svg";
 import { CollectionsOutlined, SettingsSystemDaydreamTwoTone } from '@material-ui/icons';
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import AudioReactRecorder, { RecordState } from 'audio-react-recorder'  
+import AudioReactRecorder, { RecordState } from 'audio-react-recorder'; 
 
 const AudioRecord = (props) => {
     const { classes,modelId} = props;
