@@ -141,7 +141,7 @@ const Benchmark = (props) => {
         // else if (datasetType['ocr-corpus'])
         //     return "Script *"
         else
-            return "Language *"
+            return "Language"
     }
 
     const getTitle = () => {

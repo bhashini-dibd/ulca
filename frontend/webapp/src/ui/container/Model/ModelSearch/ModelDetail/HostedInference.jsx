@@ -5,6 +5,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Spinner from "../../../../components/common/Spinner";
+import { getLanguageName } from '../../../../../utils/getLabel';
 import {
     Grid,
     Typography,
@@ -27,6 +28,10 @@ const HostedInference = (props) => {
     const [sourceLanguage, setSourceLanguage] = useState(
         { value: 'en', label: 'English' }
     );
+    const srcLang = getLanguageName(props.source);
+    const tgtLang = getLanguageName(props.target);
+    console.log(srcLang, tgtLang)
+
     // useEffect(() => {
     // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
     // }, []);
@@ -99,6 +104,8 @@ const HostedInference = (props) => {
     //     setSourceLanguage(sLang);
     // 	}
     // };
+
+
     return (
         // <div>
         //<Grid container spacing={2}>
@@ -117,7 +124,7 @@ const HostedInference = (props) => {
                                 value={'English'}
                                 renderInput={(params) => <TextField {...params} variant="standard" />}
                             /> */}
-                            <Typography variant='h6' className={classes.hosted}>English</Typography>
+                            <Typography variant='h6' className={classes.hosted}>{srcLang}</Typography>
                         </Grid>
                     </Grid>
                 </CardContent>
@@ -165,7 +172,7 @@ const HostedInference = (props) => {
                                 value={'Hindi'}
                                 renderInput={(params) => <TextField {...params} variant="standard" />}
                             /> */}
-                            <Typography variant='h6' className={classes.hosted}>Hindi</Typography>
+                            <Typography variant='h6' className={classes.hosted}>{tgtLang}</Typography>
                         </Grid>
                     </Grid>
                 </CardContent>

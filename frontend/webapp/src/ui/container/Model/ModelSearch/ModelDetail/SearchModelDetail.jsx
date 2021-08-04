@@ -65,7 +65,7 @@ const SearchModelDetail = (props) => {
                 <Grid container>
                     <Grid className={classes.leftSection} item xs={8} sm={8} md={8} lg={8} xl={8}>
 
-                        {data.task !== 'asr' ? <HostedInference task={data.task} modelId={params.srno} /> : <HostedInferASR task={data.task} modelId={params.srno} />}
+                        {data.task !== 'asr' ? <HostedInference task={data.task} modelId={params.srno} source={data.source} target={data.target} /> : <HostedInferASR task={data.task} modelId={params.srno} />}
                     </Grid>
                     <Grid item xs={4} sm={4} md={4} lg={4} xl={4} style={{ paddingLeft: '24px' }}>
                         {description.map(des => <ModelDescription title={des.title} para={des.para} />)}
