@@ -9,9 +9,10 @@ import {
     Typography,
     TextField,
     Button,
-    CardContent, Card, CardActions, CardHeader 
+    CircularProgress,
+    CardContent, Card, CardActions, CardHeader
 } from '@material-ui/core';
-import { useState } from 'react';ss
+import { useState } from 'react';
 import { identifier } from '@babel/types';
 import Snackbar from '../../../../components/common/Snackbar';
 
@@ -20,6 +21,7 @@ const HostedInference = (props) => {
     const history = useHistory();
     const [translation, setTranslationState] = useState(false)
     const [sourceText, setSourceText] = useState("");
+    const [loading, setLoading] = useState(false);
     const [target, setTarget] = useState("")
     const [sourceLanguage, setSourceLanguage] = useState(
         { value: 'en', label: 'English' }
@@ -40,6 +42,7 @@ const HostedInference = (props) => {
         setTarget("")
     }
     const handleCompute = () => {
+        setLoading(true);
         const apiObj = new HostedInferenceAPI(modelId, sourceText, task);
         fetch(apiObj.apiEndPoint(), {
             method: 'POST',
@@ -47,6 +50,7 @@ const HostedInference = (props) => {
             body: JSON.stringify(apiObj.getBody())
         }).then(async resp => {
             let rsp_data = await resp.json();
+            setLoading(false)
             if (resp.ok) {
                 if (rsp_data.hasOwnProperty('translation') && rsp_data.translation) {
                     setTarget(rsp_data.translation.output[0].target)
@@ -63,7 +67,7 @@ const HostedInference = (props) => {
                 Promise.reject(rsp_data);
             }
         }).catch(err => {
-            console.log(err)
+            setLoading(false)
             setSnackbarInfo({
                 ...snackbar,
                 open: true,
@@ -99,14 +103,25 @@ const HostedInference = (props) => {
         //<Grid container spacing={2}>
         <Grid className={classes.gridCompute} item xl={12} lg={12} md={12} sm={12} xs={12}>
             <Card className={classes.hostedCard}>
+                <CardContent className={classes.translateCard}>
+                    <Grid container className={classes.cardHeader}>
+                        <Grid item xs={4} sm={4} md={4} lg={4} xl={4} className={classes.headerContent}>
+                            <Typography variant='h6' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
+                        </Grid>
+                        {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                            <Autocomplete
+                                disabled
+                                options={['English']}
+                                value={'English'}
+                                renderInput={(params) => <TextField {...params} variant="standard" />}
+                            />
+                        </Grid> */}
+                    </Grid>
+                </CardContent>
                 <CardContent>
-                    <Typography variant='body1' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
-                    <div className={classes.dropDownStyle}>
-                        {/* {renderTexfield()} */}
-                    </div>
                     <textarea
                         value={sourceText}
-                        rows={6}
+                        rows={5}
                         // cols={40}
                         className={classes.textArea}
                         placeholder="Enter Text"
@@ -116,33 +131,45 @@ const HostedInference = (props) => {
                     />
                 </CardContent>
 
-                    <CardActions style={{marginBottom:'13px', float:'right'}}>
-                        <Grid container spacing={2}>
-                            <Grid item>
-                                <Button size="small" variant="outlined" onClick={clearAll}>
-                                    Clear
-                                </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button
-                                    color="primary"
-                                    className={classes.computeBtn}
-                                    variant="contained"
-                                    size={'small'}
-
-                                    onClick={handleCompute}
-                                >
-                                    Translate
-                                </Button>
-                            </Grid>
+                <CardActions className={classes.actionButtons} >
+                    <Grid container spacing={2}>
+                        <Grid item>
+                            <Button size="small" variant="outlined" onClick={clearAll}>
+                                Clear All
+                            </Button>
                         </Grid>
-                    </CardActions>
+                        <Grid item>
+                            <Button
+                                color="primary"
+                                className={classes.computeBtn}
+                                variant="contained"
+                                size={'small'}
+                                onClick={handleCompute}
+                                disabled={loading}>
+                                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                Translate
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </CardActions>
             </Card>
             <Card className={classes.translatedCard}>
+                <CardContent className={classes.translateCard}>
+                    <Grid container className={classes.cardHeader}>
+                        {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.headerContent}>
+                            <Autocomplete
+                                disabled
+                                options={['Hindi']}
+                                value={'Hindi'}
+                                renderInput={(params) => <TextField {...params} variant="standard" />}
+                            />
+                        </Grid> */}
+                    </Grid>
+                </CardContent>
                 <CardContent>
                     <textarea
                         disabled
-                        rows={8}
+                        rows={6}
                         value={target}
                         className={classes.textArea}
                     />

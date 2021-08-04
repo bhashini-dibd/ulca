@@ -346,19 +346,19 @@ const DataSet = (theme) => ({
         // alignItems: 'center'
     },
     modelTitle: {
-        marginTop: '34px'
+        marginTop: '15px',
+        padding: 0
     },
     mainTitle: { marginTop: '10px' },
     backButton: {
         boxShadow: "none",
         padding: "0",
     },
-    modelPara: { marginTop: '15px' },
-    gridCompute: { margin: '15px 10px' },
+    gridCompute: { marginTop: '15px ' },
     hosted: {
         display: 'flex',
         // alignItems: 'flex-end'
-        // alignItems: 'center'
+        alignItems: 'center'
     },
     translatedCard: {
         height: '300px',
@@ -382,14 +382,28 @@ const DataSet = (theme) => ({
         outline: 'none',
         fontSize: '18px',
         lineHeight: '32px',
-        color: 'black'
+        color: 'black',
+        fontFamily: 'Roboto'
+        //    paddingLeft:'16px'
     },
     hostedCard: {
         height: '300px',
         borderColor: '#2D63AB',
         borderRadius: '8px',
         paddingBottom: '13px',
-        marginRight: '24px'
+        marginRight: '24px',
+    },
+    cardHeader: {
+        backgroundColor: "#F4F7FB", height: '52px', alignItems: 'center'
+    },
+    headerContent: {
+        marginLeft: '18px'
+    },
+    actionButtons: {
+        marginBottom: '13px', float: 'right'
+    },
+    translateCard: {
+        padding: 0
     }
 });
 
