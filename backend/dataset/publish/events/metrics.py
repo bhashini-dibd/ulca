@@ -56,7 +56,7 @@ class MetricEvent:
             if 'collectionSource' in data.keys():
                 event["collectionSource"] = data["collectionSource"]
             if 'submitter' in data.keys():
-                primary_submitter_ids, primary_submitter_names, secondary_submitters = [] = [], [], []
+                primary_submitter_ids, primary_submitter_names, secondary_submitters = [], [], []
                 for submitter in data["submitter"]:
                     if 'id' in submitter.keys():
                         primary_submitter_ids.append(submitter["id"])
