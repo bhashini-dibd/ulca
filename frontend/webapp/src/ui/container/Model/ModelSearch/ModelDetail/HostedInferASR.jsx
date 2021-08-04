@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import UrlConfig from '../../../../../configs/internalurlmapping';
 import HostedInferenceAPI from '../../../../../redux/actions/api/Model/ModelSearch/HostedInference';
-
+import AudioRecord from './VoiceRecorder';
 import {
     Grid,
     Typography,
@@ -25,7 +25,7 @@ const HostedInferASR = (props) => {
         variant: 'success'
     })
     const [translation, setTranslationState] = useState(false);
-    const [target,setTarget] = useState("");
+    const [target, setTarget] = useState("");
     const handleCompute = () => setTranslationState(true);
     // const url = UrlConfig.dataset
     const handleClose = () => {
@@ -68,13 +68,13 @@ const HostedInferASR = (props) => {
                 setSnackbarInfo({
                     ...snackbar,
                     open: true,
-                    message:"The model is not accessible currently. Please try again later",
+                    message: "The model is not accessible currently. Please try again later",
                     timeOut: 40000,
                     variant: 'error'
                 })
             }
             else {
-                if(rsp_data.hasOwnProperty('asr') && rsp_data.asr){
+                if (rsp_data.hasOwnProperty('asr') && rsp_data.asr) {
                     setTarget(rsp_data.asr.output[0].target)
                     setTranslationState(true)
                 }
@@ -96,48 +96,72 @@ const HostedInferASR = (props) => {
     }
 
     return (
-        <div>
-            <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
-            <Grid container spacing={2}>
-                <Grid className={classes.gridCompute} item xl={8} lg={8} md={8} sm={8} xs={8}>
-                    <TextField fullWidth
+        <Grid container >
 
-                        color="primary"
-                        label="Paste the URL of the public repository"
-                        value={url}
-                        error={error.url ? true : false}
-                        helperText={error.url}
-                        onChange={(e) => {
-                            setUrl(e.target.value)
-                            setError({ ...error, url: false })
-                        }}
-                    />
-                </Grid>
-                <Grid item xl={4} lg={4} md={4} sm={4} xs={4} className={classes.computeGrid}>
-                    <Button
-                        color="primary"
-                        className={classes.computeBtn}
-                        variant="contained"
-                        size={'small'}
+            {/* <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
 
-                        onClick={handleSubmit}
-                    >
-                        Convert
-                    </Button>
-                </Grid>
 
-                {translation &&
-                    // <Grid item xl={11} lg={11} md={12} sm={12} xs={12}>
-                    <Card style={{ backgroundColor: '#139D601A', color: 'black', heigth: '50px', width: '440px' }}>
-                        <CardContent style={{ paddingBottom: '16px' }}>
-                            {target}
-                        </CardContent>
-                    </Card>
-                    // </Grid>
-                }
+
+
+            <Grid className={classes.gridCompute} item xl={5} lg={5} md={5} sm={5} xs={5}><AudioRecord /></Grid>
+            <Grid className={classes.gridCompute} item xl={6} lg={6} md={6} sm={6} xs={6} >
+
+                <Card className={classes.asrCard}>
+                    <CardContent>
+                        <textarea
+                            disabled
+                            rows={6}
+                            value={target}
+                            className={classes.textArea}
+                        />
+                    </CardContent>
+                </Card>
+
+
             </Grid>
-        </div>
+            <Grid className={classes.gridCompute} item xl={5} lg={5} md={5} sm={5} xs={5} >
+                <Card className={classes.asrCard}>
+                    <CardContent>
+                        <TextField fullWidth
 
+                            color="primary"
+                            label="Paste the URL of the public repository"
+                            value={url}
+                            error={error.url ? true : false}
+                            helperText={error.url}
+                            onChange={(e) => {
+                                setUrl(e.target.value)
+                                setError({ ...error, url: false })
+                            }}
+                        />
+                    </CardContent>
+                </Card>
+
+            </Grid>
+            <Grid item xl={4} lg={4} md={4} sm={4} xs={4} className={classes.computeGrid}>
+                <Button
+                    color="primary"
+                    className={classes.computeBtn}
+                    variant="contained"
+                    size={'small'}
+
+                    onClick={handleSubmit}
+                >
+                    Convert
+                </Button>
+            </Grid>
+
+            {translation &&
+                // <Grid item xl={11} lg={11} md={12} sm={12} xs={12}>
+                <Card style={{ backgroundColor: '#139D601A', color: 'black', heigth: '50px', width: '440px' }}>
+                    <CardContent style={{ paddingBottom: '16px' }}>
+                        {target}
+                    </CardContent>
+                </Card>
+                // </Grid>
+            }
+
+        </Grid>
     )
 }
 export default withStyles(DatasetStyle)(HostedInferASR);

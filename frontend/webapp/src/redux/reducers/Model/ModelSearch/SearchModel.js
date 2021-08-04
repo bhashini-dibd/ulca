@@ -81,7 +81,7 @@ const getContributionList = (state, payload) => {
 
         let sLanguage = element.languages.length > 0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
         let tLanguage = element.languages && element.languages.length > 0 && element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
-        let lang = sLanguage + " - " + tLanguage
+        let lang = tLanguage ? (sLanguage + " - " + tLanguage) : sLanguage
         responseData.push(
             {
                 description: element.description,

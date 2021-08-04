@@ -7,7 +7,7 @@ import HostedInference from "./HostedInference";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import Header from '../../../../components/common/Header';
-
+import AudioRecord from './VoiceRecorder';
 import {
     Grid,
     Typography,
