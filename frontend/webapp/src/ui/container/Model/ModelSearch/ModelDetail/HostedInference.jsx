@@ -3,12 +3,13 @@ import DatasetStyle from '../../../../styles/Dataset';
 import { useHistory } from 'react-router';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import {
     Grid,
     Typography,
     TextField,
     Button,
-    CardContent, Card
+    CardContent, Card, CardActions, CardHeader 
 } from '@material-ui/core';
 import { useState } from 'react';
 import { identifier } from '@babel/types';
@@ -20,6 +21,12 @@ const HostedInference = (props) => {
     const [translation, setTranslationState] = useState(false)
     const [sourceText, setSourceText] = useState("");
     const [target, setTarget] = useState("")
+    const [sourceLanguage, setSourceLanguage] = useState(
+        { value: 'en', label: 'English' }
+    );
+    // useEffect(() => {
+    // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
+    // }, []);
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
@@ -27,6 +34,10 @@ const HostedInference = (props) => {
     })
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
+    }
+    const clearAll = () => {
+        setSourceText("");
+        setTarget("")
     }
     const handleCompute = () => {
         const apiObj = new HostedInferenceAPI(modelId, sourceText, task);
@@ -60,60 +71,84 @@ const HostedInference = (props) => {
                 variant: 'error'
             })
         })
-    };
+    }
+    // const renderTexfield = () => {
+    //     //  let labels = Language.map(lang => lang.label)
+    //     return (
+    //         <Autocomplete
+    //            // className={classes.titleDropdown}
+    //             value={"English"}
+    //             id="source"
+    //             disabled
+    //             //  options={labels}
+    //             // onChange={(event, data) => handleLanguagePairChange(data, 'source')}
+    //           //  renderInput={(params) => <TextField fullWidth {...params} variant="standard"
+    //             // />}
+    //         />
+    //     )
+    // }
+    // const handleLanguagePairChange = (value, property) => {
+    // 	let sLang =  Language.filter(val => val.label ===value )[0]
+    // 	if(sLang){
+    // 		fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
+    //     setSourceLanguage(sLang);
+    // 	}
+    // };
     return (
-        <div>
-            <Grid container spacing={2}>
-                <Grid className={classes.gridCompute} item xl={8} lg={8} md={8} sm={8} xs={8}>
-                    <Card className={classes.hostedCard}>
-                        <CardContent>
-                            <Typography variant='body1' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
-                            <textarea
-                                rows={6}
-                                // cols={40}
-                                className={classes.textArea}
-                                placeholder="Enter Text"
-                                onChange={(e) => {
-                                    setSourceText(e.target.value);
-                                }}
-                            />
-                            <div style={{ float: 'right' }}>
-                                <Grid container spacing={2}>
-                                    <Grid item>
-                                        <Button size="small" variant="outlined"
-                                        >
-                                            Clear
-                                        </Button>
-                                    </Grid>
-                                    <Grid item>
-                                        <Button
-                                            color="primary"
-                                            className={classes.computeBtn}
-                                            variant="contained"
-                                            size={'small'}
+        // <div>
+        //<Grid container spacing={2}>
+        <Grid className={classes.gridCompute} item xl={12} lg={12} md={12} sm={12} xs={12}>
+            <Card className={classes.hostedCard}>
+                <CardContent>
+                    <Typography variant='body1' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
+                    <div className={classes.dropDownStyle}>
+                        {/* {renderTexfield()} */}
+                    </div>
+                    <textarea
+                        value={sourceText}
+                        rows={6}
+                        // cols={40}
+                        className={classes.textArea}
+                        placeholder="Enter Text"
+                        onChange={(e) => {
+                            setSourceText(e.target.value);
+                        }}
+                    />
+                </CardContent>
 
-                                            onClick={handleCompute}
-                                        >
-                                            Translate
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </div>
+                    <CardActions style={{marginBottom:'13px', float:'right'}}>
+                        <Grid container spacing={2}>
+                            <Grid item>
+                                <Button size="small" variant="outlined" onClick={clearAll}>
+                                    Clear
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    color="primary"
+                                    className={classes.computeBtn}
+                                    variant="contained"
+                                    size={'small'}
 
-
-                        </CardContent>
-                    </Card>
-                    <Card className={classes.translatedCard}>
-                        <CardContent>
-                            <textarea
-                                disabled
-                                rows={6}
-                                value={target}
-                                className={classes.textArea}
-                            />
-                        </CardContent>
-                    </Card>
-                    {/* <TextField fullWidth
+                                    onClick={handleCompute}
+                                >
+                                    Translate
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </CardActions>
+            </Card>
+            <Card className={classes.translatedCard}>
+                <CardContent>
+                    <textarea
+                        disabled
+                        rows={8}
+                        value={target}
+                        className={classes.textArea}
+                    />
+                </CardContent>
+            </Card>
+            {/* <TextField fullWidth
                         color="primary"
                         label="Enter Text"
                         value={sourceText}
@@ -123,10 +158,6 @@ const HostedInference = (props) => {
                             setSourceText(e.target.value);
                         }}
                     /> */}
-
-                </Grid>
-            </Grid>
-
             {snackbar.open &&
                 <Snackbar
                     open={snackbar.open}
@@ -135,7 +166,11 @@ const HostedInference = (props) => {
                     message={snackbar.message}
                     variant={snackbar.variant}
                 />}
-        </div>
+        </Grid>
+        //  </Grid>
+
+
+        //   </div>
 
     )
 }

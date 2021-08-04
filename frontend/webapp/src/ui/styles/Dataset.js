@@ -357,10 +357,10 @@ const DataSet = (theme) => ({
     },
     translatedCard: {
         height: '300px',
-        width: '146%',
         borderColor: '#2D63AB',
         borderRadius: '8px',
-        marginTop: '20px'
+        marginTop: '20px',
+        marginRight:'24px'
     },
     textArea: {
         backgroundColor: 'inherit',
@@ -374,9 +374,10 @@ const DataSet = (theme) => ({
     },
     hostedCard: {
         height: '300px',
-        width: '146%',
         borderColor: '#2D63AB',
-        borderRadius: '8px'
+        borderRadius: '8px',
+        paddingBottom:'13px',
+        marginRight:'24px'
     }
 });
 
