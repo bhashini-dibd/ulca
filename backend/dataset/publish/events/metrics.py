@@ -44,7 +44,7 @@ class MetricEvent:
                      "sourceLanguage": None, "targetLanguage": None, "domains": None, "license": None, "collectionSource": None,
                      "primarySubmitterId": None, "secondarySubmitterIds": None, "collectionMethod_collectionDescriptions": None,
                      "collectionMethod_collectionDetails_alignmentTool": None, "format": None, "channel": None, "samplingRate": None,
-                     "bitsPerSample": None, "gender": None, "durationInSeconds": None}
+                     "bitsPerSample": None, "gender": None, "durationInSeconds": None, "primarySubmitterName": None}
             if 'sourceLanguage' in data.keys():
                 event["sourceLanguage"] = data["sourceLanguage"]
             if 'targetLanguage' in data.keys():
@@ -56,25 +56,35 @@ class MetricEvent:
             if 'collectionSource' in data.keys():
                 event["collectionSource"] = data["collectionSource"]
             if 'submitter' in data.keys():
-                submitter = data["submitter"][0]
-                if 'id' in submitter.keys():
-                    event["primarySubmitterId"] = submitter["id"]
-                if 'team' in submitter.keys():
-                    secondary_submitters = []
-                    for team in submitter["team"]:
-                        secondary_submitters.append(team["name"])
-                    if secondary_submitters:
-                        event["secondarySubmitterIds"] = secondary_submitters
+                primary_submitter_ids, primary_submitter_names, secondary_submitters = [] = [], [], []
+                for submitter in data["submitter"]:
+                    if 'id' in submitter.keys():
+                        primary_submitter_ids.append(submitter["id"])
+                    if 'name' in submitter.keys():
+                        primary_submitter_names.append(submitter["name"])
+                    if 'team' in submitter.keys():
+                        for team in submitter["team"]:
+                            secondary_submitters.append(team["name"])
+                if primary_submitter_ids:
+                    event["primarySubmitterId"] = primary_submitter_ids
+                if primary_submitter_names:
+                    event["primarySubmitterName"] = primary_submitter_names
+                if secondary_submitters:
+                    event["secondarySubmitterIds"] = secondary_submitters
             if 'collectionMethod' in data.keys():
+                coll_desc, coll_details = [], []
                 if data["collectionMethod"]:
-                    cm = data["collectionMethod"][0]
-                    if cm:
+                    for cm in data["collectionMethod"]:
                         if 'collectionDescription' in cm.keys():
-                            event["collectionMethod_collectionDescriptions"] = cm["collectionDescription"]
+                            coll_desc.append(cm["collectionDescription"])
                         if 'collectionDetails' in cm.keys():
                             if cm["collectionDetails"]:
                                 if 'alignmentTool' in cm["collectionDetails"].keys():
-                                    event["collectionMethod_collectionDetails_alignmentTool"] = cm["collectionDetails"]["alignmentTool"]
+                                    coll_details.append(cm["collectionDetails"]["alignmentTool"])
+                if coll_desc:
+                    event["collectionMethod_collectionDescriptions"] = coll_desc
+                if coll_details:
+                    event["collectionMethod_collectionDetails_alignmentTool"] = coll_details
             if 'format' in data.keys():
                 event["format"] = data["format"]
             if 'channel' in data.keys():
