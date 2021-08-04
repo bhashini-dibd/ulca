@@ -42,6 +42,7 @@ redis_server_password                   =   os.environ.get('REDIS_PASS','passwor
 redis_key_expiry                        =   os.environ.get('ULCA_ERROR_RECORD_EXPIRY_IN_SEC',172800)
 if isinstance(redis_key_expiry, str):
     redis_key_expiry  =  eval(redis_key_expiry)
+error_batch_size                        =   os.environ.get('ULCA_ERROR_BATCH_SIZE',100000)
 
 
 
