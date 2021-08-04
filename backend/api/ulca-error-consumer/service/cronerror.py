@@ -75,7 +75,7 @@ class ErrorProcessor(Thread):
                     log.info(f'Completed csv creation for srn-- {srn} ')  
                     #forking a new thread
                     log.info(f'Initiating upload process for srn -- {srn} on a new fork')
-                    persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,file,file_name))
+                    persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,file,file_name,error_records_count))
                     persister.start()
                 else:
                     log.info(f'No new records left for uploading, for srn -- {srn}')
@@ -99,13 +99,13 @@ class ErrorProcessor(Thread):
             log.exception(f'Exception while ingesting errors to object store: {e}')
             return []
 
-    def upload_error_to_object_store(self,srn,file,file_name):
+    def upload_error_to_object_store(self,srn,file,file_name,error_records_count):
         #initiating upload API call
         error_object_path = storeutils.file_store_upload_call(file,file_name,error_prefix)
         if error_object_path == False:
             return  None
         log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
-        error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "internal_file": file, "file": error_object_path, "count": len(error_records)}
+        error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "internal_file": file, "file": error_object_path, "count": error_records_count}
         #updating record on mongo with uploaded error count
         errorepo.upsert(error_record)
         log.info(f'Updated db record for SRN -- {srn}')
