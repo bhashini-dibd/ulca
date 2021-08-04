@@ -13,37 +13,38 @@ import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
 import { CollectionsOutlined, SettingsSystemDaydreamTwoTone } from '@material-ui/icons';
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
-import { useReactMediaRecorder } from "react-media-recorder";
+
     
 
 const AudioRecord = (props) => {
-    const { classes} = props;
-    const {
-        status,
-        startRecording,
-        stopRecording,
-        mediaBlobUrl,
-      } = useReactMediaRecorder({ video: true });
+    const { classes,modelId} = props;
     const [recordAudio, setRecordAudio] = useState(false);
+    const [base64, setBase64] = useState("");
     const [data, setData] = useState(null);
 
+
+
+    const blobToBase64 = (blob) => {
+        debugger
+        const reader = new FileReader();
+        reader.readAsDataURL(blob.blobURL);
+        return new Promise(resolve => {
+            reader.onloadend = () => {
+                resolve(reader.result);
+            };
+        });
+    };
     const handleStop =  (data) =>{
         console.log(typeof data.blobURL)
-        // var textPromise = data.text();
-        // console.log("((((((((((((((((((((",textPromise)
-        // data.text().then(text => console.log("==========",text)/* do something with the text */);
-//         var reader = new FileReader();
-// reader.onload = function() {
-//     alert(reader.data);
-// }
-// reader.readAsText(data);
-
-// console.log(reader)
         setData(data.blobURL)
+        let blob= blobToBase64(data)
+        setBase64(blob)
     }
 
+   
+
     const handleCompute = () => {
-        const apiObj = new HostedInferenceAPI();
+        const apiObj = new HostedInferenceAPI(modelId,base64,"asr",true);
         fetch(apiObj.apiEndPoint(), {
             method: 'POST',
             headers: apiObj.getHeaders().headers,
@@ -77,28 +78,11 @@ const AudioRecord = (props) => {
     };
 
     const handleData = (data) =>{
-       
-console.log(data)
-        
     }
 
     const handleClick = (value) =>{
-
         setRecordAudio(value)
     }
-
-    // blobToBase64(blob) {
-    //     const reader = new FileReader();
-    //     reader.readAsDataURL(blob);
-    //     return new Promise(resolve => {
-    //         reader.onloadend = () => {
-    //             resolve(reader.result);
-    //         };
-    //     });
-    // };
-
-
-    console.log(data)
 return (
 
     <Card className={classes.asrCard}>
@@ -108,6 +92,8 @@ return (
         {recordAudio ?<div className={classes.center}><img src={Stop} onClick={()=>handleClick(false)} style={{cursor:"pointer"}}/> </div>:
         <div className={classes.center}><img src={Start} onClick={()=>handleClick(true)} style={{cursor:"pointer"}}/> </div>
         }
+
+<div className={classes.center}><Typography style = {{height:"12px"}}variant="caption">{recordAudio ? "Recording..." : ""}</Typography> </div>
         <div style={{display:"none"}}>
     <ReactMic 
     record={recordAudio}
@@ -118,8 +104,8 @@ return (
     backgroundColor="#FF4081" />
     </div>
     <div  className={classes.center}>
-  <audio  controls id="sample" >
-  <source src={ data } id="sample"/>
+  <audio  src={ data } controls id="sample" >
+  
       </audio>
       </div>
   
@@ -136,6 +122,7 @@ return (
                     </Button>
       </CardActions>
                     </Card>
+                    
   
 )
 }

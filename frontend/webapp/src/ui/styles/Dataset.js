@@ -39,7 +39,7 @@ const DataSet = (theme) => ({
         display: 'flex',
         justifyContent: 'center',
         marginLeft: 'auto',
-        marginTop: '20px',
+        marginTop: '10px',
     },
 
     updateBtn: {
@@ -354,7 +354,7 @@ const DataSet = (theme) => ({
         padding: "0",
     },
     modelPara: { marginTop: '15px' },
-    gridCompute: { margin: '15px 10px' },
+    gridCompute: { marginRight: '15px' },
     hosted: {
         display: 'flex',
         // alignItems: 'flex-end'
