@@ -13,38 +13,39 @@ import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
 import { CollectionsOutlined, SettingsSystemDaydreamTwoTone } from '@material-ui/icons';
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
-
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
     
 
 const AudioRecord = (props) => {
     const { classes,modelId} = props;
     const [recordAudio, setRecordAudio] = useState(false);
-    const [base64, setBase64] = useState("");
+    const [base, setBase] = useState("");
     const [data, setData] = useState(null);
 
 
 
     const blobToBase64 = (blob) => {
-        debugger
-        const reader = new FileReader();
-        reader.readAsDataURL(blob.blobURL);
-        return new Promise(resolve => {
-            reader.onloadend = () => {
-                resolve(reader.result);
-            };
-        });
+        
+        var reader = new FileReader();
+        reader.readAsDataURL(blob.blob); 
+        var base64data = ""
+        reader.onloadend = function() {
+            base64data = reader.result;           
+            setBase(base64data)
+        }
+                return base64data;
     };
     const handleStop =  (data) =>{
-        console.log(typeof data.blobURL)
         setData(data.blobURL)
-        let blob= blobToBase64(data)
-        setBase64(blob)
+        blobToBase64(data)
+        
     }
 
    
 
     const handleCompute = () => {
-        const apiObj = new HostedInferenceAPI(modelId,base64,"asr",true);
+        debugger
+        const apiObj = new HostedInferenceAPI(modelId,base,"asr",true);
         fetch(apiObj.apiEndPoint(), {
             method: 'POST',
             headers: apiObj.getHeaders().headers,
@@ -83,11 +84,15 @@ const AudioRecord = (props) => {
     const handleClick = (value) =>{
         setRecordAudio(value)
     }
+
+    console.log(base)
 return (
 
     <Card className={classes.asrCard}>
 
-
+    <Grid container className={classes.cardHeader}>
+                <Typography variant='h6' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
+        </Grid>
                         <CardContent>
         {recordAudio ?<div className={classes.center}><img src={Stop} onClick={()=>handleClick(false)} style={{cursor:"pointer"}}/> </div>:
         <div className={classes.center}><img src={Start} onClick={()=>handleClick(true)} style={{cursor:"pointer"}}/> </div>

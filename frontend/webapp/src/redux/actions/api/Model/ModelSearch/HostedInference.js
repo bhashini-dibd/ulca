@@ -40,6 +40,7 @@ export default class HostedInference extends API {
             modelId: this.modelId,
             task: this.task
         }
+        debugger
         if (this.task === 'translation') {
             bodyData.input = [{ source: this.input }]
         } else if (this.task === 'asr') {
