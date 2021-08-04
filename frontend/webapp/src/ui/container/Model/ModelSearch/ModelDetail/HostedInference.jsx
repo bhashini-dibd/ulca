@@ -52,8 +52,8 @@ const HostedInference = (props) => {
             let rsp_data = await resp.json();
             setLoading(false)
             if (resp.ok) {
-                if (rsp_data.hasOwnProperty('translation') && rsp_data.translation) {
-                    setTarget(rsp_data.translation.output[0].target)
+                if (rsp_data.hasOwnProperty('outputText') && rsp_data.outputText) {
+                    setTarget(rsp_data.outputText)
                     //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
                     setTranslationState(true)
                 }
@@ -108,14 +108,14 @@ const HostedInference = (props) => {
                         <Grid item xs={4} sm={4} md={4} lg={4} xl={4} className={classes.headerContent}>
                             <Typography variant='h6' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
                         </Grid>
-                        {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                             <Autocomplete
                                 disabled
                                 options={['English']}
                                 value={'English'}
                                 renderInput={(params) => <TextField {...params} variant="standard" />}
                             />
-                        </Grid> */}
+                        </Grid>
                     </Grid>
                 </CardContent>
                 <CardContent>
@@ -156,14 +156,14 @@ const HostedInference = (props) => {
             <Card className={classes.translatedCard}>
                 <CardContent className={classes.translateCard}>
                     <Grid container className={classes.cardHeader}>
-                        {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.headerContent}>
+                        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.headerContent}>
                             <Autocomplete
                                 disabled
                                 options={['Hindi']}
                                 value={'Hindi'}
                                 renderInput={(params) => <TextField {...params} variant="standard" />}
                             />
-                        </Grid> */}
+                        </Grid>
                     </Grid>
                 </CardContent>
                 <CardContent>

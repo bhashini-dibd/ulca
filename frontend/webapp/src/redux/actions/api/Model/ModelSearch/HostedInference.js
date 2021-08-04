@@ -46,8 +46,8 @@ export default class HostedInference extends API {
             if (this.record) {
                 bodyData.audioContent = this.input
             }else{
-                bodyData.audioUri = this.input
-            }
+                bodyData.audioContent = this.input
+            }gi
             
         }
         bodyData.userId = JSON.parse(localStorage.getItem('userDetails')).userID
