@@ -44,7 +44,7 @@ const HostedInference = (props) => {
     }
     const handleCompute = () => {
         setLoading(true);
-        const apiObj = new HostedInferenceAPI(modelId, sourceText, task);
+        const apiObj = new HostedInferenceAPI(modelId, sourceText, task, false);
         fetch(apiObj.apiEndPoint(), {
             method: 'POST',
             headers: apiObj.getHeaders().headers,

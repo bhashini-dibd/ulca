@@ -62,7 +62,7 @@ const HostedInferASR = (props) => {
     }
   };
   const handleApicall = async () => {
-    let apiObj = new HostedInferenceAPI(modelId, url, task);
+    let apiObj = new HostedInferenceAPI(modelId, url, task, false);
     setApiCall(true)
     fetch(apiObj.apiEndPoint(), {
       method: "post",
@@ -71,6 +71,7 @@ const HostedInferASR = (props) => {
     })
       .then(async (response) => {
         const rsp_data = await response.json();
+        debugger
         setApiCall(false)
         if (!response.ok) {
           setSnackbarInfo({
@@ -82,8 +83,8 @@ const HostedInferASR = (props) => {
             variant: "error",
           });
         } else {
-          if (rsp_data.hasOwnProperty("asr") && rsp_data.asr) {
-            setTarget(rsp_data.asr.output[0].target);
+          if (rsp_data.hasOwnProperty("outputText") ) {
+            setTarget(rsp_data.outputText);
             setTranslationState(true);
           }
         }
@@ -120,7 +121,7 @@ const HostedInferASR = (props) => {
         sm={5}
         xs={5}
       >
-        <AudioRecord modelId={modelId} />
+        <AudioRecord modelId={modelId} handleApicall = {handleApicall}/>
       </Grid>
       <Grid
         className={classes.grid}
@@ -133,16 +134,9 @@ const HostedInferASR = (props) => {
       >
         <Card className={classes.asrCard}>
           <Grid container className={classes.cardHeader}>
-            <Typography variant='h6' className={classes.hosted}>Output</Typography>
+            <Typography variant='h6' className={classes.titleCard}>Output</Typography>
           </Grid>
-          <CardContent>
-            <textarea
-              disabled
-              rows={6}
-              value={target}
-              className={classes.textArea}
-            />
-          </CardContent>
+          <CardContent>{target}</CardContent>
         </Card>
       </Grid>
 
@@ -159,9 +153,9 @@ const HostedInferASR = (props) => {
         sm={5}
         xs={5}
       >
-        <Card className={classes.hostedCard}>
+        <Card className={classes.asrCard}>
           <Grid container className={classes.cardHeader}>
-            <Typography variant='h6' className={classes.hosted}>Notes</Typography>
+            <Typography variant='h6' className={classes.titleCard}>Notes</Typography>
           </Grid>
           <CardContent>
             <Typography variant={"caption"}>Max duration: 15 mins (If more, transcript of first 15 mins only will be given)</Typography>
@@ -205,7 +199,7 @@ const HostedInferASR = (props) => {
       >
         <Card className={classes.asrCard}>
           <Grid container className={classes.cardHeader}>
-            <Typography variant='h6' className={classes.hosted}>Output</Typography>
+            <Typography variant='h6' className={classes.titleCard}>Output</Typography>
           </Grid>
           <CardContent>{target}</CardContent>
         </Card>

@@ -39,15 +39,28 @@ const DataSet = (theme) => ({
         display: 'flex',
         justifyContent: 'center',
         marginLeft: 'auto',
-        marginTop: '10px',
+        
+    },
+    centerAudio: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: 'auto',
+        marginTop:"6px"
+        
+    },
+    titleCard:{
+        display: 'flex',
+        // alignItems: 'flex-end'
+        alignItems: 'center',
+        paddingLeft:"20px" 
     },
 
     updateBtn: {
-
         display: 'flex',
         justifyItems: 'center',
         marginTop: '-4%',
     },
+    
     submitBtn: {
         marginTop: '6vh',
         color: 'white',

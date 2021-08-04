@@ -47,7 +47,7 @@ export default class HostedInference extends API {
                 
                 bodyData.audioContent = this.input
             }else{
-                bodyData.audioContent = this.input
+                bodyData.audioUri = this.input
             }
             
         }

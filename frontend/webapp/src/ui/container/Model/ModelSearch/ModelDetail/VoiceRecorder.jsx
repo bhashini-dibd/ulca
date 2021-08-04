@@ -25,7 +25,7 @@ const AudioRecord = (props) => {
 
 
     const blobToBase64 = (blob) => {
-        
+        debugger
         var reader = new FileReader();
         reader.readAsDataURL(blob.blob); 
         var base64data = ""
@@ -83,18 +83,16 @@ const AudioRecord = (props) => {
     const handleClick = (value) =>{
         setRecordAudio(value)
     }
-
-    console.log(base)
 return (
 
     <Card className={classes.asrCard}>
 
     <Grid container className={classes.cardHeader}>
-                <Typography variant='h6' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
+                <Typography variant='h6' className={classes.titleCard}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
         </Grid>
                         <CardContent>
-        {recordAudio ?<div className={classes.center}><img src={Stop} onClick={()=>handleClick(false)} style={{cursor:"pointer"}}/> </div>:
-        <div className={classes.center}><img src={Start} onClick={()=>handleClick(true)} style={{cursor:"pointer"}}/> </div>
+        {recordAudio ?<div className={classes.center}><img src={Stop} alt="" onClick={()=>handleClick(false)} style={{cursor:"pointer"}}/> </div>:
+        <div className={classes.center}><img src={Start} alt ="" onClick={()=>handleClick(true)} style={{cursor:"pointer"}}/> </div>
         }
 
 <div className={classes.center}><Typography style = {{height:"12px"}}variant="caption">{recordAudio ? "Recording..." : ""}</Typography> </div>
@@ -105,9 +103,10 @@ return (
     onStop={handleStop}
     onData={handleData}
     strokeColor="#000000"
+    mimeType="audio/wav" 
     backgroundColor="#FF4081" />
     </div>
-    <div  className={classes.center}>
+    <div  className={classes.centerAudio}>
   <audio  src={ data } controls id="sample" >
   
       </audio>
