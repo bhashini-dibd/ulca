@@ -39,20 +39,20 @@ const DataSet = (theme) => ({
         display: 'flex',
         justifyContent: 'center',
         marginLeft: 'auto',
-        
+
     },
     centerAudio: {
         display: 'flex',
         justifyContent: 'center',
         marginLeft: 'auto',
-        marginTop:"6px"
-        
+        marginTop: "6px"
+
     },
-    titleCard:{
+    titleCard: {
         display: 'flex',
         // alignItems: 'flex-end'
         alignItems: 'center',
-        paddingLeft:"20px" 
+        paddingLeft: "20px"
     },
 
     updateBtn: {
@@ -60,7 +60,7 @@ const DataSet = (theme) => ({
         justifyItems: 'center',
         marginTop: '-4%',
     },
-    
+
     submitBtn: {
         marginTop: '6vh',
         color: 'white',
@@ -388,8 +388,8 @@ const DataSet = (theme) => ({
         borderRadius: '8px',
         margin: '20px 20px 20px 0px',
     },
-    computeBtnUrl:{
-        marginTop:"40px"
+    computeBtnUrl: {
+        marginTop: "40px"
     },
     textArea: {
         backgroundColor: 'inherit',
@@ -421,6 +421,11 @@ const DataSet = (theme) => ({
     },
     translateCard: {
         padding: 0
+    },
+    modelPara: {
+        marginTop: '15px ',
+        //textTransform: 'capitalize'
+        '&:first-letter': { textTransform: 'capitalize' }
     }
 });
 
