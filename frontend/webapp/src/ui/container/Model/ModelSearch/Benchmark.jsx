@@ -55,9 +55,10 @@ const Benchmark = (props) => {
     const dispatch = useDispatch();
     const param = useParams();
     const history = useHistory();
+    const searchFilter = useSelector(state => state.searchFilter);
     const [languagePair, setLanguagePair] = useState({
-        source: 'English',
-        target: { value: "hi", label: "Hindi" }
+        source: searchFilter.source,
+        target: searchFilter.target
     });
     // const [filterBy, setFilterBy] = useState({
     //     domain: [],
@@ -70,14 +71,12 @@ const Benchmark = (props) => {
         collectionMethod: ''
     });
 
-    const [datasetType, setDatasetType] = useState({
-        'translation': true
-    })
+    const [datasetType, setDatasetType] = useState(searchFilter.type)
 
     // const [modelTask, setModelTask]=useState({
     //     'translation': true
     // })
-
+    console.log(datasetType)
     const [count, setCount] = useState(0);
     const [urls, setUrls] = useState({
         downloadSample: '',
@@ -92,10 +91,18 @@ const Benchmark = (props) => {
 
 
     useEffect(() => {
-        makeSubmitAPICall("en", "hi", {})
+        const type = searchFilter.type
+        if (type['translation'] !== undefined) {
+            const source = getValueForLabel(languagePair.source).value;
+            const target = languagePair.target.value;
+            makeSubmitAPICall(source, target, type)
+        } else {
+            const source = languagePair.target !== "" ? languagePair.target.value:"";
+            makeSubmitAPICall(source, "", type)
+        }
     }, [])
 
-
+    console.log(languagePair.source, languagePair.target);
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
@@ -121,7 +128,9 @@ const Benchmark = (props) => {
         checkedC: false,
 
     });
-    const [label, setLabel] = useState('Translation')
+
+    const modelLabel = ModelTask.filter(task => task.value === Object.keys(searchFilter.type)[0])[0].label
+    const [label, setLabel] = useState(modelLabel)
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
     const { params, srno } = param
@@ -160,7 +169,7 @@ const Benchmark = (props) => {
         });
         setLanguagePair({
             source: "",
-            target: []
+            target: ""
         });
     }
 
@@ -184,7 +193,7 @@ const Benchmark = (props) => {
 
     const handleSubmitBtn = () => {
         // let tgt = languagePair.target.map(trgt => trgt.value)
-        let tgt = languagePair.target && languagePair.target.value
+        let tgt = languagePair.target ? languagePair.target.value:""
         let domain = "All"
         let submitter = "All"
         // let domain = filterBy.domain && [getFilterValueForLabel('domain', filterBy.domain).value]
@@ -192,7 +201,7 @@ const Benchmark = (props) => {
 
         if (datasetType['translation']) {
             if (languagePair.source && languagePair.target) {
-                let source = getValueForLabel(languagePair.source).value
+                let source = languagePair.source? getValueForLabel(languagePair.source).value:""
                 makeSubmitAPICall(source, tgt, datasetType, domain, submitter)
                 //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
             }
@@ -208,11 +217,11 @@ const Benchmark = (props) => {
                 setTgtError(true)
         }
         else {
-            if (!languagePair.target)
-                setTgtError(true)
-            else {
-                makeSubmitAPICall(tgt, null, datasetType, domain, submitter)
-            }
+            // if (!languagePair.target)
+            //     setTgtError(true)
+            // else {
+            makeSubmitAPICall(tgt, null, datasetType, domain, submitter)
+            // }
 
         }
 
@@ -244,6 +253,7 @@ const Benchmark = (props) => {
                 </Button>
                 <StyledMenu id="data-set"
                     anchorEl={anchorEl}
+
                     open={Boolean(anchorEl)}
                     onClose={(e) => handleClose(e)}
                     className={classes.styledMenu1}
@@ -431,7 +441,7 @@ const Benchmark = (props) => {
                     </Grid>
 
                     <Grid item xs={12} sm={7} md={9} lg={9} xl={9} className={classes.modelTable}>
-                        <SearchModels />
+                        <SearchModels source={languagePair.source} target={languagePair.target} type={datasetType} />
                     </Grid>
 
                 </Grid>
