@@ -14,6 +14,8 @@ import Theme from "../../theme/theme-default";
 import MenuItems from "../../components/common/MenuItem";
 import {menuItems} from '../../../configs/menuItems';
 import Dialog from "./Dialog";
+import { useDispatch } from "react-redux";
+import {initialSearchFilter} from '../../../redux/actions/api/Model/ModelSearch/Benchmark';
 const StyledMenu = withStyles({
  
 })((props) => (
@@ -55,6 +57,7 @@ const Header = (props) => {
   const handleOpenModel = (e) => {
     setAnchorModel(e.currentTarget)
   }
+  const dispatch = useDispatch();
 
   const handleLogoutOption = (e) => {
     setAnchorElLogout(e.currentTarget)
@@ -67,6 +70,7 @@ const Header = (props) => {
 
   const handleMenuItemClick = (url) => {
     if(authenticate() || url ==="/benchmark/initiate" || url.includes()){
+      dispatch(initialSearchFilter());
       history.push(`${process.env.PUBLIC_URL}${url}`)
     handleClose();
     }
