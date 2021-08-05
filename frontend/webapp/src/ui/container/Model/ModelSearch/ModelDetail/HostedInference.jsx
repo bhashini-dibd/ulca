@@ -144,7 +144,7 @@ const HostedInference = (props) => {
                 <CardActions className={classes.actionButtons} >
                     <Grid container spacing={2}>
                         <Grid item>
-                            <Button size="small" variant="outlined" onClick={clearAll}>
+                            <Button disabled={sourceText ? false : true} size="small" variant="outlined" onClick={clearAll}>
                                 Clear All
                             </Button>
                         </Grid>
@@ -155,7 +155,7 @@ const HostedInference = (props) => {
                                 variant="contained"
                                 size={'small'}
                                 onClick={handleCompute}
-                                disabled={loading}>
+                                disabled={sourceText ? false : true}>
                                 Translate
                             </Button>
                         </Grid>
