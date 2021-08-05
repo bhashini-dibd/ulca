@@ -24,21 +24,20 @@
 
 
 
+    
 //     const blobToBase64 = (blob) => {
 //         debugger
 //         var reader = new FileReader();
 //         reader.readAsDataURL(blob.blob); 
-//         var base64data = ""
 //         reader.onloadend = function() {
-//             base64data = reader.result;           
+//             let base64data = reader.result;      
 //             setBase(base64data)
 //         }
-//                 return base64data;
+                
 //     };
 //     const handleStop =  (data) =>{
 //         setData(data.blobURL)
 //         blobToBase64(data)
-        
 //     }
 
    
@@ -103,6 +102,8 @@
 //     onStop={handleStop}
 //     onData={handleData}
 //     strokeColor="#000000"
+//     channelCount={1}
+//     sampleRate={16000}
 //     mimeType="audio/wav" 
 //     backgroundColor="#FF4081" />
 //     </div>
@@ -264,3 +265,5 @@ return (
 }
 
 export default  withStyles(DatasetStyle)(AudioRecord);
+
+

@@ -99,7 +99,7 @@ const ChartRender = (props) => {
 				fetchChartData(selectedOption.value,fValue , fetchNextParams(event))
 				setPage(value)
 				
-				
+				setToggleValue(fValue)
 				handleSelectChange(selectedOption, event, fValue, value)
 
 				break;
