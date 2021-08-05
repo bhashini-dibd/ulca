@@ -65,7 +65,6 @@ class StoreUtils:
         zip_file = filepath.split('.')[0] + '.zip'
         with ZipFile(zip_file, 'w') as myzip:
             myzip.write(filepath,arcname,ZIP_DEFLATED)
-            myzip.close()
         os.remove(filepath)
         return zip_file 
 

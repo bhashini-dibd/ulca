@@ -109,7 +109,7 @@ class ErrorProcessor(Thread):
         #updating record on mongo with uploaded error count
         errorepo.upsert(error_record)
         log.info(f'Updated db record for SRN -- {srn}')
-        os.remove(file)
+        # os.remove(file)
         return error_record
 
 
