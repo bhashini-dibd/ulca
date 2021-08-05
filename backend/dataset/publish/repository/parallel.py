@@ -108,7 +108,6 @@ class ParallelRepo:
                                                              {"targetLanguage": query["targetLanguage"][0]}]}})
                         if query['originalSourceSentence']:
                             query["derived"] = False
-                    log.info(f"pipeline: {pipeline}")
                 else:
                     pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]},
                                                          {"targetLanguage": {"$in": query["targetLanguage"]}}]}})

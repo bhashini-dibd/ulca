@@ -47,7 +47,7 @@ class DatasetUtils:
             res_path_sample_os = self.upload_file(res_path_sample, dataset_prefix, f'{service_req_no}-sample-ds.json')
             return res_path_os, res_path_sample_os
         except Exception as e:
-            log.exception(f'Exception while pushing search results to s3: {e}', e)
+            log.exception(f'Exception while pushing search results to object store: {e}', e)
             return False, False
 
     # Utility to hash a file
@@ -66,6 +66,7 @@ class DatasetUtils:
 
     # Utility to upload files to ULCA Object store
     def upload_file(self, file_location, folder, file_name):
+        log.info(f'Uploading file to the Object Store......')
         file_store_req = {"fileLocation": file_location, "storageFolder": folder, "fileName": file_name}
         uri = f'{file_store_host}{file_store_upload_endpoint}'
         try:
