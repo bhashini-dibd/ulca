@@ -1,3 +1,5 @@
+import threading
+from threading import Thread
 import logging
 from utilities.response import post_error
 import boto3 
@@ -13,8 +15,10 @@ class AwsFileRepo():
         s3_file_name =folder+"/"+ file_name
         s3_client = boto3.client('s3', aws_access_key_id=aws_access_key, aws_secret_access_key=aws_secret_key)
         try:
-            log.info(f'Pushing {file_path} to S3 at {s3_file_name} ......')
-            s3_client.upload_file(file_path, aws_bucket_name, s3_file_name)
+            log.info(f'Pushing {file_path} to S3 at {s3_file_name}  on a new fork......')
+            persister = threading.Thread(target=s3_client.upload_file, args=(file_path, aws_bucket_name, s3_file_name))
+            persister.start()
+            # s3_client.upload_file(file_path, aws_bucket_name, s3_file_name)
             return f'{aws_link_prefix}{s3_file_name}'
         except Exception as e:
             log.exception(f'Exception while pushing to s3: {e}', e)
