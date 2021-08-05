@@ -30,7 +30,6 @@ const HostedInference = (props) => {
     );
     const srcLang = getLanguageName(props.source);
     const tgtLang = getLanguageName(props.target);
-    console.log(srcLang, tgtLang)
 
     // useEffect(() => {
     // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])

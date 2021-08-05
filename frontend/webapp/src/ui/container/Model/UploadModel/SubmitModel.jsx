@@ -48,10 +48,8 @@ const SubmitModel = (props) => {
     //     setAnchorEl(event.currentTarget)
     // };
 
-    console.log(submitStatus)
 
     useEffect(() => {
-        console.log(modelIdStatus, submitStatus)
         if (submitStatus && modelIdStatus !== submitStatus) {
             history.push(`${process.env.PUBLIC_URL}/model/submission/${submitStatus}`)
         }
@@ -198,8 +196,6 @@ const SubmitModel = (props) => {
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
-
-    console.log(submitStatus)
 
     return (
         <div>

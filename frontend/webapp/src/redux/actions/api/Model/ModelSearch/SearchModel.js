@@ -31,7 +31,6 @@ export default class SearchModel extends API {
         if (res) {
             this.report = res.data;
         }
-        console.log('inside processResponse', res)
     }
 
     apiEndPoint() {

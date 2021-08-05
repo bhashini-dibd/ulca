@@ -26,9 +26,11 @@ const ChartRender = (props) => {
 	const [sourceLanguage, setSourceLanguage] = useState(
         { value: 'en', label: 'English' }
     );
+	const [toggleValue, setToggleValue] = useState("domains");
 	const [selectedLanguage, setSelectedLanguage] = useState("");
 	const [selectedLanguageName, setSelectedLanguageName] = useState("");
 	const [page, setPage] = useState(0);
+	const [dataValue, setDataValue] = useState("");
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const DashboardReport = useSelector((state) => state.dashboardReport);
@@ -65,7 +67,9 @@ const ChartRender = (props) => {
 	const fetchNextParams = (eventValue) => {
 		var source = ""
 		let targetLanguage = ""
-		let event = { "field": null, "value": eventValue && eventValue.hasOwnProperty("_id") && eventValue._id }
+		let val = eventValue && eventValue.hasOwnProperty("_id") && eventValue._id
+		let event = { "field": filterValue, "value": val ? val : dataValue }
+		val && setDataValue(val)
 		if (selectedOption.value === "parallel-corpus") {
 			source = sourceLanguage.value
 			targetLanguage =  selectedLanguage 
@@ -82,19 +86,21 @@ const ChartRender = (props) => {
 	}
 
 	const handleOnClick = (value, event, filter) => {
-
 		switch (value) {
 			case 1:
 				fetchChartData(selectedOption.value, filter ? filter : filterValue, fetchParams(event))
+				setFilterValue(filter ? filter : filterValue)
 				handleSelectChange(selectedOption, event, filter, value)
 				setPage(value)
 
 				break;
 			case 2:
-				fetchChartData(selectedOption.value, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", fetchNextParams(event))
+				let fValue = filter?filter:filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions";
+				fetchChartData(selectedOption.value,fValue , fetchNextParams(event))
 				setPage(value)
-				setFilterValue('domains')
-				handleSelectChange(selectedOption, event, filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions", value)
+				
+				
+				handleSelectChange(selectedOption, event, fValue, value)
 
 				break;
 			case 0:
@@ -104,7 +110,6 @@ const ChartRender = (props) => {
 				handleSelectChange(selectedOption, "", "", value)
 				setSelectedLanguage("")
 				setSelectedLanguageName("")
-				
 				break;
 			default:
 
@@ -157,12 +162,31 @@ const ChartRender = (props) => {
 		setPopUp (false)
 	}
 
+	const handleLevelChange = (value) =>{
+		setToggleValue(value)
+		// setTitle(`English-${selectedLanguageName}  ${selectedOption.value}- Grouped by ${(value === "domains") ? "Domain" : (value === "source") ? "Source" : value === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+		handleOnClick(2, "", value)
+	}
+
 	const fetchFilterButtons = () => {
 		return (
 			<div className={classes.filterButton}>
 				<Button color={filterValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domains")}>Domain</Button>
 				{/* <Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button> */}
-				<Button color={filterValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>
+				<Button style={{marginRight:"10px"}} color={filterValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>
+				<Button color={filterValue === "primarySubmitterName" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("primarySubmitterName")}>Submitter</Button>
+
+			</div>
+		)
+	}
+
+	const fetchButtonssecondLevel = () => {
+		return (
+			<div className={classes.filterButton}>
+				{filterValue !== "domains" &&<Button color={toggleValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLevelChange("domains")}>Domain</Button>}
+				{/* <Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button> */}
+				{filterValue !== "collectionMethod_collectionDescriptions" &&<Button style={{marginRight:"10px"}} color={toggleValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLevelChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>}
+				{filterValue !== "primarySubmitterName" &&<Button color={toggleValue === "primarySubmitterName" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLevelChange("primarySubmitterName")}>Submitter</Button>}
 
 			</div>
 		)
@@ -179,12 +203,12 @@ const ChartRender = (props) => {
 					
 
 				} else if (page === 1) {
-					setTitle(`${sourceLanguage.label}-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  parallel sentences - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
+					setTitle(`${sourceLanguage.label}-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  parallel sentences - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter":"Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
 					
 
 				} else if (page === 2) {
-					setTitle(`${sourceLanguage.label}-${selectedLanguageName} parallel sentences of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setTitle(`${sourceLanguage.label}-${selectedLanguageName} parallel sentences ${filterValue === "primarySubmitterName"? "by" :"of"}  ${event.label?event.label : dataValue } - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 					
 					
@@ -203,7 +227,7 @@ const ChartRender = (props) => {
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
 					
 				} else if (page === 2) {
-					setTitle(`Number of sentences in ${selectedLanguageName} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setTitle(`Number of sentences in ${selectedLanguageName}${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 					
 				}
@@ -219,7 +243,7 @@ const ChartRender = (props) => {
 					setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
 					
 				} else if (page === 2) {
-					setTitle(`Number of audio hours in ${selectedLanguageName} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setTitle(`Number of audio hours in ${selectedLanguageName} ${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
 					setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 					
 				}
@@ -236,7 +260,7 @@ const ChartRender = (props) => {
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
 					
 				} else if (page === 2) {
-					setTitle(`Number of images with ${selectedLanguageName} text of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+					setTitle(`Number of images with ${selectedLanguageName} text ${filterValue === "primarySubmitterName"? "uploaded by" :"of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 					
 				}
@@ -254,7 +278,7 @@ const ChartRender = (props) => {
 						setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
 						
 					} else if (page === 2) {
-						setTitle(`Number of audio hours in ${selectedLanguageName} of ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"}`)
+						setTitle(`Number of audio hours in ${selectedLanguageName} ${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
 						setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
 						
 					}
@@ -275,6 +299,7 @@ const ChartRender = (props) => {
 				page		= 	{page}
 				count 		= 	{DashboardReport.totalCount}>
 				{page === 1 && fetchFilterButtons()}
+				{page === 2 && fetchButtonssecondLevel()}
 				
 			</ TitleBar>
 			{/* <Button onClick = {()=> setPopUp(true)} color= "primary" variant="contained" className={classes.infoBtn}><InfoOutlinedIcon/></Button> */}
@@ -316,7 +341,6 @@ const ChartRender = (props) => {
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
 								<Bar margin={{ top: 140, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
-									{console.log()}
 									<LabelList
 										formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }}
 										position="top"

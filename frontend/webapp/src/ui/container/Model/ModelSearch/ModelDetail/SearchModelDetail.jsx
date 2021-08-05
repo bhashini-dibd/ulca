@@ -26,7 +26,6 @@ const SearchModelDetail = (props) => {
 
         setData(location.state)
     }, [location]);
-    console.log('data', data)
     const description = [
         {
             title: "Description",

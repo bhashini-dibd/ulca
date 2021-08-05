@@ -265,8 +265,6 @@ const ContributionList = (props) => {
         };
 
         const { classes } = props;
-
-        console.log(myContributionReport)
         return (
                
                 <div>
