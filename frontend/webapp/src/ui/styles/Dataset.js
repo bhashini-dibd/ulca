@@ -389,7 +389,11 @@ const DataSet = (theme) => ({
         margin: '20px 20px 20px 0px',
     },
     computeBtnUrl: {
-        marginTop: "40px"
+        marginTop: "40px",
+        "@media (max-width:1000px)": {
+            marginTop: "10px",
+        }
+        
     },
     textArea: {
         backgroundColor: 'inherit',

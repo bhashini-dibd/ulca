@@ -124,8 +124,8 @@ const HostedInferASR = (props) => {
         xl={5}
         lg={5}
         md={5}
-        sm={5}
-        xs={5}
+        sm={12}
+        xs={12}
       >
         <AudioRecord modelId={modelId} handleApicall = {handleApicall}/>
       </Grid>
@@ -135,8 +135,8 @@ const HostedInferASR = (props) => {
         xl={6}
         lg={6}
         md={6}
-        sm={6}
-        xs={6}
+        sm={12}
+        xs={12}
       >
         <Card className={classes.asrCard}>
           <Grid container className={classes.cardHeader}>
@@ -156,8 +156,8 @@ const HostedInferASR = (props) => {
         xl={5}
         lg={5}
         md={5}
-        sm={5}
-        xs={5}
+        sm={12}
+        xs={12}
       >
         <Card className={classes.asrCard}>
           <Grid container className={classes.cardHeader}>
@@ -185,6 +185,7 @@ const HostedInferASR = (props) => {
             <Button
               color="primary"
               className={classes.computeBtnUrl}
+              disabled= {url ? false:true}
               variant="contained"
               size={"small"}
               onClick={handleSubmit}
@@ -200,8 +201,8 @@ const HostedInferASR = (props) => {
         xl={6}
         lg={6}
         md={6}
-        sm={6}
-        xs={6}
+        sm={12}
+        xs={12}
       >
         <Card className={classes.asrCard}>
           <Grid container className={classes.cardHeader}>
