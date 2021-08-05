@@ -152,9 +152,9 @@ import AudioReactRecorder, { RecordState } from 'audio-react-recorder';
 
 const AudioRecord = (props) => {
     const { classes,modelId} = props;
-    const [recordAudio, setRecordAudio] = useState();
+    const [recordAudio, setRecordAudio] = useState("");
     const [base, setBase] = useState("");
-    const [data, setData] = useState(null);
+    const [data, setData] = useState("");
 
 
 
@@ -207,6 +207,7 @@ const AudioRecord = (props) => {
     };
 
     const handleStart = (data) =>{
+        setData(null)
         setRecordAudio(RecordState.START)
     }
 
@@ -218,7 +219,7 @@ const AudioRecord = (props) => {
         setData(data.url)
         setBase(blobToBase64(data))
     }
-console.log(recordAudio)
+
 return (
 
     <Card className={classes.asrCard}>
@@ -238,8 +239,10 @@ return (
 
       </div>
       <div  className={classes.centerAudio}>
-   <audio  src={ data } controls id="sample" >
+      {data ? <audio  src={ data } controls id="sample" >
        </audio>
+       :<audio  src={ "test" } controls id="sample" >
+       </audio>}
        </div>
   
                         </CardContent>
@@ -248,7 +251,7 @@ return (
                         color="primary"
                         variant="contained"
                         size={'small'}
-
+                        disabled= {data ? false:true}
                         onClick={()=>handleCompute()}
                     >
                         Convert
