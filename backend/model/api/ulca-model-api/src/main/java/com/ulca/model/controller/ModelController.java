@@ -56,9 +56,16 @@ public class ModelController {
 		return modelService.modelListByUserId(userId, startPage, endPage);
 	}
 
+	@GetMapping()
+	public ModelExtended getModel( @RequestParam(required = true) String modelId ) {
+		log.info("******** Entry ModelController:: getModel *******");
+
+		return modelService.getMode(modelId);
+	}
+	
 	@PostMapping("/upload")
 	public UploadModelResponse uploadModel(@RequestParam("file") MultipartFile file,@RequestParam(required = true) String userId) throws Exception {
-
+		log.info("******** Entry ModelController:: uploadModel *******");
 		return modelService.uploadModel(file, userId);
 
 	}
