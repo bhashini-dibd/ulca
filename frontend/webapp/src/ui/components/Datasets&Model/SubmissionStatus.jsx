@@ -15,7 +15,7 @@ const SubmissionStatus = (props) => {
     return (
         <div>
             <div className={classes.breadcrum}>
-                <BreadCrum links={[urlconfig[type]]} activeLink="Submit Dataset" />
+                <BreadCrum links={[urlconfig[type]]} activeLink={type === "model" ? "Submit Model" : "Submit Dataset"} />
             </div>
             <Paper>
                 <Grid container className={classes.dataSubmissionGrid}>
