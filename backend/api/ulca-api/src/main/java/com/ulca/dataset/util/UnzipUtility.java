@@ -145,7 +145,7 @@ public class UnzipUtility {
 	}
 */
 	
-	public Map<String, String> unzip(String zipFilePath, String destDirectory, String serviceRequestNumber) {
+	public Map<String, String> unzip(String zipFilePath, String destDirectory, String serviceRequestNumber) throws IOException {
 
 		Map<String, String> fileMap = new HashMap<String, String>();
 
@@ -156,12 +156,19 @@ public class UnzipUtility {
 		 
 		try (ZipFile zipFile = new ZipFile(zipFilePath)) {
 			zipFile.stream().parallel() // enable multi-threading
-					.forEach(e -> unzipEntry(zipFile, e, targetDirPath, fileMap));
+					.forEach(e -> {
+						try {
+							unzipEntry(zipFile, e, targetDirPath, fileMap);
+						} catch (IOException ex) {
+							// TODO Auto-generated catch block
+							log.info(ex.getMessage());
+						}
+					});
 		} catch (IOException e) {
-			throw new RuntimeException("Error opening zip file '" + zipFilePath + "': " + e, e);
+			throw new IOException("Error opening zip file '" + zipFilePath + "': " + e, e);
 		}
 		if (fileMap.containsKey("baseLocation")) {
-			throw new RuntimeException("Uploaded zip file does not contains params.json");
+			throw new IOException("Uploaded zip file does not contains params.json");
 		}
 		log.info("unzip timings :: " + serviceRequestNumber);
 		log.info("start time :: " + startTime);
@@ -171,7 +178,7 @@ public class UnzipUtility {
 		return fileMap;
 	}
 
-	private void unzipEntry(ZipFile zipFile, ZipEntry entry, Path targetDir, Map<String, String> fileMap) {
+	private void unzipEntry(ZipFile zipFile, ZipEntry entry, Path targetDir, Map<String, String> fileMap) throws IOException {
 		try {
 			Path targetPath = targetDir.resolve(Paths.get(entry.getName()));
 			if (Files.isDirectory(targetPath)) {
@@ -199,7 +206,7 @@ public class UnzipUtility {
 		} catch (java.nio.file.FileSystemException e) {
 			log.info("error while unzipping file :: " + e.getMessage());
 		} catch (IOException e) {
-			throw new RuntimeException("Error processing zip entry '" + entry.getName() + "': " + e, e);
+			throw new IOException("Error processing zip entry '" + entry.getName() + "': " + e.getMessage());
 		}
 	}
 	
