@@ -27,7 +27,7 @@ public class UnzipUtility {
 	/**
 	 * Size of the buffer to read/write data
 	 */
-	//private static final int BUFFER_SIZE = 4096;
+	private static final int BUFFER_SIZE = 4096;
 
 	/**
 	 * Extracts a zip file specified by the zipFilePath to a directory specified by
@@ -151,6 +151,7 @@ public class UnzipUtility {
 
 		String targetDir = destDirectory + File.separator + serviceRequestNumber;
 		Path targetDirPath = Paths.get(targetDir);
+		ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath));
 		
 		 String startTime = new Date().toString();
 		 
@@ -158,7 +159,7 @@ public class UnzipUtility {
 			zipFile.stream().parallel() // enable multi-threading
 					.forEach(e -> {
 						try {
-							unzipEntry(zipFile, e, targetDirPath, fileMap);
+							unzipEntryTest(zipIn,zipFile, e, targetDirPath, fileMap);
 						} catch (Exception ex) {
 							// TODO Auto-generated catch block
 							log.info(ex.getMessage());
@@ -227,5 +228,63 @@ public class UnzipUtility {
 		}
 	}
 	
+	private void unzipEntryTest(ZipInputStream zipIn, ZipFile zipFile, ZipEntry entry, Path targetDir, Map<String, String> fileMap) throws IOException {
+		try {
+			Path targetPath = targetDir.resolve(Paths.get(entry.getName()));
+			
+			System.out.println(targetPath.toString());
+			if (entry.isDirectory()) {
+				String directoryPath = targetPath.toString();
+				File fileDirect = new File(directoryPath);
+				if (!fileDirect.exists()) {
+					
+					log.info("creating destination folder :: " + fileDirect);
+					fileDirect.mkdirs();
+					
+				}
+				
+			} else {
+				String filePath = targetPath.toString();
+				
+				log.info("filePath :: " + filePath);
+
+				if (!filePath.contains("__MACOSX") && !filePath.contains("DS_Store")) {
+					String directoryPath = targetPath.getParent().toString();
+					File fileDirect = new File(directoryPath);
+					if (!fileDirect.exists()) {
+						log.info("creating destination folder :: " + fileDirect + " for filePath :: " + filePath);
+						fileDirect.mkdirs();
+					}
+					try (InputStream in = zipFile.getInputStream(entry)) {
+						Files.copy(in, targetPath, StandardCopyOption.REPLACE_EXISTING);
+					}
+					
+					String entryType = entry.getName();
+					String fileDetails[] = entryType.split("/");
+					String fileName = fileDetails[fileDetails.length - 1];
+					if (fileName.equals("params.json")) {
+						log.info("baseLocation :: " + targetPath.getParent().toString());
+						fileMap.put("baseLocation", targetPath.getParent().toString());
+					}
+				}
+			}
+		} catch (java.nio.file.FileAlreadyExistsException e) {
+			log.info("error while unzipping file :: " + e.getMessage());
+		} catch (java.nio.file.FileSystemException e) {
+			log.info("error while unzipping file :: " + e.getMessage());
+		} catch (Exception e) {
+			throw new IOException("Error processing zip entry '" + entry.getName() + "': " + e.getMessage());
+		}
+	}
+	
+	private void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
+		BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath));
+		byte[] bytesIn = new byte[BUFFER_SIZE];
+		int read = 0;
+		while ((read = zipIn.read(bytesIn)) != -1) {
+			bos.write(bytesIn, 0, read);
+		}
+		bos.close();
+	}
 	
 }
