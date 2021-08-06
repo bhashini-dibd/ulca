@@ -42,9 +42,6 @@ public class RbacFilter extends ZuulFilter {
     @Value("${ulca.app.host}")
     private String appHost;
 
-    @Value("${zuul.routes.ulca-model.url}")
-    private String modelHost;
-
     @Override
     public String filterType() {
         return "pre";
@@ -90,15 +87,14 @@ public class RbacFilter extends ZuulFilter {
         }
         Boolean isUserAuthorised = verifyAuthorization(ctx, uri);
         if (isUserAuthorised){
-            if(uri.contains("model"))
-                logger.info(PROCEED_ROUTING_MESSAGE, modelHost);
             logger.info(PROCEED_ROUTING_MESSAGE, uri);
             return null;
         }
-        else
+        else {
             logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, uri);
             ExceptionUtils.raiseCustomException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_MESSAGE);
             return null;
+        }
     }
 
     /**
