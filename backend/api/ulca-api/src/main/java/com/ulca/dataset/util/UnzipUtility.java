@@ -159,7 +159,7 @@ public class UnzipUtility {
 					.forEach(e -> {
 						try {
 							unzipEntry(zipFile, e, targetDirPath, fileMap);
-						} catch (IOException ex) {
+						} catch (Exception ex) {
 							// TODO Auto-generated catch block
 							log.info(ex.getMessage());
 						}
@@ -167,7 +167,7 @@ public class UnzipUtility {
 		} catch (IOException e) {
 			throw new IOException("Error opening zip file '" + zipFilePath + "': " + e, e);
 		}
-		if (fileMap.containsKey("baseLocation")) {
+		if (!fileMap.containsKey("baseLocation")) {
 			throw new IOException("Uploaded zip file does not contains params.json");
 		}
 		log.info("unzip timings :: " + serviceRequestNumber);
@@ -205,7 +205,7 @@ public class UnzipUtility {
 			log.info("error while unzipping file :: " + e.getMessage());
 		} catch (java.nio.file.FileSystemException e) {
 			log.info("error while unzipping file :: " + e.getMessage());
-		} catch (IOException e) {
+		} catch (Exception e) {
 			throw new IOException("Error processing zip entry '" + entry.getName() + "': " + e.getMessage());
 		}
 	}
