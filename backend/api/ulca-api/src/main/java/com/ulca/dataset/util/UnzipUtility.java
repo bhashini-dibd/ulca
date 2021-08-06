@@ -168,7 +168,23 @@ public class UnzipUtility {
 			throw new IOException("Error opening zip file '" + zipFilePath + "': " + e, e);
 		}
 		if (!fileMap.containsKey("baseLocation")) {
-			throw new IOException("Uploaded zip file does not contains params.json");
+			String baseLocation = "";
+			File f = new File(targetDir);
+			String[] pathnames = f.list();
+			log.info("pathnames :: " + pathnames.toString());
+			for (String pathname : pathnames) {
+	            // Print the names of files and directories
+				if(pathname.contains("params.json")) {
+					baseLocation = pathname;
+					break;
+				}
+	        }
+			if(baseLocation.isBlank()) {
+				throw new IOException("Uploaded zip file does not contains params.json");
+			}else {
+				fileMap.put("baseLocation",baseLocation);
+			}
+			
 		}
 		log.info("unzip timings :: " + serviceRequestNumber);
 		log.info("start time :: " + startTime);
@@ -197,14 +213,15 @@ public class UnzipUtility {
 					String fileDetails[] = entryType.split("/");
 					String fileName = fileDetails[fileDetails.length - 1];
 					if (fileName.equals("params.json")) {
+						log.info("baseLocation :: " + targetPath.getParent().toString());
 						fileMap.put("baseLocation", targetPath.getParent().toString());
 					}
 				}
 			}
 		} catch (java.nio.file.FileAlreadyExistsException e) {
-			log.info("error while unzipping file :: " + e.getMessage());
+			//log.info("error while unzipping file :: " + e.getMessage());
 		} catch (java.nio.file.FileSystemException e) {
-			log.info("error while unzipping file :: " + e.getMessage());
+			//log.info("error while unzipping file :: " + e.getMessage());
 		} catch (Exception e) {
 			throw new IOException("Error processing zip entry '" + entry.getName() + "': " + e.getMessage());
 		}
