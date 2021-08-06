@@ -7,7 +7,6 @@ import org.anuvaad.cache.ZuulConfigCache;
 import org.anuvaad.models.*;
 import org.anuvaad.utils.ExceptionUtils;
 import org.anuvaad.utils.UserUtils;
-import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +15,12 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StreamUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.anuvaad.constants.RequestContextConstants.*;
 
@@ -44,6 +41,9 @@ public class RbacFilter extends ZuulFilter {
 
     @Value("${ulca.app.host}")
     private String appHost;
+
+    @Value("${zuul.routes.ulca-model.url}")
+    private String modelHost;
 
     @Override
     public String filterType() {
@@ -90,6 +90,8 @@ public class RbacFilter extends ZuulFilter {
         }
         Boolean isUserAuthorised = verifyAuthorization(ctx, uri);
         if (isUserAuthorised){
+            if(uri.contains("model"))
+                logger.info(PROCEED_ROUTING_MESSAGE, modelHost);
             logger.info(PROCEED_ROUTING_MESSAGE, uri);
             return null;
         }
