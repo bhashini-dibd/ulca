@@ -196,6 +196,8 @@ public class UnzipUtility {
 			}
 		} catch (java.nio.file.FileAlreadyExistsException e) {
 			log.info("error while unzipping file :: " + e.getMessage());
+		} catch (java.nio.file.FileSystemException e) {
+			log.info("error while unzipping file :: " + e.getMessage());
 		} catch (IOException e) {
 			throw new RuntimeException("Error processing zip entry '" + entry.getName() + "': " + e, e);
 		}
