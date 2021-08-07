@@ -28,7 +28,6 @@ class ASRComputeResource(Resource):
         
         try:
             result = asrrepo.process_asr(lang,audio,userId,inference)
-            print(result,"********")
             res = CustomResponse(Status.SUCCESS.value,result)
             log.info("response successfully generated.")
             return res.getres()
