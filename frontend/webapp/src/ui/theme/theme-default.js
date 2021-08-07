@@ -158,7 +158,7 @@ const themeDefault = createMuiTheme({
     MUIDataTableBodyCell: {
       root: { padding: ".5rem .5rem .5rem .8rem", textTransform: "capitalize" },
     },
-    
+
     MuiButton: {
       root: {
         minWidth: "25",
@@ -175,7 +175,7 @@ const themeDefault = createMuiTheme({
         letterSpacing: "0.5px",
         textAlign: "center",
         height: "26px",
-        
+
       },
       sizeLarge: {
         height: "48px",
@@ -185,8 +185,28 @@ const themeDefault = createMuiTheme({
       },
 
 
+    },
+    MuiTabs:{
+      indicator:{
+        // display:'none',
+        backgroundColor:"orange"
+      }
+    },
+    MuiTab:{
+      root:{
+        width:'auto',
+        // '&:first-child':{
+          padding:'0',
+          marginRight:'54px',
+        // }
+        "@media (min-width:600px)": {
+          minWidth:'auto',
+        }
+      },
+      wrapper:{
+        alignItems:'flex-start',
+      }
     }
-
   },
   palette: {
     primary: {
@@ -255,7 +275,7 @@ themeDefault.typography.body2 = {
   fontFamily: '"Roboto", sans-serif',
   fontWeight: "400",
   color: "#0C0F0F",
-  lineHeight:"22px"
+  lineHeight: "22px"
 };
 themeDefault.typography.caption = {
   fontSize: "0.75rem",

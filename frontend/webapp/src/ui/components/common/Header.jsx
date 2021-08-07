@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import { withStyles, Button, Menu, MenuItem, MuiThemeProvider, Divider } from "@material-ui/core";
+import { withStyles, Button, Menu, MenuItem, MuiThemeProvider, Divider, Grid } from "@material-ui/core";
 import DownIcon from '@material-ui/icons/ArrowDropDown';
 import Avatar from '@material-ui/core/Avatar';
 import HeaderStyles from "../../styles/HeaderStyles"
@@ -16,7 +16,8 @@ import { menuItems } from '../../../configs/menuItems';
 import Dialog from "./Dialog";
 import { useDispatch } from "react-redux";
 import { initialSearchFilter } from '../../../redux/actions/api/Model/ModelSearch/Benchmark';
-import bhashiniLogo from '../../../assets/bhashiniogo.png'
+import bhashiniLogo from '../../../assets/bhashiniogo.png';
+
 const StyledMenu = withStyles({
 
 })((props) => (
@@ -235,21 +236,30 @@ const Header = (props) => {
                 :
                 <div className={classes.profile}>
                   <div className={classes.desktopAuth}>
-                    <Button
-                      className={classes.menuBtn}
-                      color="default"
-                      onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
-                      variant="text"
-                    >
-                      Sign In
-                    </Button>
-                    <Button
-                      className={classes.menuBtn2}
-                      color="default"
-                      variant="text"
-                      onClick={() => history.push(`${process.env.PUBLIC_URL}/user/register`)}
-                    >
-                      Sign Up</Button>
+                    <Grid container spacing={2}>
+                      <Grid item>
+                        <Button
+                          size="small"
+                          // className={classes.menuBtn}
+                          color="default"
+                          onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
+                          variant="outlined"
+                        >
+                          Sign In
+                        </Button>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          // className={classes.menuBtn2}
+                          color="primary"
+                          variant="contained"
+                          size="small"
+                          onClick={() => history.push(`${process.env.PUBLIC_URL}/user/register`)}
+                        >
+                          Sign Up
+                        </Button>
+                      </Grid>
+                    </Grid>
                   </div>
                   <div className={classes.mobileAuth}>
                     <Button

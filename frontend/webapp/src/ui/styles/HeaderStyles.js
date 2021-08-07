@@ -46,7 +46,7 @@ const HeaderStyles = (theme) => ({
   },
   profile: {
     marginLeft: 'auto',
-    marginRight: '-1%'
+    // marginRight: '-1%'
   },
   menuBtn: {
     height: "54px",
