@@ -84,16 +84,20 @@ const HostedInferASR = (props) => {
             variant: "error",
           });
         } else {
-          if (rsp_data.hasOwnProperty("outputText") ) {
+              debugger
               if(status){
-                setTarget(rsp_data.outputText);
-              }else{
-                setTargetAudio(rsp_data.outputText);
+                setTargetAudio(rsp_data.data.transcript);
+                
               }
+              else{
+                setTarget(rsp_data.outputText);
+              }
+                
+
             
             setTranslationState(true);
           }
-        }
+        
       })
       .catch((error) => {
         setApiCall(false)
@@ -112,6 +116,7 @@ const HostedInferASR = (props) => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
 
+  console.log(targetAudio)
   return (
     <Grid container>
 
@@ -142,7 +147,7 @@ const HostedInferASR = (props) => {
           <Grid container className={classes.cardHeader}>
             <Typography variant='h6' className={classes.titleCard}>Output</Typography>
           </Grid>
-          <CardContent>{target}</CardContent>
+          <CardContent>{targetAudio}</CardContent>
         </Card>
       </Grid>
 
@@ -208,7 +213,7 @@ const HostedInferASR = (props) => {
           <Grid container className={classes.cardHeader}>
             <Typography variant='h6' className={classes.titleCard}>Output</Typography>
           </Grid>
-          <CardContent>{targetAudio}</CardContent>
+          <CardContent>{target}</CardContent>
         </Card>
       </Grid>
     </Grid>
