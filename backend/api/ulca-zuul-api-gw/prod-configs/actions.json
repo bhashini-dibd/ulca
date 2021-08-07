@@ -159,6 +159,14 @@
             "active":true,
             "whiteList":true,
             "description":"API to compute models"
+        },
+        {
+            "id":"6c5b13f8-cbad-4729-ac94-05eb0248490b",
+            "uri":"/ulca/apis/asr/v1/model/compute",
+            "module":"ASR-MODEL-COMPUTE",
+            "active":true,
+            "whiteList":true,
+            "description":"API to compute asr models"
         }
     ]
 }
