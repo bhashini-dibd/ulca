@@ -96,14 +96,16 @@ const Benchmark = (props) => {
 
 
     useEffect(() => {
-        const type = searchFilter.type
-        if (type['translation'] !== undefined) {
-            const source = getValueForLabel(languagePair.source).value;
-            const target = languagePair.target.value;
-            makeSubmitAPICall(source, target, type)
-        } else {
-            const source = languagePair.target !== "" ? languagePair.target.value : "";
-            makeSubmitAPICall(source, "", type)
+        if(aunthenticate()){
+            const type = searchFilter.type
+            if (type['translation'] !== undefined) {
+                const source = getValueForLabel(languagePair.source).value;
+                const target = languagePair.target.value;
+                makeSubmitAPICall(source, target, type)
+            } else {
+                const source = languagePair.target !== "" ? languagePair.target.value : "";
+                makeSubmitAPICall(source, "", type)
+            }
         }
     }, [])
 

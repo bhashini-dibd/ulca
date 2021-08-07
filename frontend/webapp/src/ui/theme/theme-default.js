@@ -206,6 +206,11 @@ const themeDefault = createMuiTheme({
       wrapper:{
         alignItems:'flex-start',
       }
+    },
+    MuiBox:{
+      root:{
+        padding:'24px 0px'
+      }
     }
   },
   palette: {
