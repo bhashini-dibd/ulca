@@ -18,7 +18,7 @@ const endpoints = {
   getModelContributionList :"/ulca/apis/v0/model/listByUserId",
   modelSearch: '/ulca/apis/v0/model/search',
   hostedInference: '/ulca/apis/v0/model/compute',
-  hostedVoice: '/ulca/apis/v1/model/compute'
+  hostedVoice: '/ulca/apis/asr/v1/model/compute'
 };
 
 export default endpoints;
