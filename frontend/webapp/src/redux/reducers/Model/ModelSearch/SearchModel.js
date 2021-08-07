@@ -71,6 +71,7 @@ const getClearFilter = (data) => {
 }
 
 const getContributionList = (state, payload) => {
+    debugger
     let responseData = [];
     let statusFilter = [];
     let modelFilter = [];
@@ -92,6 +93,7 @@ const getContributionList = (state, payload) => {
                 domain: getDomainDetails(element.domain),
                 status: "Published",
                 language: lang,
+                inferenceEndPoint:element.inferenceEndPoint,
                 source: element.languages.length > 0 && element.languages[0].sourceLanguage,
                 target:element.languages && element.languages.length > 0 && element.languages[0].targetLanguage,
                 licence: element.license,

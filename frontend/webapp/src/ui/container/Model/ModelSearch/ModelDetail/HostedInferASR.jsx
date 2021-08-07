@@ -18,7 +18,7 @@ import {
 import { useState } from "react";
 
 const HostedInferASR = (props) => {
-  const { classes, title, para, modelId, task } = props;
+  const { classes, title, para, modelId, task,source, inferenceEndPoint } = props;
   const history = useHistory();
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
@@ -64,7 +64,7 @@ const HostedInferASR = (props) => {
   };
   const handleApicall = async (modelId, url, task, status= false) => {
       
-    let apiObj = new HostedInferenceAPI(modelId, url, task, status);
+    let apiObj = new HostedInferenceAPI(modelId, url, task, status, source, inferenceEndPoint);
     setApiCall(true)
     fetch(apiObj.apiEndPoint(), {
       method: "post",

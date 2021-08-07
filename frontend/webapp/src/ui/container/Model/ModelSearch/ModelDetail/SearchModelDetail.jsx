@@ -22,6 +22,7 @@ const SearchModelDetail = (props) => {
     const [data, setData] = useState("")
     const location = useLocation();
     const params = useParams();
+    console.log(data)
     useEffect(() => {
 
         setData(location.state)
@@ -64,7 +65,7 @@ const SearchModelDetail = (props) => {
                 <Grid container>
                     <Grid className={classes.leftSection} item xs={12} sm={12} md={8} lg={8} xl={8}>
 
-                        {data.task !== 'asr' ? <HostedInference task={data.task} modelId={params.srno} source={data.source} target={data.target} /> : <HostedInferASR task={data.task} modelId={params.srno} />}
+                        {data.task !== 'asr' ? <HostedInference task={data.task} modelId={params.srno} source={data.source} target={data.target} /> : <HostedInferASR task={data.task} source= {data.source} inferenceEndPoint={data.inferenceEndPoint} modelId={params.srno} />}
                     </Grid>
                     <Grid item xs={12} sm={12} md={4} lg={4} xl={4} style={{ paddingLeft: '24px' }}>
                         {description.map(des => <ModelDescription title={des.title} para={des.para} />)}
