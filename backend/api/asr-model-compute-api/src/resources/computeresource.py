@@ -24,11 +24,10 @@ class ASRComputeResource(Resource):
         if "audioContent" in body:
             audio = body["audioContent"]
         if "audioUri" in body:
-            audio = ["audioUri"]
-        
+            audio = body["audioUri"]
         try:
             result = asrrepo.process_asr(lang,audio,userId,inference)
-            res = CustomResponse(Status.SUCCESS.value,result)
+            res = CustomResponse(Status.SUCCESS.value,result,None)
             log.info("response successfully generated.")
             return res.getres()
         except Exception as e:

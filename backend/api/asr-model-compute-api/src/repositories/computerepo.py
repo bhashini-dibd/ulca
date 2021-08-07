@@ -15,13 +15,14 @@ log = logging.getLogger('file')
 class ASRComputeRepo:
 
     def process_asr(self,lang,audio,userId,inference):
-        callbackurl =   inference["callbackUrl"]
-        transformat =   inference["schema"]["request"]["config"]["transcriptionFormat"]
-        audioformat =   inference["schema"]["request"]["config"]["audioFormat"]
         
+        callbackurl =   inference["callbackUrl"]
+        transformat =   inference["schema"]["request"]["config"]["transcriptionFormat"]["value"].upper()
+        audioformat =   inference["schema"]["request"]["config"]["audioFormat"].upper()
         url=validators.url(audio)
         if url == True:
-            self.make_audiouri_call(audio,lang,callbackurl,transformat,audioformat)
+            result = self.make_audiouri_call(audio,lang,callbackurl,transformat,audioformat)
+            return result
         else:
             try:
                 encode_string = audio
@@ -36,10 +37,11 @@ class ASRComputeRepo:
                 processed_file = f'{shared_storage_path}audio-{userId}-processed.wav'
                 audio.export(processed_file, format="wav")
 
-                encoded_data=base64.b64encode(open(processed_file, "rb").read())  
+                encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
                 os.remove(file)
                 os.remove(processed_file)
-                self.make_base64_audio_processor_call(encoded_data,lang,callbackurl,transformat,audioformat)
+                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat)
+                return result
 
             except Exception as e:
                 log.info(f'Exception while processing request: {e}')
@@ -54,13 +56,12 @@ class ASRComputeRepo:
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body)
+            content = response.content
+            response_data = json.loads(content)
             if response.status_code != 200:
-                log.info(f'Response: {response.content}')
-                return []
-            response_data = response.content
-            log.info("Received response from vakyanch end point to transcribe asr data")
-            response = json.loads(response_data)
-            return response
+                log.info(f'Requestfailed due to {response_data}')
+                return None
+            return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
             return []
@@ -70,17 +71,18 @@ class ASRComputeRepo:
         try:
             headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"value": lang},"transcriptionFormat": transformat,"audioFormat": audioformat},
-                        "audio": {"audioContents": data}}
+                        "audio": {"audioContent": str(data)}}
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body)
+            content = response.content
+            response_data = json.loads(content)
             if response.status_code != 200:
-                log.info(f'Response: {response.content}')
-                return []
-            response_data = response.content
+                log.info(f'Requestfailed due to {response_data["message"]}')
+                return None
+            
             log.info("Received response from vakyanch end point to transcribe asr data")
-            response = json.loads(response_data)
-            return response
+            return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
             return []
