@@ -90,7 +90,7 @@ const HostedInferASR = (props) => {
                 
               }
               else{
-                setTarget(rsp_data.outputText);
+                setTarget(rsp_data.data.transcript);
               }
                 
 
