@@ -3,7 +3,7 @@ import os
 import time
 
 DEBUG = False
-API_URL_PREFIX = "/ulca/apis/asr/"
+API_URL_PREFIX = "/ulca/apis/asr"
 HOST = '0.0.0.0'
 PORT = 5001
 
@@ -15,10 +15,3 @@ shared_storage_path             =       os.environ.get("ULCA_SHARED_STORAGE_PATH
 
 
 
-logging.basicConfig(
-    filename=os.getenv("SERVICE_LOG", "server.log"),
-    level=logging.DEBUG,
-    format="%(levelname)s: %(asctime)s \
-        pid:%(process)s module:%(module)s %(message)s",
-    datefmt="%d/%m/%y %H:%M:%S",
-)

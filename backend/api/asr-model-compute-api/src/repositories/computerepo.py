@@ -8,15 +8,20 @@ from config import shared_storage_path,vakyansh_audiouri_link,vakyansh_audiconte
 import base64
 import requests
 import logging
+from logging.config import dictConfig
 log = logging.getLogger('file')
 
 
 class ASRComputeRepo:
 
-    def process_asr(self,lang,audio,userId):
+    def process_asr(self,lang,audio,userId,inference):
+        callbackurl =   inference["callbackUrl"]
+        transformat =   inference["schema"]["request"]["config"]["transcriptionFormat"]
+        audioformat =   inference["schema"]["request"]["config"]["audioFormat"]
+        
         url=validators.url(audio)
         if url == True:
-            self.make_audiouri_call(audio,lang)
+            self.make_audiouri_call(audio,lang,callbackurl,transformat,audioformat)
         else:
             try:
                 encode_string = audio
@@ -34,19 +39,19 @@ class ASRComputeRepo:
                 encoded_data=base64.b64encode(open(processed_file, "rb").read())  
                 os.remove(file)
                 os.remove(processed_file)
-                self.make_base64_audio_processor_call(encoded_data,lang)
+                self.make_base64_audio_processor_call(encoded_data,lang,callbackurl,transformat,audioformat)
 
             except Exception as e:
                 log.info(f'Exception while processing request: {e}')
                 return []
 
     
-    def make_audiouri_call(self, url,lang):
+    def make_audiouri_call(self, url,lang,callbackurl,transformat,audioformat):
         try:
             headers =   {"Content-Type": "application/json"}
-            body    =   {"config": {"language": {"value": lang},"transcriptionFormat": "TRANSCRIPT","audioFormat": "WAV"},
+            body    =   {"config": {"language": {"value": lang},"transcriptionFormat": transformat,"audioFormat": audioformat},
                         "audio": {"audioUri": url}}
-            request_url = vakyansh_audiouri_link
+            request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body)
             if response.status_code != 200:
@@ -61,12 +66,12 @@ class ASRComputeRepo:
             return []
 
 
-    def make_base64_audio_processor_call(self,data,lang):
+    def make_base64_audio_processor_call(self,data,lang,callbackurl,transformat,audioformat):
         try:
             headers =   {"Content-Type": "application/json"}
-            body    =   {"config": {"language": {"value": lang},"transcriptionFormat": "TRANSCRIPT","audioFormat": "WAV"},
+            body    =   {"config": {"language": {"value": lang},"transcriptionFormat": transformat,"audioFormat": audioformat},
                         "audio": {"audioContents": data}}
-            request_url = vakyansh_audicontent_link
+            request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body)
             if response.status_code != 200:
@@ -79,3 +84,37 @@ class ASRComputeRepo:
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
             return []
+
+
+
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})

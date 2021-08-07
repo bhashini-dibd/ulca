@@ -4,8 +4,41 @@ from flask_cors import CORS
 import routes
 import config
 import logging
+from logging.config import dictConfig
 
-log = logging.getLogger('file')
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})
+log  =   logging.getLogger('file')
+
 compute_app  = Flask(__name__)
 
 
@@ -18,5 +51,7 @@ for blueprint in vars(routes).values():
 
 
 if __name__ == "__main__":
+    log.info("starting model compute service.............")
     compute_app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
     
+
