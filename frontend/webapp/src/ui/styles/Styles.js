@@ -1,15 +1,15 @@
 const GlobalStyles = (theme) => ({
   container: {
-    
+
     maxWidth: "1272px",
-    width : "100%",
-    margin :"4.1rem auto",
+    width: "100%",
+    margin: "4.1rem auto",
     // background: theme.palette.background.default,
     fontFamily: theme.typography.fontFamily
   },
 
-  headerContainer :{
-    height:"70px"
+  headerContainer: {
+    height: "70px"
   },
   root: {
     background: "#F8F8F8",
@@ -28,8 +28,22 @@ const GlobalStyles = (theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  
-  
+
+  typeTypo: {
+    color: 'black',
+    backgroundColor: "#FFD981",
+    borderRadius: '24px',
+    padding: '5px 10px',
+    width: 'fit-content',
+    fontSize: '12px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  card:{
+    marginBottom: '20px', height: '270px'
+  }
+
 
 });
 

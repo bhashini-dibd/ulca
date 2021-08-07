@@ -69,7 +69,7 @@ const themeDefault = createMuiTheme({
       },
       MuiButton: {
         root: {
-          display: "none"
+          display: "none",
         }
       }
 
@@ -162,7 +162,7 @@ const themeDefault = createMuiTheme({
     MuiButton: {
       root: {
         minWidth: "25",
-        borderRadius: "0",
+        borderRadius: "20px",
 
       },
       label: {

@@ -28,6 +28,7 @@ export const Language = [
     { value: 'ta', label: 'Tamil' },
     { value: 'te', label: 'Telugu' },
     { value: 'ur', label: 'Urdu' },
+    { value: 'ne', label: 'Nepali' },
     
 
 ];
