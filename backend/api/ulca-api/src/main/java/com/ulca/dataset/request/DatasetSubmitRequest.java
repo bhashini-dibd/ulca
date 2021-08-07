@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DatasetSubmitRequest {
 	
-	@NotBlank(message="datasetName is required")
+	@NotBlank(message="userId is required")
 	private final String userId;
 	
 	@NotBlank(message="datasetName is required")
