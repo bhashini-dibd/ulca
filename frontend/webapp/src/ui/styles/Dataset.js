@@ -24,6 +24,9 @@ const DataSet = (theme) => ({
         marginTop: '1vh',
 
     },
+    computeBtn:{
+        borderRadius:"20px"
+    },
 
     divStyle: {
         padding: "5% 10% 5% 3.125rem"

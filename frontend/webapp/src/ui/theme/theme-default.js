@@ -174,8 +174,7 @@ const themeDefault = createMuiTheme({
         lineHeight: "1.14",
         letterSpacing: "0.5px",
         textAlign: "center",
-        height: "26px",
-
+        height: "26px",   
       },
       sizeLarge: {
         height: "48px",

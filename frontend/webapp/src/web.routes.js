@@ -82,7 +82,7 @@ export default function App() {
             
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/search-model/:srno?`}
+            path={`${process.env.PUBLIC_URL}/search-model/:srno?/:model?`}
            
             component={SearchModelDetail}
            

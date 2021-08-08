@@ -29,7 +29,6 @@ import com.ulca.dataset.kakfa.DatasetErrorPublishService;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.kakfa.model.FileDownload;
 import com.ulca.dataset.model.Error;
-import com.ulca.dataset.model.Fileidentifier;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;

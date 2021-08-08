@@ -20,6 +20,7 @@ const SearchModelDetail = (props) => {
     const { classes } = props;
     const history = useHistory();
     const [data, setData] = useState("")
+    const [modelTry, setModelTry] = useState(false)
     const location = useLocation();
     const params = useParams();
     useEffect(() => {
@@ -32,9 +33,14 @@ const SearchModelDetail = (props) => {
             para: data.description
         },
         {
+            title:"Source URL",
+            para: data.refUrl
+        },
+        {
             title: "Task",
             para: data.task
         },
+        
         {
             title: "Languages",
             para: data.language
@@ -53,18 +59,39 @@ const SearchModelDetail = (props) => {
         history.goBack()
     }
 
+    const handleClick = () =>{
+        history.push({
+            pathname: `${process.env.PUBLIC_URL}/search-model/${params.srno}/model`,
+            state: data
+    })
+        
+    }
+
     return (
         <>
             <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
             {data && <div className={classes.parentPaper}>
-                <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back to model list</Button>
+                <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>{params.model ? "Back to description":"Back to model list"}</Button>
+                
+                <div style={{display:"flex", justifyContent:"space-between"}}>
                 <Typography variant="h6" className={classes.mainTitle}>{data.modelName}</Typography>
+                {!params.model && <Button
+                                color="primary"
+                                className={classes.computeBtn}
+                                variant="contained"
+                                size={'small'}
+                                onClick= {()=>handleClick()}
+                                >
+                                Try Model
+                            </Button>}
+                            </div>
                 {/* <hr style={{marginTop: "19px",opacity:'0.3' }}></hr> */}
                 <Divider className={classes.gridCompute} />
+                {params.model ? 
                 <Grid container>
                     <Grid className={classes.leftSection} item xs={12} sm={12} md={8} lg={8} xl={8}>
 
-                        {data.task !== 'asr' ? <HostedInference task={data.task} modelId={params.srno} source={data.source} target={data.target} /> : <HostedInferASR task={data.task} modelId={params.srno} />}
+                        {data.task !== 'asr' ? <HostedInference task={data.task} modelId={params.srno} source={data.source} target={data.target} /> : <HostedInferASR task={data.task} source= {data.source} inferenceEndPoint={data.inferenceEndPoint} modelId={params.srno} />}
                     </Grid>
                     <Grid item xs={12} sm={12} md={4} lg={4} xl={4} style={{ paddingLeft: '24px' }}>
                         {description.map(des => <ModelDescription title={des.title} para={des.para} />)}
@@ -72,7 +99,18 @@ const SearchModelDetail = (props) => {
                     </Grid>
 
 
+                </Grid>:
+                <Grid container>
+                
+                <Grid item xs={12} sm={12} md={9} lg={9} xl={9} >
+                    {description.map(des => <ModelDescription title={des.title} para={des.para} />)}
+
                 </Grid>
+
+
+            </Grid>
+
+}
             </div>}
         </>
     )

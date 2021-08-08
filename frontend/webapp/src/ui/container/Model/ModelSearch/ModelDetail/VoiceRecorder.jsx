@@ -168,6 +168,9 @@ const AudioRecord = (props) => {
         }
                 
     };
+
+
+    
  
 
    
@@ -213,6 +216,7 @@ const AudioRecord = (props) => {
     }
 
     const handleStop = (value) =>{
+
         setRecordAudio(RecordState.STOP)
     }
 

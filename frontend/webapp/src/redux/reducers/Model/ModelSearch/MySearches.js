@@ -17,6 +17,7 @@ const dateConversion = (value) =>{
 
 const getMySearches = (payload) => {
     let newArr = []
+    debugger
     payload.forEach(element =>{
         if(element.searchCriteria){
             let dataSet  = getDatasetName(element.searchCriteria.datasetType);
@@ -32,6 +33,8 @@ const getMySearches = (payload) => {
                     searched_on   : dateConversion(element.timestamp),
                     status      : element.status.length> 0 && element.status[0].status,
                     endPoint:element.inferenceEndPoint,
+                    refUrl:element.refUrl ? element.refUrl : "NA",
+                    inferenceEndPoint:element.inferenceEndPoint,
                     count : searchDetails && searchDetails.count,
                     sampleUrl : searchDetails && searchDetails.datasetSample,
                     downloadUrl : searchDetails && searchDetails.dataset,

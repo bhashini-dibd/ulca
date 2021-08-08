@@ -18,7 +18,7 @@ import {
 import { useState } from "react";
 
 const HostedInferASR = (props) => {
-  const { classes, title, para, modelId, task } = props;
+  const { classes, title, para, modelId, task,source, inferenceEndPoint } = props;
   const history = useHistory();
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
@@ -64,7 +64,7 @@ const HostedInferASR = (props) => {
   };
   const handleApicall = async (modelId, url, task, status= false) => {
       
-    let apiObj = new HostedInferenceAPI(modelId, url, task, status);
+    let apiObj = new HostedInferenceAPI(modelId, url, task, status, source, inferenceEndPoint);
     setApiCall(true)
     fetch(apiObj.apiEndPoint(), {
       method: "post",
@@ -84,16 +84,20 @@ const HostedInferASR = (props) => {
             variant: "error",
           });
         } else {
-          if (rsp_data.hasOwnProperty("outputText") ) {
+              debugger
               if(status){
-                setTarget(rsp_data.outputText);
-              }else{
-                setTargetAudio(rsp_data.outputText);
+                setTargetAudio(rsp_data.data.transcript);
+                
               }
+              else{
+                setTarget(rsp_data.data.transcript);
+              }
+                
+
             
             setTranslationState(true);
           }
-        }
+        
       })
       .catch((error) => {
         setApiCall(false)
@@ -111,7 +115,6 @@ const HostedInferASR = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
-
   return (
     <Grid container>
 
@@ -142,7 +145,7 @@ const HostedInferASR = (props) => {
           <Grid container className={classes.cardHeader}>
             <Typography variant='h6' className={classes.titleCard}>Output</Typography>
           </Grid>
-          <CardContent>{target}</CardContent>
+          <CardContent>{targetAudio}</CardContent>
         </Card>
       </Grid>
 
@@ -208,7 +211,7 @@ const HostedInferASR = (props) => {
           <Grid container className={classes.cardHeader}>
             <Typography variant='h6' className={classes.titleCard}>Output</Typography>
           </Grid>
-          <CardContent>{targetAudio}</CardContent>
+          <CardContent>{target}</CardContent>
         </Card>
       </Grid>
     </Grid>

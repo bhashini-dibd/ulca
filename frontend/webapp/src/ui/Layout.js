@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 import { useHistory } from "react-router-dom";
 import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
 import Theme from "./theme/theme-default";
 import { withStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import GlobalStyles from "./styles/Styles";
