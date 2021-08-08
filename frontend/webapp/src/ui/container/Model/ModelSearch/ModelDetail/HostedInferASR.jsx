@@ -115,8 +115,6 @@ const HostedInferASR = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
-
-  console.log(targetAudio)
   return (
     <Grid container>
 

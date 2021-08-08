@@ -10,7 +10,6 @@ import {
 const ModelDescription = (props) => {
     const { classes, title, para } = props;
     const history = useHistory();
-    console.log(title)
     return (
         <div>
             <Typography variant="h6" className={classes.modelTitle}>{title}</Typography>

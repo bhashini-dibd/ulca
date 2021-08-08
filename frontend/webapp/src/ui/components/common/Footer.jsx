@@ -1,5 +1,5 @@
 // import 'bootstrap/dist/css/bootstrap.min.css';
-import "../../styles/css/style.css"
+// import "../../styles/css/style.css"
 import email from "../../styles/img/email-id.png";
 import web from "../../styles/img/web.png";
 import location from "../../styles/img/location.png";
@@ -7,30 +7,32 @@ import facebook from "../../styles/img/facebook.png";
 import tw from "../../styles/img/tw.png";
 import insta from "../../styles/img/insta.png";
 import dg from "../../styles/img/dg-india.png";
+import { Grid } from "@material-ui/core";
 
 
 const Footer = (props) => {
 return (
-    <footer className="footer">
-    <div className="container-fluid">
-            <div className="footer-links row">
-        <div className="col-md-4 footerBg bg1">
+    <footer >
+    <Grid container>
+            
+            <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
             
             <img src={web} alt="" className=""/>
             <div className="">Web<br/> 
                 <a className="font-weight-bold" href="https://www.meity.gov.in" target="_blank" rel="noopener noreferrer">www.meity.gov.in</a>
                 
             </div>
-        </div>
-         <div className="col-md-4 footerBg bg2">
+
+        </Grid>
+        <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
             
             <img src={email} alt="" className=""/>.
             <div className="">Mail<br/> 
                 <a className="font-weight-bold" href="mailto:contact@bhashini.gov.in">contact@bhashini.gov.in</a>
                 
             </div>
-        </div>
-         <div className="col-md-4 footerBg bg3">
+            </Grid>
+            <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
             
             <img src={location} alt="" className=""/>
             <div className="">Address<br/> 
@@ -39,13 +41,13 @@ Electronics Niketan, 6, CGO Complex,
 Lodhi Road, New Delhi - 110003</p>
                 
             </div>
-        </div>
-    </div>
-    </div>
+       </Grid>
+   
+    </Grid>
     <div className="section primary-color">
-        <div className="container">
+    <Grid container>
             <div className="row align-items-center">
-                <div className="col-md-6">
+            <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
              
                         <ul className="d-lg-flex link">
                             <li><a href="#">Whitepaper</a></li>
@@ -58,8 +60,8 @@ Lodhi Road, New Delhi - 110003</p>
                             </li>
                         </ul>
          
-                </div>
-                <div className="col-md-6">
+                </Grid>
+                <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
               
                         <ul className="socialLink link d-flex justify-content-end">
                             <li><a href="https://www.facebook.com/" target="_blank"><img src={facebook} alt="facebook"/></a></li>
@@ -67,7 +69,7 @@ Lodhi Road, New Delhi - 110003</p>
                             <li><a href="https://www.instagram.com/" target="_blank"> <img src={insta} alt="instagram"/></a></li>
                         </ul>
   
-                </div>
+                </Grid>
 
             </div>
             <hr/>
@@ -110,7 +112,7 @@ Supports : Firefox, Google Chrome, Internet Explorer 10.0+, Safari</p>
                 
 
             </div>
-        </div>
+        </Grid>
     </div>
 </footer>
 )

@@ -23,12 +23,10 @@ const SearchModelDetail = (props) => {
     const [modelTry, setModelTry] = useState(false)
     const location = useLocation();
     const params = useParams();
-    console.log(params.model)
     useEffect(() => {
 
         setData(location.state)
     }, [location]);
-    console.log(data)
     const description = [
         {
             title: "Description",
@@ -63,7 +61,7 @@ const SearchModelDetail = (props) => {
 
     const handleClick = () =>{
         history.push({
-            pathname: `${process.env.PUBLIC_URL}/search-model/${params.id}/model`,
+            pathname: `${process.env.PUBLIC_URL}/search-model/${params.srno}/model`,
             state: data
     })
         

@@ -76,7 +76,6 @@ const Benchmark = (props) => {
     // const [modelTask, setModelTask]=useState({
     //     'translation': true
     // })
-    console.log(datasetType)
     const [count, setCount] = useState(0);
     const [urls, setUrls] = useState({
         downloadSample: '',
@@ -102,7 +101,6 @@ const Benchmark = (props) => {
         }
     }, [])
 
-    console.log(languagePair.source, languagePair.target);
     const handleCheckboxChange = (event) => {
         setState({ ...state, [event.target.name]: event.target.checked });
     };
