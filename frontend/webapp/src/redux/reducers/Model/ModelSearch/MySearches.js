@@ -33,6 +33,7 @@ const getMySearches = (payload) => {
                     searched_on   : dateConversion(element.timestamp),
                     status      : element.status.length> 0 && element.status[0].status,
                     endPoint:element.inferenceEndPoint,
+                    refUrl:element.refUrl ? element.refUrl : "NA",
                     inferenceEndPoint:element.inferenceEndPoint,
                     count : searchDetails && searchDetails.count,
                     sampleUrl : searchDetails && searchDetails.datasetSample,

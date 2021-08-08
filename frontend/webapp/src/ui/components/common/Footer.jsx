@@ -1,4 +1,4 @@
-
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import "../../styles/css/style.css"
 import email from "../../styles/img/email-id.png";
 import web from "../../styles/img/web.png";

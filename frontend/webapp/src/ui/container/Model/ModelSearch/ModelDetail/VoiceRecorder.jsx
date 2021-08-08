@@ -160,6 +160,7 @@ const AudioRecord = (props) => {
 
 
     const blobToBase64 = (blob) => {
+        console.log(blob.blob.size)
         var reader = new FileReader();
         reader.readAsDataURL(blob.blob); 
         reader.onloadend = function() {
@@ -168,6 +169,9 @@ const AudioRecord = (props) => {
         }
                 
     };
+
+
+    
  
 
    

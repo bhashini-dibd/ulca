@@ -176,6 +176,7 @@ const themeDefault = createMuiTheme({
         textAlign: "center",
         height: "26px",
         
+        
       },
       sizeLarge: {
         height: "48px",

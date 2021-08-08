@@ -75,9 +75,7 @@ const style = createMuiTheme({
     },
     MuiGrid: {
       grid: {
-
         maxWidth: "100%"
-
       }
     },
 

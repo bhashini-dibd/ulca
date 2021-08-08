@@ -93,6 +93,7 @@ const getContributionList = (state, payload) => {
                 domain: getDomainDetails(element.domain),
                 status: "Published",
                 language: lang,
+                refUrl:element.refUrl ? element.refUrl :"NA",
                 inferenceEndPoint:element.inferenceEndPoint,
                 source: element.languages.length > 0 && element.languages[0].sourceLanguage,
                 target:element.languages && element.languages.length > 0 && element.languages[0].targetLanguage,
