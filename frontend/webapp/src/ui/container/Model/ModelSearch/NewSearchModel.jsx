@@ -57,7 +57,7 @@ export default () => {
                 {searchModelResult.responseData.length ?
                     <CardComponent onClick={handleClick} value={searchModelResult} /> :
 
-                    <div style={{ background: `url(${Record}) no-repeat`, position: 'absolute',top:'45%',left:'37%',height:'287px',width:'287px',display:'flex',justifyContent:'center' }}>
+                    <div style={{ background: `url(${Record}) no-repeat`, position: 'absolute',top:'45%',left:'40%',height:'287px',width:'287px',display:'flex',justifyContent:'center' }}>
                         <strong style={{
                             position: "absolute",
                             top: "65%"
