@@ -97,7 +97,7 @@ const Header = (props) => {
               alt="Bhashini Logo"
             />
             {/* <Divider orientation="vertical" color="primary"/> */}
-            <Typography variant="h5" onClick={() => history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
+            <Typography variant="h4" onClick={() => history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
               ULCA
             </Typography>
 
@@ -128,9 +128,7 @@ const Header = (props) => {
                       onClick={(e) => handleOpenMenu(e)}
                       variant="text"
                     >
-                      <Typography variant={"body1"} >
                         Dataset
-                      </Typography>
                       {authenticate() && <DownIcon color="action" />}
                     </Button>
                   </div>
@@ -179,9 +177,7 @@ const Header = (props) => {
                 <div className={classes.options}>
                   <div className={classes.model}>
                     <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
-                      <Typography variant={"body1"}>
                         Model
-                      </Typography>
                       {authenticate() && <DownIcon color="action" />}
                     </Button>
                   </div>

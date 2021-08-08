@@ -162,56 +162,57 @@ const themeDefault = createMuiTheme({
     MuiButton: {
       root: {
         minWidth: "25",
-        borderRadius:'none'
+        borderRadius: 'none'
       },
       label: {
 
         textTransform: "none",
-        fontFamily: '"Segoe UI","Roboto"',
-        fontSize: "15px",
+        fontFamily: '"Roboto", "Segoe UI"',
+        fontSize: "16px",
         fontWeight: "500",
         lineHeight: "1.14",
         letterSpacing: "0.5px",
         textAlign: "center",
-        height: "26px",   
+        height: "26px",
       },
       sizeLarge: {
         height: "48px",
-       borderRadius: "20px",
+        borderRadius: "20px",
 
       },
       sizeSmall: {
         height: "36px",
-       borderRadius: "20px",
+        borderRadius: "20px",
 
       },
 
 
     },
-    MuiTabs:{
-      indicator:{
+    MuiTabs: {
+      indicator: {
         // display:'none',
-        backgroundColor:"#FD7F23"
+        backgroundColor: "#FD7F23"
       }
     },
-    MuiTab:{
-      root:{
-        width:'auto',
+    MuiTab: {
+      root: {
+        width: 'auto',
         // '&:first-child':{
-          padding:'0',
-          marginRight:'54px',
+        padding: '0',
+        marginRight: '54px',
         // }
         "@media (min-width:600px)": {
-          minWidth:'auto',
+          minWidth: 'auto',
         }
       },
-      wrapper:{
-        alignItems:'flex-start',
+      wrapper: {
+        alignItems: 'flex-start',
+        textTransform: 'none'
       }
     },
-    MuiBox:{
-      root:{
-        padding:'24px 0px'
+    MuiBox: {
+      root: {
+        padding: '24px 0px'
       }
     }
   },
@@ -263,7 +264,7 @@ themeDefault.typography.h5 = {
   fontWeight: "300",
 };
 themeDefault.typography.h6 = {
-  fontSize: "1.3125rem",
+  fontSize: "1.125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
   paddingTop: "4px",
@@ -273,8 +274,8 @@ themeDefault.typography.h6 = {
 };
 themeDefault.typography.body1 = {
   fontSize: "1rem",
-  fontFamily: '"Roboto", sans-serif ,sans-serif',
-  fontWeight: "400"
+  fontFamily: '"Rowdies","Roboto", sans-serif ,sans-serif',
+  fontWeight: "300"
 
 };
 themeDefault.typography.body2 = {

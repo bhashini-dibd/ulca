@@ -453,7 +453,7 @@ const Benchmark = (props) => {
                     </Grid>
                     :
                     <Paper elevation={0} className={classes.mainPaper}>
-                        <Typography variant="h6">Explore Models</Typography>
+                        <Typography variant="h5">Explore Models</Typography>
                         <NewSearchModel />
                     </Paper>
                 }

@@ -35,7 +35,6 @@ const GlobalStyles = (theme) => ({
     borderRadius: '24px',
     padding: '5px 10px',
     width: 'fit-content',
-    fontSize: '12px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -55,7 +54,6 @@ const GlobalStyles = (theme) => ({
     display: 'flex',
     alignItems: 'center',
     paddingLeft: '15px',
-    fontWeight: '600',
     borderRadius: '12px'
   }
 

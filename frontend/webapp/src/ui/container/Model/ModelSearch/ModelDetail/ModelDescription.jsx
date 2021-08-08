@@ -14,7 +14,7 @@ const ModelDescription = (props) => {
         <div>
             <Typography variant="h6" className={classes.modelTitle}>{title}</Typography>
             {title !=="Source URL" || para==="NA"?
-            <Typography className={classes.modelPara}>{para}</Typography>:
+            <Typography variant="body2"className={classes.modelPara}>{para}</Typography>:
             <Link href={para}>
             {para}</Link>}
 
