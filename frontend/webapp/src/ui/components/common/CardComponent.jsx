@@ -14,7 +14,7 @@ const CardComponent = (props) => {
                     <Grid item xs={12} sm={6} md={5} lg={4} xl={4}
                         className={classes.card}
                         style={{ background: `url(${i % 2 === 0 ? BlueCard : GreenCard}) no-repeat` }}>
-                        <div onClick={props.onClick} style={{ padding: '10px 20px', boxSizing: "border-box" }}>
+                        <div onClick={()=>props.onClick(data)} style={{ padding: '10px 20px', boxSizing: "border-box",cursor:"pointer" }}>
                             <Typography className={classes.typeTypo} variant="body2">{getTaskName(data.task)}</Typography>
                             <Typography variant="body1" className={classes.modelname}>{data.modelName}</Typography>
                             <Grid className={classes.cardGrid} container>

@@ -5,10 +5,12 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import CardComponent from '../../../components/common/CardComponent';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, } from "react-redux";
 import SearchModel from '../../../../redux/actions/api/Model/ModelSearch/SearchModel';
 import APITransport from '../../../../redux/actions/apitransport/apitransport';
 import Record from "../../../../assets/record.svg";
+import { useHistory } from "react-router-dom";
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -37,7 +39,7 @@ export default () => {
     }
     const dispatch = useDispatch();
     const searchModelResult = useSelector(state => state.searchModel);
-
+    const history = useHistory();
     useEffect(() => {
         makeModelSearchAPICall(ModelTask[0].value);
     }, [])
@@ -47,8 +49,11 @@ export default () => {
         dispatch(APITransport(apiObj));
     }
 
-    const handleClick = () => {
-        console.log('Card Clicked!!!!')
+    const handleClick = (data) => {
+        history.push({
+            pathname: `${process.env.PUBLIC_URL}/search-model/${data.submitRefNumber}`,
+            state: data
+    })
     }
 
     return (
