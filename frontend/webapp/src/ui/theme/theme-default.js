@@ -162,8 +162,7 @@ const themeDefault = createMuiTheme({
     MuiButton: {
       root: {
         minWidth: "25",
-        borderRadius: "20px",
-
+        borderRadius:'none'
       },
       label: {
 
@@ -178,9 +177,13 @@ const themeDefault = createMuiTheme({
       },
       sizeLarge: {
         height: "48px",
+       borderRadius: "20px",
+
       },
       sizeSmall: {
         height: "36px",
+       borderRadius: "20px",
+
       },
 
 
@@ -188,7 +191,7 @@ const themeDefault = createMuiTheme({
     MuiTabs:{
       indicator:{
         // display:'none',
-        backgroundColor:"orange"
+        backgroundColor:"#FD7F23"
       }
     },
     MuiTab:{

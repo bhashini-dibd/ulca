@@ -12,7 +12,7 @@ const GlobalStyles = (theme) => ({
     height: "70px"
   },
   root: {
-    background: "#F8F8F8",
+    // background: "#F8F8F8",
     flexGrow: 1,
     height: window.innerHeight,
     zIndex: 1,
