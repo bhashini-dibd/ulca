@@ -40,8 +40,23 @@ const GlobalStyles = (theme) => ({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  card:{
+  card: {
     marginBottom: '20px', height: '270px'
+  },
+  cardGrid: {
+    marginTop: '20px'
+  },
+  modelname: {
+    marginTop: '15px',
+    height: '64px',
+    backgroundColor: 'white',
+    maxWidth: '340px',
+    width: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '15px',
+    fontWeight: '600',
+    borderRadius: '12px'
   }
 
 

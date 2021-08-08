@@ -42,12 +42,12 @@ function a11yProps(index) {
 export default function SimpleTabs(props) {
     return (
         <div>
-            <AppBar style={{ borderTop: "none", borderRight: "none",borderLeft:"none" }} position="static" color="inherit">
+            <AppBar style={{ borderTop: "none", borderRight: "none", borderLeft: "none", marginTop:'10px' }} position="static" color="inherit">
                 <Tabs value={props.value} onChange={props.handleChange} aria-label="simple tabs example">
                     {
                         props.tabs.map((tab, index) => {
                             return (
-                               <Tab label={tab.label} {...a11yProps(index)} />
+                                <Tab label={tab.label} {...a11yProps(index)} />
                             )
                         })
                     }

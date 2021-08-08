@@ -96,7 +96,7 @@ const Benchmark = (props) => {
 
 
     useEffect(() => {
-        if(aunthenticate()){
+        if (aunthenticate()) {
             const type = searchFilter.type
             if (type['translation'] !== undefined) {
                 const source = getValueForLabel(languagePair.source).value;
@@ -454,7 +454,7 @@ const Benchmark = (props) => {
 
                     </Grid>
                     :
-                    <Paper elevation={0} style={{border:'none'}}>
+                    <Paper elevation={0} className={classes.mainPaper}>
                         <Typography variant="h6">Explore Models</Typography>
                         <NewSearchModel />
                     </Paper>

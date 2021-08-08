@@ -1,13 +1,14 @@
 import BlueCard from '../../../assets/card.svg';
 import GreenCard from '../../../assets/card2.svg';
+import Record from "../../../assets/record.svg"
 import { Grid, Typography, withStyles } from '@material-ui/core';
 import CommonStyles from '../../styles/Styles';
-import { getLanguageName, getTaskName,FilterByDomain } from '../../../utils/getLabel';
+import { getLanguageName, getTaskName, FilterByDomain } from '../../../utils/getLabel';
 
 const CardComponent = (props) => {
     const { value, classes } = props;
     return (
-        <Grid container spacing={2} style={{ marginTop: '20px' }}>{
+        <Grid container spacing={2} className={classes.cardGrid}>{
             value.responseData.map((data, i) => {
                 return (
                     <Grid item xs={12} sm={6} md={5} lg={4} xl={4}
@@ -15,19 +16,8 @@ const CardComponent = (props) => {
                         style={{ background: `url(${i % 2 === 0 ? BlueCard : GreenCard}) no-repeat` }}>
                         <div onClick={props.onClick} style={{ padding: '10px 20px', boxSizing: "border-box" }}>
                             <Typography className={classes.typeTypo} variant="body2">{getTaskName(data.task)}</Typography>
-                            <Typography variant="body1" style={{
-                                marginTop: '15px',
-                                height: '64px',
-                                backgroundColor: 'white',
-                                maxWidth: '340px',
-                                width: 'auto',
-                                display: 'flex',
-                                alignItems: 'center',
-                                paddingLeft: '15px',
-                                fontWeight: '600',
-                                borderRadius: '12px'
-                            }}>{data.modelName}</Typography>
-                            <Grid style={{ marginTop: '20px' }} container>
+                            <Typography variant="body1" className={classes.modelname}>{data.modelName}</Typography>
+                            <Grid className={classes.cardGrid} container>
                                 <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>{data.task === 'translation' ? 'Source' : 'Language'}</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{getLanguageName(data.source)}</Typography>
