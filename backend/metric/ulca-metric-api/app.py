@@ -1,15 +1,21 @@
 from flask import Flask
 from flask.blueprints import Blueprint
 from flask_cors import CORS
+import src.services.metriccronjob 
 from src import routes
 import logging
 from logging.config import dictConfig
 import config
-
+from flask_mail import Mail
+import threading
 
 log = logging.getLogger('file')
 
 flask_app = Flask(__name__)
+
+flask_app.config.update(config.MAIL_SETTINGS)
+#creating an instance of Mail class
+mail=Mail(flask_app)
 
 if config.ENABLE_CORS:
     cors    = CORS(flask_app, resources={r"/api/*": {"origins": "*"}})
@@ -19,11 +25,13 @@ for blueprint in vars(routes).values():
         flask_app.register_blueprint(blueprint, url_prefix=config.API_URL_PREFIX)
 
 @flask_app.route(config.API_URL_PREFIX)
-def info():
-    return "Welcome to Dataset APIs"
+def start_cron():
+    cron = src.services.metriccronjob.CronProcessor(threading.Event())
+    cron.start()
 
 if __name__ == "__main__":
     log.info("starting module")
+    start_cron()
     flask_app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
 
 dictConfig({

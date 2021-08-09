@@ -1,14 +1,19 @@
 from threading import Thread
 from config import error_cron_interval_sec
+import config
 import logging
+from src.db import ModelRepo
 import os
 from datetime import datetime
 from logging.config import dictConfig
-
+import time
+from flask_mail import Mail, Message
+from flask import render_template
+from app import mail
 log         =   logging.getLogger('file')
 
-
-class MetricFilterProcessor(Thread):
+repo = ModelRepo()
+class CronProcessor(Thread):
     def __init__(self, event):
         Thread.__init__(self)
         self.stopped = event
@@ -16,10 +21,11 @@ class MetricFilterProcessor(Thread):
     # Cron JOB to update filter set params
     def run(self):
         run = 0
-        while not self.stopped.wait(eval(str(error_cron_interval_sec))):
+        while not self.stopped.wait(error_cron_interval_sec):
             log.info(f'Metric Cron Processor run :{run}')
             try:
-                self.initiate_filter_processing
+                parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count = self.calculate_counts()
+                self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count})
                 
                 run += 1
             except Exception as e:
@@ -28,7 +34,33 @@ class MetricFilterProcessor(Thread):
 
     
 
-   
+    def calculate_counts(self):
+        try:
+            parallel_count = repo.count({},config.data_connection_url,config.data_parallel)
+            ocr_count = repo.count({},config.data_connection_url,config.data_ocr)
+            mono_count = repo.count({},config.data_connection_url,config.data_mono)
+            asr_labeled = repo.aggregate([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_connection_url,config.data_asr)
+            asr_count = asr_labeled[0]["sum"]
+            asr_unlabeled = repo.aggregate([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_connection_url,config.data_asr_unlabeled)
+            asr_unlabeled_count = asr_unlabeled[0]["sum"]
+            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count
+        except Exception as e:
+            log.exception(f'{e}')
+
+    def generate_email_notification(self,data):
+
+        for email in config.receiver_email_ids:
+            tdy_date        =   str(datetime.utcnow)
+            mail_server = config.MAIL_SETTINGS["MAIL_USERNAME"]
+            email_subject   =   "Satistics for the ULCA data corpus"
+            template        =   'count_mail.html'
+            try:
+                msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
+                msg.html = render_template(template,date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"])
+                mail.send(msg)
+                log.info("Generated email notification for {} ".format(email))
+            except Exception as e:
+                log.exception("Exception while generating email notification | {}".format(str(e)))
 
 
 

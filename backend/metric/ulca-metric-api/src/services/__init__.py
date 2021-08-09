@@ -1,1 +1,1 @@
-from .metriccronjob import MetricFilterProcessor
+from .metriccronjob import CronProcessor

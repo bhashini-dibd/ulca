@@ -19,23 +19,26 @@ class ModelRepo:
     def __init__(self):
        pass
     #method to instantiate mongo client object
-    def instantiate(self):
+    def instantiate(self,schema,collection):
         global mongo_instance
         client = pymongo.MongoClient(MONGO_CONNECTION_URL)
-        mongo_instance = client[MONGO_DB_SCHEMA][MONGO_MODEL_COLLECTION]
+        if schema == None and collection == None:
+            mongo_instance = client[MONGO_DB_SCHEMA][MONGO_MODEL_COLLECTION]
+        else:
+            mongo_instance = client[schema][collection]
         return mongo_instance
 
     #geting the mongo clent object
-    def get_mongo_instance(self):
+    def get_mongo_instance(self,schema=None,collection=None):
         global mongo_instance
         if not mongo_instance:
-            return self.instantiate()
+            return self.instantiate(schema,collection)
         else:
             return mongo_instance
 
-    def aggregate(self, query):
+    def aggregate(self, query,schema=None,collection=None):
         try:
-            col = self.get_mongo_instance()
+            col = self.get_mongo_instance(schema,collection)
             res =   col.aggregate(query) 
             result = []
             for record in res:
@@ -45,9 +48,9 @@ class ModelRepo:
             log.exception(f'Exception in repo aggregate: {e}', e)
             return []
     
-    def count(self, query):
+    def count(self, query,schema=None,collection=None):
         try:
-            col = self.get_mongo_instance()
+            col = self.get_mongo_instance(schema,collection)
             res =   col.count(query) 
             return res
         except Exception as e:
