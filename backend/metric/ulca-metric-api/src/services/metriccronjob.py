@@ -37,16 +37,16 @@ class CronProcessor(Thread):
     def calculate_counts(self):
         log.info('Calculating counts!')
         try:
-            parallel_count = repo.count_data_col({},config.data_connection_url,config.data_parallel)
+            parallel_count = repo.count_data_col({},config.data_db_schema,config.data_parallel)
             log.info(parallel_count)
-            ocr_count = repo.count_data_col({},config.data_connection_url,config.data_ocr)
+            ocr_count = repo.count_data_col({},config.data_db_schema,config.data_ocr)
             log.info(ocr_count)
-            mono_count = repo.count_data_col({},config.data_connection_url,config.data_mono)
+            mono_count = repo.count_data_col({},config.data_db_schema,config.data_mono)
             log.info(mono_count)
-            asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_connection_url,config.data_asr)
+            asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
             asr_count = asr_labeled[0]["sum"]
             log.info(asr_count)
-            asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_connection_url,config.data_asr_unlabeled)
+            asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
             asr_unlabeled_count = asr_unlabeled[0]["sum"]
             log.info(asr_unlabeled_count)
             return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count

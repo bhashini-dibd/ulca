@@ -56,6 +56,7 @@ class ModelRepo:
             return 0
 
     def count_data_col(self, query,schema,collection):
+        log.info(f"Mongo count calculation : {query},{schema},{collection}")
         try:
             client = pymongo.MongoClient(config.data_connection_url)
             mongo_instance = client[schema][collection]
@@ -66,6 +67,7 @@ class ModelRepo:
             return []
 
     def aggregate_data_col(self, query,schema,collection):
+        log.info(f"Mongo aggregation : {query},{schema},{collection}")
         try:
             client = pymongo.MongoClient(config.data_connection_url)
             mongo_instance = client[schema][collection]
