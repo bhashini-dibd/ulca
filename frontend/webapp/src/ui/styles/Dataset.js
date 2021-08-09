@@ -396,7 +396,7 @@ const DataSet = (theme) => ({
         "@media (max-width:1000px)": {
             marginTop: "10px",
         }
-        
+
     },
     textArea: {
         backgroundColor: 'inherit',
@@ -433,6 +433,9 @@ const DataSet = (theme) => ({
         marginTop: '15px ',
         //textTransform: 'capitalize'
         '&:first-letter': { textTransform: 'capitalize' }
+    },
+    mainPaper: {
+        border: 'none'
     }
 });
 
