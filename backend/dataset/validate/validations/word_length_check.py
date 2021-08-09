@@ -35,7 +35,7 @@ class WordLengthCheck(BaseValidator):
             log.info('----word length check  -> Passed----')
             return super().execute(request)
         except Exception as e:
-            log.exception('Exception while executing word length check', e)
+            log.exception(f'Exception while executing word length check: {str(e)}', e)
             return {"message": "Exception while executing word length check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 
