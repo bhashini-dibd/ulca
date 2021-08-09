@@ -10,7 +10,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
     <App />
-    {/* <Footer/> */}
+    <Footer/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
