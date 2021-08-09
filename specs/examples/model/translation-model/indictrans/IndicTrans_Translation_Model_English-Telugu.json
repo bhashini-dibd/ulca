@@ -96,7 +96,7 @@
                }
             ],
             "config": {
-               "modelId":127,
+               "modelId":126,
                "language": {
                   "sourceLanguage": "en",
                   "targetLanguage": "te"
