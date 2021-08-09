@@ -26,7 +26,7 @@ class AudioMetadataCheck(BaseValidator):
                 try:
                     metadata = audio_metadata.load(audio_file)
                 except Exception as e:
-                    log.exception('Exception while loading the audio file', e)
+                    log.exception(f'Exception while loading the audio file: {str(e)}', e)
                     return {"message": "Unable to load the audio file, file format is unsupported or the file is corrupt", "code": "INVALID_AUDIO_FILE", "status": "FAILED"}
 
                 if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
@@ -58,7 +58,7 @@ class AudioMetadataCheck(BaseValidator):
                 log.info('----Audio metadata check -> Passed----')
                 return super().execute(request)
         except Exception as e:
-            log.exception('Exception while executing Audio metadata check', e)
+            log.exception(f'Exception while executing Audio metadata check: {str(e)}', e)
             return {"message": "Exception while executing Audio metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 # Log config
