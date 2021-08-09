@@ -13,10 +13,10 @@ const ModelDescription = (props) => {
     return (
         <div>
             <Typography variant="h6" className={classes.modelTitle}>{title}</Typography>
-            {title !=="Source URL" || para==="NA"?
-            <Typography variant="body2"className={classes.modelPara}>{para}</Typography>:
-            <Link href={para}>
-            {para}</Link>}
+            {title !== "Source URL" || para === "NA" ?
+                <Typography variant="body2" className={classes.modelPara}>{para}</Typography> :
+                <Typography className={classes.modelTitle}><Link variant="body2" href={para}>
+                    {para}</Link></Typography>}
 
         </div>
     )

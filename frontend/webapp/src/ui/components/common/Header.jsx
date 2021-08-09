@@ -57,7 +57,7 @@ const Header = (props) => {
   }
 
   const handleOpenModel = (e) => {
-    authenticate() ? setAnchorModel(e.currentTarget) : history.push(`${process.env.PUBLIC_URL}/benchmark/initiate`)
+    authenticate() ? setAnchorModel(e.currentTarget) : history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
   }
   const dispatch = useDispatch();
 
@@ -125,7 +125,7 @@ const Header = (props) => {
                 <div className={classes.datasetOption}>
                   <div>
                     <Button className={classes.menuBtn}
-                      onClick={(e) => handleOpenMenu(e)}
+                      onClick={(e) => authenticate()? handleOpenMenu(e):handleMenuItemClick('/user/login')}
                       variant="text"
                     >
                         Dataset
