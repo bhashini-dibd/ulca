@@ -1,9 +1,9 @@
 import C from '../../../actions/constants';
 
 const initialState = {
-    type: {"translation": true },
-    source: "English",
-    target: { value: "hi", label: "Hindi" }
+    type: "translation",
+    source: "",
+    target: ""
 }
 
 const reducer = (state = initialState, action) => {
