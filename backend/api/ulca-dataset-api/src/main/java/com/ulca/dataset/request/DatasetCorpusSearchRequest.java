@@ -24,7 +24,7 @@ public class DatasetCorpusSearchRequest {
 	@NotBlank(message="criteria is required")
     private final SearchCriteria criteria;
 	
-	@JsonInclude(JsonInclude.Include.NON_NULL)
-    private final String[] groupby;
+	//@JsonInclude(JsonInclude.Include.NON_NULL)
+   // private final Boolean groupby;
 
 }
