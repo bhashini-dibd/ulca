@@ -14,7 +14,7 @@ const ChartRender = (props) => {
 	const [selectedOption, setSelectedOption] = useState(DatasetItems[0]);
 	const [count, setCount] = useState(0);
 	const [total, setTotal] = useState(0);
-	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Models"});
+	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Task"});
 	const [title, setTitle] = useState("Number of Models");
     const [selectedType, setSelectedType] = useState("");
     const [selectedTypeName, setSelectedTypeName] = useState("");
@@ -133,6 +133,7 @@ const ChartRender = (props) => {
 	const fetchFilterButtons = () => {
 		return (
 			<div className={classes.filterButton}>
+                <Typography className={classes.fiterText} value="" variant="body1"> Filter By </Typography>
 				<Button color={filterValue === "language" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("language")}>Language</Button>
 				<Button color={filterValue === "submitter" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("submitter")}>Submitter</Button>
 
@@ -147,7 +148,7 @@ const ChartRender = (props) => {
 				if (page === 0) {
 					setTitle("Number of Models")
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
-					setAxisValue({xAxis:"Languages",yAxis:"Count"})
+					setAxisValue({xAxis:"Task",yAxis:"Count"})
 					
 
 				} else if (page === 1) {

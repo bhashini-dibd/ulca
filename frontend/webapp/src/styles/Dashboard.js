@@ -20,6 +20,9 @@ const FileUploadStyles = (theme) => ({
     margin :"17px auto",
     padding:"0"
   },
+  fiterText:{
+marginTop:"8px"
+  },
  
   select: {
     marginLeft:"10px",
@@ -33,8 +36,7 @@ const FileUploadStyles = (theme) => ({
     paddingRight: '1.5%',
     minWidth:"auto",
     display: "flex",
-    flexDirection: "row",
-    cursor: "pointer",
+    flexDirection: "row"
    
 
     // "@media (max-width:800px)": {

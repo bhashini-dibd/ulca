@@ -178,6 +178,7 @@ const ChartRender = (props) => {
 	const fetchFilterButtons = () => {
 		return (
 			<div className={classes.filterButton}>
+				<Typography className={classes.fiterText} value="" variant="body1"> Filter By </Typography>
 				<Button color={filterValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domains")}>Domain</Button>
 				{/* <Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button> */}
 				<Button style={{marginRight:"10px"}} color={filterValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>
@@ -191,6 +192,7 @@ const ChartRender = (props) => {
 		debugger
 		return (
 			<div className={classes.filterButton}>
+				<Typography className={classes.fiterText} value="" variant="body1"> Filter By </Typography>
 				{filterValue !== "domains" &&<Button color={toggleValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLevelChange("domains")}>Domain</Button>}
 				{/* <Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button> */}
 				{filterValue !== "collectionMethod_collectionDescriptions" &&<Button style={{marginRight:"10px"}} color={toggleValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLevelChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>}
