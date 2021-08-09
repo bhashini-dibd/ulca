@@ -130,7 +130,10 @@ class ASRUnlabeledService:
             data = repo.search(query, exclude, None, None)
             if data:
                 asr_data = data[0]
-                return asr_data[0]
+                if asr_data:
+                    return asr_data[0]
+                else:
+                    return None
             else:
                 return None
         except Exception as e:
