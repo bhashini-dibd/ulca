@@ -89,7 +89,10 @@ class ASRService:
         try:
             hashes = [data["audioHash"], data["textHash"]]
             record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
+            log.info(record)
             if record:
+                if isinstance(record, list):
+                    record = record[0]
                 dup_data = service.enrich_duplicate_data(data, record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
                 if dup_data:
                     dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
@@ -127,6 +130,7 @@ class ASRService:
         try:
             exclude = {"_id": False}
             data = repo.search(query, exclude, None, None)
+            log.info(data)
             if data:
                 return data[0]
             else:
