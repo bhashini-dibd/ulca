@@ -26,7 +26,6 @@
 
     
 //     const blobToBase64 = (blob) => {
-//         debugger
 //         var reader = new FileReader();
 //         reader.readAsDataURL(blob.blob); 
 //         reader.onloadend = function() {

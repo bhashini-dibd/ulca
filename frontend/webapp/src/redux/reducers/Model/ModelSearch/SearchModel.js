@@ -71,7 +71,6 @@ const getClearFilter = (data) => {
 }
 
 const getContributionList = (state, payload) => {
-    debugger
     let responseData = [];
     let statusFilter = [];
     let modelFilter = [];
