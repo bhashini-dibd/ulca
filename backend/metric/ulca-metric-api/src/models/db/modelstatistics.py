@@ -21,7 +21,7 @@ class AggregateModelData(object):
                 grpby_params = request_object["groupby"]
 
             if (match_params ==  None and grpby_params == None):
-                query   =   [{ "$group": {"_id": {"model":"$name"},"count": { "$sum": 1 }}}]
+                query   =   [{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
                 result = repo.aggregate(query)
                 chart_data = []
@@ -35,7 +35,7 @@ class AggregateModelData(object):
 
 
             if grpby_params[0]["field"] == "language":
-                query   =   [ { '$match':{ "name" : "IndicTrans" }}, { '$unwind': "$languages" },
+                query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }}, { '$unwind': "$languages" },
                             { "$group": {"_id": {"lang1":"$languages.sourceLanguage","lang2":"$languages.targetLanguage"},
                             "count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
@@ -43,14 +43,18 @@ class AggregateModelData(object):
                 chart_data = []
                 for record in result:
                     rec = {}
-                    rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
-                    rec["label"]    =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
+                    if match_params[0]["value"] == "TRANSLATION":
+                        rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
+                        rec["label"]    =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
+                    else:
+                        rec["_id"]      =   record["_id"]["lang1"]
+                        rec["label"]    =   record["_id"]["lang1"]
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count
 
             if grpby_params[0]["field"] == "submitter":
-                query   =   [ { '$match':{ "name" : "IndicTrans" }},
+                query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }},
                             { "$group": {"_id": {"submitter":"$submitter.name"},
                             "count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
