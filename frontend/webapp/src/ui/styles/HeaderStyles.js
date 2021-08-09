@@ -42,7 +42,10 @@ const HeaderStyles = (theme) => ({
     }
   },
   options: {
-    marginLeft: '1.875%'
+    marginLeft: '1.875%',
+    "@media (max-width:670px)": {
+      marginLeft: '2%'
+    }
   },
   profile: {
     marginLeft: 'auto',
@@ -107,11 +110,11 @@ const HeaderStyles = (theme) => ({
       display: 'block'
     }
   },
-  model: {
-    "@media (max-width:425px)": {
-      display: 'none'
-    }
-  },
+  // model: {
+  //   "@media (max-width:425px)": {
+  //     display: 'none'
+  //   }
+  // },
   modelMobile: {
     display: 'none',
     "@media (max-width:425px)": {
@@ -156,8 +159,13 @@ const HeaderStyles = (theme) => ({
   bhashiniLogo: {
     paddingRight: '12px',
     boxShadow: "3px 0 2px -2px #00000029",
-    marginRight: '12px'
+    marginRight: '12px',
+    "@media (max-width:670px)": {
+      display: 'none'
+    }
   },
+
+  
   btnStyle: {
     padding: '0px',
     justifyContent: 'left',

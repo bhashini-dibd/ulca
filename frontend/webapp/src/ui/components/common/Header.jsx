@@ -245,7 +245,7 @@ const Header = (props) => {
                         </Button>
                       </Grid>
                       <Grid item>
-                        <Button
+                        {/* <Button
                           // className={classes.menuBtn2}
                           color="primary"
                           variant="contained"
@@ -253,7 +253,7 @@ const Header = (props) => {
                           onClick={() => history.push(`${process.env.PUBLIC_URL}/user/register`)}
                         >
                           Sign Up
-                        </Button>
+                        </Button> */}
                       </Grid>
                     </Grid>
                   </div>
@@ -265,13 +265,13 @@ const Header = (props) => {
                     >
                       <GroupIcon />
                     </Button>
-                    <Button
+                    {/* <Button
                       className={classes.menuBtn}
                       variant="text"
                       onClick={() => history.push(`${process.env.PUBLIC_URL}/user/register`)}
                     >
                       <GroupAddIcon />
-                    </Button>
+                    </Button> */}
                   </div>
                 </div>
             }

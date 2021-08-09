@@ -203,6 +203,11 @@ const themeDefault = createMuiTheme({
         // }
         "@media (min-width:600px)": {
           minWidth: 'auto',
+        },
+
+        "@media (max-width:600px)": {
+          marginRight: '20px',
+          minWidth: 'auto',
         }
       },
       wrapper: {
