@@ -37,6 +37,7 @@ class ModelRepo:
             return mongo_instance
 
     def aggregate(self, query,schema=None,collection=None):
+        log.info(query,schema,collection)
         try:
             col = self.get_mongo_instance(schema,collection)
             res =   col.aggregate(query) 
