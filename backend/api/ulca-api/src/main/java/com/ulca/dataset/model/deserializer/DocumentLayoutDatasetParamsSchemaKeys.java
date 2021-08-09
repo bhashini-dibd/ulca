@@ -1,4 +1,4 @@
-package com.ulca.dataset.model.deserializer;
+/*package com.ulca.dataset.model.deserializer;
 
 public enum DocumentLayoutDatasetParamsSchemaKeys {
 
@@ -15,5 +15,6 @@ public enum DocumentLayoutDatasetParamsSchemaKeys {
 		
 }
 
+*/
 
  

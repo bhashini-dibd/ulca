@@ -25,7 +25,6 @@ import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.ProcessTrackerDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.exception.ServiceRequestNumberNotFoundException;
-import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.kakfa.model.FileDownload;
 import com.ulca.dataset.model.Dataset;
 import com.ulca.dataset.model.Fileidentifier;

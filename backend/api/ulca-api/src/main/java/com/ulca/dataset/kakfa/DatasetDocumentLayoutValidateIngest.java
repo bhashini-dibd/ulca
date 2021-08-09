@@ -1,4 +1,4 @@
-package com.ulca.dataset.kakfa;
+/*package com.ulca.dataset.kakfa;
 
 import java.io.File;
 import java.io.IOException;
@@ -424,3 +424,4 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 	}
 	
 }
+*/

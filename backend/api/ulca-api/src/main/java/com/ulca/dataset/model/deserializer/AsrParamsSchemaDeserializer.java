@@ -1,4 +1,4 @@
-package com.ulca.dataset.model.deserializer;
+/*package com.ulca.dataset.model.deserializer;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -51,9 +51,7 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -474,3 +472,4 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 	}
 
 }
+*/

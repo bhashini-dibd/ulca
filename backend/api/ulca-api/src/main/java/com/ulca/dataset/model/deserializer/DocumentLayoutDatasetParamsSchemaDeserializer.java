@@ -1,4 +1,4 @@
-package com.ulca.dataset.model.deserializer;
+/*package com.ulca.dataset.model.deserializer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,9 +37,7 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Override
@@ -244,3 +242,4 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 	}
 
 }
+*/

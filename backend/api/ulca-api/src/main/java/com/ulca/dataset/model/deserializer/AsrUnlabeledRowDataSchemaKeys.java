@@ -1,4 +1,4 @@
-package com.ulca.dataset.model.deserializer;
+/*package com.ulca.dataset.model.deserializer;
 
 public enum AsrUnlabeledRowDataSchemaKeys {
 
@@ -21,3 +21,5 @@ public enum AsrUnlabeledRowDataSchemaKeys {
 		collectionSource
 	
 }
+
+*/
