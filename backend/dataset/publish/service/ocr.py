@@ -92,8 +92,6 @@ class OCRService:
             hashes = [data["imageHash"], data["groundTruthHash"]]
             record = self.get_ocr_dataset_internal({"tags": {"$all": hashes}})
             if record:
-                if isinstance(record, list):
-                    record = record[0]
                 dup_data = service.enrich_duplicate_data(data, record, metadata, ocr_immutable_keys, ocr_updatable_keys, ocr_non_tag_keys)
                 if dup_data:
                     dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])

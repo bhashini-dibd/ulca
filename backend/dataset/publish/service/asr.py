@@ -89,7 +89,6 @@ class ASRService:
         try:
             hashes = [data["audioHash"], data["textHash"]]
             record = self.get_asr_dataset_internal({"tags": {"$all": hashes}})
-            log.info(record)
             if record:
                 if isinstance(record, list):
                     record = record[0]
@@ -130,9 +129,9 @@ class ASRService:
         try:
             exclude = {"_id": False}
             data = repo.search(query, exclude, None, None)
-            log.info(data)
             if data:
-                return data[0]
+                asr_data = data[0]
+                return asr_data[0]
             else:
                 return None
         except Exception as e:

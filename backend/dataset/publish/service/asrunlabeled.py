@@ -90,8 +90,6 @@ class ASRUnlabeledService:
         try:
             record = self.get_asr_unlabeled_dataset_internal({"tags": {"$all": [data["audioHash"]]}})
             if record:
-                if isinstance(record, list):
-                    record = record[0]
                 dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
                                                          asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
                 if dup_data:
@@ -131,7 +129,8 @@ class ASRUnlabeledService:
             exclude = {"_id": False}
             data = repo.search(query, exclude, None, None)
             if data:
-                return data[0]
+                asr_data = data[0]
+                return asr_data[0]
             else:
                 return None
         except Exception as e:

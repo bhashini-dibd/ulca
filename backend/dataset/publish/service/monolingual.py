@@ -40,8 +40,6 @@ class MonolingualService:
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
             if record:
-                if isinstance(record, list):
-                    record = record[0]
                 result = self.get_enriched_data(record, metadata)
                 if result:
                     if result[0] == "INSERT":
