@@ -25,6 +25,7 @@ import PopUp from "./ui/container/DataSet/ReadymadeDataset.jsx/PopUp";
 import FilterList from "./ui/container/DataSet/DatasetView/FilterList";
 import Reset from "./ui/container/UserManagement/Reset";
 import Benchmark from './ui/container/Model/ModelSearch/Benchmark';
+import ExploreModels from "./ui/container/Model/ModelSearch/ExploreModels"
 import SearchModelDetail from './ui/container/Model/ModelSearch/ModelDetail/SearchModelDetail';
 
 const PrivateRoute = ({ path, component: Component, authenticate, title, token, ...rest }) => {
@@ -75,20 +76,26 @@ export default function App() {
             component={ActivateUser}
           />
 
-<Route
+          <Route
             path={`${process.env.PUBLIC_URL}/benchmark/:params/:srno?`}
-            
+
             component={Benchmark}
-            
+
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/model/explore-models`}
+
+            component={ExploreModels}
+
           />
           <Route
             path={`${process.env.PUBLIC_URL}/search-model/:srno?/:model?`}
-           
+
             component={SearchModelDetail}
-           
+
           />
 
-          
+
 
 
 
@@ -206,7 +213,7 @@ export default function App() {
             currentMenu="pop-up"
             dontShowHeader={false}
           />
-         
+
 
           {/* <Route
             path={`${process.env.PUBLIC_URL}/user/reset-password/:email/:userId/:time`}

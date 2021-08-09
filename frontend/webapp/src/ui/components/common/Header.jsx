@@ -57,7 +57,7 @@ const Header = (props) => {
   }
 
   const handleOpenModel = (e) => {
-    authenticate() ? setAnchorModel(e.currentTarget) : history.push(`${process.env.PUBLIC_URL}/benchmark/initiate`)
+    authenticate() ? setAnchorModel(e.currentTarget) : history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
   }
   const dispatch = useDispatch();
 
