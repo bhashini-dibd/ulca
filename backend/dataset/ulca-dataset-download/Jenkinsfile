@@ -11,7 +11,7 @@ stage('compress build folder')
 withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
 {
 sh '''
-cd backend/api/ulca-dataset-download
+cd backend/dataset/ulca-dataset-download
 if [ -f "$(pwd)/build" ]
 then
   sudo rm -rf $(pwd)/build
