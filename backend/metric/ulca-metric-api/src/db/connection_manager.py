@@ -2,6 +2,7 @@ import sqlalchemy as db
 from config import MONGO_CONNECTION_URL,MONGO_DB_SCHEMA,MONGO_MODEL_COLLECTION,DRUID_CONNECTION_URL
 import pymongo
 import logging
+import config
 
 
 log = logging.getLogger('fie')
@@ -19,41 +20,60 @@ class ModelRepo:
     def __init__(self):
        pass
     #method to instantiate mongo client object
-    def instantiate(self,schema,collection):
+    def instantiate(self):
         global mongo_instance
         client = pymongo.MongoClient(MONGO_CONNECTION_URL)
-        if schema == None and collection == None:
-            mongo_instance = client[MONGO_DB_SCHEMA][MONGO_MODEL_COLLECTION]
-        else:
-            mongo_instance = client[schema][collection]
+        mongo_instance = client[MONGO_DB_SCHEMA][MONGO_MODEL_COLLECTION]
         return mongo_instance
 
     #geting the mongo clent object
-    def get_mongo_instance(self,schema=None,collection=None):
+    def get_mongo_instance(self):
         global mongo_instance
         if not mongo_instance:
-            return self.instantiate(schema,collection)
+            return self.instantiate()
         else:
             return mongo_instance
 
-    def aggregate(self, query,schema=None,collection=None):
-        log.info(query,schema,collection)
+    def aggregate(self, query):
         try:
-            col = self.get_mongo_instance(schema,collection)
+            col = self.get_mongo_instance()
             res =   col.aggregate(query) 
             result = []
             for record in res:
                 result.append(record)
             return result
         except Exception as e:
-            log.exception(f'Exception in repo aggregate: {e}', e)
+            log.exception(f'Exception in repo search: {e}', e)
             return []
-    
-    def count(self, query,schema=None,collection=None):
+
+    def count(self, query):
         try:
-            col = self.get_mongo_instance(schema,collection)
+            col = self.get_mongo_instance()
             res =   col.count(query) 
             return res
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return 0
+
+    def count_data_col(self, query,schema,collection):
+        try:
+            client = pymongo.MongoClient(config.data_connection_url)
+            mongo_instance = client[schema][collection]
+            res =   mongo_instance.count(query) 
+            return res
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return []
+
+    def aggregate_data_col(self, query,schema,collection):
+        try:
+            client = pymongo.MongoClient(config.data_connection_url)
+            mongo_instance = client[schema][collection]
+            res =   mongo_instance.aggregate(query) 
+            result = []
+            for record in res:
+                result.append(record)
+            return result
         except Exception as e:
             log.exception(f'Exception in repo search: {e}', e)
             return []

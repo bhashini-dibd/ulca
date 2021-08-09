@@ -35,6 +35,7 @@ class CronProcessor(Thread):
     
 
     def calculate_counts(self):
+        log.info('Calculating counts!')
         try:
             parallel_count = repo.count({},config.data_connection_url,config.data_parallel)
             log.info(parallel_count)
@@ -53,6 +54,7 @@ class CronProcessor(Thread):
             log.exception(f'{e}')
 
     def generate_email_notification(self,data):
+        log.info('Generating email notification!')
 
         for email in config.receiver_email_ids:
             tdy_date        =   str(datetime.utcnow)
