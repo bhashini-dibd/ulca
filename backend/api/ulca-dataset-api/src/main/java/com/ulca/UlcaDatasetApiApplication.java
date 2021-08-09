@@ -6,11 +6,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class UlcaApiApplication {
+public class UlcaDatasetApiApplication {
 
 	
 	public static void main(String[] args) {
-		SpringApplication.run(UlcaApiApplication.class, args);
+		SpringApplication.run(UlcaDatasetApiApplication.class, args);
 	}
 
 }

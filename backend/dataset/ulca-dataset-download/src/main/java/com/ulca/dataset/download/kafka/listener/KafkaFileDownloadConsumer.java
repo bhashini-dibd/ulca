@@ -143,7 +143,8 @@ public class KafkaFileDownloadConsumer {
 				
 				return;
 			}
-			datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
+			//datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
+			datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
 			
 			
 			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");

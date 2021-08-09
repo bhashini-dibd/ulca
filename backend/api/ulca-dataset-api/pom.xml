@@ -9,11 +9,11 @@
 		<version>2.5.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>ulca-api</groupId>
-	<artifactId>ulca-api</artifactId>
+	<groupId>ulca-dataset-api</groupId>
+	<artifactId>ulca-dataset-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ulca-api</name>
-	<description>ULCA REST API</description>
+	<name>ulca-dataset-api</name>
+	<description>ULCA DATASET REST API</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -110,7 +110,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>ulca-api</finalName>
+		<finalName>ulca-dataset-api</finalName>
 	</build>
 
 </project>
