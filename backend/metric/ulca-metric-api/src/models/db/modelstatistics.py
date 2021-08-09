@@ -28,7 +28,10 @@ class AggregateModelData(object):
                 for record in result:
                     rec = {}
                     rec["_id"]      =   record["_id"]["model"]
-                    rec["label"]    =   record["_id"]["model"]
+                    if len(record["_id"]["model"])>9:
+                        rec["label"]    =   str(record["_id"]["model"]).title()
+                    else:
+                        rec["label"]    =   record["_id"]["model"]
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count
@@ -45,10 +48,10 @@ class AggregateModelData(object):
                     rec = {}
                     if match_params[0]["value"] == "TRANSLATION":
                         rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
-                        rec["label"]    =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
+                        rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
                     else:
                         rec["_id"]      =   record["_id"]["lang1"]
-                        rec["label"]    =   record["_id"]["lang1"]
+                        rec["label"]    =   str(record["_id"]["lang1"]).title()
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count

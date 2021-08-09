@@ -23,7 +23,6 @@ class AggregateDatasetModel(object):
             delete  =   "isDelete"
             datatype=   "datasetType"  
             duration=   "durationInSeconds"
-# SELECT SUM("durationInSeconds" * "count"), isDelete FROM "dataset-training-v5"  WHERE (datasetType = 'asr-corpus') GROUP BY isDelete
 
             dtype = request_object["type"]
             match_params = None
