@@ -9,7 +9,7 @@ const FooterStyle = (theme) => ({
     info :{display:"flex",marginLeft:"auto",width:"80%",justifyContent:"space-between",marginTop:"30px"},
     copy:{display:"flex",marginRight:"auto",width:"80%",justifyContent:"space-between",marginTop:"30px"},
     parent:{background:"#0F2749 !important"},
-    parentDiv:{maxWidth:"1172px",display:"flex",margin:"auto"},
+    parentDiv:{maxWidth:"1140px",display:"flex",margin:"auto"},
     textAlign:{textAlign:"center",marginTop:"2rem"},
     image:{marginRight:"1rem"},
     link:{fontWeight:"bold", color:"#16337B",marginTop:"10px"}

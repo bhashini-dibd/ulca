@@ -57,12 +57,12 @@ Lodhi Road, New Delhi - 110003</p>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
              
                         <ul className= {classes.bhasini}>
-                            <li><Link color="secondary" href="#">Whitepaper</Link></li>
+                            <li><Link color="while" href="#">Whitepaper</Link></li>
                             
-                            <li><Link color="secondary" href="https://bhashini.uniteframework.io/en/ecosystem">Ecosystem</Link></li>
+                            <li><Link color="while" href="https://bhashini.uniteframework.io/en/ecosystem">Ecosystem</Link></li>
                             <li>
-                                <Link color="secondary" href=""><div className="join">
-        <Link className="bh-btn-primary" color="secondary" href="https://uat.vakyansh.in/hi/home.html" target="_blank" rel="noopener noreferrer"> Join Bhasha Daan </Link>
+                                <Link color="while" href=""><div className="join">
+        <Link className="bh-btn-primary" color="while" href="https://uat.vakyansh.in/hi/home.html" target="_blank" rel="noopener noreferrer"> Join Bhasha Daan </Link>
     </div></Link>
                             </li>
                         </ul>
@@ -79,7 +79,7 @@ Lodhi Road, New Delhi - 110003</p>
                 </Grid>
 
             </Grid>
-            <div style={{marginTop:"1rem",marginBottom:"1rem",border:"0px",borderTop:"1px solid white"}}/>
+            <Divider style={{width:"100%",marginTop:"20px",background:"#4E6079",marginBottom:"15px"}}/>
             
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                             <br/>
@@ -89,9 +89,9 @@ NLTM: National Language Translation Mission</p>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                     <ul className={classes.info}>
-                        <li><Link color="secondary"href="https://bhashini.uniteframework.io/en/web-information-manager" target="_blank">Web Information Manager</Link></li>
-                        <li><Link  color="secondary" href="https://bhashini.uniteframework.io/en/privacy-policy" target="_blank">Privacy Policy</Link></li>
-                        <li><Link color="secondary" href="https://bhashini.uniteframework.io/en/terms-conditions" target="_blank"> Terms of Use</Link></li>
+                        <li><Link color="while"href="https://bhashini.uniteframework.io/en/web-information-manager" target="_blank">Web Information Manager</Link></li>
+                        <li><Link  color="white" href="https://bhashini.uniteframework.io/en/privacy-policy" target="_blank">Privacy Policy</Link></li>
+                        <li><Link color="white" href="https://bhashini.uniteframework.io/en/terms-conditions" target="_blank"> Terms of Use</Link></li>
                     </ul>
                </Grid>
 
