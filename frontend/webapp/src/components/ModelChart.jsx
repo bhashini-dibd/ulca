@@ -14,14 +14,14 @@ const ChartRender = (props) => {
 	const [selectedOption, setSelectedOption] = useState(DatasetItems[0]);
 	const [count, setCount] = useState(0);
 	const [total, setTotal] = useState(0);
-	const [toggleValue, setToggleValue] = useState("domains");
 	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Models"});
 	const [title, setTitle] = useState("Number of Models");
-	const [filterValue, setFilterValue] = useState("domains");
+    const [selectedType, setSelectedType] = useState("");
+    const [selectedTypeName, setSelectedTypeName] = useState("");
+	const [filterValue, setFilterValue] = useState("language");
   const [data, setData] = useState([]);
   const [dataValue, setDataValue] = useState("");
-	const [selectedLanguage, setSelectedLanguage] = useState("");
-	const [selectedLanguageName, setSelectedLanguageName] = useState("");
+
 	const [page, setPage] = useState(0);
 	const [sourceLanguage, setSourceLanguage] = useState(
         { value: 'en', label: 'English' }
@@ -86,67 +86,33 @@ const ChartRender = (props) => {
 
         )
     }
-	const handleLevelChange = (value) =>{
-		setToggleValue(value)
-		// setTitle(`English-${selectedLanguageName}  ${selectedOption.value}- Grouped by ${(value === "domains") ? "Domain" : (value === "source") ? "Source" : value === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
-		handleOnClick(2, "", value)
-	}
+
 	
 
 	const fetchParams = (event) => {
-		var source = ""
-		let targetLanguage = ""
-		if (selectedOption.value === "parallel-corpus") {
-			source =sourceLanguage.value ;
-			targetLanguage =   (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id) 
-		}
-		else {
-			source = (selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id);
-			targetLanguage =  "" ;
-
-		}
-		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
-		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }])
-	}
-
-	const fetchNextParams = (eventValue) => {
-		var source = ""
-		let targetLanguage = ""
-		let val = eventValue && eventValue.hasOwnProperty("_id") && eventValue._id
-		let event = { "field": filterValue, "value": val ? val : dataValue }
-		val && setDataValue(val)
-		if (selectedOption.value === "parallel-corpus") {
-			source = sourceLanguage.value
-			targetLanguage =  selectedLanguage 
-
-		}
-		else {
-			source = selectedLanguage ;
-			targetLanguage = "";
-
-		}
-		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
-		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }, event])
+        setSelectedType(selectedType ? selectedType : event && event.hasOwnProperty("_id") && event._id)
+		setSelectedTypeName(selectedTypeName ? selectedTypeName : event && event.hasOwnProperty("label") && event.label)
+		return ([{ "field":"type", "value":  (event && event.hasOwnProperty("_id") && event._id)? event._id : selectedType}])
 	}
 
 	const handleOnClick = (value, event, filter) => {
+        debugger
 		switch (value) {
 			case 1:
-				fetchChartData(selectedOption.value, filter ? filter : filterValue, fetchParams(event))
+				fetchChartData("model", filter ? filter : filterValue, fetchParams(event))
 				setFilterValue(filter ? filter : filterValue)
+                
 				handleSelectChange(selectedOption, event, filter, value)
 				setPage(value)
 
 				break;
 			case 0:
-				fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
+				fetchChartData("model","", "")
 				setPage(value)
-				setFilterValue('domains')
+				setFilterValue('language')
 				handleSelectChange(selectedOption, "", "", value)
-				setSelectedLanguage("")
-				setSelectedLanguageName("")
+				setSelectedType("")
+				setSelectedTypeName("")
 				break;
 			default:
 
@@ -155,7 +121,6 @@ const ChartRender = (props) => {
 	}
 	const handleLanguageChange = (value) => {
 		setFilterValue(value)
-		setTitle(`English-${selectedLanguageName}  ${selectedOption.value}- Grouped by ${(value === "domains") ? "Domain" : (value === "source") ? "Source" : value === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"}`)
 		handleOnClick(1, "", value)
 	}
 	const handleCardNavigation = () => {
@@ -168,17 +133,17 @@ const ChartRender = (props) => {
 	const fetchFilterButtons = () => {
 		return (
 			<div className={classes.filterButton}>
-				<Button color={filterValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domains")}>Language</Button>
-				<Button color={filterValue === "primarySubmitterName" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("primarySubmitterName")}>Submitter</Button>
+				<Button color={filterValue === "language" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("language")}>Language</Button>
+				<Button color={filterValue === "submitter" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("submitter")}>Submitter</Button>
 
 			</div>
 		)
 	}
 
 	const handleSelectChange = (dataSet, event, filter, page) => {
+        debugger
 		setSelectedOption(dataSet)
-		switch (dataSet.value) {
-			case 'model':
+		
 				if (page === 0) {
 					setTitle("Number of Models")
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
@@ -186,17 +151,9 @@ const ChartRender = (props) => {
 					
 
 				} else if (page === 1) {
-					setTitle(`${sourceLanguage.label}-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  parallel sentences - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter":"Domain"}`)
-					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
-					
-
+					setTitle(`Number of ${selectedTypeName ? selectedTypeName : event.label} models - Grouped by ${filter ? filter : filterValue}`)
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "language") ? "Language" : (filter === "submitter") ?  "Submitter" : "Language"})
 				} 
-
-				break;
-			
-			default:
-				setTitle("")
-		}
 	}
 	return (
 			<div className={classes.container}>
