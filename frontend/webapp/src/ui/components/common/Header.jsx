@@ -125,7 +125,7 @@ const Header = (props) => {
                 <div className={classes.datasetOption}>
                   <div>
                     <Button className={classes.menuBtn}
-                      onClick={(e) => handleOpenMenu(e)}
+                      onClick={(e) => authenticate()? handleOpenMenu(e):handleMenuItemClick('/user/login')}
                       variant="text"
                     >
                         Dataset
