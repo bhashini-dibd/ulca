@@ -57,7 +57,9 @@ class DatasetService:
     params: metadata (metadata of the record to be inserted)
     '''
     def enrich_duplicate_data(self, data, record, metadata, immutable, updatable, non_tag):
-        db_record = record
+        db_record = {}
+        for key in record.keys():
+            db_record[key] = record[key]
         found = False
         for key in data.keys():
             if key in updatable:
@@ -105,7 +107,7 @@ class DatasetService:
                 if entry not in dataset_ids:
                     dataset_ids.append(entry)
             db_record["datasetId"] = dataset_ids
-            db_record["tags"] = self.get_tags(record, non_tag)
+            db_record["tags"] = self.get_tags(db_record, non_tag)
             return db_record
         else:
             return False

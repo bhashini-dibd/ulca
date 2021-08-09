@@ -40,18 +40,19 @@ class ParallelService:
             if record:
                 result = self.get_enriched_data(record, metadata)
                 if result:
-                    if isinstance(result[0], list):
+                    if result[0] == "INSERT":
                         if metadata["userMode"] != user_mode_pseudo:
-                            repo.insert(result[0])
-                            count += len(result[0])
-                            metrics.build_metric_event(result[0], metadata, None, None)
+                            repo.insert(result[1])
+                            count += len(result[1])
+                            metrics.build_metric_event(result[1], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif result[0] == "UPDATE":
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
-                        metrics.build_metric_event(result[1], metadata, None, True)
+                        metric_record = (result[1], result[2])
+                        metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
                     else:
-                        error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
+                        error_list.append({"record": result[1], "originalRecord": result[2], "code": "DUPLICATE_RECORD",
                                            "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
                                            "message": "This record is already available in the system"})
@@ -91,9 +92,9 @@ class ParallelService:
                                 dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                                 if metadata["userMode"] != user_mode_pseudo:
                                     repo.update(dup_data)
-                                return "UPDATE", dup_data
+                                return "UPDATE", dup_data, record
                             else:
-                                return data, record
+                                return "DUPLICATE", data, record
                         derived_data = self.enrich_derived_data(data, record, records, metadata)
                         if derived_data:
                             new_records.append(derived_data)
@@ -110,7 +111,7 @@ class ParallelService:
                     obj["tags"] = service.get_tags(obj, parallel_non_tag_keys)
                 obj["lastModifiedOn"] = obj["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
                 insert_records.append(obj)
-            return insert_records, insert_records
+            return "INSERT", insert_records, insert_records
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
             log.info(f'Data: {data}')
@@ -214,7 +215,7 @@ class ParallelService:
                         dataset_ids.append(entry)
                 db_record["datasetId"] = dataset_ids
                 db_record["derived"] = False
-                db_record["tags"] = service.get_tags(record, parallel_non_tag_keys)
+                db_record["tags"] = service.get_tags(db_record, parallel_non_tag_keys)
                 return db_record
             else:
                 return False

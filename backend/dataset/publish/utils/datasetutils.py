@@ -1,6 +1,7 @@
 import hashlib
 import json
 import logging
+import os
 from logging.config import dictConfig
 
 import requests
@@ -35,15 +36,16 @@ class DatasetUtils:
 
     # Method to push search results to object store
     def push_result_to_object_store(self, result, service_req_no, size):
-        log.info(f'Pushing results and sample to Object Store......')
+        log.info(f'Writing results and sample to Object Store......')
         try:
             res_path = f'{shared_storage_path}{service_req_no}-ds.json'
             with open(res_path, 'w') as f:
                 json.dump(result, f)
-            res_path_os = self.upload_file(res_path, dataset_prefix, f'{service_req_no}-ds.json')
             res_path_sample = f'{shared_storage_path}{service_req_no}-sample-ds.json'
             with open(res_path_sample, 'w') as f:
                 json.dump(result[:size], f)
+            log.info(f'Publishing results and sample to Object Store......')
+            res_path_os = self.upload_file(res_path, dataset_prefix, f'{service_req_no}-ds.json')
             res_path_sample_os = self.upload_file(res_path_sample, dataset_prefix, f'{service_req_no}-sample-ds.json')
             return res_path_os, res_path_sample_os
         except Exception as e:

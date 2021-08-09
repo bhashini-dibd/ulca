@@ -50,7 +50,8 @@ class MonolingualService:
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif result[0] == "UPDATE":
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
-                        metrics.build_metric_event(result[2], metadata, None, True)
+                        metric_record = (result[1], result[2])
+                        metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
                     else:
                         error_list.append(
@@ -90,7 +91,7 @@ class MonolingualService:
                     dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                     if metadata["userMode"] != user_mode_pseudo:
                         repo.update(dup_data)
-                    return "UPDATE", data, dup_data
+                    return "UPDATE", dup_data, record
                 else:
                     return "DUPLICATE", data, record
             insert_data = data
