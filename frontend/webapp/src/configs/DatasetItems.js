@@ -1,10 +1,10 @@
 export const ModelTask = [
 
     { value: 'translation', label: 'Translation' },
-    { value: 'tts', label: 'TTS' },
     { value: 'asr', label: 'ASR' },
+    { value: 'tts', label: 'TTS' },
     { value: 'ocr', label: 'OCR' },
-    { value: 'document-layout', label: 'Document Layout' }
+    // { value: 'document-layout', label: 'Document Layout' }
 ];
 export const DatasetItems = [
 
@@ -28,6 +28,7 @@ export const Language = [
     { value: 'ta', label: 'Tamil' },
     { value: 'te', label: 'Telugu' },
     { value: 'ur', label: 'Urdu' },
+    { value: 'ne', label: 'Nepali' },
     
 
 ];

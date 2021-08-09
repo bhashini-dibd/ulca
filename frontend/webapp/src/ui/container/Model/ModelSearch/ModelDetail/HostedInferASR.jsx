@@ -84,7 +84,6 @@ const HostedInferASR = (props) => {
             variant: "error",
           });
         } else {
-              debugger
               if(status){
                 setTargetAudio(rsp_data.data.transcript);
                 
