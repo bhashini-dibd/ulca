@@ -15,8 +15,8 @@ const ChartRender = (props) => {
 	const [count, setCount] = useState(0);
 	const [total, setTotal] = useState(0);
 	const [toggleValue, setToggleValue] = useState("domains");
-	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Languages"});
-	const [title, setTitle] = useState("Number of parallel sentences per language with");
+	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Models"});
+	const [title, setTitle] = useState("Number of Models");
 	const [filterValue, setFilterValue] = useState("domains");
   const [data, setData] = useState([]);
   const [dataValue, setDataValue] = useState("");
@@ -28,7 +28,7 @@ const ChartRender = (props) => {
     );
 
   useEffect(() => {
-    fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
+    fetchChartData("model","", "")
       
   }, [selectedOption,sourceLanguage]);
 
@@ -140,15 +140,6 @@ const ChartRender = (props) => {
 				setPage(value)
 
 				break;
-			case 2:
-				let fValue = filter?filter:filterValue === "collectionMethod_collectionDescriptions" ? "domains" : "collectionMethod_collectionDescriptions";
-				fetchChartData(selectedOption.value,fValue , fetchNextParams(event))
-				setPage(value)
-				
-				setToggleValue(fValue)
-				handleSelectChange(selectedOption, event, fValue, value)
-
-				break;
 			case 0:
 				fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 				setPage(value)
@@ -177,23 +168,8 @@ const ChartRender = (props) => {
 	const fetchFilterButtons = () => {
 		return (
 			<div className={classes.filterButton}>
-				<Button color={filterValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domains")}>Domain</Button>
-				{/* <Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button> */}
-				<Button style={{marginRight:"10px"}} color={filterValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>
+				<Button color={filterValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("domains")}>Language</Button>
 				<Button color={filterValue === "primarySubmitterName" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("primarySubmitterName")}>Submitter</Button>
-
-			</div>
-		)
-	}
-
-	const fetchButtonssecondLevel = () => {
-		debugger
-		return (
-			<div className={classes.filterButton}>
-				{filterValue !== "domains" &&<Button color={toggleValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLevelChange("domains")}>Domain</Button>}
-				{/* <Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button> */}
-				{filterValue !== "collectionMethod_collectionDescriptions" &&<Button style={{marginRight:"10px"}} color={toggleValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLevelChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>}
-				{filterValue !== "primarySubmitterName" &&<Button color={toggleValue === "primarySubmitterName" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLevelChange("primarySubmitterName")}>Submitter</Button>}
 
 			</div>
 		)
@@ -202,9 +178,9 @@ const ChartRender = (props) => {
 	const handleSelectChange = (dataSet, event, filter, page) => {
 		setSelectedOption(dataSet)
 		switch (dataSet.value) {
-			case 'parallel-corpus':
+			case 'model':
 				if (page === 0) {
-					setTitle("Number of parallel sentences per language with ")
+					setTitle("Number of Models")
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 					setAxisValue({xAxis:"Languages",yAxis:"Count"})
 					
@@ -214,83 +190,10 @@ const ChartRender = (props) => {
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
 					
 
-				} else if (page === 2) {
-					setTitle(`${sourceLanguage.label}-${selectedLanguageName} parallel sentences ${filterValue === "primarySubmitterName"? "by" :"of"}  ${event.label?event.label : dataValue } - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
-					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter": "Domain"})
-					
-					
-				}
+				} 
 
 				break;
-			case 'monolingual-corpus':
-				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": null}])
-					setTitle('Number of sentences per language')
-					
-					setAxisValue({xAxis:"Languages",yAxis:"Count"})
-					
-				} else if (page === 1) {
-					setTitle(`Number of sentences in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" :filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
-					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
-					
-				} else if (page === 2) {
-					setTitle(`Number of sentences in ${selectedLanguageName}${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
-					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter": "Domain"})
-					
-				}
-				
-				break;
-			case 'asr-corpus':
-				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": null}])
-					setAxisValue({xAxis:"Languages",yAxis:"Hours"})
-					setTitle("Number of audio hours per language")
-				} else if (page === 1) {
-					setTitle(`Number of audio hours in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" :filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
-					setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
-					
-				} else if (page === 2) {
-					setTitle(`Number of audio hours in ${selectedLanguageName} ${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
-					setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter": "Domain"})
-					
-				}
-
-				break;
-			case 'ocr-corpus':
-
-				if (page === 0) {
-					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": null}])
-					setTitle("Number of images per language")
-					setAxisValue({xAxis:"Languages",yAxis:"Count"})
-				} else if (page === 1) {
-					setTitle(`Number of images with ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} text - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" :filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
-					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
-					
-				} else if (page === 2) {
-					setTitle(`Number of images with ${selectedLanguageName} text ${filterValue === "primarySubmitterName"? "uploaded by" :"of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
-					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter": "Domain"})
-					
-				}
-				
-
-				break;
-				case 'asr-unlabeled-corpus':
-
-					if (page === 0) {
-						selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": null}])
-						setAxisValue({xAxis:"Languages",yAxis:"Hours"})
-						setTitle("Number of audio hours per language")
-					} else if (page === 1) {
-						setTitle(`Number of audio hours in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" :filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
-						setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
-						
-					} else if (page === 2) {
-						setTitle(`Number of audio hours in ${selectedLanguageName} ${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
-						setAxisValue({yAxis:("Hours"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter":"Domain"})
-						
-					}
-	
-					break;
+			
 			default:
 				setTitle("")
 		}
@@ -301,17 +204,17 @@ const ChartRender = (props) => {
 				
         <TitleBar selectedOption=	{selectedOption}
 				handleSelectChange=	{handleSelectChange}
-				options		=	{options}
+				options		=	{""}
 				isDisabled	=	{page !== 0 ? true : false}
 				page		= 	{page}
 				count 		= 	{total}
 				>
-				{page === 1 ? fetchFilterButtons() : page === 2 ?fetchButtonssecondLevel():"" }
+				{page === 1 && fetchFilterButtons() }
 				
 			</ TitleBar>
 			<div className={classes.iconStyle}>
 					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button></>
-						 {(selectedOption.value ==="parallel-corpus" && page===0 )? 
+						 {(selectedOption.value ==="model" && page===0 )? 
 						<div className= {classes.titleStyle}>
 						
 						<Typography className={classes.titleText} value="" variant="h6"> {title} </Typography>

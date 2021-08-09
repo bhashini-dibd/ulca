@@ -4,7 +4,7 @@ import {
   Route
 } from "react-router-dom";
 import history from "./web.history";
-import Dashboard from "./components/Chart";
+import Dashboard from "./Layout";
 export default function App() {
   return (
 

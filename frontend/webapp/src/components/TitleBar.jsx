@@ -51,7 +51,7 @@ const TitleBar = (props) => {
                 <Toolbar className={classes.toolbar}>
                     <Grid container className={classes.toolGrid}>
                         < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.selectGrid}>
-                            <Button className={classes.btnStyle}
+                        {options ? <><Button className={classes.btnStyle}
                                 disabled={page !== 0 ? true : false}
                                 color="inherit"
                                 onClick={(e) => openEl(e.currentTarget)}
@@ -86,8 +86,10 @@ const TitleBar = (props) => {
                                         </MenuItem>
                                     })
                                 }
-                            </StyledMenu>
-                        </Grid>
+                            </StyledMenu></>: <Typography variant={"body1"}>
+                                               <strong> Model</strong>
+                                            </Typography>}
+                        </Grid> 
                         < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.tempGrid}>
                             <Typography variant="body2" gutterBottom>
                                 Total Count

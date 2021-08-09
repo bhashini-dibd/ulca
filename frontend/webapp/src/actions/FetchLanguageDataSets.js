@@ -28,7 +28,7 @@ export default class CreateGlossary {
     getBody() {
         let request = {}
         request["type"]        = this.dataType;
-        request["criterions"]  = this.criterions;
+        request["criterions"]  = this.criterions?this.criterions:null;
          request["groupby"]     = this.value ? [{"field":this.value, "value": null}]: null
         return request;
     }
