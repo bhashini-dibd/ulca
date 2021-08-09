@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector, } from "react-redux";
 import SearchModel from '../../../../redux/actions/api/Model/ModelSearch/SearchModel';
 import APITransport from '../../../../redux/actions/apitransport/apitransport';
-import Record from "../../../../assets/record.svg";
+import Record from "../../../../assets/no-record.svg";
 import { useHistory } from "react-router-dom";
 
 
@@ -62,18 +62,20 @@ export default () => {
                 {searchModelResult.responseData.length ?
                     <CardComponent onClick={handleClick} value={searchModelResult} /> :
 
-                    <div style={{ background: `url(${Record}) no-repeat`, position: 'absolute',top:'45%',left:'40%',height:'287px',width:'287px',display:'flex',justifyContent:'center' }}>
-                        <strong style={{
-                            position: "absolute",
-                            top: "65%"
-                        }}>No record found!</strong>
+                    <div style={{ background: `url(${Record}) no-repeat center center`, height:'287px',marginTop:'20vh'}}>
+                    {/* //     <strong style={{
+                    //         position: "absolute",
+                    //         top: "65%"
+                    //     }}>No record found!</strong>
+                        // <div > */}
                         {/* <img
                             style={{ position: 'absolute', top: '45%', left: '38%', right: '38%' }}
                             src={Record}
                             alt="No records Icon"
                         /> */}
-                        {/* <span style={{ position: 'absolute', top: '70%', left: '42%', right: '38%' }}>No records found</span> */}
-                    </div>
+                        </div>
+                        // {/* <span style={{ position: 'absolute', top: '70%', left: '42%', right: '38%' }}>No records found</span> */}
+                    // </div>
                 }
             </TabPanel>
         </Tab>
