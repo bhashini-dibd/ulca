@@ -8,6 +8,9 @@ from flask import render_template
 from app import mail
 from repositories import NotifierRepo
 log         =   logging.getLogger('file')
+import pytz
+
+IST = pytz.timezone('Asia/Kolkata')
 
 repo = NotifierRepo()
 
@@ -50,7 +53,7 @@ class NotifierService:
         try:
             for user in config.receiver_email_ids:
                 email       = user   
-                tdy_date    =  datetime.now()
+                tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
                 msg         = Message(subject=f" ULCA- Statistics {tdy_date}",
                               sender="anuvaad.support@tarento.com",
                               recipients=[email])
