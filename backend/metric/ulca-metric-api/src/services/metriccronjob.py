@@ -5,7 +5,7 @@ import logging
 from src.db import ModelRepo
 import requests
 log         =   logging.getLogger('file')
-
+from logging.config import dictConfig
 repo = ModelRepo()
 class CronProcessor(Thread):
     def __init__(self, event):
@@ -22,7 +22,8 @@ class CronProcessor(Thread):
                 body    =   {"emails":[]}
                 request_url = config.email_service_url
                 log.info("Intiating request to email service %s"%request_url)
-                requests.post(url=request_url, headers = headers, json = body)
+                result=requests.post(url=request_url, headers = headers, json = body)
+                log.info(result.content)
                 
                 run += 1
             except Exception as e:

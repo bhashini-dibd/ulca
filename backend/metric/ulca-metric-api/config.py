@@ -24,6 +24,8 @@ FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/app/utilities
 FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','filters')
 
 error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',300)#14400
+if isinstance(error_cron_interval_sec, str):
+    error_cron_interval_sec  =  eval(error_cron_interval_sec)
 
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 data_db_schema              =   os.environ.get('DATA_PARALLEL', 'ulca')
