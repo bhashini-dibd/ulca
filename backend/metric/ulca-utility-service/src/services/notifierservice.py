@@ -38,9 +38,11 @@ class NotifierService:
             log.info(mono_count)
             asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
             asr_count = (asr_labeled[0]["total"])/3600
+            asr_count = round(asr_count,4)
             log.info(asr_count)
             asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
             asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
+            asr_unlabeled_count=round(asr_unlabeled_count,4)
             log.info(asr_unlabeled_count)
 
             pending_jobs = repo.count_process_col({"status": "Pending"},config.process_db_schema,config.process_col)

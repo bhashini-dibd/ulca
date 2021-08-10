@@ -1,55 +1,38 @@
-<!doctype html>
-<html>
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-	
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
-<style>
-
-	</style>	
-<title>ULCA - Dataset Statistics</title>
-</head>
-
-<body bgcolor="#f1f1f1">
-	<table  cellspacing="0" cellpadding="0" align="center" bgcolor="#ffffff" style="max-width:600px; width: 100%; font-family: 'Lato', sans-serif; ">
-  <tbody>
-    <tr>
-      <td>
-		<table width="85%" border="0" cellspacing="0" cellpadding="0" align="center" style="padding: 40px 0 40px 0;">
-		  <tbody>
-			<tr>
-			  <td>
-				<h4 style="margin: 0; margin-bottom: 40px; padding: 0; font-size: 21px; font-weight: 700; color: #0C0F0F; ">ULCA</h4>
-			
-			  </td>
-			</tr>
-			  <tr>
-			  	<td style="background-color: #ECECF1; padding: 40px;">
-					<p><a style="font-size: 16px; color: #0C0F0F; margin-bottom: 20px;">Dear User,</a></p>
-                    <p style=" margin-bottom: 20px; font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400;">Here are the statistics for ULCA datasets and jobs-</p>
-					<p style="font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400; padding-top: 20px;">Parallel dataset (#sentence pair): <b> {{parallel}}</b></p>
-					<p style="font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400; padding-top: 20px;">Monolingual dataset (#sentences): <b> {{mono}}</b></p>
-					<p style="font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400; padding-top: 20px;">ASR dataset (#hours): <b>{{asr}}</b></p>
-					<p style="font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400; padding-top: 20px;">ASR Unlabeled dataset (#hours): <b>{{asrun}}</b></p>
-					<p style="font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400; padding-top: 20px;">OCR dataset (#images) : <b>{{ocr}}</b></p>
-					<p style="font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400; padding-top: 20px;">-----------------------------------------------------------------------------</p><p style="font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400; padding-top: 20px;"># of jobs in progress : <b>{{inprogress}}</b></p>
-					<p style="font-size: 14px; line-height: 0.2; color: #0C0F0F;font-weight: 400; padding-top: 20px;"># of jobs pending : <b>{{pending}}</b></p>
-				  </td>
-			  </tr>
-			  <tr>
-			  	<td>
-				  	<p style="font-size: 14px; line-height: 1.5; color: #0C0F0F;font-weight: 400; padding-top: 40px;">Thanks,<br><b>ULCA Team</b></p>
-						
-				  </td>
-			  </tr>
-
-		  </tbody>
-		</table>
-		</td>
-    </tr>
-  </tbody>
+<p>&lt;!doctype html&gt;</p>
+<p>&nbsp;</p>
+<table style="max-width: 600px; width: 100%; font-family: 'Lato', sans-serif;" cellspacing="0" cellpadding="0" align="center" bgcolor="#ffffff">
+<tbody>
+<tr>
+<td>
+<table style="padding: 40px 0 40px 0;" border="0" width="85%" cellspacing="0" cellpadding="0" align="center">
+<tbody>
+<tr>
+<td>
+<h4 style="margin: 0; margin-bottom: 40px; padding: 0; font-size: 21px; font-weight: bold; color: #0c0f0f;">ULCA</h4>
+</td>
+</tr>
+<tr>
+<td style="background-color: #ececf1; padding: 30px;">
+<p><a style="font-size: 16px; color: #0c0f0f; margin-bottom: 20px;">Dear User,</a></p>
+<p style="margin-bottom: 20px; font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400;">Here are the statistics for ULCA datasets and jobs:-</p>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;">Parallel dataset (#sentence pair) <br /><strong>{{parallel}}</strong></p>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;">Monolingual dataset (#sentences) <br /><strong>{{mono}}</strong></p>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;">ASR dataset (#hours) <br /><strong>{{asr}}</strong></p>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;">ASR Unlabeled dataset (#hours) <br /><strong>{{asrun}}</strong></p>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;">OCR dataset (#images) <br /><strong>{{ocr}}</strong></p>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;">---------------------------------------------------------------------</p>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;"># of jobs in progress <br /><strong>{{inprogress}}</strong></p>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 20px;"># of jobs pending <br /><strong>{{pending}}</strong></p>
+</td>
+</tr>
+<tr>
+<td>
+<p style="font-size: 14px; line-height: 1.5; color: #0c0f0f; font-weight: 400; padding-top: 40px;">Thanks,<br /><strong>ULCA Team</strong></p>
+</td>
+</tr>
+</tbody>
 </table>
-</body>
-</html>
+</td>
+</tr>
+</tbody>
+</table>
