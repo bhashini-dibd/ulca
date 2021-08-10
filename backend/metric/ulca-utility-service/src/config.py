@@ -12,8 +12,8 @@ MAIL_SETTINGS           =   {
                                 "MAIL_PORT"     : 465,
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
-                                "MAIL_USERNAME" : os.environ.get('ULCA_SUPPORT_EMAIL','tempusermonday@gmail.com'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','monday@911')
+                                "MAIL_USERNAME" : os.environ.get('ULCA_SUPPORT_EMAIL','xxx'),
+                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','xx')
                             }
 
 
