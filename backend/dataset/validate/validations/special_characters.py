@@ -31,7 +31,7 @@ class SpecialCharacterCheck(BaseValidator):
 
             return super().execute(request)
         except Exception as e:
-            log.exception(f'Exception while removing special characters: {str(e)}', e)
+            log.exception(f"Exception while removing special characters: {str(e)}", e)
             return {"message": "Exception while removing special characters", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 
