@@ -9,10 +9,13 @@ import { useDispatch, useSelector, } from "react-redux";
 import SearchModel from '../../../../redux/actions/api/Model/ModelSearch/SearchModel';
 import updateFilter from '../../../../redux/actions/api/Model/ModelSearch/Benchmark';
 import APITransport from '../../../../redux/actions/apitransport/apitransport';
+import { FilterModel, clearFilterModel} from "../../../../redux/actions/api/Model/ModelView/DatasetAction"
 import Record from "../../../../assets/no-record.svg";
 import { useHistory } from "react-router-dom";
 import SearchList from '../../../../redux/actions/api/Model/ModelSearch/SearchList';
 
+import C from "../../../../redux/actions/constants";
+import FilterList from "./ModelDetail/Filter"
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -33,11 +36,15 @@ function TabPanel(props) {
     );
 }
 
-export default () => {
+const NewSearchModel =() => {
     const filter = useSelector(state => state.searchFilter);
     const type = ModelTask.map(task => task.value);
     const [value, setValue] = useState(type.indexOf(filter.type))
     const [searchValue,setSearchValue] = useState("");
+    const [anchorEl, setAnchorEl] = useState(null);
+   
+    const popoverOpen = Boolean(anchorEl);
+        const id = popoverOpen ? 'simple-popover' : undefined;
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -49,7 +56,6 @@ export default () => {
     const dispatch = useDispatch();
     const searchModelResult = useSelector(state => state.searchModel);
     const history = useHistory();
-
     useEffect(() => {
         makeModelSearchAPICall(filter.type);
     }, [])
@@ -58,6 +64,20 @@ export default () => {
         const apiObj = new SearchModel(type, "", "")
         dispatch(APITransport(apiObj));
     }
+
+    const handleShowFilter = (event) => {
+        setAnchorEl(event.currentTarget);
+}
+const handleClose = () => {
+        setAnchorEl(null);
+};
+const clearAll = (data) => {
+        dispatch(clearFilterModel(data, C.CLEAR_FILTER_MODEL))
+}
+const apply = (data) => {
+        handleClose()
+        dispatch(FilterModel(data, C.SEARCH_FILTER))
+}
 
     const handleClick = (data) => {
         dispatch(updateFilter({ source: "", filter: "", type: data.task }));
@@ -72,14 +92,28 @@ export default () => {
         dispatch(SearchList(event.target.value))
     }
     return (
-        <Tab handleSearch={handleSearch} searchValue={searchValue} handleChange={handleChange} value={value} tabs={ModelTask} >
+        <Tab handleSearch={handleSearch} handleShowFilter={handleShowFilter} searchValue={searchValue} handleChange={handleChange} value={value} tabs={ModelTask} >
             <TabPanel value={value} index={value}>
-                {searchModelResult.responseData.length ?
+                {searchModelResult.filteredData.length ?
                     <CardComponent onClick={handleClick} value={searchModelResult} /> :
                     <div style={{ background: `url(${Record}) no-repeat center center`, height: '287px', marginTop: '20vh' }}>
                     </div>
                 }
             </TabPanel>
+
+            {popoverOpen && <FilterList
+                                id={id}
+                                open={popoverOpen}
+                                anchorEl={anchorEl}
+                                handleClose={handleClose}
+                                filter={searchModelResult.filter}
+                                selectedFilter={searchModelResult.selectedFilter}
+                                clearAll={clearAll}
+                                apply={apply}
+                        />
+                        }
         </Tab>
     )
 }
+
+export default NewSearchModel;

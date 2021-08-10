@@ -7,7 +7,7 @@ const initialState = {
     filteredData: [],
     refreshStatus: false,
     filter: { status: [], modelType: [] },
-    selectedFilter: { status: [], modelType: [] },
+    selectedFilter: { language: [], domainFilter: [], submitter:[] },
 }
 
 const dateConversion = (value) => {
@@ -18,29 +18,44 @@ const dateConversion = (value) => {
 }
 
 const getFilterValue = (payload, data) => {
+    debugger
     let { filterValues } = payload
-    let statusFilter = []
-    let filterResult = []
-    if (filterValues && filterValues.hasOwnProperty("status") && filterValues.status.length > 0) {
-        statusFilter = data.responseData.filter(value => {
-            if (filterValues.status.includes(value.status)) {
+    let languageFilter= []
+    let  domainFilterValue = []
+    let  filterResult = []
+    debugger
+    if (filterValues && filterValues.hasOwnProperty("language") && filterValues.language.length > 0) {
+        languageFilter = data.responseData.filter(value => {
+            if ((filterValues.language.includes(value.tLanguage))|| ((filterValues.language.includes(value.sLanguage)))){
                 return value
             }
         })
 
     } else {
-        statusFilter = data.responseData
+        languageFilter = data.responseData
     }
-    if (filterValues && filterValues.hasOwnProperty("modelType") && filterValues.modelType.length > 0) {
-        filterResult = statusFilter.filter(value => {
-            if (filterValues.modelType.includes(value.modelType)) {
+    debugger
+    if (filterValues && filterValues.hasOwnProperty("domainFilter") && filterValues.domainFilter.length > 0) {
+        domainFilterValue = languageFilter.filter(value => {
+            if (filterValues.domainFilter.includes(value.domain)) {
                 return value
             }
         })
     }
     else {
-        filterResult = statusFilter
+        domainFilterValue = languageFilter
     }
+    if (filterValues && filterValues.hasOwnProperty("submitter") && filterValues.submitter.length > 0) {
+        filterResult = domainFilterValue.filter(value => {
+            if (filterValues.submitter.includes(value.domain)) {
+                return value
+            }
+        })
+    }
+    else {
+        filterResult = languageFilter
+    }
+    debugger
     data.filteredData = filterResult;
     data.selectedFilter = filterValues;
     return data;
@@ -66,21 +81,23 @@ const getDomainDetails = (data) => {
 
 const getClearFilter = (data) => {
     data.filteredData = data.responseData;
-    data.selectedFilter = { status: [], modelType: [] }
+    data.selectedFilter = { language: [], domainFilter: [], submitter:[]  }
     return data;
 }
 
 const getContributionList = (state, payload) => {
     let responseData = [];
-    let statusFilter = [];
-    let modelFilter = [];
-    let filter = { status: [], modelType: [] }
+    let languageFilter = [];
+    let submitterFilter = [];
+    let domainFilter = [];
+    let filter = {language: [], domainFilter: [], submitter:[]  }
     let refreshStatus = false;
     payload.forEach(element => {
 
         let sLanguage = element.languages.length > 0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
         let tLanguage = element.languages && element.languages.length > 0 && element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
-        let lang = tLanguage ? (sLanguage + " - " + tLanguage) : sLanguage
+        let lang = tLanguage ? (sLanguage + " - " + tLanguage) : sLanguage;
+        let domain = getDomainDetails(element.domain)
         responseData.push(
             {
                 description: element.description,
@@ -89,8 +106,10 @@ const getContributionList = (state, payload) => {
                 // submittedOn: dateConversion(element.submittedOn),
                 publishedOn: dateConversion(element.publishedOn),
                 task: element.task.type,
-                domain: getDomainDetails(element.domain),
+                domain: domain,
                 status: "Published",
+                sLanguage,
+                tLanguage,
                 language: lang,
                 refUrl: element.refUrl ? element.refUrl : "NA",
                 inferenceEndPoint: element.inferenceEndPoint,
@@ -103,14 +122,15 @@ const getContributionList = (state, payload) => {
             }
 
         )
-        !statusFilter.includes(element.status) && statusFilter.push(element.status)
-        if (element.status === "In-Progress" || element.status === "Pending") {
-            refreshStatus = true
-        }
+        !languageFilter.includes(sLanguage) && languageFilter.push(sLanguage)
+        !languageFilter.includes(tLanguage) && languageFilter.push(tLanguage)
+        !domainFilter.includes(domain) && domainFilter.push(domain)
+        !submitterFilter.includes(element.submitter.name) && submitterFilter.push(element.submitter.name)
     });
 
-    filter.status = [...(new Set(statusFilter))];
-    filter.modelType = [...(new Set(modelFilter))];
+    filter.language = [...(new Set(languageFilter))];
+    filter.domainFilter = [...(new Set(domainFilter))];
+    filter.submitter = [...(new Set(submitterFilter))];
 
 
     responseData = responseData.reverse()
@@ -145,6 +165,10 @@ const reducer = (state = initialState, action) => {
 
         case C.GET_SEARCHED_LIST:
             return getSearchedList(state, action.payload)
+        case C.SEARCH_FILTER:
+            return getFilterValue(action.payload, state);
+        case C.CLEAR_FILTER_MODEL:
+            return getClearFilter(state);
         default:
             return {
                 ...state

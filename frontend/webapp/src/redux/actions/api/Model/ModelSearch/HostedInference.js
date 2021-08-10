@@ -57,7 +57,7 @@ export default class HostedInference extends API {
             bodyData.inferenceEndPoint = this.inferenceEndPoint;
             
         }
-        bodyData.userId = JSON.parse(localStorage.getItem('userDetails')).userID
+        bodyData.userId = localStorage.getItem('userDetails') && JSON.parse(localStorage.getItem('userDetails')).userID
         return bodyData;
     }
 

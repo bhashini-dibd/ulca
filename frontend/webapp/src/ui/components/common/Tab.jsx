@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { alpha, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { Button, Grid, TextField } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
@@ -117,7 +116,7 @@ const SimpleTabs = (props) => {
                                 </div>
                             </Grid>
                             <Grid item>
-                                <Button variant="outlined">Filter</Button>
+                                <Button variant="outlined" onClick={props.handleShowFilter}>Filter</Button>
                             </Grid>
                         </Grid>
                     </Grid>

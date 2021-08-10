@@ -45,7 +45,7 @@ export default class SearchModel extends API {
             domain: this.domain,
             submitter: this.submitter
         }
-        // bodyData.userId = JSON.parse(localStorage.getItem('userDetails')).userID
+        bodyData.userId = localStorage.getItem('userDetails') && JSON.parse(localStorage.getItem('userDetails')).userID
         return bodyData;
     }
 
