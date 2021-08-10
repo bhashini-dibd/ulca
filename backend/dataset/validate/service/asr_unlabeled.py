@@ -43,7 +43,7 @@ class ASRUnlabeledValidate:
                 tracker_data = {"status": "FAILED"}
                 pt.update_task_details(tracker_data)
         except Exception as e:
-            log.exception(f'Exception in validation of asr-unlabeled dataset: {str(e)}', e)
+            log.exception(f"Exception in validation of asr-unlabeled dataset: {str(e)}", e)
             tracker_data = {"status": "FAILED"}
             pt.update_task_details(tracker_data)
             return {"message": "EXCEPTION while validating dataset!!", "status": "FAILED"}

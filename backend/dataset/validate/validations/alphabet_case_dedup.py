@@ -25,7 +25,7 @@ class CaseDedup(BaseValidator):
                     h.update(chunk)
             return h.hexdigest()
         except Exception as e:
-            log.exception('Exception while hashing the file: {str(e)}', e)
+            log.exception(f"Exception while hashing the file: {str(e)}", e)
             return None
 
     def execute(self, request):
@@ -51,7 +51,7 @@ class CaseDedup(BaseValidator):
 
             return super().execute(request)
         except Exception as e:
-            log.exception(f'Exception while adding hash values for sentences: {str(e)}', e)
+            log.exception(f"Exception while adding hash values for sentences: {str(e)}", e)
             return {"message": "Exception while adding hash values for sentences", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 
