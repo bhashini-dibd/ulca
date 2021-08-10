@@ -90,12 +90,12 @@ const Header = (props) => {
       <AppBar color="inherit">
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
-            <Link href="https://bhashini.uniteframework.io/en/">
-            <img className={classes.bhashiniLogo}
-            
-              src={bhashiniLogo}
-              alt="Bhashini Logo"
-            />
+            <Link href="https://bhashini.gov.in/en/">
+              <img className={classes.bhashiniLogo}
+
+                src={bhashiniLogo}
+                alt="Bhashini Logo"
+              />
             </Link>
             {/* <Divider orientation="vertical" color="primary"/> */}
             <Typography variant="h4" onClick={() => authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
@@ -145,24 +145,24 @@ const Header = (props) => {
                     }
                   </div>
                 }
-                {/* {authenticate() && */}
-                <div className={classes.options}>
-                  <div className={classes.model}>
-                    <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
-                      Model
-                      {authenticate() && <DownIcon color="action" />}
-                    </Button>
-                  </div>
+                {authenticate() &&
+                  <div className={classes.options}>
+                    <div className={classes.model}>
+                      <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
+                        Model
+                        {authenticate() && <DownIcon color="action" />}
+                      </Button>
+                    </div>
 
-                  <MenuItems
-                    id={"dataset-menu"}
-                    anchorEl={anchorModel}
-                    handleClose={handleClose}
-                    menuOptions={menuItems.models}
-                    handleMenuItemClick={handleMenuItemClick}
-                  />
-                </div>
-                {/* } */}
+                    <MenuItems
+                      id={"dataset-menu"}
+                      anchorEl={anchorModel}
+                      handleClose={handleClose}
+                      menuOptions={menuItems.models}
+                      handleMenuItemClick={handleMenuItemClick}
+                    />
+                  </div>
+                }
               </>
             }
             {

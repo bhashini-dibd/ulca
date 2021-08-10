@@ -18,12 +18,10 @@ const dateConversion = (value) => {
 }
 
 const getFilterValue = (payload, data) => {
-    debugger
     let { filterValues } = payload
     let languageFilter= []
     let  domainFilterValue = []
     let  filterResult = []
-    debugger
     if (filterValues && filterValues.hasOwnProperty("language") && filterValues.language.length > 0) {
         languageFilter = data.responseData.filter(value => {
             if ((filterValues.language.includes(value.tLanguage))|| ((filterValues.language.includes(value.sLanguage)))){
@@ -34,7 +32,6 @@ const getFilterValue = (payload, data) => {
     } else {
         languageFilter = data.responseData
     }
-    debugger
     if (filterValues && filterValues.hasOwnProperty("domainFilter") && filterValues.domainFilter.length > 0) {
         domainFilterValue = languageFilter.filter(value => {
             if (filterValues.domainFilter.includes(value.domain)) {
@@ -55,7 +52,6 @@ const getFilterValue = (payload, data) => {
     else {
         filterResult = languageFilter
     }
-    debugger
     data.filteredData = filterResult;
     data.selectedFilter = filterValues;
     return data;
@@ -141,7 +137,7 @@ const getContributionList = (state, payload) => {
 
 const getSearchedList = (state, searchValue) => {
     let results = [];
-    let searchKey = ["domain", "modelName", "status", "submitter"];
+    let searchKey = ["domain", "modelName", "status", "submitter","sLanguage","tLanguage"];
     for (var i = 0; i < state.responseData.length; i++) {
         Object.keys(state.responseData[i]).forEach((key) => {
             if (searchKey.indexOf(key) > -1) {

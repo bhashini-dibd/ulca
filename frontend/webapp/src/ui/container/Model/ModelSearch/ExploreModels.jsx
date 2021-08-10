@@ -18,7 +18,7 @@ const ExploreModels = (props) => {
             <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
             <div className={classes.parentPaper}>
                 <Paper elevation={0} className={classes.mainPaper}>
-                    <Typography variant="h5">Explore Models</Typography>
+                    <Typography variant="h3">Explore Models</Typography>
                     <NewSearchModel />
                 </Paper>
             </div>

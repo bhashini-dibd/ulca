@@ -115,9 +115,9 @@ const SimpleTabs = (props) => {
                                     />
                                 </div>
                             </Grid>
-                            <Grid item>
+                            {/* <Grid item>
                                 <Button variant="outlined" onClick={props.handleShowFilter}>Filter</Button>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Grid>
                 </Grid>
