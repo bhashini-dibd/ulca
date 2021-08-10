@@ -4,6 +4,7 @@ import config
 import logging
 from src.db import ModelRepo
 import requests
+from logging.config import dictConfig
 log         =   logging.getLogger('file')
 from logging.config import dictConfig
 repo = ModelRepo()
