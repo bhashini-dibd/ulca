@@ -44,6 +44,19 @@ class NotifierRepo:
             log.exception(f'Exception in repo search: {e}', e)
             return []
 
+    def count_process_col(self, query,schema,collection):
+        log.info(f"Mongo count calculation : {query},{schema},{collection}")
+        print(query,schema,collection,"****counting**")
+        print(config.process_connection_url)
+        try:
+            log.info(f"Mongo count calculation : {query},{schema},{collection}")
+            client = pymongo.MongoClient(config.process_connection_url)
+            mongo_instance = client[schema][collection]
+            res =   mongo_instance.count(query) 
+            return res
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return []
 #  Log config
 dictConfig({
     'version': 1,

@@ -43,9 +43,9 @@ class NotifierService:
             asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
             log.info(asr_unlabeled_count)
 
-            pending_jobs = repo.count_data_col({"status": "Pending"},config.process_db_schema,config.process_col)
+            pending_jobs = repo.count_process_col({"status": "Pending"},config.process_db_schema,config.process_col)
             log.info(pending_jobs)
-            inprogress_jobs = repo.count_data_col({"status": "In-Progress"},config.process_db_schema,config.process_col)
+            inprogress_jobs = repo.count_process_col({"status": "In-Progress"},config.process_db_schema,config.process_col)
             log.info(inprogress_jobs)
             return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs
         except Exception as e:
