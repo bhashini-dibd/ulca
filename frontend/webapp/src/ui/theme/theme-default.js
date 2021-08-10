@@ -279,8 +279,8 @@ themeDefault.typography.h6 = {
 };
 themeDefault.typography.body1 = {
   fontSize: "1rem",
-  fontFamily: '"Rowdies","Roboto", sans-serif ,sans-serif',
-  fontWeight: "300"
+  fontFamily: '"Roboto", sans-serif ,sans-serif',
+  fontWeight: "400"
 
 };
 themeDefault.typography.body2 = {
