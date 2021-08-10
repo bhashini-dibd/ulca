@@ -23,7 +23,7 @@ DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','ht
 FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/app/utilities/')
 FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','filters')
 
-error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',300)#14400
+error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',20000)#14400
 if isinstance(error_cron_interval_sec, str):
     error_cron_interval_sec  =  eval(error_cron_interval_sec)
 
