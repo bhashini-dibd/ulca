@@ -28,7 +28,7 @@ class ImageMetadataCheck(BaseValidator):
             log.info('----image metadata check  -> Passed----')
             return super().execute(request)
         except Exception as e:
-            log.exception('Exception while executing Image metadata check', e)
+            log.exception(f'Exception while executing Image metadata check: {str(e)}', e)
             return {"message": "Exception while executing Image metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 # Log config
