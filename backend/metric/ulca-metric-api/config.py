@@ -23,7 +23,7 @@ DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','ht
 FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/app/utilities/')
 FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','filters')
 
-error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',30)#14400
+error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',300)#14400
 
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 data_db_schema              =   os.environ.get('DATA_PARALLEL', 'ulca')
@@ -43,4 +43,4 @@ MAIL_SETTINGS           =   {
                             }
 
 
-receiver_email_ids = ['jainy.joy@tarento.com']
+email_service_url             = os.environ.get('UTILITY_SERVICE_NOTIFY_COUNT_URL','http://utility-service:5001//ulca/apis/v1/send/mail')

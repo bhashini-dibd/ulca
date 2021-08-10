@@ -30,9 +30,9 @@ def start_cron():
     with app.test_request_context():
         cron = src.services.metriccronjob.CronProcessor(threading.Event())
         cron.start()
-# start_cron()
 if __name__ == "__main__":
     log.info("starting module")
+    start_cron()
     app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
     
 

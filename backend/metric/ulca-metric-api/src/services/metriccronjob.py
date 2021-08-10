@@ -3,13 +3,7 @@ from config import error_cron_interval_sec
 import config
 import logging
 from src.db import ModelRepo
-import os
-from datetime import datetime
-from logging.config import dictConfig
-import time
-from flask_mail import Mail, Message
-from flask import render_template
-from app import mail
+import requests
 log         =   logging.getLogger('file')
 
 repo = ModelRepo()
@@ -24,8 +18,11 @@ class CronProcessor(Thread):
         while not self.stopped.wait(error_cron_interval_sec):
             log.info(f'Metric Cron Processor run :{run}')
             try:
-                parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count = self.calculate_counts()
-                self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count})
+                headers =   {"Content-Type": "application/json"}
+                body    =   {"emails":[]}
+                request_url = config.email_service_url
+                log.info("Intiating request to email service %s"%request_url)
+                requests.post(url=request_url, headers = headers, json = body)
                 
                 run += 1
             except Exception as e:
@@ -33,44 +30,6 @@ class CronProcessor(Thread):
                 log.exception(f'Exception on Metric Cron Processor on run : {run} , exception : {e}')
 
     
-
-    def calculate_counts(self):
-        log.info('Calculating counts!')
-        try:
-            parallel_count = repo.count_data_col({},config.data_db_schema,config.data_parallel)
-            log.info(parallel_count)
-            ocr_count = repo.count_data_col({},config.data_db_schema,config.data_ocr)
-            log.info(ocr_count)
-            mono_count = repo.count_data_col({},config.data_db_schema,config.data_mono)
-            log.info(mono_count)
-            asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
-            asr_count = asr_labeled[0]["sum"]
-            log.info(asr_count)
-            asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
-            asr_unlabeled_count = asr_unlabeled[0]["sum"]
-            log.info(asr_unlabeled_count)
-            return 0,0,0,0,0
-        except Exception as e:
-            log.exception(f'{e}')
-
-   
-    def generate_email_notification(self,data):
-        """Registered users are notified with email."""
-
-        try:
-            for user in config.receiver_email_ids:
-                email       = user   
-                tdy_date        =   str(datetime.utcnow)
-                msg         = Message(subject="Satistics for the ULCA data corpus",
-                              sender="anuvaad.support@tarento.com",
-                              recipients=[email])
-                msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"])
-                mail.send(msg)
-                log.info("Generated email notification ")
-        except Exception as e:
-            log.exception("Exception while generating email notification for user registration: " +
-                          str(e))
-
 
 
 # Log config
