@@ -307,7 +307,7 @@ const ChartRender = (props) => {
                    
                     <div class="text-center">
                         <h2 class="text-center text-black mt-3">Dataset Dashboard</h2>
-                    <p class="">ULCA is the largest repository of datasets of Indic languages</p>
+                    <p class="ft-20">ULCA is the largest repository of datasets of Indic languages</p>
                    
                     </div>
                     <div class="dashboard-map">

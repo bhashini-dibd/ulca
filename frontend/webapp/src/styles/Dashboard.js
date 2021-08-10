@@ -21,7 +21,7 @@ const FileUploadStyles = (theme) => ({
     padding:"0"
   },
   fiterText:{
-marginTop:"8px"
+marginTop:"3px"
   },
  
   select: {
