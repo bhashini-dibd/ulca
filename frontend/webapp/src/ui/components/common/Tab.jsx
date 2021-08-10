@@ -47,7 +47,7 @@ export default function SimpleTabs(props) {
             <AppBar style={{ borderTop: "none", borderRight: "none", borderLeft: "none", marginTop: '10px' }} position="static" color="inherit">
                 <Grid container>    
                     <Grid item xs={9} sm={9} md={9} lg={9} xl={9}>
-                        <Tabs value={props.value} onChange={props.handleChange} aria-label="simple tabs example">
+                        <Tabs value={props.value} onChange={(event)=>{props.handleChange(event)}} aria-label="simple tabs example">
                         {
                             props.tabs.map((tab, index) => {
                                 return (
@@ -57,8 +57,9 @@ export default function SimpleTabs(props) {
                         }
                     </Tabs>
                     </Grid>
-                    <Grid item><Button>Search</Button></Grid>
-                    <Grid item><Button variant="outlined">Filter</Button>
+                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3} style={{display:"flex"}}>
+                    <Button>Search</Button>
+                    <Button variant="outlined" onClick= {props.handleShowFilter}>Filter</Button>
                     </Grid>
                 </Grid>
             </AppBar>
