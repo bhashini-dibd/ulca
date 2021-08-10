@@ -28,5 +28,5 @@ data_mono                   =   os.environ.get('DATA_MONO', 'monolingual-dataset
 data_asr                    =   os.environ.get('DATA_ASR', 'asr-dataset')
 data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabeled-dataset')  
 
-process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracker ')
+process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracker')
 process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')
