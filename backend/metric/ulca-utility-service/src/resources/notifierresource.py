@@ -14,11 +14,11 @@ class NotifierResource(Resource):
     # reading json request and reurnung final response
     def post(self):
         log.info("Request received for notifiying the users")
-        body    =   request.get_json()
-        emails  =   body["emails"]
+        # body    =   request.get_json()
+        # emails  =   body["emails"]
         
         try:
-            service.notify_user(emails)
+            service.notify_user()
             res = CustomResponse(Status.SUCCESS.value,None,None)
             log.info("response successfully generated.")
             return res.getres()

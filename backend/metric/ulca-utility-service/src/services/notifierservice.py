@@ -14,7 +14,7 @@ repo = NotifierRepo()
 class NotifierService:
 
     # Cron JOB to update filter set params
-    def notify_user(self,emails):
+    def notify_user(self,emails=None):
         try:
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count = self.calculate_counts()
             self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count})
@@ -34,10 +34,10 @@ class NotifierService:
             mono_count = repo.count_data_col({},config.data_db_schema,config.data_mono)
             log.info(mono_count)
             asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
-            asr_count = asr_labeled[0]["sum"]
+            asr_count = (asr_labeled[0]["total"])/3600
             log.info(asr_count)
             asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
-            asr_unlabeled_count = asr_unlabeled[0]["sum"]
+            asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
             log.info(asr_unlabeled_count)
             return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count
         except Exception as e:
@@ -50,8 +50,8 @@ class NotifierService:
         try:
             for user in config.receiver_email_ids:
                 email       = user   
-                tdy_date        =   str(datetime.utcnow())
-                msg         = Message(subject="Satistics for the ULCA data corpus",
+                tdy_date    =  datetime.now()
+                msg         = Message(subject=f" ULCA- Statistics {tdy_date}",
                               sender="anuvaad.support@tarento.com",
                               recipients=[email])
                 msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"])
