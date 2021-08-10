@@ -5,12 +5,11 @@ import App from './web.routes';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import store from "./redux/store/store"
-import Footer from "./ui/components/common/Footer"
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>
     <App />
-    <Footer/>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

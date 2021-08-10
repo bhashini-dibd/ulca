@@ -10,6 +10,7 @@ import Header from '../../../components/common/Header';
 import aunthenticate from '../../../../configs/authenticate';
 import NewSearchModel from './NewSearchModel';
 import Theme from '../../../theme/theme-default';
+import Footer from "../../../components/common/Footer";
 const ExploreModels = (props) => {
     const { classes } = props;
     return (
@@ -21,6 +22,7 @@ const ExploreModels = (props) => {
                     <NewSearchModel />
                 </Paper>
             </div>
+            <Footer/>
         </MuiThemeProvider>
     )
 

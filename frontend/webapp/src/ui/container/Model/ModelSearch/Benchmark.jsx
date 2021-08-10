@@ -36,6 +36,7 @@ import Header from '../../../components/common/Header';
 import aunthenticate from '../../../../configs/authenticate';
 import NewSearchModel from './NewSearchModel';
 import Theme from '../../../theme/theme-default';
+import Footer from "../../../components/common/Footer";
 
 const StyledMenu = withStyles({
 })((props) => (
@@ -458,6 +459,7 @@ const Benchmark = (props) => {
                     </Paper>
                 }
             </div>
+            <Footer/>
         </MuiThemeProvider>
     )
 
