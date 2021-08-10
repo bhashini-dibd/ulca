@@ -170,7 +170,7 @@ const ChartRender = (props) => {
 	}
 	const handleCardNavigation = () => {
 
-		handleOnClick(page - 1)
+		handleOnClick(0)
 	}
 
 
@@ -195,7 +195,7 @@ const ChartRender = (props) => {
 				<Typography className={classes.fiterText} value="" variant="body1"> Filter By </Typography>
 				{filterValue !== "domains" &&<Button color={toggleValue === "domains" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLevelChange("domains")}>Domain</Button>}
 				{/* <Button  color={filterValue === "source" ? "primary":"default"} style={ filterValue === "source" ? {backgroundColor: "#E8F5F8"} : {} }size="medium" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("source")}>Source</Button> */}
-				{filterValue !== "collectionMethod_collectionDescriptions" &&<Button style={{marginRight:"10px"}} color={toggleValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLevelChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>}
+				{filterValue !== "collectionMethod_collectionDescriptions" &&<Button style={{marginRight:"10px"}} color={toggleValue === "collectionMethod_collectionDescriptions" ? "primary" : "default"}  size="small" variant="outlined" className={filterValue === "domains" && classes.backButton} onClick={() => handleLevelChange("collectionMethod_collectionDescriptions")}>Collection Method</Button>}
 				{filterValue !== "primarySubmitterName" &&<Button color={toggleValue === "primarySubmitterName" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLevelChange("primarySubmitterName")}>Submitter</Button>}
 
 			</div>
@@ -307,7 +307,7 @@ const ChartRender = (props) => {
                    
                     <div class="text-center">
                         <h2 class="text-center text-black mt-3">Dataset Dashboard</h2>
-                    <p class="">ULCA claims to be the largest repository of datasets of Indic languages</p>
+                    <p class="">ULCA is the largest repository of datasets of Indic languages</p>
                    
                     </div>
                     <div class="dashboard-map">
@@ -327,7 +327,7 @@ const ChartRender = (props) => {
 				
 			</ TitleBar>
 			<div className={classes.iconStyle}>
-					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button></>
+					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} onClick={() => handleCardNavigation()}>Reset</Button></>
 						 {(selectedOption.value ==="parallel-corpus" && page===0 )? 
 						<div className= {classes.titleStyle}>
 						

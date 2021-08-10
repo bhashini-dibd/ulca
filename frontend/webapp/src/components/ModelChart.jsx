@@ -125,7 +125,7 @@ const ChartRender = (props) => {
 	}
 	const handleCardNavigation = () => {
 
-		handleOnClick(page - 1)
+		handleOnClick(0)
 	}
 
 
@@ -171,7 +171,7 @@ const ChartRender = (props) => {
 				
 			</ TitleBar>
 			<div className={classes.iconStyle}>
-					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button></>
+					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}}  onClick={() => handleCardNavigation()}>Reset</Button></>
 						 {(selectedOption.value ==="model" && page===0 )? 
 						<div className= {classes.titleStyle}>
 						
