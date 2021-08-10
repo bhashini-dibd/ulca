@@ -50,12 +50,14 @@ class NotifierService:
             return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs
         except Exception as e:
             log.exception(f'{e}')
-            # return 0,0,0,0,0,0,0
+            return 0,0,0,0,0,0,0
 
     def generate_email_notification(self,data):
 
         try:
-            for user in config.receiver_email_ids.split(','):
+            users = config.receiver_email_ids.split(',')
+            log.info(f"Generating emails for {users} ")
+            for user in users:
                 email       = user   
                 tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
                 msg         = Message(subject=f" ULCA- Statistics {tdy_date}",
@@ -63,7 +65,7 @@ class NotifierService:
                               recipients=[email])
                 msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],inprogress=data["inprogress"],pending=data["pending"])
                 mail.send(msg)
-                log.info("Generated email notification ")
+                log.info(f"Generated email notification for {user}")
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
