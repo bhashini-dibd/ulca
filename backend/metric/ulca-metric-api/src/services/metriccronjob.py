@@ -49,26 +49,27 @@ class CronProcessor(Thread):
             asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
             asr_unlabeled_count = asr_unlabeled[0]["sum"]
             log.info(asr_unlabeled_count)
-            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count
+            return 0,0,0,0,0
         except Exception as e:
             log.exception(f'{e}')
 
+   
     def generate_email_notification(self,data):
-        log.info('Generating email notification!')
+        """Registered users are notified with email."""
 
-        for email in config.receiver_email_ids:
-            tdy_date        =   str(datetime.utcnow)
-            mail_server = config.MAIL_SETTINGS["MAIL_USERNAME"]
-            email_subject   =   "Satistics for the ULCA data corpus"
-            template        =   'count_mail.html'
-            try:
-                msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
-                msg.html = render_template(template,date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"])
+        try:
+            for user in config.receiver_email_ids:
+                email       = user   
+                tdy_date        =   str(datetime.utcnow)
+                msg         = Message(subject="Satistics for the ULCA data corpus",
+                              sender="anuvaad.support@tarento.com",
+                              recipients=[email])
+                msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"])
                 mail.send(msg)
-                log.info("Generated email notification for {} ".format(email))
-            except Exception as e:
-                log.exception("Exception while generating email notification | {}".format(str(e)))
-
+                log.info("Generated email notification ")
+        except Exception as e:
+            log.exception("Exception while generating email notification for user registration: " +
+                          str(e))
 
 
 

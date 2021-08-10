@@ -11,28 +11,30 @@ import threading
 
 log = logging.getLogger('file')
 
-flask_app = Flask(__name__)
+app = Flask(__name__)
 
-flask_app.config.update(config.MAIL_SETTINGS)
+# app.config.update(config.MAIL_SETTINGS)
 #creating an instance of Mail class
-mail=Mail(flask_app)
+# mail=Mail(app)
 
 if config.ENABLE_CORS:
-    cors    = CORS(flask_app, resources={r"/api/*": {"origins": "*"}})
+    cors    = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):
-        flask_app.register_blueprint(blueprint, url_prefix=config.API_URL_PREFIX)
+        app.register_blueprint(blueprint, url_prefix=config.API_URL_PREFIX)
 
-@flask_app.route(config.API_URL_PREFIX)
+
+
 def start_cron():
-    cron = src.services.metriccronjob.CronProcessor(threading.Event())
-    cron.start()
-
+    with app.test_request_context():
+        cron = src.services.metriccronjob.CronProcessor(threading.Event())
+        cron.start()
+# start_cron()
 if __name__ == "__main__":
     log.info("starting module")
-    start_cron()
-    flask_app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
+    app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
+    
 
 dictConfig({
     'version': 1,

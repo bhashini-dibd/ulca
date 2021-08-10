@@ -3,9 +3,10 @@ from config import MONGO_CONNECTION_URL,MONGO_DB_SCHEMA,MONGO_MODEL_COLLECTION,D
 import pymongo
 import logging
 import config
-
+from logging.config import dictConfig
 
 log = logging.getLogger('fie')
+
 def get_data_store():
     log.info("Establishing connection with druid")
     engine      = db.create_engine(DRUID_CONNECTION_URL)  
@@ -57,7 +58,10 @@ class ModelRepo:
 
     def count_data_col(self, query,schema,collection):
         log.info(f"Mongo count calculation : {query},{schema},{collection}")
+        print(query,schema,collection,"****counting**")
+        print(config.data_connection_url)
         try:
+            log.info(f"Mongo count calculation : {query},{schema},{collection}")
             client = pymongo.MongoClient(config.data_connection_url)
             mongo_instance = client[schema][collection]
             res =   mongo_instance.count(query) 
@@ -68,8 +72,12 @@ class ModelRepo:
 
     def aggregate_data_col(self, query,schema,collection):
         log.info(f"Mongo aggregation : {query},{schema},{collection}")
+        print(query,schema,collection,"***aggregating***")
+        print(config.data_connection_url)
         try:
+            log.info(f"Mongo count calculation : {query},{schema},{collection}")
             client = pymongo.MongoClient(config.data_connection_url)
+
             mongo_instance = client[schema][collection]
             res =   mongo_instance.aggregate(query) 
             result = []
@@ -79,3 +87,36 @@ class ModelRepo:
         except Exception as e:
             log.exception(f'Exception in repo search: {e}', e)
             return []
+
+#  Log config
+dictConfig({
+    'version': 1,
+    'formatters': {'default': {
+        'format': '[%(asctime)s] {%(filename)s:%(lineno)d} %(threadName)s %(levelname)s in %(module)s: %(message)s',
+    }},
+    'handlers': {
+        'info': {
+            'class': 'logging.FileHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'filename': 'info.log'
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'formatter': 'default',
+            'stream': 'ext://sys.stdout',
+        }
+    },
+    'loggers': {
+        'file': {
+            'level': 'DEBUG',
+            'handlers': ['info', 'console'],
+            'propagate': ''
+        }
+    },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['info', 'console']
+    }
+})
