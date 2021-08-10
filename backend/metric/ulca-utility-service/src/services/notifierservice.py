@@ -55,7 +55,7 @@ class NotifierService:
     def generate_email_notification(self,data):
 
         try:
-            for user in config.receiver_email_ids:
+            for user in config.receiver_email_ids.split(','):
                 email       = user   
                 tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
                 msg         = Message(subject=f" ULCA- Statistics {tdy_date}",
