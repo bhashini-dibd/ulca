@@ -1,5 +1,4 @@
 FROM python:3.7-slim
-RUN apt-get install -y ffmpeg
 COPY / /app
 WORKDIR /app
 RUN pip3 install -r requirements.txt
