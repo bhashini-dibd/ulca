@@ -186,7 +186,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				datasetIngest.setMd5hash(md5hash);
 				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
 				
-				datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
+				datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
+				//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
 			}
 
 		} else {
