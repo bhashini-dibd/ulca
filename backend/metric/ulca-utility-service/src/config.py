@@ -12,8 +12,8 @@ MAIL_SETTINGS           =   {
                                 "MAIL_PORT"     : 465,
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
-                                "MAIL_USERNAME" : os.environ.get('ULCA_SUPPORT_EMAIL','xxxx'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','xxx')
+                                "MAIL_USERNAME" : os.environ.get('ULCA_SUPPORT_EMAIL','tempusermonday@gmail.com'),
+                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','monday@911')
                             }
 
 
@@ -27,4 +27,5 @@ data_mono                   =   os.environ.get('DATA_MONO', 'monolingual-dataset
 data_asr                    =   os.environ.get('DATA_ASR', 'asr-dataset')
 data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabeled-dataset')  
 
-
+process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracker ')
+process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')

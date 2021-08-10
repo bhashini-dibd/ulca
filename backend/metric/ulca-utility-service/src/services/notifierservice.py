@@ -19,8 +19,8 @@ class NotifierService:
     # Cron JOB to update filter set params
     def notify_user(self,emails=None):
         try:
-            parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count = self.calculate_counts()
-            self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count})
+            parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs = self.calculate_counts()
+            self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count,"pending":pending_jobs,"inprogress":inprogress_jobs})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
@@ -42,13 +42,17 @@ class NotifierService:
             asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
             asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
             log.info(asr_unlabeled_count)
-            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count
+
+            pending_jobs = repo.count_data_col({"status": "Pending"},config.process_db_schema,config.process_col)
+            log.info(pending_jobs)
+            inprogress_jobs = repo.count_data_col({"status": "In-Progress"},config.process_db_schema,config.process_col)
+            log.info(inprogress_jobs)
+            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs
         except Exception as e:
             log.exception(f'{e}')
-
+            # return 0,0,0,0,0,0,0
 
     def generate_email_notification(self,data):
-        """Registered users are notified with email."""
 
         try:
             for user in config.receiver_email_ids:
@@ -57,11 +61,11 @@ class NotifierService:
                 msg         = Message(subject=f" ULCA- Statistics {tdy_date}",
                               sender="anuvaad.support@tarento.com",
                               recipients=[email])
-                msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"])
+                msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],inprogress=data["inprogress"],pending=data["pending"])
                 mail.send(msg)
                 log.info("Generated email notification ")
         except Exception as e:
-            log.exception("Exception while generating email notification for user registration: " +
+            log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
 
 
