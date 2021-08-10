@@ -9,7 +9,7 @@ const CardComponent = (props) => {
     const { value, classes } = props;
     return (
         <Grid container spacing={2} className={classes.cardGrid}>{
-            value.responseData.map((data, i) => {
+            value.filteredData.map((data, i) => {
                 return (
                     <Grid item xs={12} sm={6} md={5} lg={4} xl={4}
                         className={classes.card}

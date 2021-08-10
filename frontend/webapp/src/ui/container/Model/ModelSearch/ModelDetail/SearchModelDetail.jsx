@@ -54,6 +54,10 @@ const SearchModelDetail = (props) => {
         {
             title: "Submitter",
             para: data.submitter
+        },
+        {
+            title: "Published On",
+            para: data.publishedOn
         }
     ]
     const handleCardNavigation = () => {

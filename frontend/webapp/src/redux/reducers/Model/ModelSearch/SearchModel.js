@@ -92,10 +92,10 @@ const getContributionList = (state, payload) => {
                 domain: getDomainDetails(element.domain),
                 status: "Published",
                 language: lang,
-                refUrl:element.refUrl ? element.refUrl :"NA",
-                inferenceEndPoint:element.inferenceEndPoint,
+                refUrl: element.refUrl ? element.refUrl : "NA",
+                inferenceEndPoint: element.inferenceEndPoint,
                 source: element.languages.length > 0 && element.languages[0].sourceLanguage,
-                target:element.languages && element.languages.length > 0 && element.languages[0].targetLanguage,
+                target: element.languages && element.languages.length > 0 && element.languages[0].targetLanguage,
                 licence: element.license,
                 submitter: element.submitter.name,
                 trainingDataset: element.trainingDataset,
@@ -119,11 +119,32 @@ const getContributionList = (state, payload) => {
     return filteredData
 }
 
+const getSearchedList = (state, searchValue) => {
+    let results = [];
+    let searchKey = ["domain", "modelName", "status", "submitter"];
+    for (var i = 0; i < state.responseData.length; i++) {
+        Object.keys(state.responseData[i]).forEach((key) => {
+            if (searchKey.indexOf(key) > -1) {
+                if (state.responseData[i][key].toLowerCase().includes(searchValue.toLowerCase())) {
+                    results.push(state.responseData[i]);
+                }
+            }
+        })
+    }
+    return {
+        ...state,
+        filteredData: !searchValue ? state.responseData : results
+    }
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 
         case C.SUBMIT_MODEL_SEARCH:
             return getContributionList(state, action.payload);
+
+        case C.GET_SEARCHED_LIST:
+            return getSearchedList(state, action.payload)
         default:
             return {
                 ...state

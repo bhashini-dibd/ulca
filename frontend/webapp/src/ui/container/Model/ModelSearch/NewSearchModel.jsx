@@ -11,6 +11,7 @@ import updateFilter from '../../../../redux/actions/api/Model/ModelSearch/Benchm
 import APITransport from '../../../../redux/actions/apitransport/apitransport';
 import Record from "../../../../assets/no-record.svg";
 import { useHistory } from "react-router-dom";
+import SearchList from '../../../../redux/actions/api/Model/ModelSearch/SearchList';
 
 
 function TabPanel(props) {
@@ -36,11 +37,15 @@ export default () => {
     const filter = useSelector(state => state.searchFilter);
     const type = ModelTask.map(task => task.value);
     const [value, setValue] = useState(type.indexOf(filter.type))
+    const [searchValue,setSearchValue] = useState("");
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
         makeModelSearchAPICall(ModelTask[newValue].value);
+        setSearchValue("");
+        // dispatch(SearchList(searchValue))
+
     }
-    console.log(filter)
     const dispatch = useDispatch();
     const searchModelResult = useSelector(state => state.searchModel);
     const history = useHistory();
@@ -62,26 +67,17 @@ export default () => {
         })
     }
 
+    const handleSearch=(event)=>{
+        setSearchValue(event.target.value);
+        dispatch(SearchList(event.target.value))
+    }
     return (
-        <Tab handleChange={handleChange} value={value} tabs={ModelTask} >
+        <Tab handleSearch={handleSearch} searchValue={searchValue} handleChange={handleChange} value={value} tabs={ModelTask} >
             <TabPanel value={value} index={value}>
                 {searchModelResult.responseData.length ?
                     <CardComponent onClick={handleClick} value={searchModelResult} /> :
-
                     <div style={{ background: `url(${Record}) no-repeat center center`, height: '287px', marginTop: '20vh' }}>
-                        {/* //     <strong style={{
-                    //         position: "absolute",
-                    //         top: "65%"
-                    //     }}>No record found!</strong>
-                        // <div > */}
-                        {/* <img
-                            style={{ position: 'absolute', top: '45%', left: '38%', right: '38%' }}
-                            src={Record}
-                            alt="No records Icon"
-                        /> */}
                     </div>
-                    // {/* <span style={{ position: 'absolute', top: '70%', left: '42%', right: '38%' }}>No records found</span> */}
-                    // </div>
                 }
             </TabPanel>
         </Tab>
