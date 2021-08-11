@@ -19,14 +19,19 @@ class AudioMetadataCheck(BaseValidator):
         try:
             if request["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled]:
                 audio_file = request['record']['fileLocation']
-                file_size = os.path.getsize(audio_file)
+                try:
+                    file_size = os.path.getsize(audio_file)
+                except Exception as e:
+                    log.exception(f"Exception while accessing file from file store: {str(e)}")
+                    return {"message": "Exception while executing Audio metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+
                 if file_size == 0:
                     return {"message": "The audio file is unplayable, the filesize is 0 bytes", "code": "ZERO_BYTES_FILE", "status": "FAILED"}
 
                 try:
                     metadata = audio_metadata.load(audio_file)
                 except Exception as e:
-                    log.exception(f"Exception while loading the audio file: {str(e)}", e)
+                    log.exception(f"Exception while loading the audio file: {str(e)}")
                     return {"message": "Unable to load the audio file, file format is unsupported or the file is corrupt", "code": "INVALID_AUDIO_FILE", "status": "FAILED"}
 
                 if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
@@ -58,7 +63,7 @@ class AudioMetadataCheck(BaseValidator):
                 log.info('----Audio metadata check -> Passed----')
                 return super().execute(request)
         except Exception as e:
-            log.exception(f"Exception while executing Audio metadata check: {str(e)}", e)
+            log.exception(f"Exception while executing Audio metadata check: {str(e)}")
             return {"message": "Exception while executing Audio metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 # Log config
