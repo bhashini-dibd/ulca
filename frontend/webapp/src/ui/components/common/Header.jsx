@@ -232,13 +232,15 @@ const Header = (props) => {
                     </Grid>
                   </div>
                   <div className={classes.mobileAuth}>
-                    <Button
-                      className={classes.menuBtn}
-                      onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
-                      variant="text"
-                    >
-                      <GroupIcon />
-                    </Button>
+                    {authenticate() &&
+                      <Button
+                        className={classes.menuBtn}
+                        onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
+                        variant="text"
+                      >
+                        <GroupIcon />
+                      </Button>
+                    }
                     {/* <Button
                       className={classes.menuBtn}
                       variant="text"

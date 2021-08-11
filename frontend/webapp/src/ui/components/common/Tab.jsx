@@ -43,7 +43,10 @@ const styles = theme => ({
         borderTop: "none", borderRight: "none", borderLeft: "none", marginTop: '10px'
     },
     gridAlign: {
-        justifyContent: 'flex-end', alignItems: 'flex-end'
+        justifyContent: 'flex-end', alignItems: 'flex-end',
+        "@media (max-width:750px)": {
+            justifyContent: 'flex-start',
+          }
     }
 });
 
@@ -86,7 +89,7 @@ const SimpleTabs = (props) => {
         <div>
             <AppBar className={classes.appTab} position="static" color="inherit">
                 <Grid container spacing={2}>
-                    <Grid item xs={6} sm={6} md={7} lg={8} xl={8}>
+                    <Grid item xs={12} sm={12} md={7} lg={8} xl={8}>
                         <Tabs value={props.value} onChange={props.handleChange}>
                             {
                                 props.tabs.map((tab, index) => {
@@ -97,7 +100,7 @@ const SimpleTabs = (props) => {
                             }
                         </Tabs>
                     </Grid>
-                    <Grid item xs={6} sm={6} md={5} lg={4} xl={4}>
+                    <Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
                         <Grid container spacing={2} className={classes.gridAlign}>
                             <Grid item>
                                 <div className={classes.search}>
