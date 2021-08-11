@@ -22,7 +22,7 @@ class NotifierService:
     def notify_user(self,emails=None):
         try:
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
-            self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count,"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
+            # self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count,"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
@@ -49,6 +49,7 @@ class NotifierService:
 
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] } },{"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}}]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
+            log.info(aggresult)
             pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
             log.info(f"Pending :{pending_jobs}")
             log.info(f"In-Progress:{inprogress_jobs}")
