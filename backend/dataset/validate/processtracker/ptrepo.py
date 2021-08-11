@@ -111,7 +111,9 @@ class PTRepo:
             value = "validateSuccess"
             if error:
                 value = "validateError"
-            client.hincrby(key, value, 1)
+            val = client.hgetall(key)
+            if val:
+                client.hincrby(key, value, 1)
         except Exception as e:
             log.exception(f'Exception in redis search: {e}', e)
             return None
