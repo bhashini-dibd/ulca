@@ -21,7 +21,10 @@ const FileUploadStyles = (theme) => ({
     padding:"0"
   },
   fiterText:{
-marginTop:"3px"
+marginTop:"3px",
+"@media (max-width:800px)": {
+  display:"none"
+}
   },
  
   select: {

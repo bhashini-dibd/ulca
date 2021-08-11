@@ -152,7 +152,10 @@ const HeaderStyles = (theme) => ({
     boxShadow: '3px 0 2px -2px #00000029',
     height: '54px',
     alignContent: 'center',
-    display: 'grid'
+    display: 'grid',
+    "@media (max-width:800px)": {
+      display:"none"
+    }
   },
   btnStyle: {
     padding: '0px',
