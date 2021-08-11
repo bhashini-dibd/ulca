@@ -27,7 +27,7 @@ const CardComponent = (props) => {
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{getLanguageName(data.target)}</Typography>
                                 </Grid>}
                             </Grid>
-                            <Grid style={{ marginTop: '28px', color: "#ffffff" }} container>
+                            <Grid style={{ marginTop: '20px', color: "#ffffff" }} container>
                                 <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Domain</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{FilterByDomain([data.domain])[0].label}</Typography>

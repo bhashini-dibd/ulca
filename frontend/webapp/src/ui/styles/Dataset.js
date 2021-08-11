@@ -24,8 +24,8 @@ const DataSet = (theme) => ({
         marginTop: '1vh',
 
     },
-    computeBtn:{
-        borderRadius:"20px"
+    computeBtn: {
+        borderRadius: "20px"
     },
 
     divStyle: {
@@ -268,17 +268,25 @@ const DataSet = (theme) => ({
     filterContainer: {
         borderBottom: '1px solid #00000029',
         paddingLeft: '18.5px',
-        marginTop: '20px'
+        marginTop: '20px',
+        width: '600px',
+        maxHeight:'270px',
+        overflow:'auto'
     },
     filterTypo: {
         marginBottom: '9px'
     },
     applyBtn: {
         float: "right",
-
-        borderRadius: '4px',
+        borderRadius: '20px',
         margin: '9px 16px 9px auto',
         width: '80px'
+    },
+    clrBtn: {
+        float: "right",
+        borderRadius: '20px',
+        margin: '9px 10px 9px auto',
+        width: '100px'
     },
     menuStyle: {
         padding: '0px',

@@ -65,7 +65,7 @@ const FilterList = (props) => {
     return (
         <div>
             <Popover
-                // style={{ width: '399px', minHeight: '246px' }}
+                // style={{ width: '600px', minHeight: '246px' }}
                 id={props.id}
                 open={props.open}
                 anchorEl={props.anchorEl}
@@ -81,8 +81,8 @@ const FilterList = (props) => {
             >
                 
                 <Grid container className={classes.filterContainer}>
-                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                        <Typography variant="body2" className={classes.filterTypo}>Domain</Typography>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <Typography variant="h6" className={classes.filterTypo}>Domain</Typography>
                         <FormGroup>
                             {filter.domainFilter.map((type) => {
                                 return (
@@ -100,11 +100,11 @@ const FilterList = (props) => {
                             })}
                         </FormGroup>
                     </Grid>
-                    <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
+                    {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical"></Divider>
-                    </Grid>
-                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                        <Typography variant="body2" className={classes.filterTypo}>Language</Typography>
+                    </Grid> */}
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <Typography variant="h6" className={classes.filterTypo}>Language</Typography>
                         <FormGroup>
                             {filter.language.map((type) => {
                                 return (
@@ -123,11 +123,11 @@ const FilterList = (props) => {
                         </FormGroup>
                     </Grid>
                 
-                <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
+                {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical"></Divider>
-                    </Grid>
-                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                        <Typography variant="body2" className={classes.filterTypo}>Submitter</Typography>
+                    </Grid> */}
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                        <Typography variant="h6" className={classes.filterTypo}>Submitter</Typography>
                         <FormGroup>
                             {filter.submitter.map((type) => {
                                 return (
@@ -154,7 +154,7 @@ const FilterList = (props) => {
                 <Button
                     
                     onClick={handleClearAll}
-                    color="primary" size="small" variant="contained" className={classes.applyBtn}> Clear All
+                    color="primary" size="small" variant="contained" className={classes.clrBtn}> Clear All
                 </Button>
                
                 

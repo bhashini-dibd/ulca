@@ -9,6 +9,8 @@ import { Button, Grid } from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
+import FilterListIcon from '@material-ui/icons/FilterList';
+
 
 const styles = theme => ({
     search: {
@@ -46,8 +48,10 @@ const styles = theme => ({
         justifyContent: 'flex-end', alignItems: 'flex-end',
         "@media (max-width:750px)": {
             justifyContent: 'flex-start',
-          }
-    }
+        }
+    },
+    iconStyle: { marginRight: '.5rem' },
+    filterBtn:{borderRadius:'22px'}
 });
 
 function TabPanel(props) {
@@ -119,7 +123,7 @@ const SimpleTabs = (props) => {
                                 </div>
                             </Grid>
                             {/* <Grid item>
-                                <Button variant="outlined" onClick={props.handleShowFilter}>Filter</Button>
+                                <Button variant="outlined" size="medium" className={classes.filterBtn} onClick={props.handleShowFilter} ><FilterListIcon className={classes.iconStyle} />Filter</Button>
                             </Grid> */}
                         </Grid>
                     </Grid>
