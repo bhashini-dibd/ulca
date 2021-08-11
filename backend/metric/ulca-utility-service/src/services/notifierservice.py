@@ -1,4 +1,5 @@
 
+import os
 import config
 import logging
 from datetime import datetime
@@ -8,6 +9,7 @@ from flask import render_template
 from app import mail
 from repositories import NotifierRepo
 log         =   logging.getLogger('file')
+import csv
 import pytz
 
 IST = pytz.timezone('Asia/Kolkata')
@@ -19,8 +21,8 @@ class NotifierService:
     # Cron JOB to update filter set params
     def notify_user(self,emails=None):
         try:
-            parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs = self.calculate_counts()
-            self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count,"pending":pending_jobs,"inprogress":inprogress_jobs})
+            parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
+            self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count,"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
@@ -45,14 +47,16 @@ class NotifierService:
             asr_unlabeled_count=round(asr_unlabeled_count,4)
             log.info(asr_unlabeled_count)
 
-            pending_jobs = repo.count_process_col({"status": "Pending"},config.process_db_schema,config.process_col)
-            log.info(pending_jobs)
-            inprogress_jobs = repo.count_process_col({"status": "In-Progress"},config.process_db_schema,config.process_col)
-            log.info(inprogress_jobs)
-            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs
+            aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] } },{"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}}]
+            aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
+            pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
+            log.info(f"Pending :{pending_jobs}")
+            log.info(f"In-Progress:{inprogress_jobs}")
+            log.info(f"file:{jobfile}")
+            # 
+            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,jobfile
         except Exception as e:
             log.exception(f'{e}')
-            return 0,0,0,0,0,0,0
 
     def generate_email_notification(self,data):
 
@@ -66,11 +70,69 @@ class NotifierService:
                               sender="anuvaad.support@tarento.com",
                               recipients=[email])
                 msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],inprogress=data["inprogress"],pending=data["pending"])
+                file= data["file"]
+                with open (file,'rb') as fp:
+                    msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
+
                 mail.send(msg)
+                os.remove(file)
                 log.info(f"Generated email notification for {user}")
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
+
+    def process_aggregation_output(self,aggdata):
+        try:
+            
+            inprogress = 0
+            pending = 0
+            jobs=[]
+            stages = ["download","ingest","validate","publish"]
+            for agg in aggdata:
+                status={}
+                status["serviceRequestNumber"] = agg["serviceRequestNumber"]
+                for task in agg["tasks"]:
+                    if task["tool"] == "search":
+                        break
+                    status[task["tool"]] = task["status"]
+                jobs.append(status)
+            
+            for job in jobs:
+                for stage in stages:
+                    if job.get(stage) == None:
+                        job[stage] = "Pending"
+                        
+            for job in jobs:
+                if "Pending" in job.values():
+                    pending = pending +1
+                else:
+                    inprogress = inprogress+1
+            csvfile_created = self.write_to_csv(jobs)
+            return pending,inprogress,csvfile_created
+
+        except Exception as e:
+            log.exception(f"Exception:{e}") 
+
+    
+    def write_to_csv(self, data_list):
+        try:
+            tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d-%H:%M:%S')
+            file = f'{config.shared_storage_path}{tdy_date}.csv'
+            csv_headers = ["serviceRequestNumber","download","ingest","validate","publish"]
+            log.info('Started csv writing !...')
+            with open(file, 'w') as output_file:
+                dict_writer = csv.DictWriter(output_file,fieldnames=csv_headers,extrasaction='ignore')
+                dict_writer.writeheader()
+                for data in data_list:
+                    dict_writer.writerow(data)
+            log.info(f'{len(data_list)} Jobs written to csv -{file}')
+            return file
+        except Exception as e:
+            log.exception(f'Exception in csv writer: {e}')
+            return
+
+
+            
 
 
 

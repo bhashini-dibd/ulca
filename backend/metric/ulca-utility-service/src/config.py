@@ -13,11 +13,11 @@ MAIL_SETTINGS           =   {
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
                                 "MAIL_USERNAME" : os.environ.get('ULCA_SUPPORT_EMAIL','xx'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','xx')
+                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','xxx')
                             }
 
 
-receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"")#,'ravi.roy@tarento.com','aravinth.bheemaraj@tarento.com','rajagopal.reddy@tarento.com'
+receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"jainy.joy@tarento.com")
 
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 process_connection_url      =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhost:27017')
@@ -30,3 +30,4 @@ data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabe
 
 process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracker')
 process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')
+shared_storage_path         =   os.environ.get('ULCA_SHARED_STORAGE_PATH', "/opt/")

@@ -57,6 +57,26 @@ class NotifierRepo:
         except Exception as e:
             log.exception(f'Exception in repo search: {e}', e)
             return []
+
+    def aggregate_process_col(self, query,schema,collection):
+        log.info(f"Mongo aggregation : {query},{schema},{collection}")
+        print(query,schema,collection,"***aggregating***")
+        print(config.process_connection_url)
+        try:
+            log.info(f"Mongo count calculation : {query},{schema},{collection}")
+            client = pymongo.MongoClient(config.data_connection_url)
+
+            mongo_instance = client[schema][collection]
+            res =   mongo_instance.aggregate(query) 
+            result = []
+            for record in res:
+                result.append(record)
+            return result
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return []
+
+
 #  Log config
 dictConfig({
     'version': 1,
