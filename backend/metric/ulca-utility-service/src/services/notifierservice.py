@@ -47,14 +47,16 @@ class NotifierService:
             asr_unlabeled_count=round(asr_unlabeled_count,4)
             log.info(asr_unlabeled_count)
 
-            aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] } },{"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}}]
+            aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] } },
+                        {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
+                        ]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
             log.info(aggresult)
             pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
             log.info(f"Pending :{pending_jobs}")
             log.info(f"In-Progress:{inprogress_jobs}")
             log.info(f"file:{jobfile}")
-            # 
+            
             return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,jobfile
         except Exception as e:
             log.exception(f'{e}')
@@ -94,6 +96,7 @@ class NotifierService:
                 status["serviceRequestNumber"] = agg["serviceRequestNumber"]
                 for task in agg["tasks"]:
                     if task["tool"] == "search":
+                        status.clear()
                         break
                     status[task["tool"]] = task["status"]
                 jobs.append(status)

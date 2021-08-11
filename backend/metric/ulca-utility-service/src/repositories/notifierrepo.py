@@ -64,10 +64,11 @@ class NotifierRepo:
         print(config.process_connection_url)
         try:
             log.info(f"Mongo count calculation : {query},{schema},{collection}")
-            client = pymongo.MongoClient(config.data_connection_url)
+            client = pymongo.MongoClient(config.process_connection_url)
 
             mongo_instance = client[schema][collection]
-            res =   mongo_instance.aggregate(query) 
+            
+            res =   mongo_instance.aggregate(query)
             result = []
             for record in res:
                 result.append(record)
@@ -76,6 +77,7 @@ class NotifierRepo:
             log.exception(f'Exception in repo search: {e}', e)
             return []
 
+    
 
 #  Log config
 dictConfig({
