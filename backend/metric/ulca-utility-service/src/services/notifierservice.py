@@ -51,7 +51,7 @@ class NotifierService:
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
-            log.info(aggresult)
+            # log.info(aggresult)
             pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
             log.info(f"Pending :{pending_jobs}")
             log.info(f"In-Progress:{inprogress_jobs}")
@@ -92,12 +92,11 @@ class NotifierService:
             jobs=[]
             stages = ["download","ingest","validate","publish"]
             for agg in aggdata:
+                if agg["serviceRequestAction"] == "search":
+                    continue
                 status={}
                 status["serviceRequestNumber"] = agg["serviceRequestNumber"]
                 for task in agg["tasks"]:
-                    if task["tool"] == "search":
-                        status.clear()
-                        break
                     status[task["tool"]] = task["status"]
                 jobs.append(status)
             
