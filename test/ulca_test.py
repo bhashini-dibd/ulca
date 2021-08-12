@@ -10,7 +10,6 @@ import time
 from typing import NewType, final
 sys.path.append("C:\GITLOCUSTCODE\Locust")
 import hashlib
-from utilities.csvreader import CSVreader
 import boto3
 import s3fs
 from datetime import datetime
