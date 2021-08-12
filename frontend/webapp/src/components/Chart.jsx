@@ -369,9 +369,9 @@ const ChartRender = (props) => {
 									type="category"
 									
 								>
-									<Label value= {axisValue.xAxis} position= 'insideBottom' fontWeight="bold" fontSize={18}></Label>
+									<Label value= {axisValue.xAxis} position= 'insideBottom' fontWeight="bold" fontSize={16}></Label>
 								</XAxis>
-								<YAxis padding={{ top: 30 }}  tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} ><Label value= {axisValue.yAxis} angle= {-90} position= 'insideLeft' fontWeight="bold" fontSize={18} ></Label></YAxis>
+								<YAxis padding={{ top: 30 }}  tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} ><Label value= {axisValue.yAxis} angle= {-90} position= 'insideLeft' fontWeight="bold" fontSize={16} ></Label></YAxis>
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
