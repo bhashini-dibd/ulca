@@ -13,6 +13,7 @@ import hashlib
 from utilities.csvreader import CSVreader
 import boto3
 import s3fs
+from datetime import datetime
 
 
 
@@ -20,6 +21,7 @@ s3 = boto3.client('s3')
 obj = s3.get_object(Bucket= 'anuvaad-raw-datasets', Key ='json.csv')
 pd_reader = pd.read_csv(obj['Body'])
 my_reader = pd_reader.to_dict('records')
+outurl = 'https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/json_output.csv'
 ###
 s33 = s3fs.S3FileSystem(anon=False)
 
@@ -74,13 +76,20 @@ class  UserBehaviour(SequentialTaskSet):
     @task
     def md5(self):
         self.md5_list=[]
+        self.param = []
         #files
         for row in my_reader:
+            date = datetime.now().strftime("%Y_%m_%d-%I:%M:%S_%p")
+            smnth = row["datasetName"]
+            row["datasetName"] = smnth +  date
+
             paramdata = {
                 "userId": self.userid,
                 "datasetName": row["datasetName"],
                 "url": row["url"]
             }
+            self.param.append(paramdata)
+
             data=(json.dumps(paramdata)).encode("utf-8")
             test = hashlib.md5(data).hexdigest()
             self.crypt= hashlib.md5((self.private + "|" + test).encode("utf-8")).hexdigest()
@@ -95,16 +104,10 @@ class  UserBehaviour(SequentialTaskSet):
         for idx, row in enumerate(my_reader):
 
             headers1 = {"key": self.public,"sig":self.md5_list[idx]}
-           
-            paramdata = {
-                    "userId": self.userid,#userid
-                    "datasetName": row["datasetName"],
-                    "url": row["url"],
-                }
-            self.sub_val = [row['type'],row['datasetName'],row['url']]
+            self.sub_val = [row['type'],self.param[idx]['datasetName'],row['url']]
            
             with self.client.post("https://dev-auth.ulcacontrib.org/ulca/apis/v0/dataset/corpus/submit",
-                                json=paramdata, headers=headers1, name="submit") as response:
+                                json=self.param[idx], headers=headers1, name="submit") as response:
                 json_res = response.json()
                
                 if 'data' in json_res.keys():
@@ -150,7 +153,7 @@ class  UserBehaviour(SequentialTaskSet):
                             finala = finald.json()
 
                         newvari = finala['data']
-                        print("this is to fix pending for long time issue",newvari)
+                        #print("this is to fix pending for long time issue",newvari)
                         if newvari[0]['tool'] == 'download' and newvari[0]['status'] == 'Completed' and len(newvari) > 1:
                             print("downlaod is completed and successful")
                             downvar = 'successful'
@@ -243,6 +246,7 @@ class  UserBehaviour(SequentialTaskSet):
 
     @task
     def done(self):
+        print("Resultant csv output -- ",outurl)
         self.user.environment.runner.quit()
 
 
