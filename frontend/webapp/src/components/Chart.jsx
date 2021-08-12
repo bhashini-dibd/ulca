@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { withStyles, Typography, Paper, Button,TextField } from "@material-ui/core";
 import ChartStyles from "../styles/Dashboard";
-import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis, Tooltip } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis, Tooltip,Label } from 'recharts';
 import FetchLanguageDataSets from "../actions/FetchLanguageDataSets";
 import { ArrowBack } from '@material-ui/icons';
 import {DatasetItems,Language} from "../configs/DatasetItems";
@@ -298,6 +298,20 @@ const ChartRender = (props) => {
 				setTitle("")
 		}
 	}
+
+	const CustomizedAxisTick =(props)=> {
+		
+		  const { x, y, payload } = props;
+	  
+		  return (
+			<g transform={`translate(${x},${y})`}>
+			  <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
+			   {payload.value && (payload.value.substr(0,14)+ (payload.value.length> 14? "...":""))}
+			  </text>
+			</g>
+		  );
+		
+	  }
 	return (
 
 		<section className="section dashboard" style={{background:"white"}}>
@@ -342,20 +356,22 @@ const ChartRender = (props) => {
 					</div>
 					
 					<div className={classes.title}>
-						<ResponsiveContainer width="95%" height={550} >
-							<BarChart width={900} height={350} data={data} fontSize="14px" fontFamily="Roboto" maxBarSize={100} >
+						<ResponsiveContainer width="98%" height={550} >
+							<BarChart width={900} height={400} data={data} fontSize="14px" fontFamily="Roboto" maxBarSize={100} >
 
 								<XAxis dataKey="label"
 									textAnchor={"end"}
-									tick={{ angle: -30, marginTop: "8px" }}
+									tick={<CustomizedAxisTick/>}
 									height={130}
 									interval={0}
 									position="insideLeft"
+									
 									type="category"
-									label={{ value: axisValue.xAxis, position: 'insideRight', offset: 0 }}
+									
 								>
+									<Label value= {axisValue.xAxis} position= 'insideBottom' fontWeight="bold" fontSize={18}></Label>
 								</XAxis>
-								<YAxis padding={{ top: 30 }} label={{ value: axisValue.yAxis, angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
+								<YAxis padding={{ top: 30 }}  tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} ><Label value= {axisValue.yAxis} angle= {-90} position= 'insideLeft' fontWeight="bold" fontSize={18} ></Label></YAxis>
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
