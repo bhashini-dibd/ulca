@@ -20,7 +20,11 @@ class AudioMetadataCheck(BaseValidator):
             if request["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled]:
                 audio_file = request['record']['fileLocation']
                 try:
-                    file_size = os.path.getsize(audio_file)
+                    if os.path.exists(audio_file) and os.path.isfile(audio_file):
+                        file_size = os.path.getsize(audio_file)
+                    else:
+                        log.info('The audio file does not exist in file store')
+                        return {"message": "Exception while executing Audio metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
                 except Exception as e:
                     log.exception(f"Exception while accessing file from file store: {str(e)}")
                     return {"message": "Exception while executing Audio metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
