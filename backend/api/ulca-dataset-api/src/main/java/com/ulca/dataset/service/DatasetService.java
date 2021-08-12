@@ -579,7 +579,10 @@ public class DatasetService {
 		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
 		Dataset dataset = datasetDao.findByDatasetId(processTracker.getDatasetId());
 		dataset.getDatasetFileIdentifier().setFileUlcaUrl(localUrl);
-		datasetDao.save(dataset);
+		
+		Fileidentifier fileidentifier = dataset.getDatasetFileIdentifier();
+		fileidentifier.setFileUlcaUrl(localUrl);
+		fileIdentifierDao.save(fileidentifier);
 	}
 
 }
