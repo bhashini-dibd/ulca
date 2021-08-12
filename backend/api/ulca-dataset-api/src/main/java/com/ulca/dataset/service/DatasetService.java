@@ -574,5 +574,12 @@ public class DatasetService {
 		return taskTrackerList;
 	}
 	
+	public void updateDatasetFileLocation(String serviceRequestNumber, String localUrl) {
+		
+		ProcessTracker processTracker = processTrackerDao.findByServiceRequestNumber(serviceRequestNumber);
+		Dataset dataset = datasetDao.findByDatasetId(processTracker.getDatasetId());
+		dataset.getDatasetFileIdentifier().setFileUlcaUrl(localUrl);
+		datasetDao.save(dataset);
+	}
 
 }
