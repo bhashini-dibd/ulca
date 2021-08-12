@@ -124,7 +124,7 @@ class ParallelRepo:
                 pipeline.append({"$match": {f'collectionMethod.1': {"$exists": True}}})
             if query['groupBy']:
                 pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
-                count = 1
+                count = 2
                 if 'countOfTranslations' in query.keys():
                     count = query["countOfTranslations"]
                 pipeline.append(

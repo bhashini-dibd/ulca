@@ -19,6 +19,8 @@ class DatasetUtils:
     # Utility to get tags out of an object
     def get_tags(self, d):
         for v in d.values():
+            if not v:
+                continue
             if isinstance(v, dict):
                 yield from self.get_tags(v)
             elif isinstance(v, list):

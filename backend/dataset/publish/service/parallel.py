@@ -309,9 +309,9 @@ class ParallelService:
             if 'maxScore' in query.keys():
                 score_query["$lte"] = query["maxScore"]
             if score_query:
-                db_query["scoreQuery"] = {"data.score": score_query}
+                db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": score_query}}}
             if 'score' in query.keys():
-                db_query["scoreQuery"] = {"data.score": query["score"]}
+                db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": query["score"]}}}
             if 'collectionSource' in query.keys():
                 tags.extend(query["collectionSource"])
             if 'collectionMode' in query.keys():
