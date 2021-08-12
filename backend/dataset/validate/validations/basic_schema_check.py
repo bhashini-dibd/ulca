@@ -30,7 +30,7 @@ class BasicSchemaCheck(BaseValidator):
             else:
                 return {"message": "Mandatory keys missing", "code": "KEYS_MISSING", "status": "FAILED"}
         except Exception as e:
-            log.exception(f"Exception while executing basic schema check: {str(e)}", e)
+            log.exception(f"Exception while executing basic schema check: {str(e)}")
             return {"message": "Exception while executing basic schema check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 
