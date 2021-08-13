@@ -34,6 +34,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
@@ -80,6 +84,7 @@
 		    <artifactId>jedis</artifactId>
 		   <!--   <version>3.5.1</version>-->
 		</dependency>
+		
 	</dependencies>
 
 	<build>

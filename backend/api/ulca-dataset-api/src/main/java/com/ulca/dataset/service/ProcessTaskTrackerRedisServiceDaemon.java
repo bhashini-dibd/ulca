@@ -45,6 +45,9 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	private Integer successThreshold;
 	
 
+	@Autowired
+	DatasetFileService datasetFileService;
+	
 	@Scheduled(cron = "*/10 * * * * *")
 	public void updateTaskTracker() {
 		
@@ -283,6 +286,9 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 			taskTrackerRedisDao.delete(serviceRequestNumber);
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
+			
+			//upload submitted-datasets file to object store and delete the file
+			datasetFileService.datasetAfterIngestCleanJob(serviceRequestNumber);
 		}
 
 	}
