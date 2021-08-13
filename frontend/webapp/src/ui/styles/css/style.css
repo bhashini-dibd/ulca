@@ -26,10 +26,7 @@ a {
     color: #ffffff;
     /*     font-size: .875rem; */
 }
-a:hover { 
-   text-decoration: underline;
-   color: #ffffff;
-}
+
 img {
   max-width: 100%;
   height: auto;
