@@ -32,7 +32,7 @@ class SentenceLengthCheck(BaseValidator):
             log.info('----sentence length check  -> Passed----')
             return super().execute(request)
         except Exception as e:
-            log.exception(f"Exception while executing sentence length check: {str(e)}", e)
+            log.exception(f"Exception while executing sentence length check: {str(e)}")
             return {"message": "Exception while executing sentence length check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 # Log config
