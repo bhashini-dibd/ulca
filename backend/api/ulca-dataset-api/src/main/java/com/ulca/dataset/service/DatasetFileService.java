@@ -5,6 +5,7 @@ import java.io.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.ulca.dataset.request.ObjectStoreFileUploadRequest;
@@ -67,12 +68,14 @@ public class DatasetFileService {
 		String filePath = downloadFolder + "/" + fileName;
 		File file = new File(filePath);
 		Boolean isZippedFileDeleted = file.delete();
-
+		
 		// delete unzipped folder
 		String unzippedFolderLocation = downloadFolder + "/" + serviceRequestNumber;
 		file = new File(unzippedFolderLocation);
-		Boolean isUzippedFileDeleted = file.delete();
-
+		boolean result = FileSystemUtils.deleteRecursively(file);
+		log.info("dataset downloaded file is being deleted after storing to object store");
+		log.info("deleted file :: " + fileName );
+		log.info("deleted folder :: " + unzippedFolderLocation);
 	}
 
 }
