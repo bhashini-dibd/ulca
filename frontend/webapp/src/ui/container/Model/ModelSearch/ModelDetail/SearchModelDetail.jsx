@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import Header from '../../../../components/common/Header';
 import AudioRecord from './VoiceRecorder';
+import Footer from "../../../../components/common/Footer"
 import Theme from '../../../../theme/theme-default';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import {
@@ -118,6 +119,7 @@ const SearchModelDetail = (props) => {
 
                 }
             </div>}
+            <Footer/>
         </MuiThemeProvider>
     )
 }
