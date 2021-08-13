@@ -76,31 +76,17 @@ public class DatasetFileService {
 		
 		// delete unzipped folder
 		String unzippedFolderLocation = downloadFolder + "/" + serviceRequestNumber;
-		//file = new File(unzippedFolderLocation);
-		/*
 		Path dir = Paths.get(unzippedFolderLocation);
 		try {
 			boolean result = FileSystemUtils.deleteRecursively(dir);
 		} catch (IOException e) {
 			
-			log.info("could not delete folder :: " + unzippedFolderLocation);
-			e.printStackTrace();
-		}
-		*/
-		Path pathToBeDeleted = Paths.get(unzippedFolderLocation);
-
-	    try {
-			Files.walk(pathToBeDeleted)
-			  .sorted(Comparator.reverseOrder())
-			  .map(Path::toFile)
-			  .forEach(File::delete);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			log.info("could not delete folder :: " + unzippedFolderLocation + " serviceRequestNumber : " + serviceRequestNumber);
 			e.printStackTrace();
 		}
 	    
-		log.info("dataset downloaded file is being deleted after storing to object store");
-		log.info("deleted file :: " + fileName );
+		log.info("dataset downloaded file is being deleted after storing to object store, serviceRequestNumber : " + serviceRequestNumber);
+		log.info("deleted file :: " + filePath );
 		log.info("deleted folder :: " + unzippedFolderLocation);
 	}
 
