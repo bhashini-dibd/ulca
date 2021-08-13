@@ -270,8 +270,12 @@ const DataSet = (theme) => ({
         paddingLeft: '18.5px',
         marginTop: '20px',
         width: '600px',
-        maxHeight:'270px',
-        overflow:'auto'
+        maxHeight: '270px',
+        overflow: 'auto',
+        "@media (max-width:550px)": {
+            width: '330px',
+            maxHeight: '170px',
+        }
     },
     filterTypo: {
         marginBottom: '9px'

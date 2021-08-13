@@ -3,14 +3,14 @@ import DataSet from "../../../../styles/Dataset";
 import { withStyles, Button, Divider, Grid, Typography, Popover, FormGroup, Checkbox, FormControlLabel } from "@material-ui/core";
 
 const FilterList = (props) => {
-    const {classes} = props;
+    const { classes } = props;
     const { filter, selectedFilter, clearAll, apply } = props
     const [selectedDomain, setSelectedDomain] = useState(selectedFilter.domainFilter)
     const [selectedLanguage, setSelectedLanguage] = useState(selectedFilter.language)
     const [selectedSubmitter, setSelectedSubmitter] = useState(selectedFilter.submitter)
     const handleDatasetChange = (e) => {
         if (e.target.checked)
-        setSelectedDomain([...selectedDomain, e.target.name])
+            setSelectedDomain([...selectedDomain, e.target.name])
         else {
             const selected = Object.assign([], selectedDomain)
             const index = selected.indexOf(e.target.name);
@@ -24,7 +24,7 @@ const FilterList = (props) => {
     }
     const handleStatusChange = (e) => {
         if (e.target.checked)
-        setSelectedLanguage([...selectedLanguage, e.target.name])
+            setSelectedLanguage([...selectedLanguage, e.target.name])
         else {
             const selected = Object.assign([], selectedLanguage)
             const index = selected.indexOf(e.target.name);
@@ -37,7 +37,7 @@ const FilterList = (props) => {
     }
     const handleSubmitterChange = (e) => {
         if (e.target.checked)
-        setSelectedSubmitter([...selectedSubmitter, e.target.name])
+            setSelectedSubmitter([...selectedSubmitter, e.target.name])
         else {
             const selected = Object.assign([], selectedLanguage)
             const index = selected.indexOf(e.target.name);
@@ -55,7 +55,7 @@ const FilterList = (props) => {
         clearAll({ modelType: [], status: [] })
     }
     const isChecked = (type, param) => {
-        const index = param === 'domainFilter' ? selectedDomain.indexOf(type) : param === 'language' ? selectedLanguage.indexOf(type): selectedSubmitter.indexOf(type);
+        const index = param === 'domainFilter' ? selectedDomain.indexOf(type) : param === 'language' ? selectedLanguage.indexOf(type) : selectedSubmitter.indexOf(type);
         if (index > -1)
             return true
         return false
@@ -79,7 +79,7 @@ const FilterList = (props) => {
                     horizontal: 'right',
                 }}
             >
-                
+
                 <Grid container className={classes.filterContainer}>
                     <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <Typography variant="h6" className={classes.filterTypo}>Domain</Typography>
@@ -122,8 +122,8 @@ const FilterList = (props) => {
                             })}
                         </FormGroup>
                     </Grid>
-                
-                {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
+
+                    {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical"></Divider>
                     </Grid> */}
                     <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
@@ -152,12 +152,12 @@ const FilterList = (props) => {
                     color="primary" size="small" variant="contained" className={classes.applyBtn}> Apply
                 </Button>
                 <Button
-                    
+                    disabled={!(selectedDomain.length || selectedLanguage.length || selectedSubmitter.length)}
                     onClick={handleClearAll}
-                    color="primary" size="small" variant="contained" className={classes.clrBtn}> Clear All
+                    size="small" variant="outlined" className={classes.clrBtn}> Clear All
                 </Button>
-               
-                
+
+
 
             </Popover>
         </div >
