@@ -33,7 +33,11 @@ class AudioMetadataCheck(BaseValidator):
                     return {"message": "The audio file is unplayable, the filesize is 0 bytes", "code": "ZERO_BYTES_FILE", "status": "FAILED"}
 
                 try:
-                    metadata = audio_metadata.load(audio_file)
+                    if os.path.exists(audio_file) and os.path.isfile(audio_file):
+                        metadata = audio_metadata.load(audio_file)
+                    else:
+                        log.info('The audio file does not exist in file store')
+                        return {"message": "Exception while executing Audio metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
                 except Exception as e:
                     log.exception(f"Exception while loading the audio file: {str(e)}")
                     return {"message": "Unable to load the audio file, file format is unsupported or the file is corrupt", "code": "INVALID_AUDIO_FILE", "status": "FAILED"}
