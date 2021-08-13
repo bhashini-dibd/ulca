@@ -1,6 +1,9 @@
 package com.ulca.dataset.service;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,8 +74,15 @@ public class DatasetFileService {
 		
 		// delete unzipped folder
 		String unzippedFolderLocation = downloadFolder + "/" + serviceRequestNumber;
-		file = new File(unzippedFolderLocation);
-		boolean result = FileSystemUtils.deleteRecursively(file);
+		//file = new File(unzippedFolderLocation);
+		Path dir = Paths.get(unzippedFolderLocation);
+		try {
+			boolean result = FileSystemUtils.deleteRecursively(dir);
+		} catch (IOException e) {
+			
+			log.info("could not delete folder :: " + unzippedFolderLocation);
+			e.printStackTrace();
+		}
 		log.info("dataset downloaded file is being deleted after storing to object store");
 		log.info("deleted file :: " + fileName );
 		log.info("deleted folder :: " + unzippedFolderLocation);
