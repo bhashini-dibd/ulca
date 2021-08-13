@@ -190,7 +190,7 @@ const Login = (props) => {
                   </IconButton>
                 </InputAdornment>
               }
-              labelWidth={80}
+              labelWidth={100}
             />
             {error.password && <FormHelperText error={true}>Incorrect password</FormHelperText>}
           </FormControl>
