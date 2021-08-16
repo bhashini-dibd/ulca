@@ -3,9 +3,13 @@ const internalUrls = {
         name: 'Dataset',
         url: '/dashboard'
     },
+    model: {
+        name: 'Model',
+        url: '/dashboard'
+    },
     myContribution: {
         name: 'My Contribution',
-        url: '/my-contribution'
+        url: '/dataset/my-contribution'
     },
     mySearches: {
         name: 'My Searches',

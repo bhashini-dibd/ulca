@@ -1,0 +1,496 @@
+openapi: 3.0.1
+info:
+  title: Unified Language Contribution API (ULCA) documentation
+  description: 'The ULCA API documentation defines a core set of interfaces that enables users and communities to contribute AI/ML datasets to build a large, open Indic languages resource ecosystem. The dataset contributions are primarily geared toward the area of NLP, ASR/TTS and OCR. The documentation proposes core set of interfaces where various AI based models can be hosted, referenced and benchmarked. The interfaces enables entire community to participate, collaborate and track key benchmark parameters.'
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 0.7.0
+servers:
+- url: https://stage-auth.ulcacontrib.org
+  description: Production server (uses live data)
+paths:
+  /ulca/apis/v0/dataset/corpus/submit:
+    post:
+      tags:
+      - dataset-controller
+      operationId: datasetSubmit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetSubmitRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetSubmitResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+      
+
+  /ulca/apis/v0/dataset/corpus/search:
+    post:
+      tags:
+      - dataset-controller
+      operationId: corpusSearch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetCorpusSearchRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetCorpusSearchResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/listByUserId:
+    get:
+      tags:
+      - dataset-controller
+      operationId: listByUserId
+      parameters:
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: startPage
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: endPage
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetListByUserIdResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/getByServiceRequestNumber:
+    get:
+      tags:
+      - dataset-controller
+      operationId: datasetByServiceRequestNumber
+      parameters:
+      - name: serviceRequestNumber
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetByServiceReqNrResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/getByDatasetId:
+    get:
+      tags:
+      - dataset-controller
+      operationId: datasetById
+      parameters:
+      - name: datasetId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetByIdResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/corpus/search/status:
+    get:
+      tags:
+      - dataset-controller
+      operationId: searchStatus
+      parameters:
+      - name: serviceRequestNumber
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetSearchStatusResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/corpus/search/listByUserId:
+    get:
+      tags:
+      - dataset-controller
+      operationId: searchListByUserId
+      parameters:
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: startPage
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: endPage
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SearchListByUserIdResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+                
+components:
+  schemas:
+    DatasetSubmitRequest:
+      required:
+      - datasetName
+      - url
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+        datasetName:
+          type: string
+        url:
+          type: string
+    Data:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+        datasetId:
+          type: string
+        timestamp:
+          type: string
+    DatasetSubmitResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Data'
+    DatasetCorpusSearchRequest:
+      required:
+      - criteria
+      type: object
+      properties:
+        userId:
+          type: string
+        datasetType:
+          type: string
+          enum:
+          - parallel-corpus
+          - monolingual-corpus
+          - asr-corpus
+          - asr-unlabeled-corpus
+          - ocr-corpus
+          - document-layout-corpus
+        criteria:
+          $ref: '#/components/schemas/SearchCriteria'
+    SearchCriteria:
+      type: object
+      properties:
+        licence:
+          type: array
+          items:
+            type: string
+        minScore:
+          type: number
+          format: float
+        serviceRequestNumber:
+          type: string
+        targetLanguage:
+          type: array
+          items:
+            type: string
+        collectionMode:
+          type: array
+          items:
+            type: string
+        multipleContributors:
+          type: boolean
+        maxScore:
+          type: number
+          format: float
+        collectionSource:
+          type: array
+          items:
+            type: string
+        score:
+          type: number
+          format: float
+        domain:
+          type: array
+          items:
+            type: string
+        limit:
+          type: integer
+          format: int32
+        datasetId:
+          type: string
+        datasetType:
+          type: string
+        sourceLanguage:
+          type: array
+          items:
+            type: string
+        groupBy:
+          type: boolean
+        countOfTranslations:
+          type: integer
+          format: int32
+        originalSourceSentence:
+          type: boolean
+    DatasetCorpusSearchResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Data'
+    DatasetListByUserIdResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetListByUserIdResponseDto'
+        count:
+          type: integer
+          format: int32
+        startPage:
+          type: integer
+          format: int32
+        endPage:
+          type: integer
+          format: int32
+    DatasetListByUserIdResponseDto:
+      type: object
+      properties:
+        datasetId:
+          type: string
+        serviceRequestNumber:
+          type: string
+        datasetName:
+          type: string
+        datasetType:
+          type: string
+        submittedOn:
+          type: string
+        status:
+          type: string
+    DatasetByServiceReqNrResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskTracker'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code of the error
+        message:
+          type: string
+          description: Description of the error
+        cause:
+          type: object
+          description: Additional details related to the cause of the error
+        report:
+          type: string
+          description: Link to the error report file
+      description: Task Tracker entity
+    TaskTracker:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+          description: Unique identifier of the service request
+        tool:
+          type: string
+          description: Tool updating this data
+          enum:
+          - download
+          - pseudo
+          - ingest
+          - validate
+          - publish
+          - search
+          - delete
+        id:
+          type: string
+        status:
+          type: string
+          description: Status of the task
+        details:
+          type: string
+          description: Details of the current status of the task
+        startTime:
+          type: string
+          description: ISO timestamp of the instance of the start of process
+        endTime:
+          type: string
+          description: ISO timestamp of the instance of the end of process
+        lastModified:
+          type: string
+          description: ISO timestamp of the instance of the end of process
+        error:
+          $ref: '#/components/schemas/Error'
+      description: Task Tracker entity
+    DatasetByIdResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TaskTracker'
+    DatasetSearchStatusResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Data'
+    SearchListByUserIdResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchListByUserIdResponseDto'
+        count:
+          type: integer
+          format: int32
+        startPage:
+          type: integer
+          format: int32
+        endPage:
+          type: integer
+          format: int32
+    SearchListByUserIdResponseDto:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+        timestamp:
+          type: string
+        searchCriteria:
+          $ref: '#/components/schemas/SearchCriteria'
+        status:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskTracker'
+    HttpErrorResponse:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: status code as encountered in the processing life-cycle
+          
+        message:
+          type: string
+          description: human understandable format
+        timestamp:
+          type: string
+          format: datetime
+  securitySchemes:
+      apiKey:
+        type: apiKey
+        in: header
+        name: key
+      apiSig:
+        type: apiKey
+        in: header
+        name: sig
+        description: signed request url or body   
+        
+security:
+  - apiKey: []
+    apiSig: []

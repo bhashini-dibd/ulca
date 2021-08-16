@@ -1,3 +1,11 @@
+export const ModelTask = [
+
+    { value: 'translation', label: 'Translation' },
+    { value: 'asr', label: 'ASR' },
+    { value: 'tts', label: 'TTS' },
+    { value: 'ocr', label: 'OCR' },
+    // { value: 'document-layout', label: 'Document Layout' }
+];
 export const DatasetItems = [
 
     { value: 'parallel-corpus', label: 'Parallel Dataset' },
@@ -20,6 +28,7 @@ export const Language = [
     { value: 'ta', label: 'Tamil' },
     { value: 'te', label: 'Telugu' },
     { value: 'ur', label: 'Urdu' },
+    { value: 'ne', label: 'Nepali' },
     
 
 ];

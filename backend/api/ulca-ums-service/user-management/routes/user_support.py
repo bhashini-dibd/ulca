@@ -1,6 +1,6 @@
 from flask import Blueprint
 from flask_restful import Api
-from resources import UserLogin, UserLogout, ApiKeySearch, ForgotPassword, ResetPassword , SearchRoles
+from resources import UserLogin, UserLogout, ApiKeySearch, ForgotPassword, ResetPassword , SearchRoles, VerifyToken
 
 
 USER_SUPPORT_BLUEPRINT = Blueprint("user-management-support", __name__)
@@ -27,4 +27,8 @@ Api(USER_SUPPORT_BLUEPRINT).add_resource(
 
 Api(USER_SUPPORT_BLUEPRINT).add_resource(
     SearchRoles,"/v1/users/get-roles"
+)
+
+Api(USER_SUPPORT_BLUEPRINT).add_resource(
+    VerifyToken,"/v1/users/get/token/status"
 )

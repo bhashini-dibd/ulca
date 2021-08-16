@@ -2,7 +2,7 @@ export const menuItems = {
     dataset: [
         {
             name: 'My Contribution',
-            url: '/my-contribution'
+            url: '/dataset/my-contribution'
         },
         {
             name: 'My Searches',
@@ -18,17 +18,21 @@ export const menuItems = {
         // },
         {
             name: 'Submit Dataset',
-            url: '/submit-dataset/upload'
+            url: '/dataset/upload'
         }],
 
     models: [
         {
-            name: '',
-            url: ''
+            name: 'My Contribution',
+            url: '/model/my-contribution'
         },
         {
-            name: '',
-            url: ''
+            name: 'Explore Models',
+            url: '/model/explore-models'
+        },
+        {
+            name: 'Submit Model',
+            url: '/model/upload'
         }],
     profile: [
         {

@@ -19,6 +19,7 @@
    }
  
    getBody() {
+     this.details.roles =  ["CONTRIBUTOR-USER"]
      let apiParam = {
         "users": [this.details]}
      return apiParam;

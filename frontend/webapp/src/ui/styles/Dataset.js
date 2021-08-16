@@ -4,8 +4,15 @@ const DataSet = (theme) => ({
         minHeight: '674px',
         boxShadow: "0px 0px 2px #00000029",
         border: "1px solid #0000001F",
-        
-      },
+
+    },
+    parentPaper: {
+        minHeight: "56px",
+        maxWidth: "1272px",
+        width: "100%",
+        margin: "17px auto",
+        padding: "0"
+    },
     title: {
         marginBottom: '6vh'
     },
@@ -16,6 +23,9 @@ const DataSet = (theme) => ({
     radioGroup: {
         marginTop: '1vh',
 
+    },
+    computeBtn: {
+        borderRadius: "20px"
     },
 
     divStyle: {
@@ -28,14 +38,32 @@ const DataSet = (theme) => ({
     list: {
         marginLeft: "-20px"
     },
+    center: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: 'auto',
+
+    },
+    centerAudio: {
+        display: 'flex',
+        justifyContent: 'center',
+        marginLeft: 'auto',
+        marginTop: "6px"
+
+    },
+    titleCard: {
+        display: 'flex',
+        // alignItems: 'flex-end'
+        alignItems: 'center',
+        paddingLeft: "20px"
+    },
 
     updateBtn: {
-
         display: 'flex',
         justifyItems: 'center',
-        marginLeft: 'auto',
         marginTop: '-4%',
     },
+
     submitBtn: {
         marginTop: '6vh',
         color: 'white',
@@ -158,6 +186,9 @@ const DataSet = (theme) => ({
         justifyContent: "center",
         height: window.innerHeight - 80
     },
+    modelTable: {
+        marginTop: "2rem"
+    },
     action: { display: "flex", flexDirection: "row" },
     FindInPageIcon: { fontSize: '8rem' },
     searchResult: {
@@ -237,17 +268,29 @@ const DataSet = (theme) => ({
     filterContainer: {
         borderBottom: '1px solid #00000029',
         paddingLeft: '18.5px',
-        marginTop: '20px'
+        marginTop: '20px',
+        width: '600px',
+        maxHeight: '270px',
+        overflow: 'auto',
+        "@media (max-width:550px)": {
+            width: '330px',
+            maxHeight: '170px',
+        }
     },
     filterTypo: {
         marginBottom: '9px'
     },
     applyBtn: {
         float: "right",
-
-        borderRadius: '4px',
+        borderRadius: '20px',
         margin: '9px 16px 9px auto',
         width: '80px'
+    },
+    clrBtn: {
+        float: "right",
+        borderRadius: '20px',
+        margin: '9px 10px 9px auto',
+        width: '100px'
     },
     menuStyle: {
         padding: '0px',
@@ -255,51 +298,157 @@ const DataSet = (theme) => ({
         fontSize: "1.125rem",
         fontWeight: "500 !important",
         "&:hover": {
-
             backgroundColor: 'white',
+        },
+        borderBottom: "1px solid rgba(0, 0, 0, 0.42)",
+        // borderTop:"3px solid green",
+        '& svg': {
+            marginLeft: 'auto',
+            color: "rgba(0, 0, 0, 0.42)"
         }
     },
     container: {
         margin: '12.75px 0px 18px 15px'
     },
+    browseBtn: {
+        marginTop: "-20px"
+    },
     contriCard: {
         width: '578px',
         minHeight: '100px',
-        margin : "10px",
-        padding:"0px 10px",
+        margin: "10px",
+        padding: "0px 10px",
         "@media (max-width:1250px)": {
             width: '500px',
-            
+
         },
         "@media (max-width:900px)": {
             width: '350px',
-            
+
         },
         "@media (max-width:700px)": {
             width: '350px',
-            
+
         },
-        
+
     },
     typeTypo: {
         marginTop: '6.25px',
-        opacity:".5"
+        opacity: ".5"
     },
     Typo: {
         marginTop: '6.25px',
     },
-    nameTypo:{
+    nameTypo: {
         marginTop: '6.25px',
-        fontWeight:"500"
+        fontWeight: "500"
     },
 
-    gridHeader:{padding:"13px 24px 14px 24px",display:"flex"},
-    gridTypo:{marginTop:"4px"},
-    gridData:{display: "flex",
-    flexWrap: "wrap",
-    alignContent:"flex-start",
-    marginLeft: "14px",minHeight:"550px"}
+    gridHeader: { padding: "13px 24px 14px 24px", display: "flex" },
+    gridTypo: { marginTop: "4px" },
+    gridData: {
+        display: "flex",
+        flexWrap: "wrap",
+        alignContent: "flex-start",
+        marginLeft: "14px", minHeight: "550px"
+    },
+    styleHr: {
+        maxWidth: "24px",
+        justifyItems: "flex-start",
+        display: "inline-flex",
+        width: "100%",
+        margin: 0,
+        marginBottom: '7.5px',
+        // border:"4px solid #1DB5D8",
+        borderRadius: "3px",
+        height: '4px',
+        border: 'none',
+        background: '#1DB5D8'
+    },
+    subType: {
+        marginBottom: '18.5px'
+    },
+    computeGrid: {
+        display: 'flex',
+        alignItems: 'flex-end',
+        // alignItems: 'center'
+    },
+    modelTitle: {
+        marginTop: '15px',
+        padding: 0
+    },
+    mainTitle: { marginTop: '10px' },
+    backButton: {
+        boxShadow: "none",
+        padding: "0",
+    },
+    gridCompute: { marginTop: '15px ' },
+    grid: { marginRight: '15px ' },
+    hosted: {
+        display: 'flex',
+        // alignItems: 'flex-end'
+        alignItems: 'center'
+    },
+    translatedCard: {
+        height: '300px',
+        borderColor: '#2D63AB',
+        borderRadius: '8px',
+        marginTop: '20px',
+        marginRight: '24px'
+    },
+    asrCard: {
+        height: '300px',
+        width: '100%',
+        borderColor: '#2D63AB',
+        borderRadius: '8px',
+        margin: '20px 20px 20px 0px',
+    },
+    computeBtnUrl: {
+        marginTop: "40px",
+        "@media (max-width:1000px)": {
+            marginTop: "10px",
+        }
 
+    },
+    textArea: {
+        backgroundColor: 'inherit',
+        border: 'none',
+        width: "100%",
+        resize: 'none',
+        outline: 'none',
+        fontSize: '18px',
+        lineHeight: '32px',
+        color: 'black',
+        fontFamily: 'Roboto'
+        //    paddingLeft:'16px'
+    },
+    hostedCard: {
+        height: '300px',
+        borderColor: '#2D63AB',
+        borderRadius: '8px',
+        paddingBottom: '13px',
+        marginRight: '24px',
+    },
+    cardHeader: {
+        backgroundColor: "#F4F7FB", height: '52px', alignItems: 'center'
+    },
+    headerContent: {
+        marginLeft: '18px'
+    },
+    actionButtons: {
+        marginBottom: '13px', float: 'right'
+    },
+    translateCard: {
+        padding: 0
+    },
+    modelPara: {
+        marginTop: '15px ',
+        //textTransform: 'capitalize'
+        '&:first-letter': { textTransform: 'capitalize' }
+    },
+    mainPaper: {
+        border: 'none'
+    }
 });
 
 export default DataSet;

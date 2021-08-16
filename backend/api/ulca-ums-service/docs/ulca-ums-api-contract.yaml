@@ -6,8 +6,8 @@ info:
     A python based microservice for user management. This service will expose
     REST APIs to maintain user and admin functionalities.
   contact:
-    name: Dheeraj Gujral
-    email: dheeraj.gujral@tarento.com
+    name: Jainy Joy
+    email: jainy.joy@tarento.com
   
 paths:
   /v1/users/signup:
