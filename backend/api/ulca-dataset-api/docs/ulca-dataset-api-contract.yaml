@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.7.0
+  version: 1.0
 servers:
 - url: https://stage-auth.ulcacontrib.org
   description: Production server (uses live data)
