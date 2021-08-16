@@ -76,9 +76,9 @@ class ASRRepo:
                 if 'durationInSeconds' in record.keys():
                     seconds += record["durationInSeconds"]
                 result.append(record)
+            log.info(f'seconds: {seconds}')
             if seconds != 0:
-                min, sec = divmod(seconds, 60)
-                hours, min = divmod(min, 60)
+                hours = seconds/3600
             return result, hours
         except Exception as e:
             log.exception(e)
