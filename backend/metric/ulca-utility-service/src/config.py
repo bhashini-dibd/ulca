@@ -31,3 +31,7 @@ data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabe
 process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracker')
 process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')
 shared_storage_path         =   os.environ.get('ULCA_SHARED_STORAGE_PATH', "/opt/")
+
+error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',3000)#14400
+if isinstance(error_cron_interval_sec, str):
+    error_cron_interval_sec  =  eval(error_cron_interval_sec)
