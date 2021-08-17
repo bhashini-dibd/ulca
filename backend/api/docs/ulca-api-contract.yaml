@@ -7,7 +7,7 @@ info:
     email: contact@ekstep.org
   version: 0.7.0
 servers:
-- url: https://stage-auth.ulcacontrib.org
+- url: https://meity-auth.ulcacontrib.org 
   description: Production server (uses live data)
 paths:
   /ulca/apis/v0/dataset/corpus/submit:
