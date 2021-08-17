@@ -51,7 +51,27 @@ const styles = theme => ({
         }
     },
     iconStyle: { marginRight: '.5rem' },
-    filterBtn:{borderRadius:'22px'}
+    filterBtn: { borderRadius: '22px' },
+    tablabel: {
+        fontSize: '20px',
+        fontWeight: '300',
+        letterSpacing: '0px',
+        fontFamily: 'Rowdies',
+        // '&:first-child':{
+        padding: '0',
+        marginRight: '54px',
+        "@media (min-width:600px)": {
+            minWidth: 'auto',
+        },
+
+        "@media (max-width:600px)": {
+            marginRight: '20px',
+            minWidth: 'auto',
+        },
+        "@media (max-width:550px)": {
+            fontSize: "1rem",
+        }
+    }
 });
 
 function TabPanel(props) {
@@ -98,7 +118,7 @@ const SimpleTabs = (props) => {
                             {
                                 props.tabs.map((tab, index) => {
                                     return (
-                                        <Tab label={tab.label} {...a11yProps(index)} />
+                                        <Tab className={classes.tablabel} label={tab.label} {...a11yProps(index)} />
                                     )
                                 })
                             }

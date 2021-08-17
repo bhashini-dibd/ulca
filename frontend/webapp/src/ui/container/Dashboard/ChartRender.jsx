@@ -305,7 +305,7 @@ const ChartRender = (props) => {
 	}
 	return (
 		<MuiThemeProvider theme={Theme}>
-			<><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
+			<Header style={{ marginBottom: "10px" }} />
 			<div className={classes.container}>
 			<TitleBar selectedOption=	{selectedOption}
 				handleSelectChange=	{handleSelectChange}

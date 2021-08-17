@@ -197,14 +197,15 @@ const themeDefault = createMuiTheme({
     MuiTab: {
       root: {
         width: 'auto',
-        fontSize: '20px',
+        fontSize: '18px',
         fontWeight: '300',
         letterSpacing: '0px',
-        fontFamily: 'Rowdies',
+        color: '#3A3A3A',
+        opacity: '1',
+        fontFamily: 'Roboto',
         // '&:first-child':{
         padding: '0',
-        marginRight: '54px',
-        // }
+        marginRight: '28px',
         "@media (min-width:600px)": {
           minWidth: 'auto',
         },
@@ -278,10 +279,12 @@ themeDefault.typography.h4 = {
   // letterSpacing: "1.98px",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "1rem",
+  }
 };
 themeDefault.typography.h5 = {
   fontSize: "1.3125rem",
-
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
   "@media (max-width:550px)": {

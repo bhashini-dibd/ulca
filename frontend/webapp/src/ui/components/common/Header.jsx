@@ -18,7 +18,7 @@ import { useDispatch } from "react-redux";
 import { initialSearchFilter } from '../../../redux/actions/api/Model/ModelSearch/Benchmark';
 import bhashiniLogo from '../../../assets/bhashiniogo.png';
 import { Link } from "@material-ui/core";
-
+import SubHeader from './SubHeader';
 const StyledMenu = withStyles({
 
 })((props) => (
@@ -45,7 +45,9 @@ const Header = (props) => {
   const [open, setOpen] = useState(false)
   const [logout, setAnchorElLogout] = useState(null)
   const history = useHistory();
-
+ const [menuType,setMenuType]= useState("");
+ const type = menuType && menuItems[menuType].map(task => task.name);
+ const [value, setValue] = useState("");
   const { firstName, lastName } = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : { firstName: "", lastName: "" }
   const handleClose = (e) => {
     setAnchorEl(null)
@@ -71,6 +73,12 @@ const Header = (props) => {
     handleClose();
   }
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    // dispatch(SearchList(searchValue))
+
+}
+
   const handleMenuItemClick = (url) => {
     if (authenticate() || url === "/benchmark/initiate" || url.includes()) {
       dispatch(initialSearchFilter());
@@ -87,7 +95,7 @@ const Header = (props) => {
 
   return (
     <MuiThemeProvider theme={Theme}>
-      <AppBar color="inherit">
+      <AppBar color="inherit" position="static">
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
             <Link href="https://bhashini.gov.in/en/">
@@ -125,16 +133,14 @@ const Header = (props) => {
                 </div> */}
                 {authenticate() &&
                   <div className={classes.datasetOption}>
-                    <div>
                       <Button className={classes.menuBtn}
-                        onClick={(e) => authenticate() ? handleOpenMenu(e) : handleMenuItemClick('/user/login')}
+                        onClick={(e) => setMenuType("dataset")}
                         variant="text"
                       >
                         Dataset
-                        {authenticate() && <DownIcon color="action" />}
+                        {/* {authenticate() && <DownIcon color="action" />} */}
                       </Button>
-                    </div>
-                    {authenticate() &&
+                    {/* {authenticate() &&
                       <MenuItems
                         id={"dataset-menu"}
                         anchorEl={anchorEl}
@@ -142,25 +148,25 @@ const Header = (props) => {
                         menuOptions={menuItems.dataset}
                         handleMenuItemClick={handleMenuItemClick}
                       />
-                    }
+                    } */}
                   </div>
                 }
                 {authenticate() &&
                   <div className={classes.options}>
                     <div className={classes.model}>
-                      <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
+                      <Button className={classes.menuBtn} variant="text" onClick={(e) => setMenuType("models")}>
                         Model
-                        {authenticate() && <DownIcon color="action" />}
+                        {/* {authenticate() && <DownIcon color="action" />} */}
                       </Button>
                     </div>
-
+{/* 
                     <MenuItems
                       id={"dataset-menu"}
                       anchorEl={anchorModel}
                       handleClose={handleClose}
                       menuOptions={menuItems.models}
                       handleMenuItemClick={handleMenuItemClick}
-                    />
+                    /> */}
                   </div>
                 }
               </>
@@ -254,7 +260,7 @@ const Header = (props) => {
           </div>
         </Toolbar>
       </AppBar>
-
+      {authenticate()&& menuType && <SubHeader tabs={menuItems[menuType]} value={value}  handleChange={handleChange}/>}
       {open && <Dialog
         title={"Not Signed In"}
         open={open}
