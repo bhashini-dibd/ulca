@@ -65,7 +65,7 @@ paths:
     get:
       tags:
       - dataset-controller
-      operationId: listByUserId
+      operationId: listByUserIdDataset
       parameters:
       - name: userId
         in: query
@@ -346,7 +346,7 @@ paths:
     get:
       tags:
       - model-controller
-      operationId: listByUserId
+      operationId: mistByUserIdModel
       parameters:
       - name: userId
         in: query
