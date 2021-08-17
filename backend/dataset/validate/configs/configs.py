@@ -32,6 +32,11 @@ pt_redis_db = os.environ.get('ULCA_PT_REDIS_DB', 0)
 if isinstance(pt_redis_db, str):
     pt_redis_db = eval(pt_redis_db)
 
+validate_dedup_redis_db = os.environ.get('ULCA_VALIDATE_DEDUP_REDIS_DB', 6)
+if isinstance(validate_dedup_redis_db, str):
+    validate_dedup_redis_db = eval(validate_dedup_redis_db)
+
+record_expiry_in_sec = os.environ.get('ULCA_VALIDATE_RECORD_EXPIRY_IN_SEC', 172800)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
 
 ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
