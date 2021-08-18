@@ -1,41 +1,31 @@
-from flask import Flask
-from flask.blueprints import Blueprint
-from flask_cors import CORS
-import src.services.metriccronjob 
-from src import routes
+import requests
+from config import DATA_FILTER_SET_FILE_PATH,FILTER_DIR_NAME,FILTER_FILE_NAME
+import json
 import logging
 from logging.config import dictConfig
-import config
-from flask_mail import Mail
-import threading
-
 log = logging.getLogger('file')
 
-app = Flask(__name__)
+class DataUtils:
 
-# app.config.update(config.MAIL_SETTINGS)
-#creating an instance of Mail class
-# mail=Mail(app)
+    def read_filter_params(self):
+        """Reading roles from git config."""
+        
+        try:
+            file = requests.get(DATA_FILTER_SET_FILE_PATH, allow_redirects=True)
+            file_path = FILTER_DIR_NAME + FILTER_FILE_NAME
+            open(file_path, 'wb').write(file.content)
+            log.info("Filters read from git and pushed to local")
+            with open(file_path, 'r') as stream:
+                parsed = json.load(stream)
+                filterconfigs = parsed['dataset']
+            return filterconfigs
+        except Exception as exc:
+            log.exception("Exception while reading filters: " +str(exc))
+            return []
 
-if config.ENABLE_CORS:
-    cors    = CORS(app, resources={r"/api/*": {"origins": "*"}})
-
-for blueprint in vars(routes).values():
-    if isinstance(blueprint, Blueprint):
-        app.register_blueprint(blueprint, url_prefix=config.API_URL_PREFIX)
 
 
-
-def start_cron():
-    with app.test_request_context():
-        cron = src.services.metriccronjob.CronProcessor(threading.Event())
-        cron.start()
-if __name__ == "__main__":
-    log.info("starting module")
-    start_cron()
-    app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
-    
-
+# Log config
 dictConfig({
     'version': 1,
     'formatters': {'default': {

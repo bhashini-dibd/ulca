@@ -1,0 +1,1 @@
+from .notifierresource import NotifierResource
