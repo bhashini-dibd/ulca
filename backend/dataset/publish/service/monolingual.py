@@ -1,5 +1,6 @@
 import logging
 import multiprocessing
+import time
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
@@ -49,7 +50,8 @@ class MonolingualService:
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif result[0] == "UPDATE":
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
-                        metrics.build_metric_event(result[2], metadata, None, True)
+                        metric_record = (result[1], result[2])
+                        metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
                     else:
                         error_list.append(
@@ -59,6 +61,7 @@ class MonolingualService:
                              "message": "This record is already available in the system"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                 else:
+                    log.error(f'INTERNAL ERROR: Failing record due to internal error: ID: {record["id"]}, SRN: {metadata["serviceRequestNumber"]}')
                     error_list.append(
                         {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
                          "datasetType": dataset_type_monolingual, "datasetName": metadata["datasetName"],
@@ -68,7 +71,7 @@ class MonolingualService:
                         {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'Mono - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'Mono - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading Monolingual dataset!!", "status": "FAILED"}
@@ -85,8 +88,10 @@ class MonolingualService:
             if record:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, mono_immutable_keys, mono_updatable_keys, mono_non_tag_keys)
                 if dup_data:
-                    repo.update(dup_data)
-                    return "UPDATE", data, dup_data
+                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                    if metadata["userMode"] != user_mode_pseudo:
+                        repo.update(dup_data)
+                    return "UPDATE", dup_data, record
                 else:
                     return "DUPLICATE", data, record
             insert_data = data
@@ -97,6 +102,7 @@ class MonolingualService:
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
             insert_data["tags"] = service.get_tags(insert_data, mono_non_tag_keys)
+            insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
@@ -136,13 +142,14 @@ class MonolingualService:
             if 'collectionSource' in query.keys():
                 tags.extend(query["collectionMode"])
             if 'license' in query.keys():
-                tags.append(query["licence"])
+                tags.extend(query["licence"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
             if 'multipleContributors' in query.keys():
-                db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
+                if query['multipleContributors']:
+                    db_query[f'collectionMethod.1'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
             exclude = {"_id": False}
