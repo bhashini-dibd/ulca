@@ -79,7 +79,7 @@ class ASRUnlabeledRepo:
             log.info(f'seconds: {seconds}')
             if seconds != 0:
                 hours = seconds/3600
-            return result, hours
+            return result, round(hours, 3)
         except Exception as e:
             log.exception(e)
             return [], 0
