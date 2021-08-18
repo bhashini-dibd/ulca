@@ -14,11 +14,14 @@ import Theme from "../../theme/theme-default";
 import MenuItems from "../../components/common/MenuItem";
 import { menuItems } from '../../../configs/menuItems';
 import Dialog from "./Dialog";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { initialSearchFilter } from '../../../redux/actions/api/Model/ModelSearch/Benchmark';
 import bhashiniLogo from '../../../assets/bhashiniogo.png';
 import { Link } from "@material-ui/core";
 import SubHeader from './SubHeader';
+import getMenuType from "../../../redux/actions/api/Common/getMenuType";
+import getMenuOption from "../../../redux/actions/api/Common/getMenuOption";
+
 const StyledMenu = withStyles({
 
 })((props) => (
@@ -45,9 +48,8 @@ const Header = (props) => {
   const [open, setOpen] = useState(false)
   const [logout, setAnchorElLogout] = useState(null)
   const history = useHistory();
- const [menuType,setMenuType]= useState("");
- const type = menuType && menuItems[menuType].map(task => task.name);
- const [value, setValue] = useState("");
+  const menuType = useSelector(state => state.getMenuInfo.type);
+  const value = useSelector(state => state.getMenuInfo.optionSelected);
   const { firstName, lastName } = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : { firstName: "", lastName: "" }
   const handleClose = (e) => {
     setAnchorEl(null)
@@ -74,10 +76,9 @@ const Header = (props) => {
   }
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-    // dispatch(SearchList(searchValue))
+    dispatch(getMenuOption(newValue))
 
-}
+  }
 
   const handleMenuItemClick = (url) => {
     if (authenticate() || url === "/benchmark/initiate" || url.includes()) {
@@ -91,6 +92,10 @@ const Header = (props) => {
       setOpen(true)
     }
 
+  }
+
+  const handleMenuTypeClick = (type) => {
+    dispatch(getMenuType(type));
   }
 
   return (
@@ -133,13 +138,13 @@ const Header = (props) => {
                 </div> */}
                 {authenticate() &&
                   <div className={classes.datasetOption}>
-                      <Button className={classes.menuBtn}
-                        onClick={(e) => setMenuType("dataset")}
-                        variant="text"
-                      >
-                        Dataset
-                        {/* {authenticate() && <DownIcon color="action" />} */}
-                      </Button>
+                    <Button className={classes.menuBtn}
+                      onClick={(e) => handleMenuTypeClick('dataset')}
+                      variant="text"
+                    >
+                      Dataset
+                      {/* {authenticate() && <DownIcon color="action" />} */}
+                    </Button>
                     {/* {authenticate() &&
                       <MenuItems
                         id={"dataset-menu"}
@@ -154,12 +159,12 @@ const Header = (props) => {
                 {authenticate() &&
                   <div className={classes.options}>
                     <div className={classes.model}>
-                      <Button className={classes.menuBtn} variant="text" onClick={(e) => setMenuType("models")}>
+                      <Button className={classes.menuBtn} variant="text" onClick={(e) => handleMenuTypeClick('models')}>
                         Model
                         {/* {authenticate() && <DownIcon color="action" />} */}
                       </Button>
                     </div>
-{/* 
+                    {/* 
                     <MenuItems
                       id={"dataset-menu"}
                       anchorEl={anchorModel}
@@ -260,7 +265,7 @@ const Header = (props) => {
           </div>
         </Toolbar>
       </AppBar>
-      {authenticate()&& menuType && <SubHeader tabs={menuItems[menuType]} value={value}  handleChange={handleChange}/>}
+      {authenticate() && menuType && <SubHeader tabs={menuItems[menuType]} value={value} handleChange={handleChange} />}
       {open && <Dialog
         title={"Not Signed In"}
         open={open}
