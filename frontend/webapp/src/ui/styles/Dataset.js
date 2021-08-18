@@ -16,6 +16,9 @@ const DataSet = (theme) => ({
     title: {
         marginBottom: '6vh'
     },
+    description:{
+        width:"95%"
+    },
     form: {
         marginTop: '1vh',
         width: '90%',
