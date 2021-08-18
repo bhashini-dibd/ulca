@@ -148,7 +148,8 @@ const DataSet = (theme) => ({
         padding: '5%'
     },
     thankYouTypo: {
-        marginBottom: '1.3%'
+        marginBottom: '1.3%',
+        color: '#FD7F23'
     },
     reqNoTypo: {
         marginBottom: '2.5%',
