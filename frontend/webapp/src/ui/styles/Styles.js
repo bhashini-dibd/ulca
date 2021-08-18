@@ -1,20 +1,25 @@
 const GlobalStyles = (theme) => ({
   container: {
-    margin: "4em 0em 0em 0em",
+
+    maxWidth: "1272px",
     width: "100%",
+    margin: "4.1rem auto",
     // background: theme.palette.background.default,
-    fontFamily: theme.typography.fontFamily,
-    minHeight: "calc(100vh - 5em)",
+    fontFamily: theme.typography.fontFamily
+  },
+
+  headerContainer: {
+    height: "70px"
   },
   root: {
-    background: "#F8F8F8",
+    // background: "#F8F8F8",
     flexGrow: 1,
     height: window.innerHeight,
     zIndex: 1,
-    overflow: "hidden",
     position: "relative",
     minHeight: "720px",
     display: "flex",
+    flexDirection:"column"
   },
   appBar: {
     backgroundColor: theme.palette.primary.dark,
@@ -24,38 +29,36 @@ const GlobalStyles = (theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
   },
-  content: {
-    background: theme.palette.background.default,
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing(3),
-    marginTop: "3%",
-  },
-  loaderStyle: {
-    position: 'fixed',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 1000,
-    width: '100%',
-    height: '100%',
-    top: 0,
-    left: 0,
 
+  typeTypo: {
+    color: 'black',
+    backgroundColor: "#FFD981",
+    borderRadius: '24px',
+    padding: '5px 10px',
+    width: 'fit-content',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  progress: {
-    position: 'relative',
-    top: '40%',
-    left: '46%'
-
+  card: {
+    marginBottom: '20px', height: '270px'
   },
-  snackbar: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
+  cardGrid: {
+    marginTop: '20px'
   },
-  snackbarFont: {
-    fontSize: '1rem'
+  modelname: {
+    marginTop: '15px',
+    height: '64px',
+    backgroundColor: 'white',
+    maxWidth: '340px',
+    width: 'auto',
+    display: 'flex',
+    alignItems: 'center',
+    paddingLeft: '15px',
+    borderRadius: '12px'
   }
+
+
 });
 
 export default GlobalStyles;

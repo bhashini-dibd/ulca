@@ -6,24 +6,22 @@ import {
   Button,
 } from "@material-ui/core";
 import LoginStyles from "../../styles/Login";
+import {  useHistory } from "react-router-dom";
 
 function AppInfo(props) {
   const { classes } = props;
+  const history = useHistory();
   return (
     <Hidden only="xs">
       <Grid item xs={12} sm={4} md={3} lg={3} color = {"primary"}className={classes.appInfo}>
-        <Typography className={classes.title}>ULCA</Typography>
-        <Typography className={classes.subTitle}>
-          Universal Language Contribution APIs
+        
+        <Typography className={classes.title} variant={"h2"} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>ULCA</Typography>
+        <Typography variant={"h3"} className={classes.subTitle}>
+          Universal Language Contribution API
         </Typography>
-        <Typography className={classes.body}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris .
+        <Typography variant={"body1"} className={classes.body}>
+        ULCA is an open-sourced API and data platform to collect, curate and discover datasets in Indian languages.
         </Typography>
-        <Button variant="contained" className={classes.expButton}>
-          Explore
-        </Button>
       </Grid>
     </Hidden>
   );

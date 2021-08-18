@@ -13,7 +13,7 @@ import C from '../../actions/constants';
       }
 
     //   const handleData = (dataValues) =>{
-    //     debugger
+
     //     if (dataValues.length > 0) {
     //       let others = dataValues.slice(7, dataValues.length)
     //       let othersCount = 0
@@ -31,7 +31,7 @@ import C from '../../actions/constants';
     //           dataSetValues.push(obj)
     //       }
   
-    //        console.log(dataSetValues) 
+
     //       return {dataSetValues, dataValues} 
          
 
@@ -41,9 +41,12 @@ import C from '../../actions/constants';
     // }
 
 
-    const handleExpand = (data) =>{
-
-      debugger
+    const handleSum = (data,totalCount) =>{
+      let count = data.reduce((acc,rem)=>(acc + Number(rem.value)),0)
+      if(count%1!==0) {
+        count = Number(count).toFixed(3)
+      }
+      return {data , count, totalCount}
 
     }
       
@@ -51,7 +54,7 @@ import C from '../../actions/constants';
     switch (action.type) {
         
         case C.DASHBOARD_DATASETS:
-            return action.payload.data.sort( compare );
+            return handleSum(action.payload.data.sort( compare ),action.payload.count);
 
         default:
             return state;

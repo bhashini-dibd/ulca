@@ -1,0 +1,321 @@
+---
+openapi: 3.0.0
+info:
+  title: ULCA BI event schema description
+  description: The document defines the BI events schema structure that internal modules will be publishing
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 0.1.0
+servers:
+- url: /
+paths: {}
+components:
+  schemas:
+    Language:
+      type: string
+      description: supported language code
+      example: en
+      enum:
+      - en
+      - hi
+      - mr
+      - ta
+      - te
+      - kn
+      - gu
+      - pa
+      - bn
+      - ml
+      - as
+      - brx
+      - doi
+      - ks
+      - kok
+      - mai
+      - mni
+      - ne
+      - or
+      - sd
+      - si
+      - ur
+      - sat
+      - lus
+      - njz
+      - pnr
+      - kha
+      - grt
+      - sa
+    AudioFormat:
+      type: string
+      description: audio format of the audio file
+      example: flac
+      enum:
+      - wav
+      - pcm
+      - mp3
+      - flac
+    AudioChannel:
+      type: string
+      description: number of channel in the audio
+      example: stereo
+      enum:
+      - mono
+      - stereo
+    AudioSampleRate:
+      type: number
+      description: sample rate of the audio file in kHz
+      example: 44
+    AudioBitsPerSample:
+      type: string
+      description: number of bits per sample
+      example: sixteen
+      enum:
+      - sixteen
+      - eight
+    NumberOfSpeakers:
+      minimum: 1
+      type: number
+      description: number of speakers in the recorded audio file
+      example: 3
+    Gender:
+      type: string
+      description: gender description
+      enum:
+      - male
+      - female
+      - transgender
+      - non-specified
+      - others
+    BIEvent:
+      required:
+      - collectionMethodDescriptions
+      - domains
+      - eventId
+      - eventType
+      - license
+      - sourceLanguage
+      - submitterName
+      - timestamp
+      type: object
+      properties:
+        eventType:
+          type: string
+          description: event type used by the each business flow
+          enum:
+          - dataset-training
+          - dataset-benchmark
+          - dataset-training-search
+          - dataset-training-file-download
+          - dataset-readymade-file-download
+          - model-definition
+          - model-benchmark-runs
+        eventId:
+          type: string
+          description: combination of serviceRequestNumber + recordId (dataset & models)
+          format: uuidv4 + uuidv4
+        timestamp:
+          type: string
+          description: Creation date and time
+          format: date-time
+          example: 2021-05-31T10:33:00Z
+        sourceLanguage:
+          $ref: '#/components/schemas/Language'
+        targetLanguage:
+          $ref: '#/components/schemas/Language'
+        domains:
+          type: array
+          example:
+          - news
+          - legal
+          items:
+            maxItems: 10
+            minItems: 1
+            type: string
+        license:
+          type: string
+          description: license under which entity is submitted
+          example: cc-04
+        primarySubmitterId:
+          type: string
+          description: system generated non-mutable user id
+          format: uuidv4
+        submitterId:
+          type: string
+          description: canonical value of the user contributor name
+          format: string
+          example: Vishal
+        secondarySubmitterIds:
+          type: array
+          items:
+            type: string
+            description: canonical value of the user contributor name
+            format: string
+            example: '["Vishal","Ajitesh Sharma"]'
+      description: Base definition of event schema
+    ErrorEvent:
+      required:
+      - eventId
+      - eventType
+      - timestamp
+      type: object
+      properties:
+        eventType:
+          type: string
+          description: event type used by the each business flow
+          enum:
+          - dataset-training
+          - dataset-benchmark
+          - dataset-training-search
+          - dataset-training-file-download
+          - dataset-readymade-file-download
+          - model-definition
+          - model-benchmark-runs
+        eventId:
+          type: string
+          description: only serviceRequestNumber
+          format: uuidv4
+        timestamp:
+          type: string
+          description: Creation date and time
+          format: date-time
+          example: 2021-05-31T10:33:00Z
+      description: base error event specificiation
+    DatasetEvent:
+      required:
+      - datasetType
+      - isDelete
+      type: object
+      properties:
+        datasetType:
+          type: string
+          description: dataset event type
+          enum:
+          - parallel-corpus
+          - monolingual-corpus
+          - asr-corpus
+          - document-ocr-corpus
+        isDelete:
+          type: boolean
+          description: helps to track count of delete & updated records.
+          example: false
+        collectionMethod_collectionDescriptions:
+          type: array
+          example:
+          - machine-translated
+          - auto-aligned
+          items:
+            maxItems: 10
+            minItems: 1
+            type: string
+        collectionMethod_collectionDetails_alignmentTool:
+          type: string
+          description: alignmentTool name
+          example: LASER
+          enum:
+          - LaBSE
+          - LASER
+        format:
+          $ref: '#/components/schemas/AudioFormat'
+        channel:
+          $ref: '#/components/schemas/AudioChannel'
+        samplingRate:
+          $ref: '#/components/schemas/AudioSampleRate'
+        bitsPerSample:
+          $ref: '#/components/schemas/AudioBitsPerSample'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        durationInSeconds:
+          type: number
+          description: audio recording in seconds
+      description: dataset event schema
+      allOf:
+      - $ref: '#/components/schemas/BIEvent'
+      - type: object
+    ModelEvent:
+      type: object
+      properties:
+        taskType:
+          type: string
+          description: dataset event type
+          enum:
+          - translation
+          - tts
+          - asr
+          - document-layout
+          - ocr
+      description: model event schema
+      allOf:
+      - $ref: '#/components/schemas/BIEvent'
+      - type: object
+    BenchmarkEvent:
+      type: object
+      properties:
+        datasetType:
+          type: string
+          description: dataset event type
+          enum:
+          - parallel-corpus
+          - monolingual-corpus
+          - asr-corpus
+          - document-ocr-corpus
+      description: benchmark dataset event schema
+      allOf:
+      - $ref: '#/components/schemas/BIEvent'
+      - type: object
+    DatasetIngestErrorEvent:
+      required:
+      - code
+      - currentRecordIndex
+      - datasetId
+      - datasetType
+      - message
+      - messageType
+      - record
+      type: object
+      properties:
+        datasetType:
+          type: string
+          description: dataset event type
+          enum:
+          - parallel-corpus
+          - monolingual-corpus
+          - asr-corpus
+          - document-ocr-corpus
+        datasetId:
+          type: string
+          description: dataset identifier
+          format: uuidv4
+        currentRecordIndex:
+          type: number
+          description: record index number
+          format: integer
+          example: 5001
+        message:
+          type: string
+          description: helpful human understandable message
+          example: duplicate record encountered
+        code:
+          type: string
+          description: error code
+          enum:
+          - 1000_XXX
+          - 2000_XXX
+          - 3000_XXX
+        messageType:
+          type: string
+          description: category of message
+          example: error
+          enum:
+          - error
+          - warning
+        record:
+          type: object
+          description: ingested record of dataset that has errored out
+        referenceRecord:
+          type: object
+          description: original dataset record that is already present
+      description: error event encountered in processing of dataset ingestion
+      allOf:
+      - $ref: '#/components/schemas/ErrorEvent'
+      - type: object

@@ -18,7 +18,8 @@ function apiStatusAsync(progress, errors, message, res = null, unauthrized = fal
         error: errors,
         message: res && res.status && res.status.statusMessage ? res.status.statusMessage : message,
         unauthrized: unauthrized,
-        loading: loading
+        loading: loading,
+        
       }
     };
   }
@@ -35,6 +36,7 @@ function apiStatusAsync(progress, errors, message, res = null, unauthrized = fal
 }
 
 function success(res, api, dispatch) {
+
   api.processResponse(res.data);
   dispatch(apiStatusAsync(false, false, api.successMsg, res.data, null, false));
   if (api.type) {
@@ -45,7 +47,7 @@ function success(res, api, dispatch) {
 }
 
 function error(err, api, dispatch) {
-  let errorMsg = err.response && err.response.data && err.response.data.why ? err.response.data.why : Strings.error.message.http.default;
+  let errorMsg = ((err.response && err.response.data && err.response.data.why) ? err.response.data.why : ((err.response && err.response.status&& Object.keys(Strings.error.message.http).includes(Number(err.response.status))) ? Strings.error.message.http[Number(err.response.status)]:Strings.error.message.http.default));
   if (api.errorMsg || api.errorMsg === null) {
     errorMsg = api.errorMsg === null ? "" : api.errorMsg;
   }

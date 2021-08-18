@@ -1,18 +1,17 @@
 import API from "../../api";
 import C from "../../constants";
 import ENDPOINTS from "../../../../configs/apiendpoints";
-import CONFIGS from "../../../../configs/configs";
+
 
 export default class CreateGlossary extends API {
     
     constructor(dataType,value,criterions = [], timeout = 2000) {
         super('POST', timeout, false);
-        this.type = C.DASHBOARD_DATASETS;
-        this.dataType = dataType;
-        this.criterions = criterions
-        this.value = value
-       
-        this.endpoint = `${CONFIGS.DASHBOARD_URL}${ENDPOINTS.dataSetSearchApi}`;
+        this.type           =   C.DASHBOARD_DATASETS;
+        this.dataType       =   dataType;
+        this.criterions     =   criterions
+        this.value          =   value
+        this.endpoint       =   `${super.apiEndPointAuto()}${ENDPOINTS.dataSetSearchApi}`;
     }
 
     toString() {
@@ -34,7 +33,7 @@ export default class CreateGlossary extends API {
         let request = {}
         request["type"]        = this.dataType;
         request["criterions"]  = this.criterions;
-        request["groupby"]     =  {"type":"PARAMS", "value": this.value}
+         request["groupby"]     = this.value ? [{"field":this.value, "value": null}]: null
         return request;
     }
 

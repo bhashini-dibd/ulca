@@ -1,12 +1,4 @@
 const FileUploadStyles = (theme) => ({
-  container: {
-
-    margin: "1.5rem 20% 3rem 15.5%",
-    overflow: "auto",
-    "@media (max-width:800px)": {
-      margin: "auto"
-    }
-  },
 
   breadcrum: {
     marginBottom: "1.5rem",
@@ -16,36 +8,44 @@ const FileUploadStyles = (theme) => ({
     cursor: "pointer",
   },
   titleBar: {
-    margin: "0 0 1vh 1vh",
+    
     display: "flex",
     flexDirection: "row",
+    padding:"2.5rem 0 0 3%"
   },
   paper: {
-    padding: "3%",
+    minHeight:"56px",
+    maxWidth: "1272px",
+    width : "100%",
+    margin :"17px auto",
+    padding:"0"
   },
-  Typography: { 
-    margin: ".5rem 3% 0 0 ",
-    "@media (max-width:500px)": {
-      margin: ".7rem 0 0 0 ",
-      fontSize:"12px"
-    }
-   },
+ 
   select: {
+    marginLeft:"10px",
     width: "20%",
     minWidth: "10rem",
-    color:"grey"
+    color:"green",
+    cursor: "pointer"
   },
+  titleStyle :{display:"flex",
+  "@media (max-width:740px)": {marginRight:"0",display:"flex",flexDirection:"column"} 
+},
   filterButton:{
     marginLeft: 'auto',
-    paddingRight: '5%',
+    paddingRight: '1.5%',
     minWidth:"auto",
     display: "flex",
     flexDirection: "row",
+    cursor: "pointer",
+   
 
     // "@media (max-width:800px)": {
     //   display: 'none'
     // }
   },
+  infoBtn:{height:"60px",width:"40px", position:"absolute", marginTop:"17px"}
+  ,
   filterButtonIcon:{
     
     display: 'none',
@@ -75,9 +75,15 @@ const FileUploadStyles = (theme) => ({
   },
   backButton: {
     boxShadow: "none",
-    backgroundColor: "#F0F1F3",
-    color: "#0C0F0F",
-    marginRight: ".5rem",
+    paddingTop:"5px",
+    marginLeft: "1.3rem",
+    marginRight: ".5rem"
+    
+  },
+  titleText: {
+    marginLeft: "1.68rem",
+    marginRight:".5rem"
+    
   },
   seperator: {
     width: "1px",
@@ -95,9 +101,15 @@ const FileUploadStyles = (theme) => ({
     marginRight:".7rem",
     "@media (max-width:800px)": {marginRight:"0"}
   },
+  titleDropdown:
+    {marginLeft:"1rem",minWidth:"10rem"}
+  ,
+  dropDownStyle:{display:"flex",marginLeft:".68rem"},
+
   title:{
     textAlign: "left",
-    margin: "4.5vh 0 8.5vh 1vh",
+    paddingLeft:"1%",
+    margin: "4.5vh 0 4vh 1vh",
     "@media (max-width:600px)": {textAlign: "center",}
   }
 });

@@ -6,10 +6,10 @@ import {
     FormControl,
     Button,
     TextField,
-    Hidden,
-    Popover
+    Link,
+    Hidden
 } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+// import Autocomplete from '@material-ui/lab/Autocomplete';
 import BreadCrum from '../../../components/common/Breadcrum';
 import { withStyles } from '@material-ui/core/styles';
 import { RadioButton, RadioGroup } from 'react-radio-buttons';
@@ -18,75 +18,137 @@ import { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Snackbar from '../../../components/common/Snackbar';
 import UrlConfig from '../../../../configs/internalurlmapping';
+import SubmitDatasetApi from "../../../../redux/actions/api/DataSet/UploadDataset/SubmitDataset"
+import DatasetItems from "../../../../configs/DatasetItems";
+import getTitleName from '../../../../utils/getDataset';
+import C from "../../../../redux/actions/constants";
+import { useDispatch } from 'react-redux';
+import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
 
 const SubmitDataset = (props) => {
     const { classes } = props;
     const [anchorEl, setAnchorEl] = useState(null);
-    const [dataset, setDatasetInfo] = useState({ name: "", url: "", type: "pd", filteredName: "" })
+    const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "" })
+    const [title, setTitle] = useState("Parallel Dataset")
+    const dispatch = useDispatch();
     const [snackbar, setSnackbarInfo] = useState({
-        timeOut: 3000,
         open: false,
         message: '',
         variant: 'success'
     })
-    const [error] = useState(false)
+    const [error, setError] = useState({ datasetName: "", url: "", type: false })
     const [search, setSearch] = useState(false)
     const history = useHistory();
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
-    };
+    // const handleClick = (event) => {
+    //     setAnchorEl(event.currentTarget)
+    // };
 
     const handleClose = () => {
         setAnchorEl(null);
     };
 
-    const handleDone = () => {
-        if (dataset.filteredName) {
-            setDatasetInfo({ ...dataset, name: dataset.filteredName })
-        }
-        handleClose();
+    // const handleDone = () => {
+    //     if (dataset.filteredName) {
+    //         setDatasetInfo({ ...dataset, datasetName: dataset.filteredName })
+    //     }
+    //     handleClose();
+    // }
+
+    // const renderUpdateDatasetSearch = () => {
+    //     return (
+    //         <div>
+    //             <div className={classes.updateDataset}>
+    //                 <Grid container spacing={1}>
+    //                     <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    //                         <Autocomplete
+    //                             id="tags-outlined"
+    //                             options={[]}
+    //                             getOptionLabel={(option) => option.name}
+    //                             filterSelectedOptions
+    //                             open={search}
+    //                             onChange={(e, value) => {
+    //                                 setDatasetInfo({ ...dataset, datasetName: value.name})
+    //                                 handleClose();
+    //                             }}
+    //                             onOpen={() => {
+    //                                 setTimeout(() => setSearch(true), 200)
+    //                             }}
+    //                             onClose={() => {
+    //                                 setSearch(false)
+    //                             }}
+    //                             openOnFocus
+    //                             renderInput={(params) => (
+    //                                 <TextField
+    //                                     id="search-dataset"
+    //                                     variant="outlined"
+    //                                     placeholder="Search Dataset"
+    //                                     autoFocus={true}
+    //                                     {...params}
+    //                                 />
+    //                             )}
+    //                         />
+    //                     </Grid>
+    //                 </Grid>
+    //             </div>
+
+    //         </div>
+    //     )
+    // }
+
+    const handleApicall = async () => {
+
+        let apiObj = new SubmitDatasetApi(dataset)
+        fetch(apiObj.apiEndPoint(), {
+            method: 'post',
+            body: JSON.stringify(apiObj.getBody()),
+            headers: apiObj.getHeaders().headers
+        }).then(async response => {
+            const rsp_data = await response.json();
+            if (!response.ok) {
+                setSnackbarInfo ({
+                    ...snackbar,
+                    open: true,
+                    message: rsp_data.message ? rsp_data.message : "Something went wrong. Please try again.",
+                    timeOut: 40000,
+                    variant: 'error'
+                })
+                if(response.status===401){
+                    setTimeout(()=>history.push(`${process.env.PUBLIC_URL}/user/login`),3000)}
+                }
+                
+                
+             else {
+                dispatch(PageChange(0, C.PAGE_CHANGE));
+                history.push(`${process.env.PUBLIC_URL}/dataset/submission/${rsp_data.data.serviceRequestNumber}`)
+                //           return true;
+            }
+        }).catch((error) => {
+            setSnackbarInfo({
+                ...snackbar,
+                open: true,
+                message: "Something went wrong. Please try again.",
+                timeOut: 40000,
+                variant: 'error'
+            })
+        });
+
     }
 
-    const renderUpdateDatasetSearch = () => {
-        return (
-            <div>
-                <div className={classes.updateDataset}>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <Autocomplete
-                                id="tags-outlined"
-                                options={[{ "name": 'Test' }, { "name": 'Test123' }, { "name": 'Test456' }]}
-                                getOptionLabel={(option) => option.name}
-                                filterSelectedOptions
-                                open={search}
-                                onChange={(e, value) => {
-                                    setDatasetInfo({ ...dataset, name: value.name})
-                                    handleClose();
-                                }}
-                                onOpen={() => {
-                                    setTimeout(() => setSearch(true), 200)
-                                }}
-                                onClose={() => {
-                                    setSearch(false)
-                                }}
-                                openOnFocus
-                                renderInput={(params) => (
-                                    <TextField
-                                        id="search-dataset"
-                                        variant="outlined"
-                                        placeholder="Search Dataset"
-                                        autoFocus={true}
-                                        {...params}
-                                    />
-                                )}
-                            />
-                        </Grid>
-                    </Grid>
-                </div>
-               
-            </div>
-        )
+   
+
+    const renderInstrructions = () => {
+        return <div className={classes.list} >
+            <ul>
+            <li><Typography className={classes.marginValue} variant="body2">Provide a meaningful name to your dataset.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Provide the URL where the dataset is stored at.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Make sure the URL is a direct download link.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">If your dataset is stored in Google Drive, use<Link id="newaccount" href="https://sites.google.com/site/gdocs2direct/home">{" "}
+              https://sites.google.com/site/gdocs2direct/home {" "}
+            </Link>to generate a direct download link.</Typography></li>
+            <li><Typography className={classes.marginValue} variant="body2">Make sure the dataset is available in .zip format.</Typography></li>
+            </ul>
+        </div>
     }
 
     const validURL = (str) => {
@@ -101,62 +163,30 @@ const SubmitDataset = (props) => {
     }
 
     const handleSubmitDataset = (e) => {
-        if (dataset.name.trim() !== "" && dataset.url.trim() !== "" && dataset.type.trim() !== "") {
-            if (validURL(dataset.url)) {
-                setSnackbarInfo({
-                    ...snackbar,
-                    open: true,
-                    message: 'Please wait while we process your request...',
-                    timeOut: 3000,
-                    variant: 'info'
-                })
+        if (dataset.datasetName.trim() === "" || dataset.url.trim() === "") {
+            setError({ ...error, name: !dataset.datasetName.trim() ? "Name cannot be empty" : "", url: !dataset.url.trim() ? "URL cannot be empty" : "" })
 
-                setTimeout(() => history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${5}`), 3000)
-            } else {
-                setSnackbarInfo({
-                    ...snackbar,
-                    open: true,
-                    message: 'Invalid URL',
-                    timeOut: 3000,
-                    variant: 'error'
-                })
-            }
-            if (dataset.name.length > 256) {
-                setSnackbarInfo({
-                    ...snackbar,
-                    open: true,
-                    message: 'Dataset name field can have a max of 256 characters',
-                    timeOut: 3000,
-                    variant: 'error'
-                })
-                alert('')
-            }
+        }
+        else if (dataset.datasetName.length > 256) {
+            setError({ ...error, name: "Max 256 characters allowed" })
 
-        } else {
+        }
+        else if (!validURL(dataset.url)) {
+            setError({ ...error, url: "‘Invalid URL" })
+        }
+        else {
+
+            handleApicall()
             setSnackbarInfo({
                 ...snackbar,
                 open: true,
-                message: 'Please fill all the details',
-                timeOut: 3000,
-                variant: 'error'
+                message: 'Please wait while we process your request...',
+                variant: 'info'
             })
         }
-    }
 
-    const renderDatasetType = () => {
-        let { type } = dataset
-        switch (type) {
-            case 'pd':
-                return 'Parallel Dataset'
-            case 'md':
-                return 'Monolingual Dataset'
-            case 'atd':
-                return 'ASR/TTS Dataset'
-            case 'od':
-                return 'OCR Dataset'
-            default:
-                return 'Parallel Dataset'
-        }
+
+
     }
 
     const handleSnackbarClose = () => {
@@ -167,35 +197,18 @@ const SubmitDataset = (props) => {
 
     return (
         <div>
-            <div className={classes.divStyle}>
+            <div >
                 <div className={classes.breadcrum}>
                     <BreadCrum links={[url]} activeLink="Submit Dataset" />
                 </div>
-                <Paper elevation={3} className={classes.paper}>
-                    <Grid container className={classes.title}>
-                        <Grid item>
-                            <Typography variant="h4"><strong>Submit Dataset</strong></Typography>
-                        </Grid>
-                    </Grid>
+                <Paper elevation={3} className={classes.divStyle}>
+                   
                     <Grid container spacing={5}>
                         <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
-                            <Typography color="textSecondary" variant="subtitle1">STEP-1</Typography>
+                           
                             <FormControl className={classes.form}>
-                                <Typography className={classes.typography} variant="h5"><strong>Select Dataset Type</strong></Typography>
-                                <RadioGroup value={dataset.type} onChange={(e) => setDatasetInfo({ ...dataset, type: e })} className={classes.radioGroup} vertical="true">
-                                    <RadioButton rootColor="grey" pointColor="black" value="pd">
-                                        Parallel Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="md">
-                                        Monolingual Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="atd">
-                                        ASR/TTS Dataset
-                                    </RadioButton>
-                                    <RadioButton rootColor="grey" pointColor="black" value="od">
-                                        OCR Dataset
-                                    </RadioButton>
-                                </RadioGroup>
+                                <Typography className={classes.typography} variant="subtitle1">How to submit dataset?</Typography>
+                                    {renderInstrructions()}
                             </FormControl>
                         </Grid>
                         <Hidden>
@@ -204,21 +217,24 @@ const SubmitDataset = (props) => {
                             </Grid>
                         </Hidden>
                         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-                            <Typography color="textSecondary" variant="subtitle1">STEP-2</Typography>
+                        
                             <FormControl className={classes.form}>
-                                <Grid container spacing={3}>
+                                <Grid container spacing={6}>
                                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                         <Grid container spacing={5}>
-                                            <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
-                                                <Typography variant="h5"><strong>{renderDatasetType()}</strong></Typography>
+                                            <Grid item xl={5} lg={5} md={5} sm={12} xs={12}>
+                                                <Typography className={classes.typography} variant="subtitle1">Submit Dataset</Typography>
                                             </Grid>
-                                            <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
+                                            {/* <Grid item xl={7} lg={7} md={7} sm={12} xs={12}>
+                                                <div>
                                                 <Button
+                                                    size = "medium"
                                                     className={classes.updateBtn}
-                                                    color="inherit"
-                                                    variant="contained"
+                                                    color="primary"
+                                                    variant="outlined"
                                                     onClick={(e) => handleClick(e)}
                                                 >
+                                                    
                                                     Update an existing dataset
                                             </Button>
                                                 <Popover
@@ -237,29 +253,38 @@ const SubmitDataset = (props) => {
                                                     }}
                                                     children={renderUpdateDatasetSearch()}
                                                 />
-                                            </Grid>
+                                                </div>
+                                            </Grid> */}
                                         </Grid>
                                     </Grid>
                                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                         <Grid container spacing={3}>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                                 <TextField fullWidth
-                                                    variant="outlined"
+
                                                     color="primary"
                                                     label="Dataset name"
-                                                    value={dataset.name}
-                                                    error={error}
-                                                    helperText={error && "Dataset name already exists"}
-                                                    onChange={(e) => setDatasetInfo({ ...dataset, name: e.target.value })}
+                                                    value={dataset.datasetName}
+                                                    error={error.name ? true : false}
+                                                    helperText={error.name}
+                                                    onChange={(e) => {
+                                                        setDatasetInfo({ ...dataset, datasetName: e.target.value })
+                                                        setError({ ...error, name: false })
+                                                    }}
                                                 />
                                             </Grid>
                                             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                                                 <TextField fullWidth
-                                                    variant="outlined"
+
                                                     color="primary"
                                                     label="Paste the URL of the public repository"
                                                     value={dataset.url}
-                                                    onChange={(e) => setDatasetInfo({ ...dataset, url: e.target.value })}
+                                                    error={error.url ? true : false}
+                                                    helperText={error.url}
+                                                    onChange={(e) => {
+                                                        setDatasetInfo({ ...dataset, url: e.target.value })
+                                                        setError({ ...error, url: false })
+                                                    }}
                                                 />
                                             </Grid>
                                         </Grid>
@@ -269,7 +294,8 @@ const SubmitDataset = (props) => {
                                     color="primary"
                                     className={classes.submitBtn}
                                     variant="contained"
-                                    
+                                    size={'large'}
+
                                     onClick={handleSubmitDataset}
                                 >
                                     Submit
@@ -279,14 +305,14 @@ const SubmitDataset = (props) => {
                     </Grid>
                 </Paper>
             </div>
-            <Snackbar
-                open={snackbar.open}
-                timeOut={snackbar.timeOut}
-                handleClose={handleSnackbarClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                message={snackbar.message}
-                variant={snackbar.variant}
-            />
+            {snackbar.open &&
+                <Snackbar
+                    open={snackbar.open}
+                    handleClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                    message={snackbar.message}
+                    variant={snackbar.variant}
+                />}
         </div>
     )
 }

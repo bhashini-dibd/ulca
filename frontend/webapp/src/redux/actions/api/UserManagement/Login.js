@@ -19,7 +19,9 @@
    }
  
    getBody() {
-     return 
+     let apiParam = {"authenticator": "ULCA",
+     "data": this.credentials}
+     return apiParam;
    }
  
    getHeaders() {
