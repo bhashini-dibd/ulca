@@ -21,18 +21,20 @@ public class TaskTrackerRedisDao {
 
 	public Map<String, Map<String, String>> findAll() {
 
-		
 		Set<String> keyList = redisTemplate.keys(Prefix + "*");
 		Map<String, Map<String, String>> map = new HashMap<String, Map<String, String>>();
 
 		for (String key : keyList) {
 
 			try {
-				String serviceRequestNumber = redisTemplate.opsForHash().get(key, "serviceRequestNumber") + "";
+
+				String serviceRequestNumber = redisTemplate.opsForHash().hasKey(key, "serviceRequestNumber")
+						? String.valueOf(redisTemplate.opsForHash().get(key, "serviceRequestNumber"))
+						: null;
 				String mode = redisTemplate.opsForHash().get(key, "mode") + "";
 				String baseLocation = redisTemplate.opsForHash().get(key, "baseLocation") + "";
 				String md5hash = redisTemplate.opsForHash().get(key, "md5hash") + "";
-				
+
 				String ingestComplete = redisTemplate.opsForHash().get(key, "ingestComplete") + "";
 				String count = redisTemplate.opsForHash().get(key, "count") + "";
 				String ingestSuccess = redisTemplate.opsForHash().get(key, "ingestSuccess") + "";
@@ -42,13 +44,26 @@ public class TaskTrackerRedisDao {
 				String validateError = redisTemplate.opsForHash().get(key, "validateError") + "";
 				String validateSuccess = redisTemplate.opsForHash().get(key, "validateSuccess") + "";
 
+				String publishSuccessSeconds = redisTemplate.opsForHash().hasKey(key, "publishSuccessSeconds")
+						? String.valueOf(redisTemplate.opsForHash().get(key, "publishSuccessSeconds"))
+						: null;
+				String publishErrorSeconds = redisTemplate.opsForHash().hasKey(key, "publishErrorSeconds")
+						? String.valueOf(redisTemplate.opsForHash().get(key, "publishErrorSeconds"))
+						: null;
+				String validateSuccessSeconds = redisTemplate.opsForHash().hasKey(key, "validateSuccessSeconds")
+						? String.valueOf(redisTemplate.opsForHash().get(key, "validateSuccessSeconds"))
+						: null;
+				String validateErrorSeconds = redisTemplate.opsForHash().hasKey(key, "validateErrorSeconds")
+						? String.valueOf(redisTemplate.opsForHash().get(key, "validateErrorSeconds"))
+						: null;
+
 				Map<String, String> innerMap = new HashMap<String, String>();
 
 				innerMap.put("serviceRequestNumber", serviceRequestNumber);
 				innerMap.put("mode", mode);
 				innerMap.put("baseLocation", baseLocation);
 				innerMap.put("md5hash", md5hash);
-				
+
 				innerMap.put("ingestComplete", ingestComplete);
 				innerMap.put("count", count);
 				innerMap.put("ingestSuccess", ingestSuccess);
@@ -58,13 +73,24 @@ public class TaskTrackerRedisDao {
 				innerMap.put("validateError", validateError);
 				innerMap.put("validateSuccess", validateSuccess);
 
+				if (publishSuccessSeconds != null) {
+					innerMap.put("publishSuccessSeconds", publishSuccessSeconds);
+				}
+				if (publishErrorSeconds != null) {
+					innerMap.put("publishErrorSeconds", publishErrorSeconds);
+				}
+				if (validateSuccessSeconds != null) {
+					innerMap.put("validateSuccessSeconds", validateSuccessSeconds);
+				}
+				if (validateErrorSeconds != null) {
+					innerMap.put("validateErrorSeconds", validateErrorSeconds);
+				}
+
 				map.put(serviceRequestNumber, innerMap);
-			} catch( Exception e) {
+			} catch (Exception e) {
 				log.info("Problem while retrieving data from redis. Please check the redis. key :: " + key);
 				log.info("Exception occured :: " + e.getMessage());
 			}
-			
-
 
 		}
 
@@ -88,10 +114,11 @@ public class TaskTrackerRedisDao {
 		redisTemplate.opsForHash().put(key, "validateSuccess", "0");
 		redisTemplate.opsForHash().put(key, "publishError", "0");
 		redisTemplate.opsForHash().put(key, "publishSuccess", "0");
-		
+
 		log.info("******* Exit TaskTrackerRedisDao : intialize ******* ");
 
 	}
+
 	public void intializePseudoIngest(final String serviceRequestNumber, String baseLocation, String md5hash) {
 
 		log.info("******* Entry TaskTrackerRedisDao : intialize ******* ");
@@ -110,13 +137,13 @@ public class TaskTrackerRedisDao {
 		redisTemplate.opsForHash().put(key, "validateSuccess", "0");
 		redisTemplate.opsForHash().put(key, "publishError", "0");
 		redisTemplate.opsForHash().put(key, "publishSuccess", "0");
-		
+
 		log.info("******* Exit TaskTrackerRedisDao : intialize ******* ");
 
 	}
 
 	public void increment(String serviceRequestNumber, String key) {
-		
+
 		redisTemplate.opsForHash().increment(Prefix + serviceRequestNumber, key, 1);
 
 	}
@@ -127,13 +154,14 @@ public class TaskTrackerRedisDao {
 		redisTemplate.opsForHash().put(Prefix + serviceRequestNumber, "ingestComplete", String.valueOf(1));
 
 	}
+
 	public void updateCountOnIngestFailure(String serviceRequestNumber) {
 
 		String ingestError = (String) redisTemplate.opsForHash().get(Prefix + serviceRequestNumber, "ingestError");
 		String ingestSuccess = (String) redisTemplate.opsForHash().get(Prefix + serviceRequestNumber, "ingestSuccess");
-		
-		String count = String.valueOf(Integer.parseInt(ingestSuccess)+Integer.parseInt(ingestError));
-		
+
+		String count = String.valueOf(Integer.parseInt(ingestSuccess) + Integer.parseInt(ingestError));
+
 		redisTemplate.opsForHash().put(Prefix + serviceRequestNumber, "count", count);
 		redisTemplate.opsForHash().put(Prefix + serviceRequestNumber, "ingestComplete", String.valueOf(1));
 
@@ -144,4 +172,3 @@ public class TaskTrackerRedisDao {
 		redisTemplate.delete(Prefix + serviceRequestNumber);
 	}
 }
-
