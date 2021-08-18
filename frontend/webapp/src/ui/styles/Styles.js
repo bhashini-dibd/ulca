@@ -19,6 +19,7 @@ const GlobalStyles = (theme) => ({
     position: "relative",
     minHeight: "720px",
     display: "flex",
+    flexDirection:"column"
   },
   appBar: {
     backgroundColor: theme.palette.primary.dark,

@@ -52,5 +52,21 @@ export  function clearFilter( filterValues,constant) {
     }
 }
 
+export  function clearFilterModel( filterValues,constant) {
+    return {     
+        type: constant,
+        payload: {filterValues}
+    }
+}
+
+export  function FilterModel( filterValues,constant) {
+    return {     
+        type: constant,
+        payload: {filterValues}
+    }
+}
+
+
+
 
 

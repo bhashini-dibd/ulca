@@ -133,7 +133,7 @@
             "uri":"/ulca/apis/v0/model/upload",
             "module":"ULCA-API-MODEL",
             "active":true,
-            "whiteList":true,
+            "whiteList":false,
             "description":"API to upload models"
         },
         {
@@ -149,8 +149,24 @@
             "uri":"/ulca/apis/v0/model/listByUserId",
             "module":"ULCA-API-MODEL",
             "active":true,
-            "whiteList":true,
+            "whiteList":false,
             "description":"API to fetch models"
+        },
+        {
+            "id":"5c3038d9-17fc-452d-9e01-967dcc2e876e",
+            "uri":"/ulca/apis/v0/model/compute",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to compute models"
+        },
+        {
+            "id":"6c5b13f8-cbad-4729-ac94-05eb0248490b",
+            "uri":"/ulca/apis/asr/v1/model/compute",
+            "module":"ASR-MODEL-COMPUTE",
+            "active":true,
+            "whiteList":true,
+            "description":"API to compute asr models"
         }
     ]
 }

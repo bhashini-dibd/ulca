@@ -197,6 +197,10 @@ const themeDefault = createMuiTheme({
     MuiTab: {
       root: {
         width: 'auto',
+        fontSize: '20px',
+        fontWeight: '300',
+        letterSpacing: '0px',
+        fontFamily: 'Rowdies',
         // '&:first-child':{
         padding: '0',
         marginRight: '54px',
@@ -208,6 +212,9 @@ const themeDefault = createMuiTheme({
         "@media (max-width:600px)": {
           marginRight: '20px',
           minWidth: 'auto',
+        },
+        "@media (max-width:550px)": {
+          fontSize: "1rem",
         }
       },
       wrapper: {
@@ -244,17 +251,27 @@ themeDefault.typography.h1 = {
   fontSize: "3.125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "2rem",
+  }
 };
 themeDefault.typography.h2 = {
   fontSize: "2.5rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "1.5rem",
+  }
 };
 themeDefault.typography.h3 = {
   fontSize: "1.6875rem",
-  letterSpacing: "1.98px",
+  //letterSpacing: "1.98px",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  letterSpacing: '0px',
+  "@media (max-width:550px)": {
+    fontSize: "1.3rem",
+  }
 };
 themeDefault.typography.h4 = {
   fontSize: "1.5rem",
@@ -267,9 +284,12 @@ themeDefault.typography.h5 = {
 
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "1rem",
+  }
 };
 themeDefault.typography.h6 = {
-  fontSize: "1.125rem",
+  fontSize: "1.25rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
   paddingTop: "4px",
@@ -278,9 +298,9 @@ themeDefault.typography.h6 = {
   }
 };
 themeDefault.typography.body1 = {
-  fontSize: "1rem",
-  fontFamily: '"Rowdies","Roboto", sans-serif ,sans-serif',
-  fontWeight: "300"
+  fontSize: "1.25rem",
+  fontFamily: '"Roboto", sans-serif ,sans-serif',
+  fontWeight: "400"
 
 };
 themeDefault.typography.body2 = {

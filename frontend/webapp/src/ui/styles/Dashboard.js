@@ -108,8 +108,8 @@ const FileUploadStyles = (theme) => ({
 
   title:{
     textAlign: "left",
-    paddingLeft:"3%",
-    margin: "4.5vh 0 0vh 1vh",
+    paddingLeft:"1%",
+    margin: "4.5vh 0 4vh 1vh",
     "@media (max-width:600px)": {textAlign: "center",}
   }
 });
