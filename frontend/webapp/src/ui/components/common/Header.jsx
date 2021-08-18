@@ -111,7 +111,11 @@ const Header = (props) => {
               />
             </Link>
             {/* <Divider orientation="vertical" color="primary"/> */}
-            <Typography variant="h4" onClick={() => authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
+            <Typography variant="h4" onClick={() => {
+             dispatch(getMenuType(""));
+             dispatch(getMenuOption(""));
+             authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)}
+            }>
               ULCA
             </Typography>
 
