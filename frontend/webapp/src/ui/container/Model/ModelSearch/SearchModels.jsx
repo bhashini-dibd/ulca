@@ -17,11 +17,10 @@ import UrlConfig from '../../../../configs/internalurlmapping';
 import { useParams } from "react-router";
 import C from "../../../../redux/actions/constants";
 import FilterListIcon from '@material-ui/icons/FilterList';
-
+import updateFilter from '../../../../redux/actions/api/Model/ModelSearch/Benchmark';
 
 
 const ContributionList = (props) => {
-
         const history = useHistory();
         const dispatch = useDispatch(ClearReport);
         const myContributionReport = useSelector((state) => state.searchModel);
@@ -75,6 +74,9 @@ const ContributionList = (props) => {
                 </>
         }
         const handleRowClick = (id, name, status) => {
+                const {source,target,type} = props;
+                const payload = {source,target,type};
+                dispatch(updateFilter(payload));
                 let result = ""
                 myContributionReport.filteredData.forEach(item => {
                         if (item.submitRefNumber === id) {

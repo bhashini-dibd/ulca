@@ -3,12 +3,16 @@ import DatasetStyle from '../../../../styles/Dataset';
 import { useHistory } from 'react-router';
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined';
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import Spinner from "../../../../components/common/Spinner";
+import { getLanguageName } from '../../../../../utils/getLabel';
 import {
     Grid,
     Typography,
     TextField,
     Button,
-    CardContent, Card
+    CircularProgress,
+    CardContent, Card, CardActions, CardHeader
 } from '@material-ui/core';
 import { useState } from 'react';
 import { identifier } from '@babel/types';
@@ -19,7 +23,17 @@ const HostedInference = (props) => {
     const history = useHistory();
     const [translation, setTranslationState] = useState(false)
     const [sourceText, setSourceText] = useState("");
+    const [loading, setLoading] = useState(false);
     const [target, setTarget] = useState("")
+    const [sourceLanguage, setSourceLanguage] = useState(
+        { value: 'en', label: 'English' }
+    );
+    const srcLang = getLanguageName(props.source);
+    const tgtLang = getLanguageName(props.target);
+
+    // useEffect(() => {
+    // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
+    // }, []);
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
@@ -28,17 +42,24 @@ const HostedInference = (props) => {
     const handleSnackbarClose = () => {
         setSnackbarInfo({ ...snackbar, open: false })
     }
+    const clearAll = () => {
+        setSourceText("");
+        setTarget("")
+    }
     const handleCompute = () => {
-        const apiObj = new HostedInferenceAPI(modelId, sourceText, task);
+        setLoading(true);
+        const apiObj = new HostedInferenceAPI(modelId, sourceText, task, false);
         fetch(apiObj.apiEndPoint(), {
             method: 'POST',
             headers: apiObj.getHeaders().headers,
             body: JSON.stringify(apiObj.getBody())
         }).then(async resp => {
             let rsp_data = await resp.json();
+            setLoading(false)
             if (resp.ok) {
-                if (rsp_data.hasOwnProperty('translation') && rsp_data.translation) {
-                    setTarget(rsp_data.translation.output[0].target)
+                if (rsp_data.hasOwnProperty('outputText') && rsp_data.outputText) {
+                    setTarget(rsp_data.outputText)
+                    //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
                     setTranslationState(true)
                 }
             } else {
@@ -51,7 +72,7 @@ const HostedInference = (props) => {
                 Promise.reject(rsp_data);
             }
         }).catch(err => {
-            console.log(err)
+            setLoading(false)
             setSnackbarInfo({
                 ...snackbar,
                 open: true,
@@ -59,13 +80,112 @@ const HostedInference = (props) => {
                 variant: 'error'
             })
         })
-    };
+    }
+    // const renderTexfield = () => {
+    //     //  let labels = Language.map(lang => lang.label)
+    //     return (
+    //         <Autocomplete
+    //            // className={classes.titleDropdown}
+    //             value={"English"}
+    //             id="source"
+    //             disabled
+    //             //  options={labels}
+    //             // onChange={(event, data) => handleLanguagePairChange(data, 'source')}
+    //           //  renderInput={(params) => <TextField fullWidth {...params} variant="standard"
+    //             // />}
+    //         />
+    //     )
+    // }
+    // const handleLanguagePairChange = (value, property) => {
+    // 	let sLang =  Language.filter(val => val.label ===value )[0]
+    // 	if(sLang){
+    // 		fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
+    //     setSourceLanguage(sLang);
+    // 	}
+    // };
+
+
     return (
-        <div>
-            <Typography variant='h6' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
-            <Grid container spacing={2}>
-                <Grid className={classes.gridCompute} item xl={8} lg={8} md={8} sm={8} xs={8}>
-                    <TextField fullWidth
+        // <div>
+        //<Grid container spacing={2}>
+        <Grid className={classes.gridCompute} item xl={12} lg={12} md={12} sm={12} xs={12}>
+            {loading && <Spinner />}
+            <Card className={classes.hostedCard}>
+                <CardContent className={classes.translateCard}>
+                    <Grid container className={classes.cardHeader}>
+                        <Grid item xs={4} sm={4} md={4} lg={4} xl={4} className={classes.headerContent}>
+                            <Typography variant='h6' className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
+                        </Grid>
+                        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                            {/* <Autocomplete
+                                disabled
+                                options={['English']}
+                                value={'English'}
+                                renderInput={(params) => <TextField {...params} variant="standard" />}
+                            /> */}
+                            <Typography variant='h6' className={classes.hosted}>{srcLang}</Typography>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <CardContent>
+                    <textarea
+                        value={sourceText}
+                        rows={5}
+                        // cols={40}
+                        className={classes.textArea}
+                        placeholder="Enter Text"
+                        onChange={(e) => {
+                            setSourceText(e.target.value);
+                        }}
+                    />
+                </CardContent>
+
+                <CardActions className={classes.actionButtons} >
+                    <Grid container spacing={2}>
+                        <Grid item>
+                            <Button disabled={sourceText ? false : true} size="small" variant="outlined" onClick={clearAll}>
+                                Clear All
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Button
+                                color="primary"
+                                className={classes.computeBtn}
+                                variant="contained"
+                                size={'small'}
+                                onClick={handleCompute}
+                                disabled={sourceText ? false : true}>
+                                Translate
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </CardActions>
+            </Card>
+            <Card className={classes.translatedCard}>
+                <CardContent className={classes.translateCard}>
+                    <Grid container className={classes.cardHeader}>
+                        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.headerContent}>
+                            {/* <Autocomplete
+                                disabled
+                                options={['Hindi']}
+                                value={'Hindi'}
+                                renderInput={(params) => <TextField {...params} variant="standard" />}
+                            /> */}
+                            <Typography variant='h6' className={classes.hosted}>{tgtLang}</Typography>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <CardContent>
+                    <textarea
+                        disabled
+                        placeholder='Output'
+                        rows={6}
+                        value={target}
+                        className={classes.textArea}
+                    />
+                </CardContent>
+            </Card>
+            {/* <TextField fullWidth
                         color="primary"
                         label="Enter Text"
                         value={sourceText}
@@ -74,47 +194,7 @@ const HostedInference = (props) => {
                         onChange={(e) => {
                             setSourceText(e.target.value);
                         }}
-                    />
-                    {/* <textarea
-                    rows={4}
-                    cols={40}
-                    placeholder="Enter Text"
-                    //  rowsMax={4}
-                    //     color="primary"
-                    //     label="Enter Text"
-                    // value={model.modelName}
-                    // error={error.name ? true : false}
-                    // helperText={error.name}
-                    onChange={(e) => {
-                        setModelInfo({ ...model, modelName: e.target.value })
-                        setError({ ...error, name: false })
-                    }}
                     /> */}
-                </Grid>
-                <Grid item xl={4} lg={4} md={4} sm={4} xs={4} className={classes.computeGrid}>
-                    <Button
-                        color="primary"
-                        className={classes.computeBtn}
-                        variant="contained"
-                        size={'small'}
-
-                        onClick={handleCompute}
-                    >
-                        Translate
-                    </Button>
-                </Grid>
-
-                {translation &&
-                    // <Grid item xl={11} lg={11} md={12} sm={12} xs={12}>
-                    <Card style={{ backgroundColor: '#139D601A', color: 'black', heigth: '50px', width: '440px' }}>
-                        <CardContent style={{ paddingBottom: '16px' }}>
-                            {target}
-                        </CardContent>
-                    </Card>
-                    // </Grid>
-                }
-            </Grid>
-
             {snackbar.open &&
                 <Snackbar
                     open={snackbar.open}
@@ -123,7 +203,11 @@ const HostedInference = (props) => {
                     message={snackbar.message}
                     variant={snackbar.variant}
                 />}
-        </div>
+        </Grid>
+        //  </Grid>
+
+
+        //   </div>
 
     )
 }

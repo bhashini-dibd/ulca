@@ -3,17 +3,20 @@ import DatasetStyle from '../../../../styles/Dataset';
 import { useHistory, useParams } from 'react-router';
 import {
     Grid,
+    Link,
     Typography
 } from '@material-ui/core';
 
 const ModelDescription = (props) => {
     const { classes, title, para } = props;
     const history = useHistory();
-
     return (
-        <div style={{maxWidth:'624px'}}>
+        <div>
             <Typography variant="h6" className={classes.modelTitle}>{title}</Typography>
-            <Typography className={classes.modelPara}>{para}</Typography>
+            {title !== "Source URL" || para === "NA" ?
+                <Typography style={{fontSize:'20px', fontFamily:'Roboto',textAlign:"justify"}} className={classes.modelPara}>{para}</Typography> :
+                <Typography className={classes.modelTitle}><Link style={{color:"#3f51b5",fontSize:'20px',}} variant="body2" href={para}>
+                    {para}</Link></Typography>}
 
         </div>
     )

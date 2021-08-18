@@ -1,3 +1,5 @@
+import threading
+from threading import Thread
 import logging
 from azure.storage.blob import BlobServiceClient, BlobClient
 from config import azure_link_prefix,azure_connection_string,azure_container_name,download_folder
@@ -18,15 +20,11 @@ class AzureFileRepo():
         blob_file_name = folder + "/" + file_name
         blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
         blob_client = blob_service_client.get_blob_client(container=azure_container_name, blob=blob_file_name)
-        try:
-            with open(file_path, "rb") as data:
-                log.info(f'Pushing {file_path} to azure at {blob_file_name} ......')
-                blob_client.upload_blob(data,overwrite=True)
-            return f'{azure_link_prefix}{blob_file_name}'
-        except Exception as e:
-            log.exception(f'Exception while pushing to azure blob storage: {e}', e)
-            return post_error("Service Exception",f"Exception occurred:{e}")
-    
+        log.info(f'Pushing {file_path} to azure at {blob_file_name} on a new fork......')
+        persister = threading.Thread(target=self.upload_file, args=(blob_client,file_path))
+        persister.start()
+        return f'{azure_link_prefix}{blob_file_name}'
+
     #downloadin file from blob storage
     def download_file_from_blob(self, blob_file_name):
         blob_service_client =  BlobServiceClient.from_connection_string(azure_connection_string)
@@ -50,3 +48,12 @@ class AzureFileRepo():
         except Exception as e:
             log.exception(e)
             return post_error("Service Exception",f"Exception occurred:{e}")
+
+
+    def upload_file(self,blob_client,file_path):
+        try:
+            with open(file_path, "rb") as data:
+                blob_client.upload_blob(data,overwrite=True)
+            os.remove(file_path)
+        except Exception as e:
+            log.exception(f'Exception while pushing to azure blob storage: {e}', e)

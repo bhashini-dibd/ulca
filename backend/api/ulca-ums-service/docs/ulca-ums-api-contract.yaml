@@ -1,14 +1,15 @@
 openapi: 3.0.0
 info:
-  version: 0.7.0
+  version: 1.0.0
   title: ULCA User Management -API Contract
   description: >-
     A python based microservice for user management. This service will expose
     REST APIs to maintain user and admin functionalities.
   contact:
-    name: Dheeraj Gujral
-    email: dheeraj.gujral@tarento.com
-  
+    name: Jainy Joy
+    email: jainy.joy@tarento.com
+servers:
+- url: /ulca/usr-mgmt
 paths:
   /v1/users/signup:
     post:
@@ -50,7 +51,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerifyUserRequest'
+              $ref: '#/components/schemas/UserVerificationRequest'
         required: true
       responses:
         '200':
@@ -58,7 +59,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/VerifyResponse'
+                $ref: '#/components/schemas/UserVerificationResponse'
         '400':
           description: On input errors causing failure in user verification.
           content:
@@ -89,7 +90,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Status'
+                $ref: '#/components/schemas/ApiKeySearchResponse'
         '400':
           description: On input errors causing failure in auth token search.
           content:
@@ -120,7 +121,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/UserData'
+                $ref: '#/components/schemas/UserLoginResponse'
         '400':
           description: On input errors causing failure in user login.
           content:
@@ -134,67 +135,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error' 
                 
-  /v1/users/update:
-    post:
-      tags:
-        - 'Update User'
-      summary: 'REST API to update users'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateUserRequest'
-        required: true
-      responses:
-        '200':
-          description: User updated successfully.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Status'
-        '400':
-          description: On input errors causing failure in user account updation.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: On system level errors causing failure in user account updation.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Error' 
-                
-  /v1/users/logout:
-    post:
-      tags:
-        - 'Logout'
-      summary: 'REST API to logout'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserLogoutRequest'
-        required: true
-      responses:
-        '200':
-          description: Logged out successfully.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Status'
-        '400':
-          description: On input errors causing failure in user logout.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Error'
-        '500':
-          description: On system level errors causing failure in user logout.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/Error' 
+   
   /v1/users/forgot-password:
     post:
       tags:
@@ -238,7 +179,7 @@ paths:
         required: true
       responses:
         '200':
-          description: Password reset successfully.
+          description: Password updated successfully.
           content:
             '*/*':
               schema:
@@ -267,6 +208,7 @@ components:
         - firstName
         - email
         - password
+        - roles
       properties:
         firstName:
          type: string
@@ -289,51 +231,20 @@ components:
           type: string
           description: Mobile phone number of the user to be registered.
     
-    UpdateUserRequest:
-      type: object
-      properties:
-        userID:
-          type: string
-          description: Unique IDs of the users
-        firstName:
-          type: string
-          description: Name of the user.
-        lastName:
-          type: string
-          description: Name of the user.
-        description:
-          type: string
-          description: description of the user.
-        email:
-          type: string
-          description: email id of the user.
-        phoneNo:
-          type: string
-          description: mobile number of the user
-            
-      description: user details to update 
+
     
     UserLoginRequest:
       type: object
       properties:
         authenticator:
-          type: string
           $ref: '#/components/schemas/Authenticator'
-          description: user login authenticator
         data:
           type: object
           oneOf:
             - $ref: '#/components/schemas/UlcaLoginAuthenticator'
             - $ref: '#/components/schemas/GmailLoginAuthenticator'
     
-    UserLogoutRequest:
-      type: object
-      properties:
-        email:
-          type: string
-          description: Unique email of the user
-      description: Details of the user to be logged out.
-
+  
 
     ApiKeySearchRequest:
       type: object
@@ -362,13 +273,9 @@ components:
         password:
           type: string
           description: password to be updated
-        confirmPassword:
-          type: string
-          description: confirmPassword to be updated
-      description: Request for user records.
 
 
-    VerifyUserRequest:
+    UserVerificationRequest:
       type: object
       properties:
         email:
@@ -435,12 +342,6 @@ components:
         description:
           type: string
           description: Description of the role.
-        createdOn:
-          type: number
-          description: 13 digit epoch timestamp
-        updatedOn:
-          type: number
-          description: 13 digit epoch timestamp
   
    
   
@@ -462,14 +363,9 @@ components:
       type: object
       properties:
         userKeys:
-          type: object
           $ref: '#/components/schemas/AuthData'
-          description: keys allotted for the user.
         userDetails:
-          type: object
           $ref: '#/components/schemas/User'
-          description: user record stored on db.
-        
           
           
     Status:
@@ -485,30 +381,38 @@ components:
           type: integer
           description: count of data items.
     
-    VerifyResponse:
+    UserVerificationResponse:
       type: object
       properties:
         message:
           type: string
           description: message returned after succesful request completion.
         data:
-          type: object
           $ref: '#/components/schemas/AuthData'
-          description: data returned by the request.
         count:
           type: integer
           description: count of data items.
     
-    LoginResponse:
+    UserLoginResponse:
       type: object
       properties:
         message:
           type: string
           description: message returned after succesful request completion.
         data:
-          type: object
-          $ref: '#/components/schemas/AuthData'
-          description: data returned by the request.
+          $ref: '#/components/schemas/UserData'
+        count:
+          type: integer
+          description: count of data items.
+    
+    ApiKeySearchResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          $ref: '#/components/schemas/UserData'
         count:
           type: integer
           description: count of data items.
@@ -556,27 +460,7 @@ components:
             authuser:
               type: number
               description: authuser 
-          
-    UserLoginResponse:
-      type: object
-      properties:
-        ok:
-          type: string
-          description: true or false 
-        http:
-          type: object
-          properties:
-            status:
-              type: string
-              description: status code of the request
-        
-        data:
-          type: object
-          $ref: '#/components/schemas/AuthData'
-        count:
-          type: integer
-          description: count of data items
-          
+
           
   
     Authenticator:

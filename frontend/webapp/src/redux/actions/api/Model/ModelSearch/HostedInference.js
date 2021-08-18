@@ -8,13 +8,17 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from 'md5';
 
 export default class HostedInference extends API {
-    constructor(modelId, input, task, timeout = 2000) {
+    constructor(modelId, input, task,record,source, inferenceEndPoint, timeout = 2000) {
         super("POST", timeout, false);
         this.modelId = modelId;
         this.input = input;
         this.task = task;
-        this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.hostedInference}`;
+        this.record = record;
+        this.source = source;
+        this.inferenceEndPoint =inferenceEndPoint
+        this.endpoint = `${super.apiEndPointAuto()}${this.task === 'asr' ?ENDPOINTS.hostedVoice :ENDPOINTS.hostedInference}`;
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'));
+        
     }
 
     toString() {
@@ -42,10 +46,18 @@ export default class HostedInference extends API {
         if (this.task === 'translation') {
             bodyData.input = [{ source: this.input }]
         } else if (this.task === 'asr') {
-            console.log(this.input,this.task)
-            bodyData.audioUri = this.input
+            if (this.record) {
+                
+                bodyData.audioContent = this.input.split("base64,")[1]
+
+            }else{
+                bodyData.audioUri = this.input
+            }
+            bodyData.source = this.source;
+            bodyData.inferenceEndPoint = this.inferenceEndPoint;
+            
         }
-        bodyData.userId = JSON.parse(localStorage.getItem('userDetails')).userID
+        bodyData.userId = localStorage.getItem('userDetails') && JSON.parse(localStorage.getItem('userDetails')).userID
         return bodyData;
     }
 

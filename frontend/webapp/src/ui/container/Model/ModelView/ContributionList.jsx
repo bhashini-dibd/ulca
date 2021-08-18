@@ -19,6 +19,8 @@ import C from "../../../../redux/actions/constants";
 import FilterListIcon from '@material-ui/icons/FilterList';
 import FilterList from "./FilterList";
 import GridView from "./GridView";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
 
 const ContributionList = (props) => {
 
@@ -86,9 +88,7 @@ const ContributionList = (props) => {
                         
                         {/* <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button> */}
                         <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
-                        <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button>
-                       
-                        
+                        <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button>        
                 </>
         }
         const handleRowClick = (id,name,status) => {
@@ -208,7 +208,7 @@ const ContributionList = (props) => {
                           empty: true,
                           customBodyRender: (value, tableMeta, updateValue) => {
                             if (tableMeta.rowData) {
-                              return <div>{renderEventList(tableMeta.rowData[0])}</div>;
+                              return <Button style={{background:"white",borderRadius:"1rem"}}>{renderEventList(tableMeta.rowData[0])}</Button>;
                             }
                           },
                         },
@@ -241,6 +241,48 @@ const ContributionList = (props) => {
                 fixedHeader: false,
                 filterType: "checkbox",
                 download: false,
+                expandableRows: false,
+                
+      expandableRowsHeader: false,
+      expandableRowsOnClick: false,
+//       isRowExpandable: (dataIndex, expandedRows) => {
+//         if (dataIndex === 3 || dataIndex === 4) return false;
+
+//         // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
+//         if (expandedRows.data.length > 4 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
+//         return true;
+//       },
+     
+//       renderExpandableRow: (rowData, rowMeta) => {
+//         const colSpan = rowData.length + 1;
+//         return (
+               
+//           <TableRow>
+//             <TableCell>
+             
+//             </TableCell>
+//             <TableCell>
+//               Custom expandable
+//             </TableCell>
+//             <TableCell>
+//               Custom 
+//             </TableCell>
+//             <TableCell>
+//               Custom 
+//             </TableCell>
+//             <TableCell>
+//               Custom 
+//             </TableCell>
+//             <TableCell>
+//               Custom 
+//             </TableCell>
+//             <TableCell>
+             
+//             </TableCell>
+            
+//           </TableRow>
+//         );
+//       },
                 print: false,
                 viewColumns: false,
                 rowsPerPage: PageInfo.count,
@@ -265,8 +307,6 @@ const ContributionList = (props) => {
         };
 
         const { classes } = props;
-
-        console.log(myContributionReport)
         return (
                
                 <div>

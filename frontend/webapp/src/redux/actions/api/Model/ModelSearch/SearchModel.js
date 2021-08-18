@@ -31,7 +31,6 @@ export default class SearchModel extends API {
         if (res) {
             this.report = res.data;
         }
-        console.log('inside processResponse', res)
     }
 
     apiEndPoint() {
@@ -46,7 +45,7 @@ export default class SearchModel extends API {
             domain: this.domain,
             submitter: this.submitter
         }
-        bodyData.userId = JSON.parse(localStorage.getItem('userDetails')).userID
+        bodyData.userId = localStorage.getItem('userDetails') && JSON.parse(localStorage.getItem('userDetails')).userID
         return bodyData;
     }
 
