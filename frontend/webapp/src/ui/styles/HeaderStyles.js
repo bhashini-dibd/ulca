@@ -160,9 +160,10 @@ const HeaderStyles = (theme) => ({
     paddingRight: '12px',
     boxShadow: "3px 0 2px -2px #00000029",
     marginRight: '12px',
-    "@media (max-width:670px)": {
-      display: 'none'
-    }
+    display:'block',
+    // "@media (max-width:670px)": {
+    //   size:'10px'
+    // }
   },
 
   

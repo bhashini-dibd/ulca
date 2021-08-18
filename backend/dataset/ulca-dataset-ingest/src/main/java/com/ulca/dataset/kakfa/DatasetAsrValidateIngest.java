@@ -222,7 +222,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		vModel.put("userMode", mode);
 		
 		 
-		taskTrackerRedisDao.intialize(serviceRequestNumber);
+		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetType);
 		 
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 		String basePath  = datasetIngest.getBaseLocation()  + File.separator;

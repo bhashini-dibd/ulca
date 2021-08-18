@@ -59,7 +59,7 @@ public class SearchKafkaPublishService {
 		serviceRequestNumber = processTracker.getServiceRequestNumber();
 		SearchCriteria searchCriteria = request.getCriteria();
 		searchCriteria.setServiceRequestNumber(processTracker.getServiceRequestNumber());
-		searchCriteria.setGroupBy(request.getGroupby());
+		//searchCriteria.setGroupBy(request.getGroupby());
 		searchCriteria.setDatasetType(request.getDatasetType().toString());
 		
 		log.info(searchCriteria.toString());

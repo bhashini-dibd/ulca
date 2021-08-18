@@ -57,22 +57,36 @@ class DatasetService:
     params: metadata (metadata of the record to be inserted)
     '''
     def enrich_duplicate_data(self, data, record, metadata, immutable, updatable, non_tag):
-        db_record = record
+        db_record = {}
+        for key in record.keys():
+            db_record[key] = record[key]
         found = False
         for key in data.keys():
             if key in updatable:
-                found = True
-                db_record[key] = data[key]
+                if key not in db_record.keys():
+                    found = True
+                    db_record[key] = data[key]
+                else:
+                    if db_record[key] != data[key]:
+                        found = True
+                        db_record[key] = data[key]
                 continue
             if key not in immutable:
                 if key not in db_record.keys():
                     found = True
                     db_record[key] = [data[key]]
                 elif isinstance(data[key], list):
-                    pairs = zip(data[key], db_record[key])
-                    if any(x != y for x, y in pairs):
-                        found = True
-                        db_record[key].extend(data[key])
+                    val = data[key][0]
+                    if isinstance(val, dict):
+                        pairs = zip(data[key], db_record[key])
+                        if any(x != y for x, y in pairs):
+                            found = True
+                            db_record[key].extend(data[key])
+                    else:
+                        for entry in data[key]:
+                            if entry not in db_record[key]:
+                                found = True
+                                db_record[key].append(entry)
                 else:
                     if isinstance(db_record[key], list):
                         if data[key] not in db_record[key]:
@@ -83,11 +97,17 @@ class DatasetService:
                             found = True
                             db_record[key] = [db_record[key]]
                             db_record[key].append(data[key])
+                            db_record[key] = list(set(db_record[key]))
                         else:
                             db_record[key] = [db_record[key]]
         if found:
             db_record["datasetId"].append(metadata["datasetId"])
-            db_record["tags"] = self.get_tags(record, non_tag)
+            dataset_ids = []
+            for entry in db_record["datasetId"]:
+                if entry not in dataset_ids:
+                    dataset_ids.append(entry)
+            db_record["datasetId"] = dataset_ids
+            db_record["tags"] = self.get_tags(db_record, non_tag)
             return db_record
         else:
             return False
@@ -101,7 +121,8 @@ class DatasetService:
         for key in insert_data:
             if key not in non_tag:
                 tag_details[key] = insert_data[key]
-        return list(utils.get_tags(tag_details))
+        tags = list(utils.get_tags(tag_details))
+        return list(set(tags))
 
 
 # Log config

@@ -45,6 +45,9 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	private Integer successThreshold;
 	
 
+	@Autowired
+	DatasetFileService datasetFileService;
+	
 	@Scheduled(cron = "*/10 * * * * *")
 	public void updateTaskTracker() {
 		
@@ -186,7 +189,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				datasetIngest.setMd5hash(md5hash);
 				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
 				
-				datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
+				datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
+				//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
 			}
 
 		} else {
@@ -245,7 +249,15 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
 		}
-
+		
+		
+		
+		if(val.containsKey("validateSuccessSeconds")) {
+			proCountSuccess.put("validateSuccessSeconds", val.get("validateSuccessSeconds"));
+		}
+		if(val.containsKey("validateErrorSeconds")) {
+			proCountFailure.put("validateErrorSeconds", val.get("validateErrorSeconds"));
+		}
 		proCountSuccess.put("count", validateSuccess);
 		proCountFailure.put("count", validateError);
 
@@ -261,6 +273,20 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 						com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
 		}
 
+		if(val.containsKey("publishSuccessSeconds")) {
+			proCountSuccess.put("publishSuccessSeconds", val.get("publishSuccessSeconds"));
+		}
+		if(val.containsKey("publishErrorSeconds")) {
+			proCountFailure.put("publishErrorSeconds", val.get("publishErrorSeconds"));
+		}
+		//remove the values for validateSuccessSeconds and validateErrorSeconds
+		if(proCountSuccess.has("validateSuccessSeconds")) {
+			proCountSuccess.remove("validateSuccessSeconds");
+		}
+		if(proCountFailure.has("validateErrorSeconds")) {
+			proCountFailure.remove("validateErrorSeconds");
+		}
+		
 		proCountSuccess.put("count", publishSuccess);
 		proCountFailure.put("count", publishError);
 
@@ -282,6 +308,9 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 			taskTrackerRedisDao.delete(serviceRequestNumber);
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
+			
+			//upload submitted-datasets file to object store and delete the file
+			datasetFileService.datasetAfterIngestCleanJob(serviceRequestNumber);
 		}
 
 	}

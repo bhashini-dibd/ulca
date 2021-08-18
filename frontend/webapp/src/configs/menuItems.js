@@ -27,8 +27,8 @@ export const menuItems = {
             url: '/model/my-contribution'
         },
         {
-            name: 'Search Model',
-            url: '/benchmark/initiate'
+            name: 'Explore Models',
+            url: '/model/explore-models'
         },
         {
             name: 'Submit Model',

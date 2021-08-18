@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { withStyles, Typography, MuiThemeProvider, Paper, Button ,TextField} from "@material-ui/core";
 import ChartStyles from "../../styles/Dashboard";
-import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis, Tooltip } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, Cell, XAxis, LabelList, YAxis, Tooltip,Label } from 'recharts';
 import APITransport from "../../../redux/actions/apitransport/apitransport";
 import FetchLanguageDataSets from "../../../redux/actions/api/Dashboard/languageDatasets";
 import { ArrowBack } from '@material-ui/icons';
@@ -14,6 +14,7 @@ import Theme from "../../theme/theme-default";
 import TitleBar from "./TitleBar";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Language, FilterBy } from '../../../configs/DatasetItems';
+import Footer from "../../components/common/Footer";
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
 
@@ -155,7 +156,7 @@ const ChartRender = (props) => {
 	}
 	const handleCardNavigation = () => {
 
-		handleOnClick(page - 1)
+		handleOnClick(0)
 	}
 
 	const handleClosePopUp = () =>{
@@ -178,6 +179,20 @@ const ChartRender = (props) => {
 
 			</div>
 		)
+	}
+
+	const CustomizedAxisTick =(props)=> {
+		
+		const { x, y, payload } = props;
+	
+		return (
+		  <g transform={`translate(${x},${y})`}>
+			<text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-35)">
+			 {payload.value && (payload.value.substr(0,14)+ (payload.value.length> 14? "...":""))}
+			</text>
+		  </g>
+		);
+	  
 	}
 
 	const fetchButtonssecondLevel = () => {
@@ -204,13 +219,12 @@ const ChartRender = (props) => {
 
 				} else if (page === 1) {
 					setTitle(`${sourceLanguage.label}-${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label}  parallel sentences - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter":"Domain"}`)
-					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : "Domain"})
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
 					
 
 				} else if (page === 2) {
 					setTitle(`${sourceLanguage.label}-${selectedLanguageName} parallel sentences ${filterValue === "primarySubmitterName"? "by" :"of"}  ${event.label?event.label : dataValue } - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
-					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": "Domain"})
-					
+					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter": "Domain"})
 					
 				}
 
@@ -306,9 +320,9 @@ const ChartRender = (props) => {
 			{/* {popUp && <AppInfo handleClose = {handleClosePopUp} open ={popUp}/>} */}
 
 				<Paper elevation={3} className={classes.paper}>
-						
+					
 					<div className={classes.iconStyle}>
-					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back</Button></>
+					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}} onClick={() => handleCardNavigation()}>Reset</Button></>
 						 {(selectedOption.value ==="parallel-corpus" && page===0 )? 
 						<div className= {classes.titleStyle}>
 						
@@ -323,20 +337,22 @@ const ChartRender = (props) => {
 					</div>
 					
 					<div className={classes.title}>
-						<ResponsiveContainer width="95%" height={550} >
-							<BarChart width={900} height={350} data={DashboardReport.data} fontSize="14px" fontFamily="Roboto" maxBarSize={100} >
+						<ResponsiveContainer width="98%" height={550} >
+							<BarChart width={900} height={400} data={DashboardReport.data} fontSize="14px" fontFamily="Roboto" maxBarSize={100} >
 
 								<XAxis dataKey="label"
 									textAnchor={"end"}
-									tick={{ angle: -30, marginTop: "8px" }}
+									tick={<CustomizedAxisTick/>}
 									height={130}
 									interval={0}
 									position="insideLeft"
+									
 									type="category"
-									label={{ value: axisValue.xAxis, position: 'insideRight', offset: 0 }}
+									
 								>
+									<Label value= {axisValue.xAxis} position= 'insideBottom' fontWeight="bold" fontSize={16}></Label>
 								</XAxis>
-								<YAxis padding={{ top: 30 }} label={{ value: axisValue.yAxis, angle: -90, position: 'insideLeft' }} tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} />
+								<YAxis padding={{ top: 60 }}  tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} ><Label value= {axisValue.yAxis} angle= {-90} position= 'insideLeft' fontWeight="bold" fontSize={16} ></Label></YAxis>
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
@@ -365,7 +381,9 @@ const ChartRender = (props) => {
 				</Paper>
 
 			</div>
+			<Footer/>
 		</MuiThemeProvider>
+		
 	)
 
 
