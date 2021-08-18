@@ -148,14 +148,17 @@ const DataSet = (theme) => ({
         padding: '5%'
     },
     thankYouTypo: {
-        marginBottom: '1.3%'
+        marginTop: '20px',
+        color: '#FD7F23'
     },
     reqNoTypo: {
-        marginBottom: '2.5%',
+        marginTop: '10px',
+        marginBottom: '20px',
     },
     myContriBtn: {
-        marginTop: '8%',
+        marginTop: '20px',
     },
+    noteTypo: { marginTop: '40px', marginBottom: '20px' },
     ButtonRefresh: {
         marginLeft: "auto"
     },
@@ -448,6 +451,14 @@ const DataSet = (theme) => ({
     },
     mainPaper: {
         border: 'none'
+    },
+    submitPaper: {
+        textAlign: 'center',
+        width: '624px',
+        height: '620px',
+        margin: 'auto',
+        padding: '70px 59px 0 59px',
+        marginBottom: '118px'
     }
 });
 
