@@ -150,7 +150,7 @@ const HostedInferASR = (props) => {
 
       <Typography variant={"body1"}>Disclaimer : </Typography>
 
-      <Typography variant={"body2"}>Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.</Typography>
+      <Typography style={{width:"95%"}} variant={"body2"}>Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.</Typography>
 
       <Grid
         className={classes.grid}
@@ -168,10 +168,10 @@ const HostedInferASR = (props) => {
           <CardContent>
             <Typography variant={"caption"}>Max duration: 1 min</Typography>
             <TextField
-              style={{ marginTop: "15px", marginBottom: "10px" }}
+              style={{ marginTop: "15px", marginBottom: "10px"}}
               fullWidth
               color="primary"
-              label="Paste the URL of the public repository"
+              label="Paste the public repository URL"
               value={url}
               error={error.url ? true : false}
               helperText={error.url}

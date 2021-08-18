@@ -8,8 +8,10 @@ from service.parallel import ParallelService
 from service.asr import ASRService
 from service.ocr import OCRService
 from service.monolingual import MonolingualService
+from service.asrunlabeled import ASRUnlabeledService
 
-from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_search_consumer_grp
+from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_search_consumer_grp, \
+    dataset_type_asr_unlabeled
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from kafka import KafkaConsumer
 from repository.datasetrepo import DatasetRepo
@@ -35,7 +37,7 @@ def search_consume():
         topics = [search_input_topic]
         consumer = instantiate(topics)
         repo = DatasetRepo()
-        p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
+        p_service, m_service, a_service, o_service, au_service = ParallelService(), MonolingualService(), ASRService(), OCRService(), ASRUnlabeledService()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-SEARCH-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -50,6 +52,7 @@ def search_consume():
                             break
                         else:
                             repo.upsert(data["serviceRequestNumber"], {"query": data}, True)
+                        log.info(f'PROCESSING - start - SRN: {data["serviceRequestNumber"]}')
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.get_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:
@@ -58,6 +61,9 @@ def search_consume():
                             a_service.get_asr_dataset(data)
                         if data["datasetType"] == dataset_type_monolingual:
                             m_service.get_monolingual_dataset(data)
+                        if data["datasetType"] == dataset_type_asr_unlabeled:
+                            au_service.get_asr_unlabeled_dataset(data)
+                        log.info(f'PROCESSING - end - SRN: {data["serviceRequestNumber"]}')
                         break
                 except Exception as e:
                     log.exception(f'{prefix} Exception in ds search consumer while consuming: {str(e)}', e)
