@@ -9,9 +9,6 @@ info:
     name: Jainy Joy
     email: jainy.joy@tarento.com
 servers:
-# Added by API Auto Mocking Plugin
-- description: SwaggerHub API Auto Mocking
-  url: https://virtserver.swaggerhub.com/JainyJoy/usermanagement/1.0.0
 - url: /ulca/usr-mgmt
 paths:
   /v1/users/signup:
