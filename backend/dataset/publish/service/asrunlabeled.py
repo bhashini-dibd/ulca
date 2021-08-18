@@ -49,7 +49,7 @@ class ASRUnlabeledService:
                                                 "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr_unlabeled})
                     elif result[0] == "UPDATE":
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr_unlabeled})
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr_unlabeled, "isUpdate": True})
                         metric_record = (result[1], result[2])
                         metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1

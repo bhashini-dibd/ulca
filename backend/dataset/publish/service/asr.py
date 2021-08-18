@@ -48,7 +48,7 @@ class ASRService:
                                                 "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr})
                     elif result[0] == "UPDATE":
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
-                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr})
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr, "isUpdate": True})
                         metric_record = (result[1], result[2])
                         metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
@@ -74,7 +74,7 @@ class ASRService:
                          "datasetType": dataset_type_asr, "datasetName": metadata["datasetName"],
                          "serviceRequestNumber": metadata["serviceRequestNumber"],
                          "message": "There was an exception while processing this record!"})
-                    pt.update_task_details(
+                    pt.update_task_detaxils(
                         {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "durationInSeconds": record["durationInSeconds"],
                          "datasetType": dataset_type_asr})
             if error_list:
