@@ -44,7 +44,9 @@ public class SearchCriteria {
 
     private String[] sourceLanguage;
     
-    private String[] groupBy;
+    private Boolean groupBy;
+    
+    private Integer countOfTranslations;
     
     private Boolean originalSourceSentence;
     

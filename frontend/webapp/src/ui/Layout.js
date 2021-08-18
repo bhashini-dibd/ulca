@@ -10,6 +10,8 @@ import { withStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import GlobalStyles from "./styles/Styles";
 import Spinner from "./components/common/Spinner";
 import Snackbar from './components/common/Snackbar';
+
+
 function App(props) {
   const Component = props.component;
   const { classes  } = props;
@@ -51,7 +53,9 @@ function App(props) {
           {renderSpinner()}
           {renderError()}
           <Component />
+          
         </div>
+        <Footer/>
       </div>
     </MuiThemeProvider>
   );

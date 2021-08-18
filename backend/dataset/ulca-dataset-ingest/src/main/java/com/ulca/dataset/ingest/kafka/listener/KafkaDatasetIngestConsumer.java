@@ -63,7 +63,7 @@ public class KafkaDatasetIngestConsumer {
 	@KafkaListener(groupId = "${kafka.ulca.ds.ingest.ip.topic.group.id}", topics = "${kafka.ulca.ds.ingest.ip.topic}", containerFactory = "datasetIngestKafkaListenerContainerFactory")
 	public void datasetIngest(DatasetIngest datasetIngest) {
 		 
-		log.info("************ Exit KafkaDatasetIngestConsumer :: datasetIngest *********");
+		log.info("************ Entry KafkaDatasetIngestConsumer :: datasetIngest *********");
 		try {
 			String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
 			String mode = datasetIngest.getMode();

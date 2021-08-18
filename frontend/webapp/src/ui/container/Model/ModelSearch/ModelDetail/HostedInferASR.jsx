@@ -18,7 +18,7 @@ import {
 import { useState } from "react";
 
 const HostedInferASR = (props) => {
-  const { classes, title, para, modelId, task,source, inferenceEndPoint } = props;
+  const { classes, title, para, modelId, task, source, inferenceEndPoint } = props;
   const history = useHistory();
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
@@ -62,8 +62,8 @@ const HostedInferASR = (props) => {
       });
     }
   };
-  const handleApicall = async (modelId, url, task, status= false) => {
-      
+  const handleApicall = async (modelId, url, task, status = false) => {
+
     let apiObj = new HostedInferenceAPI(modelId, url, task, status, source, inferenceEndPoint);
     setApiCall(true)
     fetch(apiObj.apiEndPoint(), {
@@ -84,19 +84,19 @@ const HostedInferASR = (props) => {
             variant: "error",
           });
         } else {
-              if(status){
-                setTargetAudio(rsp_data.data.transcript);
-                
-              }
-              else{
-                setTarget(rsp_data.data.transcript);
-              }
-                
+          if (status) {
+            setTargetAudio(rsp_data.data.transcript);
 
-            
-            setTranslationState(true);
           }
-        
+          else {
+            setTarget(rsp_data.data.transcript);
+          }
+
+
+
+          setTranslationState(true);
+        }
+
       })
       .catch((error) => {
         setApiCall(false)
@@ -129,7 +129,7 @@ const HostedInferASR = (props) => {
         sm={12}
         xs={12}
       >
-        <AudioRecord modelId={modelId} handleApicall = {handleApicall}/>
+        <AudioRecord modelId={modelId} handleApicall={handleApicall} />
       </Grid>
       <Grid
         className={classes.grid}
@@ -150,7 +150,7 @@ const HostedInferASR = (props) => {
 
       <Typography variant={"body1"}>Disclaimer : </Typography>
 
-      <Typography variant={"caption"}>Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.</Typography>
+      <Typography style={{width:"95%"}} variant={"body2"}>Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.</Typography>
 
       <Grid
         className={classes.grid}
@@ -166,12 +166,12 @@ const HostedInferASR = (props) => {
             <Typography variant='h6' className={classes.titleCard}>Notes</Typography>
           </Grid>
           <CardContent>
-            <Typography variant={"caption"}>Max duration: 15 mins (If more, transcript of first 15 mins only will be given)</Typography>
+            <Typography variant={"caption"}>Max duration: 1 min</Typography>
             <TextField
-              style={{ marginTop: "15px", marginBottom: "10px" }}
+              style={{ marginTop: "15px", marginBottom: "10px"}}
               fullWidth
               color="primary"
-              label="Paste the URL of the public repository"
+              label="Paste the public repository URL"
               value={url}
               error={error.url ? true : false}
               helperText={error.url}
@@ -187,7 +187,7 @@ const HostedInferASR = (props) => {
             <Button
               color="primary"
               className={classes.computeBtnUrl}
-              disabled= {url ? false:true}
+              disabled={url ? false : true}
               variant="contained"
               size={"small"}
               onClick={handleSubmit}

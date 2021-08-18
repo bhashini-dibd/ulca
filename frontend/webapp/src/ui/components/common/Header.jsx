@@ -17,6 +17,7 @@ import Dialog from "./Dialog";
 import { useDispatch } from "react-redux";
 import { initialSearchFilter } from '../../../redux/actions/api/Model/ModelSearch/Benchmark';
 import bhashiniLogo from '../../../assets/bhashiniogo.png';
+import { Link } from "@material-ui/core";
 
 const StyledMenu = withStyles({
 
@@ -57,7 +58,7 @@ const Header = (props) => {
   }
 
   const handleOpenModel = (e) => {
-    authenticate() ? setAnchorModel(e.currentTarget) : history.push(`${process.env.PUBLIC_URL}/benchmark/initiate`)
+    authenticate() ? setAnchorModel(e.currentTarget) : history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
   }
   const dispatch = useDispatch();
 
@@ -84,20 +85,20 @@ const Header = (props) => {
 
   }
 
-
-
-
   return (
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit">
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
-            <img className={classes.bhashiniLogo}
-              src={bhashiniLogo}
-              alt="Bhashini Logo"
-            />
+            <Link href="https://bhashini.gov.in/en/">
+              <img className={classes.bhashiniLogo}
+
+                src={bhashiniLogo}
+                alt="Bhashini Logo"
+              />
+            </Link>
             {/* <Divider orientation="vertical" color="primary"/> */}
-            <Typography variant="h4" onClick={() => history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
+            <Typography variant="h4" onClick={() => authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
               ULCA
             </Typography>
 
@@ -122,73 +123,46 @@ const Header = (props) => {
                     <HomeIcon fontSize="large" />
                   </Button>
                 </div> */}
-                <div className={classes.datasetOption}>
-                  <div>
-                    <Button className={classes.menuBtn}
-                      onClick={(e) => handleOpenMenu(e)}
-                      variant="text"
-                    >
+                {authenticate() &&
+                  <div className={classes.datasetOption}>
+                    <div>
+                      <Button className={classes.menuBtn}
+                        onClick={(e) => authenticate() ? handleOpenMenu(e) : handleMenuItemClick('/user/login')}
+                        variant="text"
+                      >
                         Dataset
-                      {authenticate() && <DownIcon color="action" />}
-                    </Button>
+                        {authenticate() && <DownIcon color="action" />}
+                      </Button>
+                    </div>
+                    {authenticate() &&
+                      <MenuItems
+                        id={"dataset-menu"}
+                        anchorEl={anchorEl}
+                        handleClose={handleClose}
+                        menuOptions={menuItems.dataset}
+                        handleMenuItemClick={handleMenuItemClick}
+                      />
+                    }
                   </div>
-                  {authenticate() &&
+                }
+                {authenticate() &&
+                  <div className={classes.options}>
+                    <div className={classes.model}>
+                      <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
+                        Model
+                        {authenticate() && <DownIcon color="action" />}
+                      </Button>
+                    </div>
+
                     <MenuItems
                       id={"dataset-menu"}
-                      anchorEl={anchorEl}
+                      anchorEl={anchorModel}
                       handleClose={handleClose}
-                      menuOptions={menuItems.dataset}
+                      menuOptions={menuItems.models}
                       handleMenuItemClick={handleMenuItemClick}
                     />
-                  }
-                  {/* <StyledMenu id="data-set"
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={(e) => handleClose(e)}
-                     className={classes.styledMenu1}
-                  >
-                    <MenuItem
-                      className={classes.styledMenu}
-                      onClick={() => handleMenuItemClick('/my-contribution')}
-                    >
-                      My Contributon
-                    </MenuItem>
-                    <MenuItem className={classes.styledMenu}
-                      onClick={() => handleMenuItemClick('/my-searches')}
-                    >
-                      My Searches
-                    </MenuItem>
-                    <MenuItem className={classes.styledMenu}
-                      onClick={() => handleMenuItemClick('/search-and-download-rec/initiate/-1')}
-                    >
-                      Search & Download Records
-                    </MenuItem>
-                    <MenuItem className={classes.styledMenu}
-                     onClick={() => handleMenuItemClick('/readymade-dataset')}>
-                      Explore Readymade Datasets
-                    </MenuItem>
-                    <MenuItem className={classes.styledMenu}
-                      onClick={() => handleMenuItemClick('/submit-dataset/upload')}
-                    >
-                      Submit Dataset
-                    </MenuItem>
-                  </StyledMenu> */}
-                </div>
-                <div className={classes.options}>
-                  <div className={classes.model}>
-                    <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
-                        Model
-                      {authenticate() && <DownIcon color="action" />}
-                    </Button>
                   </div>
-                  {authenticate() && <MenuItems
-                    id={"dataset-menu"}
-                    anchorEl={anchorModel}
-                    handleClose={handleClose}
-                    menuOptions={menuItems.models}
-                    handleMenuItemClick={handleMenuItemClick}
-                  />}
-                </div>
+                }
               </>
             }
             {
@@ -234,7 +208,7 @@ const Header = (props) => {
                   <div className={classes.desktopAuth}>
                     <Grid container spacing={2}>
                       <Grid item>
-                        <Button
+                        {/* <Button
                           size="small"
                           // className={classes.menuBtn}
                           color="default"
@@ -242,7 +216,7 @@ const Header = (props) => {
                           variant="outlined"
                         >
                           Sign In
-                        </Button>
+                        </Button> */}
                       </Grid>
                       <Grid item>
                         {/* <Button
@@ -258,13 +232,15 @@ const Header = (props) => {
                     </Grid>
                   </div>
                   <div className={classes.mobileAuth}>
-                    <Button
-                      className={classes.menuBtn}
-                      onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
-                      variant="text"
-                    >
-                      <GroupIcon />
-                    </Button>
+                    {authenticate() &&
+                      <Button
+                        className={classes.menuBtn}
+                        onClick={() => history.push(`${process.env.PUBLIC_URL}/user/login`)}
+                        variant="text"
+                      >
+                        <GroupIcon />
+                      </Button>
+                    }
                     {/* <Button
                       className={classes.menuBtn}
                       variant="text"

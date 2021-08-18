@@ -10,8 +10,9 @@ from service.ocr import OCRService
 from service.monolingual import MonolingualService
 from service.asrunlabeled import ASRUnlabeledService
 
-from configs.configs import kafka_bootstrap_server_host, publish_input_topic, publish_consumer_grp
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled
+from configs.configs import kafka_bootstrap_server_host, publish_input_topic, publish_consumer_grp, user_mode_real
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, \
+    dataset_type_asr_unlabeled
 from kafka import KafkaConsumer
 from repository.datasetrepo import DatasetRepo
 
@@ -25,6 +26,7 @@ def instantiate(topics):
                              api_version=(1, 0, 0),
                              group_id=publish_consumer_grp,
                              auto_offset_reset='latest',
+                             max_poll_interval_ms=300000,
                              enable_auto_commit=True,
                              value_deserializer=lambda x: handle_json(x))
     return consumer
@@ -36,7 +38,6 @@ def consume():
         topics = [publish_input_topic]
         consumer = instantiate(topics)
         p_service, m_service, a_service, o_service, au_service = ParallelService(), MonolingualService(), ASRService(), OCRService(), ASRUnlabeledService()
-        repo = DatasetRepo()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-CONS-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -46,13 +47,10 @@ def consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
-                        if repo.search([data["record"]["id"]]):
-                            log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+                        if check_relay(data):
                             break
-                        else:
-                            rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "datasetType": data["datasetType"]}
-                            repo.upsert(data["record"]["id"], rec, True)
-                        log.info(f'PROCESSING - start - ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+                        log.info(
+                            f'PROCESSING - start - ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.load_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:
@@ -80,6 +78,31 @@ def handle_json(x):
     except Exception as e:
         log.exception(f'Exception while deserialising: {str(e)}', e)
         return {}
+
+
+# Method to check if a record is getting relayed
+def check_relay(data):
+    repo = DatasetRepo()
+    record = repo.search([data["record"]["id"]])
+    if record:
+        record = record[0]
+        if 'mode' in record.keys():
+            if record['mode'] == user_mode_real:
+                log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+                return True
+            else:
+                rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"],
+                       "mode": data["userMode"], "datasetType": data["datasetType"]}
+                repo.upsert(data["record"]["id"], rec, True)
+                return False
+        else:
+            log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+            return True
+    else:
+        rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "mode": data["userMode"],
+               "datasetType": data["datasetType"]}
+        repo.upsert(data["record"]["id"], rec, True)
+        return False
 
 
 # Log config

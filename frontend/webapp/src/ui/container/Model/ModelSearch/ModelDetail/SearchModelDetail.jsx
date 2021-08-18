@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import Header from '../../../../components/common/Header';
 import AudioRecord from './VoiceRecorder';
+import Footer from "../../../../components/common/Footer"
 import Theme from '../../../../theme/theme-default';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import {
@@ -54,11 +55,15 @@ const SearchModelDetail = (props) => {
         {
             title: "Submitter",
             para: data.submitter
+        },
+        {
+            title: "Published On",
+            para: data.publishedOn
         }
     ]
     const handleCardNavigation = () => {
-        // history.push(`${process.env.PUBLIC_URL}/benchmark/initiate`)
-        history.goBack()
+        history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
+        // history.goBack()
     }
 
     const handleClick = () => {
@@ -73,7 +78,7 @@ const SearchModelDetail = (props) => {
         <MuiThemeProvider theme={Theme}>
             <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
             {data && <div className={classes.parentPaper}>
-                <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>{params.model ? "Back to description" : "Back to model list"}</Button>
+                <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back to model list</Button>
 
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h5" className={classes.mainTitle}>{data.modelName}</Typography>
@@ -114,6 +119,7 @@ const SearchModelDetail = (props) => {
 
                 }
             </div>}
+            <Footer/>
         </MuiThemeProvider>
     )
 }
