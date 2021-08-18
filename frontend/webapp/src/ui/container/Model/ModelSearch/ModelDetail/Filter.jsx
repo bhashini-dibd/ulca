@@ -39,7 +39,7 @@ const FilterList = (props) => {
         if (e.target.checked)
             setSelectedSubmitter([...selectedSubmitter, e.target.name])
         else {
-            const selected = Object.assign([], selectedLanguage)
+            const selected = Object.assign([], selectedSubmitter)
             const index = selected.indexOf(e.target.name);
 
             if (index > -1) {
