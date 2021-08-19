@@ -74,7 +74,7 @@ class ASRService:
                          "datasetType": dataset_type_asr, "datasetName": metadata["datasetName"],
                          "serviceRequestNumber": metadata["serviceRequestNumber"],
                          "message": "There was an exception while processing this record!"})
-                    pt.update_task_detaxils(
+                    pt.update_task_details(
                         {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "durationInSeconds": record["durationInSeconds"],
                          "datasetType": dataset_type_asr})
             if error_list:
