@@ -64,15 +64,18 @@ class DatasetService:
         for key in data.keys():
             if key in updatable:
                 if key not in db_record.keys():
+                    log.info(f"FOUND 1: {key}")
                     found = True
                     db_record[key] = data[key]
                 else:
                     if db_record[key] != data[key]:
+                        log.info(f"FOUND 2: {key}")
                         found = True
                         db_record[key] = data[key]
                 continue
             if key not in immutable:
                 if key not in db_record.keys():
+                    log.info(f"FOUND 3: {key}")
                     found = True
                     db_record[key] = [data[key]]
                 elif isinstance(data[key], list):
@@ -80,20 +83,24 @@ class DatasetService:
                     if isinstance(val, dict):
                         pairs = zip(data[key], db_record[key])
                         if any(x != y for x, y in pairs):
+                            log.info(f"FOUND 4: {key}")
                             found = True
                             db_record[key].extend(data[key])
                     else:
                         for entry in data[key]:
                             if entry not in db_record[key]:
+                                log.info(f"FOUND 5: {key}")
                                 found = True
                                 db_record[key].append(entry)
                 else:
                     if isinstance(db_record[key], list):
                         if data[key] not in db_record[key]:
+                            log.info(f"FOUND 6: {key}")
                             found = True
                             db_record[key].append(data[key])
                     else:
                         if db_record[key] != data[key]:
+                            log.info(f"FOUND 7: {key}")
                             found = True
                             db_record[key] = [db_record[key]]
                             db_record[key].append(data[key])
