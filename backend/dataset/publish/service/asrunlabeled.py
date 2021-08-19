@@ -136,6 +136,7 @@ class ASRUnlabeledService:
             if data:
                 asr_data = data[0]
                 if asr_data:
+                    log.info(f'len: {len(asr_data)}')
                     return asr_data[0]
                 else:
                     return None
