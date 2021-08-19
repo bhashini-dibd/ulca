@@ -68,9 +68,6 @@ class DatasetService:
                     db_record[key] = data[key]
                 else:
                     if db_record[key] != data[key]:
-                        log.info(f"FOUND 2: {key}")
-                        log.info(f"FOUND 2: {db_record[key]}")
-                        log.info(f"FOUND 2: {data[key]}")
                         found = True
                         db_record[key] = data[key]
                 continue
