@@ -119,7 +119,9 @@ const ContributionList = (props) => {
                                result = item
                        }
                 })
-
+                if(result){
+                        result.prevUrl = 'my-contri'
+                }
                result && history.push({
                 pathname: `${process.env.PUBLIC_URL}/search-model/${srNo}`,
                 state: result }) 
