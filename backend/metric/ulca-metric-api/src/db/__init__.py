@@ -1,1 +1,1 @@
-from .connection_manager import get_data_store
+from .connection_manager import get_data_store, ModelRepo

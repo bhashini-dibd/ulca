@@ -221,7 +221,7 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 		vModel.put("userMode",mode);
 		
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
-		taskTrackerRedisDao.intialize(serviceRequestNumber);
+		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetType);
 		String basePath  = datasetIngest.getBaseLocation()  + File.separator;
 
 		reader.beginArray();

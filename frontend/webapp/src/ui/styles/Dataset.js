@@ -16,6 +16,9 @@ const DataSet = (theme) => ({
     title: {
         marginBottom: '6vh'
     },
+    description: {
+        width: "95%"
+    },
     form: {
         marginTop: '1vh',
         width: '90%',
@@ -148,15 +151,17 @@ const DataSet = (theme) => ({
         padding: '5%'
     },
     thankYouTypo: {
-        marginBottom: '1.3%',
+        marginTop: '20px',
         color: '#FD7F23'
     },
     reqNoTypo: {
-        marginBottom: '2.5%',
+        marginTop: '10px',
+        marginBottom: '20px',
     },
     myContriBtn: {
-        marginTop: '8%',
+        marginTop: '20px',
     },
+    noteTypo: { marginTop: '40px', marginBottom: '20px' },
     ButtonRefresh: {
         marginLeft: "auto"
     },
@@ -364,7 +369,7 @@ const DataSet = (theme) => ({
         borderRadius: "3px",
         height: '4px',
         border: 'none',
-        background: '#1DB5D8'
+        background: '#FD7F23'
     },
     subType: {
         marginBottom: '18.5px'
@@ -449,6 +454,15 @@ const DataSet = (theme) => ({
     },
     mainPaper: {
         border: 'none'
+    },
+    submitPaper: {
+        textAlign: 'center',
+        width: '624px',
+        height: '620px',
+        margin: 'auto',
+        padding: '70px 59px 0 59px',
+        marginTop: '51px',
+        marginBottom: '118px'
     }
 });
 

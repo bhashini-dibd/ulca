@@ -62,8 +62,9 @@ const SearchModelDetail = (props) => {
         }
     ]
     const handleCardNavigation = () => {
+
         history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
-        // history.goBack()
+
     }
 
     const handleClick = () => {
@@ -73,6 +74,7 @@ const SearchModelDetail = (props) => {
         })
 
     }
+    console.log(history)
 
     return (
         <MuiThemeProvider theme={Theme}>
@@ -119,7 +121,7 @@ const SearchModelDetail = (props) => {
 
                 }
             </div>}
-            <Footer/>
+            <Footer />
         </MuiThemeProvider>
     )
 }

@@ -6,26 +6,25 @@ const style = createMuiTheme({
     fontWeight: "400",
   },
   overrides: {
-    MuiTableRow: {
-      root: {
-        '&.MuiTableRow-hover:hover': {
-
-
-          backgroundColor: "#F4F4FA"
-
-        }
-
-
-
-      },
-      hover: {
-        //   "&:hover": {
-        //     color: '#2C2799',
-        // backgroundColor: " rgba(44,39,153, .05)"
-        // }
-
-      }
+    
+    MuiTableRow: { root: {
+      height:"60px",
+      margin:"10px",
+      '&$hover:hover:nth-child(odd)':
+      {backgroundColor: '#D6EAF8'} ,
+      '&$hover:hover:nth-child(even)':
+      {backgroundColor: '#E9F7EF'} } 
     },
+    MUIDataTableBodyRow: {
+        root: {
+          '&:nth-child(odd)': { 
+            backgroundColor: '#D6EAF8'
+          },
+          '&:nth-child(even)': { 
+            backgroundColor: '#E9F7EF'
+          }
+        }
+      },
     MUIDataTableFilterList: {
       chip: {
         display: 'none'
@@ -56,7 +55,7 @@ const style = createMuiTheme({
       paper: {
         minHeight: '674px',
         boxShadow: "0px 0px 2px #00000029",
-        border: "1px solid #0000001F"
+        border: "0"
       },
       responsiveBase: {
         minHeight: "560px"

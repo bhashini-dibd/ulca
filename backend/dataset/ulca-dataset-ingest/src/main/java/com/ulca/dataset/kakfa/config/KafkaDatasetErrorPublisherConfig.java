@@ -1,4 +1,4 @@
-package com.ulca.dataset.kakfa;
+package com.ulca.dataset.kakfa.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class KafkaDatasetErrorPublishService {
+public class KafkaDatasetErrorPublisherConfig {
 	
 
 	@Value("${kafka.ulca.bootstrap.server.host}")
