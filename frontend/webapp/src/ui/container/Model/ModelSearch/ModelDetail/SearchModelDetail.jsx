@@ -62,12 +62,9 @@ const SearchModelDetail = (props) => {
         }
     ]
     const handleCardNavigation = () => {
-        const{prevUrl} = location.state
-        if(prevUrl === 'explore-models'){
-            history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
-        }else{
-            history.push(`${process.env.PUBLIC_URL}/model/my-contribution`)
-        }
+
+        history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
+
     }
 
     const handleClick = () => {
@@ -124,7 +121,7 @@ const SearchModelDetail = (props) => {
 
                 }
             </div>}
-            <Footer/>
+            <Footer />
         </MuiThemeProvider>
     )
 }
