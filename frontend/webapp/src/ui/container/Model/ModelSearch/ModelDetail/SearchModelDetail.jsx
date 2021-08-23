@@ -62,9 +62,12 @@ const SearchModelDetail = (props) => {
         }
     ]
     const handleCardNavigation = () => {
-
-        history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
-
+        const { prevUrl } = location.state
+        if (prevUrl === 'explore-models') {
+            history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
+        } else {
+            history.push(`${process.env.PUBLIC_URL}/model/my-contribution`)
+        }
     }
 
     const handleClick = () => {
@@ -78,7 +81,7 @@ const SearchModelDetail = (props) => {
 
     return (
         <MuiThemeProvider theme={Theme}>
-            <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
+            <Header style={{ marginBottom: "10px" }} />
             {data && <div className={classes.parentPaper}>
                 <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back to model list</Button>
 

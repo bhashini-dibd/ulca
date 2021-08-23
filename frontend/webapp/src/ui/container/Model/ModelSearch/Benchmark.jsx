@@ -252,7 +252,7 @@ const Benchmark = (props) => {
                     fullWidth
                     onClick={(e) => openEl(e.currentTarget)}
                     variant="text">
-                    <Typography variant="subtitle1">
+                    <Typography variant="body1">
                         {label}
                     </Typography>
                     <DownIcon />
@@ -395,7 +395,7 @@ const Benchmark = (props) => {
 
     return (
         <MuiThemeProvider theme={Theme}>
-            <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
+            <Header style={{ marginBottom: "10px" }} />
             <div className={classes.parentPaper}>
                 {aunthenticate() ?
                     <Grid container spacing={3} >
@@ -459,7 +459,7 @@ const Benchmark = (props) => {
                     </Paper>
                 }
             </div>
-            <Footer/>
+            <Footer />
         </MuiThemeProvider>
     )
 

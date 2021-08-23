@@ -12,7 +12,6 @@ export default (state = initialState, action) => {
                 return {
                     ...state,
                     type: action.payload,
-                    optionSelected: ""
                 }
             }
             return {

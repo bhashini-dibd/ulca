@@ -331,7 +331,7 @@ const SearchAndDownloadRecords = (props) => {
                     fullWidth
                     onClick={(e) => openEl(e.currentTarget)}
                     variant="text">
-                    <Typography variant="subtitle1">
+                    <Typography variant="body1">
                         {label}
                     </Typography>
                     <DownIcon />

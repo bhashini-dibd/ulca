@@ -95,6 +95,14 @@ const Header = (props) => {
   }
 
   const handleMenuTypeClick = (type) => {
+    if (type === 'models') {
+      history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
+      dispatch(getMenuOption(1));
+    }
+    else{
+      history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+      dispatch(getMenuOption(2));
+    }
     dispatch(getMenuType(type));
   }
 
@@ -112,9 +120,10 @@ const Header = (props) => {
             </Link>
             {/* <Divider orientation="vertical" color="primary"/> */}
             <Typography variant="h4" onClick={() => {
-             dispatch(getMenuType(""));
-             dispatch(getMenuOption(""));
-             authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)}
+              dispatch(getMenuType(""));
+              dispatch(getMenuOption(""));
+              authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)
+            }
             }>
               ULCA
             </Typography>

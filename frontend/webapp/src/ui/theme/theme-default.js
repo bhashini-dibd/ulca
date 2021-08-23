@@ -319,7 +319,7 @@ themeDefault.typography.caption = {
   fontWeight: "400",
 };
 themeDefault.typography.subtitle1 = {
-  fontSize: "0.875rem",
+  fontSize: "1rem",
   fontFamily: "'Roboto', sans-serif",
   fontWeight: "400",
   "@media (max-width:550px)": {
