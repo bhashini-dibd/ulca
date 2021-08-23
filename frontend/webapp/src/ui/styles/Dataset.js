@@ -369,7 +369,7 @@ const DataSet = (theme) => ({
         borderRadius: "3px",
         height: '4px',
         border: 'none',
-        background: '#1DB5D8'
+        background: '#FD7F23'
     },
     subType: {
         marginBottom: '18.5px'

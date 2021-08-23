@@ -169,19 +169,19 @@ const themeDefault = createMuiTheme({
         textTransform: "none",
         fontFamily: '"Roboto", "Segoe UI"',
         fontSize: "16px",
-        fontWeight: "500",
-        lineHeight: "1.14",
-        letterSpacing: "0.5px",
+        //fontWeight: "500",
+        //lineHeight: "1.14",
+        letterSpacing: "0.16px",
         textAlign: "center",
-        height: "26px",
+        height: "19px",
       },
       sizeLarge: {
-        height: "48px",
+        height: "40px",
         borderRadius: "20px",
 
       },
       sizeSmall: {
-        height: "36px",
+        height: "30px",
         borderRadius: "20px",
 
       },
@@ -289,7 +289,7 @@ themeDefault.typography.h5 = {
   }
 };
 themeDefault.typography.h6 = {
-  fontSize: "1.25rem",
+  fontSize: "1.125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
   paddingTop: "4px",
@@ -304,7 +304,7 @@ themeDefault.typography.body1 = {
 
 };
 themeDefault.typography.body2 = {
-  fontSize: "0.875rem",
+  fontSize: "1.125rem",
   fontFamily: '"Roboto", sans-serif',
   fontWeight: "400",
   color: "#0C0F0F",
@@ -316,7 +316,7 @@ themeDefault.typography.caption = {
   fontWeight: "400",
 };
 themeDefault.typography.subtitle1 = {
-  fontSize: "1.125rem",
+  fontSize: "0.875rem",
   fontFamily: "'Roboto', sans-serif",
   fontWeight: "400",
   "@media (max-width:550px)": {
