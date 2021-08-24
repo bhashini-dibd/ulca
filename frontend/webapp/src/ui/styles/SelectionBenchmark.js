@@ -2,6 +2,7 @@ const DataSet = (theme) => ({
 
     paper: {
         minHeight: '674px',
+        minWidth:"900px",
         boxShadow: "0px 0px 2px #00000029",
         border: "1px solid #0000001F",
 
@@ -371,7 +372,7 @@ const DataSet = (theme) => ({
         borderRadius: "3px",
         height: '4px',
         border: 'none',
-        background: '#FD7F23'
+        background: '#1DB5D8'
     },
     subType: {
         marginBottom: '18.5px'
@@ -382,7 +383,7 @@ const DataSet = (theme) => ({
         // alignItems: 'center'
     },
     modelTitle: {
-        marginTop: '25px',
+        marginTop: '15px',
         padding: 0
     },
     mainTitle: { marginTop: '10px' },

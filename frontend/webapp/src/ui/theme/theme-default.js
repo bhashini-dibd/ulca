@@ -6,27 +6,24 @@ const themeDefault = createMuiTheme({
     fontWeight: "400",
   },
   overrides: {
-    MuiTableRow: {
-      root: {
-        cursor: "pointer",
-        '&.MuiTableRow-hover:hover': {
-
-
-          backgroundColor: "#F4F4FA"
-
-        }
-
-
-
-      },
-      hover: {
-        //   "&:hover": {
-        //     color: '#2C2799',
-        // backgroundColor: " rgba(44,39,153, .05)"
-        // }
-
-      }
+    MuiTableRow: { root: {
+      height:"60px",
+      margin:"10px",
+      '&$hover:hover:nth-child(odd)':
+      {backgroundColor: '#D6EAF8'} ,
+      '&$hover:hover:nth-child(even)':
+      {backgroundColor: '#E9F7EF'} } 
     },
+    MUIDataTableBodyRow: {
+        root: {
+          '&:nth-child(odd)': { 
+            backgroundColor: '#D6EAF8'
+          },
+          '&:nth-child(even)': { 
+            backgroundColor: '#E9F7EF'
+          }
+        }
+      },
     MUIDataTableFilterList: {
       chip: {
         display: 'none'
