@@ -58,7 +58,7 @@ const TitleBar = (props) => {
                                 variant="text">
 
                                 {/* {selectedOption&& getLabel(selectedOption)} */}
-                                <Typography variant="body1">
+                                <Typography variant="subtitle1">
                                     {selectedOption.label}
                                 </Typography>
                                 <DownIcon />
@@ -92,7 +92,7 @@ const TitleBar = (props) => {
                                 {/* {props.label} */}
                                 Total Count
                             </Typography>
-                            <Typography variant="body1">
+                            <Typography variant="subtitle1">
                                 {/* {props.totValue} */}
                                 {count ? new Intl.NumberFormat('en').format(count) : 0}
                             </Typography>

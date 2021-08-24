@@ -115,9 +115,9 @@ const ReadymadeDataset = (props) => {
         const { classes }               = props;
         return (
                 <div >
-                        <div className  = {classes.breadcrum}>
+                        {/* <div className  = {classes.breadcrum}>
                                 <BreadCrum links = {[UrlConfig.dataset]} activeLink = "Readymade Dataset" />
-                        </div>
+                        </div> */}
 
                                 <MUIDataTable
                                         title   =       {`Readymade Dataset`}

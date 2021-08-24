@@ -194,14 +194,17 @@ const themeDefault = createMuiTheme({
         backgroundColor: "#FD7F23"
       }
     },
+    // label: {
+    //   color: '#3A3A3A',
+    //   opacity: '1',
+    // },
     MuiTab: {
       root: {
         width: 'auto',
         fontSize: '18px',
         fontWeight: '300',
         letterSpacing: '0px',
-        color: '#3A3A3A',
-        opacity: '1',
+
         fontFamily: 'Roboto',
         // '&:first-child':{
         padding: '0',
@@ -307,7 +310,7 @@ themeDefault.typography.body1 = {
 
 };
 themeDefault.typography.body2 = {
-  fontSize: "1.125rem",
+  fontSize: "0.875rem",
   fontFamily: '"Roboto", sans-serif',
   fontWeight: "400",
   color: "#0C0F0F",
@@ -319,7 +322,7 @@ themeDefault.typography.caption = {
   fontWeight: "400",
 };
 themeDefault.typography.subtitle1 = {
-  fontSize: "1rem",
+  fontSize: "1.125rem",
   fontFamily: "'Roboto', sans-serif",
   fontWeight: "400",
   "@media (max-width:550px)": {

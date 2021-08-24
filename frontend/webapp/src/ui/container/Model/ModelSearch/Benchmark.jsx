@@ -401,9 +401,9 @@ const Benchmark = (props) => {
                     <Grid container spacing={3} >
                         <Grid className={classes.leftSection} item xs={12} sm={4} md={3} lg={3} xl={3}>
                             <Grid container spacing={2}>
-                                <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                {/* <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                     <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search Model" />
-                                </Grid>
+                                </Grid> */}
                                 <Grid item className={(params === 'inprogress' || params === 'completed') && classes.blurOut}
                                     xs={12} sm={12} md={12} lg={12} xl={12}
                                 >

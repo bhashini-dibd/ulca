@@ -17,7 +17,7 @@ const RequestNumberCreation = (props) => {
                     />
                     <Typography className={classes.yourSearchQuery} color="primary" variant="h6">Your search query has been submitted.</Typography>
                     <Typography className={classes.serReqNoTypo} variant="h5">Your Service Request Number is {reqno}</Typography>
-                    <Typography color="textSecondary" variant="body1">The result will be displayed once it is ready.</Typography>
+                    <Typography color="textSecondary" variant="subtitle1">The result will be displayed once it is ready.</Typography>
                     <Button className={classes.mySearches} color="primary" variant="outlined"
                         onClick={() => history.push(`${process.env.PUBLIC_URL}/my-searches`)}
                     >
