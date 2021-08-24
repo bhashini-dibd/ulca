@@ -111,7 +111,7 @@ const SubHeader = (props) => {
                             props.tabs.map((tab, index) => {
                                 console.log(tab)
                                 return (
-                                    <Tab label={tab.name} {...a11yProps(index)} onClick={() => handleClick(tab.url)} />
+                                    <Tab label={tab.name} {...a11yProps(index)} onClick={() => handleClick(tab.url)} color="red" />
                                 )
                             })
                         }
