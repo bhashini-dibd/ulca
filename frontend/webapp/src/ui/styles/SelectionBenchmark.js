@@ -2,6 +2,7 @@ const DataSet = (theme) => ({
 
     paper: {
         minHeight: '674px',
+        minWidth:"900px",
         boxShadow: "0px 0px 2px #00000029",
         border: "1px solid #0000001F",
 

@@ -19,8 +19,8 @@ import C from "../../../../redux/actions/constants";
 import FilterListIcon from '@material-ui/icons/FilterList';
 import FilterList from "./FilterList";
 import GridView from "./GridView";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
+import RenderExpandTable from "./ExpandTable";
+import SelectionList from "./BenchmarkSelection";
 
 const ContributionList = (props) => {
 
@@ -36,6 +36,8 @@ const ContributionList = (props) => {
         const data = myContributionReport.filteredData
         const [anchorEl, setAnchorEl] = React.useState(null);
         const popoverOpen = Boolean(anchorEl);
+        const [selectionOpen, setSelectionOpen] = React.useState(null);
+        
         const id = popoverOpen ? 'simple-popover' : undefined;
 
         useEffect(() => {
@@ -129,6 +131,14 @@ const ContributionList = (props) => {
                 return <Typography style={{cursor:"pointer"}}color="primary" onClick={() => handleDocumentView(srNo)}>View Card</Typography>
         }
 
+        const handleRowClickSelection = (event) =>{
+
+                setSelectionOpen(true)        
+        }
+        const handleCloseSelection = () =>{
+                setSelectionOpen(false)
+        }
+
     
 
 
@@ -208,7 +218,7 @@ const ContributionList = (props) => {
                           empty: true,
                           customBodyRender: (value, tableMeta, updateValue) => {
                             if (tableMeta.rowData) {
-                              return <Button style={{background:"white",borderRadius:"1rem"}}>{renderEventList(tableMeta.rowData[0])}</Button>;
+                              return <Button style={{background:"white",borderRadius:"1rem"}} onClick = {(event)=>handleRowClickSelection(event)}>Run Benchmark</Button>;
                             }
                           },
                         },
@@ -241,9 +251,9 @@ const ContributionList = (props) => {
                 fixedHeader: false,
                 filterType: "checkbox",
                 download: false,
-                expandableRows: false,
+                expandableRows: true,
                 
-      expandableRowsHeader: false,
+      expandableRowsHeader: true,
       expandableRowsOnClick: false,
 //       isRowExpandable: (dataIndex, expandedRows) => {
 //         if (dataIndex === 3 || dataIndex === 4) return false;
@@ -253,36 +263,13 @@ const ContributionList = (props) => {
 //         return true;
 //       },
      
-//       renderExpandableRow: (rowData, rowMeta) => {
-//         const colSpan = rowData.length + 1;
-//         return (
+      renderExpandableRow: (rowData, rowMeta) => {
+        const colSpan = rowData.length + 1;
+        return (
                
-//           <TableRow>
-//             <TableCell>
-             
-//             </TableCell>
-//             <TableCell>
-//               Custom expandable
-//             </TableCell>
-//             <TableCell>
-//               Custom 
-//             </TableCell>
-//             <TableCell>
-//               Custom 
-//             </TableCell>
-//             <TableCell>
-//               Custom 
-//             </TableCell>
-//             <TableCell>
-//               Custom 
-//             </TableCell>
-//             <TableCell>
-             
-//             </TableCell>
-            
-//           </TableRow>
-//         );
-//       },
+          <RenderExpandTable/>
+        );
+      },
                 print: false,
                 viewColumns: false,
                 rowsPerPage: PageInfo.count,
@@ -341,6 +328,16 @@ const ContributionList = (props) => {
                                 handleClose={handleClose}
                                 filter={myContributionReport.filter}
                                 selectedFilter={myContributionReport.selectedFilter}
+                                clearAll={clearAll}
+                                apply={apply}
+                        />
+                        }
+                        {selectionOpen && <SelectionList
+                                id={id}
+                                open={selectionOpen}
+                                data= {data}
+                                handleClose={handleCloseSelection}
+                                
                                 clearAll={clearAll}
                                 apply={apply}
                         />

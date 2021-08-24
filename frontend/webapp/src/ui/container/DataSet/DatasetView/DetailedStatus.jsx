@@ -1,4 +1,4 @@
-import { withStyles,  MuiThemeProvider, createMuiTheme, Button, Typography } from "@material-ui/core";
+import { withStyles,  MuiThemeProvider, createTheme, Button, Typography } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect} from "react";
 import DataSet from "../../../styles/Dataset";
@@ -37,7 +37,7 @@ const DetailedStatus = (props) => {
         }
         
 
-        const getMuiTheme = () => createMuiTheme({
+        const getMuiTheme = () => createTheme({
                 overrides: {
                         MuiTableCell: {
                                 head    : {
