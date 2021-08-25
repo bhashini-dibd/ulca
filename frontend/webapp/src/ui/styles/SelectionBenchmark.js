@@ -120,8 +120,9 @@ const DataSet = (theme) => ({
 
     headerButtons: {
         display: "flex",
+        margin:"6px",
         justifyContent: 'flex-end',
-        width: "100%",
+        width: "99%",
         marginBottom: '.6rem',
         boxSizing: 'border-box',
     },
