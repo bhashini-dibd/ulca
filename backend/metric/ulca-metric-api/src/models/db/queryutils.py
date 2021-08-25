@@ -63,8 +63,11 @@ class QueryUtils:
                 if not val:
                     elem["label"]="Unspecified"
                 else:
-                    title=val.split('-')
-                    elem["label"]=" ".join(title).title()
+                    if group_by_field == "primarySubmitterName": 
+                        elem["label"] = val
+                    else:
+                        title=val.split('-')
+                        elem["label"]=" ".join(title).title()
                 elem["value"]=value
                 chart_data.append(elem)                 
             return chart_data

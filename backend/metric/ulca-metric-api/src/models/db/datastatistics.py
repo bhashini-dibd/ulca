@@ -22,11 +22,9 @@ class AggregateDatasetModel(object):
             tgt     =   "targetLanguage"
             delete  =   "isDelete"
             datatype=   "datasetType"  
-
+            duration=   "durationInSeconds"
 
             dtype = request_object["type"]
-            if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
-                count = "durationInSeconds"
             match_params = None
             if "criterions" in request_object:
                 match_params = request_object["criterions"]
@@ -34,7 +32,10 @@ class AggregateDatasetModel(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]
 
-            sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
+            if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
+            else:
+                sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
             sumtotal_result = utils.query_runner(sumtotal_query)
             true_count = 0
             false_count = 0
@@ -49,7 +50,10 @@ class AggregateDatasetModel(object):
 
             #aggregate query for language pairs
             if grpby_params == None and len(match_params) ==1:
-                query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
+                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                    query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
+                else:
+                    query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
                 params = match_params[0]
                 value = params["value"]
 
@@ -71,7 +75,12 @@ class AggregateDatasetModel(object):
                 grp_field  = params["field"]
                 src_val = next((item["value"] for item in match_params if item["field"] == "sourceLanguage"), False)
                 tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), False)
-                query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{dtype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+                else:
+                    query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
                             WHERE (({datatype} = \'{dtype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
                             GROUP BY {src}, {tgt}, {delete}, {grp_field}'
 
@@ -82,14 +91,18 @@ class AggregateDatasetModel(object):
             if grpby_params != None and len(match_params) ==3:
                 params = grpby_params[0]
                 grp_field  = params["field"]
-                if grp_field == "collectionMethod_collectionDescriptions":
-                    sub_field = "domains"
-                elif grp_field == "domains":
-                    sub_field = "collectionMethod_collectionDescriptions"
+                sub_field  = match_params[2]["field"]
                 src_val = next((item["value"] for item in match_params if item["field"] == "sourceLanguage"), None)
                 tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), None)
-                sub_val = next((item["value"] for item in match_params  if item["field"] == None), None)
-                query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                sub_val = next((item["value"] for item in match_params  if item["field"] not in ["sourceLanguage","targetLanguage"]))
+                
+                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                    query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{dtype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
+                            AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+
+                else:
+                    query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
                             WHERE (({datatype} = \'{dtype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
                             AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'
                 

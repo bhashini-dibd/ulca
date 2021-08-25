@@ -15,6 +15,8 @@ import modelTableView from './Model/ModelView/TableStatus';
 import modelStatus from './Model/ModelSubmit/SubmitModel';
 import searchFilter from './Model/ModelSearch/Benchmark';
 import searchModel from './Model/ModelSearch/SearchModel';
+import getMenuInfo from './Common/getMenuInfo';
+
 const index = {
     apiStatus,
     myContributionReport,
@@ -31,7 +33,8 @@ const index = {
     modelTableView,
     modelStatus,
     searchModel,
-    searchFilter
+    searchFilter,
+    getMenuInfo
 };
 
 export default index;

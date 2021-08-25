@@ -6,27 +6,24 @@ const themeDefault = createMuiTheme({
     fontWeight: "400",
   },
   overrides: {
-    MuiTableRow: {
-      root: {
-        cursor: "pointer",
-        '&.MuiTableRow-hover:hover': {
-
-
-          backgroundColor: "#F4F4FA"
-
-        }
-
-
-
-      },
-      hover: {
-        //   "&:hover": {
-        //     color: '#2C2799',
-        // backgroundColor: " rgba(44,39,153, .05)"
-        // }
-
-      }
+    MuiTableRow: { root: {
+      height:"60px",
+      margin:"10px",
+      '&$hover:hover:nth-child(odd)':
+      {backgroundColor: '#D6EAF8'} ,
+      '&$hover:hover:nth-child(even)':
+      {backgroundColor: '#E9F7EF'} } 
     },
+    MUIDataTableBodyRow: {
+        root: {
+          '&:nth-child(odd)': { 
+            backgroundColor: '#D6EAF8'
+          },
+          '&:nth-child(even)': { 
+            backgroundColor: '#E9F7EF'
+          }
+        }
+      },
     MUIDataTableFilterList: {
       chip: {
         display: 'none'
@@ -169,19 +166,24 @@ const themeDefault = createMuiTheme({
         textTransform: "none",
         fontFamily: '"Roboto", "Segoe UI"',
         fontSize: "16px",
-        fontWeight: "500",
-        lineHeight: "1.14",
-        letterSpacing: "0.5px",
+        //fontWeight: "500",
+        //lineHeight: "1.14",
+        letterSpacing: "0.16px",
         textAlign: "center",
-        height: "26px",
+        height: "19px",
       },
       sizeLarge: {
-        height: "48px",
+        height: "40px",
+        borderRadius: "20px",
+
+      },
+      sizeMedium: {
+        height: "40px",
         borderRadius: "20px",
 
       },
       sizeSmall: {
-        height: "36px",
+        height: "30px",
         borderRadius: "20px",
 
       },
@@ -197,25 +199,30 @@ const themeDefault = createMuiTheme({
     MuiTab: {
       root: {
         width: 'auto',
-        fontSize: '20px',
+        fontSize: '18px',
         fontWeight: '300',
         letterSpacing: '0px',
-        fontFamily: 'Rowdies',
+        fontFamily: 'Roboto',
         // '&:first-child':{
         padding: '0',
-        marginRight: '54px',
-        // }
+        marginRight: '28px',
         "@media (min-width:600px)": {
           minWidth: 'auto',
         },
-
         "@media (max-width:600px)": {
           marginRight: '20px',
           minWidth: 'auto',
         },
         "@media (max-width:550px)": {
           fontSize: "1rem",
-        }
+        },
+      },
+      textColorInherit: {
+        color: '#3A3A3A',
+        opacity: 1,
+        '&.Mui-selected': {
+          fontWeight: 'bold'
+        },
       },
       wrapper: {
         alignItems: 'flex-start',
@@ -278,10 +285,12 @@ themeDefault.typography.h4 = {
   // letterSpacing: "1.98px",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "1rem",
+  }
 };
 themeDefault.typography.h5 = {
   fontSize: "1.3125rem",
-
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
   "@media (max-width:550px)": {
@@ -289,7 +298,7 @@ themeDefault.typography.h5 = {
   }
 };
 themeDefault.typography.h6 = {
-  fontSize: "1.25rem",
+  fontSize: "1.125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
   paddingTop: "4px",
