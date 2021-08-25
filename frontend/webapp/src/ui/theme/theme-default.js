@@ -191,17 +191,12 @@ const themeDefault = createMuiTheme({
         backgroundColor: "#FD7F23"
       }
     },
-    // label: {
-    //   color: '#3A3A3A',
-    //   opacity: '1',
-    // },
     MuiTab: {
       root: {
         width: 'auto',
         fontSize: '18px',
         fontWeight: '300',
         letterSpacing: '0px',
-
         fontFamily: 'Roboto',
         // '&:first-child':{
         padding: '0',
@@ -209,14 +204,20 @@ const themeDefault = createMuiTheme({
         "@media (min-width:600px)": {
           minWidth: 'auto',
         },
-
         "@media (max-width:600px)": {
           marginRight: '20px',
           minWidth: 'auto',
         },
         "@media (max-width:550px)": {
           fontSize: "1rem",
-        }
+        },
+      },
+      textColorInherit: {
+        color: '#3A3A3A',
+        opacity: 1,
+        '&.Mui-selected': {
+          fontWeight: 'bold'
+        },
       },
       wrapper: {
         alignItems: 'flex-start',

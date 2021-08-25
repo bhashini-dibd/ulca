@@ -162,7 +162,7 @@ const HeaderStyles = (theme) => ({
     marginRight: '14px',
     display: 'block',
     "@media (max-width:670px)": {
-      width:'800px'
+      width:'100px'
     }
   },
 
