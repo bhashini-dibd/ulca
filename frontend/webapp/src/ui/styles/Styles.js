@@ -3,7 +3,7 @@ const GlobalStyles = (theme) => ({
 
     maxWidth: "1272px",
     width: "100%",
-    margin: "4.1rem auto",
+    margin: "2rem auto",
     // background: theme.palette.background.default,
     fontFamily: theme.typography.fontFamily
   },
@@ -47,14 +47,15 @@ const GlobalStyles = (theme) => ({
     marginTop: '20px'
   },
   modelname: {
+    boxSizing:'border-box',
     marginTop: '15px',
     height: '64px',
     backgroundColor: 'white',
-    maxWidth: '340px',
+    maxWidth: '350px',
     width: 'auto',
     display: 'flex',
     alignItems: 'center',
-    paddingLeft: '15px',
+    padding: '0 15px',
     borderRadius: '12px'
   }
 

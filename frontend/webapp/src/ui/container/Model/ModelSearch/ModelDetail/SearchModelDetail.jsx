@@ -61,9 +61,14 @@ const SearchModelDetail = (props) => {
             para: data.publishedOn
         }
     ]
+    const { prevUrl } = location.state
     const handleCardNavigation = () => {
-        history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
-        // history.goBack()
+       // const { prevUrl } = location.state
+        if (prevUrl === 'explore-models') {
+            history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
+        } else {
+            history.push(`${process.env.PUBLIC_URL}/model/my-contribution`)
+        }
     }
 
     const handleClick = () => {
@@ -73,12 +78,13 @@ const SearchModelDetail = (props) => {
         })
 
     }
+    console.log(history)
 
     return (
         <MuiThemeProvider theme={Theme}>
-            <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
+            <Header style={{ marginBottom: "10px" }} />
             {data && <div className={classes.parentPaper}>
-                <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>Back to model list</Button>
+                <Button size="small" color="primary" className={classes.backButton} startIcon={<ArrowBack />} onClick={() => handleCardNavigation()}>{prevUrl === 'explore-models'? 'Back to Model List' : 'Back to My Contribution'}</Button>
 
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <Typography variant="h5" className={classes.mainTitle}>{data.modelName}</Typography>
@@ -119,7 +125,7 @@ const SearchModelDetail = (props) => {
 
                 }
             </div>}
-            <Footer/>
+            <Footer />
         </MuiThemeProvider>
     )
 }

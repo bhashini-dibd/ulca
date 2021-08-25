@@ -15,10 +15,10 @@ const ExploreModels = (props) => {
     const { classes } = props;
     return (
         <MuiThemeProvider theme={Theme}>
-            <><Header style={{ marginBottom: "10px" }} /><br /><br /><br /> </>
+            <Header style={{ marginBottom: "10px" }} />
             <div className={classes.parentPaper}>
                 <Paper elevation={0} className={classes.mainPaper}>
-                    <Typography variant="h3">Explore Models</Typography>
+                    {!aunthenticate() && <Typography variant="h3">Explore Models</Typography>}
                     <NewSearchModel />
                 </Paper>
             </div>
