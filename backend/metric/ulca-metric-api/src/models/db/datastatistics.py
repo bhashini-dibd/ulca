@@ -92,10 +92,6 @@ class AggregateDatasetModel(object):
                 params = grpby_params[0]
                 grp_field  = params["field"]
                 sub_field  = match_params[2]["field"]
-                # if grp_field == "collectionMethod_collectionDescriptions":
-                #     sub_field = "domains"
-                # elif grp_field == "domains":
-                #     sub_field = "collectionMethod_collectionDescriptions"
                 src_val = next((item["value"] for item in match_params if item["field"] == "sourceLanguage"), None)
                 tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), None)
                 sub_val = next((item["value"] for item in match_params  if item["field"] not in ["sourceLanguage","targetLanguage"]))
