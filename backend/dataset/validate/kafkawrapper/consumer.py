@@ -15,6 +15,7 @@ from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_typ
 from kafka import KafkaConsumer
 from processtracker.processtracker import ProcessTracker
 from kafkawrapper.producer import Producer
+from kafkawrapper.redis_util import RedisUtil
 
 log = logging.getLogger('file')
 
@@ -47,13 +48,13 @@ def consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
+                        if check_relay(data):
+                            log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+                            break
+
                         srn = data["serviceRequestNumber"]
                         log.info(f'data received from ingest -- SRN {srn}')
-                        #if 'eof' in data.keys():
-                         #   if data["eof"]:
-                          #      prod.produce(data, validate_output_topic, None)
-                           #     pt.end_processing(data)
-                            #    break
+
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.execute_validation_pipeline(data)
                         if data["datasetType"] == dataset_type_ocr:
@@ -79,6 +80,18 @@ def handle_json(x):
     except Exception as e:
         log.exception(f'Exception while deserialising: {str(e)}', e)
         return {}
+
+# Method to check if a record is getting relayed
+def check_relay(data):
+    repo = RedisUtil()
+    record = repo.search([data["record"]["id"]])
+    if record:
+        return True
+    else:
+        rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "mode": data["userMode"],
+               "datasetType": data["datasetType"]}
+        repo.upsert(data["record"]["id"], rec, True)
+        return False
 
 # Log config
 dictConfig({

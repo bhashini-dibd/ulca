@@ -19,6 +19,8 @@ import C from "../../../../redux/actions/constants";
 import FilterListIcon from '@material-ui/icons/FilterList';
 import FilterList from "./FilterList";
 import GridView from "./GridView";
+import RenderExpandTable from "./ExpandTable";
+import SelectionList from "./BenchmarkSelection";
 
 const ContributionList = (props) => {
 
@@ -34,6 +36,8 @@ const ContributionList = (props) => {
         const data = myContributionReport.filteredData
         const [anchorEl, setAnchorEl] = React.useState(null);
         const popoverOpen = Boolean(anchorEl);
+        const [selectionOpen, setSelectionOpen] = React.useState(null);
+        
         const id = popoverOpen ? 'simple-popover' : undefined;
 
         useEffect(() => {
@@ -86,9 +90,7 @@ const ContributionList = (props) => {
                         
                         {/* <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button> */}
                         <Button color={"primary"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
-                        <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button>
-                       
-                        
+                        <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button>        
                 </>
         }
         const handleRowClick = (id,name,status) => {
@@ -119,7 +121,9 @@ const ContributionList = (props) => {
                                result = item
                        }
                 })
-
+                if(result){
+                        result.prevUrl = 'my-contri'
+                }
                result && history.push({
                 pathname: `${process.env.PUBLIC_URL}/search-model/${srNo}`,
                 state: result }) 
@@ -127,6 +131,14 @@ const ContributionList = (props) => {
         }
         const renderEventList = (srNo) =>{
                 return <Typography style={{cursor:"pointer"}}color="primary" onClick={() => handleDocumentView(srNo)}>View Card</Typography>
+        }
+
+        const handleRowClickSelection = (event) =>{
+
+                setSelectionOpen(true)        
+        }
+        const handleCloseSelection = () =>{
+                setSelectionOpen(false)
         }
 
     
@@ -208,7 +220,7 @@ const ContributionList = (props) => {
                           empty: true,
                           customBodyRender: (value, tableMeta, updateValue) => {
                             if (tableMeta.rowData) {
-                              return <div>{renderEventList(tableMeta.rowData[0])}</div>;
+                              return <Button style={{background:"white",borderRadius:"1rem"}} onClick = {(event)=>handleRowClickSelection(event)}>Run Benchmark</Button>;
                             }
                           },
                         },
@@ -241,6 +253,25 @@ const ContributionList = (props) => {
                 fixedHeader: false,
                 filterType: "checkbox",
                 download: false,
+                expandableRows: true,
+                
+      expandableRowsHeader: true,
+      expandableRowsOnClick: false,
+//       isRowExpandable: (dataIndex, expandedRows) => {
+//         if (dataIndex === 3 || dataIndex === 4) return false;
+
+//         // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
+//         if (expandedRows.data.length > 4 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0) return false;
+//         return true;
+//       },
+     
+      renderExpandableRow: (rowData, rowMeta) => {
+        const colSpan = rowData.length + 1;
+        return (
+               
+          <RenderExpandTable/>
+        );
+      },
                 print: false,
                 viewColumns: false,
                 rowsPerPage: PageInfo.count,
@@ -268,9 +299,9 @@ const ContributionList = (props) => {
         return (
                
                 <div>
-                        <div className={classes.breadcrum}>
+                        {/* <div className={classes.breadcrum}>
                                 <BreadCrum links={[UrlConfig.model]} activeLink="My Contribution" />
-                        </div>
+                        </div> */}
 
                         {/* <div className={classes.title}>
                                 
@@ -299,6 +330,16 @@ const ContributionList = (props) => {
                                 handleClose={handleClose}
                                 filter={myContributionReport.filter}
                                 selectedFilter={myContributionReport.selectedFilter}
+                                clearAll={clearAll}
+                                apply={apply}
+                        />
+                        }
+                        {selectionOpen && <SelectionList
+                                id={id}
+                                open={selectionOpen}
+                                data= {data}
+                                handleClose={handleCloseSelection}
+                                
                                 clearAll={clearAll}
                                 apply={apply}
                         />

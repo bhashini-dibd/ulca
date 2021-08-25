@@ -222,7 +222,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		vModel.put("userMode", mode);
 		
 		 
-		taskTrackerRedisDao.intialize(serviceRequestNumber);
+		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetType);
 		 
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 		String basePath  = datasetIngest.getBaseLocation()  + File.separator;
@@ -266,6 +266,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 				
 				if(isFileAvailable(fileLocation)) {
 					
+					//log.info("File Available :: " + fileLocation);
 					successCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 					finalRecord.put("fileLocation", fileLocation);
@@ -275,6 +276,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 					vModel.put("currentRecordIndex", numberOfRecords);
 					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 				}else {
+					//log.info("File Not Available :: " + fileLocation);
 					failedCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED",  finalRecord.get("audioFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;

@@ -159,9 +159,9 @@ const DetailedStatus = (props) => {
         const { classes }               = props;
         return (
                 <div>
-                        <div className  = {classes.breadcrum}>
+                        {/* <div className  = {classes.breadcrum}>
                                 <BreadCrum links = {[UrlConfig.dataset,UrlConfig.myContribution]} activeLink = "Dataset details" />
-                        </div>
+                        </div> */}
                         <div className = {classes.headerButtons}>
                                 {fetchHeaderButton()} 
                         </div>

@@ -159,14 +159,14 @@ const HeaderStyles = (theme) => ({
   bhashiniLogo: {
     paddingRight: '12px',
     boxShadow: "3px 0 2px -2px #00000029",
-    marginRight: '12px',
-    display:'block',
-    // "@media (max-width:670px)": {
-    //   size:'10px'
-    // }
+    marginRight: '14px',
+    display: 'block',
+    "@media (max-width:670px)": {
+      width:'100px'
+    }
   },
 
-  
+
   btnStyle: {
     padding: '0px',
     justifyContent: 'left',
@@ -177,6 +177,6 @@ const HeaderStyles = (theme) => ({
 
       backgroundColor: 'white',
     }
-  }
+  },
 });
 export default HeaderStyles;

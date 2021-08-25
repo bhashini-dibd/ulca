@@ -1,9 +1,6 @@
-import hashlib
 import logging
-import multiprocessing
-import threading
+import time
 import uuid
-from functools import partial
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, user_mode_pseudo, \
     sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel, parallel_updatable_keys
@@ -43,23 +40,25 @@ class ParallelService:
             if record:
                 result = self.get_enriched_data(record, metadata)
                 if result:
-                    if isinstance(result[0], list):
+                    if result[0] == "INSERT":
                         if metadata["userMode"] != user_mode_pseudo:
-                            repo.insert(result[0])
-                            count += len(result[0])
-                            metrics.build_metric_event(result[0], metadata, None, None)
+                            repo.insert(result[1])
+                            count += len(result[1])
+                            metrics.build_metric_event(result[1], metadata, None, None)
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif result[0] == "UPDATE":
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
-                        metrics.build_metric_event(result[1], metadata, None, True)
+                        metric_record = (result[1], result[2])
+                        metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
                     else:
-                        error_list.append({"record": result[0], "originalRecord": result[1], "code": "DUPLICATE_RECORD",
+                        error_list.append({"record": result[1], "originalRecord": result[2], "code": "DUPLICATE_RECORD",
                                            "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
                                            "message": "This record is already available in the system"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                 else:
+                    log.error(f'INTERNAL ERROR: Failing record due to internal error: ID: {record["id"]}, SRN: {metadata["serviceRequestNumber"]}')
                     error_list.append(
                         {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
                          "datasetType": dataset_type_parallel, "datasetName": metadata["datasetName"],
@@ -69,7 +68,7 @@ class ParallelService:
                         {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'Parallel - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'Parallel - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading Parallel dataset!!", "status": "FAILED"}
@@ -90,10 +89,12 @@ class ParallelService:
                         if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
-                                repo.update(dup_data)
-                                return "UPDATE", dup_data
+                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                                if metadata["userMode"] != user_mode_pseudo:
+                                    repo.update(dup_data)
+                                return "UPDATE", dup_data, record
                             else:
-                                return data, record
+                                return "DUPLICATE", data, record
                         derived_data = self.enrich_derived_data(data, record, records, metadata)
                         if derived_data:
                             new_records.append(derived_data)
@@ -108,10 +109,16 @@ class ParallelService:
                     obj["datasetId"] = [metadata["datasetId"]]
                     obj["derived"] = False
                     obj["tags"] = service.get_tags(obj, parallel_non_tag_keys)
+                obj["lastModifiedOn"] = obj["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
                 insert_records.append(obj)
-            return insert_records, insert_records
+            return "INSERT", insert_records, insert_records
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
+            log.info(f'Data: {data}')
+            i = 0
+            for rec in records:
+                log.info(f'Records {i}: {rec}')
+                i += 1
             return None
 
     '''
@@ -151,7 +158,7 @@ class ParallelService:
                     db_record[key] = data[key]
                     continue
                 if key not in parallel_immutable_keys:
-                    if not isinstance(db_record[key], list):
+                    if not isinstance(data[key], list):
                         db_record[key] = [data[key]]
                     else:
                         db_record[key] = data[key]
@@ -163,18 +170,30 @@ class ParallelService:
             found = False
             for key in data.keys():
                 if key in parallel_updatable_keys:
-                    found = True
-                    db_record[key] = data[key]
+                    if key not in db_record.keys():
+                        found = True
+                        db_record[key] = data[key]
+                    else:
+                        if db_record[key] != data[key]:
+                            found = True
+                            db_record[key] = data[key]
                     continue
                 if key not in parallel_immutable_keys:
                     if key not in db_record.keys():
                         found = True
                         db_record[key] = [data[key]]
                     elif isinstance(data[key], list):
-                        pairs = zip(data[key], db_record[key])
-                        if any(x != y for x, y in pairs):
-                            found = True
-                            db_record[key].extend(data[key])
+                        val = data[key][0]
+                        if isinstance(val, dict):
+                            pairs = zip(data[key], db_record[key])
+                            if any(x != y for x, y in pairs):
+                                found = True
+                                db_record[key].extend(data[key])
+                        else:
+                            for entry in data[key]:
+                                if entry not in db_record[key]:
+                                    found = True
+                                    db_record[key].append(entry)
                     else:
                         if isinstance(db_record[key], list):
                             if data[key] not in db_record[key]:
@@ -185,12 +204,18 @@ class ParallelService:
                                 found = True
                                 db_record[key] = [db_record[key]]
                                 db_record[key].append(data[key])
+                                db_record[key] = list(set(db_record[key]))
                             else:
                                 db_record[key] = [db_record[key]]
             if found:
                 db_record["datasetId"].append(metadata["datasetId"])
+                dataset_ids = []
+                for entry in db_record["datasetId"]:
+                    if entry not in dataset_ids:
+                        dataset_ids.append(entry)
+                db_record["datasetId"] = dataset_ids
                 db_record["derived"] = False
-                db_record["tags"] = service.get_tags(record, parallel_non_tag_keys)
+                db_record["tags"] = service.get_tags(db_record, parallel_non_tag_keys)
                 return db_record
             else:
                 return False
@@ -236,7 +261,7 @@ class ParallelService:
                 if (derived_data["sourceTextHash"] in hashes) and (derived_data["targetTextHash"] in hashes):
                     return None
             for key in data.keys():
-                if key not in parallel_immutable_keys:
+                if key not in parallel_immutable_keys and key not in parallel_updatable_keys:
                     if key not in record.keys():
                         record[key] = [data[key]]
                     elif isinstance(data[key], list):
@@ -248,6 +273,7 @@ class ParallelService:
                     derived_data[key] = record[key]
             derived_data["datasetId"] = [metadata["datasetId"]]
             derived_data["datasetId"].extend(record["datasetId"])
+            derived_data["datasetId"] = list(set(derived_data["datasetId"]))
             derived_data["datasetType"] = metadata["datasetType"]
             derived_data["derived"] = True
             derived_data["tags"] = service.get_tags(derived_data, parallel_non_tag_keys)
@@ -267,28 +293,31 @@ class ParallelService:
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
-            db_query = {}
-            score_query = {}
+            db_query, score_query = {}, {}
+            tags, tgt_lang = [], []
+            if 'sourceLanguage' in query.keys():
+                db_query["sourceLanguage"] = query["sourceLanguage"][0] #source is always single
+            if 'targetLanguage' in query.keys():
+                for tgt in query["targetLanguage"]:
+                    tgt_lang.append(tgt)
+            if 'originalSourceSentence' in query.keys():
+                db_query['originalSourceSentence'] = query['originalSourceSentence']
+            else:
+                db_query['originalSourceSentence'] = False
             if 'minScore' in query.keys():
                 score_query["$gte"] = query["minScore"]
             if 'maxScore' in query.keys():
                 score_query["$lte"] = query["maxScore"]
             if score_query:
-                db_query["scoreQuery"] = {"data.score": score_query}
+                db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": score_query}}}
             if 'score' in query.keys():
-                db_query["scoreQuery"] = {"data.score": query["score"]}
-            tags, tgt_lang = [], []
-            if 'sourceLanguage' in query.keys():
-                db_query["sourceLanguage"] = query["sourceLanguage"][0]
-            if 'targetLanguage' in query.keys():
-                for tgt in query["targetLanguage"]:
-                    tgt_lang.append(tgt)
+                db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": query["score"]}}}
             if 'collectionSource' in query.keys():
                 tags.extend(query["collectionSource"])
             if 'collectionMode' in query.keys():
                 tags.extend(query["collectionMode"])
             if 'license' in query.keys():
-                tags.append(query["licence"])
+                tags.extend(query["licence"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
@@ -300,10 +329,14 @@ class ParallelService:
                 db_query["targetLanguage"] = tgt_lang
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
+            else:
+                db_query["multipleContributors"] = False
             if 'groupBy' in query.keys():
-                db_query["groupBy"] = True
+                db_query["groupBy"] = query["groupBy"]
                 if 'countOfTranslations' in query.keys():
                     db_query["countOfTranslations"] = query["countOfTranslations"]
+            else:
+                db_query["groupBy"] = False
             data = repo.search(db_query, off, lim)
             result, pipeline, count = data[0], data[1], data[2]
             log.info(f'Result --- Count: {count}, Query: {query}, Pipeline: {pipeline}')
@@ -314,7 +347,7 @@ class ParallelService:
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
                     pt.task_event_search(op, None)
                 else:
-                    log.error(f'There was an error while pushing result to S3')
+                    log.error(f'There was an error while pushing result to object store!')
                     error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_parallel, "serviceRequestNumber": query["serviceRequestNumber"],
                                                    "message": "There was an error while pushing result to object store"}
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
