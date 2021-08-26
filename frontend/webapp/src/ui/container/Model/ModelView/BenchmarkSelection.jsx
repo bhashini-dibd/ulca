@@ -97,7 +97,7 @@ const handleShowFilter = (event) => {
 const fetchHeaderButton= () => {
         return (
                 <div className={classes.headerButtons}>
-                        <Typography  variant="h5" >My Contribution</Typography>
+                        <Typography  variant="h5" ></Typography>
                         <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button>
                 
                 </div>
