@@ -177,6 +177,11 @@ const themeDefault = createMuiTheme({
         borderRadius: "20px",
 
       },
+      sizeMedium: {
+        height: "40px",
+        borderRadius: "20px",
+
+      },
       sizeSmall: {
         height: "30px",
         borderRadius: "20px",

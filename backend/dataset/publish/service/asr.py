@@ -44,9 +44,11 @@ class ASRService:
                             repo.insert([result[1]])
                             count += 1
                             metrics.build_metric_event(result[1], metadata, None, None)
-                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr})
+                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr})
                     elif result[0] == "UPDATE":
-                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr})
+                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr, "isUpdate": True})
                         metric_record = (result[1], result[2])
                         metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
@@ -55,14 +57,16 @@ class ASRService:
                             {"record": result[1], "code": "UPLOAD_FAILED", "datasetName": metadata["datasetName"],
                              "datasetType": dataset_type_asr, "serviceRequestNumber": metadata["serviceRequestNumber"],
                              "message": "Upload of audio file to object store failed"})
-                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr})
+                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr})
                     else:
                         error_list.append({"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
                                            "datasetType": dataset_type_asr,
                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
                                            "message": "This record is already available in the system",
                                            "datasetName": metadata["datasetName"]})
-                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr})
+                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr})
                 else:
                     log.error(f'INTERNAL ERROR: Failing record due to internal error: ID: {record["id"]}, SRN: {metadata["serviceRequestNumber"]}')
                     error_list.append(
@@ -71,7 +75,7 @@ class ASRService:
                          "serviceRequestNumber": metadata["serviceRequestNumber"],
                          "message": "There was an exception while processing this record!"})
                     pt.update_task_details(
-                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "durationInSeconds": record["durationInSeconds"],
                          "datasetType": dataset_type_asr})
             if error_list:
                 error_event.create_error_event(error_list)
