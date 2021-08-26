@@ -85,7 +85,6 @@ const FilterList = (props) => {
                         <Typography variant="h6" className={classes.filterTypo}>Domain</Typography>
                         <FormGroup>
                             {filter.domainFilter.map((type) => {
-                                console.log("-------",type)
                                 return (
                                     <FormControlLabel
                                         control={
@@ -108,7 +107,6 @@ const FilterList = (props) => {
                         <Typography variant="h6" className={classes.filterTypo}>Language</Typography>
                         <FormGroup>
                             {filter.language.map((type) => {
-                                console.log("-------",type)
                                 return (
                                     <FormControlLabel
                                         control={

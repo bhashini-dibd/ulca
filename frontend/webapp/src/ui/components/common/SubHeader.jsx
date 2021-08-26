@@ -109,7 +109,6 @@ const SubHeader = (props) => {
                     <Tabs value={props.value}  onChange={props.handleChange}>
                         {
                             props.tabs.map((tab, index) => {
-                                console.log(tab)
                                 return (
                                     <Tab label={tab.name} {...a11yProps(index)} onClick={() => handleClick(tab.url)} />
                                 )

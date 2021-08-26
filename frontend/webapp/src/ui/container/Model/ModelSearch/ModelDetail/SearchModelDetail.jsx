@@ -78,7 +78,6 @@ const SearchModelDetail = (props) => {
         })
 
     }
-    console.log(history)
 
     return (
         <MuiThemeProvider theme={Theme}>
