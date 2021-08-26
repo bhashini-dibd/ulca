@@ -133,7 +133,7 @@
             "uri":"/ulca/apis/v0/model/upload",
             "module":"ULCA-API-MODEL",
             "active":true,
-            "whiteList":false,
+            "whiteList":true,
             "description":"API to upload models"
         },
         {
