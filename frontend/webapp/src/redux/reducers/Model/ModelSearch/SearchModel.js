@@ -118,10 +118,10 @@ const getContributionList = (state, payload) => {
             }
 
         )
-        !languageFilter.includes(sLanguage) && languageFilter.push(sLanguage)
-        !languageFilter.includes(tLanguage) && languageFilter.push(tLanguage)
-        !domainFilter.includes(domain) && domainFilter.push(domain)
-        !submitterFilter.includes(element.submitter.name) && submitterFilter.push(element.submitter.name)
+        !languageFilter.includes(sLanguage) &&sLanguage&& languageFilter.push(sLanguage)
+        !languageFilter.includes(tLanguage) &&tLanguage && languageFilter.push(tLanguage)
+        !domainFilter.includes(domain) && domain && domainFilter.push(domain)
+        !submitterFilter.includes(element.submitter.name) && element.submitter.name && submitterFilter.push(element.submitter.name)
     });
 
     filter.language = [...(new Set(languageFilter))];

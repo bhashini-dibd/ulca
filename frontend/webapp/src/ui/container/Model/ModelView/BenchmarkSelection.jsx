@@ -385,7 +385,7 @@ const option2 = {
                 <>
                 <MUIDataTable
                 
-                                title={`My Contribution`}
+                                title={`Select Benchmark Dataset`}
                                 data={data}
                                 columns={columns}
                                 options= {options}
@@ -401,7 +401,7 @@ const option2 = {
                 <>
                 <MUIDataTable
                 
-                                title={`My Contribution`}
+                                title={`Select Metric Dataset`}
                                 data={data}
                                 columns={column2}
                                 options= {option2}

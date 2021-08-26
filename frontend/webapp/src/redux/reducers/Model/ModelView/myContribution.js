@@ -22,7 +22,7 @@ const getFilterValue = (payload, data) => {
     let filterResult = []
     if (filterValues && filterValues.hasOwnProperty("status") && filterValues.status.length > 0) {
         statusFilter = data.responseData.filter(value => {
-            if (filterValues.status.includes(value.status)) {
+            if (value.status && filterValues.status.includes(value.status)) {
                 return value
             }
         })
@@ -32,7 +32,7 @@ const getFilterValue = (payload, data) => {
     }
     if (filterValues && filterValues.hasOwnProperty("modelType") && filterValues.modelType.length > 0) {
         filterResult = statusFilter.filter(value => {
-            if (filterValues.modelType.includes(value.modelType)) {
+            if (value.modelType && filterValues.modelType.includes(value.modelType)) {
                 return value
             }
         })
@@ -100,8 +100,8 @@ const getContributionList = (state, payload) => {
             }
 
         )
-        !statusFilter.includes(element.status) && statusFilter.push(element.status)
-        !modelFilter.includes(element.datasetName) && modelFilter.push(getDatasetName(element.datasetType))
+        ! statusFilter.includes(element.status) && element.status && statusFilter.push(element.status)
+        ! modelFilter.includes(element.datasetName) && element.datasetName && modelFilter.push(getDatasetName(element.datasetType))
         if (element.status === "In-Progress" || element.status === "Pending") {
             refreshStatus = true
         }
