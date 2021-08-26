@@ -220,7 +220,8 @@ const ContributionList = (props) => {
                           empty: true,
                           customBodyRender: (value, tableMeta, updateValue) => {
                             if (tableMeta.rowData) {
-                              return <Button style={{background:"white",borderRadius:"1rem"}} onClick = {(event)=>handleRowClickSelection(event)}>Run Benchmark</Button>;
+                        //       return <Button style={{background:"white",borderRadius:"1rem"}} onClick = {(event)=>handleRowClickSelection(event)}>Run Benchmark</Button>;
+                              return <Button style={{background:"white",borderRadius:"1rem"}} >{renderEventList(tableMeta.rowData[0])}</Button>;
                             }
                           },
                         },
@@ -253,7 +254,7 @@ const ContributionList = (props) => {
                 fixedHeader: false,
                 filterType: "checkbox",
                 download: false,
-                expandableRows: true,
+                // expandableRows: true,
                 
       expandableRowsHeader: true,
       expandableRowsOnClick: false,

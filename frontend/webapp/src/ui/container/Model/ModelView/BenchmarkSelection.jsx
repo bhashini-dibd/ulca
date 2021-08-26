@@ -97,7 +97,7 @@ const handleShowFilter = (event) => {
 const fetchHeaderButton= () => {
         return (
                 <div className={classes.headerButtons}>
-                        <Typography  variant="h5" >My Contribution</Typography>
+                        <Typography  variant="h5" ></Typography>
                         <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button>
                 
                 </div>
@@ -196,7 +196,6 @@ const handleSelectMetric = (id) =>{
                   empty: true,
                   customBodyRender: (value, tableMeta, updateValue) => {
                     if (tableMeta.rowData) {
-                            console.log()
                             if(selectedValue.includes(tableMeta.rowData[0])){
                                 return <Button variant="outlined" onClick= {()=>handleSelect(tableMeta.rowData[0])} style={{background:"#2A61AD",borderRadius:"1.25rem",textTransform:"Capitalize", color:"white",width:"79px"}} ><CheckIcon/></Button>;
                             }
@@ -276,7 +275,6 @@ const column2 = [
                   empty: true,
                   customBodyRender: (value, tableMeta, updateValue) => {
                     if (tableMeta.rowData) {
-                            console.log()
                             if(selectedMetric.includes(tableMeta.rowData[0])){
                                 return <Button variant="outlined" onClick= {()=>handleSelectMetric(tableMeta.rowData[0])} style={{background:"#2A61AD",borderRadius:"1.25rem",textTransform:"Capitalize", color:"white",width:"79px"}} ><CheckIcon/></Button>;
                             }
@@ -385,7 +383,7 @@ const option2 = {
                 <>
                 <MUIDataTable
                 
-                                title={`My Contribution`}
+                                title={`Select Benchmark Dataset`}
                                 data={data}
                                 columns={columns}
                                 options= {options}
@@ -401,7 +399,7 @@ const option2 = {
                 <>
                 <MUIDataTable
                 
-                                title={`My Contribution`}
+                                title={`Select Metric Dataset`}
                                 data={data}
                                 columns={column2}
                                 options= {option2}
