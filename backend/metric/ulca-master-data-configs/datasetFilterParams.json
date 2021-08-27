@@ -1,6 +1,6 @@
 {
   "dataset": {
-    "parallel-corpus": {
+    "parallel-dataset": {
       "filters": [
         {
           "filter": "languagepair",
@@ -396,7 +396,8 @@
           "values": [
             {
               "value": "machine-translated",
-              "label": "Machine Translated"
+              "label": "Machine Translated",
+              "tool/method":[]
             },
             {
               "value": "auto-aligned",
@@ -470,37 +471,12 @@
           "values": []
         },
         {
-          "filter": "submitter",
+          "filter": "submitterName",
           "values": []
-        },
-        {
-          "filter": "collectionMethodSpecific",
-          "values": [
-            {
-              "filter": "alignmentTool",
-              "values": []
-            },
-            {
-              "filter": "alignmentScoreRange",
-              "values": []
-            },
-            {
-              "filter": "editingTool",
-              "values": []
-            },
-            {
-              "filter": "translationModel",
-              "values": []
-            },
-            {
-              "filter": "evaluationMethod",
-              "values": []
-            }
-          ]
         }
       ]
     },
-    "monolingual-corpus": {
+    "monolingual-dataset": {
       "filters": [
         {
           "filter": "sourceLanguage",
@@ -538,12 +514,12 @@
           "values": []
         },
         {
-          "filter": "submitter",
+          "filter": "submitterName",
           "values": []
         }
       ]
     },
-    "asr-unlabeled-corpus": {
+    "asr-unlabeled-dataset": {
       "filters": [
         {
           "filter": "sourceLanguage",
@@ -581,7 +557,7 @@
           "values": []
         },
         {
-          "filter": "submitter",
+          "filter": "submitterName",
           "values": []
         },
         {
@@ -597,11 +573,11 @@
           "values": []
         },
         {
-          "filter": "bpsRate",
+          "filter": "bitsPerSample",
           "values": []
         },
         {
-          "filter": "countOfSpeakers",
+          "filter": "numberOfSpeakers",
           "values": []
         },
         {
@@ -626,7 +602,7 @@
         }
       ]
     },
-    "ocr-corpus": {
+    "ocr-dataset": {
       "filters": [
         {
           "filter": "sourceLanguage",
@@ -692,7 +668,7 @@
           "values": []
         },
         {
-          "filter": "submitter",
+          "filter": "submitterName",
           "values": []
         },
         {
@@ -700,33 +676,16 @@
           "values": []
         },
         {
-          "filter": "format",
-          "values": []
-        },
-        {
-          "filter": "dpiRange",
+          "filter": "dpi",
           "values": []
         },
         {
           "filter": "imageTextType",
           "values": []
-        },
-        {
-          "filter": "collectionMethodSpecific",
-          "values": [
-            {
-              "filter": "methodDescription",
-              "values": []
-            },
-            {
-              "filter": "ocrTool",
-              "values": []
-            }
-          ]
         }
       ]
     },
-    "asr-corpus": {
+    "asr-dataset": {
       "filters": [
         {
           "filter": "sourceLanguage",
@@ -780,7 +739,7 @@
           "values": []
         },
         {
-          "filter": "submitter",
+          "filter": "submitterName",
           "values": []
         },
         {
@@ -796,11 +755,11 @@
           "values": []
         },
         {
-          "filter": "bpsRate",
+          "filter": "bitsPerSample",
           "values": []
         },
         {
-          "filter": "countOfSpeakers",
+          "filter": "numberOfSpeakers",
           "values": []
         },
         {
@@ -827,3 +786,4 @@
     }
   }
 }
+
