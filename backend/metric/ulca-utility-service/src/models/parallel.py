@@ -12,6 +12,7 @@ class ParallelModel:
         self.col    =   data_parallel
 
     def compute_parallel_data_filters(self,parallel_data):
+        log.info("Updating parallel filter params!")
         try:
             language_pairs_query = [{"$addFields": { "languagepairs": { "$concat":[ '$sourceLanguage', ' - ', '$targetLanguage'] }}},
                                     { "$group": {"_id": "$languagepairs"}}]
@@ -24,26 +25,33 @@ class ParallelModel:
             for filter in parallel_data["filters"]:
                 if filter["filter"]         ==  "languagepair":
                     filter["values"]        =   self.get_language_pairs(lang_pairs)
+                    log.info("collected available languages")
                 if filter["filter"]         ==  "collectionMethod":
                     filter["values"]        =   self.get_collection_details(collectionres)
+                    log.info("collected available collection methods")
                 if filter["filter"]         ==  "domain":
                     domainres               =   repo.distinct("domain",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(domainres)
+                    log.info("collected available domains")
                 if filter["filter"]         ==  "collectionSource":
                     sourceres               =   repo.distinct("collectionSource",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(sourceres)
+                    log.info("collected available sources")
                 if filter["filter"]         ==  "license":
                     licenseres               =   repo.distinct("license",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(licenseres)
+                    log.info("collected available licenses")
                 if filter["filter"]         ==  "submitterName":
                     domainres               =   repo.distinct("submitter.name",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(domainres)
+                    log.info("collected available submitter names")
             return parallel_data
         except Exception as e:
             log.info(f"Exception on ParallelModel :{e}")
 
 
     def get_language_pairs(self,lang_pairs):
+        log.info("formatting language filter")
         values = []
         for key in LANG_CODES:
             lang_obj    =   {}
@@ -63,31 +71,32 @@ class ParallelModel:
         return values
 
     def get_collection_details(self,collection_data):
+        log.info("formatting collection method,details filter")
         values = []
         for data in collection_data:
             collection = {}
             collection["value"] = data["_id"]
             collection["label"] = str(data["_id"]).title()
-            collection["tool/method"] = []
-
+            tools =[]
             for obj in data["details"]:
                 if "alignmentTool" in obj:
-                    collection["tool/method"].append({"alignmentTool":obj["alignmentTool"]})
+                    tools.append({"alignmentTool":obj["alignmentTool"]})
                  
                 if "translationModel" in obj:
-                    collection["tool/method"].append({"translationModel":obj["translationModel"]})
+                    tools.append({"translationModel":obj["translationModel"]})
 
                 if "editingTool" in obj:
-                    collection["tool/method"].append({"editingTool":obj["editingTool"]})
+                    tools.append({"editingTool":obj["editingTool"]})
 
                 if "evaluationMethod" in obj:
-                    collection["tool/method"].append({"evaluationMethod":obj["evaluationMethod"]})
+                    tools.append({"evaluationMethod":obj["evaluationMethod"]})
             
-            collection["tool/method"] = list(set(collection["tool/method"]))
+            collection["tool/method"] = [i for n, i in enumerate(tools) if i not in tools[n + 1:]]
             values.append(collection)
         return values
 
     def get_formated_data(self, attribute_data):
+        log.info("formatting filter attribute")
         values = []
         for data in attribute_data:
             attribute = {}

@@ -12,6 +12,7 @@ class AsrUnlabeledModel:
         self.col    =   data_asr_unlabeled
 
     def compute_asr_unlabeled_data_filters(self,asr_unlabeled_data):
+        log.info("Updating asr-unlabeled filter params!")
         try:
             collection_query    =   [{ '$unwind':'$collectionMethod' },{ '$unwind':'$collectionMethod.collectionDescription' },{ '$group': { '_id': '$collectionMethod.collectionDescription', 'details': {'$addToSet': '$collectionMethod.collectionDetails'}}}]
             collectionres       =   repo.aggregate(collection_query,self.db,self.col)
@@ -20,47 +21,62 @@ class AsrUnlabeledModel:
                 if filter["filter"]         ==  "sourceLanguage":
                     langres                 =   repo.distinct("sourceLanguage",self.db,self.col)
                     filter["values"]        =   self.get_language_filter(langres)
+                    log.info("collected available languages")
                 if filter["filter"]         ==  "collectionMethod":
                     filter["values"]        =   self.get_collection_details(collectionres)
+                    log.info("collected available collection details")
                 if filter["filter"]         ==  "domain":
                     domainres               =   repo.distinct("domain",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(domainres)
+                    log.info("collected available domains")
                 if filter["filter"]         ==  "collectionSource":
                     sourceres               =   repo.distinct("collectionSource",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(sourceres)
+                    log.info("collected available sources")
                 if filter["filter"]         ==  "license":
                     licenseres              =   repo.distinct("license",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(licenseres)
+                    log.info("collected available licenses")
                 if filter["filter"]         ==  "submitterName":
-                    domainres               =   repo.distinct("submitter.name",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(domainres)
+                    submiterres               =   repo.distinct("submitter.name",self.db,self.col)
+                    filter["values"]        =   self.get_formated_data(submiterres)
+                    log.info("collected available submitter names")
                 if filter["filter"]         ==  "format":
                     formatres               =   repo.distinct("format",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(formatres)
+                    log.info("collected available formats")
                 if filter["filter"]         ==  "channel":
                     channelres              =   repo.distinct("channel",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(channelres)
+                    log.info("collected available channels")
                 if filter["filter"]         ==  "samplingRate":
                     srateres                =   repo.distinct("samplingRate",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(srateres)
+                    log.info("collected available sampling rates")
                 if filter["filter"]         ==  "bitsPerSample":
                     bpsres                  =   repo.distinct("bitsPerSample",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(bpsres)
+                    log.info("collected available bps")
                 if filter["filter"]         ==  "numberOfSpeakers":
                     speakercountres         =   repo.distinct("numberOfSpeakers",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(speakercountres)
+                    log.info("collected number of speakers")
                 if filter["filter"]         ==  "gender":
                     genderres               =   repo.distinct("gender",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(genderres)
+                    log.info("collected available gender list")
                 if filter["filter"]         ==  "dialect":
                     dialectres              =   repo.distinct("dialect",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(dialectres)
+                    log.info("collected available dialects")
                 if filter["filter"]         ==  "snrTool":
-                    srateres                =   repo.distinct("snr.methodDetails.snrTool",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(srateres)
-                if filter["filter"]         ==  "samplingRate":
-                    snrtoolres              =   repo.distinct("snrtoolres",self.db,self.col)
+                    snrtoolres              =   repo.distinct("snr.methodDetails.snrTool",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(snrtoolres)
+                    log.info("collected available snr tools")
+                if filter["filter"]         ==  "samplingRate":
+                    srateres                =   repo.distinct("samplingRate",self.db,self.col)
+                    filter["values"]        =   self.get_formated_data(srateres)
+                    log.info("collected available sampling rates")
 
             return asr_unlabeled_data
         except Exception as e:
@@ -69,6 +85,7 @@ class AsrUnlabeledModel:
 
     
     def get_language_filter(self,lang_list):
+        log.info("formatting language filter")
         values = []
         for data in lang_list:
             attribute = {}
@@ -78,28 +95,29 @@ class AsrUnlabeledModel:
         return values
 
     def get_collection_details(self,collection_data):
+        log.info("formatting collection method,details filter")
         values = []
         for data in collection_data:
             collection = {}
             collection["value"] = data["_id"]
             collection["label"] = str(data["_id"]).title()
-            collection["tool/method"] = []
-
+            tools =[]
             for obj in data["details"]:
                 if "asrModel" in obj:
-                    collection["tool/method"].append({"asrModel":obj["asrModel"]})
+                    tools.append({"asrModel":obj["asrModel"]})
                  
                 if "evaluationMethod" in obj:
-                    collection["tool/method"].append({"evaluationMethod":obj["evaluationMethod"]})
+                    tools.append({"evaluationMethod":obj["evaluationMethod"]})
 
                 if "alignmentTool" in obj:
-                    collection["tool/method"].append({"alignmentTool":obj["alignmentTool"]})
+                    tools.append({"alignmentTool":obj["alignmentTool"]})
             
-            collection["tool/method"] = list(set(collection["tool/method"]))
+            collection["tool/method"] = [i for n, i in enumerate(tools) if i not in tools[n + 1:]]
             values.append(collection)
         return values
 
     def get_formated_data(self, attribute_data):
+        log.info("formatting filter attribute")
         values = []
         for data in attribute_data:
             attribute = {}

@@ -29,7 +29,8 @@ class DataRepo:
     def distinct(self, field,db,col):
         try:
             col = self.get_mongo_instance(db,col)
-            col.distinct(field)
+            res = col.distinct(field)
+            return res
         except Exception as e:
             print(e)
             log.info(f'Exception while updating document : {e}')

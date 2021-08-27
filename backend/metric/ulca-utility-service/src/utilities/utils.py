@@ -13,6 +13,7 @@ class DataUtils:
         try:
             file = requests.get(data_filter_set_file_path, allow_redirects=True)
             file_path = shared_storage_path + filter_file_name
+            # file_path = '/home/jainy/Desktop/datasetFilterParams.json'
             open(file_path, 'wb').write(file.content)
             log.info(f"Filters read from git and pushed to local {file_path}")
             with open(file_path, 'r') as stream:
@@ -21,8 +22,17 @@ class DataUtils:
             return filterconfigs, file_path
         except Exception as exc:
             log.exception("Exception while reading filters: " +str(exc))
-            return None
-    
+            return None, None
+
+    def write_to_config_file(self,filepath,data):
+        try:
+            with open (filepath,'wb') as confile:
+                confile.write(data)
+        except Exception as e:
+            log.info(f"Exception while writing filter configs : {e}")
+
+
+
     def upload_to_object_store(self,file_path):
         """Uploading file to object store"""
         

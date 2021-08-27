@@ -30,6 +30,7 @@ class FilterCronProcessor(Thread):
                 data,filepath = utils.read_from_config_file()
                 response = self.update_filter_params(data) 
                 if response != False:
+                    utils.write_to_config_file(filepath)
                     log.info("Updated filter params succesfully")
                     utils.upload_to_object_store(filepath)
 
@@ -44,7 +45,7 @@ class FilterCronProcessor(Thread):
             log.info("Failed to update parallel filter params!")
             return False
         data["parallel-dataset"] = para_response
-        ocr_response = parallel_model.compute_parallel_data_filters(data["ocr-dataset"])
+        ocr_response = ocr_model.compute_ocr_data_filters(data["ocr-dataset"])
         if not ocr_response:
             log.info("Failed to update ocr filter params!")
             return False

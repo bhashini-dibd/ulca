@@ -12,6 +12,7 @@ class AsrModel:
         self.col    =   data_asr
 
     def compute_asr_data_filters(self,asr_data):
+        log.info("Updating asr filter params!")
         try:
             collection_query    =   [{ '$unwind':'$collectionMethod' },{ '$unwind':'$collectionMethod.collectionDescription' },{ '$group': { '_id': '$collectionMethod.collectionDescription', 'details': {'$addToSet': '$collectionMethod.collectionDetails'}}}]
             collectionres       =   repo.aggregate(collection_query,self.db,self.col)
@@ -68,6 +69,7 @@ class AsrModel:
 
     
     def get_language_filter(self,lang_list):
+        log.info("formatting language filter")
         values = []
         for data in lang_list:
             attribute = {}
@@ -77,28 +79,30 @@ class AsrModel:
         return values
 
     def get_collection_details(self,collection_data):
+        log.info("formatting collection method,details filter")
         values = []
         for data in collection_data:
             collection = {}
             collection["value"] = data["_id"]
             collection["label"] = str(data["_id"]).title()
-            collection["tool/method"] = []
+            tools = []
 
             for obj in data["details"]:
                 if "asrModel" in obj:
-                    collection["tool/method"].append({"asrModel":obj["asrModel"]})
+                    tools.append({"asrModel":obj["asrModel"]})
                  
                 if "evaluationMethod" in obj:
-                    collection["tool/method"].append({"evaluationMethod":obj["evaluationMethod"]})
+                    tools.append({"evaluationMethod":obj["evaluationMethod"]})
 
                 if "alignmentTool" in obj:
-                    collection["tool/method"].append({"alignmentTool":obj["alignmentTool"]})
+                    tools.append({"alignmentTool":obj["alignmentTool"]})
             
-            collection["tool/method"] = list(set(collection["tool/method"]))
+            collection["tool/method"] = [i for n, i in enumerate(tools) if i not in tools[n + 1:]]
             values.append(collection)
         return values
 
     def get_formated_data(self, attribute_data):
+        log.info("formatting filter attribute")
         values = []
         for data in attribute_data:
             attribute = {}
