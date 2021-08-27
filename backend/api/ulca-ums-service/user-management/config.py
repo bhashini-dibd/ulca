@@ -47,6 +47,7 @@ MAIL_SETTINGS           =   {
                                 "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxx'),
                                 "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxx')
                             }
+MAIL_SENDER             =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')
 USER_VERIFY_LINK_EXPIRY =   os.environ.get('ULCA_VERIFY_LINK_EXP_HRS',48)
 USER_API_KEY_EXPIRY     =   os.environ.get('ULCA_API_KEY_EXP_DAYS',30)
 #React-app base url
