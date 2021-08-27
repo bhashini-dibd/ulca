@@ -1,11 +1,11 @@
-import logging
-from logging.config import dictConfig
 from config import process_connection_url , process_db_schema, process_col
 import pymongo
+import logging
+from logging.config import dictConfig
 log = logging.getLogger('file')
 
 
-class StatusUpdaterRepo:
+class DataRepo:
     
     def __init__(self):
         pass
@@ -22,6 +22,14 @@ class StatusUpdaterRepo:
         try:
             col = self.get_mongo_instance(db,col)
             col.update(cond, query)
+        except Exception as e:
+            print(e)
+            log.info(f'Exception while updating document : {e}')
+
+    def distinct(self, field,db,col):
+        try:
+            col = self.get_mongo_instance(db,col)
+            col.distinct(field)
         except Exception as e:
             print(e)
             log.info(f'Exception while updating document : {e}')
