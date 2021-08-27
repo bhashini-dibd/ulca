@@ -22,7 +22,7 @@ import static org.anuvaad.constants.RequestContextConstants.CORRELATION_ID_KEY;
 public class UserUtils {
 
     private static final String RETRIEVING_USER_FAILED_MESSAGE = "Retrieving user failed";
-    private static final String USER_UNAVAILABLE_MESSAGE = "There's no user associated with this public key: {}";
+    private static final String USER_UNAVAILABLE_MESSAGE = "There's no user associated with this public key, please re-check: {}";
 
     @Value("${ulca.ums.host}")
     private String umsHost;
