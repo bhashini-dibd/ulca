@@ -36,6 +36,7 @@ class MonolingualModel:
                     domainres               =   repo.distinct("submitter.name",self.db,self.col)
                     filter["values"]        =   self.get_formated_data(domainres)
                     log.info("collected available submitter names")
+            return mono_data
         except Exception as e:
             log.info(f"Exception on MonolingualModel :{e}")
     
