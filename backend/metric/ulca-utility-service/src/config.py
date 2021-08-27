@@ -7,15 +7,16 @@ PORT = 5001
 
 ENABLE_CORS = False
 
-MAIL_SETTINGS           =   {
-                                "MAIL_SERVER"   : 'smtp.gmail.com',
-                                "MAIL_PORT"     : 465,
+#gmail server configs
+MAIL_SETTINGS                =   {
+                                "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),
+                                "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT',465)),
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
-                                "MAIL_USERNAME" : os.environ.get('ULCA_SUPPORT_EMAIL','xx'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','xxx')
-                            }
-
+                                "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxx'),
+                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxx')
+                                }
+MAIL_SENDER                  =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')
 
 receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"jainy.joy@tarento.com")
 

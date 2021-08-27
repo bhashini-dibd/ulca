@@ -65,21 +65,19 @@ class NotifierService:
 
         try:
             users = config.receiver_email_ids.split(',')
-            log.info(f"Generating emails for {users} ")
-            for user in users:
-                email       = user   
-                tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
-                msg         = Message(subject=f" ULCA- Statistics {tdy_date}",
-                              sender="anuvaad.support@tarento.com",
-                              recipients=[email])
-                msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],inprogress=data["inprogress"],pending=data["pending"])
-                file= data["file"]
-                with open (file,'rb') as fp:
-                    msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
+            log.info(f"Generating emails for {users} ") 
+            tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
+            msg         = Message(subject=f" ULCA- Statistics {tdy_date}",
+                              sender=config.MAIL_SENDER,
+                              recipients=users)
+            msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],inprogress=data["inprogress"],pending=data["pending"])
+            file= data["file"]
+            # with open (file,'rb') as fp:
+            #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
 
-                mail.send(msg)
-                os.remove(file)
-                log.info(f"Generated email notification for {user}")
+            mail.send(msg)
+            os.remove(file)
+            log.info(f"Generated email notifications")
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
                           str(e))
