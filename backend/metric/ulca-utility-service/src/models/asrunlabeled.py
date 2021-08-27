@@ -13,6 +13,7 @@ class AsrUnlabeledModel:
 
     def compute_asr_unlabeled_data_filters(self,asr_unlabeled_data):
         log.info("Updating asr-unlabeled filter params!")
+        print(asr_unlabeled_data)
         try:
             collection_query    =   [{ '$unwind':'$collectionMethod' },{ '$unwind':'$collectionMethod.collectionDescription' },{ '$group': { '_id': '$collectionMethod.collectionDescription', 'details': {'$addToSet': '$collectionMethod.collectionDetails'}}}]
             collectionres       =   repo.aggregate(collection_query,self.db,self.col)

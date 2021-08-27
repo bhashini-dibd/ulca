@@ -13,7 +13,7 @@ parallel_model  =   ParallelModel()
 ocr_model       =   OcrModel()
 mono_model      =   MonolingualModel()
 asr_model       =   AsrModel()
-asr_unlabeled_model =   AsrUnlabeledModel
+asr_unlabeled_model =   AsrUnlabeledModel()
 
 class FilterCronProcessor(Thread):
     def __init__(self, event):
@@ -30,7 +30,7 @@ class FilterCronProcessor(Thread):
                 data,filepath = utils.read_from_config_file()
                 response = self.update_filter_params(data) 
                 if response != False:
-                    utils.write_to_config_file(filepath)
+                    utils.write_to_config_file(filepath,response)
                     log.info("Updated filter params succesfully")
                     utils.upload_to_object_store(filepath)
 
