@@ -32,7 +32,7 @@ class FilterCronProcessor(Thread):
                 if response != False:
                     utils.write_to_config_file(filepath,response)
                     log.info("Updated filter params succesfully")
-                    utils.upload_to_object_store(filepath)
+                    # utils.upload_to_object_store(filepath)
 
                 run += 1
             except Exception as e:

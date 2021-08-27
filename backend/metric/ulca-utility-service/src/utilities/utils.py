@@ -27,7 +27,7 @@ class DataUtils:
     def write_to_config_file(self,filepath,data):
         try:
             with open (filepath,'wb') as confile:
-                confile.write(data)
+                json.dump(data,confile)
         except Exception as e:
             log.info(f"Exception while writing filter configs : {e}")
 
