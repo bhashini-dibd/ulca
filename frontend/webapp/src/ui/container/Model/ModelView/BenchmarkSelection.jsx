@@ -196,7 +196,6 @@ const handleSelectMetric = (id) =>{
                   empty: true,
                   customBodyRender: (value, tableMeta, updateValue) => {
                     if (tableMeta.rowData) {
-                            console.log()
                             if(selectedValue.includes(tableMeta.rowData[0])){
                                 return <Button variant="outlined" onClick= {()=>handleSelect(tableMeta.rowData[0])} style={{background:"#2A61AD",borderRadius:"1.25rem",textTransform:"Capitalize", color:"white",width:"79px"}} ><CheckIcon/></Button>;
                             }
@@ -276,7 +275,6 @@ const column2 = [
                   empty: true,
                   customBodyRender: (value, tableMeta, updateValue) => {
                     if (tableMeta.rowData) {
-                            console.log()
                             if(selectedMetric.includes(tableMeta.rowData[0])){
                                 return <Button variant="outlined" onClick= {()=>handleSelectMetric(tableMeta.rowData[0])} style={{background:"#2A61AD",borderRadius:"1.25rem",textTransform:"Capitalize", color:"white",width:"79px"}} ><CheckIcon/></Button>;
                             }
