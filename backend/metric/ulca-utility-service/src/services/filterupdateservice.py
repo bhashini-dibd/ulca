@@ -32,7 +32,7 @@ class FilterCronProcessor(Thread):
                 if response != False:
                     utils.write_to_config_file(filepath,response)
                     log.info("Updated filter params succesfully")
-                    # utils.upload_to_object_store(filepath)
+                    utils.upload_to_object_store(filepath)
 
                 run += 1
             except Exception as e:
@@ -40,6 +40,7 @@ class FilterCronProcessor(Thread):
                 log.exception(f'Exception on FilterCronProcessor run : {run} , exception : {e}')
 
     def update_filter_params(self,data):
+        data_new = {}
         para_response = parallel_model.compute_parallel_data_filters(data["parallel-dataset"])
         if not para_response:
             log.info("Failed to update parallel filter params!")
@@ -65,8 +66,8 @@ class FilterCronProcessor(Thread):
             log.info("Failed to update mono lingual filter params!")
             return False
         data["asr-unlabeled-dataset"] = asr_unlabel_response
-
-        return data
+        data_new["data"] = data
+        return data_new
 
 
         
