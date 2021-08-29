@@ -1,6 +1,7 @@
 import requests
-from config import DATA_FILTER_SET_FILE_PATH,FILTER_DIR_NAME,FILTER_FILE_NAME
+from config import DATA_FILTER_SET_FILE_PATH,FILTER_DIR_NAME,FILTER_FILE_NAME, config_file_link
 import json
+import urllib.request
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -8,14 +9,12 @@ log = logging.getLogger('file')
 class DataUtils:
 
     def read_filter_params(self):
-        """Reading roles from git config."""
+        """Reading filter configs."""
         
         try:
-            file = requests.get(DATA_FILTER_SET_FILE_PATH, allow_redirects=True)
-            file_path = FILTER_DIR_NAME + FILTER_FILE_NAME
-            open(file_path, 'wb').write(file.content)
-            log.info("Filters read from git and pushed to local")
-            with open(file_path, 'r') as stream:
+            filename = FILTER_DIR_NAME + FILTER_FILE_NAME
+            urllib.request.urlretrieve(config_file_link, filename)
+            with open(filename, 'r') as stream:
                 parsed = json.load(stream)
                 filterconfigs = parsed['dataset']
             return filterconfigs
