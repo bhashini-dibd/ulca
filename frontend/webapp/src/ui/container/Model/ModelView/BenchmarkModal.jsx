@@ -1,5 +1,7 @@
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import CloseIcon from "@material-ui/icons/Close";
+import { IconButton } from "@material-ui/core";
 
 const BenchmarkModal = (props) => {
   const getMuiTheme = () =>
@@ -24,6 +26,18 @@ const BenchmarkModal = (props) => {
             minHeight: "700px",
           },
         },
+        MuiToolbar: {
+          root: {
+            marginTop: "18px",
+          },
+          gutters: {
+            padding: "0",
+            "@media (min-width:600px)": {
+              paddingLeft: "0",
+              paddingRight: "0",
+            },
+          },
+        },
       },
     });
 
@@ -36,11 +50,17 @@ const BenchmarkModal = (props) => {
         width: "1030px",
       }}
     >
+      <IconButton
+        style={{ position: "inherit", left: "98%" }}
+        onClick={props.handleCloseModal}
+      >
+        <CloseIcon color="action" />
+      </IconButton>
       <MuiThemeProvider theme={getMuiTheme()}>
         <MUIDataTable
           columns={props.columns}
           options={props.options}
-          title={"Select Benchmark Dataset and Metric"}
+          title={"Select Benchmark Dataset and Metric \n "}
         ></MUIDataTable>
       </MuiThemeProvider>
     </div>

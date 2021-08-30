@@ -280,7 +280,11 @@ const ContributionList = (props) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <BenchmarkModal columns={columns} options={options} />
+        <BenchmarkModal
+          columns={columns}
+          options={options}
+          handleCloseModal={handleCloseModal}
+        />
       </Modal>
     );
   };
@@ -323,6 +327,23 @@ const ContributionList = (props) => {
     return <Typography>--</Typography>;
   };
 
+  const renderStatus = (status) => {
+    return (
+      <Typography
+        variant="body1"
+        style={{
+          color:
+            status === "Failed"
+              ? "#F54336"
+              : status === "Published"
+              ? "#2A61AD"
+              : "#FD7F23",
+        }}
+      >
+        {status}
+      </Typography>
+    );
+  };
   const columns = [
     {
       name: "submitRefNumber",
@@ -386,6 +407,11 @@ const ContributionList = (props) => {
         filter: true,
         sort: true,
         display: view ? "excluded" : true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          if (tableMeta.rowData) {
+            return renderStatus(tableMeta.rowData[6]);
+          }
+        },
       },
     },
     {
@@ -418,9 +444,9 @@ const ContributionList = (props) => {
       },
       options: { sortDirection: "desc" },
     },
-    //     onRowClick: (rowData) => {
-    //       handleDocumentView(rowData[0]);
-    //     },
+    // onRowClick: (rowData) => {
+    //   handleDocumentView(rowData[0]);
+    // },
     //     onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
     filter: false,
