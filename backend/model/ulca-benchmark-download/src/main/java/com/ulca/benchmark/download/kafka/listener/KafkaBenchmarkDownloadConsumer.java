@@ -17,11 +17,13 @@ import org.springframework.stereotype.Service;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
+import com.ulca.benchmark.service.TranslationBenchmark;
 import com.ulca.benchmark.util.UnzipUtility;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.Benchmark;
+import io.swagger.model.ModelTask;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -39,6 +41,9 @@ public class KafkaBenchmarkDownloadConsumer {
 	
 	@Autowired
 	BenchmarkDao benchmarkDao;
+	
+	@Autowired
+	TranslationBenchmark translationBenchmark;
 
 	@KafkaListener(groupId = "${kafka.ulca.bm.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.bm.filedownload.ip.topic}" , containerFactory = "benchmarkDownloadKafkaListenerContainerFactory")
 	public void downloadBenchmarkDataset(ExecuteBenchmarkRequest benchmarkDownload) {
@@ -80,6 +85,13 @@ public class KafkaBenchmarkDownloadConsumer {
 					String serviceRequestNumber = metricId + benchmarkId;
 					
 					fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
+					
+					
+					if(benchmark.getTask().equals(ModelTask.TypeEnum.TRANSLATION)) {
+						translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap);
+					}
+					
+					
 					
 					log.info(fileMap.toString());
 					
