@@ -1,9 +1,11 @@
 package io.swagger.model;
 
 import java.util.Objects;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.Domain;
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
@@ -35,10 +37,6 @@ public class Benchmark   {
 
   @JsonProperty("domain")
   private Domain domain = null;
-  
-  @JsonProperty("task")
-  private ModelTask task = null;
-  
 
   @JsonProperty("createdOn")
   private String createdOn = null;
@@ -146,27 +144,6 @@ public class Benchmark   {
   public void setDomain(Domain domain) {
     this.domain = domain;
   }
-  
-  public Benchmark task(ModelTask task) {
-	    this.task = task;
-	    return this;
-	  }
-
-	  /**
-	   * Get task
-	   * @return task
-	   **/
-	  @Schema(required = true, description = "")
-	      @NotNull
-
-	    @Valid
-	    public ModelTask getTask() {
-	    return task;
-	  }
-
-	  public void setTask(ModelTask task) {
-	    this.task = task;
-	  }
 
   public Benchmark createdOn(String createdOn) {
     this.createdOn = createdOn;
@@ -219,9 +196,7 @@ public class Benchmark   {
     return Objects.equals(this.benchmarkId, benchmark.benchmarkId) &&
         Objects.equals(this.name, benchmark.name) &&
         Objects.equals(this.description, benchmark.description) &&
-        Objects.equals(this.dataset, benchmark.dataset) &&
         Objects.equals(this.domain, benchmark.domain) &&
-        Objects.equals(this.task, benchmark.task) &&
         Objects.equals(this.createdOn, benchmark.createdOn) &&
         Objects.equals(this.submittedOn, benchmark.submittedOn);
   }
@@ -239,9 +214,7 @@ public class Benchmark   {
     sb.append("    benchmarkId: ").append(toIndentedString(benchmarkId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    dataset: ").append(toIndentedString(dataset)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
-    sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    createdOn: ").append(toIndentedString(createdOn)).append("\n");
     sb.append("    submittedOn: ").append(toIndentedString(submittedOn)).append("\n");
     sb.append("}");

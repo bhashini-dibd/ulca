@@ -1,4 +1,4 @@
-package com.ulca.benchmark.download.kafka.model;
+package com.ulca.benchmark.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

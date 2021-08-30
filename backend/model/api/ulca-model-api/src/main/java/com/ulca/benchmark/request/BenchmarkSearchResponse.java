@@ -1,8 +1,8 @@
 package com.ulca.benchmark.request;
 
-import com.ulca.benchmark.model.BenchmarkExtended;
+import java.util.List;
 
-import io.swagger.model.ModelTask;
+import io.swagger.model.Benchmark;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -16,6 +16,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BenchmarkSearchResponse {
 	
-	private List<BenchmarkExtended>  benchmarkExtendedlist;
+	private List<Benchmark>  benchmarkExtendedlist;
 
 }

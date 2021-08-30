@@ -1,5 +1,6 @@
 package com.ulca.benchmark.request;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExecuteBenchmarkRequest {
+
 
 	 	 String modelId;
 	     List<BenchmarkMetricRequest> benchmarks;

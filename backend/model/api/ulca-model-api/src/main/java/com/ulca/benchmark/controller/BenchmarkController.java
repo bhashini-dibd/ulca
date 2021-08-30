@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.Valid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,18 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ulca.benchmark.model.BenchmarkExtended;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSearchResponse;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.service.BenchmarkService;
-import com.ulca.model.response.ModelListByUserIdResponse;
 
-import io.swagger.model.ModelTask;
+import io.swagger.model.Benchmark;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -35,35 +30,34 @@ public class BenchmarkController {
 
 	@Autowired
 	BenchmarkService benchmarkService;
-	
+
 	@PostMapping("/submit")
-	public ResponseEntity<BenchmarkExtended> submitBenchmark(@RequestBody BenchmarkExtended request) {
+	public ResponseEntity<Benchmark> submitBenchmark(@RequestBody Benchmark request) {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
-		BenchmarkExtended benchmark= benchmarkService.submitBenchmark(request);
-		
-		return new ResponseEntity<>(benchmark,HttpStatus.OK);
+		Benchmark benchmark = benchmarkService.submitBenchmark(request);
+
+		return new ResponseEntity<>(benchmark, HttpStatus.OK);
 	}
 
 	@PostMapping("/execute")
-	public ResponseEntity<ExecuteBenchmarkResponse> executeBenchmark(@Valid @RequestBody ExecuteBenchmarkRequest request) {
+	public ResponseEntity<ExecuteBenchmarkResponse> executeBenchmark(
+			@Valid @RequestBody ExecuteBenchmarkRequest request) {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
-		ExecuteBenchmarkResponse response= benchmarkService.executeBenchmark(request);
-		
-		return new ResponseEntity<>(response,HttpStatus.OK);
-	}
-	
-	@GetMapping("/getBytask")
-	public ResponseEntity<BenchmarkSearchResponse>  listBytask(@Valid @RequestBody BenchmarkSearchRequest request) {
-		
-		log.info("******** Entry BenchMarkController:: fetch *******");
-		BenchmarkSearchRequest model = new BenchmarkSearchRequest();
-		
-		List<BenchmarkSearchResponse> response=benchmarkService.ListByTaskID(request);
-		
-		return new ResponseEntity<>(response,HttpStatus.OK);
+		ExecuteBenchmarkResponse response = benchmarkService.executeBenchmark(request);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	
+	@GetMapping("/getBytask")
+	public ResponseEntity<List<BenchmarkSearchResponse> > listBytask(@Valid @RequestBody BenchmarkSearchRequest request) {
+
+		log.info("******** Entry BenchMarkController:: fetch *******");
+
+		List<BenchmarkSearchResponse> response = benchmarkService.listByTaskID(request);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+
 }

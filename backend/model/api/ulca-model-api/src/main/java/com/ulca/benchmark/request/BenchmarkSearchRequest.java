@@ -1,7 +1,6 @@
 package com.ulca.benchmark.request;
 
-import com.ulca.benchmark.model.BenchmarkExtended;
-
+import io.swagger.model.Benchmark;
 import io.swagger.model.ModelTask;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +17,6 @@ public class BenchmarkSearchRequest {
 	
 	
    private ModelTask task ;
-   private BenchmarkExtended domain ;
+   private Benchmark domain ;
 
 }

@@ -14,7 +14,7 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
-import com.ulca.benchmark.download.kafka.model.ExecuteBenchmarkRequest;
+import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 
 
 @Configuration
@@ -27,13 +27,15 @@ public class KafkaBenchmarkDownloadConsumerConfig {
 
 	// config for json data
 	
+			
+	
 	@Bean
 	public ConsumerFactory<String, ExecuteBenchmarkRequest> benchmarkDownloadConsumerFactory() {
 		Map<String, Object> configs = new HashMap<>();
 		configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
 		configs.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
 		configs.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-		configs.put(ConsumerConfig.GROUP_ID_CONFIG, "${KAFKA_ULCA_DS_FILEDOWNLOAD_IP_TOPIC_GROUP_ID}");
+		configs.put(ConsumerConfig.GROUP_ID_CONFIG, "${KAFKA_ULCA_BM_FILEDOWNLOAD_IP_TOPIC_GROUP_ID}");
 		return new DefaultKafkaConsumerFactory<>(configs, new StringDeserializer(), new JsonDeserializer<>(ExecuteBenchmarkRequest.class));
 	}
 

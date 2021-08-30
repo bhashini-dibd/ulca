@@ -1,5 +1,6 @@
-package com.ulca.benchmark.download.kafka.model;
+package com.ulca.benchmark.request;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -14,8 +15,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExecuteBenchmarkRequest {
-
-	 	 String modelId;
+	
+		String modelId;
 	     List<BenchmarkMetricRequest> benchmarks;
 	    
 }
