@@ -21,7 +21,7 @@ if isinstance(TIME_CONVERSION_VAL, str):
 
 DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','https://raw.githubusercontent.com/ULCA-IN/ulca/metric-api-feature/backend/metric/ulca-master-data-configs/datasetFilterParams.json')
 FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/opt/')
-FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','updated/datasetFilterParams.json')
+FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','datasetFilterParams-new.json')
 
 error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',172800)#14400
 if isinstance(error_cron_interval_sec, str):
