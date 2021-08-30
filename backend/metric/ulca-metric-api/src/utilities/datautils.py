@@ -8,7 +8,7 @@ log = logging.getLogger('file')
 
 class DataUtils:
 
-    def read_filter_params(self):
+    def read_filter_params_from_store(self):
         """Reading filter configs."""
         
         try:
@@ -21,6 +21,20 @@ class DataUtils:
         except Exception as exc:
             log.exception("Exception while reading filters: " +str(exc))
             return []
+
+    def read_filter_params_from_git(self):
+        try:
+            file = requests.get(DATA_FILTER_SET_FILE_PATH, allow_redirects=True)
+            file_path = FILTER_DIR_NAME + FILTER_FILE_NAME
+            open(file_path, 'wb').write(file.content)
+            log.info(f"Filters read from git and pushed to local {file_path}")
+            with open(file_path, 'r') as stream:
+                parsed = json.load(stream)
+                filterconfigs = parsed['dataset']
+            return filterconfigs
+        except Exception as exc:
+            log.exception("Exception while reading filters: " +str(exc))
+            return None, None
 
 
 
