@@ -8,11 +8,14 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -21,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.Benchmark;
@@ -37,6 +41,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class TranslationBenchmark {
 
+	@Autowired
+	private KafkaTemplate<String, String> benchmarkMetricKafkaTemplate;
+	
+	@Value("${kafka.ulca.bm.metric.ip.topic}")
+	private String mbMetricTopic;
+	
+	
 	@Autowired
 	WebClient.Builder builder;
 
@@ -60,8 +71,6 @@ public class TranslationBenchmark {
 			}
 			request.setInput(sentences);
 
-			// WebClient.Builder builder = WebClient.builder();
-
 			String responseStr = builder.build().post().uri(callBackUrl)
 					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
 
@@ -76,7 +85,7 @@ public class TranslationBenchmark {
 		
 	}
 	
-	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap) throws IOException {
+	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
@@ -94,8 +103,22 @@ public class TranslationBenchmark {
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
 			
-			JSONObject target =  new JSONObject(dataRow);
+			JSONObject inputJson =  new JSONObject(dataRow);
 			
+			String input = inputJson.getString("sourceText");
+			
+			List<String> ip = new ArrayList<String>();
+			ip.add(input);
+			
+			String mtgt = compute(callBackUrl, schema,ip );
+	          
+			JSONObject target =  new JSONObject();
+			target.put("mtgt", mtgt);
+			target.put("src", inputJson.getString("sourceText"));
+			target.put("tgt", inputJson.getString("targetText"));
+			target.put("metric", "BLEU");
+			
+			benchmarkMetricKafkaTemplate.send(mbMetricTopic,target.toString());
 			
 			
 		}
