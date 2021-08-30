@@ -20,14 +20,24 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import getBenchmarkMetric from "../../../../redux/actions/api/Model/ModelView/BenchmarkMetric";
+import { useEffect } from "react";
+import RunBenchmark from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
+
 
 const BenchmarkModal = (props) => {
   const { classes } = props;
   const [index, setIndex] = useState([]);
   const [subIndex, setSubIndex] = useState([]);
+  const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.result);
+  const rows = useSelector((state) => state.getBenchMarkMetric.result);
 
+  useEffect(() => {
+    dispatch(RunBenchmark());
+  }, []);
+  
   const fetchModalFooter = () => {
     return (
       <>
@@ -86,6 +96,7 @@ const BenchmarkModal = (props) => {
         }}
         className={classes.filterBtn}
         onClick={() => {
+          dispatch(getBenchmarkMetric());
           let exisitingIndex = Object.assign([], index);
           if (index.indexOf(rowIndex) > -1) {
             exisitingIndex.splice(index.indexOf(rowIndex), 1);
@@ -136,19 +147,19 @@ const BenchmarkModal = (props) => {
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return renderSelectButton(tableMeta.rowIndex, setIndex, index);
+          // return (
+          //   <Button
+          //     variant="outlined"
+          //     size="small"
+          //     className={classes.filterBtn}
+          //     onClick={() => dispatch(getBenchmarkMetric())}
+          //   >
+          //     Select
+          //   </Button>
+          // );
         },
       },
     },
-  ];
-
-  function createData(metric, domain) {
-    return { metric, domain };
-  }
-
-  const rows = [
-    createData("M1", "Domain1"),
-    createData("M2", "Domain2"),
-    createData("M3", "Domain3"),
   ];
 
   const options = {
@@ -169,7 +180,7 @@ const BenchmarkModal = (props) => {
           <TableRow>
             <TableCell />
             <TableCell align="center">Metric</TableCell>
-            <TableCell align="left">Domain</TableCell>
+            <TableCell align="left">Description</TableCell>
             <TableCell align="left">Action</TableCell>
           </TableRow>
           {rows.map((row, i) => {
@@ -177,9 +188,17 @@ const BenchmarkModal = (props) => {
               <TableRow>
                 <TableCell />
                 <TableCell align="center">{row.metric}</TableCell>
-                <TableCell align="left">{row.domain}</TableCell>
+                <TableCell align="left">{row.description}</TableCell>
                 <TableCell align="left">
-                  {renderSelectButton(i, setSubIndex, subIndex)}
+                  {/* {renderSelectButton(i, setSubIndex, subIndex)} */}
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    className={classes.filterBtn}
+                    // onClick={() => dispatch(getBenchmarkMetric())}
+                  >
+                    Select
+                  </Button>
                 </TableCell>
               </TableRow>
             );

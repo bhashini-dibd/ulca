@@ -54,6 +54,7 @@ const constants = {
    * action for model benchmark
    */
   RUN_BENCHMARK: "RUN_BENCHMARK",
+  BENCHMARK_METRIC: "BENCHMARK_METRIC",
 };
 
 export default constants;

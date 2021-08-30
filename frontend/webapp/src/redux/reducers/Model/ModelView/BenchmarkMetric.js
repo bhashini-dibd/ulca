@@ -4,22 +4,19 @@ const initialState = {
   result: [],
 };
 
-const getBenchmarkDetails = () => {
+const getBenchmarkMetric = () => {
   const result = {
     result: [
       {
-        datasetName: "D1",
-        domain: "Legal",
+        metric: "M1",
         description: "Lorem Ipsum",
       },
       {
-        datasetName: "D2",
-        domain: "Legal",
+        metric: "M2",
         description: "Lorem Ipsum",
       },
       {
-        datasetName: "D3",
-        domain: "Legal",
+        metric: "M3",
         description: "Lorem Ipsum",
       },
     ],
@@ -29,9 +26,9 @@ const getBenchmarkDetails = () => {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case C.RUN_BENCHMARK:
+    case C.BENCHMARK_METRIC:
       return {
-        ...getBenchmarkDetails(),
+        ...getBenchmarkMetric(),
       };
     default:
       return {
