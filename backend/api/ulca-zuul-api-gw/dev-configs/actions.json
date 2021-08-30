@@ -161,6 +161,14 @@
             "description":"API to compute models"
         },
         {
+            "id":"889e497c-1df3-4b55-880d-0252c896f2c0",
+            "uri":"/ulca/apis/v0/benchmark/getBytask",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to get benchmark by task"
+        },
+        {
             "id":"6c5b13f8-cbad-4729-ac94-05eb0248490b",
             "uri":"/ulca/apis/asr/v1/model/compute",
             "module":"ASR-MODEL-COMPUTE",
