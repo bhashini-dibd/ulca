@@ -3,10 +3,12 @@ import {
   MuiThemeProvider,
   withStyles,
 } from "@material-ui/core/styles";
+import CheckIcon from "@material-ui/icons/Check";
 import CloseIcon from "@material-ui/icons/Close";
 import DatasetStyle from "../../../styles/Dataset";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import SearchIcon from "@material-ui/icons/Search";
+
 import {
   IconButton,
   Button,
@@ -15,16 +17,17 @@ import {
   InputBase,
   TableCell,
   TableRow,
-  Table,
-  TableContainer,
-  Paper,
 } from "@material-ui/core";
 import { useState } from "react";
-import MUIDataTable, { TableHead, TableHeadCell } from "mui-datatables";
+import MUIDataTable from "mui-datatables";
+import { useSelector } from "react-redux";
 
 const BenchmarkModal = (props) => {
   const { classes } = props;
   const [index, setIndex] = useState([]);
+  const [subIndex, setSubIndex] = useState([]);
+  const data = useSelector((state) => state.getBenchMarkDetails.result);
+
   const fetchModalFooter = () => {
     return (
       <>
@@ -73,6 +76,34 @@ const BenchmarkModal = (props) => {
     );
   };
 
+  const renderSelectButton = (rowIndex, setFnc, index) => {
+    return (
+      <Button
+        variant="outlined"
+        size="small"
+        style={{
+          backgroundColor: index.indexOf(rowIndex) > -1 ? "#2A61AD" : "white",
+        }}
+        className={classes.filterBtn}
+        onClick={() => {
+          let exisitingIndex = Object.assign([], index);
+          if (index.indexOf(rowIndex) > -1) {
+            exisitingIndex.splice(index.indexOf(rowIndex), 1);
+            setFnc(exisitingIndex);
+          } else if (index.indexOf(rowIndex) === -1) {
+            setFnc([...index, rowIndex]);
+          }
+        }}
+      >
+        {index.indexOf(rowIndex) > -1 ? (
+          <CheckIcon style={{ color: "#FFFFFF" }} />
+        ) : (
+          "Select"
+        )}
+      </Button>
+    );
+  };
+
   const columns = [
     {
       name: "datasetName",
@@ -104,33 +135,22 @@ const BenchmarkModal = (props) => {
         filter: false,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          console.log(tableMeta);
-          return (
-            <Button
-              variant="outlined"
-              size="small"
-              className={classes.filterBtn}
-              onClick={() => {
-                const existingIndex = [...index];
-                if (index.indexOf(tableMeta.rowIndex) > -1) {
-                  let slicedIndex = existingIndex.map((data, i) => {
-                    if (i !== tableMeta.rowIndex) {
-                      return data;
-                    }
-                  });
-                  setIndex(slicedIndex);
-                } else {
-                  setIndex([...existingIndex, tableMeta.rowIndex]);
-                }
-              }}
-            >
-              Select
-            </Button>
-          );
+          return renderSelectButton(tableMeta.rowIndex, setIndex, index);
         },
       },
     },
   ];
+
+  function createData(metric, domain) {
+    return { metric, domain };
+  }
+
+  const rows = [
+    createData("M1", "Domain1"),
+    createData("M2", "Domain2"),
+    createData("M3", "Domain3"),
+  ];
+
   const options = {
     customToolbar: fetchModalToolBar,
     customFooter: fetchModalFooter,
@@ -145,12 +165,26 @@ const BenchmarkModal = (props) => {
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       return (
-        <TableRow style={{ border: "1px solid #00000029", width: "98%" }}>
-          <TableCell />
-          <TableCell align="center">Metrics</TableCell>
-          <TableCell align="left">Domain</TableCell>
-          <TableCell align="left">Action</TableCell>
-        </TableRow>
+        <>
+          <TableRow>
+            <TableCell />
+            <TableCell align="center">Metric</TableCell>
+            <TableCell align="left">Domain</TableCell>
+            <TableCell align="left">Action</TableCell>
+          </TableRow>
+          {rows.map((row, i) => {
+            return (
+              <TableRow>
+                <TableCell />
+                <TableCell align="center">{row.metric}</TableCell>
+                <TableCell align="left">{row.domain}</TableCell>
+                <TableCell align="left">
+                  {renderSelectButton(i, setSubIndex, subIndex)}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </>
       );
     },
     isRowExpandable: (dataIndex, expandedRows) => {
@@ -165,28 +199,6 @@ const BenchmarkModal = (props) => {
       return true;
     },
   };
-  const data = [
-    {
-      datasetName: "1",
-      domain: "Legal",
-      description: "test",
-    },
-    {
-      datasetName: "1",
-      domain: "Legal",
-      description: "test",
-    },
-    {
-      datasetName: "1",
-      domain: "Legal",
-      description: "test",
-    },
-    {
-      datasetName: "1",
-      domain: "Legal",
-      description: "test",
-    },
-  ];
 
   const getMuiTheme = () =>
     createMuiTheme({
