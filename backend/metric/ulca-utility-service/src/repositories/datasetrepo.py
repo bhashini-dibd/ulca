@@ -1,4 +1,4 @@
-from config import process_connection_url , process_db_schema, process_col
+from config import data_connection_url
 import pymongo
 import logging
 from logging.config import dictConfig
@@ -13,7 +13,7 @@ class DataRepo:
     #method to instantiate mongo client object
     def get_mongo_instance(self,database,collection):
         global mongo_instance
-        client = pymongo.MongoClient(process_connection_url)
+        client = pymongo.MongoClient(data_connection_url)
         mongo_instance = client[database][collection]
         return mongo_instance
 
