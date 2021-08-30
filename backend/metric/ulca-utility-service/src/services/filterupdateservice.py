@@ -30,6 +30,7 @@ class FilterCronProcessor(Thread):
                 data,filepath = utils.read_from_config_file()
                 response = self.update_filter_params(data) 
                 if response != False:
+                    filepath = "/opt/datasetFilterParams1.json"
                     utils.write_to_config_file(filepath,response)
                     log.info("Updated filter params succesfully")
                     utils.upload_to_object_store(filepath)

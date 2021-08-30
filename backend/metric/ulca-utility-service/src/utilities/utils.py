@@ -26,6 +26,7 @@ class DataUtils:
 
     def write_to_config_file(self,filepath,data):
         try:
+            log.info(f"updating {filepath}")
             with open (filepath,'w') as confile:
                 json.dump(data,confile)
         except Exception as e:
