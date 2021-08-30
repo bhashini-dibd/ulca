@@ -1,7 +1,13 @@
-import { withStyles, Button, Typography, Grid } from "@material-ui/core";
+import {
+  withStyles,
+  Button,
+  Typography,
+  Grid,
+  InputBase,
+  Divider,
+} from "@material-ui/core";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "../../../styles/Datatable";
-import BreadCrum from "../../../components/common/Breadcrum";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -9,6 +15,9 @@ import DataSet from "../../../styles/Dataset";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
 import MyContributionList from "../../../../redux/actions/api/Model/ModelView/MyContribution";
+import Modal from "@material-ui/core/Modal";
+import SearchIcon from "@material-ui/icons/Search";
+
 import {
   PageChange,
   RowChange,
@@ -19,7 +28,6 @@ import {
 import ClearReport from "../../../../redux/actions/api/Model/ModelView/DatasetAction";
 import Dialog from "../../../components/common/Dialog";
 import { Cached, GridOn, List } from "@material-ui/icons";
-import UrlConfig from "../../../../configs/internalurlmapping";
 import { useParams } from "react-router";
 import C from "../../../../redux/actions/constants";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -27,6 +35,7 @@ import FilterList from "./FilterList";
 import GridView from "./GridView";
 import RenderExpandTable from "./ExpandTable";
 import SelectionList from "./BenchmarkSelection";
+import BenchmarkModal from "./BenchmarkModal";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -46,7 +55,7 @@ const ContributionList = (props) => {
   const [selectionOpen, setSelectionOpen] = React.useState(null);
 
   const id = popoverOpen ? "simple-popover" : undefined;
-
+  const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
     (myContributionReport.filteredData.length === 0 ||
       myContributionReport.refreshStatus ||
@@ -169,8 +178,115 @@ const ContributionList = (props) => {
     setSelectionOpen(false);
   };
 
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const fetchModalToolBar = () => {
+    return (
+      <Grid container spacing={2} className={classes.gridAlign}>
+        <Grid item>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon fontSize="small" />
+            </div>
+            <InputBase
+              placeholder="Search..."
+              onChange={(e) => props.handleSearch(e)}
+              value={props.searchValue}
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ "aria-label": "search" }}
+            />
+          </div>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            size="medium"
+            className={classes.filterBtn}
+          >
+            <FilterListIcon className={classes.iconStyle} />
+            Filter
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const fetchModalFooter = () => {
+    return (
+      <>
+        <Divider />
+        <Button
+          style={{ float: "right", marginTop: "5px" }}
+          className={classes.filterBtn}
+          variant="outlined"
+          disabled
+        >
+          Submit
+        </Button>
+      </>
+    );
+  };
+
+  const renderBenchmarkModal = () => {
+    const columns = [
+      {
+        name: "Dataset Name",
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: "Domain",
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: "Description",
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+      {
+        name: "Action",
+        options: {
+          filter: false,
+          sort: false,
+        },
+      },
+    ];
+    const options = {
+      customToolbar: fetchModalToolBar,
+      customFooter: fetchModalFooter,
+      print: false,
+      viewColumns: false,
+      selectableRows: false,
+      download: false,
+      search: false,
+      filter: false,
+    };
+    return (
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <BenchmarkModal columns={columns} options={options} />
+      </Modal>
+    );
+  };
+
   const handleRunBenchMarkClick = () => {
-    console.log("clicked");
+    setOpenModal(true);
   };
 
   const renderActionButtons = (status) => {
@@ -424,6 +540,7 @@ const ContributionList = (props) => {
           apply={apply}
         />
       )}
+      {openModal && renderBenchmarkModal()}
     </div>
   );
 };
