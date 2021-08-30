@@ -62,18 +62,14 @@ public class KafkaBenchmarkDownloadConsumer {
 			 for(BenchmarkMetricRequest bmMetric : benchmarks) {
 				 
 				 String benchmarkId = bmMetric.getBenchmarkId();
-				 
 				 String fileName = metricId + benchmarkId+".zip";
-				 
 				 Optional<ModelExtended> modelOpt = modelDao.findById(metricId);
-				 
 				 ModelExtended model = modelOpt.get();
-				 
 				 Optional<Benchmark> benchmarkOpt = benchmarkDao.findById(benchmarkId);
-				 
 				 Benchmark benchmark = benchmarkOpt.get();
-				 
 				 String datasetUrl = benchmark.getDataset();
+				 
+				 String metric = bmMetric.getMetric();
 				 
 				try {
 					String filePath = downloadUsingNIO(datasetUrl, downloadFolder, fileName);
