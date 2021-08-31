@@ -42,6 +42,7 @@ const ContributionList = (props) => {
   );
   const PageInfo = useSelector((state) => state.modelPageChangeDetails);
   const [open, setOpen] = useState(false);
+  const [benchmarkInfo, setBenchmarkInfo] = useState({ type: "", domain: [] });
   const view = useSelector((state) => state.modelTableView.view);
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
@@ -187,32 +188,37 @@ const ContributionList = (props) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <BenchmarkModal handleCloseModal={handleCloseModal} />
+        <BenchmarkModal
+          handleCloseModal={handleCloseModal}
+          type={benchmarkInfo.type}
+          domain={benchmarkInfo.domain}
+        />
       </Modal>
     );
   };
 
-  const handleRunBenchMarkClick = () => {
+  const handleRunBenchMarkClick = (type, domain) => {
+    setBenchmarkInfo({ type, domain: [domain] });
     setOpenModal(true);
   };
 
-  const renderActionButtons = (status) => {
+  const renderActionButtons = (status, type, domain) => {
     if (status !== "Failed" && status !== "In Progress") {
       return (
         <Grid container spacing={1}>
-          <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
+          <Grid item>
             <Button
               className={classes.benchmarkActionButtons}
               style={{ color: "#FD7F23", fontSize: "1rem" }}
               size="small"
               variant="contained"
-              onClick={handleRunBenchMarkClick}
+              onClick={() => handleRunBenchMarkClick(type, domain)}
             >
               Run Benchmark
             </Button>
           </Grid>
           <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-            <Button
+            {/* <Button
               size="small"
               variant="contained"
               className={classes.benchmarkActionButtons}
@@ -222,7 +228,7 @@ const ContributionList = (props) => {
               }}
             >
               {status === "Published" ? "Unpublish" : "Publish"}
-            </Button>
+            </Button> */}
           </Grid>
         </Grid>
       );
@@ -326,7 +332,11 @@ const ContributionList = (props) => {
         empty: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
-            return renderActionButtons(tableMeta.rowData[6]);
+            return renderActionButtons(
+              tableMeta.rowData[6],
+              tableMeta.rowData[1],
+              tableMeta.rowData[3]
+            );
           }
         },
       },

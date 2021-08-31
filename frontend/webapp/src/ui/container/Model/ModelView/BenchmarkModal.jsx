@@ -23,19 +23,41 @@ import MUIDataTable from "mui-datatables";
 import { useDispatch, useSelector } from "react-redux";
 import getBenchmarkMetric from "../../../../redux/actions/api/Model/ModelView/BenchmarkMetric";
 import { useEffect } from "react";
-import RunBenchmark from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
+import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
+import FilterList from "./FilterList";
+import FilterBenchmark from "./FilterBenchmark";
+import APITransport from "../../../../redux/actions/apitransport/apitransport";
 
 const BenchmarkModal = (props) => {
-  const { classes } = props;
+  const { classes, type, domain } = props;
   const [index, setIndex] = useState([]);
   const [subIndex, setSubIndex] = useState([]);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.result);
   const rows = useSelector((state) => state.getBenchMarkMetric.result);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const popoverOpen = Boolean(anchorEl);
+  const id = popoverOpen ? "simple-popover" : undefined;
 
   useEffect(() => {
-    dispatch(RunBenchmark());
+    const apiObj = new RunBenchmarkAPI(type, domain);
+    dispatch(APITransport(apiObj));
   }, []);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const clearAll = (data) => {
+    console.log("clearAll clicked");
+  };
+  const apply = (data) => {
+    handleClose();
+    console.log("apply called");
+  };
+
+  const handleShowFilter = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const fetchModalFooter = () => {
     return (
@@ -76,6 +98,7 @@ const BenchmarkModal = (props) => {
             variant="outlined"
             size="medium"
             className={classes.filterBtn}
+            onClick={handleShowFilter}
           >
             <FilterListIcon className={classes.iconStyle} />
             Filter
@@ -181,7 +204,7 @@ const BenchmarkModal = (props) => {
             <TableCell />
             <TableCell align="center">Metric</TableCell>
             <TableCell align="left">Description</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <TableCell align="left">Action</TableCell>
           </TableRow>
           {rows.map((row, i) => {
             return (
@@ -189,7 +212,7 @@ const BenchmarkModal = (props) => {
                 <TableCell />
                 <TableCell align="center">{row.metric}</TableCell>
                 <TableCell align="left">{row.description}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left">
                   {/* {renderSelectButton(i, setSubIndex, subIndex)} */}
                   <Button
                     variant="outlined"
@@ -299,6 +322,18 @@ const BenchmarkModal = (props) => {
           title={"Select Benchmark Dataset and Metric"}
         ></MUIDataTable>
       </MuiThemeProvider>
+      {popoverOpen && (
+        <FilterBenchmark
+          id={id}
+          open={popoverOpen}
+          anchorEl={anchorEl}
+          handleClose={handleClose}
+          filter={{ datasetType: ["Legal", "News"] }}
+          selectedFilter={{ datasetType: [{ type: "asr", status: true }] }}
+          clearAll={clearAll}
+          apply={apply}
+        />
+      )}
     </div>
   );
 };

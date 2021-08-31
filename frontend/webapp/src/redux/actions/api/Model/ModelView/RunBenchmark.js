@@ -1,9 +1,60 @@
+import API from "../../../api";
 import C from "../../../constants";
+import ENDPOINTS from "../../../../../configs/apiendpoints";
+import md5 from "md5";
+export default class RunBenchmark extends API {
+  constructor(type, domain, timeout = 200000) {
+    super("POST", timeout, false);
+    this.user_id = JSON.parse(localStorage.getItem("userDetails")).userID;
+    this.type = C.RUN_BENCHMARK;
+    this.type = type;
+    this.domain = domain;
+    this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
+    this.endpoint = `${super.apiEndPointAuto()}${
+      ENDPOINTS.getBenchmarkDetails
+    }`;
+  }
 
-const action = () => {
-  return {
-    type: C.RUN_BENCHMARK,
-  };
-};
+  toString() {
+    return `${super.toString()} email: ${this.email} token: ${
+      this.token
+    } expires: ${this.expires} userid: ${this.userid}, type: ${this.type}`;
+  }
 
-export default action;
+  processResponse(res) {
+    super.processResponse(res);
+    if (res) {
+      this.report = res.data;
+    }
+  }
+
+  apiEndPoint() {
+    let url = `${this.endpoint}?userId=${this.user_id}`;
+
+    return url;
+  }
+
+  getBody() {
+    return {
+      task: this.type,
+      domain: this.domain,
+    };
+  }
+
+  getHeaders() {
+    let res = this.apiEndPoint();
+    let urlSha = md5(res);
+    let hash = md5(this.userDetails.privateKey + "|" + urlSha);
+    this.headers = {
+      headers: {
+        key: this.userDetails.publicKey,
+        sig: hash,
+      },
+    };
+    return this.headers;
+  }
+
+  getPayload() {
+    return this.report;
+  }
+}
