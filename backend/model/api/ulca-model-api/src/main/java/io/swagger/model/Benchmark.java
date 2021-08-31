@@ -1,10 +1,14 @@
 package io.swagger.model;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import org.apache.kafka.common.MetricName;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -16,7 +20,7 @@ import javax.validation.constraints.*;
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-26T01:12:13.097Z[GMT]")
 
-
+@Document(collection = "benchmark")
 public class Benchmark   {
 	
 	@Id
@@ -28,9 +32,23 @@ public class Benchmark   {
 
   @JsonProperty("description")
   private String description = null;
+ 
+  @JsonProperty("metricName")
+  private MetricName metricName = null;
+
+  @JsonProperty("score")
+  private BigDecimal score = null;
+
+  
+  @JsonProperty("dataset")
+  private String dataset = null;
 
   @JsonProperty("domain")
   private Domain domain = null;
+  
+  @JsonProperty("task")
+  private ModelTask task = null;
+  
 
   @JsonProperty("createdOn")
   private String createdOn = null;
@@ -96,6 +114,27 @@ public class Benchmark   {
   public void setDescription(String description) {
     this.description = description;
   }
+  
+  public Benchmark dataset(String dataset) {
+	    this.dataset = dataset;
+	    return this;
+	  }
+
+	  /**
+	   * description of the benchmark including how it has been curated
+	   * @return description
+	   **/
+	  @Schema(example = "benchmark dataset url", required = true, description = "benchmark dataset url")
+	      @NotNull
+
+	  @Size(min=50,max=200)   public String getDataset() {
+	    return dataset;
+	  }
+
+	  public void setDataset(String dataset) {
+	    this.dataset = dataset;
+	  }
+	  
 
   public Benchmark domain(Domain domain) {
     this.domain = domain;
@@ -117,6 +156,27 @@ public class Benchmark   {
   public void setDomain(Domain domain) {
     this.domain = domain;
   }
+  
+  public Benchmark task(ModelTask task) {
+	    this.task = task;
+	    return this;
+	  }
+
+	  /**
+	   * Get task
+	   * @return task
+	   **/
+	  @Schema(required = true, description = "")
+	      @NotNull
+
+	    @Valid
+	    public ModelTask getTask() {
+	    return task;
+	  }
+
+	  public void setTask(ModelTask task) {
+	    this.task = task;
+	  }
 
   public Benchmark createdOn(String createdOn) {
     this.createdOn = createdOn;
@@ -169,7 +229,9 @@ public class Benchmark   {
     return Objects.equals(this.benchmarkId, benchmark.benchmarkId) &&
         Objects.equals(this.name, benchmark.name) &&
         Objects.equals(this.description, benchmark.description) &&
+        Objects.equals(this.dataset, benchmark.dataset) &&
         Objects.equals(this.domain, benchmark.domain) &&
+        Objects.equals(this.task, benchmark.task) &&
         Objects.equals(this.createdOn, benchmark.createdOn) &&
         Objects.equals(this.submittedOn, benchmark.submittedOn);
   }
@@ -187,7 +249,9 @@ public class Benchmark   {
     sb.append("    benchmarkId: ").append(toIndentedString(benchmarkId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    dataset: ").append(toIndentedString(dataset)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
+    sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    createdOn: ").append(toIndentedString(createdOn)).append("\n");
     sb.append("    submittedOn: ").append(toIndentedString(submittedOn)).append("\n");
     sb.append("}");
