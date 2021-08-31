@@ -1,8 +1,15 @@
 import C from "../../../constants";
 
-const action = () => {
+const action = (type, index, parentIndex) => {
+  if (type === "METRIC") {
+    return {
+      type: C.SELECT_METRIC,
+      payload: { index, parentIndex },
+    };
+  }
   return {
-    type: C.BENCHMARK_METRIC,
+    type: C.SELECT_DATASET,
+    payload: { index, parentIndex },
   };
 };
 

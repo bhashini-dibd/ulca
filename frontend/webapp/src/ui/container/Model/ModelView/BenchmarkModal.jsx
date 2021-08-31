@@ -34,6 +34,9 @@ const BenchmarkModal = (props) => {
   const [subIndex, setSubIndex] = useState([]);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.result);
+  const selectedIndex = useSelector(
+    (state) => state.getBenchMarkDetails.selectedIndex
+  );
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
@@ -107,31 +110,20 @@ const BenchmarkModal = (props) => {
     );
   };
 
-  const renderSelectButton = (rowIndex, setFnc, index) => {
+  const renderSelectButton = (type, index, status, parentIndex) => {
     return (
       <Button
         variant="outlined"
         size="small"
         style={{
-          backgroundColor: index.indexOf(rowIndex) > -1 ? "#2A61AD" : "white",
+          backgroundColor: status ? "#2A61AD" : "white",
         }}
         className={classes.filterBtn}
         onClick={() => {
-          dispatch(getBenchmarkMetric());
-          let exisitingIndex = Object.assign([], index);
-          if (index.indexOf(rowIndex) > -1) {
-            exisitingIndex.splice(index.indexOf(rowIndex), 1);
-            setFnc(exisitingIndex);
-          } else if (index.indexOf(rowIndex) === -1) {
-            setFnc([...index, rowIndex]);
-          }
+          dispatch(getBenchmarkMetric(type, index, parentIndex));
         }}
       >
-        {index.indexOf(rowIndex) > -1 ? (
-          <CheckIcon style={{ color: "#FFFFFF" }} />
-        ) : (
-          "Select"
-        )}
+        {status ? <CheckIcon style={{ color: "#FFFFFF" }} /> : "Select"}
       </Button>
     );
   };
@@ -162,18 +154,32 @@ const BenchmarkModal = (props) => {
       },
     },
     {
+      name: "selected",
+      label: "Selected",
+      options: {
+        display: "excluded",
+      },
+    },
+    {
       name: "Action",
       options: {
         filter: false,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return renderSelectButton(tableMeta.rowIndex, setIndex, index);
+          return renderSelectButton(
+            "DATASET",
+            tableMeta.rowIndex,
+            tableMeta.rowData[3],
+            tableMeta.rowIndex
+          );
           // return (
           //   <Button
           //     variant="outlined"
           //     size="small"
           //     className={classes.filterBtn}
-          //     onClick={() => dispatch(getBenchmarkMetric())}
+          //     onClick={() =>
+          //       dispatch(getBenchmarkMetric("DATASET", tableMeta.rowIndex))
+          //     }
           //   >
           //     Select
           //   </Button>
@@ -193,11 +199,10 @@ const BenchmarkModal = (props) => {
     search: false,
     filter: false,
     expandableRows: true,
-    rowsExpanded: index,
+    rowsExpanded: selectedIndex,
     customRowRenderer: (data, dataIndex, rowIndex) => {},
     renderExpandableRow: (rowData, rowMeta) => {
       const rows = data[rowMeta.rowIndex].metric;
-      const colSpan = rowData.length + 1;
       return (
         <>
           <TableRow>
@@ -211,19 +216,26 @@ const BenchmarkModal = (props) => {
             return (
               <TableRow>
                 <TableCell />
-                <TableCell align="center">{row}</TableCell>
+                <TableCell align="center">{row.metricName}</TableCell>
                 {/* <TableCell align="left">{row.description}</TableCell> */}
                 <TableCell align="left">
-                  {/* {renderSelectButton(i, setSubIndex, subIndex)} */}
-                  <Button
+                  {renderSelectButton(
+                    "METRIC",
+                    i,
+                    row.selected,
+                    rowMeta.rowIndex
+                  )}
+                  {/* <Button
                     variant="outlined"
                     size="small"
                     style={{ backgroundColor: "white" }}
                     className={classes.filterBtn}
-                    // onClick={() => dispatch(getBenchmarkMetric())}
+                    onClick={() =>
+                      dispatch(getBenchmarkMetric("METRIC", i, row.selected))
+                    }
                   >
                     Select
-                  </Button>
+                  </Button> */}
                 </TableCell>
                 <TableCell align="right" />
               </TableRow>

@@ -16,7 +16,6 @@ import searchFilter from "./Model/ModelSearch/Benchmark";
 import searchModel from "./Model/ModelSearch/SearchModel";
 import getMenuInfo from "./Common/getMenuInfo";
 import getBenchMarkDetails from "./Model/ModelView/RunBenchmark";
-import getBenchMarkMetric from "./Model/ModelView/BenchmarkMetric";
 
 const index = {
   apiStatus,
@@ -37,7 +36,6 @@ const index = {
   searchFilter,
   getMenuInfo,
   getBenchMarkDetails,
-  getBenchMarkMetric,
 };
 
 export default index;
