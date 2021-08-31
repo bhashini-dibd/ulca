@@ -25,7 +25,6 @@ import getBenchmarkMetric from "../../../../redux/actions/api/Model/ModelView/Be
 import { useEffect } from "react";
 import RunBenchmark from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
 
-
 const BenchmarkModal = (props) => {
   const { classes } = props;
   const [index, setIndex] = useState([]);
@@ -37,7 +36,7 @@ const BenchmarkModal = (props) => {
   useEffect(() => {
     dispatch(RunBenchmark());
   }, []);
-  
+
   const fetchModalFooter = () => {
     return (
       <>
@@ -173,6 +172,7 @@ const BenchmarkModal = (props) => {
     filter: false,
     expandableRows: true,
     rowsExpanded: index,
+    customRowRenderer: (data, dataIndex, rowIndex) => {},
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       return (
@@ -181,7 +181,7 @@ const BenchmarkModal = (props) => {
             <TableCell />
             <TableCell align="center">Metric</TableCell>
             <TableCell align="left">Description</TableCell>
-            <TableCell align="left">Action</TableCell>
+            <TableCell align="right">Action</TableCell>
           </TableRow>
           {rows.map((row, i) => {
             return (
@@ -189,17 +189,19 @@ const BenchmarkModal = (props) => {
                 <TableCell />
                 <TableCell align="center">{row.metric}</TableCell>
                 <TableCell align="left">{row.description}</TableCell>
-                <TableCell align="left">
+                <TableCell align="right">
                   {/* {renderSelectButton(i, setSubIndex, subIndex)} */}
                   <Button
                     variant="outlined"
                     size="small"
+                    style={{ backgroundColor: "white" }}
                     className={classes.filterBtn}
                     // onClick={() => dispatch(getBenchmarkMetric())}
                   >
                     Select
                   </Button>
                 </TableCell>
+                <TableCell align="right" />
               </TableRow>
             );
           })}
