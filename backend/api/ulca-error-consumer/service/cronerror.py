@@ -74,9 +74,9 @@ class ErrorProcessor(Thread):
                             zip_file,zip_file_name=self.create_error_file(error_records,srn,i)
                     log.info(f'Completed csv creation for srn-- {srn} ')  
                     #forking a new thread
-                    log.info(f'Initiating upload process for srn -- {srn} on a new fork')
-                    persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,zip_file,zip_file_name,error_records_count))
-                    persister.start()
+                    # log.info(f'Initiating upload process for srn -- {srn} on a new fork')
+                    # persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,zip_file,zip_file_name,error_records_count))
+                    # persister.start()
                 else:
                     log.info(f'No new records left for uploading, for srn -- {srn}')
                 
