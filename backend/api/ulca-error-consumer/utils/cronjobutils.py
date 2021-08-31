@@ -51,12 +51,11 @@ class StoreUtils:
     #zipping error file 
     def zipfile_creation(self,csv_filepath,zip_file_path):
         try:
-            arcname = zip_file_path.replace("/opt/","")
-            log.info(arcname)
+            arcname = csv_filepath.replace("/opt/","")
             compression_mode    =   ZIP_DEFLATED
             with ZipFile(zip_file_path, mode='a') as zf:
                 zf.write(csv_filepath,arcname, compress_type=compression_mode)
-            # os.remove(csv_filepath)
+            os.remove(csv_filepath)
         except Exception as e:
             log.info(f"Exception while zip file creation : {e}")
 
