@@ -66,16 +66,16 @@ class ErrorProcessor(Thread):
                 
                 if error_records_count > uploaded_count:
                     keys_list=[error_records_keys[i:i + error_batch_size] for i in range(0, len(error_records_keys), error_batch_size)]
-                    for keys in keys_list:
+                    for i,keys in enumerate(keys_list):
                         #fetching back all the records from redis store using the srn keys
                         error_records = storerepo.get_all_records(keys,None)
                         log.info(f'Received {len(error_records)} records from redis store for srn -- {srn}')
                         if error_records:
-                            file,file_name=self.create_error_file(error_records,srn)
+                            zip_file,zip_file_name=self.create_error_file(error_records,srn,i)
                     log.info(f'Completed csv creation for srn-- {srn} ')  
                     #forking a new thread
                     log.info(f'Initiating upload process for srn -- {srn} on a new fork')
-                    persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,file,file_name,error_records_count))
+                    persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,zip_file,zip_file_name,error_records_count))
                     persister.start()
                 else:
                     log.info(f'No new records left for uploading, for srn -- {srn}')
@@ -84,16 +84,16 @@ class ErrorProcessor(Thread):
             log.exception(f"Exception on error processing {e}")
 
     #method to upload errors onto object store
-    def create_error_file(self, error_records, srn):
+    def create_error_file(self, error_records, srn,index):
         try:
-            file = f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
-            log.info(f'Writing {len(error_records)} errors to {file} for srn -- {srn}')
+            csv_file = f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}-{index}.csv'
+            zip_file= f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.zip'
+            log.info(f'Writing {len(error_records)} errors to {csv_file} for srn -- {srn}')
             #writing to csv locally
-            storeutils.write_to_csv(error_records,file,srn)
-            # zipfile = storeutils.zipfile_creation(file)
-            # log.info(f"zip file created :{zipfile} , for srn -- {srn}, ")
-            file_name = file.replace("/opt/","")
-            return file,file_name
+            storeutils.write_to_csv(error_records,csv_file,srn)
+            zipfile = storeutils.zipfile_creation(csv_file,zip_file)
+            log.info(f"zip file created :{zipfile} , for srn -- {srn}, ")
+            return zipfile,zip_file.replace("/opt/","")
             
         except Exception as e:
             log.exception(f'Exception while ingesting errors to object store: {e}')
@@ -109,8 +109,6 @@ class ErrorProcessor(Thread):
         #updating record on mongo with uploaded error count
         errorepo.upsert(error_record)
         log.info(f'Updated db record for SRN -- {srn}')
-        # os.remove(file)
-        return error_record
 
 
 

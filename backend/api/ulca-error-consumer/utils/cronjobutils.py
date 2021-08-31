@@ -1,6 +1,7 @@
 import logging
 import json
 import csv
+import zipfile
 import requests
 from configs.configs import file_store_host,file_store_upload_endpoint,pt_publish_tool
 from logging.config import dictConfig
@@ -14,22 +15,10 @@ class StoreUtils:
     #method to write on csv file
     def write_to_csv(self, data_list, file, srn):
         try:
-            # data_modified, data_pub = [], None
-            # for data in data_list:
-            #     if isinstance(data, str):
-            #         data = json.loads(data)
-            #     if 'stage' in data.keys():
-            #         if data["stage"] == pt_publish_tool:
-            #             data_pub = data
-            #     data_modified.append(data)
-            # if not data_pub:
-            #     data_pub = data_modified[-1]
             file_exists = os.path.isfile(file)
             csv_headers = ['stage','message','record','originalRecord']
             log.info('Started csv writing !...')
             with open(file, 'a', newline='') as output_file:
-                # dict_writer = csv.DictWriter(output_file, list(data_pub.keys()))
-                
                 dict_writer = csv.DictWriter(output_file,fieldnames=csv_headers,extrasaction='ignore')
                 if not file_exists:
                     dict_writer.writeheader()
@@ -60,13 +49,16 @@ class StoreUtils:
         return False
 
     #zipping error file 
-    def zipfile_creation(self,filepath):
-        arcname = filepath.replace("/opt/","")
-        zip_file = filepath.split('.')[0] + '.zip'
-        with ZipFile(zip_file, 'w') as myzip:
-            myzip.write(filepath,arcname,ZIP_DEFLATED)
-        os.remove(filepath)
-        return zip_file 
+    def zipfile_creation(self,csv_filepath,zip_file_path):
+        try:
+            arcname = zip_file_path.replace("/opt/","")
+            compression_mode    =   ZIP_DEFLATED
+            with ZipFile(zip_file_path, mode='a') as zf:
+                zf.write(csv_filepath,arcname, compress_type=compression_mode)
+            os.remove(csv_filepath)
+        except Exception as e:
+            log.info(f"Exception while zip file creation : {e}")
+
 
 
 
