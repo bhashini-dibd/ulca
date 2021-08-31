@@ -13,6 +13,9 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 
 
 const styles = theme => ({
+    MuiTab: {
+
+    },
     search: {
         position: 'relative',
         borderRadius: '24px',
@@ -54,7 +57,7 @@ const styles = theme => ({
     filterBtn: { borderRadius: '22px' },
     tablabel: {
         fontSize: '20px',
-        //fontWeight: '300',
+        fontWeight: '300',
         letterSpacing: '0px',
         fontFamily: 'Rowdies',
         // '&:first-child':{
@@ -70,6 +73,9 @@ const styles = theme => ({
         },
         "@media (max-width:550px)": {
             fontSize: "1rem",
+        },
+        '&.MuiTab-textColorInherit.Mui-selected': {
+            fontWeight: '300'
         }
     }
 });
