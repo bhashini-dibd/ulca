@@ -24,16 +24,17 @@ import { useDispatch, useSelector } from "react-redux";
 import getBenchmarkMetric from "../../../../redux/actions/api/Model/ModelView/BenchmarkMetric";
 import { useEffect } from "react";
 import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
-import FilterList from "./FilterList";
 import FilterBenchmark from "./FilterBenchmark";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 
 const BenchmarkModal = (props) => {
   const { classes, type, domain } = props;
-  const [index, setIndex] = useState([]);
-  const [subIndex, setSubIndex] = useState([]);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.result);
+  const count = useSelector((state) => state.getBenchMarkDetails.count);
+  const benchmarkInfo = useSelector(
+    (state) => state.getBenchMarkDetails.benchmarkInfo
+  );
   const selectedIndex = useSelector(
     (state) => state.getBenchMarkDetails.selectedIndex
   );
@@ -66,9 +67,10 @@ const BenchmarkModal = (props) => {
       <>
         <Divider style={{ margin: "5px" }} />
         <Button
+          color="primary"
           style={{ float: "right", marginTop: "5px", borderRadius: "22px" }}
-          variant="outlined"
-          disabled
+          variant="contained"
+          disabled={benchmarkInfo.length ? false : true}
         >
           Submit
         </Button>
@@ -101,6 +103,7 @@ const BenchmarkModal = (props) => {
             size="medium"
             className={classes.filterBtn}
             onClick={handleShowFilter}
+            disabled={count ? false : true}
           >
             <FilterListIcon className={classes.iconStyle} />
             Filter
@@ -127,7 +130,6 @@ const BenchmarkModal = (props) => {
       </Button>
     );
   };
-
   const columns = [
     {
       name: "datasetName",

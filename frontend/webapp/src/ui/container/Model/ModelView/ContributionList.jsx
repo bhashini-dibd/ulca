@@ -33,6 +33,7 @@ import GridView from "./GridView";
 import RenderExpandTable from "./ExpandTable";
 import SelectionList from "./BenchmarkSelection";
 import BenchmarkModal from "./BenchmarkModal";
+import clearBenchMark from '../../../../redux/actions/api/Model/ModelView/ClearBenchmark';
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -177,6 +178,7 @@ const ContributionList = (props) => {
   };
 
   const handleCloseModal = () => {
+    dispatch(clearBenchMark());
     setOpenModal(false);
   };
 

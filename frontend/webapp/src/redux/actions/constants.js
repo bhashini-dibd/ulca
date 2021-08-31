@@ -56,6 +56,7 @@ const constants = {
   RUN_BENCHMARK: "RUN_BENCHMARK",
   SELECT_DATASET: "SELECT_DATASET",
   SELECT_METRIC: "SELECT_METRIC",
+  CLEAR_BENCHMARK: "CLEAR_BENCHMARK",
 };
 
 export default constants;

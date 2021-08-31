@@ -3,6 +3,8 @@ import C from "../../../actions/constants";
 const initialState = {
   result: [],
   selectedIndex: [],
+  benchmarkInfo: [],
+  count: 0,
 };
 
 const getBenchmarkDetails = (payload) => {
@@ -21,6 +23,7 @@ const getBenchmarkDetails = (payload) => {
         domain: dataset.domain.join(","),
         metric,
         selected: false,
+        benchmarkId: dataset.benchmarkId,
       });
     });
   }
@@ -35,15 +38,29 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
       result.result[index].metric.forEach((val) => {
         val.selected = false;
       });
+      result.benchmarkInfo.splice(result.selectedIndex.indexOf(index), 1);
       result.selectedIndex.splice(result.selectedIndex.indexOf(index), 1);
     } else {
       result.selectedIndex.push(index);
     }
     return result;
   } else {
-    console.log(index, parentIndex, result.result);
     result.result[parentIndex].metric[index].selected =
       !result.result[parentIndex].metric[index].selected;
+    let updatedBenchmarkInfo = [];
+    result.result.forEach((val) => {
+      if (val.selected) {
+        val.metric.forEach((e) => {
+          if (e.selected) {
+            updatedBenchmarkInfo.push({
+              benchmarkId: val.benchmarkId,
+              metric: e.metricName,
+            });
+          }
+        });
+      }
+    });
+    result.benchmarkInfo = updatedBenchmarkInfo;
     return result;
   }
 };
@@ -52,7 +69,9 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.RUN_BENCHMARK:
       return {
+        ...state,
         result: getBenchmarkDetails(action.payload),
+        count: action.payload.count,
         selectedIndex: [],
       };
     case C.SELECT_DATASET:
@@ -70,6 +89,11 @@ const reducer = (state = initialState, action) => {
           action.payload.parentIndex
         ),
       };
+    case C.CLEAR_BENCHMARK: {
+      return {
+        ...initialState,
+      };
+    }
     default:
       return {
         ...state,
