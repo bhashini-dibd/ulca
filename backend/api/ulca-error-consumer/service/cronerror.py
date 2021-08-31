@@ -91,9 +91,9 @@ class ErrorProcessor(Thread):
             log.info(f'Writing {len(error_records)} errors to {csv_file} for srn -- {srn}')
             #writing to csv locally
             storeutils.write_to_csv(error_records,csv_file,srn)
-            zipfile = storeutils.zipfile_creation(csv_file,zip_file)
-            log.info(f"zip file created :{zipfile} , for srn -- {srn}, ")
-            return zipfile,zip_file.replace("/opt/","")
+            storeutils.zipfile_creation(csv_file,zip_file)
+            log.info(f"zip file created :{zip_file} , for srn -- {srn}, ")
+            return zip_file,zip_file.replace("/opt/","")
             
         except Exception as e:
             log.exception(f'Exception while ingesting errors to object store: {e}')
