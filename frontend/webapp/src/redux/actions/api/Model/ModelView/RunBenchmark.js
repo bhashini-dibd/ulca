@@ -1,13 +1,12 @@
 import API from "../../../api";
 import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
-import md5 from "md5";
 export default class RunBenchmark extends API {
-  constructor(type, domain, timeout = 200000) {
+  constructor(task, domain, timeout = 200000) {
     super("POST", timeout, false);
     this.user_id = JSON.parse(localStorage.getItem("userDetails")).userID;
     this.type = C.RUN_BENCHMARK;
-    this.type = type;
+    this.task = task;
     this.domain = domain;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
     this.endpoint = `${super.apiEndPointAuto()}${
@@ -24,7 +23,7 @@ export default class RunBenchmark extends API {
   processResponse(res) {
     super.processResponse(res);
     if (res) {
-      this.report = res.data;
+      this.report = res;
     }
   }
 
@@ -36,19 +35,15 @@ export default class RunBenchmark extends API {
 
   getBody() {
     return {
-      task: this.type,
-      domain: this.domain,
+      task: "translation", //this.task,
+      domain: ["legal"], //this.domain,
     };
   }
 
   getHeaders() {
-    let res = this.apiEndPoint();
-    let urlSha = md5(res);
-    let hash = md5(this.userDetails.privateKey + "|" + urlSha);
     this.headers = {
       headers: {
-        key: this.userDetails.publicKey,
-        sig: hash,
+        "Content-Type": "application/json",
       },
     };
     return this.headers;

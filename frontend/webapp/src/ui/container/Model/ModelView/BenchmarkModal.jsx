@@ -34,7 +34,6 @@ const BenchmarkModal = (props) => {
   const [subIndex, setSubIndex] = useState([]);
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.result);
-  const rows = useSelector((state) => state.getBenchMarkMetric.result);
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
@@ -197,21 +196,23 @@ const BenchmarkModal = (props) => {
     rowsExpanded: index,
     customRowRenderer: (data, dataIndex, rowIndex) => {},
     renderExpandableRow: (rowData, rowMeta) => {
+      const rows = data[rowMeta.rowIndex].metric;
       const colSpan = rowData.length + 1;
       return (
         <>
           <TableRow>
             <TableCell />
             <TableCell align="center">Metric</TableCell>
-            <TableCell align="left">Description</TableCell>
+            {/* <TableCell align="left">Description</TableCell> */}
             <TableCell align="left">Action</TableCell>
+            <TableCell />
           </TableRow>
           {rows.map((row, i) => {
             return (
               <TableRow>
                 <TableCell />
-                <TableCell align="center">{row.metric}</TableCell>
-                <TableCell align="left">{row.description}</TableCell>
+                <TableCell align="center">{row}</TableCell>
+                {/* <TableCell align="left">{row.description}</TableCell> */}
                 <TableCell align="left">
                   {/* {renderSelectButton(i, setSubIndex, subIndex)} */}
                   <Button

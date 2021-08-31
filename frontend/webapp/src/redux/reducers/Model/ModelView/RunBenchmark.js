@@ -4,26 +4,18 @@ const initialState = {
   result: [],
 };
 
-const getBenchmarkDetails = () => {
-  const result = {
-    result: [
-      {
-        datasetName: "D1",
-        domain: "Legal",
-        description: "Lorem Ipsum",
-      },
-      {
-        datasetName: "D2",
-        domain: "Legal",
-        description: "Lorem Ipsum",
-      },
-      {
-        datasetName: "D3",
-        domain: "Legal",
-        description: "Lorem Ipsum",
-      },
-    ],
-  };
+const getBenchmarkDetails = (payload) => {
+  let result = [];
+  if (payload.count) {
+    payload.benchmark.forEach((dataset) => {
+      result.push({
+        datasetName: dataset.name,
+        description: dataset.description === null ? "" : dataset.description,
+        domain: dataset.domain.join(","),
+        metric: payload.metric,
+      });
+    });
+  }
   return result;
 };
 
@@ -31,7 +23,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.RUN_BENCHMARK:
       return {
-        ...getBenchmarkDetails(),
+        result: getBenchmarkDetails(action.payload),
       };
     default:
       return {
