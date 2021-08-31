@@ -19,6 +19,8 @@ import com.ulca.model.response.ModelComputeResponse;
 
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
+import io.swagger.model.OCRRequest;
+import io.swagger.model.OCRResponse;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.Sentence;
 import io.swagger.model.Sentences;
@@ -93,6 +95,22 @@ public class ModelInferenceEndPointService {
 			asrResponse.setOutput(null);
 			asrInference.setResponse(asrResponse);
 			schema = asrInference;
+
+		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
+			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+			OCRRequest request = ocrInference.getRequest();
+
+			String responseStr = builder.build().post().uri(callBackUrl)
+					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
+
+			log.info("response test for OCRRRequest" + responseStr);
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			OCRResponse response = objectMapper.readValue(responseStr, OCRResponse.class);
+			ocrInference.setResponse(response);
+			schema = ocrInference;
 
 		}
 
