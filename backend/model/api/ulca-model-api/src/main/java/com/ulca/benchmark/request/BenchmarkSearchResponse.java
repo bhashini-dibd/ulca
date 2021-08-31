@@ -15,7 +15,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BenchmarkSearchResponse {
+
+	String message;
+	List<Benchmark> benchmark;
 	
-	private List<Benchmark>  benchmarkExtendedlist;
+	List<String>  metric;
+	
+	int count;
 
 }

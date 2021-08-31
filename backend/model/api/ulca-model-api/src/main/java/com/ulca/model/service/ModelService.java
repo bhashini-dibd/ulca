@@ -128,7 +128,6 @@ public class ModelService {
 	public UploadModelResponse uploadModel(MultipartFile file, String userId) throws Exception {
 
 		String modelFilePath = storeModelFile(file);
-
 		ModelExtended modelObj = getModel(modelFilePath);
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(new Date().toString());
@@ -141,39 +140,30 @@ public class ModelService {
 				throw new DuplicateKeyException("Model with same name exist in system");
 			}
 		}
-
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
-
 		schema = modelInferenceEndPointService.validateCallBackUrl(callBackUrl, schema);
 		inferenceAPIEndPoint.setSchema(schema);
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
-
 		modelDao.save(modelObj);
 
 		return new UploadModelResponse("Model Saved Successfully", modelObj);
-
 	}
 
 	public ModelExtended getModel(String modelFilePath) {
 
 		ModelExtended modelObj = null;
-
 		ObjectMapper objectMapper = new ObjectMapper();
 		File file = new File(modelFilePath);
-
 		try {
 			modelObj = objectMapper.readValue(file, ModelExtended.class);
 			return modelObj;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 		return modelObj;
-
 	}
 
 	public ModelSearchResponse searchModel(ModelSearchRequest request) {
@@ -214,15 +204,11 @@ public class ModelService {
 
 		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();
-
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
 		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
-
 	}
 
 }

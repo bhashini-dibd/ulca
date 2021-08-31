@@ -1,13 +1,10 @@
 package com.ulca.benchmark.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,17 +42,18 @@ public class BenchmarkController {
 			@Valid @RequestBody ExecuteBenchmarkRequest request) {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
+		
 		ExecuteBenchmarkResponse response = benchmarkService.executeBenchmark(request);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping("/getBytask")
-	public ResponseEntity<List<BenchmarkSearchResponse> > listBytask(@Valid @RequestBody BenchmarkSearchRequest request) {
+	@PostMapping("/getByTask")
+	public ResponseEntity<BenchmarkSearchResponse> listBytask(@Valid @RequestBody BenchmarkSearchRequest request) {
 
-		log.info("******** Entry BenchMarkController:: fetch *******");
+		log.info("******** Entry BenchMarkController:: getByTask *******");
 
-		List<BenchmarkSearchResponse> response = benchmarkService.listByTaskID(request);
+		BenchmarkSearchResponse response = benchmarkService.listByTaskID(request);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
