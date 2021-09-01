@@ -2,6 +2,7 @@ package com.ulca.model.service;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,7 +204,11 @@ public class ModelInferenceEndPointService {
 		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+			
+			List<String> imageUrlList = new ArrayList<String>();
+			imageUrlList.add(compute.getImageUri());
 			OCRRequest request = ocrInference.getRequest();
+			request.setImageUri(imageUrlList);
 
 			String responseStr = builder.build().post().uri(callBackUrl)
 					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
