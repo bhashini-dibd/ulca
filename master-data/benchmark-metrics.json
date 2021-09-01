@@ -1,0 +1,12 @@
+{
+    "benchmarkMetrics":[
+        {
+            "task": "TRANSLATION",
+            "metrics": ["BLEU", "SacreBLEU", "METEOR", "LEPOR"]
+        },
+        {
+            "task": "ASR",
+            "metrics": ["WER", "CER"]
+        }
+    ]
+}
