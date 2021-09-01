@@ -200,6 +200,24 @@ public class ModelInferenceEndPointService {
 			
 			return response;
 		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
+			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+			OCRRequest request = ocrInference.getRequest();
+
+			String responseStr = builder.build().post().uri(callBackUrl)
+					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
+
+			log.info("response test for OCRRRequest" + responseStr);
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			OCRResponse ocrResponse = objectMapper.readValue(responseStr, OCRResponse.class);
+			
+			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+			
+
+		}
+		
 		return response;
 	}
 
