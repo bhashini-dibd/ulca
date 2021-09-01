@@ -62,13 +62,13 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "https://users-auth.anuvaad.org/anuvaad/ocr/v0/ulca-ocr/",
+       "callbackUrl": "https://users-auth.anuvaad.org/anuvaad/ocr/v0/ulca-ocr",
        "schema": {
           "taskType": "ocr",
           "request": {
-             "ocr": {
-                "imageUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/anuvaad_ocr_english.jpg"
-             },
+             "imageUri": [
+                "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/anuvaad_ocr_english.jpg"
+             ],
              "config": {
                 "language": {
                    "sourceLanguage": "en"
@@ -80,4 +80,4 @@
     "trainingDataset": {
        "description": "Ncert books and Judgement(HCs+SC)+synthetic data(11 fonts), 47972 manually verified lines for Tamil and 28600 manually verified lines Hindi  "
     }
- }
+}
