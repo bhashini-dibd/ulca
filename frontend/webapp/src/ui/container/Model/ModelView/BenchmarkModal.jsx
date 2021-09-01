@@ -344,8 +344,8 @@ const BenchmarkModal = (props) => {
           open={popoverOpen}
           anchorEl={anchorEl}
           handleClose={handleClose}
-          filter={{ datasetType: ["Legal", "News"] }}
-          selectedFilter={{ datasetType: [{ type: "asr", status: true }] }}
+          filter={["legal", "news"]}
+          selectedFilter={["legal"]}
           clearAll={clearAll}
           apply={apply}
         />

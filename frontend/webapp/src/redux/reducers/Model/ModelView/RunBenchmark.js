@@ -92,7 +92,7 @@ const reducer = (state = initialState, action) => {
           "DATASET",
           state,
           action.payload.index
-        ).filteredData,
+        ).result,
         selectedIndex: getUpdatedBenchMark(
           "DATASET",
           state,

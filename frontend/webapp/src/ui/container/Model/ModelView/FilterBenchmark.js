@@ -13,8 +13,20 @@ import {
 } from "@material-ui/core";
 
 const FilterBenchmark = (props) => {
-  const { classes, handleClearAll, filter, id, open, anchorEl, handleClose } =
-    props;
+  const {
+    classes,
+    handleClearAll,
+    filter,
+    selectedFilter,
+    id,
+    open,
+    anchorEl,
+    handleClose,
+  } = props;
+
+  const isChecked = (type) => {
+    return selectedFilter.indexOf(type) > -1;
+  };
 
   return (
     <div>
@@ -53,11 +65,16 @@ const FilterBenchmark = (props) => {
               Domain
             </Typography>
             <FormGroup>
-              {filter.datasetType.map((type) => {
+              {filter.map((type) => {
                 return (
                   <FormControlLabel
                     control={
-                      <Checkbox checked={true} name={type} color="primary" />
+                      <Checkbox
+                        checked={isChecked(type)}
+                        name={type}
+                        color="primary"
+                        onChange={props.handleCheckboxClick}
+                      />
                     }
                     label={type}
                   />
