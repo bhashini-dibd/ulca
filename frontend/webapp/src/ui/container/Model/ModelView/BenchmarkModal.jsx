@@ -68,10 +68,10 @@ const BenchmarkModal = (props) => {
     fetch(apiObj.apiEndPoint(), {
       method: "POST",
       headers: apiObj.getHeaders().headers,
-      body: JSON.stringify(apiObj.getBody),
+      body: JSON.stringify(apiObj.getBody()),
     }).then(async (res) => {
       let rsp_data = await res.json();
-      console.log(res);
+      props.handleCloseModal();
     });
   };
 

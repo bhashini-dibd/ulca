@@ -3,8 +3,6 @@ import {
   Button,
   Typography,
   Grid,
-  InputBase,
-  Divider,
 } from "@material-ui/core";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "../../../styles/Datatable";
