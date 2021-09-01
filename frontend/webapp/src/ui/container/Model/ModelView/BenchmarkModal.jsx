@@ -27,11 +27,12 @@ import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBe
 import FilterBenchmark from "./FilterBenchmark";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/SubmitBenchmark";
+import searchBenchmark from "../../../../redux/actions/api/Model/ModelView/SearchBenchmark";
 
 const BenchmarkModal = (props) => {
   const { classes, type, domain, modelId } = props;
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.getBenchMarkDetails.result);
+  const data = useSelector((state) => state.getBenchMarkDetails.filteredData);
   const count = useSelector((state) => state.getBenchMarkDetails.count);
   const benchmarkInfo = useSelector(
     (state) => state.getBenchMarkDetails.benchmarkInfo
@@ -70,7 +71,6 @@ const BenchmarkModal = (props) => {
       headers: apiObj.getHeaders().headers,
       body: JSON.stringify(apiObj.getBody()),
     }).then(async (res) => {
-      let rsp_data = await res.json();
       props.handleCloseModal();
     });
   };
@@ -91,6 +91,10 @@ const BenchmarkModal = (props) => {
       </>
     );
   };
+
+  const handleSearch = (event) => {
+    dispatch(searchBenchmark(event.target.value));
+  };
   const fetchModalToolBar = () => {
     return (
       <Grid container spacing={2} className={classes.gridAlign}>
@@ -101,7 +105,7 @@ const BenchmarkModal = (props) => {
             </div>
             <InputBase
               placeholder="Search..."
-              onChange={(e) => props.handleSearch(e)}
+              onChange={(e) => handleSearch(e)}
               value={props.searchValue}
               classes={{
                 root: classes.inputRoot,
@@ -210,18 +214,18 @@ const BenchmarkModal = (props) => {
       return (
         <>
           <TableRow>
-            <TableCell />
-            <TableCell align="left">Metric</TableCell>
+            <TableCell></TableCell>
+            <TableCell>Metric</TableCell>
             {/* <TableCell align="left">Description</TableCell> */}
-            <TableCell align="left">Action</TableCell>
+            <TableCell>Action</TableCell>
           </TableRow>
           {rows.map((row, i) => {
             return (
               <TableRow>
-                <TableCell />
-                <TableCell align="left">{row.metricName}</TableCell>
+                <TableCell></TableCell>
+                <TableCell>{row.metricName}</TableCell>
                 {/* <TableCell align="left">{row.description}</TableCell> */}
-                <TableCell align="left">
+                <TableCell>
                   {renderSelectButton(
                     "METRIC",
                     i,
@@ -259,7 +263,7 @@ const BenchmarkModal = (props) => {
         MUIDataTable: {
           paper: {
             padding: "21px",
-            width: "64.375rem",
+            width: "65.375rem",
           },
           responsiveBase: {
             minHeight: "35rem",

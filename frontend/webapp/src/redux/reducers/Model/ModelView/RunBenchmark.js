@@ -4,6 +4,7 @@ const initialState = {
   result: [],
   selectedIndex: [],
   benchmarkInfo: [],
+  filteredData: [],
   count: 0,
 };
 
@@ -16,7 +17,7 @@ const getBenchmarkDetails = (payload) => {
         selected: false,
       };
     });
-    payload.benchmark.forEach((dataset) => {
+    payload.benchmark.forEach((dataset, i) => {
       result.push({
         datasetName: dataset.name,
         description: dataset.description === null ? "" : dataset.description,
@@ -65,33 +66,65 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   }
 };
 
+const getFilteredData = (payload, searchValue) => {
+  let filteredData = payload.filter((dataset) =>
+    dataset.datasetName.toLowerCase().includes(searchValue.toLowerCase())
+  );
+  return filteredData;
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.RUN_BENCHMARK:
       return {
         ...state,
         result: getBenchmarkDetails(action.payload),
+        filteredData: getBenchmarkDetails(action.payload),
         count: action.payload.count,
         selectedIndex: [],
       };
     case C.SELECT_DATASET:
       return {
         ...state,
-        ...getUpdatedBenchMark("DATASET", state, action.payload.index),
+        result: getUpdatedBenchMark("DATASET", state, action.payload.index)
+          .result,
+        filteredData: getUpdatedBenchMark(
+          "DATASET",
+          state,
+          action.payload.index
+        ).filteredData,
+        selectedIndex: getUpdatedBenchMark(
+          "DATASET",
+          state,
+          action.payload.index
+        ).selectedIndex,
       };
     case C.SELECT_METRIC:
       return {
         ...state,
-        ...getUpdatedBenchMark(
+        result: getUpdatedBenchMark(
           "METRIC",
           state,
           action.payload.index,
           action.payload.parentIndex
-        ),
+        ).result,
+        filteredData: getUpdatedBenchMark(
+          "METRIC",
+          state,
+          action.payload.index,
+          action.payload.parentIndex
+        ).result,
       };
     case C.CLEAR_BENCHMARK: {
       return {
         ...initialState,
+      };
+    }
+    case C.SEARCH_BENCHMARK: {
+      getFilteredData(state.result, action.payload);
+      return {
+        ...state,
+        filteredData: getFilteredData(state.result, action.payload),
       };
     }
     default:
