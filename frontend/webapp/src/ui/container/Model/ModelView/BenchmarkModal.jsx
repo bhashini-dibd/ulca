@@ -33,7 +33,7 @@ const BenchmarkModal = (props) => {
   const { classes, type, domain, modelId } = props;
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.filteredData);
-  const count = useSelector((state) => state.getBenchMarkDetails.count);
+  const count = data.length;
   const benchmarkInfo = useSelector(
     (state) => state.getBenchMarkDetails.benchmarkInfo
   );
