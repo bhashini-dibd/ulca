@@ -33,7 +33,7 @@ import GridView from "./GridView";
 import RenderExpandTable from "./ExpandTable";
 import SelectionList from "./BenchmarkSelection";
 import BenchmarkModal from "./BenchmarkModal";
-import clearBenchMark from '../../../../redux/actions/api/Model/ModelView/ClearBenchmark';
+import clearBenchMark from "../../../../redux/actions/api/Model/ModelView/ClearBenchmark";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -43,7 +43,11 @@ const ContributionList = (props) => {
   );
   const PageInfo = useSelector((state) => state.modelPageChangeDetails);
   const [open, setOpen] = useState(false);
-  const [benchmarkInfo, setBenchmarkInfo] = useState({ type: "", domain: [] });
+  const [benchmarkInfo, setBenchmarkInfo] = useState({
+    type: "",
+    domain: [],
+    modelId: "",
+  });
   const view = useSelector((state) => state.modelTableView.view);
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
@@ -199,12 +203,12 @@ const ContributionList = (props) => {
     );
   };
 
-  const handleRunBenchMarkClick = (type, domain) => {
-    setBenchmarkInfo({ type, domain: [domain] });
+  const handleRunBenchMarkClick = (type, domain, modelId) => {
+    setBenchmarkInfo({ type, domain: [domain], modelId });
     setOpenModal(true);
   };
 
-  const renderActionButtons = (status, type, domain) => {
+  const renderActionButtons = (status, type, domain, modelId) => {
     if (status !== "Failed" && status !== "In Progress") {
       return (
         <Grid container spacing={1}>
@@ -214,7 +218,7 @@ const ContributionList = (props) => {
               style={{ color: "#FD7F23", fontSize: "1rem" }}
               size="small"
               variant="contained"
-              onClick={() => handleRunBenchMarkClick(type, domain)}
+              onClick={() => handleRunBenchMarkClick(type, domain, modelId)}
             >
               Run Benchmark
             </Button>
@@ -337,7 +341,8 @@ const ContributionList = (props) => {
             return renderActionButtons(
               tableMeta.rowData[6],
               tableMeta.rowData[1],
-              tableMeta.rowData[3]
+              tableMeta.rowData[3],
+              tableMeta.rowData[0]
             );
           }
         },

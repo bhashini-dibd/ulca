@@ -26,9 +26,10 @@ import { useEffect } from "react";
 import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
 import FilterBenchmark from "./FilterBenchmark";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
+import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/SubmitBenchmark";
 
 const BenchmarkModal = (props) => {
-  const { classes, type, domain } = props;
+  const { classes, type, domain, modelId } = props;
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.result);
   const count = useSelector((state) => state.getBenchMarkDetails.count);
@@ -62,6 +63,18 @@ const BenchmarkModal = (props) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const makeSubmitAPICall = () => {
+    const apiObj = new SubmitBenchmark(modelId, benchmarkInfo);
+    fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody),
+    }).then(async (res) => {
+      let rsp_data = await res.json();
+      console.log(res);
+    });
+  };
+
   const fetchModalFooter = () => {
     return (
       <>
@@ -70,6 +83,7 @@ const BenchmarkModal = (props) => {
           color="primary"
           style={{ float: "right", marginTop: "5px", borderRadius: "22px" }}
           variant="contained"
+          onClick={makeSubmitAPICall}
           disabled={benchmarkInfo.length ? false : true}
         >
           Submit
