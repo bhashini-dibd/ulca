@@ -19,7 +19,7 @@ const getBenchmarkDetails = (payload) => {
     });
     payload.benchmark.forEach((dataset, i) => {
       result.push({
-        datasetName: dataset.name,
+        datasetName: dataset.name + i,
         description: dataset.description === null ? "" : dataset.description,
         domain: dataset.domain.join(","),
         metric,
@@ -35,8 +35,12 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   let result = Object.assign([], JSON.parse(JSON.stringify(prevState)));
   if (type === "DATASET") {
     result.result[index].selected = !result.result[index].selected;
+    result.filteredData[index].selected = !result.filteredData[index].selected;
     if (result.selectedIndex.indexOf(index) > -1) {
       result.result[index].metric.forEach((val) => {
+        val.selected = false;
+      });
+      result.filteredData[index].metric.forEach((val) => {
         val.selected = false;
       });
       result.benchmarkInfo.splice(result.selectedIndex.indexOf(index), 1);
@@ -48,6 +52,8 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   } else {
     result.result[parentIndex].metric[index].selected =
       !result.result[parentIndex].metric[index].selected;
+    result.filteredData[parentIndex].metric[index].selected =
+      !result.filteredData[parentIndex].metric[index].selected;
     let updatedBenchmarkInfo = [];
     result.result.forEach((val) => {
       if (val.selected) {
@@ -92,7 +98,7 @@ const reducer = (state = initialState, action) => {
           "DATASET",
           state,
           action.payload.index
-        ).result,
+        ).filteredData,
         selectedIndex: getUpdatedBenchMark(
           "DATASET",
           state,
@@ -102,18 +108,12 @@ const reducer = (state = initialState, action) => {
     case C.SELECT_METRIC:
       return {
         ...state,
-        result: getUpdatedBenchMark(
+        ...getUpdatedBenchMark(
           "METRIC",
           state,
           action.payload.index,
           action.payload.parentIndex
-        ).result,
-        filteredData: getUpdatedBenchMark(
-          "METRIC",
-          state,
-          action.payload.index,
-          action.payload.parentIndex
-        ).result,
+        )
       };
     case C.CLEAR_BENCHMARK: {
       return {
