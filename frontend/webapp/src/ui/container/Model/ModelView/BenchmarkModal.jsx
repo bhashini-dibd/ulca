@@ -131,9 +131,9 @@ const BenchmarkModal = (props) => {
     return (
       <Button
         variant="outlined"
-        size="small"
         style={{
           backgroundColor: status ? "#2A61AD" : "white",
+          width: "85px",
         }}
         className={classes.filterBtn}
         onClick={() => {
@@ -147,7 +147,7 @@ const BenchmarkModal = (props) => {
   const columns = [
     {
       name: "datasetName",
-      label: "Dataset Name",
+      label: "Benchmark Dataset",
       options: {
         filter: false,
         sort: false,
@@ -188,18 +188,6 @@ const BenchmarkModal = (props) => {
             tableMeta.rowData[3],
             tableMeta.rowIndex
           );
-          // return (
-          //   <Button
-          //     variant="outlined"
-          //     size="small"
-          //     className={classes.filterBtn}
-          //     onClick={() =>
-          //       dispatch(getBenchmarkMetric("DATASET", tableMeta.rowIndex))
-          //     }
-          //   >
-          //     Select
-          //   </Button>
-          // );
         },
       },
     },
@@ -223,16 +211,15 @@ const BenchmarkModal = (props) => {
         <>
           <TableRow>
             <TableCell />
-            <TableCell align="center">Metric</TableCell>
+            <TableCell align="left">Metric</TableCell>
             {/* <TableCell align="left">Description</TableCell> */}
             <TableCell align="left">Action</TableCell>
-            <TableCell />
           </TableRow>
           {rows.map((row, i) => {
             return (
               <TableRow>
                 <TableCell />
-                <TableCell align="center">{row.metricName}</TableCell>
+                <TableCell align="left">{row.metricName}</TableCell>
                 {/* <TableCell align="left">{row.description}</TableCell> */}
                 <TableCell align="left">
                   {renderSelectButton(
@@ -241,19 +228,7 @@ const BenchmarkModal = (props) => {
                     row.selected,
                     rowMeta.rowIndex
                   )}
-                  {/* <Button
-                    variant="outlined"
-                    size="small"
-                    style={{ backgroundColor: "white" }}
-                    className={classes.filterBtn}
-                    onClick={() =>
-                      dispatch(getBenchmarkMetric("METRIC", i, row.selected))
-                    }
-                  >
-                    Select
-                  </Button> */}
                 </TableCell>
-                <TableCell align="right" />
               </TableRow>
             );
           })}
@@ -298,12 +273,20 @@ const BenchmarkModal = (props) => {
         },
         MuiTableCell: {
           head: {
-            padding: ".6rem .5rem .6rem 1.5rem",
+            // padding: ".6rem .5rem .6rem 1.5rem",
             backgroundColor: "#F8F8FA !important",
             marginLeft: "25px",
             letterSpacing: "0.74",
             fontWeight: "bold",
             minHeight: "700px",
+          },
+          paddingCheckbox: {
+            display: "none",
+          },
+        },
+        MUIDataTableHeadCell: {
+          fixedHeader: {
+            position: "initial",
           },
         },
         MuiToolbar: {
