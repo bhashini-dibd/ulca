@@ -11,9 +11,9 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExecuteBenchmarkResponse {
+public class BenchmarkMetricRequest {
 
-
-	String benchmarkProcessId;
-
+	  String benchmarkId;
+      String metric;
+     
 }
