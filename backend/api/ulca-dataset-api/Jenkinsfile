@@ -1,4 +1,5 @@
 #!groovy
+import hudson.model.*
 node('server_build_slave') {
 
 try {
@@ -29,7 +30,9 @@ docker login -u $dockerhub_user -p $dockerhub_pass
 docker push anuvaadio/$image_name:$commit_id
 sudo rm -rf target/
 '''
+   manager.addShortText("${params.image_name}:${BUILD_ID}-${git rev-parse --short HEAD}")
 
+   
         }
 }
 
