@@ -13,6 +13,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
+import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 
 @Configuration
@@ -23,16 +24,16 @@ public class KafkaBenchmarkDownloadPublisherConfig {
     private String bootstrapAddress;
 	
 	@Bean
-	public ProducerFactory<String, ExecuteBenchmarkRequest> benchmarkDownloadProducerFactory() {
+	public ProducerFactory<String, BmDatasetDownload> benchmarkDownloadProducerFactory() {
 		Map<String, Object> configs = new HashMap<>();
 		configs.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
 		configs.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 		configs.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
-		return new DefaultKafkaProducerFactory<String, ExecuteBenchmarkRequest>(configs);
+		return new DefaultKafkaProducerFactory<String, BmDatasetDownload>(configs);
 	}
 
 	@Bean
-	public KafkaTemplate<String, ExecuteBenchmarkRequest> benchmarkDownloadKafkaTemplate() {
+	public KafkaTemplate<String, BmDatasetDownload> benchmarkDownloadKafkaTemplate() {
 		return new KafkaTemplate<>(benchmarkDownloadProducerFactory());
 	}
 

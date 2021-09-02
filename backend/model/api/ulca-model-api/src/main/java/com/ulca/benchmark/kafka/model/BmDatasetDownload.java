@@ -1,4 +1,4 @@
-package com.ulca.benchmark.request;
+package com.ulca.benchmark.kafka.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class ExecuteBenchmarkResponse {
-
+@AllArgsConstructor
+public class BmDatasetDownload {
+	
 	String benchmarkProcessId;
+
 }
