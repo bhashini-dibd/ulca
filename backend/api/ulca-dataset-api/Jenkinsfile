@@ -32,10 +32,12 @@ sudo rm -rf target/
 '''
    
 
-     
+     try {
 matcher = manager.getLogMatcher(".*tagged anuvaadio.(.*).*")
 buildMsg=matcher.group(1)
 manager.addShortText(buildMsg)
+        catch (err) {
+        }
    
         }
 }
