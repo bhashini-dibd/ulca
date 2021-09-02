@@ -30,14 +30,10 @@ docker login -u $dockerhub_user -p $dockerhub_pass
 docker push anuvaadio/$image_name:$commit_id
 sudo rm -rf target/
 '''
-   
 
-     try {
-matcher = manager.getLogMatcher(".*tagged anuvaadio.(.*).*")
-buildMsg=matcher.group(1)
+def matcher = manager.getLogMatcher(".*tagged anuvaadio.(.*).*")
+def buildMsg = matcher.group(1)
 manager.addShortText(buildMsg)
-     } catch (err) {
-        }
    
         }
 }
