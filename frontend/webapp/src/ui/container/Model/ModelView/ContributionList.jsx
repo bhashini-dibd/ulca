@@ -45,6 +45,7 @@ const ContributionList = (props) => {
   const view = useSelector((state) => state.modelTableView.view);
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
+  const [index, setIndex] = useState([]);
   const { added } = useParams();
   const data = myContributionReport.filteredData;
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -213,6 +214,16 @@ const ContributionList = (props) => {
       headers: apiObj.getHeaders().headers,
       body: JSON.stringify(apiObj.getBody()),
     }).then(async (res) => {
+      let rsp_data = await res.json();
+      if (res.ok) {
+        let benchmarkIndex = 0;
+        data.forEach((model, i) => {
+          if (model.submitRefNumber === benchmarkInfo.modelId) {
+            benchmarkIndex = i;
+          }
+        });
+        setIndex([...index, benchmarkIndex]);
+      }
       handleCloseModal();
     });
   };
@@ -384,7 +395,16 @@ const ContributionList = (props) => {
     filterType: "checkbox",
     download: false,
     expandableRows: true,
+    // onRowExpansionChange: (
+    //   currentRowsExpanded,
+    //   allRowsExpanded,
+    //   rowsExpanded
+    // ) => {
+    //   const currentIndex = currentRowsExpanded[0].index;
 
+    //   setIndex([...index, currentIndex]);
+    // },
+    rowsExpanded: index,
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
     isRowExpandable: (dataIndex, expandedRows) => {
