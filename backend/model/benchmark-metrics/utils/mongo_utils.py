@@ -30,11 +30,11 @@ class BenchMarkingProcessRepo:
     def insert(self, data):
         
         col = self.get_mongo_instance()
-        doc = col.find({'benchmarkProcessId':data['benchmarkProcessId'], 'datasetId':data['datasetId']})
-        id = doc['_id']
-        col.update_one({"_id":id}, {"$set": {"score": data['eval_score']} }, False, True)
-        col.update_one({"_id":id}, {"$set": {"status": "Completed" }}, False, True)
-        
+        doc = col.find({'benchmarkingProcessId':data['benchmarkingProcessId'], 'datasetId':data['datasetId']})
+        doc_id = doc[0]['_id']
+        col.update_one({"_id":doc_id}, {"$set": {"score": data['eval_score']} }, False, True)
+        col.update_one({"_id":doc_id}, {"$set": {"status": "Completed" }}, False, True)
+        log.info(f"Updated evaluation score for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
 
 
 # Log config

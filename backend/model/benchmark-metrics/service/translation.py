@@ -29,7 +29,7 @@ class TranslationMetricEvalHandler:
                     eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation)
                     if eval_score:
                         #benchmark["corpus_eval_score"] = eval_score
-                        doc = {'benchmarkProcessId':request['benchmarkProcessId'],'datasetId': benchmark['datasetId'],'score':eval_score}        
+                        doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'datasetId': benchmark['datasetId'],'score':eval_score}        
                         repo.insert(doc)
                     else:
                         log.exception("Exception while metric evaluation of model")
