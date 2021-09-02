@@ -1,7 +1,6 @@
 package com.ulca.dataset.kakfa;
 
 import java.io.File;
-import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +50,9 @@ public interface DatasetValidateIngest {
 					JSONObject valueJson = (JSONObject) value;
 					deepMerge(valueJson, target.getJSONObject(key));
 				} else {
-					target.put(key, value);
+					if(value != null && !value.equals(null)) {
+						target.put(key, value);
+					}
 				}
 			}
 		}

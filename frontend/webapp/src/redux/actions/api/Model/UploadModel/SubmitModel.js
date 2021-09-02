@@ -47,7 +47,7 @@ export default class LoginAPI extends API {
 
   getHeaders() {
     let urlSha = md5(JSON.stringify(this.getFormData()))
-    let hash = md5(this.userDetails.privateKey + "|" + urlSha)
+    let hash = md5(this.userDetails.privateKey +"|"+urlSha)
     this.headers = {
       headers: {
         "key": this.userDetails.publicKey,

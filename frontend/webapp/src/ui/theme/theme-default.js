@@ -9,6 +9,7 @@ const themeDefault = createMuiTheme({
     MuiTableRow: { root: {
       height:"60px",
       margin:"10px",
+      cursor:"pointer",
       '&$hover:hover:nth-child(odd)':
       {backgroundColor: '#D6EAF8'} ,
       '&$hover:hover:nth-child(even)':
@@ -131,7 +132,7 @@ const themeDefault = createMuiTheme({
     },
     MuiAppBar: {
       root: {
-        boxSizing: "none",
+        boxSizing: "border-box",
         margin: "-1px",
         padding: "0px"
       }
