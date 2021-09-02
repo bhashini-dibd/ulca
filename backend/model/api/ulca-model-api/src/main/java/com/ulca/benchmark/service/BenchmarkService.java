@@ -15,6 +15,7 @@ import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
+
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSearchResponse;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
@@ -31,6 +32,7 @@ public class BenchmarkService {
 
 	@Autowired
 	private KafkaTemplate<String, BmDatasetDownload> benchmarkDownloadKafkaTemplate;
+
 
 	@Value("${kafka.ulca.bm.filedownload.ip.topic}")
 	private String benchmarkDownloadTopic;
@@ -71,7 +73,6 @@ public class BenchmarkService {
 
 		ExecuteBenchmarkResponse response = new ExecuteBenchmarkResponse();
 		response.setBenchmarkProcessId(uuid.toString());
-		
 
 		log.info("******** Exit BenchmarkService:: executeBenchmark *******");
 		
