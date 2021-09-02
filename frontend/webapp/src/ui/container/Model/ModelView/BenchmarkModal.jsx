@@ -122,7 +122,7 @@ const BenchmarkModal = (props) => {
           </div>
         </Grid>
         <Grid item>
-          <Button
+          {/* <Button
             variant="outlined"
             size="medium"
             className={classes.filterBtn}
@@ -131,7 +131,7 @@ const BenchmarkModal = (props) => {
           >
             <FilterListIcon className={classes.iconStyle} />
             Filter
-          </Button>
+          </Button> */}
         </Grid>
       </Grid>
     );
