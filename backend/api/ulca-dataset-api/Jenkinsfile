@@ -30,8 +30,12 @@ docker login -u $dockerhub_user -p $dockerhub_pass
 docker push anuvaadio/$image_name:$commit_id
 sudo rm -rf target/
 '''
-   manager.addShortText("${params.image_name}:${BUILD_ID}-${git rev-parse --short HEAD}")
+   
 
+     
+matcher = manager.getLogMatcher(".*tagged anuvaadio.(.*).*")
+buildMsg=matcher.group(1)
+manager.addShortText(buildMsg)
    
         }
 }
