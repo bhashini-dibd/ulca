@@ -7,7 +7,7 @@ import os
 metric_config_path = os.environ.get('ULCA_MODEL_METRIC_CONFIG_PATH', 'configs/metric_config.json')
 
 kafka_bootstrap_server_host = os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
-metric_eval_input_topic = os.environ.get('KAFKA_ULCA_METRIC_EVAL_IP_TOPIC', 'ulca-metric-eval-ip-v0')
+metric_eval_input_topic = os.environ.get('KAFKA_ULCA_METRIC_EVAL_IP_TOPIC', 'ulca-bm-metric-ip-v0')
 metric_eval_consumer_grp = os.environ.get('KAFKA_ULCA_METRIC_EVAL_CONSUMER_GRP', 'ulca-metric-eval-consumer-group-v0')
 
 # pt_redis_db = os.environ.get('ULCA_PT_REDIS_DB', 0)
@@ -19,6 +19,7 @@ metric_eval_consumer_grp = os.environ.get('KAFKA_ULCA_METRIC_EVAL_CONSUMER_GRP',
 ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 mongo_db_name = os.environ.get('ulca-process-tracker', "ulca-process-tracker")
 mongo_collection_name = os.environ.get('benchmarkprocess', "ulca-process-tracker")
+
 
 # pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 # pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
