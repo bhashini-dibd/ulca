@@ -3,7 +3,7 @@ from datetime import datetime
 from logging.config import dictConfig
 
 from models.metric_manager import MetricManager
-from utils.mongo-utils import BenchMarkingProcessRepo
+from utils.mongo_utils import BenchMarkingProcessRepo
 
 log = logging.getLogger('file')
 repo = BenchMarkingProcessRepo()

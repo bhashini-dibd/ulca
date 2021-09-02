@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime
 from logging.config import dictConfig
-from utils.mongo-utils import BenchMarkingProcessRepo
+from utils.mongo_utils import BenchMarkingProcessRepo
 
 from models.metric_manager import MetricManager
 
