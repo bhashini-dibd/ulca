@@ -35,8 +35,8 @@ export default class RunBenchmark extends API {
 
   getBody() {
     return {
-      task: "translation", //this.task,
-      // domain: ["legal", "general"],
+      task: this.task,
+      domain: this.domain,
     };
   }
 

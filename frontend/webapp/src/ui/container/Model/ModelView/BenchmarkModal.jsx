@@ -26,7 +26,6 @@ import { useEffect } from "react";
 import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
 import FilterBenchmark from "./FilterBenchmark";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
-import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/SubmitBenchmark";
 import searchBenchmark from "../../../../redux/actions/api/Model/ModelView/SearchBenchmark";
 import {
   filterBenchmark,
@@ -34,10 +33,9 @@ import {
 } from "../../../../redux/actions/api/Model/ModelView/FilterBenchmark";
 
 const BenchmarkModal = (props) => {
-  const { classes, type, domain, modelId } = props;
+  const { classes, type, domain } = props;
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.filteredData);
-  const count = data.length;
   const benchmarkInfo = useSelector(
     (state) => state.getBenchMarkDetails.benchmarkInfo
   );
@@ -70,17 +68,6 @@ const BenchmarkModal = (props) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const makeSubmitAPICall = () => {
-    const apiObj = new SubmitBenchmark(modelId, benchmarkInfo);
-    fetch(apiObj.apiEndPoint(), {
-      method: "POST",
-      headers: apiObj.getHeaders().headers,
-      body: JSON.stringify(apiObj.getBody()),
-    }).then(async (res) => {
-      props.handleCloseModal();
-    });
-  };
-
   const fetchModalFooter = () => {
     return (
       <>
@@ -89,7 +76,7 @@ const BenchmarkModal = (props) => {
           color="primary"
           style={{ float: "right", marginTop: "5px", borderRadius: "22px" }}
           variant="contained"
-          onClick={makeSubmitAPICall}
+          onClick={props.makeSubmitAPICall}
           disabled={benchmarkInfo.length ? false : true}
         >
           Submit

@@ -27,6 +27,7 @@ import RenderExpandTable from "./ExpandTable";
 import SelectionList from "./BenchmarkSelection";
 import BenchmarkModal from "./BenchmarkModal";
 import clearBenchMark from "../../../../redux/actions/api/Model/ModelView/ClearBenchmark";
+import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/SubmitBenchmark";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -49,7 +50,9 @@ const ContributionList = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const popoverOpen = Boolean(anchorEl);
   const [selectionOpen, setSelectionOpen] = React.useState(null);
-
+  const benchmark = useSelector(
+    (state) => state.getBenchMarkDetails.benchmarkInfo
+  );
   const id = popoverOpen ? "simple-popover" : undefined;
   const [openModal, setOpenModal] = useState(false);
   useEffect(() => {
@@ -189,6 +192,7 @@ const ContributionList = (props) => {
         aria-describedby="simple-modal-description"
       >
         <BenchmarkModal
+          makeSubmitAPICall={makeSubmitAPICall}
           handleCloseModal={handleCloseModal}
           type={benchmarkInfo.type}
           domain={benchmarkInfo.domain}
@@ -200,6 +204,17 @@ const ContributionList = (props) => {
   const handleRunBenchMarkClick = (type, domain, modelId) => {
     setBenchmarkInfo({ type, domain: [domain], modelId });
     setOpenModal(true);
+  };
+
+  const makeSubmitAPICall = () => {
+    const apiObj = new SubmitBenchmark(benchmarkInfo.modelId, benchmark);
+    fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody()),
+    }).then(async (res) => {
+      handleCloseModal();
+    });
   };
 
   const renderActionButtons = (status, type, domain, modelId) => {
