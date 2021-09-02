@@ -92,6 +92,19 @@ const getAvailableFilters = (payload) => {
   }
   return uniqueFilters;
 };
+
+const filterByDomain = (prevState, payload) => {
+  let filteredDomain = [];
+  let newState = Object.assign({}, JSON.parse(JSON.stringify(prevState)));
+  prevState.result.forEach((result) => {
+    if (payload.indexOf(result.domain) > -1) {
+      filteredDomain.push(result);
+    }
+  });
+  newState.filteredData = filteredDomain;
+  return newState;
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.RUN_BENCHMARK:
@@ -128,6 +141,19 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         filteredData: getFilteredData(state.result, action.payload),
+      };
+    }
+    case C.FILTER_BENCHMARK: {
+      return {
+        ...state,
+        ...filterByDomain(state, action.payload),
+      };
+    }
+
+    case C.CLEAR_FILTER_BENCHMARK: {
+      return {
+        ...state,
+        filteredData: state.result,
       };
     }
     default:

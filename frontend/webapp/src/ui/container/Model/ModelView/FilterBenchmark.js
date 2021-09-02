@@ -102,6 +102,7 @@ const FilterBenchmark = (props) => {
               marginLeft: "34.2px",
               borderRadius: "20px",
             }}
+            disabled={selectedFilter.length ? false : true}
           >
             {" "}
             Clear All

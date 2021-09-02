@@ -28,6 +28,10 @@ import FilterBenchmark from "./FilterBenchmark";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/SubmitBenchmark";
 import searchBenchmark from "../../../../redux/actions/api/Model/ModelView/SearchBenchmark";
+import {
+  filterBenchmark,
+  clearFilterBenchmark,
+} from "../../../../redux/actions/api/Model/ModelView/FilterBenchmark";
 
 const BenchmarkModal = (props) => {
   const { classes, type, domain, modelId } = props;
@@ -57,9 +61,9 @@ const BenchmarkModal = (props) => {
     setAnchorEl(null);
   };
 
-  const apply = (data) => {
+  const apply = () => {
     handleClose();
-    console.log("apply called");
+    dispatch(filterBenchmark(selectedFilters));
   };
 
   const handleShowFilter = (event) => {
@@ -118,7 +122,7 @@ const BenchmarkModal = (props) => {
           </div>
         </Grid>
         <Grid item>
-          {/* <Button
+          <Button
             variant="outlined"
             size="medium"
             className={classes.filterBtn}
@@ -127,7 +131,7 @@ const BenchmarkModal = (props) => {
           >
             <FilterListIcon className={classes.iconStyle} />
             Filter
-          </Button> */}
+          </Button>
         </Grid>
       </Grid>
     );
@@ -342,6 +346,8 @@ const BenchmarkModal = (props) => {
 
   const clearAll = () => {
     setSelectedFilters([]);
+    setAnchorEl(null);
+    dispatch(clearFilterBenchmark());
   };
 
   return (
