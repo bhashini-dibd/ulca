@@ -15,13 +15,14 @@ import {
 const FilterBenchmark = (props) => {
   const {
     classes,
-    handleClearAll,
+    clearAll,
     filter,
     selectedFilter,
     id,
     open,
     anchorEl,
     handleClose,
+    apply,
   } = props;
 
   const isChecked = (type) => {
@@ -93,7 +94,7 @@ const FilterBenchmark = (props) => {
           }}
         >
           <Button
-            onClick={handleClearAll}
+            onClick={clearAll}
             variant="outlined"
             style={{
               width: "100px",
@@ -109,6 +110,8 @@ const FilterBenchmark = (props) => {
             color="primary"
             variant="contained"
             style={{ width: "80px", borderRadius: "20px" }}
+            disabled={selectedFilter.length ? false : true}
+            onClick={apply}
           >
             {" "}
             Apply

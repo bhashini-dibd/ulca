@@ -1,9 +1,4 @@
-import {
-  withStyles,
-  Button,
-  Typography,
-  Grid,
-} from "@material-ui/core";
+import { withStyles, Button, Typography, Grid } from "@material-ui/core";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "../../../styles/Datatable";
 import React, { useEffect, useState } from "react";
@@ -187,6 +182,7 @@ const ContributionList = (props) => {
   const renderBenchmarkModal = () => {
     return (
       <Modal
+        id="benchmarkTable"
         open={openModal}
         onClose={handleCloseModal}
         aria-labelledby="simple-modal-title"

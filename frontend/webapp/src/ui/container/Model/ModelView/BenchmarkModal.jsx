@@ -40,9 +40,13 @@ const BenchmarkModal = (props) => {
   const selectedIndex = useSelector(
     (state) => state.getBenchMarkDetails.selectedIndex
   );
+  const availableFilters = useSelector(
+    (state) => state.getBenchMarkDetails.availableFilters
+  );
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
+  const [selectedFilters, setSelectedFilters] = useState([]);
 
   useEffect(() => {
     const apiObj = new RunBenchmarkAPI(type, domain);
@@ -52,9 +56,7 @@ const BenchmarkModal = (props) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const clearAll = (data) => {
-    console.log("clearAll clicked");
-  };
+
   const apply = (data) => {
     handleClose();
     console.log("apply called");
@@ -116,7 +118,7 @@ const BenchmarkModal = (props) => {
           </div>
         </Grid>
         <Grid item>
-          <Button
+          {/* <Button
             variant="outlined"
             size="medium"
             className={classes.filterBtn}
@@ -125,7 +127,7 @@ const BenchmarkModal = (props) => {
           >
             <FilterListIcon className={classes.iconStyle} />
             Filter
-          </Button>
+          </Button> */}
         </Grid>
       </Grid>
     );
@@ -141,6 +143,16 @@ const BenchmarkModal = (props) => {
         }}
         className={classes.filterBtn}
         onClick={() => {
+          if (type === "DATASET") {
+            const modal = document.querySelectorAll(
+              `#MUIDataTableBodyRow-${index}`
+            )[1];
+            if (modal.style.backgroundColor) {
+              modal.style.backgroundColor = "";
+            } else {
+              modal.style.backgroundColor = "#E2F2FD";
+            }
+          }
           dispatch(getBenchmarkMetric(type, index, parentIndex));
         }}
       >
@@ -214,15 +226,17 @@ const BenchmarkModal = (props) => {
       return (
         <>
           <TableRow>
-            <TableCell></TableCell>
+            {/* <TableCell></TableCell> */}
             <TableCell>Metric</TableCell>
             {/* <TableCell align="left">Description</TableCell> */}
             <TableCell>Action</TableCell>
+            <TableCell></TableCell>
+            <TableCell></TableCell>
           </TableRow>
           {rows.map((row, i) => {
             return (
-              <TableRow>
-                <TableCell></TableCell>
+              <TableRow key={i} style={{ backgroundColor: "#E2F2FD" }}>
+                {/* <TableCell></TableCell> */}
                 <TableCell>{row.metricName}</TableCell>
                 {/* <TableCell align="left">{row.description}</TableCell> */}
                 <TableCell>
@@ -233,6 +247,8 @@ const BenchmarkModal = (props) => {
                     rowMeta.rowIndex
                   )}
                 </TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             );
           })}
@@ -308,10 +324,26 @@ const BenchmarkModal = (props) => {
         MuiTableRow: {
           root: {
             border: "1px solid #00000029",
+            // backgroundColor:"#E2F2FD"
           },
         },
       },
     });
+
+  const handleCheckboxClick = (e) => {
+    if (selectedFilters.indexOf(e.target.name) < 0) {
+      setSelectedFilters([...selectedFilters, e.target.name]);
+    } else if (selectedFilters.indexOf(e.target.name) > -1) {
+      let existingFilter = Object.assign([], selectedFilters);
+      existingFilter.splice(selectedFilters.indexOf(e.target.name), 1);
+      setSelectedFilters(existingFilter);
+    }
+  };
+
+  const clearAll = () => {
+    setSelectedFilters([]);
+  };
+
   return (
     <div
       style={{
@@ -332,6 +364,7 @@ const BenchmarkModal = (props) => {
       </div>
       <MuiThemeProvider theme={getMuiTheme()}>
         <MUIDataTable
+          id="benchmarkDataTable"
           options={options}
           data={data}
           columns={columns}
@@ -344,10 +377,11 @@ const BenchmarkModal = (props) => {
           open={popoverOpen}
           anchorEl={anchorEl}
           handleClose={handleClose}
-          filter={["legal", "news"]}
-          selectedFilter={["legal"]}
+          filter={availableFilters}
+          selectedFilter={selectedFilters}
           clearAll={clearAll}
           apply={apply}
+          handleCheckboxClick={handleCheckboxClick}
         />
       )}
     </div>

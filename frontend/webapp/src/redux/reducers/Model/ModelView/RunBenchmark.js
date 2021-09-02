@@ -5,6 +5,7 @@ const initialState = {
   selectedIndex: [],
   benchmarkInfo: [],
   filteredData: [],
+  availableFilters: [],
   count: 0,
 };
 
@@ -19,7 +20,7 @@ const getBenchmarkDetails = (payload) => {
     });
     payload.benchmark.forEach((dataset, i) => {
       result.push({
-        datasetName: dataset.name + i,
+        datasetName: dataset.name,
         description: dataset.description === null ? "" : dataset.description,
         domain: dataset.domain.join(","),
         metric,
@@ -48,28 +49,27 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
     } else {
       result.selectedIndex.push(index);
     }
-    return result;
   } else {
     result.result[parentIndex].metric[index].selected =
       !result.result[parentIndex].metric[index].selected;
     result.filteredData[parentIndex].metric[index].selected =
       !result.filteredData[parentIndex].metric[index].selected;
-    let updatedBenchmarkInfo = [];
-    result.result.forEach((val) => {
-      if (val.selected) {
-        val.metric.forEach((e) => {
-          if (e.selected) {
-            updatedBenchmarkInfo.push({
-              benchmarkId: val.benchmarkId,
-              metric: e.metricName,
-            });
-          }
-        });
-      }
-    });
-    result.benchmarkInfo = updatedBenchmarkInfo;
-    return result;
   }
+  let updatedBenchmarkInfo = [];
+  result.result.forEach((val) => {
+    if (val.selected) {
+      val.metric.forEach((e) => {
+        if (e.selected) {
+          updatedBenchmarkInfo.push({
+            benchmarkId: val.benchmarkId,
+            metric: e.metricName,
+          });
+        }
+      });
+    }
+  });
+  result.benchmarkInfo = updatedBenchmarkInfo;
+  return result;
 };
 
 const getFilteredData = (payload, searchValue) => {
@@ -79,6 +79,19 @@ const getFilteredData = (payload, searchValue) => {
   return filteredData;
 };
 
+const getAvailableFilters = (payload) => {
+  let availableFilters = [];
+  payload.benchmark.forEach((data) => {
+    data.domain.forEach((val) => availableFilters.push(val));
+  });
+  let uniqueFilters = [];
+  for (let i = 0; i < availableFilters.length; i++) {
+    if (uniqueFilters.indexOf(availableFilters[i]) < 0) {
+      uniqueFilters.push(availableFilters[i]);
+    }
+  }
+  return uniqueFilters;
+};
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.RUN_BENCHMARK:
@@ -88,22 +101,12 @@ const reducer = (state = initialState, action) => {
         filteredData: getBenchmarkDetails(action.payload),
         count: action.payload.count,
         selectedIndex: [],
+        availableFilters: getAvailableFilters(action.payload),
       };
     case C.SELECT_DATASET:
       return {
         ...state,
-        result: getUpdatedBenchMark("DATASET", state, action.payload.index)
-          .result,
-        filteredData: getUpdatedBenchMark(
-          "DATASET",
-          state,
-          action.payload.index
-        ).filteredData,
-        selectedIndex: getUpdatedBenchMark(
-          "DATASET",
-          state,
-          action.payload.index
-        ).selectedIndex,
+        ...getUpdatedBenchMark("DATASET", state, action.payload.index),
       };
     case C.SELECT_METRIC:
       return {
@@ -113,7 +116,7 @@ const reducer = (state = initialState, action) => {
           state,
           action.payload.index,
           action.payload.parentIndex
-        )
+        ),
       };
     case C.CLEAR_BENCHMARK: {
       return {
