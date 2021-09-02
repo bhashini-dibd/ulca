@@ -33,15 +33,12 @@ class TextLanguageCheck(BaseValidator):
                 lang_list.append(record['sourceLanguage'])
 
             for text, lang in zip(text_list, lang_list):
-                # Skipping for Assamese(as) and Oriya(or) as the current model doesnt support them
-                #if lang == 'as' or lang == 'or':
-                 #   continue
-                #res = detect_langs(text)
+                # Skipping for few languages as the current model doesnt support them
+                if lang in ['brx', 'doi', 'kok', 'mai', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt']:
+                    continue
+
                 try:
                     detector = Detector(text)
-                # detected_lang = str(res[0]).split(':')[0]
-                # prob = str(res[0]).split(':')[1]
-                # if detected_lang != lang or float(prob) < 0.75:
                     if detector.language.code != lang or detector.language.confidence<50:
                         return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
                 except Exception as e:
