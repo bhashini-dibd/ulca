@@ -1,0 +1,8 @@
+[
+    {
+        "metric_name":"BLEU", "metric_implementation":"TranslationBLEUScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"WER", "metric_implementation":"ASRWEREval", "score_context":"default"
+    }
+]
