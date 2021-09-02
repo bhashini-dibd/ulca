@@ -3,8 +3,11 @@ from datetime import datetime
 from logging.config import dictConfig
 
 from models.metric_manager import MetricManager
+from utils.mongo-utils import BenchMarkingProcessRepo
 
 log = logging.getLogger('file')
+repo = BenchMarkingProcessRepo()
+
 
 class ASRMetricEvalHandler:
     def __init__(self):
@@ -25,7 +28,9 @@ class ASRMetricEvalHandler:
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
                     eval_score = metric_inst.asr_metric_eval(ground_truth, machine_translation)
                     if eval_score:
-                        benchmark["corpus_eval_score"] = eval_score
+                        #benchmark["corpus_eval_score"] = eval_score
+                        doc = {'benchmarkProcessId':request['benchmarkProcessId'],'datasetId': benchmark['datasetId'],'score':eval_score}        
+                        repo.insert(doc)
                     else:
                         log.exception("Exception while metric evaluation of model")
             else:

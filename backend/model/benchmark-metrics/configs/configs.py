@@ -14,7 +14,12 @@ metric_eval_consumer_grp = os.environ.get('KAFKA_ULCA_METRIC_EVAL_CONSUMER_GRP',
 # if isinstance(pt_redis_db, str):
 #     pt_redis_db = eval(pt_redis_db)
 
-# ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
+
+
+ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
+mongo_db_name = os.environ.get('ulca-process-tracker', "ulca-process-tracker")
+mongo_collection_name = os.environ.get('benchmarkprocess', "ulca-process-tracker")
+
 # pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 # pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
 

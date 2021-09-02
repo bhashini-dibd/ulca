@@ -1,10 +1,13 @@
 import logging
 from datetime import datetime
 from logging.config import dictConfig
+from utils.mongo-utils import BenchMarkingProcessRepo
 
 from models.metric_manager import MetricManager
 
 log = logging.getLogger('file')
+
+repo = BenchMarkingProcessRepo()
 
 class TranslationMetricEvalHandler:
     def __init__(self):
@@ -25,9 +28,12 @@ class TranslationMetricEvalHandler:
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
                     eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation)
                     if eval_score:
-                        benchmark["corpus_eval_score"] = eval_score
+                        #benchmark["corpus_eval_score"] = eval_score
+                        doc = {'benchmarkProcessId':request['benchmarkProcessId'],'datasetId': benchmark['datasetId'],'score':eval_score}        
+                        repo.insert(doc)
                     else:
                         log.exception("Exception while metric evaluation of model")
+                               
             else:
                 log.info("Missing parameter: benchmark details")
                 return
