@@ -40,12 +40,13 @@ class BenchMarkingProcessRepo:
             #             benchmark_docs.append(doc)
             #     # doc_id = doc[0]['_id']
             #     if benchmark_docs:
-            res = col.update_one({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, False, True)
+            res = col.update({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, {"multi": True, "upsert": False})
                     # col.update_one({"_id":doc_id}, {"$set": {"status": "Completed" }}, False, True)
+            log.info(res)
             if res.modified_count == 1:
                 log.info(f"Updated evaluation score for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
             else:
-                log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']}")
+                log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']} eval_score: {data['eval_score']}")
             #     else:
             #         log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']}")
             # else:
