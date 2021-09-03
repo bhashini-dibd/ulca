@@ -152,11 +152,12 @@ public class TranslationBenchmark {
 			}
 		}
 		
-		
-		JSONObject benchmarkDatasets  = new JSONObject();
-		benchmarkDatasets.put("datasetId", benchmark.getBenchmarkId());
-		benchmarkDatasets.put("metric", metric);
-		benchmarkDatasets.put("corpus", corpus);
+		JSONArray benchmarkDatasets = new JSONArray();
+		JSONObject benchmarkDataset  = new JSONObject();
+		benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
+		benchmarkDataset.put("metric", metric);
+		benchmarkDataset.put("corpus", corpus);
+		benchmarkDatasets.put(benchmarkDataset);
         	
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
