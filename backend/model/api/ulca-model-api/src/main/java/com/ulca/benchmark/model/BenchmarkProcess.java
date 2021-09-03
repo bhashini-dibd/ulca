@@ -3,6 +3,8 @@ package com.ulca.benchmark.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -24,8 +26,10 @@ public class BenchmarkProcess {
 	String benchmarkProcessId;
 	String benchmarkDatasetId;
 	String benchmarkDatasetName;
-	String score;
+	double score;
 	String metric;
 	String status;
+	String createdOn;
+	String lastModifiedOn;
 
 }

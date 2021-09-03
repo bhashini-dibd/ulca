@@ -42,6 +42,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class TranslationBenchmark {
 
+	private final int chunkSize = 200;
+	
 	@Autowired
 	private KafkaTemplate<String, String> benchmarkMetricKafkaTemplate;
 	
@@ -128,7 +130,7 @@ public class TranslationBenchmark {
 		
 		JSONArray corpus = new JSONArray();
 		
-		int chunkSize = 500;
+	
 		List<List<String>> ipChunks = partition(ip, chunkSize);
 		List<List<String>> tgtChunks = partition(tgtList, chunkSize);
 				

@@ -7,5 +7,7 @@ import io.swagger.model.Benchmark;
 
 @Repository
 public interface BenchmarkDao extends MongoRepository<Benchmark, String> {
+
+	Benchmark findByBenchmarkId(String benchmarkId);
 	
 }
