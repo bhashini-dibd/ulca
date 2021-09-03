@@ -215,9 +215,9 @@ const BenchmarkModal = (props) => {
         <>
           <TableRow>
             {/* <TableCell></TableCell> */}
-            <TableCell>Metric</TableCell>
+            <TableCell><strong>Metric</strong></TableCell>
             {/* <TableCell align="left">Description</TableCell> */}
-            <TableCell>Action</TableCell>
+            <TableCell><strong>Action</strong></TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>
