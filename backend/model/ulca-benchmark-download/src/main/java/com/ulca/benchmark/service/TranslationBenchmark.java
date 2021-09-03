@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.Benchmark;
@@ -42,6 +42,8 @@ import reactor.core.publisher.Mono;
 @Service
 public class TranslationBenchmark {
 
+	private final int chunkSize = 200;
+	
 	@Autowired
 	private KafkaTemplate<String, String> benchmarkMetricKafkaTemplate;
 	
@@ -126,22 +128,38 @@ public class TranslationBenchmark {
 		reader.close();
 		inputStream.close();
 		
-		TranslationResponse translation = compute(callBackUrl, schema,ip );
-		Sentences sentenses = translation.getOutput();
 		JSONArray corpus = new JSONArray();
-		int size = tgtList.size();
-		for(int i = 0; i< size; i++) {
-			Sentence sentense = sentenses.get(i);
-            JSONObject target =  new JSONObject();
-			target.put("tgt", tgtList.get(i));
-			target.put("mtgt", sentense.getTarget());
-			corpus.put(target);
+		
+	
+		List<List<String>> ipChunks = partition(ip, chunkSize);
+		List<List<String>> tgtChunks = partition(tgtList, chunkSize);
+				
+		int ipChunksSize = ipChunks.size();
+		
+		for(int k=0; k<ipChunksSize; k++ ) {
+			
+			List<String> input = ipChunks.get(k);
+			List<String> expectedTgt = tgtChunks.get(k);
+			
+			TranslationResponse translation = compute(callBackUrl, schema,input );
+			Sentences sentenses = translation.getOutput();
+			
+			int size = input.size();
+			for(int i = 0; i< size; i++) {
+				Sentence sentense = sentenses.get(i);
+	            JSONObject target =  new JSONObject();
+				target.put("tgt", expectedTgt.get(i));
+				target.put("mtgt", sentense.getTarget());
+				corpus.put(target);
+			}
 		}
 		
-		JSONObject benchmarkDatasets  = new JSONObject();
-		benchmarkDatasets.put("datasetId", benchmark.getBenchmarkId());
-		benchmarkDatasets.put("metric", metric);
-		benchmarkDatasets.put("corpus", corpus);
+		JSONArray benchmarkDatasets = new JSONArray();
+		JSONObject benchmarkDataset  = new JSONObject();
+		benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
+		benchmarkDataset.put("metric", metric);
+		benchmarkDataset.put("corpus", corpus);
+		benchmarkDatasets.put(benchmarkDataset);
         	
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
@@ -155,6 +173,29 @@ public class TranslationBenchmark {
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
 		
 		
+	}
+	
+	private static <T> List<List<T>> partition(Collection<T> members, int maxSize)
+	{
+	    List<List<T>> res = new ArrayList<>();
+
+	    List<T> internal = new ArrayList<>();
+
+	    for (T member : members)
+	    {
+	        internal.add(member);
+
+	        if (internal.size() == maxSize)
+	        {
+	            res.add(internal);
+	            internal = new ArrayList<>();
+	        }
+	    }
+	    if (internal.isEmpty() == false)
+	    {
+	        res.add(internal);
+	    }
+	    return res;
 	}
 
 }

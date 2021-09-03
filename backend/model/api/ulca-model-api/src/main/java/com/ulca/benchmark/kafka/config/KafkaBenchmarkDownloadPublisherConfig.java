@@ -19,7 +19,6 @@ import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 @Configuration
 public class KafkaBenchmarkDownloadPublisherConfig {
 
-	
 	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 	
