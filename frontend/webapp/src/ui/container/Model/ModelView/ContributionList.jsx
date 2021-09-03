@@ -415,14 +415,14 @@ const ContributionList = (props) => {
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
     isRowExpandable: (dataIndex, expandedRows) => {
-      if (dataIndex === 3 || dataIndex === 4) return false;
+      // if (dataIndex === 3 || dataIndex === 4) return false;
 
-      //         // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
-      if (
-        expandedRows.data.length > 4 &&
-        expandedRows.data.filter((d) => d.dataIndex === dataIndex).length === 0
-      )
-        return false;
+      // //         // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
+      // if (
+      //   expandedRows.data.length > 4 &&
+      //   expandedRows.data.filter((d) => d.dataIndex === dataIndex).length === 0
+      // )
+      //   return false;
       return true;
     },
 
