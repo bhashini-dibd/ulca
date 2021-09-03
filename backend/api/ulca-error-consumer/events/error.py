@@ -19,7 +19,7 @@ class ErrorEvent:
     def write_error_in_store(self,data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
-            error_rec = {'serviceRequestNumber':data['serviceRequestNumber'],'stage':data['stage'],'message':data['message']}
+            error_rec = {'datasetName':data['datasetName'],'serviceRequestNumber':data['serviceRequestNumber'],'stage':data['stage'],'message':data['message']}
             error_repo.upsert(error_rec)
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}')
