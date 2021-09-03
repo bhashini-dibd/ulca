@@ -368,6 +368,13 @@ const ContributionList = (props) => {
         },
       },
     },
+    {
+      name: "benchmarkPerformance",
+      label: "Benchmark Performance",
+      options: {
+        display: "excluded",
+      },
+    },
   ];
 
   const options = {
@@ -421,7 +428,9 @@ const ContributionList = (props) => {
 
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
-      return <RenderExpandTable />;
+      return (
+        <RenderExpandTable rows={rowData[8]} renderStatus={renderStatus} />
+      );
     },
     print: false,
     viewColumns: false,
