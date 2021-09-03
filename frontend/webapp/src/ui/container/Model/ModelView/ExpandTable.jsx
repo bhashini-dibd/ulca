@@ -11,8 +11,8 @@ const ExpandTable = (props) => {
       <>
         <TableRow
           style={{
-            borderLeft: `5px solid ${color ? "#D6EAF8" : "#E9F7EF"}`,
-            borderRight: `4px solid ${color ? "#D6EAF8" : "#E9F7EF"}`,
+            borderLeft: `5px solid ${color ? "#E2F2FD" : "#E9F7EF"}`,
+            borderRight: `4px solid ${color ? "#E2F2FD" : "#E9F7EF"}`,
           }}
         >
           <TableCell></TableCell>
@@ -29,7 +29,7 @@ const ExpandTable = (props) => {
           return (
             <TableRow
               style={{
-                backgroundColor: color ? "#D6EAF8" : "#E9F7EF",
+                backgroundColor: color ? "#E2F2FD" : "#E9F7EF",
               }}
             >
               <TableCell></TableCell>
