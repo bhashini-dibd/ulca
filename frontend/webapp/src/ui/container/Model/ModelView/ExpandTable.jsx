@@ -35,7 +35,7 @@ const ExpandTable = (props) => {
               <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell>{row.benchmarkDatasetName}</TableCell>
-              <TableCell>{row.metric}</TableCell>
+              <TableCell>{row.metric.toUpperCase()}</TableCell>
               <TableCell>{row.score ? row.score : "--"}</TableCell>
               <TableCell>{renderStatus(row.status)}</TableCell>
               {/* <TableCell>Action</TableCell> */}

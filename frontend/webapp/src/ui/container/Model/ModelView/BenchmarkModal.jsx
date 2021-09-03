@@ -30,7 +30,7 @@ import {
 } from "../../../../redux/actions/api/Model/ModelView/FilterBenchmark";
 
 const BenchmarkModal = (props) => {
-  const { classes, type, domain } = props;
+  const { classes } = props;
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getBenchMarkDetails.filteredData);
   const benchmarkInfo = useSelector(
@@ -225,7 +225,7 @@ const BenchmarkModal = (props) => {
             return (
               <TableRow key={i} style={{ backgroundColor: "#E2F2FD" }}>
                 {/* <TableCell></TableCell> */}
-                <TableCell>{row.metricName}</TableCell>
+                <TableCell>{row.metricName.toUpperCase()}</TableCell>
                 {/* <TableCell align="left">{row.description}</TableCell> */}
                 <TableCell>
                   {renderSelectButton(

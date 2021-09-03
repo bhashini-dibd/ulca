@@ -60,9 +60,7 @@ const ContributionList = (props) => {
   const id = popoverOpen ? "simple-popover" : undefined;
   const [openModal, setOpenModal] = useState(false);
 
-  const status = useSelector(
-    (state) => state.getBenchMarkDetails.status
-  );
+  const status = useSelector((state) => state.getBenchMarkDetails.status);
 
   useEffect(() => {
     (myContributionReport.filteredData.length === 0 ||
@@ -73,7 +71,7 @@ const ContributionList = (props) => {
 
   useEffect(() => {
     console.log("inside useeffect");
-    if (status==="completed") {
+    if (status === "completed") {
       setLoading(false);
       setOpenModal(true);
     }
@@ -233,7 +231,7 @@ const ContributionList = (props) => {
       headers: apiObj.getHeaders().headers,
       body: JSON.stringify(apiObj.getBody()),
     }).then(async (res) => {
-      let rsp_data = await res.json();
+      // let rsp_data = await res.json();
       if (res.ok) {
         let benchmarkIndex = 0;
         data.forEach((model, i) => {
@@ -241,7 +239,8 @@ const ContributionList = (props) => {
             benchmarkIndex = i;
           }
         });
-        setIndex([...index, benchmarkIndex]);
+        MyContributionListApi();
+        setIndex([benchmarkIndex]);
       }
       handleCloseModal();
     });
