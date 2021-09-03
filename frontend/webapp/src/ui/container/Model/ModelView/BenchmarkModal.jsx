@@ -47,7 +47,6 @@ const BenchmarkModal = (props) => {
   const id = popoverOpen ? "simple-popover" : undefined;
   const [selectedFilters, setSelectedFilters] = useState([]);
 
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -271,6 +270,7 @@ const BenchmarkModal = (props) => {
             width: "65.375rem",
           },
           responsiveBase: {
+            overflow: "initial",
             minHeight: "35rem",
             maxHeight: "35rem",
           },
@@ -310,10 +310,17 @@ const BenchmarkModal = (props) => {
             },
           },
         },
+        MUIDataTableHeadRow: {
+          root: {
+            border: "none",
+            borderBottom: "5px solid white",
+            backgroundColor: "#F3F3F3",
+          },
+        },
         MuiTableRow: {
           root: {
-            border: "1px solid #00000029",
-            // backgroundColor:"#E2F2FD"
+            border: "1px solid #3A3A3A1A",
+            opacity: 1,
           },
         },
       },
