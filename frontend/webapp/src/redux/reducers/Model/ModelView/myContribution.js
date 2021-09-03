@@ -90,16 +90,6 @@ const getContributionList = (state, payload) => {
   let statusFilter = [];
   let modelFilter = [];
   let filter = { status: [], modelType: [] };
-  let benchmarkPerformance = [
-    {
-      benchmarkProcessId: "1",
-      benchmarkDatasetId: "2",
-      benchmarkDatasetName: "English-Hindi",
-      score: "1",
-      metric: "BLEU",
-      status: "In-Progress",
-    },
-  ];
   let refreshStatus = false;
   payload.forEach((element) => {
     let sLanguage =
@@ -113,7 +103,7 @@ const getContributionList = (state, payload) => {
       getLanguageName(element.languages[0].targetLanguage);
     let lang = tLanguage ? sLanguage + " - " + tLanguage : sLanguage;
     responseData.push({
-      benchmarkPerformance: benchmarkPerformance,
+      benchmarkPerformance: element.benchmarkPerformance,
       submitRefNumber: element.modelId,
       modelName: element.name,
       description: element.description,
