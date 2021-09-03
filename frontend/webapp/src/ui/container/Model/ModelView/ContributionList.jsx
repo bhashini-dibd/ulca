@@ -262,17 +262,27 @@ const ContributionList = (props) => {
     return <Typography>--</Typography>;
   };
 
+  const returnColor = (status) => {
+    switch (status) {
+      case "Failed":
+        return "#F54336";
+      case "Completed":
+        return "#139D60";
+      case "Submitted":
+        return "#139D60";
+      case "Published":
+        return "#2A61AD";
+      default:
+        return "#FD7F23";
+    }
+  };
+
   const renderStatus = (status) => {
     return (
       <Typography
         variant="body1"
         style={{
-          color:
-            status === "Failed"
-              ? "#F54336"
-              : status === "Published"
-              ? "#2A61AD"
-              : "#FD7F23",
+          color: returnColor(status),
         }}
       >
         {status}
@@ -416,14 +426,14 @@ const ContributionList = (props) => {
     expandableRowsOnClick: false,
     isRowExpandable: (dataIndex, expandedRows) => {
       if (data[dataIndex].benchmarkPerformance.length) {
-      return true;
+        return true;
       }
       return false;
     },
 
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
-      const even_odd = (rowMeta.rowIndex % 2) === 0;
+      const even_odd = rowMeta.rowIndex % 2 === 0;
       return (
         <RenderExpandTable
           rows={rowData[8]}
