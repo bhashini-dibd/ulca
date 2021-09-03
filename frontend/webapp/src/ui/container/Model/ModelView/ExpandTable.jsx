@@ -1,20 +1,20 @@
-import {
-  withStyles,
-  Typography,
-  Card,
-  Grid,
-  ButtonBase,
-} from "@material-ui/core";
+import { withStyles } from "@material-ui/core";
 import DataSet from "../../../styles/Dataset";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 
 const ExpandTable = (props) => {
-  const { classes, data, handleCardClick, rows, renderStatus } = props;
+  const { rows, renderStatus, color } = props;
   const renderTable = () => {
+    console.log(color);
     return (
       <>
-        <TableRow>
+        <TableRow
+          style={{
+            borderLeft: `5px solid ${color ? "#D6EAF8" : "#E9F7EF"}`,
+            borderRight: `4px solid ${color ? "#D6EAF8" : "#E9F7EF"}`,
+          }}
+        >
           <TableCell></TableCell>
           <TableCell></TableCell>
           <TableCell>Benchmark Dataset</TableCell>
@@ -27,7 +27,11 @@ const ExpandTable = (props) => {
         </TableRow>
         {rows.map((row) => {
           return (
-            <TableRow style={{ backgroundColor: "#E2F2FD" }}>
+            <TableRow
+              style={{
+                backgroundColor: color ? "#D6EAF8" : "#E9F7EF",
+              }}
+            >
               <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell>{row.benchmarkDatasetName}</TableCell>

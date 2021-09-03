@@ -415,21 +415,21 @@ const ContributionList = (props) => {
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
     isRowExpandable: (dataIndex, expandedRows) => {
-      // if (dataIndex === 3 || dataIndex === 4) return false;
-
-      // //         // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
-      // if (
-      //   expandedRows.data.length > 4 &&
-      //   expandedRows.data.filter((d) => d.dataIndex === dataIndex).length === 0
-      // )
-      //   return false;
+      // if (data[dataIndex].benchmarkPerformance.length) {
       return true;
+      // }
+      // return false;
     },
 
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
+      const even_odd = (rowMeta.rowIndex % 2) === 0;
       return (
-        <RenderExpandTable rows={rowData[8]} renderStatus={renderStatus} />
+        <RenderExpandTable
+          rows={rowData[8]}
+          color={even_odd}
+          renderStatus={renderStatus}
+        />
       );
     },
     print: false,
