@@ -70,7 +70,6 @@ const ContributionList = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("inside useeffect");
     if (status === "completed") {
       setLoading(false);
       setOpenModal(true);
