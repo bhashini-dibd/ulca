@@ -40,7 +40,7 @@ class BenchMarkingProcessRepo:
             #             benchmark_docs.append(doc)
             #     # doc_id = doc[0]['_id']
             #     if benchmark_docs:
-            res = col.update({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, {"multi": True, "upsert": False})
+            res = col.update({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, False, False, True)
                     # col.update_one({"_id":doc_id}, {"$set": {"status": "Completed" }}, False, True)
             log.info(res)
             if res.modified_count == 1:
