@@ -8,7 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -23,11 +25,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.dao.ModelExtended;
 
+import io.swagger.model.ASRRequest;
+import io.swagger.model.ASRResponse;
 import io.swagger.model.Benchmark;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
@@ -40,10 +46,8 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
-public class TranslationBenchmark {
+public class AsrBenchmark {
 
-	private final int chunkSize = 200;
-	
 	@Autowired
 	private KafkaTemplate<String, String> benchmarkMetricKafkaTemplate;
 	
@@ -56,34 +60,53 @@ public class TranslationBenchmark {
 
 	
 
-	public TranslationResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
-			List<String> sourceSentences)
+	public String compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
+			byte[] base64audioContent)
 			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 
 		log.info("calling the inference end point");
-		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
-			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
-			TranslationRequest request = translationInference.getRequest();
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
+			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
+			ASRRequest request = asrInference.getRequest();
+
+			AsrCallBackRequest asrCallBackRequest = new AsrCallBackRequest();
+			AsrCallBackRequest.Config config = asrCallBackRequest.getConfig();
+
+			config.setAudioFormat(request.getConfig().getAudioFormat().toString().toUpperCase());
+			config.setTranscriptionFormat(
+					request.getConfig().getTranscriptionFormat().getValue().toString().toUpperCase());
+			AsrCallBackRequest.Language lang = config.getLanguage();
+			lang.setValue(request.getConfig().getLanguage().getSourceLanguage().toString());
+			config.setLanguage(lang);
+			asrCallBackRequest.setConfig(config);
+			AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
 			
-			Sentences sentences = new Sentences();
-			for (String ip : sourceSentences) {
-				Sentence sentense = new Sentence();
-				sentense.setSource(ip);
-				sentences.add(sentense);
-			}
-			request.setInput(sentences);
+			audio.setAudioContent(base64audioContent);
+			asrCallBackRequest.setAudio(audio);
+
+			// WebClient.Builder builder = WebClient.builder();
 
 			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
+					.body(Mono.just(asrCallBackRequest), AsrCallBackRequest.class).retrieve().bodyToMono(String.class)
+					.block();
 
 			ObjectMapper objectMapper = new ObjectMapper();
+			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
 
-			TranslationResponse translation = objectMapper.readValue(responseStr, TranslationResponse.class);
+			log.info("response CallBackUrl:: ");
+			log.info(responseStr);
+			ASRResponse asrResponse = new ASRResponse();
+			Sentences sentences = new Sentences();
+			Sentence sentence = new Sentence();
+			sentence.setTarget(jsonNode.get("transcript").asText());
+			sentences.add(sentence);
+			asrResponse.setOutput(sentences);
 			
-			return translation;
+			return jsonNode.get("transcript").asText() ;
 			
 		}
+		
 		return null;
 		
 	}
@@ -101,101 +124,50 @@ public class TranslationBenchmark {
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 		reader.beginArray();
 		
-		
 		List<String> ip = new ArrayList<String>();
 		List<String> tgtList = new ArrayList<String>();
 		
+		String baseLocation = fileMap.get("baseLocation")  + File.separator ;
+		JSONArray corpus = new JSONArray();
 		while (reader.hasNext()) {
 			
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
-			
 			log.info("dataRow :: " + dataRow);
-			
 			JSONObject inputJson =  new JSONObject(dataRow);
+			String audioFilename = inputJson.getString("audioFilename");
+			String audioPath = baseLocation + audioFilename;
+			byte[] bytes = Files.readAllBytes(Paths.get(audioPath));
 			
-			String input = inputJson.getString("sourceText");
+			String resultText = compute(callBackUrl, schema, Base64.getMimeEncoder().encode(bytes));
 			
-			String targetText = inputJson.getString("targetText");
-			
-			
-			ip.add(input);
-			tgtList.add(targetText);
-			
+			String targetText = inputJson.getString("text");
+			JSONObject target =  new JSONObject();
+			target.put("tgt", targetText);
+			target.put("mtgt", resultText);
+			corpus.put(target);
 		}
 		reader.endArray();
 		reader.close();
 		inputStream.close();
 		
-		JSONArray corpus = new JSONArray();
-		
-	
-		List<List<String>> ipChunks = partition(ip, chunkSize);
-		List<List<String>> tgtChunks = partition(tgtList, chunkSize);
-				
-		int ipChunksSize = ipChunks.size();
-		
-		for(int k=0; k<ipChunksSize; k++ ) {
-			
-			List<String> input = ipChunks.get(k);
-			List<String> expectedTgt = tgtChunks.get(k);
-			
-			TranslationResponse translation = compute(callBackUrl, schema,input );
-			Sentences sentenses = translation.getOutput();
-			
-			int size = input.size();
-			for(int i = 0; i< size; i++) {
-				Sentence sentense = sentenses.get(i);
-	            JSONObject target =  new JSONObject();
-				target.put("tgt", expectedTgt.get(i));
-				target.put("mtgt", sentense.getTarget());
-				corpus.put(target);
-			}
-		}
-		
-		JSONArray benchmarkDatasets = new JSONArray();
-		JSONObject benchmarkDataset  = new JSONObject();
-		benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
-		benchmarkDataset.put("metric", metric);
-		benchmarkDataset.put("corpus", corpus);
-		benchmarkDatasets.put(benchmarkDataset);
-        	
+		JSONObject benchmarkDatasets  = new JSONObject();
+		benchmarkDatasets.put("datasetId", benchmark.getBenchmarkId());
+		benchmarkDatasets.put("metric", metric);
+		benchmarkDatasets.put("corpus", corpus);
+
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
-		
 		log.info("data before sending to metric");
 		log.info(metricRequest.toString());
 		
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
 		
-		
 	}
 	
-	private static <T> List<List<T>> partition(Collection<T> members, int maxSize)
-	{
-	    List<List<T>> res = new ArrayList<>();
-
-	    List<T> internal = new ArrayList<>();
-
-	    for (T member : members)
-	    {
-	        internal.add(member);
-
-	        if (internal.size() == maxSize)
-	        {
-	            res.add(internal);
-	            internal = new ArrayList<>();
-	        }
-	    }
-	    if (internal.isEmpty() == false)
-	    {
-	        res.add(internal);
-	    }
-	    return res;
-	}
-
+	
 }
