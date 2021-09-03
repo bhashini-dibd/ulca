@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
@@ -28,12 +29,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.benchmark.dao.BenchmarkDao;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
+import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.UploadModelResponse;
 
@@ -55,6 +60,9 @@ public class ModelService {
 
 	@Autowired
 	ModelDao modelDao;
+	
+	@Autowired
+	BenchmarkProcessDao benchmarkProcessDao;
 
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
@@ -82,7 +90,18 @@ public class ModelService {
 		} else {
 			list = modelDao.findByUserId(userId);
 		}
-		return new ModelListByUserIdResponse("Model list by UserId", list, list.size());
+		
+		List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
+		for(ModelExtended model : list) {
+			ModelListResponseDto modelDto = new ModelListResponseDto();
+			BeanUtils.copyProperties(model, modelDto);
+			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
+			modelDto.setBenchmarkPerformance(benchmarkProcess);
+			modelDtoList.add(modelDto);
+			
+		}
+		
+		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
 	}
 
 	public ModelExtended getMode(String modelId) {

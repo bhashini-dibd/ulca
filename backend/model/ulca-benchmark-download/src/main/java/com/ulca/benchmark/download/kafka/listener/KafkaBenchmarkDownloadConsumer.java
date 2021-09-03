@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -58,6 +61,15 @@ public class KafkaBenchmarkDownloadConsumer {
 
 			String benchmarkProcessId = bmDsDownload.getBenchmarkProcessId();
 			String downloadFolder = bmDsDownloadFolder + "/benchmark-dataset";
+			
+			Path targetLocation = Paths.get(downloadFolder).toAbsolutePath().normalize();
+
+			try {
+				Files.createDirectories(targetLocation);
+			} catch (Exception ex) {
+				throw new Exception("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
+			}
+			
 
 			List<BenchmarkProcess> bmProcessList = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
 
