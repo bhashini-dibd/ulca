@@ -133,7 +133,7 @@
             "uri":"/ulca/apis/v0/model/upload",
             "module":"ULCA-API-MODEL",
             "active":true,
-            "whiteList":false,
+            "whiteList":true,
             "description":"API to upload models"
         },
         {
@@ -159,6 +159,30 @@
             "active":true,
             "whiteList":true,
             "description":"API to compute models"
+        },
+        {
+            "id":"1bdbb278-3f7e-4680-b892-519294a07518",
+            "uri":"/ulca/apis/v0/benchmark/submit",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to insert benchmark dataset"
+        },
+        {
+            "id":"63b59091-ad6a-4147-bc7d-a10712147c05",
+            "uri":"/ulca/apis/v0/benchmark/execute",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to execute a benchmarking task on the model"
+        },
+        {
+            "id":"889e497c-1df3-4b55-880d-0252c896f2c0",
+            "uri":"/ulca/apis/v0/benchmark/getBytask",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to get benchmark by task"
         },
         {
             "id":"6c5b13f8-cbad-4729-ac94-05eb0248490b",

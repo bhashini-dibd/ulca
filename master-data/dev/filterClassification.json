@@ -1,0 +1,281 @@
+{
+    "parallel-corpus": {
+        "label": "Parallel Dataset",
+        "basicFilters": [
+            {
+                "value": "sourceLanguage",
+                "label": "Source Language"
+            },
+            {
+                "value": "targetLanguage",
+                "label": "Target Language"
+            },
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "liscense",
+                "label": "License"
+            },
+            {
+                "value": "submitter.name",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            },
+            {
+                "label": "Alignment Tool",
+                "value": "alignmentTool"
+            },
+            {
+                "label": "Alignment Score",
+                "value": "alignmentScore"
+            },
+            {
+                "label": "Editing Tool",
+                "value": "editingTool"
+            },
+            {
+                "label": "Translation Model",
+                "value": "translationModel"
+            },
+            {
+                "label": "Evaluation Method",
+                "value": "evaluationMethod"
+            }
+        ]
+    },
+    "ocr-corpus": {
+        "label": "OCR Dataset",
+        "basicFilters": [
+            {
+                "value": "sourceLanguage",
+                "label": "Language"
+            },
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "liscense",
+                "label": "License"
+            },
+            {
+                "value": "submitter.name",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            },
+            {
+                "value": "format",
+                "label": "Format"
+            },
+            {
+                "value": "dpi",
+                "label": "DPI"
+            },
+            {
+                "value": "imageTextType",
+                "label": "Image Text Type"
+            },
+            {
+                "value": "collectionDescription",
+                "label": "Collection Description"
+            },
+            {
+                "value": "ocrTool",
+                "label": "OCR Tool"
+            }
+        ]
+    },
+    "monolingual-corpus": {
+        "label": "Monolingual Dataset",
+        "basicFilters": [
+            {
+                "value": "sourceLanguage",
+                "label": "Language"
+            },
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "liscense",
+                "label": "License"
+            },
+            {
+                "value": "submitter.name",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            }
+        ]
+    },
+    "asr-corpus": {
+        "label": "ASR / TTS Dataset",
+        "basicFilters": [
+            {
+                "value": "sourceLanguage",
+                "label": "Language"
+            },
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "sourceLanguage",
+                "label": "License"
+            },
+            {
+                "value": "submitter.name",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            },
+            {
+                "value": "channel",
+                "label": "Channel"
+            },
+            {
+                "value": "format",
+                "label": "Format"
+            },
+            {
+                "value": "samplingRate",
+                "label": "Sampling Rate"
+            },
+            {
+                "value": "bitsPerSample",
+                "label": "Bits per Sample"
+            },
+            {
+                "value": "numberOfSpeakers",
+                "label": "Number of Speakers"
+            },
+            {
+                "value": "age",
+                "label": "Age"
+            },
+            {
+                "value": "gender",
+                "label": "Gender"
+            },
+            {
+                "value": "dialect",
+                "label": "Dialect"
+            },
+            {
+                "value": "snr.methodDetails.snrTool",
+                "label": "SNR Tool"
+            },
+            {
+                "value": "snrtoolres",
+                "label": "SNR Range"
+            }
+        ]
+    },
+    "asr-unlabeled-corpus": {
+        "label": "ASR Unlabeled Dataset",
+        "basicFilters": [
+            {
+                "value": "sourceLanguage",
+                "label": "Language"
+            },
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "liscense",
+                "label": "License"
+            },
+            {
+                "value": "submitter.name",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            },
+            {
+                "value": "channel",
+                "label": "Channel"
+            },
+            {
+                "value": "format",
+                "label": "Format"
+            },
+            {
+                "value": "samplingRate",
+                "label": "Sampling Rate"
+            },
+            {
+                "value": "bitsPerSample",
+                "label": "Bits per Sample"
+            },
+            {
+                "value": "numberOfSpeakers",
+                "label": "Number of Speakers"
+            },
+            {
+                "value": "age",
+                "label": "Age"
+            },
+            {
+                "value": "gender",
+                "label": "Gender"
+            },
+            {
+                "value": "dialect",
+                "label": "Dialect"
+            },
+            {
+                "value": "snr.methodDetails.snrTool",
+                "label": "SNR Tool"
+            },
+            {
+                "value": "snrtoolres",
+                "label": "SNR Range"
+            }
+        ]
+    }
+}
