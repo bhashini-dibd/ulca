@@ -61,6 +61,7 @@ public class BenchmarkService {
 			bmProcess.setBenchmarkProcessId(uuid.toString());
 			bmProcess.setMetric(bm.getMetric());
 			bmProcess.setModelId(modelId);
+			bmProcess.setStatus("In-Progress");
 			benchmarkprocessDao.save(bmProcess);
 			
 		}
