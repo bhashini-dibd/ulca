@@ -22,10 +22,7 @@ import { useState } from "react";
 import MUIDataTable from "mui-datatables";
 import { useDispatch, useSelector } from "react-redux";
 import getBenchmarkMetric from "../../../../redux/actions/api/Model/ModelView/BenchmarkMetric";
-import { useEffect } from "react";
-import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
 import FilterBenchmark from "./FilterBenchmark";
-import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import searchBenchmark from "../../../../redux/actions/api/Model/ModelView/SearchBenchmark";
 import {
   filterBenchmark,
@@ -50,10 +47,6 @@ const BenchmarkModal = (props) => {
   const id = popoverOpen ? "simple-popover" : undefined;
   const [selectedFilters, setSelectedFilters] = useState([]);
 
-  useEffect(() => {
-    const apiObj = new RunBenchmarkAPI(type, domain);
-    dispatch(APITransport(apiObj));
-  }, []);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -201,6 +194,11 @@ const BenchmarkModal = (props) => {
   ];
 
   const options = {
+    textLabels: {
+      body: {
+        noMatch: "No benchmark dataset available",
+      },
+    },
     customToolbar: fetchModalToolBar,
     customFooter: fetchModalFooter,
     print: false,

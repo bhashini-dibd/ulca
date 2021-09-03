@@ -7,6 +7,7 @@ const initialState = {
   filteredData: [],
   availableFilters: [],
   count: 0,
+  status: "progress",
 };
 
 const getBenchmarkDetails = (payload) => {
@@ -115,6 +116,7 @@ const reducer = (state = initialState, action) => {
         count: action.payload.count,
         selectedIndex: [],
         availableFilters: getAvailableFilters(action.payload),
+        status: "completed",
       };
     case C.SELECT_DATASET:
       return {

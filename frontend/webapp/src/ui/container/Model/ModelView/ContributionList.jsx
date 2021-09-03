@@ -28,10 +28,13 @@ import SelectionList from "./BenchmarkSelection";
 import BenchmarkModal from "./BenchmarkModal";
 import clearBenchMark from "../../../../redux/actions/api/Model/ModelView/ClearBenchmark";
 import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/SubmitBenchmark";
+import Spinner from "../../../components/common/Spinner";
+import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
 
 const ContributionList = (props) => {
   const history = useHistory();
   const dispatch = useDispatch(ClearReport);
+  const [loading, setLoading] = useState(false);
   const myContributionReport = useSelector(
     (state) => state.modelContributionReport
   );
@@ -56,12 +59,25 @@ const ContributionList = (props) => {
   );
   const id = popoverOpen ? "simple-popover" : undefined;
   const [openModal, setOpenModal] = useState(false);
+
+  const status = useSelector(
+    (state) => state.getBenchMarkDetails.status
+  );
+
   useEffect(() => {
     (myContributionReport.filteredData.length === 0 ||
       myContributionReport.refreshStatus ||
       added) &&
       MyContributionListApi();
   }, []);
+
+  useEffect(() => {
+    console.log("inside useeffect");
+    if (status==="completed") {
+      setLoading(false);
+      setOpenModal(true);
+    }
+  });
 
   const MyContributionListApi = () => {
     dispatch(ClearReport());
@@ -203,8 +219,11 @@ const ContributionList = (props) => {
   };
 
   const handleRunBenchMarkClick = (type, domain, modelId) => {
+    setLoading(true);
+    dispatch(clearBenchMark());
     setBenchmarkInfo({ type, domain: [domain], modelId });
-    setOpenModal(true);
+    const apiObj = new RunBenchmarkAPI(type, [domain]);
+    dispatch(APITransport(apiObj));
   };
 
   const makeSubmitAPICall = () => {
@@ -464,6 +483,7 @@ const ContributionList = (props) => {
   const { classes } = props;
   return (
     <div>
+      {loading && <Spinner />}
       {/* <div className={classes.breadcrum}>
                                 <BreadCrum links={[UrlConfig.model]} activeLink="My Contribution" />
                         </div> */}
