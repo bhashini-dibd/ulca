@@ -87,7 +87,7 @@ class ErrorRepo:
     def upsert(self, object_in):
         try:
             col = self.get_mongo_instance()
-            col.update({"serviceRequestNumber": object_in["serviceRequestNumber"]}, {'$set' : object_in}, upsert=True)
+            col.update(object_in,{ '$inc': { 'count': 1 } }, upsert=True)
         except Exception as e:
             log.exception(f'Exception in repo upsert: {e}', e)
 
