@@ -415,10 +415,10 @@ const ContributionList = (props) => {
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
     isRowExpandable: (dataIndex, expandedRows) => {
-      // if (data[dataIndex].benchmarkPerformance.length) {
+      if (data[dataIndex].benchmarkPerformance.length) {
       return true;
-      // }
-      // return false;
+      }
+      return false;
     },
 
     renderExpandableRow: (rowData, rowMeta) => {
