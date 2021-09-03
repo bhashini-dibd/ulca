@@ -30,19 +30,26 @@ class BenchMarkingProcessRepo:
     def insert(self, data):
         
         col = self.get_mongo_instance()
-        benchmark_docs = []
+        # benchmark_docs = []
         try:
-            docs = col.find({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']})
-            if docs:
-                for doc in docs:
-                    if doc:
-                        benchmark_docs.append(doc)
-                # doc_id = doc[0]['_id']
-                col.update_one({"_id":benchmark_docs[0]['_id']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, False, True)
-                # col.update_one({"_id":doc_id}, {"$set": {"status": "Completed" }}, False, True)
+            # docs = col.find({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']})
+            # if docs:
+            #     for doc in docs:
+            #         log.info(f"Document found: {doc}")
+            #         if doc:
+            #             benchmark_docs.append(doc)
+            #     # doc_id = doc[0]['_id']
+            #     if benchmark_docs:
+            res = col.update_one({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, False, True)
+                    # col.update_one({"_id":doc_id}, {"$set": {"status": "Completed" }}, False, True)
+            if res.modified_count == 1:
                 log.info(f"Updated evaluation score for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
             else:
                 log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']}")
+            #     else:
+            #         log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']}")
+            # else:
+            #     log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']}")
         except Exception as e:
             log.exception(f"Exception while updating database with evaluation score: {str(e)}")
 
