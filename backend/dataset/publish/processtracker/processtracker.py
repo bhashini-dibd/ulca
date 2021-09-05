@@ -3,13 +3,13 @@ import uuid
 from datetime import datetime
 from logging.config import dictConfig
 
-from configs.configs import pt_search_tool, pt_delete_tool, pt_inprogress_status, pt_success_status, pt_failed_status
+from configs.configs import pt_search_tool, pt_delete_tool, pt_inprogress_status, pt_success_status, pt_failed_status, \
+    dataset_type_asr, dataset_type_asr_unlabeled
 from .ptrepo import PTRepo
 
 log = logging.getLogger('file')
 
 repo = PTRepo()
-srn_map = {}
 
 class ProcessTracker:
     def __init__(self):
@@ -19,11 +19,20 @@ class ProcessTracker:
     params: data (record to be processed)
     '''
     def update_task_details(self, data):
-        global srn_map
-        if data["status"] == "SUCCESS":
-            repo.redis_key_inc(data["serviceRequestNumber"], False)
+        if 'datasetType' in data.keys():
+            if data["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled]:
+                if data["status"] == "SUCCESS":
+                    if 'isUpdate' not in data.keys():
+                        repo.redis_key_inc(data["serviceRequestNumber"], data["durationInSeconds"], False)
+                    else:
+                        repo.redis_key_inc(data["serviceRequestNumber"], None, False)
+                else:
+                    repo.redis_key_inc(data["serviceRequestNumber"], data["durationInSeconds"], True)
         else:
-            repo.redis_key_inc(data["serviceRequestNumber"], True)
+            if data["status"] == "SUCCESS":
+                repo.redis_key_inc(data["serviceRequestNumber"], None, False)
+            else:
+                repo.redis_key_inc(data["serviceRequestNumber"], None, True)
 
     '''
     Method to update the process tracker for a dataset search event

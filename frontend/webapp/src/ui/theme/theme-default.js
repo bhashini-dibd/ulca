@@ -6,27 +6,25 @@ const themeDefault = createMuiTheme({
     fontWeight: "400",
   },
   overrides: {
-    MuiTableRow: {
-      root: {
-        cursor: "pointer",
-        '&.MuiTableRow-hover:hover': {
-
-
-          backgroundColor: "#F4F4FA"
-
-        }
-
-
-
-      },
-      hover: {
-        //   "&:hover": {
-        //     color: '#2C2799',
-        // backgroundColor: " rgba(44,39,153, .05)"
-        // }
-
-      }
+    MuiTableRow: { root: {
+      height:"60px",
+      margin:"10px",
+      cursor:"pointer",
+      '&$hover:hover:nth-child(odd)':
+      {backgroundColor: '#D6EAF8'} ,
+      '&$hover:hover:nth-child(even)':
+      {backgroundColor: '#E9F7EF'} } 
     },
+    MUIDataTableBodyRow: {
+        root: {
+          '&:nth-child(odd)': { 
+            backgroundColor: '#D6EAF8'
+          },
+          '&:nth-child(even)': { 
+            backgroundColor: '#E9F7EF'
+          }
+        }
+      },
     MUIDataTableFilterList: {
       chip: {
         display: 'none'
@@ -69,7 +67,7 @@ const themeDefault = createMuiTheme({
       },
       MuiButton: {
         root: {
-          display: "none"
+          display: "none",
         }
       }
 
@@ -134,7 +132,7 @@ const themeDefault = createMuiTheme({
     },
     MuiAppBar: {
       root: {
-        boxSizing: "none",
+        boxSizing: "border-box",
         margin: "-1px",
         padding: "0px"
       }
@@ -158,35 +156,85 @@ const themeDefault = createMuiTheme({
     MUIDataTableBodyCell: {
       root: { padding: ".5rem .5rem .5rem .8rem", textTransform: "capitalize" },
     },
-    
+
     MuiButton: {
       root: {
         minWidth: "25",
-        borderRadius: "0",
-
+        borderRadius: 'none'
       },
       label: {
 
         textTransform: "none",
-        fontFamily: '"Segoe UI","Roboto"',
-        fontSize: "15px",
-        fontWeight: "500",
-        lineHeight: "1.14",
-        letterSpacing: "0.5px",
+        fontFamily: '"Roboto", "Segoe UI"',
+        fontSize: "16px",
+        //fontWeight: "500",
+        //lineHeight: "1.14",
+        letterSpacing: "0.16px",
         textAlign: "center",
-        height: "26px",
-        
+        height: "19px",
       },
       sizeLarge: {
-        height: "48px",
+        height: "40px",
+        borderRadius: "20px",
+
+      },
+      sizeMedium: {
+        height: "40px",
+        borderRadius: "20px",
+
       },
       sizeSmall: {
-        height: "36px",
+        height: "30px",
+        borderRadius: "20px",
+
       },
 
 
+    },
+    MuiTabs: {
+      indicator: {
+        // display:'none',
+        backgroundColor: "#FD7F23"
+      }
+    },
+    MuiTab: {
+      root: {
+        width: 'auto',
+        fontSize: '18px',
+        fontWeight: '300',
+        letterSpacing: '0px',
+        fontFamily: 'Roboto',
+        // '&:first-child':{
+        padding: '0',
+        marginRight: '28px',
+        "@media (min-width:600px)": {
+          minWidth: 'auto',
+        },
+        "@media (max-width:600px)": {
+          marginRight: '20px',
+          minWidth: 'auto',
+        },
+        "@media (max-width:550px)": {
+          fontSize: "1rem",
+        },
+      },
+      textColorInherit: {
+        color: '#3A3A3A',
+        opacity: 1,
+        '&.Mui-selected': {
+          fontWeight: 'bold'
+        },
+      },
+      wrapper: {
+        alignItems: 'flex-start',
+        textTransform: 'none'
+      }
+    },
+    MuiBox: {
+      root: {
+        padding: '24px 0px'
+      }
     }
-
   },
   palette: {
     primary: {
@@ -211,32 +259,47 @@ themeDefault.typography.h1 = {
   fontSize: "3.125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "2rem",
+  }
 };
 themeDefault.typography.h2 = {
   fontSize: "2.5rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "1.5rem",
+  }
 };
 themeDefault.typography.h3 = {
   fontSize: "1.6875rem",
-  letterSpacing: "1.98px",
+  //letterSpacing: "1.98px",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  letterSpacing: '0px',
+  "@media (max-width:550px)": {
+    fontSize: "1.3rem",
+  }
 };
 themeDefault.typography.h4 = {
   fontSize: "1.5rem",
   // letterSpacing: "1.98px",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "1rem",
+  }
 };
 themeDefault.typography.h5 = {
   fontSize: "1.3125rem",
-
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: "1rem",
+  }
 };
 themeDefault.typography.h6 = {
-  fontSize: "1.3125rem",
+  fontSize: "1.125rem",
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
   paddingTop: "4px",
@@ -245,7 +308,7 @@ themeDefault.typography.h6 = {
   }
 };
 themeDefault.typography.body1 = {
-  fontSize: "1rem",
+  fontSize: "1.25rem",
   fontFamily: '"Roboto", sans-serif ,sans-serif',
   fontWeight: "400"
 
@@ -255,7 +318,7 @@ themeDefault.typography.body2 = {
   fontFamily: '"Roboto", sans-serif',
   fontWeight: "400",
   color: "#0C0F0F",
-  lineHeight:"22px"
+  lineHeight: "22px"
 };
 themeDefault.typography.caption = {
   fontSize: "0.75rem",

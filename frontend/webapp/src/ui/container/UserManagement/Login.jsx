@@ -14,19 +14,21 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import LoginStyles from "../../styles/Login";
 import LoginApi from "../../../redux/actions/api/UserManagement/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import Snackbar from '../../components/common/Snackbar';
+import { useDispatch } from 'react-redux';
+import Logout from "../../../redux/actions/api/UserManagement/Logout"
 // import {useReducer, useSelector} from "react-redux";
 // import { LoginSocialFacebook, LoginSocialGithub } from "reactjs-social-login";
 // import { LinkedIn } from "react-linkedin-login-oauth2";
 
 
 const Login = (props) => {
-
+  const dispatch = useDispatch();
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -45,6 +47,11 @@ const Login = (props) => {
     message: '',
     variant: 'success'
   })
+
+
+  useEffect(() => {
+   dispatch(Logout())
+}, []);
 
 
 
@@ -183,7 +190,7 @@ const Login = (props) => {
                   </IconButton>
                 </InputAdornment>
               }
-              labelWidth={80}
+              labelWidth={100}
             />
             {error.password && <FormHelperText error={true}>Incorrect password</FormHelperText>}
           </FormControl>

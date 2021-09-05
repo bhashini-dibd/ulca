@@ -21,7 +21,7 @@ const DownloadDatasetRecords = (props) => {
                     {props.sentencePair ?
                         <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
                             <Typography variant="h5">{`${props.sentencePair}`}</Typography>
-                            <Typography variant="subtitle1">{renderSentence()}</Typography>
+                            <Typography variant="body1">{renderSentence()}</Typography>
                         </Grid> :
                         <Grid item xs={7} sm={7} md={7} lg={7} xl={7}>
                             <Typography variant="h5">No records found.</Typography>

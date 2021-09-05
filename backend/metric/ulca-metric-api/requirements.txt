@@ -1,0 +1,13 @@
+flask==1.1.2
+flask-cors==3.0.8
+flask-restful==0.3.8
+uuid==1.30
+kafka_python==2.0.1
+anuvaad_auditor==0.1.6
+xlrd==1.2.0
+pandas==1.1.5
+pydruid==0.6.2
+pymongo==3.11.3
+SQLAlchemy==1.4.17
+iso-language-codes==1.1.0
+Flask-Mail==0.9.1

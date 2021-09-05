@@ -1,4 +1,4 @@
-import { Language, FilterBy } from '../configs/DatasetItems';
+import { Language, FilterBy, ModelTask } from '../configs/DatasetItems';
 import DatasetItems from '../configs/DatasetItems';
 
 export const FilterByDomain =(value) =>{
@@ -27,6 +27,27 @@ export const FilterByCollection =(value) =>{
             return arr;
         
     
+}
+
+export const getLanguageName = (value)=>{
+    let result =""
+    Language.forEach(val => {
+        if(val.value===value){
+            result =  val.label
+        }
+    })
+    return result;
+   
+}
+export const getTaskName = (value)=>{
+    let result =""
+    ModelTask.forEach(val => {
+        if(val.value===value){
+            result =  val.label
+        }
+    })
+    return result;
+   
 }
 
 

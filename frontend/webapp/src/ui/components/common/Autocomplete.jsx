@@ -12,13 +12,14 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 export default function CheckboxesTags(props) {
   return (
     <Autocomplete
-      multiple
+      // multiple
       disabled={props.disabled}
+      multiple={!props.single}
       id={props.id}
       options={props.options}
       disableCloseOnSelect
       value={props.value}
-      getOptionLabel={(option) => option.label}
+      getOptionLabel={(option) => option.label ? option.label : ""}
       onChange={(event, value, reason) => props.handleOnChange(value, props.filter)}
       getOptionSelected={(option, value) => {
         return option.label === value.label
@@ -35,7 +36,7 @@ export default function CheckboxesTags(props) {
         </React.Fragment>
       )}
       renderInput={(params) => (
-        <TextField {...params} variant="standard" label={props.label} error={props.error} helperText={props.error && props.helperText}/>
+        <TextField {...params} variant="standard" label={props.label} error={props.error} helperText={props.error && props.helperText} />
       )}
     />
   );

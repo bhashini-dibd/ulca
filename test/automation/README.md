@@ -16,49 +16,68 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
     * -l    (--login) : flag for login credentials.
 
-* ### For Submitting
+* ### For Dataset
 
-    1. **Single Dataset:**
+    1. **Uploading Single Dataset:**
 
-            python3 automate.py -s -n "dataset-1" -url "https://example.com/dataset-01.zip"
+            python3 automate.py -d -n "dataset-1" -url "https://example.com/dataset-01.zip"
 
         Arguments:
 
-        * -s (--submit) : Flag for Submitting Dataset
+        * -d (--dataset) : Flag for Dataset Functions
         * -n (--name) : Dataset Name
         * -url (--url)  : Valid Dataset URL
 
-     2. **Multiple Datasets (using csv):**
+     2. **Uploading Multiple Datasets (using csv):**
 
-            python3 automate.py -s -i "1.csv"
+            python3 automate.py -d -i "1.csv"
 
         Arguments:
 
-        * -s (--submit) : Flag for Submitting Dataset
+        * -d (--dataset) : Flag for Dataset Functions
         * -i (--input) : input csv file (default-encoding: utf-8)
 
-* ### For Search and Download
+     3. **Searching and Downloading Dataset**
 
-        python3 automate.py -d -src english -tgt tamil,telugu -t parallel
+            python3 automate.py -d -src en -tgt ta,te -t parallel
+
+        Arguments:
+
+        * -d (--dataset) : Flag for Dataset Functions
+        * -t (--type) : Valid Dataset Type
+        * -src (--source) : Valid Source Language
+        * -tgt (--target) : Valid Target Language
+        * [optional] -dom (--domain) : domain of the dataset
+        * [optional] -col (--collection-method) : collection method for the dataset
+        * [optional] -ma (--m-annotators) : flag for Vetted by multiple annotators
+        * [optional] -mt (--m-translators) : flag for manually translated by multiple translators
+        * [optional] -org (--org-source) : flag for original sentencence in source language
+
+* ### For Model (Transalation purpose)
+
+        python3 automate.py -m -n "model-name" -i "input-string"
 
     Arguments:
 
-    * -d (--download) : Flag for Searching and Downloading Dataset
-    * -t (--type) : Valid Dataset Type
-    * -src (--source) : Valid Source Language
-    * -tgt (--target) : Valid Target Language
-    * [optional] -dom (--domain) : domain of the dataset
-    * [optional] -col (--collection-method) : collection method for the dataset
-    * [optional] -ma (--m-annotators) : flag for Vetted by multiple annotators
-    * [optional] -mt (--m-translators) : flag for manually translated by multiple translators
+    * -d (--model) : Flag for Model functions.
+    * -n (--name) : Name of the model
+    * -i (--input) : Input string that has to be translated.
 
-* ### For Supported stuff
+* ### For Updating Schema
 
-        python3 automate.py --support
+        python3 automate.py --update-schema
 
     Arguments:
 
-    * --support : Flag for printing supported
+    * --update-schema : Flag for updating schema 
+
+* ### For Chart Data
+
+        python3 automate.py --chart-data
+
+    Arguments:
+
+    * --chart-data : Flag for getting chart data[languages with its counts] 
 
 To view script usage help from terminal, run:
 
@@ -69,7 +88,11 @@ To view script usage help from terminal, run:
 1. config.py - contains data used for automation.
 2. driver_script.py - contains code for loading browsers/driver.
 3. core_script.py - contains core functions for automation.
-4. automate.py - main file for automation.
+4. dataset_script.py - contains functions for dataset related automation.
+5. model_script.py - contains functions for model related automation.
+6. automate.py - main file for automation.
+7. schema.yml - contains the schema used for automation.
+8. requirements.txt - contains python-packages required to run automation. 
 
 ### Requirements
 
@@ -81,7 +104,7 @@ To install necessary packages for the script, run:
 
 - update username/password [`ULCA_USERNAME` / `ULCA_PASSWORD`] in config.py file.
 - For changing the Browser and Driver path, Update the config.py file
-- default column names are ["Dataset Name"], ["Dataset URL"]
+- default column names for CSV file are ["Dataset Name"], ["Dataset URL"]
 - Required Drivers for Browser:
     - Google Chrome - chromedriver
     - Mozilla Firefox - geckodriver

@@ -7,11 +7,11 @@ const HeaderStyles = (theme) => ({
     margin: "0 auto",
     display: 'flex',
     alignItems: 'center',
-    padding:"0",
-    boxSizing :"border-box"
+    padding: "0",
+    boxSizing: "border-box"
   },
-  appBar:{
-   boxSizing:"border-box"
+  appBar: {
+    boxSizing: "border-box"
   },
   title: {
     color: 'white',
@@ -42,16 +42,19 @@ const HeaderStyles = (theme) => ({
     }
   },
   options: {
-    marginLeft: '1.875%'
+    marginLeft: '1.875%',
+    "@media (max-width:670px)": {
+      marginLeft: '2%'
+    }
   },
   profile: {
     marginLeft: 'auto',
-    marginRight: '-1%'
+    // marginRight: '-1%'
   },
   menuBtn: {
     height: "54px",
     minWidth: "110px",
-    color: 'white'
+    // color: 'white'
   },
   menuBtn2: {
     height: "37px",
@@ -91,8 +94,9 @@ const HeaderStyles = (theme) => ({
   avatar: {
     width: "36px",
     height: "36px",
-    backgroundColor: "white",
-    fontSize: "14px"
+    backgroundColor: "#2A61AD",
+    fontSize: "14px",
+    color: "#FFFFFF"
   },
 
   dataset: {
@@ -106,11 +110,11 @@ const HeaderStyles = (theme) => ({
       display: 'block'
     }
   },
-  model: {
-    "@media (max-width:425px)": {
-      display: 'none'
-    }
-  },
+  // model: {
+  //   "@media (max-width:425px)": {
+  //     display: 'none'
+  //   }
+  // },
   modelMobile: {
     display: 'none',
     "@media (max-width:425px)": {
@@ -152,16 +156,27 @@ const HeaderStyles = (theme) => ({
     alignContent: 'center',
     display: 'grid'
   },
+  bhashiniLogo: {
+    paddingRight: '12px',
+    boxShadow: "3px 0 2px -2px #00000029",
+    marginRight: '14px',
+    display: 'block',
+    "@media (max-width:670px)": {
+      width:'100px'
+    }
+  },
+
+
   btnStyle: {
     padding: '0px',
     justifyContent: 'left',
     fontSize: "1.125rem",
- // fontFamily: '"Poppins","lato" ,sans-serif',
-  fontWeight: "500 !important",
+    // fontFamily: '"Poppins","lato" ,sans-serif',
+    fontWeight: "500 !important",
     "&:hover": {
 
       backgroundColor: 'white',
     }
-  }
+  },
 });
 export default HeaderStyles;

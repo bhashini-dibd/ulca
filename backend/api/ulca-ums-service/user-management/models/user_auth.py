@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from utilities import UserUtils, normalize_bson_to_json
 import time
 import config
-from config import USR_MONGO_COLLECTION, USR_TEMP_TOKEN_MONGO_COLLECTION, USR_KEY_MONGO_COLLECTION
+from config import USR_KEY_MONGO_COLLECTION, USR_MONGO_COLLECTION, USR_TEMP_TOKEN_MONGO_COLLECTION
 import logging
 from utilities import EnumVals
 
@@ -16,6 +16,8 @@ admin_role_key          =   config.ADMIN_ROLE_KEY
 verify_mail_expiry      =   config.USER_VERIFY_LINK_EXPIRY
 apikey_expiry           =   config.USER_API_KEY_EXPIRY  
 
+
+
 class UserAuthenticationModel(object):
 
     def user_login(self,user_email, password=None):
@@ -23,6 +25,8 @@ class UserAuthenticationModel(object):
 
         try:
             user_keys = UserUtils.get_data_from_keybase(user_email,keys=True)
+            if not user_keys:
+                    user_keys   =   UserUtils.generate_api_keys(user_email)
             if "errorID" in user_keys:
                 return user_keys
 
@@ -33,10 +37,6 @@ class UserAuthenticationModel(object):
                 return post_error("Data not valid","Error on fetching user details")
             for user in user_details:
                 return {"userKeys":user_keys,"userDetails": normalize_bson_to_json(user)}
-
-            # if (datetime.utcnow() - user_keys["createdOn"]) > timedelta(days=apikey_expiry):
-            #     log.info("api-keys expired for {}".format(user_email), MODULE_CONTEXT)
-            #     new_keys = userutils.renew_api_keys(user_email)
                 
         except Exception as e:
             log.exception("Database connection exception | {} ".format(str(e)))
@@ -68,7 +68,7 @@ class UserAuthenticationModel(object):
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)
 
 
-    def token_search(self,key):
+    def key_search(self,key):
         """Token search for user details"""
 
         try:
@@ -79,6 +79,9 @@ class UserAuthenticationModel(object):
             email = result["email"]
             collections = get_db()[USR_MONGO_COLLECTION] 
             user = collections.find({"email":email,"isVerified":True,"isActive":True},{"password":0,"_id":0})
+            if user.count() == 0:
+                log.info("No user records found in db matching email: {}".format(email))
+                return post_error("Invalid data", "Data received on request is not valid", None)
             for record in user:
                 record["privateKey"] = result["privateKey"]
                 return normalize_bson_to_json(record)
@@ -88,23 +91,37 @@ class UserAuthenticationModel(object):
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)
 
   
-    def forgot_password(self,user_name):
+    def forgot_password(self,user_email):
         """Generaing forgot password notification"""
 
-        #generating random id
-        rand_id=UserUtils.generate_user_id()
         #connecting to mongo instance/collection
-        collections = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION]
+        user_collection         =   get_db()[USR_MONGO_COLLECTION]
+        key_collection          =   get_db()[USR_KEY_MONGO_COLLECTION]
+        token_collection        =   get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION]
+        user_record = user_collection.find({"email":user_email})
+        name = user_record[0]["firstName"]
+        record = token_collection.find({"email":user_email})
+        #removing previous records if any
+        if record.count() != 0:
+            key_collection.remove({"email":user_email})
+            token_collection.remove({"email":user_email})
+            
+        user_keys = UserUtils.get_data_from_keybase(user_email,keys=True)
+        if not user_keys:
+            user_keys   =   UserUtils.generate_api_keys(user_email)
+        if "errorID" in user_keys:
+            return user_keys
+        user_keys["createdOn"] = datetime.utcnow()
         #inserting new id generated onto temporary token collection
-        collections.insert({"email": user_name, "token": rand_id, "createdOn": datetime.utcnow()})
+        token_collection.insert(user_keys)
         #generating email notification
-        result = UserUtils.generate_email_reset_password([{"email":user_name,"uuid":rand_id}],EnumVals.ForgotPwdTaskId.value)
+        result = UserUtils.generate_email_notification([{"email":user_email,"pubKey":user_keys["publicKey"],"pvtKey":user_keys["privateKey"],"name":name}],EnumVals.ForgotPwdTaskId.value)
         if result is not None:
             return result
         return True
     
 
-    def reset_password(self,user_id,user_name,password):
+    def reset_password(self,user_id,user_email,password):
         """Resetting password
         
         an active user can reset their own password,
@@ -116,27 +133,32 @@ class UserAuthenticationModel(object):
         try:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
+            key_collection = get_db()[USR_KEY_MONGO_COLLECTION]
+            temp_collection = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION]
             #searching for valid record matching given user_id
             record = collections.find({"userID": user_id})
             if record.count() != 0:
                 log.info("Record found matching the userID {}".format(user_id), MODULE_CONTEXT)
                 for user in record:
                     #fetching the user roles
-                    roles=[ rol['roleCode'] for rol in user["roles"] ] 
-                    #converting roles to upper keys
-                    role_keys=[x.upper() for x in roles]
+                    roles=user["roles"] 
                     #fetching user name
-                    username=user["userName"]
+                    email=user["email"]
+
                 #verifying the requested person, both admin and user can reset password   
-                if (admin_role_key in role_keys) or (username == user_name):
+                if (admin_role_key in roles) or (email == user_email):
                     log.info("Reset password request is checked against role permission and username")
-                    results = collections.update({"userName":user_name,"is_active":True}, {"$set": {"password": hashed}})
+                    results = collections.update({"email":user_email,"isActive":True}, {"$set": {"password": hashed}})
                     if 'writeError' in list(results.keys()):
                         return post_error("Database error", "writeError while updating record", None)
+                    # removing temp API keys from user record
+                    temp_collection.remove({"email":user_email})
+                    # removing API keys from user record
+                    key_collection.remove({"email":user_email})
                     return True
             else:
                 log.info("No record found matching the userID {}".format(user_id), MODULE_CONTEXT)
-                return post_error("Data Not valid","Invalid Credential",None)              
+                return post_error("Data Not valid","Invalid user details",None)              
         except Exception as e:
             log.exception("Database  exception ",  MODULE_CONTEXT, e)
             return post_error("Database exception", "Exception:{}".format(str(e)), None)         
@@ -220,3 +242,18 @@ class UserAuthenticationModel(object):
             return post_error("Database exception", "Exception:{}".format(str(e)), None)
            
            
+    def token_search(self,token):
+        """Token search for user details"""
+
+        try:
+            log.info("searching for the keys")
+            collections = get_db()[USR_TEMP_TOKEN_MONGO_COLLECTION] 
+            user = collections.find({"publicKey":token})
+            if user.count() == 0:
+                log.info("Token has expired")
+                return {"active": False}
+            return {"active": True}
+
+        except Exception as e:
+            log.exception("Database connection exception | {}".format(str(e)))
+            return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)

@@ -1,6 +1,7 @@
 import hashlib
 import json
 import logging
+import os
 from logging.config import dictConfig
 
 import requests
@@ -18,6 +19,8 @@ class DatasetUtils:
     # Utility to get tags out of an object
     def get_tags(self, d):
         for v in d.values():
+            if not v:
+                continue
             if isinstance(v, dict):
                 yield from self.get_tags(v)
             elif isinstance(v, list):
@@ -35,19 +38,20 @@ class DatasetUtils:
 
     # Method to push search results to object store
     def push_result_to_object_store(self, result, service_req_no, size):
-        log.info(f'Pushing results and sample to Object Store......')
+        log.info(f'Writing results and sample to Object Store......')
         try:
             res_path = f'{shared_storage_path}{service_req_no}-ds.json'
             with open(res_path, 'w') as f:
                 json.dump(result, f)
-            res_path_os = self.upload_file(res_path, dataset_prefix, f'{service_req_no}-ds.json')
             res_path_sample = f'{shared_storage_path}{service_req_no}-sample-ds.json'
             with open(res_path_sample, 'w') as f:
                 json.dump(result[:size], f)
+            log.info(f'Publishing results and sample to Object Store......')
+            res_path_os = self.upload_file(res_path, dataset_prefix, f'{service_req_no}-ds.json')
             res_path_sample_os = self.upload_file(res_path_sample, dataset_prefix, f'{service_req_no}-sample-ds.json')
             return res_path_os, res_path_sample_os
         except Exception as e:
-            log.exception(f'Exception while pushing search results to s3: {e}', e)
+            log.exception(f'Exception while pushing search results to object store: {e}', e)
             return False, False
 
     # Utility to hash a file
@@ -66,6 +70,7 @@ class DatasetUtils:
 
     # Utility to upload files to ULCA Object store
     def upload_file(self, file_location, folder, file_name):
+        log.info(f'Uploading file to the Object Store......')
         file_store_req = {"fileLocation": file_location, "storageFolder": folder, "fileName": file_name}
         uri = f'{file_store_host}{file_store_upload_endpoint}'
         try:

@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Snackbar from '../../../components/common/Snackbar';
 import UrlConfig from '../../../../configs/internalurlmapping';
-import SubmitDatasetApi from "../../../../redux/actions/api/UploadDataset/SubmitDataset"
+import SubmitDatasetApi from "../../../../redux/actions/api/DataSet/UploadDataset/SubmitDataset"
 import DatasetItems from "../../../../configs/DatasetItems";
 import getTitleName from '../../../../utils/getDataset';
 import C from "../../../../redux/actions/constants";
@@ -120,7 +120,7 @@ const SubmitDataset = (props) => {
                 
              else {
                 dispatch(PageChange(0, C.PAGE_CHANGE));
-                history.push(`${process.env.PUBLIC_URL}/submit-dataset/submission/${rsp_data.data.serviceRequestNumber}`)
+                history.push(`${process.env.PUBLIC_URL}/dataset/submission/${rsp_data.data.serviceRequestNumber}`)
                 //           return true;
             }
         }).catch((error) => {
@@ -198,9 +198,9 @@ const SubmitDataset = (props) => {
     return (
         <div>
             <div >
-                <div className={classes.breadcrum}>
+                {/* <div className={classes.breadcrum}>
                     <BreadCrum links={[url]} activeLink="Submit Dataset" />
-                </div>
+                </div> */}
                 <Paper elevation={3} className={classes.divStyle}>
                    
                     <Grid container spacing={5}>

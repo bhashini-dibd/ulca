@@ -1,4 +1,3 @@
-from os import name
 import uuid
 import time
 import re
@@ -30,9 +29,10 @@ json_file_name      =   config.ROLE_CODES_FILE_NAME
 
 mail_server         =   config.MAIL_SETTINGS["MAIL_USERNAME"]
 mail_ui_link        =   config.BASE_URL
+reset_pwd_link      =   config.RESET_PWD_ENDPOINT
 token_life          =   config.AUTH_TOKEN_EXPIRY_HRS
 verify_mail_expiry  =   config.USER_VERIFY_LINK_EXPIRY
-
+apikey_expiry       =   config.USER_API_KEY_EXPIRY  
 role_codes          =   []
 role_details        =   []
 
@@ -164,15 +164,15 @@ class UserUtils:
         
         try: 
             #creating payload for API Key storage
-            verification_payload = {"email": email, "publicKey":str(uuid.uuid4()), "privateKey": uuid.uuid4().hex, "createdOn": str(datetime.utcnow())}
+            key_payload = {"email": email, "publicKey":str(uuid.uuid4()), "privateKey": uuid.uuid4().hex, "createdOn": datetime.utcnow()}
             log.info("New API key issued for {}".format(email), MODULE_CONTEXT) 
             #connecting to mongo instance/collection
             collections = get_db()[USR_KEY_MONGO_COLLECTION]
             #inserting api-key records on db
-            collections.insert(verification_payload)
-            del verification_payload["_id"]
-            del verification_payload["createdOn"]
-            return verification_payload
+            collections.insert(key_payload)
+            del key_payload["_id"]
+            del key_payload["createdOn"]
+            return key_payload
 
         except Exception as e:
             log.exception("Database exception | {}".format(str(e)))
@@ -269,17 +269,22 @@ class UserUtils:
             if keys:
                 result = collections.find({"email":value},{"email":1,"publicKey":1,"privateKey":1,"_id":0})
                 if result.count() ==0:
-                    log.info("No keys found matching the request")
-                    return post_error("Invalid data", "Data received on request is not valid", None)
+                    return None
                 for key in result:
                     return key  
             if email:
-                result = collections.find({"publicKey":value},{"email":1,"privateKey":1,"_id":0})
+                result = collections.find({"publicKey":value},{"email":1,"privateKey":1,"createdOn":1,"_id":0})
                 if result.count() ==0:
                     log.info("No data found matching the request")
                     return post_error("Invalid key", "key received is invalid", None)
                 for key in result:
-                    return key
+                    if ((datetime.utcnow() - key["createdOn"]) > timedelta(days=apikey_expiry)):
+                        log.info("Keys expired for user : {}".format(key["email"]))
+                        #removing keys since they had expired
+                        collections.remove({"publicKey":value})
+                        return post_error("Invalid key", "key has expired", None)
+                    else:
+                        return key
 
         except Exception as e:
             log.exception("db connection exception | {}".format(str(e)))
@@ -507,7 +512,8 @@ class UserUtils:
             timestamp   =   eval(str(time.time()).replace('.', '')[0:13])
             name        =   None
             user_id     =   None
-            rand_id     =   None
+            pubKey      =   None
+            pvtKey      =   None
             link        =   None
 
             if task_id == EnumVals.VerificationTaskId.value:
@@ -523,10 +529,11 @@ class UserUtils:
 
             if task_id == EnumVals.ForgotPwdTaskId.value:
                 email_subject   =   EnumVals.ForgotPwdSubject.value
-                template        =   'reset_mail_template.html'
-                rand_id         =   user_record["uuid"]
-                link            =   mail_ui_link+"set-password/{}/{}/{}".format(email,rand_id,timestamp)
-                
+                template        =   'reset_pwd_mail_template.html'
+                pubKey          =   user_record["pubKey"]
+                pvtKey          =   user_record["pvtKey"]
+                link            =   mail_ui_link+reset_pwd_link+"{}/{}/{}/{}".format(email,pubKey,pvtKey,timestamp)
+                name            =   user_record["name"]
             try:
                 msg = Message(subject=email_subject,sender=mail_server,recipients=[email])
                 msg.html = render_template(template,ui_link=mail_ui_link,activity_link=link,user_name=name)
@@ -544,12 +551,12 @@ class UserUtils:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
             #searching for record matching user_name
-            valid = collections.find({"userName":user_email,"is_verified":True})
+            valid = collections.find({"email":user_email,"isVerified":True})
             if valid.count() == 0:
                 log.info("Not a valid email/username")
-                return post_error("Not Valid","Given email is not associated with any of the active ULCA accounts",None)
+                return post_error("Not Valid","This email address is not registered with ULCA",None)#Given email is not associated with any of the active ULCA accounts
             for value in valid:
-                if value["is_active"]== False:
+                if value["isActive"]== False:
                     log.info("Given email/username is inactive")
                     return post_error("Not active", "This operation is not allowed for an inactive user", None)
         except Exception as e:

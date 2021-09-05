@@ -4,6 +4,7 @@ import hashlib
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
+import os
 
 class CaseDedup(BaseValidator):
     """
@@ -18,14 +19,18 @@ class CaseDedup(BaseValidator):
     def hash_file(self, filename):
         h = hashlib.sha256()
         try:
-            with open(filename, 'rb') as file:
-                chunk = 0
-                while chunk != b'':
-                    chunk = file.read(1024)
-                    h.update(chunk)
-            return h.hexdigest()
+            if os.path.exists(filename) and os.path.isfile(filename):
+                with open(filename, 'rb') as file:
+                    chunk = 0
+                    while chunk != b'':
+                        chunk = file.read(1024)
+                        h.update(chunk)
+                return h.hexdigest()
+            else:
+                log.info('The audio file does not exist in file store')
+                return None
         except Exception as e:
-            log.exception(e)
+            log.exception(f"Exception while hashing the file: {str(e)}")
             return None
 
     def execute(self, request):
@@ -34,24 +39,41 @@ class CaseDedup(BaseValidator):
             if request["datasetType"] == dataset_type_parallel:
                 request['record']['sourceTextHash'] = self.create_hash(request['record']['sourceText'], request['record']['sourceLanguage'])
                 request['record']['targetTextHash'] = self.create_hash(request['record']['targetText'], request['record']['targetLanguage'])
+
             if request["datasetType"] == dataset_type_asr:
                 audio_file = request['record']['fileLocation']
-                #file_path = f'{shared_storage_path}{audio_file}'
-                request['record']['audioHash'] = self.hash_file(audio_file)
+                hash_str = self.hash_file(audio_file)
+                if hash_str:
+                    request['record']['audioHash'] = hash_str
+                else:
+                    return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+
                 request['record']['textHash'] = self.create_hash(request['record']['text'], request['record']['sourceLanguage'])
+
             if request["datasetType"] == dataset_type_ocr:
                 image_file = request['record']['fileLocation']
-                request['record']['imageHash'] = self.hash_file(image_file)
+                hash_str = self.hash_file(image_file)
+                if hash_str:
+                    request['record']['imageHash'] = hash_str
+                else:
+                    return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+
                 request['record']['groundTruthHash'] = self.create_hash(request['record']['groundTruth'], request['record']['sourceLanguage'])
+
             if request["datasetType"] == dataset_type_monolingual:
                 request['record']['textHash'] = self.create_hash(request['record']['text'], request['record']['sourceLanguage'])
+
             if request["datasetType"] == dataset_type_asr_unlabeled:
                 audio_file = request['record']['fileLocation']
-                request['record']['audioHash'] = self.hash_file(audio_file)
+                hash_str = self.hash_file(audio_file)
+                if hash_str:
+                    request['record']['audioHash'] = hash_str
+                else:
+                    return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
             return super().execute(request)
         except Exception as e:
-            log.exception('Exception while adding hash values for sentences', e)
+            log.exception(f"Exception while adding hash values for sentences: {str(e)}")
             return {"message": "Exception while adding hash values for sentences", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 

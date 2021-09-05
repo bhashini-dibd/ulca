@@ -1,6 +1,6 @@
 import threading
 from threading import Thread
-from configs.configs import error_cron_interval_sec, shared_storage_path, error_prefix
+from configs.configs import error_cron_interval_sec, shared_storage_path, error_prefix, error_batch_size
 from .cronrepo import StoreRepo
 import logging
 from events.errorrepo import ErrorRepo
@@ -8,6 +8,7 @@ from utils.cronjobutils import StoreUtils
 import os
 from datetime import datetime
 from logging.config import dictConfig
+
 
 log         =   logging.getLogger('file')
 storerepo   =   StoreRepo()
@@ -62,42 +63,54 @@ class ErrorProcessor(Thread):
                 error_records_count = len(error_records_keys)
                 log.info(f'{error_records_count} records found in redis store for srn -- {srn}')
                 #if both mongo and redis store count matches, no upload; Else if redis-count > mongo-count start uploading
+                
                 if error_records_count > uploaded_count:
-                    #fetching back all the records from redis store using the srn keys
-                    error_records = storerepo.get_all_records(error_records_keys,pattern)
-                    log.info(f'Received {len(error_records)} records from redis store for srn -- {srn}')
-                    if error_records:
-                        log.info(f'Initiating upload process for srn -- {srn} on a new fork')
-                        #forking a new thread
-                        persister = threading.Thread(target=self.upload_error_to_object_store, args=(error_records,srn))
-                        persister.start()
+                    keys_list=[error_records_keys[i:i + error_batch_size] for i in range(0, len(error_records_keys), error_batch_size)]
+                    for keys in keys_list:
+                        #fetching back all the records from redis store using the srn keys
+                        error_records = storerepo.get_all_records(keys,None)
+                        log.info(f'Received {len(error_records)} records from redis store for srn -- {srn}')
+                        if error_records:
+                            file,file_name=self.create_error_file(error_records,srn)
+                    log.info(f'Completed csv creation for srn-- {srn} ')  
+                    #forking a new thread
+                    log.info(f'Initiating upload process for srn -- {srn} on a new fork')
+                    persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,file,file_name,error_records_count))
+                    persister.start()
                 else:
                     log.info(f'No new records left for uploading, for srn -- {srn}')
+                
         except Exception as e:
             log.exception(f"Exception on error processing {e}")
 
     #method to upload errors onto object store
-    def upload_error_to_object_store(self, error_records, srn):
+    def create_error_file(self, error_records, srn):
         try:
             file = f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
             log.info(f'Writing {len(error_records)} errors to {file} for srn -- {srn}')
             #writing to csv locally
             storeutils.write_to_csv(error_records,file,srn)
+            # zipfile = storeutils.zipfile_creation(file)
+            # log.info(f"zip file created :{zipfile} , for srn -- {srn}, ")
             file_name = file.replace("/opt/","")
-            print(file, file_name)
-            #initiating upload API call
-            error_object_path = storeutils.file_store_upload_call(file,file_name,error_prefix)
-            log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
-            error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "internal_file": file, "file": error_object_path, "count": len(error_records)}
-            #updating record on mongo with uploaded error count
-            errorepo.upsert(error_record)
-            log.info(f'Updated db record for SRN -- {srn}')
-            os.remove(file)
-            return error_record
+            return file,file_name
+            
         except Exception as e:
-            log.exception(f'Exception while ingesting errors to object store: {e}', e)
+            log.exception(f'Exception while ingesting errors to object store: {e}')
             return []
 
+    def upload_error_to_object_store(self,srn,file,file_name,error_records_count):
+        #initiating upload API call
+        error_object_path = storeutils.file_store_upload_call(file,file_name,error_prefix)
+        if error_object_path == False:
+            return  None
+        log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
+        error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "internal_file": file, "file": error_object_path, "count": error_records_count}
+        #updating record on mongo with uploaded error count
+        errorepo.upsert(error_record)
+        log.info(f'Updated db record for SRN -- {srn}')
+        # os.remove(file)
+        return error_record
 
 
 

@@ -17,8 +17,9 @@ class ImageMetadataCheck(BaseValidator):
             if request["datasetType"] == dataset_type_ocr:
                 image_file = request['record']['fileLocation']
                 with Image.open(image_file) as img:
-                    if img.format.lower() != request['format'].lower():
-                        return {"message": "Image format does not match with the one specified", "code": "IMAGE_FORMAT_MISMATCH", "status": "FAILED"}
+                    if 'format' in request['record'].keys():
+                        if img.format.lower() != request['record']['format'].lower():
+                            return {"message": "Image format does not match with the one specified", "code": "IMAGE_FORMAT_MISMATCH", "status": "FAILED"}
                     width, height = img.size
                     box_vertices = request['record']['boundingBox']['vertices']
                     for vertex in box_vertices:
@@ -28,7 +29,7 @@ class ImageMetadataCheck(BaseValidator):
             log.info('----image metadata check  -> Passed----')
             return super().execute(request)
         except Exception as e:
-            log.exception('Exception while executing Image metadata check', e)
+            log.exception(f"Exception while executing Image metadata check: {str(e)}")
             return {"message": "Exception while executing Image metadata check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 # Log config
