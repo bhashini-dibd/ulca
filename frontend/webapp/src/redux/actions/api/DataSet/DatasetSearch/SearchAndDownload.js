@@ -10,7 +10,8 @@ export default class SearchAndDownload extends API {
         this.type = C.GET_SEARCH_OPTIONS;
        // this.endpoint= "https://jsonplaceholder.typicode.com/posts";
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
-        this.endpoint = `${CONFIGS.API_URL}${ENDPOINTS.getSearchOptions}`;
+        this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getSearchOptions}`;
+        console.log(this.endpoint)
     }
 
     toString() {

@@ -26,8 +26,10 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import MultiAutocomplete from '../../../components/common/Autocomplete';
 import { Language, FilterBy } from '../../../../configs/DatasetItems';
 import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest';
-import DatasetType from '../../../../configs/DatasetItems';
+// import DatasetType from '../../../../configs/DatasetItems';
 import getLanguageLabel from '../../../../utils/getLabel';
+import SearchAndDownloadAPI from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
+import APITransport from '../../../../redux/actions/apitransport/apitransport';
 const StyledMenu = withStyles({
 })((props) => (
     <Menu
@@ -48,6 +50,8 @@ const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
     const urlMySearch = UrlConfig.mySearches;
+    const DatasetType = useSelector(state=>state.mySearchOptions.result.datasetType)
+    console.log(DatasetType)
     const dispatch = useDispatch();
     const param = useParams();
     const history = useHistory();
@@ -79,6 +83,8 @@ const SearchAndDownloadRecords = (props) => {
 
     useEffect(() => {
 
+        const apiData= new SearchAndDownloadAPI();
+        dispatch(APITransport(apiData))
         previousUrl.current = params;
 
         let data = detailedReport.responseData.filter((val) => {
