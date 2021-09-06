@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,6 +21,7 @@ import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.service.AsrBenchmark;
 import com.ulca.benchmark.service.TranslationBenchmark;
 import com.ulca.benchmark.util.UnzipUtility;
 import com.ulca.model.dao.ModelDao;
@@ -48,6 +52,9 @@ public class KafkaBenchmarkDownloadConsumer {
 
 	@Autowired
 	TranslationBenchmark translationBenchmark;
+	
+	@Autowired
+	AsrBenchmark asrBenchmark;
 
 	@KafkaListener(groupId = "${kafka.ulca.bm.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.bm.filedownload.ip.topic}", containerFactory = "benchmarkDownloadKafkaListenerContainerFactory")
 	public void downloadBenchmarkDataset(BmDatasetDownload bmDsDownload) {
@@ -58,6 +65,15 @@ public class KafkaBenchmarkDownloadConsumer {
 
 			String benchmarkProcessId = bmDsDownload.getBenchmarkProcessId();
 			String downloadFolder = bmDsDownloadFolder + "/benchmark-dataset";
+			
+			Path targetLocation = Paths.get(downloadFolder).toAbsolutePath().normalize();
+
+			try {
+				Files.createDirectories(targetLocation);
+			} catch (Exception ex) {
+				throw new Exception("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
+			}
+			
 
 			List<BenchmarkProcess> bmProcessList = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
 
@@ -99,7 +115,10 @@ public class KafkaBenchmarkDownloadConsumer {
 								benchmarkProcessId);
 						break;
 					case ASR:
-
+						log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
+						
+						asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+								benchmarkProcessId);
 						break;
 
 					case OCR:

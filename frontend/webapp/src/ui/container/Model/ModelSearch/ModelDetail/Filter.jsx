@@ -95,7 +95,7 @@ const FilterList = (props) => {
                                                 color="primary"
                                             />
                                         }
-                                        label={type}
+                                        label={type[0].toUpperCase()+type.slice(1)}
                                     />)
                             })}
                         </FormGroup>
