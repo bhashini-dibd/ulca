@@ -471,6 +471,7 @@ const DataSet = (theme) => ({
     marginLeft: 0,
     width: "220px",
     textAlign: "left",
+    float:'right'
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
