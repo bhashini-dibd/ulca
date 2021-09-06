@@ -6,7 +6,7 @@ redis_server_host = os.environ.get('REDIS_URL', 'localhost')
 redis_server_port = os.environ.get('REDIS_PORT', 6379)
 redis_server_pass = os.environ.get('REDIS_PASS', None)
 
-db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://localhost:27017/")
+db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://10.30.11.136:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")
 asr_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_COL', "asr-dataset")
 asr_unlabeled_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_UNLABELED_COL', "asr-unlabeled-dataset")
@@ -56,8 +56,8 @@ asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
 parallel_updatable_keys = ["alignmentScore", "version"]
-parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter", "lastModifiedOn", "createdOn"]
-parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn"]
+parallel_non_tag_keys = ["id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn", "createdOn"]
+parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn"]
 
 ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
 ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation", "lastModifiedOn", "createdOn"]
