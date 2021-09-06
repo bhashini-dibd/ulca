@@ -10,11 +10,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
+import java.util.Base64; //java8 base64
+
+//Import the Base64 encoding library.
+//import org.apache.commons.codec.binary.Base64;
+
+import javax.sound.sampled.AudioFormat;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +36,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.request.AsrComputeRequest;
+import com.ulca.benchmark.request.AsrComputeResponse;
 import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.dao.ModelExtended;
 
+import io.swagger.model.ASRInference;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.model.Benchmark;
@@ -53,6 +63,9 @@ public class AsrBenchmark {
 	
 	@Value("${kafka.ulca.bm.metric.ip.topic}")
 	private String mbMetricTopic;
+	
+	@Value("${asrcomputeurl}")
+	private String asrcomputeurl;
 	
 	
 	@Autowired
@@ -138,9 +151,32 @@ public class AsrBenchmark {
 			JSONObject inputJson =  new JSONObject(dataRow);
 			String audioFilename = inputJson.getString("audioFilename");
 			String audioPath = baseLocation + audioFilename;
-			byte[] bytes = Files.readAllBytes(Paths.get(audioPath));
 			
-			String resultText = compute(callBackUrl, schema, Base64.getMimeEncoder().encode(bytes));
+			byte[] bytes = Files.readAllBytes(Paths.get(audioPath));
+			//byte[] bytes = FileUtils.readFileToByteArray(new File(audioPath));
+			
+
+			//String encoded = Base64.getEncoder().encodeToString(bytes, 0);                                       
+
+			//byte[] decoded = Base64.getDecoder().decode(encoded, 0);
+			//String resultText = compute(callBackUrl, schema, Base64.getMimeEncoder().encode(bytes));
+			
+			// Encode the speech.
+			//byte[] encodedAudio = Base64.encodeBase64(audio.getBytes());
+		
+			
+			//byte[] encodedAudio = Base64.encodeBase64(bytes);
+			
+			//String resultText = compute(callBackUrl, schema, encodedAudio);
+			
+			AsrComputeRequest request = new AsrComputeRequest();
+			request.setCallbackUrl(callBackUrl);
+			request.setFilePath(audioPath);
+			
+			ASRInference asrInference = (ASRInference) schema;
+			request.setSourceLanguage(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
+			
+			String resultText = asrComputeInternal(request);		
 			
 			String targetText = inputJson.getString("text");
 			JSONObject target =  new JSONObject();
@@ -151,11 +187,12 @@ public class AsrBenchmark {
 		reader.endArray();
 		reader.close();
 		inputStream.close();
-		
-		JSONObject benchmarkDatasets  = new JSONObject();
-		benchmarkDatasets.put("datasetId", benchmark.getBenchmarkId());
-		benchmarkDatasets.put("metric", metric);
-		benchmarkDatasets.put("corpus", corpus);
+		JSONArray benchmarkDatasets = new JSONArray();
+		JSONObject benchmarkDataset  = new JSONObject();
+		benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
+		benchmarkDataset.put("metric", metric);
+		benchmarkDataset.put("corpus", corpus);
+		benchmarkDatasets.put(benchmarkDataset);
 
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
@@ -166,6 +203,16 @@ public class AsrBenchmark {
 		log.info(metricRequest.toString());
 		
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
+		
+	}
+	
+	public String asrComputeInternal(AsrComputeRequest request) {
+		
+		AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
+				.body(Mono.just(request), AsrCallBackRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
+				.block();
+		
+		return response.getData().getTranscript();
 		
 	}
 	

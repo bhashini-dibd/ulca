@@ -85,6 +85,15 @@ const getClearFilter = (data) => {
   return data;
 };
 
+const convertDate = (data) => {
+  return data.map((element) => {
+    element.createdOn = element.createdOn
+      ? dateConversion(element.createdOn)
+      : "";
+    return element;
+  });
+};
+
 const getContributionList = (state, payload) => {
   let responseData = [];
   let statusFilter = [];
@@ -103,7 +112,7 @@ const getContributionList = (state, payload) => {
       getLanguageName(element.languages[0].targetLanguage);
     let lang = tLanguage ? sLanguage + " - " + tLanguage : sLanguage;
     responseData.push({
-      benchmarkPerformance: element.benchmarkPerformance,
+      benchmarkPerformance: convertDate(element.benchmarkPerformance),
       submitRefNumber: element.modelId,
       modelName: element.name,
       description: element.description,

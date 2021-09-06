@@ -17,6 +17,10 @@ import {
   InputBase,
   TableCell,
   TableRow,
+  TableBody,
+  TableHead,
+  Box,
+  Table
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -126,16 +130,17 @@ const BenchmarkModal = (props) => {
         }}
         className={classes.filterBtn}
         onClick={() => {
-          if (type === "DATASET") {
-            const modal = document.querySelectorAll(
-              `#MUIDataTableBodyRow-${index}`
-            )[1];
-            if (modal.style.backgroundColor) {
-              modal.style.backgroundColor = "";
-            } else {
-              modal.style.backgroundColor = "#E2F2FD";
-            }
-          }
+          // if (type === "DATASET") {
+          //   const modals = document.querySelectorAll(
+          //     `#MUIDataTableBodyRow-${index}`
+          //   );
+          //   const modal = modals[modals.length - 1];
+          //   if (modal.style.backgroundColor) {
+          //     modal.style.backgroundColor = "";
+          //   } else {
+          //     modal.style.backgroundColor = "#E2F2FD";
+          //   }
+          // }
           dispatch(getBenchmarkMetric(type, index, parentIndex));
         }}
       >
@@ -214,32 +219,56 @@ const BenchmarkModal = (props) => {
       return (
         <>
           <TableRow>
-            {/* <TableCell></TableCell> */}
-            <TableCell><strong>Metric</strong></TableCell>
-            {/* <TableCell align="left">Description</TableCell> */}
-            <TableCell><strong>Action</strong></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
+            <TableCell colSpan={6}>
+              <>
+                <Box style={{ margin: "0 80px" }}>
+                  <Table size="small" aria-label="purchases">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>
+                          <strong>Metric</strong>
+                        </TableCell>
+                        {/* <TableCell align="left">Description</TableCell> */}
+                        <TableCell>
+                          <strong>Action</strong>
+                        </TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row, i) => {
+                        return (
+                          <TableRow
+                            key={i}
+                            style={{
+                              backgroundColor: "rgba(254, 191, 44, 0.1)",
+                            }}
+                          >
+                            {/* <TableCell></TableCell> */}
+                            <TableCell>
+                              {row.metricName.toUpperCase()}
+                            </TableCell>
+                            {/* <TableCell align="left">{row.description}</TableCell> */}
+                            <TableCell>
+                              {renderSelectButton(
+                                "METRIC",
+                                i,
+                                row.selected,
+                                rowMeta.rowIndex
+                              )}
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </Box>
+              </>
+            </TableCell>
           </TableRow>
-          {rows.map((row, i) => {
-            return (
-              <TableRow key={i} style={{ backgroundColor: "#E2F2FD" }}>
-                {/* <TableCell></TableCell> */}
-                <TableCell>{row.metricName.toUpperCase()}</TableCell>
-                {/* <TableCell align="left">{row.description}</TableCell> */}
-                <TableCell>
-                  {renderSelectButton(
-                    "METRIC",
-                    i,
-                    row.selected,
-                    rowMeta.rowIndex
-                  )}
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            );
-          })}
         </>
       );
     },
@@ -262,6 +291,16 @@ const BenchmarkModal = (props) => {
         MuiTable: {
           root: {
             width: "100%",
+          },
+        },
+        MUIDataTableBodyRow: {
+          root: {
+            "&:nth-child(odd)": {
+              backgroundColor: "#D6EAF8",
+            },
+            "&:nth-child(even)": {
+              backgroundColor: "#E9F7EF",
+            },
           },
         },
         MUIDataTable: {
@@ -314,13 +353,16 @@ const BenchmarkModal = (props) => {
           root: {
             border: "none",
             borderBottom: "5px solid white",
-            backgroundColor: "#F3F3F3",
+            // backgroundColor: "#F3F3F3",
+            
           },
         },
         MuiTableRow: {
           root: {
             border: "1px solid #3A3A3A1A",
             opacity: 1,
+            "&$hover:hover:nth-child(odd)": { backgroundColor: "#D6EAF8" },
+            "&$hover:hover:nth-child(even)": { backgroundColor: "#E9F7EF" },
           },
         },
       },

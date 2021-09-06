@@ -6,6 +6,8 @@ import {
 } from "react-router-dom";
 import history from "./web.history";
 import Layout from "./ui/Layout";
+import PublicLayout from "./ui/Layout";
+
 import Login from "./ui/container/UserManagement/UserManagement";
 import SubmitDataset from "./ui/container/DataSet/UploadDataset/SubmitDataset";
 import SubmitModel from "./ui/container/Model/UploadModel/SubmitModel";
@@ -35,6 +37,8 @@ const PrivateRoute = ({
   authenticate,
   title,
   token,
+  type,
+  index,
   ...rest
 }) => {
   return (
@@ -42,11 +46,8 @@ const PrivateRoute = ({
       {...rest}
       render={(props) =>
         authenticate() ? (
-          title === "Dashboard" ? (
-            <Dashboard />
-          ) : (
-            <Layout component={Component} {...rest} />
-          )
+          title === "Dashboard" ? <Dashboard /> :
+            <Layout component={Component} type={type} index={index} {...rest} />
         ) : (
           // <Redirect to={`${process.env.PUBLIC_URL}/user/login`}/>
           <Redirect
@@ -92,7 +93,13 @@ export default function App() {
           />
           <Route
             path={`${process.env.PUBLIC_URL}/model/explore-models`}
-            component={ExploreModels}
+            render={(props) =>
+            <PublicLayout type = {"models"}
+            index={1}
+            component={ExploreModels} />
+            }
+            
+
           />
           <Route
             path={`${process.env.PUBLIC_URL}/search-model/:srno?/:model?`}
@@ -111,6 +118,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}
+            type = {"dataset"}
+            index={0}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/dataset/my-contribution/:added?`}
@@ -119,6 +128,8 @@ export default function App() {
             component={ContributionList}
             currentMenu="contribution-list"
             dontShowHeader={false}
+            type = {"dataset"}
+            index={0}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/model/my-contribution/:added?`}
@@ -127,6 +138,8 @@ export default function App() {
             component={ModelContributionList}
             currentMenu="contribution-list"
             dontShowHeader={false}
+            type = {"models"}
+            index={0}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/dataset/upload`}
@@ -136,6 +149,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}
+            type = {"dataset"}
+            index={3}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/model/upload`}
@@ -145,6 +160,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="submit-model"
             dontShowHeader={false}
+            type = {"models"}
+            index={2}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/dashboard`}
@@ -154,6 +171,7 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}
+
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/my-searches`}
@@ -162,6 +180,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}
+            type = {"dataset"}
+            index={1}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/readymade-dataset`}
@@ -170,6 +190,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
             dontShowHeader={false}
+            type = {"dataset"}
+            index={0}
           />
 
           <PrivateRoute
@@ -180,6 +202,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="submission-status"
             dontShowHeader={false}
+            type = {""}
+            index={0}
           />
 
           <PrivateRoute
@@ -189,6 +213,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="search-and-download-rec"
             dontShowHeader={false}
+            type = {"dataset"}
+            index={2}
           />
 
           <Route
@@ -203,6 +229,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="pop-up"
             dontShowHeader={false}
+            type = {"dataset"}
+            index={2}
           />
 
           <PrivateRoute
@@ -212,6 +240,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="pop-up"
             dontShowHeader={false}
+            type = {"dataset"}
+            index={2}
           />
 
           <PrivateRoute
