@@ -27,7 +27,7 @@ const ExpandTable = (props) => {
           <TableCell>{returnTypo("Benchmark Dataset")}</TableCell>
           <TableCell>{returnTypo("Metric")}</TableCell>
           <TableCell>{returnTypo("Score")}</TableCell>
-          <TableCell>{returnTypo("Benchmark run date")}</TableCell>
+          <TableCell>{returnTypo("Benchmark Run Date")}</TableCell>
           <TableCell>{returnTypo("Status")}</TableCell>
           <TableCell></TableCell>
           {/* <TableCell></TableCell> */}
