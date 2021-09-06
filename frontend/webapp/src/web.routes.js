@@ -251,6 +251,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="leaderboard"
             dontShowHeader={false}
+            type = {"models"}
+            index={2}
           />
 
           {/* <Route
