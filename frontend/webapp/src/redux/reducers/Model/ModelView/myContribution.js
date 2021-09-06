@@ -117,7 +117,10 @@ const getContributionList = (state, payload) => {
       modelName: element.name,
       description: element.description,
       submittedOn: dateConversion(element.submittedOn),
-      task: element.task.type,
+      task:
+        element.task.type !== "translation"
+          ? element.task.type.toUpperCase()
+          : element.task.type,
       domain: getDomainDetails(element.domain),
       status: "Published",
       endPoint: element.inferenceEndPoint,
@@ -128,7 +131,7 @@ const getContributionList = (state, payload) => {
         element.languages &&
         element.languages.length > 0 &&
         element.languages[0].targetLanguage,
-      licence: element.license,
+      licence: element.license.toUpperCase(),
       submitter: element.submitter.name,
       trainingDataset: element.trainingDataset,
       action: "View Result",
