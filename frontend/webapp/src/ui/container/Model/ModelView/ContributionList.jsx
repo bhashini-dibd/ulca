@@ -133,7 +133,7 @@ const ContributionList = (props) => {
           <Cached className={classes.iconStyle} />
           Refresh
         </Button>
-        <Button
+        {/* <Button
           color={"default"}
           size="medium"
           variant="default"
@@ -142,7 +142,7 @@ const ContributionList = (props) => {
         >
           {" "}
           {view ? <List size="large" /> : <GridOn />}
-        </Button>
+        </Button> */}
       </>
     );
   };
