@@ -30,7 +30,7 @@ const ExpandTable = (props) => {
           <TableCell>{returnTypo("Benchmark run date")}</TableCell>
           <TableCell>{returnTypo("Status")}</TableCell>
           <TableCell></TableCell>
-          <TableCell></TableCell>
+          {/* <TableCell></TableCell> */}
         </TableRow>
         {rows.map((row) => {
           return (
@@ -47,7 +47,7 @@ const ExpandTable = (props) => {
               <TableCell>{row.createdOn}</TableCell>
               <TableCell>{renderStatus(row.status)}</TableCell>
               <TableCell></TableCell>
-              <TableCell></TableCell>
+              {/* <TableCell></TableCell> */}
             </TableRow>
           );
         })}
