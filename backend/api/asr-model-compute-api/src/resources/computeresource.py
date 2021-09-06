@@ -39,7 +39,7 @@ class ComputeAudioResource(Resource):
     def post(self):
         log.info("Request received for asr computing")
         body                =   request.get_json()
-        audio_file_path     =   body["audio_file_path"]
+        audio_file_path     =   body["filePath"]
         lang                =   body["sourceLanguage"]
         callback_url        =   body["callbackUrl"]
         transformat         =   "TRANSCRIPT"
