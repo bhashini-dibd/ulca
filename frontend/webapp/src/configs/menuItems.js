@@ -31,6 +31,10 @@ export const menuItems = {
             url: '/model/explore-models'
         },
         {
+            name: 'Model Leaderboard',
+            url: '/model/leaderboard'
+        },
+        {
             name: 'Submit Model',
             url: '/model/upload'
         }],
