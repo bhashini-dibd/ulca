@@ -27,8 +27,8 @@ const ExpandTable = (props) => {
           <TableCell>{returnTypo("Benchmark Dataset")}</TableCell>
           <TableCell>{returnTypo("Metric")}</TableCell>
           <TableCell>{returnTypo("Score")}</TableCell>
+          <TableCell>{returnTypo("Benchmark run date")}</TableCell>
           <TableCell>{returnTypo("Status")}</TableCell>
-          {/* <TableCell>Action</TableCell> */}
           <TableCell></TableCell>
           <TableCell></TableCell>
         </TableRow>
@@ -44,8 +44,8 @@ const ExpandTable = (props) => {
               <TableCell>{row.benchmarkDatasetName}</TableCell>
               <TableCell>{row.metric.toUpperCase()}</TableCell>
               <TableCell>{row.score ? row.score : "--"}</TableCell>
+              <TableCell>{row.createdOn}</TableCell>
               <TableCell>{renderStatus(row.status)}</TableCell>
-              {/* <TableCell>Action</TableCell> */}
               <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
