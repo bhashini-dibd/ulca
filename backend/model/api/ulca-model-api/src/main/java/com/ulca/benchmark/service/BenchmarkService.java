@@ -21,6 +21,7 @@ import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSearchResponse;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkResponse;
+import com.ulca.model.response.BmProcessListByProcessIdResponse;
 
 import io.swagger.model.Benchmark;
 import io.swagger.model.ModelTask;
@@ -133,6 +134,17 @@ public class BenchmarkService {
 		}
 
 		return null;
+	}
+	
+	public BmProcessListByProcessIdResponse getScorelistByProcess(String benchmarkProcessId ){
+		
+		List<BenchmarkProcess> list =  benchmarkprocessDao.findByBenchmarkProcessId(benchmarkProcessId);
+		
+		BmProcessListByProcessIdResponse response = new BmProcessListByProcessIdResponse("Benchmark Process list", list, list.size());
+		
+		return response;
+		
+		
 	}
 
 }
