@@ -1,50 +1,61 @@
-import { withStyles, Typography, Card, Grid,ButtonBase } from "@material-ui/core";
+import { Typography, withStyles } from "@material-ui/core";
 import DataSet from "../../../styles/Dataset";
 import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 
 const ExpandTable = (props) => {
-
-    const { classes,data,handleCardClick } = props;
-    const renderTable = () =>{
-        return (
-            <TableRow>
-            <TableCell>
-             
-            </TableCell>
-            <TableCell>
-             
-             </TableCell>
-            <TableCell>
-              Custom expandable
-            </TableCell>
-            <TableCell>
-              Custom 
-            </TableCell>
-            <TableCell>
-              Custom 
-            </TableCell>
-            <TableCell>
-              Custom 
-            </TableCell>
-            <TableCell>
-              Custom 
-            </TableCell>
-            <TableCell>
-             
-            </TableCell>
-            
-          </TableRow>
-        )
-    }
+  const { rows, renderStatus, color } = props;
+  const renderTable = () => {
+    const returnTypo = (value) => {
+      return (
+        <Typography variant="body2">
+          <strong>{value}</strong>
+        </Typography>
+      );
+    };
 
     return (
-        <>
-       {renderTable()}
+      <>
+        <TableRow
+          style={{
+            borderLeft: `2px solid ${color ? "#E2F2FD" : "#E9F7EF"}`,
+            borderRight: `2px solid ${color ? "#E2F2FD" : "#E9F7EF"}`,
+          }}
+        >
+          <TableCell></TableCell>
+          <TableCell></TableCell>
+          <TableCell>{returnTypo("Benchmark Dataset")}</TableCell>
+          <TableCell>{returnTypo("Metric")}</TableCell>
+          <TableCell>{returnTypo("Score")}</TableCell>
+          <TableCell>{returnTypo("Benchmark Run Date")}</TableCell>
+          <TableCell>{returnTypo("Status")}</TableCell>
+          <TableCell></TableCell>
+          {/* <TableCell></TableCell> */}
+        </TableRow>
+        {rows.map((row) => {
+          return (
+            <TableRow
+              style={{
+                backgroundColor: color ? "#E2F2FD" : "#E9F7EF",
+              }}
+            >
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell>{row.benchmarkDatasetName}</TableCell>
+              <TableCell>{row.metric.toUpperCase()}</TableCell>
+              <TableCell>{row.score ? row.score : "--"}</TableCell>
+              <TableCell>{row.createdOn}</TableCell>
+              <TableCell>{renderStatus(row.status)}</TableCell>
+              <TableCell></TableCell>
+              {/* <TableCell></TableCell> */}
+            </TableRow>
+          );
+        })}
       </>
-            
-            
     );
+  };
+
+  return <>{renderTable()}</>;
 };
 
 export default withStyles(DataSet)(ExpandTable);

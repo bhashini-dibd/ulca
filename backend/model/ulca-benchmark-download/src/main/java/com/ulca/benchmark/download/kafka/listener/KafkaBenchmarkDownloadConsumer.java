@@ -21,6 +21,7 @@ import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.service.AsrBenchmark;
 import com.ulca.benchmark.service.TranslationBenchmark;
 import com.ulca.benchmark.util.UnzipUtility;
 import com.ulca.model.dao.ModelDao;
@@ -51,6 +52,9 @@ public class KafkaBenchmarkDownloadConsumer {
 
 	@Autowired
 	TranslationBenchmark translationBenchmark;
+	
+	@Autowired
+	AsrBenchmark asrBenchmark;
 
 	@KafkaListener(groupId = "${kafka.ulca.bm.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.bm.filedownload.ip.topic}", containerFactory = "benchmarkDownloadKafkaListenerContainerFactory")
 	public void downloadBenchmarkDataset(BmDatasetDownload bmDsDownload) {
@@ -111,7 +115,10 @@ public class KafkaBenchmarkDownloadConsumer {
 								benchmarkProcessId);
 						break;
 					case ASR:
-
+						log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
+						
+						asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+								benchmarkProcessId);
 						break;
 
 					case OCR:

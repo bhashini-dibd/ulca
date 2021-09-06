@@ -17,6 +17,7 @@ import lombok.Setter;
 @Document(collection = "benchmarkprocess")
 public class BenchmarkProcess {
 	
+
 	@Id
     String id;
 	
@@ -24,8 +25,10 @@ public class BenchmarkProcess {
 	String benchmarkProcessId;
 	String benchmarkDatasetId;
 	String benchmarkDatasetName;
-	String score;
+	double score;
 	String metric;
 	String status;
+	String createdOn;
+	String lastModifiedOn;
 
 }
