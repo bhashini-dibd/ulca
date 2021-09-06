@@ -1,6 +1,7 @@
 {
   "dataset": {
-    "parallel-dataset": {
+    "parallel-corpus": {
+      "label":"Parallel Dataset",
       "filters": [
         {
           "filter": "languagepair",
@@ -397,6 +398,7 @@
         },
         {
           "filter": "collectionMethod",
+          "label":"Collection Method",
           "values": [
             {
               "value": "machine-translated-post-edited",
@@ -444,6 +446,7 @@
         },
         {
           "filter": "domain",
+          "label": "Domain",
           "values": [
             {
               "value": "entertainment",
@@ -481,6 +484,7 @@
         },
         {
           "filter": "collectionSource",
+          "label": "Collection Source",
           "values": [
             {
               "value": "\tPIB",
@@ -646,6 +650,7 @@
         },
         {
           "filter": "license",
+          "label": "License",
           "values": [
             {
               "value": "cc-by-4.0",
@@ -654,7 +659,8 @@
           ]
         },
         {
-          "filter": "submitterName",
+          "filter": "submitter.name",
+          "label": "Submitter",
           "values": [
             {
               "value": "Project Anuvaad",
@@ -672,10 +678,12 @@
         }
       ]
     },
-    "monolingual-dataset": {
+    "monolingual-corpus": {
+       "label":"Monolingual Dataset",
       "filters": [
         {
           "filter": "sourceLanguage",
+          "label": "Language",
           "values": [
             {
               "value": "en",
@@ -689,6 +697,7 @@
         },
         {
           "filter": "domain",
+          "label": "Domain",
           "values": [
             {
               "value": "legal",
@@ -708,6 +717,7 @@
         },
         {
           "filter": "collectionMethod",
+          "label": "Collection Method",
           "values": [
             {
               "value": "",
@@ -717,6 +727,7 @@
         },
         {
           "filter": "collectionSource",
+          "label": "Collection Source",
           "values": [
             {
               "value": "http://pib.gov.in/",
@@ -736,6 +747,7 @@
         },
         {
           "filter": "license",
+          "label": "License",
           "values": [
             {
               "value": "cc-by-4.0",
@@ -744,7 +756,8 @@
           ]
         },
         {
-          "filter": "submitterName",
+          "filter": "submitter.name",
+          "label":"Submitter",
           "values": [
             {
               "value": "Project Anuvaad",
@@ -755,6 +768,7 @@
       ]
     },
     "asr-unlabeled-dataset": {
+       "label":"Asr Unlabeled Dataset",
       "filters": [
         {
           "filter": "sourceLanguage",
@@ -960,6 +974,7 @@
         },
         {
           "filter": "license",
+          "label": "License",
           "values": [
             {
               "value": "cc-by-4.0",
@@ -968,7 +983,8 @@
           ]
         },
         {
-          "filter": "submitterName",
+          "filter": "submitter.name",
+          "label": "Submitter",
           "values": [
             {
               "value": "Anirudh",
@@ -986,6 +1002,7 @@
         },
         {
           "filter": "format",
+          "label": "Format",
           "values": [
             {
               "value": "wav",
@@ -995,6 +1012,7 @@
         },
         {
           "filter": "channel",
+          "label": "Channel",
           "values": [
             {
               "value": null,
@@ -1008,6 +1026,7 @@
         },
         {
           "filter": "samplingRate",
+          "label": "Sampling Rate",
           "values": [
             {
               "value": null,
@@ -1025,6 +1044,7 @@
         },
         {
           "filter": "bitsPerSample",
+          "label": "Bits per Sample",
           "values": [
             {
               "value": null,
@@ -1038,6 +1058,7 @@
         },
         {
           "filter": "numberOfSpeakers",
+          "label": "Number of Speakers",
           "values": [
             {
               "value": null,
@@ -1051,6 +1072,7 @@
         },
         {
           "filter": "gender",
+          "label": "Gender",
           "values": [
             {
               "value": null,
@@ -1064,10 +1086,12 @@
         },
         {
           "filter": "age",
+          "label": "Age",
           "values": []
         },
         {
           "filter": "dialect",
+          "label": "Dialect",
           "values": [
             {
               "value": null,
@@ -1076,7 +1100,8 @@
           ]
         },
         {
-          "filter": "snrTool",
+          "filter": "snr.methodDetails.snrTool",
+          "label": "SNR Tool",
           "values": [
             {
               "value": "WADASNR",
@@ -1091,9 +1116,11 @@
       ]
     },
     "ocr-dataset": {
+       "label":"OCR Dataset",
       "filters": [
         {
           "filter": "sourceLanguage",
+          "label": "Language",
           "values": [
             {
               "value": "as",
@@ -1131,6 +1158,7 @@
         },
         {
           "filter": "domain",
+          "label": "Domain",
           "values": [
             {
               "value": "education",
@@ -1152,6 +1180,7 @@
         },
         {
           "filter": "collectionMethod",
+          "label": "Collection Method",
           "values": [
             {
               "value": "web-scraping-ocr",
@@ -1166,6 +1195,7 @@
         },
         {
           "filter": "collectionSource",
+          "label": "Collection Source",
           "values": [
             {
               "value": "14_or.pdf",
@@ -1259,6 +1289,7 @@
         },
         {
           "filter": "license",
+          "label": "License",
           "values": [
             {
               "value": "cc-by-4.0",
@@ -1267,7 +1298,8 @@
           ]
         },
         {
-          "filter": "submitterName",
+          "filter": "submitter.name",
+          "label": "Submitter",
           "values": [
             {
               "value": "Project Anuvaad",
@@ -1277,6 +1309,7 @@
         },
         {
           "filter": "format",
+          "label": "Format",
           "values": [
             {
               "value": "png",
@@ -1286,6 +1319,7 @@
         },
         {
           "filter": "dpi",
+          "label": "DPI",
           "values": [
             {
               "value": "300_dpi",
@@ -1299,6 +1333,7 @@
         },
         {
           "filter": "imageTextType",
+          "label": "Image Text Type",
           "values": [
             {
               "value": "computer-typed-text",
@@ -1309,6 +1344,7 @@
       ]
     },
     "asr-dataset": {
+       "label":"ASR / TTS Dataset",
       "filters": [
         {
           "filter": "sourceLanguage",
@@ -1627,6 +1663,7 @@
         },
         {
           "filter": "license",
+          "label": "License",
           "values": [
             {
               "value": "cc-by-4.0",
@@ -1635,7 +1672,8 @@
           ]
         },
         {
-          "filter": "submitterName",
+          "filter": "submitter.name",
+          "label": "Submitter",
           "values": [
             {
               "value": "Anirudh",
@@ -1657,6 +1695,7 @@
         },
         {
           "filter": "format",
+          "label": "Format",
           "values": [
             {
               "value": null,
@@ -1670,6 +1709,7 @@
         },
         {
           "filter": "channel",
+          "label": "Channel",
           "values": [
             {
               "value": null,
@@ -1683,10 +1723,12 @@
         },
         {
           "filter": "samplingRate",
+          "label": "Sampling Rate",
           "values": []
         },
         {
           "filter": "bitsPerSample",
+          "label": "Bits per Sample",
           "values": [
             {
               "value": null,
@@ -1700,6 +1742,7 @@
         },
         {
           "filter": "numberOfSpeakers",
+          "label": "Number of Speakers",
           "values": [
             {
               "value": null,
@@ -1717,6 +1760,7 @@
         },
         {
           "filter": "gender",
+          "label": "Gender",
           "values": [
             {
               "value": null,
@@ -1730,10 +1774,12 @@
         },
         {
           "filter": "age",
+          "label": "Age",
           "values": []
         },
         {
           "filter": "dialect",
+          "label": "Dialect",
           "values": [
             {
               "value": null,
@@ -1742,7 +1788,8 @@
           ]
         },
         {
-          "filter": "snrTool",
+          "filter": "snr.methodDetails.snrTool",
+          "label": "SNR Tool",
           "values": [
             {
               "value": "WADASNR",
@@ -1758,3 +1805,4 @@
     }
   }
 }
+
