@@ -177,6 +177,14 @@ const BenchmarkModal = (props) => {
       },
     },
     {
+      name: "createdOn",
+      label: "Benchmark run date",
+      options: {
+        filter: false,
+        sort: false,
+      },
+    },
+    {
       name: "Action",
       options: {
         filter: false,
@@ -194,6 +202,9 @@ const BenchmarkModal = (props) => {
   ];
 
   const options = {
+    fixedHeader:true,
+    responsive:'standard',
+    fixedSelectColumn: true,
     textLabels: {
       body: {
         noMatch: "No benchmark dataset available",
@@ -225,6 +236,7 @@ const BenchmarkModal = (props) => {
             </TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
+            <TableCell></TableCell>
           </TableRow>
           {rows.map((row, i) => {
             return (
@@ -240,6 +252,7 @@ const BenchmarkModal = (props) => {
                     rowMeta.rowIndex
                   )}
                 </TableCell>
+                <TableCell></TableCell>
                 <TableCell></TableCell>
                 <TableCell></TableCell>
               </TableRow>
