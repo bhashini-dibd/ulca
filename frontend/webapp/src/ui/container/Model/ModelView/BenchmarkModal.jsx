@@ -127,9 +127,10 @@ const BenchmarkModal = (props) => {
         className={classes.filterBtn}
         onClick={() => {
           if (type === "DATASET") {
-            const modal = document.querySelectorAll(
+            const modals = document.querySelectorAll(
               `#MUIDataTableBodyRow-${index}`
-            )[1];
+            );
+            const modal = modals[modals.length - 1];
             if (modal.style.backgroundColor) {
               modal.style.backgroundColor = "";
             } else {
@@ -215,9 +216,13 @@ const BenchmarkModal = (props) => {
         <>
           <TableRow>
             {/* <TableCell></TableCell> */}
-            <TableCell><strong>Metric</strong></TableCell>
+            <TableCell>
+              <strong>Metric</strong>
+            </TableCell>
             {/* <TableCell align="left">Description</TableCell> */}
-            <TableCell><strong>Action</strong></TableCell>
+            <TableCell>
+              <strong>Action</strong>
+            </TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
           </TableRow>
