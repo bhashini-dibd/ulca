@@ -51,7 +51,8 @@ export default class LoginAPI extends API {
     this.headers = {
       headers: {
         "key": this.userDetails.publicKey,
-        "sig": hash
+        "sig": hash,
+        "payload":urlSha
       }
     };
     return this.headers;

@@ -40,13 +40,14 @@ ROLE_CODES_FILE_NAME    =   os.environ.get('UMS_ROLES_FILE_NAME','roles.json')
 
 #gmail server configs
 MAIL_SETTINGS           =   {
-                                "MAIL_SERVER"   : 'smtp.gmail.com',
-                                "MAIL_PORT"     : 465,
+                                "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),
+                                "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT',465)),
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
-                                "MAIL_USERNAME" : os.environ.get('ULCA_SUPPORT_EMAIL','xxxxxxx'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','xxxxx')
+                                "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxx'),
+                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxx')
                             }
+MAIL_SENDER             =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')
 USER_VERIFY_LINK_EXPIRY =   os.environ.get('ULCA_VERIFY_LINK_EXP_HRS',48)
 USER_API_KEY_EXPIRY     =   os.environ.get('ULCA_API_KEY_EXP_DAYS',30)
 #React-app base url

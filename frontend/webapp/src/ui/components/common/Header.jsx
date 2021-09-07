@@ -105,9 +105,6 @@ const Header = (props) => {
     }
     dispatch(getMenuType(type));
   }
-
-  console.log("-----",type,index,menuItems[type])
-
   return (
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit" position="static">
