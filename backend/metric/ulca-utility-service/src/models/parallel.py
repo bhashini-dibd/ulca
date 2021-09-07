@@ -69,11 +69,7 @@ class ParallelModel:
             if data in ['auto-aligned' ,'auto-aligned-from-parallel-docs']:
                 aligntools = repo.distinct("collectionMethod.collectionDetails.alignmentTool",self.db,self.col)
                 tools.append({"Alignment Tool" : aligntools })
-                minmax_query = [{ "$group": { "_id": None,"max": { "$max": "$collectionMethod.collectionDetails.alignmentScore" },
-                                "min": { "$min": "$collectionMethod.collectionDetails.alignmentScore" }}}]
-                alignscore = repo.aggregate(minmax_query,self.db,self.col)
-                del alignscore[0]['_id']
-                tools.append({"Alignment Score Range" : alignscore[0] })
+                tools.append({"Alignment Score Range" : ['<0.5','0.5-0.6','0.6-0.7','0.8-0.9','0.9-1.0'] })
             
             if data in ['machine-translated','machine-translated-post-edited']:
                 models = repo.distinct("collectionMethod.collectionDetails.translationModel",self.db,self.col)

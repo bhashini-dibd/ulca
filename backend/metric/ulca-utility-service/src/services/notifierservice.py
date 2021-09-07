@@ -47,7 +47,7 @@ class NotifierService:
             asr_unlabeled_count=round(asr_unlabeled_count,4)
             log.info(asr_unlabeled_count)
 
-            aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] } },
+            aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
