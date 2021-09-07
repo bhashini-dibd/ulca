@@ -465,6 +465,10 @@ const DataSet = (theme) => ({
         padding: '70px 59px 0 59px',
         marginTop: '51px',
         marginBottom: '118px'
+    },
+    advanceFilter: {
+        textAlign:'right',
+        color:"#FD7F23"
     }
 });
 

@@ -30,6 +30,8 @@ import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSe
 import getLanguageLabel from '../../../../utils/getLabel';
 import SearchAndDownloadAPI from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
 import APITransport from '../../../../redux/actions/apitransport/apitransport';
+import AdvanceFilter from '../../../components/common/AdvanceFilter';
+
 const StyledMenu = withStyles({
 })((props) => (
     <Menu
@@ -536,9 +538,9 @@ const SearchAndDownloadRecords = (props) => {
                                 </Grid>
                             </Grid>
                             <div className={classes.advanceFilter}>
-                                <Button disabled={!languagePair.target.length} variant="outlined" size="small" color="primary" onClick={renderAdvanceFilter()}>Advance filter</Button>
+                                <Button disabled={!languagePair.target.length} style={{color:"#FD7F23"}} variant="outlined" size="small" onClick={renderAdvanceFilter()}>Advance filter</Button>
                             </div>
-
+                            <AdvanceFilter filters={[{placeholder:"License"},{placeholder:"Submitter"},{placeholder:"Collection Method"}]}/>
                             {renderclearNsubmitButtons()}
                         </Grid>
                     </Grid>
