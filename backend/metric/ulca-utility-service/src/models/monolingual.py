@@ -16,26 +16,20 @@ class MonolingualModel:
         log.info("Updating monolingual filter params!")
         try:
             for filter in mono_data["filters"]:
-                if filter["filter"]         ==  "sourceLanguage":
+
+                if filter["filter"]         ==  "collectionMethod.collectionDescription":
+                    collection_method       =   repo.distinct("collectionMethod.collectionDescription",self.db,self.col)
+                    filter["values"]        =   self.get_collection_details(collection_method)
+                    log.info("collected availabel collection methods")
+                elif filter["filter"]       ==  "sorceLanguage":
                     langres                 =   repo.distinct("sourceLanguage",self.db,self.col)
                     filter["values"]        =   self.get_language_filter(langres)
-                    log.info("collected available languages")
-                if filter["filter"]         ==  "domain":
-                    domainres               =   repo.distinct("domain",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(domainres)
-                    log.info("collected available doamins")
-                if filter["filter"]         ==  "collectionSource":
-                    sourceres               =   repo.distinct("collectionSource",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(sourceres)
-                    log.info("collected available sources")
-                if filter["filter"]         ==  "license":
-                    licenseres              =   repo.distinct("license",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(licenseres)
-                    log.info("collected available licenses")
-                if filter["filter"]         ==  "submitterName":
-                    domainres               =   repo.distinct("submitter.name",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(domainres)
-                    log.info("collected available submitter names")
+                    log.info("collected available languages") 
+                else:
+                    response                =   repo.distinct(filter["filter"],self.db,self.col)
+                    filter["values"]        =   self.get_formated_data(response)
+                    log.info(f"collected available {filter['label']}")
+
             return mono_data
         except Exception as e:
             log.info(f"Exception on MonolingualModel :{e}")
@@ -54,17 +48,17 @@ class MonolingualModel:
     def get_collection_details(self,collection_data):
         log.info("formatting collection method,details filter")
         values = []
-        for data in collection_data:
+        if not collection_data:
             collection = {}
-            collection["value"] = data["_id"]
-            collection["label"] = str(data["_id"]).title()
-            tools = []
-            for obj in data["details"]:
-                if "ocrTool" in obj:
-                    tools.append({"ocrTool":obj["ocrTool"]})
-            
-            collection["tool/method"] = [i for n, i in enumerate(tools) if i not in tools[n + 1:]]
+            collection["value"] = ""
+            collection["label"] = "Unspecified"
             values.append(collection)
+        else:
+            for data in collection_data:
+                collection = {}
+                collection["value"] = data
+                collection["label"] = ' '.join(data.split('-')).title()
+                values.append(collection)
         return values
 
     def get_formated_data(self, attribute_data):

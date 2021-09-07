@@ -30,7 +30,7 @@ class FilterCronProcessor(Thread):
                 data,filepath = utils.read_from_config_file()
                 response = self.update_filter_params(data) 
                 if response != False:
-                    filepath = "/opt/datasetFilterParams1.json"
+                    # filepath = "/opt/datasetFilterParams1.json"
                     utils.write_to_config_file(filepath,response)
                     log.info("Updated filter params succesfully")
                     utils.upload_to_object_store(filepath)
@@ -42,32 +42,32 @@ class FilterCronProcessor(Thread):
 
     def update_filter_params(self,data):
         data_new = {}
-        para_response = parallel_model.compute_parallel_data_filters(data["parallel-dataset"])
+        para_response = parallel_model.compute_parallel_data_filters(data["parallel-corpus"])
         if not para_response:
             log.info("Failed to update parallel filter params!")
             return False
-        data["parallel-dataset"] = para_response
-        ocr_response = ocr_model.compute_ocr_data_filters(data["ocr-dataset"])
+        data["parallel-corpus"] = para_response
+        ocr_response = ocr_model.compute_ocr_data_filters(data["ocr-corpus"])
         if not ocr_response:
             log.info("Failed to update ocr filter params!")
             return False
-        data["ocr-dataset"] = ocr_response
-        mono_response = mono_model.compute_monolingual_data_filters(data["monolingual-dataset"])
+        data["ocr-corpus"] = ocr_response
+        mono_response = mono_model.compute_monolingual_data_filters(data["monolingual-corpus"])
         if not mono_response:
             log.info("Failed to update mono lingual filter params!")
             return False
-        data["monolingual-dataset"] = mono_response
-        asr_response = asr_model.compute_asr_data_filters(data["asr-dataset"])
+        data["monolingual-corpus"] = mono_response
+        asr_response = asr_model.compute_asr_data_filters(data["asr-corpus"])
         if not asr_response:
             log.info("Failed to update asr filter params!")
             return False
-        data["asr-dataset"] = asr_response
-        asr_unlabel_response = asr_unlabeled_model.compute_asr_unlabeled_data_filters(data["asr-unlabeled-dataset"])
+        data["asr-corpus"] = asr_response
+        asr_unlabel_response = asr_unlabeled_model.compute_asr_unlabeled_data_filters(data["asr-unlabeled-corpus"])
         if not asr_unlabel_response:
             log.info("Failed to update mono lingual filter params!")
             return False
-        data["asr-unlabeled-dataset"] = asr_unlabel_response
-        data_new["data"] = data
+        data["asr-unlabeled-corpus"] = asr_unlabel_response
+        data_new["dataset"] = data
         return data_new
 
 

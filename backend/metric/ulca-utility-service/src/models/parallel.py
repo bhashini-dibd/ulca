@@ -14,37 +14,24 @@ class ParallelModel:
     def compute_parallel_data_filters(self,parallel_data):
         log.info("Updating parallel filter params!")
         try:
-            language_pairs_query = [{"$addFields": { "languagepairs": { "$concat":[ '$sourceLanguage', ' - ', '$targetLanguage'] }}},
-                                    { "$group": {"_id": "$languagepairs"}}]
-            langres             =   repo.aggregate(language_pairs_query,self.db,self.col)
-            lang_pairs          =   [{x["_id"].split("-")[0]:x["_id"].split("-")[1]} for x in langres]
-
-            collection_query    =   [{ '$unwind':'$collectionMethod' },{ '$unwind':'$collectionMethod.collectionDescription' },{ '$group': { '_id': '$collectionMethod.collectionDescription', 'details': {'$addToSet': '$collectionMethod.collectionDetails'}}}]
-            collectionres       =   repo.aggregate(collection_query,self.db,self.col)
 
             for filter in parallel_data["filters"]:
                 if filter["filter"]         ==  "languagepair":
+                    language_pairs_query    =  [{"$addFields": { "languagepairs": { "$concat":[ '$sourceLanguage', ' - ', '$targetLanguage'] }}},
+                                                 { "$group": {"_id": "$languagepairs"}}]
+                    langres                 =   repo.aggregate(language_pairs_query,self.db,self.col)
+                    lang_pairs              =   [{x["_id"].split("-")[0]:x["_id"].split("-")[1]} for x in langres]
                     filter["values"]        =   self.get_language_pairs(lang_pairs)
-                    log.info("collected available languages")
-                if filter["filter"]         ==  "collectionMethod":
-                    filter["values"]        =   self.get_collection_details(collectionres)
+                    log.info("collected available languages")            
+                elif filter["filter"]       ==  "collectionMethod.collectionDescription":
+                    collection_method       =   repo.distinct("collectionMethod.collectionDescription",self.db,self.col)
+                    filter["values"]        =   self.get_collection_details(collection_method)
                     log.info("collected available collection methods")
-                if filter["filter"]         ==  "domain":
-                    domainres               =   repo.distinct("domain",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(domainres)
-                    log.info("collected available domains")
-                if filter["filter"]         ==  "collectionSource":
-                    sourceres               =   repo.distinct("collectionSource",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(sourceres)
-                    log.info("collected available sources")
-                if filter["filter"]         ==  "license":
-                    licenseres               =   repo.distinct("license",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(licenseres)
-                    log.info("collected available licenses")
-                if filter["filter"]         ==  "submitterName":
-                    domainres               =   repo.distinct("submitter.name",self.db,self.col)
-                    filter["values"]        =   self.get_formated_data(domainres)
-                    log.info("collected available submitter names")
+                else:
+                    response                =   repo.distinct(filter["filter"],self.db,self.col)
+                    filter["values"]        =   self.get_formated_data(response)
+                    log.info(f"collected available {filter['label']}")
+
             return parallel_data
         except Exception as e:
             log.info(f"Exception on ParallelModel :{e}")
@@ -70,28 +57,32 @@ class ParallelModel:
             values.append(lang_obj)
         return values
 
-    def get_collection_details(self,collection_data):
+    
+    def get_collection_details(self,collection_methods):
         log.info("formatting collection method,details filter")
         values = []
-        for data in collection_data:
+        for data in collection_methods:
             collection = {}
-            collection["value"] = data["_id"]
-            collection["label"] = str(data["_id"]).title()
+            collection["value"] = data
+            collection["label"] = ' '.join(data.split('-')).title()
             tools =[]
-            for obj in data["details"]:
-                if "alignmentTool" in obj:
-                    tools.append({"alignmentTool":obj["alignmentTool"]})
-                 
-                if "translationModel" in obj:
-                    tools.append({"translationModel":obj["translationModel"]})
-
-                if "editingTool" in obj:
-                    tools.append({"editingTool":obj["editingTool"]})
-
-                if "evaluationMethod" in obj:
-                    tools.append({"evaluationMethod":obj["evaluationMethod"]})
+            if data in ['auto-aligned' ,'auto-aligned-from-parallel-docs']:
+                aligntools = repo.distinct("collectionMethod.collectionDetails.alignmentTool",self.db,self.col)
+                tools.append({"Alignment Tool" : aligntools })
+                minmax_query = [{ "$group": { "_id": None,"max": { "$max": "$collectionMethod.collectionDetails.alignmentScore" },
+                                "min": { "$min": "$collectionMethod.collectionDetails.alignmentScore" }}}]
+                alignscore = repo.aggregate(minmax_query,self.db,self.col)
+                del alignscore[0]['_id']
+                tools.append({"Alignment Score Range" : alignscore[0] })
             
-            collection["tool/method"] = [i for n, i in enumerate(tools) if i not in tools[n + 1:]]
+            if data in ['machine-translated','machine-translated-post-edited']:
+                models = repo.distinct("collectionMethod.collectionDetails.translationModel",self.db,self.col)
+                tools.append({"Translation Model" : models })
+
+                evaluation_tools = repo.distinct("collectionMethod.collectionDetails.evaluationMethod",self.db,self.col)
+                tools.append({"Evaluation Method" : evaluation_tools })
+            
+            collection["tool/method"] = tools
             values.append(collection)
         return values
 
