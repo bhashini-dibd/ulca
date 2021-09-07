@@ -10,7 +10,7 @@ utils = QueryUtils()
 class FetchFilterParams(object):
     #data aggregation
     def search(self):
-        params = DataUtils.read_filter_params(self)
+        params = DataUtils.read_filter_params_from_git(self)
         return params
 
     

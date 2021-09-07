@@ -1,5 +1,5 @@
 from threading import Thread
-from config import error_cron_interval_sec
+from config import error_cron_interval_sec, process_db_schema,process_col
 import logging
 from logging.config import dictConfig
 from repositories import StatusUpdaterRepo
@@ -25,7 +25,7 @@ class StatusCronProcessor(Thread):
                         log.info(f"Updating status for srn -{srn}")
                         condition = {'serviceRequestNumber':srn}
                         query = {'$set':{'status':'Abandoned'}}
-                        repo.update(condition,query)
+                        repo.update(condition,query,process_db_schema,process_col)
                         
                 run += 1
             except Exception as e:
@@ -37,7 +37,7 @@ class StatusCronProcessor(Thread):
         query = [{ '$match':{'serviceRequestType':'dataset','status':'Pending'}},
                  {'$project': {'startedOn': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber':'$serviceRequestNumber'}},
                     { '$match':{'startedOn':{ '$lt': lastday }}} ]
-        aggresult = repo.aggregate(query)
+        aggresult = repo.aggregate(query,process_db_schema,process_col)
         if not aggresult:
             log.info("0 pending srns found >>")
             return None
