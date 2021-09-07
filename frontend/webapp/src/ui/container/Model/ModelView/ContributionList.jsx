@@ -76,6 +76,16 @@ const ContributionList = (props) => {
     }
   });
 
+  useEffect(() => {
+    let newIndex = [];
+    data.forEach((element, i) => {
+      if (element.benchmarkPerformance.length) newIndex.push(i);
+    });
+    setIndex(newIndex);
+  }, [data]);
+
+  console.log(index);
+
   const MyContributionListApi = () => {
     dispatch(ClearReport());
     const userObj = new MyContributionList(
@@ -216,6 +226,7 @@ const ContributionList = (props) => {
   };
 
   const handleRunBenchMarkClick = (type, domain, modelId) => {
+    setIndex([]);
     setLoading(true);
     dispatch(clearBenchMark());
     setBenchmarkInfo({ type, domain: [domain], modelId });
@@ -425,8 +436,8 @@ const ContributionList = (props) => {
     customToolbar: fetchHeaderButton,
     filter: false,
     displaySelectToolbar: false,
-    fixedHeader: false,
     filterType: "checkbox",
+    fixedHeader: false,
     download: false,
     expandableRows: true,
     // onRowExpansionChange: (
@@ -434,30 +445,24 @@ const ContributionList = (props) => {
     //   allRowsExpanded,
     //   rowsExpanded
     // ) => {
-    //   const currentIndex = currentRowsExpanded[0].index;
-
-    //   setIndex([...index, currentIndex]);
+    //   console.log("called");
     // },
     rowsExpanded: index,
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
-    isRowExpandable: (dataIndex, expandedRows) => {
-      if (data[dataIndex].benchmarkPerformance.length) {
-        return true;
-      }
-      return false;
-    },
-
+    // isRowExpandable: (dataIndex, expandedRows) => expandedRows.data.filter(d=>index.indexOf(d.index) > -1),
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
-      return (
-        <RenderExpandTable
-          rows={rowData[8]}
-          color={even_odd}
-          renderStatus={renderStatus}
-        />
-      );
+      // console.log(rowData);
+      if (rowData[8].length)
+        return (
+          <RenderExpandTable
+            rows={rowData[8]}
+            color={even_odd}
+            renderStatus={renderStatus}
+          />
+        );
     },
     print: false,
     viewColumns: false,
