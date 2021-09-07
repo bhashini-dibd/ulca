@@ -76,15 +76,15 @@ const ContributionList = (props) => {
     }
   });
 
-  useEffect(() => {
-    let newIndex = [];
-    data.forEach((element, i) => {
-      if (element.benchmarkPerformance.length) newIndex.push(i);
-    });
-    setIndex(newIndex);
-  }, [data]);
+  // useEffect(() => {
+  //   let newIndex = [];
+  //   data.forEach((element, i) => {
+  //     if (element.benchmarkPerformance.length) newIndex.push(i);
+  //   });
+  //   setIndex(newIndex);
+  // }, [data]);
 
-  console.log(index);
+  // console.log(index);
 
   const MyContributionListApi = () => {
     dispatch(ClearReport());
@@ -226,7 +226,6 @@ const ContributionList = (props) => {
   };
 
   const handleRunBenchMarkClick = (type, domain, modelId) => {
-    setIndex([]);
     setLoading(true);
     dispatch(clearBenchMark());
     setBenchmarkInfo({ type, domain: [domain], modelId });
@@ -440,13 +439,20 @@ const ContributionList = (props) => {
     fixedHeader: false,
     download: false,
     expandableRows: true,
-    // onRowExpansionChange: (
-    //   currentRowsExpanded,
-    //   allRowsExpanded,
-    //   rowsExpanded
-    // ) => {
-    //   console.log("called");
-    // },
+    onRowExpansionChange: (
+      currentRowsExpanded,
+      allRowsExpanded,
+      rowsExpanded
+    ) => {
+      let newIndex = [];
+      if (!allRowsExpanded.length) {
+        setIndex([]);
+      }
+      allRowsExpanded.forEach((row) => {
+        newIndex.push(row.index);
+      });
+      setIndex(newIndex);
+    },
     rowsExpanded: index,
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
