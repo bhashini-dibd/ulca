@@ -20,7 +20,7 @@ import {
   TableBody,
   TableHead,
   Box,
-  Table
+  Table,
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -269,7 +269,6 @@ const BenchmarkModal = (props) => {
               </>
             </TableCell>
           </TableRow>
-          
         </>
       );
     },
@@ -310,7 +309,8 @@ const BenchmarkModal = (props) => {
             width: "65.375rem",
           },
           responsiveBase: {
-            overflow: "initial",
+            overflowX: "hidden",
+            overflowY: "auto",
             minHeight: "35rem",
             maxHeight: "35rem",
           },
@@ -355,7 +355,6 @@ const BenchmarkModal = (props) => {
             border: "none",
             borderBottom: "5px solid white",
             // backgroundColor: "#F3F3F3",
-            
           },
         },
         MuiTableRow: {
