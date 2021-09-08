@@ -160,7 +160,7 @@ public class BenchmarkService {
 		return null;
 	}
 	
-	public BmProcessListByProcessIdResponse getScorelistByProcess(String benchmarkProcessId ){
+	public BmProcessListByProcessIdResponse processStatus(String benchmarkProcessId ){
 		
 		List<BenchmarkProcess> list =  benchmarkprocessDao.findByBenchmarkProcessId(benchmarkProcessId);
 		
