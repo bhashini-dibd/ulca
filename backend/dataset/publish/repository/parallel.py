@@ -70,12 +70,13 @@ class ParallelRepo:
         try:
             log.info(f'aScore-update: {object_in["_id"]} | {object_in["collectionMethod"]}')
             result = col.delete_many({"_id": object_in["_id"]})
-            log.info(f'aScore-deleted: {result.deleted_count}')
+            log.info(f'aScore-deleted: {object_in["_id"]} | {result.deleted_count}')
             if result.deleted_count > 0:
                 col.insert_many([object_in])
-                res = col.find({"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}, {"_id": True})
+                res = col.find({"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}})
                 res_array = []
                 for rec in res:
+                    rec["_id"] = str(rec["_id"])
                     res_array.append(rec)
                 for r in res_array:
                     log.info(f'aScore-post: {str(r["_id"])} | {r["collectionMethod"]}')
