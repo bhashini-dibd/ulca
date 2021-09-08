@@ -71,10 +71,14 @@ class ParallelRepo:
             log.info(f'aScore-update: {object_in["_id"]} | {object_in["collectionMethod"]}')
             result = col.delete_many({"_id": object_in["_id"]})
             log.info(f'aScore-deleted: {result.deleted_count}')
-            col.insert_many([object_in])
-            res = col.find({"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}, {"_id": True})
-            for rec in res:
-                log.info(f'aScore-post: {str(rec["_id"])} | {rec["collectionMethod"]}')
+            if result.deleted_count > 0:
+                col.insert_many([object_in])
+                res = col.find({"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}, {"_id": True})
+                res_array = []
+                for rec in res:
+                    res_array.append(rec)
+                for r in res_array:
+                    log.info(f'aScore-post: {str(r["_id"])} | {r["collectionMethod"]}')
         except Exception as e:
             log.exception(f"Exception while updating: {e}", e)
 
