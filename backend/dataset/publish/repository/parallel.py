@@ -2,6 +2,9 @@ import logging
 from collections import OrderedDict
 from datetime import datetime
 from logging.config import dictConfig
+
+import bson
+
 from configs.configs import db_cluster, db, parallel_collection, parallel_search_ignore_keys, shared_storage_path
 
 import pymongo
@@ -71,8 +74,8 @@ class ParallelRepo:
                 col.delete_one({"_id": str(db_id)})
             col.insert(object_in)'''
             for db_id in res:
-                log.info(f'db_id: {str(db_id)}')
-                col.replace_one({"_id": str(db_id)}, object_in, True)
+                log.info(f'db_id: {str(db_id["_id"])}')
+                col.replace_one({"_id": str(db_id["_id"])}, object_in)
         except Exception as e:
             log.exception(f"Exception while updating: {e}", e)
 
