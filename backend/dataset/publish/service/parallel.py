@@ -170,15 +170,21 @@ class ParallelService:
             for key in data.keys():
                 if key in parallel_updatable_keys:
                     if key not in db_record.keys():
+                        log.info("found 1")
+                        log.info(key)
                         found = True
                         db_record[key] = data[key]
                     else:
                         if db_record[key] != data[key]:
+                            log.info("found 2")
+                            log.info(key)
                             found = True
                             db_record[key] = data[key]
                     continue
                 if key not in parallel_immutable_keys:
                     if key not in db_record.keys():
+                        log.info("found 3")
+                        log.info(key)
                         found = True
                         db_record[key] = [data[key]]
                     elif isinstance(data[key], list):
@@ -186,20 +192,28 @@ class ParallelService:
                         if isinstance(val, dict):
                             pairs = zip(data[key], db_record[key])
                             if any(x != y for x, y in pairs):
+                                log.info("found 4")
+                                log.info(key)
                                 found = True
                                 db_record[key].extend(data[key])
                         else:
                             for entry in data[key]:
                                 if entry not in db_record[key]:
+                                    log.info("found 5")
+                                    log.info(key)
                                     found = True
                                     db_record[key].append(entry)
                     else:
                         if isinstance(db_record[key], list):
                             if data[key] not in db_record[key]:
+                                log.info("found 6")
+                                log.info(key)
                                 found = True
                                 db_record[key].append(data[key])
                         else:
                             if db_record[key] != data[key]:
+                                log.info("found 7")
+                                log.info(key)
                                 found = True
                                 db_record[key] = [db_record[key]]
                                 db_record[key].append(data[key])

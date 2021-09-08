@@ -68,8 +68,11 @@ class ParallelRepo:
     def update(self, object_in):
         col = self.get_mongo_instance()
         try:
-            log.info(f'db_id: {object_in["_id"]}')
-            col.replace_one({"_id": object_in["_id"]}, object_in)
+            log.info(f'aScore-update: {object_in["collectionMethod"]}')
+            col.replace_one({"_id": object_in["_id"]}, object_in, False)
+            res = col.find({"_id": object_in["_id"]})
+            for rec in res:
+                log.info(f'aScore-post: {rec["collectionMethod"]}')
         except Exception as e:
             log.exception(f"Exception while updating: {e}", e)
 
