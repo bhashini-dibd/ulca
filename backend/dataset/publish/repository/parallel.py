@@ -55,6 +55,8 @@ class ParallelRepo:
 
     def insert(self, data):
         col = self.get_mongo_instance()
+        for record in data:
+            log.info(f'aScore-insert: {record["collectionMethod"]}')
         col.insert_many(data)
         return len(data)
 
@@ -65,6 +67,7 @@ class ParallelRepo:
     def update(self, object_in):
         col = self.get_mongo_instance()
         try:
+            log.info(f'aScore-update: {object_in["collectionMethod"]}')
             query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
             col.replace_one(query, object_in)
         except Exception as e:
