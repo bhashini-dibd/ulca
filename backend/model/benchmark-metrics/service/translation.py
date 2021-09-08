@@ -1,6 +1,5 @@
 import logging
 from datetime import datetime
-import numpy as np
 from logging.config import dictConfig
 from utils.mongo_utils import BenchMarkingProcessRepo
 
@@ -29,7 +28,8 @@ class TranslationMetricEvalHandler:
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
                     eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation)
                     if eval_score:
-                        doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': float(np.round(eval_score, 3))}
+                        #benchmark["corpus_eval_score"] = eval_score
+                        doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score':eval_score}        
                         repo.insert(doc)
                     else:
                         log.exception("Exception while metric evaluation of model")
