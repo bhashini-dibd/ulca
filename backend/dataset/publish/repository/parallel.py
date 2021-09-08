@@ -68,14 +68,8 @@ class ParallelRepo:
     def update(self, object_in):
         col = self.get_mongo_instance()
         try:
-            query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
-            res = col.find(query, {"_id": True})
-            '''for db_id in res:
-                col.delete_one({"_id": str(db_id)})
-            col.insert(object_in)'''
-            for db_id in res:
-                log.info(f'db_id: {str(db_id["_id"])}')
-                col.replace_one({"_id": str(db_id["_id"])}, object_in)
+            log.info(f'db_id: {object_in["_id"]}')
+            col.replace_one({"_id": object_in["_id"]}, object_in)
         except Exception as e:
             log.exception(f"Exception while updating: {e}", e)
 
@@ -83,11 +77,19 @@ class ParallelRepo:
         try:
             col = self.get_mongo_instance()
             if offset is None and res_limit is None:
-                res = col.find(query, exclude).sort([('_id', 1)])
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', 1)])
+                else:
+                    res = col.find(query).sort([('_id', 1)])
             else:
-                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                else:
+                    res = col.find(query).sort([('_id', -1)]).skip(offset).limit(res_limit)
             result = []
             for record in res:
+                if "_id" in record.keys():
+                    record["_id"] = str(record["_id"])
                 result.append(record)
             return result
         except Exception as e:
