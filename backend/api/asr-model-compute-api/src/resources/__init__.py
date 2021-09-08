@@ -1,1 +1,1 @@
-from .computeresource import ASRComputeResource
+from .computeresource import ASRComputeResource, ComputeAudioResource

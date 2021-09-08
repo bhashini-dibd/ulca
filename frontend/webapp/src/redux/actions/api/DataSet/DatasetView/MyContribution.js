@@ -41,7 +41,8 @@ export default class MyCOntribution extends API {
         this.headers = {
             headers: {
                 "key" :this.userDetails.publicKey,
-                "sig"  : hash
+                "sig"  : hash,
+                "payload":urlSha
             }
         };
         return this.headers;

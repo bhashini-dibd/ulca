@@ -3,19 +3,22 @@ package org.ulca.filters.pre;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import org.ulca.cache.ZuulConfigCache;
-import org.ulca.models.Action;
-import org.ulca.models.User;
-import org.ulca.utils.ExceptionUtils;
-import org.ulca.utils.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.ulca.cache.ZuulConfigCache;
+import org.ulca.models.Action;
+import org.ulca.models.User;
+import org.ulca.utils.ExceptionUtils;
+import org.ulca.utils.UserUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.ulca.constants.RequestContextConstants.*;
 
@@ -39,6 +42,7 @@ public class AuthFilter extends ZuulFilter {
 
     private static final String PK_RETRIEVE_FAILURE_MESSAGE = "Couldn't find public key in the request.";
     private static final String SIG_RETRIEVE_FAILURE_MESSAGE = "Couldn't find signature in the request.";
+    private static final String PAYLOAD_RETRIEVE_FAILURE_MESSAGE = "Couldn't find payload in the request.";
     private static final String SKIP_AUTH_CHECK = "Auth check skipped - whitelisted endpoint | {}";
     private static final String ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE = "Routing to protected endpoint {} restricted - Invalid public key";
     private static final String PROCEED_ROUTING_MESSAGE = "Routing to protected endpoint: {} - authentication check passed!";
@@ -79,7 +83,7 @@ public class AuthFilter extends ZuulFilter {
             ExceptionUtils.raiseCustomException(HttpStatus.NOT_FOUND, INVALID_ENDPOINT_MSG);
         }
         try {
-            headerMap = getKeyAndSigFromRequestHeader();
+            headerMap = getHeadersFromRequestHeader();
         } catch (Exception e) {
             logger.error(PK_RETRIEVE_FAILURE_MESSAGE, e);
             ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, PK_RETRIEVE_FAILURE_MESSAGE);
@@ -89,15 +93,21 @@ public class AuthFilter extends ZuulFilter {
             logger.info(PK_RETRIEVE_FAILURE_MESSAGE);
             ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, PK_RETRIEVE_FAILURE_MESSAGE);
         }
-        else if (headerMap.get("SIG") == null){
+        else if (headerMap.get("SIG") == null) {
             logger.info(SIG_RETRIEVE_FAILURE_MESSAGE);
+            ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, SIG_RETRIEVE_FAILURE_MESSAGE);
+        }
+        else if (headerMap.get("PAYLOAD") == null){
+            logger.info(PAYLOAD_RETRIEVE_FAILURE_MESSAGE);
             ExceptionUtils.raiseCustomException(HttpStatus.BAD_REQUEST, SIG_RETRIEVE_FAILURE_MESSAGE);
         }
         else {
             String publicKey = headerMap.get("PK");
             String sig = headerMap.get("SIG");
+            String payload = headerMap.get("PAYLOAD");
             ctx.set(PUBLIC_KEY, publicKey);
             ctx.set(SIG_KEY, sig);
+            ctx.set(PAYLOAD_KEY, payload);
             User user = verifyAuthenticity(ctx, publicKey);
             if (null == user){
                 logger.info(ROUTING_TO_PROTECTED_ENDPOINT_RESTRICTED_MESSAGE, ctx.get(ACTION_URI));
@@ -188,11 +198,12 @@ public class AuthFilter extends ZuulFilter {
      * Fetches auth token from the request header.
      * @return
      */
-    private Map<String, String> getKeyAndSigFromRequestHeader() {
+    private Map<String, String> getHeadersFromRequestHeader() {
         RequestContext ctx = RequestContext.getCurrentContext();
         Map<String, String> headers = new HashMap<>();
         headers.put("PK", ctx.getRequest().getHeader(PUBLIC_KEY_HEADER));
         headers.put("SIG", ctx.getRequest().getHeader(SIG_HEADER));
+        headers.put("PAYLOAD", ctx.getRequest().getHeader(PAYLOAD_HEADER));
         return headers;
     }
 

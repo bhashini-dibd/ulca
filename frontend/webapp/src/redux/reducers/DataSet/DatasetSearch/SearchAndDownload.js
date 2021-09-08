@@ -18,19 +18,25 @@ const initialState = {
 
 const getSearchOptions = (payload) => {
     let datasetTypeArray = Object.keys(payload.data);
-    let datasetName = ["parallel", "monolingual", "ASR", "OCR", "AS1"]
-    let datasetType = datasetTypeArray.map((type, i) => {
+    let datasetType = datasetTypeArray.map((type) => {
         return {
-            label: datasetName[i],
-            // label: payload[type].label,
-            value: datasetTypeArray[i].replace('dataset', 'corpus')
+            label: payload.data[type].label,
+            value: type
+        }
+    })
+
+    let sourceLanguage = payload.data[datasetTypeArray[0]].filters[0].values.map(lang => {
+        return {
+            value: lang.value,
+            label: lang.label
         }
     })
 
     return {
+        "data": payload.data,
         "datasetType": datasetType,
         "languagePair": {
-            "sourceLang": [],
+            "sourceLang": sourceLanguage,
             "targetLang": []
         },
         "scripts": ["Indus", "Brahmi", "Gupta", "Tamil", "Devanagari"],
@@ -42,11 +48,27 @@ const getSearchOptions = (payload) => {
     }
 }
 
+const getSearchFilter = (datasetType, prevState) => {
+    let newState = Object.assign({}, JSON.parse(JSON.stringify(prevState)));
+    newState["languagePair"]["sourceLang"] = newState["data"][datasetType]["filters"][0]['values'].map(value => {
+        return {
+            value: value.value,
+            label: value.label
+        }
+    });
+    return newState;
+
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case C.GET_SEARCH_OPTIONS:
             return {
                 result: getSearchOptions(action.payload)
+            }
+        case C.GET_SEARCH_FILTERS:
+            return {
+                result: getSearchFilter(action.payload, state.result)
             }
         default:
             return {

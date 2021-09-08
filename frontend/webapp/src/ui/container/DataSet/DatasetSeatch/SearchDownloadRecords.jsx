@@ -24,13 +24,14 @@ import RequestNumberCreation from "./RequestNumberCreation";
 import { useHistory, useParams } from 'react-router';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import MultiAutocomplete from '../../../components/common/Autocomplete';
-import { Language, FilterBy } from '../../../../configs/DatasetItems';
+import { FilterBy } from '../../../../configs/DatasetItems';
 import SubmitSearchRequest from '../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest';
 // import DatasetType from '../../../../configs/DatasetItems';
 import getLanguageLabel from '../../../../utils/getLabel';
 import SearchAndDownloadAPI from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
 import APITransport from '../../../../redux/actions/apitransport/apitransport';
 import AdvanceFilter from '../../../components/common/AdvanceFilter';
+import { getFilter } from '../../../../redux/actions/api/DataSet/DatasetSearch/GetFilters';
 
 const StyledMenu = withStyles({
 })((props) => (
@@ -52,8 +53,8 @@ const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
     const urlMySearch = UrlConfig.mySearches;
-    const DatasetType = useSelector(state=>state.mySearchOptions.result.datasetType)
-    console.log(DatasetType)
+    const DatasetType = useSelector(state => state.mySearchOptions.result.datasetType)
+    const Language = useSelector(state => state.mySearchOptions.result.languagePair.sourceLang)
     const dispatch = useDispatch();
     const param = useParams();
     const history = useHistory();
@@ -85,7 +86,7 @@ const SearchAndDownloadRecords = (props) => {
 
     useEffect(() => {
 
-        const apiData= new SearchAndDownloadAPI();
+        const apiData = new SearchAndDownloadAPI();
         dispatch(APITransport(apiData))
         previousUrl.current = params;
 
@@ -118,6 +119,12 @@ const SearchAndDownloadRecords = (props) => {
             history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
 
     }, []);
+
+    // useEffect(()=>{
+    //     if(DatasetType.length){
+    //         dispatch(getFilter('parallel-corpus'))
+    //     }
+    // },[DatasetType])
 
     useEffect(() => {
         if (previousUrl.current !== params && previousUrl.current !== 'initiate') {
@@ -311,6 +318,7 @@ const SearchAndDownloadRecords = (props) => {
     const handleChange = (label, value) => {
         setLabel(label)
         handleDatasetClick(value)
+        dispatch(getFilter(value));
     };
     const [anchorEl, openEl] = useState(null);
     const handleClose = () => {
@@ -538,9 +546,9 @@ const SearchAndDownloadRecords = (props) => {
                                 </Grid>
                             </Grid>
                             <div className={classes.advanceFilter}>
-                                <Button disabled={!languagePair.target.length} style={{color:"#FD7F23"}} variant="outlined" size="small" onClick={renderAdvanceFilter()}>Advance filter</Button>
+                                <Button disabled={!languagePair.target.length} style={{ color: "#FD7F23" }} variant="outlined" size="small" onClick={renderAdvanceFilter()}>Advance filter</Button>
                             </div>
-                            <AdvanceFilter filters={[{placeholder:"License"},{placeholder:"Submitter"},{placeholder:"Collection Method"}]}/>
+                            <AdvanceFilter filters={[{ placeholder: "License" }, { placeholder: "Submitter" }, { placeholder: "Collection Method" }]} />
                             {renderclearNsubmitButtons()}
                         </Grid>
                     </Grid>

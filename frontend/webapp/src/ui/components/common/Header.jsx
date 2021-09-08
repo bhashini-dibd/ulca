@@ -41,7 +41,7 @@ const StyledMenu = withStyles({
 ));
 
 const Header = (props) => {
-  const { classes } = props;
+  const { classes,type,index } = props;
   const [anchorEl, setAnchorEl] = useState(null)
   const [anchorModel, setAnchorModel] = useState(null)
   const [urlLink, setUrlLink] = useState(null)
@@ -50,6 +50,7 @@ const Header = (props) => {
   const history = useHistory();
   const menuType = useSelector(state => state.getMenuInfo.type);
   const value = useSelector(state => state.getMenuInfo.optionSelected);
+
   const { firstName, lastName } = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : { firstName: "", lastName: "" }
   const handleClose = (e) => {
     setAnchorEl(null)
@@ -77,7 +78,6 @@ const Header = (props) => {
 
   const handleChange = (event, newValue) => {
     dispatch(getMenuOption(newValue))
-
   }
 
   const handleMenuItemClick = (url) => {
@@ -105,7 +105,6 @@ const Header = (props) => {
     }
     dispatch(getMenuType(type));
   }
-
   return (
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit" position="static">
@@ -150,7 +149,7 @@ const Header = (props) => {
                   </Button>
                 </div> */}
                 {authenticate() &&
-                  <div className={classes.datasetOption}>
+                  <div className={classes.datasetOption}  style ={type === "dataset"?{background:"#f5f5f5"}:{}}>
                     <Button className={classes.menuBtn}
                       onClick={(e) => handleMenuTypeClick('dataset')}
                       variant="text"
@@ -171,7 +170,7 @@ const Header = (props) => {
                 }
                 {authenticate() &&
                   <div className={classes.options}>
-                    <div className={classes.model}>
+                    <div className={classes.model} style ={type === "models"?{background:"#f5f5f5"}:{}}>
                       <Button className={classes.menuBtn} variant="text" onClick={(e) => handleMenuTypeClick('models')}>
                         Model
                         {/* {authenticate() && <DownIcon color="action" />} */}
@@ -278,7 +277,7 @@ const Header = (props) => {
           </div>
         </Toolbar>
       </AppBar>
-      {authenticate() && menuType && <SubHeader tabs={menuItems[menuType]} value={value} handleChange={handleChange} />}
+      {authenticate() &&type&& <SubHeader tabs={menuItems[type]} value={index} handleChange={handleChange} />}
       {open && <Dialog
         title={"Not Signed In"}
         open={open}

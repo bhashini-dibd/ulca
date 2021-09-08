@@ -2,6 +2,7 @@ package com.ulca.model.service;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import com.ulca.model.response.ModelComputeResponse;
 
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
+import io.swagger.model.OCRRequest;
+import io.swagger.model.OCRResponse;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.Sentence;
 import io.swagger.model.Sentences;
@@ -93,6 +96,22 @@ public class ModelInferenceEndPointService {
 			asrResponse.setOutput(null);
 			asrInference.setResponse(asrResponse);
 			schema = asrInference;
+
+		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
+			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+			OCRRequest request = ocrInference.getRequest();
+
+			String responseStr = builder.build().post().uri(callBackUrl)
+					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
+
+			log.info("response test for OCRRRequest" + responseStr);
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			OCRResponse response = objectMapper.readValue(responseStr, OCRResponse.class);
+			ocrInference.setResponse(response);
+			schema = ocrInference;
 
 		}
 
@@ -182,6 +201,28 @@ public class ModelInferenceEndPointService {
 			
 			return response;
 		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
+			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+			
+			List<String> imageUrlList = new ArrayList<String>();
+			imageUrlList.add(compute.getImageUri());
+			OCRRequest request = ocrInference.getRequest();
+			request.setImageUri(imageUrlList);
+
+			String responseStr = builder.build().post().uri(callBackUrl)
+					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
+
+			log.info("response test for OCRRRequest" + responseStr);
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			OCRResponse ocrResponse = objectMapper.readValue(responseStr, OCRResponse.class);
+			
+			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+			
+
+		}
+		
 		return response;
 	}
 
