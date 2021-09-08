@@ -69,18 +69,8 @@ class ParallelRepo:
     def update(self, object_in):
         col = self.get_mongo_instance()
         try:
-            log.info(f'aScore-update: {object_in["_id"]} | {object_in["collectionMethod"]}')
             object_in["_id"] = ObjectId(object_in["_id"])
-            result = col.replace_one({"_id": object_in["_id"]}, object_in, False)
-            log.info(f'aScore-modified: {str(object_in["_id"])} | {result.modified_count}')
-            res = col.find({"_id": object_in["_id"]})
-            res_array = []
-            for rec in res:
-                rec["_id"] = str(rec["_id"])
-                res_array.append(rec)
-            for r in res_array:
-                log.info(f'aScore-post: {r["_id"]} | {r["collectionMethod"]}')
-            #res = col.find({"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}})
+            col.replace_one({"_id": object_in["_id"]}, object_in, False)
         except Exception as e:
             log.exception(f"Exception while updating: {e}", e)
 
