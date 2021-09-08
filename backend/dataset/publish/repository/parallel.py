@@ -4,6 +4,7 @@ from datetime import datetime
 from logging.config import dictConfig
 
 import bson
+from bson import ObjectId
 
 from configs.configs import db_cluster, db, parallel_collection, parallel_search_ignore_keys, shared_storage_path
 
@@ -69,17 +70,16 @@ class ParallelRepo:
         col = self.get_mongo_instance()
         try:
             log.info(f'aScore-update: {object_in["_id"]} | {object_in["collectionMethod"]}')
-            result = col.delete_many({"_id": object_in["_id"]})
-            log.info(f'aScore-deleted: {object_in["_id"]} | {result.deleted_count}')
-            if result.deleted_count > 0:
-                col.insert_many([object_in])
-                res = col.find({"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}})
-                res_array = []
-                for rec in res:
-                    rec["_id"] = str(rec["_id"])
-                    res_array.append(rec)
-                for r in res_array:
-                    log.info(f'aScore-post: {str(r["_id"])} | {r["collectionMethod"]}')
+            result = col.replace_one({"_id": ObjectId(object_in["_id"])}, object_in, False)
+            log.info(f'aScore-modified: {object_in["_id"]} | {result.modified_count}')
+            res = col.find({"_id": ObjectId(object_in["_id"])})
+            res_array = []
+            for rec in res:
+                rec["_id"] = str(rec["_id"])
+                res_array.append(rec)
+            for r in res_array:
+                log.info(f'aScore-post: {str(r["_id"])} | {r["collectionMethod"]}')
+            #res = col.find({"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}})
         except Exception as e:
             log.exception(f"Exception while updating: {e}", e)
 
