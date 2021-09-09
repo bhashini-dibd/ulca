@@ -1,6 +1,7 @@
 package io.swagger.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -33,8 +34,8 @@ public class Benchmark   {
   @JsonProperty("description")
   private String description = null;
  
-  @JsonProperty("metricName")
-  private MetricName metricName = null;
+  @JsonProperty("metric")
+  private List<String> metric = null;
 
   @JsonProperty("score")
   private BigDecimal score = null;
@@ -114,6 +115,23 @@ public class Benchmark   {
   public void setDescription(String description) {
     this.description = description;
   }
+  
+  public Benchmark metric(List<String> metric) {
+	    this.metric = metric;
+	    return this;
+	  }
+
+	  
+
+	  public List<String> getMetric() {
+	    return metric;
+	  }
+
+	  public void setMetricd(List<String> metric) {
+	    this.metric = metric;
+	  }
+	  
+	  
   
   public Benchmark dataset(String dataset) {
 	    this.dataset = dataset;

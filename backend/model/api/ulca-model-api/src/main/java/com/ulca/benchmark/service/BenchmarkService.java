@@ -1,10 +1,12 @@
 package com.ulca.benchmark.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
@@ -23,6 +25,7 @@ import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSearchResponse;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkResponse;
+import com.ulca.benchmark.response.BenchmarkDto;
 import com.ulca.benchmark.util.Utility;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
@@ -125,12 +128,25 @@ public class BenchmarkService {
 		}
 		Example<Benchmark> example = Example.of(benchmark);
 		List<Benchmark> list = benchmarkDao.findAll(example);
+		
+		List<BenchmarkDto> dtoList = new ArrayList<BenchmarkDto>();
 
-		List<String> metric = null;
-		if (request.getTask() != null && !request.getTask().isBlank()) {
-			metric = getMetric(request.getTask());
+		for(Benchmark bm : list) {
+			
+			BenchmarkDto dto = new BenchmarkDto();
+			BeanUtils.copyProperties(bm, dto);
+			
+			BenchmarkProcess bmProc = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
+			
+			List<String> metricList = bm.getMetric();
+			metricList.remove(bmProc.getMetric());
+			
+			dto.setAvailableMetric(metricList);
+			dtoList.add(dto);
+			
 		}
-		response = new BenchmarkSearchResponse("Benchmark Search Result", list, metric, list.size());
+		
+		response = new BenchmarkSearchResponse("Benchmark Search Result", dtoList,dtoList.size());
 
 		log.info("******** Exit BenchmarkService:: listByTaskID *******");
 
