@@ -1,13 +1,9 @@
-from os import write
 from locust import  between,SequentialTaskSet,HttpUser,task,between
 import json
-import requests
-import re
 import sys
 import csv
 import pandas as pd
 import time
-from typing import NewType, final
 sys.path.append("C:\GITLOCUSTCODE\Locust")
 import hashlib
 import boto3
@@ -116,25 +112,25 @@ class  UserBehaviour(SequentialTaskSet):
                 print("API Response error",e)
 
                
-                if 'data' in json_res.keys():
-                    self.ssn = str(json_res['data']['serviceRequestNumber'])
-                    self.submit_rst = 'successful'
-                    self.ssnlist.append(self.ssn)
-                    url_search = "https://dev-auth.ulcacontrib.org/ulca/apis/v0/dataset/getByServiceRequestNumber?serviceRequestNumber="+self.ssn
-                    url_search.replace(" ","")
-                    data1 = str(url_search).encode("utf-8")
-                    test1 = hashlib.md5(data1).hexdigest()
-                    self.crypt_url = hashlib.md5((self.private + "|" + test1).encode("utf-8")).hexdigest()
-                    self.sub_list.append(self.crypt_url)
-                    self.sub_url.append(test1)
+            if 'data' in json_res.keys():
+                self.ssn = str(json_res['data']['serviceRequestNumber'])
+                self.submit_rst = 'successful'
+                self.ssnlist.append(self.ssn)
+                url_search = "https://dev-auth.ulcacontrib.org/ulca/apis/v0/dataset/getByServiceRequestNumber?serviceRequestNumber="+self.ssn
+                url_search.replace(" ","")
+                data1 = str(url_search).encode("utf-8")
+                test1 = hashlib.md5(data1).hexdigest()
+                self.crypt_url = hashlib.md5((self.private + "|" + test1).encode("utf-8")).hexdigest()
+                self.sub_list.append(self.crypt_url)
+                self.sub_url.append(test1)
 
-                elif 'code' in json_res.keys():
-                    print("dataset already submitted")
-                    self.sub_list.append("cryptEmpty")
-                    self.submit_rst = "failed"
-                    self.varr = "SsnNotAvail"
+            elif 'code' in json_res.keys():
+                print("dataset already submitted")
+                self.sub_list.append("cryptEmpty")
+                self.submit_rst = "failed"
+                self.varr = "SsnNotAvail"
 
-                    self.ssnlist.append(self.varr)
+                self.ssnlist.append(self.varr)
 
         self.srch = self.sub_val
 
