@@ -14,7 +14,8 @@ import Snackbar from './components/common/Snackbar';
 
 function App(props) {
   const Component = props.component;
-  const { classes,type,index  } = props;
+  const { classes,type,index,userRoles  } = props;
+
   const [popUp, setPopup] =  useState(true)
   const apiStatus = useSelector((state) => state.apiStatus);
   const history = useHistory();
