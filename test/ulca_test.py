@@ -91,7 +91,7 @@ class  UserBehaviour(SequentialTaskSet):
             self.param.append(paramdata)
 
             data=(json.dumps(paramdata))
-            data.replace(" ","").encode("utf-8")
+            data = data.replace(" ","").encode("utf-8")
             test = hashlib.md5(data).hexdigest()
             self.test.append(test)
             self.crypt= hashlib.md5((self.private + "|" + test).encode("utf-8")).hexdigest()
