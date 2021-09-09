@@ -20,7 +20,7 @@ import {
   TableBody,
   TableHead,
   Box,
-  Table
+  Table,
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -269,7 +269,6 @@ const BenchmarkModal = (props) => {
               </>
             </TableCell>
           </TableRow>
-          
         </>
       );
     },
@@ -294,6 +293,13 @@ const BenchmarkModal = (props) => {
             width: "100%",
           },
         },
+        MUIDataTableToolbar: {
+          root: {
+            "@media (max-width: 599.95px)": {
+              display: "flex !important",
+            },
+          },
+        },
         MUIDataTableBodyRow: {
           root: {
             "&:nth-child(odd)": {
@@ -308,11 +314,31 @@ const BenchmarkModal = (props) => {
           paper: {
             padding: "21px",
             width: "65.375rem",
+            "@media (max-width:1090px)": {
+              width: "55.375rem",
+            },
+            "@media (max-width:930px)": {
+              width: "45.375rem",
+            },
+            "@media (max-width:760px)": {
+              width: "35.375rem",
+            },
+            "@media (max-width:605px)": {
+              width: "30.375rem",
+            },
+            "@media (max-width:530px)": {
+              width: "25.375rem",
+            },
+            "@media (max-width:450px)": {
+              width: "20.375rem",
+            },
           },
           responsiveBase: {
-            overflow: "initial",
-            minHeight: "35rem",
-            maxHeight: "35rem",
+            oveflow: "initial",
+            overflowX: "hidden",
+            overflowY: "auto",
+            minHeight: "30rem",
+            maxHeight: "30rem",
           },
         },
         MUIDataTableSelectCell: {
@@ -355,7 +381,6 @@ const BenchmarkModal = (props) => {
             border: "none",
             borderBottom: "5px solid white",
             // backgroundColor: "#F3F3F3",
-            
           },
         },
         MuiTableRow: {

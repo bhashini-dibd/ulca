@@ -99,8 +99,8 @@ class ASRService:
                     record = record[0]
                 dup_data = service.enrich_duplicate_data(data, record, metadata, asr_immutable_keys, asr_updatable_keys, asr_non_tag_keys)
                 if dup_data:
-                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                     if metadata["userMode"] != user_mode_pseudo:
+                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                         repo.update(dup_data)
                     return "UPDATE", dup_data, record
                 else:
@@ -132,8 +132,7 @@ class ASRService:
     '''
     def get_asr_dataset_internal(self, query):
         try:
-            exclude = {"_id": False}
-            data = repo.search(query, exclude, None, None)
+            data = repo.search(query, None, None, None)
             if data:
                 asr_data = data[0]
                 if asr_data:

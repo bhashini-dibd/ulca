@@ -89,8 +89,8 @@ class ParallelService:
                         if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
-                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                                 if metadata["userMode"] != user_mode_pseudo:
+                                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                                     repo.update(dup_data)
                                 return "UPDATE", dup_data, record
                             else:
@@ -131,8 +131,7 @@ class ParallelService:
                 db_query = {"tags": {"$all": query["hash"]}}
             else:
                 db_query = {"tags": {"$in": query["hash"]}}
-            exclude = {"_id": False}
-            data = repo.search_internal(db_query, exclude, None, None)
+            data = repo.search_internal(db_query, None, None, None)
             if data:
                 return data
             else:
@@ -196,7 +195,12 @@ class ParallelService:
                                     db_record[key].append(entry)
                     else:
                         if isinstance(db_record[key], list):
-                            if data[key] not in db_record[key]:
+                            eq = False
+                            for r in db_record[key]:
+                                eq = data[key] == r
+                                if eq:
+                                    break
+                            if not eq:
                                 found = True
                                 db_record[key].append(data[key])
                         else:
