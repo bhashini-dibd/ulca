@@ -85,7 +85,13 @@ const SearchAndDownloadRecords = (props) => {
     const detailedReport = useSelector((state) => state.mySearchReport);
 
     useEffect(() => {
-
+        fetch('https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev/filterClassification.json',{
+            method:'get',
+            // headers:{"Content-Type":"application/json"}
+        })    .then(async res=>{
+                let rsp_data= await res.json();
+                console.log(rsp_data);
+        })
         const apiData = new SearchAndDownloadAPI();
         dispatch(APITransport(apiData))
         previousUrl.current = params;

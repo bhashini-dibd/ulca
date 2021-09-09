@@ -2,18 +2,14 @@ import C from '../../../actions/constants';
 
 const initialState = {
     result: {
+        "data":[],
         "datasetType": [],
         "languagePair": {
             "sourceLang": [],
-            "targetLang": []
         },
-        "scripts": ["Indus", "Brahmi", "Gupta", "Tamil", "Devanagari"],
-        "filterBy": {
-            "domain": [],
-            "source": [],
-            "collectionMethods": []
-        }
-    }
+    },
+    "basicFilter":[],
+    "advFilter":[]
 }
 
 const getSearchOptions = (payload) => {
@@ -32,19 +28,14 @@ const getSearchOptions = (payload) => {
         }
     })
 
+    // let basicFilter = payload.data[datasetTypeArray[0]].filters.map
+
     return {
         "data": payload.data,
         "datasetType": datasetType,
         "languagePair": {
             "sourceLang": sourceLanguage,
-            "targetLang": []
         },
-        "scripts": ["Indus", "Brahmi", "Gupta", "Tamil", "Devanagari"],
-        "filterBy": {
-            "domain": [],
-            "source": [],
-            "collectionMethods": []
-        }
     }
 }
 
@@ -64,11 +55,19 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
         case C.GET_SEARCH_OPTIONS:
             return {
+                ...state,
                 result: getSearchOptions(action.payload)
             }
         case C.GET_SEARCH_FILTERS:
             return {
+                ...state,
                 result: getSearchFilter(action.payload, state.result)
+            }
+
+        case C.GET_FILTER_CATEGORY:
+            return{
+                ...state,
+                
             }
         default:
             return {
