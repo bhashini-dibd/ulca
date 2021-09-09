@@ -94,8 +94,8 @@ class OCRService:
             if record:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, ocr_immutable_keys, ocr_updatable_keys, ocr_non_tag_keys)
                 if dup_data:
-                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                     if metadata["userMode"] != user_mode_pseudo:
+                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                         repo.update(dup_data)
                     return "UPDATE", dup_data, record
                 else:
@@ -126,8 +126,7 @@ class OCRService:
     '''
     def get_ocr_dataset_internal(self, query):
         try:
-            exclude = {"_id": False}
-            data = repo.search(query, exclude, None, None)
+            data = repo.search(query, None, None, None)
             if data:
                 return data[0]
             else:

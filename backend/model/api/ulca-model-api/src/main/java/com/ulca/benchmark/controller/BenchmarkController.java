@@ -64,10 +64,10 @@ public class BenchmarkController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getScoreByProcess")
-	public ResponseEntity<BmProcessListByProcessIdResponse> getScorelistByProcess(@RequestParam String benchmarkProcessId){
+	@GetMapping("/process/status")
+	public ResponseEntity<BmProcessListByProcessIdResponse> processStatus(@RequestParam String benchmarkProcessId){
 		
-		BmProcessListByProcessIdResponse response = benchmarkService.getScorelistByProcess(benchmarkProcessId);
+		BmProcessListByProcessIdResponse response = benchmarkService.processStatus(benchmarkProcessId);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK); 
 		
