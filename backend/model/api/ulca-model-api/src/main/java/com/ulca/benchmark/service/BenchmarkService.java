@@ -128,18 +128,16 @@ public class BenchmarkService {
 		}
 		Example<Benchmark> example = Example.of(benchmark);
 		List<Benchmark> list = benchmarkDao.findAll(example);
-		
 		List<BenchmarkDto> dtoList = new ArrayList<BenchmarkDto>();
-
 		for(Benchmark bm : list) {
-			
 			BenchmarkDto dto = new BenchmarkDto();
 			BeanUtils.copyProperties(bm, dto);
+			List<String> metricList = new ArrayList<>(bm.getMetric());
+			List<BenchmarkProcess> bmProcList = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
 			
-			BenchmarkProcess bmProc = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
-			
-			List<String> metricList = bm.getMetric();
-			metricList.remove(bmProc.getMetric());
+			for(BenchmarkProcess bmProc : bmProcList) {
+				metricList.remove(bmProc.getMetric());
+			}
 			
 			dto.setAvailableMetric(metricList);
 			dtoList.add(dto);

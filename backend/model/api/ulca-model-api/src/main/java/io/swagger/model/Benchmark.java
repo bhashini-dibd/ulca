@@ -37,10 +37,6 @@ public class Benchmark   {
   @JsonProperty("metric")
   private List<String> metric = null;
 
-  @JsonProperty("score")
-  private BigDecimal score = null;
-
-  
   @JsonProperty("dataset")
   private String dataset = null;
 
@@ -120,18 +116,14 @@ public class Benchmark   {
 	    this.metric = metric;
 	    return this;
 	  }
+ 
+  public List<String> getMetric() {
+		return metric;
+	}
 
-	  
-
-	  public List<String> getMetric() {
-	    return metric;
-	  }
-
-	  public void setMetricd(List<String> metric) {
-	    this.metric = metric;
-	  }
-	  
-	  
+	public void setMetric(List<String> metric) {
+		this.metric = metric;
+	}
   
   public Benchmark dataset(String dataset) {
 	    this.dataset = dataset;
