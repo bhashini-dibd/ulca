@@ -104,6 +104,16 @@
             "role":"ADMIN",
             "actionID": "a4c9f08d-0968-403d-ab1f-008b1b1aff44",
             "active":true
+        },
+        {
+            "role":"READONLY-USER",
+            "actionID": "573ddaef-daac-4479-a9f6-4b0bc272de20",
+            "active":true
+        },
+        {
+            "role":"READONLY-USER",
+            "actionID": "9085ca30-ca0c-4b7e-81ba-0ca41568a372",
+            "active":true
         }
     ]
 }

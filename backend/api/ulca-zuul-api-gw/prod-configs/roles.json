@@ -19,6 +19,11 @@
             "code":"CONTRIBUTOR-SME",
             "active":true,
             "description":"Has access to CRUD operations on benchmark"
+        },
+        {
+            "code":"READONLY-USER",
+            "active":true,
+            "description":"Has access to Search features on ULCA"
         }
     ]
 }
