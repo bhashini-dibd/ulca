@@ -31,7 +31,8 @@ import getLanguageLabel from '../../../../utils/getLabel';
 import SearchAndDownloadAPI from '../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload';
 import APITransport from '../../../../redux/actions/apitransport/apitransport';
 import AdvanceFilter from '../../../components/common/AdvanceFilter';
-import { getFilter } from '../../../../redux/actions/api/DataSet/DatasetSearch/GetFilters';
+import { getFilter, getFilterCategory } from '../../../../redux/actions/api/DataSet/DatasetSearch/GetFilters';
+import SingleAutoComplete from '../../../components/common/SingleAutoComplete';
 
 const StyledMenu = withStyles({
 })((props) => (
@@ -55,6 +56,7 @@ const SearchAndDownloadRecords = (props) => {
     const urlMySearch = UrlConfig.mySearches;
     const DatasetType = useSelector(state => state.mySearchOptions.result.datasetType)
     const Language = useSelector(state => state.mySearchOptions.result.languagePair.sourceLang)
+    const basicFilter = useSelector(state => state.mySearchOptions.result.basicFilter)
     const dispatch = useDispatch();
     const param = useParams();
     const history = useHistory();
@@ -87,13 +89,16 @@ const SearchAndDownloadRecords = (props) => {
     useEffect(() => {
         fetch('https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev/filterClassification.json',{
             method:'get',
-            // headers:{"Content-Type":"application/json"}
         })    .then(async res=>{
                 let rsp_data= await res.json();
-                console.log(rsp_data);
+                if(res.ok){
+                    dispatch(getFilterCategory(rsp_data,Object.keys(datasetType)[0]))
+                    const apiData = new SearchAndDownloadAPI();
+                    dispatch(APITransport(apiData))
+                }
+        }).catch((err)=>{
+            console.log(err)
         })
-        const apiData = new SearchAndDownloadAPI();
-        dispatch(APITransport(apiData))
         previousUrl.current = params;
 
         let data = detailedReport.responseData.filter((val) => {
@@ -544,12 +549,19 @@ const SearchAndDownloadRecords = (props) => {
                             </div>
                             <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
                             <Grid container spacing={1}>
-                                <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                {/* <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                     {renderFilterByfield("domain", "Select Domain", filterBy.domain, FilterBy.domain)}
                                 </Grid>
                                 <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                     {renderFilterByfield("collectionMethod", "Select Collection Method", filterBy.collectionMethod, FilterBy.collectionMethod)}
-                                </Grid>
+                                </Grid> */}
+                                {
+                                    basicFilter.map(filter=>{
+                                        return <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                        <SingleAutoComplete id={filter.value} labels={filter.values} placeholder={`Select ${filter.label}`}/>
+                                        </Grid>
+                                    })
+                                }
                             </Grid>
                             <div className={classes.advanceFilter}>
                                 <Button disabled={!languagePair.target.length} style={{ color: "#FD7F23" }} variant="outlined" size="small" onClick={renderAdvanceFilter()}>Advance filter</Button>

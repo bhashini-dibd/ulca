@@ -6,3 +6,13 @@ export const getFilter = (datasetType) => {
         payload: datasetType
     }
 }
+
+export const getFilterCategory = (payload,datasetType)=>{
+    return {
+        type:C.GET_FILTER_CATEGORY,
+        payload:{
+            data:payload,
+            type:datasetType
+        }
+    }
+}

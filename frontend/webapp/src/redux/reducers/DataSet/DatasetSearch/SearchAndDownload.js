@@ -2,17 +2,19 @@ import C from '../../../actions/constants';
 
 const initialState = {
     result: {
-        "data":[],
+        "data": [],
         "datasetType": [],
         "languagePair": {
             "sourceLang": [],
         },
+        basicFilter: [],
+        advFilter: []
     },
-    "basicFilter":[],
-    "advFilter":[]
+
 }
 
-const getSearchOptions = (payload) => {
+const getSearchOptions = (payload, prevState) => {
+    let newState = Object.assign({}, JSON.parse(JSON.stringify(prevState)));
     let datasetTypeArray = Object.keys(payload.data);
     let datasetType = datasetTypeArray.map((type) => {
         return {
@@ -28,15 +30,19 @@ const getSearchOptions = (payload) => {
         }
     })
 
-    // let basicFilter = payload.data[datasetTypeArray[0]].filters.map
-
-    return {
-        "data": payload.data,
-        "datasetType": datasetType,
-        "languagePair": {
-            "sourceLang": sourceLanguage,
-        },
-    }
+    newState["basicFilter"] = prevState.basicFilter.map(base => {
+        return payload.data[datasetTypeArray[0]].filters.forEach(filter => {
+            if (base.value === filter.filter) {
+                base["values"] = filter.values
+            }
+            return base
+        })
+    })
+console.log(newState["basicFilter"])
+    newState["data"] = payload.data
+    newState["datasetType"] = datasetType
+    newState["languagePair"]["sourceLang"] = sourceLanguage
+    return newState;
 }
 
 const getSearchFilter = (datasetType, prevState) => {
@@ -51,12 +57,18 @@ const getSearchFilter = (datasetType, prevState) => {
 
 }
 
+const setEmptyValues = (data) => {
+    return data.map(val => {
+        val["values"] = [];
+        return val
+    })
+}
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case C.GET_SEARCH_OPTIONS:
             return {
-                ...state,
-                result: getSearchOptions(action.payload)
+                result: getSearchOptions(action.payload, state.result)
             }
         case C.GET_SEARCH_FILTERS:
             return {
@@ -65,9 +77,14 @@ const reducer = (state = initialState, action) => {
             }
 
         case C.GET_FILTER_CATEGORY:
-            return{
-                ...state,
-                
+            const { data, type } = action.payload
+            return {
+                result: {
+                    ...state.result,
+                    basicFilter: setEmptyValues(data[type].basicFilters),
+                    advFilter: setEmptyValues(data[type].advancedFilters)
+                },
+
             }
         default:
             return {

@@ -4,9 +4,9 @@ import { TextField } from "@material-ui/core";
 const SingleAutoComplete = (props) => {
     const { value, id, labels, placeholder, error, handleChange } = props
     return (<Autocomplete
-        // value={value}
+        value={value}
         id={id}
-        // options={labels}
+        options={labels}
         // onChange={(event, data) => handleChange(data, id)}
         renderInput={(params) => <TextField fullWidth {...params} label={placeholder} variant="standard"
             // error={error}
