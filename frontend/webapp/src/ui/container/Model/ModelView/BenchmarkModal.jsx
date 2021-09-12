@@ -337,8 +337,8 @@ const BenchmarkModal = (props) => {
             oveflow: "initial",
             overflowX: "hidden",
             overflowY: "auto",
-            minHeight: "30rem",
-            maxHeight: "30rem",
+            minHeight: "34vh",
+            maxHeight: "34vh",
           },
         },
         MUIDataTableSelectCell: {
