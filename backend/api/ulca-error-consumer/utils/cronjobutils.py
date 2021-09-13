@@ -13,10 +13,9 @@ import os
 class StoreUtils:
 
     #method to write on csv file
-    def write_to_csv(self, data_list, file, srn):
+    def write_to_csv(self, data_list, file, srn,csv_headers):
         try:
             file_exists = os.path.isfile(file)
-            csv_headers = ['stage','message','record','originalRecord']
             log.info('Started csv writing !...')
             with open(file, 'a', newline='') as output_file:
                 dict_writer = csv.DictWriter(output_file,fieldnames=csv_headers,extrasaction='ignore')
