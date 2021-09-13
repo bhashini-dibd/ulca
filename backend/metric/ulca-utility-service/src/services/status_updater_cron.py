@@ -1,5 +1,5 @@
 from threading import Thread
-from config import error_cron_interval_sec, process_db_schema,process_col
+from config import status_cron_interval_sec, process_db_schema,process_col, pending_jobs_duration, tasks_col
 import logging
 from logging.config import dictConfig
 from repositories import StatusUpdaterRepo
@@ -16,7 +16,7 @@ class StatusCronProcessor(Thread):
     # Cron JOB to update filter set params
     def run(self):
         run = 0
-        while not self.stopped.wait(error_cron_interval_sec):
+        while not self.stopped.wait(status_cron_interval_sec):
             log.info(f'Job status updater cron run :{run}')
             try:
                 pending_srns = self.get_pending_tasks()
@@ -24,8 +24,9 @@ class StatusCronProcessor(Thread):
                     for srn in pending_srns:
                         log.info(f"Updating status for srn -{srn}")
                         condition = {'serviceRequestNumber':srn}
-                        query = {'$set':{'status':'Abandoned'}}
-                        repo.update(condition,query,process_db_schema,process_col)
+                        query = {'$set':{'status':'Completed'}}
+                        repo.update(condition,query,False,process_db_schema,process_col)
+                        repo.update(condition,query,True,process_db_schema,tasks_col)
                         
                 run += 1
             except Exception as e:
@@ -33,7 +34,7 @@ class StatusCronProcessor(Thread):
                 log.exception(f'Exception on Metric Cron Processor on run : {run} , exception : {e}')
 
     def get_pending_tasks(self):
-        lastday = datetime.now() - timedelta(days=1)
+        lastday = datetime.now() - timedelta(days=pending_jobs_duration)
         query = [{ '$match':{'serviceRequestType':'dataset','status':'Pending'}},
                  {'$project': {'startedOn': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber':'$serviceRequestNumber'}},
                     { '$match':{'startedOn':{ '$lt': lastday }}} ]

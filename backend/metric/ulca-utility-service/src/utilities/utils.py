@@ -1,7 +1,11 @@
 import requests
-from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint
+from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint, git_token
+from config import git_repo, git_filter_branch, git_filter_path
+import base64
 import json
 import logging
+from github import Github
+import os
 from logging.config import dictConfig
 log = logging.getLogger('file')
 
@@ -13,7 +17,6 @@ class DataUtils:
         try:
             file = requests.get(data_filter_set_file_path, allow_redirects=True)
             file_path = shared_storage_path + filter_file_name
-            # file_path = '/home/jainy/Desktop/datasetFilterParams.json'
             open(file_path, 'wb').write(file.content)
             log.info(f"Filters read from git and pushed to local {file_path}")
             with open(file_path, 'r') as stream:
@@ -52,6 +55,7 @@ class DataUtils:
         except Exception as e:
             log.exception(f'Exception while pushing config file to object store: {e}')
             return False
+
 
 
 
