@@ -8,6 +8,7 @@ from configs.configs import app_host, app_port,ENABLE_CORS,context_path
 from flask.blueprints import Blueprint
 from flask_cors import CORS
 import routes
+from service.cronerror import ErrorProcessor
 from configs.configs import consumer_count
 log = logging.getLogger('file')
 
@@ -28,6 +29,9 @@ def start_consumer():
             for i in range(1,consumer_count+1):
                 error_consumer = Process(target=error_consume)
                 error_consumer.start()
+            # starts cron job for writing errors onto object store
+            error_processor_cron = ErrorProcessor(threading.Event())
+            error_processor_cron.start()
         except Exception as e:
             log.exception(f'Exception while starting the ULCA error-service kafka consumer: {str(e)}')
 

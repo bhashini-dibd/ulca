@@ -1,22 +1,49 @@
 import logging
 import threading
+import uuid
 from logging.config import dictConfig
-from configs.configs import shared_storage_path,error_prefix
+from configs.configs import redis_key_expiry, shared_storage_path,error_prefix
 from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
+from service.cronrepo import StoreRepo
 from datetime import datetime
 
 log = logging.getLogger('file')
 mongo_instance = None
 error_repo = ErrorRepo()
 utils = DatasetUtils()
+store_repo = StoreRepo()
 
 class ErrorEvent:
     def __init__(self):
         pass
     
+    #dumping errors onto redis store
+    def write_error_in_redis(self, data):
+        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
+        try:
+            error_id = data["serviceRequestNumber"]+'.'+str(uuid.uuid4())
+            expiry_time = redis_key_expiry
+            store_repo.upsert(error_id,data,expiry_time)
+        except Exception as e:
+            log.exception(f'Exception while writing errors: {e}')
+            return False
+
+    #fetches back error record (object store link) from db
+    def get_error_report(self, srn, internal):
+        try:
+            query = {"serviceRequestNumber": srn,"uploaded":True}
+            exclude = {"_id": False}
+            log.info(f'Search for error reports of SRN -- {srn} from db started')
+            error_record = error_repo.search(query, exclude, None, None)
+            if error_record:
+                return error_record
+        except Exception as e:
+            log.exception(f'Exception while fetching error report: {e}')
+            return []
+
     #writing errors to mongostore
-    def write_error_in_store(self,data):
+    def write_error_in_mongo(self,data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
         try:
             error_rec = {'datasetName':data['datasetName'],'serviceRequestNumber':data['serviceRequestNumber'],'stage':data['stage'],'message':data['message']}
@@ -24,33 +51,6 @@ class ErrorEvent:
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}')
             return False
-
-    
-    def get_error_report(self, srn, internal):
-        try:
-            #fetches back error record (object store link) from db
-            query = {"serviceRequestNumber": srn,"uploaded":True}
-            exclude = {"_id": False}
-            log.info(f'Search for error reports of SRN -- {srn} from db started')
-            error_record = error_repo.search(query, exclude, None, None)
-            if error_record:
-                return error_record
-            else:
-                #searching for error records
-                query = {"serviceRequestNumber": srn}
-                exclude = {"_id": False}
-                log.info(f'Search for error reports of SRN -- {srn} from db started')
-                error_records = error_repo.search(query, exclude, None, None)
-                log.info(f'Returned {len(error_records)} records')
-                file = f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
-                utils.create_csv(error_records,file,srn)
-                error_record = self.upload_error_to_object_store(srn,file,len(error_records))
-                return error_record
-            
-        except Exception as e:
-            log.exception(f'Exception while fetching error report: {e}')
-            return []
-
     
     def upload_error_to_object_store(self,srn,file,error_records_count):
         file_name = str(file).replace("/opt/","")

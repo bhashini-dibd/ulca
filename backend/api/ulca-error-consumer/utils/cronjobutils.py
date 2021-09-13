@@ -1,18 +1,36 @@
-import json
 import logging
-from logging.config import dictConfig
-from configs.configs import file_store_host, file_store_upload_endpoint
-import requests
+import json
 import csv
-
+import zipfile
+import requests
+from configs.configs import file_store_host,file_store_upload_endpoint,pt_publish_tool
+from logging.config import dictConfig
 log = logging.getLogger('file')
+from zipfile import ZipFile, ZIP_DEFLATED
+import os
 
-mongo_instance = None
 
-class DatasetUtils:
-    def __init__(self):
-        pass
-    
+class StoreUtils:
+
+    #method to write on csv file
+    def write_to_csv(self, data_list, file, srn):
+        try:
+            file_exists = os.path.isfile(file)
+            csv_headers = ['stage','message','record','originalRecord']
+            log.info('Started csv writing !...')
+            with open(file, 'a', newline='') as output_file:
+                dict_writer = csv.DictWriter(output_file,fieldnames=csv_headers,extrasaction='ignore')
+                if not file_exists:
+                    dict_writer.writeheader()
+                for data in data_list:
+                    dict_writer.writerow(data)
+            log.info(f'{len(data_list)} Errors written to csv for SRN -- {srn}')
+            return
+        except Exception as e:
+            log.exception(f'Exception in csv writer: {e}')
+            return
+
+    #triggering file-store api call 
     def file_store_upload_call(self, file,file_name ,folder_name):
         try:
             headers =   {"Content-Type": "application/json"}
@@ -29,21 +47,19 @@ class DatasetUtils:
         except Exception as e:
             log.exception(f'Exception while pushing error file to object store: {e}')
         return False
-    
-    def create_csv(self, data_list, file, srn):
+
+    #zipping error file 
+    def zipfile_creation(self,csv_filepath,zip_file_path):
         try:
-            csv_headers = ['stage','message','count']
-            log.info('Started csv writing !...')
-            with open(file, 'a', newline='') as output_file:
-                dict_writer = csv.DictWriter(output_file,fieldnames=csv_headers,extrasaction='ignore')
-                dict_writer.writeheader()
-                for data in data_list:
-                    dict_writer.writerow(data)
-            log.info(f'{len(data_list)} Errors written to csv for SRN -- {srn}')
-            return 
+            arcname = csv_filepath.replace("/opt/","")
+            compression_mode    =   ZIP_DEFLATED
+            with ZipFile(zip_file_path, mode='a') as zf:
+                zf.write(csv_filepath,arcname, compress_type=compression_mode)
+            os.remove(csv_filepath)
         except Exception as e:
-            log.exception(f'Exception in csv writer: {e}')
-            return
+            log.info(f"Exception while zip file creation : {e}")
+
+   
 
 
 # Log config
