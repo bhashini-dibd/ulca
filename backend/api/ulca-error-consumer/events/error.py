@@ -20,7 +20,7 @@ class ErrorEvent:
     
     #dumping errors onto redis store
     def write_error_in_redis(self, data):
-        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
+        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]} in redis')
         try:
             error_id = data["serviceRequestNumber"]+'.'+str(uuid.uuid4())
             expiry_time = redis_key_expiry
@@ -44,7 +44,7 @@ class ErrorEvent:
 
     #writing errors to mongostore
     def write_error_in_mongo(self,data):
-        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]}')
+        log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]} in mongo')
         try:
             error_rec = {'datasetName':data['datasetName'],'serviceRequestNumber':data['serviceRequestNumber'],'stage':data['stage'],'message':data['message']}
             error_repo.upsert(error_rec)
