@@ -229,7 +229,7 @@ const ContributionList = (props) => {
     setLoading(true);
     dispatch(clearBenchMark());
     setBenchmarkInfo({ type, domain: [domain], modelId });
-    const apiObj = new RunBenchmarkAPI(type, [domain]);
+    const apiObj = new RunBenchmarkAPI(type, [domain],modelId);
     dispatch(APITransport(apiObj));
   };
 
