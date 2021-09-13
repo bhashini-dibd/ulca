@@ -53,15 +53,27 @@ The code in this repo could be utilized to automate procedures for submitting,se
         * [optional] -mt (--m-translators) : flag for manually translated by multiple translators
         * [optional] -org (--org-source) : flag for original sentencence in source language
 
-* ### For Model (Transalation purpose)
+* ### For Model
 
-        python3 automate.py -m -n "model-name" -i "input-string"
+    1. **Uploading Model and running benchmarks:**
 
-    Arguments:
+            python3 automate.py -m -n 'model-1' -i 'model-1.json'
 
-    * -d (--model) : Flag for Model functions.
-    * -n (--name) : Name of the model
-    * -i (--input) : Input string that has to be translated.
+        Arguments:
+
+        * -m (--model) : Flag for Model Functions
+        * -n (--name) : Model Name
+        * -i (--input)  : Valid Model File (.json)
+
+     2. **Model Task functions: (eg:translation)**
+
+            python3 automate.py -m -t 'translation' -n "model-name" -i "input-string-or-url"
+
+        Arguments:
+
+        * -m (--model) : Flag for Model Functions
+        * -n (--name) : Model Name
+        * -i (--input)  : Input for Model Task (eg: sentence for Translation Task)
 
 * ### For Updating Schema
 
@@ -78,6 +90,14 @@ The code in this repo could be utilized to automate procedures for submitting,se
     Arguments:
 
     * --chart-data : Flag for getting chart data[languages with its counts] 
+
+* ### For running test on website
+
+        python3 automate.py --test-website
+
+    Arguments:
+
+    * --test-website : Flag for testing elements of website on a browser 
 
 To view script usage help from terminal, run:
 
