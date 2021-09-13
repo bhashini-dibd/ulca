@@ -3,14 +3,6 @@
         "label": "Parallel Dataset",
         "basicFilters": [
             {
-                "value": "sourceLanguage",
-                "label": "Source Language"
-            },
-            {
-                "value": "targetLanguage",
-                "label": "Target Language"
-            },
-            {
                 "value": "domain",
                 "label": "Domain"
             },
