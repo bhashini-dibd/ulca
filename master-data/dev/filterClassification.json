@@ -3,10 +3,6 @@
         "label": "Parallel Dataset",
         "basicFilters": [
             {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
-            {
                 "value": "domain",
                 "label": "Domain"
             },
@@ -53,10 +49,6 @@
     "ocr-corpus": {
         "label": "OCR Dataset",
         "basicFilters": [
-            {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
             {
                 "value": "domain",
                 "label": "Domain"
@@ -105,10 +97,6 @@
         "label": "Monolingual Dataset",
         "basicFilters": [
             {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
-            {
                 "value": "domain",
                 "label": "Domain"
             },
@@ -135,10 +123,6 @@
     "asr-corpus": {
         "label": "ASR / TTS Dataset",
         "basicFilters": [
-            {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
             {
                 "value": "domain",
                 "label": "Domain"
@@ -206,10 +190,6 @@
     "asr-unlabeled-corpus": {
         "label": "ASR Unlabeled Dataset",
         "basicFilters": [
-            {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
             {
                 "value": "domain",
                 "label": "Domain"
