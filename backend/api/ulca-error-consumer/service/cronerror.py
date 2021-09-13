@@ -55,8 +55,8 @@ class ErrorProcessor(Thread):
                 error_records = [x for x in error_records if not x.get("uploaded")]
                 log.info(f'Returned {len(error_records)} records')
                 file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
-                ['stage','message','count']
-                storeutils.write_to_csv(error_records,file,srn)
+                headers =['stage','message','count']
+                storeutils.write_to_csv(error_records,file,srn,headers)
                 agg_file = storeutils.file_store_upload_call(file,file.replace("/opt/",""),error_prefix)
                 update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None}
                 condition = {"serviceRequestNumber": srn, "uploaded": True}
