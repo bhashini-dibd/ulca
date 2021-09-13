@@ -356,7 +356,7 @@ const ContributionList = (props) => {
     },
     {
       name: "licence",
-      label: "Licence",
+      label: "License",
       options: {
         filter: false,
         sort: true,
