@@ -120,7 +120,13 @@ const BenchmarkModal = (props) => {
     );
   };
 
-  const renderSelectButton = (type, index, status, parentIndex) => {
+  const renderSelectButton = (
+    type,
+    index,
+    status,
+    parentIndex,
+    disabled = false
+  ) => {
     return (
       <Button
         variant="outlined"
@@ -130,19 +136,9 @@ const BenchmarkModal = (props) => {
         }}
         className={classes.filterBtn}
         onClick={() => {
-          // if (type === "DATASET") {
-          //   const modals = document.querySelectorAll(
-          //     `#MUIDataTableBodyRow-${index}`
-          //   );
-          //   const modal = modals[modals.length - 1];
-          //   if (modal.style.backgroundColor) {
-          //     modal.style.backgroundColor = "";
-          //   } else {
-          //     modal.style.backgroundColor = "#E2F2FD";
-          //   }
-          // }
           dispatch(getBenchmarkMetric(type, index, parentIndex));
         }}
+        disabled={disabled}
       >
         {status ? <CheckIcon style={{ color: "#FFFFFF" }} /> : "Select"}
       </Button>
@@ -255,7 +251,8 @@ const BenchmarkModal = (props) => {
                                 "METRIC",
                                 i,
                                 row.selected,
-                                rowMeta.rowIndex
+                                rowMeta.rowIndex,
+                                row.isMetricDisabled
                               )}
                             </TableCell>
                             <TableCell></TableCell>

@@ -10,21 +10,27 @@ const initialState = {
   status: "progress",
 };
 
+const getMetric = (metricData = [], availableMetric = []) => {
+  let metric = metricData.map((value) => {
+    return {
+      metricName: value,
+      selected: false,
+      isMetricDisabled: availableMetric.indexOf(value) > -1 ? false : true,
+    };
+  });
+  return metric;
+};
+
 const getBenchmarkDetails = (payload) => {
   let result = [];
   if (payload.count) {
-    let metric = payload.metric.map((value) => {
-      return {
-        metricName: value,
-        selected: false,
-      };
-    });
     payload.benchmark.forEach((dataset, i) => {
       result.push({
         datasetName: dataset.name,
         description: dataset.description === null ? "" : dataset.description,
         domain: dataset.domain.join(","),
-        metric,
+        metric: getMetric(dataset.metric, dataset.availableMetric),
+        // metric: getMetric(['bleu','sacrebleu'], ['bleu']),
         selected: false,
         benchmarkId: dataset.benchmarkId,
       });
