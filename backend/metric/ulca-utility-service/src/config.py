@@ -17,10 +17,6 @@ MAIL_SETTINGS                =   {
                                 "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxx')
                                 }
 MAIL_SENDER                  =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')
-git_token                   =   os.environ.get('ULCA_GIT_TOKEN','xxxxxxxxxxxxx')
-git_repo                   =   os.environ.get('ULCA_GIT_REPO','ULCA-IN/ulca/')
-git_filter_branch          =   os.environ.get('ULCA_GIT_FILTER_BRANCH','metric-api-feature')
-git_filter_path             =   os.environ.get('ULCA_GIT_FILTER_FILE_PATH','backend/metric/ulca-master-data-configs/datasetFilterParams.json')
 
 receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"jainy.joy@tarento.com")
 

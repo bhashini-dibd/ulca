@@ -1,11 +1,7 @@
 import requests
-from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint, git_token
-from config import git_repo, git_filter_branch, git_filter_path
-import base64
+from config import data_filter_set_file_path,shared_storage_path,filter_file_name, file_store_host, file_store_upload_endpoint
 import json
 import logging
-from github import Github
-import os
 from logging.config import dictConfig
 log = logging.getLogger('file')
 
