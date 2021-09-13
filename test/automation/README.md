@@ -57,12 +57,13 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
     1. **Uploading Model and running benchmarks:**
 
-            python3 automate.py -m -n 'model-1' -i 'model-1.json'
+            python3 automate.py -m -n 'model-1' -i 'model-1.json' -b 'benchmark-1'
 
         Arguments:
 
         * -m (--model) : Flag for Model Functions
         * -n (--name) : Model Name
+        * -b (--benchmark) : Benchamrk Name to be run
         * -i (--input)  : Valid Model File (.json)
 
      2. **Model Task functions: (eg:translation)**
