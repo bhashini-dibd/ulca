@@ -269,6 +269,7 @@ const BenchmarkModal = (props) => {
               </>
             </TableCell>
           </TableRow>
+          <TableRow className={classes.tableRow}></TableRow>
         </>
       );
     },

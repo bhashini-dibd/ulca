@@ -73,7 +73,6 @@ const ExpandTable = (props) => {
               </Box>
             </>
           </TableCell>
-          .
         </TableRow>
         <TableRow className={classes.tableRow}></TableRow>
       </>
