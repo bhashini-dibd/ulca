@@ -532,7 +532,7 @@ const SearchAndDownloadRecords = (props) => {
     const renderSubFilters = ()=>{
         const values = Object.values(advFilterState);
         let renderFilter =  values.map(filter=>{
-            if(filter.hasOwnProperty('sub-filters')){
+            if(filter && filter.hasOwnProperty('sub-filters')){
                return filter['sub-filters'].map(val=><Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                         {filter.type !== "text" ?
                             <SingleAutoComplete
@@ -602,13 +602,13 @@ const SearchAndDownloadRecords = (props) => {
                                                     handleChange = {handleBasicFilter}
                                                     disabled={!languagePair.target.length}
                                                     id={filter.value}
-                                                    value={basicFilterState[filter.value]} 
+                                                    value={basicFilterState[filter.value]?basicFilterState[filter.value]:""} 
                                                     labels={filter.values}
                                                     placeholder={`Select ${filter.label}`} />
                                                 :
                                                 <TextField disabled={!languagePair.target.length}
                                                     id={filter.value}
-                                                    value={basicFilterState[filter.value]} 
+                                                    value={basicFilterState[filter.value]?basicFilterState[filter.value]:""} 
                                                     label={`Select ${filter.label}`}
                                                     onChange = {(e)=>handleBasicFilter(e.target.value,filter.value)}
                                                     fullWidth
@@ -619,7 +619,7 @@ const SearchAndDownloadRecords = (props) => {
                                 }
                             </Grid>
                             <div className={classes.advanceFilter}>
-                                <Button style={{ color: "#FD7F23" }} variant="outlined" size="small" onClick={() => setOpen(!open)}>Advance filter</Button>
+                                <Button disabled={!languagePair.target.length} style={{ color: "#FD7F23" }} variant="outlined" size="small" onClick={() => setOpen(!open)}>Advance filter</Button>
                             </div>
                             {
                                 open &&

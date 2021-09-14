@@ -7,7 +7,7 @@ const SingleAutoComplete = (props) => {
         <Autocomplete
             value={value}
             id={id}
-            //   disabled={disabled}
+            disabled={disabled}
             options={labels}
             getOptionLabel={(option) => (option.label ? option.label : "")}
             onChange={(event, data) => handleChange(data, id)}
