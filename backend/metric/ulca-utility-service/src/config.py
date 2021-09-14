@@ -50,6 +50,6 @@ filter_file_name            =   os.environ.get('FILTER_FILE_NAME','datasetFilter
 file_store_host                         =   os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'http://file-store:5001')
 file_store_upload_endpoint              =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/v0/file/upload')
 
-pending_jobs_duration       =   os.environ.get('PENDING_JOBS_DURATION_DAYS',2)
+pending_jobs_duration       =   os.environ.get('PENDING_JOBS_DURATION_HRS',10)
 if isinstance(pending_jobs_duration, str):
     pending_jobs_duration =  eval(pending_jobs_duration)

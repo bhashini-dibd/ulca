@@ -22,22 +22,24 @@ class StatusCronProcessor(Thread):
                 pending_srns = self.get_pending_tasks()
                 if pending_srns:
                     for srn in pending_srns:
-                        log.info(f"Updating status for srn -{srn}")
                         condition = {'serviceRequestNumber':srn}
-                        query = {'$set':{'status':'Completed'}}
+                        query = {'$set':{'status':'Completed','manuallyUpdated':True}}
+                        multi ={'multi':True}
                         repo.update(condition,query,False,process_db_schema,process_col)
                         repo.update(condition,query,True,process_db_schema,tasks_col)
-                        
+                        log.info(f"Updated status for srn -{srn}")
+                log.info('Completed run!')      
                 run += 1
             except Exception as e:
                 run += 1
                 log.exception(f'Exception on Metric Cron Processor on run : {run} , exception : {e}')
 
     def get_pending_tasks(self):
-        lastday = datetime.now() - timedelta(days=pending_jobs_duration)
-        query = [{ '$match':{'serviceRequestType':'dataset','status':'Pending'}},
-                 {'$project': {'startedOn': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber':'$serviceRequestNumber'}},
-                    { '$match':{'startedOn':{ '$lt': lastday }}} ]
+        lastday = (datetime.now() - timedelta(hours=pending_jobs_duration))
+        query = [{ '$match':{'serviceRequestType':'dataset','status':{'$in':['In-Progress','Pending']}}}, {
+                                                     '$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
+                                                     {'$match': {'date': {'$lt': lastday}}}]
+        log.info(f"Query :{query}")
         aggresult = repo.aggregate(query,process_db_schema,process_col)
         if not aggresult:
             log.info("0 pending srns found >>")
