@@ -21,6 +21,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.LookupOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -66,6 +70,9 @@ public class ModelService {
 	
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
+	
+	@Autowired
+    private MongoTemplate mongoTemplate;
 
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
@@ -237,12 +244,30 @@ public class ModelService {
 
 		ModelLeaderboardResponse response = new ModelLeaderboardResponse();
 		List<ModelLeaderboardResponseDto> dtoList = new ArrayList<ModelLeaderboardResponseDto>();
+		ModelLeaderboardResponseDto dto= new ModelLeaderboardResponseDto();
+		LookupOperation lookup = LookupOperation.newLookup()
+                .from("benchmarkprocess")
+                .localField("modelId")
+                .foreignField("modelId")
+                .as("join_benchmarkprocess");
+		Aggregation aggregation = Aggregation.newAggregation(
+                Aggregation.match(Criteria.where("modelId").is(dto.getModelId())),
+                lookup,Aggregation.match(Criteria.where("join_benchmarkprocess.modelId").is(dto.getModelId())),Aggregation.skip(10) , Aggregation.limit(10));
+       
+		dtoList= mongoTemplate.aggregate(aggregation, BenchmarkProcess.class, ModelLeaderboardResponseDto.class).getMappedResults();
 		
 		// join the benchmarkprocess and model collection and fetch the result
 		// iterate result and create object of ModelLeaderboardResponseDto with respective values
 		// add the dto objectto dtoList
 
-		
+ 	for(ModelLeaderboardResponseDto mdto: dtoList) {
+			
+			mdto.setLanguages(mdto.getSourceLanguage());
+			mdto.setMetric(mdto.getMetric());
+			mdto.setModelName(mdto.getModelName());
+			mdto.setBenchmarkDatase(mdto.getBenchmarkDatase());
+			
+		}
 
 		response.setData(dtoList);		
 		response.setCount(dtoList.size());
