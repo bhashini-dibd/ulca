@@ -35,8 +35,11 @@ import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
+import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelLeaderboardResponse;
+import com.ulca.model.response.ModelLeaderboardResponseDto;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
@@ -229,5 +232,24 @@ public class ModelService {
 
 		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
 	}
+	
+	public ModelLeaderboardResponse searchLeaderboard(ModelLeaderboardRequest request) {
+
+		ModelLeaderboardResponse response = new ModelLeaderboardResponse();
+		List<ModelLeaderboardResponseDto> dtoList = new ArrayList<ModelLeaderboardResponseDto>();
+		
+		// join the benchmarkprocess and model collection and fetch the result
+		// iterate result and create object of ModelLeaderboardResponseDto with respective values
+		// add the dto objectto dtoList
+
+		
+
+		response.setData(dtoList);		
+		response.setCount(dtoList.size());
+		response.setMessage("Model Leader Board results");
+		
+		return (ModelLeaderboardResponse) response;
+	}
+	
 
 }
