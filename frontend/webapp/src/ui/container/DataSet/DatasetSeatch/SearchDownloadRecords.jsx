@@ -529,7 +529,29 @@ const SearchAndDownloadRecords = (props) => {
         )
     }
 
-    console.log(basicFilterState,advFilterState)
+    const renderSubFilters = ()=>{
+        const values = Object.values(advFilterState);
+        let renderFilter =  values.map(filter=>{
+            if(filter.hasOwnProperty('sub-filters')){
+               return filter['sub-filters'].map(val=><Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        {filter.type !== "text" ?
+                            <SingleAutoComplete
+                                handleChange={handleDropDownChange}
+                                disabled={!languagePair.target.length}
+                                id={val.value} labels={val.values}
+                                placeholder={`Select ${val.label}`} />
+                            :
+                            <TextField disabled={!languagePair.target.length}
+                                id={val.value}
+                                label={`Select ${val.label}`}
+                                fullWidth
+                            />
+                        }
+                    </Grid>)
+            }
+        })
+        return renderFilter
+    }
 
     return (
         <div>
@@ -619,6 +641,7 @@ const SearchAndDownloadRecords = (props) => {
                                     </Grid>
                                 })
                             }
+                            {renderSubFilters()}
                             {open && renderAdvanceFilter()}
                             {/* <AdvanceFilter filters={[{ placeholder: "License" }, { placeholder: "Submitter" }, { placeholder: "Collection Method" }]} /> */}
                             {renderclearNsubmitButtons()}

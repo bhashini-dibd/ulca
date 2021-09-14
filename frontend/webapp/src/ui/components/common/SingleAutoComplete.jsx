@@ -5,7 +5,7 @@ const SingleAutoComplete = (props) => {
     const { value, id, labels, placeholder, error, handleChange, disabled } = props;
     return (
         <Autocomplete
-            value={value?value:""}
+            value={value}
             id={id}
             //   disabled={disabled}
             options={labels}
