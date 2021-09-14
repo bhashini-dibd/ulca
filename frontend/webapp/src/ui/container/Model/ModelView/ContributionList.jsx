@@ -77,12 +77,14 @@ const ContributionList = (props) => {
   });
 
   // useEffect(() => {
-  //   let newIndex = [];
-  //   data.forEach((element, i) => {
-  //     if (element.benchmarkPerformance.length) newIndex.push(i);
+  //   document.querySelectorAll(`button`).forEach((element) => {
+  //     element.classList.forEach((list) => {
+  //       if (list.includes("MUIDataTableHeadCell-toolButton-")) {
+  //         document.querySelector(`.${list}`).removeAttribute("title");
+  //       }
+  //     });
   //   });
-  //   setIndex(newIndex);
-  // }, [data]);
+  // }, []);
 
   // console.log(index);
 
@@ -229,7 +231,7 @@ const ContributionList = (props) => {
     setLoading(true);
     dispatch(clearBenchMark());
     setBenchmarkInfo({ type, domain: [domain], modelId });
-    const apiObj = new RunBenchmarkAPI(type, [domain],modelId);
+    const apiObj = new RunBenchmarkAPI(type, [domain], modelId);
     dispatch(APITransport(apiObj));
   };
 

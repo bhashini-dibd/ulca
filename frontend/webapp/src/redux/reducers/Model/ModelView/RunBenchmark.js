@@ -8,6 +8,7 @@ const initialState = {
   availableFilters: [],
   count: 0,
   status: "progress",
+  submitStatus: true,
 };
 
 const getMetric = (metricData = [], availableMetric = []) => {
@@ -30,7 +31,7 @@ const getBenchmarkDetails = (payload) => {
         description: dataset.description === null ? "" : dataset.description,
         domain: dataset.domain.join(","),
         metric: getMetric(dataset.metric, dataset.availableMetric),
-        // metric: getMetric(['bleu','sacrebleu'], ['bleu']),
+        // metric: getMetric(["bleu", "sacrebleu"], ["bleu"]),
         selected: false,
         benchmarkId: dataset.benchmarkId,
       });
@@ -65,18 +66,41 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   let updatedBenchmarkInfo = [];
   result.result.forEach((val) => {
     if (val.selected) {
+      updatedBenchmarkInfo.push({
+        benchmarkId: val.benchmarkId,
+      });
       val.metric.forEach((e) => {
         if (e.selected) {
-          updatedBenchmarkInfo.push({
-            benchmarkId: val.benchmarkId,
-            metric: e.metricName,
-          });
+          updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric =
+            e.metricName;
         }
       });
     }
   });
   result.benchmarkInfo = updatedBenchmarkInfo;
+  result.submitStatus = getSubmitStatus(updatedBenchmarkInfo);
   return result;
+};
+
+const getSubmitStatus = (benchmarkInfo) => {
+  let benchmarkObj = {};
+  benchmarkInfo.forEach((data) => {
+    if (benchmarkObj.hasOwnProperty(data.benchmarkId)) {
+      benchmarkObj[data.benchmarkId].push(data.metric);
+    } else {
+      benchmarkObj[data.benchmarkId] = data.metric ? [data.metric] : "";
+    }
+  });
+  let values = [...Object.values(benchmarkObj)];
+  if (values.length) {
+    for (let i = 0; i < values.length; i++) {
+      if (!values[i].length) {
+        return true;
+      }
+    }
+    return false;
+  }
+  return true;
 };
 
 const getFilteredData = (payload, searchValue) => {
