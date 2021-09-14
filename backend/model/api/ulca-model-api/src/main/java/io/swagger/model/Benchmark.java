@@ -46,6 +46,8 @@ public class Benchmark   {
   @JsonProperty("task")
   private ModelTask task = null;
   
+  @JsonProperty("languages")
+  private LanguagePairs languages = null;
 
   @JsonProperty("createdOn")
   private String createdOn = null;
@@ -167,6 +169,7 @@ public class Benchmark   {
     this.domain = domain;
   }
   
+  
   public Benchmark task(ModelTask task) {
 	    this.task = task;
 	    return this;
@@ -187,6 +190,27 @@ public class Benchmark   {
 	  public void setTask(ModelTask task) {
 	    this.task = task;
 	  }
+	  
+	  public Benchmark languages(LanguagePairs languages) {
+		    this.languages = languages;
+		    return this;
+		  }
+
+		  /**
+		   * Get languages
+		   * @return languages
+		   **/
+		  @Schema(required = true, description = "")
+		      @NotNull
+
+		    @Valid
+		    public LanguagePairs getLanguages() {
+		    return languages;
+		  }
+
+		  public void setLanguages(LanguagePairs languages) {
+		    this.languages = languages;
+		  }
 
   public Benchmark createdOn(String createdOn) {
     this.createdOn = createdOn;
