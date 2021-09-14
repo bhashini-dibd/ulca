@@ -2,15 +2,15 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { TextField } from "@material-ui/core";
 
 const SingleAutoComplete = (props) => {
-  const { value, id, labels, placeholder, error, handleChange } = props;
-  console.log("value", value, "labels", labels);
+  const { value, id, labels, placeholder, error, handleChange,disabled } = props;
   return (
     <Autocomplete
       //   value={value}
       id={id}
+    //   disabled={disabled}
       options={labels}
       getOptionLabel={(option) => (option.label ? option.label : "")}
-      //   onChange={(event, data) => handleChange(data, id)}
+        onChange={(event, data) => handleChange(data, id)}
       renderInput={(params) => (
         <TextField
           fullWidth

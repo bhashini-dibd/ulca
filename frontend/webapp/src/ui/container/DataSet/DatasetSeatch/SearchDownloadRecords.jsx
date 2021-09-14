@@ -56,10 +56,14 @@ const SearchAndDownloadRecords = (props) => {
     const urlMySearch = UrlConfig.mySearches;
     const DatasetType = useSelector(state => state.mySearchOptions.result.datasetType)
     const Language = useSelector(state => state.mySearchOptions.result.languagePair.sourceLang)
-    const basicFilter = useSelector(state => state.mySearchOptions.result.basicFilter)
+    const basicFilter = useSelector(state => state.mySearchOptions.result.basicFilter);
+    const advFilter = useSelector(state => state.mySearchOptions.result.advFilter);
     const dispatch = useDispatch();
     const param = useParams();
     const history = useHistory();
+    const [open, setOpen] = useState(false);
+    const [advFilterState, setAdvFilterState] = useState({});
+    const [basicFilterState, setBasicFilterState] = useState({});
     const [languagePair, setLanguagePair] = useState({
         source: '',
         target: []
@@ -87,16 +91,16 @@ const SearchAndDownloadRecords = (props) => {
     const detailedReport = useSelector((state) => state.mySearchReport);
 
     useEffect(() => {
-        fetch('https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev/filterClassification.json',{
-            method:'get',
-        })    .then(async res=>{
-                let rsp_data= await res.json();
-                if(res.ok){
-                    dispatch(getFilterCategory(rsp_data,Object.keys(datasetType)[0]))
-                    const apiData = new SearchAndDownloadAPI();
-                    dispatch(APITransport(apiData))
-                }
-        }).catch((err)=>{
+        fetch('https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev/filterClassification.json', {
+            method: 'get',
+        }).then(async res => {
+            let rsp_data = await res.json();
+            if (res.ok) {
+                dispatch(getFilterCategory(rsp_data, Object.keys(datasetType)[0]))
+                const apiData = new SearchAndDownloadAPI();
+                dispatch(APITransport(apiData))
+            }
+        }).catch((err) => {
             console.log(err)
         })
         previousUrl.current = params;
@@ -166,6 +170,18 @@ const SearchAndDownloadRecords = (props) => {
     const handleFilterByChange = (value, property) => {
         setFilterBy({ ...filterBy, [property]: value });
     };
+    const handleDropDownChange = (data, id) => {
+        let filter = {...advFilterState}
+        filter[id] = data;
+        setAdvFilterState({...advFilterState,...filter});
+    }
+
+    const handleBasicFilter = (data, id) => {
+        let filter = {...basicFilterState}
+        filter[id] = data;
+        setBasicFilterState({...basicFilterState,...filter});
+    }
+    console.log(basicFilterState)
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
@@ -556,17 +572,54 @@ const SearchAndDownloadRecords = (props) => {
                                     {renderFilterByfield("collectionMethod", "Select Collection Method", filterBy.collectionMethod, FilterBy.collectionMethod)}
                                 </Grid> */}
                                 {
-                                    basicFilter.map(filter=>{
+                                    basicFilter.map(filter => {
                                         return <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                        <SingleAutoComplete id={filter.value} labels={filter.values} placeholder={`Select ${filter.label}`}/>
+                                            {filter.type !== "text" ?
+                                                <SingleAutoComplete
+                                                    handleChange = {handleBasicFilter}
+                                                    disabled={!languagePair.target.length}
+                                                    id={filter.value}
+                                                    value={basicFilterState[filter.value]} 
+                                                    labels={filter.values}
+                                                    placeholder={`Select ${filter.label}`} />
+                                                :
+                                                <TextField disabled={!languagePair.target.length}
+                                                    id={filter.value}
+                                                    value={basicFilterState[filter.value]} 
+                                                    label={`Select ${filter.label}`}
+                                                    onChange = {(e)=>handleBasicFilter(e.target.value,filter.value)}
+                                                    fullWidth
+                                                />
+                                            }
                                         </Grid>
                                     })
                                 }
                             </Grid>
                             <div className={classes.advanceFilter}>
-                                <Button disabled={!languagePair.target.length} style={{ color: "#FD7F23" }} variant="outlined" size="small" onClick={renderAdvanceFilter()}>Advance filter</Button>
+                                <Button style={{ color: "#FD7F23" }} variant="outlined" size="small" onClick={() => setOpen(!open)}>Advance filter</Button>
                             </div>
-                            <AdvanceFilter filters={[{ placeholder: "License" }, { placeholder: "Submitter" }, { placeholder: "Collection Method" }]} />
+                            {
+                                open &&
+                                advFilter.map(filter => {
+                                    return <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                        {filter.type !== "text" ?
+                                            <SingleAutoComplete
+                                                handleChange={handleDropDownChange}
+                                                disabled={!languagePair.target.length}
+                                                id={filter.value} labels={filter.values}
+                                                placeholder={`Select ${filter.label}`} />
+                                            :
+                                            <TextField disabled={!languagePair.target.length}
+                                                id={filter.value}
+                                                label={`Select ${filter.label}`}
+                                                fullWidth
+                                            />
+                                        }
+                                    </Grid>
+                                })
+                            }
+                            {open && renderAdvanceFilter()}
+                            {/* <AdvanceFilter filters={[{ placeholder: "License" }, { placeholder: "Submitter" }, { placeholder: "Collection Method" }]} /> */}
                             {renderclearNsubmitButtons()}
                         </Grid>
                     </Grid>
