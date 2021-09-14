@@ -237,17 +237,16 @@ const SearchAndDownloadRecords = (props) => {
             return "Select Language"
     }
     const clearfilter = () => {
-        setFilterBy({
-            domain: "",
-            source: "",
-            collectionMethod: ""
-        });
+        setOpen(false);
+        setAdvFilterState({});
+        setBasicFilterState({});
         setLanguagePair({
             source: "",
             target: []
         });
     }
 
+    console.log(advFilterState)
     const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type, originalSourceSentence = false) => {
         const Dataset = Object.keys(type)[0]
         setSnackbarInfo({
@@ -529,6 +528,8 @@ const SearchAndDownloadRecords = (props) => {
             </div>
         )
     }
+
+    console.log(basicFilterState,advFilterState)
 
     return (
         <div>
