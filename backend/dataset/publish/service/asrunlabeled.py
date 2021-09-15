@@ -159,8 +159,6 @@ class ASRUnlabeledService:
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
             if 'collectionMode' in query.keys():
                 tags.extend(query["collectionMode"])
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionMode"])
             if 'license' in query.keys():
                 tags.extend(query["licence"])
             if 'domain' in query.keys():
@@ -169,8 +167,39 @@ class ASRUnlabeledService:
                 tags.append(query["channel"])
             if 'gender' in query.keys():
                 tags.append(query["gender"])
+            if 'format' in query.keys():
+                tags.append(query["format"])
+            if 'bitsPerSample' in query.keys():
+                tags.append(query["bitsPerSample"])
+            if 'dialect' in query.keys():
+                tags.append(query["dialect"])
+            if 'snrTool' in query.keys():
+                tags.append(query["snrTool"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
+            if 'collectionSource' in query.keys():
+                db_query["collectionSource"] = {"$in": [f"/{query['collectionSource']}/i"]}
+            if 'submitterName' in query.keys():
+                db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
+            if 'samplingRate' in query.keys():
+                db_query["samplingRate"] = query["samplingRate"]
+            no_of_speakers_query, age_query = {}, {}
+            if 'minNoOfSpeakers' in query.keys():
+                no_of_speakers_query["$gte"] = query["minNoOfSpeakers"]
+            if 'maxNoOfSpeakers' in query.keys():
+                no_of_speakers_query["$lte"] = query["maxNoOfSpeakers"]
+            if no_of_speakers_query:
+                db_query["numberOfSpeakers"] = no_of_speakers_query
+            if 'noOfSpeakers' in query.keys():
+                db_query["numberOfSpeakers"] = query["noOfSpeakers"]
+            if 'minAge' in query.keys():
+                no_of_speakers_query["$gte"] = query["minAge"]
+            if 'maxAge' in query.keys():
+                no_of_speakers_query["$lte"] = query["maxAge"]
+            if age_query:
+                db_query["age"] = age_query
+            if 'age' in query.keys():
+                db_query["age"] = query["age"]
             if 'multipleContributors' in query.keys():
                 if query['multipleContributors']:
                     db_query[f'collectionMethod.1'] = {"$exists": True}

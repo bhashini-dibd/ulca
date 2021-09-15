@@ -138,14 +138,16 @@ class MonolingualService:
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
             if 'collectionMode' in query.keys():
                 tags.extend(query["collectionMode"])
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionMode"])
             if 'license' in query.keys():
                 tags.extend(query["licence"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
+            if 'collectionSource' in query.keys():
+                db_query["collectionSource"] = {"$in": [f"/{query['collectionSource']}/i"]}
+            if 'submitterName' in query.keys():
+                db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
             if 'multipleContributors' in query.keys():
                 if query['multipleContributors']:
                     db_query[f'collectionMethod.1'] = {"$exists": True}

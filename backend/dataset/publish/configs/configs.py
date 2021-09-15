@@ -45,12 +45,12 @@ if isinstance(record_expiry_in_sec, str):
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
+asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
 asr_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
+asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
 asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "audioHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
