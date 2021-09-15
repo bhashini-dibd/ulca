@@ -23,9 +23,9 @@ DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','ht
 FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/opt/')
 FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','datasetFilterParams-new.json')
 
-error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',172800)#14400
-if isinstance(error_cron_interval_sec, str):
-    error_cron_interval_sec  =  eval(error_cron_interval_sec)
+metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',86400)#14400
+if isinstance(metric_cron_interval_sec, str):
+    metric_cron_interval_sec  =  eval(metric_cron_interval_sec)
 
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 data_db_schema              =   os.environ.get('DATA_PARALLEL', 'ulca')

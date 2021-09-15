@@ -1,7 +1,7 @@
 from models.asrunlabeled import AsrUnlabeledModel
 from models.asr import AsrModel
 from threading import Thread
-from config import error_cron_interval_sec
+from config import filter_cron_interval_sec
 from models import ParallelModel, OcrModel, MonolingualModel
 import logging
 from logging.config import dictConfig
@@ -24,7 +24,7 @@ class FilterCronProcessor(Thread):
     def run(self):
         run = 0
 
-        while not self.stopped.wait(error_cron_interval_sec):
+        while not self.stopped.wait(filter_cron_interval_sec):
             log.info(f'FilterCronProcessor run :{run}')
             try:
                 data,filepath = utils.read_from_config_file()
