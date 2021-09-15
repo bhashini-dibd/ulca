@@ -34,9 +34,9 @@ process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes'
 tasks_col                   =   os.environ.get('PROCESS_COL','ulca-pt-tasks')
 
 
-error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',300)#14400
-if isinstance(error_cron_interval_sec, str):
-    error_cron_interval_sec =  eval(error_cron_interval_sec)
+filter_cron_interval_sec     =   os.environ.get('FILTER_CRON_INTERVAL_SEC',300)#14400
+if isinstance(filter_cron_interval_sec, str):
+    filter_cron_interval_sec =  eval(filter_cron_interval_sec)
 
 status_cron_interval_sec     =   os.environ.get('STATUS_UPDATER_CRON_INTERVAL_SEC',7200)
 if isinstance(status_cron_interval_sec, str):
