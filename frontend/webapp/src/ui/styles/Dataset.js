@@ -178,7 +178,7 @@ const DataSet = (theme) => ({
     marginBottom: "1.938rem",
   },
   clearNSubmit: {
-    marginTop: "4rem",
+    // marginTop: "20rem",
     float: "right",
   },
   parent: {
@@ -504,7 +504,8 @@ const DataSet = (theme) => ({
   advanceFilter: {
     textAlign: 'right',
     color: "#FD7F23"
-  }
+  },
+  advanceFilterContainer: { maxHeight: "16rem", overflowY: 'auto', overflowX: "hidden", marginTop: "2rem" }
 });
 
 export default DataSet;

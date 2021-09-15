@@ -171,15 +171,15 @@ const SearchAndDownloadRecords = (props) => {
         setFilterBy({ ...filterBy, [property]: value });
     };
     const handleDropDownChange = (data, id) => {
-        let filter = {...advFilterState}
+        let filter = { ...advFilterState }
         filter[id] = data;
-        setAdvFilterState({...advFilterState,...filter});
+        setAdvFilterState({ ...advFilterState, ...filter });
     }
 
     const handleBasicFilter = (data, id) => {
-        let filter = {...basicFilterState}
+        let filter = { ...basicFilterState }
         filter[id] = data;
-        setBasicFilterState({...basicFilterState,...filter});
+        setBasicFilterState({ ...basicFilterState, ...filter });
     }
     console.log(basicFilterState)
     const [snackbar, setSnackbarInfo] = useState({
@@ -309,8 +309,6 @@ const SearchAndDownloadRecords = (props) => {
 
     const handleSubmitBtn = () => {
         let tgt = languagePair.target.map(trgt => trgt.value)
-        //let domain = filterBy.domain.map(domain => domain.value)
-        //let collectionMethod = filterBy.collectionMethod.map(method => method.value)
         let domain = filterBy.domain && [getFilterValueForLabel('domain', filterBy.domain).value]
         let collectionMethod = filterBy.collectionMethod && [getFilterValueForLabel('collectionMethod', filterBy.collectionMethod).value]
         if (datasetType['parallel-corpus']) {
@@ -353,15 +351,6 @@ const SearchAndDownloadRecords = (props) => {
 
     const renderDatasetButtons = () => {
         return (
-            // DatasetType.map((type, i) => {
-            //     return (
-            // <Button size='small' className={classes.innerButton} variant="outlined"
-            //     color={datasetType[type.value] && "primary"}
-            //     key={i}
-            //     onClick={() => handleDatasetClick(type.value)}
-            // >
-            //     {type.label}
-            // </Button>
             <>
                 <Button className={classes.menuStyle}
                     // disabled={page !== 0 ? true : false}
@@ -421,24 +410,7 @@ const SearchAndDownloadRecords = (props) => {
 
         )
     }
-    // const renderFilterByfield = (id, label, value, filter) => {
-    //     return (
-    //         <TextField className={classes.subHeader}
-    //             fullWidth
-    //             select
-    //             id={id}
-    //             label={label}
-    //             value={value}
-    //             onChange={(event) => handleFilterByChange(event.target.value, id)}
-    //         >
-    //             {filter.map((option) => (
-    //                 <MenuItem key={option.value} value={option.value}>
-    //                     {option.label}
-    //                 </MenuItem>
-    //             ))}
-    //         </TextField>
-    //     )
-    // }
+
     const renderFilterByfield = (id, label, value, filter) => {
         let filterByOptions = FilterBy[id].map(data => data.label)
         return (
@@ -490,15 +462,7 @@ const SearchAndDownloadRecords = (props) => {
     }
     const renderclearNsubmitButtons = () => {
         return (
-            /* <div className={classes.clearNSubmit}>
-                      <Button size="large"  variant="outlined" onClick={clearfilter}>
-                          Clear
-                  </Button>
-                      <Button size="large" className={classes.buttonStyle} variant="contained" color="primary" onClick={handleSubmitBtn}>
-                          Submit
-                  </Button>
-                  </div> */
-            <Grid container className={classes.clearNSubmit}>
+            <Grid container className={classes.clearNSubmit} style={{ marginTop: open ? '2rem' : '18rem' }}>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={9}>
                     <Grid container spacing={2} >
@@ -529,25 +493,25 @@ const SearchAndDownloadRecords = (props) => {
         )
     }
 
-    const renderSubFilters = ()=>{
+    const renderSubFilters = () => {
         const values = Object.values(advFilterState);
-        let renderFilter =  values.map(filter=>{
-            if(filter && filter.hasOwnProperty('sub-filters')){
-               return filter['sub-filters'].map(val=><Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                        {filter.type !== "text" ?
-                            <SingleAutoComplete
-                                handleChange={handleDropDownChange}
-                                disabled={!languagePair.target.length}
-                                id={val.value} labels={val.values}
-                                placeholder={`Select ${val.label}`} />
-                            :
-                            <TextField disabled={!languagePair.target.length}
-                                id={val.value}
-                                label={`Select ${val.label}`}
-                                fullWidth
-                            />
-                        }
-                    </Grid>)
+        let renderFilter = values.map(filter => {
+            if (filter && filter.hasOwnProperty('sub-filters')) {
+                return filter['sub-filters'].map(val => <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    {filter.type !== "text" ?
+                        <SingleAutoComplete
+                            handleChange={handleDropDownChange}
+                            disabled={!languagePair.target.length}
+                            id={val.value} labels={val.values}
+                            placeholder={`Select ${val.label}`} />
+                        :
+                        <TextField disabled={!languagePair.target.length}
+                            id={val.value}
+                            label={`Select ${val.label}`}
+                            fullWidth
+                        />
+                    }
+                </Grid>)
             }
         })
         return renderFilter
@@ -558,9 +522,6 @@ const SearchAndDownloadRecords = (props) => {
             <Grid container spacing={3}>
                 <Grid className={classes.leftSection} item xs={12} sm={5} md={4} lg={4} xl={4}>
                     <Grid container spacing={2}>
-                        {/* <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search & Download Records" />
-                        </Grid> */}
                         <Grid item className={(params === 'inprogress' || params === 'completed') && classes.blurOut}
                             xs={12} sm={12} md={12} lg={12} xl={12}
                         >
@@ -588,29 +549,23 @@ const SearchAndDownloadRecords = (props) => {
                             </div>
                             <Typography className={classes.subHeader} variant="body1">Filter by</Typography>
                             <Grid container spacing={1}>
-                                {/* <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    {renderFilterByfield("domain", "Select Domain", filterBy.domain, FilterBy.domain)}
-                                </Grid>
-                                <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                    {renderFilterByfield("collectionMethod", "Select Collection Method", filterBy.collectionMethod, FilterBy.collectionMethod)}
-                                </Grid> */}
                                 {
                                     basicFilter.map(filter => {
                                         return <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
                                             {filter.type !== "text" ?
                                                 <SingleAutoComplete
-                                                    handleChange = {handleBasicFilter}
+                                                    handleChange={handleBasicFilter}
                                                     disabled={!languagePair.target.length}
                                                     id={filter.value}
-                                                    value={basicFilterState[filter.value]?basicFilterState[filter.value]:""} 
+                                                    value={basicFilterState[filter.value] ? basicFilterState[filter.value] : ""}
                                                     labels={filter.values}
                                                     placeholder={`Select ${filter.label}`} />
                                                 :
                                                 <TextField disabled={!languagePair.target.length}
                                                     id={filter.value}
-                                                    value={basicFilterState[filter.value]?basicFilterState[filter.value]:""} 
+                                                    value={basicFilterState[filter.value] ? basicFilterState[filter.value] : ""}
                                                     label={`Select ${filter.label}`}
-                                                    onChange = {(e)=>handleBasicFilter(e.target.value,filter.value)}
+                                                    onChange={(e) => handleBasicFilter(e.target.value, filter.value)}
                                                     fullWidth
                                                 />
                                             }
@@ -619,31 +574,32 @@ const SearchAndDownloadRecords = (props) => {
                                 }
                             </Grid>
                             <div className={classes.advanceFilter}>
-                                <Button disabled={!languagePair.target.length} style={{ color: "#FD7F23" }} variant="outlined" size="small" onClick={() => setOpen(!open)}>Advance filter</Button>
+                                <Button disabled={!languagePair.target.length} style={{ color: "#FD7F23" }} variant="outlined" size="small" onClick={() => setOpen(!open)}>Advanced filter</Button>
                             </div>
-                            {
-                                open &&
-                                advFilter.map(filter => {
-                                    return <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                                        {filter.type !== "text" ?
-                                            <SingleAutoComplete
-                                                handleChange={handleDropDownChange}
-                                                disabled={!languagePair.target.length}
-                                                id={filter.value} labels={filter.values}
-                                                placeholder={`Select ${filter.label}`} />
-                                            :
-                                            <TextField disabled={!languagePair.target.length}
-                                                id={filter.value}
-                                                label={`Select ${filter.label}`}
-                                                fullWidth
-                                            />
-                                        }
-                                    </Grid>
-                                })
-                            }
-                            {renderSubFilters()}
-                            {open && renderAdvanceFilter()}
-                            {/* <AdvanceFilter filters={[{ placeholder: "License" }, { placeholder: "Submitter" }, { placeholder: "Collection Method" }]} /> */}
+                            <div className={classes.advanceFilterContainer}>
+                                {
+                                    open &&
+                                    advFilter.map(filter => {
+                                        return <Grid className={classes.subHeader} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                                            {filter.type !== "text" ?
+                                                <SingleAutoComplete
+                                                    handleChange={handleDropDownChange}
+                                                    disabled={!languagePair.target.length}
+                                                    id={filter.value} labels={filter.values}
+                                                    placeholder={`Select ${filter.label}`} />
+                                                :
+                                                <TextField disabled={!languagePair.target.length}
+                                                    id={filter.value}
+                                                    label={`Select ${filter.label}`}
+                                                    fullWidth
+                                                />
+                                            }
+                                        </Grid>
+                                    })
+                                }
+                                {renderSubFilters()}
+                                {open && renderAdvanceFilter()}
+                            </div>
                             {renderclearNsubmitButtons()}
                         </Grid>
                     </Grid>
