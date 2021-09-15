@@ -14,7 +14,7 @@ import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 
 const ExpandTable = (props) => {
-  const { rows, renderStatus, color,classes } = props;
+  const { rows, renderStatus, color, classes } = props;
   const renderTable = () => {
     const returnTypo = (value) => {
       return (
@@ -48,9 +48,10 @@ const ExpandTable = (props) => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {rows.map((row) => {
+                    {rows.map((row, i) => {
                       return (
                         <TableRow
+                          key={i}
                           style={{
                             backgroundColor: "rgba(254, 191, 44, 0.1)",
                           }}
@@ -71,7 +72,7 @@ const ExpandTable = (props) => {
                 </Table>
               </Box>
             </>
-          </TableCell>.
+          </TableCell>
         </TableRow>
         <TableRow className={classes.tableRow}></TableRow>
       </>

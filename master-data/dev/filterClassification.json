@@ -3,14 +3,6 @@
         "label": "Parallel Dataset",
         "basicFilters": [
             {
-                "value": "sourceLanguage",
-                "label": "Source Language"
-            },
-            {
-                "value": "targetLanguage",
-                "label": "Target Language"
-            },
-            {
                 "value": "domain",
                 "label": "Domain"
             },
@@ -21,7 +13,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscense",
+                "value": "license",
                 "label": "License"
             },
             {
@@ -29,28 +21,8 @@
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod",
+                "value": "collectionMethod.collectionDescription",
                 "label": "Collection Method"
-            },
-            {
-                "label": "Alignment Tool",
-                "value": "alignmentTool"
-            },
-            {
-                "label": "Alignment Score",
-                "value": "alignmentScore"
-            },
-            {
-                "label": "Editing Tool",
-                "value": "editingTool"
-            },
-            {
-                "label": "Translation Model",
-                "value": "translationModel"
-            },
-            {
-                "label": "Evaluation Method",
-                "value": "evaluationMethod"
             }
         ]
     },
@@ -58,10 +30,6 @@
         "label": "OCR Dataset",
         "basicFilters": [
             {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
-            {
                 "value": "domain",
                 "label": "Domain"
             },
@@ -72,7 +40,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscense",
+                "value": "license",
                 "label": "License"
             },
             {
@@ -80,7 +48,7 @@
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod",
+                "value": "collectionMethod.collectionDescription",
                 "label": "Collection Method"
             },
             {
@@ -94,24 +62,12 @@
             {
                 "value": "imageTextType",
                 "label": "Image Text Type"
-            },
-            {
-                "value": "collectionDescription",
-                "label": "Collection Description"
-            },
-            {
-                "value": "ocrTool",
-                "label": "OCR Tool"
             }
         ]
     },
     "monolingual-corpus": {
         "label": "Monolingual Dataset",
         "basicFilters": [
-            {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
             {
                 "value": "domain",
                 "label": "Domain"
@@ -123,7 +79,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscense",
+                "value": "license",
                 "label": "License"
             },
             {
@@ -131,7 +87,7 @@
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod",
+                "value": "collectionMethod.collectionDescription",
                 "label": "Collection Method"
             }
         ]
@@ -140,10 +96,6 @@
         "label": "ASR / TTS Dataset",
         "basicFilters": [
             {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
-            {
                 "value": "domain",
                 "label": "Domain"
             },
@@ -154,7 +106,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "sourceLanguage",
+                "value": "licence",
                 "label": "License"
             },
             {
@@ -196,14 +148,6 @@
             {
                 "value": "dialect",
                 "label": "Dialect"
-            },
-            {
-                "value": "snr.methodDetails.snrTool",
-                "label": "SNR Tool"
-            },
-            {
-                "value": "snrtoolres",
-                "label": "SNR Range"
             }
         ]
     },
@@ -211,10 +155,6 @@
         "label": "ASR Unlabeled Dataset",
         "basicFilters": [
             {
-                "value": "sourceLanguage",
-                "label": "Language"
-            },
-            {
                 "value": "domain",
                 "label": "Domain"
             },
@@ -225,7 +165,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscense",
+                "value": "license",
                 "label": "License"
             },
             {
@@ -233,7 +173,7 @@
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod",
+                "value": "collectionMethod.collectionDescription",
                 "label": "Collection Method"
             },
             {
@@ -267,14 +207,6 @@
             {
                 "value": "dialect",
                 "label": "Dialect"
-            },
-            {
-                "value": "snr.methodDetails.snrTool",
-                "label": "SNR Tool"
-            },
-            {
-                "value": "snrtoolres",
-                "label": "SNR Range"
             }
         ]
     }

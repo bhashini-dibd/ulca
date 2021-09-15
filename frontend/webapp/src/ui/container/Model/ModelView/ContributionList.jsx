@@ -76,15 +76,17 @@ const ContributionList = (props) => {
     }
   });
 
-  useEffect(() => {
-    let newIndex = [];
-    data.forEach((element, i) => {
-      if (element.benchmarkPerformance.length) newIndex.push(i);
-    });
-    setIndex(newIndex);
-  }, [data]);
+  // useEffect(() => {
+  //   document.querySelectorAll(`button`).forEach((element) => {
+  //     element.classList.forEach((list) => {
+  //       if (list.includes("MUIDataTableHeadCell-toolButton-")) {
+  //         document.querySelector(`.${list}`).removeAttribute("title");
+  //       }
+  //     });
+  //   });
+  // }, []);
 
-  console.log(index);
+  // console.log(index);
 
   const MyContributionListApi = () => {
     dispatch(ClearReport());
@@ -226,11 +228,10 @@ const ContributionList = (props) => {
   };
 
   const handleRunBenchMarkClick = (type, domain, modelId) => {
-    setIndex([]);
     setLoading(true);
     dispatch(clearBenchMark());
     setBenchmarkInfo({ type, domain: [domain], modelId });
-    const apiObj = new RunBenchmarkAPI(type, [domain]);
+    const apiObj = new RunBenchmarkAPI(type, [domain], modelId);
     dispatch(APITransport(apiObj));
   };
 
@@ -357,7 +358,7 @@ const ContributionList = (props) => {
     },
     {
       name: "licence",
-      label: "Licence",
+      label: "License",
       options: {
         filter: false,
         sort: true,
@@ -440,13 +441,20 @@ const ContributionList = (props) => {
     fixedHeader: false,
     download: false,
     expandableRows: true,
-    // onRowExpansionChange: (
-    //   currentRowsExpanded,
-    //   allRowsExpanded,
-    //   rowsExpanded
-    // ) => {
-    //   console.log("called");
-    // },
+    onRowExpansionChange: (
+      currentRowsExpanded,
+      allRowsExpanded,
+      rowsExpanded
+    ) => {
+      let newIndex = [];
+      if (!allRowsExpanded.length) {
+        setIndex([]);
+      }
+      allRowsExpanded.forEach((row) => {
+        newIndex.push(row.index);
+      });
+      setIndex(newIndex);
+    },
     rowsExpanded: index,
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
