@@ -10,8 +10,12 @@ import yaml
 import requests
 from termcolor import colored
 from selenium.webdriver.common.keys import Keys
-import config
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
 
+import config
+import elements as ele
 
 ENV_DICT = {"stage": 'stage', 'dev': 'dev', 'prod': 'meity'}
 LANGUAGE_DICT = {'bn': 'bengali', 'hi': 'hindi', 'en': 'english',
@@ -24,147 +28,18 @@ LANGUAGE_DICT = {'bn': 'bengali', 'hi': 'hindi', 'en': 'english',
 # ULCA-urls
 ULCA_DOMAIN = "https://"+ENV_DICT[config.DEFAULT_ENV]+"."
 ULCA_LOGIN_URL = ULCA_DOMAIN+"ulcacontrib.org/user/login"
-ULCA_DASHBOARD_URL = ULCA_DOMAIN+"ulcacontrib.org/dashboard"
+ULCA_DASH_URL = ULCA_DOMAIN+"ulcacontrib.org/dashboard"
 
-ULCA_DATASET_SUBMIT_URL = ULCA_DOMAIN + "ulcacontrib.org/dataset/upload"
-ULCA_DATASET_CONTRIB_URL = ULCA_DOMAIN + \
+ULCA_DS_SUBMIT_URL = ULCA_DOMAIN + "ulcacontrib.org/dataset/upload"
+ULCA_DS_CONTRIB_URL = ULCA_DOMAIN + \
     "ulcacontrib.org/dataset/my-contribution"
-ULCA_DATASET_MYSEARCHS_URL = ULCA_DOMAIN + "ulcacontrib.org/my-searches"
-ULCA_DATASET_SEARCH_URL = ULCA_DOMAIN+"ulcacontrib.org/search-and-" + \
+ULCA_DS_MYSRCH_URL = ULCA_DOMAIN + "ulcacontrib.org/my-searches"
+ULCA_DS_SD_URL = ULCA_DOMAIN+"ulcacontrib.org/search-and-" + \
     "download-rec/initiate/-1"
 
-ULCA_MODEL_SUBMIT_URL = ULCA_DOMAIN+"ulcacontrib.org/model/upload"
-ULCA_MODEL_EXPLORE_URL = ULCA_DOMAIN + "ulcacontrib.org/model/explore-models"
-ULCA_MODEL_CONTRIB_URL = ULCA_DOMAIN + "ulcacontrib.org/model/my-contribution"
-
-
-# xpaths-of-buttons/elements-in-ULCA-websites
-#         list -> 0 -> name of the element
-#         list -> 1 -> xpath of the element (only-support-xpaths)
-#
-ELE_USERNAME_INP = ["USERNAME-INPUT-FIELD", '//*[@id="outlined-required"]']
-ELE_PASSWORD_INP = ["PASSWORD-INPUT-FIELD",
-                    '//*[@id="outlined-adornment-password"]']
-ELE_LOGIN_BTN = ["LOGIN-BUTTON", "//*[@id='root']/div/div/div/div/form/button"]
-ELE_PROFILE_BTN = ["PROFILE-BUTTON",
-                   '//*[@id="root"]/div/header/div/div/div[3]/button']
-ELE_LOGOUT_BTN = ["LOGOUT_BUTTON", "//*[@id='data-set']/div[3]/ul"]
-
-ELE_SEARCHTYPELIST_BTN = ["SEARCHPAGE-DATATYPE-LISTBTN",
-                          '//*[@id="root"]/div/div/div/div/div/div[1]' +
-                          '/div/div/div[1]/button']
-ELE_SEARCHSOURCE_INP = ["SEARCHPAGE-SOURCE-INPUT-FEILD",
-                        '//*[@id="source"]']
-ELE_SEARCHTARGET_INP = ["SEARCHPAGE-TARGET-INPUT-FEILD",
-                        '//*[@id="language-target"]']
-ELE_SEARCHDOMAIN_INP = ["SEARCHPAGE-DOMAIN-INPUT-FEILD",
-                        '//*[@id="domain"]']
-ELE_SEARCHCOLL_INP = ["SEARCHPAGE-COLLECTION-METHOD-INPUT-FEILD",
-                      '//*[@id="collectionMethod"]']
-ELE_SEARCHMULANNO_CB = ["SEARCHPAGE-MULTIPLE-ANNOTATORS-CHECKVOX-FEILD",
-                        '//*[@name="checkedA"]']
-ELE_SEARCHMANTRANS_CB = ["SEARCHPAGE-MULTIPLE-TRANSLATORS-CHECKBOX-FEILD",
-                         '//*[@name="checkedB"]']
-ELE_SEARCHORGSOURCE_CB = ["SEARCHPAGE-ORGINAL-SOURCE-CHECKBOX-FEILD",
-                          '//*[@name="checkedC"]']
-ELE_SEARCHSUBMIT_CB = ["SEARCHPAGE-SUBMIT-BUTTON",
-                       '//*[@id="root"]/div/div/div/div/div/div[1]/div/div' +
-                       '/div[5]/div[2]/div/div[2]/button']
-ELE_SEARCHSRN_CB = ["SEARCHED-SRN-NO",
-                    "//*[@id='root']/div/div/div/div/div/"
-                    + "div[2]/div/div/div/h5"]
-
-ELE_MYSEARCHNAME_TXT = ["MYSEARCH-1STROW-NAME",
-                        '//*[@data-testid="MUIDataTableBodyRow-0"]/td[1]/' +
-                        'div[2]']
-ELE_MYSEARCHCOUNT_TXT = ["MYSEARCH-1STROW-COUNT",
-                         '//*[@data-testid="MUIDataTableBodyRow-0"]/td[3]/' +
-                         'div[2]']
-ELE_MYSEARCHSTATUS_TXT = ["MYSEARCH-1STROW-STATUS",
-                          '//*[@data-testid="MUIDataTableBodyRow-0"]/td[4]/' +
-                          'div[2]']
-ELE_SAMPLEFILE_A = ["MYSEARCH-SAMPLEFILE-A-HREF",
-                    '//*[@id="root"]/div/div/div/div/div/'
-                    + 'div[2]/div/div/div[2]/a[1]']
-ELE_ALLFILE_A = ["MYSEARCH-ALLFILE-A-HREF",
-                 '//*[@id="root"]/div/div/div/div/div/div[2]/div/'
-                 + 'div/div[2]/a[2]']
-
-ELE_SUBMITNAME_INP = ["SUBMIT-DATASET-NAME-INPUT",
-                      '//*[@id="root"]/div/div/div/div/div/div/div/div[3]' +
-                      '/div/div/div[2]/div/div[1]/div/div/input']
-ELE_SUBMITURL_INP = ["SUBMIT-DATASET-URL-INPUT",
-                     '//*[@id="root"]/div/div/div/div/div/div/div/div[3]' +
-                     '/div/div/div[2]/div/div[2]/div/div/input']
-ELE_SUBMITDATA_BTN = ["SUBMIT-BUTTON",
-                      '//*[@id="root"]/div/div/div/div/div/div/div/' +
-                      'div[3]/div/button']
-ELE_SUBMITSRN_TXT = ["SUBMIT-SRN-NO-H5",
-                     '//*[@id="root"]/div/div/div/div/div/h5']
-
-ELE_CONTRIBNAME_TXT = ["MYCONTRIB-1STROW-NAME-TXT",
-                       '//*[@id="MUIDataTableBodyRow-0"]/td[1]/div[2]']
-ELE_CONTRIBSTATUS_TXT = ["MYCONTRIB-1STROW-STATUS-TXT",
-                         '//*[@id="MUIDataTableBodyRow-0"]/td[4]/div[2]']
-ELE_CONTRIBREFRESH_BTN = ["MYCONTRIB-REFRESH-BTN",
-                          '//*[@id="root"]/div/div/div/div/div[2]/div'
-                          + '/button[1]']
-
-ELE_CDOWNLOADSTATUS_TXT = ["MYCONTRIB-1STROW-DOWNLOAD-STATUS-TXT",
-                           '//*[@id="MUIDataTableBodyRow-0"]/td[2]/div[2]']
-ELE_CINGESTSTATUS_TXT = ["MYCONTRIB-2NDROW-INGEST-STATUS-TXT",
-                         '//*[@id="MUIDataTableBodyRow-1"]/td[2]/div[2]']
-ELE_CINGESTSC_TXT = ["MYCONTRIB-2NDROW-INGEST-SUCCESS-COUNT-TXT",
-                     '//*[@id="MUIDataTableBodyRow-1"]/td[3]/div[2]']
-ELE_CINGESTFC_TXT = ["MYCONTRIB-2NDROW-INGEST-FAILURE-COUNT-TXT",
-                     '//*[@id="MUIDataTableBodyRow-1"]/td[4]/div[2]']
-ELE_CVALIDATESTATUS_TXT = ["MYCONTRIB-3RDROW-VALIDATE-STATUS-TXT",
-                           '//*[@id="MUIDataTableBodyRow-2"]/td[2]/div[2]']
-ELE_CVALIDATESC_TXT = ["MYCONTRIB-3RDROW-VALIDATE-SUCCESS-COUNT-TXT",
-                       '//*[@id="MUIDataTableBodyRow-2"]/td[3]/div[2]']
-ELE_CVALIDATEFC_TXT = ["MYCONTRIB-3RDROW-VALIDATE-FAILURE-COUNT-TXT",
-                       '//*[@id="MUIDataTableBodyRow-2"]/td[4]/div[2]']
-ELE_CPUBLISHSTATUS_TXT = ["MYCONTRIB-4THROW-PUBLISH-STATUS-TXT",
-                          '//*[@id="MUIDataTableBodyRow-3"]/td[2]/div[2]']
-ELE_CPUBLISHSC_TXT = ["MYCONTRIB-4THROW-PUBLISH-SUCCESS-COUNT-TXT",
-                      '//*[@id="MUIDataTableBodyRow-3"]/td[3]/div[2]']
-ELE_CPUBLISHFC_TXT = ["MYCONTRIB-4THROW-PUBLISH-FAILURE-COUNT-TXT",
-                      '//*[@id="MUIDataTableBodyRow-3"]/td[4]/div[2]']
-ELE_CLOG_A = ["MYCONTRIB-ERROR-LOG-FILE-ATAG",
-              '//*[@id="root"]/div/div/div/div/div[1]/div/a']
-
-ELE_DASHDATATYPESELECT_BUTTON = ["DASHBOARD-DATATYPE-SELECT-BUTTON",
-                                 '//*[@id="root"]/div/div/header/'
-                                 + 'div/div/div[1]/button']
-ELE_DASHDTPARALLEL_BTN = ["DASHBOARD-PARALLEL-DATATYPE-SELECT",
-                          '//*[@value="parallel-corpus"]']
-ELE_DASHDTMONO_BTN = ["DASHBOARD-MONOLINGUAL-DATATYPE-SELECT",
-                      '//*[@value="monolingual-corpus"]']
-ELE_DASHDTASRTTS_BTN = ["DASHBOARD-ASR-TTS-DATATYPE-SELECT",
-                        '//*[@value="asr-corpus"]']
-ELE_DASHDTOCR_BTN = ["DASHBOARD-OCR-DATATYPE-SELECT",
-                     '//*[@value="ocr-corpus"]']
-ELE_DASHDTASRUNLAB_BTN = ["DASHBOARD-ASR-UNLABLELED-DATATYPE-SELECT",
-                          '//*[@value="asr-unlabeled-corpus"]']
-ELE_DASHPARASRCLANG_INP = ["DASHBOARD-PARALLEL-SOURCE-LANG-INPUT",
-                           '//*[@id="source"]']
-ELE_DASHLANGNAMES_LI = ["DASHBOARD-CHART-LANGUAGE-NAMES-LIST",
-                        '//*[@class="recharts-layer recharts-cartesian-axis' +
-                        '-tick"]']
-ELE_DASHLANGRECT_LI = ["DASHBOARD-CHART-RECTANGLE-LIST",
-                       '//*[@class="recharts-layer recharts-bar-rectangle"]']
-ELE_DASHLANGCOUNTS_LI = ["DASHBOARD-CHART-LANGUAGE-COUNT-LIST",
-                         "//*[@class='recharts-text recharts-label']"]
-ELE_DASHTOTCOUNTS_TXT = ["DASHBOARD-DATATYPE-TOTAL-COUNT-H6",
-                         "//*[@id='root']/div/div/header/div/div/div[2]/h6"]
-ELE_DASHSRCCOUNTS_TXT = ["DASHBOARD-DATATYPE-SRC-LANG-COUNT-H6",
-                         '//*[@id="root"]/div/div/div/div[1]/div/div/h6']
-ELE_DASHGROUPCOLL_BTN = ["DASHBOARD-GROUPBY-COLLECTION-BUTTON",
-                         '//*[@id="root"]/div/div/header/div/div/div[4]' +
-                         '/div/div/button[2]']
-ELE_DASHGROUPSUBM_BTN = ["DASHBOARD-GROUPBY-SUBMITTER-BUTTON",
-                         '//*[@id="root"]/div/div/header/div/div/div[4]' +
-                         '/div/div/button[3]']
+ULCA_MDL_SUBMIT_URL = ULCA_DOMAIN+"ulcacontrib.org/model/upload"
+ULCA_MDL_EXPLR_URL = ULCA_DOMAIN + "ulcacontrib.org/model/explore-models"
+ULCA_MDL_CONTRIB_URL = ULCA_DOMAIN + "ulcacontrib.org/model/my-contribution"
 
 
 def get_url(url, driver):
@@ -238,9 +113,10 @@ def perform_webpage_function(element_data, function, driver, input_data=None):
             element.send_keys(Keys.ENTER)
             element.send_keys(Keys.ESCAPE)
             time.sleep(1)
-    except Exception:
+    except Exception as e:
         status = False
         status_str = "ELEMENT="+element_data[0]+" - NOT FOUND"
+        # print(e)
     return status, status_str
 
 
@@ -261,12 +137,12 @@ def perform_logout(driver):
     """
     status = True
     print("LOGOUT : ", flush=True, end="")
-    driver = get_url(ULCA_DASHBOARD_URL, driver)
-    status, status_str = perform_webpage_function(ELE_PROFILE_BTN, "click",
-                                                  driver)
+    driver = get_url(ULCA_DASH_URL, driver)
+    status, status_str = perform_webpage_function(ele.DASH_PROFILE_BTN,
+                                                  "click", driver)
     if status:
-        status, status_str = perform_webpage_function(ELE_LOGOUT_BTN, "click",
-                                                      driver)
+        status, status_str = perform_webpage_function(ele.DASH_LOGOUT_BTN,
+                                                      "click", driver)
     if status is False:
         print(colored("FAILED", "red"))
     else:
@@ -336,16 +212,16 @@ def perform_login(driver):
     else:
         driver = get_url(ULCA_LOGIN_URL, driver)
         status, status_str = perform_webpage_function(
-            ELE_USERNAME_INP, "input", driver, input_data=username)
+            ele.LOGIN_USERNAME_INP, "input", driver, input_data=username)
         if status:
             status, status_str = perform_webpage_function(
-                ELE_PASSWORD_INP, "input", driver, input_data=password)
+                ele.LOGIN_PASSWORD_INP, "input", driver, input_data=password)
         if status:
             status, status_str = perform_webpage_function(
-                ELE_LOGIN_BTN, "click", driver, input_data=password)
+                ele.LOGIN_BTN, "click", driver, input_data=password)
         if status:
             try:
-                driver.find_element_by_xpath(ELE_PROFILE_BTN[1])
+                driver.find_element_by_xpath(ele.DASH_PROFILE_BTN[1])
                 status = True
                 login_str = ""
             except Exception:
@@ -544,11 +420,11 @@ def select_chart_datatype(dataset_type, src, driver):
                     status_str = "Not a valid source language."
                 else:
                     status, status_str = perform_webpage_function(
-                        ELE_DASHPARASRCLANG_INP, "dropdown", driver,
+                        ele.DASH_CHART_SRCLANG_INP, "dropdown", driver,
                         input_data=LANGUAGE_DICT[src])
                     if status:
                         status, status_str = perform_webpage_function(
-                            ELE_DASHSRCCOUNTS_TXT, "text", driver)
+                            ele.DASH_CHART_SRCCNT_TXT, "text", driver)
                     if status:
                         status_str = " - "+src.capitalize()+"-count=" + \
                             status_str
@@ -592,10 +468,10 @@ def get_chart_data_values(src_count, driver):
             time.sleep(2)
             lang_names = driver.find_element_by_tag_name('svg')
             lang_names = lang_names.find_elements_by_xpath(
-                ELE_DASHLANGNAMES_LI[1])
+                ele.DASH_CHART_LNAMES_LI[1])
         except Exception:
             status = False
-            status_str = "ELEMENT="+ELE_DASHLANGNAMES_LI[0]+" - NOT FOUND"
+            status_str = "ELEMENT="+ele.DASH_CHART_LNAMES_LI[0]+" - NOT FOUND"
     if status:
         for i in range(len(lang_names)):
             lang = lang_names[i].text.strip()
@@ -607,10 +483,10 @@ def get_chart_data_values(src_count, driver):
     if status:
         try:
             lang_counts = driver.find_elements_by_xpath(
-                ELE_DASHLANGCOUNTS_LI[1])
+                ele.DASH_CHART_LCOUNTS_LI[1])
         except Exception:
             status = False
-            status_str = "ELEMENT="+ELE_DASHLANGCOUNTS_LI[0]+" - NOT FOUND"
+            status_str = "ELEMENT="+ele.DASH_CHART_LCOUNTS_LI[0]+" - NOT FOUND"
     if status:
         del lang_counts[0]
         del lang_counts[0]
@@ -619,7 +495,7 @@ def get_chart_data_values(src_count, driver):
             lang_counts[i] = str(count)
 
         status, status_str = perform_webpage_function(
-            ELE_DASHTOTCOUNTS_TXT, "text", driver)
+            ele.DASH_CHART_TOTCNT_TXT, "text", driver)
     if status:
         if status_str.find('.') > -1:
             status_str += " hours"
@@ -666,10 +542,11 @@ def select_group_chart(tgt, groupby, driver):
                 lang_names = driver.find_element_by_tag_name(
                     'svg')
                 lang_names = lang_names.find_elements_by_xpath(
-                    ELE_DASHLANGRECT_LI[1])
+                    ele.DASH_CHART_LRECTS_LI[1])
             except Exception:
                 status = False
-                status_str = "ELEMENT="+ELE_DASHLANGRECT_LI[0]+" - NOT FOUND"
+                status_str = "ELEMENT=" + \
+                    ele.DASH_CHART_LRECTS_LI[0]+" - NOT FOUND"
     if status:
         lang_names[lang_index].click()
     groupby_list = ['domain', 'collection', 'submitter']
@@ -680,10 +557,10 @@ def select_group_chart(tgt, groupby, driver):
         if status:
             if groupby == 'submitter':
                 status, status_str = perform_webpage_function(
-                    ELE_DASHGROUPSUBM_BTN, "click", driver)
+                    ele.DASH_CHART_GROUPSUBM_BTN, "click", driver)
             elif groupby == 'collection':
                 status, status_str = perform_webpage_function(
-                    ELE_DASHGROUPCOLL_BTN, "click", driver)
+                    ele.DASH_CHART_GROUPCOLLM_BTN, "click", driver)
             else:
                 pass
     return status, status_str, driver
@@ -714,11 +591,11 @@ def get_chart_data(dataset_type, groupby, src, tgt, driver):
     """
     status = True
     status_str = ""
-    driver = get_url(ULCA_DASHBOARD_URL, driver)
+    driver = get_url(ULCA_DASH_URL, driver)
     print("CHART-DATA : ", flush=True, end="")
     if status:
         status, status_str = perform_webpage_function(
-            ELE_DASHDATATYPESELECT_BUTTON, "click", driver)
+            ele.DASH_DTYPE_SLCT_BTN, "click", driver)
     if status:
         status, status_str, driver = select_chart_datatype(dataset_type, src,
                                                            driver)
@@ -759,8 +636,6 @@ def test_elements_with_browser(driver):
     """
     test_elements_with_browser functions tests all the elements if available.
 
-    {STILL_IN_PROGRESS}
-
     Parameters
     ----------
     driver : selenium.driver
@@ -772,5 +647,35 @@ def test_elements_with_browser(driver):
         A Browser window object.
 
     """
-    print('TEST : test method still in-progress.')
+    TEST_DASH = ["DASHBOARD-PAGE", ULCA_DASH_URL, ele.TEST_DASH]
+    TEST_DS_SUBMIT = ["DATASET-SUBMIT-PAGE",
+                      ULCA_DS_SUBMIT_URL, ele.TEST_DS_SUBMIT]
+    TEST_DS_SD = ["DATASET-S/DOWNLOAD-PAGE", ULCA_DS_SD_URL, ele.TEST_DS_SD]
+    TEST_MDL_SUBMIT = ["MODEL-SUBMIT-PAGE",
+                       ULCA_MDL_SUBMIT_URL, ele.TEST_MDL_SUBMIT]
+    TEST_MDL_EXPLR = ["MODEL-EXPLORE-PAGE",
+                      ULCA_MDL_EXPLR_URL, ele.TEST_MDL_EXPLR]
+
+    test_list = [TEST_DASH, TEST_DS_SD, TEST_DS_SUBMIT,
+                 TEST_MDL_EXPLR, TEST_MDL_SUBMIT]
+    for test in test_list:
+        status = True
+        status_str = ""
+        print("{} : ".format(test[0]), end="", flush=True)
+        driver = get_url(test[1], driver)
+        fail_list = []
+        for t in test[2]:
+            try:
+                wait = WebDriverWait(driver, 2)
+                wait.until(EC.presence_of_element_located((By.XPATH, t[1])))
+            except Exception:
+                fail_list.append(t[0])
+        if len(fail_list) == 0:
+            status = True
+            status_str = "{0}/{0}".format(len(test[2]))
+        else:
+            status = False
+            status_str = "{0}/{1} - {2}".format(len(fail_list), len(test[2]),
+                                                str(fail_list))
+        driver = print_status(status, status_str, driver)
     return driver

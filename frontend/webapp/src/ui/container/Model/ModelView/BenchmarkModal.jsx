@@ -40,6 +40,9 @@ const BenchmarkModal = (props) => {
   const benchmarkInfo = useSelector(
     (state) => state.getBenchMarkDetails.benchmarkInfo
   );
+  const submitStatus = useSelector(
+    (state) => state.getBenchMarkDetails.submitStatus
+  );
   const selectedIndex = useSelector(
     (state) => state.getBenchMarkDetails.selectedIndex
   );
@@ -73,7 +76,7 @@ const BenchmarkModal = (props) => {
           style={{ float: "right", marginTop: "5px", borderRadius: "22px" }}
           variant="contained"
           onClick={props.makeSubmitAPICall}
-          disabled={benchmarkInfo.length ? false : true}
+          disabled={submitStatus}
         >
           Submit
         </Button>
@@ -120,7 +123,13 @@ const BenchmarkModal = (props) => {
     );
   };
 
-  const renderSelectButton = (type, index, status, parentIndex) => {
+  const renderSelectButton = (
+    type,
+    index,
+    status,
+    parentIndex,
+    disabled = false
+  ) => {
     return (
       <Button
         variant="outlined"
@@ -130,19 +139,9 @@ const BenchmarkModal = (props) => {
         }}
         className={classes.filterBtn}
         onClick={() => {
-          // if (type === "DATASET") {
-          //   const modals = document.querySelectorAll(
-          //     `#MUIDataTableBodyRow-${index}`
-          //   );
-          //   const modal = modals[modals.length - 1];
-          //   if (modal.style.backgroundColor) {
-          //     modal.style.backgroundColor = "";
-          //   } else {
-          //     modal.style.backgroundColor = "#E2F2FD";
-          //   }
-          // }
           dispatch(getBenchmarkMetric(type, index, parentIndex));
         }}
+        disabled={disabled}
       >
         {status ? <CheckIcon style={{ color: "#FFFFFF" }} /> : "Select"}
       </Button>
@@ -255,7 +254,8 @@ const BenchmarkModal = (props) => {
                                 "METRIC",
                                 i,
                                 row.selected,
-                                rowMeta.rowIndex
+                                rowMeta.rowIndex,
+                                row.isMetricDisabled
                               )}
                             </TableCell>
                             <TableCell></TableCell>
@@ -269,6 +269,7 @@ const BenchmarkModal = (props) => {
               </>
             </TableCell>
           </TableRow>
+          <TableRow className={classes.tableRow}></TableRow>
         </>
       );
     },
@@ -337,8 +338,8 @@ const BenchmarkModal = (props) => {
             oveflow: "initial",
             overflowX: "hidden",
             overflowY: "auto",
-            minHeight: "30rem",
-            maxHeight: "30rem",
+            minHeight: "34vh",
+            maxHeight: "34vh",
           },
         },
         MUIDataTableSelectCell: {
