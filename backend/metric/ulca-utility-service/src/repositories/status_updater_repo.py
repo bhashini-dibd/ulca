@@ -18,10 +18,10 @@ class StatusUpdaterRepo:
         return mongo_instance
 
     # Updates the object in the mongo collection
-    def update(self, cond,query,db,col):
+    def update(self, cond,query,multi_flag,db,col):
         try:
             col = self.get_mongo_instance(db,col)
-            col.update(cond, query)
+            col.update(cond, query,multi=multi_flag)
         except Exception as e:
             print(e)
             log.info(f'Exception while updating document : {e}')

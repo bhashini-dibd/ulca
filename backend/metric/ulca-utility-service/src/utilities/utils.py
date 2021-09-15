@@ -13,7 +13,6 @@ class DataUtils:
         try:
             file = requests.get(data_filter_set_file_path, allow_redirects=True)
             file_path = shared_storage_path + filter_file_name
-            # file_path = '/home/jainy/Desktop/datasetFilterParams.json'
             open(file_path, 'wb').write(file.content)
             log.info(f"Filters read from git and pushed to local {file_path}")
             with open(file_path, 'r') as stream:
@@ -52,6 +51,7 @@ class DataUtils:
         except Exception as e:
             log.exception(f'Exception while pushing config file to object store: {e}')
             return False
+
 
 
 
