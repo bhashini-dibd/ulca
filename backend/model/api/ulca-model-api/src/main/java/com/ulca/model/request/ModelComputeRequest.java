@@ -24,5 +24,6 @@ public class ModelComputeRequest {
     public List<Input> input;
     public String audioUri;
     public byte[] audioContent;
+    public String imageUri;
 	  
 }

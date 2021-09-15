@@ -14,10 +14,13 @@ import Theme from "../../theme/theme-default";
 import MenuItems from "../../components/common/MenuItem";
 import { menuItems } from '../../../configs/menuItems';
 import Dialog from "./Dialog";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { initialSearchFilter } from '../../../redux/actions/api/Model/ModelSearch/Benchmark';
 import bhashiniLogo from '../../../assets/bhashiniogo.png';
 import { Link } from "@material-ui/core";
+import SubHeader from './SubHeader';
+import getMenuType from "../../../redux/actions/api/Common/getMenuType";
+import getMenuOption from "../../../redux/actions/api/Common/getMenuOption";
 
 const StyledMenu = withStyles({
 
@@ -38,14 +41,15 @@ const StyledMenu = withStyles({
 ));
 
 const Header = (props) => {
-  const { classes } = props;
+  const { classes,type,index} = props;
   const [anchorEl, setAnchorEl] = useState(null)
   const [anchorModel, setAnchorModel] = useState(null)
   const [urlLink, setUrlLink] = useState(null)
   const [open, setOpen] = useState(false)
   const [logout, setAnchorElLogout] = useState(null)
   const history = useHistory();
-
+  const menuType = useSelector(state => state.getMenuInfo.type);
+  const value = useSelector(state => state.getMenuInfo.optionSelected);
   const { firstName, lastName } = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : { firstName: "", lastName: "" }
   const handleClose = (e) => {
     setAnchorEl(null)
@@ -71,6 +75,10 @@ const Header = (props) => {
     handleClose();
   }
 
+  const handleChange = (event, newValue) => {
+    dispatch(getMenuOption(newValue))
+  }
+
   const handleMenuItemClick = (url) => {
     if (authenticate() || url === "/benchmark/initiate" || url.includes()) {
       dispatch(initialSearchFilter());
@@ -85,9 +93,20 @@ const Header = (props) => {
 
   }
 
+  const handleMenuTypeClick = (type) => {
+    if (type === 'models') {
+      history.push(`${process.env.PUBLIC_URL}/model/explore-models`)
+      dispatch(getMenuOption(1));
+    }
+    else{
+      history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
+      dispatch(getMenuOption(2));
+    }
+    dispatch(getMenuType(type));
+  }
   return (
     <MuiThemeProvider theme={Theme}>
-      <AppBar color="inherit">
+      <AppBar color="inherit" position="static">
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
             <Link href="https://bhashini.gov.in/en/">
@@ -98,7 +117,12 @@ const Header = (props) => {
               />
             </Link>
             {/* <Divider orientation="vertical" color="primary"/> */}
-            <Typography variant="h4" onClick={() => authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)}>
+            <Typography variant="h4" onClick={() => {
+              dispatch(getMenuType(""));
+              dispatch(getMenuOption(""));
+              authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)
+            }
+            }>
               ULCA
             </Typography>
 
@@ -124,17 +148,15 @@ const Header = (props) => {
                   </Button>
                 </div> */}
                 {authenticate() &&
-                  <div className={classes.datasetOption}>
-                    <div>
-                      <Button className={classes.menuBtn}
-                        onClick={(e) => authenticate() ? handleOpenMenu(e) : handleMenuItemClick('/user/login')}
-                        variant="text"
-                      >
-                        Dataset
-                        {authenticate() && <DownIcon color="action" />}
-                      </Button>
-                    </div>
-                    {authenticate() &&
+                  <div className={classes.datasetOption}  style ={type === "dataset"?{background:"#f5f5f5"}:{}}>
+                    <Button className={classes.menuBtn}
+                      onClick={(e) => handleMenuTypeClick('dataset')}
+                      variant="text"
+                    >
+                      Dataset
+                      {/* {authenticate() && <DownIcon color="action" />} */}
+                    </Button>
+                    {/* {authenticate() &&
                       <MenuItems
                         id={"dataset-menu"}
                         anchorEl={anchorEl}
@@ -142,25 +164,25 @@ const Header = (props) => {
                         menuOptions={menuItems.dataset}
                         handleMenuItemClick={handleMenuItemClick}
                       />
-                    }
+                    } */}
                   </div>
                 }
                 {authenticate() &&
                   <div className={classes.options}>
-                    <div className={classes.model}>
-                      <Button className={classes.menuBtn} variant="text" onClick={(e) => handleOpenModel(e)}>
+                    <div className={classes.model} style ={type === "models"?{background:"#f5f5f5"}:{}}>
+                      <Button className={classes.menuBtn} variant="text" onClick={(e) => handleMenuTypeClick('models')}>
                         Model
-                        {authenticate() && <DownIcon color="action" />}
+                        {/* {authenticate() && <DownIcon color="action" />} */}
                       </Button>
                     </div>
-
+                    {/* 
                     <MenuItems
                       id={"dataset-menu"}
                       anchorEl={anchorModel}
                       handleClose={handleClose}
                       menuOptions={menuItems.models}
                       handleMenuItemClick={handleMenuItemClick}
-                    />
+                    /> */}
                   </div>
                 }
               </>
@@ -254,7 +276,7 @@ const Header = (props) => {
           </div>
         </Toolbar>
       </AppBar>
-
+      {authenticate() &&type&& <SubHeader tabs={menuItems[type]} value={index} handleChange={handleChange} />}
       {open && <Dialog
         title={"Not Signed In"}
         open={open}

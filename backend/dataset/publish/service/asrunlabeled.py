@@ -45,9 +45,11 @@ class ASRUnlabeledService:
                             repo.insert([result[1]])
                             count += 1
                             metrics.build_metric_event(result[1], metadata, None, None)
-                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr_unlabeled})
+                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr_unlabeled})
                     elif result[0] == "UPDATE":
-                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr_unlabeled})
+                        pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr_unlabeled, "isUpdate": True})
                         metric_record = (result[1], result[2])
                         metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
@@ -56,14 +58,16 @@ class ASRUnlabeledService:
                             {"record": result[1], "code": "UPLOAD_FAILED", "datasetName": metadata["datasetName"],
                              "datasetType": dataset_type_asr_unlabeled, "serviceRequestNumber": metadata["serviceRequestNumber"],
                              "message": "Upload of audio file to object store failed"})
-                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr_unlabeled})
+                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr_unlabeled})
                     else:
                         error_list.append({"record": result[1], "code": "DUPLICATE_RECORD", "originalRecord": result[2],
                                            "datasetType": dataset_type_asr_unlabeled,
                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
                                            "message": "This record is already available in the system",
                                            "datasetName": metadata["datasetName"]})
-                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "datasetType": dataset_type_asr_unlabeled})
+                        pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                                                "durationInSeconds": record["durationInSeconds"], "datasetType": dataset_type_asr_unlabeled})
                 else:
                     log.error(f'INTERNAL ERROR: Failing record due to internal error: ID: {record["id"]}, SRN: {metadata["serviceRequestNumber"]}')
                     error_list.append(
@@ -72,7 +76,7 @@ class ASRUnlabeledService:
                          "serviceRequestNumber": metadata["serviceRequestNumber"],
                          "message": "There was an exception while processing this record!"})
                     pt.update_task_details(
-                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"],
+                        {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"], "durationInSeconds": record["durationInSeconds"],
                          "datasetType": dataset_type_asr_unlabeled})
             if error_list:
                 error_event.create_error_event(error_list)
@@ -94,8 +98,8 @@ class ASRUnlabeledService:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, asr_unlabeled_immutable_keys,
                                                          asr_unlabeled_updatable_keys, asr_unlabeled_non_tag_keys)
                 if dup_data:
-                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                     if metadata["userMode"] != user_mode_pseudo:
+                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                         repo.update(dup_data)
                     return "UPDATE", dup_data, record
                 else:
@@ -127,8 +131,7 @@ class ASRUnlabeledService:
     '''
     def get_asr_unlabeled_dataset_internal(self, query):
         try:
-            exclude = {"_id": False}
-            data = repo.search(query, exclude, None, None)
+            data = repo.search(query, None, None, None)
             if data:
                 asr_data = data[0]
                 if asr_data:

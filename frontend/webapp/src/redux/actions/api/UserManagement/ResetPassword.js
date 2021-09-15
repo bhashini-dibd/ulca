@@ -37,7 +37,8 @@ export default class ResetPassword extends API {
             headers: {
                 "Content-Type": "application/json",
                 "key": this.publicKey,
-                "sig": hash
+                "sig": hash,
+                "payload":urlSha
             }
         };
         return this.headers;

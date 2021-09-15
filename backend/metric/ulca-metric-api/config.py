@@ -19,13 +19,13 @@ TIME_CONVERSION_VAL     =   os.environ.get('ASR_DATA_CONERSION_VAL',3600)
 if isinstance(TIME_CONVERSION_VAL, str):
     TIME_CONVERSION_VAL  =  eval(TIME_CONVERSION_VAL)
 
-DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','https://raw.githubusercontent.com/project-anuvaad/ULCA/metric-api-feature/backend/metric/ulca-master-data-configs/datasetFilterParams.json')
-FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/app/utilities/')
-FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','filters')
+DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev/datasetFilterParams.json')
+FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/opt/')
+FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','datasetFilterParams-new.json')
 
-error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',172800)#14400
-if isinstance(error_cron_interval_sec, str):
-    error_cron_interval_sec  =  eval(error_cron_interval_sec)
+metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',86400)#14400
+if isinstance(metric_cron_interval_sec, str):
+    metric_cron_interval_sec  =  eval(metric_cron_interval_sec)
 
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 data_db_schema              =   os.environ.get('DATA_PARALLEL', 'ulca')
@@ -35,14 +35,6 @@ data_mono                   =   os.environ.get('DATA_MONO', 'monolingual-dataset
 data_asr                    =   os.environ.get('DATA_ASR', 'asr-dataset')
 data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabeled-dataset')  
 
-MAIL_SETTINGS           =   {
-                                "MAIL_SERVER"   : 'smtp.gmail.com',
-                                "MAIL_PORT"     : 465,
-                                "MAIL_USE_TLS"  : False,
-                                "MAIL_USE_SSL"  : True,
-                                "MAIL_USERNAME" : os.environ.get('ULCA_SUPPORT_EMAIL','xxx@gmail.com'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_SUPPORT_EMAIL_PASSWORD','xxx')
-                            }
 
-
-email_service_url             = os.environ.get('UTILITY_SERVICE_NOTIFY_COUNT_URL','http://utility-service:5001//ulca/apis/v1/send/mail')
+email_service_url           =   os.environ.get('UTILITY_SERVICE_NOTIFY_COUNT_URL','http://utility-service:5001//ulca/apis/v1/send/mail')
+config_file_link            =   os.environ.get('ULCA_FILTER_CONFIGS_FILE_LINK',f'https://ulca-datasets.s3.amazonaws.com/errors/datasetFilterParams.json')  

@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from flask import request
 from models.response import CustomResponse
-from models.status import Status
+from models.response import Status
 import config
 import logging
 from services import NotifierService
