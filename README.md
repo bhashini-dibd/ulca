@@ -73,6 +73,7 @@ https://github.com/ULCA-IN/ulca
 | Publish | [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fstaging%2Fbuild-master%2Fpublish)](https://jenkins.ulcacontrib.org/job/ULCA/job/staging/job/build-master/job/publish/) |
 | User Management | [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fstaging%2Fbuild-master%2Fuser-management)](https://jenkins.ulcacontrib.org/job/ULCA/job/staging/job/build-master/job/user-management/) |
 | Validate | [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fstaging%2Fbuild-master%2Fvalidate)](https://jenkins.ulcacontrib.org/job/ULCA/job/staging/job/build-master/job/validate/) |
+|  Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/run-tests/) |
 
 
 # Contribution
