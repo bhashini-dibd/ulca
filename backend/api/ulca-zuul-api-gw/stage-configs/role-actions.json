@@ -114,6 +114,11 @@
             "role":"READONLY-USER",
             "actionID": "9085ca30-ca0c-4b7e-81ba-0ca41568a372",
             "active":true
+        },
+        {
+            "role":"READONLY-USER",
+            "actionID": "d7da02b7-248c-43ab-aa9a-dac8b6c3a66f",
+            "active":true
         }
     ]
 }
