@@ -38,7 +38,7 @@ error_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',300)#1
 if isinstance(error_cron_interval_sec, str):
     error_cron_interval_sec =  eval(error_cron_interval_sec)
 
-status_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',300)#14400
+status_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',7200)
 if isinstance(status_cron_interval_sec, str):
     status_cron_interval_sec =  eval(status_cron_interval_sec)
 
