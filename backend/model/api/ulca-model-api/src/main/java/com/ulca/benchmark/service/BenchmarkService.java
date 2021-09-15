@@ -126,6 +126,8 @@ public class BenchmarkService {
 		if (request.getDomain() != null) {
 			benchmark.setDomain(request.getDomain());
 		}
+		ModelExtended model= modelDao.findByModelId(request.getModelId());
+		benchmark.setLanguages(model.getLanguages());
 		Example<Benchmark> example = Example.of(benchmark);
 		List<Benchmark> list = benchmarkDao.findAll(example);
 		List<BenchmarkDto> dtoList = new ArrayList<BenchmarkDto>();
