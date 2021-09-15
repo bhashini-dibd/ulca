@@ -42,7 +42,8 @@ export default class SubmitSearchRequest extends API {
             headers: {
                 "Content-Type": "application/json",
                 "key": this.userDetails.publicKey,
-                "sig": hash
+                "sig": hash,
+                "payload":urlSha
             }
         };
         return this.headers;

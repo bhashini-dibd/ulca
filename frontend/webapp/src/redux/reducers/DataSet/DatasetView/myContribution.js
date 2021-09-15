@@ -55,22 +55,24 @@ const getContributionList = (state, payload) => {
     let responseData = [];
     let statusFilter = [];
     let datatypeFilter = [];
+    
     let filter = { status: [], datasetType: [] }
     let refreshStatus = false;
     payload.forEach(element => {
+        let getType = getDatasetName(element.datasetType);
         responseData.push(
             {
                 submitRefNumber: element.serviceRequestNumber,
                 datasetName: element.datasetName,
                 submittedOn: dateConversion(element.submittedOn),
-                datasetType: getDatasetName(element.datasetType),
+                datasetType: getType ? getType : "Unidentified",
                 status: element.status,
                 color: element.status === "Completed" ? "#139D60" : element.status === "In-Progress" ? "#2C2799" : element.status === "Failed" ? "#F54336" : "#FEA52C"
             }
 
         )
         !statusFilter.includes(element.status) && statusFilter.push(element.status)
-        !datatypeFilter.includes(element.datasetName) && datatypeFilter.push(getDatasetName(element.datasetType))
+        !datatypeFilter.includes(element.datasetName) && datatypeFilter.push(getType ? getType : "Unidentified")
         if (element.status === "In-Progress" || element.status === "Pending") {
             refreshStatus = true
         }

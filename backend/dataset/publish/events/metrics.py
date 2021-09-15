@@ -83,7 +83,11 @@ class MetricEvent:
                     for cm in data["collectionMethod"]:
                         if cm:
                             if 'collectionDescription' in cm.keys():
-                                coll_desc.append(cm["collectionDescription"])
+                                if cm["collectionDescription"]:
+                                    if isinstance(cm["collectionDescription"], list):
+                                        coll_desc.extend(cm["collectionDescription"])
+                                    else:
+                                        coll_desc.append(cm["collectionDescription"])
                             if 'collectionDetails' in cm.keys():
                                 if cm["collectionDetails"]:
                                     if 'alignmentTool' in cm["collectionDetails"].keys():

@@ -1,0 +1,1243 @@
+{
+  "dataset": {
+    "parallel-corpus": {
+      "label": "Parallel Dataset",
+      "filters": [
+        {
+          "filter": "languagepair",
+          "label": "Language Pairs",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "pa",
+              "label": "Punjabi"
+            },
+            {
+              "value": "bn",
+              "label": "Bengali"
+            },
+            {
+              "value": "en",
+              "label": "English"
+            },
+            {
+              "value": "ta",
+              "label": "Tamil"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "kok",
+              "label": "Konkani"
+            },
+            {
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod.collectionDescription",
+          "label": "Collection Method",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "auto-aligned",
+              "label": "Auto Aligned",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "label": "Alignment Tool",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "LaBSE",
+                      "label": "LaBSE"
+                    },
+                    {
+                      "value": "LASER",
+                      "label": "LASER"
+                    }
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.alignmentScore",
+                  "label": "Alignment Score Range",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": [
+                        0,
+                        0.5
+                      ],
+                      "label": "<0.5"
+                    },
+                    {
+                      "value": [
+                        0.5,
+                        0.6
+                      ],
+                      "label": "0.5-0.6"
+                    },
+                    {
+                      "value": [
+                        0.6,
+                        0.7
+                      ],
+                      "label": "0.6-0.7"
+                    },
+                    {
+                      "value": [
+                        0.7,
+                        0.8
+                      ],
+                      "label": "0.8-0.9"
+                    },
+                    {
+                      "value": [
+                        0.9,
+                        1
+                      ],
+                      "label": "0.9-1.0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "auto-aligned-from-parallel-docs",
+              "label": "Auto Aligned From Parallel Docs",
+              "type": "drop-down",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "label": "Alignment Tool",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "LaBSE",
+                      "label": "LaBSE"
+                    }
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.alignmentScore",
+                  "label": "Alignment Score Range",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": [
+                        0,
+                        0.5
+                      ],
+                      "label": "<0.5"
+                    },
+                    {
+                      "value": [
+                        0.5,
+                        0.6
+                      ],
+                      "label": "0.5-0.6"
+                    },
+                    {
+                      "value": [
+                        0.6,
+                        0.7
+                      ],
+                      "label": "0.6-0.7"
+                    },
+                    {
+                      "value": [
+                        0.7,
+                        0.8
+                      ],
+                      "label": "0.8-0.9"
+                    },
+                    {
+                      "value": [
+                        0.9,
+                        1
+                      ],
+                      "label": "0.9-1.0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "machine-translated",
+              "label": "Machine Translated",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.translationModel",
+                  "label": "Translation Model",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "Google",
+                      "label": "Google Translate"
+                    }
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "label": "Evaluation Method",
+                  "type": "drop-down",
+                  "values": []
+                }
+              ]
+            },
+            {
+              "value": "machine-translated-post-edited",
+              "label": "Machine Translated Post Edited",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.translationModel",
+                  "label": "Translation Model",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "Google",
+                      "label": "Google Translate"
+                    }
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "label": "Evaluation Method",
+                  "type": "drop-down",
+                  "values": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "label": "Domain",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
+            },
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "government-press-release",
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "label": "Collection Source",
+          "type": "text",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "label": "License",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "cc-by-4.0",
+              "label": "Cc-By-4.0"
+            }
+          ]
+        },
+        {
+          "filter": "submitter.name",
+          "label": "Submitter",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "Project Anuvaad",
+              "label": "Project Anuvaad"
+            },
+            {
+              "value": "Samanantar",
+              "label": "Samanantar"
+            },
+            {
+              "value": "ai4bharat",
+              "label": "Ai4Bharat"
+            }
+          ]
+        }
+      ]
+    },
+    "monolingual-corpus": {
+      "label": "Monolingual Dataset",
+      "filters": [
+        {
+          "filter": "sourceLanguage",
+          "label": "Language",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "en",
+              "label": "En"
+            },
+            {
+              "value": "hi",
+              "label": "Hi"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "label": "Domain",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "legal",
+              "label": "Legal"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod.collectionDescription",
+          "label": "Collection Method",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "",
+              "label": "Unspecified"
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "label": "Collection Source",
+          "type": "text",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "label": "License",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "cc-by-4.0",
+              "label": "Cc-By-4.0"
+            }
+          ]
+        },
+        {
+          "filter": "submitter.name",
+          "label": "Submitter",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "Project Anuvaad",
+              "label": "Project Anuvaad"
+            }
+          ]
+        }
+      ]
+    },
+    "asr-unlabeled-corpus": {
+      "label": "Asr Unlabeled Dataset",
+      "filters": [
+        {
+          "filter": "sourceLanguage",
+          "label": "Language",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "bn",
+              "label": "Bengali"
+            },
+            {
+              "value": "en",
+              "label": "English"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "pa",
+              "label": "Punjabi"
+            },
+            {
+              "value": "ta",
+              "label": "Tamil"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "label": "Domain",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "education",
+              "label": "Education"
+            },
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod.collectionDescription",
+          "label": "Collection Method",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "machine-generated-transcript",
+              "label": "Machine Generated Transcript",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.asrModel",
+                  "label": "ASR Model",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "gogle asr",
+                      "label": "Gogle asr"
+                    }
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "label": "Evaluation Method",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "wer",
+                      "label": "WER"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "label": "Collection Source",
+          "type": "text",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "label": "License",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "cc-by-4.0",
+              "label": "Cc-By-4.0"
+            }
+          ]
+        },
+        {
+          "filter": "submitter.name",
+          "label": "Submitter",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "anuvaad",
+              "label": "Anuvaad"
+            },
+            {
+              "value": "ekstep",
+              "label": "Ekstep"
+            }
+          ]
+        },
+        {
+          "filter": "format",
+          "label": "Format",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "wav",
+              "label": "Wav"
+            }
+          ]
+        },
+        {
+          "filter": "channel",
+          "label": "Channel",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            },
+            {
+              "value": "mono",
+              "label": "Mono"
+            }
+          ]
+        },
+        {
+          "filter": "samplingRate",
+          "label": "Sampling Rate",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            },
+            {
+              "value": 16,
+              "label": "16"
+            },
+            {
+              "value": 44.1,
+              "label": "44.1"
+            }
+          ]
+        },
+        {
+          "filter": "bitsPerSample",
+          "label": "Bits per Sample",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            },
+            {
+              "value": "sixteen",
+              "label": "Sixteen"
+            }
+          ]
+        },
+        {
+          "filter": "numberOfSpeakers",
+          "label": "Number of Speakers",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            },
+            {
+              "value": 1,
+              "label": "1"
+            }
+          ]
+        },
+        {
+          "filter": "gender",
+          "label": "Gender",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "female",
+              "label": "Female"
+            },
+            {
+              "value": "male",
+              "label": "Male"
+            }
+          ]
+        },
+        {
+          "filter": "age",
+          "label": "Age",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "filter": "dialect",
+          "label": "Dialect",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "filter": "snr.methodDetails.snrTool",
+          "label": "SNR Tool",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "WADASNR",
+              "label": "Wadasnr"
+            }
+          ]
+        },
+        {
+          "filter": "snr.methodDetails.snr",
+          "label": "SNR Range",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": [
+                0,
+                1
+              ],
+              "label": "0.0-1.0"
+            }
+          ]
+        }
+      ]
+    },
+    "ocr-corpus": {
+      "label": "OCR Dataset",
+      "type": "drop-down",
+      "filters": [
+        {
+          "filter": "sourceLanguage",
+          "label": "Language",
+          "values": [
+            {
+              "value": "as",
+              "label": "As"
+            },
+            {
+              "value": "bn",
+              "label": "Bn"
+            },
+            {
+              "value": "en",
+              "label": "En"
+            },
+            {
+              "value": "hi",
+              "label": "Hi"
+            },
+            {
+              "value": "ml",
+              "label": "Ml"
+            },
+            {
+              "value": "mr",
+              "label": "Mr"
+            },
+            {
+              "value": "or",
+              "label": "Or"
+            },
+            {
+              "value": "ta",
+              "label": "Ta"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "label": "Domain",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "education",
+              "label": "Education"
+            },
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "government-press-release",
+              "label": "Government-Press-Release"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod.collectionDescription",
+          "label": "Collection Method",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "web-scraping-ocr",
+              "label": "Web Scraping OCR",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.ocrTool",
+                  "label": "OCR Tool",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "anuvaad ocr",
+                      "label": "Anuvaad OCR"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "label": "Collection Source",
+          "type": "text",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "label": "License",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "cc-by-4.0",
+              "label": "Cc-By-4.0"
+            }
+          ]
+        },
+        {
+          "filter": "submitter.name",
+          "label": "Submitter",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "Project Anuvaad",
+              "label": "Project Anuvaad"
+            }
+          ]
+        },
+        {
+          "filter": "format",
+          "label": "Format",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "png",
+              "label": "Png"
+            }
+          ]
+        },
+        {
+          "filter": "dpi",
+          "label": "DPI",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "300_dpi",
+              "label": "300_Dpi"
+            },
+            {
+              "value": "72_dpi",
+              "label": "72_Dpi"
+            }
+          ]
+        },
+        {
+          "filter": "imageTextType",
+          "label": "Image Text Type",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "computer-typed-text",
+              "label": "Computer-Typed-Text"
+            }
+          ]
+        }
+      ]
+    },
+    "asr-corpus": {
+      "label": "ASR / TTS Dataset",
+      "filters": [
+        {
+          "filter": "sourceLanguage",
+          "label": "Language",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "bn",
+              "label": "Bengali"
+            },
+            {
+              "value": "en",
+              "label": "English"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "pa",
+              "label": "Punjabi"
+            },
+            {
+              "value": "ta",
+              "label": "Tamil"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            }
+          ]
+        },
+        {
+          "filter": "domain",
+          "label": "Domain",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "education",
+              "label": "Education"
+            },
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod.collectionDescription",
+          "label": "Collection Method",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "machine-generated-transcript",
+              "label": "Machine Generated Transcript",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.asrModel",
+                  "label": "ASR Model",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "gogle asr",
+                      "label": "Gogle asr"
+                    }
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "label": "Evaluation Method",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "wer",
+                      "label": "WER"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "filter": "collectionSource",
+          "label": "Collection Source",
+          "type": "text",
+          "values": []
+        },
+        {
+          "filter": "license",
+          "label": "License",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "cc-by-4.0",
+              "label": "Cc-By-4.0"
+            }
+          ]
+        },
+        {
+          "filter": "submitter.name",
+          "label": "Submitter",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "anuvaad",
+              "label": "Anuvaad"
+            },
+            {
+              "value": "ekstep",
+              "label": "Ekstep"
+            }
+          ]
+        },
+        {
+          "filter": "format",
+          "label": "Format",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "wav",
+              "label": "Wav"
+            }
+          ]
+        },
+        {
+          "filter": "channel",
+          "label": "Channel",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            },
+            {
+              "value": "mono",
+              "label": "Mono"
+            }
+          ]
+        },
+        {
+          "filter": "samplingRate",
+          "label": "Sampling Rate",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            },
+            {
+              "value": 16,
+              "label": "16"
+            },
+            {
+              "value": 44.1,
+              "label": "44.1"
+            }
+          ]
+        },
+        {
+          "filter": "bitsPerSample",
+          "label": "Bits per Sample",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            },
+            {
+              "value": "sixteen",
+              "label": "Sixteen"
+            }
+          ]
+        },
+        {
+          "filter": "numberOfSpeakers",
+          "label": "Number of Speakers",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            },
+            {
+              "value": 1,
+              "label": "1"
+            }
+          ]
+        },
+        {
+          "filter": "gender",
+          "label": "Gender",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "female",
+              "label": "Female"
+            },
+            {
+              "value": "male",
+              "label": "Male"
+            }
+          ]
+        },
+        {
+          "filter": "age",
+          "label": "Age",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "filter": "dialect",
+          "label": "Dialect",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": null,
+              "label": "None"
+            }
+          ]
+        },
+        {
+          "filter": "snr.methodDetails.snrTool",
+          "label": "SNR Tool",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "WADASNR",
+              "label": "Wadasnr"
+            }
+          ]
+        },
+        {
+          "filter": "snr.methodDetails.snr",
+          "label": "SNR Range",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": [
+                0,
+                1
+              ],
+              "label": "0.0-1.0"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

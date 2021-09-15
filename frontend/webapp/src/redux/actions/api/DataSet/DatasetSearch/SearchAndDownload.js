@@ -8,9 +8,9 @@ export default class SearchAndDownload extends API {
     constructor(timeout = 200000) {
         super("GET", timeout, false);
         this.type = C.GET_SEARCH_OPTIONS;
-        this.endpoint= "https://jsonplaceholder.typicode.com/posts";
+       // this.endpoint= "https://jsonplaceholder.typicode.com/posts";
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
-        //this.endpoint = `${CONFIGS.API_URL}${ENDPOINTS.getSearchOptions}`;
+        this.endpoint = `${CONFIGS.API_URL}${ENDPOINTS.getSearchOptions}`;
     }
 
     toString() {
@@ -34,7 +34,8 @@ export default class SearchAndDownload extends API {
         this.headers = {
             headers: {
                 "key" :this.userDetails.publicKey,
-                "sig"  : hash
+                "sig"  : hash,
+                "payload": urlSha
             }
         };
         return this.headers;
