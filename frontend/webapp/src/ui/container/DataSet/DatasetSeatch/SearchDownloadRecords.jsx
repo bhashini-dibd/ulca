@@ -331,7 +331,7 @@ const SearchAndDownloadRecords = (props) => {
                     fullWidth
                     onClick={(e) => openEl(e.currentTarget)}
                     variant="text">
-                    <Typography variant="subtitle1">
+                    <Typography variant="body1">
                         {label}
                     </Typography>
                     <DownIcon />
@@ -485,9 +485,9 @@ const SearchAndDownloadRecords = (props) => {
             <Grid container spacing={3}>
                 <Grid className={classes.leftSection} item xs={12} sm={5} md={4} lg={4} xl={4}>
                     <Grid container spacing={2}>
-                        <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
+                        {/* <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
                             <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search & Download Records" />
-                        </Grid>
+                        </Grid> */}
                         <Grid item className={(params === 'inprogress' || params === 'completed') && classes.blurOut}
                             xs={12} sm={12} md={12} lg={12} xl={12}
                         >

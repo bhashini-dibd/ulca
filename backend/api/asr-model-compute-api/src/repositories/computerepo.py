@@ -47,6 +47,24 @@ class ASRComputeRepo:
                 log.info(f'Exception while processing request: {e}')
                 return []
 
+    def process_asr_from_audio_file(self,lang,audio_file_path,callback_url,transformat,audioformat):
+        
+            try:
+                audio = AudioSegment.from_wav(audio_file_path)
+                audio = audio.set_channels(1)
+                audio = audio.set_frame_rate(16000)
+                processed_file = f'{shared_storage_path}audio-processed.wav'
+                audio.export(processed_file, format="wav")
+                encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
+                os.remove(processed_file)
+                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callback_url,transformat,audioformat)
+                return result
+
+            except Exception as e:
+                log.info(f'Exception while processing request: {e}')
+                return []
+
+
     
     def make_audiouri_call(self, url,lang,callbackurl,transformat,audioformat):
         try:

@@ -166,9 +166,9 @@ const MySearches = (props) => {
         const { classes } = props;
         return (
                 <div >
-                        <div className={classes.breadcrum}>
+                        {/* <div className={classes.breadcrum}>
                                 <BreadCrum links={[UrlConfig.dataset]} activeLink="My Searches" />
-                        </div>
+                        </div> */}
 
                         <MUIDataTable
                                 title={`My Searches`}

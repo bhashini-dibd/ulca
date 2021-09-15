@@ -88,8 +88,8 @@ class MonolingualService:
             if record:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, mono_immutable_keys, mono_updatable_keys, mono_non_tag_keys)
                 if dup_data:
-                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                     if metadata["userMode"] != user_mode_pseudo:
+                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                         repo.update(dup_data)
                     return "UPDATE", dup_data, record
                 else:
@@ -114,8 +114,7 @@ class MonolingualService:
     '''
     def get_monolingual_dataset_internal(self, query):
         try:
-            exclude = {"_id": False}
-            data = repo.search(query, exclude, None, None)
+            data = repo.search(query, None, None, None)
             if data:
                 return data[0]
             else:

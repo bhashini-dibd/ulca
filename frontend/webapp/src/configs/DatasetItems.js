@@ -29,8 +29,21 @@ export const Language = [
     { value: 'te', label: 'Telugu' },
     { value: 'ur', label: 'Urdu' },
     { value: 'ne', label: 'Nepali' },
-    
-
+    { value: 'brx', label: 'Bodo' },
+    { value: 'doi', label: 'Dogri' },
+    { value: 'kok', label: 'Konkani' },
+    { value: 'mai', label: 'Maithili' },
+    { value: 'mni', label: 'Manipuri' },
+    { value: 'sat', label: 'Santali' },
+    { value: 'lus', label: 'Lushai' },
+    { value: 'njz', label: 'Nishi' },
+    { value: 'pnr', label: 'Panim' },
+    { value: 'grt', label: 'Garo' },
+    { value: 'ks', label: 'Kashmiri' },
+    { value: 'sd', label: 'Sindhi' },
+    { value: 'si', label: 'Sinhalese' },
+    { value: 'kha', label: 'Khasi' },
+    { value: 'sa', label: 'Sanskrit' }
 ];
 
 

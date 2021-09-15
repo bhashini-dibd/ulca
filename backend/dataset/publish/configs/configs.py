@@ -6,7 +6,7 @@ redis_server_host = os.environ.get('REDIS_URL', 'localhost')
 redis_server_port = os.environ.get('REDIS_PORT', 6379)
 redis_server_pass = os.environ.get('REDIS_PASS', None)
 
-db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://localhost:27017/")
+db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://10.30.11.136:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")
 asr_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_COL', "asr-dataset")
 asr_unlabeled_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_UNLABELED_COL', "asr-unlabeled-dataset")
@@ -44,29 +44,29 @@ if isinstance(record_expiry_in_sec, str):
     record_expiry_in_sec = eval(record_expiry_in_sec)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
-asr_immutable_keys = ["id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-asr_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
-asr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn"]
+asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
+asr_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
-asr_unlabeled_immutable_keys = ["id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-asr_unlabeled_non_tag_keys = ["id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
-asr_unlabeled_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "audioHash", "fileLocation", "lastModifiedOn", "createdOn"]
+asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
+asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "audioHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
-parallel_immutable_keys = ["id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+parallel_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn", "createdOn"]
+parallel_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version", "datasetId", "sourceLanguage", "targetLanguage"]
 parallel_updatable_keys = ["alignmentScore", "version"]
-parallel_non_tag_keys = ["id", "score", "sourceText", "targetText", "submitter", "lastModifiedOn", "createdOn"]
-parallel_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn"]
 
-ocr_immutable_keys = ["id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-ocr_non_tag_keys = ["id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation", "lastModifiedOn", "createdOn"]
-ocr_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "imageHash", "groundTruthHash", "fileLocation", "lastModifiedOn", "createdOn"]
+ocr_immutable_keys = ["_id", "id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+ocr_non_tag_keys = ["_id", "id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation", "lastModifiedOn", "createdOn"]
+ocr_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "imageHash", "groundTruthHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 ocr_updatable_keys = ["version"]
 
-mono_immutable_keys = ["id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn"]
-mono_non_tag_keys = ["id", "text", "submitter", "lastModifiedOn", "createdOn"]
-mono_search_ignore_keys = ["_id", "tags", "submitter", "collectionSource", "license", "domain", "collectionMethod", "datasetType", "textHash", "lastModifiedOn", "createdOn"]
+mono_immutable_keys = ["_id", "id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn"]
+mono_non_tag_keys = ["_id", "id", "text", "submitter", "lastModifiedOn", "createdOn"]
+mono_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "textHash", "lastModifiedOn", "createdOn", "version", "datasetId"]
 mono_updatable_keys = ["version"]
 
 publish_error_code = "3000_XXX"

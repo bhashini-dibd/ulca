@@ -33,6 +33,25 @@ class ASRComputeResource(Resource):
         except Exception as e:
             log.info(f'Exception on ASRComputeResource {e}')
 
+class ComputeAudioResource(Resource):
+
+    # reading json request and reurnung final response
+    def post(self):
+        log.info("Request received for asr computing")
+        body                =   request.get_json()
+        audio_file_path     =   body["filePath"]
+        lang                =   body["sourceLanguage"]
+        callback_url        =   body["callbackUrl"]
+        transformat         =   "TRANSCRIPT"
+        audioformat         =   "WAV"
+        try:
+            result = asrrepo.process_asr_from_audio_file(lang,audio_file_path,callback_url,transformat,audioformat)
+            res = CustomResponse(Status.SUCCESS.value,result,None)
+            log.info("response successfully generated.")
+            return res.getres()
+        except Exception as e:
+            log.info(f'Exception on ComputeAudioResource {e}')
+
 
 
 

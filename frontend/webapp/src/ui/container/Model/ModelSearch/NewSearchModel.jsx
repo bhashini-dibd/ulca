@@ -80,6 +80,7 @@ const apply = (data) => {
 }
 
     const handleClick = (data) => {
+        data.prevUrl = 'explore-models';
         dispatch(updateFilter({ source: "", filter: "", type: data.task }));
         history.push({
             pathname: `${process.env.PUBLIC_URL}/search-model/${data.submitRefNumber}`,

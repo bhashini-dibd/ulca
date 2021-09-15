@@ -14,7 +14,8 @@ import Snackbar from './components/common/Snackbar';
 
 function App(props) {
   const Component = props.component;
-  const { classes  } = props;
+  const { classes,type,index,userRoles  } = props;
+
   const [popUp, setPopup] =  useState(true)
   const apiStatus = useSelector((state) => state.apiStatus);
   const history = useHistory();
@@ -45,10 +46,11 @@ function App(props) {
   />
    
   };}
+
   return (
     <MuiThemeProvider theme={Theme}>
       <div className={classes.root}>
-        <Header className={classes.headerContainer}/>
+        <Header type={type} index={index} className={classes.headerContainer}/>
         <div className={classes.container}>
           {renderSpinner()}
           {renderError()}

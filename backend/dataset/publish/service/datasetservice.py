@@ -89,7 +89,12 @@ class DatasetService:
                                 db_record[key].append(entry)
                 else:
                     if isinstance(db_record[key], list):
-                        if data[key] not in db_record[key]:
+                        eq = False
+                        for r in db_record[key]:
+                            eq = data[key] == r
+                            if eq:
+                                break
+                        if not eq:
                             found = True
                             db_record[key].append(data[key])
                     else:
