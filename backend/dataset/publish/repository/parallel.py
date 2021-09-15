@@ -2,6 +2,10 @@ import logging
 from collections import OrderedDict
 from datetime import datetime
 from logging.config import dictConfig
+
+import bson
+from bson import ObjectId
+
 from configs.configs import db_cluster, db, parallel_collection, parallel_search_ignore_keys, shared_storage_path
 
 import pymongo
@@ -65,8 +69,8 @@ class ParallelRepo:
     def update(self, object_in):
         col = self.get_mongo_instance()
         try:
-            query = {"tags": {"$all": [object_in["sourceTextHash"], object_in["targetTextHash"]]}}
-            col.replace_one(query, object_in)
+            object_in["_id"] = ObjectId(object_in["_id"])
+            col.replace_one({"_id": object_in["_id"]}, object_in, False)
         except Exception as e:
             log.exception(f"Exception while updating: {e}", e)
 
@@ -74,11 +78,19 @@ class ParallelRepo:
         try:
             col = self.get_mongo_instance()
             if offset is None and res_limit is None:
-                res = col.find(query, exclude).sort([('_id', 1)])
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', 1)])
+                else:
+                    res = col.find(query).sort([('_id', 1)])
             else:
-                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                else:
+                    res = col.find(query).sort([('_id', -1)]).skip(offset).limit(res_limit)
             result = []
             for record in res:
+                if "_id" in record.keys():
+                    record["_id"] = str(record["_id"])
                 result.append(record)
             return result
         except Exception as e:

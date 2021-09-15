@@ -27,6 +27,7 @@ const DataSet = (theme) => ({
   computeBtn: {
     borderRadius: "20px",
   },
+  tableRow:{display:"none"},
 
   divStyle: {
     padding: "5% 10% 5% 3.125rem",

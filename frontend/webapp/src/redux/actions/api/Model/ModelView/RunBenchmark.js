@@ -2,12 +2,13 @@ import API from "../../../api";
 import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
 export default class RunBenchmark extends API {
-  constructor(task, domain, timeout = 200000) {
+  constructor(task, domain, modelId, timeout = 200000) {
     super("POST", timeout, false);
     this.user_id = JSON.parse(localStorage.getItem("userDetails")).userID;
     this.type = C.RUN_BENCHMARK;
     this.task = task;
     this.domain = domain;
+    this.modelId = modelId;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
     this.endpoint = `${super.apiEndPointAuto()}${
       ENDPOINTS.getBenchmarkDetails
@@ -37,6 +38,7 @@ export default class RunBenchmark extends API {
     return {
       task: this.task,
       domain: this.domain,
+      modelId: this.modelId,
     };
   }
 

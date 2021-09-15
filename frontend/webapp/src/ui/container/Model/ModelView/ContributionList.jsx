@@ -76,6 +76,18 @@ const ContributionList = (props) => {
     }
   });
 
+  // useEffect(() => {
+  //   document.querySelectorAll(`button`).forEach((element) => {
+  //     element.classList.forEach((list) => {
+  //       if (list.includes("MUIDataTableHeadCell-toolButton-")) {
+  //         document.querySelector(`.${list}`).removeAttribute("title");
+  //       }
+  //     });
+  //   });
+  // }, []);
+
+  // console.log(index);
+
   const MyContributionListApi = () => {
     dispatch(ClearReport());
     const userObj = new MyContributionList(
@@ -133,7 +145,7 @@ const ContributionList = (props) => {
           <Cached className={classes.iconStyle} />
           Refresh
         </Button>
-        <Button
+        {/* <Button
           color={"default"}
           size="medium"
           variant="default"
@@ -142,7 +154,7 @@ const ContributionList = (props) => {
         >
           {" "}
           {view ? <List size="large" /> : <GridOn />}
-        </Button>
+        </Button> */}
       </>
     );
   };
@@ -219,7 +231,7 @@ const ContributionList = (props) => {
     setLoading(true);
     dispatch(clearBenchMark());
     setBenchmarkInfo({ type, domain: [domain], modelId });
-    const apiObj = new RunBenchmarkAPI(type, [domain]);
+    const apiObj = new RunBenchmarkAPI(type, [domain], modelId);
     dispatch(APITransport(apiObj));
   };
 
@@ -346,7 +358,7 @@ const ContributionList = (props) => {
     },
     {
       name: "licence",
-      label: "Licence",
+      label: "License",
       options: {
         filter: false,
         sort: true,
@@ -425,39 +437,40 @@ const ContributionList = (props) => {
     customToolbar: fetchHeaderButton,
     filter: false,
     displaySelectToolbar: false,
-    fixedHeader: false,
     filterType: "checkbox",
+    fixedHeader: false,
     download: false,
     expandableRows: true,
-    // onRowExpansionChange: (
-    //   currentRowsExpanded,
-    //   allRowsExpanded,
-    //   rowsExpanded
-    // ) => {
-    //   const currentIndex = currentRowsExpanded[0].index;
-
-    //   setIndex([...index, currentIndex]);
-    // },
+    onRowExpansionChange: (
+      currentRowsExpanded,
+      allRowsExpanded,
+      rowsExpanded
+    ) => {
+      let newIndex = [];
+      if (!allRowsExpanded.length) {
+        setIndex([]);
+      }
+      allRowsExpanded.forEach((row) => {
+        newIndex.push(row.index);
+      });
+      setIndex(newIndex);
+    },
     rowsExpanded: index,
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
-    isRowExpandable: (dataIndex, expandedRows) => {
-      if (data[dataIndex].benchmarkPerformance.length) {
-        return true;
-      }
-      return false;
-    },
-
+    // isRowExpandable: (dataIndex, expandedRows) => expandedRows.data.filter(d=>index.indexOf(d.index) > -1),
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
-      return (
-        <RenderExpandTable
-          rows={rowData[8]}
-          color={even_odd}
-          renderStatus={renderStatus}
-        />
-      );
+      // console.log(rowData);
+      if (rowData[8].length)
+        return (
+          <RenderExpandTable
+            rows={rowData[8]}
+            color={even_odd}
+            renderStatus={renderStatus}
+          />
+        );
     },
     print: false,
     viewColumns: false,

@@ -40,6 +40,7 @@ export default class SubmitBenchmark extends API {
         "Content-Type": "application/json",
         key: this.userDetails.publicKey,
         sig: hash,
+        "payload":urlSha
       },
     };
     return this.headers;

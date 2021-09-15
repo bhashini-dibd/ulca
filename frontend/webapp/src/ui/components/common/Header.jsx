@@ -41,7 +41,7 @@ const StyledMenu = withStyles({
 ));
 
 const Header = (props) => {
-  const { classes,type,index } = props;
+  const { classes,type,index} = props;
   const [anchorEl, setAnchorEl] = useState(null)
   const [anchorModel, setAnchorModel] = useState(null)
   const [urlLink, setUrlLink] = useState(null)
@@ -50,7 +50,6 @@ const Header = (props) => {
   const history = useHistory();
   const menuType = useSelector(state => state.getMenuInfo.type);
   const value = useSelector(state => state.getMenuInfo.optionSelected);
-
   const { firstName, lastName } = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : { firstName: "", lastName: "" }
   const handleClose = (e) => {
     setAnchorEl(null)
@@ -105,9 +104,6 @@ const Header = (props) => {
     }
     dispatch(getMenuType(type));
   }
-
-  console.log("-----",type,index,menuItems[type])
-
   return (
     <MuiThemeProvider theme={Theme}>
       <AppBar color="inherit" position="static">

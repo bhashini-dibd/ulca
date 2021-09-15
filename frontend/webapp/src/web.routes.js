@@ -144,7 +144,6 @@ export default function App() {
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/dataset/upload`}
             title={"Submit Dataset"}
-            userRoles={[""]}
             component={SubmitDataset}
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
@@ -175,7 +174,6 @@ export default function App() {
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/my-searches`}
-            userRoles={[""]}
             component={MySearches}
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
@@ -185,7 +183,6 @@ export default function App() {
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/readymade-dataset`}
-            userRoles={[""]}
             component={ReadymadeDataset}
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
@@ -197,7 +194,6 @@ export default function App() {
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/:type/submission/:reqno`}
             title={"Submission status"}
-            userRoles={[""]}
             component={SubmissionSubmission}
             authenticate={authenticateUser}
             currentMenu="submission-status"
@@ -208,7 +204,6 @@ export default function App() {
 
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/search-and-download-rec/:params/:srno`}
-            userRoles={[""]}
             component={SearchAndDownloadRecords}
             authenticate={authenticateUser}
             currentMenu="search-and-download-rec"
@@ -224,7 +219,6 @@ export default function App() {
 
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/pop-up`}
-            userRoles={[""]}
             component={PopUp}
             authenticate={authenticateUser}
             currentMenu="pop-up"
@@ -235,7 +229,6 @@ export default function App() {
 
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/filter-list`}
-            userRoles={[""]}
             component={FilterList}
             authenticate={authenticateUser}
             currentMenu="pop-up"

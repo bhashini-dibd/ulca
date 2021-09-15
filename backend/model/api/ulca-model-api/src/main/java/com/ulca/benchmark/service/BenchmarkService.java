@@ -3,24 +3,31 @@ package com.ulca.benchmark.service;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
+import com.ulca.benchmark.exception.BenchmarkNotFoundException;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
-
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSearchResponse;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkResponse;
+import com.ulca.benchmark.util.Utility;
+import com.ulca.model.dao.ModelDao;
+import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.exception.ModelNotFoundException;
+import com.ulca.model.response.BmProcessListByProcessIdResponse;
 
 import io.swagger.model.Benchmark;
 import io.swagger.model.ModelTask;
@@ -39,6 +46,10 @@ public class BenchmarkService {
 
 	@Autowired
 	BenchmarkDao benchmarkDao;
+	
+	@Autowired
+	ModelDao modelDao;
+	
 
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
@@ -49,18 +60,32 @@ public class BenchmarkService {
 		return benchmark;
 	}
 
+	@Transactional
 	public ExecuteBenchmarkResponse executeBenchmark(ExecuteBenchmarkRequest request) {
 
 		log.info("******** Entry BenchmarkService:: executeBenchmark *******");
 
-		UUID uuid = UUID.randomUUID();
+		String serviceRequestNumber = Utility.getBenchmarkExecuteReferenceNumber();
 		String modelId = request.getModelId();
+		Optional<ModelExtended> model = modelDao.findById(modelId);
+		System.out.println(model);
+		if(model.isEmpty()) {
+			throw new ModelNotFoundException("Model with not modelId : " + modelId + " not available ");
+		}
 
 		for (BenchmarkMetricRequest bm : request.getBenchmarks()) {
 			Benchmark benchmark = benchmarkDao.findByBenchmarkId(bm.getBenchmarkId());
+			if(benchmark == null ) {
+				throw new BenchmarkNotFoundException("Benchmark : " + bm.getBenchmarkId() + " not found ");
+			}
+			List<BenchmarkProcess> isExistBmProcess = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetIdAndMetric(modelId,bm.getBenchmarkId(),bm.getMetric());
+			if(isExistBmProcess != null && isExistBmProcess.size()>0 ) {
+				String message = "Benchmark has already been executed for benchmarkId : " + bm.getBenchmarkId() + " and metric : " + bm.getMetric();
+				throw new BenchmarkNotAllowedException(message);
+			}
 			BenchmarkProcess bmProcess = new BenchmarkProcess();
 			bmProcess.setBenchmarkDatasetId(bm.getBenchmarkId());
-			bmProcess.setBenchmarkProcessId(uuid.toString());
+			bmProcess.setBenchmarkProcessId(serviceRequestNumber);
 			bmProcess.setMetric(bm.getMetric());
 			bmProcess.setBenchmarkDatasetName(benchmark.getName());
 			bmProcess.setModelId(modelId);
@@ -71,12 +96,12 @@ public class BenchmarkService {
 
 		}
 
-		BmDatasetDownload bmDsDownload = new BmDatasetDownload(uuid.toString());
+		BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
 
 		benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
 
 		ExecuteBenchmarkResponse response = new ExecuteBenchmarkResponse();
-		response.setBenchmarkProcessId(uuid.toString());
+		response.setBenchmarkProcessId(serviceRequestNumber);
 
 		log.info("******** Exit BenchmarkService:: executeBenchmark *******");
 
@@ -133,6 +158,17 @@ public class BenchmarkService {
 		}
 
 		return null;
+	}
+	
+	public BmProcessListByProcessIdResponse processStatus(String benchmarkProcessId ){
+		
+		List<BenchmarkProcess> list =  benchmarkprocessDao.findByBenchmarkProcessId(benchmarkProcessId);
+		
+		BmProcessListByProcessIdResponse response = new BmProcessListByProcessIdResponse("Benchmark Process list", list, list.size());
+		
+		return response;
+		
+		
 	}
 
 }
