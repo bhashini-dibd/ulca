@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,6 +43,8 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelLeaderboardFiltersMetricResponse;
+import com.ulca.model.response.ModelLeaderboardFiltersResponse;
 import com.ulca.model.response.ModelLeaderboardResponse;
 import com.ulca.model.response.ModelLeaderboardResponseDto;
 import com.ulca.model.response.ModelListByUserIdResponse;
@@ -67,12 +70,12 @@ public class ModelService {
 
 	@Autowired
 	ModelDao modelDao;
-	
+
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
-	
+
 	@Autowired
-    private MongoTemplate mongoTemplate;
+	private MongoTemplate mongoTemplate;
 
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
@@ -100,17 +103,17 @@ public class ModelService {
 		} else {
 			list = modelDao.findByUserId(userId);
 		}
-		
+
 		List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
-		for(ModelExtended model : list) {
+		for (ModelExtended model : list) {
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			modelDtoList.add(modelDto);
-			
+
 		}
-		
+
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
 	}
 
@@ -191,7 +194,7 @@ public class ModelService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return modelObj;
 	}
 
@@ -239,42 +242,77 @@ public class ModelService {
 
 		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
 	}
-	
+
 	public ModelLeaderboardResponse searchLeaderboard(ModelLeaderboardRequest request) {
 
 		ModelLeaderboardResponse response = new ModelLeaderboardResponse();
 		List<ModelLeaderboardResponseDto> dtoList = new ArrayList<ModelLeaderboardResponseDto>();
-		ModelLeaderboardResponseDto dto= new ModelLeaderboardResponseDto();
-		LookupOperation lookup = LookupOperation.newLookup()
-                .from("benchmarkprocess")
-                .localField("modelId")
-                .foreignField("modelId")
-                .as("join_benchmarkprocess");
+		ModelLeaderboardResponseDto dto = new ModelLeaderboardResponseDto();
+		LookupOperation lookup = LookupOperation.newLookup().from("benchmarkprocess").localField("modelId")
+				.foreignField("modelId").as("join_benchmarkprocess");
 		Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.match(Criteria.where("modelId").is(dto.getModelId())),
-                lookup,Aggregation.match(Criteria.where("join_benchmarkprocess.modelId").is(dto.getModelId())),Aggregation.skip(10) , Aggregation.limit(10));
-       
-		dtoList= mongoTemplate.aggregate(aggregation, BenchmarkProcess.class, ModelLeaderboardResponseDto.class).getMappedResults();
-		
+				Aggregation.match(Criteria.where("modelId").is(dto.getModelId())), lookup,
+				Aggregation.match(Criteria.where("join_benchmarkprocess.modelId").is(dto.getModelId())),
+				Aggregation.skip(10), Aggregation.limit(10));
+
+		dtoList = mongoTemplate.aggregate(aggregation, BenchmarkProcess.class, ModelLeaderboardResponseDto.class)
+				.getMappedResults();
+
 		// join the benchmarkprocess and model collection and fetch the result
-		// iterate result and create object of ModelLeaderboardResponseDto with respective values
+		// iterate result and create object of ModelLeaderboardResponseDto with
+		// respective values
 		// add the dto objectto dtoList
 
- 	for(ModelLeaderboardResponseDto mdto: dtoList) {
-			
-			mdto.setLanguages(mdto.getSourceLanguage());
+		for (ModelLeaderboardResponseDto mdto : dtoList) {
+
+			// mdto.setLanguages(mdto.getSourceLanguage());
 			mdto.setMetric(mdto.getMetric());
 			mdto.setModelName(mdto.getModelName());
 			mdto.setBenchmarkDatase(mdto.getBenchmarkDatase());
-			
+
 		}
 
-		response.setData(dtoList);		
+		response.setData(dtoList);
 		response.setCount(dtoList.size());
 		response.setMessage("Model Leader Board results");
-		
+
 		return (ModelLeaderboardResponse) response;
 	}
-	
+
+	public ModelLeaderboardFiltersResponse leaderBoardFilters() {
+
+		log.info("******** Entry ModelService:: leaderBoardFilters *******");
+
+		ModelLeaderboardFiltersResponse response = new ModelLeaderboardFiltersResponse();
+
+		ModelTask.TypeEnum[] list = ModelTask.TypeEnum.values();
+		for (ModelTask.TypeEnum type : list) {
+			log.info(type.toString());
+		}
+
+		ModelLeaderboardFiltersMetricResponse metric = new ModelLeaderboardFiltersMetricResponse();
+		String[] translation = { "bleu", "sacrebleu", "meteor", "lepor" };
+		metric.setTranslation(Arrays.asList(translation));
+		String[] asr = { "wer", "cer" };
+		metric.setAsr(Arrays.asList(asr));
+
+		String[] documentLayoutBenchmarkMetric = { "precision", "recall", "h1-mean" };
+		metric.setDocumentLayout(Arrays.asList(documentLayoutBenchmarkMetric));
+
+		String[] ocr = { "wer", "cer" };
+		metric.setOcr(Arrays.asList(ocr));
+
+		String[] tts = { "wer", "cer" };
+		metric.setTts(Arrays.asList(tts));
+
+		response.setMetric(metric);
+		response.setSourceLanguage(LanguagePair.SourceLanguageEnum.values());
+		response.setTargetLanguage(LanguagePair.TargetLanguageEnum.values());
+
+		response.setTask(list);
+
+		return response;
+
+	}
 
 }

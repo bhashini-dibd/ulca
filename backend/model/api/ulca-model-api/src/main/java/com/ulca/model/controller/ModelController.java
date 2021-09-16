@@ -23,6 +23,7 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelLeaderboardFiltersResponse;
 import com.ulca.model.response.ModelLeaderboardResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelSearchResponse;
@@ -95,6 +96,13 @@ public class ModelController {
 		return modelService.searchLeaderboard(request);
 	}
 	
+	
+	@GetMapping("/leaderboard/filters")
+	public ModelLeaderboardFiltersResponse leaderBoardFilters() {
+
+		log.info("******** Entry ModelController:: leaderBoardFilters *******");
+		return modelService.leaderBoardFilters();
+	}
 	
 	
 }
