@@ -3,8 +3,6 @@ import {
   Typography,
   Button,
   TextField,
-  Checkbox,
-  FormControlLabel,
   Menu,
   MenuItem,
 } from "@material-ui/core";
@@ -15,7 +13,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import MultiAutocomplete from "../../../components/common/Autocomplete";
 import { Language, FilterBy } from "../../../../configs/DatasetItems";
 import { ModelTask } from "../../../../configs/DatasetItems";
 import SearchModel from "../../../../redux/actions/api/Model/ModelSearch/SearchModel";
@@ -109,19 +106,14 @@ const Benchmark = (props) => {
 
   const handleDatasetClick = (property) => {
     clearfilter();
-    setDatasetType({ [property]: true });
+    setDatasetType(property);
     setSrcError(false);
     setTgtError(false);
   };
-  const getLabel = () => {
-    if (datasetType["translation"]) return "Target Language *";
-    else return "Language";
-  };
+  
 
   const getTitle = () => {
-    if (datasetType["translation"]) return "Select Language Pair";
-    // else if (datasetType['ocr-corpus'])
-    //     return "Select Script"
+    if (datasetType === "translation") return "Select Language Pair";
     else return "Select Language";
   };
   const clearfilter = () => {
@@ -226,15 +218,15 @@ const Benchmark = (props) => {
     let labels = Language.map((lang) => lang.label);
     return (
       <Autocomplete
-        value={languagePair.source ? languagePair.source : null}
-        id="source"
+        value={languagePair[id] ? languagePair[id] : null}
+        id={id}
         options={labels}
-        onChange={(event, data) => handleLanguagePairChange(data, "source")}
+        onChange={(event, data) => handleLanguagePairChange(data, id)}
         renderInput={(params) => (
           <TextField
             fullWidth
             {...params}
-            label="Source Language *"
+            label={label}
             variant="standard"
             error={srcError}
             helperText={srcError && "This field is mandatory"}
@@ -319,22 +311,15 @@ const Benchmark = (props) => {
                 <div className={classes.subHeader}>
                   {datasetType === "translation" &&
                     renderTexfield(
-                      "select-source-language",
+                      "source",
                       "Source Language *"
                     )}
                 </div>
                 <div className={classes.autoComplete}>
-                  <MultiAutocomplete
-                    single={true}
-                    id="language-target"
-                    options={getTargetLang()}
-                    filter="target"
-                    value={languagePair.target}
-                    handleOnChange={handleLanguagePairChange}
-                    label={getLabel()}
-                    error={tgtError}
-                    helperText="This field is mandatory"
-                  />
+                  {renderTexfield(
+                    "target",
+                    datasetType === "translation"?"Target Language *":"Language *"
+                  )}
                 </div>
                 <Typography className={classes.subHeader} variant="body1">
                   Filter by
@@ -354,38 +339,6 @@ const Benchmark = (props) => {
                       "Metric",
                       filterBy.domain,
                       FilterBy.domain
-                    )}
-                  </Grid>
-                  <Grid
-                    className={classes.subHeader}
-                    item
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={12}
-                    xl={12}
-                  >
-                    {renderFilterByfield(
-                      "domain",
-                      "Domain",
-                      filterBy.domain,
-                      FilterBy.domain
-                    )}
-                  </Grid>
-                  <Grid
-                    className={classes.subHeader}
-                    item
-                    xs={12}
-                    sm={12}
-                    md={12}
-                    lg={12}
-                    xl={12}
-                  >
-                    {renderFilterByfield(
-                      "collectionMethod",
-                      "Submitter",
-                      filterBy.collectionMethod,
-                      FilterBy.collectionMethod
                     )}
                   </Grid>
                 </Grid>

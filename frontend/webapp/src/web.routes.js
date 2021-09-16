@@ -237,16 +237,16 @@ export default function App() {
             index={2}
           />
 
-          <PrivateRoute
+          {/* <Route
             path={`${process.env.PUBLIC_URL}/model/leaderboard`}
-            userRoles={[""]}
-            component={Leaderboard}
-            authenticate={authenticateUser}
-            currentMenu="leaderboard"
-            dontShowHeader={false}
-            type = {"models"}
+            render={(props) =>
+            <PublicLayout type = {"models"}
             index={2}
-          />
+            component={Leaderboard} />
+            }
+            
+
+          /> */}
 
           {/* <Route
             path={`${process.env.PUBLIC_URL}/user/reset-password/:email/:userId/:time`}
