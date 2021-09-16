@@ -101,14 +101,6 @@ public class ModelController {
 		return modelService.searchLeaderboard(request);
 	}
 	
-	/*
-	@GetMapping("/leaderboard/filters1")
-	public ModelLeaderboardFiltersResponse leaderBoardFilters1() {
-
-		log.info("******** Entry ModelController:: leaderBoardFilters *******");
-		return modelService.leaderBoardFilters_bkp();
-	}
-	*/
 	
 	@GetMapping("/leaderboard/filters")
 	public ResponseEntity<Object>   leaderBoardFilters() throws IOException {
