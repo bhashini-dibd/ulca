@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -248,8 +249,10 @@ public class ModelService {
 		ModelLeaderboardResponse response = new ModelLeaderboardResponse();
 		List<ModelLeaderboardResponseDto> dtoList = new ArrayList<ModelLeaderboardResponseDto>();
 		ModelLeaderboardResponseDto dto = new ModelLeaderboardResponseDto();
+		
 		LookupOperation lookup = LookupOperation.newLookup().from("benchmarkprocess").localField("modelId")
 				.foreignField("modelId").as("join_benchmarkprocess");
+		
 		Aggregation aggregation = Aggregation.newAggregation(
 				Aggregation.match(Criteria.where("modelId").is(dto.getModelId())), lookup,
 				Aggregation.match(Criteria.where("join_benchmarkprocess.modelId").is(dto.getModelId())),
@@ -265,7 +268,7 @@ public class ModelService {
 
 		for (ModelLeaderboardResponseDto mdto : dtoList) {
 
-			// mdto.setLanguages(mdto.getSourceLanguage());
+			//mdto.setLanguages(mdto.getSourceLanguage());
 			mdto.setMetric(mdto.getMetric());
 			mdto.setModelName(mdto.getModelName());
 			mdto.setBenchmarkDatase(mdto.getBenchmarkDatase());
@@ -279,7 +282,7 @@ public class ModelService {
 		return (ModelLeaderboardResponse) response;
 	}
 
-	public ModelLeaderboardFiltersResponse leaderBoardFilters() {
+	public ModelLeaderboardFiltersResponse leaderBoardFilters_bkp() {
 
 		log.info("******** Entry ModelService:: leaderBoardFilters *******");
 
@@ -314,5 +317,22 @@ public class ModelService {
 		return response;
 
 	}
+	
+	public Object leaderBoardFilters() throws IOException {
+
+		log.info("******** Entry ModelService:: leaderBoardFilters *******");
+
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		File file = new File("modelFilter.json");
+		Object  testObj = objectMapper.readValue(file, Object.class);
+		
+		
+		
+		return testObj;
+		
+	}
+	
+	
 
 }

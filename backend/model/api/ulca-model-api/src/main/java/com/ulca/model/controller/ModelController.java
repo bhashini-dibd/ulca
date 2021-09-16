@@ -1,12 +1,16 @@
 package com.ulca.model.controller;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +26,7 @@ import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
+import com.ulca.model.response.BmProcessListByProcessIdResponse;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelLeaderboardFiltersResponse;
 import com.ulca.model.response.ModelLeaderboardResponse;
@@ -96,13 +101,21 @@ public class ModelController {
 		return modelService.searchLeaderboard(request);
 	}
 	
-	
-	@GetMapping("/leaderboard/filters")
-	public ModelLeaderboardFiltersResponse leaderBoardFilters() {
+	/*
+	@GetMapping("/leaderboard/filters1")
+	public ModelLeaderboardFiltersResponse leaderBoardFilters1() {
 
 		log.info("******** Entry ModelController:: leaderBoardFilters *******");
-		return modelService.leaderBoardFilters();
+		return modelService.leaderBoardFilters_bkp();
 	}
+	*/
 	
+	@GetMapping("/leaderboard/filters")
+	public ResponseEntity<Object>   leaderBoardFilters() throws IOException {
+
+		log.info("******** Entry ModelController:: leaderBoardFilters *******");
+		
+		return new ResponseEntity<>(modelService.leaderBoardFilters(), HttpStatus.OK); 
+	}
 	
 }
