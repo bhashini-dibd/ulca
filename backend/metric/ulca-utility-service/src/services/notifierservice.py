@@ -119,7 +119,6 @@ class NotifierService:
                 if data == "asr-unlabeled-corpus":
                     mongo_count =   asr_unlabeled_count
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
-                print(request,"**************")
                 utility     =   datautils.DataUtils()
                 druid_count =   utility.get_statistics_from_metrics_service(request)
                 print(druid_count)
