@@ -29,6 +29,7 @@ import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,6 +75,9 @@ public class ModelService {
 
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
+	
+	@Autowired
+	BenchmarkDao benchmarkDao;
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -324,7 +328,10 @@ public class ModelService {
 
 		
 		ObjectMapper objectMapper = new ObjectMapper();
-		File file = new File("modelFilter.json");
+		
+		File file = ResourceUtils.getFile("classpath:modelFilter.json");
+		
+		//File file = new File("modelFilter.json");
 		Object  testObj = objectMapper.readValue(file, Object.class);
 		
 		
