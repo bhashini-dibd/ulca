@@ -334,85 +334,53 @@ public class ModelService {
 	public Object leaderBoardFilters() throws IOException {
 
 		log.info("******** Entry ModelService:: leaderBoardFilters *******");
-
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		
 		String commonFilterUrl = "https://raw.githubusercontent.com/ULCA-IN/ulca/model_api/master-data/dev/modelFilter.json";
 		String commonFilterData = builder.build().get().uri(commonFilterUrl).retrieve().bodyToMono(String.class).block();
 		
-		System.out.println(commonFilterData);
-		
-		//File file = ResourceUtils.getFile("classpath:modelFilter.json");
-		
-		//File file = new File("modelFilter.json");
-		//Object  commonFilterObj = objectMapper.readValue(file, Object.class);
-		
-		//String commonFilterData = objectMapper.writeValueAsString(commonFilterObj);
 		JSONObject filters =  new JSONObject(commonFilterData);
-		
 		
 		JSONObject benchmarkDataset = new JSONObject();
 		ModelTask task = new ModelTask();
 		task.setType(ModelTask.TypeEnum.TRANSLATION);
 		List<Benchmark>  trans = benchmarkDao.findByTask(task);
-		
 		String transData = objectMapper.writeValueAsString(trans);
-		System.out.println(transData);
 		JSONArray transJson =  new JSONArray(transData);
-		
 		benchmarkDataset.put("translation", transJson);
 		
 		task = new ModelTask();
 		task.setType(ModelTask.TypeEnum.ASR);
 		List<Benchmark>  asr = benchmarkDao.findByTask(task);
-		
-		String asrData = objectMapper.writeValueAsString(trans);
+		String asrData = objectMapper.writeValueAsString(asr);
 		JSONArray asrJson =  new JSONArray(asrData);
-		
 		benchmarkDataset.put("asr", asrJson);
 		
 		task = new ModelTask();
 		task.setType(ModelTask.TypeEnum.OCR);
 		List<Benchmark>  ocr = benchmarkDao.findByTask(task);
-		
-		String ocrData = objectMapper.writeValueAsString(trans);
+		String ocrData = objectMapper.writeValueAsString(ocr);
 		JSONArray ocrJson =  new JSONArray(ocrData);
-		
 		benchmarkDataset.put("ocr", ocrJson);
 		
 		task = new ModelTask();
 		task.setType(ModelTask.TypeEnum.TTS);
 		List<Benchmark>  tts = benchmarkDao.findByTask(task);
-		
-		String ttsData = objectMapper.writeValueAsString(trans);
+		String ttsData = objectMapper.writeValueAsString(tts);
 		JSONArray ttsJson =  new JSONArray(ttsData);
-		
 		benchmarkDataset.put("tts", ttsJson);
 		
 		task = new ModelTask();
         task.setType(ModelTask.TypeEnum.DOCUMENT_LAYOUT);
 		List<Benchmark>  document = benchmarkDao.findByTask(task);
-		
-		String documentData = objectMapper.writeValueAsString(trans);
+		String documentData = objectMapper.writeValueAsString(document);
 		JSONArray documentJson =  new JSONArray(documentData);
-		
 		benchmarkDataset.put("document", documentJson);
 		
 		filters.put("benchmarkDataset", benchmarkDataset);
 		
 		Object  filterObj = objectMapper.readValue(filters.toString(), Object.class);
-		
-		/*
-		String responseStr = builder.build().post().uri(callBackUrl)
-				.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
-		*/
-		//String url = "https://github.com/ULCA-IN/ulca/blob/master/master-data/dev/datasetFilterParams.json";
-		
-		//String url = "https://raw.githubusercontent.com/ULCA-IN/ulca/master/master-data/dev/filterClassification.json";
-		
-		
-		//String responseStr = builder.build().get().uri(url).retrieve().bodyToMono(String.class).block();
 		
 		
 		return filterObj;
