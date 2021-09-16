@@ -317,7 +317,7 @@ class ParallelService:
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
+                tags.extend(query["datasetId"])
                 db_query["derived"] = False
             if tags:
                 db_query["tags"] = tags

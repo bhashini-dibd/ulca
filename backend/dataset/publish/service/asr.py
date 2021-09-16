@@ -165,19 +165,19 @@ class ASRService:
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'channel' in query.keys():
-                tags.append(query["channel"])
+                tags.extend(query["channel"])
             if 'gender' in query.keys():
-                tags.append(query["gender"])
+                tags.extend(query["gender"])
             if 'format' in query.keys():
-                tags.append(query["format"])
+                tags.extend(query["format"])
             if 'bitsPerSample' in query.keys():
-                tags.append(query["bitsPerSample"])
+                tags.extend(query["bitsPerSample"])
             if 'dialect' in query.keys():
-                tags.append(query["dialect"])
+                tags.extend(query["dialect"])
             if 'snrTool' in query.keys():
-                tags.append(query["snrTool"])
+                tags.extend(query["snrTool"])
             if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
+                tags.extend(query["datasetId"])
             if 'collectionSource' in query.keys():
                 db_query["collectionSource"] = {"$in": [f"/{query['collectionSource']}/i"]}
             if 'submitterName' in query.keys():

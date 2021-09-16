@@ -143,7 +143,7 @@ class MonolingualService:
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
+                tags.extend(query["datasetId"])
             if 'collectionSource' in query.keys():
                 db_query["collectionSource"] = {"$in": [f"/{query['collectionSource']}/i"]}
             if 'submitterName' in query.keys():
