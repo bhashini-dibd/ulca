@@ -16,6 +16,8 @@ import searchFilter from "./Model/ModelSearch/Benchmark";
 import searchModel from "./Model/ModelSearch/SearchModel";
 import getMenuInfo from "./Common/getMenuInfo";
 import getBenchMarkDetails from "./Model/ModelView/RunBenchmark";
+import SearchReadymadeDataset from "./DataSet/ReadymadeDataset/SearchReadymade";
+import searchReadymade from "./DataSet/ReadymadeDataset/Readymade";
 
 const index = {
   apiStatus,
@@ -33,9 +35,11 @@ const index = {
   modelTableView,
   modelStatus,
   searchModel,
+  SearchReadymadeDataset,
   searchFilter,
   getMenuInfo,
   getBenchMarkDetails,
+  searchReadymade
 };
 
 export default index;

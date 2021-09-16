@@ -23,7 +23,13 @@ export const menuItems = {
             name: 'Submit Dataset',
             url: '/dataset/upload',
             roles:["CONTRIBUTOR-USER"]
-        }],
+        },
+        // {
+        //     name: 'Readymade Dataset',
+        //     url: '/dataset/readymade-datasets',
+        //     roles:["CONTRIBUTOR-USER"]
+        // }
+    ],
 
     models: [
         {
@@ -36,6 +42,11 @@ export const menuItems = {
             url: '/model/explore-models',
             roles:["READONLY-USER","CONTRIBUTOR-USER"]
         },
+        // {
+        //     name: 'Model Leaderboard',
+        //     url: '/model/leaderboard',
+        //     roles:["CONTRIBUTOR-USER"]
+        // },
         {
             name: 'Submit Model',
             url: '/model/upload',

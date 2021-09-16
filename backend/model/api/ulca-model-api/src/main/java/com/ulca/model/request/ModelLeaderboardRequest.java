@@ -1,6 +1,5 @@
-package com.ulca.benchmark.request;
+package com.ulca.model.request;
 
-import io.swagger.model.Domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -12,11 +11,13 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BenchmarkSearchRequest {
-	
-  // private String task ;
-  // private Domain domain ;
-   private String modelId;
-   
 
+public class ModelLeaderboardRequest {
+
+	String task;
+	String sourceLanguage;
+	String targetLanguage;
+	String metric;
+	String domain;
+	
 }

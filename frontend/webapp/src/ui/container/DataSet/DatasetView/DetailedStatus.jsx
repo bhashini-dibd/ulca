@@ -68,10 +68,12 @@ const DetailedStatus = (props) => {
         const fetchHeaderButton = () => {
                 return (
                         <div className={classes.headerButtons}>
-                                <Typography variant="h5" >{name}</Typography>
-                                {<Button color={"primary"} size="medium" className={classes.ButtonRefresh} variant="outlined" disabled={(status.toLowerCase() === "in-progress" || status.toLowerCase() === "pending") ? false : true} onClick={() => DetailedDataSetStatusApi()}><Cached className={classes.iconStyle} />Refresh</Button>}
-                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.hasOwnProperty("file")) ? false : true} className={!(errorData.status !== "completed") ? classes.ButtonRefresh : classes.buttonStyle} onClick={() => handleDownload()}><SaveAlt className={classes.iconStyle} />Error Logs</Button>
-
+                                <Typography  variant="h5" >{name}</Typography>
+                                { <Button color={"primary" } size="medium" className = {classes.ButtonRefresh} variant="outlined" disabled={(status.toLowerCase()==="in-progress" || status.toLowerCase()==="pending")? false:true}   onClick={() => DetailedDataSetStatusApi()}><Cached className ={classes.iconStyle}/>Refresh</Button>}
+                                <Button color={"primary"} href={errorData.consolidated_file} target="_self" size="medium" variant="outlined" disabled={(errorData.hasOwnProperty("consolidated_file"))? false:true} className={!(errorData.status!=="completed")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Error Summary</Button>
+                               
+                                <Button color={"primary"} href={errorData.file} target="_self" size="medium" variant="outlined" disabled={(errorData.hasOwnProperty("file"))? false:true} className={!(errorData.status!=="completed")? classes.ButtonRefresh : classes.buttonStyle } onClick={() => handleDownload()}><SaveAlt className ={classes.iconStyle}/>Detailed Error Logs</Button>
+                        
                         </div>
                 );
         }
