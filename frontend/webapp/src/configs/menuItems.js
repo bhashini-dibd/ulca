@@ -23,7 +23,13 @@ export const menuItems = {
             name: 'Submit Dataset',
             url: '/dataset/upload',
             roles:["CONTRIBUTOR-USER"]
-        }],
+        },
+        // {
+        //     name: 'Readymade Dataset',
+        //     url: '/dataset/readymade-datasets',
+        //     roles:["CONTRIBUTOR-USER"]
+        // }
+    ],
 
     models: [
         {
