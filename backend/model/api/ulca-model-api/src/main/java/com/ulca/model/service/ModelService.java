@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -54,6 +56,7 @@ import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.UploadModelResponse;
 
+import io.swagger.model.Benchmark;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
@@ -62,7 +65,9 @@ import io.swagger.model.LanguagePairs;
 import io.swagger.model.ModelTask;
 import io.swagger.model.ModelTask.TypeEnum;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
+import io.swagger.model.TranslationRequest;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -87,6 +92,10 @@ public class ModelService {
 
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
+	
+	@Autowired
+	WebClient.Builder builder;
+	
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -329,14 +338,84 @@ public class ModelService {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		
-		File file = ResourceUtils.getFile("classpath:modelFilter.json");
+		String commonFilterUrl = "https://raw.githubusercontent.com/ULCA-IN/ulca/model_api/master-data/dev/modelFilter.json";
+		String commonFilterData = builder.build().get().uri(commonFilterUrl).retrieve().bodyToMono(String.class).block();
+		
+		System.out.println(commonFilterData);
+		
+		//File file = ResourceUtils.getFile("classpath:modelFilter.json");
 		
 		//File file = new File("modelFilter.json");
-		Object  testObj = objectMapper.readValue(file, Object.class);
+		//Object  commonFilterObj = objectMapper.readValue(file, Object.class);
+		
+		//String commonFilterData = objectMapper.writeValueAsString(commonFilterObj);
+		JSONObject filters =  new JSONObject(commonFilterData);
 		
 		
+		JSONObject benchmarkDataset = new JSONObject();
+		ModelTask task = new ModelTask();
+		task.setType(ModelTask.TypeEnum.TRANSLATION);
+		List<Benchmark>  trans = benchmarkDao.findByTask(task);
 		
-		return testObj;
+		String transData = objectMapper.writeValueAsString(trans);
+		System.out.println(transData);
+		JSONArray transJson =  new JSONArray(transData);
+		
+		benchmarkDataset.put("translation", transJson);
+		
+		task = new ModelTask();
+		task.setType(ModelTask.TypeEnum.ASR);
+		List<Benchmark>  asr = benchmarkDao.findByTask(task);
+		
+		String asrData = objectMapper.writeValueAsString(trans);
+		JSONArray asrJson =  new JSONArray(asrData);
+		
+		benchmarkDataset.put("asr", asrJson);
+		
+		task = new ModelTask();
+		task.setType(ModelTask.TypeEnum.OCR);
+		List<Benchmark>  ocr = benchmarkDao.findByTask(task);
+		
+		String ocrData = objectMapper.writeValueAsString(trans);
+		JSONArray ocrJson =  new JSONArray(ocrData);
+		
+		benchmarkDataset.put("ocr", ocrJson);
+		
+		task = new ModelTask();
+		task.setType(ModelTask.TypeEnum.TTS);
+		List<Benchmark>  tts = benchmarkDao.findByTask(task);
+		
+		String ttsData = objectMapper.writeValueAsString(trans);
+		JSONArray ttsJson =  new JSONArray(ttsData);
+		
+		benchmarkDataset.put("tts", ttsJson);
+		
+		task = new ModelTask();
+        task.setType(ModelTask.TypeEnum.DOCUMENT_LAYOUT);
+		List<Benchmark>  document = benchmarkDao.findByTask(task);
+		
+		String documentData = objectMapper.writeValueAsString(trans);
+		JSONArray documentJson =  new JSONArray(documentData);
+		
+		benchmarkDataset.put("document", documentJson);
+		
+		filters.put("benchmarkDataset", benchmarkDataset);
+		
+		Object  filterObj = objectMapper.readValue(filters.toString(), Object.class);
+		
+		/*
+		String responseStr = builder.build().post().uri(callBackUrl)
+				.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
+		*/
+		//String url = "https://github.com/ULCA-IN/ulca/blob/master/master-data/dev/datasetFilterParams.json";
+		
+		//String url = "https://raw.githubusercontent.com/ULCA-IN/ulca/master/master-data/dev/filterClassification.json";
+		
+		
+		//String responseStr = builder.build().get().uri(url).retrieve().bodyToMono(String.class).block();
+		
+		
+		return filterObj;
 		
 	}
 	
