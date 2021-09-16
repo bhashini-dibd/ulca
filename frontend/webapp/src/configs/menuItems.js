@@ -36,6 +36,11 @@ export const menuItems = {
             url: '/model/explore-models',
             roles:["READONLY-USER","CONTRIBUTOR-USER"]
         },
+        // {
+        //     name: 'Model Leaderboard',
+        //     url: '/model/leaderboard',
+        //     roles:["CONTRIBUTOR-USER"]
+        // },
         {
             name: 'Submit Model',
             url: '/model/upload',

@@ -36,7 +36,7 @@ export default class RunBenchmark extends API {
 
   getBody() {
     return {
-      task: this.task,
+      task: this.task.toLowerCase(),
       domain: this.domain,
       modelId: this.modelId,
     };
