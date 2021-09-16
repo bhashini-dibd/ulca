@@ -1,7 +1,7 @@
 package com.ulca.model.response;
 
 import java.util.List;
-import com.ulca.model.request.ModelLeaderboardRequest;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

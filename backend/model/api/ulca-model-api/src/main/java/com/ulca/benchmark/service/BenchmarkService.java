@@ -1,7 +1,6 @@
 package com.ulca.benchmark.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,8 +32,6 @@ import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
 
 import io.swagger.model.Benchmark;
-import io.swagger.model.ModelTask;
-import io.swagger.model.ModelTask.TypeEnum;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -148,28 +145,6 @@ public class BenchmarkService {
 		return response;
 	}
 
-	private List<String> getMetric(String task) {
-
-		String[] metric = null;
-		if (task.equalsIgnoreCase("translation")) {
-			metric = new String[] { "bleu" };
-			return Arrays.asList(metric);
-		}
-		if (task.equalsIgnoreCase("asr")) {
-			metric = new String[] { "wer" };
-			return Arrays.asList(metric);
-		}
-		if (task.equalsIgnoreCase("document-layout")) {
-			metric = new String[] { "precision", "recall", "h1-mean" };
-			return Arrays.asList(metric);
-		}
-		if (task.equalsIgnoreCase("ocr")) {
-			metric = new String[] { "wer", "cer" };
-			return Arrays.asList(metric);
-		}
-
-		return null;
-	}
 	
 	public BmProcessListByProcessIdResponse processStatus(String benchmarkProcessId ){
 		

@@ -30,7 +30,6 @@ import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -65,9 +64,7 @@ import io.swagger.model.LanguagePairs;
 import io.swagger.model.ModelTask;
 import io.swagger.model.ModelTask.TypeEnum;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
-import io.swagger.model.TranslationRequest;
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service

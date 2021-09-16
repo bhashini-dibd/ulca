@@ -3,11 +3,9 @@ package com.ulca.model.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 import javax.validation.Valid;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -26,18 +23,13 @@ import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
-import com.ulca.model.response.BmProcessListByProcessIdResponse;
 import com.ulca.model.response.ModelComputeResponse;
-import com.ulca.model.response.ModelLeaderboardFiltersResponse;
 import com.ulca.model.response.ModelLeaderboardResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.UploadModelResponse;
-import com.ulca.model.service.ModelInferenceEndPointService;
 import com.ulca.model.service.ModelService;
 
-import io.swagger.model.Model;
-import io.swagger.model.TranslationResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
