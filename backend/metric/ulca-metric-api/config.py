@@ -27,6 +27,11 @@ metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',86400
 if isinstance(metric_cron_interval_sec, str):
     metric_cron_interval_sec  =  eval(metric_cron_interval_sec)
 
+mismatch_cron_interval_sec     =   os.environ.get('MISMTACH_IDENTIFIER_CRON_INTERVAL_SEC',30)#14400
+if isinstance(mismatch_cron_interval_sec, str):
+    mismatch_cron_interval_sec  =  eval(mismatch_cron_interval_sec)
+
+
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 data_db_schema              =   os.environ.get('DATA_PARALLEL', 'ulca')
 data_parallel               =   os.environ.get('DATA_SCHEMA', 'parallel-dataset')
@@ -37,4 +42,5 @@ data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabe
 
 
 email_service_url           =   os.environ.get('UTILITY_SERVICE_NOTIFY_COUNT_URL','http://utility-service:5001//ulca/apis/v1/send/mail')
+mismatch_email_service_url  =   os.environ.get('UTILITY_SERVICE_NOTIFY_MISMATCH_URL','http://utility-service:5001//ulca/apis/v1/notify/mismatch')
 config_file_link            =   os.environ.get('ULCA_FILTER_CONFIGS_FILE_LINK',f'https://ulca-datasets.s3.amazonaws.com/errors/datasetFilterParams.json')  
