@@ -363,6 +363,7 @@ const BenchmarkModal = (props) => {
         MUIDataTableHeadCell: {
           fixedHeader: {
             position: "initial",
+            width:'120px'
           },
         },
         MuiToolbar: {
