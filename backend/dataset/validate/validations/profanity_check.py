@@ -64,7 +64,7 @@ class ProfanityCheck(BaseValidator):
                         error_msg = 'Offensive text found similar to <' + offensive_txt + '>'
                         return {"message": error_msg, "code": "OFFENSIVE_TEXT_FOUND", "status": "FAILED"}
 
-            log.info('----sentence length check  -> Passed----')
+            log.info('---- Profanity check  -> Passed----')
             return super().execute(request)
         except Exception as e:
             log.exception(f"Exception while executing profanity check: {str(e)}")
