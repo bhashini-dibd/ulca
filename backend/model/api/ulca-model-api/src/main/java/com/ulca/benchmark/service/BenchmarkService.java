@@ -118,16 +118,11 @@ public class BenchmarkService {
 
 		BenchmarkSearchResponse response = null;
 		Benchmark benchmark = new Benchmark();
-		if (request.getTask() != null && !request.getTask().isBlank()) {
-			ModelTask modelTask = new ModelTask();
-			modelTask.setType(TypeEnum.fromValue(request.getTask()));
-			benchmark.setTask(modelTask);
-		}
-		if (request.getDomain() != null) {
-			benchmark.setDomain(request.getDomain());
-		}
+		
 		ModelExtended model= modelDao.findByModelId(request.getModelId());
 		benchmark.setLanguages(model.getLanguages());
+		benchmark.setTask(model.getTask());
+		
 		Example<Benchmark> example = Example.of(benchmark);
 		List<Benchmark> list = benchmarkDao.findAll(example);
 		List<BenchmarkDto> dtoList = new ArrayList<BenchmarkDto>();

@@ -14,8 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BenchmarkSearchRequest {
 	
-   private String task ;
-   private Domain domain ;
+  // private String task ;
+  // private Domain domain ;
    private String modelId;
    
 
