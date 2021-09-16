@@ -21,9 +21,9 @@ import authenticateUser from "./configs/authenticate";
 import MySearches from "./ui/container/DataSet/DatasetSeatch/MySearches";
 import SearchAndDownloadRecords from "./ui/container/DataSet/DatasetSeatch/SearchDownloadRecords";
 import ActivateUser from "./ui/container/UserManagement/ActivateUser";
-import ActiveUser from "./ui/container/UserManagement/ActiveUser";
-import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset.jsx/ReadymadeDataset";
-import PopUp from "./ui/container/DataSet/ReadymadeDataset.jsx/PopUp";
+import ActiveUser from "./ui/container/UserManagement/ActiveUser"
+import ReadymadeDataset from "./ui/container/DataSet/ReadymadeDataset/ReadymadeDataset";
+import PopUp from "./ui/container/DataSet/ReadymadeDataset/PopUp";
 import FilterList from "./ui/container/DataSet/DatasetView/FilterList";
 import Reset from "./ui/container/UserManagement/Reset";
 import Benchmark from "./ui/container/Model/ModelSearch/Benchmark";
@@ -98,8 +98,14 @@ export default function App() {
             index={1}
             component={ExploreModels} />
             }
-            
-
+          />
+           <Route
+            path={`${process.env.PUBLIC_URL}/dataset/readymade-datasets`}
+            render={(props) =>
+            <PublicLayout type = {"dataset"}
+            index={4}
+            component={ReadymadeDataset} />
+            }
           />
           <Route
             path={`${process.env.PUBLIC_URL}/search-model/:srno?/:model?`}

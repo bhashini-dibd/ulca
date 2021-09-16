@@ -14,6 +14,15 @@ export const DatasetItems = [
     { value: 'ocr-corpus', label: 'OCR Dataset' },
     { value: 'asr-unlabeled-corpus', label: 'ASR Unlabeled Dataset' }
 ];
+
+export const DatasetReadymade = [
+
+    { value: 'parallel-corpus', label: 'Parallel' },
+    { value: 'monolingual-corpus', label: 'Monolingual' },
+    { value: 'asr-corpus', label: 'ASR' },
+    { value: 'ocr-corpus', label: 'OCR' },
+    { value: 'asr-unlabeled-corpus', label: 'ASR Unlabeled' }
+];
 export const Language = [
     { value: 'as', label: 'Assamese' },
     { value: 'bn', label: 'Bengali' },
