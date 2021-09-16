@@ -13,7 +13,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscense",
+                "value": "license",
                 "label": "License"
             },
             {
@@ -21,28 +21,8 @@
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod",
+                "value": "collectionMethod.collectionDescription",
                 "label": "Collection Method"
-            },
-            {
-                "label": "Alignment Tool",
-                "value": "alignmentTool"
-            },
-            {
-                "label": "Alignment Score",
-                "value": "alignmentScore"
-            },
-            {
-                "label": "Editing Tool",
-                "value": "editingTool"
-            },
-            {
-                "label": "Translation Model",
-                "value": "translationModel"
-            },
-            {
-                "label": "Evaluation Method",
-                "value": "evaluationMethod"
             }
         ]
     },
@@ -60,7 +40,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscense",
+                "value": "license",
                 "label": "License"
             },
             {
@@ -68,7 +48,7 @@
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod",
+                "value": "collectionMethod.collectionDescription",
                 "label": "Collection Method"
             },
             {
@@ -82,14 +62,6 @@
             {
                 "value": "imageTextType",
                 "label": "Image Text Type"
-            },
-            {
-                "value": "collectionDescription",
-                "label": "Collection Description"
-            },
-            {
-                "value": "ocrTool",
-                "label": "OCR Tool"
             }
         ]
     },
@@ -107,7 +79,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscense",
+                "value": "license",
                 "label": "License"
             },
             {
@@ -115,7 +87,7 @@
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod",
+                "value": "collectionMethod.collectionDescription",
                 "label": "Collection Method"
             }
         ]
@@ -134,7 +106,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscence",
+                "value": "licence",
                 "label": "License"
             },
             {
@@ -176,14 +148,6 @@
             {
                 "value": "dialect",
                 "label": "Dialect"
-            },
-            {
-                "value": "snr.methodDetails.snrTool",
-                "label": "SNR Tool"
-            },
-            {
-                "value": "snrtoolres",
-                "label": "SNR Range"
             }
         ]
     },
@@ -201,7 +165,7 @@
         ],
         "advancedFilters": [
             {
-                "value": "liscense",
+                "value": "license",
                 "label": "License"
             },
             {
@@ -209,7 +173,7 @@
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod",
+                "value": "collectionMethod.collectionDescription",
                 "label": "Collection Method"
             },
             {
@@ -243,14 +207,6 @@
             {
                 "value": "dialect",
                 "label": "Dialect"
-            },
-            {
-                "value": "snr.methodDetails.snrTool",
-                "label": "SNR Tool"
-            },
-            {
-                "value": "snrtoolres",
-                "label": "SNR Range"
             }
         ]
     }

@@ -40,6 +40,9 @@ const BenchmarkModal = (props) => {
   const benchmarkInfo = useSelector(
     (state) => state.getBenchMarkDetails.benchmarkInfo
   );
+  const submitStatus = useSelector(
+    (state) => state.getBenchMarkDetails.submitStatus
+  );
   const selectedIndex = useSelector(
     (state) => state.getBenchMarkDetails.selectedIndex
   );
@@ -73,7 +76,7 @@ const BenchmarkModal = (props) => {
           style={{ float: "right", marginTop: "5px", borderRadius: "22px" }}
           variant="contained"
           onClick={props.makeSubmitAPICall}
-          disabled={benchmarkInfo.length ? false : true}
+          disabled={submitStatus}
         >
           Submit
         </Button>
@@ -360,6 +363,7 @@ const BenchmarkModal = (props) => {
         MUIDataTableHeadCell: {
           fixedHeader: {
             position: "initial",
+            width:'120px'
           },
         },
         MuiToolbar: {
