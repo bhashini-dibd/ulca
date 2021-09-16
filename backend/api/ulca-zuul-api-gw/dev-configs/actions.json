@@ -161,6 +161,14 @@
             "description":"API to compute models"
         },
         {
+            "id":"4d717fca-f82d-499d-9363-4fb8a90c5eef",
+            "uri":"/ulca/apis/v0/model/leaderboard/filters",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"API to fetch leaderboard filters"
+        },
+        {
             "id":"1bdbb278-3f7e-4680-b892-519294a07518",
             "uri":"/ulca/apis/v0/benchmark/submit",
             "module":"ULCA-API-MODEL",
