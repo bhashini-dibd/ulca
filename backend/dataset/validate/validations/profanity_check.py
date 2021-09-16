@@ -61,7 +61,7 @@ class ProfanityCheck(BaseValidator):
 
                     offensive_txt, similarity_perc = possible_match
                     if similarity_perc > 60:
-                        error_msg = 'Offensive text found similar to <' + offensive_txt + '>'
+                        error_msg = 'Offensive text found'
                         return {"message": error_msg, "code": "OFFENSIVE_TEXT_FOUND", "status": "FAILED"}
 
             log.info('---- Profanity check  -> Passed----')
