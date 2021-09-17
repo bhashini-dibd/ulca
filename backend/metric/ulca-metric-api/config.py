@@ -27,7 +27,7 @@ metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',86400
 if isinstance(metric_cron_interval_sec, str):
     metric_cron_interval_sec  =  eval(metric_cron_interval_sec)
 
-mismatch_cron_interval_sec     =   os.environ.get('MISMTACH_IDENTIFIER_CRON_INTERVAL_SEC',86400)#14400
+mismatch_cron_interval_sec     =   os.environ.get('MISMTACH_IDENTIFIER_CRON_INTERVAL_SEC',864000)#14400
 if isinstance(mismatch_cron_interval_sec, str):
     mismatch_cron_interval_sec  =  eval(mismatch_cron_interval_sec)
 
