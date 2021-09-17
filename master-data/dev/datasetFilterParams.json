@@ -299,6 +299,37 @@
                   "values": []
                 }
               ]
+            },
+            {
+              "value": "manual-aligned",
+              "label": "Manually Aligned",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.editingTool",
+                  "label": "Editing Tool",
+                  "type": "drop-down",
+                  "values": []
+                }
+              ]
+            },
+            {
+              "value": "mauall-translated",
+              "label": "Manually Translated",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.editingTool",
+                  "label": "Editing Tool",
+                  "type": "drop-down",
+                  "values": [
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "label": "Evaluation Method",
+                  "type": "drop-down",
+                  "values": []
+                }
+              ]
             }
           ]
         },
@@ -418,7 +449,51 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "cc-by-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "cc-by-sa-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "cc-by-nd-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "cc-by-nd-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "cc-by-nc-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "cc-by-nc-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "cc-by-nc-sa-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "mit"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "gpl-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "bsd-3-clause"
+            },
+            {
+              "value": "private-commercial",
+              "label": "private-commercial"
+            },
+            {
+              "value": "unknown-license",
+              "label": "unknown-license"
             }
           ]
         },
@@ -450,14 +525,122 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
-          "values": [
+           "values": [
+            {
+              "value": "pa",
+              "label": "Punjabi"
+            },
+            {
+              "value": "bn",
+              "label": "Bengali"
+            },
             {
               "value": "en",
-              "label": "En"
+              "label": "English"
+            },
+            {
+              "value": "ta",
+              "label": "Tamil"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
             },
             {
               "value": "hi",
-              "label": "Hi"
+              "label": "Hindi"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "kok",
+              "label": "Konkani"
+            },
+            {
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
             }
           ]
         },
@@ -467,12 +650,100 @@
           "type": "drop-down",
           "values": [
             {
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
+            },
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "government-press-release",
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
+            {
               "value": "legal",
               "label": "Legal"
             },
             {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
               "value": "news",
               "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
             }
           ]
         },
@@ -500,7 +771,51 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "cc-by-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "cc-by-sa-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "cc-by-nd-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "cc-by-nd-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "cc-by-nc-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "cc-by-nc-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "cc-by-nc-sa-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "mit"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "gpl-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "bsd-3-clause"
+            },
+            {
+              "value": "private-commercial",
+              "label": "private-commercial"
+            },
+            {
+              "value": "unknown-license",
+              "label": "unknown-license"
             }
           ]
         },
@@ -512,6 +827,14 @@
             {
               "value": "Project Anuvaad",
               "label": "Project Anuvaad"
+            },
+            {
+              "value": "Samanantar",
+              "label": "Samanantar"
+            },
+            {
+              "value": "ai4bharat",
+              "label": "Ai4Bharat"
             }
           ]
         }
@@ -524,10 +847,10 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
-          "values": [
+           "values": [
             {
-              "value": "as",
-              "label": "Assamese"
+              "value": "pa",
+              "label": "Punjabi"
             },
             {
               "value": "bn",
@@ -538,40 +861,108 @@
               "label": "English"
             },
             {
-              "value": "gu",
-              "label": "Gujarati"
-            },
-            {
-              "value": "hi",
-              "label": "Hindi"
+              "value": "ta",
+              "label": "Tamil"
             },
             {
               "value": "ml",
               "label": "Malayalam"
             },
             {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
               "value": "mr",
               "label": "Marathi"
             },
             {
-              "value": "ne",
-              "label": "Nepali"
+              "value": "gu",
+              "label": "Gujarati"
             },
             {
               "value": "or",
               "label": "Odia"
             },
             {
-              "value": "pa",
-              "label": "Punjabi"
+              "value": "as",
+              "label": "Assamese"
             },
             {
-              "value": "ta",
-              "label": "Tamil"
+              "value": "kok",
+              "label": "Konkani"
             },
             {
-              "value": "te",
-              "label": "Telugu"
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
             }
           ]
         },
@@ -581,16 +972,100 @@
           "type": "drop-down",
           "values": [
             {
-              "value": "education",
-              "label": "Education"
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
             },
             {
               "value": "general",
               "label": "General"
             },
             {
+              "value": "government-press-release",
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
               "value": "news",
               "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
             }
           ]
         },
@@ -626,6 +1101,40 @@
                   ]
                 }
               ]
+            },
+            {
+              "value": "auto-aligned",
+              "label": "Auto Aligned",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "label": "Alignment Tool",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "AENAES",
+                      "label": "AENAES"
+                    }
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.alignmentScore",
+                  "label": "Alinment Score Range",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": [0.0,1.0],
+                      "label": "0.0-1.0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "manual-transcribed",
+              "label": "Manually Transcribed",
+              "sub-filters": [
+              ]
             }
           ]
         },
@@ -642,7 +1151,51 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "cc-by-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "cc-by-sa-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "cc-by-nd-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "cc-by-nd-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "cc-by-nc-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "cc-by-nc-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "cc-by-nc-sa-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "mit"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "gpl-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "bsd-3-clause"
+            },
+            {
+              "value": "private-commercial",
+              "label": "private-commercial"
+            },
+            {
+              "value": "unknown-license",
+              "label": "unknown-license"
             }
           ]
         },
@@ -652,12 +1205,16 @@
           "type": "drop-down",
           "values": [
             {
-              "value": "anuvaad",
-              "label": "Anuvaad"
+              "value": "Project Anuvaad",
+              "label": "Project Anuvaad"
             },
             {
-              "value": "ekstep",
-              "label": "Ekstep"
+              "value": "Samanantar",
+              "label": "Samanantar"
+            },
+            {
+              "value": "ai4bharat",
+              "label": "Ai4Bharat"
             }
           ]
         },
@@ -668,7 +1225,19 @@
           "values": [
             {
               "value": "wav",
-              "label": "Wav"
+              "label": "wav"
+            },
+            {
+              "value": "pcm",
+              "label": "pcm"
+            },
+            {
+              "value": "flac",
+              "label": "flac"
+            },
+            {
+              "value": "mp3",
+              "label": "mp3"
             }
           ]
         },
@@ -678,12 +1247,12 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "stereo",
+              "label": "stereo"
             },
             {
               "value": "mono",
-              "label": "Mono"
+              "label": "mono"
             }
           ]
         },
@@ -712,8 +1281,8 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "eight",
+              "label": "eight"
             },
             {
               "value": "sixteen",
@@ -727,12 +1296,12 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": [1,5],
+              "label": "1-5"
             },
             {
-              "value": 1,
-              "label": "1"
+              "value": [5,10],
+              "label": "5-10"
             }
           ]
         },
@@ -748,6 +1317,18 @@
             {
               "value": "male",
               "label": "Male"
+            },
+            {
+              "value": "transgender",
+              "label": "Transgender"
+            },
+            {
+              "value": "non-specified",
+              "label": "Non Specified"
+            },
+            {
+              "value": "others",
+              "label": "Others"
             }
           ]
         },
@@ -757,8 +1338,20 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": [0,9],
+              "label": "0-9"
+            },
+            {
+              "value": [10,20],
+              "label": "10-20"
+            },
+            {
+              "value": [21,60],
+              "label": "21-60"
+            },
+            {
+              "value": [60,100],
+              "label": "60-100"
             }
           ]
         },
@@ -768,8 +1361,16 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "hi-thethi",
+              "label": "hi-thethi"
+            },
+            {
+              "value": "hi-magahi",
+              "label": "hi-magahi"
+            },
+            {
+              "value": "ta-madurai",
+              "label": "ta-madurai"
             }
           ]
         },
@@ -807,38 +1408,122 @@
         {
           "filter": "sourceLanguage",
           "label": "Language",
-          "values": [
+           "values": [
             {
-              "value": "as",
-              "label": "As"
+              "value": "pa",
+              "label": "Punjabi"
             },
             {
               "value": "bn",
-              "label": "Bn"
+              "label": "Bengali"
             },
             {
               "value": "en",
-              "label": "En"
-            },
-            {
-              "value": "hi",
-              "label": "Hi"
-            },
-            {
-              "value": "ml",
-              "label": "Ml"
-            },
-            {
-              "value": "mr",
-              "label": "Mr"
-            },
-            {
-              "value": "or",
-              "label": "Or"
+              "label": "English"
             },
             {
               "value": "ta",
-              "label": "Ta"
+              "label": "Tamil"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "kok",
+              "label": "Konkani"
+            },
+            {
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
             }
           ]
         },
@@ -848,8 +1533,12 @@
           "type": "drop-down",
           "values": [
             {
-              "value": "education",
-              "label": "Education"
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
             },
             {
               "value": "general",
@@ -857,11 +1546,87 @@
             },
             {
               "value": "government-press-release",
-              "label": "Government-Press-Release"
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
             },
             {
               "value": "legal",
               "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
             }
           ]
         },
@@ -880,8 +1645,138 @@
                   "type": "drop-down",
                   "values": [
                     {
+                      "value": "google cloud vision",
+                      "label": "Google Cloud Vision"
+                    },
+                    {
+                      "value": "tesseract",
+                      "label": "Tesseract"
+                    },
+                    {
                       "value": "anuvaad ocr",
                       "label": "Anuvaad OCR"
+                    },
+                    {
+                      "value": "microsoft azure computer vision",
+                      "label": "Microsoft Azure Computer Vision"
+                    },
+                    {
+                      "value": "calamari",
+                      "label": "Calamari"
+                    },
+                    {
+                      "value": "ocropus",
+                      "label": "Ccropus"
+                    },
+                    {
+                      "value": "amazon textract",
+                      "label": "Amazon Textract"
+                    },
+                    {
+                      "value": "abbyy cloud ocr",
+                      "label": "Abby Cloud OCR"
+                    },
+                    {
+                      "value": "unknown",
+                      "label": "Unknown"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "screen-capture",
+              "label": "Screen Capture",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.ocrTool",
+                  "label": "OCR Tool",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "google cloud vision",
+                      "label": "Google Cloud Vision"
+                    },
+                    {
+                      "value": "tesseract",
+                      "label": "Tesseract"
+                    },
+                    {
+                      "value": "anuvaad ocr",
+                      "label": "Anuvaad OCR"
+                    },
+                    {
+                      "value": "microsoft azure computer vision",
+                      "label": "Microsoft Azure Computer Vision"
+                    },
+                    {
+                      "value": "calamari",
+                      "label": "Calamari"
+                    },
+                    {
+                      "value": "ocropus",
+                      "label": "Ccropus"
+                    },
+                    {
+                      "value": "amazon textract",
+                      "label": "Amazon Textract"
+                    },
+                    {
+                      "value": "abbyy cloud ocr",
+                      "label": "Abby Cloud OCR"
+                    },
+                    {
+                      "value": "unknown",
+                      "label": "Unknown"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "scanned-ocr",
+              "label": "Scanned OCR",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.ocrTool",
+                  "label": "OCR Tool",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "google cloud vision",
+                      "label": "Google Cloud Vision"
+                    },
+                    {
+                      "value": "tesseract",
+                      "label": "Tesseract"
+                    },
+                    {
+                      "value": "anuvaad ocr",
+                      "label": "Anuvaad OCR"
+                    },
+                    {
+                      "value": "microsoft azure computer vision",
+                      "label": "Microsoft Azure Computer Vision"
+                    },
+                    {
+                      "value": "calamari",
+                      "label": "Calamari"
+                    },
+                    {
+                      "value": "ocropus",
+                      "label": "Ccropus"
+                    },
+                    {
+                      "value": "amazon textract",
+                      "label": "Amazon Textract"
+                    },
+                    {
+                      "value": "abbyy cloud ocr",
+                      "label": "Abby Cloud OCR"
+                    },
+                    {
+                      "value": "unknown",
+                      "label": "Unknown"
                     }
                   ]
                 }
@@ -902,7 +1797,51 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "cc-by-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "cc-by-sa-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "cc-by-nd-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "cc-by-nd-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "cc-by-nc-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "cc-by-nc-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "cc-by-nc-sa-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "mit"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "gpl-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "bsd-3-clause"
+            },
+            {
+              "value": "private-commercial",
+              "label": "private-commercial"
+            },
+            {
+              "value": "unknown-license",
+              "label": "unknown-license"
             }
           ]
         },
@@ -914,6 +1853,14 @@
             {
               "value": "Project Anuvaad",
               "label": "Project Anuvaad"
+            },
+            {
+              "value": "Samanantar",
+              "label": "Samanantar"
+            },
+            {
+              "value": "ai4bharat",
+              "label": "Ai4Bharat"
             }
           ]
         },
@@ -963,10 +1910,10 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
-          "values": [
+           "values": [
             {
-              "value": "as",
-              "label": "Assamese"
+              "value": "pa",
+              "label": "Punjabi"
             },
             {
               "value": "bn",
@@ -977,40 +1924,108 @@
               "label": "English"
             },
             {
-              "value": "gu",
-              "label": "Gujarati"
-            },
-            {
-              "value": "hi",
-              "label": "Hindi"
+              "value": "ta",
+              "label": "Tamil"
             },
             {
               "value": "ml",
               "label": "Malayalam"
             },
             {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
               "value": "mr",
               "label": "Marathi"
             },
             {
-              "value": "ne",
-              "label": "Nepali"
+              "value": "gu",
+              "label": "Gujarati"
             },
             {
               "value": "or",
               "label": "Odia"
             },
             {
-              "value": "pa",
-              "label": "Punjabi"
+              "value": "as",
+              "label": "Assamese"
             },
             {
-              "value": "ta",
-              "label": "Tamil"
+              "value": "kok",
+              "label": "Konkani"
             },
             {
-              "value": "te",
-              "label": "Telugu"
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
             }
           ]
         },
@@ -1020,16 +2035,100 @@
           "type": "drop-down",
           "values": [
             {
-              "value": "education",
-              "label": "Education"
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
             },
             {
               "value": "general",
               "label": "General"
             },
             {
+              "value": "government-press-release",
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
               "value": "news",
               "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
             }
           ]
         },
@@ -1037,7 +2136,7 @@
           "filter": "collectionMethod.collectionDescription",
           "label": "Collection Method",
           "type": "drop-down",
-          "values": [
+           "values": [
             {
               "value": "machine-generated-transcript",
               "label": "Machine Generated Transcript",
@@ -1065,8 +2164,34 @@
                   ]
                 }
               ]
-            }
-          ]
+            },
+            {
+              "value": "auto-aligned",
+              "label": "Auto Aligned",
+              "sub-filters": [
+                {
+                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "label": "Alignment Tool",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": "AENAES",
+                      "label": "AENAES"
+                    }
+                  ]
+                },
+                {
+                  "filter": "collectionMethod.collectionDetails.alignmentScore",
+                  "label": "Alinment Score Range",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": [0.0,1.0],
+                      "label": "0.0-1.0"
+                    }
+                  ]
+                }
+              ]
         },
         {
           "filter": "collectionSource",
@@ -1081,7 +2206,51 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "cc-by-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "cc-by-sa-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "cc-by-nd-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "cc-by-nd-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "cc-by-nc-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "cc-by-nc-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "cc-by-nc-sa-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "mit"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "gpl-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "bsd-3-clause"
+            },
+            {
+              "value": "private-commercial",
+              "label": "private-commercial"
+            },
+            {
+              "value": "unknown-license",
+              "label": "unknown-license"
             }
           ]
         },
@@ -1091,12 +2260,16 @@
           "type": "drop-down",
           "values": [
             {
-              "value": "anuvaad",
-              "label": "Anuvaad"
+              "value": "Project Anuvaad",
+              "label": "Project Anuvaad"
             },
             {
-              "value": "ekstep",
-              "label": "Ekstep"
+              "value": "Samanantar",
+              "label": "Samanantar"
+            },
+            {
+              "value": "ai4bharat",
+              "label": "Ai4Bharat"
             }
           ]
         },
@@ -1107,7 +2280,19 @@
           "values": [
             {
               "value": "wav",
-              "label": "Wav"
+              "label": "wav"
+            },
+            {
+              "value": "pcm",
+              "label": "pcm"
+            },
+            {
+              "value": "flac",
+              "label": "flac"
+            },
+            {
+              "value": "mp3",
+              "label": "mp3"
             }
           ]
         },
@@ -1117,12 +2302,12 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "stereo",
+              "label": "stereo"
             },
             {
               "value": "mono",
-              "label": "Mono"
+              "label": "mono"
             }
           ]
         },
@@ -1151,8 +2336,8 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "eight",
+              "label": "eight"
             },
             {
               "value": "sixteen",
@@ -1187,6 +2372,18 @@
             {
               "value": "male",
               "label": "Male"
+            },
+            {
+              "value": "transgender",
+              "label": "Transgender"
+            },
+            {
+              "value": "non-specified",
+              "label": "Non Specified"
+            },
+            {
+              "value": "others",
+              "label": "Others"
             }
           ]
         },
@@ -1196,8 +2393,20 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": [0,9],
+              "label": "0-9"
+            },
+            {
+              "value": [10,20],
+              "label": "10-20"
+            },
+            {
+              "value": [21,60],
+              "label": "21-60"
+            },
+            {
+              "value": [60,100],
+              "label": "60-100"
             }
           ]
         },
@@ -1207,8 +2416,16 @@
           "type": "drop-down",
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "hi-thethi",
+              "label": "hi-thethi"
+            },
+            {
+              "value": "hi-magahi",
+              "label": "hi-magahi"
+            },
+            {
+              "value": "ta-madurai",
+              "label": "ta-madurai"
             }
           ]
         },
@@ -1238,6 +2455,6 @@
           ]
         }
       ]
-    }
+    }]
   }
-}
+}}
