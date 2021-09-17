@@ -51,6 +51,11 @@ export const menuItems = {
             name: 'Submit Model',
             url: '/model/upload',
             roles:["CONTRIBUTOR-USER"]
+        },
+    {
+            name: 'Benchmark Models',
+            url: '/model/benchmark-models',
+            roles:["CONTRIBUTOR-USER"]
         }],
     profile: [
         {

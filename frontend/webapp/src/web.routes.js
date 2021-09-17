@@ -30,6 +30,7 @@ import Benchmark from "./ui/container/Model/ModelSearch/Benchmark";
 import ExploreModels from "./ui/container/Model/ModelSearch/ExploreModels";
 import SearchModelDetail from "./ui/container/Model/ModelSearch/ModelDetail/SearchModelDetail";
 import Leaderboard from "./ui/container/Model/ModelLeaderboard/Leaderboard";
+import BenchmarkModels from "./ui/container/Model/BenchmarkModel/BenchmarkDataset"
 
 const PrivateRoute = ({
   path,
@@ -97,6 +98,14 @@ export default function App() {
             <PublicLayout type = {"models"}
             index={1}
             component={ExploreModels} />
+            }
+          />
+          <Route
+            path={`${process.env.PUBLIC_URL}/model/benchmark-models`}
+            render={(props) =>
+            <PublicLayout type = {"models"}
+            index={3}
+            component={BenchmarkModels} />
             }
           />
            <Route

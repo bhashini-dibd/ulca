@@ -1,4 +1,4 @@
-import { withStyles, Button } from "@material-ui/core";
+import { withStyles, Button, Typography } from "@material-ui/core";
 import BreadCrum from '../../../components/common/Breadcrum';
 import React, { useEffect, useState } from "react";
 import DataSet from "../../../styles/Dataset";
@@ -107,6 +107,13 @@ const MySearches = (props) => {
                         options: {
                                 filter: false,
                                 sort: true,
+                                customBodyRender: (value, tableMeta, updateValue) => {
+                                        return <div style={{ textTransform: "none" }}>
+                                                {(tableMeta.rowData[5] === 'asr-corpus' || tableMeta.rowData[5] === 'asr-unlabeled-corpus') ?
+                                                        `${tableMeta.rowData[3]} hrs` :
+                                                        tableMeta.rowData[3]}
+                                        </div>
+                                },
 
                         }
                 },
@@ -116,6 +123,14 @@ const MySearches = (props) => {
                         options: {
                                 filter: true,
                                 sort: true,
+
+                        },
+                },
+                {
+                        name: "datasetType",
+                        label: "Dataset Type",
+                        options: {
+                                display: 'excluded'
 
                         },
                 }
@@ -181,8 +196,8 @@ const MySearches = (props) => {
                                 open={popoverOpen}
                                 anchorEl={anchorEl}
                                 handleClose={handleClose}
-                                filter={{datasetType: [], status:[]} }
-                                selectedFilter={{datasetType: [], status:[]} }
+                                filter={{ datasetType: [], status: [] }}
+                                selectedFilter={{ datasetType: [], status: [] }}
                                 //  filter={{ datasetType: [], status: ['completed', 'in-progress', 'failed'] }}
                                 // selectedFilter={{ datasetType: [], status: ['completed', 'in-progress'] }}
                                 clearAll={clearAll}

@@ -2,16 +2,16 @@ from models.asrunlabeled import AsrUnlabeledModel
 from models.asr import AsrModel
 from threading import Thread
 from config import filter_cron_interval_sec
-from models import ParallelModel, OcrModel, MonolingualModel
+# from models import ParallelModel, OcrModel, MonolingualModel
 import logging
 from logging.config import dictConfig
 log         =   logging.getLogger('file')
-from utilities import DataUtils
+# from utilities import DataUtils
 
-utils           =   DataUtils()
-parallel_model  =   ParallelModel()
-ocr_model       =   OcrModel()
-mono_model      =   MonolingualModel()
+# utils           =   DataUtils()
+# parallel_model  =   ParallelModel()
+# ocr_model       =   OcrModel()
+# mono_model      =   MonolingualModel()
 asr_model       =   AsrModel()
 asr_unlabeled_model =   AsrUnlabeledModel()
 
