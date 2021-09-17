@@ -1,5 +1,7 @@
 package com.ulca.dataset.request;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.AllArgsConstructor;
@@ -15,41 +17,53 @@ import lombok.Setter;
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SearchCriteria {
-	
-	private String[] licence;
 
-    private Float minScore;
+	private String serviceRequestNumber;
+	private String datasetType;
 
-    private String serviceRequestNumber;
+	// List of String --
+	private List<String> sourceLanguage;
+	private List<String> targetLanguage;
+	private List<String> collectionMode;
+	private List<String> alignmentTool;
+	private List<String> editingTool;
+	private List<String> translationModel;
+	private List<String> license;
+	private List<String> domain;
+	private List<String> datasetId;
+	private List<String> channel;
+	private List<String> gender;
+	private List<String> format;
+	private List<String> bitsPerSample;
+	private List<String> dialect;
+	private List<String> snrTool;
+	private List<String> collectionDescription;
+	private List<String> ocrTool;
+	private List<String> dpi;
+	private List<String> imageTextType;
 
-    private String[] targetLanguage;
+	// String --
+	private String collectionSource;
+	private String submitterName;
 
-    private String[] collectionMode;
+	// Float --
+	private Float minScore;
+	private Float maxScore;
+	private Float score;
+	private Float samplingRate;
 
-    private Boolean multipleContributors;
+	// Integer --
+	private Integer countOfTranslations;
+	private Integer minNoOfSpeakers;
+	private Integer maxNoOfSpeakers;
+	private Integer noOfSpeakers;
+	private Integer minAge;
+	private Integer maxAge;
+	private Integer age;
 
-    private Float maxScore;
-
-    private String[] collectionSource;
-
-    private Float score;
-
-    private String[] domain;
-
-    private Integer limit;
-
-    private String datasetId;
-
-    private String datasetType;
-
-    private String[] sourceLanguage;
-    
-    private Boolean groupBy;
-    
-    private Integer countOfTranslations;
-    
-    private Boolean originalSourceSentence;
-    
-    
+	// Boolean --
+	private Boolean multipleContributors;
+	private Boolean originalSourceSentence;
+	private Boolean groupBy;
 
 }
