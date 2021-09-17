@@ -304,8 +304,8 @@ class ParallelService:
             if 'targetLanguage' in query.keys():
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
             if 'alignmentTool' in query.keys():
                 tags.extend(query["alignmentTool"])
             if 'editingTool' in query.keys():

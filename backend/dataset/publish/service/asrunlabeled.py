@@ -157,8 +157,8 @@ class ASRUnlabeledService:
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
             if 'license' in query.keys():
                 tags.extend(query["licence"])
             if 'domain' in query.keys():
