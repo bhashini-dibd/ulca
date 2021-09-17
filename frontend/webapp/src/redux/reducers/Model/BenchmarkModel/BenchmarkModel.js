@@ -101,7 +101,7 @@ const getContributionList = (state, payload) => {
                 modelName: element.name,
                 // submittedOn: dateConversion(element.submittedOn),
                 // publishedOn: dateConversion(element.publishedOn),
-                metrics:"",
+                metrics:"-",
                 task: element.task.type,
                 domain: domain,
                 status: "Published",
