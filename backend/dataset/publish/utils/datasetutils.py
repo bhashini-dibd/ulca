@@ -115,7 +115,7 @@ class DatasetUtils:
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
             for idx, fil in enumerate(range(len(full_list))):
-                with zip_file.open(f'{shared_storage_path}{file_name}-{str(idx)}.json', 'w') as file:
+                with zip_file.open(f'{file_name}-{str(idx)}.json', 'w') as file:
                     list_data = json.dumps(full_list[idx]).encode('utf-8')
                     file.write(list_data)
         with open(f'{shared_storage_path}{file_name}.zip', 'wb') as f:
