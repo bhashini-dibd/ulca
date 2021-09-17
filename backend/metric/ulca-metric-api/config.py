@@ -23,11 +23,11 @@ DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','ht
 FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/opt/')
 FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','datasetFilterParams-new.json')
 
-metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',14400)#
+metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',864000)#
 if isinstance(metric_cron_interval_sec, str):
     metric_cron_interval_sec  =  eval(metric_cron_interval_sec)
 
-mismatch_cron_interval_sec     =   os.environ.get('MISMTACH_IDENTIFIER_CRON_INTERVAL_SEC',7200)#14400
+mismatch_cron_interval_sec     =   os.environ.get('MISMTACH_IDENTIFIER_CRON_INTERVAL_SEC',86400)#14400
 if isinstance(mismatch_cron_interval_sec, str):
     mismatch_cron_interval_sec  =  eval(mismatch_cron_interval_sec)
 
