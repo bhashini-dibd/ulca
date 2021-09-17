@@ -39,7 +39,7 @@ export default class SearchModel extends API {
 
     getBody() {
         let bodyData = {
-            task: this.task,
+            task: "ocr",
             sourceLanguage: this.sourceLanguage,
             targetLanguage: this.targetLanguage,
             domain: this.domain,
