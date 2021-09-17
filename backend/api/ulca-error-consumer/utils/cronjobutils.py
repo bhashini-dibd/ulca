@@ -13,14 +13,12 @@ import os
 class StoreUtils:
 
     #method to write on csv file
-    def write_to_csv(self, data_list, file, srn,csv_headers):
+    def write_to_csv(self, data_list, file, srn,csv_headers,fields):
         try:
-            file_exists = os.path.isfile(file)
             log.info('Started csv writing !...')
-            with open(file, 'a', newline='') as output_file:
-                dict_writer = csv.DictWriter(output_file,fieldnames=csv_headers,extrasaction='ignore')
-                if not file_exists:
-                    dict_writer.writeheader()
+            with open(file, 'w', newline='') as output_file:
+                dict_writer = csv.DictWriter(output_file,fieldnames=fields,extrasaction='ignore')
+                dict_writer.writer.writerow(csv_headers)
                 for data in data_list:
                     dict_writer.writerow(data)
             log.info(f'{len(data_list)} Errors written to csv for SRN -- {srn}')

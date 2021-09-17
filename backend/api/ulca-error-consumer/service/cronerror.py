@@ -55,8 +55,9 @@ class ErrorProcessor(Thread):
                 error_records = [x for x in error_records if not x.get("uploaded")]
                 log.info(f'Returned {len(error_records)} records')
                 file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
-                headers =['stage','message','count']
-                storeutils.write_to_csv(error_records,file,srn,headers)
+                headers =   ['Stage','Error Message', 'Record Count']
+                fields  =   ['stage','message','count']
+                storeutils.write_to_csv(error_records,file,srn,headers,fields)
                 agg_file = storeutils.file_store_upload_call(file,file.replace("/opt/",""),error_prefix)
                 update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None}
                 condition = {"serviceRequestNumber": srn, "uploaded": True}
@@ -104,8 +105,9 @@ class ErrorProcessor(Thread):
             zip_file= f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.zip'
             log.info(f'Writing {len(error_records)} errors to {csv_file} for srn -- {srn}')
             #writing to csv locally
-            headers = ['stage','message','record','originalRecord']
-            storeutils.write_to_csv(error_records,csv_file,srn,headers)
+            headers = ['Stage', 'Error Message', 'Record', 'Original Record']
+            fields = ['stage','message','record','originalRecord']
+            storeutils.write_to_csv(error_records,csv_file,srn,headers,fields)
             storeutils.zipfile_creation(csv_file,zip_file)
             log.info(f"zip file created :{zip_file} , for srn -- {srn}, ")
             return zip_file,zip_file.replace("/opt/","")
