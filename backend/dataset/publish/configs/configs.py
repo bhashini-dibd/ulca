@@ -42,6 +42,9 @@ if isinstance(pub_dedup_redis_db, str):
 record_expiry_in_sec = os.environ.get('ULCA_PUBLISH_RECORD_EXPIRY_IN_SEC', 86400)
 if isinstance(record_expiry_in_sec, str):
     record_expiry_in_sec = eval(record_expiry_in_sec)
+zip_chunk_size = os.environ.get('ULCA_PUBLISH_ZIP_CHUNK_SIZE', 100000)
+if isinstance(zip_chunk_size, str):
+    zip_chunk_size = eval(zip_chunk_size)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
