@@ -281,5 +281,39 @@
 			"recall",
 			"h1-mean"
 		]
-	}
+	},
+	"domain": [
+            {
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
+            },
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            }
+          ]
 }
