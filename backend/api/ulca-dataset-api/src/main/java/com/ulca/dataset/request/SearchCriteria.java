@@ -24,7 +24,7 @@ public class SearchCriteria {
 	// List of String --
 	private List<String> sourceLanguage;
 	private List<String> targetLanguage;
-	private List<String> collectionMode;
+	private List<String> collectionMethod;
 	private List<String> alignmentTool;
 	private List<String> editingTool;
 	private List<String> translationModel;
