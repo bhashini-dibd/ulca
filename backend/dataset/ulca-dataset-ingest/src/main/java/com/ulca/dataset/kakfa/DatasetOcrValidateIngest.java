@@ -290,7 +290,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 					// send error event
 					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 					
-					log.info("record :: " +numberOfRecords + "failed " );
 				}
 
 				
