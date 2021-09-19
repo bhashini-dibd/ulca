@@ -16,5 +16,6 @@ public interface BenchmarkProcessDao extends MongoRepository<BenchmarkProcess, S
 	List<BenchmarkProcess> findByBenchmarkProcessId(String benchmarkProcessId);
 	List<BenchmarkProcess> findByModelIdAndBenchmarkDatasetIdAndMetric(String modelId, String benchmarkId, String metric);
 	List<BenchmarkProcess> findByModelIdAndBenchmarkDatasetId(String modelId, String benchmarkId);
+	List<BenchmarkProcess> findByBenchmarkDatasetId(String benchmarkId);
 	
 }
