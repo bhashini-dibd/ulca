@@ -128,11 +128,18 @@ public class ModelService {
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
 	}
 
-	public ModelExtended getMode(String modelId) {
+	public ModelListResponseDto getModelDescription(String modelId) {
 		Optional<ModelExtended> result = modelDao.findById(modelId);
 
 		if (!result.isEmpty()) {
-			return result.get();
+			
+			ModelExtended model = result.get();
+			ModelListResponseDto modelDto = new ModelListResponseDto();
+			BeanUtils.copyProperties(model, modelDto);
+			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
+			modelDto.setBenchmarkPerformance(benchmarkProcess);
+			
+			return modelDto;
 		}
 		return null;
 	}

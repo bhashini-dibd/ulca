@@ -26,6 +26,7 @@ import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelLeaderboardResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
+import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.UploadModelResponse;
 import com.ulca.model.service.ModelService;
@@ -57,10 +58,10 @@ public class ModelController {
 	}
 
 	@GetMapping()
-	public ModelExtended getModel( @RequestParam(required = true) String modelId ) {
+	public ModelListResponseDto getModel( @RequestParam(required = true) String modelId ) {
 		log.info("******** Entry ModelController:: getModel *******");
 
-		return modelService.getMode(modelId);
+		return modelService.getModelDescription(modelId);
 	}
 	
 	@PostMapping("/upload")
