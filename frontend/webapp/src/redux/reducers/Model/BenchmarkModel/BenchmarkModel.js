@@ -90,7 +90,7 @@ const getContributionList = (state, payload) => {
     let refreshStatus = false;
     payload.forEach(element => {
 
-        let sLanguage = element.languages.length > 0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
+        let sLanguage = element.languages && element.languages.length > 0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
         let tLanguage = element.languages && element.languages.length > 0 && element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
         let lang = tLanguage ? (sLanguage + " - " + tLanguage) : sLanguage;
         let domain = getDomainDetails(element.domain)
@@ -111,7 +111,7 @@ const getContributionList = (state, payload) => {
                 language: lang,
                 refUrl: element.refUrl ? element.refUrl : "NA",
                 inferenceEndPoint: element.inferenceEndPoint,
-                source: element.languages.length > 0 && element.languages[0].sourceLanguage,
+                source: element.languages && element.languages.length > 0 && element.languages[0].sourceLanguage,
                 target: element.languages && element.languages.length > 0 && element.languages[0].targetLanguage,
                 licence: element.license,
                 submitter: element.submitter ? element.submitter.name :"-",
