@@ -22,6 +22,8 @@ const endpoints = {
   getBenchmarkDetails: "/ulca/apis/v0/benchmark/getByTask",
   submitBenchmark: "/ulca/apis/v0/benchmark/execute",
   benchmarkTable: '/ulca/apis/v0/model/getModel',
+  benchmarkModelSearch:"/ulca/apis/v0/benchmark/search",
+  benchmarkDetails:"/ulca/apis/v0/benchmark"
 };
 
 export default endpoints;

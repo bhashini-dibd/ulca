@@ -10,7 +10,6 @@ const CardComponent = (props) => {
     return (
         <Grid container spacing={2} className={classes.cardGrid}>{
             value.filteredData.map((data, i) => {
-                console.log(data)
                 return (
                     <Grid item xs={12} sm={6} md={5} lg={4} xl={4}
                         className={classes.card}
@@ -33,10 +32,10 @@ const CardComponent = (props) => {
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Domain</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{FilterByDomain([data.domain])[0].label}</Typography>
                                 </Grid>
-                                <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
+                                {data.submitter && <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Submitter</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{data.submitter}</Typography>
-                                </Grid>
+                                </Grid>}
                                 {data.publishedOn && <Grid item>
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Published On</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{data.publishedOn.split(",")[0]}</Typography>

@@ -53,8 +53,8 @@ export const menuItems = {
             roles:["CONTRIBUTOR-USER"]
         },
     {
-            name: 'Benchmark Models',
-            url: '/model/benchmark-models',
+            name: 'Benchmark Datasets',
+            url: '/model/benchmark-datasets',
             roles:["CONTRIBUTOR-USER"]
         }],
     profile: [
