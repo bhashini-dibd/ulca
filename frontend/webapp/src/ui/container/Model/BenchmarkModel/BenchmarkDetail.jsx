@@ -69,11 +69,11 @@ const SearchModelDetail = (props) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  
+
   const [index, setIndex] = useState(0);
   const [modelTry, setModelTry] = useState(false);
   const location = useLocation();
-  // const { prevUrl } = location.state;
+  const { prevUrl } = location.state ? location.state : "";
   const metricArray = data.metricArray ? data.metricArray : [];
   //   useEffect(() => {
   //     setData(location.state);
@@ -100,20 +100,20 @@ const SearchModelDetail = (props) => {
       title: "Domain",
       para: data.domain,
     },
-    {
-      title: "Metric",
-      para: data.metric,
-    },
+    // {
+    //   title: "Metric",
+    //   para: data.metric,
+    // },
   ];
   //   const { prevUrl } = location.state;
-  //   const handleCardNavigation = () => {
-  //     // const { prevUrl } = location.state
-  //     if (prevUrl === "explore-models") {
-  //       history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
-  //     } else {
-  //       history.push(`${process.env.PUBLIC_URL}/model/my-contribution`);
-  //     }
-  //   };
+  const handleCardNavigation = () => {
+    // const { prevUrl } = location.state
+    if (prevUrl === "explore-models") {
+      history.push(`${process.env.PUBLIC_URL}/model/benchmark-datasets`);
+    } else {
+      history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
+    }
+  };
 
   const handleClick = () => {
     history.push({
@@ -159,10 +159,6 @@ const SearchModelDetail = (props) => {
 
   const handleIndexChange = (metric) => {
     setIndex(metricArray.indexOf(metric));
-  };
-
-  const handleCardNavigation = () => {
-    history.push(`${process.env.PUBLIC_URL}/model/benchmark-datasets`);
   };
 
   const getMuiTheme = () =>
@@ -231,10 +227,10 @@ const SearchModelDetail = (props) => {
             startIcon={<ArrowBack />}
             onClick={() => handleCardNavigation()}
           >
-            {/* {prevUrl === "explore-models"
+            {prevUrl === "explore-models"
               ? "Back to Benchmark Datasets"
-              : "Back to Explore Models"} */}
-            Back to Benchmark Datasets
+              : "Back to Explore Models"}
+            {/* Back to Benchmark Datasets */}
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
