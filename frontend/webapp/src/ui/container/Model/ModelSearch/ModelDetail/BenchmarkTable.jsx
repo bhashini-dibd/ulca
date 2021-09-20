@@ -1,7 +1,7 @@
 import { withStyles, Link, Button } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import DataSet from "../../../../styles/Dataset";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
@@ -18,9 +18,20 @@ import { useParams } from "react-router";
 // import GridView from "./GridView";
 
 const BenchmarkTable = (props) => {
+    const history = useHistory();
     const columns = [
         {
-            name: "submitRefNumber",
+            name: "benchmarkDatasetId",
+            label: "Benchmark ID",
+            options: {
+                filter: false,
+                sort: true,
+                display: "excluded"
+            },
+        },
+
+        {
+            name: "benchmarkDatasetName",
             label: "Benchmark Dataset",
             options: {
                 filter: false,
@@ -29,7 +40,7 @@ const BenchmarkTable = (props) => {
         },
 
         {
-            name: "datasetName",
+            name: "metric",
             label: "Metric",
             options: {
                 filter: false,
@@ -37,7 +48,7 @@ const BenchmarkTable = (props) => {
             },
         },
         {
-            name: "datasetType",
+            name: "score",
             label: "Score",
             options: {
                 filter: false,
@@ -45,7 +56,7 @@ const BenchmarkTable = (props) => {
             },
         },
         {
-            name: "submittedOn",
+            name: "createdOn",
             label: "Benchmark Run On",
             options: {
                 filter: false,
@@ -71,7 +82,7 @@ const BenchmarkTable = (props) => {
             },
             options: { sortDirection: "desc" },
         },
-        // onRowClick: rowData => handleRowClick(rowData[0], rowData[1], rowData[4]),
+        onRowClick: rowData => history.push(`${process.env.PUBLIC_URL}/model/benchmark-details/${rowData[0]}`),
         // customToolbar: fetchHeaderButton,
         search: false,
         filter: false,
@@ -86,6 +97,7 @@ const BenchmarkTable = (props) => {
 
     const { classes } = props;
     const dispatch = useDispatch();
+    const data = useSelector(state => state.benchmarkTableDetails.benchmarkPerformance)
     useEffect(() => {
         const APIObj = new BenchmarkTableAPI(props.modelId)
         dispatch(APITransport(APIObj))
@@ -93,7 +105,7 @@ const BenchmarkTable = (props) => {
     return (
 
         <MUIDataTable
-            // data={data}
+            data={data}
             columns={columns}
             options={options}
         />
