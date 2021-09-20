@@ -1,9 +1,11 @@
 package com.ulca.benchmark.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -211,6 +213,7 @@ public class BenchmarkService {
 			GetBenchmarkByIdResponse bmDto = new GetBenchmarkByIdResponse();
 			BeanUtils.copyProperties(result, bmDto);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkprocessDao.findByBenchmarkDatasetId(benchmarkId);
+			benchmarkProcess.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
 			bmDto.setBenchmarkPerformance(benchmarkProcess);
 			
 			return bmDto;
