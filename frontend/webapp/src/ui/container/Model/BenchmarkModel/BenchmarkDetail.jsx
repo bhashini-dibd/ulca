@@ -198,7 +198,7 @@ const SearchModelDetail = (props) => {
               ))}
             </Grid>
           </Grid>
-          {metricArray.length ? (
+          {/* {metricArray.length ? (
             <Grid container>
               <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
                 <Box
@@ -240,7 +240,7 @@ const SearchModelDetail = (props) => {
             </Grid>
           ) : (
             <div></div>
-          )}
+          )} */}
         </div>
       )}
       <Footer />
