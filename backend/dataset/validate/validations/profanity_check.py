@@ -22,6 +22,7 @@ class ProfanityCheck(BaseValidator):
 
     def read_refs(self):
         ref_links = [validate_profanity_reference_en, validate_profanity_reference_hi]
+        log.info('----Loading profanity references----')
         try:
             for link in ref_links:
                 for line in urllib.request.urlopen(link):
@@ -30,8 +31,13 @@ class ProfanityCheck(BaseValidator):
             log.exception(f"Exception while reading profanity reference data: {str(e)}")
 
     def transliterate_to_en(self, blob):
+        log.info('----Transliterating to English----')
         txt = Text(blob)
-        return " ".join([x for x in txt.transliterate("en")])
+        try:
+            return " ".join([x for x in txt.transliterate("en")])
+        except Exception as e:
+            log.exception(f"Exception while transliterating to English: {str(e)}")
+            return None
 
     def execute(self, request):
         log.info('----Executing the profanity check----')
@@ -59,9 +65,13 @@ class ProfanityCheck(BaseValidator):
                 lang_list.append(record['sourceLanguage'])
 
             for text, lang in zip(text_list, lang_list):
-                if lang in ['en', 'hi']:
+                if lang in ['en', 'hi', 'transliterated-en']:
+                    # Run the scorer for Hindi text as is and also run for transliterated to En
                     if lang == 'hi':
-                        text = self.transliterate_to_en(text)
+                        trnsltrtd_txt = self.transliterate_to_en(text)
+                        if trnsltrtd_txt:
+                            text_list.append(trnsltrtd_txt)
+                            lang_list.append('transliterated-en')
                     try:
                         possible_match = process.extractOne(text, self.refs, scorer=fuzz.token_set_ratio)
                     except Exception as e:
