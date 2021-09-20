@@ -194,7 +194,7 @@
         },
         {
             "id":"9d7420d4-1a61-493f-a2fe-fd3f27d98925",
-            "uri":"/ulca/apis/v0/model",
+            "uri":"/ulca/apis/v0/model/getModel",
             "module":"ULCA-API-MODEL",
             "active":true,
             "whiteList":true,
