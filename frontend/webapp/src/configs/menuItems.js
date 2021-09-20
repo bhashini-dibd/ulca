@@ -54,7 +54,7 @@ export const menuItems = {
         },
     {
             name: 'Benchmark Datasets',
-            url: '/model/benchmark-models',
+            url: '/model/benchmark-datasets',
             roles:["CONTRIBUTOR-USER"]
         }],
     profile: [

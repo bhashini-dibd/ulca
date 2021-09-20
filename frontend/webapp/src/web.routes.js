@@ -101,7 +101,7 @@ export default function App() {
             }
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/model/benchmark-models`}
+            path={`${process.env.PUBLIC_URL}/model/benchmark-datasets`}
             render={(props) =>
             <PublicLayout type = {"models"}
             index={3}
