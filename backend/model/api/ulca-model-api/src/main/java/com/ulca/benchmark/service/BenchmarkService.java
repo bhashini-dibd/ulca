@@ -80,10 +80,11 @@ public class BenchmarkService {
 		String serviceRequestNumber = Utility.getBenchmarkExecuteReferenceNumber();
 		String modelId = request.getModelId();
 		Optional<ModelExtended> model = modelDao.findById(modelId);
-		System.out.println(model);
 		if(model.isEmpty()) {
 			throw new ModelNotFoundException("Model with not modelId : " + modelId + " not available ");
 		}
+		
+		ModelExtended modelExtended = model.get();
 
 		for (BenchmarkMetricRequest bm : request.getBenchmarks()) {
 			Benchmark benchmark = benchmarkDao.findByBenchmarkId(bm.getBenchmarkId());
@@ -101,6 +102,7 @@ public class BenchmarkService {
 			bmProcess.setMetric(bm.getMetric());
 			bmProcess.setBenchmarkDatasetName(benchmark.getName());
 			bmProcess.setModelId(modelId);
+			bmProcess.setModelName(modelExtended.getName());
 			bmProcess.setStatus("In-Progress");
 			bmProcess.setCreatedOn(new Date().toString());
 			bmProcess.setLastModifiedOn(new Date().toString());
