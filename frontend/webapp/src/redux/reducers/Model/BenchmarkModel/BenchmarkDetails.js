@@ -24,6 +24,7 @@ const getBenchmarkDetails = (data) => {
     metric: data.metric ? data.metric.join(", ") : "",
     task: data.task.type,
     metricArray: data.metric,
+    benchmarkPerformance: data.benchmarkPerformance,
   };
 };
 
@@ -32,11 +33,11 @@ const reducer = (state = initialState, action) => {
     case C.GET_BENCHMARK_DETAILS:
       const data = getBenchmarkDetails(action.payload);
       return {
-        data,
+        ...data,
       };
     default:
       return {
-        data: state,
+        ...state,
       };
   }
 };

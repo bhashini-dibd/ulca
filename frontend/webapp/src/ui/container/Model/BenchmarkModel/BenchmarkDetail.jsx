@@ -58,7 +58,7 @@ const SearchModelDetail = (props) => {
   const history = useHistory();
   const params = useParams();
   const benchmarkId = params.benchmarkId;
-  const data = useSelector((state) => state.benchmarkDetails.data);
+  const data = useSelector((state) => state.benchmarkDetails);
   const dispatch = useDispatch();
   useEffect(() => {
     const apiObj = new BenchmarkDetails(benchmarkId);
