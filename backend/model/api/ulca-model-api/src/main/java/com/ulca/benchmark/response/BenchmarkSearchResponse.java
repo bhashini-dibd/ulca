@@ -17,7 +17,7 @@ import lombok.Setter;
 public class BenchmarkSearchResponse {
 
 	String message;
-	List<Benchmark> benchmark;
+	List<Benchmark> data;
 	int count;
 
 }
