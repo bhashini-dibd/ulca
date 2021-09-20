@@ -1,7 +1,8 @@
-package com.ulca.model.response;
+package com.ulca.benchmark.response;
 
 import java.util.List;
 
+import io.swagger.model.Benchmark;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -9,14 +10,14 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class ModelLeaderboardResponse {
+public class BenchmarkSearchResponse {
 
 	String message;
-	List<ModelLeaderboardResponseDto> data;
+	List<Benchmark> data;
 	int count;
-	
+
 }
