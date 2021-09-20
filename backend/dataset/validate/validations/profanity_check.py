@@ -1,8 +1,9 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, validate_profanity_reference_en
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, validate_profanity_reference_en, validate_profanity_reference_hi
 
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
+from polyglot.text import Text
 import urllib.request
 
 import logging
@@ -12,7 +13,7 @@ log = logging.getLogger('file')
 class ProfanityCheck(BaseValidator):
     """
     Verifies the sentence for profanity using reference words
-    Currently works for English only
+    Currently works for English and Hindi only
     """
 
     def __init__(self):
@@ -20,11 +21,17 @@ class ProfanityCheck(BaseValidator):
         self.read_refs()
 
     def read_refs(self):
+        ref_links = [validate_profanity_reference_en, validate_profanity_reference_hi]
         try:
-            for line in urllib.request.urlopen(validate_profanity_reference_en):
-                self.refs.append(line.decode().strip())
+            for link in ref_links:
+                for line in urllib.request.urlopen(link):
+                    self.refs.append(line.decode().strip())
         except Exception as e:
             log.exception(f"Exception while reading profanity reference data: {str(e)}")
+
+    def transliterate_to_en(self, blob):
+        txt = Text(blob)
+        return " ".join([x for x in txt.transliterate("en")])
 
     def execute(self, request):
         log.info('----Executing the profanity check----')
@@ -52,7 +59,9 @@ class ProfanityCheck(BaseValidator):
                 lang_list.append(record['sourceLanguage'])
 
             for text, lang in zip(text_list, lang_list):
-                if lang == 'en':
+                if lang in ['en', 'hi']:
+                    if lang == 'hi':
+                        text = self.transliterate_to_en(text)
                     try:
                         possible_match = process.extractOne(text, self.refs, scorer=fuzz.token_set_ratio)
                     except Exception as e:
