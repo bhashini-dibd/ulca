@@ -59,7 +59,7 @@ public class BenchmarkController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
-	@GetMapping()
+	@GetMapping("/getBenchmark")
 	public GetBenchmarkByIdResponse getBenchmarkById( @RequestParam(required = true) String benchmarkId ) {
 		log.info("******** Entry BenchMarkController:: getBenchmarkById *******");
 

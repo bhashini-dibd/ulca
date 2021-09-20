@@ -57,7 +57,7 @@ public class ModelController {
 		return modelService.modelListByUserId(userId, startPage, endPage);
 	}
 
-	@GetMapping()
+	@GetMapping("/getModel")
 	public ModelListResponseDto getModel( @RequestParam(required = true) String modelId ) {
 		log.info("******** Entry ModelController:: getModel *******");
 
