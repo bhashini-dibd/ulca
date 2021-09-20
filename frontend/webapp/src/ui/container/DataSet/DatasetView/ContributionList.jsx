@@ -79,7 +79,7 @@ const ContributionList = (props) => {
                         
                         <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button>
                         <Button color={"primary"} size="medium" variant="outlined" className={classes.buttonStyle} onClick={() => MyContributionListApi()}><Cached className={classes.iconStyle} />Refresh</Button>
-                        <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button>
+                        {/* <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button> */}
                        
                         
                 </>

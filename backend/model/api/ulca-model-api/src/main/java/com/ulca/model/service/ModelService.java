@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -52,6 +55,7 @@ import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.UploadModelResponse;
 
+import io.swagger.model.Benchmark;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
@@ -73,6 +77,9 @@ public class ModelService {
 
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
+	
+	@Autowired
+	BenchmarkDao benchmarkDao;
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -82,6 +89,10 @@ public class ModelService {
 
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
+	
+	@Autowired
+	WebClient.Builder builder;
+	
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -117,11 +128,18 @@ public class ModelService {
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
 	}
 
-	public ModelExtended getMode(String modelId) {
+	public ModelListResponseDto getModelDescription(String modelId) {
 		Optional<ModelExtended> result = modelDao.findById(modelId);
 
 		if (!result.isEmpty()) {
-			return result.get();
+			
+			ModelExtended model = result.get();
+			ModelListResponseDto modelDto = new ModelListResponseDto();
+			BeanUtils.copyProperties(model, modelDto);
+			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
+			modelDto.setBenchmarkPerformance(benchmarkProcess);
+			
+			return modelDto;
 		}
 		return null;
 	}
@@ -248,8 +266,10 @@ public class ModelService {
 		ModelLeaderboardResponse response = new ModelLeaderboardResponse();
 		List<ModelLeaderboardResponseDto> dtoList = new ArrayList<ModelLeaderboardResponseDto>();
 		ModelLeaderboardResponseDto dto = new ModelLeaderboardResponseDto();
+		
 		LookupOperation lookup = LookupOperation.newLookup().from("benchmarkprocess").localField("modelId")
 				.foreignField("modelId").as("join_benchmarkprocess");
+		
 		Aggregation aggregation = Aggregation.newAggregation(
 				Aggregation.match(Criteria.where("modelId").is(dto.getModelId())), lookup,
 				Aggregation.match(Criteria.where("join_benchmarkprocess.modelId").is(dto.getModelId())),
@@ -265,7 +285,7 @@ public class ModelService {
 
 		for (ModelLeaderboardResponseDto mdto : dtoList) {
 
-			// mdto.setLanguages(mdto.getSourceLanguage());
+			//mdto.setLanguages(mdto.getSourceLanguage());
 			mdto.setMetric(mdto.getMetric());
 			mdto.setModelName(mdto.getModelName());
 			mdto.setBenchmarkDatase(mdto.getBenchmarkDatase());
@@ -279,7 +299,7 @@ public class ModelService {
 		return (ModelLeaderboardResponse) response;
 	}
 
-	public ModelLeaderboardFiltersResponse leaderBoardFilters() {
+	public ModelLeaderboardFiltersResponse leaderBoardFilters_bkp() {
 
 		log.info("******** Entry ModelService:: leaderBoardFilters *******");
 
@@ -314,5 +334,63 @@ public class ModelService {
 		return response;
 
 	}
+	
+	public Object leaderBoardFilters() throws IOException {
+
+		log.info("******** Entry ModelService:: leaderBoardFilters *******");
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		
+		String commonFilterUrl = "https://raw.githubusercontent.com/ULCA-IN/ulca/model_api/master-data/dev/modelFilter.json";
+		String commonFilterData = builder.build().get().uri(commonFilterUrl).retrieve().bodyToMono(String.class).block();
+		
+		JSONObject filters =  new JSONObject(commonFilterData);
+		
+		JSONObject benchmarkDataset = new JSONObject();
+		ModelTask task = new ModelTask();
+		task.setType(ModelTask.TypeEnum.TRANSLATION);
+		List<Benchmark>  trans = benchmarkDao.findByTask(task);
+		String transData = objectMapper.writeValueAsString(trans);
+		JSONArray transJson =  new JSONArray(transData);
+		benchmarkDataset.put("translation", transJson);
+		
+		task = new ModelTask();
+		task.setType(ModelTask.TypeEnum.ASR);
+		List<Benchmark>  asr = benchmarkDao.findByTask(task);
+		String asrData = objectMapper.writeValueAsString(asr);
+		JSONArray asrJson =  new JSONArray(asrData);
+		benchmarkDataset.put("asr", asrJson);
+		
+		task = new ModelTask();
+		task.setType(ModelTask.TypeEnum.OCR);
+		List<Benchmark>  ocr = benchmarkDao.findByTask(task);
+		String ocrData = objectMapper.writeValueAsString(ocr);
+		JSONArray ocrJson =  new JSONArray(ocrData);
+		benchmarkDataset.put("ocr", ocrJson);
+		
+		task = new ModelTask();
+		task.setType(ModelTask.TypeEnum.TTS);
+		List<Benchmark>  tts = benchmarkDao.findByTask(task);
+		String ttsData = objectMapper.writeValueAsString(tts);
+		JSONArray ttsJson =  new JSONArray(ttsData);
+		benchmarkDataset.put("tts", ttsJson);
+		
+		task = new ModelTask();
+        task.setType(ModelTask.TypeEnum.DOCUMENT_LAYOUT);
+		List<Benchmark>  document = benchmarkDao.findByTask(task);
+		String documentData = objectMapper.writeValueAsString(document);
+		JSONArray documentJson =  new JSONArray(documentData);
+		benchmarkDataset.put("document", documentJson);
+		
+		filters.put("benchmarkDataset", benchmarkDataset);
+		
+		Object  filterObj = objectMapper.readValue(filters.toString(), Object.class);
+		
+		
+		return filterObj;
+		
+	}
+	
+	
 
 }

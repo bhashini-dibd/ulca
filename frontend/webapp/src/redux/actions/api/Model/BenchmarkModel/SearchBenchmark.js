@@ -15,7 +15,7 @@ export default class SearchModel extends API {
         this.targetLanguage = targetLanguage;
         this.domain = domain;
         this.submitter = submitter
-        this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.modelSearch}`;
+        this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.benchmarkModelSearch}`;
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'));
         this.type = C.BENCHMARK_MODEL_SEARCH;
     }
@@ -39,7 +39,7 @@ export default class SearchModel extends API {
 
     getBody() {
         let bodyData = {
-            task: "ocr",
+            task: this.task,
             sourceLanguage: this.sourceLanguage,
             targetLanguage: this.targetLanguage,
             domain: this.domain,

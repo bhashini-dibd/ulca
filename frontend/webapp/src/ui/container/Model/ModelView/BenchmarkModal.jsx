@@ -210,6 +210,7 @@ const BenchmarkModal = (props) => {
     download: false,
     search: false,
     filter: false,
+    pagination:false,
     expandableRows: true,
     rowsExpanded: selectedIndex,
     customRowRenderer: (data, dataIndex, rowIndex) => {},
