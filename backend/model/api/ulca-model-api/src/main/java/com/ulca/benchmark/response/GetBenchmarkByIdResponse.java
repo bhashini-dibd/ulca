@@ -1,8 +1,9 @@
-package com.ulca.benchmark.request;
+package com.ulca.benchmark.response;
+
 
 import java.util.List;
 
-import com.ulca.benchmark.response.BenchmarkDto;
+import com.ulca.benchmark.model.BenchmarkProcess;
 
 import io.swagger.model.Benchmark;
 import lombok.AllArgsConstructor;
@@ -12,15 +13,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class BenchmarkSearchResponse {
+@AllArgsConstructor
 
-	String message;
-	List<BenchmarkDto> benchmark;
+public class GetBenchmarkByIdResponse extends Benchmark {
+
+	List<BenchmarkProcess> benchmarkPerformance ;
 	
-	int count;
-
 }
