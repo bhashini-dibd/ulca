@@ -14,6 +14,7 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 import { Grid, Typography, Button, Divider } from "@material-ui/core";
 import HostedInferASR from "./HostedInferASR";
 import HostedInferOCR from "./HostedInferOCR";
+import BenchmarkTable from "./BenchmarkTable";
 
 const SearchModelDetail = (props) => {
   const { classes } = props;
@@ -175,6 +176,7 @@ const SearchModelDetail = (props) => {
                 {description.map((des) => (
                   <ModelDescription title={des.title} para={des.para} />
                 ))}
+                <BenchmarkTable modelId={params.srno} />
               </Grid>
             </Grid>
           )}
