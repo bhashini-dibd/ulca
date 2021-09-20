@@ -21,6 +21,7 @@ import getBenchMarkDetails from "./Model/ModelView/RunBenchmark";
 import SearchReadymadeDataset from "./DataSet/ReadymadeDataset/SearchReadymade";
 import searchReadymade from "./DataSet/ReadymadeDataset/Readymade";
 import benchmarkDetails from './Model/BenchmarkModel/BenchmarkDetails';
+import benchmarkTableDetails from './Model/ModelSearch/BenchmarkTable';
 
 const index = {
   apiStatus,
@@ -45,7 +46,8 @@ const index = {
   searchReadymade,
   BenchmarkSearch,
   BenchmarkList,
-  benchmarkDetails
+  benchmarkDetails,
+  benchmarkTableDetails
 };
 
 export default index;
