@@ -97,11 +97,11 @@ const getContributionList = (state, payload) => {
         responseData.push(
             {
                 description: element.description,
-                submitRefNumber: element.modelId,
+                submitRefNumber: element.benchmarkId,
                 modelName: element.name,
                 // submittedOn: dateConversion(element.submittedOn),
                 // publishedOn: dateConversion(element.publishedOn),
-                metrics:"-",
+                metrics:element.metric ? element.metric:"-" ,
                 task: element.task.type,
                 domain: domain,
                 status: "Published",
@@ -113,7 +113,7 @@ const getContributionList = (state, payload) => {
                 source: element.languages.length > 0 && element.languages[0].sourceLanguage,
                 target: element.languages && element.languages.length > 0 && element.languages[0].targetLanguage,
                 licence: element.license,
-                submitter: element.submitter.name,
+                // submitter: element.submitter.name,
                 trainingDataset: element.trainingDataset,
                 color: element.status === "Completed" ? "#139D60" : element.status === "In-Progress" ? "#139D60" : element.status === "Failed" ? "#139D60" : "green"
             }
@@ -122,7 +122,7 @@ const getContributionList = (state, payload) => {
         !languageFilter.includes(sLanguage) && sLanguage && languageFilter.push(sLanguage)
         !languageFilter.includes(tLanguage) && tLanguage && languageFilter.push(tLanguage)
         !domainFilter.includes(domain) && domain && domainFilter.push(domain)
-        !submitterFilter.includes(element.submitter.name) && element.submitter.name && submitterFilter.push(element.submitter.name)
+        // !submitterFilter.includes(element.submitter.name) && element.submitter.name && submitterFilter.push(element.submitter.name)
     });
 
     filter.language = [...(new Set(languageFilter))];
