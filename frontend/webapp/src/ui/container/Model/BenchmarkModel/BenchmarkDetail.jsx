@@ -73,7 +73,7 @@ const SearchModelDetail = (props) => {
   const [index, setIndex] = useState(0);
   const [modelTry, setModelTry] = useState(false);
   const location = useLocation();
-  const { prevUrl } = location.state;
+  // const { prevUrl } = location.state;
   const metricArray = data.metricArray ? data.metricArray : [];
   //   useEffect(() => {
   //     setData(location.state);
@@ -231,10 +231,10 @@ const SearchModelDetail = (props) => {
             startIcon={<ArrowBack />}
             onClick={() => handleCardNavigation()}
           >
-            {prevUrl === "explore-models"
+            {/* {prevUrl === "explore-models"
               ? "Back to Benchmark Datasets"
-              : "Back to Explore Models"}
-            {/* Back to Benchmark Datasets */}
+              : "Back to Explore Models"} */}
+            Back to Benchmark Datasets
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
