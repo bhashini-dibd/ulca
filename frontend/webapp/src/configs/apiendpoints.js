@@ -1,11 +1,10 @@
 const endpoints = {
-
-  getContributionList: '/ulca/apis/v0/dataset/listByUserId',
-  getDetailReport: '/ulca/apis/v0/dataset/getByServiceRequestNumber',
-  dataSetSearchApi: '/ulca/data-metric/v0/store/search',
-  login: '/ulca/user-mgmt/v1/users/login',
-  datasetSubmit: '/ulca/apis/v0/dataset/corpus/submit',
-  getSearchOptions: '/ulca/data-metric/v0/store/attributes',
+  getContributionList: "/ulca/apis/v0/dataset/listByUserId",
+  getDetailReport: "/ulca/apis/v0/dataset/getByServiceRequestNumber",
+  dataSetSearchApi: "/ulca/data-metric/v0/store/search",
+  login: "/ulca/user-mgmt/v1/users/login",
+  datasetSubmit: "/ulca/apis/v0/dataset/corpus/submit",
+  getSearchOptions: "/ulca/data-metric/v0/store/attributes",
   mySearches: "/ulca/apis/v0/dataset/corpus/search/listByUserId",
   submitSearchReq: "/ulca/apis/v0/dataset/corpus/search",
   errorReport: "/ulca/error-consumer/v0/error/report",
@@ -21,7 +20,9 @@ const endpoints = {
   hostedVoice: "/ulca/apis/asr/v1/model/compute",
   getBenchmarkDetails: "/ulca/apis/v0/benchmark/getByTask",
   submitBenchmark: "/ulca/apis/v0/benchmark/execute",
-  benchmarkModelSearch:"/ulca/apis/v0/benchmark/search"
+  benchmarkTable: '/ulca/apis/v0/model/getModel',
+  benchmarkModelSearch:"/ulca/apis/v0/benchmark/search",
+  benchmarkDetails:"/ulca/apis/v0/benchmark/getBenchmark"
 };
 
 export default endpoints;
