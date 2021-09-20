@@ -18,7 +18,6 @@ const dateConversion = (value) => {
 }
 
 const getFilterValue = (payload, data) => {
-    debugger
     let { filterValues } = payload
     let languageFilter = []
     let domainFilterValue = []
@@ -60,7 +59,6 @@ const getFilterValue = (payload, data) => {
 }
 
 const getDomainDetails = (data) => {
-    debugger
     if (data.length === 1) {
         return data[0]
     } else {
@@ -96,6 +94,7 @@ const getContributionList = (state, payload) => {
         let tLanguage = element.languages && element.languages.length > 0 && element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
         let lang = tLanguage ? (sLanguage + " - " + tLanguage) : sLanguage;
         let domain = getDomainDetails(element.domain)
+        let metrics = element.metric && getDomainDetails(element.metric)
         responseData.push(
             {
                 description: element.description,
@@ -103,7 +102,7 @@ const getContributionList = (state, payload) => {
                 modelName: element.name,
                 // submittedOn: dateConversion(element.submittedOn),
                 // publishedOn: dateConversion(element.publishedOn),
-                metrics:element.metric ? element.metric:"-" ,
+                metrics:metrics ? metrics:"-" ,
                 task: element.task.type,
                 domain: domain,
                 status: "Published",
@@ -115,7 +114,7 @@ const getContributionList = (state, payload) => {
                 source: element.languages.length > 0 && element.languages[0].sourceLanguage,
                 target: element.languages && element.languages.length > 0 && element.languages[0].targetLanguage,
                 licence: element.license,
-                // submitter: element.submitter.name,
+                submitter: element.submitter ? element.submitter.name :"-",
                 trainingDataset: element.trainingDataset,
                 color: element.status === "Completed" ? "#139D60" : element.status === "In-Progress" ? "#139D60" : element.status === "Failed" ? "#139D60" : "green"
             }
