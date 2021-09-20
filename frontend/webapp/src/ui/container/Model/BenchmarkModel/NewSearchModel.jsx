@@ -86,10 +86,10 @@ const handleClick = (data) => {
     data.prevUrl = 'explore-models';
     console.log(data)
     dispatch(updateFilter({ source: "", filter: "", type: data.task }));
-    history.push({
-        pathname: `${process.env.PUBLIC_URL}/benchmark-details/${data.submitRefNumber}`,
-        state: data
-    })
+    // history.push({
+    //     pathname: `${process.env.PUBLIC_URL}/model/benchmark-details/${data.submitRefNumber}`,
+    //     state: data
+    // })
 }
 
 
