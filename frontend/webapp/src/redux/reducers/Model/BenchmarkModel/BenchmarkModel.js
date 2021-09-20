@@ -18,6 +18,7 @@ const dateConversion = (value) => {
 }
 
 const getFilterValue = (payload, data) => {
+    debugger
     let { filterValues } = payload
     let languageFilter = []
     let domainFilterValue = []
@@ -50,7 +51,7 @@ const getFilterValue = (payload, data) => {
         })
     }
     else {
-        filterResult = languageFilter
+        filterResult = domainFilterValue
     }
     data.filteredData = filterResult;
     data.selectedFilter = filterValues;
@@ -59,6 +60,7 @@ const getFilterValue = (payload, data) => {
 }
 
 const getDomainDetails = (data) => {
+    debugger
     if (data.length === 1) {
         return data[0]
     } else {

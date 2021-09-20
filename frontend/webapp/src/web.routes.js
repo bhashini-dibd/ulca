@@ -107,14 +107,12 @@ export default function App() {
             )}
           />
           <Route
-            path={`${process.env.PUBLIC_URL}/model/benchmark-models`}
-            render={(props) => (
-              <PublicLayout
-                type={"models"}
-                index={3}
-                component={BenchmarkModels}
-              />
-            )}
+            path={`${process.env.PUBLIC_URL}/model/benchmark-datasets`}
+            render={(props) =>
+            <PublicLayout type = {"models"}
+            index={3}
+            component={BenchmarkModels} />
+            }
           />
           <Route
             path={`${process.env.PUBLIC_URL}/model/benchmark-details/:benchmarkId`}

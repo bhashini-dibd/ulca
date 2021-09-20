@@ -164,7 +164,7 @@ const SearchModelDetail = (props) => {
   };
 
   const handleCardNavigation = () => {
-    history.push(`${process.env.PUBLIC_URL}/model/benchmark-models`);
+    history.push(`${process.env.PUBLIC_URL}/model/benchmark-datasets`);
   };
 
   return (
@@ -182,7 +182,7 @@ const SearchModelDetail = (props) => {
             {/* {prevUrl === "explore-models"
               ? "Back to Model List"
               : "Back to My Contribution"} */}
-            Back to Benchmark Model
+            Back to Benchmark Datasets
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
