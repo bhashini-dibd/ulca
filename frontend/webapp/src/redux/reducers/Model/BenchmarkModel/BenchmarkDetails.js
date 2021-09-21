@@ -13,6 +13,7 @@ const initialState = {
   languages: [],
   createdOn: null,
   submittedOn: null,
+  metricArray:[]
 };
 
 const addPositions = (data) => {
@@ -58,7 +59,6 @@ const getBenchmarkDetails = (data) => {
   };
 };
 
-const getMetricData = (prevState, payload) => {};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -66,10 +66,6 @@ const reducer = (state = initialState, action) => {
       const data = getBenchmarkDetails(action.payload);
       return {
         ...data,
-      };
-    case C.GET_METRIC_DETAILS:
-      return {
-        ...getMetricData(state, action.payload),
       };
     default:
       return {
