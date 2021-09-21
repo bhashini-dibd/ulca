@@ -40,10 +40,10 @@ const CardComponent = (props) => {
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Published On</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{data.publishedOn.split(",")[0]}</Typography>
                                 </Grid>}
-                                {data.metrics && <Grid item>
+                                {/* {data.metrics && <Grid item>
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Metrics</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{data.metrics}</Typography>
-                                </Grid>}
+                                </Grid>} */}
                             </Grid>
                         </div>
                     </Grid>
