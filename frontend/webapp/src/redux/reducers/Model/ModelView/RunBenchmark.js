@@ -55,7 +55,7 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   let result = Object.assign([], JSON.parse(JSON.stringify(prevState)));
   if (type === "DATASET") {
     index = getIndex(result.result, index);
-    result.result[index].selected = !result.result[index].selected;
+    // result.result[index].selected = !result.result[index].selected;
     result.filteredData[parentIndex].selected =
       !result.filteredData[parentIndex].selected;
     if (result.selectedIndex.indexOf(index) > -1) {
@@ -77,21 +77,42 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
       !result.filteredData[parentIndex].metric[index].selected;
   }
   let updatedBenchmarkInfo = [];
-  result.result.forEach((val) => {
+  result.filteredData.forEach((val) => {
     if (val.selected) {
       updatedBenchmarkInfo.push({
         benchmarkId: val.benchmarkId,
       });
       val.metric.forEach((e) => {
         if (e.selected) {
-          updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric =
-            e.metricName;
+          if (
+            updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric ===
+            undefined
+          ) {
+            updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric =
+              e.metricName;
+          } else {
+            updatedBenchmarkInfo.push({
+              benchmarkId: val.benchmarkId,
+              metric: e.metricName,
+            });
+          }
         }
       });
     }
   });
   result.benchmarkInfo = updatedBenchmarkInfo;
   result.submitStatus = getSubmitStatus(updatedBenchmarkInfo);
+  result.result = result.result.map((data) => {
+    let updatedData = {};
+    result.filteredData.forEach((value) => {
+      if (value.benchmarkId === data.benchmarkId) {
+        updatedData = Object.assign({}, JSON.parse(JSON.stringify(value)));
+      } else {
+        updatedData = Object.assign({}, JSON.parse(JSON.stringify(data)));
+      }
+    });
+    return updatedData;
+  });
   return result;
 };
 
@@ -120,7 +141,13 @@ const getFilteredData = (payload, searchValue) => {
   let filteredData = payload.filter((dataset) =>
     dataset.datasetName.toLowerCase().includes(searchValue.toLowerCase())
   );
-  return filteredData;
+  let newSelectedIndex = [];
+  filteredData.forEach((data, i) => {
+    if (data.selected) {
+      newSelectedIndex.push(i);
+    }
+  });
+  return { filteredData, selectedIndex: newSelectedIndex };
 };
 
 const getAvailableFilters = (payload) => {
@@ -187,10 +214,14 @@ const reducer = (state = initialState, action) => {
       };
     }
     case C.SEARCH_BENCHMARK: {
-      getFilteredData(state.result, action.payload);
+      const { filteredData, selectedIndex } = getFilteredData(
+        state.result,
+        action.payload
+      );
       return {
         ...state,
-        filteredData: getFilteredData(state.result, action.payload),
+        filteredData,
+        selectedIndex,
       };
     }
     case C.FILTER_BENCHMARK: {

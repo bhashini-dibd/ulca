@@ -109,8 +109,8 @@ const DetailedStatus = (props) => {
                                 sort: false,
                                 customBodyRender: (value, tableMeta, updateValue) => {
                                         return <div>
-                                                <Typography className={classes.hosted}>{tableMeta.rowData[2]} {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
-
+                                                {/* <Typography className={classes.hosted}>{tableMeta.rowData[2]} {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
+                                                <Typography className={classes.hosted}>{tableMeta.rowData[2]}</Typography>
 
                                         </div>
                                 },
