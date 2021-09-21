@@ -144,13 +144,11 @@ public class BenchmarkService {
 			BenchmarkDto dto = new BenchmarkDto();
 			BeanUtils.copyProperties(bm, dto);
 			List<String> metricList = getMetric(bm.getTask().getType().toString());
-			
+			dto.setMetric(new ArrayList<>(metricList));
 			List<BenchmarkProcess> bmProcList = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
-			
 			for(BenchmarkProcess bmProc : bmProcList) {
 				metricList.remove(bmProc.getMetric());
 			}
-			
 			dto.setAvailableMetric(metricList);
 			dtoList.add(dto);
 			
@@ -228,32 +226,32 @@ public class BenchmarkService {
 	List<String> getMetric(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu", "sacrebleu", "meteor", "lepor" };
-			list = Arrays.asList(metric);
+			String[] metric = { "bleu", "sacrebleu","meteor","lepor" };
+			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 
 		if (task.equalsIgnoreCase("asr")) {
 			String[] metric = { "wer", "cer" };
-			list = Arrays.asList(metric);
+			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("ocr")) {
 
 			String[] metric = { "wer", "cer" };
-			list = Arrays.asList(metric);
+			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("tts")) {
 
 			String[] metric = { "wer", "cer" };
-			list = Arrays.asList(metric);
+			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 
 		if (task.equalsIgnoreCase("document-layout")) {
 			String[] metric = { "precision", "recall", "h1-mean" };
-			list = Arrays.asList(metric);
+			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		return list;
