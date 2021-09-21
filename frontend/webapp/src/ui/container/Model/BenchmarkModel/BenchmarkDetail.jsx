@@ -74,18 +74,20 @@ const SearchModelDetail = (props) => {
   const [modelTry, setModelTry] = useState(false);
   const location = useLocation();
   const { prevUrl } = location.state ? location.state : "";
-  const metricArray = data.metricArray ? data.metricArray : [];
-  //   useEffect(() => {
-  //     setData(location.state);
-  //   }, [location]);
+  const metricArray = data.metricArray;
+  const [metric, setMetric] = useState("");
+  const tableData = useSelector(
+    (state) => state.benchmarkDetails.benchmarkPerformance
+  );
+
+  useEffect(() => {
+    setMetric(metricArray[0]);
+  }, [metricArray]);
+
   const description = [
     {
       title: "Description",
       para: data.description,
-    },
-    {
-      title: "Source URL",
-      para: data.refUrl,
     },
     {
       title: "Task",
@@ -100,31 +102,14 @@ const SearchModelDetail = (props) => {
       title: "Domain",
       para: data.domain,
     },
-    // {
-    //   title: "Metric",
-    //   para: data.metric,
-    // },
   ];
-  //   const { prevUrl } = location.state;
   const handleCardNavigation = () => {
-    // const { prevUrl } = location.state
     if (prevUrl === "explore-models") {
       history.push(`${process.env.PUBLIC_URL}/model/benchmark-datasets`);
     } else {
       history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
     }
   };
-
-  const handleClick = () => {
-    history.push({
-      pathname: `${process.env.PUBLIC_URL}/search-model/${params.srno}/model`,
-      state: data,
-    });
-  };
-
-  const tableData = useSelector(
-    (state) => state.benchmarkDetails.benchmarkPerformance
-  );
 
   const columns = [
     {
@@ -144,7 +129,7 @@ const SearchModelDetail = (props) => {
   const options = {
     textLabels: {
       body: {
-        noMatch: "No benchmark dataset available",
+        noMatch: "No records available",
       },
     },
     print: false,
@@ -159,6 +144,7 @@ const SearchModelDetail = (props) => {
 
   const handleIndexChange = (metric) => {
     setIndex(metricArray.indexOf(metric));
+    setMetric(metric);
   };
 
   const getMuiTheme = () =>
@@ -249,6 +235,15 @@ const SearchModelDetail = (props) => {
           {metricArray.length ? (
             <Grid container>
               <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+                <Typography
+                  style={{ marginTop: "3%" }}
+                  variant="h5"
+                  className={classes.mainTitle}
+                >
+                  Model Leaderboard
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
                 <Box
                   sx={{
                     bgcolor: "background.paper",
@@ -257,7 +252,7 @@ const SearchModelDetail = (props) => {
                 >
                   <AppBar
                     color="transparent"
-                    style={{ border: "none", marginTop: "3%" }}
+                    style={{ border: "none" }}
                     position="static"
                   >
                     <Tabs
@@ -275,11 +270,10 @@ const SearchModelDetail = (props) => {
                       ))}
                     </Tabs>
                   </AppBar>
-
                   <TabPanel value={value} index={index}>
                     <MuiThemeProvider theme={getMuiTheme()}>
                       <MUIDataTable
-                        data={tableData}
+                        data={tableData[metric]}
                         columns={columns}
                         options={options}
                       />

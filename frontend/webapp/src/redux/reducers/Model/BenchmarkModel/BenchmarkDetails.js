@@ -13,13 +13,31 @@ const initialState = {
   languages: [],
   createdOn: null,
   submittedOn: null,
+  metricArray:[]
 };
 
 const addPositions = (data) => {
-  return data.map((val, i) => {
-    val.position = i + 1;
-    return val;
+  const keys = Object.keys(data);
+  keys.forEach((key) => {
+    data[key].forEach((val, i) => {
+      val["position"] = i + 1;
+    });
   });
+  console.log(data);
+  return data;
+};
+
+const updateBenchmarkPerformance = (performanceData) => {
+  let obj = {};
+  performanceData.forEach((data) => {
+    if (obj[data.metric] === undefined) {
+      obj[data.metric] = [data];
+    } else {
+      obj[data.metric] = obj[data.metric].push(data);
+    }
+  });
+  let resultObj = addPositions(obj);
+  return resultObj;
 };
 
 const getBenchmarkDetails = (data) => {
@@ -37,9 +55,10 @@ const getBenchmarkDetails = (data) => {
     metric: data.metric ? data.metric.join(", ") : "",
     task: data.task.type,
     metricArray: data.metric,
-    benchmarkPerformance: addPositions(data.benchmarkPerformance),
+    benchmarkPerformance: updateBenchmarkPerformance(data.benchmarkPerformance),
   };
 };
+
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
