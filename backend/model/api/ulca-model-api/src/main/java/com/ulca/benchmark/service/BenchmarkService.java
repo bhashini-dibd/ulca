@@ -212,6 +212,8 @@ public class BenchmarkService {
 		if (result != null) {
 			GetBenchmarkByIdResponse bmDto = new GetBenchmarkByIdResponse();
 			BeanUtils.copyProperties(result, bmDto);
+			List<String> metricList = getMetric(result.getTask().getType().toString());
+			bmDto.setMetric(metricList);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkprocessDao.findByBenchmarkDatasetId(benchmarkId);
 			benchmarkProcess.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
 			bmDto.setBenchmarkPerformance(benchmarkProcess);
