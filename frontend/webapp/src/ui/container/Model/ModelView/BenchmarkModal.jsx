@@ -192,7 +192,6 @@ const BenchmarkModal = (props) => {
         filter: false,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          console.log(tableMeta);
           return renderSelectButton(
             "DATASET",
             tableMeta.rowData[0],

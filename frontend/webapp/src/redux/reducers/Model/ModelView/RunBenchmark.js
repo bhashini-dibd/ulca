@@ -84,8 +84,18 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
       });
       val.metric.forEach((e) => {
         if (e.selected) {
-          updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric =
-            e.metricName;
+          if (
+            updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric ===
+            undefined
+          ) {
+            updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric =
+              e.metricName;
+          } else {
+            updatedBenchmarkInfo.push({
+              benchmarkId: val.benchmarkId,
+              metric: e.metricName,
+            });
+          }
         }
       });
     }
