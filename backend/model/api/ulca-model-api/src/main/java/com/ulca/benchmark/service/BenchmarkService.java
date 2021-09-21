@@ -144,6 +144,7 @@ public class BenchmarkService {
 			BenchmarkDto dto = new BenchmarkDto();
 			BeanUtils.copyProperties(bm, dto);
 			List<String> metricList = getMetric(bm.getTask().getType().toString());
+			dto.setMetric(new ArrayList<>(metricList));
 			List<BenchmarkProcess> bmProcList = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
 			for(BenchmarkProcess bmProc : bmProcList) {
 				metricList.remove(bmProc.getMetric());
