@@ -1,6 +1,7 @@
 package com.ulca.benchmark.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -142,7 +143,8 @@ public class BenchmarkService {
 		for(Benchmark bm : list) {
 			BenchmarkDto dto = new BenchmarkDto();
 			BeanUtils.copyProperties(bm, dto);
-			List<String> metricList = new ArrayList<>(bm.getMetric());
+			List<String> metricList = getMetric(bm.getTask().getType().toString());
+			
 			List<BenchmarkProcess> bmProcList = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
 			
 			for(BenchmarkProcess bmProc : bmProcList) {
@@ -220,6 +222,41 @@ public class BenchmarkService {
 		}
 		return null;
 		
+	}
+	
+
+	List<String> getMetric(String task) {
+		List<String> list = null;
+		if (task.equalsIgnoreCase("translation")) {
+			String[] metric = { "bleu", "sacrebleu", "meteor", "lepor" };
+			list = Arrays.asList(metric);
+			return list;
+		}
+
+		if (task.equalsIgnoreCase("asr")) {
+			String[] metric = { "wer", "cer" };
+			list = Arrays.asList(metric);
+			return list;
+		}
+		if (task.equalsIgnoreCase("ocr")) {
+
+			String[] metric = { "wer", "cer" };
+			list = Arrays.asList(metric);
+			return list;
+		}
+		if (task.equalsIgnoreCase("tts")) {
+
+			String[] metric = { "wer", "cer" };
+			list = Arrays.asList(metric);
+			return list;
+		}
+
+		if (task.equalsIgnoreCase("document-layout")) {
+			String[] metric = { "precision", "recall", "h1-mean" };
+			list = Arrays.asList(metric);
+			return list;
+		}
+		return list;
 	}
 
 }
