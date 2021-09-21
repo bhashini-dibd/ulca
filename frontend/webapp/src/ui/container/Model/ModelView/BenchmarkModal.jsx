@@ -149,6 +149,13 @@ const BenchmarkModal = (props) => {
   };
   const columns = [
     {
+      name: "benchmarkId",
+      label: "Benchmark Id",
+      options: {
+        display: "excluded",
+      },
+    },
+    {
       name: "datasetName",
       label: "Benchmark Dataset",
       options: {
@@ -185,10 +192,11 @@ const BenchmarkModal = (props) => {
         filter: false,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
+          console.log(tableMeta);
           return renderSelectButton(
             "DATASET",
-            tableMeta.rowIndex,
-            tableMeta.rowData[3],
+            tableMeta.rowData[0],
+            tableMeta.rowData[4],
             tableMeta.rowIndex
           );
         },
@@ -210,7 +218,7 @@ const BenchmarkModal = (props) => {
     download: false,
     search: false,
     filter: false,
-    pagination:false,
+    pagination: false,
     expandableRows: true,
     rowsExpanded: selectedIndex,
     customRowRenderer: (data, dataIndex, rowIndex) => {},
@@ -364,7 +372,7 @@ const BenchmarkModal = (props) => {
         MUIDataTableHeadCell: {
           fixedHeader: {
             position: "initial",
-            width:'120px'
+            width: "120px",
           },
         },
         MuiToolbar: {

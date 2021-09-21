@@ -1,4 +1,4 @@
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, createMuiTheme } from "@material-ui/core/styles";
 import DatasetStyle from "../../../styles/Dataset";
 import { ArrowBack } from "@material-ui/icons";
 import { useHistory, useParams } from "react-router";
@@ -69,9 +69,11 @@ const SearchModelDetail = (props) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   const [index, setIndex] = useState(0);
   const [modelTry, setModelTry] = useState(false);
   const location = useLocation();
+  const { prevUrl } = location.state ? location.state : "";
   const metricArray = data.metricArray ? data.metricArray : [];
   //   useEffect(() => {
   //     setData(location.state);
@@ -98,20 +100,20 @@ const SearchModelDetail = (props) => {
       title: "Domain",
       para: data.domain,
     },
-    {
-      title: "Metric",
-      para: data.metric,
-    },
+    // {
+    //   title: "Metric",
+    //   para: data.metric,
+    // },
   ];
   //   const { prevUrl } = location.state;
-  //   const handleCardNavigation = () => {
-  //     // const { prevUrl } = location.state
-  //     if (prevUrl === "explore-models") {
-  //       history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
-  //     } else {
-  //       history.push(`${process.env.PUBLIC_URL}/model/my-contribution`);
-  //     }
-  //   };
+  const handleCardNavigation = () => {
+    // const { prevUrl } = location.state
+    if (prevUrl === "explore-models") {
+      history.push(`${process.env.PUBLIC_URL}/model/benchmark-datasets`);
+    } else {
+      history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
+    }
+  };
 
   const handleClick = () => {
     history.push({
@@ -120,13 +122,9 @@ const SearchModelDetail = (props) => {
     });
   };
 
-  const tableData = [
-    {
-      position: "1",
-      modelName: "Model 1",
-      score: "1",
-    },
-  ];
+  const tableData = useSelector(
+    (state) => state.benchmarkDetails.benchmarkPerformance
+  );
 
   const columns = [
     {
@@ -163,9 +161,59 @@ const SearchModelDetail = (props) => {
     setIndex(metricArray.indexOf(metric));
   };
 
-  const handleCardNavigation = () => {
-    history.push(`${process.env.PUBLIC_URL}/model/benchmark-datasets`);
-  };
+  const getMuiTheme = () =>
+    createMuiTheme({
+      overrides: {
+        MUIDataTableBodyRow: {
+          root: {
+            "&:nth-child(odd)": {
+              backgroundColor: "#D6EAF8",
+            },
+            "&:nth-child(even)": {
+              backgroundColor: "#E9F7EF",
+            },
+          },
+        },
+        MUIDataTable: {
+          paper: {
+            minHeight: "560px",
+            boxShadow: "0px 0px 2px #00000029",
+            border: "1px solid #0000001F",
+          },
+          responsiveBase: {
+            minHeight: "560px",
+          },
+        },
+        MuiTableCell: {
+          head: {
+            // padding: ".6rem .5rem .6rem 1.5rem",
+            backgroundColor: "#F8F8FA !important",
+            marginLeft: "25px",
+            letterSpacing: "0.74",
+            fontWeight: "bold",
+            minHeight: "700px",
+          },
+          paddingCheckbox: {
+            display: "none",
+          },
+        },
+        MuiTableRow: {
+          root: {
+            border: "1px solid #3A3A3A1A",
+            opacity: 1,
+            "&$hover:hover:nth-child(odd)": { backgroundColor: "#D6EAF8" },
+            "&$hover:hover:nth-child(even)": { backgroundColor: "#E9F7EF" },
+          },
+        },
+        MUIDataTableHeadCell: {
+          root: {
+            "&$nth-child(1)": {
+              width: "3%",
+            },
+          },
+        },
+      },
+    });
 
   return (
     <MuiThemeProvider theme={Theme}>
@@ -179,10 +227,10 @@ const SearchModelDetail = (props) => {
             startIcon={<ArrowBack />}
             onClick={() => handleCardNavigation()}
           >
-            {/* {prevUrl === "explore-models"
-              ? "Back to Model List"
-              : "Back to My Contribution"} */}
-            Back to Benchmark Datasets
+            {prevUrl === "explore-models"
+              ? "Back to Benchmark Datasets"
+              : "Back to Explore Models"}
+            {/* Back to Benchmark Datasets */}
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -198,7 +246,7 @@ const SearchModelDetail = (props) => {
               ))}
             </Grid>
           </Grid>
-          {/* {metricArray.length ? (
+          {metricArray.length ? (
             <Grid container>
               <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
                 <Box
@@ -229,18 +277,20 @@ const SearchModelDetail = (props) => {
                   </AppBar>
 
                   <TabPanel value={value} index={index}>
-                    <MUIDataTable
-                      data={tableData}
-                      columns={columns}
-                      options={options}
-                    />
+                    <MuiThemeProvider theme={getMuiTheme()}>
+                      <MUIDataTable
+                        data={tableData}
+                        columns={columns}
+                        options={options}
+                      />
+                    </MuiThemeProvider>
                   </TabPanel>
                 </Box>
               </Grid>
             </Grid>
           ) : (
             <div></div>
-          )} */}
+          )}
         </div>
       )}
       <Footer />

@@ -40,22 +40,35 @@ const getBenchmarkDetails = (payload) => {
   return result;
 };
 
+const getIndex = (data, benchmarkId) => {
+  let index = 0;
+  data.forEach((val, i) => {
+    console.log(val.benchmarkId);
+    if (val.benchmarkId === benchmarkId) {
+      index = i;
+    }
+  });
+  return index;
+};
+
 const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   let result = Object.assign([], JSON.parse(JSON.stringify(prevState)));
   if (type === "DATASET") {
+    index = getIndex(result.result, index);
     result.result[index].selected = !result.result[index].selected;
-    result.filteredData[index].selected = !result.filteredData[index].selected;
+    result.filteredData[parentIndex].selected =
+      !result.filteredData[parentIndex].selected;
     if (result.selectedIndex.indexOf(index) > -1) {
       result.result[index].metric.forEach((val) => {
         val.selected = false;
       });
-      result.filteredData[index].metric.forEach((val) => {
+      result.filteredData[parentIndex].metric.forEach((val) => {
         val.selected = false;
       });
       result.benchmarkInfo.splice(result.selectedIndex.indexOf(index), 1);
       result.selectedIndex.splice(result.selectedIndex.indexOf(index), 1);
     } else {
-      result.selectedIndex.push(index);
+      result.selectedIndex.push(parentIndex);
     }
   } else {
     result.result[parentIndex].metric[index].selected =
@@ -151,7 +164,12 @@ const reducer = (state = initialState, action) => {
     case C.SELECT_DATASET:
       return {
         ...state,
-        ...getUpdatedBenchMark("DATASET", state, action.payload.index),
+        ...getUpdatedBenchMark(
+          "DATASET",
+          state,
+          action.payload.index,
+          action.payload.parentIndex
+        ),
       };
     case C.SELECT_METRIC:
       return {
