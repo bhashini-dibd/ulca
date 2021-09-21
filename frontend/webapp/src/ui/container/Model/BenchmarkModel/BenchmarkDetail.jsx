@@ -58,6 +58,7 @@ const SearchModelDetail = (props) => {
   const history = useHistory();
   const params = useParams();
   const benchmarkId = params.benchmarkId;
+  const [metric, setMetric] = useState("");
   const data = useSelector((state) => state.benchmarkDetails);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -75,18 +76,18 @@ const SearchModelDetail = (props) => {
   const location = useLocation();
   const { prevUrl } = location.state ? location.state : "";
   const metricArray = data.metricArray ? data.metricArray : [];
-  //   useEffect(() => {
-  //     setData(location.state);
-  //   }, [location]);
+  useEffect(() => {
+    setMetric(metricArray[0] ? metricArray[0] : "");
+  }, []);
   const description = [
     {
       title: "Description",
       para: data.description,
     },
-    {
-      title: "Source URL",
-      para: data.refUrl,
-    },
+    // {
+    //   title: "Source URL",
+    //   para: data.refUrl,
+    // },
     {
       title: "Task",
       para: data.task,
@@ -126,6 +127,7 @@ const SearchModelDetail = (props) => {
     (state) => state.benchmarkDetails.benchmarkPerformance
   );
 
+
   const columns = [
     {
       name: "position",
@@ -144,7 +146,7 @@ const SearchModelDetail = (props) => {
   const options = {
     textLabels: {
       body: {
-        noMatch: "No benchmark dataset available",
+        noMatch: "No records available",
       },
     },
     print: false,
@@ -158,7 +160,9 @@ const SearchModelDetail = (props) => {
   };
 
   const handleIndexChange = (metric) => {
+    console.log(metric);
     setIndex(metricArray.indexOf(metric));
+    setMetric(metric);
   };
 
   const getMuiTheme = () =>
@@ -279,7 +283,8 @@ const SearchModelDetail = (props) => {
                   <TabPanel value={value} index={index}>
                     <MuiThemeProvider theme={getMuiTheme()}>
                       <MUIDataTable
-                        data={tableData}
+                        title={"Model Leaderboard"}
+                        data={tableData[metric]}
                         columns={columns}
                         options={options}
                       />
