@@ -13,7 +13,7 @@ const initialState = {
   languages: [],
   createdOn: null,
   submittedOn: null,
-  metricArray:[]
+  metricArray: [],
 };
 
 const addPositions = (data) => {
@@ -30,12 +30,15 @@ const addPositions = (data) => {
 const updateBenchmarkPerformance = (performanceData) => {
   let obj = {};
   performanceData.forEach((data) => {
+    console.log(data);
     if (obj[data.metric] === undefined) {
       obj[data.metric] = [data];
+      console.log(obj);
     } else {
-      obj[data.metric] = obj[data.metric].push(data);
+      obj[data.metric].push(data);
     }
   });
+  console.log(obj);
   let resultObj = addPositions(obj);
   return resultObj;
 };
@@ -58,7 +61,6 @@ const getBenchmarkDetails = (data) => {
     benchmarkPerformance: updateBenchmarkPerformance(data.benchmarkPerformance),
   };
 };
-
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
