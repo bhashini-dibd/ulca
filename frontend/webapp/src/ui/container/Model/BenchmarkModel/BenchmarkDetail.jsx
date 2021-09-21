@@ -63,7 +63,7 @@ const SearchModelDetail = (props) => {
   useEffect(() => {
     const apiObj = new BenchmarkDetails(benchmarkId);
     dispatch(APITransport(apiObj));
-  }, []);
+  }, [benchmarkId]);
 
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
