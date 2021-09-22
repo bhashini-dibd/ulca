@@ -38,6 +38,8 @@ class ErrorEvent:
             error_record = error_repo.search(query, exclude, None, None)
             if error_record:
                 return error_record
+            return [{"consolidated_file":None,"count":None,"file":None,"serviceRequestNumber":srn,"time_stamp":None,"uploaded":None}]
+
         except Exception as e:
             log.exception(f'Exception while fetching error report: {e}')
             return []
