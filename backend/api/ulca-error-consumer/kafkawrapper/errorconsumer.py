@@ -39,7 +39,8 @@ def error_consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
-                        error_event.write_error(data)
+                        error_event.write_error_in_redis(data)
+                        error_event.write_error_in_mongo(data)
                     else:
                         break
                 except Exception as e:
