@@ -1,8 +1,14 @@
 import os
 
-# redis_server_host = os.environ.get('REDIS_URL', 'localhost')
-# redis_server_port = os.environ.get('REDIS_PORT', 6379)
-# redis_server_pass = os.environ.get('REDIS_PASS', None)
+redis_server_host = os.environ.get('REDIS_URL', 'localhost')
+redis_server_port = os.environ.get('REDIS_PORT', 6379)
+redis_server_pass = os.environ.get('REDIS_PASS', None)
+
+benchmark_metrics_dedup_redis_db = os.environ.get('ULCA_BENCHMARK_METRICS_DEDUP_REDIS_DB', 7)
+if isinstance(benchmark_metrics_dedup_redis_db, str):
+    benchmark_metrics_dedup_redis_db = eval(benchmark_metrics_dedup_redis_db)
+
+record_expiry_in_sec = os.environ.get('ULCA_BENCHMARK_METRICS_RECORD_EXPIRY_IN_SEC', 172800)
 
 metric_config_path = os.environ.get('ULCA_MODEL_METRIC_CONFIG_PATH', 'configs/metric_config.json')
 
