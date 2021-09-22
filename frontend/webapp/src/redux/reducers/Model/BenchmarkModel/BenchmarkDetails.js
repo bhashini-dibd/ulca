@@ -59,6 +59,7 @@ const getBenchmarkDetails = (data) => {
     task: data.task.type,
     metricArray: data.metric,
     benchmarkPerformance: updateBenchmarkPerformance(data.benchmarkPerformance),
+    submitter: data.submitter.name,
   };
 };
 

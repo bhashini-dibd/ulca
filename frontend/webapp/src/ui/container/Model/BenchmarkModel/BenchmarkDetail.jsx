@@ -99,6 +99,10 @@ const SearchModelDetail = (props) => {
       para: data.language,
     },
     {
+      title: "Submitter",
+      para: data.submitter,
+    },
+    {
       title: "Domain",
       para: data.domain,
     },
