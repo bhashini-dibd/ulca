@@ -24,8 +24,9 @@ function App(props) {
     }
   };
   useEffect(() => {
-    window.scrollTo()
+    window.scrollTo();
   }, []);
+
   const handleClose = () => {
     setPopup(false);
   };
