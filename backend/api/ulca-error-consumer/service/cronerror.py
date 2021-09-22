@@ -1,9 +1,11 @@
+from events.processrepo import ProcessRepo
 import threading
 from threading import Thread
 from configs.configs import error_cron_interval_sec, shared_storage_path, error_prefix, error_batch_size
 from .cronrepo import StoreRepo
 import logging
 from events.errorrepo import ErrorRepo
+from events.processrepo import ProcessRepo
 from utils.cronjobutils import StoreUtils
 import os
 from datetime import datetime
@@ -14,7 +16,7 @@ log         =   logging.getLogger('file')
 storerepo   =   StoreRepo()
 errorepo    =   ErrorRepo()
 storeutils  =   StoreUtils()
-
+prorepo     =   ProcessRepo()
 
 class ErrorProcessor(Thread):
     def __init__(self, event):
@@ -45,38 +47,51 @@ class ErrorProcessor(Thread):
     def initiate_error_processing(self,srn_list):
         try:
             for srn in srn_list:
-                log.info(f'Processing errors for srn -- {srn}')
-                query   = {"serviceRequestNumber":srn}
-                exclude = {"_id":0}
+                log.info(f'Creating aggregated error report for srn-- {srn}')
+                er_query = {"serviceRequestNumber": srn}
+                exclude =  {"_id": False}
+                log.info(f'Search for error reports of SRN -- {srn} from db started')
+                error_records = errorepo.search(er_query, exclude, None, None)
+                error_records = [x for x in error_records if not x.get("uploaded")]
+                log.info(f'Returned {len(error_records)} records')
+                file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
+                headers =   ['Stage','Error Message', 'Record Count']
+                fields  =   ['stage','message','count']
+                storeutils.write_to_csv(error_records,file,srn,headers,fields)
+                agg_file = storeutils.file_store_upload_call(file,file.replace("/opt/",""),error_prefix)
+                update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None}
+                condition = {"serviceRequestNumber": srn, "uploaded": True}
+                errorepo.update(condition,update_query,True)
+
+                query   = {"serviceRequestNumber" : srn,"status" : "Completed"}
                 #getting record from mongo matching srn, if present
-                uploaded_record = errorepo.search(query,exclude,None,None)
-                uploaded_count = 0
-                if uploaded_record:
-                    #count of previously uploaded errors
-                    uploaded_count =uploaded_record[0]["count"]
-                log.info(f'{uploaded_count} record/s were uploaded previously on to object store for srn -- {srn}')
-                #srn.uuid - pattern of all keys in redis
-                pattern = f'{srn}.*'
-                #getting all keys matching the patterns
-                error_records_keys = storerepo.get_keys_matching_pattern(pattern)
-                #counting keys matching the pattern, to get the count of error records on redis store against respective srn
-                error_records_count = len(error_records_keys)
-                log.info(f'{error_records_count} records found in redis store for srn -- {srn}')
-                #if both mongo and redis store count matches, no upload; Else if redis-count > mongo-count start uploading
-                
-                if error_records_count > uploaded_count:
+                completed_stats = prorepo.count(query)
+                #create error file when the job is completed
+                if completed_stats == 1:
+                    #srn.uuid - pattern of all keys in redis
+                    pattern = f'{srn}.*'
+                    #getting all keys matching the patterns
+                    error_records_keys = storerepo.get_keys_matching_pattern(pattern)
+                    #counting keys matching the pattern, to get the count of error records on redis store against respective srn
+                    error_records_count = len(error_records_keys)
+                    log.info(f'{error_records_count} records found in redis store for srn -- {srn}')
+
                     keys_list=[error_records_keys[i:i + error_batch_size] for i in range(0, len(error_records_keys), error_batch_size)]
-                    for keys in keys_list:
+                    for i,keys in enumerate(keys_list):
                         #fetching back all the records from redis store using the srn keys
                         error_records = storerepo.get_all_records(keys,None)
                         log.info(f'Received {len(error_records)} records from redis store for srn -- {srn}')
                         if error_records:
-                            file,file_name=self.create_error_file(error_records,srn)
+                            zip_file,zip_file_name=self.create_error_file(error_records,srn,i)
                     log.info(f'Completed csv creation for srn-- {srn} ')  
                     #forking a new thread
                     log.info(f'Initiating upload process for srn -- {srn} on a new fork')
-                    persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,file,file_name,error_records_count))
+                    persister = threading.Thread(target=self.upload_error_to_object_store, args=(srn,zip_file,zip_file_name,error_records_count))
                     persister.start()
+                    #removing records from redis
+                    remover = threading.Thread(target=storerepo.delete,args=(error_records_keys,))
+                    remover.start()
+                        
                 else:
                     log.info(f'No new records left for uploading, for srn -- {srn}')
                 
@@ -84,16 +99,18 @@ class ErrorProcessor(Thread):
             log.exception(f"Exception on error processing {e}")
 
     #method to upload errors onto object store
-    def create_error_file(self, error_records, srn):
+    def create_error_file(self, error_records, srn,index):
         try:
-            file = f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
-            log.info(f'Writing {len(error_records)} errors to {file} for srn -- {srn}')
+            csv_file = f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}-{index}.csv'
+            zip_file= f'{shared_storage_path}error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.zip'
+            log.info(f'Writing {len(error_records)} errors to {csv_file} for srn -- {srn}')
             #writing to csv locally
-            storeutils.write_to_csv(error_records,file,srn)
-            # zipfile = storeutils.zipfile_creation(file)
-            # log.info(f"zip file created :{zipfile} , for srn -- {srn}, ")
-            file_name = file.replace("/opt/","")
-            return file,file_name
+            headers = ['Stage', 'Error Message', 'Record', 'Original Record']
+            fields = ['stage','message','record','originalRecord']
+            storeutils.write_to_csv(error_records,csv_file,srn,headers,fields)
+            storeutils.zipfile_creation(csv_file,zip_file)
+            log.info(f"zip file created :{zip_file} , for srn -- {srn}, ")
+            return zip_file,zip_file.replace("/opt/","")
             
         except Exception as e:
             log.exception(f'Exception while ingesting errors to object store: {e}')
@@ -105,12 +122,14 @@ class ErrorProcessor(Thread):
         if error_object_path == False:
             return  None
         log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
-        error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "internal_file": file, "file": error_object_path, "count": error_records_count}
+        cond = {"serviceRequestNumber": srn, "uploaded": True}
+        error_record = {"$set":{ "file": error_object_path, "count": error_records_count}}
         #updating record on mongo with uploaded error count
-        errorepo.upsert(error_record)
-        log.info(f'Updated db record for SRN -- {srn}')
-        # os.remove(file)
-        return error_record
+        errorepo.update(cond,error_record,False)
+        log.info(f'Updated db record for SRN after creating final report -- {srn}')
+        
+
+
 
 
 

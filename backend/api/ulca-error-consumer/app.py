@@ -29,7 +29,7 @@ def start_consumer():
             for i in range(1,consumer_count+1):
                 error_consumer = Process(target=error_consume)
                 error_consumer.start()
-            #starts cron job for writing errors onto object store
+            # starts cron job for writing errors onto object store
             error_processor_cron = ErrorProcessor(threading.Event())
             error_processor_cron.start()
         except Exception as e:
