@@ -59,7 +59,6 @@ const NewSearchModel =() => {
     const searchModelResult = useSelector(state => state.BenchmarkList);
     const history = useHistory();
     useEffect(() => {
-        console.log(filter.type)
         makeModelSearchAPICall(filter.type);
     }, [])
 
@@ -84,7 +83,6 @@ const apply = (data) => {
 
 const handleClick = (data) => {
     data.prevUrl = 'explore-models';
-    console.log(data)
     dispatch(updateFilter({ source: "", filter: "", type: data.task }));
     history.push({
         pathname: `${process.env.PUBLIC_URL}/model/benchmark-details/${data.submitRefNumber}`,
