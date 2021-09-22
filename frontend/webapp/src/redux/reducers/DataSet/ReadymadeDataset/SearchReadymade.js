@@ -82,7 +82,6 @@ const getClearFilter = (data) => {
 }
 
 const getContributionList = (state, payload) => {
-    console.log(state, payload)
     let responseData = [];
     let languageFilter = [];
     let submitterFilter = [];

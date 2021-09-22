@@ -46,7 +46,6 @@ const LeaderboardList = (props) => {
   ];
 
   const handleSearch = () => {
-    console.log("search");
   };
 
   const renderToolbar = () => {
