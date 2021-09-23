@@ -42,6 +42,7 @@ import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.exception.ModelValidationException;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
@@ -179,6 +180,9 @@ public class ModelService {
 
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getModel(modelFilePath);
+		
+		validateModel(modelObj);
+		
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(new Date().toString());
 		modelObj.setPublishedOn(new Date().toString());
@@ -188,7 +192,7 @@ public class ModelService {
 				modelDao.save(modelObj);
 			} catch (DuplicateKeyException ex) {
 				ex.printStackTrace();
-				throw new DuplicateKeyException("Model with same name exist in system");
+				throw new DuplicateKeyException("Model with same name and version exist in system");
 			}
 		}
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
@@ -215,6 +219,41 @@ public class ModelService {
 		}
 
 		return modelObj;
+	}
+	
+	private Boolean validateModel(ModelExtended model) throws ModelValidationException {
+		
+		if(model.getName() == null || model.getName().isBlank()) 
+			throw new ModelValidationException("name is required field");
+		
+		if(model.getVersion() == null || model.getVersion().isBlank())
+			throw new ModelValidationException("version is required field");
+		
+		if(model.getDescription() == null ||  model.getDescription().isBlank())
+			throw new ModelValidationException("description is required field");
+		
+		if(model.getTask() == null)
+			throw new ModelValidationException("task is required field");
+		
+		if(model.getLanguages() == null)
+			throw new ModelValidationException("languages is required field");
+		
+		if(model.getLicense() == null)
+			throw new ModelValidationException("license is required field");
+		
+		if(model.getDomain() == null)
+			throw new ModelValidationException("domain is required field");
+		
+		if(model.getSubmitter() == null)
+			throw new ModelValidationException("submitter is required field");
+		
+		if(model.getInferenceEndPoint() == null)
+			throw new ModelValidationException("inferenceEndPoint is required field");
+		
+		if(model.getTrainingDataset() == null)
+			throw new ModelValidationException("trainingDataset is required field");
+		
+		return true;
 	}
 
 	public ModelSearchResponse searchModel(ModelSearchRequest request) {
