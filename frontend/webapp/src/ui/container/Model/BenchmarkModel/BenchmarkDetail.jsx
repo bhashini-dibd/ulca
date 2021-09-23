@@ -112,7 +112,8 @@ const SearchModelDetail = (props) => {
     if (prevUrl === "explore-models") {
       history.push(`${process.env.PUBLIC_URL}/model/benchmark-datasets`);
     } else {
-      history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
+      // history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
+      history.goBack();
     }
   };
 
@@ -233,7 +234,7 @@ const SearchModelDetail = (props) => {
           >
             {prevUrl === "explore-models"
               ? "Back to Benchmark Datasets"
-              : "Back to Explore Models"}
+              : "Back to Model Description"}
             {/* Back to Benchmark Datasets */}
           </Button>
 
