@@ -148,16 +148,31 @@ class OCRService:
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionMode"])
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
+            if 'collectionDescription' in query.keys():
+                tags.extend(query["collectionDescription"])
+            if 'ocrTool' in query.keys():
+                tags.extend(query["ocrTool"])
             if 'license' in query.keys():
                 tags.extend(query["licence"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
+            if 'format' in query.keys():
+                tags.extend(query["format"])
+            if 'dpi' in query.keys():
+                tags.extend(query["dpi"])
+            if 'imageTextType' in query.keys():
+                tags.extend(query["imageTextType"])
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
+            if 'collectionSource' in query.keys():
+                coll_source = []
+                for cs in query["collectionSource"]:
+                    coll_source.append(f"/{cs}/i")
+                db_query["collectionSource"] = {"$in": coll_source}
+            if 'submitterName' in query.keys():
+                db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
             if 'multipleContributors' in query.keys():
                 if query['multipleContributors']:
                     db_query[f'collectionMethod.1'] = {"$exists": True}

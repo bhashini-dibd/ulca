@@ -58,4 +58,4 @@ validate_text_length_threshold = os.environ.get('DS_VALIDATE_TEXT_LENGTH_THRESHO
 asr_minimum_words_per_min = os.environ.get('DS_VALIDATE_MINIMUM_WORDS_PER_MIN', 10)
 validate_parallel_labse_threshold = os.environ.get('VALIDATE_PARALLEL_LABSE_THRESHOLD', 0.75)
 validate_profanity_reference_en = os.environ.get('DS_VALIDATE_PROFANITY_REFERENCE_EN', "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en")
-
+validate_profanity_reference_hi = os.environ.get('DS_VALIDATE_PROFANITY_REFERENCE_HI', "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/hi")

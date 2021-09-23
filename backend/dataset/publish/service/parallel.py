@@ -304,10 +304,32 @@ class ParallelService:
             if 'targetLanguage' in query.keys():
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
-            if 'originalSourceSentence' in query.keys():
-                db_query['originalSourceSentence'] = query['originalSourceSentence']
-            else:
-                db_query['originalSourceSentence'] = False
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
+            if 'alignmentTool' in query.keys():
+                tags.extend(query["alignmentTool"])
+            if 'editingTool' in query.keys():
+                tags.extend(query["editingTool"])
+            if 'translationModel' in query.keys():
+                tags.extend(query["translationModel"])
+            if 'license' in query.keys():
+                tags.extend(query["licence"])
+            if 'domain' in query.keys():
+                tags.extend(query["domain"])
+            if 'datasetId' in query.keys():
+                tags.extend(query["datasetId"])
+                db_query["derived"] = False
+            if tags:
+                db_query["tags"] = tags
+            if tgt_lang:
+                db_query["targetLanguage"] = tgt_lang
+            if 'collectionSource' in query.keys():
+                coll_source = []
+                for cs in query["collectionSource"]:
+                    coll_source.append(f"/{cs}/i")
+                db_query["collectionSourceQuery"] = {"collectionSource": {"$in": coll_source}}
+            if 'submitterName' in query.keys():
+                db_query["submitterNameQuery"] = {"submitter": {"$elemMatch": {"name": query["submitterName"]}}}
             if 'minScore' in query.keys():
                 score_query["$gte"] = query["minScore"]
             if 'maxScore' in query.keys():
@@ -316,25 +338,14 @@ class ParallelService:
                 db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": score_query}}}
             if 'score' in query.keys():
                 db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": query["score"]}}}
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionSource"])
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
-            if 'license' in query.keys():
-                tags.extend(query["licence"])
-            if 'domain' in query.keys():
-                tags.extend(query["domain"])
-            if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
-                db_query["derived"] = False
-            if tags:
-                db_query["tags"] = tags
-            if tgt_lang:
-                db_query["targetLanguage"] = tgt_lang
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
             else:
                 db_query["multipleContributors"] = False
+            if 'originalSourceSentence' in query.keys():
+                db_query['originalSourceSentence'] = query['originalSourceSentence']
+            else:
+                db_query['originalSourceSentence'] = False
             if 'groupBy' in query.keys():
                 db_query["groupBy"] = query["groupBy"]
                 if 'countOfTranslations' in query.keys():
