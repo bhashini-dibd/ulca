@@ -79,7 +79,10 @@ const SearchModelDetail = (props) => {
   const tableData = useSelector(
     (state) => state.benchmarkDetails.benchmarkPerformance
   );
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+  
   useEffect(() => {
     setMetric(metricArray[0]);
   }, [metricArray]);
