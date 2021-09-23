@@ -17,7 +17,7 @@ import {
             
                 <div className={classes.parentPaper}>
                     <Paper elevation={0} className={classes.mainPaper}>
-                        {!aunthenticate() && <Typography variant="h3">Benchmark Model</Typography>}
+                        {/* {!aunthenticate() && <Typography variant="h3">Benchmark Model</Typography>} */}
                         <NewSearchModel />
                     </Paper>
                 </div>
