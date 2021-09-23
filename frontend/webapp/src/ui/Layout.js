@@ -23,9 +23,7 @@ function App(props) {
       return <Spinner />;
     }
   };
-  useEffect(() => {
-    window.scrollTo();
-  }, []);
+  
 
   const handleClose = () => {
     setPopup(false);

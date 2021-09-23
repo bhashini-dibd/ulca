@@ -23,22 +23,19 @@ const addPositions = (data) => {
       val["position"] = i + 1;
     });
   });
-  console.log(data);
+
   return data;
 };
 
 const updateBenchmarkPerformance = (performanceData) => {
   let obj = {};
   performanceData.forEach((data) => {
-    console.log(data);
     if (obj[data.metric] === undefined) {
       obj[data.metric] = [data];
-      console.log(obj);
     } else {
       obj[data.metric].push(data);
     }
   });
-  console.log(obj);
   let resultObj = addPositions(obj);
   return resultObj;
 };
@@ -59,6 +56,7 @@ const getBenchmarkDetails = (data) => {
     task: data.task.type,
     metricArray: data.metric,
     benchmarkPerformance: updateBenchmarkPerformance(data.benchmarkPerformance),
+    submitter: data.submitter.name ? data.submitter.name : "-",
   };
 };
 

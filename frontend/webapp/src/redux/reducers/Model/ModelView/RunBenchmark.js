@@ -43,7 +43,6 @@ const getBenchmarkDetails = (payload) => {
 const getIndex = (data, benchmarkId) => {
   let index = 0;
   data.forEach((val, i) => {
-    console.log(val.benchmarkId);
     if (val.benchmarkId === benchmarkId) {
       index = i;
     }
