@@ -15,10 +15,14 @@ class ProcessTracker:
         pass
 
     def update_task_details(self, data):
+        duration = None
+        if 'duration' in data.keys():
+            duration = data['duration']
+
         if data["status"] == "SUCCESS":
-            repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], False)
+            repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], duration, False)
         else:
-            repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], True)
+            repo.redis_key_inc('ServiceRequestNumber_'+data["serviceRequestNumber"], duration, True)
 
     def create_task_event(self, data):
         log.info(f'Publishing pt event for SUBMIT -- {data["serviceRequestNumber"]}')
