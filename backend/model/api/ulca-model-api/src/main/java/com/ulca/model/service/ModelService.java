@@ -187,6 +187,7 @@ public class ModelService {
 			try {
 				modelDao.save(modelObj);
 			} catch (DuplicateKeyException ex) {
+				ex.printStackTrace();
 				throw new DuplicateKeyException("Model with same name exist in system");
 			}
 		}
