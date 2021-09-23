@@ -324,7 +324,10 @@ class ParallelService:
             if tgt_lang:
                 db_query["targetLanguage"] = tgt_lang
             if 'collectionSource' in query.keys():
-                db_query["collectionSourceQuery"] = {"collectionSource": {"$in": [f"/{query['collectionSource']}/i"]}}
+                coll_source = []
+                for cs in query["collectionSource"]:
+                    coll_source.append(f"/{cs}/i")
+                db_query["collectionSourceQuery"] = {"collectionSource": {"$in": coll_source}}
             if 'submitterName' in query.keys():
                 db_query["submitterNameQuery"] = {"submitter": {"$elemMatch": {"name": query["submitterName"]}}}
             if 'minScore' in query.keys():

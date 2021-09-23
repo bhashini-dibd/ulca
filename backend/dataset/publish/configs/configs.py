@@ -72,6 +72,14 @@ mono_non_tag_keys = ["_id", "id", "text", "submitter", "lastModifiedOn", "create
 mono_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "textHash", "lastModifiedOn", "createdOn", "version", "datasetId"]
 mono_updatable_keys = ["version"]
 
+govt_data_whitelist_enabled = os.environ.get('ULCA_PUBLISH_GOVT_DATA_WHITELIST_ENABLED', True)
+if isinstance(govt_data_whitelist_enabled, str):
+    if govt_data_whitelist_enabled == "TRUE":
+        govt_data_whitelist_enabled = True
+    else:
+        govt_data_whitelist_enabled = False
+govt_cs = ["govt", "nic"]
+
 publish_error_code = "3000_XXX"
 threads_threshold = 100
 

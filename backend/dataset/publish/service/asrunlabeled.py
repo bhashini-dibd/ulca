@@ -178,7 +178,10 @@ class ASRUnlabeledService:
             if 'datasetId' in query.keys():
                 tags.extend(query["datasetId"])
             if 'collectionSource' in query.keys():
-                db_query["collectionSource"] = {"$in": [f"/{query['collectionSource']}/i"]}
+                coll_source = []
+                for cs in query["collectionSource"]:
+                    coll_source.append(f"/{cs}/i")
+                db_query["collectionSource"] = {"$in": coll_source}
             if 'submitterName' in query.keys():
                 db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
             if 'samplingRate' in query.keys():
