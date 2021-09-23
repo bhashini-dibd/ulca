@@ -58,7 +58,6 @@ const NewSearchModel =() => {
     const searchModelResult = useSelector(state => state.SearchReadymadeDataset);
     const history = useHistory();
     useEffect(() => {
-        console.log(filter.type)
         makeModelSearchAPICall(filter.type);
     }, [])
 
