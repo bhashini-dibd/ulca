@@ -65,7 +65,7 @@ const SearchAndDownloadRecords = (props) => {
     const [advFilterState, setAdvFilterState] = useState({});
     const [basicFilterState, setBasicFilterState] = useState({});
     const [languagePair, setLanguagePair] = useState({
-        source: '',
+        source: [],
         target: []
     });
 
@@ -171,6 +171,7 @@ const SearchAndDownloadRecords = (props) => {
         setFilterBy({ ...filterBy, [property]: value });
     };
     const handleDropDownChange = (data, id) => {
+        console.log(data, id);
         let filter = { ...advFilterState }
         filter[id] = data;
         setAdvFilterState({ ...advFilterState, ...filter });
@@ -247,7 +248,7 @@ const SearchAndDownloadRecords = (props) => {
     }
 
     console.log(advFilterState)
-    const makeSubmitAPICall = (src, tgt, domain, collectionMethod, type, originalSourceSentence = false) => {
+    const makeSubmitAPICall = (type, criteria) => {
         const Dataset = Object.keys(type)[0]
         setSnackbarInfo({
             ...snackbar,
@@ -255,7 +256,7 @@ const SearchAndDownloadRecords = (props) => {
             message: 'Please wait while we process your request.',
             variant: 'info'
         })
-        const apiObj = new SubmitSearchRequest(Dataset, tgt, src, domain, collectionMethod, originalSourceSentence)
+        const apiObj = new SubmitSearchRequest(Dataset, criteria)
         fetch(apiObj.apiEndPoint(), {
             method: 'post',
             headers: apiObj.getHeaders().headers,
@@ -307,15 +308,29 @@ const SearchAndDownloadRecords = (props) => {
         // }
     }
 
+    const getObjectValue = (obj) => {
+        let updatedObj = {};
+        let objKeys = Object.keys(obj);
+        objKeys.forEach(key => {
+            updatedObj[key] = obj[key].hasOwnProperty('value')?obj[key].value:obj[key]
+        })
+        return updatedObj;
+    }
+
+    const getArrayValue = (arr)=>{
+        let updatedArr = arr.map(element=>{
+            return element.value
+        })
+        return updatedArr;
+    }
+
     const handleSubmitBtn = () => {
-        let tgt = languagePair.target.map(trgt => trgt.value)
-        let domain = filterBy.domain && [getFilterValueForLabel('domain', filterBy.domain).value]
-        let collectionMethod = filterBy.collectionMethod && [getFilterValueForLabel('collectionMethod', filterBy.collectionMethod).value]
+        const obj = { ...basicFilterState, ...advFilterState };
+        const criteria = { sourceLanguage: getArrayValue([languagePair.source]), targetLanguage: getArrayValue(languagePair.target), criteria: getObjectValue(obj) }
+        console.log(criteria);
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
-                let source = getValueForLabel(languagePair.source).value
-                makeSubmitAPICall(source, tgt, domain, collectionMethod, datasetType, state.checkedC)
-                //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
+                makeSubmitAPICall(datasetType, criteria)
             }
 
             else if (!languagePair.source && !languagePair.target.length) {
@@ -332,7 +347,7 @@ const SearchAndDownloadRecords = (props) => {
             if (!languagePair.target.length)
                 setTgtError(true)
             else {
-                makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType)
+                // makeSubmitAPICall(datasetType,criteria)
             }
 
         }
@@ -502,11 +517,11 @@ const SearchAndDownloadRecords = (props) => {
                         <SingleAutoComplete
                             handleChange={handleDropDownChange}
                             disabled={!languagePair.target.length}
-                            id={val.value} labels={val.values}
+                            id={val.filter} labels={val.values}
                             placeholder={`Select ${val.label}`} />
                         :
                         <TextField disabled={!languagePair.target.length}
-                            id={val.value}
+                            id={val.filter}
                             label={`Select ${val.label}`}
                             fullWidth
                         />
@@ -532,7 +547,15 @@ const SearchAndDownloadRecords = (props) => {
                             </div>
                             <Typography className={classes.subHeader} variant="body1">{getTitle()}</Typography>
                             <div className={classes.subHeader}>
-                                {datasetType['parallel-corpus'] && renderTexfield("select-source-language", "Source Language *")}
+                                {datasetType['parallel-corpus'] &&
+                                    //  renderTexfield("select-source-language", "Source Language *")
+                                    <SingleAutoComplete
+                                        handleChange={handleLanguagePairChange}
+                                        id={"source"}
+                                        value={languagePair.source}
+                                        labels={Language}
+                                        placeholder={`Select Source Language *`} />
+                                }
                             </div>
                             <div className={classes.autoComplete}>
                                 <MultiAutocomplete
