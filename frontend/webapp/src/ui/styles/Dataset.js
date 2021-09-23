@@ -215,12 +215,13 @@ const DataSet = (theme) => ({
   },
   yourSearchQuery: {
     marginBottom: "2%",
+    color:'#FD7F23'
   },
   serReqNoTypo: {
     marginBottom: "7%",
   },
   mySearches: {
-    marginTop: "1%",
+    marginTop: "3%",
     width: "60%",
     //  textTransform:'inherit'
   },
