@@ -112,7 +112,6 @@ const SubHeader = (props) => {
                     <Tabs value={props.value}  onChange={props.handleChange}>
                         {
                             props.tabs.map((tab, index) => {
-                                debugger
                                 console.log(tab, index,role,tab.roles)
                                 if(tab.roles.includes(role) ||(tab.public)){
                                 return (
