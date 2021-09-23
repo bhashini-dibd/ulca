@@ -407,7 +407,7 @@ const ContributionList = (props) => {
           if (tableMeta.rowData) {
             console.log(tableMeta.rowData)
             return renderActionButtons(
-              tableMeta.rowData[6],
+              tableMeta.rowData[7],
               tableMeta.rowData[1],
               tableMeta.rowData[4],
               tableMeta.rowData[0]
