@@ -58,13 +58,12 @@ const SearchModelDetail = (props) => {
   const history = useHistory();
   const params = useParams();
   const benchmarkId = params.benchmarkId;
-  const [metric, setMetric] = useState("");
   const data = useSelector((state) => state.benchmarkDetails);
   const dispatch = useDispatch();
   useEffect(() => {
     const apiObj = new BenchmarkDetails(benchmarkId);
     dispatch(APITransport(apiObj));
-  }, []);
+  }, [benchmarkId]);
 
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
@@ -75,19 +74,21 @@ const SearchModelDetail = (props) => {
   const [modelTry, setModelTry] = useState(false);
   const location = useLocation();
   const { prevUrl } = location.state ? location.state : "";
-  const metricArray = data.metricArray ? data.metricArray : [];
+  const metricArray = data.metricArray;
+  const [metric, setMetric] = useState("");
+  const tableData = useSelector(
+    (state) => state.benchmarkDetails.benchmarkPerformance
+  );
+
   useEffect(() => {
-    setMetric(metricArray[0] ? metricArray[0] : "");
-  }, []);
+    setMetric(metricArray[0]);
+  }, [metricArray]);
+
   const description = [
     {
       title: "Description",
       para: data.description,
     },
-    // {
-    //   title: "Source URL",
-    //   para: data.refUrl,
-    // },
     {
       title: "Task",
       para: data.task,
@@ -98,17 +99,15 @@ const SearchModelDetail = (props) => {
       para: data.language,
     },
     {
+      title: "Submitter",
+      para: data.submitter,
+    },
+    {
       title: "Domain",
       para: data.domain,
     },
-    // {
-    //   title: "Metric",
-    //   para: data.metric,
-    // },
   ];
-  //   const { prevUrl } = location.state;
   const handleCardNavigation = () => {
-    // const { prevUrl } = location.state
     if (prevUrl === "explore-models") {
       history.push(`${process.env.PUBLIC_URL}/model/benchmark-datasets`);
     } else {
@@ -116,18 +115,6 @@ const SearchModelDetail = (props) => {
       history.goBack();
     }
   };
-
-  const handleClick = () => {
-    history.push({
-      pathname: `${process.env.PUBLIC_URL}/search-model/${params.srno}/model`,
-      state: data,
-    });
-  };
-
-  const tableData = useSelector(
-    (state) => state.benchmarkDetails.benchmarkPerformance
-  );
-
 
   const columns = [
     {
@@ -161,7 +148,6 @@ const SearchModelDetail = (props) => {
   };
 
   const handleIndexChange = (metric) => {
-    console.log(metric);
     setIndex(metricArray.indexOf(metric));
     setMetric(metric);
   };
@@ -254,6 +240,15 @@ const SearchModelDetail = (props) => {
           {metricArray.length ? (
             <Grid container>
               <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
+                <Typography
+                  style={{ marginTop: "3%" }}
+                  variant="h5"
+                  className={classes.mainTitle}
+                >
+                  Model Leaderboard
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
                 <Box
                   sx={{
                     bgcolor: "background.paper",
@@ -262,7 +257,7 @@ const SearchModelDetail = (props) => {
                 >
                   <AppBar
                     color="transparent"
-                    style={{ border: "none", marginTop: "3%" }}
+                    style={{ border: "none" }}
                     position="static"
                   >
                     <Tabs
@@ -280,11 +275,9 @@ const SearchModelDetail = (props) => {
                       ))}
                     </Tabs>
                   </AppBar>
-
                   <TabPanel value={value} index={index}>
                     <MuiThemeProvider theme={getMuiTheme()}>
                       <MUIDataTable
-                        title={"Model Leaderboard"}
                         data={tableData[metric]}
                         columns={columns}
                         options={options}

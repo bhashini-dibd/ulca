@@ -13,6 +13,7 @@ const initialState = {
   languages: [],
   createdOn: null,
   submittedOn: null,
+  metricArray: [],
 };
 
 const addPositions = (data) => {
@@ -22,7 +23,7 @@ const addPositions = (data) => {
       val["position"] = i + 1;
     });
   });
-  console.log(data);
+
   return data;
 };
 
@@ -32,7 +33,7 @@ const updateBenchmarkPerformance = (performanceData) => {
     if (obj[data.metric] === undefined) {
       obj[data.metric] = [data];
     } else {
-      obj[data.metric] = obj[data.metric].push(data);
+      obj[data.metric].push(data);
     }
   });
   let resultObj = addPositions(obj);
@@ -55,10 +56,9 @@ const getBenchmarkDetails = (data) => {
     task: data.task.type,
     metricArray: data.metric,
     benchmarkPerformance: updateBenchmarkPerformance(data.benchmarkPerformance),
+    submitter: data.submitter.name ? data.submitter.name : "-",
   };
 };
-
-const getMetricData = (prevState, payload) => {};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -66,10 +66,6 @@ const reducer = (state = initialState, action) => {
       const data = getBenchmarkDetails(action.payload);
       return {
         ...data,
-      };
-    case C.GET_METRIC_DETAILS:
-      return {
-        ...getMetricData(state, action.payload),
       };
     default:
       return {

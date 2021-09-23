@@ -1,30 +1,22 @@
 import logging
 from logging.config import dictConfig
-from configs.configs import ulca_db_cluster, error_db, error_collection
+from configs.configs import ulca_db_cluster, process_db, process_collection
 import pymongo
 log = logging.getLogger('file')
 
 
 mongo_instance = None
 
-class ErrorRepo:
+class ProcessRepo:
     
     def __init__(self):
-        #creating index on mongo for fast retrieval
-        client = pymongo.MongoClient(ulca_db_cluster)
-        mongo_instance = client[error_db][error_collection]
-        try:
-            mongo_instance.create_index('serviceRequestNumber')
-        except pymongo.errors.DuplicateKeyError:
-            log.info("duplicate key, ignoring")
-        except Exception as e:
-            log.exception(f"Exception on index creation :{e}")
+        pass
         
     #method to instantiate mongo client object
     def instantiate(self):
         global mongo_instance
         client = pymongo.MongoClient(ulca_db_cluster)
-        mongo_instance = client[error_db][error_collection]
+        mongo_instance = client[process_db][process_collection]
         return mongo_instance
 
     #geting the mongo clent object
@@ -44,9 +36,9 @@ class ErrorRepo:
         return len(data)
 
     # Updates the object in the mongo collection
-    def update(self, cond,object_in,upsert_flag):
+    def update(self, object_in):
         col = self.get_mongo_instance()
-        col.update(cond, object_in,upsert = upsert_flag)
+        col.replace_one({"id": object_in["id"]}, object_in)
 
     # delete a single object in the mongo collection
     def delete(self, rec_id):
