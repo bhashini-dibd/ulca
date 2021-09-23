@@ -228,25 +228,25 @@ public class BenchmarkService {
 	List<String> getMetric(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu", "sacrebleu","meteor","lepor" };
+			String[] metric = { "bleu", "sacrebleu" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 
 		if (task.equalsIgnoreCase("asr")) {
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("ocr")) {
 
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer"};
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("tts")) {
 
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
