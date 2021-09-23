@@ -273,7 +273,7 @@ const ContributionList = (props) => {
             </Button>
           </Grid>
           <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-            {/* <Button
+            <Button
               size="small"
               variant="contained"
               className={classes.benchmarkActionButtons}
@@ -283,7 +283,7 @@ const ContributionList = (props) => {
               }}
             >
               {status === "Published" ? "Unpublish" : "Publish"}
-            </Button> */}
+            </Button>
           </Grid>
         </Grid>
       );
@@ -337,10 +337,18 @@ const ContributionList = (props) => {
         display: view ? "excluded" : true,
       },
     },
-
     {
       name: "modelName",
       label: "Model Name",
+      options: {
+        filter: false,
+        sort: true,
+        display: view ? "excluded" : true,
+      },
+    },
+    {
+      name: "version",
+      label: "Version",
       options: {
         filter: false,
         sort: true,
@@ -383,7 +391,7 @@ const ContributionList = (props) => {
         display: view ? "excluded" : true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
-            return renderStatus(tableMeta.rowData[6]);
+            return renderStatus(tableMeta.rowData[7]);
           }
         },
       },
@@ -397,10 +405,11 @@ const ContributionList = (props) => {
         empty: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
+            console.log(tableMeta.rowData)
             return renderActionButtons(
               tableMeta.rowData[6],
               tableMeta.rowData[1],
-              tableMeta.rowData[3],
+              tableMeta.rowData[4],
               tableMeta.rowData[0]
             );
           }
@@ -463,10 +472,10 @@ const ContributionList = (props) => {
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
       // console.log(rowData);
-      if (rowData[8].length)
+      if (rowData[9].length)
         return (
           <RenderExpandTable
-            rows={rowData[8]}
+            rows={rowData[9]}
             color={even_odd}
             renderStatus={renderStatus}
           />
