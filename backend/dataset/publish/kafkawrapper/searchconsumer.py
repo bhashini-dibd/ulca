@@ -11,7 +11,7 @@ from service.monolingual import MonolingualService
 from service.asrunlabeled import ASRUnlabeledService
 
 from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_search_consumer_grp, \
-    dataset_type_asr_unlabeled
+    dataset_type_asr_unlabeled, govt_cs, govt_data_whitelist_enabled
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
 from kafka import KafkaConsumer
 from repository.datasetrepo import DatasetRepo
@@ -53,6 +53,13 @@ def search_consume():
                         else:
                             repo.upsert(data["serviceRequestNumber"], {"query": data}, True)
                         log.info(f'PROCESSING - start - SRN: {data["serviceRequestNumber"]}')
+                        if govt_data_whitelist_enabled:
+                            coll_source = []
+                            for cs in govt_cs:
+                                coll_source.append(cs)
+                            if 'collectionSource' in data.keys():
+                                coll_source.append(data["collectionSource"])
+                            data["collectionSource"] = coll_source
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.get_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:

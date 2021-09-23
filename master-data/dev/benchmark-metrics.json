@@ -1,12 +1,74 @@
 {
-    "benchmarkMetrics":[
-        {
-            "task": "TRANSLATION",
-            "metrics": ["BLEU", "SacreBLEU", "METEOR", "LEPOR"]
-        },
-        {
-            "task": "ASR",
-            "metrics": ["WER", "CER"]
-        }
+    "benchmarkMetrics": [
+      {
+        "task": "translation",
+        "metrics": [
+          {
+            "code": "bleu",
+            "values": [
+              {
+                "name": "BLEU",
+                "locale": "en"
+              }
+            ],
+            "active": true
+          },
+          {
+            "code": "sacrebleu",
+            "values": [
+              {
+                "name": "SacreBLEU",
+                "locale": "en"
+              }
+            ],
+            "active": true
+          },
+          {
+            "code": "meteor",
+            "values": [
+              {
+                "name": "METEOR",
+                "locale": "en"
+              }
+            ],
+            "active": true
+          },
+          {
+            "code": "lepor",
+            "values": [
+              {
+                "name": "LEPOR",
+                "locale": "en"
+              }
+            ],
+            "active": true
+          }
+        ]
+      },
+      {
+        "task": "asr",
+        "metrics": [
+          {
+            "code": "wer",
+            "values": [
+              {
+                "name": "WER",
+                "locale": "en"
+              }
+            ],
+            "active": true
+          },
+          {
+            "code": "cer",
+            "values": [
+              {
+                "name": "CER",
+                "locale": "en"
+              }
+            ],
+            "active": true
+          }
+        ]
+      }
     ]
-}
+  }

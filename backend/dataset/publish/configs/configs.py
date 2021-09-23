@@ -42,15 +42,18 @@ if isinstance(pub_dedup_redis_db, str):
 record_expiry_in_sec = os.environ.get('ULCA_PUBLISH_RECORD_EXPIRY_IN_SEC', 86400)
 if isinstance(record_expiry_in_sec, str):
     record_expiry_in_sec = eval(record_expiry_in_sec)
+zip_chunk_size = os.environ.get('ULCA_PUBLISH_ZIP_CHUNK_SIZE', 100000)
+if isinstance(zip_chunk_size, str):
+    zip_chunk_size = eval(zip_chunk_size)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
 asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
+asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
 asr_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn"]
+asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
 asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "audioHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
@@ -68,6 +71,14 @@ mono_immutable_keys = ["_id", "id", "text", "textHash", "datasetType", "sourceLa
 mono_non_tag_keys = ["_id", "id", "text", "submitter", "lastModifiedOn", "createdOn"]
 mono_search_ignore_keys = ["_id", "id", "tags", "submitter", "collectionSource", "license", "domain", "datasetType", "textHash", "lastModifiedOn", "createdOn", "version", "datasetId"]
 mono_updatable_keys = ["version"]
+
+govt_data_whitelist_enabled = os.environ.get('ULCA_PUBLISH_GOVT_DATA_WHITELIST_ENABLED', True)
+if isinstance(govt_data_whitelist_enabled, str):
+    if govt_data_whitelist_enabled == "TRUE":
+        govt_data_whitelist_enabled = True
+    else:
+        govt_data_whitelist_enabled = False
+govt_cs = ["govt", "nic"]
 
 publish_error_code = "3000_XXX"
 threads_threshold = 100
