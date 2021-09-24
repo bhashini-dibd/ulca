@@ -96,7 +96,7 @@ const getContributionList = (state, payload) => {
         let domain = getDomainDetails(element.domain)
         responseData.push(
             {
-                version:element.version ?element.version:"NA" ,
+                version:element.version ?element.version:"v1.0" ,
                 description: element.description,
                 submitRefNumber: element.modelId,
                 modelName: element.name,
