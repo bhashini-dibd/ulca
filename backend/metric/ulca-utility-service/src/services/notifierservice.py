@@ -98,34 +98,39 @@ class NotifierService:
     def check_for_mismatch(self,parallel_count,ocr_count,monolingual_count,asr_count,asr_unlabeled_count):
         try:
             mismatch = []
-            dtypes              =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus"]
+            dtypes              =   ["parallel-corpus","ocr-corpus","asr-corpus","monolingual-corpus","asr-unlabeled-corpus"]
             for data in dtypes:
-                if data == "parallel-corpus":
-                    mongo_count =   parallel_count
-                    request     =   {"type":"parallel-corpus","criterions":[{"field":"sourceLanguage","value":"en"}],"groupby":None}
-                    
-                if data == "monolingual-corpus":
-                    mongo_count =   monolingual_count
-                    request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
-                
                 if data == "ocr-corpus":
                     mongo_count =   ocr_count
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
+                    label       =   "OCR Dataset"
 
                 if data == "asr-corpus":
                     mongo_count =   asr_count
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
-                
+                    label       =   "ASR/TTS Dataset"
+
+                if data == "parallel-corpus":
+                    mongo_count =   parallel_count
+                    request     =   {"type":"parallel-corpus","criterions":[{"field":"sourceLanguage","value":"en"}],"groupby":None}
+                    label       =   "Parallel Dataset"
+                    
+                if data == "monolingual-corpus":
+                    mongo_count =   monolingual_count
+                    request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
+                    label       =   "Monolingual Dataset"
+                             
                 if data == "asr-unlabeled-corpus":
                     mongo_count =   asr_unlabeled_count
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
+                    label       =   "ASR Unlabeled Dataset"
                 utility     =   datautils.DataUtils()
                 druid_count =   utility.get_statistics_from_metrics_service(request)
                 print(druid_count)
                 if druid_count == False:
                     return
                 if (druid_count < (mongo_count-10)) or (druid_count > (mongo_count)):
-                    mismatch.append({"Data Type": data,"Druid Count": druid_count,"Mongo Count": mongo_count})
+                    mismatch.append({"Data Type": label,"Druid Count": druid_count,"Mongo Count": mongo_count})
             if mismatch:
                 return mismatch
                 
