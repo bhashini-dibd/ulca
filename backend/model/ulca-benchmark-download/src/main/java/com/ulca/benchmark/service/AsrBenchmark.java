@@ -147,7 +147,7 @@ public class AsrBenchmark {
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
-			log.info("dataRow :: " + dataRow);
+			
 			JSONObject inputJson =  new JSONObject(dataRow);
 			String audioFilename = inputJson.getString("audioFilename");
 			String audioPath = baseLocation + audioFilename;
@@ -173,10 +173,14 @@ public class AsrBenchmark {
 			request.setCallbackUrl(callBackUrl);
 			request.setFilePath(audioPath);
 			
+			log.info("start time for calling the inference end point");
+			log.info("dataRow :: " + dataRow);
 			ASRInference asrInference = (ASRInference) schema;
 			request.setSourceLanguage(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
 			
-			String resultText = asrComputeInternal(request);		
+			String resultText = asrComputeInternal(request);	
+			log.info("result :: " + resultText);
+			log.info("end time for calling the inference end point");
 			
 			String targetText = inputJson.getString("text");
 			JSONObject target =  new JSONObject();
