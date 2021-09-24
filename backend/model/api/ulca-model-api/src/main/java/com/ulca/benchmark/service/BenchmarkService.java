@@ -222,8 +222,7 @@ public class BenchmarkService {
 					bmProcessPublished.add(bm);
 				}
 			}
-			
-			bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
+			bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore).reversed()).collect(Collectors.toList());
 			bmDto.setBenchmarkPerformance(bmProcessPublished);
 			
 			return bmDto;
