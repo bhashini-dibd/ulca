@@ -186,7 +186,7 @@ public class ModelService {
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(new Date().toString());
 		modelObj.setPublishedOn(new Date().toString());
-		modelObj.setStatus("submitted");
+		modelObj.setStatus("unpublished");
 		if (modelObj != null) {
 			try {
 				modelDao.save(modelObj);
