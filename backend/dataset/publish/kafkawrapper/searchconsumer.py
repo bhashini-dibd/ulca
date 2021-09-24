@@ -53,12 +53,13 @@ def search_consume():
                         else:
                             repo.upsert(data["serviceRequestNumber"], {"query": data}, True)
                         log.info(f'PROCESSING - start - SRN: {data["serviceRequestNumber"]}')
+                        coll_source = []
                         if govt_data_whitelist_enabled:
-                            coll_source = []
                             for cs in govt_cs:
                                 coll_source.append(cs)
-                            if 'collectionSource' in data.keys():
-                                coll_source.append(data["collectionSource"])
+                        if 'collectionSource' in data.keys():
+                            coll_source.append(data["collectionSource"])
+                        if coll_source:
                             data["collectionSource"] = coll_source
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.get_parallel_dataset(data)

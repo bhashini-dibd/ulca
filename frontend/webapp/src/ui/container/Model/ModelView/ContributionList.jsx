@@ -60,7 +60,11 @@ const ContributionList = (props) => {
   );
   const id = popoverOpen ? "simple-popover" : undefined;
   const [openModal, setOpenModal] = useState(false);
-
+  const [openDialog, setOpenDialog] = useState(false);
+  const [modelStatusInfo, setModelStatusInfo] = useState({
+    modelId: "",
+    status: "",
+  });
   const status = useSelector((state) => state.getBenchMarkDetails.status);
 
   useEffect(() => {
@@ -270,13 +274,24 @@ const ContributionList = (props) => {
       headers: apiObj.getHeaders().headers,
     })
       .then(async (res) => {
+        handleDialogClose();
         if (res.ok) {
           MyContributionListApi();
         }
       })
       .catch((err) => {
+        handleDialogClose();
         console.log(err);
       });
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const openConfirmationDialog = (status, modelId) => {
+    setOpenDialog(true);
+    setModelStatusInfo({ status, modelId });
   };
 
   const renderActionButtons = (status, type, domain, modelId) => {
@@ -308,7 +323,7 @@ const ContributionList = (props) => {
                 color: status === "published" ? "#F54336" : "#139D60",
                 fontSize: "1rem",
               }}
-              onClick={() => toggleModelStatusAPI(modelId, status)}
+              onClick={() => openConfirmationDialog(status, modelId)}
             >
               {status === "published" ? "Unpublish" : "Publish"}
             </Button>
@@ -346,6 +361,28 @@ const ContributionList = (props) => {
       </Typography>
     );
   };
+
+  const renderConfirmationDialog = () => {
+    const { status, modelId } = modelStatusInfo;
+    return (
+      <Dialog
+        title={`${
+          status === "published" ? "Unpublish Model" : "Publish Model"
+        }`}
+        message={`${
+          status === "published"
+            ? "After the model is unpublished, it will not be available for public use. Are you sure you want to unpublish the model?"
+            : "After the model is published, it will be available for public use. Are you sure you want to publish the model?"
+        }`}
+        handleSubmit={() => toggleModelStatusAPI(modelId, status)}
+        handleClose={handleDialogClose}
+        actionButton="Cancel"
+        actionButton2="Yes"
+        open={openDialog}
+      />
+    );
+  };
+
   const columns = [
     {
       name: "submitRefNumber",
@@ -381,6 +418,15 @@ const ContributionList = (props) => {
         filter: false,
         sort: true,
         display: view ? "excluded" : true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          if (tableMeta.rowData) {
+            return (
+              <Typography style={{ textTransform: "none" }} variant="body2">
+                {tableMeta.rowData[3]}
+              </Typography>
+            );
+          }
+        },
       },
     },
     {
@@ -498,7 +544,6 @@ const ContributionList = (props) => {
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
-      // console.log(rowData);
       if (rowData[9].length)
         return (
           <RenderExpandTable
@@ -602,6 +647,7 @@ const ContributionList = (props) => {
         />
       )}
       {openModal && renderBenchmarkModal()}
+      {openDialog && renderConfirmationDialog()}
     </div>
   );
 };

@@ -68,6 +68,7 @@ public class ModelControllerExceptionHandler {
 		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
+	
 	@ExceptionHandler(ModelNotFoundException.class)
 	  public final ResponseEntity<Object> handleModelNotFoundException(ModelNotFoundException ex, WebRequest request) {
 		
@@ -75,4 +76,24 @@ public class ModelControllerExceptionHandler {
 		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
+	
+	@ExceptionHandler(ModelValidationException.class)
+	  public final ResponseEntity<Object> handleModelValidationException(ModelValidationException ex, WebRequest request) {
+		
+		String errorCode = "Model Validation Failed"; 
+		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
+	
+	
+	@ExceptionHandler(ModelStatusChangeException.class)
+	  public final ResponseEntity<Object> handleModelStatusChangeException(ModelStatusChangeException ex, WebRequest request) {
+		
+		String errorCode = "Can not " + ex.status + " the model." ;
+		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
+	
+	
+	
 }

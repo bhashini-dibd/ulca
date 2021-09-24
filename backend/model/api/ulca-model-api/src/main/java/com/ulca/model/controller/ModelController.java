@@ -21,13 +21,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.request.ModelComputeRequest;
-import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
+import com.ulca.model.request.ModelStatusChangeRequest;
 import com.ulca.model.response.ModelComputeResponse;
-import com.ulca.model.response.ModelLeaderboardResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
+import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 import com.ulca.model.service.ModelService;
 
@@ -78,6 +78,12 @@ public class ModelController {
 		return modelService.searchModel(request);
 	}
 	
+	@PostMapping("/status/change")
+	public ModelStatusChangeResponse changeStatus(@Valid @RequestBody ModelStatusChangeRequest request) {
+
+		log.info("******** Entry ModelController:: changeStatus *******");
+		return modelService.changeStatus(request);
+	}
 	
 	@PostMapping("/compute")
 	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
@@ -85,13 +91,6 @@ public class ModelController {
 		log.info("******** Entry ModelController:: computeModel *******");
 		return modelService.computeModel(request);
 
-	}
-	
-	@PostMapping("/leaderboard")
-	public ModelLeaderboardResponse searchLeaderboard(@Valid @RequestBody ModelLeaderboardRequest request) {
-
-		log.info("******** Entry ModelController:: leaderboard *******");
-		return modelService.searchLeaderboard(request);
 	}
 	
 	
