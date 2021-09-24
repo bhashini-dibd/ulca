@@ -215,8 +215,15 @@ public class BenchmarkService {
 			List<String> metricList = getMetric(result.getTask().getType().toString());
 			bmDto.setMetric(metricList);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkprocessDao.findByBenchmarkDatasetId(benchmarkId);
-			benchmarkProcess.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
-			bmDto.setBenchmarkPerformance(benchmarkProcess);
+			List<BenchmarkProcess> bmProcessPublished = new ArrayList<BenchmarkProcess>();
+			for(BenchmarkProcess bm : benchmarkProcess) {
+				ModelExtended model = modelDao.findByModelId(bm.getModelId());
+				if(model.getStatus().equalsIgnoreCase("published")) {
+					bmProcessPublished.add(bm);
+				}
+			}
+			bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore).reversed()).collect(Collectors.toList());
+			bmDto.setBenchmarkPerformance(bmProcessPublished);
 			
 			return bmDto;
 		}
@@ -228,25 +235,25 @@ public class BenchmarkService {
 	List<String> getMetric(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu", "sacrebleu","meteor","lepor" };
+			String[] metric = { "bleu", "sacrebleu" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 
 		if (task.equalsIgnoreCase("asr")) {
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("ocr")) {
 
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer"};
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("tts")) {
 
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
