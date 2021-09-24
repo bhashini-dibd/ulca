@@ -299,7 +299,9 @@ const ContributionList = (props) => {
               size="small"
               variant="contained"
               className={classes.benchmarkActionButtons}
-              disabled={status === "Failed" ? true : false}
+              disabled={
+                status === "Failed" || status === "In Progress" ? true : false
+              }
               style={{
                 color: status === "Published" ? "#F54336" : "#139D60",
                 fontSize: "1rem",
