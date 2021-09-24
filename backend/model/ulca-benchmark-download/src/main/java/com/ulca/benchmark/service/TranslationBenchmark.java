@@ -42,7 +42,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class TranslationBenchmark {
 
-	private final int chunkSize = 200;
+	private final int chunkSize = 20;
 	
 	@Autowired
 	private KafkaTemplate<String, String> benchmarkMetricKafkaTemplate;
