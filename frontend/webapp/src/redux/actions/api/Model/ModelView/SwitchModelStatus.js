@@ -45,6 +45,7 @@ export default class MyContribution extends API {
     let hash = md5(this.userDetails.privateKey + "|" + urlSha);
     this.headers = {
       headers: {
+        "Content-Type": "application/json",
         key: this.userDetails.publicKey,
         sig: hash,
         payload: urlSha,

@@ -123,7 +123,7 @@ const getContributionList = (state, payload) => {
           ? element.task.type.toUpperCase()
           : element.task.type,
       domain: getDomainDetails(element.domain),
-      status: "Published",
+      status: element.status,
       endPoint: element.inferenceEndPoint,
       language: lang,
       source:

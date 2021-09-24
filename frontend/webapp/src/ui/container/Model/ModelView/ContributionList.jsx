@@ -260,9 +260,9 @@ const ContributionList = (props) => {
 
   const toggleModelStatusAPI = (modelId, status) => {
     const toggledStatus =
-      status === "Completed"
+      status === "unpublished"
         ? "published"
-        : status === "Published" && "unpublished";
+        : status === "published" && "unpublished";
     const apiObj = new SwitchModelStatus(modelId, toggledStatus);
     fetch(apiObj.apiEndPoint(), {
       method: "POST",
@@ -280,19 +280,21 @@ const ContributionList = (props) => {
   };
 
   const renderActionButtons = (status, type, domain, modelId) => {
-    if (status !== "Failed" && status !== "In Progress") {
+    if (status !== "failed" && status !== "In Progress") {
       return (
         <Grid container spacing={1}>
           <Grid item>
-            <Button
-              className={classes.benchmarkActionButtons}
-              style={{ color: "#FD7F23", fontSize: "1rem" }}
-              size="small"
-              variant="contained"
-              onClick={() => handleRunBenchMarkClick(type, domain, modelId)}
-            >
-              Run Benchmark
-            </Button>
+            {status !== "published" && (
+              <Button
+                className={classes.benchmarkActionButtons}
+                style={{ color: "#FD7F23", fontSize: "1rem" }}
+                size="small"
+                variant="contained"
+                onClick={() => handleRunBenchMarkClick(type, domain, modelId)}
+              >
+                Run Benchmark
+              </Button>
+            )}
           </Grid>
           <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
             <Button
@@ -300,15 +302,15 @@ const ContributionList = (props) => {
               variant="contained"
               className={classes.benchmarkActionButtons}
               disabled={
-                status === "Failed" || status === "In Progress" ? true : false
+                status === "failed" || status === "In Progress" ? true : false
               }
               style={{
-                color: status === "Published" ? "#F54336" : "#139D60",
+                color: status === "published" ? "#F54336" : "#139D60",
                 fontSize: "1rem",
               }}
               onClick={() => toggleModelStatusAPI(modelId, status)}
             >
-              {status === "Published" ? "Unpublish" : "Publish"}
+              {status === "published" ? "Unpublish" : "Publish"}
             </Button>
           </Grid>
         </Grid>
@@ -319,13 +321,13 @@ const ContributionList = (props) => {
 
   const returnColor = (status) => {
     switch (status) {
-      case "Failed":
+      case "failed":
         return "#F54336";
-      case "Completed":
+      case "completed":
         return "#139D60";
-      case "Submitted":
+      case "submitted":
         return "#139D60";
-      case "Published":
+      case "published":
         return "#2A61AD";
       default:
         return "#FD7F23";
