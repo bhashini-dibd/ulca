@@ -209,6 +209,14 @@
             "description":"Open to fetch benchmark datasets"
         },
         {
+            "id":"d8812e00-cc10-470d-9957-045425ba7ff8",
+            "uri":"/ulca/apis/v0/model/status/change",
+            "module":"ULCA-API-MODEL",
+            "active":true,
+            "whiteList":true,
+            "description":"Api for publish/unpublish of model"
+        },
+        {
             "id":"6c5b13f8-cbad-4729-ac94-05eb0248490b",
             "uri":"/ulca/apis/asr/v1/model/compute",
             "module":"ASR-MODEL-COMPUTE",
