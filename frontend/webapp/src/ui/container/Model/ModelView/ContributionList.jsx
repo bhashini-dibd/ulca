@@ -381,6 +381,15 @@ const ContributionList = (props) => {
         filter: false,
         sort: true,
         display: view ? "excluded" : true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          if (tableMeta.rowData) {
+            return (
+              <Typography style={{ textTransform: "none" }} variant="body2">
+                {tableMeta.rowData[3]}
+              </Typography>
+            );
+          }
+        },
       },
     },
     {
