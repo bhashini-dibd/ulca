@@ -4,8 +4,8 @@
       "label": "Parallel Dataset",
       "filters": [
         {
-          "filter": "languagepair",
-          "label": "Language Pairs",
+          "filter": "sourceLanguage",
+          "label": "Source Language",
           "type": "drop-down",
           "values": [
             {
@@ -127,7 +127,130 @@
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "targetLanguage",
+          "label": "Target Language",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": "pa",
+              "label": "Punjabi"
+            },
+            {
+              "value": "bn",
+              "label": "Bengali"
+            },
+            {
+              "value": "en",
+              "label": "English"
+            },
+            {
+              "value": "ta",
+              "label": "Tamil"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "kok",
+              "label": "Konkani"
+            },
+            {
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
           "values": [
@@ -136,7 +259,7 @@
               "label": "Auto Aligned",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "filter": "alignmentTool",
                   "label": "Alignment Tool",
                   "type": "drop-down",
                   "values": [
@@ -151,43 +274,50 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentScore",
+                  "filter": "alignmentScore",
                   "label": "Alignment Score Range",
                   "type": "drop-down",
                   "values": [
                     {
-                      "value": [
-                        0,
-                        0.5
-                      ],
+                      "value": {
+                        "minScore": 0,
+                        "maxScore": 0.5
+                      },
                       "label": "<0.5"
                     },
                     {
-                      "value": [
-                        0.5,
-                        0.6
-                      ],
+                      "value": {
+                        "minScore": 0.5,
+                        "maxScore": 0.6
+                      },
                       "label": "0.5-0.6"
                     },
                     {
-                      "value": [
-                        0.6,
-                        0.7
-                      ],
+                      "value": {
+                        "minScore": 0.6,
+                        "maxScore": 0.7
+                      },
                       "label": "0.6-0.7"
                     },
                     {
-                      "value": [
-                        0.7,
-                        0.8
-                      ],
+                      "value": {
+                        "minScore": 0.7,
+                        "maxScore": 0.8
+                      },
+                      "label": "0.7-0.8"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.8,
+                        "maxScore": 0.9
+                      },
                       "label": "0.8-0.9"
                     },
                     {
-                      "value": [
-                        0.9,
-                        1
-                      ],
+                      "value": {
+                        "minScore": 0.9,
+                        "maxScore": 1
+                      },
                       "label": "0.9-1.0"
                     }
                   ]
@@ -200,7 +330,7 @@
               "type": "drop-down",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "filter": "alignmentTool",
                   "label": "Alignment Tool",
                   "type": "drop-down",
                   "values": [
@@ -211,43 +341,50 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentScore",
+                  "filter": "alignmentScore",
                   "label": "Alignment Score Range",
                   "type": "drop-down",
                   "values": [
                     {
-                      "value": [
-                        0,
-                        0.5
-                      ],
+                      "value": {
+                        "minScore": 0,
+                        "maxScore": 0.5
+                      },
                       "label": "<0.5"
                     },
                     {
-                      "value": [
-                        0.5,
-                        0.6
-                      ],
+                      "value": {
+                        "minScore": 0.5,
+                        "maxScore": 0.6
+                      },
                       "label": "0.5-0.6"
                     },
                     {
-                      "value": [
-                        0.6,
-                        0.7
-                      ],
+                      "value": {
+                        "minScore": 0.6,
+                        "maxScore": 0.7
+                      },
                       "label": "0.6-0.7"
                     },
                     {
-                      "value": [
-                        0.7,
-                        0.8
-                      ],
+                      "value": {
+                        "minScore": 0.7,
+                        "maxScore": 0.8
+                      },
+                      "label": "0.7-0.8"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.8,
+                        "maxScore": 0.9
+                      },
                       "label": "0.8-0.9"
                     },
                     {
-                      "value": [
-                        0.9,
-                        1
-                      ],
+                      "value": {
+                        "minScore": 0.9,
+                        "maxScore": 1
+                      },
                       "label": "0.9-1.0"
                     }
                   ]
@@ -259,7 +396,7 @@
               "label": "Machine Translated",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.translationModel",
+                  "filter": "translationModel",
                   "label": "Translation Model",
                   "type": "drop-down",
                   "values": [
@@ -270,7 +407,7 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
                   "values": []
@@ -282,7 +419,7 @@
               "label": "Machine Translated Post Edited",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.translationModel",
+                  "filter": "translationModel",
                   "label": "Translation Model",
                   "type": "drop-down",
                   "values": [
@@ -293,7 +430,7 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
                   "values": []
@@ -305,7 +442,7 @@
               "label": "Manually Aligned",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.editingTool",
+                  "filter": "editingTool",
                   "label": "Editing Tool",
                   "type": "drop-down",
                   "values": []
@@ -317,14 +454,13 @@
               "label": "Manually Translated",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.editingTool",
+                  "filter": "editingTool",
                   "label": "Editing Tool",
                   "type": "drop-down",
-                  "values": [
-                  ]
+                  "values": []
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
                   "values": []
@@ -449,72 +585,59 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "cc-by-4.0"
+              "label": "CC-BY-4.0"
             },
             {
               "value": "cc-by-sa-4.0",
-              "label": "cc-by-sa-4.0"
+              "label": "CC-BY-SA-4.0"
             },
             {
               "value": "cc-by-nd-2.0",
-              "label": "cc-by-nd-2.0"
+              "label": "CC-BY-ND-2.0"
             },
             {
               "value": "cc-by-nd-4.0",
-              "label": "cc-by-nd-4.0"
+              "label": "CC-BY-ND-4.0"
             },
             {
               "value": "cc-by-nc-3.0",
-              "label": "cc-by-nc-3.0"
+              "label": "CC-BY-ND-3.0"
             },
             {
               "value": "cc-by-nc-4.0",
-              "label": "cc-by-nc-4.0"
+              "label": "CC-BY-NC-4.0"
             },
             {
               "value": "cc-by-nc-sa-4.0",
-              "label": "cc-by-nc-sa-4.0"
+              "label": "CC-BY-NC-SA-4.0"
             },
             {
               "value": "mit",
-              "label": "mit"
+              "label": "MIT"
             },
             {
               "value": "gpl-3.0",
-              "label": "gpl-3.0"
+              "label": "GPL-3.0"
             },
             {
               "value": "bsd-3-clause",
-              "label": "bsd-3-clause"
+              "label": "BSD-3-CLAUSE"
             },
             {
               "value": "private-commercial",
-              "label": "private-commercial"
+              "label": "PRIVATE COMMERCIAL"
             },
             {
               "value": "unknown-license",
-              "label": "unknown-license"
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "Project Anuvaad",
-              "label": "Project Anuvaad"
-            },
-            {
-              "value": "Samanantar",
-              "label": "Samanantar"
-            },
-            {
-              "value": "ai4bharat",
-              "label": "Ai4Bharat"
-            }
-          ]
+          "type": "text",
+          "values": []
         }
       ]
     },
@@ -525,7 +648,7 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
-           "values": [
+          "values": [
             {
               "value": "pa",
               "label": "Punjabi"
@@ -748,7 +871,7 @@
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
           "values": [
@@ -771,72 +894,59 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "cc-by-4.0"
+              "label": "CC-BY-4.0"
             },
             {
               "value": "cc-by-sa-4.0",
-              "label": "cc-by-sa-4.0"
+              "label": "CC-BY-SA-4.0"
             },
             {
               "value": "cc-by-nd-2.0",
-              "label": "cc-by-nd-2.0"
+              "label": "CC-BY-ND-2.0"
             },
             {
               "value": "cc-by-nd-4.0",
-              "label": "cc-by-nd-4.0"
+              "label": "CC-BY-ND-4.0"
             },
             {
               "value": "cc-by-nc-3.0",
-              "label": "cc-by-nc-3.0"
+              "label": "CC-BY-ND-3.0"
             },
             {
               "value": "cc-by-nc-4.0",
-              "label": "cc-by-nc-4.0"
+              "label": "CC-BY-NC-4.0"
             },
             {
               "value": "cc-by-nc-sa-4.0",
-              "label": "cc-by-nc-sa-4.0"
+              "label": "CC-BY-NC-SA-4.0"
             },
             {
               "value": "mit",
-              "label": "mit"
+              "label": "MIT"
             },
             {
               "value": "gpl-3.0",
-              "label": "gpl-3.0"
+              "label": "GPL-3.0"
             },
             {
               "value": "bsd-3-clause",
-              "label": "bsd-3-clause"
+              "label": "BSD-3-CLAUSE"
             },
             {
               "value": "private-commercial",
-              "label": "private-commercial"
+              "label": "PRIVATE COMMERCIAL"
             },
             {
               "value": "unknown-license",
-              "label": "unknown-license"
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "Project Anuvaad",
-              "label": "Project Anuvaad"
-            },
-            {
-              "value": "Samanantar",
-              "label": "Samanantar"
-            },
-            {
-              "value": "ai4bharat",
-              "label": "Ai4Bharat"
-            }
-          ]
+          "type": "text",
+          "values": []
         }
       ]
     },
@@ -847,7 +957,7 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
-           "values": [
+          "values": [
             {
               "value": "pa",
               "label": "Punjabi"
@@ -1070,7 +1180,7 @@
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
           "values": [
@@ -1079,7 +1189,7 @@
               "label": "Machine Generated Transcript",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.asrModel",
+                  "filter": "asrModel",
                   "label": "ASR Model",
                   "type": "drop-down",
                   "values": [
@@ -1090,7 +1200,7 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
                   "values": [
@@ -1107,7 +1217,7 @@
               "label": "Auto Aligned",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "filter": "alignmentTool",
                   "label": "Alignment Tool",
                   "type": "drop-down",
                   "values": [
@@ -1118,13 +1228,51 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentScore",
+                  "filter": "alignmentScore",
                   "label": "Alinment Score Range",
                   "type": "drop-down",
                   "values": [
                     {
-                      "value": [0.0,1.0],
-                      "label": "0.0-1.0"
+                      "value": {
+                        "minScore": 0,
+                        "maxScore": 0.5
+                      },
+                      "label": "<0.5"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.5,
+                        "maxScore": 0.6
+                      },
+                      "label": "0.5-0.6"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.6,
+                        "maxScore": 0.7
+                      },
+                      "label": "0.6-0.7"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.7,
+                        "maxScore": 0.8
+                      },
+                      "label": "0.7-0.8"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.8,
+                        "maxScore": 0.9
+                      },
+                      "label": "0.8-0.9"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.9,
+                        "maxScore": 1
+                      },
+                      "label": "0.9-1.0"
                     }
                   ]
                 }
@@ -1133,8 +1281,7 @@
             {
               "value": "manual-transcribed",
               "label": "Manually Transcribed",
-              "sub-filters": [
-              ]
+              "sub-filters": []
             }
           ]
         },
@@ -1151,72 +1298,59 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "cc-by-4.0"
+              "label": "CC-BY-4.0"
             },
             {
               "value": "cc-by-sa-4.0",
-              "label": "cc-by-sa-4.0"
+              "label": "CC-BY-SA-4.0"
             },
             {
               "value": "cc-by-nd-2.0",
-              "label": "cc-by-nd-2.0"
+              "label": "CC-BY-ND-2.0"
             },
             {
               "value": "cc-by-nd-4.0",
-              "label": "cc-by-nd-4.0"
+              "label": "CC-BY-ND-4.0"
             },
             {
               "value": "cc-by-nc-3.0",
-              "label": "cc-by-nc-3.0"
+              "label": "CC-BY-ND-3.0"
             },
             {
               "value": "cc-by-nc-4.0",
-              "label": "cc-by-nc-4.0"
+              "label": "CC-BY-NC-4.0"
             },
             {
               "value": "cc-by-nc-sa-4.0",
-              "label": "cc-by-nc-sa-4.0"
+              "label": "CC-BY-NC-SA-4.0"
             },
             {
               "value": "mit",
-              "label": "mit"
+              "label": "MIT"
             },
             {
               "value": "gpl-3.0",
-              "label": "gpl-3.0"
+              "label": "GPL-3.0"
             },
             {
               "value": "bsd-3-clause",
-              "label": "bsd-3-clause"
+              "label": "BSD-3-CLAUSE"
             },
             {
               "value": "private-commercial",
-              "label": "private-commercial"
+              "label": "PRIVATE COMMERCIAL"
             },
             {
               "value": "unknown-license",
-              "label": "unknown-license"
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "Project Anuvaad",
-              "label": "Project Anuvaad"
-            },
-            {
-              "value": "Samanantar",
-              "label": "Samanantar"
-            },
-            {
-              "value": "ai4bharat",
-              "label": "Ai4Bharat"
-            }
-          ]
+          "type": "text",
+          "values": []
         },
         {
           "filter": "format",
@@ -1225,19 +1359,19 @@
           "values": [
             {
               "value": "wav",
-              "label": "wav"
+              "label": "WAV"
             },
             {
               "value": "pcm",
-              "label": "pcm"
+              "label": "PCM"
             },
             {
               "value": "flac",
-              "label": "flac"
+              "label": "FLAC"
             },
             {
               "value": "mp3",
-              "label": "mp3"
+              "label": "MP3"
             }
           ]
         },
@@ -1248,11 +1382,11 @@
           "values": [
             {
               "value": "stereo",
-              "label": "stereo"
+              "label": "Stereo"
             },
             {
               "value": "mono",
-              "label": "mono"
+              "label": "Mono"
             }
           ]
         },
@@ -1282,7 +1416,7 @@
           "values": [
             {
               "value": "eight",
-              "label": "eight"
+              "label": "Eight"
             },
             {
               "value": "sixteen",
@@ -1291,16 +1425,22 @@
           ]
         },
         {
-          "filter": "numberOfSpeakers",
+          "filter": "noOfSpeakers",
           "label": "Number of Speakers",
           "type": "drop-down",
           "values": [
             {
-              "value": [1,5],
+              "value": {
+                "minNoOfSpeakers": 1,
+                "maxNoOfSpeakers": 5
+              },
               "label": "1-5"
             },
             {
-              "value": [5,10],
+              "value": {
+                "minNoOfSpeakers": 5,
+                "maxNoOfSpeakers": 10
+              },
               "label": "5-10"
             }
           ]
@@ -1338,19 +1478,31 @@
           "type": "drop-down",
           "values": [
             {
-              "value": [0,9],
+              "value": {
+                "minAge": 0,
+                "maxAge": 9
+              },
               "label": "0-9"
             },
             {
-              "value": [10,20],
+              "value": {
+                "minAge": 10,
+                "maxAge": 20
+              },
               "label": "10-20"
             },
             {
-              "value": [21,60],
+              "value": {
+                "minAge": 21,
+                "maxAge": 60
+              },
               "label": "21-60"
             },
             {
-              "value": [60,100],
+              "value": {
+                "minAge": 60,
+                "maxAge": 100
+              },
               "label": "60-100"
             }
           ]
@@ -1375,7 +1527,7 @@
           ]
         },
         {
-          "filter": "snr.methodDetails.snrTool",
+          "filter": "snrTool",
           "label": "SNR Tool",
           "type": "drop-down",
           "values": [
@@ -1386,15 +1538,15 @@
           ]
         },
         {
-          "filter": "snr.methodDetails.snr",
+          "filter": "snr",
           "label": "SNR Range",
           "type": "drop-down",
           "values": [
             {
-              "value": [
-                0,
-                1
-              ],
+              "value": {
+                "minScore": 0,
+                "maxScore": 1
+              },
               "label": "0.0-1.0"
             }
           ]
@@ -1408,7 +1560,7 @@
         {
           "filter": "sourceLanguage",
           "label": "Language",
-           "values": [
+          "values": [
             {
               "value": "pa",
               "label": "Punjabi"
@@ -1631,7 +1783,7 @@
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
           "values": [
@@ -1640,7 +1792,7 @@
               "label": "Web Scraping OCR",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.ocrTool",
+                  "filter": "ocrTool",
                   "label": "OCR Tool",
                   "type": "drop-down",
                   "values": [
@@ -1689,7 +1841,7 @@
               "label": "Screen Capture",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.ocrTool",
+                  "filter": "ocrTool",
                   "label": "OCR Tool",
                   "type": "drop-down",
                   "values": [
@@ -1738,7 +1890,7 @@
               "label": "Scanned OCR",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.ocrTool",
+                  "filter": "ocrTool",
                   "label": "OCR Tool",
                   "type": "drop-down",
                   "values": [
@@ -1797,72 +1949,59 @@
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "cc-by-4.0"
+              "label": "CC-BY-4.0"
             },
             {
               "value": "cc-by-sa-4.0",
-              "label": "cc-by-sa-4.0"
+              "label": "CC-BY-SA-4.0"
             },
             {
               "value": "cc-by-nd-2.0",
-              "label": "cc-by-nd-2.0"
+              "label": "CC-BY-ND-2.0"
             },
             {
               "value": "cc-by-nd-4.0",
-              "label": "cc-by-nd-4.0"
+              "label": "CC-BY-ND-4.0"
             },
             {
               "value": "cc-by-nc-3.0",
-              "label": "cc-by-nc-3.0"
+              "label": "CC-BY-ND-3.0"
             },
             {
               "value": "cc-by-nc-4.0",
-              "label": "cc-by-nc-4.0"
+              "label": "CC-BY-NC-4.0"
             },
             {
               "value": "cc-by-nc-sa-4.0",
-              "label": "cc-by-nc-sa-4.0"
+              "label": "CC-BY-NC-SA-4.0"
             },
             {
               "value": "mit",
-              "label": "mit"
+              "label": "MIT"
             },
             {
               "value": "gpl-3.0",
-              "label": "gpl-3.0"
+              "label": "GPL-3.0"
             },
             {
               "value": "bsd-3-clause",
-              "label": "bsd-3-clause"
+              "label": "BSD-3-CLAUSE"
             },
             {
               "value": "private-commercial",
-              "label": "private-commercial"
+              "label": "PRIVATE COMMERCIAL"
             },
             {
               "value": "unknown-license",
-              "label": "unknown-license"
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "Project Anuvaad",
-              "label": "Project Anuvaad"
-            },
-            {
-              "value": "Samanantar",
-              "label": "Samanantar"
-            },
-            {
-              "value": "ai4bharat",
-              "label": "Ai4Bharat"
-            }
-          ]
+          "type": "text",
+          "values": []
         },
         {
           "filter": "format",
@@ -1910,7 +2049,7 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
-           "values": [
+          "values": [
             {
               "value": "pa",
               "label": "Punjabi"
@@ -2133,16 +2272,16 @@
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
-           "values": [
+          "values": [
             {
               "value": "machine-generated-transcript",
               "label": "Machine Generated Transcript",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.asrModel",
+                  "filter": "asrModel",
                   "label": "ASR Model",
                   "type": "drop-down",
                   "values": [
@@ -2153,7 +2292,7 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
                   "values": [
@@ -2170,7 +2309,7 @@
               "label": "Auto Aligned",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "filter": "alignmentTool",
                   "label": "Alignment Tool",
                   "type": "drop-down",
                   "values": [
@@ -2181,280 +2320,325 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentScore",
+                  "filter": "alignmentScore",
                   "label": "Alinment Score Range",
                   "type": "drop-down",
                   "values": [
                     {
-                      "value": [0.0,1.0],
-                      "label": "0.0-1.0"
+                      "value": {
+                        "minScore": 0,
+                        "maxScore": 0.5
+                      },
+                      "label": "<0.5"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.5,
+                        "maxScore": 0.6
+                      },
+                      "label": "0.5-0.6"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.6,
+                        "maxScore": 0.7
+                      },
+                      "label": "0.6-0.7"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.7,
+                        "maxScore": 0.8
+                      },
+                      "label": "0.7-0.8"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.8,
+                        "maxScore": 0.9
+                      },
+                      "label": "0.8-0.9"
+                    },
+                    {
+                      "value": {
+                        "minScore": 0.9,
+                        "maxScore": 1
+                      },
+                      "label": "0.9-1.0"
                     }
                   ]
                 }
               ]
-        },
-        {
-          "filter": "collectionSource",
-          "label": "Collection Source",
-          "type": "text",
-          "values": []
-        },
-        {
-          "filter": "license",
-          "label": "License",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "cc-by-4.0",
-              "label": "cc-by-4.0"
             },
             {
-              "value": "cc-by-sa-4.0",
-              "label": "cc-by-sa-4.0"
+              "filter": "collectionSource",
+              "label": "Collection Source",
+              "type": "text",
+              "values": []
             },
             {
-              "value": "cc-by-nd-2.0",
-              "label": "cc-by-nd-2.0"
+              "filter": "license",
+              "label": "License",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": "cc-by-4.0",
+                  "label": "CC-BY-4.0"
+                },
+                {
+                  "value": "cc-by-sa-4.0",
+                  "label": "CC-BY-SA-4.0"
+                },
+                {
+                  "value": "cc-by-nd-2.0",
+                  "label": "CC-BY-ND-2.0"
+                },
+                {
+                  "value": "cc-by-nd-4.0",
+                  "label": "CC-BY-ND-4.0"
+                },
+                {
+                  "value": "cc-by-nc-3.0",
+                  "label": "CC-BY-ND-3.0"
+                },
+                {
+                  "value": "cc-by-nc-4.0",
+                  "label": "CC-BY-NC-4.0"
+                },
+                {
+                  "value": "cc-by-nc-sa-4.0",
+                  "label": "CC-BY-NC-SA-4.0"
+                },
+                {
+                  "value": "mit",
+                  "label": "MIT"
+                },
+                {
+                  "value": "gpl-3.0",
+                  "label": "GPL-3.0"
+                },
+                {
+                  "value": "bsd-3-clause",
+                  "label": "BSD-3-CLAUSE"
+                },
+                {
+                  "value": "private-commercial",
+                  "label": "PRIVATE COMMERCIAL"
+                },
+                {
+                  "value": "unknown-license",
+                  "label": "UNKNOWN LICENSE"
+                }
+              ]
             },
             {
-              "value": "cc-by-nd-4.0",
-              "label": "cc-by-nd-4.0"
+              "filter": "submitterName",
+              "label": "Submitter",
+              "type": "text",
+              "values": []
             },
             {
-              "value": "cc-by-nc-3.0",
-              "label": "cc-by-nc-3.0"
+              "filter": "format",
+              "label": "Format",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": "wav",
+                  "label": "wav"
+                },
+                {
+                  "value": "pcm",
+                  "label": "pcm"
+                },
+                {
+                  "value": "flac",
+                  "label": "flac"
+                },
+                {
+                  "value": "mp3",
+                  "label": "mp3"
+                }
+              ]
             },
             {
-              "value": "cc-by-nc-4.0",
-              "label": "cc-by-nc-4.0"
+              "filter": "channel",
+              "label": "Channel",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": "stereo",
+                  "label": "stereo"
+                },
+                {
+                  "value": "mono",
+                  "label": "mono"
+                }
+              ]
             },
             {
-              "value": "cc-by-nc-sa-4.0",
-              "label": "cc-by-nc-sa-4.0"
+              "filter": "samplingRate",
+              "label": "Sampling Rate",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": null,
+                  "label": "None"
+                },
+                {
+                  "value": 16,
+                  "label": "16"
+                },
+                {
+                  "value": 44.1,
+                  "label": "44.1"
+                }
+              ]
             },
             {
-              "value": "mit",
-              "label": "mit"
+              "filter": "bitsPerSample",
+              "label": "Bits per Sample",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": "eight",
+                  "label": "eight"
+                },
+                {
+                  "value": "sixteen",
+                  "label": "Sixteen"
+                }
+              ]
             },
             {
-              "value": "gpl-3.0",
-              "label": "gpl-3.0"
+              "filter": "noOfSpeakers",
+              "label": "Number of Speakers",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": {
+                    "minNoOfSpeakers": 1,
+                    "maxNoOfSpeakers": 5
+                  },
+                  "label": "1-5"
+                },
+                {
+                  "value": {
+                    "minNoOfSpeakers": 5,
+                    "maxNoOfSpeakers": 10
+                  },
+                  "label": "5-10"
+                }
+              ]
             },
             {
-              "value": "bsd-3-clause",
-              "label": "bsd-3-clause"
+              "filter": "gender",
+              "label": "Gender",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": "female",
+                  "label": "Female"
+                },
+                {
+                  "value": "male",
+                  "label": "Male"
+                },
+                {
+                  "value": "transgender",
+                  "label": "Transgender"
+                },
+                {
+                  "value": "non-specified",
+                  "label": "Non Specified"
+                },
+                {
+                  "value": "others",
+                  "label": "Others"
+                }
+              ]
             },
             {
-              "value": "private-commercial",
-              "label": "private-commercial"
+              "filter": "age",
+              "label": "Age",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": {
+                    "minAge": 0,
+                    "maxAge": 9
+                  },
+                  "label": "0-9"
+                },
+                {
+                  "value": {
+                    "minAge": 10,
+                    "maxAge": 20
+                  },
+                  "label": "10-20"
+                },
+                {
+                  "value": {
+                    "minAge": 21,
+                    "maxAge": 60
+                  },
+                  "label": "21-60"
+                },
+                {
+                  "value": {
+                    "minAge": 60,
+                    "maxAge": 100
+                  },
+                  "label": "60-100"
+                }
+              ]
             },
             {
-              "value": "unknown-license",
-              "label": "unknown-license"
-            }
-          ]
-        },
-        {
-          "filter": "submitter.name",
-          "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "Project Anuvaad",
-              "label": "Project Anuvaad"
+              "filter": "dialect",
+              "label": "Dialect",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": "hi-thethi",
+                  "label": "hi-thethi"
+                },
+                {
+                  "value": "hi-magahi",
+                  "label": "hi-magahi"
+                },
+                {
+                  "value": "ta-madurai",
+                  "label": "ta-madurai"
+                }
+              ]
             },
             {
-              "value": "Samanantar",
-              "label": "Samanantar"
+              "filter": "snrTool",
+              "label": "SNR Tool",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": "WADASNR",
+                  "label": "Wadasnr"
+                }
+              ]
             },
             {
-              "value": "ai4bharat",
-              "label": "Ai4Bharat"
-            }
-          ]
-        },
-        {
-          "filter": "format",
-          "label": "Format",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "wav",
-              "label": "wav"
-            },
-            {
-              "value": "pcm",
-              "label": "pcm"
-            },
-            {
-              "value": "flac",
-              "label": "flac"
-            },
-            {
-              "value": "mp3",
-              "label": "mp3"
-            }
-          ]
-        },
-        {
-          "filter": "channel",
-          "label": "Channel",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "stereo",
-              "label": "stereo"
-            },
-            {
-              "value": "mono",
-              "label": "mono"
-            }
-          ]
-        },
-        {
-          "filter": "samplingRate",
-          "label": "Sampling Rate",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": null,
-              "label": "None"
-            },
-            {
-              "value": 16,
-              "label": "16"
-            },
-            {
-              "value": 44.1,
-              "label": "44.1"
-            }
-          ]
-        },
-        {
-          "filter": "bitsPerSample",
-          "label": "Bits per Sample",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "eight",
-              "label": "eight"
-            },
-            {
-              "value": "sixteen",
-              "label": "Sixteen"
-            }
-          ]
-        },
-        {
-          "filter": "numberOfSpeakers",
-          "label": "Number of Speakers",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": null,
-              "label": "None"
-            },
-            {
-              "value": 1,
-              "label": "1"
-            }
-          ]
-        },
-        {
-          "filter": "gender",
-          "label": "Gender",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "female",
-              "label": "Female"
-            },
-            {
-              "value": "male",
-              "label": "Male"
-            },
-            {
-              "value": "transgender",
-              "label": "Transgender"
-            },
-            {
-              "value": "non-specified",
-              "label": "Non Specified"
-            },
-            {
-              "value": "others",
-              "label": "Others"
-            }
-          ]
-        },
-        {
-          "filter": "age",
-          "label": "Age",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": [0,9],
-              "label": "0-9"
-            },
-            {
-              "value": [10,20],
-              "label": "10-20"
-            },
-            {
-              "value": [21,60],
-              "label": "21-60"
-            },
-            {
-              "value": [60,100],
-              "label": "60-100"
-            }
-          ]
-        },
-        {
-          "filter": "dialect",
-          "label": "Dialect",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "hi-thethi",
-              "label": "hi-thethi"
-            },
-            {
-              "value": "hi-magahi",
-              "label": "hi-magahi"
-            },
-            {
-              "value": "ta-madurai",
-              "label": "ta-madurai"
-            }
-          ]
-        },
-        {
-          "filter": "snr.methodDetails.snrTool",
-          "label": "SNR Tool",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "WADASNR",
-              "label": "Wadasnr"
-            }
-          ]
-        },
-        {
-          "filter": "snr.methodDetails.snr",
-          "label": "SNR Range",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": [
-                0,
-                1
-              ],
-              "label": "0.0-1.0"
+              "filter": "snr",
+              "label": "SNR Range",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": {
+                    "minScore": 0,
+                    "maxScore": 1
+                  },
+                  "label": "0.0-1.0"
+                }
+              ]
             }
           ]
         }
       ]
-    }]
+    }
   }
-}}
+}

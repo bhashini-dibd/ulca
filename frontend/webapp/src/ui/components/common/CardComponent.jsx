@@ -32,7 +32,11 @@ const CardComponent = (props) => {
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Domain</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{FilterByDomain([data.domain])[0].label}</Typography>
                                 </Grid>
-                                {data.submitter && <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
+                                {data.publishedOn ? 
+                                <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
+                                    <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Submitter</Typography>
+                                    <Typography variant="body2" style={{ color: "#ffffff" }}>{data.submitter}</Typography>
+                                </Grid>:<Grid>
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Submitter</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{data.submitter}</Typography>
                                 </Grid>}

@@ -40,7 +40,8 @@ export const menuItems = {
         {
             name: 'Explore Models',
             url: '/model/explore-models',
-            roles:["READONLY-USER","CONTRIBUTOR-USER"]
+            roles:["READONLY-USER","CONTRIBUTOR-USER"],
+            public: true
         },
         // {
         //     name: 'Model Leaderboard',
@@ -55,7 +56,8 @@ export const menuItems = {
     {
             name: 'Benchmark Datasets',
             url: '/model/benchmark-datasets',
-            roles:["CONTRIBUTOR-USER"]
+            roles:["CONTRIBUTOR-USER"],
+            public: true
         }],
     profile: [
         {

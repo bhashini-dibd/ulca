@@ -17,11 +17,11 @@
                 "label": "License"
             },
             {
-                "value": "submitter.name",
+                "value": "submitterName",
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod.collectionDescription",
+                "value": "collectionMethod",
                 "label": "Collection Method"
             }
         ]
@@ -44,11 +44,11 @@
                 "label": "License"
             },
             {
-                "value": "submitter.name",
+                "value": "submitterName",
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod.collectionDescription",
+                "value": "collectionMethod",
                 "label": "Collection Method"
             },
             {
@@ -83,11 +83,11 @@
                 "label": "License"
             },
             {
-                "value": "submitter.name",
+                "value": "submitterName",
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod.collectionDescription",
+                "value": "collectionMethod",
                 "label": "Collection Method"
             }
         ]
@@ -110,7 +110,7 @@
                 "label": "License"
             },
             {
-                "value": "submitter.name",
+                "value": "submitterName",
                 "label": "Submitter"
             },
             {
@@ -134,7 +134,7 @@
                 "label": "Bits per Sample"
             },
             {
-                "value": "numberOfSpeakers",
+                "value": "noOfSpeakers",
                 "label": "Number of Speakers"
             },
             {
@@ -169,11 +169,11 @@
                 "label": "License"
             },
             {
-                "value": "submitter.name",
+                "value": "submitterName",
                 "label": "Submitter"
             },
             {
-                "value": "collectionMethod.collectionDescription",
+                "value": "collectionMethod",
                 "label": "Collection Method"
             },
             {
@@ -193,7 +193,7 @@
                 "label": "Bits per Sample"
             },
             {
-                "value": "numberOfSpeakers",
+                "value": "noOfSpeakers",
                 "label": "Number of Speakers"
             },
             {
