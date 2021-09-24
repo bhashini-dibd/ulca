@@ -1,4 +1,5 @@
 import logging
+import re
 import time
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, offset, limit, ocr_prefix, user_mode_pseudo, \
@@ -167,9 +168,7 @@ class OCRService:
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
             if 'collectionSource' in query.keys():
-                coll_source = []
-                for cs in query["collectionSource"]:
-                    coll_source.append(f"/{cs}/i")
+                coll_source = [re.compile(f"/{cs}/i") for cs in query["collectionSource"]]
                 db_query["collectionSource"] = {"$in": coll_source}
             if 'submitterName' in query.keys():
                 db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
