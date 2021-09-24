@@ -59,6 +59,7 @@ def search_consume():
                                 coll_source.append(cs)
                         if 'collectionSource' in data.keys():
                             coll_source.append(data["collectionSource"])
+                        if coll_source:
                             data["collectionSource"] = coll_source
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.get_parallel_dataset(data)
