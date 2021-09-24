@@ -325,7 +325,7 @@ class ParallelService:
             if tgt_lang:
                 db_query["targetLanguage"] = tgt_lang
             if 'collectionSource' in query.keys():
-                coll_source = [re.compile(f"/{cs}/i") for cs in query["collectionSource"]]
+                coll_source = [re.compile(cs) for cs in query["collectionSource"]]
                 db_query["collectionSourceQuery"] = {"collectionSource": {"$in": coll_source}}
             if 'submitterName' in query.keys():
                 db_query["submitterNameQuery"] = {"submitter": {"$elemMatch": {"name": query["submitterName"]}}}
