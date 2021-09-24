@@ -11,6 +11,7 @@ from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
 from events.metrics import MetricEvent
 from .datasetservice import DatasetService
+import re
 
 
 log = logging.getLogger('file')
@@ -324,9 +325,7 @@ class ParallelService:
             if tgt_lang:
                 db_query["targetLanguage"] = tgt_lang
             if 'collectionSource' in query.keys():
-                coll_source = []
-                for cs in query["collectionSource"]:
-                    coll_source.append(f"/{cs}/i")
+                coll_source = [re.compile(cs, re.IGNORECASE) for cs in query["collectionSource"]]
                 db_query["collectionSourceQuery"] = {"collectionSource": {"$in": coll_source}}
             if 'submitterName' in query.keys():
                 db_query["submitterNameQuery"] = {"submitter": {"$elemMatch": {"name": query["submitterName"]}}}
