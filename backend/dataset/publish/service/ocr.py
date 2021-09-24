@@ -168,7 +168,7 @@ class OCRService:
             if 'datasetId' in query.keys():
                 tags.append(query["datasetId"])
             if 'collectionSource' in query.keys():
-                coll_source = [re.compile(f"/{cs}/i") for cs in query["collectionSource"]]
+                coll_source = [re.compile(cs, re.IGNORECASE) for cs in query["collectionSource"]]
                 db_query["collectionSource"] = {"$in": coll_source}
             if 'submitterName' in query.keys():
                 db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
