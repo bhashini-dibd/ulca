@@ -215,8 +215,16 @@ public class BenchmarkService {
 			List<String> metricList = getMetric(result.getTask().getType().toString());
 			bmDto.setMetric(metricList);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkprocessDao.findByBenchmarkDatasetId(benchmarkId);
-			benchmarkProcess.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
-			bmDto.setBenchmarkPerformance(benchmarkProcess);
+			List<BenchmarkProcess> bmProcessPublished = new ArrayList<BenchmarkProcess>();
+			for(BenchmarkProcess bm : benchmarkProcess) {
+				ModelExtended model = modelDao.findByModelId(bm.getModelId());
+				if(model.getStatus().equalsIgnoreCase("published")) {
+					bmProcessPublished.add(bm);
+				}
+			}
+			
+			bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
+			bmDto.setBenchmarkPerformance(bmProcessPublished);
 			
 			return bmDto;
 		}

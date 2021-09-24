@@ -14,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
@@ -25,9 +27,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.LookupOperation;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -42,18 +41,19 @@ import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.exception.ModelNotFoundException;
+import com.ulca.model.exception.ModelStatusChangeException;
 import com.ulca.model.exception.ModelValidationException;
 import com.ulca.model.request.ModelComputeRequest;
-import com.ulca.model.request.ModelLeaderboardRequest;
 import com.ulca.model.request.ModelSearchRequest;
+import com.ulca.model.request.ModelStatusChangeRequest;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelLeaderboardFiltersMetricResponse;
 import com.ulca.model.response.ModelLeaderboardFiltersResponse;
-import com.ulca.model.response.ModelLeaderboardResponse;
-import com.ulca.model.response.ModelLeaderboardResponseDto;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
+import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 
 import io.swagger.model.Benchmark;
@@ -186,7 +186,7 @@ public class ModelService {
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(new Date().toString());
 		modelObj.setPublishedOn(new Date().toString());
-		modelObj.setStatus("published");
+		modelObj.setStatus("submitted");
 		if (modelObj != null) {
 			try {
 				modelDao.save(modelObj);
@@ -288,6 +288,8 @@ public class ModelService {
 		return new ModelSearchResponse("Model Search Result", list, list.size());
 
 	}
+	
+	
 
 	public ModelComputeResponse computeModel(ModelComputeRequest compute)
 			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
@@ -301,43 +303,6 @@ public class ModelService {
 		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
 	}
 
-	public ModelLeaderboardResponse searchLeaderboard(ModelLeaderboardRequest request) {
-
-		ModelLeaderboardResponse response = new ModelLeaderboardResponse();
-		List<ModelLeaderboardResponseDto> dtoList = new ArrayList<ModelLeaderboardResponseDto>();
-		ModelLeaderboardResponseDto dto = new ModelLeaderboardResponseDto();
-		
-		LookupOperation lookup = LookupOperation.newLookup().from("benchmarkprocess").localField("modelId")
-				.foreignField("modelId").as("join_benchmarkprocess");
-		
-		Aggregation aggregation = Aggregation.newAggregation(
-				Aggregation.match(Criteria.where("modelId").is(dto.getModelId())), lookup,
-				Aggregation.match(Criteria.where("join_benchmarkprocess.modelId").is(dto.getModelId())),
-				Aggregation.skip(10), Aggregation.limit(10));
-
-		dtoList = mongoTemplate.aggregate(aggregation, BenchmarkProcess.class, ModelLeaderboardResponseDto.class)
-				.getMappedResults();
-
-		// join the benchmarkprocess and model collection and fetch the result
-		// iterate result and create object of ModelLeaderboardResponseDto with
-		// respective values
-		// add the dto objectto dtoList
-
-		for (ModelLeaderboardResponseDto mdto : dtoList) {
-
-			//mdto.setLanguages(mdto.getSourceLanguage());
-			mdto.setMetric(mdto.getMetric());
-			mdto.setModelName(mdto.getModelName());
-			mdto.setBenchmarkDatase(mdto.getBenchmarkDatase());
-
-		}
-
-		response.setData(dtoList);
-		response.setCount(dtoList.size());
-		response.setMessage("Model Leader Board results");
-
-		return (ModelLeaderboardResponse) response;
-	}
 
 	public ModelLeaderboardFiltersResponse leaderBoardFilters_bkp() {
 
@@ -429,6 +394,24 @@ public class ModelService {
 		
 		return filterObj;
 		
+	}
+
+	public ModelStatusChangeResponse changeStatus(@Valid ModelStatusChangeRequest request) {
+		
+		String userId = request.getUserId();
+		String modelId = request.getModelId();
+		String status = request.getStatus().toString();
+		ModelExtended model = modelDao.findByModelId(modelId);
+		if(model == null) {
+			throw new ModelNotFoundException("model with modelId : " + modelId + " not found");
+		}
+		if(!model.getUserId().equalsIgnoreCase(userId)) {
+			throw new ModelStatusChangeException("Not the submitter of model. So, can not " + status + " it.", status);
+		}
+		model.setStatus(status);
+		modelDao.save(model);
+		
+		return new ModelStatusChangeResponse("Model " + status +  " successfull.");
 	}
 	
 	
