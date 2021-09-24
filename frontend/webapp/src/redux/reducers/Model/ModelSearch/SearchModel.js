@@ -89,13 +89,14 @@ const getContributionList = (state, payload) => {
     let filter = { language: [], domainFilter: [], submitter: [] }
     let refreshStatus = false;
     payload.forEach(element => {
-
+        console.log(element)
         let sLanguage = element.languages.length > 0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
         let tLanguage = element.languages && element.languages.length > 0 && element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
         let lang = tLanguage ? (sLanguage + " - " + tLanguage) : sLanguage;
         let domain = getDomainDetails(element.domain)
         responseData.push(
             {
+                version:element.version ?element.version:"v1.0" ,
                 description: element.description,
                 submitRefNumber: element.modelId,
                 modelName: element.name,

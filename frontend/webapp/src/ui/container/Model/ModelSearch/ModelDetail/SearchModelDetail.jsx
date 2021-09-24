@@ -28,6 +28,10 @@ const SearchModelDetail = (props) => {
   }, [location]);
   const description = [
     {
+      title: "Version",
+      para: data.version,
+    },,
+    {
       title: "Description",
       para: data.description,
     },

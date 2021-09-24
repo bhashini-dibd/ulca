@@ -113,6 +113,7 @@ const getContributionList = (state, payload) => {
     let lang = tLanguage ? sLanguage + " - " + tLanguage : sLanguage;
     responseData.push({
       benchmarkPerformance: convertDate(element.benchmarkPerformance),
+      version: element.version ? element.version : "v1.0",
       submitRefNumber: element.modelId,
       modelName: element.name,
       description: element.description,
@@ -122,7 +123,7 @@ const getContributionList = (state, payload) => {
           ? element.task.type.toUpperCase()
           : element.task.type,
       domain: getDomainDetails(element.domain),
-      status: "Published",
+      status: element.status,
       endPoint: element.inferenceEndPoint,
       language: lang,
       source:
