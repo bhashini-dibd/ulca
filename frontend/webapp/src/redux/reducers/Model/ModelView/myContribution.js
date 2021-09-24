@@ -113,7 +113,7 @@ const getContributionList = (state, payload) => {
     let lang = tLanguage ? sLanguage + " - " + tLanguage : sLanguage;
     responseData.push({
       benchmarkPerformance: convertDate(element.benchmarkPerformance),
-      version: element.version ? element.version : "--",
+      version: element.version ? element.version : "V1.0",
       submitRefNumber: element.modelId,
       modelName: element.name,
       description: element.description,
