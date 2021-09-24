@@ -20,9 +20,10 @@ const endpoints = {
   hostedVoice: "/ulca/apis/asr/v1/model/compute",
   getBenchmarkDetails: "/ulca/apis/v0/benchmark/getByTask",
   submitBenchmark: "/ulca/apis/v0/benchmark/execute",
-  benchmarkTable: '/ulca/apis/v0/model/getModel',
-  benchmarkModelSearch:"/ulca/apis/v0/benchmark/search",
-  benchmarkDetails:"/ulca/apis/v0/benchmark/getBenchmark"
+  benchmarkTable: "/ulca/apis/v0/model/getModel",
+  benchmarkModelSearch: "/ulca/apis/v0/benchmark/search",
+  benchmarkDetails: "/ulca/apis/v0/benchmark/getBenchmark",
+  toggleModelStatus: "/ulca/apis/v0/model/status/change",
 };
 
 export default endpoints;

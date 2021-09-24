@@ -30,6 +30,7 @@ import clearBenchMark from "../../../../redux/actions/api/Model/ModelView/ClearB
 import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/SubmitBenchmark";
 import Spinner from "../../../components/common/Spinner";
 import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
+import SwitchModelStatus from "../../../../redux/actions/api/Model/ModelView/SwitchModelStatus";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -257,6 +258,27 @@ const ContributionList = (props) => {
     });
   };
 
+  const toggleModelStatusAPI = (modelId, status) => {
+    const toggledStatus =
+      status === "Completed"
+        ? "published"
+        : status === "Published" && "unpublished";
+    const apiObj = new SwitchModelStatus(modelId, toggledStatus);
+    fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      body: JSON.stringify(apiObj.getBody()),
+      headers: apiObj.getHeaders().headers,
+    })
+      .then(async (res) => {
+        if (res.ok) {
+          MyContributionListApi();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const renderActionButtons = (status, type, domain, modelId) => {
     if (status !== "Failed" && status !== "In Progress") {
       return (
@@ -277,10 +299,12 @@ const ContributionList = (props) => {
               size="small"
               variant="contained"
               className={classes.benchmarkActionButtons}
+              disabled={status === "Failed" ? true : false}
               style={{
                 color: status === "Published" ? "#F54336" : "#139D60",
                 fontSize: "1rem",
               }}
+              onClick={() => toggleModelStatusAPI(modelId, status)}
             >
               {status === "Published" ? "Unpublish" : "Publish"}
             </Button>
@@ -405,7 +429,6 @@ const ContributionList = (props) => {
         empty: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
-            console.log(tableMeta.rowData)
             return renderActionButtons(
               tableMeta.rowData[7],
               tableMeta.rowData[1],
