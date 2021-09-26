@@ -54,20 +54,29 @@ const SearchAndDownloadRecords = (props) => {
     const { classes } = props;
     const url = UrlConfig.dataset;
     const urlMySearch = UrlConfig.mySearches;
+
+    const [datasetType, setDatasetType] = useState({
+        'parallel-corpus': true
+    })
     const DatasetType = useSelector(state => state.mySearchOptions.result.datasetType)
     const Language = useSelector(state => state.mySearchOptions.result.languagePair.sourceLang)
     const basicFilter = useSelector(state => state.mySearchOptions.result.basicFilter);
     const advFilter = useSelector(state => state.mySearchOptions.result.advFilter);
+    // const basicFilterCategory = useSelector(state => state.mySearchOptions.filterCategory[Object.keys(datasetType)[0]].basicFilters);
+    // const advanceFilterCategory = useSelector(state => state.mySearchOptions.filterCategory[Object.keys(datasetType)[0]].advancedFilters);
+
     const dispatch = useDispatch();
     const param = useParams();
     const history = useHistory();
-    const [open, setOpen] = useState(false);
+    const { params, srno } = param
+    const [open, setOpen] = useState(srno > -1 ? true : false);
     const [advFilterState, setAdvFilterState] = useState({});
     const [basicFilterState, setBasicFilterState] = useState({});
     const [languagePair, setLanguagePair] = useState({
-        source: [],
+        source: "",
         target: []
     });
+    const [searchValues,setSearchValues] = useState("");
 
     const [filterBy, setFilterBy] = useState({
         domain: '',
@@ -75,9 +84,6 @@ const SearchAndDownloadRecords = (props) => {
         collectionMethod: ''
     });
 
-    const [datasetType, setDatasetType] = useState({
-        'parallel-corpus': true
-    })
 
     const [count, setCount] = useState(0);
     const [urls, setUrls] = useState({
@@ -108,24 +114,30 @@ const SearchAndDownloadRecords = (props) => {
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
         })
+
         if (data[0]) {
+            const { searchValues } = data[0];
             setCount(data[0].count);
             setUrls({
                 downloadSample: data[0].sampleUrl,
                 downloadAll: data[0].downloadUrl
             })
 
-            let target = data[0].targetLanguage ? getLanguageLabel(data[0].targetLanguage) : getLanguageLabel(data[0].sourceLanguage)
-            let source = data[0].sourceLanguage && Language.filter(val => val.value === data[0].sourceLanguage[0])[0].label
-            let domain = data[0].domain && FilterBy.domain.filter(val => val.value === data[0].domain[0])[0].label
-            let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
-            let label = data[0].search_criteria && data[0].search_criteria.split('|')[0]
-            setFilterBy({
-                ...filterBy, domain, collectionMethod
+            let target = data[0].searchValues.targetLanguage ? getLanguageLabel(data[0].searchValues.targetLanguage) : getLanguageLabel(data[0].searchValues.sourceLanguage)
+            let source = data[0].searchValues.sourceLanguage && getLanguageLabel(data[0].searchValues.sourceLanguage)[0]
+            let domain = data[0].searchValues.domain && FilterBy.domain.filter(val => val.value === data[0].searchValues.domain[0])[0]
+            let collectionSource = searchValues.collectionSource;
+            // let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
+            // let label = data[0].search_criteria && data[0].search_criteria.split('|')[0]
+            setBasicFilterState({
+                ...basicFilterState, domain, collectionSource: { value: collectionSource }
             })
             setLanguagePair({ target, source })
+
+            setFilterState(searchValues);
+
             //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
-            setDatasetType({ [data[0].datasetType]: true })
+            setDatasetType({ [data[0].searchValues.datasetType]: true })
 
             setLabel(label)
         }
@@ -134,6 +146,11 @@ const SearchAndDownloadRecords = (props) => {
             history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`)
 
     }, []);
+
+    const setFilterState = (searchValues) => {
+        const searchKeys = Object.keys(searchValues);
+      
+    }
 
     // useEffect(()=>{
     //     if(DatasetType.length){
@@ -149,6 +166,8 @@ const SearchAndDownloadRecords = (props) => {
                 source: "",
                 collectionMethod: ""
             })
+            setBasicFilterState({});
+            setAdvFilterState({});
             setLabel('Parallel Dataset')
             setDatasetType({ 'parallel-corpus': true })
         }
@@ -170,19 +189,28 @@ const SearchAndDownloadRecords = (props) => {
     const handleFilterByChange = (value, property) => {
         setFilterBy({ ...filterBy, [property]: value });
     };
-    const handleDropDownChange = (data, id) => {
-        console.log(data, id);
+    const handleDropDownChange = (value, id, type = "array") => {
         let filter = { ...advFilterState }
-        filter[id] = data;
+        console.log(type)
+        if (type === 'array') {
+            filter[id] = { ...value, type };
+        } else {
+            filter[id] = { value, type };
+
+        }
         setAdvFilterState({ ...advFilterState, ...filter });
     }
 
-    const handleBasicFilter = (data, id) => {
+    const handleBasicFilter = (value, id, type = "array") => {
         let filter = { ...basicFilterState }
-        filter[id] = data;
+        if (type === 'array') {
+            filter[id] = { ...value, type };
+        } else {
+            filter[id] = { value, type };
+
+        }
         setBasicFilterState({ ...basicFilterState, ...filter });
     }
-    console.log(basicFilterState)
     const [snackbar, setSnackbarInfo] = useState({
         open: false,
         message: '',
@@ -197,7 +225,6 @@ const SearchAndDownloadRecords = (props) => {
     const [label, setLabel] = useState('Parallel Dataset')
     const [srcError, setSrcError] = useState(false)
     const [tgtError, setTgtError] = useState(false)
-    const { params, srno } = param
     const renderPage = () => {
         let data = detailedReport.responseData.filter((val) => {
             return val.sr_no === srno
@@ -247,7 +274,6 @@ const SearchAndDownloadRecords = (props) => {
         });
     }
 
-    console.log(advFilterState)
     const makeSubmitAPICall = (type, criteria) => {
         const Dataset = Object.keys(type)[0]
         setSnackbarInfo({
@@ -312,13 +338,14 @@ const SearchAndDownloadRecords = (props) => {
         let updatedObj = {};
         let objKeys = Object.keys(obj);
         objKeys.forEach(key => {
-            updatedObj[key] = obj[key].hasOwnProperty('value')?obj[key].value:obj[key]
+            console.log(obj[key]);
+            updatedObj[key] = obj[key].type === "array" ? [obj[key].value] : obj[key].value
         })
         return updatedObj;
     }
 
-    const getArrayValue = (arr)=>{
-        let updatedArr = arr.map(element=>{
+    const getArrayValue = (arr) => {
+        let updatedArr = arr.map(element => {
             return element.value
         })
         return updatedArr;
@@ -326,8 +353,7 @@ const SearchAndDownloadRecords = (props) => {
 
     const handleSubmitBtn = () => {
         const obj = { ...basicFilterState, ...advFilterState };
-        const criteria = { sourceLanguage: getArrayValue([languagePair.source]), targetLanguage: getArrayValue(languagePair.target), criteria: getObjectValue(obj) }
-        console.log(criteria);
+        const criteria = { sourceLanguage: getArrayValue([languagePair.source]), targetLanguage: getArrayValue(languagePair.target), ...getObjectValue(obj) }
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
                 makeSubmitAPICall(datasetType, criteria)
@@ -347,7 +373,7 @@ const SearchAndDownloadRecords = (props) => {
             if (!languagePair.target.length)
                 setTgtError(true)
             else {
-                // makeSubmitAPICall(datasetType,criteria)
+                makeSubmitAPICall(datasetType, criteria)
             }
 
         }
@@ -524,6 +550,10 @@ const SearchAndDownloadRecords = (props) => {
                             id={val.filter}
                             label={`Select ${val.label}`}
                             fullWidth
+                            value={advFilterState[filter.value] ? advFilterState[filter.value].value : ""}
+                            onChange={(e) => handleDropDownChange(e.target.value, filter.value, 'text')}
+
+
                         />
                     }
                 </Grid>)
@@ -532,6 +562,7 @@ const SearchAndDownloadRecords = (props) => {
         return renderFilter
     }
 
+    console.log(basicFilterState);
     return (
         <div>
             <Grid container spacing={3}>
@@ -554,7 +585,7 @@ const SearchAndDownloadRecords = (props) => {
                                         id={"source"}
                                         value={languagePair.source}
                                         labels={Language}
-                                        placeholder={`Select Source Language *`} />
+                                        placeholder={`Source Language *`} />
                                 }
                             </div>
                             <div className={classes.autoComplete}>
@@ -586,9 +617,9 @@ const SearchAndDownloadRecords = (props) => {
                                                 :
                                                 <TextField disabled={!languagePair.target.length}
                                                     id={filter.value}
-                                                    value={basicFilterState[filter.value] ? basicFilterState[filter.value] : ""}
                                                     label={`Select ${filter.label}`}
-                                                    onChange={(e) => handleBasicFilter(e.target.value, filter.value)}
+                                                    value={basicFilterState[filter.value] ? basicFilterState[filter.value].value : ""}
+                                                    onChange={(e) => handleBasicFilter(e.target.value, filter.value, 'text')}
                                                     fullWidth
                                                 />
                                             }
@@ -615,6 +646,9 @@ const SearchAndDownloadRecords = (props) => {
                                                     id={filter.value}
                                                     label={`Select ${filter.label}`}
                                                     fullWidth
+                                                    value={advFilterState[filter.value] ? advFilterState[filter.value].value : ""}
+                                                    onChange={(e) => handleDropDownChange(e.target.value, filter.value, 'text')}
+
                                                 />
                                             }
                                         </Grid>

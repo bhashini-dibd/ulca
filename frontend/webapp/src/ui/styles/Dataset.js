@@ -121,7 +121,7 @@ const DataSet = (theme) => ({
   },
   buttonStyle: {
     marginLeft: "0.7rem",
-    borderRadius: "1rem",
+    // borderRadius: "1rem",
   },
   iconStyle: { marginRight: ".5rem" },
   thumbsUpIcon: {
@@ -215,7 +215,7 @@ const DataSet = (theme) => ({
   },
   yourSearchQuery: {
     marginBottom: "2%",
-    color:'#FD7F23'
+    color: '#FD7F23'
   },
   serReqNoTypo: {
     marginBottom: "7%",
@@ -233,6 +233,7 @@ const DataSet = (theme) => ({
     padding: "5% 14% 2% 4%",
     width: "70%",
     minHeight: "3.5rem",
+    backgroundColor: '#D6EAF8'
   },
   downloadBtnDiv: {
     margin: "10%",

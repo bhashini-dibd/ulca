@@ -3,6 +3,7 @@ import { TextField } from "@material-ui/core";
 
 const SingleAutoComplete = (props) => {
     const { value, id, labels, placeholder, error, handleChange, disabled } = props;
+    console.log(value)
     return (
         <Autocomplete
             value={value}

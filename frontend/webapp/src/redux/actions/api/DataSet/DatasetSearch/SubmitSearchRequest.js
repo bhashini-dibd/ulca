@@ -20,7 +20,7 @@ export default class SubmitSearchRequest extends API {
         return {
             userId: JSON.parse(localStorage.getItem('userDetails')).userID,
             datasetType: this.datasetType,
-            criteria: this.criteria
+            criteria: {...this.criteria}
         }
     }
 
