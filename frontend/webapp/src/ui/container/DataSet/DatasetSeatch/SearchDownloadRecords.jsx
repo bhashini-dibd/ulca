@@ -177,7 +177,7 @@ const SearchAndDownloadRecords = (props) => {
         : {};
     const searchKeys = Object.keys(searchValues);
     setOpen(hasAdvFilter(searchKeys));
-  },[]);
+  }, []);
 
   const hasAdvFilter = (searchKeys) => {
     for (let i = 0; i < advFilter.length; i++) {
@@ -237,13 +237,7 @@ const SearchAndDownloadRecords = (props) => {
   useEffect(() => {
     if (previousUrl.current !== params && previousUrl.current !== "initiate") {
       setLanguagePair({ target: [], source: "" });
-      setFilterBy({
-        domain: "",
-        source: "",
-        collectionMethod: "",
-      });
-      setBasicFilterState({});
-      setAdvFilterState({});
+      clearfilter();
       setLabel("Parallel Dataset");
       setDatasetType({ "parallel-corpus": true });
     }
@@ -346,6 +340,11 @@ const SearchAndDownloadRecords = (props) => {
       source: "",
       target: [],
     });
+    setState({
+      checkedA: false,
+      checkedB: false,
+      checkedC: false,
+    });
   };
 
   const makeSubmitAPICall = (type, criteria) => {
@@ -434,6 +433,9 @@ const SearchAndDownloadRecords = (props) => {
       sourceLanguage: getArrayValue([languagePair.source]),
       targetLanguage: getArrayValue(languagePair.target),
       ...getObjectValue(obj),
+      groupBy: false,
+      multipleContributors: false,
+      originalSourceSentence: state.checkedC,
     };
     if (datasetType["parallel-corpus"]) {
       if (languagePair.source && languagePair.target.length) {
