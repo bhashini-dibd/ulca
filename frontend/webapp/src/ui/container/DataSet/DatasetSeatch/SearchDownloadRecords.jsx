@@ -76,7 +76,7 @@ const SearchAndDownloadRecords = (props) => {
         source: "",
         target: []
     });
-    const [searchValues, setSearchValues] = useState("");
+    const [searchValues,setSearchValues] = useState("");
 
     const [filterBy, setFilterBy] = useState({
         domain: '',
@@ -149,7 +149,7 @@ const SearchAndDownloadRecords = (props) => {
 
     const setFilterState = (searchValues) => {
         const searchKeys = Object.keys(searchValues);
-
+      
     }
 
     // useEffect(()=>{
@@ -162,8 +162,7 @@ const SearchAndDownloadRecords = (props) => {
         if (previousUrl.current !== params && previousUrl.current !== 'initiate') {
             // setLanguagePair({ target: [], source: "" })
             // setBasicFilterState({});
-            // setAdvFilterState({})
-            clearfilter();
+            // setAdvFilterState({});
             setLabel('Parallel Dataset')
             setDatasetType({ 'parallel-corpus': true })
         }
@@ -262,7 +261,6 @@ const SearchAndDownloadRecords = (props) => {
     }
     const clearfilter = () => {
         setOpen(false);
-        setState({ checkedA: false, checkedB: false, checkedC: false })
         setAdvFilterState({});
         setBasicFilterState({});
         setLanguagePair({
@@ -350,7 +348,7 @@ const SearchAndDownloadRecords = (props) => {
 
     const handleSubmitBtn = () => {
         const obj = { ...basicFilterState, ...advFilterState };
-        const criteria = { sourceLanguage: getArrayValue([languagePair.source]), targetLanguage: getArrayValue(languagePair.target), ...getObjectValue(obj), originalSourceSentence: state.checkedC, multipleContributors: false, groupBy: false }
+        const criteria = { sourceLanguage: getArrayValue([languagePair.source]), targetLanguage: getArrayValue(languagePair.target), ...getObjectValue(obj) }
         if (datasetType['parallel-corpus']) {
             if (languagePair.source && languagePair.target.length) {
                 makeSubmitAPICall(datasetType, criteria)
