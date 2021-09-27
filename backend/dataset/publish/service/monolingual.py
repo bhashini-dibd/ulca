@@ -140,7 +140,7 @@ class MonolingualService:
             if 'collectionMethod' in query.keys():
                 tags.extend(query["collectionMethod"])
             if 'license' in query.keys():
-                tags.extend(query["licence"])
+                tags.extend(query["license"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
