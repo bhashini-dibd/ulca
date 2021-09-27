@@ -2,6 +2,7 @@ package com.ulca.benchmark.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ import com.ulca.model.response.BmProcessListByProcessIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 
+import io.swagger.model.ASRConfig.ModelEnum;
 import io.swagger.model.Benchmark;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePairs;
@@ -222,7 +224,16 @@ public class BenchmarkService {
 					bmProcessPublished.add(bm);
 				}
 			}
-			bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore).reversed()).collect(Collectors.toList());
+			if(	bmDto.getTask().getType() == ModelTask.TypeEnum.TRANSLATION ) {
+				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess ::getScore).reversed());
+				
+				//bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore).reversed()).collect(Collectors.toList());
+			}
+			
+			if(	bmDto.getTask().getType() == ModelTask.TypeEnum.ASR ) {
+				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess ::getScore));
+				//bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
+			}
 			bmDto.setBenchmarkPerformance(bmProcessPublished);
 			
 			return bmDto;
