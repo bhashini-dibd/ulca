@@ -224,15 +224,27 @@ public class BenchmarkService {
 					bmProcessPublished.add(bm);
 				}
 			}
+			/* 
+			 * for traslation, higher the score better the model
+			 */
 			if(	bmDto.getTask().getType() == ModelTask.TypeEnum.TRANSLATION ) {
 				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess ::getScore).reversed());
 				
 				//bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore).reversed()).collect(Collectors.toList());
 			}
-			
+			/* 
+			 * for asr, lower the score better the model
+			 */
 			if(	bmDto.getTask().getType() == ModelTask.TypeEnum.ASR ) {
 				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess ::getScore));
 				//bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
+			}
+			
+			/* 
+			 * for ocr, lower the score better the model
+			 */
+			if(	bmDto.getTask().getType() == ModelTask.TypeEnum.OCR ) {
+				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess ::getScore));
 			}
 			bmDto.setBenchmarkPerformance(bmProcessPublished);
 			
