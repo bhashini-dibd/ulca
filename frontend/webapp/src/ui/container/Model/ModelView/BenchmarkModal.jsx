@@ -296,7 +296,7 @@ const BenchmarkModal = (props) => {
                                 "METRIC",
                                 i,
                                 row.selected,
-                                rowData[0],
+                                rowMeta.dataIndex,
                                 row.isMetricDisabled
                               )}
                             </TableCell>
