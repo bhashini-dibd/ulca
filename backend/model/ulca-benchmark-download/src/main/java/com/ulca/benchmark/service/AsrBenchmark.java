@@ -142,6 +142,8 @@ public class AsrBenchmark {
 		
 		String baseLocation = fileMap.get("baseLocation")  + File.separator ;
 		JSONArray corpus = new JSONArray();
+		int totalRecords = 0;
+		int failedRecords = 0;
 		while (reader.hasNext()) {
 			
 			Object rowObj = new Gson().fromJson(reader, Object.class);
@@ -183,10 +185,16 @@ public class AsrBenchmark {
 			log.info("end time for calling the inference end point");
 			
 			String targetText = inputJson.getString("text");
-			JSONObject target =  new JSONObject();
-			target.put("tgt", targetText);
-			target.put("mtgt", resultText);
-			corpus.put(target);
+			totalRecords++;
+			if(resultText != null) {
+				JSONObject target =  new JSONObject();
+				target.put("tgt", targetText);
+				target.put("mtgt", resultText);
+				corpus.put(target);
+			}else {
+				failedRecords++;
+			}
+			
 		}
 		reader.endArray();
 		reader.close();
@@ -203,6 +211,7 @@ public class AsrBenchmark {
 		metricRequest.put("modelId", model.getModelId());
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
+		log.info("total recoords :: " + totalRecords + " failedRecords :: " + failedRecords);
 		log.info("data before sending to metric");
 		log.info(metricRequest.toString());
 		
