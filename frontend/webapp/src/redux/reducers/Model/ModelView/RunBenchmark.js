@@ -61,14 +61,14 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
       result.result[index].metric.forEach((val) => {
         val.selected = false;
       });
-      result.filteredData[index].metric
-        ? result.filteredData[index].metric.forEach((val) => {
-            val.selected = false;
-          })
-        : result.filteredData[parentIndex].metric.forEach((val) => {
-            val.selected = false;
-          });
-      console.log(index);
+      // result.filteredData[index].metric
+      //   ? result.filteredData[index].metric.forEach((val) => {
+      //       val.selected = false;
+      //     })
+      // :
+      result.filteredData[parentIndex].metric.forEach((val) => {
+        val.selected = false;
+      });
       result.benchmarkInfo.splice(result.selectedIndex.indexOf(index), 1);
       result.selectedIndex.splice(result.selectedIndex.indexOf(index), 1);
     } else {
@@ -81,12 +81,28 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
       !result.filteredData[parentIndex].metric[index].selected;
   }
   let updatedBenchmarkInfo = [];
-  result.filteredData.forEach((val) => {
+  result.result = result.result.map((data) => {
+    let updatedData = {};
+    result.filteredData.forEach((value) => {
+      if (value.benchmarkId === data.benchmarkId) {
+        updatedData = Object.assign({}, JSON.parse(JSON.stringify(value)));
+      } else {
+        updatedData = Object.assign({}, JSON.parse(JSON.stringify(data)));
+      }
+    });
+    return updatedData;
+  });
+  result.result.forEach((val) => {
     if (val.selected) {
       updatedBenchmarkInfo.push({
         benchmarkId: val.benchmarkId,
       });
       val.metric.forEach((e) => {
+        console.log(
+          updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric,
+          e.selected,
+          val.benchmarkId
+        );
         if (e.selected) {
           if (
             updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric ===
@@ -106,17 +122,6 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   });
   result.benchmarkInfo = updatedBenchmarkInfo;
   result.submitStatus = getSubmitStatus(updatedBenchmarkInfo);
-  result.result = result.result.map((data) => {
-    let updatedData = {};
-    result.filteredData.forEach((value) => {
-      if (value.benchmarkId === data.benchmarkId) {
-        updatedData = Object.assign({}, JSON.parse(JSON.stringify(value)));
-      } else {
-        updatedData = Object.assign({}, JSON.parse(JSON.stringify(data)));
-      }
-    });
-    return updatedData;
-  });
   return result;
 };
 
@@ -224,7 +229,7 @@ const reducer = (state = initialState, action) => {
       );
       return {
         ...state,
-        filteredData,
+        filteredData: action.payload === "" ? state.result : filteredData,
         selectedIndex,
       };
     }
