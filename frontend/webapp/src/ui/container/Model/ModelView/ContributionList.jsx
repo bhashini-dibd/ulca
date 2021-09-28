@@ -533,7 +533,7 @@ const ContributionList = (props) => {
         setIndex([]);
       }
       allRowsExpanded.forEach((row) => {
-        newIndex.push(row.index);
+        newIndex.push(row.dataIndex);
       });
       setIndex(newIndex);
     },
