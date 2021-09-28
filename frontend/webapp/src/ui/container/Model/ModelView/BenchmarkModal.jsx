@@ -255,7 +255,7 @@ const BenchmarkModal = (props) => {
     rowsExpanded: selectedIndex,
     customRowRenderer: (data, dataIndex, rowIndex) => {},
     renderExpandableRow: (rowData, rowMeta) => {
-      const rows = data[rowMeta.rowIndex].metric;
+      const rows = data[rowMeta.dataIndex].metric;
       return (
         <>
           <TableRow>
@@ -278,6 +278,7 @@ const BenchmarkModal = (props) => {
                     </TableHead>
                     <TableBody>
                       {rows.map((row, i) => {
+                        console.log(row);
                         return (
                           <TableRow
                             key={i}
@@ -295,7 +296,7 @@ const BenchmarkModal = (props) => {
                                 "METRIC",
                                 i,
                                 row.selected,
-                                rowMeta.rowIndex,
+                                rowData[0],
                                 row.isMetricDisabled
                               )}
                             </TableCell>

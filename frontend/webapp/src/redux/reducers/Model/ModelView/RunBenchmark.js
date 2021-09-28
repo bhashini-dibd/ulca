@@ -70,6 +70,8 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
       result.selectedIndex.push(parentIndex);
     }
   } else {
+    parentIndex = getIndex(result.result, parentIndex);
+    console.log(parentIndex);
     result.result[parentIndex].metric[index].selected =
       !result.result[parentIndex].metric[index].selected;
     result.filteredData[parentIndex].metric[index].selected =
