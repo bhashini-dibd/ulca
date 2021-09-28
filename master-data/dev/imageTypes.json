@@ -1,0 +1,74 @@
+{
+    "processStates": [
+      {
+        "code": "pending",
+        "values":[
+            {
+                "name": "Pending",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "in-progress",
+        "values":[
+            {
+                "name": "In Progress",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "completed",
+        "values":[
+            {
+                "name": "Completed",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "failed",
+        "values":[
+            {
+                "name": "Failed",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "published",
+        "values":[
+            {
+                "name": "Published",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "na",
+        "values":[
+            {
+                "name": "N/A",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "submitted",
+        "values":[
+            {
+                "name": "Submitted",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      }
+    ]
+  }
