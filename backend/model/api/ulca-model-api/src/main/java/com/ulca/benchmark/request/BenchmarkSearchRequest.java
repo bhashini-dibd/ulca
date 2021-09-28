@@ -18,8 +18,6 @@ public class BenchmarkSearchRequest {
 	@NotBlank(message="task is required")
 	private String task;
 	private String sourceLanguage;
-	private Integer startPage;
-	private Integer endPage;
 	private String targetLanguage;
 	  
 }

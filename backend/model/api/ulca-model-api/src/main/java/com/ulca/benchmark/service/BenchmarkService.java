@@ -169,7 +169,7 @@ public class BenchmarkService {
 
 	
 	
-	public BenchmarkSearchResponse searchBenchmark(BenchmarkSearchRequest request) {
+	public BenchmarkSearchResponse searchBenchmark(BenchmarkSearchRequest request, Integer startPage, Integer endPage) {
 
 		Benchmark benchmark = new Benchmark();
 		Example<Benchmark> example = Example.of(benchmark);
@@ -193,9 +193,9 @@ public class BenchmarkService {
 			benchmark.setLanguages(lprs);
 		}
 		
-		if (request.getStartPage() != null) {
-			int startPg = request.getStartPage() - 1;
-			for (int i = startPg; i < request.getEndPage(); i++) {
+		if (startPage != null) {
+			int startPg = startPage - 1;
+			for (int i = startPg; i < endPage; i++) {
 				Pageable paging = PageRequest.of(i, PAGE_SIZE);
 			  list = (List<Benchmark>) benchmarkDao.findAll(example,paging);
 			}
