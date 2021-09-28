@@ -9,8 +9,8 @@ const initialState = {
   responseData: [],
   filteredData: [],
   refreshStatus: false,
-  filter: { status: [], modelType: [] },
-  selectedFilter: { status: [], modelType: [] },
+  filter: { status: [], modelType: [], license: [], domain: [] },
+  selectedFilter: { status: [], modelType: [], license: [], domain: [] },
 };
 
 const dateConversion = (value) => {
@@ -57,6 +57,32 @@ const getFilterValue = (payload, data) => {
   } else {
     filterResult = statusFilter;
   }
+  if (
+    filterValues &&
+    filterValues.hasOwnProperty("license") &&
+    filterValues.license.length > 0
+  ) {
+    filterResult = statusFilter.filter((value) => {
+      if (value.license && filterValues.license.includes(value.license)) {
+        return value;
+      }
+    });
+  } else {
+    filterResult = statusFilter;
+  }
+  if (
+    filterValues &&
+    filterValues.hasOwnProperty("domain") &&
+    filterValues.domain.length > 0
+  ) {
+    filterResult = statusFilter.filter((value) => {
+      if (value.domain && filterValues.domain.includes(...value.domain)) {
+        return value;
+      }
+    });
+  } else {
+    filterResult = statusFilter;
+  }
   data.filteredData = filterResult;
   data.selectedFilter = filterValues;
   return data;
@@ -81,7 +107,7 @@ const getDomainDetails = (data) => {
 
 const getClearFilter = (data) => {
   data.filteredData = data.responseData;
-  data.selectedFilter = { status: [], modelType: [] };
+  data.selectedFilter = { status: [], modelType: [],license:[],domain:[] };
   return data;
 };
 
@@ -98,7 +124,9 @@ const getContributionList = (state, payload) => {
   let responseData = [];
   let statusFilter = [];
   let modelFilter = [];
-  let filter = { status: [], modelType: [] };
+  let domain = [];
+  let license = [];
+  let filter = { status: [], modelType: [], domain: [], license: [] };
   let refreshStatus = false;
   payload.forEach((element) => {
     let sLanguage =
@@ -140,17 +168,26 @@ const getContributionList = (state, payload) => {
         element.status === "Completed"
           ? "#139D60"
           : element.status === "In-Progress"
-          ? "#2C2799"
-          : element.status === "Failed"
-          ? "#F54336"
-          : "green",
+            ? "#2C2799"
+            : element.status === "Failed"
+              ? "#F54336"
+              : "green",
     });
     !statusFilter.includes(element.status) &&
       element.status &&
       statusFilter.push(element.status);
-    !modelFilter.includes(element.datasetName) &&
-      element.datasetName &&
-      modelFilter.push(getDatasetName(element.datasetType));
+
+    !modelFilter.includes(element.task.type) &&
+      element.task.type &&
+      modelFilter.push(element.task.type);
+
+    !license.includes(element.license) &&
+      element.license &&
+      license.push(element.license);
+
+    !domain.includes(...element.domain) &&
+      element.domain &&
+      domain.push(...element.domain);
     if (element.status === "In-Progress" || element.status === "Pending") {
       refreshStatus = true;
     }
@@ -158,6 +195,8 @@ const getContributionList = (state, payload) => {
 
   filter.status = [...new Set(statusFilter)];
   filter.modelType = [...new Set(modelFilter)];
+  filter.license = [...new Set(license)];
+  filter.domain = [...new Set(domain)];
 
   responseData = responseData.reverse();
   let filteredData = getFilterValue(
@@ -167,6 +206,14 @@ const getContributionList = (state, payload) => {
   filteredData.filter = filter;
   return filteredData;
 };
+
+const updateSelectedFilter = (obj, prevState) => {
+  const updatedState = Object.assign({}, JSON.parse(JSON.stringify(prevState)));
+  updatedState[obj.prop].indexOf(obj.value) > -1
+    ? updatedState[obj.prop].splice(updatedState[obj.prop].indexOf, 1)
+    : updatedState[obj.prop].push(obj.value);
+  return updatedState;
+}
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -178,6 +225,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...initialState,
       };
+    case C.GET_SELECTED_FILTER:
+      return {
+        ...state,
+        selectedFilter: updateSelectedFilter(action.payload, state.selectedFilter)
+      }
     case C.CLEAR_MODEL_FILTER:
       return getClearFilter(state);
     default:
