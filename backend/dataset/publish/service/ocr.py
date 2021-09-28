@@ -156,7 +156,7 @@ class OCRService:
             if 'ocrTool' in query.keys():
                 tags.extend(query["ocrTool"])
             if 'license' in query.keys():
-                tags.extend(query["licence"])
+                tags.extend(query["license"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'format' in query.keys():
