@@ -21,6 +21,7 @@ import {
   TableHead,
   Box,
   Table,
+  TablePagination,
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -32,6 +33,7 @@ import {
   filterBenchmark,
   clearFilterBenchmark,
 } from "../../../../redux/actions/api/Model/ModelView/FilterBenchmark";
+import CustomPagination from "../../../components/common/CustomPagination";
 
 const BenchmarkModal = (props) => {
   const { classes } = props;
@@ -69,18 +71,15 @@ const BenchmarkModal = (props) => {
 
   const fetchModalFooter = () => {
     return (
-      <>
-        <Divider style={{ margin: "5px" }} />
-        <Button
-          color="primary"
-          style={{ float: "right", marginTop: "5px", borderRadius: "22px" }}
-          variant="contained"
-          onClick={props.makeSubmitAPICall}
-          disabled={submitStatus}
-        >
-          Submit
-        </Button>
-      </>
+      <Button
+        color="primary"
+        style={{ float: "right", marginTop: "20px", borderRadius: "22px" }}
+        variant="contained"
+        onClick={props.makeSubmitAPICall}
+        disabled={submitStatus}
+      >
+        Submit
+      </Button>
     );
   };
 
@@ -210,76 +209,111 @@ const BenchmarkModal = (props) => {
       },
     },
     customToolbar: fetchModalToolBar,
-    customFooter: fetchModalFooter,
     print: false,
     viewColumns: false,
     selectableRows: false,
     download: false,
     search: false,
     filter: false,
-    pagination: false,
+    // pagination: true,
+    // customFooter: fetchModalFooter,
+    customFooter: (
+      count,
+      page,
+      rowsPerPage,
+      changeRowsPerPage,
+      changePage,
+      textLabels
+    ) => {
+      return (
+        <Grid container>
+          <Grid item xs={11} sm={11} md={11} lg={11} xl={11}>
+            <CustomPagination
+              count={count}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              changeRowsPerPage={changeRowsPerPage}
+              changePage={changePage}
+              textLabels={textLabels}
+            />
+          </Grid>
+          <Grid
+            style={{ display: "flex", alignItems: "center" }}
+            item
+            xs={1}
+            sm={1}
+            md={1}
+            lg={1}
+            xl={1}
+          >
+            {fetchModalFooter()}
+          </Grid>
+        </Grid>
+      );
+    },
     expandableRows: true,
     rowsExpanded: selectedIndex,
     customRowRenderer: (data, dataIndex, rowIndex) => {},
     renderExpandableRow: (rowData, rowMeta) => {
-      const rows = data[rowMeta.rowIndex].metric;
-        return (
-          <>
-            <TableRow>
-              <TableCell colSpan={6}>
-                <>
-                  <Box style={{ margin: "0 80px" }}>
-                    <Table size="small" aria-label="purchases">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>
-                            <strong>Metric</strong>
-                          </TableCell>
-                          {/* <TableCell align="left">Description</TableCell> */}
-                          <TableCell>
-                            <strong>Action</strong>
-                          </TableCell>
-                          <TableCell></TableCell>
-                          <TableCell></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {rows.map((row, i) => {
-                          return (
-                            <TableRow
-                              key={i}
-                              style={{
-                                backgroundColor: "rgba(254, 191, 44, 0.1)",
-                              }}
-                            >
-                              {/* <TableCell></TableCell> */}
-                              <TableCell>
-                                {row.metricName.toUpperCase()}
-                              </TableCell>
-                              {/* <TableCell align="left">{row.description}</TableCell> */}
-                              <TableCell>
-                                {renderSelectButton(
-                                  "METRIC",
-                                  i,
-                                  row.selected,
-                                  rowMeta.rowIndex,
-                                  row.isMetricDisabled
-                                )}
-                              </TableCell>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </Table>
-                  </Box>
-                </>
-              </TableCell>
-            </TableRow>
-            <TableRow className={classes.tableRow}></TableRow>
-          </>
-        );
+      const rows = data[rowMeta.dataIndex].metric;
+      return (
+        <>
+          <TableRow>
+            <TableCell colSpan={6}>
+              <>
+                <Box style={{ margin: "0 80px" }}>
+                  <Table size="small" aria-label="purchases">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>
+                          <strong>Metric</strong>
+                        </TableCell>
+                        {/* <TableCell align="left">Description</TableCell> */}
+                        <TableCell>
+                          <strong>Action</strong>
+                        </TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row, i) => {
+                        console.log(row);
+                        return (
+                          <TableRow
+                            key={i}
+                            style={{
+                              backgroundColor: "rgba(254, 191, 44, 0.1)",
+                            }}
+                          >
+                            {/* <TableCell></TableCell> */}
+                            <TableCell>
+                              {row.metricName.toUpperCase()}
+                            </TableCell>
+                            {/* <TableCell align="left">{row.description}</TableCell> */}
+                            <TableCell>
+                              {renderSelectButton(
+                                "METRIC",
+                                i,
+                                row.selected,
+                                rowMeta.dataIndex,
+                                row.isMetricDisabled
+                              )}
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </Box>
+              </>
+            </TableCell>
+          </TableRow>
+          <TableRow className={classes.tableRow}></TableRow>
+        </>
+      );
     },
     isRowExpandable: (dataIndex, expandedRows) => {
       if (dataIndex === 3 || dataIndex === 4) return false;

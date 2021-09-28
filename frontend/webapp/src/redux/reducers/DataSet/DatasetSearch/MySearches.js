@@ -24,6 +24,7 @@ const dateConversion = (value) => {
 const getMySearches = (payload) => {
   let newArr = [];
   payload.forEach((element) => {
+    console.log(element)
     if (element.searchCriteria) {
       let dataSet = getDatasetName(element.searchCriteria.datasetType);
       let langauge =

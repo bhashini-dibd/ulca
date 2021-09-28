@@ -2,6 +2,7 @@ package com.ulca.benchmark.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -40,6 +41,7 @@ import com.ulca.model.response.BmProcessListByProcessIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 
+import io.swagger.model.ASRConfig.ModelEnum;
 import io.swagger.model.Benchmark;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePairs;
@@ -215,8 +217,36 @@ public class BenchmarkService {
 			List<String> metricList = getMetric(result.getTask().getType().toString());
 			bmDto.setMetric(metricList);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkprocessDao.findByBenchmarkDatasetId(benchmarkId);
-			benchmarkProcess.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
-			bmDto.setBenchmarkPerformance(benchmarkProcess);
+			List<BenchmarkProcess> bmProcessPublished = new ArrayList<BenchmarkProcess>();
+			for(BenchmarkProcess bm : benchmarkProcess) {
+				ModelExtended model = modelDao.findByModelId(bm.getModelId());
+				if(model.getStatus().equalsIgnoreCase("published")) {
+					bmProcessPublished.add(bm);
+				}
+			}
+			/* 
+			 * for traslation, higher the score better the model
+			 */
+			if(	bmDto.getTask().getType() == ModelTask.TypeEnum.TRANSLATION ) {
+				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess ::getScore).reversed());
+				
+				//bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore).reversed()).collect(Collectors.toList());
+			}
+			/* 
+			 * for asr, lower the score better the model
+			 */
+			if(	bmDto.getTask().getType() == ModelTask.TypeEnum.ASR ) {
+				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess ::getScore));
+				//bmProcessPublished.stream().sorted(Comparator.comparingDouble(BenchmarkProcess::getScore)).collect(Collectors.toList());
+			}
+			
+			/* 
+			 * for ocr, lower the score better the model
+			 */
+			if(	bmDto.getTask().getType() == ModelTask.TypeEnum.OCR ) {
+				Collections.sort(bmProcessPublished, Comparator.comparingDouble(BenchmarkProcess ::getScore));
+			}
+			bmDto.setBenchmarkPerformance(bmProcessPublished);
 			
 			return bmDto;
 		}
@@ -228,25 +258,25 @@ public class BenchmarkService {
 	List<String> getMetric(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu", "sacrebleu","meteor","lepor" };
+			String[] metric = { "bleu" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 
 		if (task.equalsIgnoreCase("asr")) {
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("ocr")) {
 
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer"};
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("tts")) {
 
-			String[] metric = { "wer", "cer" };
+			String[] metric = { "wer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}

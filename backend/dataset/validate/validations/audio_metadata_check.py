@@ -42,14 +42,6 @@ class AudioMetadataCheck(BaseValidator):
                     log.exception(f"Exception while loading the audio file: {str(e)}")
                     return {"message": "Unable to load the audio file, file format is unsupported or the file is corrupt", "code": "INVALID_AUDIO_FILE", "status": "FAILED"}
 
-                if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
-                    if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:
-                        error_message = 'Sampling rate does not match the specified value: Expected Value - ' + str(metadata.streaminfo.sample_rate/1000) + ', Specified Value - ' + str(request['record']['samplingRate'])
-                        return {"message": error_message, "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
-                if 'bitsPerSample' in request['record'].keys() and request['record']['bitsPerSample'] != None:
-                    if metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
-                        error_message = 'Bits per sample does not match the specified value: Expected Value - ' + str(metadata.streaminfo.bit_depth) + ', Specified Value - ' + str(request['record']['bitsPerSample'])
-                        return {"message": error_message, "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
 
                 if 'duration' in request['record'].keys():
                     request['record']['durationInSeconds'] = request['record']['duration']
@@ -61,6 +53,17 @@ class AudioMetadataCheck(BaseValidator):
                     request['record']['durationInSeconds'] = (end_t-start_t).total_seconds()
                 else:
                     request['record']['durationInSeconds'] = metadata.streaminfo.duration
+
+
+                if 'samplingRate' in request['record'].keys() and request['record']['samplingRate'] != None:
+                    if metadata.streaminfo.sample_rate != request['record']['samplingRate']*1000:
+                        error_message = 'Sampling rate does not match the specified value: Expected Value - ' + str(metadata.streaminfo.sample_rate/1000) + ', Specified Value - ' + str(request['record']['samplingRate'])
+                        return {"message": error_message, "code": "INCORRECT_SAMPLING_RATE", "status": "FAILED"}
+                if 'bitsPerSample' in request['record'].keys() and request['record']['bitsPerSample'] != None:
+                    if metadata.streaminfo.bit_depth != w2n.word_to_num(request['record']['bitsPerSample']):
+                        error_message = 'Bits per sample does not match the specified value: Expected Value - ' + str(metadata.streaminfo.bit_depth) + ', Specified Value - ' + str(request['record']['bitsPerSample'])
+                        return {"message": error_message, "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
+
 
                 if request["datasetType"] == dataset_type_asr:
                     num_words = len(list(request['record']['text'].split()))

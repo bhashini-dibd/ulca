@@ -17,7 +17,7 @@ const ExploreModels = (props) => {
         
             <div className={classes.parentPaper}>
                 <Paper elevation={0} className={classes.mainPaper}>
-                    {!aunthenticate() && <Typography variant="h3">Explore Models</Typography>}
+                    {/* {!aunthenticate() && <Typography variant="h3">Explore Models</Typography>} */}
                     <NewSearchModel />
                 </Paper>
             </div>

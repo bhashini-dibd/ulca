@@ -7,6 +7,7 @@ WORKDIR /app
 #CMD ["/usr/bin/install-pkg.sh"]
 #RUN echo uconv -V
 RUN pip3 install -r requirements.txt
+RUN polyglot download transliteration2.hi
 COPY start.sh /usr/bin/start.sh
 RUN chmod +x /usr/bin/start.sh
 CMD ["/usr/bin/start.sh"]

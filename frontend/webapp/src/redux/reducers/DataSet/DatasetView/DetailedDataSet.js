@@ -19,7 +19,7 @@ const getRecordCount = (value) =>
                 countDetails["success"] = (Number(element.validateSuccessSeconds)/3600).toFixed(3) + " hrs"
             }else if(element.hasOwnProperty("publishSuccessSeconds")){
                 let hrs =(Number(element.publishSuccessSeconds)/3600).toFixed(3) + " hrs"
-                countDetails["success"] =  element.publishSuccessSeconds
+                countDetails["success"] =  hrs
             }
             else{
                 countDetails["success"] = String(element.count);

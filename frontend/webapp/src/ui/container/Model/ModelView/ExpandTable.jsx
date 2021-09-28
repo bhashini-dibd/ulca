@@ -32,7 +32,7 @@ const ExpandTable = (props) => {
             borderRight: `2px solid ${color ? "#E2F2FD" : "#E9F7EF"}`,
           }}
         >
-          <TableCell colSpan={8}>
+          <TableCell colSpan={9}>
             <>
               <Box style={{ margin: "0 80px" }}>
                 <Table size="small" aria-label="purchases">
