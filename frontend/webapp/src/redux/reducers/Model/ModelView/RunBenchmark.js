@@ -61,9 +61,13 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
       result.result[index].metric.forEach((val) => {
         val.selected = false;
       });
-      result.filteredData[parentIndex].metric.forEach((val) => {
-        val.selected = false;
-      });
+      result.filteredData[index].metric
+        ? result.filteredData[index].metric.forEach((val) => {
+            val.selected = false;
+          })
+        : result.filteredData[parentIndex].metric.forEach((val) => {
+            val.selected = false;
+          });
       console.log(index);
       result.benchmarkInfo.splice(result.selectedIndex.indexOf(index), 1);
       result.selectedIndex.splice(result.selectedIndex.indexOf(index), 1);
