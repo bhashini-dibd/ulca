@@ -314,7 +314,7 @@ class ParallelService:
             if 'translationModel' in query.keys():
                 tags.extend(query["translationModel"])
             if 'license' in query.keys():
-                tags.extend(query["licence"])
+                tags.extend(query["license"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
