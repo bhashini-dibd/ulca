@@ -1,0 +1,44 @@
+{
+    "modelTasks": [
+      {
+        "code": "translation",
+        "values":[
+            {
+                "name": "TRANSLATION",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "asr",
+        "values":[
+            {
+                "name": "ASR",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "tts",
+        "values":[
+            {
+                "name": "TTS",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "ocr",
+        "values":[
+            {
+                "name": "OCR",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      }
+    ]
+  }
