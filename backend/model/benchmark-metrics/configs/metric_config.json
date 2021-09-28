@@ -4,5 +4,11 @@
     },
     {
         "metric_name":"wer", "metric_implementation":"ASRWEREval", "score_context":"default"
+    },
+    {
+        "metric_name":"meteor", "metric_implementation":"TranslationMETEORScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"rouge", "metric_implementation":"TranslationRougeScoreEval", "score_context":"default"
     }
 ]
