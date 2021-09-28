@@ -1,17 +1,16 @@
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
-from src.db import ModelRepo
+from src.db import BenchRepo
 
-repo    =   ModelRepo()
-class AggregateModelData(object):
+repo    =   BenchRepo()
+class AggregateBenchmarkData(object):
     def __init__(self):
         pass
 
     def data_aggregator(self, request_object):
         try:
             count   =   repo.count({})
-            # dtype = request_object["type"]
             match_params = None
             if "criterions" in request_object:
                 match_params = request_object["criterions"]
@@ -37,8 +36,7 @@ class AggregateModelData(object):
 
 
             if grpby_params[0]["field"] == "language":
-                query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }}, { '$unwind': "$languages" },
-                            { "$group": {"_id": {"lang1":"$languages.sourceLanguage","lang2":"$languages.targetLanguage"},
+                query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }}, { '$unwind': "$languages" },{ "$group": {"_id": {"lang1":"$languages.sourceLanguage","lang2":"$languages.targetLanguage"},
                             "count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
                 result = repo.aggregate(query)
@@ -56,9 +54,7 @@ class AggregateModelData(object):
                 return chart_data,count
 
             if grpby_params[0]["field"] == "submitter":
-                query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }},
-                            { "$group": {"_id": {"submitter":"$submitter.name"},
-                            "count": { "$sum": 1 }}}]
+                query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }},{ "$group": {"_id": {"submitter":"$submitter.name"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
                 result = repo.aggregate(query)
                 chart_data = []
@@ -66,6 +62,19 @@ class AggregateModelData(object):
                     rec = {}
                     rec["_id"]      =   record["_id"]["submitter"]
                     rec["label"]    =   record["_id"]["submitter"]
+                    rec["value"]    =   record["count"]
+                    chart_data.append(rec)
+                return chart_data,count
+
+            if grpby_params[0]["field"] == "domain":
+                query   =  [ { '$match':{ "task.type" :  match_params[0]["value"] }},{"$unwind":"$domain"},{ "$group": {"_id": {"domain":"$domain"},"count": { "$sum": 1 }}}]
+                log.info(f"Query : {query}")
+                result = repo.aggregate(query)
+                chart_data = []
+                for record in result:
+                    rec = {}
+                    rec["_id"]      =   record["_id"]["domain"]
+                    rec["label"]    =   str(record["_id"]["domain"]).title()
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count
