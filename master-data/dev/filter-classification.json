@@ -1,0 +1,213 @@
+{
+    "parallel-corpus": {
+        "label": "Parallel Dataset",
+        "basicFilters": [
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "license",
+                "label": "License"
+            },
+            {
+                "value": "submitterName",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            }
+        ]
+    },
+    "ocr-corpus": {
+        "label": "OCR Dataset",
+        "basicFilters": [
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "license",
+                "label": "License"
+            },
+            {
+                "value": "submitterName",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            },
+            {
+                "value": "format",
+                "label": "Format"
+            },
+            {
+                "value": "dpi",
+                "label": "DPI"
+            },
+            {
+                "value": "imageTextType",
+                "label": "Image Text Type"
+            }
+        ]
+    },
+    "monolingual-corpus": {
+        "label": "Monolingual Dataset",
+        "basicFilters": [
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "license",
+                "label": "License"
+            },
+            {
+                "value": "submitterName",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            }
+        ]
+    },
+    "asr-corpus": {
+        "label": "ASR / TTS Dataset",
+        "basicFilters": [
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "licence",
+                "label": "License"
+            },
+            {
+                "value": "submitterName",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            },
+            {
+                "value": "channel",
+                "label": "Channel"
+            },
+            {
+                "value": "format",
+                "label": "Format"
+            },
+            {
+                "value": "samplingRate",
+                "label": "Sampling Rate"
+            },
+            {
+                "value": "bitsPerSample",
+                "label": "Bits per Sample"
+            },
+            {
+                "value": "noOfSpeakers",
+                "label": "Number of Speakers"
+            },
+            {
+                "value": "age",
+                "label": "Age"
+            },
+            {
+                "value": "gender",
+                "label": "Gender"
+            },
+            {
+                "value": "dialect",
+                "label": "Dialect"
+            }
+        ]
+    },
+    "asr-unlabeled-corpus": {
+        "label": "ASR Unlabeled Dataset",
+        "basicFilters": [
+            {
+                "value": "domain",
+                "label": "Domain"
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source"
+            }
+        ],
+        "advancedFilters": [
+            {
+                "value": "license",
+                "label": "License"
+            },
+            {
+                "value": "submitterName",
+                "label": "Submitter"
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method"
+            },
+            {
+                "value": "channel",
+                "label": "Channel"
+            },
+            {
+                "value": "format",
+                "label": "Format"
+            },
+            {
+                "value": "samplingRate",
+                "label": "Sampling Rate"
+            },
+            {
+                "value": "bitsPerSample",
+                "label": "Bits per Sample"
+            },
+            {
+                "value": "noOfSpeakers",
+                "label": "Number of Speakers"
+            },
+            {
+                "value": "age",
+                "label": "Age"
+            },
+            {
+                "value": "gender",
+                "label": "Gender"
+            },
+            {
+                "value": "dialect",
+                "label": "Dialect"
+            }
+        ]
+    }
+}

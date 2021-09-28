@@ -54,16 +54,21 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   let result = Object.assign([], JSON.parse(JSON.stringify(prevState)));
   if (type === "DATASET") {
     index = getIndex(result.result, index);
-    // result.result[index].selected = !result.result[index].selected;
+    result.result[index].selected = !result.result[index].selected;
     result.filteredData[parentIndex].selected =
       !result.filteredData[parentIndex].selected;
-    if (result.selectedIndex.indexOf(index) > -1) {
+    if (result.selectedIndex.indexOf(parentIndex) > -1) {
       result.result[index].metric.forEach((val) => {
         val.selected = false;
       });
-      result.filteredData[parentIndex].metric.forEach((val) => {
-        val.selected = false;
-      });
+      result.filteredData[index].metric
+        ? result.filteredData[index].metric.forEach((val) => {
+            val.selected = false;
+          })
+        : result.filteredData[parentIndex].metric.forEach((val) => {
+            val.selected = false;
+          });
+      console.log(index);
       result.benchmarkInfo.splice(result.selectedIndex.indexOf(index), 1);
       result.selectedIndex.splice(result.selectedIndex.indexOf(index), 1);
     } else {
