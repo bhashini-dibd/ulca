@@ -237,7 +237,7 @@ const ChartRender = (props) => {
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
 					
 				} else if (page === 2) {
-					setTitle(`Number of sentences in ${selectedLanguageName}${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
+					setTitle(`Number of sentences in ${selectedLanguageName}${filterValue === "primarySubmitterName"? " by" : " of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter": "Domain"})
 					
 				}
@@ -356,7 +356,7 @@ const ChartRender = (props) => {
 					</div>
 					
 					<div className={classes.title}>
-						<ResponsiveContainer width="98%" height={550} >
+						<ResponsiveContainer width="98%" height={600} >
 							<BarChart width={900} height={400} data={data} fontSize="14px" fontFamily="Roboto" maxBarSize={100} >
 
 								<XAxis dataKey="label"
@@ -371,7 +371,7 @@ const ChartRender = (props) => {
 								>
 									<Label value= {axisValue.xAxis} position= 'insideBottom' fontWeight="bold" fontSize={16}></Label>
 								</XAxis>
-								<YAxis padding={{ top: 30 }}  tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} ><Label value= {axisValue.yAxis} angle= {-90} position= 'insideLeft' fontWeight="bold" fontSize={16} ></Label></YAxis>
+								<YAxis padding={{ top: 80 }}  tickInterval={10} allowDecimals={false} type="number" dx={0} tickFormatter={(value) => new Intl.NumberFormat('en', { notation: "compact" }).format(value)} ><Label value= {axisValue.yAxis} angle= {-90} position= 'insideLeft' fontWeight="bold" fontSize={16} ></Label></YAxis>
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />

@@ -23,7 +23,7 @@ const StyledMenu = withStyles({
     />
 ));
 const TitleBar = (props) => {
-    const { classes, options, selectedOption, handleSelectChange, page, count } = props;
+    const { classes, options, selectedOption, handleSelectChange, page, count,title } = props;
     // const [options, setOptions] = useState('parallel-corpus');
 
     const handleChange = (event) => {
@@ -87,7 +87,7 @@ const TitleBar = (props) => {
                                     })
                                 }
                             </StyledMenu></>: <Typography variant={"body1"}>
-                                               <strong> Model</strong>
+                                               <strong> {title}</strong>
                                             </Typography>}
                         </Grid> 
                         < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.tempGrid}>

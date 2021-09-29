@@ -6,6 +6,7 @@ import FetchLanguageDataSets from "../actions/FetchLanguageDataSets";
 import { ArrowBack } from '@material-ui/icons';
 import {DatasetItems,Language} from "../configs/DatasetItems";
 import TitleBar from "./TitleBar";
+import image from "../img/shape2.svg"
 import Autocomplete from '@material-ui/lab/Autocomplete';
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
@@ -15,7 +16,7 @@ const ChartRender = (props) => {
 	const [count, setCount] = useState(0);
 	const [total, setTotal] = useState(0);
 	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Task"});
-	const [title, setTitle] = useState("Number of Models");
+	const [title, setTitle] = useState("Number of Benchmarks");
     const [selectedType, setSelectedType] = useState("");
     const [selectedTypeName, setSelectedTypeName] = useState("");
 	const [filterValue, setFilterValue] = useState("language");
@@ -28,7 +29,7 @@ const ChartRender = (props) => {
     );
 
   useEffect(() => {
-    fetchChartData("model","", "")
+    fetchChartData("benchmark","", "")
       
   }, [selectedOption,sourceLanguage]);
 
@@ -37,6 +38,7 @@ const ChartRender = (props) => {
 	
 
   const fetchChartData = async (dataType, value, criterions) => {
+      debugger
     let apiObj = new FetchLanguageDataSets(dataType, value, criterions);
         fetch(apiObj.apiEndPoint(), {
           method: 'post',
@@ -99,7 +101,7 @@ const ChartRender = (props) => {
         debugger
 		switch (value) {
 			case 1:
-				fetchChartData("model", filter ? filter : filterValue, fetchParams(event))
+				fetchChartData("benchmark", filter ? filter : filterValue, fetchParams(event))
 				setFilterValue(filter ? filter : filterValue)
                 
 				handleSelectChange(selectedOption, event, filter, value)
@@ -107,7 +109,7 @@ const ChartRender = (props) => {
 
 				break;
 			case 0:
-				fetchChartData("model","", "")
+				fetchChartData("benchmark","", "")
 				setPage(value)
 				setFilterValue('language')
 				handleSelectChange(selectedOption, "", "", value)
@@ -161,17 +163,34 @@ const ChartRender = (props) => {
 		setSelectedOption(dataSet)
 		
 				if (page === 0) {
-					setTitle("Number of Models")
+					setTitle("Number of Benchmark Datasets")
 					selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": sourceLanguage.value}])
 					setAxisValue({xAxis:"Task",yAxis:"Count"})
 					
 
 				} else if (page === 1) {
-					setTitle(`Number of ${selectedTypeName ? selectedTypeName : event.label} models - Grouped by ${filter ? filter : filterValue}`)
+					setTitle(`Number of ${selectedTypeName ? selectedTypeName : event.label} Benchmark Datasets - Grouped by ${filter ? filter : filterValue}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "language") ? "Language" : (filter === "submitter") ?  "Submitter" : "Language"})
 				} 
 	}
 	return (
+
+        <section className="section dashboard" style={{background:"white"}}>
+        <div class="shape1"><img src={image} alt="shapes"/></div>
+       
+                
+                   
+                    <div class="text-center">
+                        <h2 class="text-center text-black mt-3">Benchmark Dashboard</h2>
+                        <div class="join">
+                      <a class="bh-btn-primary" href="https://meity.ulcacontrib.org/model/benchmark-datasets" target="_self" rel="noopener noreferrer">Explore ULCA Benchmark</a>
+                  </div>
+                    </div>
+                    
+                    <div class="dashboard-map">
+                   
+                    
+			
 			<div className={classes.container}>
 				<Paper elevation={0} className={classes.paper}>	
 				
@@ -181,11 +200,12 @@ const ChartRender = (props) => {
 				isDisabled	=	{page !== 0 ? true : false}
 				page		= 	{page}
 				count 		= 	{total}
-				title="Model"
+                title="Benchmark"
 				>
 				{page === 1 && fetchFilterButtons() }
 				
 			</ TitleBar>
+            
 			<div className={classes.iconStyle}>
 					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}}  onClick={() => handleCardNavigation()}>Reset</Button></>
 						 {(selectedOption.value ==="model" && page===0 )? 
@@ -243,7 +263,11 @@ const ChartRender = (props) => {
 					</div>
 
 				</Paper> 
-			</div>	
+			</div>
+            </div>
+               
+       
+    </section>	
 	)
 }
 export default withStyles(ChartStyles())(ChartRender);
