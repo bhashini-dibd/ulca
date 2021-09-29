@@ -18,6 +18,7 @@ const dateConversion = (value) => {
 }
 
 const getFilterValue = (payload, data) => {
+    debugger
     let { filterValues } = payload
     let languageFilter = []
     let domainFilterValue = []
@@ -131,7 +132,7 @@ const getContributionList = (state, payload) => {
 
 
     responseData = responseData.reverse()
-    let filteredData = getFilterValue({ "filterValues": state.selectedFilter }, { "responseData": responseData })
+    let filteredData = getFilterValue({ "filterValues": initialState.selectedFilter}, { "responseData": responseData })
     filteredData.filter = filter
     return filteredData
 }

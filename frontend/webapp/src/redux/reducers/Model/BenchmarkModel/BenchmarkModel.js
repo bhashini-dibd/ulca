@@ -82,6 +82,7 @@ const getClearFilter = (data) => {
 }
 
 const getContributionList = (state, payload) => {
+    
     let responseData = [];
     let languageFilter = [];
     let submitterFilter = [];
@@ -132,7 +133,7 @@ const getContributionList = (state, payload) => {
 
 
     responseData = responseData.reverse()
-    let filteredData = getFilterValue({ "filterValues": state.selectedFilter }, { "responseData": responseData })
+    let filteredData = getFilterValue({ "filterValues": initialState.selectedFilter }, { "responseData": responseData })
     filteredData.filter = filter
     return filteredData
 }
@@ -168,9 +169,9 @@ const reducer = (state = initialState, action) => {
 
         case C.GET_SEARCHED_LIST:
             return getSearchedList(state, action.payload)
-        case C.SEARCH_FILTER:
+        case C.SEARCH_BENCHMARK:
             return getFilterValue(action.payload, state);
-        case C.CLEAR_FILTER_MODEL:
+        case C.CLEAR_FILTER_BENCHMARK:
             return getClearFilter(state);
         default:
             return {

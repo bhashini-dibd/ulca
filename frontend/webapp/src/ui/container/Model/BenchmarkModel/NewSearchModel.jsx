@@ -49,6 +49,7 @@ const NewSearchModel =() => {
         const id = popoverOpen ? 'simple-popover' : undefined;
 
     const handleChange = (event, newValue) => {
+
         setValue(newValue);
         makeModelSearchAPICall(ModelTask[newValue].value);
         setSearchValue("");
@@ -74,11 +75,11 @@ const handleClose = () => {
         setAnchorEl(null);
 };
 const clearAll = (data) => {
-        dispatch(clearFilterModel(data, C.CLEAR_FILTER_MODEL))
+        dispatch(clearFilterModel(data, C.CLEAR_FILTER_BENCHMARK))
 }
 const apply = (data) => {
         handleClose()
-        dispatch(FilterModel(data, C.SEARCH_FILTER))
+        dispatch(FilterModel(data, C.SEARCH_BENCHMARK))
 }
 
 const handleClick = (data) => {
