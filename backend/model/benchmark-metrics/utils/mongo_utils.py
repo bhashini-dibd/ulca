@@ -1,7 +1,7 @@
 import logging
 import pymongo
 from logging.config import dictConfig
-from configs.configs import ulca_db_cluster, mongo_db_name, mongo_collection_name
+from configs.configs import ulca_db_cluster, mongo_db_name, mongo_collection_name, mongo_pt_collection_name
 from datetime import datetime, timezone
 
 log = logging.getLogger('file')
@@ -42,7 +42,11 @@ class BenchMarkingProcessRepo:
             #     if benchmark_docs:
             # res = col.update({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, False, False, True)
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
-            res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, True)
+            if data['eval_score']:
+                res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, True)
+            else:
+                res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Failed", "lastModifiedOn": curr_time} }, False, False, True)
+
             # col.update_one({"_id":doc_id}, {"$set": {"status": "Completed" }}, False, True)
             # log.info(res)
             if res["nModified"] == 1:
@@ -55,6 +59,36 @@ class BenchMarkingProcessRepo:
             #     log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']}")
         except Exception as e:
             log.exception(f"Exception while updating database with evaluation score: {str(e)}")
+
+    def pt_instantiate(self):
+        global pt_mongo_instance
+        client = pymongo.MongoClient(ulca_db_cluster)
+        pt_mongo_instance = client[mongo_db_name][mongo_pt_collection_name]
+        return pt_mongo_instance
+
+    def get_mongo_pt_instance(self):
+        global pt_mongo_instance
+        if not pt_mongo_instance:
+            log.info(f'getting mongo process tracker connection............')
+            return self.pt_instantiate()
+        else:
+            return pt_mongo_instance
+
+    def insert_pt(self, data):
+
+        col = self.get_mongo_pt_instance()
+
+        try:
+            curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
+            res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "tool": "benchmark"}, {"$set": {"status": data["status"], "endTime": curr_time} }, False, False, True)
+
+            if res["nModified"] == 1:
+                log.info(f"Updated process tracker for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
+            else:
+                log.error(f"Document not found in process tracker for benchmarkingProcessId: {data['benchmarkingProcessId']}")
+
+        except Exception as e:
+            log.exception(f"Exception while updating process tracker for benchmarkingProcessId: {data['benchmarkingProcessId']}: {str(e)}")
 
 # Log config
 dictConfig({
