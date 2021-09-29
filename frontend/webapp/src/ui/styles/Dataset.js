@@ -370,7 +370,7 @@ const DataSet = (theme) => ({
     // alignItems: 'center'
   },
   modelTitle: {
-    marginTop: "25px",
+    marginTop: "10px",
     padding: 0,
   },
   mainTitle: { marginTop: "10px" },

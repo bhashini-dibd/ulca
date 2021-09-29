@@ -27,14 +27,14 @@ const SearchModelDetail = (props) => {
     setData(location.state);
   }, [location]);
   const description = [
-    {
-      title: "Version",
-      para: data.version,
-    },,
-    {
-      title: "Description",
-      para: data.description,
-    },
+    // {
+    //   title: "Version",
+    //   para: data.version,
+    // }, ,
+    // {
+    //   title: "Description",
+    //   para: data.description,
+    // },
     {
       title: "Source URL",
       para: data.refUrl,
@@ -60,6 +60,11 @@ const SearchModelDetail = (props) => {
       title: "Published On",
       para: data.publishedOn,
     },
+    {
+      title: "Training Dataset",
+      para: data.trainingDataset !== undefined ? data.trainingDataset["description"] : "NA"
+      // para:"Trained on the datasets curated as part of Anuvaad project.Trained on the datasets curated as part of Anuvaad project."
+    }
   ];
   const { prevUrl } = location.state;
   const handleCardNavigation = () => {
@@ -169,21 +174,52 @@ const SearchModelDetail = (props) => {
                 xl={4}
                 style={{ paddingLeft: "24px" }}
               >
-                {description.map((des) => (
-                  <ModelDescription title={des.title} para={des.para} />
-                ))}
+                <Grid container spacing={2} style={{marginTop:'2%'}}>
+                  {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Typography variant="h6" className={classes.modelTitle}>Version</Typography>
+                    <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.version}</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Typography variant="h6" className={classes.modelTitle}>Description</Typography>
+                    <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.description}</Typography>
+
+                  </Grid> */}
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Grid container spacing={1}>
+                      {description.map((des, i) => (
+                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                          <ModelDescription title={des.title} para={des.para} index={i} />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                </Grid>
+
               </Grid>
             </Grid>
           ) : (
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={12} md={11} lg={11} xl={11}>
-                {description.map((des) => (
-                  <ModelDescription title={des.title} para={des.para} />
-                ))}
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Typography variant="h6" className={classes.modelTitle}>Version</Typography>
+                <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.version}</Typography>
               </Grid>
-               <Grid item xs={12} sm={12} md={11} lg={11} xl={11}>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Typography variant="h6" className={classes.modelTitle}>Description</Typography>
+                <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.description}</Typography>
+
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid container spacing={2}>
+                  {description.map((des, i) => (
+                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                      <ModelDescription title={des.title} para={des.para} index={i} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={11} lg={11} xl={11}>
                 <BenchmarkTable modelId={params.srno} />
-                </Grid> 
+              </Grid>
             </Grid>
           )}
         </div>
