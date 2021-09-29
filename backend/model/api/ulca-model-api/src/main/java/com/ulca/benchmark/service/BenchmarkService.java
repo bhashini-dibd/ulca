@@ -13,6 +13,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,6 +58,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class BenchmarkService {
 
+	private int PAGE_SIZE = 10;
 	@Autowired
 	private KafkaTemplate<String, BmDatasetDownload> benchmarkDownloadKafkaTemplate;
 
@@ -165,10 +169,12 @@ public class BenchmarkService {
 
 	
 	
-	public BenchmarkSearchResponse searchBenchmark(BenchmarkSearchRequest request) {
+	public BenchmarkSearchResponse searchBenchmark(BenchmarkSearchRequest request, Integer startPage, Integer endPage) {
 
 		Benchmark benchmark = new Benchmark();
-
+		Example<Benchmark> example = Example.of(benchmark);
+		List<Benchmark> list = new ArrayList<>();
+		
 		if (request.getTask() != null && !request.getTask().isBlank()) {
 			ModelTask modelTask = new ModelTask();
 			modelTask.setType(TypeEnum.fromValue(request.getTask()));
@@ -187,9 +193,20 @@ public class BenchmarkService {
 			benchmark.setLanguages(lprs);
 		}
 		
+		if (startPage != null) {
+			int startPg = startPage - 1;
+			for (int i = startPg; i < endPage; i++) {
+				Pageable paging = PageRequest.of(i, PAGE_SIZE);
+			  list = (List<Benchmark>) benchmarkDao.findAll(example,paging);
+			}
+		} else {
+			 list =benchmarkDao.findAll(example);
+		}
 
-		Example<Benchmark> example = Example.of(benchmark);
-		List<Benchmark> list = benchmarkDao.findAll(example);
+
+		
+
+		//list = benchmarkDao.findAll(example);
 
 		return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
 

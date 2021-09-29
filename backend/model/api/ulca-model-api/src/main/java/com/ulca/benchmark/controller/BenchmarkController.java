@@ -77,10 +77,11 @@ public class BenchmarkController {
 	}
 	
 	@PostMapping("/search")
-	public BenchmarkSearchResponse searchBenchmark(@Valid @RequestBody BenchmarkSearchRequest request) {
+	public BenchmarkSearchResponse searchBenchmark(@Valid @RequestBody BenchmarkSearchRequest request, @RequestParam(required = false) Integer startPage,
+			@RequestParam(required = false) Integer endPage) {
 
 		log.info("******** Entry BenchmarkController:: searchBenchmark *******");
-		return benchmarkService.searchBenchmark(request);
+		return benchmarkService.searchBenchmark(request,startPage,endPage);
 	}
 	
 	
