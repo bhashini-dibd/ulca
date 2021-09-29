@@ -31,7 +31,7 @@ components:
           type: string
           description: model name that you want your users to see
           example: vakyansh asr model
-        name:
+        version:
           maxLength: 20
           minLength: 1
           type: string
