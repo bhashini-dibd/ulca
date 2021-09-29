@@ -1,6 +1,7 @@
 package com.ulca.benchmark.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class BenchmarkProcess {
     String id;
 	
 	String modelId;
+	
 	String benchmarkProcessId;
 	String benchmarkDatasetId;
 	String benchmarkDatasetName;
