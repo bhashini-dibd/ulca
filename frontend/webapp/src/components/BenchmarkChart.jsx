@@ -177,14 +177,14 @@ const ChartRender = (props) => {
 	return (
 
 		<section class="section bg-gray dashboard">
-        <div class="shape2"><img src={image} alt="shapes"/></div>
+        <div class="shape1"><img src={image} alt="shapes"/></div>
        
                 
                    
                     <div class="text-center">
                         <h2 class="text-center text-black mt-3">Benchmark Dashboard</h2>
                         <div class="join">
-                      <a class="bh-btn-primary" href="https://meity.ulcacontrib.org/model/benchmark-datasets" target="_self" rel="noopener noreferrer">Explore Benchmark Datasets</a>
+                      <a className="bh-btn-primary" href="https://meity.ulcacontrib.org/model/benchmark-datasets" target="_self" rel="noopener noreferrer"><span>Explore Benchmark Datasets</span></a>
                   </div>
                     </div>
                     
