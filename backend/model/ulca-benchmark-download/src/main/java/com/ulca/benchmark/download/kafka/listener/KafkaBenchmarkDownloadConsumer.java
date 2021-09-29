@@ -169,6 +169,9 @@ public class KafkaBenchmarkDownloadConsumer {
 
 					bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.completed);
 					
+					bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.benchmark, BenchmarkTaskTracker.StatusEnum.inprogress);
+					
+					
 				} catch (Exception e) {
 					
 					log.info("Unhadled Exception :: " + e.getMessage());

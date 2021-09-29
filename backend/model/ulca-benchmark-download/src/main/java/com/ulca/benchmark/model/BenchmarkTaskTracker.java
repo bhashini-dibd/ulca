@@ -36,7 +36,7 @@ public class BenchmarkTaskTracker   {
   public enum ToolEnum {
     download("download"),
     ingest("ingest"),
-    publish("benchmark");
+    benchmark("benchmark");
 
     private String value;
 
