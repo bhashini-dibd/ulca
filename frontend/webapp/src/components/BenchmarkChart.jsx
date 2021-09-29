@@ -98,7 +98,6 @@ const ChartRender = (props) => {
 	}
 
 	const handleOnClick = (value, event, filter) => {
-        debugger
 		switch (value) {
 			case 1:
 				fetchChartData("benchmark", filter ? filter : filterValue, fetchParams(event))
@@ -136,7 +135,9 @@ const ChartRender = (props) => {
 		return (
 			<div className={classes.filterButton}>
                 <Typography className={classes.fiterText} value="" variant="body1"> Filter By </Typography>
-				<Button color={filterValue === "language" ? "primary" : "default"}  size="small" variant="outlined" className={classes.backButton} onClick={() => handleLanguageChange("language")}>Language</Button>
+				<Button color={filterValue === "language" ? "primary" : "default"}className={classes.backButton}   size="small" variant="outlined"  onClick={() => handleLanguageChange("language")}>Language</Button>
+				<Button color={filterValue === "domain" ? "primary" : "default"}  size="small" variant="outlined" style={{marginRight:"10px"}} onClick={() => handleLanguageChange("domain")}>Domain</Button>
+				
 				<Button color={filterValue === "submitter" ? "primary" : "default"}  size="small" variant="outlined" onClick={() => handleLanguageChange("submitter")}>Submitter</Button>
 
 			</div>
@@ -169,21 +170,21 @@ const ChartRender = (props) => {
 					
 
 				} else if (page === 1) {
-					setTitle(`Number of ${selectedTypeName ? selectedTypeName : event.label} Benchmark Datasets - Grouped by ${filter ? filter : filterValue}`)
+					setTitle(`Number of ${selectedTypeName ? selectedTypeName : event.label} Benchmark Datasets - Grouped by ${filter ? filter[0].toUpperCase() + filter.slice(1) : filterValue[0].toUpperCase() + filterValue.slice(1)}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "language") ? "Language" : (filter === "submitter") ?  "Submitter" : "Language"})
 				} 
 	}
 	return (
 
-        <section className="section dashboard" style={{background:"white"}}>
-        <div class="shape1"><img src={image} alt="shapes"/></div>
+		<section class="section bg-gray dashboard">
+        <div class="shape2"><img src={image} alt="shapes"/></div>
        
                 
                    
                     <div class="text-center">
                         <h2 class="text-center text-black mt-3">Benchmark Dashboard</h2>
                         <div class="join">
-                      <a class="bh-btn-primary" href="https://meity.ulcacontrib.org/model/benchmark-datasets" target="_self" rel="noopener noreferrer">Explore ULCA Benchmark</a>
+                      <a class="bh-btn-primary" href="https://meity.ulcacontrib.org/model/benchmark-datasets" target="_self" rel="noopener noreferrer">Explore Benchmark Datasets</a>
                   </div>
                     </div>
                     
