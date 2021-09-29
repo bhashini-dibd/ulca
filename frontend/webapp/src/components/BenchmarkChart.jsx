@@ -16,7 +16,7 @@ const ChartRender = (props) => {
 	const [count, setCount] = useState(0);
 	const [total, setTotal] = useState(0);
 	const [axisValue, setAxisValue] = useState({yAxis:"Count", xAxis:"Task"});
-	const [title, setTitle] = useState("Number of Benchmarks");
+	const [title, setTitle] = useState("Number of Benchmark Datasets");
     const [selectedType, setSelectedType] = useState("");
     const [selectedTypeName, setSelectedTypeName] = useState("");
 	const [filterValue, setFilterValue] = useState("language");
@@ -201,7 +201,7 @@ const ChartRender = (props) => {
 				isDisabled	=	{page !== 0 ? true : false}
 				page		= 	{page}
 				count 		= 	{total}
-                title="Benchmark"
+                title="Benchmark Datasets"
 				>
 				{page === 1 && fetchFilterButtons() }
 				
