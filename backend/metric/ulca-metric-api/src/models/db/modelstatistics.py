@@ -11,7 +11,6 @@ class AggregateModelData(object):
     def data_aggregator(self, request_object):
         try:
             count   =   repo.count({})
-            # dtype = request_object["type"]
             match_params = None
             if "criterions" in request_object:
                 match_params = request_object["criterions"]
@@ -71,5 +70,5 @@ class AggregateModelData(object):
                 return chart_data,count
                 
         except Exception as e:
-            log.info(f"Exception on AggregateodelData :{e}")
+            log.info(f"Exception on AggregateModelData :{e}")
             return []
