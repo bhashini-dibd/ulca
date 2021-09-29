@@ -15,13 +15,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BenchmarkSearchRequest {
 
-	  
 	@NotBlank(message="task is required")
 	private String task;
-	
-	
 	private String sourceLanguage;
-	
 	private String targetLanguage;
 	  
 }

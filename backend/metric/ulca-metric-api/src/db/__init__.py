@@ -1,1 +1,1 @@
-from .connection_manager import get_data_store, ModelRepo
+from .connection_manager import get_data_store, ModelRepo, BenchRepo
