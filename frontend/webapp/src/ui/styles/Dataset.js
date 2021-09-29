@@ -27,7 +27,7 @@ const DataSet = (theme) => ({
   computeBtn: {
     borderRadius: "20px",
   },
-  tableRow:{display:"none"},
+  tableRow: { display: "none" },
 
   divStyle: {
     padding: "5% 10% 5% 3.125rem",
@@ -472,7 +472,7 @@ const DataSet = (theme) => ({
     marginLeft: 0,
     width: "220px",
     textAlign: "left",
-    float:'right'
+    float: "right",
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -498,6 +498,9 @@ const DataSet = (theme) => ({
     },
     fontStyle: "italic",
     fontSize: "14px",
+  },
+  inputRoot: {
+    width: "100%",
   },
   filterBtn: {
     borderRadius: "22px",
