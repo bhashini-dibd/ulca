@@ -107,7 +107,11 @@ class DataUtils:
                 users = ulca_email_group.split(',')
                 tdy_date    =   datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
                 msg         =   Message(subject=f" ULCA - Alert on dataset counts {tdy_date}",sender=MAIL_SENDER,recipients=users)
-                msg.body    =   f"There is a mismatch found on ulca data stores.\n\n Details : {data}"
+                message     =   ""
+                for i in data:
+                    line = f"Dataset Type : {i['Data Type']}\t\tMongoDB Count : {i['Mongo Count']}\t\tDruid Count : {i['Druid Count']}"
+                    message = f"{message}\n{line}"
+                msg.body    =   f"There is a mismatch found on ulca data stores.\n\nDetails of the unequal types:\n{message}"
                 mail.send(msg)
                 log.info(f"Generated alert email ")
 
