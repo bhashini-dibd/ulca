@@ -9,8 +9,8 @@ const initialState = {
   responseData: [],
   filteredData: [],
   refreshStatus: false,
-  filter: { status: [], modelType: [], license: [], domain: [] },
-  selectedFilter: { status: [], modelType: [], license: [], domain: [] },
+  filter: { status: [], task: [], license: [], domain: [] },
+  selectedFilter: { status: [], task: [], license: [], domain: [] },
 };
 
 const dateConversion = (value) => {
@@ -36,53 +36,66 @@ const getFilterValue = (payload, data) => {
     filterValues.hasOwnProperty("status") &&
     filterValues.status.length > 0
   ) {
-    statusFilter = data.responseData.filter((value) => {
+    filterResult = data.responseData.filter((value) => {
+      // statusFilter = Object.assign([], JSON.stringify(JSON.parse(data.responseData))).filter((value) => {
       if (value.status && filterValues.status.includes(value.status)) {
         return value;
       }
     });
-  } else {
-    statusFilter = data.responseData;
+  } 
+  else {
+    filterResult =data.responseData;
   }
   if (
     filterValues &&
-    filterValues.hasOwnProperty("modelType") &&
-    filterValues.modelType.length > 0
+    filterValues.hasOwnProperty("task") &&
+    filterValues.task.length > 0
   ) {
-    filterResult = statusFilter.filter((value) => {
-      if (value.modelType && filterValues.modelType.includes(value.modelType)) {
-        return value;
+    console.log('filterValues of task', filterValues)
+    console.log('filterResult of task', filterResult)
+
+    filterResult = filterResult.filter((value) => {
+      
+      if (value.task && filterValues.task.includes(value.task.toLowerCase())) {
+        return true;
       }
     });
-  } else {
-    filterResult = statusFilter;
-  }
+  } 
+  // else {
+  //   filterResult = statusFilter
+  // }
+
   if (
     filterValues &&
     filterValues.hasOwnProperty("license") &&
     filterValues.license.length > 0
   ) {
-    filterResult = statusFilter.filter((value) => {
-      if (value.license && filterValues.license.includes(value.license)) {
-        return value;
+    console.log('filterValues of license', filterValues)
+    console.log('filterResult of license', filterResult)
+    filterResult = filterResult.filter((value) => {
+      if (value.licence && filterValues.license.includes(value.licence.toLowerCase())) {
+        return true;
       }
     });
-  } else {
-    filterResult = statusFilter;
-  }
-  if (
-    filterValues &&
-    filterValues.hasOwnProperty("domain") &&
-    filterValues.domain.length > 0
-  ) {
-    filterResult = statusFilter.filter((value) => {
-      if (value.domain && filterValues.domain.includes(...value.domain)) {
-        return value;
-      }
-    });
-  } else {
-    filterResult = statusFilter;
-  }
+  } 
+  // else {
+  //   filterResult = statusFilter;
+  // }
+
+  // if (
+  //   filterValues &&
+  //   filterValues.hasOwnProperty("domain") &&
+  //   filterValues.domain.length > 0
+  // ) {
+  //   filterResult =statusFilter.filter((value) => {
+  //     if (value.domain && filterValues.domain.includes(value.domain)) {
+  //       return true;
+  //     }
+  //   });
+  // } else {
+  //   filterResult = statusFilter;
+  // }
+  // console.log(filterResult);
   data.filteredData = filterResult;
   data.selectedFilter = filterValues;
   return data;
@@ -107,7 +120,7 @@ const getDomainDetails = (data) => {
 
 const getClearFilter = (data) => {
   data.filteredData = data.responseData;
-  data.selectedFilter = { status: [], modelType: [],license:[],domain:[] };
+  data.selectedFilter = { status: [], task: [], license: [], domain: [] };
   return data;
 };
 
@@ -126,7 +139,7 @@ const getContributionList = (state, payload) => {
   let modelFilter = [];
   let domain = [];
   let license = [];
-  let filter = { status: [], modelType: [], domain: [], license: [] };
+  let filter = { status: [], task: [], domain: [], license: [] };
   let refreshStatus = false;
   payload.forEach((element) => {
     let sLanguage =
@@ -160,7 +173,7 @@ const getContributionList = (state, payload) => {
         element.languages &&
         element.languages.length > 0 &&
         element.languages[0].targetLanguage,
-      licence: element.license.toUpperCase(),
+      license: element.license.toUpperCase(),
       submitter: element.submitter.name,
       trainingDataset: element.trainingDataset,
       action: "View Result",
@@ -194,7 +207,7 @@ const getContributionList = (state, payload) => {
   });
 
   filter.status = [...new Set(statusFilter)];
-  filter.modelType = [...new Set(modelFilter)];
+  filter.task = [...new Set(modelFilter)];
   filter.license = [...new Set(license)];
   filter.domain = [...new Set(domain)];
 

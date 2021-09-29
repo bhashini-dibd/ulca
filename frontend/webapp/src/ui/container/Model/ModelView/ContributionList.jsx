@@ -115,6 +115,7 @@ const ContributionList = (props) => {
     dispatch(clearFilter(data, C.CLEAR_MODEL_FILTER));
   };
   const apply = (data) => {
+    console.log(data)
     handleClose();
     dispatch(FilterTable(data, C.MODEL_CONTRIBUTION_TABLE));
   };
@@ -141,7 +142,7 @@ const ContributionList = (props) => {
   const fetchHeaderButton = () => {
     return (
       <>
-        <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button>
+        {/* <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button> */}
         <Button
           color={"primary"}
           size="medium"
@@ -439,7 +440,7 @@ const ContributionList = (props) => {
       },
     },
     {
-      name: "licence",
+      name: "license",
       label: "License",
       options: {
         filter: false,

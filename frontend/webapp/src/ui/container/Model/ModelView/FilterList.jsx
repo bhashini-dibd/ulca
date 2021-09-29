@@ -75,15 +75,15 @@ const FilterBenchmark = (props) => {
                             Task
                         </Typography>
                         <FormGroup>
-                            {filter.modelType.map((type) => {
+                            {filter.task.map((type) => {
                                 return (
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={isChecked(type, 'modelType')}
+                                                checked={isChecked(type, 'task')}
                                                 name={type}
                                                 color="primary"
-                                                onChange={() => props.handleCheckboxClick(type, 'modelType')}
+                                                onChange={() => props.handleCheckboxClick(type, 'task')}
                                             />
                                         }
                                         label={type}
@@ -112,7 +112,7 @@ const FilterBenchmark = (props) => {
                                                 checked={isChecked(type, 'domain')}
                                                 name={type}
                                                 color="primary"
-                                                onChange={props.handleCheckboxClick}
+                                                onChange={()=>props.handleCheckboxClick(type,'domain')}
                                             />
                                         }
                                         label={type}
@@ -141,7 +141,7 @@ const FilterBenchmark = (props) => {
                                                 checked={isChecked(type, 'license')}
                                                 name={type}
                                                 color="primary"
-                                                onChange={props.handleCheckboxClick}
+                                                onChange={()=>props.handleCheckboxClick(type,'license')}
                                             />
                                         }
                                         label={type}
@@ -170,7 +170,7 @@ const FilterBenchmark = (props) => {
                                                 checked={isChecked(type, 'status')}
                                                 name={type}
                                                 color="primary"
-                                                onChange={props.handleCheckboxClick}
+                                                onChange={()=>props.handleCheckboxClick(type,'status')}
                                             />
                                         }
                                         label={type}
@@ -208,7 +208,7 @@ const FilterBenchmark = (props) => {
                         variant="contained"
                         style={{ width: "80px", borderRadius: "20px" }}
                         disabled={isDisabled()}
-                        onClick={apply}
+                        onClick={()=>apply(selectedFilter)}
                     >
                         {" "}
                         Apply
