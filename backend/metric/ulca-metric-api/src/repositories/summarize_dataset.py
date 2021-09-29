@@ -3,7 +3,6 @@ from src.models.db import AggregateDatasetModel, AggregateModelData, AggregateBe
 
 class SummarizeDatasetRepo(object):
     def __init__(self):
-        self.fetchFilterParams          =   FetchFilterParams()
         self.aggregateDatasetModel      =   AggregateDatasetModel()
         self.aggregateModel             =   AggregateModelData() 
         self.aggregateBenchmark         =   AggregateBenchmarkData()

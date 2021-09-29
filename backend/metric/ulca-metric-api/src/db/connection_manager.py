@@ -97,16 +97,16 @@ class BenchRepo:
     def instantiate(self):
         global mongo_bm_instance
         client = pymongo.MongoClient(MONGO_CONNECTION_URL)
-        mongo_instance = client[MONGO_DB_SCHEMA][MONGO_BM_COLLECTION]
-        return mongo_instance
+        mongo_bm_instance = client[MONGO_DB_SCHEMA][MONGO_BM_COLLECTION]
+        return mongo_bm_instance
 
     #geting the mongo clent object
     def get_mongo_instance(self):
-        global mongo_instance
-        if not mongo_instance:
+        global mongo_bm_instance
+        if not mongo_bm_instance:
             return self.instantiate()
         else:
-            return mongo_instance
+            return mongo_bm_instance
 
     def aggregate(self, query):
         try:
