@@ -10,7 +10,7 @@ import Footer from "../../../components/common/Footer";
 import Theme from "../../../theme/theme-default";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
-
+import { Card } from "@material-ui/core";
 import {
   Grid,
   Typography,
@@ -228,14 +228,20 @@ const SearchModelDetail = (props) => {
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h5" className={classes.mainTitle}>
-              {data.modelName}
-            </Typography>
+            <Grid container>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Card style={{ height: '100px', backgroundColor: '#0F2749', borderRadius: "8px", marginTop: '1%' }}>
+                  <Typography variant="h5" color="secondary" className={classes.mainTitle}>
+                    {data.modelName}
+                  </Typography>
+                </Card>
+              </Grid>
+            </Grid>
           </div>
-          <Divider className={classes.gridCompute} />
+          {/* <Divider className={classes.gridCompute} /> */}
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Typography variant="h6" className={classes.modelTitle}>Description</Typography>
-            <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }}
+            <Typography variant="h5" className={classes.modelTitle}>Description</Typography>
+            <Typography variant="body1" style={{textAlign: "justify" }}
               className={classes.modelPara}>{data.description}</Typography>
           </Grid>
           <Grid container style={{ marginTop: '30px' }}>

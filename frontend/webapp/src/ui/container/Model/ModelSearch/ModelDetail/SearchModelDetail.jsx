@@ -142,7 +142,7 @@ const SearchModelDetail = (props) => {
                   <Grid container>
                     <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
                       <Typography variant="h4" color='secondary' className={classes.mainTitle}>
-                        {data.modelName}
+                        {data.modelName} {data.version}
                       </Typography>
                     </Grid>
                     {!params.model && (
@@ -213,12 +213,12 @@ const SearchModelDetail = (props) => {
             </Grid>
           ) : (
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Typography variant="h6" className={classes.modelTitle}>Version</Typography>
                 <Typography variant="body1" style={{ textAlign: "justify" }} className={classes.modelPara}>{data.version}</Typography>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Typography variant="h6">Description</Typography>
+                <Typography variant="h5" className={classes.modelTitle}>Description</Typography>
                 <Typography variant="body1" style={{ textAlign: "justify" }} className={classes.modelPara}>{data.description}</Typography>
 
               </Grid>
