@@ -104,6 +104,30 @@ const getContributionList = (state, payload) => {
   return filteredData;
 };
 
+const getFilteredData = (value, data) => {
+  let newState = data.filter((val) => {
+    return (
+      (val["status"] &&
+        val["status"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["datasetName"] &&
+        val["datasetName"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["datasetType"] &&
+        val["datasetType"].toLowerCase().includes(value.toLowerCase()))
+    );
+  });
+  return newState;
+};
+
+const isFilterSelected = (selectedFilter) => {
+  const values = Object.values(selectedFilter);
+  for (let i = 0; i < values.length; i++) {
+    if (values[i].length > 0) {
+      return true;
+    }
+  }
+  return false;
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_CONTRIBUTION_LIST:
@@ -116,6 +140,14 @@ const reducer = (state = initialState, action) => {
       };
     case C.CLEAR_FILTER:
       return getClearFilter(state);
+    case C.GET_DATASET_SEARCH_VALUES:
+      // const data = isFilterSelected(state.selectedFilter)
+      //   ? state.filteredData
+      //   : state.responseData;
+      return {
+        ...state,
+        filteredData: getFilteredData(action.payload, state.responseData),
+      };
     default:
       return {
         ...state,
