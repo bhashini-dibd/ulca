@@ -231,7 +231,7 @@ const SearchModelDetail = (props) => {
                   ))}
                 </Grid>
               </Grid>
-              <Grid item xs={12} sm={12} md={11} lg={11} xl={11}>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <BenchmarkTable modelId={params.srno} />
               </Grid>
             </Grid>
