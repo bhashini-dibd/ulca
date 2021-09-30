@@ -219,7 +219,7 @@ const SearchModelDetail = (props) => {
               </Grid> */}
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Typography variant="h5" className={classes.modelTitle}>Description</Typography>
-                <Typography variant="body1" style={{ textAlign: "justify" }} className={classes.modelPara}>{data.description}</Typography>
+                <Typography variant="body1" style={{ textAlign: "justify", marginTop:'15px' }} >{data.description}</Typography>
 
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

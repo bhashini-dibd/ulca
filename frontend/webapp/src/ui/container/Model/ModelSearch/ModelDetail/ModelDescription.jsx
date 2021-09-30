@@ -30,22 +30,23 @@ const ModelDescription = (props) => {
                         image={ImageArray[index].imageUrl}
                     />
                 </Grid>
-                <Grid item xs={9} sm={9} md={9} lg={9} xl={9} style={{ display: 'flex', marginTop: "5px"}}>
+                <Grid item xs={9} sm={9} md={9} lg={9} xl={9} style={{ display: 'flex', marginTop: "5px" }}>
                     {/* <Box sx={{ display: 'flex', flexDirection: 'row' }}> */}
-                        <CardContent>
-                            <Typography component="div" variant="subtitle2" style={{marginBottom:'0px'}}>
-                                {title}
-                            </Typography>
-                            {title !== 'Source URL' || para ==="NA" ? <Typography variant="body2" color="text.secondary" component="span">
+                    <CardContent>
+                        <Typography component="div" variant="subtitle2" style={{ marginBottom: '0px' }}>
+                            {title}
+                        </Typography>
+                        {title !== 'Source URL' || para === "NA" ?
+                            <Typography variant="body2" color="text.secondary" className={classes.modelPara} >
                                 {para}
                             </Typography> :
-                                <Typography style={{overflowWrap:"anywhere"}}>
-                                    <Link style={{ color: "#3f51b5", fontSize: '14px' }} variant="body2" href={para}>
-                                        {para}
-                                    </Link>
-                                </Typography>
-                                }
-                        </CardContent>
+                            <Typography style={{ overflowWrap: "anywhere" }}>
+                                <Link style={{ color: "#3f51b5", fontSize: '14px' }} variant="body2" href={para}>
+                                    {para}
+                                </Link>
+                            </Typography>
+                        }
+                    </CardContent>
                     {/* </Box> */}
                 </Grid>
             </Grid>

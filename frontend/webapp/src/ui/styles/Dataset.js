@@ -446,7 +446,7 @@ const DataSet = (theme) => ({
     padding: 0,
   },
   modelPara: {
-    marginTop: "15px ",
+    //marginTop: "15px ",
     //textTransform: 'capitalize'
     "&:first-letter": { textTransform: "capitalize" },
   },
