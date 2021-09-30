@@ -25,7 +25,13 @@ const DataSet = (theme) => ({
     marginTop: "1vh",
   },
   computeBtn: {
-    borderRadius: "20px",
+    backgroundColor: '#FD7F23',
+    float: 'right',
+    marginRight: '30px',
+    marginTop: '33px',
+    '&:hover':{
+      backgroundColor: '#FD7F23',
+    }
   },
   tableRow: { display: "none" },
 
@@ -370,10 +376,10 @@ const DataSet = (theme) => ({
     // alignItems: 'center'
   },
   modelTitle: {
-    marginTop: "10px",
-    padding: 0,
+    marginTop: "20px",
+   // padding: 0,
   },
-  mainTitle: { marginTop: "10px" },
+  mainTitle: { marginTop: "33px", marginLeft: '38px' },
   backButton: {
     boxShadow: "none",
     padding: "0",

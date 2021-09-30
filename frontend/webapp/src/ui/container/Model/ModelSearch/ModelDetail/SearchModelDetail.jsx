@@ -11,7 +11,7 @@ import AudioRecord from "./VoiceRecorder";
 import Footer from "../../../../components/common/Footer";
 import Theme from "../../../../theme/theme-default";
 import { MuiThemeProvider } from "@material-ui/core/styles";
-import { Grid, Typography, Button, Divider } from "@material-ui/core";
+import { Grid, Typography, Button, Divider, Card } from "@material-ui/core";
 import HostedInferASR from "./HostedInferASR";
 import HostedInferOCR from "./HostedInferOCR";
 import BenchmarkTable from "./BenchmarkTable";
@@ -135,23 +135,37 @@ const SearchModelDetail = (props) => {
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h5" className={classes.mainTitle}>
-              {data.modelName}
-            </Typography>
-            {!params.model && (
-              <Button
-                color="primary"
-                className={classes.computeBtn}
-                variant="contained"
-                size={"small"}
-                onClick={() => handleClick()}
-              >
-                Try Model
-              </Button>
-            )}
+
+            <Grid container>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Card style={{ height: '100px', backgroundColor: '#0F2749', borderRadius:"8px" }}>
+                  <Grid container>
+                    <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+                      <Typography variant="h4" color='secondary' className={classes.mainTitle}>
+                        {data.modelName}
+                      </Typography>
+                    </Grid>
+                    {!params.model && (
+                      <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                        <Button
+                          color="primary"
+                          className={classes.computeBtn}
+                          variant="contained"
+                          size={"small"}
+                          onClick={() => handleClick()}
+                        >
+                          Try Model
+                        </Button>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Card>
+              </Grid>
+            </Grid>
+
           </div>
           {/* <hr style={{marginTop: "19px",opacity:'0.3' }}></hr> */}
-          <Divider className={classes.gridCompute} />
+          {/* <Divider className={classes.gridCompute} /> */}
           {params.model ? (
             <Grid container>
               <Grid
@@ -174,7 +188,7 @@ const SearchModelDetail = (props) => {
                 xl={4}
                 style={{ paddingLeft: "24px" }}
               >
-                <Grid container spacing={2} style={{marginTop:'2%'}}>
+                <Grid container spacing={2} style={{ marginTop: '2%' }}>
                   {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <Typography variant="h6" className={classes.modelTitle}>Version</Typography>
                     <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.version}</Typography>
@@ -201,11 +215,11 @@ const SearchModelDetail = (props) => {
             <Grid container spacing={3}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Typography variant="h6" className={classes.modelTitle}>Version</Typography>
-                <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.version}</Typography>
+                <Typography variant="body1" style={{ textAlign: "justify" }} className={classes.modelPara}>{data.version}</Typography>
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Typography variant="h6" className={classes.modelTitle}>Description</Typography>
-                <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.description}</Typography>
+                <Typography variant="h6">Description</Typography>
+                <Typography variant="body1" style={{ textAlign: "justify" }} className={classes.modelPara}>{data.description}</Typography>
 
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

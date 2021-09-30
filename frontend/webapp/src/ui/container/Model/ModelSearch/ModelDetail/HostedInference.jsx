@@ -150,7 +150,7 @@ const HostedInference = (props) => {
                         <Grid item>
                             <Button
                                 color="primary"
-                                className={classes.computeBtn}
+                              //  className={classes.computeBtn}
                                 variant="contained"
                                 size={'small'}
                                 onClick={handleCompute}
