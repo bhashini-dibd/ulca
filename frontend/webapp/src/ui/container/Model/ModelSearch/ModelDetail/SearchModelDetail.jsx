@@ -138,7 +138,7 @@ const SearchModelDetail = (props) => {
 
             <Grid container>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Card style={{ height: '100px', backgroundColor: '#0F2749', borderRadius:"8px" }}>
+                <Card style={{ height: '100px', backgroundColor: '#0F2749', borderRadius:"8px", marginTop:'1%' }}>
                   <Grid container>
                     <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
                       <Typography variant="h4" color='secondary' className={classes.mainTitle}>
