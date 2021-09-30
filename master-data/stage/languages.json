@@ -1,294 +1,294 @@
 {
-    "languages": [
-      {
-        "code": "en",
-        "values":[
-            {
-                "name": "English",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "hi",
-        "values":[
-            {
-                "name": "Hindi",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "mr",
-        "values":[
-            {
-                "name": "Marathi",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "ta",
-        "values":[
-            {
-                "name": "Tamil",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "te",
-        "values":[
-            {
-                "name": "Telugu",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "kn",
-        "values":[
-            {
-                "name": "Kannada",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "gu",
-        "values":[
-            {
-                "name": "Gujurati",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "pa",
-        "values":[
-            {
-                "name": "Punjabi",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "bn",
-        "values":[
-            {
-                "name": "Bengali",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "ml",
-        "values":[
-            {
-                "name": "Malayalam",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "as",
-        "values":[
-            {
-                "name": "Assamese",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "brx",
-        "values":[
-            {
-                "name": "Bodo",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "doi",
-        "values":[
-            {
-                "name": "DOI",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "ks",
-        "values":[
-            {
-                "name": "KS",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "kok",
-        "values":[
-            {
-                "name": "Konkani",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "mai",
-        "values":[
-            {
-                "name": "MAI",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "mni",
-        "values":[
-            {
-                "name": "MNI",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "ne",
-        "values":[
-            {
-                "name": "Nepali",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "or",
-        "values":[
-            {
-                "name": "odiya",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "sd",
-        "values":[
-            {
-                "name": "SD",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "si",
-        "values":[
-            {
-                "name": "SI",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "ur",
-        "values":[
-            {
-                "name": "Urdu",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "sat",
-        "values":[
-            {
-                "name": "SAT",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "lus",
-        "values":[
-            {
-                "name": "LUS",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "njz",
-        "values":[
-            {
-                "name": "NJZ",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "pnr",
-        "values":[
-            {
-                "name": "PNR",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "kha",
-        "values":[
-            {
-                "name": "KHA",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "grt",
-        "values":[
-            {
-                "name": "GRT",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      },
-      {
-        "code": "sa",
-        "values":[
-            {
-                "name": "SA",
-                "locale": "en"
-            }
-        ],
-        "active": true
-      }
-    ]
-  }
+  "languages": [
+    {
+      "code": "en",
+      "values":[
+          {
+              "name": "English",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "hi",
+      "values":[
+          {
+              "name": "Hindi",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "mr",
+      "values":[
+          {
+              "name": "Marathi",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "ta",
+      "values":[
+          {
+              "name": "Tamil",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "te",
+      "values":[
+          {
+              "name": "Telugu",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "kn",
+      "values":[
+          {
+              "name": "Kannada",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "gu",
+      "values":[
+          {
+              "name": "Gujurati",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "pa",
+      "values":[
+          {
+              "name": "Punjabi",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "bn",
+      "values":[
+          {
+              "name": "Bengali",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "ml",
+      "values":[
+          {
+              "name": "Malayalam",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "as",
+      "values":[
+          {
+              "name": "Assamese",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "brx",
+      "values":[
+          {
+              "name": "Bodo",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "doi",
+      "values":[
+          {
+              "name": "Dogri",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "ks",
+      "values":[
+          {
+              "name": "Kashmiri",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "kok",
+      "values":[
+          {
+              "name": "Konkani",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "mai",
+      "values":[
+          {
+              "name": "Maithili",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "mni",
+      "values":[
+          {
+              "name": "Manipuri",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "ne",
+      "values":[
+          {
+              "name": "Nepali",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "or",
+      "values":[
+          {
+              "name": "Odiya",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "sd",
+      "values":[
+          {
+              "name": "Sindhi",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "si",
+      "values":[
+          {
+              "name": "Sinhala",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "ur",
+      "values":[
+          {
+              "name": "Urdu",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "sat",
+      "values":[
+          {
+              "name": "Santali",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "lus",
+      "values":[
+          {
+              "name": "lushai",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "njz",
+      "values":[
+          {
+              "name": "Ngungwel",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "pnr",
+      "values":[
+          {
+              "name": "Panim",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "kha",
+      "values":[
+          {
+              "name": "Khasi",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "grt",
+      "values":[
+          {
+              "name": "Garo",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    },
+    {
+      "code": "sa",
+      "values":[
+          {
+              "name": "Sanskrit",
+              "locale": "en"
+          }
+      ],
+      "active": true
+    }
+  ]
+}
