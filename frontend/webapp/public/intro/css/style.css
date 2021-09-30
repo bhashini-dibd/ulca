@@ -221,6 +221,9 @@ footer ul {
   left: 2rem;
   margin-top: 6px;
 }
+.models {
+  margin-top: 40px;
+}
 .models .dataset-orange {
     background: #FFFFFF;
     border: 1px solid #FFB200;
@@ -394,7 +397,7 @@ h6, .h6 {
 }
 
 .join {
-    margin-top: -4px;
+    margin-left: 20px;
 }
 .join .bh-btn-primary {
   padding: 11px 30px !important;

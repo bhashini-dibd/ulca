@@ -7,6 +7,7 @@ import { ArrowBack } from '@material-ui/icons';
 import {DatasetItems,Language} from "../configs/DatasetItems";
 import TitleBar from "./TitleBar";
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import image from "../img/shape2.svg"
 var colors = ["188efc", "7a47a4", "b93e94", "1fc6a4", "f46154", "d088fd", "f3447d", "188efc", "f48734", "189ac9", "0e67bd"]
 
 
@@ -172,6 +173,22 @@ const ChartRender = (props) => {
 				} 
 	}
 	return (
+		<section className="section dashboard" style={{background:"white"}}>
+        <div class="shape1"><img src={image} alt="shapes"/></div>
+       
+                
+		
+                    
+                    <div class="text-center">
+                        <h2 class="text-center text-black mt-3">Model Dashboard</h2>
+                        <p class="ft-20">ULCA hosts a catalog of models in Indian languages</p>
+                    <div class="join">
+                      <a class="bh-btn-primary" href="https://meity.ulcacontrib.org/model/explore-models" target="_self" rel="noopener noreferrer">Explore ULCA Models </a>
+                  </div>
+                   
+                   
+                    
+			
 			<div className={classes.container}>
 				<Paper elevation={0} className={classes.paper}>	
 				
@@ -243,7 +260,11 @@ const ChartRender = (props) => {
 					</div>
 
 				</Paper> 
-			</div>	
+				</div>
+            </div>
+               
+       
+    </section>		
 	)
 }
 export default withStyles(ChartStyles())(ChartRender);

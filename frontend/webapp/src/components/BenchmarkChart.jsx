@@ -176,7 +176,7 @@ const ChartRender = (props) => {
 	}
 	return (
 
-		<section class="section bg-gray dashboard">
+		<section className="section dashboard" style={{background:"white"}}>
         <div class="shape1"><img src={image} alt="shapes"/></div>
        
                 
