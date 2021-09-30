@@ -31,8 +31,10 @@ import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/Submi
 import Spinner from "../../../components/common/Spinner";
 import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
 import SwitchModelStatus from "../../../../redux/actions/api/Model/ModelView/SwitchModelStatus";
-import FilterListIcon from '@material-ui/icons/FilterList';
-import myContribFilter from '../../../../redux/actions/api/Model/ModelView/myContribFilter';
+import FilterListIcon from "@material-ui/icons/FilterList";
+import myContribFilter from "../../../../redux/actions/api/Model/ModelView/myContribFilter";
+import Search from "../../../components/Datasets&Model/Search";
+import getSearchedValues from "../../../../redux/actions/api/Model/ModelView/GetSearchedValues";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -115,7 +117,7 @@ const ContributionList = (props) => {
     dispatch(clearFilter(data, C.CLEAR_MODEL_FILTER));
   };
   const apply = (data) => {
-    console.log(data)
+    console.log(data);
     handleClose();
     dispatch(FilterTable(data, C.MODEL_CONTRIBUTION_TABLE));
   };
@@ -138,39 +140,35 @@ const ContributionList = (props) => {
         state: result,
       });
   };
-
+  const handleSearch = (value) => {
+    dispatch(getSearchedValues(value));
+  };
   const fetchHeaderButton = () => {
     return (
-      <>
-        {/* <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button> */}
-        <Button
-          color={"primary"}
-          size="medium"
-          variant="outlined"
-          className={classes.ButtonRefresh}
-          onClick={() => MyContributionListApi()}
-        >
-          <Cached className={classes.iconStyle} />
-          Refresh
-        </Button>
-        {/* <Button
-          color={"default"}
-          size="medium"
-          variant="default"
-          className={classes.buttonStyle}
-          onClick={handleViewChange}
-        >
-          {" "}
-          {view ? <List size="large" /> : <GridOn />}
-        </Button> */}
-      </>
+      <Grid container spacing={1}>
+        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+          <Button
+            color={"primary"}
+            size="medium"
+            variant="outlined"
+            className={classes.ButtonRefresh}
+            onClick={() => MyContributionListApi()}
+          >
+            <Cached className={classes.iconStyle} />
+            Refresh
+          </Button>
+        </Grid>
+      </Grid>
     );
   };
   const handleRowClick = (id, name, status) => {
     // history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${id}`)
   };
 
-  const handleDialogSubmit = () => { };
+  const handleDialogSubmit = () => {};
 
   const processTableClickedNextOrPrevious = (sortOrder, page) => {
     dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
@@ -369,12 +367,14 @@ const ContributionList = (props) => {
     const { status, modelId } = modelStatusInfo;
     return (
       <Dialog
-        title={`${status === "published" ? "Unpublish Model" : "Publish Model"
-          }`}
-        message={`${status === "published"
-          ? "After the model is unpublished, it will not be available for public use. Are you sure you want to unpublish the model?"
-          : "After the model is published, it will be available for public use. Are you sure you want to publish the model?"
-          }`}
+        title={`${
+          status === "published" ? "Unpublish Model" : "Publish Model"
+        }`}
+        message={`${
+          status === "published"
+            ? "After the model is unpublished, it will not be available for public use. Are you sure you want to unpublish the model?"
+            : "After the model is published, it will be available for public use. Are you sure you want to publish the model?"
+        }`}
         handleSubmit={() => toggleModelStatusAPI(modelId, status)}
         handleClose={handleDialogClose}
         actionButton="Cancel"
@@ -518,6 +518,7 @@ const ContributionList = (props) => {
     // },
     //     onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
+    search: false,
     filter: false,
     displaySelectToolbar: false,
     filterType: "checkbox",
@@ -574,8 +575,8 @@ const ContributionList = (props) => {
   };
 
   const handleCheckboxClick = (value, prop) => {
-   dispatch(myContribFilter(value,prop));
-  }
+    dispatch(myContribFilter(value, prop));
+  };
 
   const { classes } = props;
   return (
