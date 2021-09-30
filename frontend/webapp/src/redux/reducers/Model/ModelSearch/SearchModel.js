@@ -45,7 +45,7 @@ const getFilterValue = (payload, data) => {
     }
     if (filterValues && filterValues.hasOwnProperty("submitter") && filterValues.submitter.length > 0) {
         filterResult = domainFilterValue.filter(value => {
-            if (filterValues.submitter.includes(value.domain)) {
+            if (filterValues.submitter.includes(value.submitter)) {
                 return value
             }
         })

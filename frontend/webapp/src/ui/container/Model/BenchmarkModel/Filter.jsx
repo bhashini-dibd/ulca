@@ -81,7 +81,7 @@ const FilterList = (props) => {
             >
 
                 <Grid container className={classes.filterContainer}>
-                <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <Typography variant="h6" className={classes.filterTypo}>Language</Typography>
                         <FormGroup>
                             {filter.language.map((type) => {
@@ -100,7 +100,7 @@ const FilterList = (props) => {
                             })}
                         </FormGroup>
                     </Grid>
-                    <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <Typography variant="h6" className={classes.filterTypo}>Domain</Typography>
                         <FormGroup>
                             {filter.domainFilter.map((type) => {
@@ -127,7 +127,7 @@ const FilterList = (props) => {
                     {/* <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
                         <Divider orientation="vertical"></Divider>
                     </Grid> */}
-                    {/* <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+                    <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
                         <Typography variant="h6" className={classes.filterTypo}>Submitter</Typography>
                         <FormGroup>
                             {filter.submitter.map((type) => {
@@ -145,7 +145,7 @@ const FilterList = (props) => {
                                     />)
                             })}
                         </FormGroup>
-                    </Grid> */}
+                    </Grid>
                 </Grid>
                 <Button
                     disabled={!(selectedDomain.length || selectedLanguage.length || selectedSubmitter.length)}

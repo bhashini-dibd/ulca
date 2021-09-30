@@ -44,7 +44,7 @@ const getFilterValue = (payload, data) => {
     }
     if (filterValues && filterValues.hasOwnProperty("submitter") && filterValues.submitter.length > 0) {
         filterResult = domainFilterValue.filter(value => {
-            if (filterValues.submitter.includes(value.domain)) {
+            if (filterValues.submitter.includes(value.submitter)) {
                 return value
             }
         })
@@ -124,7 +124,7 @@ const getContributionList = (state, payload) => {
         !languageFilter.includes(sLanguage) && sLanguage && languageFilter.push(sLanguage)
         !languageFilter.includes(tLanguage) && tLanguage && languageFilter.push(tLanguage)
         !domainFilter.includes(domain) && domain && domainFilter.push(domain)
-        // !submitterFilter.includes(element.submitter.name) && element.submitter.name && submitterFilter.push(element.submitter.name)
+        !submitterFilter.includes(element.submitter && element.submitter.name) && element.submitter && element.submitter.name && submitterFilter.push(element.submitter.name)
     });
 
     filter.language = [...(new Set(languageFilter))];
