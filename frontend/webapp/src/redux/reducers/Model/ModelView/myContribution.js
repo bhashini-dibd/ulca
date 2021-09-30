@@ -42,25 +42,23 @@ const getFilterValue = (payload, data) => {
         return value;
       }
     });
-  } 
-  else {
-    filterResult =data.responseData;
+  } else {
+    filterResult = data.responseData;
   }
   if (
     filterValues &&
     filterValues.hasOwnProperty("task") &&
     filterValues.task.length > 0
   ) {
-    console.log('filterValues of task', filterValues)
-    console.log('filterResult of task', filterResult)
+    console.log("filterValues of task", filterValues);
+    console.log("filterResult of task", filterResult);
 
     filterResult = filterResult.filter((value) => {
-      
       if (value.task && filterValues.task.includes(value.task.toLowerCase())) {
         return true;
       }
     });
-  } 
+  }
   // else {
   //   filterResult = statusFilter
   // }
@@ -70,14 +68,17 @@ const getFilterValue = (payload, data) => {
     filterValues.hasOwnProperty("license") &&
     filterValues.license.length > 0
   ) {
-    console.log('filterValues of license', filterValues)
-    console.log('filterResult of license', filterResult)
+    console.log("filterValues of license", filterValues);
+    console.log("filterResult of license", filterResult);
     filterResult = filterResult.filter((value) => {
-      if (value.licence && filterValues.license.includes(value.licence.toLowerCase())) {
+      if (
+        value.licence &&
+        filterValues.license.includes(value.licence.toLowerCase())
+      ) {
         return true;
       }
     });
-  } 
+  }
   // else {
   //   filterResult = statusFilter;
   // }
@@ -181,10 +182,10 @@ const getContributionList = (state, payload) => {
         element.status === "Completed"
           ? "#139D60"
           : element.status === "In-Progress"
-            ? "#2C2799"
-            : element.status === "Failed"
-              ? "#F54336"
-              : "green",
+          ? "#2C2799"
+          : element.status === "Failed"
+          ? "#F54336"
+          : "green",
     });
     !statusFilter.includes(element.status) &&
       element.status &&
@@ -226,7 +227,28 @@ const updateSelectedFilter = (obj, prevState) => {
     ? updatedState[obj.prop].splice(updatedState[obj.prop].indexOf, 1)
     : updatedState[obj.prop].push(obj.value);
   return updatedState;
-}
+};
+
+const getSearchedValues = (value, data) => {
+  const newState = data.filter((val) => {
+    return (
+      (val["version"] &&
+        val["version"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["status"] &&
+        val["status"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["domain"] &&
+        val["domain"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["license"] &&
+        val["license"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["task"] &&
+        val["task"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["modelName"] &&
+        val["modelName"].toLowerCase().includes(value.toLowerCase()))
+    );
+  });
+
+  return newState;
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -238,11 +260,19 @@ const reducer = (state = initialState, action) => {
       return {
         ...initialState,
       };
+    case C.GET_MODEL_SEARCH_VALUES:
+      return {
+        ...state,
+        filteredData: getSearchedValues(action.payload, state.responseData),
+      };
     case C.GET_SELECTED_FILTER:
       return {
         ...state,
-        selectedFilter: updateSelectedFilter(action.payload, state.selectedFilter)
-      }
+        selectedFilter: updateSelectedFilter(
+          action.payload,
+          state.selectedFilter
+        ),
+      };
     case C.CLEAR_MODEL_FILTER:
       return getClearFilter(state);
     default:

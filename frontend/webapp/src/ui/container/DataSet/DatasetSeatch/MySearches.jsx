@@ -17,6 +17,7 @@ import { useHistory } from "react-router-dom";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "../DatasetView/FilterList";
 import Search from "../../../components/Datasets&Model/Search";
+import getSearchedValue from '../../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues';
 
 const MySearches = (props) => {
   const detailedReport = useSelector((state) => state.mySearchReport);
@@ -56,13 +57,17 @@ const MySearches = (props) => {
     //    dispatch(FilterTable(data, C.CONTRIBUTION_TABLE))
   };
 
+  const handleSearch = (value)=>{
+    dispatch(getSearchedValue(value));
+  }
+
   const fetchHeaderButton = () => {
     return (
-//       <Grid container spacing={1}>
-//         <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
-//           <Search value="" handleSearch={() => console.log("searched")} />
-//         </Grid>
-//         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+      <Grid container spacing={1}>
+        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button
             color={"primary"}
             size="medium"
@@ -73,8 +78,8 @@ const MySearches = (props) => {
             <Cached className={classes.iconStyle} />
             Refresh
           </Button>
-//         </Grid>
-//       </Grid>
+        </Grid>
+      </Grid>
     );
   };
 
@@ -173,7 +178,7 @@ const MySearches = (props) => {
     page: PageInfo.page,
     viewColumns: false,
     selectableRows: "none",
-    search: true,
+    search: false,
     onTableChange: (action, tableState) => {
       switch (action) {
         case "changePage":
@@ -200,7 +205,7 @@ const MySearches = (props) => {
 
       <MUIDataTable
         title={`My Searches`}
-        data={detailedReport.responseData}
+        data={detailedReport.filteredData}
         columns={columns}
         options={options}
       />

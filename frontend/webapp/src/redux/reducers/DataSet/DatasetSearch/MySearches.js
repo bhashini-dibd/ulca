@@ -8,6 +8,7 @@ import getDatasetName from "../../../../utils/getDataset";
 
 const initialState = {
   responseData: [],
+  filteredData: [],
 };
 
 const dateConversion = (value) => {
@@ -16,7 +17,10 @@ const dateConversion = (value) => {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-    hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
   });
   return result.toUpperCase();
 };
@@ -24,7 +28,6 @@ const dateConversion = (value) => {
 const getMySearches = (payload) => {
   let newArr = [];
   payload.forEach((element) => {
-    console.log(element)
     if (element.searchCriteria) {
       let dataSet = getDatasetName(element.searchCriteria.datasetType);
       let langauge =
@@ -75,12 +78,32 @@ const getMySearches = (payload) => {
 
   return newArr;
 };
+const getFilteredData = (value, data) => {
+  const newState = data.filter((val) => {
+    return (
+      (val["search_criteria"] &&
+        val["search_criteria"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["count"] !== undefined && val["count"].toString().includes(value)) ||
+      (val["status"] &&
+        val["status"].toLowerCase().includes(value.toLowerCase()))
+    );
+  });
+
+  return newState;
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_MY_REPORT:
+      const data = getMySearches(action.payload);
       return {
-        responseData: getMySearches(action.payload),
+        responseData: data,
+        filteredData: data,
+      };
+    case C.GET_SEARCHED_VALUES:
+      return {
+        ...state,
+        filteredData: getFilteredData(action.payload, state.responseData),
       };
     case C.CLEAR_USER_EVENT:
       return {
