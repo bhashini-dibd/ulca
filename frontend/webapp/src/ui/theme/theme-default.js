@@ -320,5 +320,13 @@ themeDefault.typography.subtitle1 = {
     fontSize: ".9rem",
   },
 };
+themeDefault.typography.subtitle2 = {
+  fontSize: "1rem",
+  fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
+  fontWeight: "300",
+  "@media (max-width:550px)": {
+    fontSize: ".7rem",
+  },
+};
 
 export default themeDefault;

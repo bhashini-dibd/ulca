@@ -274,51 +274,64 @@
                   ]
                 },
                 {
-                  "filter": "alignmentScore",
-                  "label": "Alignment Score Range",
+                  "filter": "minScore",
+                  "label": "Min Alignment Score",
                   "type": "drop-down",
                   "values": [
                     {
-                      "value": {
-                        "minScore": 0,
-                        "maxScore": 0.5
-                      },
-                      "label": "<0.5"
+                      "value": 0,
+                      "label": "0.0"
                     },
                     {
-                      "value": {
-                        "minScore": 0.5,
-                        "maxScore": 0.6
-                      },
-                      "label": "0.5-0.6"
+                      "value": 0.5,
+                      "label": "0.5"
                     },
                     {
-                      "value": {
-                        "minScore": 0.6,
-                        "maxScore": 0.7
-                      },
-                      "label": "0.6-0.7"
+                      "value": 0.6,
+                      "label": "0.6"
                     },
                     {
-                      "value": {
-                        "minScore": 0.7,
-                        "maxScore": 0.8
-                      },
-                      "label": "0.7-0.8"
+                      "value": 0.7,
+                      "label": "0.7"
                     },
                     {
-                      "value": {
-                        "minScore": 0.8,
-                        "maxScore": 0.9
-                      },
-                      "label": "0.8-0.9"
+                      "value": 0.8,
+                      "label": "0.8"
                     },
                     {
-                      "value": {
-                        "minScore": 0.9,
-                        "maxScore": 1
-                      },
-                      "label": "0.9-1.0"
+                      "value": 0.9,
+                      "label": "0.9"
+                    }
+                  ]
+                },
+                {
+                  "filter": "maxScore",
+                  "label": "Max Alignment Score",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    },
+                    {
+                      "value": 1.0,
+                      "label": "1.0"
                     }
                   ]
                 }
@@ -341,51 +354,64 @@
                   ]
                 },
                 {
-                  "filter": "alignmentScore",
-                  "label": "Alignment Score Range",
+                  "filter": "minScore",
+                  "label": "Min Alignment Score",
                   "type": "drop-down",
                   "values": [
                     {
-                      "value": {
-                        "minScore": 0,
-                        "maxScore": 0.5
-                      },
-                      "label": "<0.5"
+                      "value": 0,
+                      "label": "0.0"
                     },
                     {
-                      "value": {
-                        "minScore": 0.5,
-                        "maxScore": 0.6
-                      },
-                      "label": "0.5-0.6"
+                      "value": 0.5,
+                      "label": "0.5"
                     },
                     {
-                      "value": {
-                        "minScore": 0.6,
-                        "maxScore": 0.7
-                      },
-                      "label": "0.6-0.7"
+                      "value": 0.6,
+                      "label": "0.6"
                     },
                     {
-                      "value": {
-                        "minScore": 0.7,
-                        "maxScore": 0.8
-                      },
-                      "label": "0.7-0.8"
+                      "value": 0.7,
+                      "label": "0.7"
                     },
                     {
-                      "value": {
-                        "minScore": 0.8,
-                        "maxScore": 0.9
-                      },
-                      "label": "0.8-0.9"
+                      "value": 0.8,
+                      "label": "0.8"
                     },
                     {
-                      "value": {
-                        "minScore": 0.9,
-                        "maxScore": 1
-                      },
-                      "label": "0.9-1.0"
+                      "value": 0.9,
+                      "label": "0.9"
+                    }
+                  ]
+                },
+                {
+                  "filter": "maxScore",
+                  "label": "Max Alignment Score",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    },
+                    {
+                      "value": 1.0,
+                      "label": "1.0"
                     }
                   ]
                 }
@@ -1228,51 +1254,64 @@
                   ]
                 },
                 {
-                  "filter": "alignmentScore",
-                  "label": "Alinment Score Range",
+                  "filter": "minScore",
+                  "label": "Min Alignment Score",
                   "type": "drop-down",
                   "values": [
                     {
-                      "value": {
-                        "minScore": 0,
-                        "maxScore": 0.5
-                      },
-                      "label": "<0.5"
+                      "value": 0,
+                      "label": "0.0"
                     },
                     {
-                      "value": {
-                        "minScore": 0.5,
-                        "maxScore": 0.6
-                      },
-                      "label": "0.5-0.6"
+                      "value": 0.5,
+                      "label": "0.5"
                     },
                     {
-                      "value": {
-                        "minScore": 0.6,
-                        "maxScore": 0.7
-                      },
-                      "label": "0.6-0.7"
+                      "value": 0.6,
+                      "label": "0.6"
                     },
                     {
-                      "value": {
-                        "minScore": 0.7,
-                        "maxScore": 0.8
-                      },
-                      "label": "0.7-0.8"
+                      "value": 0.7,
+                      "label": "0.7"
                     },
                     {
-                      "value": {
-                        "minScore": 0.8,
-                        "maxScore": 0.9
-                      },
-                      "label": "0.8-0.9"
+                      "value": 0.8,
+                      "label": "0.8"
                     },
                     {
-                      "value": {
-                        "minScore": 0.9,
-                        "maxScore": 1
-                      },
-                      "label": "0.9-1.0"
+                      "value": 0.9,
+                      "label": "0.9"
+                    }
+                  ]
+                },
+                {
+                  "filter": "maxScore",
+                  "label": "Max Alignment Score",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    },
+                    {
+                      "value": 1.0,
+                      "label": "1.0"
                     }
                   ]
                 }
@@ -1473,37 +1512,48 @@
           ]
         },
         {
-          "filter": "age",
-          "label": "Age",
+          "filter": "minAge",
+          "label": "Min Age",
           "type": "drop-down",
           "values": [
             {
-              "value": {
-                "minAge": 0,
-                "maxAge": 9
-              },
-              "label": "0-9"
+              "value": 0,
+              "label": "0"
             },
             {
-              "value": {
-                "minAge": 10,
-                "maxAge": 20
-              },
-              "label": "10-20"
+              "value": 10,
+              "label": "10"
             },
             {
-              "value": {
-                "minAge": 21,
-                "maxAge": 60
-              },
-              "label": "21-60"
+              "value": 20,
+              "label": "60"
             },
             {
-              "value": {
-                "minAge": 60,
-                "maxAge": 100
-              },
+              "value": 60,
               "label": "60-100"
+            }
+          ]
+        },
+        {
+          "filter": "maxAge",
+          "label": "Min Age",
+          "type": "drop-down",
+          "values": [
+            {
+              "value": 10,
+              "label": "10"
+            },
+            {
+              "value": 20,
+              "label": "20"
+            },
+            {
+              "value": 60,
+              "label": "60"
+            },
+            {
+              "value": 100,
+              "label": "100"
             }
           ]
         },
@@ -2320,51 +2370,64 @@
                   ]
                 },
                 {
-                  "filter": "alignmentScore",
-                  "label": "Alinment Score Range",
+                  "filter": "minScore",
+                  "label": "Min Alignment Score",
                   "type": "drop-down",
                   "values": [
                     {
-                      "value": {
-                        "minScore": 0,
-                        "maxScore": 0.5
-                      },
-                      "label": "<0.5"
+                      "value": 0,
+                      "label": "0.0"
                     },
                     {
-                      "value": {
-                        "minScore": 0.5,
-                        "maxScore": 0.6
-                      },
-                      "label": "0.5-0.6"
+                      "value": 0.5,
+                      "label": "0.5"
                     },
                     {
-                      "value": {
-                        "minScore": 0.6,
-                        "maxScore": 0.7
-                      },
-                      "label": "0.6-0.7"
+                      "value": 0.6,
+                      "label": "0.6"
                     },
                     {
-                      "value": {
-                        "minScore": 0.7,
-                        "maxScore": 0.8
-                      },
-                      "label": "0.7-0.8"
+                      "value": 0.7,
+                      "label": "0.7"
                     },
                     {
-                      "value": {
-                        "minScore": 0.8,
-                        "maxScore": 0.9
-                      },
-                      "label": "0.8-0.9"
+                      "value": 0.8,
+                      "label": "0.8"
                     },
                     {
-                      "value": {
-                        "minScore": 0.9,
-                        "maxScore": 1
-                      },
-                      "label": "0.9-1.0"
+                      "value": 0.9,
+                      "label": "0.9"
+                    }
+                  ]
+                },
+                {
+                  "filter": "maxScore",
+                  "label": "Max Alignment Score",
+                  "type": "drop-down",
+                  "values": [
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    },
+                    {
+                      "value": 1.0,
+                      "label": "1.0"
                     }
                   ]
                 }
@@ -2558,37 +2621,48 @@
               ]
             },
             {
-              "filter": "age",
-              "label": "Age",
+              "filter": "minAge",
+              "label": "Min Age",
               "type": "drop-down",
               "values": [
                 {
-                  "value": {
-                    "minAge": 0,
-                    "maxAge": 9
-                  },
-                  "label": "0-9"
+                  "value": 0,
+                  "label": "0"
                 },
                 {
-                  "value": {
-                    "minAge": 10,
-                    "maxAge": 20
-                  },
-                  "label": "10-20"
+                  "value": 10,
+                  "label": "10"
                 },
                 {
-                  "value": {
-                    "minAge": 21,
-                    "maxAge": 60
-                  },
-                  "label": "21-60"
+                  "value": 20,
+                  "label": "60"
                 },
                 {
-                  "value": {
-                    "minAge": 60,
-                    "maxAge": 100
-                  },
+                  "value": 60,
                   "label": "60-100"
+                }
+              ]
+            },
+            {
+              "filter": "maxAge",
+              "label": "Min Age",
+              "type": "drop-down",
+              "values": [
+                {
+                  "value": 10,
+                  "label": "10"
+                },
+                {
+                  "value": 20,
+                  "label": "20"
+                },
+                {
+                  "value": 60,
+                  "label": "60"
+                },
+                {
+                  "value": 100,
+                  "label": "100"
                 }
               ]
             },

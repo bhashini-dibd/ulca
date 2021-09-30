@@ -30,6 +30,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
 import GridView from "./GridView";
 import Search from "../../../components/Datasets&Model/Search";
+import getSearchedValue from '../../../../redux/actions/api/DataSet/DatasetView/GetSearchedValues';
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -93,21 +94,17 @@ const ContributionList = (props) => {
     });
   };
 
+  const handleSearch = (value) => {
+    dispatch(getSearchedValue(value));
+  };
+
   const fetchHeaderButton = () => {
     return (
-//       <Grid container spacing={0}>
-//         <Grid
-//           item
-//           xs={8}
-//           sm={8}
-//           md={8}
-//           lg={8}
-//           xl={8}
-//         >
-//           <Search value="" handleSearch={() => console.log("searched")} />
-//         </Grid>
-//         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-<>
+      <Grid container spacing={0}>
+        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button
             color={"default"}
             size="medium"
@@ -119,8 +116,8 @@ const ContributionList = (props) => {
             <FilterListIcon className={classes.iconStyle} />
             Filter
           </Button>
-        {/* </Grid> */}
-        {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2}> */}
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button
             color={"primary"}
             size="medium"
@@ -131,10 +128,9 @@ const ContributionList = (props) => {
             <Cached className={classes.iconStyle} />
             Refresh
           </Button>
-          </>
-        // {/* </Grid> */}
-//       {/* </Grid> */}
-//       {/* <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button> */}
+        </Grid>
+      </Grid>
+      //       {/* <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button> */}
     );
   };
   const handleRowClick = (id, name, status) => {
@@ -223,7 +219,7 @@ const ContributionList = (props) => {
     onRowClick: (rowData) => handleRowClick(rowData[0], rowData[1], rowData[4]),
     // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
-    search: true,
+    search: false,
     filter: false,
     displaySelectToolbar: false,
     fixedHeader: false,

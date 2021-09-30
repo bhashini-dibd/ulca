@@ -10,7 +10,7 @@ import Footer from "../../../components/common/Footer";
 import Theme from "../../../theme/theme-default";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
-
+import { Card } from "@material-ui/core";
 import {
   Grid,
   Typography,
@@ -82,15 +82,15 @@ const SearchModelDetail = (props) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   });
-  
+
   useEffect(() => {
     setMetric(metricArray[0]);
   }, [metricArray]);
 
   const description = [
     {
-      title: "Description",
-      para: data.description,
+      title: "",
+      para: "",
     },
     {
       title: "Task",
@@ -102,12 +102,12 @@ const SearchModelDetail = (props) => {
       para: data.language,
     },
     {
-      title: "Submitter",
-      para: data.submitter,
-    },
-    {
       title: "Domain",
       para: data.domain,
+    },
+    {
+      title: "Submitter",
+      para: data.submitter,
     },
   ];
   const handleCardNavigation = () => {
@@ -228,16 +228,34 @@ const SearchModelDetail = (props) => {
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h5" className={classes.mainTitle}>
-              {data.modelName}
-            </Typography>
+            <Grid container>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Card style={{ height: '100px', backgroundColor: '#0F2749', borderRadius: "8px", marginTop: '1%' }}>
+                  <Typography variant="h5" color="secondary" className={classes.mainTitle}>
+                    {data.modelName}
+                  </Typography>
+                </Card>
+              </Grid>
+            </Grid>
           </div>
-          <Divider className={classes.gridCompute} />
-          <Grid container>
-            <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
-              {description.map((des) => (
-                <ModelDescription title={des.title} para={des.para} />
-              ))}
+          {/* <Divider className={classes.gridCompute} /> */}
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Typography variant="h5" className={classes.modelTitle}>Description</Typography>
+            <Typography variant="body1" style={{textAlign: "justify", marginTop:'15px' }}>{data.description}</Typography>
+          </Grid>
+          <Grid container style={{ marginTop: '30px' }}>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <Grid container spacing={1}>
+                {description.map((des, i) => (
+                  <>{
+                    des.title !== "" &&
+                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                      <ModelDescription title={des.title} para={des.para} index={i} />
+                    </Grid>
+                  }
+                  </>
+                ))}
+              </Grid>
             </Grid>
           </Grid>
           {metricArray.length ? (
@@ -246,7 +264,6 @@ const SearchModelDetail = (props) => {
                 <Typography
                   style={{ marginTop: "3%" }}
                   variant="h5"
-                  className={classes.mainTitle}
                 >
                   Model Leaderboard
                 </Typography>
