@@ -94,20 +94,20 @@ const SearchModelDetail = (props) => {
     },
     {
       title: "Task",
-      para: data.task,
+      para: data.task ? data.task : "",
     },
 
     {
       title: "Languages",
-      para: data.language,
+      para: data.language ? data.language : "",
     },
     {
       title: "Domain",
-      para: data.domain,
+      para: data.domain ? data.domain : "",
     },
     {
       title: "Submitter",
-      para: data.submitter,
+      para: data.submitter ? data.submitter : "",
     },
   ];
   const handleCardNavigation = () => {
@@ -241,7 +241,7 @@ const SearchModelDetail = (props) => {
           {/* <Divider className={classes.gridCompute} /> */}
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <Typography variant="h5" className={classes.modelTitle}>Description</Typography>
-            <Typography variant="body1" style={{textAlign: "justify", marginTop:'15px' }}>{data.description}</Typography>
+            <Typography variant="body1" style={{ textAlign: "justify", marginTop: '15px' }}>{data.description}</Typography>
           </Grid>
           <Grid container style={{ marginTop: '30px' }}>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

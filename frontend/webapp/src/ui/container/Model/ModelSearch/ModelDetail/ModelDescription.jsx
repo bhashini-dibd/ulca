@@ -21,7 +21,7 @@ const ModelDescription = (props) => {
                  <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={title !== "Version" && classes.modelPara}>{para}</Typography> :
                  <Typography style={{ marginTop: '15px' }}><Link style={{ color: "#3f51b5", fontSize: '20px', }} variant="body2" href={para}>
                      {para}</Link></Typography>} */
-        <Card sx={{ display: 'flex' }} style={{ minHeight: '110px', maxHeight: '110px', backgroundColor: ImageArray[index].color }}>
+        <Card sx={{ display: 'flex' }} style={{ minHeight: '100px', maxHeight: '100px', backgroundColor: ImageArray[index].color }}>
             <Grid container>
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3} style={{ display: 'flex', marginTop: "21px", justifyContent: 'center' }}>
                     <CardMedia
@@ -38,9 +38,15 @@ const ModelDescription = (props) => {
                         </Typography>
                         {title !== 'Source URL' || para === "NA" ?
                             <Typography variant="body2" color="text.secondary" className={classes.modelPara} >
-                                {para}
+                                {(para[0]!== undefined) ? para.replace(para[0], para[0].toUpperCase()) : ""}
                             </Typography> :
-                            <Typography style={{ overflowWrap: "anywhere" }}>
+                            <Typography style={{
+                                overflowWrap: "anywhere",
+                                display: "-webkit-box",
+                                "-webkit-line-clamp": "2",
+                                "-webkit-box-orient": "vertical",
+                                overflow: "hidden"
+                            }}>
                                 <Link style={{ color: "#3f51b5", fontSize: '14px' }} variant="body2" href={para}>
                                     {para}
                                 </Link>
