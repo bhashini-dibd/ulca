@@ -42,6 +42,16 @@
               }
             ],
             "active": true
+          },
+          {
+            "code": "rogue",
+            "values": [
+              {
+                "name": "ROGUE",
+                "locale": "en"
+              }
+            ],
+            "active": true
           }
         ]
       },

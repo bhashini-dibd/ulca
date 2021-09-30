@@ -124,7 +124,7 @@
         "code": "doi",
         "values":[
             {
-                "name": "DOI",
+                "name": "Dogri",
                 "locale": "en"
             }
         ],
@@ -134,7 +134,7 @@
         "code": "ks",
         "values":[
             {
-                "name": "KS",
+                "name": "Kashmiri",
                 "locale": "en"
             }
         ],
@@ -154,7 +154,7 @@
         "code": "mai",
         "values":[
             {
-                "name": "MAI",
+                "name": "Maithili",
                 "locale": "en"
             }
         ],
@@ -164,7 +164,7 @@
         "code": "mni",
         "values":[
             {
-                "name": "MNI",
+                "name": "Manipuri",
                 "locale": "en"
             }
         ],
@@ -184,7 +184,7 @@
         "code": "or",
         "values":[
             {
-                "name": "odiya",
+                "name": "Odiya",
                 "locale": "en"
             }
         ],
@@ -194,7 +194,7 @@
         "code": "sd",
         "values":[
             {
-                "name": "SD",
+                "name": "Sindhi",
                 "locale": "en"
             }
         ],
@@ -204,7 +204,7 @@
         "code": "si",
         "values":[
             {
-                "name": "SI",
+                "name": "Sinhala",
                 "locale": "en"
             }
         ],
@@ -224,7 +224,7 @@
         "code": "sat",
         "values":[
             {
-                "name": "SAT",
+                "name": "Santali",
                 "locale": "en"
             }
         ],
@@ -234,7 +234,7 @@
         "code": "lus",
         "values":[
             {
-                "name": "LUS",
+                "name": "lushai",
                 "locale": "en"
             }
         ],
@@ -244,7 +244,7 @@
         "code": "njz",
         "values":[
             {
-                "name": "NJZ",
+                "name": "Ngungwel",
                 "locale": "en"
             }
         ],
@@ -254,7 +254,7 @@
         "code": "pnr",
         "values":[
             {
-                "name": "PNR",
+                "name": "Panim",
                 "locale": "en"
             }
         ],
@@ -264,7 +264,7 @@
         "code": "kha",
         "values":[
             {
-                "name": "KHA",
+                "name": "Khasi",
                 "locale": "en"
             }
         ],
@@ -274,7 +274,7 @@
         "code": "grt",
         "values":[
             {
-                "name": "GRT",
+                "name": "Garo",
                 "locale": "en"
             }
         ],
@@ -284,7 +284,7 @@
         "code": "sa",
         "values":[
             {
-                "name": "SA",
+                "name": "Sanskrit",
                 "locale": "en"
             }
         ],
