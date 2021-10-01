@@ -29,7 +29,7 @@ const DataSet = (theme) => ({
     float: 'right',
     marginRight: '30px',
     marginTop: '33px',
-    '&:hover':{
+    '&:hover': {
       backgroundColor: '#FD7F23',
     }
   },
@@ -377,7 +377,7 @@ const DataSet = (theme) => ({
   },
   modelTitle: {
     marginTop: "20px",
-   // padding: 0,
+    // padding: 0,
   },
   mainTitle: { marginTop: "33px", marginLeft: '38px' },
   backButton: {
@@ -449,6 +449,10 @@ const DataSet = (theme) => ({
     //marginTop: "15px ",
     //textTransform: 'capitalize'
     "&:first-letter": { textTransform: "capitalize" },
+    display: "-webkit-box",
+    "-webkit-line-clamp": "2",
+    "-webkit-box-orient": "vertical",
+    overflow: "hidden",
   },
   mainPaper: {
     border: "none",
