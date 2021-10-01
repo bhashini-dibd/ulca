@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ulca.benchmark.request.ModelTask;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -34,6 +35,9 @@ public class Benchmark {
 
 	@JsonProperty("description")
 	private String description = null;
+	
+	@JsonProperty("status")
+	private String status = null;
 
 	@JsonProperty("metric")
 	private List<String> metric = null;
@@ -82,6 +86,15 @@ public class Benchmark {
 	public Benchmark name(String name) {
 		this.name = name;
 		return this;
+	}
+
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	/**

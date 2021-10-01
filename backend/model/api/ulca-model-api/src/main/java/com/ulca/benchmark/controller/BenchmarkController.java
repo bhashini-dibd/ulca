@@ -19,6 +19,7 @@ import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.response.BenchmarkListByModelResponse;
 import com.ulca.benchmark.response.BenchmarkSearchResponse;
+import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.service.BenchmarkService;
@@ -28,6 +29,7 @@ import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 
 import io.swagger.model.Benchmark;
+import io.swagger.model.BenchmarkSubmitRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -40,10 +42,10 @@ public class BenchmarkController {
 	BenchmarkService benchmarkService;
 
 	@PostMapping("/submit")
-	public ResponseEntity<Benchmark> submitBenchmark(@RequestBody Benchmark request) {
+	public ResponseEntity<BenchmarkSubmitResponse> submitBenchmark(@RequestBody BenchmarkSubmitRequest request) {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
-		Benchmark benchmark = benchmarkService.submitBenchmark(request);
+		BenchmarkSubmitResponse benchmark = benchmarkService.submitBenchmark(request);
 
 		return new ResponseEntity<>(benchmark, HttpStatus.OK);
 	}

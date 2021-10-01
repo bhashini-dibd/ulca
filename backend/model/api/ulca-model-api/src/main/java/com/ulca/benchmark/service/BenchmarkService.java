@@ -1,6 +1,7 @@
 package com.ulca.benchmark.service;
 
 import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,14 +29,18 @@ import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
+import com.ulca.benchmark.request.BenchmarkSubmitRequest;
 import com.ulca.benchmark.request.BenchmarkListByModelRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.response.BenchmarkDto;
 import com.ulca.benchmark.response.BenchmarkListByModelResponse;
 import com.ulca.benchmark.response.BenchmarkSearchResponse;
+import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.util.Utility;
+import com.ulca.dataset.kakfa.model.FileDownload;
+import com.ulca.dataset.response.DatasetSubmitResponse;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelNotFoundException;
@@ -48,10 +53,8 @@ import io.swagger.model.ASRConfig.ModelEnum;
 import io.swagger.model.Benchmark;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePairs;
-import io.swagger.model.ModelTask;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
 import io.swagger.model.LanguagePair.TargetLanguageEnum;
-import io.swagger.model.ModelTask.TypeEnum;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -71,14 +74,30 @@ public class BenchmarkService {
 	@Autowired
 	ModelDao modelDao;
 	
+	@Autowired
+	private KafkaTemplate<String, FileDownload> benchmarkFiledownloadKafkaTemplate;	
 
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
 
-	public Benchmark submitBenchmark(Benchmark benchmark) {
-
-		benchmarkDao.save(benchmark);
-		return benchmark;
+	public BenchmarkSubmitResponse submitBenchmark(BenchmarkSubmitRequest benchmark) {
+		String userId = benchmark.getUserId();
+		Benchmark request= new Benchmark();
+		request.setStatus("Sumbmitted");
+		benchmarkDao.save(request);
+		
+		FileDownload fileDownload = new FileDownload();
+		fileDownload.setUserId(userId);
+		fileDownload.setDatasetId(request.getBenchmarkId());
+		fileDownload.setDatasetName(request.getName());
+		fileDownload.setFileUrl(benchmark.getUrl());
+		fileDownload.setServiceRequestNumber(request.getStatus());
+		
+		benchmarkFiledownloadKafkaTemplate.send(benchmarkDownloadTopic, fileDownload);
+		
+		String message = "Dataset Submit success";
+		return new BenchmarkSubmitResponse(request,request.getBenchmarkId(), request.getStatus());
+	
 	}
 
 	@Transactional
