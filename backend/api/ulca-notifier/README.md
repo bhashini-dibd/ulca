@@ -1,4 +1,4 @@
-# ULCA ERROR CONSUMER
+# ULCA NOTIFIER SERVICE
 
 ULCA Notifier Service.
 
