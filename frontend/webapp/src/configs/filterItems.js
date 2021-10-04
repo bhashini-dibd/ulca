@@ -1,4 +1,4 @@
-const FilterItems = [
+export const filterItems = [
     "minScore",
     "maxScore",
     "score",
@@ -10,6 +10,13 @@ const FilterItems = [
     "minAge",
     "maxAge",
     "age",
-
 ];
-export default FilterItems;
+
+export const rangeFilters=[
+    "minScore",
+    "maxScore",
+    "minNoOfSpeakers",
+    "maxNoOfSpeakers",
+    "minAge",
+    "maxAge",
+]

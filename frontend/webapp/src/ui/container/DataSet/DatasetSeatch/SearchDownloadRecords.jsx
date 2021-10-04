@@ -36,6 +36,7 @@ import {
     getFilterCategory,
 } from "../../../../redux/actions/api/DataSet/DatasetSearch/GetFilters";
 import SingleAutoComplete from "../../../components/common/SingleAutoComplete";
+import { filterItems } from '../../../../configs/filterItems';
 
 const StyledMenu = withStyles({})((props) => (
     <Menu
@@ -201,7 +202,8 @@ const SearchAndDownloadRecords = (props) => {
                             };
                         }
                     });
-                } else {
+                }
+                else {
                     result = {
                         value: searchValue,
                         type: "text",
@@ -265,7 +267,7 @@ const SearchAndDownloadRecords = (props) => {
         }
         setAdvFilterState({ ...advFilterState, ...filter });
     };
-
+    console.log(advFilterState)
     const handleBasicFilter = (value, id, type = "array") => {
         let filter = { ...basicFilterState };
         if (type === "array") {
@@ -415,7 +417,7 @@ const SearchAndDownloadRecords = (props) => {
         let objKeys = Object.keys(obj);
         objKeys.forEach((key) => {
             updatedObj[key] =
-                obj[key].type === "array" ? [obj[key].value] : obj[key].value;
+                obj[key].type === "array" ? (filterItems.indexOf(key) > -1 ? obj[key].value : [obj[key].value]) : obj[key].value;
         });
         return updatedObj;
     };
