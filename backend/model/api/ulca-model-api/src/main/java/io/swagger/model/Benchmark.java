@@ -12,8 +12,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ulca.benchmark.request.ModelTask;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -29,6 +27,9 @@ public class Benchmark {
 	@Id
 	@JsonProperty("benchmarkId")
 	private String benchmarkId = null;
+	
+	@JsonProperty("url")
+	private String url;
 
 	@JsonProperty("name")
 	private String name = null;
@@ -89,6 +90,14 @@ public class Benchmark {
 	}
 
 	
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
 	public String getStatus() {
 		return status;
 	}

@@ -25,6 +25,7 @@ import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
 import com.ulca.benchmark.exception.BenchmarkNotFoundException;
+import com.ulca.benchmark.kafka.model.BenchmarkDownload;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
@@ -75,7 +76,7 @@ public class BenchmarkService {
 	ModelDao modelDao;
 	
 	@Autowired
-	private KafkaTemplate<String, FileDownload> benchmarkFiledownloadKafkaTemplate;	
+	private KafkaTemplate<String, BenchmarkDownload> benchmarkFiledownloadKafkaTemplate;	
 
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
@@ -83,19 +84,18 @@ public class BenchmarkService {
 	public BenchmarkSubmitResponse submitBenchmark(BenchmarkSubmitRequest benchmark) {
 		String userId = benchmark.getUserId();
 		Benchmark request= new Benchmark();
+		request.setUrl(benchmark.getUrl());
 		request.setStatus("Sumbmitted");
 		benchmarkDao.save(request);
 		
-		FileDownload fileDownload = new FileDownload();
-		fileDownload.setUserId(userId);
-		fileDownload.setDatasetId(request.getBenchmarkId());
-		fileDownload.setDatasetName(request.getName());
-		fileDownload.setFileUrl(benchmark.getUrl());
-		fileDownload.setServiceRequestNumber(request.getStatus());
+		BenchmarkDownload benchmarkDownload = new BenchmarkDownload();
+		benchmarkDownload.setId(userId);
+		benchmarkDownload.setUrl(benchmark.getUrl());
+		//benchmarkDownload.setBenchmarkSubmissionType(benchmarkSubmissionType);
 		
-		benchmarkFiledownloadKafkaTemplate.send(benchmarkDownloadTopic, fileDownload);
+		benchmarkFiledownloadKafkaTemplate.send(benchmarkDownloadTopic, benchmarkDownload);
 		
-		String message = "Dataset Submit success";
+		String message = "benchmarkDataset Submit success";
 		return new BenchmarkSubmitResponse(request,request.getBenchmarkId(), request.getStatus());
 	
 	}
