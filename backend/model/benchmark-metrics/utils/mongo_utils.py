@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 log = logging.getLogger('file')
 mongo_instance = None
-
+pt_mongo_instance = None
 
 class BenchMarkingProcessRepo:
     def __init__(self):
