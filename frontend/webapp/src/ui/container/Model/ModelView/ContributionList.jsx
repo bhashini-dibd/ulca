@@ -146,8 +146,21 @@ const ContributionList = (props) => {
   const fetchHeaderButton = () => {
     return (
       <Grid container spacing={1}>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+          <Button
+            color={"default"}
+            size="medium"
+            variant="outlined"
+            className={classes.ButtonRefresh}
+            onClick={handleShowFilter}
+          >
+            {" "}
+            <FilterListIcon className={classes.iconStyle}/>
+            Filter
+          </Button>
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button
