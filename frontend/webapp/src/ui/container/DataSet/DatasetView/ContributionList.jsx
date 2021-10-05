@@ -30,7 +30,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
 import GridView from "./GridView";
 import Search from "../../../components/Datasets&Model/Search";
-import getSearchedValue from '../../../../redux/actions/api/DataSet/DatasetView/GetSearchedValues';
+import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/GetSearchedValues";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -55,6 +55,27 @@ const ContributionList = (props) => {
       added) &&
       MyContributionListApi();
   }, []);
+
+  useEffect(() => {
+    console.log("data", data);
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].submitRefNumber === added) {
+        let page = Math.floor(i / 10);
+        async function dispatchPageAction(i) {
+          await dispatch(PageChange(page, C.PAGE_CHANGE));
+          let element = await document.getElementById(
+            `MUIDataTableBodyRow-${i}`
+          );
+          element &&
+            element.scrollIntoView({
+              behavior: "smooth",
+            });
+        }
+        dispatchPageAction(i);
+        return;
+      }
+    }
+  }, [data]);
 
   const MyContributionListApi = () => {
     dispatch(ClearReport());
@@ -160,7 +181,7 @@ const ContributionList = (props) => {
       options: {
         filter: false,
         sort: false,
-        display: "excluded",
+        // display: "excluded",
       },
     },
 
