@@ -57,7 +57,6 @@ const ContributionList = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("data", data);
     for (let i = 0; i < data.length; i++) {
       if (data[i].submitRefNumber === added) {
         let page = Math.floor(i / 10);

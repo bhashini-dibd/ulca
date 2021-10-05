@@ -85,6 +85,28 @@ const ContributionList = (props) => {
     }
   });
 
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].submitRefNumber === added) {
+        let page = Math.floor(i / 10);
+        async function dispatchPageAction(i) {
+          await dispatch(PageChange(page, C.PAGE_CHANGE));
+          let element = await document.getElementById(
+            `MUIDataTableBodyRow-${i}`
+          );
+          let oldIndex = index;
+          setIndex([...oldIndex, i]);
+          element &&
+            element.scrollIntoView({
+              behavior: "smooth",
+            });
+        }
+        dispatchPageAction(i);
+        return;
+      }
+    }
+  }, [data]);
+
   // useEffect(() => {
   //   document.querySelectorAll(`button`).forEach((element) => {
   //     element.classList.forEach((list) => {
@@ -95,7 +117,7 @@ const ContributionList = (props) => {
   //   });
   // }, []);
 
-  // console.log(index);
+  console.log(index);
 
   const MyContributionListApi = () => {
     dispatch(ClearReport());
@@ -158,7 +180,7 @@ const ContributionList = (props) => {
             onClick={handleShowFilter}
           >
             {" "}
-            <FilterListIcon className={classes.iconStyle}/>
+            <FilterListIcon className={classes.iconStyle} />
             Filter
           </Button>
         </Grid>
