@@ -1,5 +1,7 @@
 package com.ulca.benchmark.response;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -14,6 +16,6 @@ import lombok.Setter;
 public class ExecuteBenchmarkResponse {
 
 
-	String benchmarkProcessId;
+	List<String> benchmarkProcessIds;
 
 }
