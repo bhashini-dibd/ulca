@@ -52,7 +52,7 @@ const getUpdatedFilters = (data, values, keys) => {
 const getFilterValue = (payload, data) => {
   let { filterValues } = payload;
   const filterKeys = Object.keys(filterValues);
-  const filterValue = Object.values(filterValues);
+  const filterValue = Object.values(filterValues).map(val=>val.map(e=>e.toLowerCase()));
   if (isFilterSelected(filterKeys, filterValue)) {
     data.filteredData = Object.assign(
       [],
