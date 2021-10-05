@@ -1,0 +1,54 @@
+{
+    "notifierEvents": [
+      {
+        "code": "dataset-submit-completed",
+        "values":[
+            {
+                "name": "dataset-submit-completed",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "dataset-submit-failed",
+        "values":[
+            {
+                "name": "dataset-submit-failed",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "benchmark-run-completed",
+        "values":[
+            {
+                "name": "benchmark-run-completed",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "benchmark-run-failed",
+        "values":[
+            {
+                "name": "Algorithm Auto Aligned",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "search-records-completed",
+        "values":[
+            {
+                "name": "search-records-completed",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      }
+    ]
+  }
