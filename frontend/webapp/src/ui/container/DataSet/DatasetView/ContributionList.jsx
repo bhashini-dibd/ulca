@@ -181,7 +181,7 @@ const ContributionList = (props) => {
       options: {
         filter: false,
         sort: false,
-        // display: "excluded",
+        display: "excluded",
       },
     },
 
