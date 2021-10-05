@@ -88,9 +88,9 @@ const ContributionList = (props) => {
   useEffect(() => {
     for (let i = 0; i < data.length; i++) {
       if (data[i].submitRefNumber === added) {
-        let page = Math.floor(i / 10);
+        let page = Math.floor(i / PageInfo.count);
         async function dispatchPageAction(i) {
-          await dispatch(PageChange(page, C.PAGE_CHANGE));
+          await dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
           let element = await document.getElementById(
             `MUIDataTableBodyRow-${i}`
           );
