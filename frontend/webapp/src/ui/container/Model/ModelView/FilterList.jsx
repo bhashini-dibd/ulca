@@ -57,11 +57,7 @@ const FilterBenchmark = (props) => {
             >
                 <Grid
                     container
-                    style={{
-                        maxWidth: "938.53px",
-                        // maxHeight: "290.22px",
-                        overflow: "auto",
-                    }}
+                    className={classes.filterContainer}
                 >
                     <Grid
                         item
@@ -180,24 +176,10 @@ const FilterBenchmark = (props) => {
                         </FormGroup>
                     </Grid>
                 </Grid>
-                <Divider />
-                <div
-                    style={{
-                        display: "flex",
-                        alignItems: "center",
-                        margin: "9px 0",
-                        width: "238.53px",
-                    }}
-                >
                     <Button
                         onClick={clearAll}
                         variant="outlined"
-                        style={{
-                            width: "100px",
-                            marginRight: "10px",
-                            marginLeft: "34.2px",
-                            borderRadius: "20px",
-                        }}
+                        className={classes.clrBtn}
                         disabled={isDisabled()}
                     >
                         {" "}
@@ -206,14 +188,13 @@ const FilterBenchmark = (props) => {
                     <Button
                         color="primary"
                         variant="contained"
-                        style={{ width: "80px", borderRadius: "20px" }}
+                        className={classes.applyBtn}
                         disabled={isDisabled()}
                         onClick={()=>apply(selectedFilter)}
                     >
                         {" "}
                         Apply
                     </Button>
-                </div>
             </Popover>
         </div>
     );
