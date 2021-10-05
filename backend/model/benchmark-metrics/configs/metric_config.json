@@ -10,5 +10,8 @@
     },
     {
         "metric_name":"rouge", "metric_implementation":"TranslationRougeScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"bert", "metric_implementation":"TranslationBertScoreEval", "score_context":"default"
     }
 ]
