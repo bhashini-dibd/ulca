@@ -19,7 +19,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.ulca.benchmark.kafka.model.BenchmarkDownload;
+import com.ulca.benchmark.kafka.model.BenchmarkIngest;
 
+import io.swagger.model.BenchmarkSubmissionType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -59,11 +61,11 @@ public class KafkaBenchmarkDownloadConsumer {
 		//DatasetType datasetType = null;
 //		String userId = file.getId();
 //		
-//		DatasetIngest datasetIngest = new DatasetIngest();
+		BenchmarkIngest benchmarkIngest = new BenchmarkIngest();
 //		//disabling pseudo ingest
-//		//datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
-//		datasetIngest.setMode(DatasetDownloadConstants.INGEST_REAL_MODE);
-//		
+		//datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
+		benchmarkIngest.setMode(DatasetDownloadConstants.INGEST_REAL_MODE);
+		
 		
 		Map<String,String> fileMap = null;
 		
@@ -81,61 +83,56 @@ public class KafkaBenchmarkDownloadConsumer {
 //			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.inprogress);
 //			processTaskTrackerService.createTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress);
 //			
-//			try {
-//				
-//				String fileName = serviceRequestNumber+".zip";
-//				String filePath = downloadUsingNIO(fileUrl, downloadFolder,fileName);
-//				
-//				log.info("file download complete");
-//				log.info("file path in downloadFile servide ::" + filePath);
-//				
-//				String md5hash = downloadFileSanityCheck(filePath);
-//				
-//				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
-//				
-//				datasetType = getDatasetType(fileMap);
-//				
-//				log.info("file unzip complete");
-//				processTaskTrackerService.updateTaskTracker(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.completed);
-//				
-//				datasetIngest.setDatasetId(datasetId);
-//				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
-//				datasetIngest.setDatasetName(datasetName);
-//				datasetIngest.setBaseLocation(fileMap.get("baseLocation"));
-//				datasetIngest.setMd5hash(md5hash);
-//				datasetIngest.setDatasetType(datasetType);
-//				datasetIngest.setUserId(userId);
+			try {
+				
+				String fileName = datasetId+".zip";
+				String filePath = downloadUsingNIO(fileUrl, downloadFolder,fileName);
+				
+				log.info("file download complete");
+				log.info("file path in downloadFile servide ::" + filePath);
+				
+				String md5hash = downloadFileSanityCheck(filePath);
+				
+				fileMap = unzipUtility.unzip(filePath, downloadFolder, datasetId);
+				
+				BenchmarkSubmissionType benchmarkSubmissionType = getDatasetType(fileMap);
+				
+				log.info("file unzip complete");
+				
+				benchmarkIngest.setId(datasetId);
+				benchmarkIngest.setUrl(fileUrl);
+				benchmarkIngest.setBaseLocation(fileMap.get("baseLocation"));
+				benchmarkIngest.setMd5hash(md5hash);
+				benchmarkIngest.setBenchmarkSubmissionType(benchmarkSubmissionType);
 
-//			} catch (IOException e) {
+			} catch (IOException e) {
 				
 				//update error
-//				Error error = new Error();
-//				error.setCause(e.getMessage());
-//				error.setMessage("file download failed");
-//				error.setCode("1000_FILE_DOWNLOAD_FAILURE");
-//				processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.download, com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
-//				processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
-//				
-//				//send error event for download failure
-//				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , null, null) ;
-//				e.printStackTrace();
-//				
-//				return;
-//			}
-//			datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
-//			//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
-//			
-//			
-//			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
-//			
-//		}catch (Exception e) {
-//			log.info("Unhadled Exception :: " + e.getMessage());
-//			log.info("cause :: " + e.getClass());
-//			e.printStackTrace();
-//			
-//		}
-//		
-	}
+				Error error = new Error();
+				error.setCause(e.getMessage());
+				error.setMessage("file download failed");
+				error.setCode("1000_FILE_DOWNLOAD_FAILURE");
+				
+				//send error event for download failure
+					e.printStackTrace();
+				
+				return;
+			}
+			catch (Exception e) {
+				log.info("Unhadled Exception :: " + e.getMessage());
+				log.info("cause :: " + e.getClass());
+				e.printStackTrace();
+				
+			}
+			datasetIngestKafkaTemplate.send(datasetIngestTopic, benchmarkIngest);
+			//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
+			
+			
+			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
+			
+		}
+		
+	
 
 	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {
 		log.info("************ Entry KafkaFileDownloadConsumer :: downloadUsingNIO *********");
@@ -200,8 +197,8 @@ public class KafkaBenchmarkDownloadConsumer {
 		return myChecksum;
 	}
 	
-	private DatasetType getDatasetType(Map<String,String> fileMap) throws IOException {
-		DatasetType datasetType = null;
+	private BenchmarkSubmissionType getDatasetType(Map<String,String> fileMap) throws IOException {
+		BenchmarkSubmissionType datasetType = null;
 		String paramsFilePath = fileMap.get("baseLocation")  + File.separator + "params.json";
 		Object rowObj = new Gson().fromJson(new FileReader(paramsFilePath), Object.class);
 		ObjectMapper mapper = new ObjectMapper();
@@ -213,7 +210,7 @@ public class KafkaBenchmarkDownloadConsumer {
 				 throw new IOException("params.json does not contain datasetType");
 			}
 			String type = params.getString("datasetType");
-			datasetType = DatasetType.fromValue(type);
+			datasetType = BenchmarkSubmissionType.fromValue(type);
 			
 			return datasetType;
 			

@@ -23,7 +23,7 @@ public class KafkaBenchmarkSubmitPublisherConfig {
     private String bootstrapAddress;
 
 	@Bean
-    public ProducerFactory<String, SearchCriteria> datasetSearchProducerFactory() {
+    public ProducerFactory<String, SearchCriteria> BenchmarkProducerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -33,7 +33,7 @@ public class KafkaBenchmarkSubmitPublisherConfig {
  
     @Bean
     public KafkaTemplate<String, SearchCriteria> datasetSearchKafkaTemplate() {
-        return new KafkaTemplate<>(datasetSearchProducerFactory());
+        return new KafkaTemplate<>(BenchmarkProducerFactory());
     }
 }
 
