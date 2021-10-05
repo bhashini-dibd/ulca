@@ -4,6 +4,7 @@ import {
   getLanguageName,
   FilterByDomain,
   FilterByCollection,
+  getTaskName,
 } from "../../../../utils/getLabel";
 const initialState = {
   responseData: [],
@@ -51,17 +52,13 @@ const getUpdatedFilters = (data, values, keys) => {
 const getFilterValue = (payload, data) => {
   let { filterValues } = payload;
   const filterKeys = Object.keys(filterValues);
-  const filterValue = Object.values(filterValues);
+  const filterValue = Object.values(filterValues).map(val=>val.map(e=>e.toLowerCase()));
   if (isFilterSelected(filterKeys, filterValue)) {
     data.filteredData = Object.assign(
       [],
       JSON.parse(
         JSON.stringify(
-          getUpdatedFilters(
-            data.responseData,
-            filterValue,
-            filterKeys
-          )
+          getUpdatedFilters(data.responseData, filterValue, filterKeys)
         )
       )
     );
@@ -159,19 +156,19 @@ const getContributionList = (state, payload) => {
     });
     !statusFilter.includes(element.status) &&
       element.status &&
-      statusFilter.push(element.status);
+      statusFilter.push(capitalizeLetter(element.status));
 
     !modelFilter.includes(element.task.type) &&
       element.task.type &&
-      modelFilter.push(element.task.type);
+      modelFilter.push(getTaskName(element.task.type));
 
     !license.includes(element.license) &&
       element.license &&
-      license.push(element.license);
+      license.push(element.license.toUpperCase());
 
     !domain.includes(...element.domain) &&
       element.domain &&
-      domain.push(...element.domain);
+      domain.push(capitalizeLetter(...element.domain));
     if (element.status === "In-Progress" || element.status === "Pending") {
       refreshStatus = true;
     }
@@ -189,6 +186,10 @@ const getContributionList = (state, payload) => {
   );
   filteredData.filter = filter;
   return filteredData;
+};
+
+const capitalizeLetter = (data) => {
+  return data.length ? data.replace(data[0], data[0].toUpperCase()) : "";
 };
 
 const updateSelectedFilter = (obj, prevState) => {
