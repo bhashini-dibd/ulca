@@ -1,7 +1,6 @@
 import logging
 from logging.config import dictConfig
 import nltk
-nltk.download('metric')
 import statistics
 from models.model_metric_eval import ModelMetricEval
 
