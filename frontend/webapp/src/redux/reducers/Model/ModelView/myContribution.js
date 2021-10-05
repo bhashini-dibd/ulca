@@ -27,77 +27,47 @@ const dateConversion = (value) => {
   return result.toUpperCase();
 };
 
+const isFilterSelected = (keys, values) => {
+  for (let i = 0; i < keys.length; i++) {
+    if (values[i].length) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const getUpdatedFilters = (data, values, keys) => {
+  let updatedFilter = data;
+  keys.forEach((key, i) => {
+    if (values[i].length) {
+      updatedFilter = updatedFilter.filter((val) => {
+        return values[i].indexOf(val[key].toLowerCase()) > -1;
+      });
+    }
+  });
+  return updatedFilter;
+};
+
 const getFilterValue = (payload, data) => {
   let { filterValues } = payload;
-  let statusFilter = [];
-  let filterResult = [];
-  if (
-    filterValues &&
-    filterValues.hasOwnProperty("status") &&
-    filterValues.status.length > 0
-  ) {
-    filterResult = data.responseData.filter((value) => {
-      // statusFilter = Object.assign([], JSON.stringify(JSON.parse(data.responseData))).filter((value) => {
-      if (value.status && filterValues.status.includes(value.status)) {
-        return value;
-      }
-    });
+  const filterKeys = Object.keys(filterValues);
+  const filterValue = Object.values(filterValues);
+  if (isFilterSelected(filterKeys, filterValue)) {
+    data.filteredData = Object.assign(
+      [],
+      JSON.parse(
+        JSON.stringify(
+          getUpdatedFilters(
+            data.responseData,
+            filterValue,
+            filterKeys
+          )
+        )
+      )
+    );
   } else {
-    filterResult = data.responseData;
+    data.filteredData = data.responseData;
   }
-  if (
-    filterValues &&
-    filterValues.hasOwnProperty("task") &&
-    filterValues.task.length > 0
-  ) {
-    console.log("filterValues of task", filterValues);
-    console.log("filterResult of task", filterResult);
-
-    filterResult = filterResult.filter((value) => {
-      if (value.task && filterValues.task.includes(value.task.toLowerCase())) {
-        return true;
-      }
-    });
-  }
-  // else {
-  //   filterResult = statusFilter
-  // }
-
-  if (
-    filterValues &&
-    filterValues.hasOwnProperty("license") &&
-    filterValues.license.length > 0
-  ) {
-    console.log("filterValues of license", filterValues);
-    console.log("filterResult of license", filterResult);
-    filterResult = filterResult.filter((value) => {
-      if (
-        value.licence &&
-        filterValues.license.includes(value.licence.toLowerCase())
-      ) {
-        return true;
-      }
-    });
-  }
-  // else {
-  //   filterResult = statusFilter;
-  // }
-
-  // if (
-  //   filterValues &&
-  //   filterValues.hasOwnProperty("domain") &&
-  //   filterValues.domain.length > 0
-  // ) {
-  //   filterResult =statusFilter.filter((value) => {
-  //     if (value.domain && filterValues.domain.includes(value.domain)) {
-  //       return true;
-  //     }
-  //   });
-  // } else {
-  //   filterResult = statusFilter;
-  // }
-  // console.log(filterResult);
-  data.filteredData = filterResult;
   data.selectedFilter = filterValues;
   return data;
 };
