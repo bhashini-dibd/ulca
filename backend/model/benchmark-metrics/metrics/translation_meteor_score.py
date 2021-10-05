@@ -1,6 +1,8 @@
 import logging
 from logging.config import dictConfig
 import nltk
+nltk.download('metric')
+import statistics
 from models.model_metric_eval import ModelMetricEval
 
 log = logging.getLogger('file')
@@ -12,8 +14,11 @@ class TranslationMeteorScoreEval(ModelMetricEval):
 
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation):
+        meteor = []
         try:
-            return nltk.translate.meteor_score.meteor_score([ground_truth],machine_translation)
+            for gt, mt in zip(ground_truth,machine_translation):
+                meteor.append(nltk.translate.meteor_score.meteor_score([gt],mt))
+            return statistics.mean(meteor)
         except Exception as e:
             log.exception(f"Exception in calculating METEOR Score: {str(e)}")
             return None

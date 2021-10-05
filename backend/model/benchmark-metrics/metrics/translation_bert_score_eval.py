@@ -1,30 +1,21 @@
 import logging
-import rouge
+from bert_score import score
 from logging.config import dictConfig
-import statistics
 from models.model_metric_eval import ModelMetricEval
 
 log = logging.getLogger('file')
 
-class TranslationRougeScoreEval(ModelMetricEval):
-
+class TranslationBertScoreEval(ModelMetricEval):
     def __init__(self):
         pass
 
-
     def machine_translation_metric_eval(self, ground_truth, machine_translation):
-        rougescore = []
         try:
-            for gt,mt in zip(ground_truth,machine_translation):
-                score = rouge.get_scores(gt,mt,avg=True)
-                score = score[0]['rouge-l']['f']
-                rougescore.append(score)
-            #score = rouge.get_scores(ground_truth,machine_translation,avg=True)
-            return statistics.mean(rougescore)
+            P, R, F1 = score(ground_truth,machine_translation,lang="en",verbose=True)
+            return  f"{F1.mean():.3f}"
         except Exception as e:
             log.exception(f"Exception in calculating ROUGE Score: {str(e)}")
             return None
-
 
 
 #LogConfig
