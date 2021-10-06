@@ -330,7 +330,22 @@ const ContributionList = (props) => {
     setModelStatusInfo({ status, modelId });
   };
 
-  const renderActionButtons = (status, type, domain, modelId) => {
+  const isDisabled = (benchmarkPerformance) => {
+    for (let i = 0; i < benchmarkPerformance.length; i++) {
+      if (benchmarkPerformance[i].status === "In-Progress") {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const renderActionButtons = (
+    benchmarkPerformance,
+    status,
+    type,
+    domain,
+    modelId
+  ) => {
     if (status !== "failed" && status !== "In Progress") {
       return (
         <Grid container spacing={1}>
@@ -353,7 +368,11 @@ const ContributionList = (props) => {
               variant="contained"
               className={classes.benchmarkActionButtons}
               disabled={
-                status === "failed" || status === "In Progress" ? true : false
+                status === "failed" ||
+                status === "In Progress" ||
+                isDisabled(benchmarkPerformance)
+                  ? true
+                  : false
               }
               style={{
                 color: status === "published" ? "#F54336" : "#139D60",
@@ -516,6 +535,7 @@ const ContributionList = (props) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
             return renderActionButtons(
+              tableMeta.rowData[9],
               tableMeta.rowData[7],
               tableMeta.rowData[1],
               tableMeta.rowData[4],
