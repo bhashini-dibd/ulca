@@ -243,9 +243,12 @@ components:
           description: the automatic evaluation metric name
           enum: 
             - bleu
-            - sacrebleu
             - meteor
-            - lepor
+            - rouge
+            - comet
+            - bert
+            - gleu
+            - ribes
         score:
           type: number
           description: is the score as per defined metric for this benchmark.
