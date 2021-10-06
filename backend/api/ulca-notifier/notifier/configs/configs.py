@@ -10,17 +10,18 @@ app_port                                =   os.environ.get('ULCA_NOTIFIER_SERVIC
 #kafka configs
 publish_consumer_grp                    =   os.environ.get('KAFKA_ULCA_DS_NOTIFIER_CONSUMER_GRP', 'ulca-ds-notifier-consumer-group-v0')
 kafka_bootstrap_server_host             =   os.environ.get('KAFKA_ULCA_BOOTSTRAP_SERVER_HOST', 'localhost:9092')
-ds_notifier_event_input_topic           =   os.environ.get('KAFKA_ULCA_DATASET_NOTIFIER_CONSUMER_IP_TOPIC', 'ulca-ds-notifier-ip-v0')
-bm_notifier_event_input_topic           =   os.environ.get('KAFKA_ULCA_BENCHMARK_NOTIFIER_CONSUMER_IP_TOPIC', 'ulca-bm-notifier-ip-v0')
-search_notifier_event_input_topic       =   os.environ.get('KAFKA_ULCA_SEARCH_NOTIFIER_CONSUMER_IP_TOPIC', 'ulca-search-notifier-ip-v0')
+notifier_event_input_topic              =   os.environ.get('KAFKA_ULCA_NOTIFIER_CONSUMER_IP_TOPIC', 'ulca-notifier-ip-v0')
 
 #mongo configs
 ulca_db_cluster                         =   os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 user_db                                 =   os.environ.get('UMS_MONGO_IDENTIFIER', "ulca-user-management")
 user_collection                         =   os.environ.get('UMS_USR_COLLECTION', "ulca-users")
-process_db                              =   os.environ.get('PROCESS_DB', "ulca-process-tracker")
-process_collection                      =   os.environ.get('PROCESS_COL', "ulca-pt-processes")
-
+process_db                              =   os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
+process_collection                      =   os.environ.get('ULCA_PROC_TRACKER_PROC_COL', "ulca-pt-processes")
+#React-app base url
+base_url                                =   os.environ.get('ULCA_REACT_APP_BASE_URL','https://dev.ulcacontrib.org/')
+ds_contribution_endpoint                =   os.environ.get('ULCA_MYCONTRIBUTION_PATH','dataset/my-contribution/')
+model_bm_contribution_endpoint         =   os.environ.get('ULCA_MYCONTRIBUTION_PATH','model/my-contribution/')
 #gmail server configs
 MAIL_SETTINGS                           =   {
                                                 "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),
@@ -28,6 +29,7 @@ MAIL_SETTINGS                           =   {
                                                 "MAIL_USE_TLS"  : False,
                                                 "MAIL_USE_SSL"  : True,
                                                 "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
-                                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxxx')
+                                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxx')
                                             }
-MAIL_SENDER                             =   os.environ.get('ULCA_SENDER_EMAIL','xxxxxxxxx')
+MAIL_SENDER                             =   os.environ.get('ULCA_SENDER_EMAIL','xxxxxxxxxx')
+

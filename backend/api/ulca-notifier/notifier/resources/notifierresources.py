@@ -13,15 +13,18 @@ class NotifierResource(Resource):
         log.info("Inside ulca-notifier service")
         if req_criteria.get("event")==None or req_criteria.get("entityID")==None or req_criteria.get("userID")==None:
             log.info('Some of the mandatory keys(event, entityID, userID) are missing ')
-            return jsonify({"message":"Some of the mandatory keys(event, entityID, userID) are missing", "data": None,"count":None}),400
+            return {"message":"Some of the mandatory keys(event, entityID, userID) are missing", "data": None,"count":None},400
         log.info(f'Request received for notifiying user on entityID-{req_criteria["entityID"]}')
         notifier    =   NotifierEvent(req_criteria["userID"])
-        if req_criteria["event"] == "dataset-published":
+        if req_criteria["event"] in ["dataset-submit-completed","dataset-submit-failed"]:
             notifier.data_submission_notifier(req_criteria)
-        if req_criteria["event"] == "benchmark-published":
+        if req_criteria["event"] in ["benchmark-run-completed","benchmark-run-failed"]:
             notifier.benchmark_submission_notifier(req_criteria)
-        if req_criteria["event"] == "search-published":
+        if req_criteria["event"] == "search-records-completed":
             notifier.data_search_notifier(req_criteria)
+        
+        return {"message":"Request successful", "data": None,"count":None},200
+
 
 
 #resource class for API health check

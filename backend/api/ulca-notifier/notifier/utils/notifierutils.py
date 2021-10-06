@@ -1,7 +1,7 @@
 import time
 import logging
 from logging.config import dictConfig
-from configs.configs import MAIL_SENDER,MAIL_SETTINGS
+from configs.configs import MAIL_SENDER
 from app import mail
 from flask_mail import Mail, Message
 from flask import render_template
@@ -15,11 +15,11 @@ class NotifierUtils:
         pass
     
     def generate_email_notification(self,template,template_vars,receiver_list,subject):
-        
+        log.info("Generating email.........")
         timestamp   =   eval(str(time.time()).replace('.', '')[0:13])
         try:
             msg = Message(subject=subject,sender=MAIL_SENDER,recipients=receiver_list)
-            msg.html = render_template(template)
+            msg.html = render_template(template,firstname=template_vars["firstname"],activity_link=template_vars["activity_link"])
             mail.send(msg)
             log.info(f"Generated email notification for {receiver_list} ")
         except Exception as e:

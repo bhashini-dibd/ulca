@@ -3,7 +3,7 @@ import logging
 import random
 import string
 from logging.config import dictConfig
-from configs.configs import kafka_bootstrap_server_host, ds_notifier_event_input_topic,bm_notifier_event_input_topic,search_notifier_event_input_topic, publish_consumer_grp
+from configs.configs import kafka_bootstrap_server_host, notifier_event_input_topic,publish_consumer_grp
 from kafka import KafkaConsumer
 
 
@@ -25,7 +25,7 @@ def instantiate(topics):
 def consumer_to_notify():
     from events.notifier import NotifierEvent
     try:
-        topics          =   [ds_notifier_event_input_topic,bm_notifier_event_input_topic,search_notifier_event_input_topic]
+        topics          =   [notifier_event_input_topic]
         consumer        =   instantiate(topics)
         topic_id        =   ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix          =   "DS-NOTIFIER-" + "(" + topic_id + ")"
@@ -37,12 +37,12 @@ def consumer_to_notify():
                     if data:
                         notofier_event  =   NotifierEvent(data["userID"])
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
-                        if msg.topic == ds_notifier_event_input_topic:
+                        if data["event"] in ["dataset-submit-completed","dataset-submit-failed"]:
                             notofier_event.data_submission_notifier(data)
-                        if msg.topic == search_notifier_event_input_topic:
-                            notofier_event.data_search_notifier(data)
-                        if msg.topic == bm_notifier_event_input_topic:
+                        if data["event"] in ["benchmark-run-completed","benchmark-run-failed"]:
                             notofier_event.benchmark_submission_notifier(data)
+                        if data["event"] == "search-records-completed":
+                            notofier_event.data_search_notifier(data)
                     else:
                         break
                 except Exception as e:
