@@ -46,8 +46,8 @@ const PrivateRoute = ({
   return (
     <Route
       {...rest}
-      render={(props) =>
-        authenticate() ? (
+      render={(props) => {
+        return authenticate() ? (
           title === "Dashboard" ? (
             <Dashboard />
           ) : (
@@ -58,11 +58,11 @@ const PrivateRoute = ({
           <Redirect
             to={{
               pathname: `${process.env.PUBLIC_URL}/user/login`,
-              from: path,
+              from: props.location.pathname,
             }}
           />
-        )
-      }
+        );
+      }}
     />
   );
 };
@@ -108,11 +108,13 @@ export default function App() {
           />
           <Route
             path={`${process.env.PUBLIC_URL}/model/benchmark-datasets`}
-            render={(props) =>
-            <PublicLayout type = {"models"}
-            index={3}
-            component={BenchmarkModels} />
-            }
+            render={(props) => (
+              <PublicLayout
+                type={"models"}
+                index={3}
+                component={BenchmarkModels}
+              />
+            )}
           />
           <Route
             path={`${process.env.PUBLIC_URL}/model/benchmark-details/:benchmarkId`}
