@@ -31,7 +31,7 @@ export const Language = [
     { value: 'hi', label: 'Hindi' },
     { value: 'kn', label: 'Kannada' },
     { value: 'ml', label: 'Malayalam' },
-    { value: 'mr',label: 'Marathi'},
+    { value: 'mr', label: 'Marathi' },
     { value: 'or', label: 'Odia' },
     { value: 'pa', label: 'Punjabi' },
     { value: 'ta', label: 'Tamil' },
@@ -59,6 +59,10 @@ export const Language = [
 export const FilterBy = {
     collectionMethod: [
         {
+            value: 'auto-aligned',
+            label: 'Auto Aligned'
+        },
+        {
             value: 'algorithm-auto-aligned',
             label: 'Algorithm Auto Aligned'
         },
@@ -75,17 +79,17 @@ export const FilterBy = {
             label: 'Human Validated'
 
         },
-       
+
         {
             value: 'manual-human-translated',
             label: 'Manual Human Translated'
         },
-        
+
         {
             value: 'phone-recording',
             label: 'Phone Recording'
         },
-        
+
         {
             value: 'web-scrapping-machine-readable',
             label: 'Web Scrapping Machine Readable'
@@ -132,5 +136,5 @@ export const FilterBy = {
             label: 'Tourism'
         }]
 
-    }
+}
 export default DatasetItems;
