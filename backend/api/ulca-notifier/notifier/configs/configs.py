@@ -21,7 +21,7 @@ process_collection                      =   os.environ.get('ULCA_PROC_TRACKER_PR
 #React-app base url
 base_url                                =   os.environ.get('ULCA_REACT_APP_BASE_URL','https://dev.ulcacontrib.org/')
 ds_contribution_endpoint                =   os.environ.get('ULCA_MYCONTRIBUTION_PATH','dataset/my-contribution/')
-model_bm_contribution_endpoint         =   os.environ.get('ULCA_MYCONTRIBUTION_PATH','model/my-contribution/')
+model_bm_contribution_endpoint          =   os.environ.get('ULCA_MODELS_MYCONTRIBUTION_PATH','model/my-contribution/')
 #gmail server configs
 MAIL_SETTINGS                           =   {
                                                 "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),
@@ -33,3 +33,9 @@ MAIL_SETTINGS                           =   {
                                             }
 MAIL_SENDER                             =   os.environ.get('ULCA_SENDER_EMAIL','xxxxxxxxxx')
 
+#events
+ds_completed                            =   os.environ.get('ULCA_NOTIFIER_DS_SUBMIT_COMPLETED_STATUS','dataset-submit-completed')
+ds_failed                               =   os.environ.get('ULCA_NOTIFIER_DS_SUBMIT_FAILED_STATUS','dataset-submit-failed')
+bm_completed                            =   os.environ.get('ULCA_NOTIFIER_BM_RUN_COMPLETED_STATUS','benchmark-run-completed')
+bm_failed                               =   os.environ.get('ULCA_NOTIFIER_BM_RUN_FAILED_STATUS','benchmark-run-failed')
+search_completed                        =   os.environ.get('ULCA_NOTIFIER_DS_SEARCH_COMPLETED_STATUS','search-records-completed')

@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from events import NotifierEvent
 from flask import request,jsonify
+from configs.configs import ds_completed,ds_failed,bm_completed,bm_failed,search_completed
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -16,11 +17,11 @@ class NotifierResource(Resource):
             return {"message":"Some of the mandatory keys(event, entityID, userID) are missing", "data": None,"count":None},400
         log.info(f'Request received for notifiying user on entityID-{req_criteria["entityID"]}')
         notifier    =   NotifierEvent(req_criteria["userID"])
-        if req_criteria["event"] in ["dataset-submit-completed","dataset-submit-failed"]:
+        if req_criteria["event"] in [ds_completed,ds_failed]:
             notifier.data_submission_notifier(req_criteria)
-        if req_criteria["event"] in ["benchmark-run-completed","benchmark-run-failed"]:
+        if req_criteria["event"] in [bm_completed,bm_failed]:
             notifier.benchmark_submission_notifier(req_criteria)
-        if req_criteria["event"] == "search-records-completed":
+        if req_criteria["event"] == search_completed:
             notifier.data_search_notifier(req_criteria)
         
         return {"message":"Request successful", "data": None,"count":None},200

@@ -2,6 +2,7 @@ import json
 import logging
 import random
 import string
+from configs.configs import ds_completed,ds_failed,bm_completed,bm_failed,search_completed
 from logging.config import dictConfig
 from configs.configs import kafka_bootstrap_server_host, notifier_event_input_topic,publish_consumer_grp
 from kafka import KafkaConsumer
@@ -37,11 +38,11 @@ def consumer_to_notify():
                     if data:
                         notofier_event  =   NotifierEvent(data["userID"])
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
-                        if data["event"] in ["dataset-submit-completed","dataset-submit-failed"]:
+                        if data["event"] in [ds_completed,ds_failed]:
                             notofier_event.data_submission_notifier(data)
-                        if data["event"] in ["benchmark-run-completed","benchmark-run-failed"]:
+                        if data["event"] in [bm_completed,bm_failed]:
                             notofier_event.benchmark_submission_notifier(data)
-                        if data["event"] == "search-records-completed":
+                        if data["event"] == search_completed:
                             notofier_event.data_search_notifier(data)
                     else:
                         break
