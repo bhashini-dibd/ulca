@@ -70,7 +70,7 @@ const ContributionList = (props) => {
     status: "",
   });
   const status = useSelector((state) => state.getBenchMarkDetails.status);
-
+  const $ = require("jquery");
   useEffect(() => {
     (myContributionReport.filteredData.length === 0 ||
       myContributionReport.refreshStatus ||
@@ -100,6 +100,11 @@ const ContributionList = (props) => {
             element.scrollIntoView({
               behavior: "smooth",
             });
+          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+            duration: 1500,
+            iterations: 5,
+            easing: "ease-in-out",
+          });
         }
         dispatchPageAction(i);
         return;

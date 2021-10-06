@@ -69,6 +69,11 @@ const ContributionList = (props) => {
             element.scrollIntoView({
               behavior: "smooth",
             });
+          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+            duration: 1500,
+            iterations: 5,
+            easing: "ease-in-out",
+          });
         }
         dispatchPageAction(i);
         return;
