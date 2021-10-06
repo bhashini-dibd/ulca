@@ -18,6 +18,7 @@ const dateConversion = (value) => {
 }
 
 const getFilterValue = (payload, data) => {
+    debugger
     let { filterValues } = payload
     let languageFilter = []
     let domainFilterValue = []
@@ -44,7 +45,7 @@ const getFilterValue = (payload, data) => {
     }
     if (filterValues && filterValues.hasOwnProperty("submitter") && filterValues.submitter.length > 0) {
         filterResult = domainFilterValue.filter(value => {
-            if (filterValues.submitter.includes(value.domain)) {
+            if (filterValues.submitter.includes(value.submitter)) {
                 return value
             }
         })
@@ -89,13 +90,14 @@ const getContributionList = (state, payload) => {
     let filter = { language: [], domainFilter: [], submitter: [] }
     let refreshStatus = false;
     payload.forEach(element => {
-
+        console.log(element)
         let sLanguage = element.languages.length > 0 && element.languages[0].sourceLanguage && getLanguageName(element.languages[0].sourceLanguage)
         let tLanguage = element.languages && element.languages.length > 0 && element.languages[0].targetLanguage && getLanguageName(element.languages[0].targetLanguage)
         let lang = tLanguage ? (sLanguage + " - " + tLanguage) : sLanguage;
         let domain = getDomainDetails(element.domain)
         responseData.push(
             {
+                version:element.version ?element.version:"v1.0" ,
                 description: element.description,
                 submitRefNumber: element.modelId,
                 modelName: element.name,
@@ -130,7 +132,7 @@ const getContributionList = (state, payload) => {
 
 
     responseData = responseData.reverse()
-    let filteredData = getFilterValue({ "filterValues": state.selectedFilter }, { "responseData": responseData })
+    let filteredData = getFilterValue({ "filterValues": initialState.selectedFilter}, { "responseData": responseData })
     filteredData.filter = filter
     return filteredData
 }

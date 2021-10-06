@@ -1,6 +1,6 @@
 from config import data_db_schema,data_asr_unlabeled
 from repositories import DataRepo
-from utilities import LANG_CODES
+import utilities
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -40,7 +40,7 @@ class AsrUnlabeledModel:
         for data in lang_list:
             attribute = {}
             attribute["value"] = data
-            attribute["label"] = LANG_CODES.get(data)
+            attribute["label"] = utilities.static.LANG_CODES.get(data)
             values.append(attribute)
         return values
     

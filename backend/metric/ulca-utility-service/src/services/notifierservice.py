@@ -1,20 +1,11 @@
-
-import os
+from utilities import datautils
 import config
 import logging
-from datetime import datetime
 from logging.config import dictConfig
-from flask_mail import Mail, Message
-from flask import render_template
-from app import mail
 from repositories import NotifierRepo
 log         =   logging.getLogger('file')
-import csv
-import pytz
 
-IST = pytz.timezone('Asia/Kolkata')
-
-repo = NotifierRepo()
+repo    =   NotifierRepo()
 
 class NotifierService:
 
@@ -22,12 +13,22 @@ class NotifierService:
     def notify_user(self,emails=None):
         try:
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
-            self.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count,"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
+            utility     =   datautils.DataUtils()
+            utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count,"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
 
-    
+    def notify_mismatch(self):
+        log.info("Checking for data mismatch.......")
+        parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
+        mismatch = self.check_for_mismatch(parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count)
+        if not mismatch:
+            log.info("Data is stable ; no mismtach in counts")
+            return None
+        utility     =   datautils.DataUtils()
+        utility.generate_email_notification(mismatch)
+
 
     def calculate_counts(self):
         log.info('Calculating counts!')
@@ -51,7 +52,6 @@ class NotifierService:
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
-            # log.info(aggresult)
             pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
             log.info(f"Pending :{pending_jobs}")
             log.info(f"In-Progress:{inprogress_jobs}")
@@ -61,27 +61,7 @@ class NotifierService:
         except Exception as e:
             log.exception(f'{e}')
 
-    def generate_email_notification(self,data):
-
-        try:
-            users = config.receiver_email_ids.split(',')
-            log.info(f"Generating emails for {users} ") 
-            tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
-            msg         = Message(subject=f" ULCA- Statistics {tdy_date}",
-                              sender=config.MAIL_SENDER,
-                              recipients=users)
-            msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],inprogress=data["inprogress"],pending=data["pending"])
-            file= data["file"]
-            # with open (file,'rb') as fp:
-            #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
-
-            mail.send(msg)
-            os.remove(file)
-            log.info(f"Generated email notifications")
-        except Exception as e:
-            log.exception("Exception while generating email notification for ULCA statistics: " +
-                          str(e))
-
+    
     def process_aggregation_output(self,aggdata):
         try:
             
@@ -108,31 +88,54 @@ class NotifierService:
                     pending = pending +1
                 else:
                     inprogress = inprogress+1
-            csvfile_created = self.write_to_csv(jobs)
+            # csvfile_created = DataUtils.write_to_csv(jobs)
+            csvfile_created = None
             return pending,inprogress,csvfile_created
 
         except Exception as e:
             log.exception(f"Exception:{e}") 
 
-    
-    def write_to_csv(self, data_list):
+    def check_for_mismatch(self,parallel_count,ocr_count,monolingual_count,asr_count,asr_unlabeled_count):
         try:
-            tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d-%H:%M:%S')
-            file = f'{config.shared_storage_path}{tdy_date}.csv'
-            csv_headers = ["serviceRequestNumber","download","ingest","validate","publish"]
-            log.info('Started csv writing !...')
-            with open(file, 'w') as output_file:
-                dict_writer = csv.DictWriter(output_file,fieldnames=csv_headers,extrasaction='ignore')
-                dict_writer.writeheader()
-                for data in data_list:
-                    dict_writer.writerow(data)
-            log.info(f'{len(data_list)} Jobs written to csv -{file}')
-            return file
+            mismatch = []
+            dtypes              =   ["parallel-corpus","ocr-corpus","asr-corpus","monolingual-corpus","asr-unlabeled-corpus"]
+            for data in dtypes:
+                if data == "ocr-corpus":
+                    mongo_count =   ocr_count
+                    request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
+                    label       =   "OCR Dataset"
+
+                if data == "asr-corpus":
+                    mongo_count =   asr_count
+                    request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
+                    label       =   "ASR/TTS Dataset"
+
+                if data == "parallel-corpus":
+                    mongo_count =   parallel_count
+                    request     =   {"type":"parallel-corpus","criterions":[{"field":"sourceLanguage","value":"en"}],"groupby":None}
+                    label       =   "Parallel Dataset"
+                    
+                if data == "monolingual-corpus":
+                    mongo_count =   monolingual_count
+                    request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
+                    label       =   "Monolingual Dataset"
+                             
+                if data == "asr-unlabeled-corpus":
+                    mongo_count =   asr_unlabeled_count
+                    request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
+                    label       =   "ASR Unlabeled Dataset"
+                utility     =   datautils.DataUtils()
+                druid_count =   utility.get_statistics_from_metrics_service(request)
+                print(druid_count)
+                if druid_count == False:
+                    return
+                if (druid_count < (mongo_count-10)) or (druid_count > (mongo_count)):
+                    mismatch.append({"Data Type": label,"Druid Count": druid_count,"Mongo Count": mongo_count})
+            if mismatch:
+                return mismatch
+                
         except Exception as e:
-            log.exception(f'Exception in csv writer: {e}')
-            return
-
-
+            log.info(f"Exception occurred while comparing stats on mongo and druid: {e}")
             
 
 

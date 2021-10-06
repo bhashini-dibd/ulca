@@ -46,6 +46,7 @@ class ProcessTracker:
             if task_event:
                 task_event["details"] = data
                 if error:
+                    log.info(f'ERROR in SEARCH: {error}')
                     task_event["status"] = pt_failed_status
                     task_event["error"] = error
                 else:

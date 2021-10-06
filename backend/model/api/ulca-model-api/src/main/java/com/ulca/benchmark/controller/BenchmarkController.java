@@ -14,13 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.request.BenchmarkListByModelRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
-import com.ulca.benchmark.request.BenchmarkSearchResponse;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
-import com.ulca.benchmark.request.ExecuteBenchmarkResponse;
+import com.ulca.benchmark.response.BenchmarkListByModelResponse;
+import com.ulca.benchmark.response.BenchmarkSearchResponse;
+import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
+import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.service.BenchmarkService;
+import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
+import com.ulca.model.response.ModelListResponseDto;
+import com.ulca.model.response.ModelSearchResponse;
 
 import io.swagger.model.Benchmark;
 import lombok.extern.slf4j.Slf4j;
@@ -54,20 +59,37 @@ public class BenchmarkController {
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 
+	@GetMapping("/getBenchmark")
+	public GetBenchmarkByIdResponse getBenchmarkById( @RequestParam(required = true) String benchmarkId ) {
+		log.info("******** Entry BenchMarkController:: getBenchmarkById *******");
+
+		return benchmarkService.getBenchmarkById(benchmarkId);
+	}
+	
 	@PostMapping("/getByTask")
-	public ResponseEntity<BenchmarkSearchResponse> listBytask(@Valid @RequestBody BenchmarkSearchRequest request) {
+	public ResponseEntity<BenchmarkListByModelResponse> listBytask(@Valid @RequestBody BenchmarkListByModelRequest request) {
 
 		log.info("******** Entry BenchMarkController:: getByTask *******");
 
-		BenchmarkSearchResponse response = benchmarkService.listByTaskID(request);
+		BenchmarkListByModelResponse response = benchmarkService.listByTaskID(request);
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
-	@GetMapping("/getScoreByProcess")
-	public ResponseEntity<BmProcessListByProcessIdResponse> getScorelistByProcess(@RequestParam String benchmarkProcessId){
+	@PostMapping("/search")
+	public BenchmarkSearchResponse searchBenchmark(@Valid @RequestBody BenchmarkSearchRequest request, @RequestParam(required = false) Integer startPage,
+			@RequestParam(required = false) Integer endPage) {
+
+		log.info("******** Entry BenchmarkController:: searchBenchmark *******");
+		return benchmarkService.searchBenchmark(request,startPage,endPage);
+	}
+	
+	
+	
+	@GetMapping("/process/status")
+	public ResponseEntity<BmProcessListByProcessIdResponse> processStatus(@RequestParam String benchmarkProcessId){
 		
-		BmProcessListByProcessIdResponse response = benchmarkService.getScorelistByProcess(benchmarkProcessId);
+		BmProcessListByProcessIdResponse response = benchmarkService.processStatus(benchmarkProcessId);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK); 
 		

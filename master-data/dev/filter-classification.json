@@ -1,0 +1,452 @@
+{
+  "basicFilters": [
+    {
+      "type": "parallel-corpus",
+      "filters": [
+        {
+          "code": "domain",
+          "values": [
+            {
+              "name": "Domain",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionSource",
+          "values": [
+            {
+              "name": "Collection Source",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ocr-corpus",
+      "filters": [
+        {
+          "code": "domain",
+          "values": [
+            {
+              "name": "Domain",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionSource",
+          "values": [
+            {
+              "name": "Collection Source",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "monolingual-corpus",
+      "filters": [
+        {
+          "code": "domain",
+          "values": [
+            {
+              "name": "Domain",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionSource",
+          "values": [
+            {
+              "name": "Collection Source",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "asr-corpus",
+      "filters": [
+        {
+          "code": "domain",
+          "values": [
+            {
+              "name": "Domain",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionSource",
+          "values": [
+            {
+              "name": "Collection Source",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "asr-unlabeled-corpus",
+      "filters": [
+        {
+          "code": "domain",
+          "values": [
+            {
+              "name": "Domain",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionSource",
+          "values": [
+            {
+              "name": "Collection Source",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "advancedFilters": [
+    {
+      "type": "parallel-corpus",
+      "filters": [
+        {
+          "code": "license",
+          "values": [
+            {
+              "name": "License",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "submitterName",
+          "values": [
+            {
+              "name": "Submitter",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionMethod",
+          "values": [
+            {
+              "name": "Collection Method",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "ocr-corpus",
+      "filters": [
+        {
+          "code": "license",
+          "values": [
+            {
+              "name": "License",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "submitterName",
+          "values": [
+            {
+              "name": "Submitter",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionMethod",
+          "values": [
+            {
+              "name": "Collection Method",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "format",
+          "values": [
+            {
+              "name": "Format",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "dpi",
+          "values": [
+            {
+              "name": "DPI",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "imageTextType",
+          "values": [
+            {
+              "name": "Image Text Type",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "monolingual-corpus",
+      "filters": [
+        {
+          "code": "license",
+          "values": [
+            {
+              "name": "License",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "submitterName",
+          "values": [
+            {
+              "name": "Submitter",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionMethod",
+          "values": [
+            {
+              "name": "Collection Method",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "asr-corpus",
+      "filters": [
+        {
+          "code": "license",
+          "values": [
+            {
+              "name": "License",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "submitterName",
+          "values": [
+            {
+              "name": "Submitter",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionMethod",
+          "values": [
+            {
+              "name": "Collection Method",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "channel",
+          "values": [
+            {
+              "name": "Channel",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "format",
+          "values": [
+            {
+              "name": "Format",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "samplingRate",
+          "values": [
+            {
+              "name": "Sampling Rate",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "bitsPerSample",
+          "values": [
+            {
+              "name": "Bits per Sample",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "noOfSpeakers",
+          "values": [
+            {
+              "name": "Number of Speakers",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "age",
+          "values": [
+            {
+              "name": "Age",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "gender",
+          "values": [
+            {
+              "name": "Gender",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "dialect",
+          "values": [
+            {
+              "name": "Dialect",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "asr-unlabeled-corpus",
+      "filters": [
+        {
+          "code": "license",
+          "values": [
+            {
+              "name": "License",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "submitterName",
+          "values": [
+            {
+              "name": "Submitter",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "collectionMethod",
+          "values": [
+            {
+              "name": "Collection Method",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "channel",
+          "values": [
+            {
+              "name": "Channel",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "format",
+          "values": [
+            {
+              "name": "Format",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "samplingRate",
+          "values": [
+            {
+              "name": "Sampling Rate",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "bitsPerSample",
+          "values": [
+            {
+              "name": "Bits per Sample",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "noOfSpeakers",
+          "values": [
+            {
+              "name": "Number of Speakers",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "age",
+          "values": [
+            {
+              "name": "Age",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "gender",
+          "values": [
+            {
+              "name": "Gender",
+              "locale": "en"
+            }
+          ]
+        },
+        {
+          "code": "dialect",
+          "values": [
+            {
+              "name": "Dialect",
+              "locale": "en"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

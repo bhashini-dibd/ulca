@@ -241,7 +241,7 @@ const ChartRender = (props) => {
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
 					
 				} else if (page === 2) {
-					setTitle(`Number of sentences in ${selectedLanguageName}${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
+					setTitle(`Number of sentences in ${selectedLanguageName}${filterValue === "primarySubmitterName"? " by" :" of"} ${event.label?event.label : dataValue }  - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter" : "Domain"}`)
 					setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter": "Domain"})
 					
 				}

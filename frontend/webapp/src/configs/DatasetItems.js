@@ -14,6 +14,15 @@ export const DatasetItems = [
     { value: 'ocr-corpus', label: 'OCR Dataset' },
     { value: 'asr-unlabeled-corpus', label: 'ASR Unlabeled Dataset' }
 ];
+
+export const DatasetReadymade = [
+
+    { value: 'parallel-corpus', label: 'Parallel' },
+    { value: 'monolingual-corpus', label: 'Monolingual' },
+    { value: 'asr-corpus', label: 'ASR' },
+    { value: 'ocr-corpus', label: 'OCR' },
+    { value: 'asr-unlabeled-corpus', label: 'ASR Unlabeled' }
+];
 export const Language = [
     { value: 'as', label: 'Assamese' },
     { value: 'bn', label: 'Bengali' },
@@ -22,7 +31,7 @@ export const Language = [
     { value: 'hi', label: 'Hindi' },
     { value: 'kn', label: 'Kannada' },
     { value: 'ml', label: 'Malayalam' },
-    { value: 'mr',label: 'Marathi'},
+    { value: 'mr', label: 'Marathi' },
     { value: 'or', label: 'Odia' },
     { value: 'pa', label: 'Punjabi' },
     { value: 'ta', label: 'Tamil' },
@@ -50,6 +59,10 @@ export const Language = [
 export const FilterBy = {
     collectionMethod: [
         {
+            value: 'auto-aligned',
+            label: 'Auto Aligned'
+        },
+        {
             value: 'algorithm-auto-aligned',
             label: 'Algorithm Auto Aligned'
         },
@@ -66,17 +79,17 @@ export const FilterBy = {
             label: 'Human Validated'
 
         },
-       
+
         {
             value: 'manual-human-translated',
             label: 'Manual Human Translated'
         },
-        
+
         {
             value: 'phone-recording',
             label: 'Phone Recording'
         },
-        
+
         {
             value: 'web-scrapping-machine-readable',
             label: 'Web Scrapping Machine Readable'
@@ -123,5 +136,5 @@ export const FilterBy = {
             label: 'Tourism'
         }]
 
-    }
+}
 export default DatasetItems;

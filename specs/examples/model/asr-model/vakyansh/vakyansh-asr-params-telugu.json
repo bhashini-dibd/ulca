@@ -1,5 +1,6 @@
 {
     "name": "Vakyansh ASR - Telugu",
+    "version": "v1.0",
     "description": "Vakyansh aims to host the key essentials of Automatic Speech Recognition (ASR) technology, focusing on Indian languages. It is a resource that allows people to build applications that leverage speech recognition. These models are built using the wav2vec 2.0 architecture. We use a self supervised learning approach in which speech representations are learnt in a latent space by masking during audio pretraining. We pretrained on almost 10,000 hours of data in 23 Indic languages. The subsequent ASR models are then finetuned on labelled data.",
     "refUrl": "https://github.com/Open-Speech-EkStep/vakyansh-models",
     "task": {
@@ -87,13 +88,13 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "https://speech-recog-model-api-gateway-new-h3dqga4.ue.gateway.dev/v1/recognize/",
+       "callbackUrl": "https://model-api.vakyansh.in/v1/recognize/te",
        "schema": {
           "taskType": "asr",
           "request": {
-             "audio": {
+             "audio": [{
                 "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_telugu.wav"
-             },
+             }],
              "config": {
                 "audioFormat": "wav",
                 "transcriptionFormat": {

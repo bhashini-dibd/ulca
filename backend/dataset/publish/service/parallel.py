@@ -11,6 +11,7 @@ from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
 from events.metrics import MetricEvent
 from .datasetservice import DatasetService
+import re
 
 
 log = logging.getLogger('file')
@@ -89,8 +90,8 @@ class ParallelService:
                         if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
-                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                                 if metadata["userMode"] != user_mode_pseudo:
+                                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                                     repo.update(dup_data)
                                 return "UPDATE", dup_data, record
                             else:
@@ -131,8 +132,7 @@ class ParallelService:
                 db_query = {"tags": {"$all": query["hash"]}}
             else:
                 db_query = {"tags": {"$in": query["hash"]}}
-            exclude = {"_id": False}
-            data = repo.search_internal(db_query, exclude, None, None)
+            data = repo.search_internal(db_query, None, None, None)
             if data:
                 return data
             else:
@@ -196,7 +196,12 @@ class ParallelService:
                                     db_record[key].append(entry)
                     else:
                         if isinstance(db_record[key], list):
-                            if data[key] not in db_record[key]:
+                            eq = False
+                            for r in db_record[key]:
+                                eq = data[key] == r
+                                if eq:
+                                    break
+                            if not eq:
                                 found = True
                                 db_record[key].append(data[key])
                         else:
@@ -300,10 +305,30 @@ class ParallelService:
             if 'targetLanguage' in query.keys():
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
-            if 'originalSourceSentence' in query.keys():
-                db_query['originalSourceSentence'] = query['originalSourceSentence']
-            else:
-                db_query['originalSourceSentence'] = False
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
+            if 'alignmentTool' in query.keys():
+                tags.extend(query["alignmentTool"])
+            if 'editingTool' in query.keys():
+                tags.extend(query["editingTool"])
+            if 'translationModel' in query.keys():
+                tags.extend(query["translationModel"])
+            if 'license' in query.keys():
+                tags.extend(query["license"])
+            if 'domain' in query.keys():
+                tags.extend(query["domain"])
+            if 'datasetId' in query.keys():
+                tags.extend(query["datasetId"])
+                db_query["derived"] = False
+            if tags:
+                db_query["tags"] = tags
+            if tgt_lang:
+                db_query["targetLanguage"] = tgt_lang
+            if 'collectionSource' in query.keys():
+                coll_source = [re.compile(cs, re.IGNORECASE) for cs in query["collectionSource"]]
+                db_query["collectionSourceQuery"] = {"collectionSource": {"$in": coll_source}}
+            if 'submitterName' in query.keys():
+                db_query["submitterNameQuery"] = {"submitter": {"$elemMatch": {"name": query["submitterName"]}}}
             if 'minScore' in query.keys():
                 score_query["$gte"] = query["minScore"]
             if 'maxScore' in query.keys():
@@ -312,25 +337,14 @@ class ParallelService:
                 db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": score_query}}}
             if 'score' in query.keys():
                 db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": query["score"]}}}
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionSource"])
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
-            if 'license' in query.keys():
-                tags.extend(query["licence"])
-            if 'domain' in query.keys():
-                tags.extend(query["domain"])
-            if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
-                db_query["derived"] = False
-            if tags:
-                db_query["tags"] = tags
-            if tgt_lang:
-                db_query["targetLanguage"] = tgt_lang
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
             else:
                 db_query["multipleContributors"] = False
+            if 'originalSourceSentence' in query.keys():
+                db_query['originalSourceSentence'] = query['originalSourceSentence']
+            else:
+                db_query['originalSourceSentence'] = False
             if 'groupBy' in query.keys():
                 db_query["groupBy"] = query["groupBy"]
                 if 'countOfTranslations' in query.keys():

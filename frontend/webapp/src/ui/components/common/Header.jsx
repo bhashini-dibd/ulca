@@ -41,7 +41,7 @@ const StyledMenu = withStyles({
 ));
 
 const Header = (props) => {
-  const { classes,type,index } = props;
+  const { classes,type,index} = props;
   const [anchorEl, setAnchorEl] = useState(null)
   const [anchorModel, setAnchorModel] = useState(null)
   const [urlLink, setUrlLink] = useState(null)
@@ -50,7 +50,6 @@ const Header = (props) => {
   const history = useHistory();
   const menuType = useSelector(state => state.getMenuInfo.type);
   const value = useSelector(state => state.getMenuInfo.optionSelected);
-
   const { firstName, lastName } = authenticate() ? JSON.parse(localStorage.getItem('userDetails')) : { firstName: "", lastName: "" }
   const handleClose = (e) => {
     setAnchorEl(null)
@@ -168,8 +167,8 @@ const Header = (props) => {
                     } */}
                   </div>
                 }
-                {authenticate() &&
-                  <div className={classes.options}>
+                
+                  <div className={authenticate() ?  classes.options:classes.datasetOption}>
                     <div className={classes.model} style ={type === "models"?{background:"#f5f5f5"}:{}}>
                       <Button className={classes.menuBtn} variant="text" onClick={(e) => handleMenuTypeClick('models')}>
                         Model
@@ -185,7 +184,7 @@ const Header = (props) => {
                       handleMenuItemClick={handleMenuItemClick}
                     /> */}
                   </div>
-                }
+                
               </>
             }
             {
@@ -218,6 +217,7 @@ const Header = (props) => {
                       className={classes.styledMenu}
                       onClick={() => {
                         localStorage.removeItem('userInfo')
+                        localStorage.removeItem('userDetails')
                         handleLogOut('/user/login')
                       }}
                     >
@@ -277,7 +277,7 @@ const Header = (props) => {
           </div>
         </Toolbar>
       </AppBar>
-      {authenticate() &&type&& <SubHeader tabs={menuItems[type]} value={index} handleChange={handleChange} />}
+      {type&& <SubHeader tabs={menuItems[type]} value={index} handleChange={handleChange} />}
       {open && <Dialog
         title={"Not Signed In"}
         open={open}

@@ -6,7 +6,6 @@ import config
 import logging
 from flask_mail import Mail
 from services.status_updater_cron import StatusCronProcessor
-from services.filterupdateservice import FilterCronProcessor
 import config
 log = logging.getLogger('file')
 from logging.config import dictConfig
@@ -22,8 +21,8 @@ if config.ENABLE_CORS:
 
 def start_cron():
     with app.test_request_context():
-        cron = StatusCronProcessor(threading.Event())
-        cron.start()
+        statcron    =    StatusCronProcessor(threading.Event())
+        statcron.start()
 
 for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):
@@ -31,9 +30,7 @@ for blueprint in vars(routes).values():
 
 
 if __name__ == "__main__":
-    # start_cron()
-    # cron = FilterCronProcessor(threading.Event())
-    # cron.start()
+    start_cron()
     app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
     
 # Log config

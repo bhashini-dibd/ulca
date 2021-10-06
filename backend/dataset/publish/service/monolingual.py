@@ -1,5 +1,6 @@
 import logging
 import multiprocessing
+import re
 import time
 from datetime import datetime
 from functools import partial
@@ -88,8 +89,8 @@ class MonolingualService:
             if record:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, mono_immutable_keys, mono_updatable_keys, mono_non_tag_keys)
                 if dup_data:
-                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                     if metadata["userMode"] != user_mode_pseudo:
+                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                         repo.update(dup_data)
                     return "UPDATE", dup_data, record
                 else:
@@ -114,8 +115,7 @@ class MonolingualService:
     '''
     def get_monolingual_dataset_internal(self, query):
         try:
-            exclude = {"_id": False}
-            data = repo.search(query, exclude, None, None)
+            data = repo.search(query, None, None, None)
             if data:
                 return data[0]
             else:
@@ -137,16 +137,19 @@ class MonolingualService:
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionMode"])
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
             if 'license' in query.keys():
-                tags.extend(query["licence"])
+                tags.extend(query["license"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
+                tags.extend(query["datasetId"])
+            if 'collectionSource' in query.keys():
+                coll_source = [re.compile(cs, re.IGNORECASE) for cs in query["collectionSource"]]
+                db_query["collectionSource"] = {"$in": coll_source}
+            if 'submitterName' in query.keys():
+                db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
             if 'multipleContributors' in query.keys():
                 if query['multipleContributors']:
                     db_query[f'collectionMethod.1'] = {"$exists": True}
