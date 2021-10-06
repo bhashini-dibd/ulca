@@ -202,7 +202,7 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/my-searches`}
+            path={`${process.env.PUBLIC_URL}/my-searches/:added?`}
             component={MySearches}
             authenticate={authenticateUser}
             currentMenu="submit-dataset"
