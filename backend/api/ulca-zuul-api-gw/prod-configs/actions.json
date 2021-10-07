@@ -223,6 +223,14 @@
             "active":true,
             "whiteList":true,
             "description":"API to compute asr models"
+        },
+        {
+            "id":"7c000df6-5c72-48ca-950d-0f2ca1691a9b",
+            "uri":"/ulca/notifier/v0/notify/user",
+            "module":"NOTIFIER",
+            "active":true,
+            "whiteList":true,
+            "description":"API to send email notifs"
         }
     ]
 }
