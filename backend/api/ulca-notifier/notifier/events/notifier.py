@@ -1,7 +1,7 @@
 import logging
 from logging.config import dictConfig
 from configs import StaticConfigs
-from configs.configs import base_url,ds_contribution_endpoint,model_bm_contribution_endpoint
+from configs.configs import base_url,ds_contribution_endpoint,model_bm_contribution_endpoint,ds_search_list_endpoint
 from utils.notifierutils import NotifierUtils
 from repository import NotifierRepo
 log     =   logging.getLogger('file')
@@ -48,7 +48,7 @@ class NotifierEvent:
                 template        =   'search_success.html'
                 receiver_list   =   [self.user_email]
                 subject         =   StaticConfigs.DS_SEARCH_COMPLETE.value
-            link                =   f'{base_url}{ds_contribution_endpoint}{data["entityID"]}'
+            link                =   f'{base_url}{ds_search_list_endpoint}{data["entityID"]}'
             template_vars       =   {"firstname":self.user_name,"activity_link":link}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)

@@ -20,8 +20,9 @@ process_db                              =   os.environ.get('ULCA_PROC_TRACKER_DB
 process_collection                      =   os.environ.get('ULCA_PROC_TRACKER_PROC_COL', "ulca-pt-processes")
 #React-app base url
 base_url                                =   os.environ.get('ULCA_REACT_APP_BASE_URL','https://dev.ulcacontrib.org/')
-ds_contribution_endpoint                =   os.environ.get('ULCA_MYCONTRIBUTION_PATH','dataset/my-contribution/')
+ds_contribution_endpoint                =   os.environ.get('ULCA_DS_MYCONTRIBUTION_PATH','dataset/my-contribution/')
 model_bm_contribution_endpoint          =   os.environ.get('ULCA_MODELS_MYCONTRIBUTION_PATH','model/my-contribution/')
+ds_search_list_endpoint                 =   os.environ.get('ULCA_DS_MYSEARCHES_PATH','my-searches/')
 #gmail server configs
 MAIL_SETTINGS                           =   {
                                                 "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),
