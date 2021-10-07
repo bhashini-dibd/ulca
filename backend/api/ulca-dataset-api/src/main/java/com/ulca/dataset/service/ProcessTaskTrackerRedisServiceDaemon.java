@@ -48,6 +48,9 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	@Autowired
 	DatasetFileService datasetFileService;
 	
+	@Autowired
+	NotificationService notificationService;
+	
 	@Scheduled(cron = "*/10 * * * * *")
 	public void updateTaskTracker() {
 		
@@ -311,6 +314,11 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			
 			//upload submitted-datasets file to object store and delete the file
 			datasetFileService.datasetAfterIngestCleanJob(serviceRequestNumber);
+			
+			String datasetName = val.get("datasetName");
+			String userId = val.get("userId");
+			
+			notificationService.notifyDatasetComplete(serviceRequestNumber, datasetName, userId);
 		}
 
 	}
