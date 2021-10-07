@@ -20,8 +20,8 @@ public class SearchCriteria {
 
 	private String serviceRequestNumber;
 	private String datasetType;
-
-	// List of String --
+	private String userId;
+	
 	private List<String> sourceLanguage;
 	private List<String> targetLanguage;
 	private List<String> collectionMethod;
@@ -42,17 +42,14 @@ public class SearchCriteria {
 	private List<String> dpi;
 	private List<String> imageTextType;
 
-	// String --
 	private String collectionSource;
 	private String submitterName;
 
-	// Float --
 	private Float minScore;
 	private Float maxScore;
 	private Float score;
 	private Float samplingRate;
-
-	// Integer --
+	
 	private Integer countOfTranslations;
 	private Integer minNoOfSpeakers;
 	private Integer maxNoOfSpeakers;
@@ -61,9 +58,8 @@ public class SearchCriteria {
 	private Integer maxAge;
 	private Integer age;
 
-	// Boolean --
 	private Boolean multipleContributors;
 	private Boolean originalSourceSentence;
 	private Boolean groupBy;
-
+	
 }
