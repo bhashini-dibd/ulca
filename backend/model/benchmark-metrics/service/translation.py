@@ -23,6 +23,9 @@ class TranslationMetricEvalHandler:
                     metric_inst = metric_mgr.get_metric_execute(benchmark["metric"])
                     if not metric_inst:
                         log.info("Metric definition not found")
+                        doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}
+                        repo.insert(doc)
+                        repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
                         return
 
                     ground_truth = [corpus_sentence["tgt"] for corpus_sentence in benchmark["corpus"]]
@@ -31,14 +34,20 @@ class TranslationMetricEvalHandler:
                     if eval_score:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': float(np.round(eval_score, 3))}
                         repo.insert(doc)
+                        repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Completed'})
                     else:
                         log.exception("Exception while metric evaluation of model")
+                        doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}
+                        repo.insert(doc)
+                        repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
                                
             else:
-                log.info("Missing parameter: benchmark details")
+                log.exception("Missing parameter: benchmark details")
+                repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
                 return
         except Exception as e:
             log.exception(f"Exception while metric evaluation of model: {str(e)}")
+            repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
            
 # Log config
 dictConfig({

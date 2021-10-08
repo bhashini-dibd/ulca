@@ -1,2 +1,5 @@
 from .translation_bleu_score_eval import TranslationBLEUScoreEval
 from .asr_wer_eval import ASRWEREval
+from .translation_meteor_score import TranslationMeteorScoreEval
+from .translation_rouge_score import TranslationRougeScoreEval
+from .translation_bert_score_eval import TranslationBertScoreEval
