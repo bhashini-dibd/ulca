@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class NotificationService {
 	
 	@Autowired
-	private KafkaTemplate<String, String> datasetNotificationKafkaTemplate;
+	private KafkaTemplate<String, String> datasetErrorKafkaTemplate;
 
 	
 	
@@ -28,7 +28,7 @@ public class NotificationService {
 		msg.put("details", datasetName);
 		msg.put("details", details);
 		
-		datasetNotificationKafkaTemplate.send(notifierTopic, msg.toString());
+		datasetErrorKafkaTemplate.send(notifierTopic, msg.toString());
 		
 	}
 	
@@ -42,7 +42,7 @@ public class NotificationService {
 		msg.put("details", datasetName);
 		msg.put("details", details);
 		
-		datasetNotificationKafkaTemplate.send(notifierTopic, msg.toString());
+		datasetErrorKafkaTemplate.send(notifierTopic, msg.toString());
 		
 	}
 
