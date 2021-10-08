@@ -51,13 +51,13 @@ class ProcessTracker:
                     log.info(f'ERROR in SEARCH: {error}')
                     task_event["status"] = pt_failed_status
                     task_event["error"] = error
-                    #notifier.create_notifier_event(data["serviceRequestNumber"], data["userID"], 0)
+                    notifier.create_notifier_event(data["serviceRequestNumber"], data["userID"], 0)
                 else:
                     task_event["status"] = pt_success_status
                 task_event["lastModifiedTime"] = str(datetime.now())
                 task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
-                #notifier.create_notifier_event(data["serviceRequestNumber"], data["userID"], data["count"])
+                notifier.create_notifier_event(data["serviceRequestNumber"], data["userID"], data["count"])
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool,
                               "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
