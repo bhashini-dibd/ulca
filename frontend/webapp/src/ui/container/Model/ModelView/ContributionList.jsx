@@ -70,7 +70,7 @@ const ContributionList = (props) => {
     status: "",
   });
   const status = useSelector((state) => state.getBenchMarkDetails.status);
-
+  const $ = require("jquery");
   useEffect(() => {
     (myContributionReport.filteredData.length === 0 ||
       myContributionReport.refreshStatus ||
@@ -85,6 +85,33 @@ const ContributionList = (props) => {
     }
   });
 
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].submitRefNumber === added) {
+        let page = Math.floor(i / PageInfo.count);
+        async function dispatchPageAction(i) {
+          await dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
+          let element = await document.getElementById(
+            `MUIDataTableBodyRow-${i}`
+          );
+          let oldIndex = index;
+          setIndex([...oldIndex, i]);
+          element &&
+            element.scrollIntoView({
+              behavior: "smooth",
+            });
+          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+            duration: 1500,
+            iterations: 5,
+            easing: "ease-in-out",
+          });
+        }
+        dispatchPageAction(i);
+        return;
+      }
+    }
+  }, [data]);
+
   // useEffect(() => {
   //   document.querySelectorAll(`button`).forEach((element) => {
   //     element.classList.forEach((list) => {
@@ -95,7 +122,7 @@ const ContributionList = (props) => {
   //   });
   // }, []);
 
-  // console.log(index);
+  console.log(index);
 
   const MyContributionListApi = () => {
     dispatch(ClearReport());
@@ -158,7 +185,7 @@ const ContributionList = (props) => {
             onClick={handleShowFilter}
           >
             {" "}
-            <FilterListIcon className={classes.iconStyle}/>
+            <FilterListIcon className={classes.iconStyle} />
             Filter
           </Button>
         </Grid>
@@ -308,7 +335,22 @@ const ContributionList = (props) => {
     setModelStatusInfo({ status, modelId });
   };
 
-  const renderActionButtons = (status, type, domain, modelId) => {
+  const isDisabled = (benchmarkPerformance) => {
+    for (let i = 0; i < benchmarkPerformance.length; i++) {
+      if (benchmarkPerformance[i].status === "In-Progress") {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const renderActionButtons = (
+    benchmarkPerformance,
+    status,
+    type,
+    domain,
+    modelId
+  ) => {
     if (status !== "failed" && status !== "In Progress") {
       return (
         <Grid container spacing={1}>
@@ -331,7 +373,11 @@ const ContributionList = (props) => {
               variant="contained"
               className={classes.benchmarkActionButtons}
               disabled={
-                status === "failed" || status === "In Progress" ? true : false
+                status === "failed" ||
+                status === "In Progress" ||
+                isDisabled(benchmarkPerformance)
+                  ? true
+                  : false
               }
               style={{
                 color: status === "published" ? "#F54336" : "#139D60",
@@ -494,6 +540,7 @@ const ContributionList = (props) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
             return renderActionButtons(
+              tableMeta.rowData[9],
               tableMeta.rowData[7],
               tableMeta.rowData[1],
               tableMeta.rowData[4],

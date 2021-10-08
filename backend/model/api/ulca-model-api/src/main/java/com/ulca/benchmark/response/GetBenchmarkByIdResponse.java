@@ -20,6 +20,7 @@ import lombok.Setter;
 
 public class GetBenchmarkByIdResponse extends Benchmark {
 
+	private List<String> metric;
 	List<BenchmarkProcess> benchmarkPerformance ;
 	
 }

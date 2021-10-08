@@ -77,7 +77,6 @@ public class AsrBenchmark {
 			byte[] base64audioContent)
 			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 
-		log.info("calling the inference end point");
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
@@ -107,8 +106,6 @@ public class AsrBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
 
-			log.info("response CallBackUrl:: ");
-			log.info(responseStr);
 			ASRResponse asrResponse = new ASRResponse();
 			Sentences sentences = new Sentences();
 			Sentence sentence = new Sentence();
@@ -155,21 +152,6 @@ public class AsrBenchmark {
 			String audioPath = baseLocation + audioFilename;
 			
 			byte[] bytes = Files.readAllBytes(Paths.get(audioPath));
-			//byte[] bytes = FileUtils.readFileToByteArray(new File(audioPath));
-			
-
-			//String encoded = Base64.getEncoder().encodeToString(bytes, 0);                                       
-
-			//byte[] decoded = Base64.getDecoder().decode(encoded, 0);
-			//String resultText = compute(callBackUrl, schema, Base64.getMimeEncoder().encode(bytes));
-			
-			// Encode the speech.
-			//byte[] encodedAudio = Base64.encodeBase64(audio.getBytes());
-		
-			
-			//byte[] encodedAudio = Base64.encodeBase64(bytes);
-			
-			//String resultText = compute(callBackUrl, schema, encodedAudio);
 			
 			AsrComputeRequest request = new AsrComputeRequest();
 			request.setCallbackUrl(callBackUrl);
