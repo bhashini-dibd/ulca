@@ -86,7 +86,7 @@ public class BenchmarkService {
 
 		log.info("******** Entry BenchmarkService:: executeBenchmark *******");
 
-		String serviceRequestNumber = Utility.getBenchmarkExecuteReferenceNumber();
+		
 		String modelId = request.getModelId();
 		Optional<ModelExtended> model = modelDao.findById(modelId);
 		if(model.isEmpty()) {
@@ -94,6 +94,8 @@ public class BenchmarkService {
 		}
 		
 		ModelExtended modelExtended = model.get();
+		
+		List<String> benchmarkProcessIds = new ArrayList<String>();
 
 		for (BenchmarkMetricRequest bm : request.getBenchmarks()) {
 			Benchmark benchmark = benchmarkDao.findByBenchmarkId(bm.getBenchmarkId());
@@ -105,6 +107,8 @@ public class BenchmarkService {
 				String message = "Benchmark has already been executed for benchmarkId : " + bm.getBenchmarkId() + " and metric : " + bm.getMetric();
 				throw new BenchmarkNotAllowedException(message);
 			}
+			String serviceRequestNumber = Utility.getBenchmarkExecuteReferenceNumber();
+			
 			BenchmarkProcess bmProcess = new BenchmarkProcess();
 			bmProcess.setBenchmarkDatasetId(bm.getBenchmarkId());
 			bmProcess.setBenchmarkProcessId(serviceRequestNumber);
@@ -116,15 +120,17 @@ public class BenchmarkService {
 			bmProcess.setCreatedOn(new Date().toString());
 			bmProcess.setLastModifiedOn(new Date().toString());
 			benchmarkprocessDao.save(bmProcess);
+			
+			BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
+			benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
+			benchmarkProcessIds.add(serviceRequestNumber);
 
 		}
 
-		BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
-
-		benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
+		
 
 		ExecuteBenchmarkResponse response = new ExecuteBenchmarkResponse();
-		response.setBenchmarkProcessId(serviceRequestNumber);
+		response.setBenchmarkProcessIds(benchmarkProcessIds);
 
 		log.info("******** Exit BenchmarkService:: executeBenchmark *******");
 
@@ -215,7 +221,10 @@ public class BenchmarkService {
 	
 	public BmProcessListByProcessIdResponse processStatus(String benchmarkProcessId ){
 		
-		List<BenchmarkProcess> list =  benchmarkprocessDao.findByBenchmarkProcessId(benchmarkProcessId);
+		BenchmarkProcess benchmarkProcess =  benchmarkprocessDao.findByBenchmarkProcessId(benchmarkProcessId);
+		
+		List<BenchmarkProcess> list = new ArrayList<BenchmarkProcess>();
+		list.add(benchmarkProcess);
 		
 		BmProcessListByProcessIdResponse response = new BmProcessListByProcessIdResponse("Benchmark Process list", list, list.size());
 		
