@@ -17,7 +17,7 @@ class TranslationRougeScoreEval(ModelMetricEval):
         try:
             for gt,mt in zip(ground_truth,machine_translation):
                 score = self.rouge.get_scores(gt,mt,avg=True)
-                score = score[0]['rouge-l']['f']
+                score = score['rouge-l']['f']
                 rougescore.append(score)
             #score = rouge.get_scores(ground_truth,machine_translation,avg=True)
             return statistics.mean(rougescore)
