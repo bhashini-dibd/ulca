@@ -1,5 +1,5 @@
 import logging
-import rouge
+from rouge import Rouge
 from logging.config import dictConfig
 import statistics
 from models.model_metric_eval import ModelMetricEval
@@ -9,14 +9,14 @@ log = logging.getLogger('file')
 class TranslationRougeScoreEval(ModelMetricEval):
 
     def __init__(self):
-        pass
+        self.rouge = Rouge()
 
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation):
         rougescore = []
         try:
             for gt,mt in zip(ground_truth,machine_translation):
-                score = rouge.get_scores(gt,mt,avg=True)
+                score = self.rouge.get_scores(gt,mt,avg=True)
                 score = score[0]['rouge-l']['f']
                 rougescore.append(score)
             #score = rouge.get_scores(ground_truth,machine_translation,avg=True)
