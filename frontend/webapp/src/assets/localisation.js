@@ -52,6 +52,9 @@ const localization_EN_Data = {
   "label.datasetStoredMsg": "Provide the URL where the dataset is stored at.",
   "label.urlDownload": "Make sure the URL is a direct download link.",
   "label.datasetName": "Provide a meaningful name to your dataset.",
+  "label.modelLeaderboard": "Model Leaderboard",
+  "button.close": "Close",
+  "label.engHinCorpus": "English-Hindi Parallel Text Corpus",
 };
 
 export function translate(locale_text) {
