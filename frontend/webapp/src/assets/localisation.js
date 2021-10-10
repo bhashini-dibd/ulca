@@ -27,6 +27,7 @@ const localization_EN_Data = {
   "label.dataset": "Dataset",
   "label.model": "Model",
   "label.logOut": "Log out",
+  "button.gotoMyContrib": "Go to My Contribution",
 };
 
 export function translate(locale_text) {
