@@ -23,6 +23,10 @@ const localization_EN_Data = {
   "label.address": "Address",
   "label.mail": "Mail",
   "label.web": "Web",
+  "label.ulca": "ULCA",
+  "label.dataset": "Dataset",
+  "label.model": "Model",
+  "label.logOut": "Log out",
 };
 
 export function translate(locale_text) {
