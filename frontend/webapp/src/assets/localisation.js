@@ -47,6 +47,11 @@ const localization_EN_Data = {
   "button.submit": "Submit",
   "button.submitDataset": "Submit Dataset",
   "label.howToSubmit": "How to submit dataset?",
+  "label.zipFormatMsg": "Make sure the dataset is available in .zip format.",
+  "link.googleDriveLink": "https://sites.google.com/site/gdocs2direct/home",
+  "label.datasetStoredMsg": "Provide the URL where the dataset is stored at.",
+  "label.urlDownload": "Make sure the URL is a direct download link.",
+  "label.datasetName": "Provide a meaningful name to your dataset.",
 };
 
 export function translate(locale_text) {

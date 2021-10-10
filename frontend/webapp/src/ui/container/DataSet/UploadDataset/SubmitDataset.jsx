@@ -147,17 +147,17 @@ const SubmitDataset = (props) => {
         <ul>
           <li>
             <Typography className={classes.marginValue} variant="body2">
-              Provide a meaningful name to your dataset.
+              {translate("label.datasetName")}
             </Typography>
           </li>
           <li>
             <Typography className={classes.marginValue} variant="body2">
-              Provide the URL where the dataset is stored at.
+              {translate("label.datasetStoredMsg")}
             </Typography>
           </li>
           <li>
             <Typography className={classes.marginValue} variant="body2">
-              Make sure the URL is a direct download link.
+              {translate("label.urlDownload")}
             </Typography>
           </li>
           <li>
@@ -168,14 +168,14 @@ const SubmitDataset = (props) => {
                 href="https://sites.google.com/site/gdocs2direct/home"
               >
                 {" "}
-                https://sites.google.com/site/gdocs2direct/home{" "}
+                {translate("link.googleDriveLink")}{" "}
               </Link>
               to generate a direct download link.
             </Typography>
           </li>
           <li>
             <Typography className={classes.marginValue} variant="body2">
-              Make sure the dataset is available in .zip format.
+              {translate("label.zipFormatMsg")}
             </Typography>
           </li>
         </ul>
