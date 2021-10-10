@@ -28,6 +28,14 @@ const localization_EN_Data = {
   "label.model": "Model",
   "label.logOut": "Log out",
   "button.gotoMyContrib": "Go to My Contribution",
+  "label.totalCount": "Total Count",
+  "label.noRecordsFound": "No records found.",
+  "button.refresh": "Refresh",
+  "button.backToMySearch": "Back to My Searches",
+  "label.searchQueryMsg": "Your search query has been submitted.",
+  "label.serviceReqNo": "Your Service Request Number is",
+  "label.searchResult": "The result will be displayed once it is ready.",
+  "label.searchResultHere": "Your search result will appear here  ",
 };
 
 export function translate(locale_text) {

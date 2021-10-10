@@ -19,6 +19,7 @@ import FilterList from "../DatasetView/FilterList";
 import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValue from '../../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues';
 import { useParams } from "react-router";
+import { translate } from "../../../../assets/localisation";
 
 
 const MySearches = (props) => {
@@ -105,7 +106,7 @@ const MySearches = (props) => {
             onClick={() => MySearchListApi()}
           >
             <Cached className={classes.iconStyle} />
-            Refresh
+            {translate("button.refresh")}
           </Button>
         </Grid>
       </Grid>
