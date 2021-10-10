@@ -36,6 +36,17 @@ const localization_EN_Data = {
   "label.serviceReqNo": "Your Service Request Number is",
   "label.searchResult": "The result will be displayed once it is ready.",
   "label.searchResultHere": "Your search result will appear here  ",
+  "button.errorSummary": "Error Summary",
+  "button.detailErrorLog": "Detailed Error Logs",
+  "button.clearAll": "Clear All",
+  "label.datasetType": "Dataset Type",
+  "label.status": "Status",
+  "button.apply": "Apply",
+  "label.myContrib": "My Contribution",
+  "button.filter": "Filter",
+  "button.submit": "Submit",
+  "button.submitDataset": "Submit Dataset",
+  "label.howToSubmit": "How to submit dataset?",
 };
 
 export function translate(locale_text) {
