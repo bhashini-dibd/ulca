@@ -55,6 +55,12 @@ const localization_EN_Data = {
   "label.modelLeaderboard": "Model Leaderboard",
   "button.close": "Close",
   "label.engHinCorpus": "English-Hindi Parallel Text Corpus",
+  "label.congratulations": "Congratulations",
+  "label.emailVerifiedMsg": "Your email address has been verified. ",
+  "link.proceedToLogin": "Proceed to login.",
+  "label.ulcaFullForm": "Universal Language Contribution API",
+  "label.ulcaInfo":
+    "ULCA is an open-sourced API and data platform to collect, curate and discover datasets in Indian languages.",
 };
 
 export function translate(locale_text) {
