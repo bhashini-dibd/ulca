@@ -37,6 +37,7 @@ import {
 } from "../../../../redux/actions/api/DataSet/DatasetSearch/GetFilters";
 import SingleAutoComplete from "../../../components/common/SingleAutoComplete";
 import { filterItems } from '../../../../configs/filterItems';
+import SearchDescription from "./SearchDescription";
 
 const StyledMenu = withStyles({})((props) => (
     <Menu
@@ -678,9 +679,8 @@ const SearchAndDownloadRecords = (props) => {
         });
         return renderFilter;
     };
-
-    return (
-        <div>
+    const renderFilters = () => {
+        return (
             <Grid container spacing={3}>
                 <Grid
                     className={classes.leftSection}
@@ -871,6 +871,40 @@ const SearchAndDownloadRecords = (props) => {
                     {renderPage()}
                 </Grid>
             </Grid>
+
+        )
+    }
+    const renderPostSubmit = () => {
+        return (
+            <Grid container spacing={3}>
+                <Grid
+                    className={classes.leftSection}
+                    item
+                    xs={12}
+                    sm={5}
+                    md={4}
+                    lg={4}
+                    xl={4}
+                >
+                    {data[0].searchInfo.map((val) => <SearchDescription title={val.title} para={val.para} />)}
+                </Grid>
+                <Grid
+                    item
+                    xs={12}
+                    sm={7}
+                    md={8}
+                    lg={8}
+                    xl={8}
+                    className={classes.parent}
+                >
+                    {renderPage()}
+                </Grid>
+            </Grid>
+        )
+    }
+    return (
+        <div>
+            {params === 'completed' ? renderPostSubmit() : renderFilters()}
             {snackbar.open && (
                 <Snackbar
                     open={snackbar.open}

@@ -5,7 +5,7 @@ import {
   FilterByCollection,
 } from "../../../../utils/getLabel";
 import getDatasetName from "../../../../utils/getDataset";
-
+import { translate } from '../../../../assets/localisation';
 const initialState = {
   responseData: [],
   filteredData: [],
@@ -24,6 +24,21 @@ const dateConversion = (value) => {
   });
   return result.toUpperCase();
 };
+
+const getSearchInfo = (searchCriteria) => {
+  let result = []
+  const keys = Object.keys(searchCriteria);
+  const keysToIgnore = ['groupBy', 'multipleContributors', 'originalSourceSentence', 'serviceRequestNumber']
+  keys.forEach((key, i) => {
+    if (keysToIgnore.indexOf(key) < 0 && searchCriteria[key]!==undefined) {
+      result.push({
+        title: translate(key),
+        para: Array.isArray(searchCriteria[key])?searchCriteria[key].join(','):searchCriteria[key]
+      })
+    }
+  })
+  return result
+}
 
 const getMySearches = (payload) => {
   let newArr = [];
@@ -55,11 +70,9 @@ const getMySearches = (payload) => {
           .join(", ");
       newArr.push({
         sr_no: element.serviceRequestNumber,
-        search_criteria: `${dataSet} | ${langauge} ${
-          tLanguage ? " | " + tLanguage : ""
-        } ${domain ? " | " + domain : ""} ${
-          collection ? " | " + collection : ""
-        }`,
+        search_criteria: `${dataSet} | ${langauge} ${tLanguage ? " | " + tLanguage : ""
+          } ${domain ? " | " + domain : ""} ${collection ? " | " + collection : ""
+          }`,
         searched_on: dateConversion(element.timestamp),
         status: element.status.length > 0 && element.status[0].status,
 
@@ -71,7 +84,8 @@ const getMySearches = (payload) => {
         // datasetType: element.searchCriteria.datasetType,
         // domain: element.searchCriteria.domain,
         // collection: element.searchCriteria.collectionMethod,
-        searchValues:element.searchCriteria
+        searchValues: element.searchCriteria,
+        searchInfo: getSearchInfo(element.searchCriteria)
       });
     }
   });
