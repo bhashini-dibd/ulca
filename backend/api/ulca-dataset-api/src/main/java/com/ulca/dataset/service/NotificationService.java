@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class NotificationService {
 	
 	@Autowired
 	private KafkaTemplate<String, String> datasetNotificationKafkaTemplate;
 
-	
-	
 	@Value("${kafka.ulca.notifier.consumer.ip.topic}")
 	private String notifierTopic;
 	
@@ -25,7 +26,7 @@ public class NotificationService {
 		msg.put("userID", userId);
 		
 		JSONObject details = new JSONObject();
-		msg.put("details", datasetName);
+		details.put("datasetName", datasetName);
 		msg.put("details", details);
 		
 		datasetNotificationKafkaTemplate.send(notifierTopic, msg.toString());
@@ -39,7 +40,7 @@ public class NotificationService {
 		msg.put("userID", userId);
 		
 		JSONObject details = new JSONObject();
-		msg.put("details", datasetName);
+		details.put("datasetName", datasetName);
 		msg.put("details", details);
 		
 		datasetNotificationKafkaTemplate.send(notifierTopic, msg.toString());

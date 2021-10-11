@@ -18,6 +18,7 @@ import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.TaskTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
+import com.ulca.dataset.service.NotificationService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -312,13 +313,14 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			taskTrackerRedisDao.delete(serviceRequestNumber);
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			
-			//upload submitted-datasets file to object store and delete the file
-			datasetFileService.datasetAfterIngestCleanJob(serviceRequestNumber);
-			
 			String datasetName = val.get("datasetName");
 			String userId = val.get("userId");
+			log.info("sending notification to user. userId : " + userId + " datasetName : " + datasetName + " serviceRequestNumber : " + serviceRequestNumber);
 			
 			notificationService.notifyDatasetComplete(serviceRequestNumber, datasetName, userId);
+			
+			//upload submitted-datasets file to object store and delete the file
+			datasetFileService.datasetAfterIngestCleanJob(serviceRequestNumber);
 		}
 
 	}
