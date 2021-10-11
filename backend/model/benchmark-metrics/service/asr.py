@@ -2,11 +2,13 @@ import logging
 from datetime import datetime
 import numpy as np
 from logging.config import dictConfig
-
+from kafkawrapper.producer import Producer
 from models.metric_manager import MetricManager
 from utils.mongo_utils import BenchMarkingProcessRepo
+from configs.configs import ulca_notifier_input_topic, ulca_notifier_benchmark_completed_event, ulca_notifier_benchmark_failed_event
 
 log = logging.getLogger('file')
+prod = Producer()
 repo = BenchMarkingProcessRepo()
 
 
@@ -26,6 +28,8 @@ class ASRMetricEvalHandler:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
+                        mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['benchmarkingProcessId'], "userID": request['userId']}
+                        prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                         return
 
                     ground_truth = [corpus_sentence["tgt"] for corpus_sentence in benchmark["corpus"]]
@@ -35,18 +39,26 @@ class ASRMetricEvalHandler:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': float(np.round(eval_score, 3))}
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Completed'})
+                        mail_notif_event = {"event": ulca_notifier_benchmark_completed_event, "entityID": request['benchmarkingProcessId'], "userID": request['userId']}
+                        prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                     else:
                         log.exception("Exception while metric evaluation of model")
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
+                        mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['benchmarkingProcessId'], "userID": request['userId']}
+                        prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
             else:
                 log.exception("Missing parameter: benchmark details")
                 repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
+                mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['benchmarkingProcessId'], "userID": request['userId']}
+                prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                 return
         except Exception as e:
             log.exception(f"Exception while metric evaluation of model: {str(e)}")
             repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
+            mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['benchmarkingProcessId'], "userID": request['userId']}
+            prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
 
 # Log config
 dictConfig({
