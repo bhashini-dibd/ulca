@@ -132,6 +132,7 @@ public class AsrBenchmark {
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+		String userId = model.getUserId();
 		reader.beginArray();
 		
 		List<String> ip = new ArrayList<String>();
@@ -185,6 +186,7 @@ public class AsrBenchmark {
 		JSONObject benchmarkDataset  = new JSONObject();
 		benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
 		benchmarkDataset.put("metric", metric);
+		benchmarkDataset.put("userId", userId);
 		benchmarkDataset.put("corpus", corpus);
 		benchmarkDatasets.put(benchmarkDataset);
 
