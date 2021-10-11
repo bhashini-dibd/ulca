@@ -186,13 +186,13 @@ public class AsrBenchmark {
 		JSONObject benchmarkDataset  = new JSONObject();
 		benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
 		benchmarkDataset.put("metric", metric);
-		benchmarkDataset.put("userId", userId);
 		benchmarkDataset.put("corpus", corpus);
 		benchmarkDatasets.put(benchmarkDataset);
 
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
+		metricRequest.put("userId", userId);
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
 		log.info("total recoords :: " + totalRecords + " failedRecords :: " + failedRecords);
