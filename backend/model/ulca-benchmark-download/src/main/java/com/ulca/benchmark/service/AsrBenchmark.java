@@ -10,11 +10,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Base64;
+import java.util.Base64; //java8 base64
+
+//Import the Base64 encoding library.
+//import org.apache.commons.codec.binary.Base64;
+
+import javax.sound.sampled.AudioFormat;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +36,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.request.AsrComputeRequest;
+import com.ulca.benchmark.request.AsrComputeResponse;
 import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.dao.ModelExtended;
 
+import io.swagger.model.ASRInference;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.model.Benchmark;
@@ -54,6 +64,9 @@ public class AsrBenchmark {
 	@Value("${kafka.ulca.bm.metric.ip.topic}")
 	private String mbMetricTopic;
 	
+	@Value("${asrcomputeurl}")
+	private String asrcomputeurl;
+	
 	
 	@Autowired
 	WebClient.Builder builder;
@@ -64,7 +77,6 @@ public class AsrBenchmark {
 			byte[] base64audioContent)
 			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 
-		log.info("calling the inference end point");
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
@@ -94,8 +106,6 @@ public class AsrBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
 
-			log.info("response CallBackUrl:: ");
-			log.info(responseStr);
 			ASRResponse asrResponse = new ASRResponse();
 			Sentences sentences = new Sentences();
 			Sentence sentence = new Sentence();
@@ -122,6 +132,7 @@ public class AsrBenchmark {
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+		String userId = model.getUserId();
 		reader.beginArray();
 		
 		List<String> ip = new ArrayList<String>();
@@ -129,43 +140,76 @@ public class AsrBenchmark {
 		
 		String baseLocation = fileMap.get("baseLocation")  + File.separator ;
 		JSONArray corpus = new JSONArray();
+		int totalRecords = 0;
+		int failedRecords = 0;
 		while (reader.hasNext()) {
 			
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
-			log.info("dataRow :: " + dataRow);
+			
 			JSONObject inputJson =  new JSONObject(dataRow);
 			String audioFilename = inputJson.getString("audioFilename");
 			String audioPath = baseLocation + audioFilename;
+			
 			byte[] bytes = Files.readAllBytes(Paths.get(audioPath));
 			
-			String resultText = compute(callBackUrl, schema, Base64.getMimeEncoder().encode(bytes));
+			AsrComputeRequest request = new AsrComputeRequest();
+			request.setCallbackUrl(callBackUrl);
+			request.setFilePath(audioPath);
+			
+			log.info("start time for calling the inference end point");
+			log.info("dataRow :: " + dataRow);
+			ASRInference asrInference = (ASRInference) schema;
+			request.setSourceLanguage(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
+			
+			String resultText = asrComputeInternal(request);	
+			log.info("result :: " + resultText);
+			log.info("end time for calling the inference end point");
 			
 			String targetText = inputJson.getString("text");
-			JSONObject target =  new JSONObject();
-			target.put("tgt", targetText);
-			target.put("mtgt", resultText);
-			corpus.put(target);
+			totalRecords++;
+			if(resultText != null) {
+				JSONObject target =  new JSONObject();
+				target.put("tgt", targetText);
+				target.put("mtgt", resultText);
+				corpus.put(target);
+			}else {
+				failedRecords++;
+			}
+			
 		}
 		reader.endArray();
 		reader.close();
 		inputStream.close();
-		
-		JSONObject benchmarkDatasets  = new JSONObject();
-		benchmarkDatasets.put("datasetId", benchmark.getBenchmarkId());
-		benchmarkDatasets.put("metric", metric);
-		benchmarkDatasets.put("corpus", corpus);
+		JSONArray benchmarkDatasets = new JSONArray();
+		JSONObject benchmarkDataset  = new JSONObject();
+		benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
+		benchmarkDataset.put("metric", metric);
+		benchmarkDataset.put("corpus", corpus);
+		benchmarkDatasets.put(benchmarkDataset);
 
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
+		metricRequest.put("userId", userId);
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
+		log.info("total recoords :: " + totalRecords + " failedRecords :: " + failedRecords);
 		log.info("data before sending to metric");
 		log.info(metricRequest.toString());
 		
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
+		
+	}
+	
+	public String asrComputeInternal(AsrComputeRequest request) {
+		
+		AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
+				.body(Mono.just(request), AsrCallBackRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
+				.block();
+		
+		return response.getData().getTranscript();
 		
 	}
 	
