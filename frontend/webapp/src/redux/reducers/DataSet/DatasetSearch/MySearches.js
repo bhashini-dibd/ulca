@@ -3,9 +3,10 @@ import {
   getLanguageLabel,
   FilterByDomain,
   FilterByCollection,
+  getLanguageName,
 } from "../../../../utils/getLabel";
 import getDatasetName from "../../../../utils/getDataset";
-import { translate } from '../../../../assets/localisation';
+import { translate } from "../../../../assets/localisation";
 const initialState = {
   responseData: [],
   filteredData: [],
@@ -25,20 +26,65 @@ const dateConversion = (value) => {
   return result.toUpperCase();
 };
 
+const getLanguages = (arr) => {
+  return arr.map((val) => getLanguageName(val)).join(", ");
+};
+
 const getSearchInfo = (searchCriteria) => {
-  let result = []
+  let result = [];
   const keys = Object.keys(searchCriteria);
-  const keysToIgnore = ['groupBy', 'multipleContributors', 'originalSourceSentence', 'serviceRequestNumber']
+  const keysToIgnore = [
+    "groupBy",
+    "multipleContributors",
+    "originalSourceSentence",
+    "serviceRequestNumber",
+    "userId",
+    "minScore",
+    "maxScore",
+  ];
   keys.forEach((key, i) => {
-    if (keysToIgnore.indexOf(key) < 0 && searchCriteria[key]!==undefined) {
-      result.push({
-        title: translate(key),
-        para: Array.isArray(searchCriteria[key])?searchCriteria[key].join(','):searchCriteria[key]
-      })
+    if (keysToIgnore.indexOf(key) < 0 && searchCriteria[key] !== undefined) {
+      if (key === "datasetType") {
+        result.push({
+          title: translate(key),
+          para: getDatasetName(searchCriteria[key]),
+          key,
+        });
+      } else if (key === "sourceLanguage" || key === "targetLanguage") {
+        result.push({
+          title: translate(key),
+          para: getLanguages(searchCriteria[key]),
+          key,
+        });
+      } else if (key === "license") {
+        result.push({
+          title: translate(key),
+          para: Array.isArray(searchCriteria[key])
+            ? searchCriteria[key].join(",").toUpperCase()
+            : searchCriteria[key],
+          key,
+        });
+      } else if (key === "collectionMethod") {
+        result.push({
+          title: translate(key),
+          para: Array.isArray(searchCriteria[key])
+            ? searchCriteria[key].join(",").replace("-", " ")
+            : searchCriteria[key],
+          key,
+        });
+      } else {
+        result.push({
+          title: translate(key),
+          para: Array.isArray(searchCriteria[key])
+            ? searchCriteria[key].join(",")
+            : searchCriteria[key],
+          key,
+        });
+      }
     }
-  })
-  return result
-}
+  });
+  return result;
+};
 
 const getMySearches = (payload) => {
   let newArr = [];
@@ -70,9 +116,11 @@ const getMySearches = (payload) => {
           .join(", ");
       newArr.push({
         sr_no: element.serviceRequestNumber,
-        search_criteria: `${dataSet} | ${langauge} ${tLanguage ? " | " + tLanguage : ""
-          } ${domain ? " | " + domain : ""} ${collection ? " | " + collection : ""
-          }`,
+        search_criteria: `${dataSet} | ${langauge} ${
+          tLanguage ? " | " + tLanguage : ""
+        } ${domain ? " | " + domain : ""} ${
+          collection ? " | " + collection : ""
+        }`,
         searched_on: dateConversion(element.timestamp),
         status: element.status.length > 0 && element.status[0].status,
 
@@ -85,7 +133,7 @@ const getMySearches = (payload) => {
         // domain: element.searchCriteria.domain,
         // collection: element.searchCriteria.collectionMethod,
         searchValues: element.searchCriteria,
-        searchInfo: getSearchInfo(element.searchCriteria)
+        searchInfo: getSearchInfo(element.searchCriteria),
       });
     }
   });
