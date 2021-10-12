@@ -290,7 +290,7 @@ public class BenchmarkService {
 		}
 
 		if (task.equalsIgnoreCase("asr")) {
-			String[] metric = { "wer" };
+			String[] metric = { "wer","cer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
