@@ -1,0 +1,31 @@
+{
+  "asrCorpusFilters": [
+    {
+      "code": "sourceLanguage",
+      "label": "Source Language",
+      "active": true,
+      "values": {
+        "master": "/languages.json",
+        "jsonPath": "$.languages"
+      }
+    },
+    {
+      "code": "collectionMethod",
+      "label": "Collection Method",
+      "active": true,
+      "values": {
+        "master": "/collectionMethods.json",
+        "jsonPath": "$.collectionMethods"
+      }
+    },
+    {
+      "code": "domain",
+      "label": "Domain",
+      "active": true,
+      "values": {
+        "master": "/domains.json",
+        "jsonPath": "$.domains"
+      }
+    }
+  ]
+}
