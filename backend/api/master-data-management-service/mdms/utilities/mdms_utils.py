@@ -18,14 +18,17 @@ class MdUtils:
             with open(file_path, 'r') as stream:
                 parsed = json.load(stream)
                 filter_name     =   data_file.replace(".json","")
-                # filter_name = "collectionMethods"
                 filterconfigs = parsed[filter_name]
             return filterconfigs
         except Exception as exc:
             log.exception("Exception while reading filters: " +str(exc))
             return None, None
 
+    
 
+
+
+        
 
 # Log config
 dictConfig({
