@@ -1,5 +1,5 @@
 {
-  "dataset": {
+  "dataset-filter-params": {
     "parallel-corpus": {
       "label": "Parallel Dataset",
       "filters": [
