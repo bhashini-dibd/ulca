@@ -284,7 +284,7 @@ public class BenchmarkService {
 	List<String> getMetric(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu","meteor","rouge" };
+			String[] metric = { "bleu","meteor","rouge","ribes","gleu" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
