@@ -36,6 +36,7 @@ import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.ParallelDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.ParallelDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
+import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.DatasetType;
@@ -62,9 +63,13 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 	@Autowired
 	DatasetService datasetService;
 	
+	@Autowired
+	NotificationService notificationService;
 	
 	@Autowired
 	TaskTrackerRedisDao taskTrackerRedisDao;
+	
+	
 
 	public static final String SOURCE_TEXT = "sourceText";
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
@@ -98,6 +103,10 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			//send error event for download failure
 			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString(), null) ;
+			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
+			
 			return;
 		}
 		
@@ -119,6 +128,9 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), null) ;
+			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 			
 			return;
 		}
@@ -161,6 +173,10 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			
 			//update redis when ingest failed
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
+			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
+			
 			return;
 			
 		}
@@ -231,7 +247,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		vModel.put("userMode", mode);
 		
 		 
-		taskTrackerRedisDao.intialize(serviceRequestNumber);
+		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetName, userId);
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 		 
 		reader.beginArray();

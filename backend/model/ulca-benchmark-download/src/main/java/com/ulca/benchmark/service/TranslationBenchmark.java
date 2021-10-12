@@ -98,6 +98,8 @@ public class TranslationBenchmark {
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+		String userId = model.getUserId();
+		
 		reader.beginArray();
 		
 		
@@ -164,6 +166,7 @@ public class TranslationBenchmark {
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
+		metricRequest.put("userId", userId);
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
 		
