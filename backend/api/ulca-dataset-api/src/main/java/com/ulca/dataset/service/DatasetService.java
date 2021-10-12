@@ -607,17 +607,23 @@ public class DatasetService {
 			return taskTrackerList;
 			
 		} else if(mapTemp.get(TaskTracker.ToolEnum.ingest.toString()).equals(TaskTracker.StatusEnum.failed.toString())) {
-			TaskTracker validate = new TaskTracker();
-			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
-			validate.setStatus(TaskTracker.StatusEnum.na.toString());
-			taskTrackerList.add(validate);
 			
-			TaskTracker publish = new TaskTracker();
-			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
-			publish.setStatus(TaskTracker.StatusEnum.na.toString());
-			taskTrackerList.add(publish);
+			if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
+				TaskTracker validate = new TaskTracker();
+				validate.serviceRequestNumber(serviceRequestNumber);
+				validate.setTool(ToolEnum.validate);
+				validate.setStatus(TaskTracker.StatusEnum.na.toString());
+				taskTrackerList.add(validate);
+			}
+			if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
+				TaskTracker publish = new TaskTracker();
+				publish.serviceRequestNumber(serviceRequestNumber);
+				publish.setTool(ToolEnum.publish);
+				publish.setStatus(TaskTracker.StatusEnum.na.toString());
+				taskTrackerList.add(publish);
+			}
+			
+			
 			return taskTrackerList;
 			
 		}else if(mapTemp.get(TaskTracker.ToolEnum.ingest.toString()).equals(TaskTracker.StatusEnum.pending.toString()) ) {
