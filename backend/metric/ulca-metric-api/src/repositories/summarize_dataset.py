@@ -1,12 +1,12 @@
 from src.models.db import FetchFilterParams
-from src.models.db import AggregateDatasetModel, AggregateModelData, AggregateBenchmarkData
+from src.models.db import AggregateDatasetModel, AggregateModelData, AggregateBenchmarkData, FetchFilterParams
 
 class SummarizeDatasetRepo(object):
     def __init__(self):
         self.aggregateDatasetModel      =   AggregateDatasetModel()
         self.aggregateModel             =   AggregateModelData() 
         self.aggregateBenchmark         =   AggregateBenchmarkData()
-
+        self.fetchFilterParams          =   FetchFilterParams()
 
     def search(self):
         corpus_stats = self.fetchFilterParams.search()
