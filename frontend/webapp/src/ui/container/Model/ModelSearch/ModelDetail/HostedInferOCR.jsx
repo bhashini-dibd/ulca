@@ -14,8 +14,10 @@ import {
   CardContent,
   Card,
   CardActions,
+  CardMedia,
 } from "@material-ui/core";
 import { useState } from "react";
+import OCRModal from "./OCRModal";
 
 const HostedInferASR = (props) => {
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
@@ -33,9 +35,10 @@ const HostedInferASR = (props) => {
   const [target, setTarget] = useState("");
   const [targetAudio, setTargetAudio] = useState("");
   const handleCompute = () => setTranslationState(true);
+  const [open, setOpen] = useState(false);
   // const url = UrlConfig.dataset
   const handleClose = () => {
-    // setAnchorEl(null);
+    setOpen(false);
   };
   const validURL = (str) => {
     var pattern = new RegExp(
@@ -115,92 +118,92 @@ const HostedInferASR = (props) => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
   return (
-    <Grid container>
-      {apiCall && <Spinner />}
-      {/* <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
-
-      {/* <Grid
-        className={classes.grid}
-        item
-        xl={5}
-        lg={5}
-        md={5}
-        sm={12}
-        xs={12}
-      >
-        <AudioRecord modelId={modelId} handleApicall={handleApicall} />
+    <>
+      <Grid container>
+        {apiCall && <Spinner />}
+        <Grid
+          className={classes.grid}
+          item
+          xl={5}
+          lg={5}
+          md={5}
+          sm={12}
+          xs={12}
+        >
+          <Card className={classes.asrCard}>
+            <Grid container className={classes.cardHeader}>
+              <Typography variant="h6" className={classes.titleCard}>
+                Image URL
+              </Typography>
+            </Grid>
+            <CardContent>
+              <TextField
+                style={{ marginTop: "15px" }}
+                fullWidth
+                color="primary"
+                label="Paste the public repository URL"
+                value={url}
+                error={error.url ? true : false}
+                helperText={error.url}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  setError({ ...error, url: false });
+                }}
+              />
+              <Button
+                color="primary"
+                style={{ float: "right", marginTop: "5px" }}
+                disabled={url ? false : true}
+                variant="contained"
+                size={"small"}
+                onClick={handleSubmit}
+              >
+                Convert
+              </Button>
+            </CardContent>
+            {url && (
+              <img
+                src={url}
+                alt="Ocr URL"
+                onClick={() => setOpen(true)}
+                style={{
+                  marginTop: "5px",
+                  padding: "10px",
+                  cursor: "pointer",
+                  maxWidth: "-webkit-fill-available",
+                }}
+              />
+            )}
+          </Card>
+        </Grid>
+        <Grid
+          className={classes.grid}
+          item
+          xl={6}
+          lg={6}
+          md={6}
+          sm={12}
+          xs={12}
+        >
+          <Card className={classes.asrCard}>
+            <Grid container className={classes.cardHeader}>
+              <Typography variant="h6" className={classes.titleCard}>
+                Output
+              </Typography>
+            </Grid>
+            <CardContent>{target}</CardContent>
+          </Card>
+        </Grid>
       </Grid>
-      <Grid
-        className={classes.grid}
-        item
-        xl={6}
-        lg={6}
-        md={6}
-        sm={12}
-        xs={12}
-      >
-        <Card className={classes.asrCard}>
-          <Grid container className={classes.cardHeader}>
-            <Typography variant='h6' className={classes.titleCard}>Output</Typography>
-          </Grid>
-          <CardContent>{targetAudio}</CardContent>
-        </Card>
-      </Grid>
-
-      <Typography variant={"body1"}>Disclaimer : </Typography>
-
-      <Typography style={{width:"95%"}} variant={"body2"}>Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.</Typography> */}
-
-      <Grid className={classes.grid} item xl={5} lg={5} md={5} sm={12} xs={12}>
-        <Card className={classes.asrCard}>
-          <Grid container className={classes.cardHeader}>
-            <Typography variant="h6" className={classes.titleCard}>
-              Image URL
-            </Typography>
-          </Grid>
-          <CardContent>
-            {/* <Typography variant={"caption"}>Max duration: 1 min</Typography> */}
-            <TextField
-              style={{ marginTop: "15px", marginBottom: "10px" }}
-              fullWidth
-              color="primary"
-              label="Paste the public repository URL"
-              value={url}
-              error={error.url ? true : false}
-              helperText={error.url}
-              onChange={(e) => {
-                setUrl(e.target.value);
-                setError({ ...error, url: false });
-              }}
-            />
-          </CardContent>
-          <CardActions
-            style={{ justifyContent: "flex-end", paddingRight: "20px" }}
-          >
-            <Button
-              color="primary"
-              className={classes.computeBtnUrl}
-              disabled={url ? false : true}
-              variant="contained"
-              size={"small"}
-              onClick={handleSubmit}
-            >
-              Convert
-            </Button>
-          </CardActions>
-        </Card>
-      </Grid>
-      <Grid className={classes.grid} item xl={6} lg={6} md={6} sm={12} xs={12}>
-        <Card className={classes.asrCard}>
-          <Grid container className={classes.cardHeader}>
-            <Typography variant="h6" className={classes.titleCard}>
-              Output
-            </Typography>
-          </Grid>
-          <CardContent>{target}</CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+      {open && (
+        <OCRModal
+          open={open}
+          message={url}
+          handleClose={handleClose}
+          title="Ocr Image"
+        />
+      )}
+    </>
   );
 };
 export default withStyles(DatasetStyle)(HostedInferASR);
