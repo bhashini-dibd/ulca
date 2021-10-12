@@ -1,23 +1,38 @@
+import json
 import logging
+
 from logging.config import dictConfig
-from models.model_metric_eval import ModelMetricEval
-import fastwer
+
+from kafka import KafkaProducer
+from configs.configs import kafka_bootstrap_server_host
 
 log = logging.getLogger('file')
 
-class ASRWEREval(ModelMetricEval):
-    """
-    Implementation of metric evaluation of ASR type models
-    using WER(Word Error Rate)
-    """
+class Producer:
 
-    def asr_metric_eval(self, ground_truth, machine_translation):
+    def __init__(self):
+        pass
 
+    # Method to instantiate producer
+    # Any other method that needs a producer will get it from here
+    def instantiate(self):
+        producer = KafkaProducer(bootstrap_servers=list(str(kafka_bootstrap_server_host).split(",")),
+                                 api_version=(1, 0, 0),
+                                 value_serializer=lambda x: json.dumps(x).encode('utf-8'))
+        return producer
+
+    # Method to push records to a topic in the kafka queue
+    def produce(self, object_in, topic, partition_in):
+
+        producer = self.instantiate()
         try:
-            return fastwer.score(machine_translation, ground_truth)
+            if object_in:
+                producer.send(topic, value=object_in)
+                log.info(f'Pushing to topic: {topic}')
+            producer.flush()
         except Exception as e:
-            log.exception(f"Exception in calculating WER: {str(e)}")
-            return None
+            log.exception(f"Exception while publishing message to kafka: {str(e)}")
+
 
 # Log config
 dictConfig({
