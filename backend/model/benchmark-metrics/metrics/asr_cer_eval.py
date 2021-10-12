@@ -5,18 +5,18 @@ import fastwer
 
 log = logging.getLogger('file')
 
-class ASRWEREval(ModelMetricEval):
+class ASRCEREval(ModelMetricEval):
     """
     Implementation of metric evaluation of ASR type models
-    using WER(Word Error Rate)
+    using CER(Character Error Rate)
     """
 
     def asr_metric_eval(self, ground_truth, machine_translation):
 
         try:
-            return fastwer.score(machine_translation, ground_truth)
+            return fastwer.score(machine_translation, ground_truth, char_level=True)
         except Exception as e:
-            log.exception(f"Exception in calculating WER: {str(e)}")
+            log.exception(f"Exception in calculating CER: {str(e)}")
             return None
 
 # Log config
