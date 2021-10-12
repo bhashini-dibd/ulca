@@ -1,0 +1,44 @@
+{
+    "collectionMethods": [
+      {
+        "code": "web-scrapping-machine-readable",
+        "label": "Web Scrapping Machine Readable",
+        "active": true
+      },
+      {
+        "code": "web-scrapping-ocr",
+        "label": "Web Scrapping OCR",
+        "active": true
+      },
+      {
+        "code": "manual-human-translated",
+        "label": "Manual Human Translated",
+        "active": true
+      },
+      {
+        "code": "algorithm-auto-aligned",
+        "label": "Algorithm Auto Aligned",
+        "active": true
+      },
+      {
+        "code": "algorithm-back-translated",
+        "label": "Algorithm Back Translated",
+        "active": true
+      },
+      {
+        "code": "human-validated",
+        "label": "Human Validated",
+        "active": true
+      },
+      {
+        "code": "phone-recording",
+        "label": "Phone Recording",
+        "active": true
+      },
+      {
+        "code": "crowd-sourced",
+        "label": "Crowd Sourced",
+        "active": true
+      }
+    ]
+  }
