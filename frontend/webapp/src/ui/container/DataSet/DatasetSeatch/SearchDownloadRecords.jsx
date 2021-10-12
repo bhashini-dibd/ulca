@@ -747,51 +747,52 @@ const SearchAndDownloadRecords = (props) => {
               </Typography>
               <Grid container spacing={1}>
                 {basicFilter.map((filter) => {
-                  return (
-                    <Grid
-                      className={classes.subHeader}
-                      item
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      xl={12}
-                    >
-                      {filter.type !== "text" ? (
-                        <SingleAutoComplete
-                          handleChange={handleBasicFilter}
-                          disabled={!languagePair.target.length}
-                          id={filter.value}
-                          value={
-                            basicFilterState[filter.value]
-                              ? basicFilterState[filter.value]
-                              : ""
-                          }
-                          labels={filter.values}
-                          placeholder={`Select ${filter.label}`}
-                        />
-                      ) : (
-                        <TextField
-                          disabled={!languagePair.target.length}
-                          id={filter.value}
-                          label={`Select ${filter.label}`}
-                          value={
-                            basicFilterState[filter.value]
-                              ? basicFilterState[filter.value].value
-                              : ""
-                          }
-                          onChange={(e) =>
-                            handleBasicFilter(
-                              e.target.value,
-                              filter.value,
-                              "text"
-                            )
-                          }
-                          fullWidth
-                        />
-                      )}
-                    </Grid>
-                  );
+                  if (filter.active)
+                    return (
+                      <Grid
+                        className={classes.subHeader}
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                      >
+                        {filter.type !== "text" ? (
+                          <SingleAutoComplete
+                            handleChange={handleBasicFilter}
+                            disabled={!languagePair.target.length}
+                            id={filter.value}
+                            value={
+                              basicFilterState[filter.value]
+                                ? basicFilterState[filter.value]
+                                : ""
+                            }
+                            labels={filter.values}
+                            placeholder={`Select ${filter.label}`}
+                          />
+                        ) : (
+                          <TextField
+                            disabled={!languagePair.target.length}
+                            id={filter.value}
+                            label={`Select ${filter.label}`}
+                            value={
+                              basicFilterState[filter.value]
+                                ? basicFilterState[filter.value].value
+                                : ""
+                            }
+                            onChange={(e) =>
+                              handleBasicFilter(
+                                e.target.value,
+                                filter.value,
+                                "text"
+                              )
+                            }
+                            fullWidth
+                          />
+                        )}
+                      </Grid>
+                    );
                 })}
               </Grid>
               <div className={classes.advanceFilter}>
@@ -808,51 +809,52 @@ const SearchAndDownloadRecords = (props) => {
               <div className={classes.advanceFilterContainer}>
                 {open &&
                   advFilter.map((filter) => {
-                    return (
-                      <Grid
-                        className={classes.subHeader}
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        xl={12}
-                      >
-                        {filter.type !== "text" ? (
-                          <SingleAutoComplete
-                            handleChange={handleDropDownChange}
-                            disabled={!languagePair.target.length}
-                            id={filter.value}
-                            labels={filter.values}
-                            placeholder={`Select ${filter.label}`}
-                            value={
-                              advFilterState[filter.value]
-                                ? advFilterState[filter.value]
-                                : ""
-                            }
-                          />
-                        ) : (
-                          <TextField
-                            disabled={!languagePair.target.length}
-                            id={filter.value}
-                            label={`Select ${filter.label}`}
-                            fullWidth
-                            value={
-                              advFilterState[filter.value]
-                                ? advFilterState[filter.value].value
-                                : ""
-                            }
-                            onChange={(e) =>
-                              handleDropDownChange(
-                                e.target.value,
-                                filter.value,
-                                "text"
-                              )
-                            }
-                          />
-                        )}
-                      </Grid>
-                    );
+                    if (filter.active)
+                      return (
+                        <Grid
+                          className={classes.subHeader}
+                          item
+                          xs={12}
+                          sm={12}
+                          md={12}
+                          lg={12}
+                          xl={12}
+                        >
+                          {filter.type !== "text" ? (
+                            <SingleAutoComplete
+                              handleChange={handleDropDownChange}
+                              disabled={!languagePair.target.length}
+                              id={filter.value}
+                              labels={filter.values}
+                              placeholder={`Select ${filter.label}`}
+                              value={
+                                advFilterState[filter.value]
+                                  ? advFilterState[filter.value]
+                                  : ""
+                              }
+                            />
+                          ) : (
+                            <TextField
+                              disabled={!languagePair.target.length}
+                              id={filter.value}
+                              label={`Select ${filter.label}`}
+                              fullWidth
+                              value={
+                                advFilterState[filter.value]
+                                  ? advFilterState[filter.value].value
+                                  : ""
+                              }
+                              onChange={(e) =>
+                                handleDropDownChange(
+                                  e.target.value,
+                                  filter.value,
+                                  "text"
+                                )
+                              }
+                            />
+                          )}
+                        </Grid>
+                      );
                   })}
                 {renderSubFilters()}
                 {open && renderAdvanceFilter()}
