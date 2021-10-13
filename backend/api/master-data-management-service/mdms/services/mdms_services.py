@@ -29,7 +29,7 @@ class MasterDataServices():
             return master_data
             
 
-    
+    #recursive function for sub master data retrieval
     def get_sub_master(self,sub_master_obj):
         log.info("Starting to fetch sub masters")
         branch              =   sub_master_obj["master"]
