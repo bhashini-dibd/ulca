@@ -8,28 +8,40 @@ utils       =   MdUtils()
 
 class MasterDataServices():
 
-    #choosing upload mechanism as per config
-    def get_attributes_data(self,attribute,lang):
-        git_file_location   =   f"{config.git_folder_prefix}{attribute}.json"
-        data                =   utils.read_from_git(git_file_location)
-        for i,attrib in enumerate(data):
-            if isinstance(attrib["values"],list):
-                locale_match        =   [val for val in attrib["values"] if val["locale"]==lang]
-                attrib["values"]    =   locale_match
-
+    #deciding master and properties to return
+    def get_attributes_data(self,attribute,jsonpath):
+        git_file_location   =   f"{config.git_folder_prefix}/{attribute}.json"
+        if not jsonpath:
+            master_data     =   utils.read_from_git(git_file_location)
+            if not master_data:
+                return post_error("Not found", "masterName is not valid")
+            if "relatedMaster" not in master_data.keys():
+                return master_data[attribute]
             else:
-                data[i]             =   self.get_sub_master(attrib["values"])
-        return data
+                for i,attrib in enumerate(master_data[attribute]):
+                    if isinstance(attrib["values"],dict) and attrib["values"]:
+                        log.info(f"denormalizing {attrib}")
+                        attrib["values"]    =   self.get_sub_master(attrib["values"])                    
+            return master_data
+        else:
+            log.info("jsonPath found on request")
+            master_data = self.get_sub_master({"master":f"/{attribute}.json","jsonPath":jsonpath})
+            return master_data
             
 
-    def get_sub_master(self,resource_link):
-        url=validators.url(resource_link)
-        if url == True:
-            sub_data = utils.read_from_git(resource_link)
-            for data in sub_data:
-                if "values" in data.keys() and not isinstance(data["values"],list):
-                    data["values"] = self.get_sub_master(data["values"])       
-            return sub_data
+    
+    def get_sub_master(self,sub_master_obj):
+        log.info("Starting to fetch sub masters")
+        branch              =   sub_master_obj["master"]
+        expression          =   sub_master_obj["jsonPath"]
+        git_file_location   =   f'{config.git_folder_prefix}{branch}'
+        data                =   utils.read_from_git(git_file_location)
+        sub_master_data     =   utils.jsonpath_parsing(data,expression)
+        for sub in sub_master_data:
+            if "values" in sub.keys() and isinstance(sub["values"],dict) and sub["values"]:
+                log.info(f'denormalizing {sub["values"]}')
+                sub["values"] = self.get_sub_master(sub["values"]) 
+        return sub_master_data
 
 
         

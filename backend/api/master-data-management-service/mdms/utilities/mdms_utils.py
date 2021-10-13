@@ -2,29 +2,30 @@ import requests
 from config import shared_storage_folder
 import json
 import urllib.request
+import os
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
+from jsonpath_ng import jsonpath, parse
 
 class MdUtils:
-
+    #reading file from git 
     def read_from_git(self,git_path):
+        log.info(f"reading from git: {git_path}")
         try:
-            file = requests.get(git_path, allow_redirects=True)
-            data_file  = (git_path.split('/'))[-1]
-            file_path = shared_storage_folder + data_file
-            open(file_path, 'wb').write(file.content)
-            log.info(f"Attributes read from git and pushed to local {file_path}")
-            with open(file_path, 'r') as stream:
-                parsed = json.load(stream)
-                filter_name     =   data_file.replace(".json","")
-                filterconfigs = parsed[filter_name]
-            return filterconfigs
+            file            =   requests.get(git_path, allow_redirects=True)
+            parsed          =   json.loads(file.content)
+            return parsed
         except Exception as exc:
             log.exception("Exception while reading filters: " +str(exc))
-            return None, None
+            return None
 
-    
+    #parsing json using jsonpath expression
+    def jsonpath_parsing(self,json_data,expression):
+        log.info("parsing json using jsonpath")
+        path_expression =   parse(expression)
+        values          =   path_expression.find(json_data)[0].value
+        return values
 
 
 
