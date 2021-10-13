@@ -1,5 +1,5 @@
 {
-  "ocrCorpuFilters": [
+  "ocrCorpusFilters": [
     {
       "code": "sourceLanguage",
       "label": "Source Language",
