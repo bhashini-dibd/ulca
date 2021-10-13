@@ -186,7 +186,10 @@ public class BenchmarkService {
 				dto.setMetric(new ArrayList<>(metricList));
 				List<BenchmarkProcess> bmProcList = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
 				for(BenchmarkProcess bmProc : bmProcList) {
-					metricList.remove(bmProc.getMetric());
+					String status = bmProc.getStatus();
+					if(status != null && !status.isBlank() && (status.equalsIgnoreCase("Completed") || status.equalsIgnoreCase("In-Progress"))) {
+						metricList.remove(bmProc.getMetric());
+					}
 				}
 				dto.setAvailableMetric(metricList);
 				dtoList.add(dto);
