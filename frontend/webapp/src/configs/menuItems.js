@@ -49,16 +49,17 @@ export const menuItems = {
         //     roles:["CONTRIBUTOR-USER"]
         // },
         {
-            name: 'Submit Model',
-            url: '/model/upload',
-            roles:["CONTRIBUTOR-USER"]
-        },
-    {
             name: 'Benchmark Datasets',
             url: '/model/benchmark-datasets',
             roles:["CONTRIBUTOR-USER"],
             public: true
-        }],
+        },
+        {
+            name: 'Submit Model',
+            url: '/model/upload',
+            roles:["CONTRIBUTOR-USER"]
+        },
+    ],
     profile: [
         {
             name: 'Change Password',
