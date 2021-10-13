@@ -39,6 +39,41 @@
         "code": "crowd-sourced",
         "label": "Crowd Sourced",
         "active": true
+      },
+      {
+        "code": "machine-generated-transcript",
+        "label": "Machine Generated Transcript",
+        "active": true
+      },
+      {
+        "code": "manual-transcribed",
+        "label": "Manual Transcribed",
+        "active": true
+      },
+      {
+        "code": "screen-capture",
+        "label": "Screen Capture",
+        "active": true
+      },
+      {
+        "code": "scanned-ocr",
+        "label": "Scanned OCR",
+        "active": true
+      },
+      {
+        "code": "auto-aligned-from-parallel-docs",
+        "label": "Auto Aligned From Parallel Docs",
+        "active": true
+      },
+      {
+        "code": "machine-translated-post-edited",
+        "label": "Machine Translated Post Edited",
+        "active": true
+      },
+      {
+        "code": "manual-aligned",
+        "label": "Manually Aligned",
+        "active": true
       }
     ]
   }

@@ -28,6 +28,15 @@
       }
     },
     {
+      "code": "ocrTool",
+      "label": "OCR Tool",
+      "active": true,
+      "values": {
+        "master": "/ocrTools.json",
+        "jsonPath": "$.ocrTools"
+      }
+    },
+    {
       "code": "collectionSource",
       "label": "Collection Source",
       "active": true,

@@ -1,0 +1,16 @@
+{
+    "alignmentTools": [
+      {
+        "code": "labse",
+        "label": "LaBSE",
+        "active": true,
+        "collectionMethod": ["auto-aligned", "auto-aligned-from-parallel-docs"]
+      },
+      {
+        "code": "laser",
+        "label": "LASER",
+        "active": true,
+        "collectionMethod": ["auto-aligned", "auto-aligned-from-parallel-docs"]
+      }
+    ]
+  }

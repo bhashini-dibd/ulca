@@ -67,6 +67,15 @@
       }
     },
     {
+      "code": "asrModel",
+      "label": "ASR Model",
+      "active": true,
+      "values": {
+        "master": "/asrModels.json",
+        "jsonPath": "$.asrModels"
+      }
+    },
+    {
       "code": "samplingRate",
       "label": "Sampling Rate",
       "active": true,
@@ -128,12 +137,12 @@
       "active": true,
       "values": [
         {
-          "minScore": 1,
-          "maxScore": 5
+          "minNoOfSpeakers": 1,
+          "maxNoOfSpeakers": 5
         },
         {
-          "minScore": 5,
-          "maxScore": 10
+          "minNoOfSpeakers": 5,
+          "maxNoOfSpeakers": 10
         }
       ]
     }

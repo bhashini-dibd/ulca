@@ -32,8 +32,17 @@
         "label": "Alignment Tool",
         "active": true,
         "values": {
-          "master": "/alignmentTool.json",
-          "jsonPath": "$.alignmentTool"
+          "master": "/alignmentTools.json",
+          "jsonPath": "$.alignmentTools"
+        }
+      },
+      {
+        "code": "translationModel",
+        "label": "Translation Model",
+        "active": true,
+        "values": {
+          "master": "/translationModels.json",
+          "jsonPath": "$.translationModels"
         }
       },
       {
