@@ -166,7 +166,106 @@
         "label": "Parallel Dataset"
     },
     "ocr-corpus": {
-        "filters": [],
+        "filters": [{
+                "value": "domain",
+                "label": "Domain",
+                "filterType": "basic",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "collectionSource",
+                "label": "Collection Source",
+                "filterType": "basic",
+                "active": true,
+                "input": "string",
+                "type": "text",
+                "parent": null
+            },
+            {
+                "value": "collectionMethod",
+                "label": "Collection Method",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "ocrTool",
+                "label": "OCR Tool",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": "web-scraping-ocr"
+            },
+            {
+                "value": "ocrTool",
+                "label": "OCR Tool",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": "screen-capture"
+            },
+            {
+                "value": "ocrTool",
+                "label": "OCR Tool",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": "scanned-ocr"
+            },
+            {
+                "value": "license",
+                "label": "License",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "submitterName",
+                "label": "Submitter",
+                "filterType": "advance",
+                "active": true,
+                "input": "string",
+                "type": "text",
+                "parent": null
+            },
+            {
+                "value": "format",
+                "label": "Format",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "dpi",
+                "label": "DPI",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "imageTextType",
+                "label": "Image Text Type",
+                "filterType": "advance",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            }
+        ],
         "label": "OCR Dataset"
     },
     "monolingual-corpus": {
