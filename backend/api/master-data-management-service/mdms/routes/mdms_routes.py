@@ -6,4 +6,4 @@ from resources import MasterDataResource
 MDMS_BLUEPRINT = Blueprint("master-data-mgmt", __name__)
 
 #fetch master data end-point
-Api(MDMS_BLUEPRINT).add_resource(MasterDataResource, "/v0/fetch/params")
+Api(MDMS_BLUEPRINT).add_resource(MasterDataResource, "/v0/fetch-master")
