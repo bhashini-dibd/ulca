@@ -119,6 +119,21 @@
             "role":"READONLY-USER",
             "actionID": "d7da02b7-248c-43ab-aa9a-dac8b6c3a66f",
             "active":true
+        },
+        {
+            "role":"ADMIN",
+            "actionID": "162bf6e7-b9cd-4c2a-baa1-0e7e4c77e6eb",
+            "active":true
+        },
+        {
+            "role":"CONTRIBUTOR-USER",
+            "actionID": "162bf6e7-b9cd-4c2a-baa1-0e7e4c77e6eb",
+            "active":true
+        },
+        {
+            "role":"READONLY-USER",
+            "actionID": "162bf6e7-b9cd-4c2a-baa1-0e7e4c77e6eb",
+            "active":true
         }
     ]
 }

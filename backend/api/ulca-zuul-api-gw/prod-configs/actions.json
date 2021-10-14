@@ -231,6 +231,14 @@
             "active":true,
             "whiteList":true,
             "description":"API to send email notifs"
+        },
+        {
+            "id":"162bf6e7-b9cd-4c2a-baa1-0e7e4c77e6eb",
+            "uri":"/ulca/mdms/v0/fetch-master",
+            "module":"MDMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to fetch MDMS data"
         }
     ]
 }
