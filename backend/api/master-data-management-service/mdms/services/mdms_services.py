@@ -9,24 +9,27 @@ utils       =   MdUtils()
 class MasterDataServices():
 
     #deciding master and properties to return
-    def get_attributes_data(self,attribute,jsonpath):
-        git_file_location   =   f"{config.git_folder_prefix}/{attribute}.json"
-        if not jsonpath:
-            master_data     =   utils.read_from_git(git_file_location)
-            if not master_data:
-                return post_error("Not found", "masterName is not valid")
-            if "relatedMaster" not in master_data.keys():
-                return master_data[attribute]
+    def get_attributes_data(self,attribute_list,jsonpath):
+        master_data_dict = {}
+        for attribute in attribute_list:
+            git_file_location   =   f"{config.git_folder_prefix}/{attribute}.json"
+            if not jsonpath:
+                master_data     =   utils.read_from_git(git_file_location)
+                if not master_data:
+                    return post_error("Not found", "masterName is not valid")
+                if "relatedMaster" not in master_data.keys():
+                    master_data_dict[attribute]     =   master_data[attribute] 
+                else:
+                    for i,attrib in enumerate(master_data[attribute]):
+                        if isinstance(attrib["values"],dict) and attrib["values"]:
+                            log.info(f"denormalizing {attrib}")
+                            attrib["values"]    =   self.get_sub_master(attrib["values"])  
+                master_data_dict[attribute]     =   master_data[attribute]    
             else:
-                for i,attrib in enumerate(master_data[attribute]):
-                    if isinstance(attrib["values"],dict) and attrib["values"]:
-                        log.info(f"denormalizing {attrib}")
-                        attrib["values"]    =   self.get_sub_master(attrib["values"])                    
-            return master_data
-        else:
-            log.info("jsonPath found on request")
-            master_data = self.get_sub_master({"master":f"/{attribute}.json","jsonPath":jsonpath})
-            return master_data
+                log.info("jsonPath found on request")
+                master_data = self.get_sub_master({"master":f"/{attribute}.json","jsonPath":jsonpath})
+                master_data_dict[attribute]     =   master_data[attribute]
+        return master_data_dict
             
 
     #recursive function for sub master data retrieval

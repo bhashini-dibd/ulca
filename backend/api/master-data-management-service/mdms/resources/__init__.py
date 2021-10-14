@@ -1,1 +1,1 @@
-from .mdms_resources import MasterDataResource
+from .mdms_resources import MasterDataResource, MultiMasterDataResource
