@@ -11,6 +11,12 @@
         "label": "LASER",
         "active": true,
         "collectionMethod": ["auto-aligned", "auto-aligned-from-parallel-docs"]
+      },
+      {
+        "code": "aenaes",
+        "label": "AENAES",
+        "active": true,
+        "collectionMethod": ["auto-aligned"]
       }
     ]
   }

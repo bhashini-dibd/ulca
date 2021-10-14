@@ -120,7 +120,7 @@
         "code": "collectionSource",
         "label": "Collection Source",
         "active": true,
-        "values": {}
+        "values": []
       },
       {
         "code": "license",
@@ -135,7 +135,7 @@
         "code": "submitterName",
         "label": "Submitter",
         "active": true,
-        "values": {}
+        "values": []
       }
     ],
     "relatedMaster": true

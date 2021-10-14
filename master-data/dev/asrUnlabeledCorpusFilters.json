@@ -31,7 +31,7 @@
       "code": "collectionSource",
       "label": "Collection Source",
       "active": true,
-      "values": {}
+      "values": []
     },
     {
       "code": "license",
@@ -46,7 +46,7 @@
       "code": "submitterName",
       "label": "Submitter",
       "active": true,
-      "values": {}
+      "values": []
     },
     {
       "code": "format",
@@ -132,19 +132,92 @@
       ]
     },
     {
-      "code": "noOfSpeakers",
-      "label": "Number of Speakers",
+      "code": "minNoOfSpeakers",
+      "label": "Min No of Speakers",
       "active": true,
       "values": [
         {
-          "minNoOfSpeakers": 1,
-          "maxNoOfSpeakers": 5
+          "value": 1,
+          "label": "1"
         },
         {
-          "minNoOfSpeakers": 5,
-          "maxNoOfSpeakers": 10
+          "value": 5,
+          "label": "5"
         }
       ]
+    },
+    {
+      "code": "maxNoOfSpeakers",
+      "label": "Max No of Speakers",
+      "active": true,
+      "values": [
+        {
+          "value": 5,
+          "label": "5"
+        },
+        {
+          "value": 10,
+          "label": "10"
+        }
+      ]
+    },
+    {
+      "code": "noOfSpeakers",
+      "label": "Number of Speakers",
+      "active": true,
+      "values": []
+    },
+    {
+      "code": "minAge",
+      "label": "Min Age",
+      "active": true,
+      "values": [
+        {
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 10,
+          "label": "10"
+        },
+        {
+          "value": 20,
+          "label": "60"
+        },
+        {
+          "value": 60,
+          "label": "60"
+        }
+      ]
+    },
+    {
+      "code": "maxAge",
+      "label": "Max Age",
+      "active": true,
+      "values": [
+        {
+          "value": 10,
+          "label": "10"
+        },
+        {
+          "value": 20,
+          "label": "20"
+        },
+        {
+          "value": 60,
+          "label": "60"
+        },
+        {
+          "value": 100,
+          "label": "100"
+        }
+      ]
+    },
+    {
+      "code": "age",
+      "label": "Age",
+      "active": true,
+      "values": []
     }
   ],
   "relatedMaster": true

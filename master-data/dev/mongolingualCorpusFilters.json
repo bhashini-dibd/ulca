@@ -46,7 +46,7 @@
       "code": "submitterName",
       "label": "Submitter",
       "active": true,
-      "values": {}
+      "values": []
     }
   ],
   "relatedMaster": true
