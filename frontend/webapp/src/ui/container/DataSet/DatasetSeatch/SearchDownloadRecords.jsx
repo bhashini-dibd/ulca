@@ -892,7 +892,7 @@ const SearchAndDownloadRecords = (props) => {
         >
           {data[0] &&
             data[0].searchInfo.map((val) => (
-              <SearchDescription title={val.title} para={val.para} />
+              <SearchDescription title={val.title} para={val.para} color={val.color} image={val.imageUrl}/>
             ))}
         </Grid>
         <Grid

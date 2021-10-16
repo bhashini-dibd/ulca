@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 
 const SearchDescription = (props) => {
-  const { classes, title, para, index } = props;
+  const { classes, title, para, index, color, image } = props;
   const history = useHistory();
   return (
     // <>
@@ -24,17 +24,29 @@ const SearchDescription = (props) => {
         minHeight: "100px",
         maxHeight: "100px",
         marginBottom: "5px",
-        //backgroundColor: ImageArray[index].color
+        backgroundColor: color,
       }}
     >
       <Grid container>
-        {/* <Grid item xs={3} sm={3} md={3} lg={3} xl={3} style={{ display: 'flex', marginTop: "21px", justifyContent: 'center' }}>
-                    <CardMedia
-                        component="img"
-                        style={{ width: '48px', height: '48px' }}
-                        image={ImageArray[index].imageUrl}
-                    />
-                </Grid> */}
+        <Grid
+          item
+          xs={3}
+          sm={3}
+          md={3}
+          lg={3}
+          xl={3}
+          style={{
+            display: "flex",
+            marginTop: "21px",
+            justifyContent: "center",
+          }}
+        >
+          <CardMedia
+            component="img"
+            style={{ width: "48px", height: "48px" }}
+            image={image}
+          />
+        </Grid>
         <Grid
           item
           xs={9}

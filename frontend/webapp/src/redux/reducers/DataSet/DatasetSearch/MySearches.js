@@ -7,11 +7,18 @@ import {
 } from "../../../../utils/getLabel";
 import getDatasetName from "../../../../utils/getDataset";
 import { translate } from "../../../../assets/localisation";
+import imageArray from "../../../../utils/getModelIcons";
+import AdvanceFilterIcon from "../../../../assets/training-dataset.svg";
+import LanguageIcon from "../../../../assets/LanguageIcon.svg";
+import DomainIcon from "../../../../assets/domainIcon.svg";
+import TaskIcon from "../../../../assets/task_alt_black_24dp.svg";
+
 const initialState = {
   responseData: [],
   filteredData: [],
 };
 
+const colorArr = imageArray.map((image) => image.color);
 const dateConversion = (value) => {
   var myDate = new Date(value);
   let result = myDate.toLocaleString("en-IN", {
@@ -49,12 +56,22 @@ const getSearchInfo = (searchCriteria) => {
           title: translate(key),
           para: getDatasetName(searchCriteria[key]),
           key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: TaskIcon,
         });
       } else if (key === "sourceLanguage" || key === "targetLanguage") {
         result.push({
           title: translate(key),
           para: getLanguages(searchCriteria[key]),
           key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: LanguageIcon,
         });
       } else if (key === "license") {
         result.push({
@@ -63,6 +80,11 @@ const getSearchInfo = (searchCriteria) => {
             ? searchCriteria[key].join(",").toUpperCase()
             : searchCriteria[key],
           key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: AdvanceFilterIcon,
         });
       } else if (key === "collectionMethod") {
         result.push({
@@ -71,6 +93,11 @@ const getSearchInfo = (searchCriteria) => {
             ? searchCriteria[key].join(",").replace("-", " ")
             : searchCriteria[key],
           key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: AdvanceFilterIcon,
         });
       } else {
         result.push({
@@ -79,6 +106,11 @@ const getSearchInfo = (searchCriteria) => {
             ? searchCriteria[key].join(",")
             : searchCriteria[key],
           key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: key === "domain" ? DomainIcon : AdvanceFilterIcon,
         });
       }
     }
