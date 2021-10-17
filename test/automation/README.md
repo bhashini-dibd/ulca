@@ -55,18 +55,39 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
 * ### For Model
 
-    1. **Uploading Model and running benchmarks:**
+    1. **Uploading a Model:**
 
-            python3 automate.py -m -n 'model-1' -i 'model-1.json' -b 'benchmark-1'
+            python3 automate.py -m -n 'model-1' -i 'model-1.json'
+
+        Arguments:
+
+        * -m (--model) : Flag for Model Functions
+        * -n (--name) : Model Name
+        * -i (--input)  : Valid Model File (.json)
+  
+    2. **Running Benchmark on a Model:**
+
+            python3 automate.py -m -n 'model-1' -b 'benchmark1' --metric 'metric1'
 
         Arguments:
 
         * -m (--model) : Flag for Model Functions
         * -n (--name) : Model Name
         * -b (--benchmark) : Benchamrk Name to be run
-        * -i (--input)  : Valid Model File (.json)
+        * --metric  : Metric name
 
-     2. **Model Task functions: (eg:translation)**
+    3. **Publish/Unpublish a Model:**
+
+            python3 automate.py -m -n 'model-1' --publish
+
+        Arguments:
+
+        * -m (--model) : Flag for Model Functions
+        * -n (--name) : Model Name
+        * --publish : flag fo publishing a model
+        * --unpublish  : flag fo unpublishing a model
+     
+    4. **Model Task functions: (eg:translation)**
 
             python3 automate.py -m -t 'translation' -n "model-name" -i "input-string-or-url"
 
@@ -74,7 +95,7 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
         * -m (--model) : Flag for Model Functions
         * -n (--name) : Model Name
-        * -i (--input)  : Input for Model Task (eg: sentence for Translation Task)
+        * -i (--input)  : Input for Model Task (eg: sentence for Translation Task,URL for OCR/ASR task)
 
 * ### For Updating Schema
 
@@ -108,12 +129,13 @@ To view script usage help from terminal, run:
 
 1. config.py - contains data used for automation.
 2. driver_script.py - contains code for loading browsers/driver.
-3. core_script.py - contains core functions for automation.
-4. dataset_script.py - contains functions for dataset related automation.
-5. model_script.py - contains functions for model related automation.
-6. automate.py - main file for automation.
-7. schema.yml - contains the schema used for automation.
-8. requirements.txt - contains python-packages required to run automation. 
+3. elements.py - contains xpaths of elements in the website.
+4. core_script.py - contains core functions for automation.
+5. dataset_script.py - contains functions for dataset related automation.
+6. model_script.py - contains functions for model related automation.
+7. automate.py - main file for automation.
+8. schema.yml - contains the schema used for automation.
+9. requirements.txt - contains python-packages required to run automation. 
 
 ### Requirements
 
