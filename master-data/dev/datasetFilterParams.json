@@ -637,7 +637,7 @@
           "label": "Collection Source",
           "type": "text",
           "datasetType": "single-value",
-          "active": true,
+          "active": false,
           "values": []
         },
         {
@@ -958,7 +958,7 @@
           "label": "Collection Source",
           "type": "text",
           "datasetType": "single-value",
-          "active": true,
+          "active": false,
           "values": []
         },
         {
@@ -1397,7 +1397,7 @@
           "label": "Collection Source",
           "type": "text",
           "datasetType": "single-value",
-          "active": true,
+          "active": false,
           "values": []
         },
         {
@@ -2110,7 +2110,7 @@
           "label": "Collection Source",
           "type": "text",
           "datasetType": "single-value",
-          "active": true,
+          "active": false,
           "values": []
         },
         {
@@ -2592,7 +2592,7 @@
           "label": "Collection Source",
           "type": "text",
           "datasetType": "single-value",
-          "active": true,
+          "active": false,
           "values": []
         },
         {

@@ -132,6 +132,7 @@ public class AsrBenchmark {
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+		String userId = model.getUserId();
 		reader.beginArray();
 		
 		List<String> ip = new ArrayList<String>();
@@ -191,6 +192,7 @@ public class AsrBenchmark {
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
+		metricRequest.put("userId", userId);
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
 		log.info("total recoords :: " + totalRecords + " failedRecords :: " + failedRecords);

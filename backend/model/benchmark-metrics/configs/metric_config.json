@@ -6,6 +6,9 @@
         "metric_name":"wer", "metric_implementation":"ASRWEREval", "score_context":"default"
     },
     {
+        "metric_name":"cer", "metric_implementation":"ASRCEREval", "score_context":"default"
+    },
+    {
         "metric_name":"meteor", "metric_implementation":"TranslationMeteorScoreEval", "score_context":"default"
     },
     {

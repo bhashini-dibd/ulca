@@ -32,6 +32,7 @@ import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.AsrUnlabeledDatasetRowDataSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.AsrUnlabeledParamsSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
+import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.AsrUnlabeledParamsSchema;
@@ -61,6 +62,9 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 	
 	@Autowired
 	DatasetService datasetService;
+	
+	@Autowired
+	NotificationService notificationService;
 
 	public void validateIngest(DatasetIngest datasetIngest)  {
 
@@ -87,6 +91,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			//send error event for download failure
 			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString(),null) ;
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 			return;
 		}
 		
@@ -110,6 +116,10 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), null) ;
+			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
+			
 			return;
 		}
 		
@@ -153,6 +163,9 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), null) ;
 			//update redis when ingest failed
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
+			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 			
 			return;
 		}
@@ -221,7 +234,8 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 		vModel.put("userMode",mode);
 		
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
-		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetType);
+		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetType, datasetName, userId);
+		
 		String basePath  = datasetIngest.getBaseLocation()  + File.separator;
 
 		reader.beginArray();
