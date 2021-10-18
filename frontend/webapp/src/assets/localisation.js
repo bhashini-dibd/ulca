@@ -77,6 +77,12 @@ const localization_EN_Data = {
   "label.exploreModels": "Explore Models",
   "label.modalTask": "Select Model Task",
   "button.clear": "Clear",
+  "label.errorLogs": "Error Logs",
+  "label.benchmarkDataset": "Benchmark Dataset",
+  "label.metric": "Metric",
+  "label.score": "Score",
+  "label.benchmarkRunDate": "Benchmark Run Date",
+  "label.domain": "Domain",
 };
 
 export function translate(locale_text) {

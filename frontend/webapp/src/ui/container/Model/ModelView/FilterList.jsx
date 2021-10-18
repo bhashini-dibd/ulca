@@ -11,6 +11,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@material-ui/core";
+import { translate } from "../../../../assets/localisation";
 
 const FilterBenchmark = (props) => {
   const {
@@ -159,7 +160,7 @@ const FilterBenchmark = (props) => {
           onClick={() => apply(selectedFilter)}
         >
           {" "}
-          Apply
+          {translate("button.apply")}
         </Button>
         <Button
           onClick={clearAll}
@@ -168,7 +169,7 @@ const FilterBenchmark = (props) => {
           disabled={isDisabled()}
         >
           {" "}
-          Clear All
+          {translate("button.clearAll")}
         </Button>
       </Popover>
     </div>
