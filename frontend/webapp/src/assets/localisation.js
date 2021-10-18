@@ -61,6 +61,7 @@ const localization_EN_Data = {
   "label.ulcaFullForm": "Universal Language Contribution API",
   "label.ulcaInfo":
     "ULCA is an open-sourced API and data platform to collect, curate and discover datasets in Indian languages.",
+  "label.readymadeDataset": "Readymade Dataset",
 };
 
 export function translate(locale_text) {
