@@ -7,6 +7,7 @@ import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
 from jsonpath_ng import jsonpath, parse
+from .response import post_error
 
 class MdUtils:
     #reading file from git 
@@ -17,7 +18,7 @@ class MdUtils:
             parsed          =   json.loads(file.content)
             return parsed
         except Exception as exc:
-            log.exception("Exception while reading filters: " +str(exc))
+            log.exception("Exception while reading from git: " +str(exc))
             return None
 
     #parsing json using jsonpath expression
