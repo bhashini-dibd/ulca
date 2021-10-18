@@ -83,6 +83,12 @@ const localization_EN_Data = {
   "label.score": "Score",
   "label.benchmarkRunDate": "Benchmark Run Date",
   "label.domain": "Domain",
+  "label.submitModel": "Submit Model",
+  "label.howToSubmitModel": "How to submit model?",
+  "label.instructions1":"Provide a meaningful name to your model.",
+  "label.instructions2":"Browse the file containing the parameters of the model.",
+  "label.instructions3":"Make sure the file should be in JSON format.",
+
 };
 
 export function translate(locale_text) {
