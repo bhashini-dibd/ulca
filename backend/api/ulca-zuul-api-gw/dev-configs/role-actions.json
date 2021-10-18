@@ -134,6 +134,26 @@
             "role":"READONLY-USER",
             "actionID": "162bf6e7-b9cd-4c2a-baa1-0e7e4c77e6eb",
             "active":true
+        },
+        {
+            "role":"ADMIN",
+            "actionID": "9253e82c-d33a-4011-acb2-733c14ee6c85",
+            "active":true
+        },
+        {
+            "role":"CONTRIBUTOR-USER",
+            "actionID": "9253e82c-d33a-4011-acb2-733c14ee6c85",
+            "active":true
+        },
+        {
+            "role":"READONLY-USER",
+            "actionID": "9253e82c-d33a-4011-acb2-733c14ee6c85",
+            "active":true
+        },
+        {
+            "role":"ADMIN",
+            "actionID": "ede5a901-807b-460c-b2bd-10975b991b08",
+            "active":true
         }
     ]
 }

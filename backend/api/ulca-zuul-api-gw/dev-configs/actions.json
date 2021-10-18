@@ -239,6 +239,22 @@
             "active":true,
             "whiteList":true,
             "description":"API to fetch MDMS data"
+        },
+        {
+            "id":"9253e82c-d33a-4011-acb2-733c14ee6c85",
+            "uri":"/ulca/mdms/v0/fetch-master/bulk",
+            "module":"MDMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to fetch MDMS data in buklk"
+        },
+        {
+            "id":"ede5a901-807b-460c-b2bd-10975b991b08",
+            "uri":"/ulca/mdms/v0/bust-cache",
+            "module":"MDMS",
+            "active":true,
+            "whiteList":true,
+            "description":"API to bust cache"
         }
     ]
 }
