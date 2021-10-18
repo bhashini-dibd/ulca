@@ -73,7 +73,10 @@ const localization_EN_Data = {
   "label.description": "Description",
   "label.tryModel": "Try Model",
   "label.backToModelList": "Back to Model List",
-  "label.backToMyContrib":"Back to My Contribution"
+  "label.backToMyContrib": "Back to My Contribution",
+  "label.exploreModels": "Explore Models",
+  "label.modalTask": "Select Model Task",
+  "button.clear": "Clear",
 };
 
 export function translate(locale_text) {
