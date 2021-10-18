@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
@@ -43,6 +44,7 @@ import com.ulca.benchmark.util.Utility;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelNotFoundException;
+import com.ulca.model.exception.RequestParamValidationException;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
@@ -86,14 +88,23 @@ public class BenchmarkService {
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
 
-	public BenchmarkSubmitResponse submitBenchmark(BenchmarkSubmitRequest request) {
+	public BenchmarkSubmitResponse submitBenchmark(BenchmarkSubmitRequest request) throws RequestParamValidationException {
 
+		ModelTask.TypeEnum type = ModelTask.TypeEnum.fromValue(request.getTask());
+		if(type == null) {
+			throw new RequestParamValidationException("ModelTask " + request.getTask() + " Not Valid ");
+		}
+		ModelTask task = new ModelTask();
+		task.setType(type);
+		
+		
+		
 		Benchmark benchmark = new Benchmark();
 		benchmark.setName(request.getName());
 		benchmark.setUserId(request.getUserId());
 		benchmark.setDataset(request.getDataset());
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());		
-		benchmark.setTask(request.getTask());
+		benchmark.setTask(task);
 		benchmarkDao.save(benchmark);
 		
 		//send data to benchmark ingest topic to download benmark and validate and update

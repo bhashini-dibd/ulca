@@ -24,6 +24,7 @@ import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.service.BenchmarkService;
+import com.ulca.model.exception.RequestParamValidationException;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
@@ -42,7 +43,7 @@ public class BenchmarkController {
 	BenchmarkService benchmarkService;
 
 	@PostMapping("/submit")
-	public ResponseEntity<BenchmarkSubmitResponse> submitBenchmark(@RequestBody BenchmarkSubmitRequest request) {
+	public ResponseEntity<BenchmarkSubmitResponse> submitBenchmark(@Valid @RequestBody BenchmarkSubmitRequest request) throws RequestParamValidationException {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
 		BenchmarkSubmitResponse response = benchmarkService.submitBenchmark(request);

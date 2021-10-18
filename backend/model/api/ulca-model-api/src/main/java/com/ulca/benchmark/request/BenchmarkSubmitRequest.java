@@ -25,7 +25,7 @@ public class BenchmarkSubmitRequest   {
     private final String dataset;
 	
 	@NotBlank(message="task is required")
-	private ModelTask task;
+	private String task;
 
 
 
