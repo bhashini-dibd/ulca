@@ -8,8 +8,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
  */
 public enum BenchmarkSubmissionType {
     SUBMITTED("Submitted"),
-    VERIFIED("Verified"),
-    FAILED("failed");
+    COMPLETED("Completed"),
+    FAILED("Failed");
 
 
   private String value;
