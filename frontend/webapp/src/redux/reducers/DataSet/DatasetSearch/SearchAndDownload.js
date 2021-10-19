@@ -1,4 +1,5 @@
 import C from "../../../actions/constants";
+import * as Filters from "../../../../configs/filters.json";
 
 const initialState = {
   result: {
@@ -14,52 +15,14 @@ const initialState = {
 };
 
 const getSearchOptions = (payload, prevState) => {
-  let newState = Object.assign({}, JSON.parse(JSON.stringify(prevState)));
-  let datasetTypeArray = Object.keys(payload.data);
-  let datasetType = datasetTypeArray.map((type) => {
+  const dataset = payload[0].datasetType;
+  return Filters.default[dataset].filters.map((filter) => {
+    const values = payload[0].values.filter((val) => val.code === filter.value);
     return {
-      label: payload.data[type].label,
-      value: type,
+      ...filter,
+      values: values.length && values[0].values,
     };
   });
-
-  let sourceLanguage = payload.data[datasetTypeArray[0]].filters[0].values.map(
-    (lang) => {
-      return {
-        value: lang.value,
-        label: lang.label,
-      };
-    }
-  );
-
-  let basicFilter = [];
-  prevState.basicFilter.forEach((base, i) => {
-    basicFilter.push(base);
-    payload.data[datasetTypeArray[0]].filters.forEach((filter) => {
-      if (base.value === filter.filter) {
-        basicFilter[i].values = filter.values;
-        basicFilter[i].type = filter.type;
-        basicFilter[i].active = filter.active;
-      }
-    });
-  });
-  let advFilter = [];
-  prevState.advFilter.forEach((base, i) => {
-    advFilter.push(base);
-    payload.data[datasetTypeArray[0]].filters.forEach((filter) => {
-      if (base.value === filter.filter) {
-        advFilter[i].values = filter.values;
-        advFilter[i].type = filter.type;
-        advFilter[i].active = filter.active;
-      }
-    });
-  });
-  newState["basicFilter"] = basicFilter;
-  newState["advFilter"] = advFilter;
-  newState["data"] = payload.data;
-  newState["datasetType"] = datasetType;
-  newState["languagePair"]["sourceLang"] = sourceLanguage;
-  return newState;
 };
 
 const getSearchFilter = (datasetType, prevState, filterCategory) => {
@@ -113,7 +76,10 @@ const reducer = (state = initialState, action) => {
     case C.GET_SEARCH_OPTIONS:
       return {
         ...state,
-        result: getSearchOptions(action.payload, state.result),
+        result: {
+          ...state.result,
+          data: getSearchOptions(action.payload, state.result),
+        },
       };
     case C.GET_SEARCH_FILTERS:
       return {

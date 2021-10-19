@@ -1,6 +1,24 @@
 {
     "parallel-corpus": {
         "filters": [{
+                "value": "sourceLanguage",
+                "label": "Source Language",
+                "filterType": "language",
+                "active": true,
+                "input": "single-select",
+                "type": "array",
+                "parent": null
+            },
+            {
+                "value": "targetLanguage",
+                "label": "Target Language",
+                "filterType": "language",
+                "active": true,
+                "input": "multi-select",
+                "type": "array",
+                "parent": null
+            },
+            {
                 "value": "domain",
                 "label": "Domain",
                 "filterType": "basic",

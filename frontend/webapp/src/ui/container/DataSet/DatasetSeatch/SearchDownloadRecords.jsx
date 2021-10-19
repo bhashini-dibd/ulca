@@ -26,7 +26,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import MultiAutocomplete from "../../../components/common/Autocomplete";
 import { FilterBy } from "../../../../configs/DatasetItems";
 import SubmitSearchRequest from "../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest";
-// import DatasetType from '../../../../configs/DatasetItems';
+import DatasetType from "../../../../configs/DatasetItems";
 import getLanguageLabel from "../../../../utils/getLabel";
 import SearchAndDownloadAPI from "../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
@@ -38,6 +38,7 @@ import {
 import SingleAutoComplete from "../../../components/common/SingleAutoComplete";
 import { filterItems } from "../../../../configs/filterItems";
 import SearchDescription from "./SearchDescription";
+import * as Filters from "../../../../configs/filters.json";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -62,9 +63,9 @@ const SearchAndDownloadRecords = (props) => {
   const [datasetType, setDatasetType] = useState({
     "parallel-corpus": true,
   });
-  const DatasetType = useSelector(
-    (state) => state.mySearchOptions.result.datasetType
-  );
+  // const DatasetType = useSelector(
+  //   (state) => state.mySearchOptions.result.datasetType
+  // );
   const Language = useSelector(
     (state) => state.mySearchOptions.result.languagePair.sourceLang
   );
@@ -74,6 +75,7 @@ const SearchAndDownloadRecords = (props) => {
   const advFilter = useSelector(
     (state) => state.mySearchOptions.result.advFilter
   );
+  const filters = useSelector((state) => state.mySearchOptions.result.data);
   // const basicFilterCategory = useSelector(state => state.mySearchOptions.filterCategory[Object.keys(datasetType)[0]].basicFilters);
   // const advanceFilterCategory = useSelector(state => state.mySearchOptions.filterCategory[Object.keys(datasetType)[0]].advancedFilters);
 
@@ -109,23 +111,9 @@ const SearchAndDownloadRecords = (props) => {
   });
 
   useEffect(() => {
-    fetch(
-      "https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev/filterClassification.json",
-      {
-        method: "get",
-      }
-    )
-      .then(async (res) => {
-        let rsp_data = await res.json();
-        if (res.ok) {
-          dispatch(getFilterCategory(rsp_data, Object.keys(datasetType)[0]));
-          const apiData = new SearchAndDownloadAPI();
-          dispatch(APITransport(apiData));
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const dataset = Object.keys(datasetType)[0];
+    const apiData = new SearchAndDownloadAPI(dataset);
+    dispatch(APITransport(apiData));
     previousUrl.current = params;
 
     if (data[0]) {
@@ -716,7 +704,7 @@ const SearchAndDownloadRecords = (props) => {
                 {getTitle()}
               </Typography>
               <div className={classes.subHeader}>
-                {datasetType["parallel-corpus"] && (
+                {/* {datasetType["parallel-corpus"] && (
                   //  renderTexfield("select-source-language", "Source Language *")
                   <SingleAutoComplete
                     handleChange={handleLanguagePairChange}
@@ -725,9 +713,48 @@ const SearchAndDownloadRecords = (props) => {
                     labels={Language}
                     placeholder={`Source Language *`}
                   />
-                )}
+                )} */}
+                {filters &&
+                  filters.map((val) => {
+                    if (
+                      val.filterType === "language" &&
+                      val.input === "single-select"
+                    ) {
+                      return (
+                        <SingleAutoComplete
+                          handleChange={handleLanguagePairChange}
+                          id={"source"}
+                          value={languagePair.source}
+                          labels={val.values}
+                          placeholder={`${val.label} *`}
+                        />
+                      );
+                    } else if (
+                      val.filterType === "language" &&
+                      val.input === "multi-select"
+                    ) {
+                      return (
+                        <div className={classes.autoComplete}>
+                        <MultiAutocomplete
+                          id="language-target"
+                          options={val.values}
+                          filter="target"
+                          value={languagePair.target}
+                          handleOnChange={handleLanguagePairChange}
+                          label={getLabel()}
+                          error={tgtError}
+                          helperText="This field is mandatory"
+                          disabled={
+                            !languagePair.source &&
+                            datasetType["parallel-corpus"]
+                          }
+                        />
+                        </div>
+                      );
+                    }
+                  })}
               </div>
-              <div className={classes.autoComplete}>
+              {/* <div className={classes.autoComplete}>
                 <MultiAutocomplete
                   id="language-target"
                   options={getTargetLang()}
@@ -741,7 +768,7 @@ const SearchAndDownloadRecords = (props) => {
                     !languagePair.source && datasetType["parallel-corpus"]
                   }
                 />
-              </div>
+              </div> */}
               <Typography className={classes.subHeader} variant="body1">
                 Filter by
               </Typography>
@@ -892,7 +919,12 @@ const SearchAndDownloadRecords = (props) => {
         >
           {data[0] &&
             data[0].searchInfo.map((val) => (
-              <SearchDescription title={val.title} para={val.para} color={val.color} image={val.imageUrl}/>
+              <SearchDescription
+                title={val.title}
+                para={val.para}
+                color={val.color}
+                image={val.imageUrl}
+              />
             ))}
         </Grid>
         <Grid
