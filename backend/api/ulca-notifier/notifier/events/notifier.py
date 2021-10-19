@@ -19,6 +19,7 @@ class NotifierEvent:
     #dumping errors onto redis store
     def data_submission_notifier(self, data):
         log.info(f'Request for notifying data submission updates for entityID:{data["entityID"]}')
+        log.info(data)
         try:
             status  =   (data["event"].split('-'))[-1]
             if      status      == "completed":
@@ -42,6 +43,7 @@ class NotifierEvent:
 
     def data_search_notifier(self, data):
         log.info(f'Request for notifying data search updates for entityID:{data["entityID"]}')
+        log.info(data)
         try:
             status  =   (data["event"].split('-'))[-1]
             if      status      == "completed":
@@ -59,6 +61,7 @@ class NotifierEvent:
     
     def benchmark_submission_notifier(self, data):
         log.info(f'Request for notifying benchmark submission updates for entityID:{data["entityID"]}')
+        log.info(data)
         try:
             status  =   (data["event"].split('-'))[-1]
             if      status      == "completed":
