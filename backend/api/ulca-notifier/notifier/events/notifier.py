@@ -30,7 +30,7 @@ class NotifierEvent:
                 subject         =   StaticConfigs.DS_SUBMIT_FAILED.value
 
             link                =   f'{base_url}{ds_contribution_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link}
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
             
@@ -49,7 +49,7 @@ class NotifierEvent:
                 receiver_list   =   [self.user_email]
                 subject         =   StaticConfigs.DS_SEARCH_COMPLETE.value
             link                =   f'{base_url}{ds_search_list_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link}
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":data["details"]["datasetType"],"modelName":None,"datasetName":None}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
         except Exception as e:
@@ -69,7 +69,7 @@ class NotifierEvent:
                 template        =   'bm_run_failed.html'
                 subject         =   StaticConfigs.BM_RUN_FAILED.value
             link                =   f'{base_url}{model_bm_contribution_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link}
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None,"modelName":None}#"modelName":data["details"]["modelName"]
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
         except Exception as e:
