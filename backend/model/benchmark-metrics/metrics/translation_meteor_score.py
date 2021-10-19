@@ -13,7 +13,7 @@ class TranslationMeteorScoreEval(ModelMetricEval):
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation):
         try:
-            return meteor.compute(predictions=machine_translation, references=ground_truth)['meteor']
+            return self.meteor.compute(predictions=machine_translation, references=ground_truth)['meteor']
         except Exception as e:
             log.exception(f"Exception in calculating METEOR Score: {str(e)}")
             return None
