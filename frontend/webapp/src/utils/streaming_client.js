@@ -4,7 +4,7 @@ let defaultSampleRate = 48000,
   input,
   processor;
 const hark = require("hark");
-const io = require("socket.io");
+const io = require("socket.io-client");
 /** Note: */
 // auto mic close needs to be added.
 // check for socket null in all used places.

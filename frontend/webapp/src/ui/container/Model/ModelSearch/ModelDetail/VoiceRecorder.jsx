@@ -42,6 +42,8 @@ const AudioRecord = (props) => {
   };
 
   const handleStart = (data) => {
+    const output = document.getElementById("asrCardOutput");
+    output.innerText = "";
     setData(null);
     setRecordAudio(RecordState.START);
     let language = "en-IN";
@@ -50,7 +52,8 @@ const AudioRecord = (props) => {
       console.log("Connected", id);
       if (action === null) {
         startStreaming(function (transcript) {
-          console.log(transcript);
+          const output = document.getElementById("asrCardOutput");
+          output.innerText = transcript;
         });
       } else {
         // post-done
@@ -110,22 +113,22 @@ const AudioRecord = (props) => {
           </Typography>{" "}
         </div>
 
-        <div style={{ display: "none" }}>
+        {/* <div style={{ display: "none" }}>
           <AudioReactRecorder
             state={recordAudio}
             onStop={onStop}
             style={{ display: "none" }}
           />
-        </div>
+        </div> */}
         <div className={classes.centerAudio}>
-          {data ? (
+          {/* {data ? (
             <audio src={data} controls id="sample"></audio>
-          ) : (
-            <audio src={"test"} controls id="sample"></audio>
-          )}
+          ) : ( */}
+          {/* <audio controls id="sample"></audio> */}
+          {/* )} */}
         </div>
       </CardContent>
-      <CardActions style={{ justifyContent: "flex-end", paddingRight: "20px" }}>
+      {/* <CardActions style={{ justifyContent: "flex-end", paddingRight: "20px" }}>
         <Button
           color="primary"
           variant="contained"
@@ -135,7 +138,7 @@ const AudioRecord = (props) => {
         >
           Convert
         </Button>
-      </CardActions>
+      </CardActions> */}
     </Card>
   );
 };
