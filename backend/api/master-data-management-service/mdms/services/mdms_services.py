@@ -10,6 +10,7 @@ model       =   StoreModel()
 class MasterDataServices():
 
     def get_attributes_data(self,master_list):
+        log.info("Searching for master in redis store")
         master_data         =   model.search(master_list)
         not_on_store_list   =   master_list
         if master_data:
