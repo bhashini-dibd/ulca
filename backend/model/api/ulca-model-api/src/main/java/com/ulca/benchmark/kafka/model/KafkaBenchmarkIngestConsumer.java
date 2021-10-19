@@ -104,7 +104,7 @@ public class KafkaBenchmarkIngestConsumer {
 				LanguagePair languages = objectMapper.readValue(params.get("languages").toString(), LanguagePair.class);
 				benchmark.setLanguages(languages);
 			}
-			benchmark.setStatus(BenchmarkSubmissionType.VERIFIED.toString());
+			benchmark.setStatus(BenchmarkSubmissionType.COMPLETED.toString());
 			
 			benchmarkDao.save(benchmark);
 			
