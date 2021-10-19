@@ -221,19 +221,19 @@ class ASRService:
                 if path:
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                           "count": hours, "dataset": path, "datasetSample": path_sample}
-                    pt.task_event_search(op, None)
+                    pt.task_event_search(op, None, dataset_type_asr)
                 else:
                     log.error(f'There was an error while pushing result to S3')
                     error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_asr, "serviceRequestNumber": query["serviceRequestNumber"],
                                                    "message": "There was an error while pushing result to object store"}
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                           "count": 0, "sample": [], "dataset": None, "datasetSample": None}
-                    pt.task_event_search(op, error)
+                    pt.task_event_search(op, error, dataset_type_asr)
             else:
                 log.info(f'No records retrieved for SRN -- {query["serviceRequestNumber"]}')
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                       "count": 0, "sample": [], "dataset": None, "datasetSample": None}
-                pt.task_event_search(op, None)
+                pt.task_event_search(op, None, dataset_type_asr)
             log.info(f'Done!')
             return op
         except Exception as e:
