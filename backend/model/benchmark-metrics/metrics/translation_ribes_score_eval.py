@@ -1,7 +1,6 @@
 import logging
 from logging.config import dictConfig
 import nltk
-import statistics
 from models.model_metric_eval import ModelMetricEval
 
 log = logging.getLogger('file')
@@ -13,11 +12,13 @@ class TranslationRibesScoreEval(ModelMetricEval):
 
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation):
-        ribes_score = []
+        reff = []
+        pred = []
         try:
             for gt, mt in zip(ground_truth,machine_translation):
-                ribes_score.append(nltk.translate.ribes_score.sentence_ribes([gt],mt))
-            return statistics.mean(ribes_score)
+                reff.append([gt.split()])
+                pred.append(mt.split())
+            return nltk.translate.ribes_score.corpus_ribes(reff,pred)
         except Exception as e:
             log.exception(f"Exception in calculating RIBES Score: {str(e)}")
             return None

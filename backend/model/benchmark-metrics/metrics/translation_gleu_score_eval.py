@@ -1,7 +1,6 @@
 import logging
 from logging.config import dictConfig
 import nltk
-import statistics
 from models.model_metric_eval import ModelMetricEval
 
 log = logging.getLogger('file')
@@ -13,11 +12,13 @@ class TranslationGleuScoreEval(ModelMetricEval):
 
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation):
-        gleu_score = []
+        reff = []
+        pred = []
         try:
             for gt, mt in zip(ground_truth,machine_translation):
-                gleu_score.append(nltk.translate.gleu_score.sentence_gleu([gt],mt))
-            return statistics.mean(gleu_score)
+                reff.append([gt.split()])
+                pred.append(mt.split())
+            return nltk.translate.gleu_score.corpus_gleu(reff,pred)
         except Exception as e:
             log.exception(f"Exception in calculating GLEU Score: {str(e)}")
             return None
