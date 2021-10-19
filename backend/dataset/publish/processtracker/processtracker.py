@@ -52,13 +52,12 @@ class ProcessTracker:
                     task_event["status"] = pt_failed_status
                     task_event["error"] = error
                     notifier_req = {"userID": data["userID"], "count": 0, "datasetType": dataset_type}
-                    notifier.create_notifier_event(data["serviceRequestNumber"], notifier_req)
                 else:
                     task_event["status"] = pt_success_status
+                    notifier_req = {"userID": data["userID"], "count": data["count"], "datasetType": dataset_type}
                 task_event["lastModifiedTime"] = str(datetime.now())
                 task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
-                notifier_req = {"userID": data["userID"], "count": data["count"], "datasetType": dataset_type}
                 notifier.create_notifier_event(data["serviceRequestNumber"], notifier_req)
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool,
