@@ -294,7 +294,7 @@ class ParallelService:
     '''
     def get_parallel_dataset(self, query):
         log.info(f'Fetching Parallel datasets for SRN -- {query["serviceRequestNumber"]}')
-        pt.task_event_search(query, None)
+        pt.task_event_search(query, None, dataset_type_parallel)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
@@ -360,20 +360,20 @@ class ParallelService:
                 if path:
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                           "count": count, "dataset": path, "datasetSample": path_sample}
-                    pt.task_event_search(op, None)
+                    pt.task_event_search(op, None, dataset_type_parallel)
                 else:
                     log.error(f'There was an error while pushing result to object store!')
                     error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_parallel, "serviceRequestNumber": query["serviceRequestNumber"],
                                                    "message": "There was an error while pushing result to object store"}
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                           "count": 0, "sample": [], "dataset": None, "datasetSample": None}
-                    pt.task_event_search(op, error)
+                    pt.task_event_search(op, error, dataset_type_parallel)
             else:
                 log.info(f'No records retrieved for SRN -- {query["serviceRequestNumber"]}')
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                       "count": 0, "sample": [], "dataset": None,
                       "datasetSample": None}
-                pt.task_event_search(op, None)
+                pt.task_event_search(op, None, dataset_type_parallel)
             log.info(f'Done!')
             op["pipeline"] = pipeline
             return op
