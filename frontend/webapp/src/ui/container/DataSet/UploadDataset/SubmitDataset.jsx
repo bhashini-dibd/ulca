@@ -51,7 +51,7 @@ const StyledMenu = withStyles({})((props) => (
 const SubmitDataset = (props) => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null);
-  const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "" });
+  const [dataset, setDatasetInfo] = useState({ name: "", url: "" });
   const [title, setTitle] = useState("Parallel Dataset");
   const dispatch = useDispatch();
   const [snackbar, setSnackbarInfo] = useState({
@@ -59,7 +59,7 @@ const SubmitDataset = (props) => {
     message: "",
     variant: "success",
   });
-  const [error, setError] = useState({ datasetName: "", url: "", type: false });
+  const [error, setError] = useState({ name: "", url: "", type: false });
   const [search, setSearch] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const history = useHistory();
@@ -222,13 +222,13 @@ const SubmitDataset = (props) => {
   };
 
   const handleSubmitDataset = (e) => {
-    if (dataset.datasetName.trim() === "" || dataset.url.trim() === "") {
+    if (dataset.name.trim() === "" || dataset.url.trim() === "") {
       setError({
         ...error,
-        name: !dataset.datasetName.trim() ? "Name cannot be empty" : "",
+        name: !dataset.name.trim() ? "Name cannot be empty" : "",
         url: !dataset.url.trim() ? "URL cannot be empty" : "",
       });
-    } else if (dataset.datasetName.length > 256) {
+    } else if (dataset.name.length > 256) {
       setError({ ...error, name: "Max 256 characters allowed" });
     } else if (!validURL(dataset.url)) {
       setError({ ...error, url: "‘Invalid URL" });
@@ -321,13 +321,13 @@ const SubmitDataset = (props) => {
                           fullWidth
                           color="primary"
                           label="Dataset name"
-                          value={dataset.datasetName}
+                          value={dataset.name}
                           error={error.name ? true : false}
                           helperText={error.name}
                           onChange={(e) => {
                             setDatasetInfo({
                               ...dataset,
-                              datasetName: e.target.value,
+                              name: e.target.value,
                             });
                             setError({ ...error, name: false });
                           }}
