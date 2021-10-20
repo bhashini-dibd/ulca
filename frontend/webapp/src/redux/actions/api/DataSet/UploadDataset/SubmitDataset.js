@@ -7,11 +7,10 @@ import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from "md5";
 
 export default class SubmitDatasetAPI extends API {
-  constructor(fileDetails, isChecked, task, timeout = 2000) {
+  constructor(fileDetails, isChecked, timeout = 2000) {
     super("POST", timeout, false);
     this.fileDetails = fileDetails;
     this.isChecked = isChecked;
-    this.task = task;
     this.endpoint = `${super.apiEndPointAuto()}${
       isChecked ? ENDPOINTS.datasetBenchmarkSubmit : ENDPOINTS.datasetSubmit
     }`;
@@ -23,13 +22,7 @@ export default class SubmitDatasetAPI extends API {
   }
 
   getBody() {
-    let bodyData = this.isChecked
-      ? {
-          name: this.fileDetails.datasetName,
-          task: this.task,
-          dataset: this.fileDetails.url,
-        }
-      : this.fileDetails;
+    let bodyData = this.fileDetails;
     bodyData.userId = JSON.parse(localStorage.getItem("userDetails")).userID;
     return bodyData;
   }

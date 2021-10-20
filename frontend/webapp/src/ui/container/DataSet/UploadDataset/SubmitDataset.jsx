@@ -122,7 +122,7 @@ const SubmitDataset = (props) => {
   // }
 
   const handleApicall = async () => {
-    let apiObj = new SubmitDatasetApi(dataset, isChecked, selectedOption);
+    let apiObj = new SubmitDatasetApi(dataset, isChecked);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: JSON.stringify(apiObj.getBody()),
@@ -130,7 +130,6 @@ const SubmitDataset = (props) => {
     })
       .then(async (response) => {
         const rsp_data = await response.json();
-        console.log(response.ok, rsp_data);
         if (!response.ok) {
           setSnackbarInfo({
             ...snackbar,
@@ -156,7 +155,6 @@ const SubmitDataset = (props) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         setSnackbarInfo({
           ...snackbar,
           open: true,
@@ -364,7 +362,7 @@ const SubmitDataset = (props) => {
                           label="It is a Benchmark Dataset"
                         />
                       </Grid>
-                      {isChecked && (
+                      {/* {isChecked && (
                         <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                           <Typography
                             className={classes.typography}
@@ -386,7 +384,7 @@ const SubmitDataset = (props) => {
                             ))}
                           </Select>
                         </Grid>
-                      )}
+                      )} */}
                     </Grid>
                   </Grid>
                 </Grid>
