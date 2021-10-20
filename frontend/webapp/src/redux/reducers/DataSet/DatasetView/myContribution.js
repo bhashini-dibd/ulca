@@ -68,7 +68,10 @@ const getContributionList = (state, payload) => {
   let filter = { status: [], datasetType: [] };
   let refreshStatus = false;
   payload.forEach((element) => {
-    let getType = getDatasetName(element.datasetType);
+    let getType =
+      element.datasetType !== "Benchmark"
+        ? getDatasetName(element.datasetType)
+        : element.datasetType;
     responseData.push({
       submitRefNumber: element.serviceRequestNumber,
       datasetName: element.datasetName,

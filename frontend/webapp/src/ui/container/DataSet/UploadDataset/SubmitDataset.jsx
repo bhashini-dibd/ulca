@@ -30,7 +30,7 @@ import getTitleName from "../../../../utils/getDataset";
 import C from "../../../../redux/actions/constants";
 import { useDispatch } from "react-redux";
 import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
-import DatasetType from "../../../../configs/DatasetItems";
+import { ModelTask } from "../../../../configs/DatasetItems";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -130,6 +130,7 @@ const SubmitDataset = (props) => {
     })
       .then(async (response) => {
         const rsp_data = await response.json();
+        console.log(response.ok, rsp_data);
         if (!response.ok) {
           setSnackbarInfo({
             ...snackbar,
@@ -155,6 +156,7 @@ const SubmitDataset = (props) => {
         }
       })
       .catch((error) => {
+        console.log(error);
         setSnackbarInfo({
           ...snackbar,
           open: true,
@@ -377,7 +379,7 @@ const SubmitDataset = (props) => {
                             value={selectedOption}
                             onChange={(e) => setOptionLabel(e.target.value)}
                           >
-                            {DatasetType.map((menu) => (
+                            {ModelTask.map((menu) => (
                               <MenuItem value={menu.value}>
                                 {menu.label}
                               </MenuItem>
