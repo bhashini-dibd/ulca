@@ -13,8 +13,6 @@ import SearchResult from "./SearchResult";
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../styles/Dataset";
 import Snackbar from "../../../components/common/Snackbar";
-import BreadCrum from "../../../components/common/Breadcrum";
-import UrlConfig from "../../../../configs/internalurlmapping";
 import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import C from "../../../../redux/actions/constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,15 +28,10 @@ import DatasetType from "../../../../configs/DatasetItems";
 import getLanguageLabel from "../../../../utils/getLabel";
 import SearchAndDownloadAPI from "../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
-import AdvanceFilter from "../../../components/common/AdvanceFilter";
-import {
-  getFilter,
-  getFilterCategory,
-} from "../../../../redux/actions/api/DataSet/DatasetSearch/GetFilters";
+import { getFilter } from "../../../../redux/actions/api/DataSet/DatasetSearch/GetFilters";
 import SingleAutoComplete from "../../../components/common/SingleAutoComplete";
 import { filterItems } from "../../../../configs/filterItems";
 import SearchDescription from "./SearchDescription";
-import * as Filters from "../../../../configs/filters.json";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -57,27 +50,16 @@ const StyledMenu = withStyles({})((props) => (
 ));
 const SearchAndDownloadRecords = (props) => {
   const { classes } = props;
-  const url = UrlConfig.dataset;
-  const urlMySearch = UrlConfig.mySearches;
 
   const [datasetType, setDatasetType] = useState({
     "parallel-corpus": true,
   });
-  // const DatasetType = useSelector(
-  //   (state) => state.mySearchOptions.result.datasetType
-  // );
-  const Language = useSelector(
-    (state) => state.mySearchOptions.result.languagePair.sourceLang
-  );
-  const basicFilter = useSelector(
-    (state) => state.mySearchOptions.result.basicFilter
-  );
-  const advFilter = useSelector(
-    (state) => state.mySearchOptions.result.advFilter
-  );
+
   const filters = useSelector((state) => state.mySearchOptions.result.data);
-  // const basicFilterCategory = useSelector(state => state.mySearchOptions.filterCategory[Object.keys(datasetType)[0]].basicFilters);
-  // const advanceFilterCategory = useSelector(state => state.mySearchOptions.filterCategory[Object.keys(datasetType)[0]].advancedFilters);
+
+  const Language = filters.filter((elem) => elem.filterType === "language");
+  const basicFilter = filters.filter((elem) => elem.filterType === "basic");
+  const advFilter = filters.filter((elem) => elem.filterType === "advance");
 
   const dispatch = useDispatch();
   const param = useParams();
@@ -217,13 +199,7 @@ const SearchAndDownloadRecords = (props) => {
       ...updatedFilterState,
     });
   };
-
-  // useEffect(()=>{
-  //     if(DatasetType.length){
-  //         dispatch(getFilter('parallel-corpus'))
-  //     }
-  // },[DatasetType])
-
+  
   useEffect(() => {
     if (previousUrl.current !== params && previousUrl.current !== "initiate") {
       setLanguagePair({ target: [], source: "" });
@@ -309,12 +285,12 @@ const SearchAndDownloadRecords = (props) => {
     setSrcError(false);
     setTgtError(false);
   };
-  const getLabel = () => {
-    if (datasetType["parallel-corpus"]) return "Target Language *";
-    // else if (datasetType['ocr-corpus'])
-    //     return "Script *"
-    else return "Language *";
-  };
+  // const getLabel = () => {
+  //   if (datasetType["parallel-corpus"]) return "Target Language *";
+  //   // else if (datasetType['ocr-corpus'])
+  //   //     return "Script *"
+  //   else return "Language *";
+  // };
 
   const getTitle = () => {
     if (datasetType["parallel-corpus"]) return "Select Language Pair";
@@ -627,10 +603,12 @@ const SearchAndDownloadRecords = (props) => {
   };
 
   const renderSubFilters = () => {
-    const values = Object.values(advFilterState);
-    let renderFilter = values.map((filter) => {
-      if (filter && filter.hasOwnProperty("sub-filters")) {
-        return filter["sub-filters"].map((val) => (
+    const values = Object.values(advFilterState).map((val) => val.code);
+    console.log("values", values);
+    return advFilter.map((filter) => {
+      console.log(values.indexOf(filter.parent) > -1, filter.parent);
+      if (values.indexOf(filter.parent) > -1) {
+        return (
           <Grid
             className={classes.subHeader}
             item
@@ -644,15 +622,15 @@ const SearchAndDownloadRecords = (props) => {
               <SingleAutoComplete
                 handleChange={handleDropDownChange}
                 disabled={!languagePair.target.length}
-                id={val.filter}
-                labels={val.values}
-                placeholder={`Select ${val.label}`}
+                id={filter.value}
+                labels={filter.values}
+                placeholder={`Select ${filter.label}`}
               />
             ) : (
               <TextField
                 disabled={!languagePair.target.length}
-                id={val.filter}
-                label={`Select ${val.label}`}
+                id={filter.value}
+                label={`Select ${filter.label}`}
                 fullWidth
                 value={
                   advFilterState[filter.value]
@@ -665,11 +643,44 @@ const SearchAndDownloadRecords = (props) => {
               />
             )}
           </Grid>
-        ));
+        );
       }
     });
-    return renderFilter;
   };
+
+  const renderLanguage = () => {
+    return (
+      <div className={classes.autoComplete}>
+        {Language.map((val) => {
+          if (val.input === "single-select") {
+            return (
+              <SingleAutoComplete
+                handleChange={handleLanguagePairChange}
+                id={"source"}
+                value={languagePair.source}
+                labels={val.values}
+                placeholder={`${val.label} *`}
+              />
+            );
+          }
+          return (
+            <MultiAutocomplete
+              id="language-target"
+              options={val.values}
+              filter="target"
+              value={languagePair.target}
+              handleOnChange={handleLanguagePairChange}
+              label={`${val.label} *`}
+              error={tgtError}
+              helperText="This field is mandatory"
+              disabled={!languagePair.source && datasetType["parallel-corpus"]}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
   const renderFilters = () => {
     return (
       <Grid container spacing={3}>
@@ -703,57 +714,7 @@ const SearchAndDownloadRecords = (props) => {
               <Typography className={classes.subHeader} variant="body1">
                 {getTitle()}
               </Typography>
-              <div className={classes.subHeader}>
-                {/* {datasetType["parallel-corpus"] && (
-                  //  renderTexfield("select-source-language", "Source Language *")
-                  <SingleAutoComplete
-                    handleChange={handleLanguagePairChange}
-                    id={"source"}
-                    value={languagePair.source}
-                    labels={Language}
-                    placeholder={`Source Language *`}
-                  />
-                )} */}
-                {filters &&
-                  filters.map((val) => {
-                    if (
-                      val.filterType === "language" &&
-                      val.input === "single-select"
-                    ) {
-                      return (
-                        <SingleAutoComplete
-                          handleChange={handleLanguagePairChange}
-                          id={"source"}
-                          value={languagePair.source}
-                          labels={val.values}
-                          placeholder={`${val.label} *`}
-                        />
-                      );
-                    } else if (
-                      val.filterType === "language" &&
-                      val.input === "multi-select"
-                    ) {
-                      return (
-                        <div className={classes.autoComplete}>
-                        <MultiAutocomplete
-                          id="language-target"
-                          options={val.values}
-                          filter="target"
-                          value={languagePair.target}
-                          handleOnChange={handleLanguagePairChange}
-                          label={getLabel()}
-                          error={tgtError}
-                          helperText="This field is mandatory"
-                          disabled={
-                            !languagePair.source &&
-                            datasetType["parallel-corpus"]
-                          }
-                        />
-                        </div>
-                      );
-                    }
-                  })}
-              </div>
+              {renderLanguage()}
               {/* <div className={classes.autoComplete}>
                 <MultiAutocomplete
                   id="language-target"
@@ -836,7 +797,7 @@ const SearchAndDownloadRecords = (props) => {
               <div className={classes.advanceFilterContainer}>
                 {open &&
                   advFilter.map((filter) => {
-                    if (filter.active)
+                    if (filter.active && filter.parent === null)
                       return (
                         <Grid
                           className={classes.subHeader}
