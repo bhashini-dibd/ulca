@@ -241,7 +241,9 @@ const ContributionList = (props) => {
       },
       options: { sortDirection: "desc" },
     },
-    onRowClick: (rowData) => handleRowClick(rowData[0], rowData[1], rowData[4]),
+    onRowClick: (rowData) =>
+      rowData[2] !== "Benchmark" &&
+      handleRowClick(rowData[0], rowData[1], rowData[4]),
     // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
     search: false,

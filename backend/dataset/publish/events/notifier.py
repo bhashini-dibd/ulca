@@ -15,13 +15,15 @@ class NotifierEvent:
         pass
 
     # Method to post notification events to the notifier consumer
-    def create_notifier_event(self, srn, user_id, res_count):
+    def create_notifier_event(self, srn, notifier_req):
+
         try:
             event = {"event": notifier_search_complete_status,
                      "entityID": srn,
-                     "userID": user_id,
+                     "userID": notifier_req["userID"],
                      "details": {
-                         "resultCount": res_count
+                         "resultCount": notifier_req["count"],
+                         "datasetType": notifier_req["datasetType"]
                      }
                      }
             prod.produce(event, notifier_input_topic, None)

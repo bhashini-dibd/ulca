@@ -2,7 +2,7 @@
 
 ## Overview 
 
-The code in this repo could be utilized to automate procedures for submitting,searching and downloading datasets from ULCA website.
+The code in this repo could be utilized to automate procedures for submitting/searching datasets and submitting/benchmarking/publishing models from ULCA website.
 
 >IMPORTANT : This Script requires Browser and its Respective Driver [Supported Browsers - Chrome, Firefox, Opera].
 
