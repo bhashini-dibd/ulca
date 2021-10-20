@@ -142,7 +142,7 @@ class OCRService:
     '''
     def get_ocr_dataset(self, query):
         log.info(f'Fetching OCR datasets for SRN -- {query["serviceRequestNumber"]}')
-        pt.task_event_search(query, None)
+        pt.task_event_search(query, None, dataset_type_ocr)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit

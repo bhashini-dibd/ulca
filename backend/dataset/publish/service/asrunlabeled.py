@@ -151,7 +151,7 @@ class ASRUnlabeledService:
     '''
     def get_asr_unlabeled_dataset(self, query):
         log.info(f'Fetching ASR UNLABELED datasets for SRN -- {query["serviceRequestNumber"]}')
-        pt.task_event_search(query, None)
+        pt.task_event_search(query, None, dataset_type_asr_unlabeled)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
