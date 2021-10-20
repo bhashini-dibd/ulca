@@ -1,75 +1,66 @@
-import {
-  Grid,
-  Typography,
-  Button,
-  CardContent,
-  Card,
-  CardActions,
-} from "@material-ui/core";
+import { Grid, Typography, CardContent, Card } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../../styles/Dataset";
 import { useState } from "react";
 import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import AudioReactRecorder, { RecordState } from "audio-react-recorder";
-import {
-  connect,
-  startStreaming,
-  stopStreaming,
-} from "../../../../../utils/streaming_client";
+import { RecordState } from "audio-react-recorder";
 import config from "../../../../../configs/configs";
-
+import StreamingClient from "../../../../../utils/streaming_client";
+import { vakyanshLanguage } from "../../../../../configs/DatasetItems";
 const SOCKET_URL = config.SOCKET_URL;
 
 const AudioRecord = (props) => {
-  const { classes, modelId } = props;
+  const [streaming, setStreaming] = useState(new StreamingClient());
+  const { classes, language } = props;
   const [recordAudio, setRecordAudio] = useState("");
-  const [base, setBase] = useState("");
   const [data, setData] = useState("");
-
-  const blobToBase64 = (blob) => {
-    var reader = new FileReader();
-    reader.readAsDataURL(blob.blob);
-    reader.onloadend = function () {
-      let base64data = reader.result;
-      setBase(base64data);
-    };
-  };
-
-  const handleCompute = () => {
-    props.handleApicall(modelId, base, "asr", true);
-  };
-
+  const languageArr = vakyanshLanguage.filter(
+    (lang) => lang.label === language
+  );
+  const languageCode = languageArr.length ? languageArr[0].value : "";
   const handleStart = (data) => {
     const output = document.getElementById("asrCardOutput");
     output.innerText = "";
     setData(null);
     setRecordAudio(RecordState.START);
-    let language = "en-IN";
-    console.log(SOCKET_URL, language);
-    connect(SOCKET_URL, language, function (action, id) {
-      console.log("Connected", id);
+    streaming.connect(SOCKET_URL, languageCode, function (action, id) {
       if (action === null) {
-        startStreaming(function (transcript) {
-          const output = document.getElementById("asrCardOutput");
-          output.innerText = transcript;
-        });
-      } else {
-        // post-done
-        console.log("Action", action, id);
+        streaming.startStreaming(
+          function (transcript) {
+            const output = document.getElementById("asrCardOutput");
+            output.innerText = transcript;
+          },
+          function (errorMsg) {
+            handleStop();
+          }
+        );
       }
     });
   };
 
   const handleStop = (value) => {
+    const output = document.getElementById("asrCardOutput");
+    streaming.punctuateText(
+      output.innerText,
+      "https://inference.vakyansh.in/punctuate",
+      (status, text) => {
+        output.innerText = text;
+      },
+      (status, error) => {
+        alert("Failed to punctuate");
+      }
+    );
+    streaming.stopStreaming((blob) => {
+      const urlBlob = window.URL.createObjectURL(blob);
+      onStop({ url: urlBlob });
+    });
     setRecordAudio(RecordState.STOP);
-    stopStreaming();
   };
 
   const onStop = (data) => {
     setData(data.url);
-    setBase(blobToBase64(data));
   };
 
   return (
@@ -112,33 +103,10 @@ const AudioRecord = (props) => {
             {recordAudio === "start" ? "Listening..." : ""}
           </Typography>{" "}
         </div>
-
-        {/* <div style={{ display: "none" }}>
-          <AudioReactRecorder
-            state={recordAudio}
-            onStop={onStop}
-            style={{ display: "none" }}
-          />
-        </div> */}
         <div className={classes.centerAudio}>
-          {/* {data ? (
-            <audio src={data} controls id="sample"></audio>
-          ) : ( */}
-          {/* <audio controls id="sample"></audio> */}
-          {/* )} */}
+          {data && <audio src={data} controls id="sample"></audio>}
         </div>
       </CardContent>
-      {/* <CardActions style={{ justifyContent: "flex-end", paddingRight: "20px" }}>
-        <Button
-          color="primary"
-          variant="contained"
-          size={"small"}
-          disabled={data ? false : true}
-          onClick={() => handleCompute()}
-        >
-          Convert
-        </Button>
-      </CardActions> */}
     </Card>
   );
 };
