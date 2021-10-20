@@ -154,6 +154,16 @@
             "role":"ADMIN",
             "actionID": "ede5a901-807b-460c-b2bd-10975b991b08",
             "active":true
+        },
+        {
+            "role":"BENCHMARK-DATASET-SUBMITTER",
+            "actionID": "1bdbb278-3f7e-4680-b892-519294a07518",
+            "active":true
+        },
+        {
+            "role":"ADMIN",
+            "actionID": "1bdbb278-3f7e-4680-b892-519294a07518",
+            "active":true
         }
     ]
 }

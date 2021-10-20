@@ -173,7 +173,7 @@
             "uri":"/ulca/apis/v0/benchmark/submit",
             "module":"ULCA-API-MODEL",
             "active":true,
-            "whiteList":true,
+            "whiteList":false,
             "description":"API to insert benchmark dataset"
         },
         {

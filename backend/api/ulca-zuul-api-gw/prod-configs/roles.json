@@ -24,6 +24,11 @@
             "code":"READONLY-USER",
             "active":true,
             "description":"Has access to Search features on ULCA"
+        },
+        {
+            "code":"BENCHMARK-DATASET-SUBMITTER",
+            "active":true,
+            "description":"Specific role to submit benchmark datasets"
         }
     ]
 }
