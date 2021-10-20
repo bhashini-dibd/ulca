@@ -4,6 +4,7 @@ const endpoints = {
   dataSetSearchApi: "/ulca/data-metric/v0/store/search",
   login: "/ulca/user-mgmt/v1/users/login",
   datasetSubmit: "/ulca/apis/v0/dataset/corpus/submit",
+  datasetBenchmarkSubmit:"/ulca/apis/v0/benchmark/submit",
   getSearchOptions: "/ulca/data-metric/v0/store/attributes",
   mySearches: "/ulca/apis/v0/dataset/corpus/search/listByUserId",
   submitSearchReq: "/ulca/apis/v0/dataset/corpus/search",

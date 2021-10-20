@@ -16,5 +16,11 @@
     },
     {
         "metric_name":"bert", "metric_implementation":"TranslationBertScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"gleu", "metric_implementation":"TranslationGleuScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"ribes", "metric_implementation":"TranslationRibesScoreEval", "score_context":"default"
     }
 ]
