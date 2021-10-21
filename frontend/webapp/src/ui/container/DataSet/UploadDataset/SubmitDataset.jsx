@@ -35,7 +35,7 @@ import { translate } from "../../../../assets/localisation";
 const SubmitDataset = (props) => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null);
-  const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "" });
+  const [dataset, setDatasetInfo] = useState({ name: "", url: "" });
   const [title, setTitle] = useState("Parallel Dataset");
   const dispatch = useDispatch();
   const [snackbar, setSnackbarInfo] = useState({
@@ -331,7 +331,7 @@ const SubmitDataset = (props) => {
                           }}
                         />
                       </Grid>
-                      <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                      {/* <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -345,7 +345,7 @@ const SubmitDataset = (props) => {
                           }
                           label="It is a Benchmark Dataset"
                         />
-                      </Grid>
+                      </Grid> */}
                       {/* {isChecked && (
                         <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                           <Typography
