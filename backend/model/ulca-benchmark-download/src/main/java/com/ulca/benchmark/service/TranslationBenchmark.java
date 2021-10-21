@@ -167,7 +167,7 @@ public class TranslationBenchmark {
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
 		metricRequest.put("modelName", model.getName());
-		if(benchmark.getLanguages().getTargetLanguage() != null) {
+		if(benchmark.getLanguages() != null && benchmark.getLanguages().getTargetLanguage() != null) {
 			String targetLanguage = benchmark.getLanguages().getTargetLanguage().toString();
 			metricRequest.put("targetLanguage", targetLanguage);
 		}
