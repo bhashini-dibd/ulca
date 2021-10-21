@@ -157,10 +157,10 @@ const MySearches = (props) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <div style={{ textTransform: "none" }}>
-              {tableMeta.rowData[5] === "asr-corpus" ||
+              {tableMeta.rowData[4]!=='In-Progress' && (tableMeta.rowData[5] === "asr-corpus" ||
               tableMeta.rowData[5] === "asr-unlabeled-corpus"
                 ? `${tableMeta.rowData[3]} hrs`
-                : tableMeta.rowData[3]}
+                : tableMeta.rowData[3])}
             </div>
           );
         },
