@@ -112,7 +112,10 @@ const ContributionList = (props) => {
       }
     }
   }, [data]);
-
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   // useEffect(() => {
   //   document.querySelectorAll(`button`).forEach((element) => {
   //     element.classList.forEach((list) => {
