@@ -11,7 +11,7 @@ class TranslationGleuScoreEval(ModelMetricEval):
         pass
 
 
-    def machine_translation_metric_eval(self, ground_truth, machine_translation):
+    def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         reff = []
         pred = []
         try:

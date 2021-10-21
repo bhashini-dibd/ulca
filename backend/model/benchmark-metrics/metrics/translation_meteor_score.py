@@ -11,7 +11,7 @@ class TranslationMeteorScoreEval(ModelMetricEval):
         self.meteor = load_metric('meteor')
         
 
-    def machine_translation_metric_eval(self, ground_truth, machine_translation):
+    def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         try:
             return self.meteor.compute(predictions=machine_translation, references=ground_truth)['meteor']
         except Exception as e:

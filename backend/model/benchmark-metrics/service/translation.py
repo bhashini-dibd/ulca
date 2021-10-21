@@ -34,7 +34,7 @@ class TranslationMetricEvalHandler:
 
                     ground_truth = [corpus_sentence["tgt"] for corpus_sentence in benchmark["corpus"]]
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
-                    eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation)
+                    eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation, request['targetLanguage'])
                     if eval_score:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': float(np.round(eval_score, 3))}
                         repo.insert(doc)
