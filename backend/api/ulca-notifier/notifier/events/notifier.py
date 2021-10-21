@@ -1,5 +1,6 @@
 import logging
 from logging.config import dictConfig
+from os import name
 from configs import StaticConfigs
 from configs.configs import base_url,ds_contribution_endpoint,model_bm_contribution_endpoint,ds_search_list_endpoint
 from utils.notifierutils import NotifierUtils
@@ -29,9 +30,11 @@ class NotifierEvent:
             elif    status      == "failed":
                 template        =   'ds_submit_failed.html'
                 subject         =   StaticConfigs.DS_SUBMIT_FAILED.value
-
+            types               =   {"parallel-corpus":"Parallel Dataset","monolingual-corpus":"Monolingual Dataset","asr-corpus":"ASR/TTS Dataset",
+                                        "asr-unlabeled-corpus":"ASR Unlabeled Dataset","ocr-corpus":"OCR Dataset","document-layout-corpus":"Document Layout Dataset"}
+            name                =   types.get(data["details"]["datasetName"])
             link                =   f'{base_url}{ds_contribution_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None}
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":name,"datasetType":None,"modelName":None}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
             
