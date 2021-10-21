@@ -95,6 +95,7 @@ const SearchModelDetail = (props) => {
             <HostedInferASR
               task={data.task}
               source={data.source}
+              language={data.language}
               inferenceEndPoint={data.inferenceEndPoint}
               modelId={params.srno}
             />

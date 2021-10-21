@@ -8,8 +8,14 @@ import {
   TextField,
   Link,
   Hidden,
+  FormControlLabel,
+  Checkbox,
+  Menu,
+  MenuItem,
+  InputLabel,
+  Select,
 } from "@material-ui/core";
-// import Autocomplete from '@material-ui/lab/Autocomplete';
+import DownIcon from "@material-ui/icons/ArrowDropDown";
 import BreadCrum from "../../../components/common/Breadcrum";
 import { withStyles } from "@material-ui/core/styles";
 import { RadioButton, RadioGroup } from "react-radio-buttons";
@@ -37,9 +43,11 @@ const SubmitDataset = (props) => {
     message: "",
     variant: "success",
   });
-  const [error, setError] = useState({ datasetName: "", url: "", type: false });
+  const [error, setError] = useState({ name: "", url: "", type: false });
   const [search, setSearch] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
   const history = useHistory();
+  const [selectedOption, setOptionLabel] = useState("");
 
   // const handleClick = (event) => {
   //     setAnchorEl(event.currentTarget)
@@ -98,7 +106,7 @@ const SubmitDataset = (props) => {
   // }
 
   const handleApicall = async () => {
-    let apiObj = new SubmitDatasetApi(dataset);
+    let apiObj = new SubmitDatasetApi(dataset, isChecked);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: JSON.stringify(apiObj.getBody()),
@@ -198,13 +206,13 @@ const SubmitDataset = (props) => {
   };
 
   const handleSubmitDataset = (e) => {
-    if (dataset.datasetName.trim() === "" || dataset.url.trim() === "") {
+    if (dataset.name.trim() === "" || dataset.url.trim() === "") {
       setError({
         ...error,
-        name: !dataset.datasetName.trim() ? "Name cannot be empty" : "",
+        name: !dataset.name.trim() ? "Name cannot be empty" : "",
         url: !dataset.url.trim() ? "URL cannot be empty" : "",
       });
-    } else if (dataset.datasetName.length > 256) {
+    } else if (dataset.name.length > 256) {
       setError({ ...error, name: "Max 256 characters allowed" });
     } else if (!validURL(dataset.url)) {
       setError({ ...error, url: "‘Invalid URL" });
@@ -222,7 +230,6 @@ const SubmitDataset = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
-
   const url = UrlConfig.dataset;
 
   return (
@@ -298,13 +305,13 @@ const SubmitDataset = (props) => {
                           fullWidth
                           color="primary"
                           label="Dataset name"
-                          value={dataset.datasetName}
+                          value={dataset.name}
                           error={error.name ? true : false}
                           helperText={error.name}
                           onChange={(e) => {
                             setDatasetInfo({
                               ...dataset,
-                              datasetName: e.target.value,
+                              name: e.target.value,
                             });
                             setError({ ...error, name: false });
                           }}
@@ -324,6 +331,44 @@ const SubmitDataset = (props) => {
                           }}
                         />
                       </Grid>
+                      <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              color="primary"
+                              checked={isChecked}
+                              onChange={() => {
+                                setIsChecked(!isChecked);
+                                setOptionLabel("");
+                              }}
+                            />
+                          }
+                          label="It is a Benchmark Dataset"
+                        />
+                      </Grid>
+                      {/* {isChecked && (
+                        <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                          <Typography
+                            className={classes.typography}
+                            variant="subtitle1"
+                          >
+                            Task
+                          </Typography>
+                          <Select
+                            fullWidth
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={selectedOption}
+                            onChange={(e) => setOptionLabel(e.target.value)}
+                          >
+                            {ModelTask.map((menu) => (
+                              <MenuItem value={menu.value}>
+                                {menu.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </Grid>
+                      )} */}
                     </Grid>
                   </Grid>
                 </Grid>

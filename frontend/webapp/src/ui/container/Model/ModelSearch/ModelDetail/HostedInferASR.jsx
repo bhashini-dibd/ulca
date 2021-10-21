@@ -19,8 +19,16 @@ import { useState } from "react";
 import { translate } from "../../../../../assets/localisation";
 
 const HostedInferASR = (props) => {
-  const { classes, title, para, modelId, task, source, inferenceEndPoint } =
-    props;
+  const {
+    classes,
+    title,
+    para,
+    modelId,
+    task,
+    source,
+    inferenceEndPoint,
+    language,
+  } = props;
   const history = useHistory();
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
@@ -123,7 +131,7 @@ const HostedInferASR = (props) => {
       {/* <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
 
       <Grid className={classes.grid} item xl={5} lg={5} md={5} sm={12} xs={12}>
-        <AudioRecord modelId={modelId} handleApicall={handleApicall} />
+        <AudioRecord modelId={modelId} handleApicall={handleApicall} language={language}/>
       </Grid>
       <Grid className={classes.grid} item xl={6} lg={6} md={6} sm={12} xs={12}>
         <Card className={classes.asrCard}>
@@ -132,7 +140,7 @@ const HostedInferASR = (props) => {
               {translate("label.output")}
             </Typography>
           </Grid>
-          <CardContent>{targetAudio}</CardContent>
+          <CardContent id="asrCardOutput">{targetAudio}</CardContent>
         </Card>
       </Grid>
 

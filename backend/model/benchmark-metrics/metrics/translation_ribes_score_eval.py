@@ -1,21 +1,26 @@
 import logging
 from logging.config import dictConfig
-from datasets import load_metric
+import nltk
 from models.model_metric_eval import ModelMetricEval
 
 log = logging.getLogger('file')
 
-class TranslationMeteorScoreEval(ModelMetricEval):
+class TranslationRibesScoreEval(ModelMetricEval):
 
     def __init__(self):
-        self.meteor = load_metric('meteor')
-        
+        pass
+
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation):
+        reff = []
+        pred = []
         try:
-            return self.meteor.compute(predictions=machine_translation, references=ground_truth)['meteor']
+            for gt, mt in zip(ground_truth,machine_translation):
+                reff.append([gt.split()])
+                pred.append(mt.split())
+            return nltk.translate.ribes_score.corpus_ribes(reff,pred)
         except Exception as e:
-            log.exception(f"Exception in calculating METEOR Score: {str(e)}")
+            log.exception(f"Exception in calculating RIBES Score: {str(e)}")
             return None
 
 #LogConfig
