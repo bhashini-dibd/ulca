@@ -55,8 +55,7 @@ const SearchAndDownloadRecords = (props) => {
     "parallel-corpus": true,
   });
 
-  const filters = useSelector((state) => state.mySearchOptions.result.data);
-
+  const filters = useSelector((state) => state.mySearchOptions.filters);
   const Language = filters.filter((elem) => elem.filterType === "language");
   const basicFilter = filters.filter((elem) => elem.filterType === "basic");
   const advFilter = filters.filter((elem) => elem.filterType === "advance");
@@ -199,7 +198,7 @@ const SearchAndDownloadRecords = (props) => {
       ...updatedFilterState,
     });
   };
-  
+
   useEffect(() => {
     if (previousUrl.current !== params && previousUrl.current !== "initiate") {
       setLanguagePair({ target: [], source: "" });
@@ -604,9 +603,7 @@ const SearchAndDownloadRecords = (props) => {
 
   const renderSubFilters = () => {
     const values = Object.values(advFilterState).map((val) => val.code);
-    console.log("values", values);
     return advFilter.map((filter) => {
-      console.log(values.indexOf(filter.parent) > -1, filter.parent);
       if (values.indexOf(filter.parent) > -1) {
         return (
           <Grid
@@ -798,51 +795,51 @@ const SearchAndDownloadRecords = (props) => {
                 {open &&
                   advFilter.map((filter) => {
                     if (filter.active && filter.parent === null)
-                      return (
-                        <Grid
-                          className={classes.subHeader}
-                          item
-                          xs={12}
-                          sm={12}
-                          md={12}
-                          lg={12}
-                          xl={12}
-                        >
-                          {filter.type !== "text" ? (
-                            <SingleAutoComplete
-                              handleChange={handleDropDownChange}
-                              disabled={!languagePair.target.length}
-                              id={filter.value}
-                              labels={filter.values}
-                              placeholder={`Select ${filter.label}`}
-                              value={
-                                advFilterState[filter.value]
-                                  ? advFilterState[filter.value]
-                                  : ""
-                              }
-                            />
-                          ) : (
-                            <TextField
-                              disabled={!languagePair.target.length}
-                              id={filter.value}
-                              label={`Select ${filter.label}`}
-                              fullWidth
-                              value={
-                                advFilterState[filter.value]
-                                  ? advFilterState[filter.value].value
-                                  : ""
-                              }
-                              onChange={(e) =>
-                                handleDropDownChange(
-                                  e.target.value,
-                                  filter.value,
-                                  "text"
-                                )
-                              }
-                            />
-                          )}
-                        </Grid>
-                      );
+                    return (
+                      <Grid
+                        className={classes.subHeader}
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                      >
+                        {filter.type !== "text" ? (
+                          <SingleAutoComplete
+                            handleChange={handleDropDownChange}
+                            disabled={!languagePair.target.length}
+                            id={filter.value}
+                            labels={filter.values}
+                            placeholder={`Select ${filter.label}`}
+                            value={
+                              advFilterState[filter.value]
+                                ? advFilterState[filter.value]
+                                : ""
+                            }
+                          />
+                        ) : (
+                          <TextField
+                            disabled={!languagePair.target.length}
+                            id={filter.value}
+                            label={`Select ${filter.label}`}
+                            fullWidth
+                            value={
+                              advFilterState[filter.value]
+                                ? advFilterState[filter.value].value
+                                : ""
+                            }
+                            onChange={(e) =>
+                              handleDropDownChange(
+                                e.target.value,
+                                filter.value,
+                                "text"
+                              )
+                            }
+                          />
+                        )}
+                      </Grid>
+                    );
                   })}
                 {renderSubFilters()}
                 {open && renderAdvanceFilter()}

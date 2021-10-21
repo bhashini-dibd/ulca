@@ -23,10 +23,7 @@ export default class SearchAndDownload extends API {
 
   processResponse(res) {
     super.processResponse(res);
-    console.log(res.data.datasetFilterParams);
-    this.report = res.data.datasetFilterParams.filter(
-      (val) => val.datasetType === this.task
-    );
+    this.report = res.data.datasetFilterParams;
   }
 
   apiEndPoint() {
