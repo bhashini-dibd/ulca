@@ -121,15 +121,40 @@
       }
     },
     {
-      "code": "snr",
-      "label": "SNR Range",
+      "code": "minSnr",
+      "label": "Min SNR",
       "active": true,
       "values": [
         {
-          "minScore": 0,
-          "maxScore": 1
+          "value": 0,
+          "label": "0"
+        },
+        {
+          "value": 18,
+          "label": "18"
         }
       ]
+    },
+    {
+      "code": "maxSnr",
+      "label": "Max SNR",
+      "active": true,
+      "values": [
+        {
+          "value": 18,
+          "label": "18"
+        },
+        {
+          "value": 30,
+          "label": "30"
+        }
+      ]
+    },
+    {
+      "code": "snr",
+      "label": "SNR",
+      "active": true,
+      "values": []
     },
     {
       "code": "minNoOfSpeakers",

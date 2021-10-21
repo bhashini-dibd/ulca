@@ -12,7 +12,7 @@
       },
       {
         "code": "asr-corpus",
-        "label": "ASR Dataset",
+        "label": "ASR/TTS Dataset",
         "active": true
       },
       {
