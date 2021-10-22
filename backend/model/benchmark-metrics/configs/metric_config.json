@@ -22,5 +22,11 @@
     },
     {
         "metric_name":"ribes", "metric_implementation":"TranslationRibesScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"wer", "metric_implementation":"OCRWEREval", "score_context":"default"
+    },
+    {
+        "metric_name":"cer", "metric_implementation":"OCRCEREval", "score_context":"default"
     }
 ]
