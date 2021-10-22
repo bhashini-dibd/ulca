@@ -28,37 +28,37 @@ class TranslationMetricEvalHandler:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
-                        mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId']}
+                        mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
                         prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                         return
 
                     ground_truth = [corpus_sentence["tgt"] for corpus_sentence in benchmark["corpus"]]
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
-                    eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation)
+                    eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation, request['targetLanguage'])
                     if eval_score:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': float(np.round(eval_score, 3))}
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Completed'})
-                        mail_notif_event = {"event": ulca_notifier_benchmark_completed_event, "entityID": request['modelId'], "userID": request['userId']}
+                        mail_notif_event = {"event": ulca_notifier_benchmark_completed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
                         prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                     else:
                         log.exception("Exception while metric evaluation of model")
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
-                        mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId']}
+                        mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
                         prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                                
             else:
                 log.exception("Missing parameter: benchmark details")
                 repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
-                mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId']}
+                mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
                 prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                 return
         except Exception as e:
             log.exception(f"Exception while metric evaluation of model: {str(e)}")
             repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
-            mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId']}
+            mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
             prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
            
 # Log config

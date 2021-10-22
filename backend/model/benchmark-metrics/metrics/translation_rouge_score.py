@@ -12,7 +12,7 @@ class TranslationRougeScoreEval(ModelMetricEval):
         self.rouge = Rouge()
 
 
-    def machine_translation_metric_eval(self, ground_truth, machine_translation):
+    def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         rougescore = []
         try:
             for gt,mt in zip(ground_truth,machine_translation):
