@@ -105,6 +105,8 @@ public class BenchmarkService {
 		benchmark.setDataset(request.getDataset());
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());		
 		benchmark.setTask(task);
+		benchmark.setSubmittedOn(new Date().toString());	
+		benchmark.setCreatedOn(new Date().toString());
 		benchmarkDao.save(benchmark);
 		
 		//send data to benchmark ingest topic to download benmark and validate and update
