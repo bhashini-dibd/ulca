@@ -1,5 +1,7 @@
 package com.ulca.benchmark.request;
 
+import javax.validation.constraints.NotBlank;
+
 import io.swagger.model.Domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,9 +16,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BenchmarkListByModelRequest {
 	
-  // private String task ;
-  // private Domain domain ;
-   private String modelId;
+	@NotBlank(message="modelId is required")
+	private String modelId;
    
 
 }

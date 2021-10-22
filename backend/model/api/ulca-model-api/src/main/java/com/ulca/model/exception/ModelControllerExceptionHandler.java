@@ -94,6 +94,13 @@ public class ModelControllerExceptionHandler {
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 	
+	@ExceptionHandler(RequestParamValidationException.class)
+	  public final ResponseEntity<Object> handleRequestParamValidationException(RequestParamValidationException ex, WebRequest request) {
+		
+		String errorCode = "Validation Failed" ;
+		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
 	
 	
 }
