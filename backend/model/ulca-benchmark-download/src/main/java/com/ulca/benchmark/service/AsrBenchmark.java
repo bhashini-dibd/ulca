@@ -38,7 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.benchmark.request.AsrComputeRequest;
 import com.ulca.benchmark.request.AsrComputeResponse;
-import com.ulca.model.dao.AsrCallBackRequest;
+//import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.ASRInference;
@@ -72,6 +72,7 @@ public class AsrBenchmark {
 	WebClient.Builder builder;
 
 	
+	/*
 
 	public String compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
 			byte[] base64audioContent)
@@ -121,6 +122,7 @@ public class AsrBenchmark {
 		
 	}
 	
+	*/
 	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
@@ -192,6 +194,12 @@ public class AsrBenchmark {
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
+		metricRequest.put("modelName", model.getName());
+		if(benchmark.getLanguages() != null && benchmark.getLanguages().getTargetLanguage() != null) {
+			String targetLanguage = benchmark.getLanguages().getTargetLanguage().toString();
+			metricRequest.put("targetLanguage", targetLanguage);
+		}
+		
 		metricRequest.put("userId", userId);
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
@@ -206,7 +214,7 @@ public class AsrBenchmark {
 	public String asrComputeInternal(AsrComputeRequest request) {
 		
 		AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
-				.body(Mono.just(request), AsrCallBackRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
+				.body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
 				.block();
 		
 		return response.getData().getTranscript();

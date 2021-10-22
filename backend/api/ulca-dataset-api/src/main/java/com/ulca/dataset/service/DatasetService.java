@@ -25,6 +25,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.dataset.constants.DatasetConstants;
+import com.ulca.dataset.dao.BenchmarkDao;
 import com.ulca.dataset.dao.DatasetDao;
 import com.ulca.dataset.dao.DatasetKafkaTransactionErrorLogDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
@@ -54,6 +55,7 @@ import com.ulca.dataset.response.SearchListByUserIdResponse;
 import com.ulca.dataset.response.SearchListByUserIdResponseDto;
 import com.ulca.dataset.util.Utility;
 
+import io.swagger.model.Benchmark;
 import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,6 +67,9 @@ public class DatasetService {
 	
 	@Autowired
 	DatasetDao datasetDao;
+	
+	@Autowired
+	BenchmarkDao benchmarkDao;
 
 	@Autowired
 	FileIdentifierDao fileIdentifierDao;
@@ -247,7 +252,7 @@ public class DatasetService {
 					
 					if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
 						list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-								dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
+								dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status, null));
 					}else {
 						
 						List<TaskTracker> taskTrackerList = taskTrackerDao
@@ -266,13 +271,25 @@ public class DatasetService {
 						} 
 
 						list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-								dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
+								dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status, null));
 					}
 				}
 			}
 		}
 
-		String msg = "Dataset List By userId";
+		List<Benchmark> benchmarkList = benchmarkDao.findByUserId(userId);
+		for(Benchmark benchmark : benchmarkList){
+			DatasetListByUserIdResponseDto dto = new DatasetListByUserIdResponseDto();
+			dto.setBenchmarkId(benchmark.getBenchmarkId());
+			dto.setDatasetName(benchmark.getName());	
+			dto.setDatasetType("Benchmark");
+			dto.setSubmittedOn(benchmark.getSubmittedOn());
+			dto.setStatus(benchmark.getStatus());
+			list.add(dto);
+		}
+		
+		String msg = "Dataset and Benchmark List By userId";
+		
 		DatasetListByUserIdResponse response = new DatasetListByUserIdResponse(msg,list, startPage, endPage);
 		log.info("******** Exit DatasetService:: datasetListByUserIdPagination *******");
 		return response;
@@ -295,7 +312,7 @@ public class DatasetService {
 				
 				if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
 					list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-							dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
+							dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status, null));
 				}else {
 					
 					List<TaskTracker> taskTrackerList = taskTrackerDao
@@ -314,11 +331,24 @@ public class DatasetService {
 					} 
 
 					list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-							dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
+							dataset.get().getDatasetName(),dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status, null));
 				}
 			}
 		}
-		String msg = "Dataset List By userId";
+		
+		List<Benchmark> benchmarkList = benchmarkDao.findByUserId(userId);
+		for(Benchmark benchmark : benchmarkList){
+			DatasetListByUserIdResponseDto dto = new DatasetListByUserIdResponseDto();
+			dto.setBenchmarkId(benchmark.getBenchmarkId());
+			dto.setDatasetName(benchmark.getName());	
+			dto.setDatasetType("Benchmark");
+			dto.setSubmittedOn(benchmark.getSubmittedOn());
+			dto.setStatus(benchmark.getStatus());
+			list.add(dto);
+			
+		}
+		
+		String msg = "Dataset and Benchmark List By userId";
 		DatasetListByUserIdResponse response = new DatasetListByUserIdResponse(msg,list);
 		log.info("******** Exit DatasetService:: datasetListByUserIdFetchAll *******");
 		return response;

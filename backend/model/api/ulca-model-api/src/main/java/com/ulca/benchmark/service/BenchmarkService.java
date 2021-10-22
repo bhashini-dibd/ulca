@@ -19,26 +19,32 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
 import com.ulca.benchmark.exception.BenchmarkNotFoundException;
+import com.ulca.benchmark.kafka.model.BenchmarkIngest;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.BenchmarkSubmissionType;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
+import com.ulca.benchmark.request.BenchmarkSubmitRequest;
 import com.ulca.benchmark.request.BenchmarkListByModelRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.response.BenchmarkDto;
 import com.ulca.benchmark.response.BenchmarkListByModelResponse;
 import com.ulca.benchmark.response.BenchmarkSearchResponse;
+import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.util.Utility;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelNotFoundException;
+import com.ulca.model.exception.RequestParamValidationException;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
@@ -64,6 +70,13 @@ public class BenchmarkService {
 
 	@Value("${kafka.ulca.bm.filedownload.ip.topic}")
 	private String benchmarkDownloadTopic;
+	
+	@Autowired
+	private KafkaTemplate<String, BenchmarkIngest> benchmarkIngestKafkaTemplate;
+
+	@Value("${kafka.ulca.bm.ingest.ip.topic}")
+	private String benchmarkIngestTopic;
+	
 
 	@Autowired
 	BenchmarkDao benchmarkDao;
@@ -75,10 +88,32 @@ public class BenchmarkService {
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
 
-	public Benchmark submitBenchmark(Benchmark benchmark) {
+	public BenchmarkSubmitResponse submitBenchmark(BenchmarkSubmitRequest request) throws RequestParamValidationException {
 
+		ModelTask.TypeEnum type = ModelTask.TypeEnum.fromValue(request.getTask());
+		if(type == null) {
+			throw new RequestParamValidationException("ModelTask " + request.getTask() + " Not Valid ");
+		}
+		ModelTask task = new ModelTask();
+		task.setType(type);
+		
+		
+		
+		Benchmark benchmark = new Benchmark();
+		benchmark.setName(request.getName());
+		benchmark.setUserId(request.getUserId());
+		benchmark.setDataset(request.getDataset());
+		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());		
+		benchmark.setTask(task);
 		benchmarkDao.save(benchmark);
-		return benchmark;
+		
+		//send data to benchmark ingest topic to download benmark and validate and update
+		
+		BenchmarkIngest benchmarkIngest = new BenchmarkIngest();
+		benchmarkIngest.setBenchmarkId(benchmark.getBenchmarkId());
+		benchmarkIngestKafkaTemplate.send(benchmarkIngestTopic, benchmarkIngest);
+		
+		return new BenchmarkSubmitResponse("Benchmark has been Submitted", benchmark.getBenchmarkId(), benchmark.getStatus());
 	}
 
 	@Transactional
@@ -146,25 +181,35 @@ public class BenchmarkService {
 		Benchmark benchmark = new Benchmark();
 		
 		ModelExtended model= modelDao.findByModelId(request.getModelId());
-		benchmark.setLanguages(model.getLanguages());
-		benchmark.setTask(model.getTask());
-		
-		Example<Benchmark> example = Example.of(benchmark);
-		List<Benchmark> list = benchmarkDao.findAll(example);
 		List<BenchmarkDto> dtoList = new ArrayList<BenchmarkDto>();
-		for(Benchmark bm : list) {
-			BenchmarkDto dto = new BenchmarkDto();
-			BeanUtils.copyProperties(bm, dto);
-			List<String> metricList = getMetric(bm.getTask().getType().toString());
-			dto.setMetric(new ArrayList<>(metricList));
-			List<BenchmarkProcess> bmProcList = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
-			for(BenchmarkProcess bmProc : bmProcList) {
-				metricList.remove(bmProc.getMetric());
-			}
-			dto.setAvailableMetric(metricList);
-			dtoList.add(dto);
+		
+		LanguagePairs lps = model.getLanguages();
+		for(LanguagePair lp : lps) {
+			benchmark.setLanguages(lp);
+			benchmark.setTask(model.getTask());
+			Example<Benchmark> example = Example.of(benchmark);
+			List<Benchmark> list = benchmarkDao.findAll(example);
 			
+			for(Benchmark bm : list) {
+				BenchmarkDto dto = new BenchmarkDto();
+				BeanUtils.copyProperties(bm, dto);
+				List<String> metricList = getMetric(bm.getTask().getType().toString());
+				dto.setMetric(new ArrayList<>(metricList));
+				List<BenchmarkProcess> bmProcList = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
+				for(BenchmarkProcess bmProc : bmProcList) {
+					String status = bmProc.getStatus();
+					if(status != null && !status.isBlank() && (status.equalsIgnoreCase("Completed") || status.equalsIgnoreCase("In-Progress"))) {
+						metricList.remove(bmProc.getMetric());
+					}
+				}
+				dto.setAvailableMetric(metricList);
+				dtoList.add(dto);
+				
+			}
 		}
+		
+		
+		
 		
 		response = new BenchmarkListByModelResponse("Benchmark Search Result", dtoList,dtoList.size());
 
@@ -188,15 +233,15 @@ public class BenchmarkService {
 		}
 
 		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
-			LanguagePairs lprs = new LanguagePairs();
+			//LanguagePairs lprs = new LanguagePairs();
 			LanguagePair lp = new LanguagePair();
 			lp.setSourceLanguage(SourceLanguageEnum.fromValue(request.getSourceLanguage()));
 
 			if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
 				lp.setTargetLanguage(TargetLanguageEnum.fromValue(request.getTargetLanguage()));
 			}
-			lprs.add(lp);
-			benchmark.setLanguages(lprs);
+			//lprs.add(lp);
+			benchmark.setLanguages(lp);
 		}
 		
 		if (startPage != null) {
@@ -208,9 +253,6 @@ public class BenchmarkService {
 		} else {
 			 list =benchmarkDao.findAll(example);
 		}
-
-
-		
 
 		//list = benchmarkDao.findAll(example);
 
@@ -284,7 +326,7 @@ public class BenchmarkService {
 	List<String> getMetric(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu","meteor","rouge" };
+			String[] metric = { "bleu","meteor","rouge","ribes","gleu","bert" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
