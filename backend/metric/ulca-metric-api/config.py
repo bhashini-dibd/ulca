@@ -24,7 +24,7 @@ DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','ht
 FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/opt/')
 FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','datasetFilterParams-new.json')
 
-metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',864000)#
+metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SECS',300)#
 if isinstance(metric_cron_interval_sec, str):
     metric_cron_interval_sec  =  eval(metric_cron_interval_sec)
 
