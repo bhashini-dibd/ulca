@@ -81,6 +81,10 @@ const ContributionList = (props) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   const MyContributionListApi = () => {
     dispatch(ClearReport());
     const userObj = new MyContributionList(

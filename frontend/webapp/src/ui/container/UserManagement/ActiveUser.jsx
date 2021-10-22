@@ -2,6 +2,7 @@ import { Paper, Typography, withStyles, Grid } from "@material-ui/core";
 import LoginStyles from "../../styles/Login";
 import MailboxIcon from "../../../assets/mailbox.svg";
 import { Link, useHistory } from "react-router-dom";
+import { translate } from "../../../assets/localisation";
 const ActiveUser = (props) => {
   const { classes } = props;
   const history = useHistory();
@@ -16,11 +17,11 @@ const ActiveUser = (props) => {
         </Grid>
         <Grid className={classes.congrats} item xs={12} sm={8}>
           <Typography variant="h6">
-            Congratulations
+            {translate("label.congratulations")}
           </Typography>
           <Typography >
-            Your email address has been verified. <Link href="#"
-              onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`) }}>Proceed to login.</Link>
+            {translate("label.emailVerifiedMsg")}<Link href="#"
+              onClick={() => { history.push(`${process.env.PUBLIC_URL}/user/login`) }}>{translate("link.proceedToLogin")}</Link>
           </Typography>
         </Grid>
       </Grid>

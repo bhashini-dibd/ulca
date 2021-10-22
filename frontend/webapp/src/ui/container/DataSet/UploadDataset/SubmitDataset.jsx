@@ -30,28 +30,12 @@ import getTitleName from "../../../../utils/getDataset";
 import C from "../../../../redux/actions/constants";
 import { useDispatch } from "react-redux";
 import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
-import { ModelTask } from "../../../../configs/DatasetItems";
-
-const StyledMenu = withStyles({})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "left",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "",
-    }}
-    {...props}
-  />
-));
+import { translate } from "../../../../assets/localisation";
 
 const SubmitDataset = (props) => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null);
-  const [dataset, setDatasetInfo] = useState({ datasetName: "", url: "" });
+  const [dataset, setDatasetInfo] = useState({ name: "", url: "" });
   const [title, setTitle] = useState("Parallel Dataset");
   const dispatch = useDispatch();
   const [snackbar, setSnackbarInfo] = useState({
@@ -59,7 +43,7 @@ const SubmitDataset = (props) => {
     message: "",
     variant: "success",
   });
-  const [error, setError] = useState({ datasetName: "", url: "", type: false });
+  const [error, setError] = useState({ name: "", url: "", type: false });
   const [search, setSearch] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const history = useHistory();
@@ -122,7 +106,7 @@ const SubmitDataset = (props) => {
   // }
 
   const handleApicall = async () => {
-    let apiObj = new SubmitDatasetApi(dataset, isChecked, selectedOption);
+    let apiObj = new SubmitDatasetApi(dataset, isChecked);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: JSON.stringify(apiObj.getBody()),
@@ -130,7 +114,6 @@ const SubmitDataset = (props) => {
     })
       .then(async (response) => {
         const rsp_data = await response.json();
-        console.log(response.ok, rsp_data);
         if (!response.ok) {
           setSnackbarInfo({
             ...snackbar,
@@ -156,7 +139,6 @@ const SubmitDataset = (props) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         setSnackbarInfo({
           ...snackbar,
           open: true,
@@ -173,17 +155,17 @@ const SubmitDataset = (props) => {
         <ul>
           <li>
             <Typography className={classes.marginValue} variant="body2">
-              Provide a meaningful name to your dataset.
+              {translate("label.datasetName")}
             </Typography>
           </li>
           <li>
             <Typography className={classes.marginValue} variant="body2">
-              Provide the URL where the dataset is stored at.
+              {translate("label.datasetStoredMsg")}
             </Typography>
           </li>
           <li>
             <Typography className={classes.marginValue} variant="body2">
-              Make sure the URL is a direct download link.
+              {translate("label.urlDownload")}
             </Typography>
           </li>
           <li>
@@ -194,14 +176,14 @@ const SubmitDataset = (props) => {
                 href="https://sites.google.com/site/gdocs2direct/home"
               >
                 {" "}
-                https://sites.google.com/site/gdocs2direct/home{" "}
+                {translate("link.googleDriveLink")}{" "}
               </Link>
               to generate a direct download link.
             </Typography>
           </li>
           <li>
             <Typography className={classes.marginValue} variant="body2">
-              Make sure the dataset is available in .zip format.
+              {translate("label.zipFormatMsg")}
             </Typography>
           </li>
         </ul>
@@ -224,13 +206,13 @@ const SubmitDataset = (props) => {
   };
 
   const handleSubmitDataset = (e) => {
-    if (dataset.datasetName.trim() === "" || dataset.url.trim() === "") {
+    if (dataset.name.trim() === "" || dataset.url.trim() === "") {
       setError({
         ...error,
-        name: !dataset.datasetName.trim() ? "Name cannot be empty" : "",
+        name: !dataset.name.trim() ? "Name cannot be empty" : "",
         url: !dataset.url.trim() ? "URL cannot be empty" : "",
       });
-    } else if (dataset.datasetName.length > 256) {
+    } else if (dataset.name.length > 256) {
       setError({ ...error, name: "Max 256 characters allowed" });
     } else if (!validURL(dataset.url)) {
       setError({ ...error, url: "‘Invalid URL" });
@@ -261,7 +243,7 @@ const SubmitDataset = (props) => {
             <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
               <FormControl className={classes.form}>
                 <Typography className={classes.typography} variant="subtitle1">
-                  How to submit dataset?
+                  {translate("label.howToSubmit")}
                 </Typography>
                 {renderInstrructions()}
               </FormControl>
@@ -281,7 +263,7 @@ const SubmitDataset = (props) => {
                           className={classes.typography}
                           variant="subtitle1"
                         >
-                          Submit Dataset
+                          {translate("button.submitDataset")}
                         </Typography>
                       </Grid>
                       {/* <Grid item xl={7} lg={7} md={7} sm={12} xs={12}>
@@ -323,13 +305,13 @@ const SubmitDataset = (props) => {
                           fullWidth
                           color="primary"
                           label="Dataset name"
-                          value={dataset.datasetName}
+                          value={dataset.name}
                           error={error.name ? true : false}
                           helperText={error.name}
                           onChange={(e) => {
                             setDatasetInfo({
                               ...dataset,
-                              datasetName: e.target.value,
+                              name: e.target.value,
                             });
                             setError({ ...error, name: false });
                           }}
@@ -349,7 +331,7 @@ const SubmitDataset = (props) => {
                           }}
                         />
                       </Grid>
-                      <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                      {/* <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -363,8 +345,8 @@ const SubmitDataset = (props) => {
                           }
                           label="It is a Benchmark Dataset"
                         />
-                      </Grid>
-                      {isChecked && (
+                      </Grid> */}
+                      {/* {isChecked && (
                         <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                           <Typography
                             className={classes.typography}
@@ -386,7 +368,7 @@ const SubmitDataset = (props) => {
                             ))}
                           </Select>
                         </Grid>
-                      )}
+                      )} */}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -397,7 +379,7 @@ const SubmitDataset = (props) => {
                   size={"large"}
                   onClick={handleSubmitDataset}
                 >
-                  Submit
+                  {translate("button.submit")}
                 </Button>
               </FormControl>
             </Grid>

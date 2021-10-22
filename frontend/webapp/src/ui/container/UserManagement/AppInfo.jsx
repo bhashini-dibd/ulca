@@ -3,10 +3,10 @@ import {
   Hidden,
   Typography,
   withStyles,
-  Button,
 } from "@material-ui/core";
 import LoginStyles from "../../styles/Login";
 import {  useHistory } from "react-router-dom";
+import { translate } from "../../../assets/localisation";
 
 function AppInfo(props) {
   const { classes } = props;
@@ -17,10 +17,10 @@ function AppInfo(props) {
         
         <Typography className={classes.title} variant={"h2"} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>ULCA</Typography>
         <Typography variant={"h3"} className={classes.subTitle}>
-          Universal Language Contribution API
+          {translate("label.ulcaFullForm")}
         </Typography>
         <Typography variant={"body1"} className={classes.body}>
-        ULCA is an open-sourced API and data platform to collect, curate and discover datasets in Indian languages.
+        {translate("label.ulcaInfo")}
         </Typography>
       </Grid>
     </Hidden>

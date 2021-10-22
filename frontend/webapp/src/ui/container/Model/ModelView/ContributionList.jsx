@@ -35,6 +35,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import myContribFilter from "../../../../redux/actions/api/Model/ModelView/myContribFilter";
 import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValues from "../../../../redux/actions/api/Model/ModelView/GetSearchedValues";
+import { translate } from "../../../../assets/localisation";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -111,7 +112,10 @@ const ContributionList = (props) => {
       }
     }
   }, [data]);
-
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   // useEffect(() => {
   //   document.querySelectorAll(`button`).forEach((element) => {
   //     element.classList.forEach((list) => {
@@ -186,7 +190,7 @@ const ContributionList = (props) => {
           >
             {" "}
             <FilterListIcon className={classes.iconStyle} />
-            Filter
+            {translate("button.filter")}
           </Button>
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
@@ -198,7 +202,7 @@ const ContributionList = (props) => {
             onClick={() => MyContributionListApi()}
           >
             <Cached className={classes.iconStyle} />
-            Refresh
+            {translate("button.refresh")}
           </Button>
         </Grid>
       </Grid>

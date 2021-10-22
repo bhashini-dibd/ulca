@@ -18,6 +18,7 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import OCRModal from "./OCRModal";
+import { translate } from "../../../../../assets/localisation";
 
 const HostedInferASR = (props) => {
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
@@ -158,7 +159,7 @@ const HostedInferASR = (props) => {
                 size={"small"}
                 onClick={handleSubmit}
               >
-                Convert
+                {translate("button.convert")}
               </Button>
             </CardContent>
             {url && (
@@ -188,7 +189,7 @@ const HostedInferASR = (props) => {
           <Card className={classes.asrCard}>
             <Grid container className={classes.cardHeader}>
               <Typography variant="h6" className={classes.titleCard}>
-                Output
+                {translate("label.output")}
               </Typography>
             </Grid>
             <CardContent>{target}</CardContent>
