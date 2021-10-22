@@ -45,11 +45,11 @@ const getBenchmarkDetails = (data) => {
     description: data.description,
     refUrl: data.dataset,
     language:
-      data.languages && data.languages[0].targetLanguage !== null
+      data.languages && data.languages.targetLanguage !== null
         ? `${getLanguageName(
-            data.languages[0].sourceLanguage
-          )} - ${getLanguageName(data.languages[0].targetLanguage)}`
-        : getLanguageName(data.languages[0].sourceLanguage),
+            data.languages.sourceLanguage
+          )} - ${getLanguageName(data.languages.targetLanguage)}`
+        : getLanguageName(data.languages.sourceLanguage),
     domain: data.domain ? data.domain.join(", ") : "",
     modelName: data.name,
     metric: data.metric ? data.metric.join(", ") : "",
