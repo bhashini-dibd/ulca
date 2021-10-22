@@ -9,13 +9,14 @@ class ModelMetricEval():
     for metrics(configs/metric_config.json) to be enabled in the application.
     """
 
-    def machine_translation_metric_eval(self, ground_truth, machine_translation):
+    def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         """
         Functional interface for translation type model
 
         ground_truth        : golden data/human vetted sentences
         machine_translation : model generated sentences
-        
+        language            : model output language
+
         Returns the evaluation score
         """
         pass
