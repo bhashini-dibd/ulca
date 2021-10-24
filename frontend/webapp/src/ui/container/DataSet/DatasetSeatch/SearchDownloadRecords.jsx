@@ -230,7 +230,7 @@ const SearchAndDownloadRecords = (props) => {
     }
     setAdvFilterState({ ...advFilterState, ...filter });
   };
-  console.log(advFilterState);
+  console.log(advFilterState, basicFilterState);
   const handleBasicFilter = (value, id, type = "array") => {
     let filter = { ...basicFilterState };
     if (type === "array") {
@@ -382,22 +382,23 @@ const SearchAndDownloadRecords = (props) => {
       updatedObj[key] =
         obj[key].type === "array"
           ? filterItems.indexOf(key) > -1
-            ? obj[key].value
-            : [obj[key].value]
-          : obj[key].value;
+            ? obj[key].code
+            : [obj[key].code]
+          : obj[key].code;
     });
     return updatedObj;
   };
 
   const getArrayValue = (arr) => {
     let updatedArr = arr.map((element) => {
-      return element.value;
+      return element.code;
     });
     return updatedArr;
   };
 
   const handleSubmitBtn = () => {
     const obj = { ...basicFilterState, ...advFilterState };
+    console.log(languagePair);
     const criteria = {
       sourceLanguage: getArrayValue([languagePair.source]),
       targetLanguage: getArrayValue(languagePair.target),
@@ -406,9 +407,10 @@ const SearchAndDownloadRecords = (props) => {
       multipleContributors: false,
       originalSourceSentence: state.checkedC,
     };
+    console.log(criteria);
     if (datasetType["parallel-corpus"]) {
       if (languagePair.source && languagePair.target.length) {
-        makeSubmitAPICall(datasetType, criteria);
+        // makeSubmitAPICall(datasetType, criteria);
       } else if (!languagePair.source && !languagePair.target.length) {
         setSrcError(true);
         setTgtError(true);
@@ -417,7 +419,7 @@ const SearchAndDownloadRecords = (props) => {
     } else {
       if (!languagePair.target.length) setTgtError(true);
       else {
-        makeSubmitAPICall(datasetType, criteria);
+        // makeSubmitAPICall(datasetType, criteria);
       }
     }
   };
@@ -795,51 +797,51 @@ const SearchAndDownloadRecords = (props) => {
                 {open &&
                   advFilter.map((filter) => {
                     if (filter.active && filter.parent === null)
-                    return (
-                      <Grid
-                        className={classes.subHeader}
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        xl={12}
-                      >
-                        {filter.type !== "text" ? (
-                          <SingleAutoComplete
-                            handleChange={handleDropDownChange}
-                            disabled={!languagePair.target.length}
-                            id={filter.value}
-                            labels={filter.values}
-                            placeholder={`Select ${filter.label}`}
-                            value={
-                              advFilterState[filter.value]
-                                ? advFilterState[filter.value]
-                                : ""
-                            }
-                          />
-                        ) : (
-                          <TextField
-                            disabled={!languagePair.target.length}
-                            id={filter.value}
-                            label={`Select ${filter.label}`}
-                            fullWidth
-                            value={
-                              advFilterState[filter.value]
-                                ? advFilterState[filter.value].value
-                                : ""
-                            }
-                            onChange={(e) =>
-                              handleDropDownChange(
-                                e.target.value,
-                                filter.value,
-                                "text"
-                              )
-                            }
-                          />
-                        )}
-                      </Grid>
-                    );
+                      return (
+                        <Grid
+                          className={classes.subHeader}
+                          item
+                          xs={12}
+                          sm={12}
+                          md={12}
+                          lg={12}
+                          xl={12}
+                        >
+                          {filter.type !== "text" ? (
+                            <SingleAutoComplete
+                              handleChange={handleDropDownChange}
+                              disabled={!languagePair.target.length}
+                              id={filter.value}
+                              labels={filter.values}
+                              placeholder={`Select ${filter.label}`}
+                              value={
+                                advFilterState[filter.value]
+                                  ? advFilterState[filter.value]
+                                  : ""
+                              }
+                            />
+                          ) : (
+                            <TextField
+                              disabled={!languagePair.target.length}
+                              id={filter.value}
+                              label={`Select ${filter.label}`}
+                              fullWidth
+                              value={
+                                advFilterState[filter.value]
+                                  ? advFilterState[filter.value].value
+                                  : ""
+                              }
+                              onChange={(e) =>
+                                handleDropDownChange(
+                                  e.target.value,
+                                  filter.value,
+                                  "text"
+                                )
+                              }
+                            />
+                          )}
+                        </Grid>
+                      );
                   })}
                 {renderSubFilters()}
                 {open && renderAdvanceFilter()}
