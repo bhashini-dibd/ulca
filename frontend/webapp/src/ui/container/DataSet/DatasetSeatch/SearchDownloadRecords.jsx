@@ -410,7 +410,7 @@ const SearchAndDownloadRecords = (props) => {
     console.log(criteria);
     if (datasetType["parallel-corpus"]) {
       if (languagePair.source && languagePair.target.length) {
-        // makeSubmitAPICall(datasetType, criteria);
+        makeSubmitAPICall(datasetType, criteria);
       } else if (!languagePair.source && !languagePair.target.length) {
         setSrcError(true);
         setTgtError(true);
@@ -419,7 +419,7 @@ const SearchAndDownloadRecords = (props) => {
     } else {
       if (!languagePair.target.length) setTgtError(true);
       else {
-        // makeSubmitAPICall(datasetType, criteria);
+        makeSubmitAPICall(datasetType, criteria);
       }
     }
   };
