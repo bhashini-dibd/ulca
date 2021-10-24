@@ -69,12 +69,21 @@ const ContributionList = (props) => {
             element.scrollIntoView({
               behavior: "smooth",
             });
+          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+            duration: 1500,
+            iterations: 5,
+            easing: "ease-in-out",
+          });
         }
         dispatchPageAction(i);
         return;
       }
     }
   }, [data]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
 
   const MyContributionListApi = () => {
     dispatch(ClearReport());
@@ -236,7 +245,9 @@ const ContributionList = (props) => {
       },
       options: { sortDirection: "desc" },
     },
-    onRowClick: (rowData) => handleRowClick(rowData[0], rowData[1], rowData[4]),
+    onRowClick: (rowData) =>
+      rowData[2] !== "Benchmark" &&
+      handleRowClick(rowData[0], rowData[1], rowData[4]),
     // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
     search: false,

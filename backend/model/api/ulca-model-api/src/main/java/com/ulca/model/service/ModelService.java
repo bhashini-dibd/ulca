@@ -82,8 +82,6 @@ public class ModelService {
 	@Autowired
 	BenchmarkDao benchmarkDao;
 
-	@Autowired
-	private MongoTemplate mongoTemplate;
 
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;

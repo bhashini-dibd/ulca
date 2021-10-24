@@ -6,10 +6,12 @@ from logging.config import dictConfig
 from configs.configs import pt_search_tool, pt_delete_tool, pt_inprogress_status, pt_success_status, pt_failed_status, \
     dataset_type_asr, dataset_type_asr_unlabeled
 from .ptrepo import PTRepo
+from events.notifier import NotifierEvent
 
 log = logging.getLogger('file')
 
 repo = PTRepo()
+notifier = NotifierEvent()
 
 class ProcessTracker:
     def __init__(self):
@@ -39,7 +41,7 @@ class ProcessTracker:
     params: data (record to be processed)
     params: error (error if any)
     '''
-    def task_event_search(self, data, error):
+    def task_event_search(self, data, error, dataset_type):
         log.info(f'Publishing pt event for SEARCH -- {data["serviceRequestNumber"]}')
         task_event = self.search_task_event(data, pt_search_tool)
         try:
@@ -49,11 +51,14 @@ class ProcessTracker:
                     log.info(f'ERROR in SEARCH: {error}')
                     task_event["status"] = pt_failed_status
                     task_event["error"] = error
+                    notifier_req = {"userID": data["userID"], "count": 0, "datasetType": dataset_type}
                 else:
                     task_event["status"] = pt_success_status
+                    notifier_req = {"userID": data["userID"], "count": data["count"], "datasetType": dataset_type}
                 task_event["lastModifiedTime"] = str(datetime.now())
                 task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
+                notifier.create_notifier_event(data["serviceRequestNumber"], notifier_req)
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool,
                               "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
@@ -66,6 +71,8 @@ class ProcessTracker:
             task_event["status"], task_event["error"] = pt_failed_status, error
             task_event["endTime"] = task_event["lastModifiedTime"] = str(datetime.now())
             repo.update(task_event)
+            notifier_req = {"userID": data["userID"], "count": 0, "datasetType": dataset_type}
+            notifier.create_notifier_event(data["serviceRequestNumber"], notifier_req)
             return None
 
     '''

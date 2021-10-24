@@ -29,7 +29,7 @@ public class BenchmarkProcess {
 	String modelName;
 	double score;
 	String metric;
-	String status;
+	String status; // Completed/In-Progress/Failed
 	String createdOn;
 	String lastModifiedOn;
 

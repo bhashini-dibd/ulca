@@ -26,6 +26,7 @@ import MUIDataTable from "mui-datatables";
 import BenchmarkDetails from "../../../../redux/actions/api/Model/BenchmarkModel/BenchmarkDetails";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { translate } from "../../../../assets/localisation";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -230,8 +231,19 @@ const SearchModelDetail = (props) => {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Grid container>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Card style={{ height: '100px', backgroundColor: '#0F2749', borderRadius: "8px", marginTop: '1%' }}>
-                  <Typography variant="h5" color="secondary" className={classes.mainTitle}>
+                <Card
+                  style={{
+                    height: "100px",
+                    backgroundColor: "#0F2749",
+                    borderRadius: "8px",
+                    marginTop: "1%",
+                  }}
+                >
+                  <Typography
+                    variant="h5"
+                    color="secondary"
+                    className={classes.mainTitle}
+                  >
                     {data.modelName}
                   </Typography>
                 </Card>
@@ -240,19 +252,30 @@ const SearchModelDetail = (props) => {
           </div>
           {/* <Divider className={classes.gridCompute} /> */}
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Typography variant="h5" className={classes.modelTitle}>Description</Typography>
-            <Typography variant="body1" style={{ textAlign: "justify", marginTop: '15px' }}>{data.description}</Typography>
+            <Typography variant="h5" className={classes.modelTitle}>
+              Description
+            </Typography>
+            <Typography
+              variant="body1"
+              style={{ textAlign: "justify", marginTop: "15px" }}
+            >
+              {data.description}
+            </Typography>
           </Grid>
-          <Grid container style={{ marginTop: '30px' }}>
+          <Grid container style={{ marginTop: "30px" }}>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <Grid container spacing={1}>
                 {description.map((des, i) => (
-                  <>{
-                    des.title !== "" &&
-                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-                      <ModelDescription title={des.title} para={des.para} index={i} />
-                    </Grid>
-                  }
+                  <>
+                    {des.title !== "" && (
+                      <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                        <ModelDescription
+                          title={des.title}
+                          para={des.para}
+                          index={i}
+                        />
+                      </Grid>
+                    )}
                   </>
                 ))}
               </Grid>
@@ -261,11 +284,8 @@ const SearchModelDetail = (props) => {
           {metricArray.length ? (
             <Grid container>
               <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
-                <Typography
-                  style={{ marginTop: "3%" }}
-                  variant="h5"
-                >
-                  Model Leaderboard
+                <Typography style={{ marginTop: "3%" }} variant="h5">
+                  {translate("label.modelLeaderboard")}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

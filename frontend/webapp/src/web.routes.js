@@ -111,7 +111,7 @@ export default function App() {
             render={(props) => (
               <PublicLayout
                 type={"models"}
-                index={3}
+                index={2}
                 component={BenchmarkModels}
               />
             )}
@@ -190,7 +190,7 @@ export default function App() {
             currentMenu="submit-model"
             dontShowHeader={false}
             type={"models"}
-            index={2}
+            index={3}
           />
           <PrivateRoute
             path={`${process.env.PUBLIC_URL}/dashboard`}
@@ -202,7 +202,7 @@ export default function App() {
             dontShowHeader={false}
           />
           <PrivateRoute
-            path={`${process.env.PUBLIC_URL}/my-searches`}
+            path={`${process.env.PUBLIC_URL}/my-searches/:added?`}
             component={MySearches}
             authenticate={authenticateUser}
             currentMenu="submit-dataset"

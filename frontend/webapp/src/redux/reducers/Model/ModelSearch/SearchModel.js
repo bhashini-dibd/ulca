@@ -18,7 +18,6 @@ const dateConversion = (value) => {
 }
 
 const getFilterValue = (payload, data) => {
-    debugger
     let { filterValues } = payload
     let languageFilter = []
     let domainFilterValue = []

@@ -12,6 +12,6 @@ import io.swagger.model.Benchmark;
 @Repository
 public interface BenchmarkProcessDao extends MongoRepository<BenchmarkProcess, String> {
 
-	List<BenchmarkProcess> findByBenchmarkProcessId(String benchmarkProcessId);
+	BenchmarkProcess findByBenchmarkProcessId(String benchmarkProcessId);
 
 }

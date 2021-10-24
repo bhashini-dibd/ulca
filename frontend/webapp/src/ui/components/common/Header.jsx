@@ -21,6 +21,7 @@ import { Link } from "@material-ui/core";
 import SubHeader from './SubHeader';
 import getMenuType from "../../../redux/actions/api/Common/getMenuType";
 import getMenuOption from "../../../redux/actions/api/Common/getMenuOption";
+import { translate } from "../../../assets/localisation";
 
 const StyledMenu = withStyles({
 
@@ -123,7 +124,7 @@ const Header = (props) => {
               authenticate() && history.push(`${process.env.PUBLIC_URL}/dashboard`)
             }
             }>
-              ULCA
+              {translate("label.ulca")}
             </Typography>
 
             {
@@ -153,7 +154,7 @@ const Header = (props) => {
                       onClick={(e) => handleMenuTypeClick('dataset')}
                       variant="text"
                     >
-                      Dataset
+                      {translate("label.dataset")}
                       {/* {authenticate() && <DownIcon color="action" />} */}
                     </Button>
                     {/* {authenticate() &&
@@ -171,7 +172,7 @@ const Header = (props) => {
                   <div className={authenticate() ?  classes.options:classes.datasetOption}>
                     <div className={classes.model} style ={type === "models"?{background:"#f5f5f5"}:{}}>
                       <Button className={classes.menuBtn} variant="text" onClick={(e) => handleMenuTypeClick('models')}>
-                        Model
+                        {translate("label.model")}
                         {/* {authenticate() && <DownIcon color="action" />} */}
                       </Button>
                     </div>
@@ -221,7 +222,7 @@ const Header = (props) => {
                         handleLogOut('/user/login')
                       }}
                     >
-                      Log out
+                      {translate("label.logOut")}
                     </MenuItem>
 
                   </StyledMenu>

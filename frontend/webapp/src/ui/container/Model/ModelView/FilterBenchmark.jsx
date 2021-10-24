@@ -11,6 +11,7 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@material-ui/core";
+import { translate } from "../../../../assets/localisation";
 
 const FilterBenchmark = (props) => {
   const {
@@ -63,7 +64,7 @@ const FilterBenchmark = (props) => {
             style={{ margin: "21px", height: "209.75px", width: "175px" }}
           >
             <Typography variant="h6" className={classes.filterTypo}>
-              Domain
+              {translate("label.domain")}
             </Typography>
             <FormGroup>
               {filter.map((type) => {
@@ -105,7 +106,7 @@ const FilterBenchmark = (props) => {
             disabled={selectedFilter.length ? false : true}
           >
             {" "}
-            Clear All
+            {translate("button.cleaAll")}
           </Button>
           <Button
             color="primary"
@@ -115,7 +116,7 @@ const FilterBenchmark = (props) => {
             onClick={apply}
           >
             {" "}
-            Apply
+            {translate("button.apply")}
           </Button>
         </div>
       </Popover>

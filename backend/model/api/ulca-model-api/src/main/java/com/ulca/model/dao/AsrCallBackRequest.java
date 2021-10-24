@@ -1,34 +1,42 @@
+/*
 package com.ulca.model.dao;
+
+import io.swagger.model.ASRFiles;
 
 public class AsrCallBackRequest {
 
 	public AsrCallBackRequest() {
 		super();
 		this.config = new Config();
-		this.audio = new Audio();
+		this.audio = new ASRFiles();
 	}
-	public AsrCallBackRequest(Config config, Audio audio) {
+	public AsrCallBackRequest(Config config, ASRFiles audio) {
 		super();
 		this.config = config;
 		this.audio = audio;
 	}
 
 	private Config config;
-    private Audio audio;
+    private ASRFiles audio;
     public Config getConfig() {
         return config;
     }
     public void setConfig(Config config) {
         this.config = config;
     }
-    public Audio getAudio() {
-        return audio;
-    }
-    public void setAudio(Audio audio) {
-        this.audio = audio;
-    }
+   
     
-   public  class Language {
+    
+   public ASRFiles getAudio() {
+		return audio;
+	}
+	public void setAudio(ASRFiles audio) {
+		this.audio = audio;
+	}
+
+
+
+public  class Language {
         private String value;
         public String getValue() {
             return value;
@@ -73,6 +81,7 @@ public class AsrCallBackRequest {
         }
     }
      
+    
      public class Audio {
     	 
     	    private String audioUri;
@@ -91,4 +100,6 @@ public class AsrCallBackRequest {
     	        this.audioUri = audioUri;
     	    }
     	}
+    	
 }
+*/

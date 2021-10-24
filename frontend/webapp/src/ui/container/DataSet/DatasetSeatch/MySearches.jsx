@@ -17,7 +17,9 @@ import { useHistory } from "react-router-dom";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "../DatasetView/FilterList";
 import Search from "../../../components/Datasets&Model/Search";
-import getSearchedValue from '../../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues';
+import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
+import { useParams } from "react-router";
+import { translate } from "../../../../assets/localisation";
 
 const MySearches = (props) => {
   const detailedReport = useSelector((state) => state.mySearchReport);
@@ -25,8 +27,9 @@ const MySearches = (props) => {
   const ApiStatus = useSelector((state) => state.apiStatus);
   const dispatch = useDispatch();
   const history = useHistory();
+  const { added } = useParams();
   const [page, setPage] = useState(0);
-  //   const data = myContributionReport.filteredData
+  const data = detailedReport.filteredData;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
@@ -39,9 +42,38 @@ const MySearches = (props) => {
     dispatch(APITransport(userObj));
   };
 
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].sr_no === added) {
+        let page = Math.floor(i / 10);
+        async function dispatchPageAction(i) {
+          await dispatch(PageChange(page, C.SEARCH_PAGE_NO));
+          let element = await document.getElementById(
+            `MUIDataTableBodyRow-${i}`
+          );
+          element &&
+            element.scrollIntoView({
+              behavior: "smooth",
+            });
+          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+            duration: 1500,
+            iterations: 5,
+            easing: "ease-in-out",
+          });
+        }
+        dispatchPageAction(i);
+        return;
+      }
+    }
+  }, [data]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
+
   const processTableClickedNextOrPrevious = (page, sortOrder) => {
-    // dispatch(PageChange(page, C.SEARCH_PAGE_NO));
-    // setPage(page)
+    dispatch(PageChange(page, C.SEARCH_PAGE_NO));
+    setPage(page);
   };
   const handleShowFilter = (event) => {
     setAnchorEl(event.currentTarget);
@@ -57,9 +89,9 @@ const MySearches = (props) => {
     //    dispatch(FilterTable(data, C.CONTRIBUTION_TABLE))
   };
 
-  const handleSearch = (value)=>{
+  const handleSearch = (value) => {
     dispatch(getSearchedValue(value));
-  }
+  };
 
   const fetchHeaderButton = () => {
     return (
@@ -76,7 +108,7 @@ const MySearches = (props) => {
             onClick={() => MySearchListApi()}
           >
             <Cached className={classes.iconStyle} />
-            Refresh
+            {translate("button.refresh")}
           </Button>
         </Grid>
       </Grid>
@@ -129,10 +161,11 @@ if(status==='completed'){
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <div style={{ textTransform: "none" }}>
-              {tableMeta.rowData[5] === "asr-corpus" ||
-              tableMeta.rowData[5] === "asr-unlabeled-corpus"
-                ? `${tableMeta.rowData[3]} hrs`
-                : tableMeta.rowData[3]}
+              {tableMeta.rowData[4] !== "In-Progress" &&
+                (tableMeta.rowData[5] === "asr-corpus" ||
+                tableMeta.rowData[5] === "asr-unlabeled-corpus"
+                  ? `${tableMeta.rowData[3]} hrs`
+                  : tableMeta.rowData[3])}
             </div>
           );
         },

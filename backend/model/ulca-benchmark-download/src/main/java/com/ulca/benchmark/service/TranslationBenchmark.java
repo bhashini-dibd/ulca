@@ -60,7 +60,6 @@ public class TranslationBenchmark {
 			List<String> sourceSentences)
 			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 
-		log.info("calling the inference end point");
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
 			TranslationRequest request = translationInference.getRequest();
@@ -99,19 +98,19 @@ public class TranslationBenchmark {
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+		String userId = model.getUserId();
+		
 		reader.beginArray();
 		
 		
 		List<String> ip = new ArrayList<String>();
 		List<String> tgtList = new ArrayList<String>();
-		
+		log.info("started processing of data.json file");
 		while (reader.hasNext()) {
 			
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
-			
-			log.info("dataRow :: " + dataRow);
 			
 			JSONObject inputJson =  new JSONObject(dataRow);
 			
@@ -128,6 +127,8 @@ public class TranslationBenchmark {
 		reader.close();
 		inputStream.close();
 		
+		log.info("end processing of data.json file");
+		
 		JSONArray corpus = new JSONArray();
 		
 	
@@ -135,7 +136,8 @@ public class TranslationBenchmark {
 		List<List<String>> tgtChunks = partition(tgtList, chunkSize);
 				
 		int ipChunksSize = ipChunks.size();
-		
+		log.info("started calling the inference end point");
+		log.info("inference end point url : " + callBackUrl);
 		for(int k=0; k<ipChunksSize; k++ ) {
 			
 			List<String> input = ipChunks.get(k);
@@ -164,10 +166,17 @@ public class TranslationBenchmark {
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
+		metricRequest.put("modelName", model.getName());
+		if(benchmark.getLanguages() != null && benchmark.getLanguages().getTargetLanguage() != null) {
+			String targetLanguage = benchmark.getLanguages().getTargetLanguage().toString();
+			metricRequest.put("targetLanguage", targetLanguage);
+		}
+		
+		metricRequest.put("userId", userId);
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
 		
-		log.info("data before sending to metric");
+		log.info("data sending to metric calculation ");
 		log.info(metricRequest.toString());
 		
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());

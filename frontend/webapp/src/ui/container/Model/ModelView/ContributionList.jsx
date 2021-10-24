@@ -35,6 +35,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import myContribFilter from "../../../../redux/actions/api/Model/ModelView/myContribFilter";
 import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValues from "../../../../redux/actions/api/Model/ModelView/GetSearchedValues";
+import { translate } from "../../../../assets/localisation";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -70,7 +71,7 @@ const ContributionList = (props) => {
     status: "",
   });
   const status = useSelector((state) => state.getBenchMarkDetails.status);
-
+  const $ = require("jquery");
   useEffect(() => {
     (myContributionReport.filteredData.length === 0 ||
       myContributionReport.refreshStatus ||
@@ -100,13 +101,21 @@ const ContributionList = (props) => {
             element.scrollIntoView({
               behavior: "smooth",
             });
+          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+            duration: 1500,
+            iterations: 5,
+            easing: "ease-in-out",
+          });
         }
         dispatchPageAction(i);
         return;
       }
     }
   }, [data]);
-
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   // useEffect(() => {
   //   document.querySelectorAll(`button`).forEach((element) => {
   //     element.classList.forEach((list) => {
@@ -181,7 +190,7 @@ const ContributionList = (props) => {
           >
             {" "}
             <FilterListIcon className={classes.iconStyle} />
-            Filter
+            {translate("button.filter")}
           </Button>
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
@@ -193,7 +202,7 @@ const ContributionList = (props) => {
             onClick={() => MyContributionListApi()}
           >
             <Cached className={classes.iconStyle} />
-            Refresh
+            {translate("button.refresh")}
           </Button>
         </Grid>
       </Grid>
