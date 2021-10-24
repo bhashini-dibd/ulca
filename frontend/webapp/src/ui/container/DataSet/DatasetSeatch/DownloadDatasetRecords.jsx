@@ -36,13 +36,8 @@ const DownloadDatasetRecords = (props) => {
                     </Grid> */}
                 </Grid>
                 {props.sentencePair ? <div className={classes.downloadBtnDiv}>
-<<<<<<< HEAD
-                    <Button href={props.urls.downloadSample} target="_self" size="small" variant="outlined" style={{backgroundColor:"#FFFFFF"}}><SaveAlt className={classes.iconStyle} />Download Sample</Button>
-                    <Button href={props.urls.downloadAll} target="_self" size="small" variant="outlined"  style={{backgroundColor:"#FFFFFF"}} className={classes.buttonStyle} ><SaveAlt className={classes.iconStyle} />Download All</Button>
-=======
                     <Button href={props.urls.downloadSample} target="_self" size="medium" variant="outlined" ><SaveAlt className={classes.iconStyle} />{translate("label.downloadSample")}</Button>
                     <Button href={props.urls.downloadAll} target="_self" size="medium" variant="outlined" className={classes.buttonStyle} ><SaveAlt className={classes.iconStyle} />{translate("label.downloadAll")}</Button>
->>>>>>> develop
                     {/* <Button href={props.urls.downloadSample} target="_self" className={classes.downloadBtn} variant="contained" color="primary"> */}
                     {/* <GetAppOutlinedIcon /> Download Sample */}
                     {/* </Button> */}
