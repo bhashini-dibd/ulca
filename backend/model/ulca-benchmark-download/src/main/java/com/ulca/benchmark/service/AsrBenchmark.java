@@ -217,8 +217,11 @@ public class AsrBenchmark {
 				.body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
 				.block();
 		
-		return response.getData().getTranscript();
+		if(response != null && response.getData() != null) {
+			return response.getData().getTranscript();
+		}
 		
+		return null;
 	}
 	
 	
