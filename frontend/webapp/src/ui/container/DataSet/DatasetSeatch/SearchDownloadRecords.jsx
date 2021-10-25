@@ -649,34 +649,41 @@ const SearchAndDownloadRecords = (props) => {
 
   const renderLanguage = () => {
     return (
-      <div className={classes.autoComplete}>
+      <>
+        {" "}
         {Language.map((val) => {
           if (val.input === "single-select") {
             return (
-              <SingleAutoComplete
-                handleChange={handleLanguagePairChange}
-                id={"source"}
-                value={languagePair.source}
-                labels={val.values}
-                placeholder={`${val.label} *`}
-              />
+              <div className={classes.subHeader}>
+                <SingleAutoComplete
+                  handleChange={handleLanguagePairChange}
+                  id={"source"}
+                  value={languagePair.source}
+                  labels={val.values}
+                  placeholder={`${val.label} *`}
+                />
+              </div>
             );
           }
           return (
-            <MultiAutocomplete
-              id="language-target"
-              options={val.values}
-              filter="target"
-              value={languagePair.target}
-              handleOnChange={handleLanguagePairChange}
-              label={`${val.label} *`}
-              error={tgtError}
-              helperText="This field is mandatory"
-              disabled={!languagePair.source && datasetType["parallel-corpus"]}
-            />
+            <div className={classes.subHeader}>
+              <MultiAutocomplete
+                id="language-target"
+                options={val.values}
+                filter="target"
+                value={languagePair.target}
+                handleOnChange={handleLanguagePairChange}
+                label={`${val.label} *`}
+                error={tgtError}
+                helperText="This field is mandatory"
+                disabled={
+                  !languagePair.source && datasetType["parallel-corpus"]
+                }
+              />
+            </div>
           );
         })}
-      </div>
+      </>
     );
   };
 
