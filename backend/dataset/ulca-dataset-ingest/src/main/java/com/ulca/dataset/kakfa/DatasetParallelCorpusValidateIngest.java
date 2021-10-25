@@ -1,9 +1,12 @@
 package com.ulca.dataset.kakfa;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.RandomAccessFile;
 import java.math.BigInteger;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
@@ -18,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +31,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.stream.JsonReader;
 import com.ulca.dataset.dao.TaskTrackerRedisDao;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
@@ -70,7 +75,10 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
 	public static final String TARGET_TEXT = "targetText";
 	public static final String TARGET_TEXT_HASH = "targetTextHash";
-
+	
+	@Value("${test.value}")
+	public static long maxReadBufferSize;    
+	
 	public void validateIngest(DatasetIngest datasetIngest) {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateIngest *********");
@@ -217,7 +225,6 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 	
 		int numberOfRecords = 0;
-		int failedCount = 0;
 		int successCount = 0;
 		
 		
@@ -255,7 +262,6 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 				
 			} catch(Exception e) {
 				
-				failedCount++;
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 				
@@ -323,120 +329,155 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
 	    
 		FileChannel dataFileChannel = FileChannel.open(Paths.get(dataFilePath));
-	    long fileSize = dataFileChannel.size();
-	    long min = 1; 
-	    long max = 10;
-	    long buffer = 10;
-	    if(fileSize > MB_50 && fileSize <= MB_300) {
-	    	buffer = 100;
-	    	max = 100;
-	    }
-	    if(fileSize > MB_300) {
-	    	buffer = 1000;
-	    	max = 1000;
-	    }
-	    long counter = min;
+	    dataFileChannel.size();
 	    
-		log.info("data.json file path :: " + dataFilePath);
+        log.info("data.json file path :: " + dataFilePath);
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
-	
-		int numberOfRecords = 0;
-		int failedCount = 0;
-		int successCount = 0;
-		int pseudoNumberOfRecords = 0;
-		
-		JSONObject vModel = new JSONObject();
-		vModel.put("record", record);
-		vModel.put("datasetId", datasetId);
-		vModel.put("datasetName", datasetName);
-		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
-		vModel.put("serviceRequestNumber", serviceRequestNumber);
-		vModel.put("userId", userId);
-		vModel.put("userMode", mode);
-		
-		 
-		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash);
-		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
-		 
-		reader.beginArray();
-		while (reader.hasNext()) {
-			numberOfRecords++;
-			
-			if(numberOfRecords == counter) {
-				pseudoNumberOfRecords++;
-				
-				min = min+buffer;
-				max = max + buffer;
-				counter = (long)(Math.random()*(max-min+1)+min);
-				
-				Object rowObj = new Gson().fromJson(reader, Object.class);
-				
-				ObjectMapper mapper = new ObjectMapper();
-				String dataRow = mapper.writeValueAsString(rowObj);
-				SimpleModule module = new SimpleModule();
-				module.addDeserializer(ParallelDatasetRowSchema.class, new ParallelDatasetRowSchemaDeserializer());
-				mapper.registerModule(module);
-				
-				ParallelDatasetRowSchema rowSchema  = null;
-				
-				try {
-					rowSchema = mapper.readValue(dataRow, ParallelDatasetRowSchema.class);
-					
-				} catch(Exception e) {
-					
-					failedCount++;
-					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
-					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
-					
-					log.info("record :: " +numberOfRecords + "failed " );
-					log.info("error message :: " + e.getMessage() );
-					
-				}
-				if(rowSchema != null) {
-					
-					successCount++;
-					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
-					
-					JSONObject target =  new JSONObject(dataRow);
-					JSONObject finalRecord = deepMerge(record, target);
-					
-					if (finalRecord.has("languages")) {
-						JSONObject language = finalRecord.getJSONObject("languages");
-						String sourceLanguage = language.getString("sourceLanguage");
-						String targetLanguage = language.getString("targetLanguage");
-						finalRecord.put("sourceLanguage", sourceLanguage);
-						finalRecord.put("targetLanguage", targetLanguage);
-						finalRecord.remove("languages");
-					}
-					
-					UUID uid = UUID.randomUUID();
-					finalRecord.put("id", uid);
+	    long min = 1; 
+	    long max = 10;
+	    long buffer = 10;
+//	    if(fileSize > MB_50 && fileSize <= MB_300) {
+//	    	buffer = 100;
+//	    	max = 100;
+//	    }
+//	    if(fileSize > MB_300) {
+//	    	buffer = 1000;
+//	    	max = 1000;
+//	    }
 
-					vModel.put("record", finalRecord);
-					vModel.put("currentRecordIndex", pseudoNumberOfRecords);
-					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
-					
-				}
-			
-			}else {
-				Object rowObj = new Gson().fromJson(reader, Object.class);
-			}
-		}
-		reader.endArray();
-		reader.close();
-		inputStream.close();
+//	    long counter = min;	
+//		int numberOfRecords = 0;
+//		int successCount = 0;
+//		int pseudoNumberOfRecords = 0;
 		
-		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
+//		JSONObject vModel = new JSONObject();
+//		vModel.put("record", record);
+//		vModel.put("datasetId", datasetId);
+//		vModel.put("datasetName", datasetName);
+//		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
+//		vModel.put("serviceRequestNumber", serviceRequestNumber);
+//		vModel.put("userId", userId);
+//		vModel.put("userMode", mode);
+//		
+//		 
+//		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash);
+//		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
+//		 
+//		reader.beginArray();
+//		while (reader.hasNext()) {
+//			numberOfRecords++;
+//			
+//			if(numberOfRecords == counter) {
+//				pseudoNumberOfRecords++;
+//				
+//				min = min+buffer;
+//				max = max + buffer;
+//				counter = (long)(Math.random()*(max-min+1)+min);
+//				
+//				Object rowObj = new Gson().fromJson(reader, Object.class);
+//				
+//				ObjectMapper mapper = new ObjectMapper();
+//				String dataRow = mapper.writeValueAsString(rowObj);
+//				SimpleModule module = new SimpleModule();
+//				module.addDeserializer(ParallelDatasetRowSchema.class, new ParallelDatasetRowSchemaDeserializer());
+//				mapper.registerModule(module);
+//				
+//				ParallelDatasetRowSchema rowSchema  = null;
+//				
+//				try {
+//					rowSchema = mapper.readValue(dataRow, ParallelDatasetRowSchema.class);
+//					
+//				} catch(Exception e) {
+//					
+//					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
+//					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
+//					
+//					log.info("record :: " +numberOfRecords + "failed " );
+//					log.info("error message :: " + e.getMessage() );
+//					
+//				}
+//				if(rowSchema != null) {
+//					
+//					successCount++;
+//					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+//					
+//					JSONObject target =  new JSONObject(dataRow);
+//					JSONObject finalRecord = deepMerge(record, target);
+//					
+//					if (finalRecord.has("languages")) {
+//						JSONObject language = finalRecord.getJSONObject("languages");
+//						String sourceLanguage = language.getString("sourceLanguage");
+//						String targetLanguage = language.getString("targetLanguage");
+//						finalRecord.put("sourceLanguage", sourceLanguage);
+//						finalRecord.put("targetLanguage", targetLanguage);
+//						finalRecord.remove("languages");
+//					}
+//					
+//					UUID uid = UUID.randomUUID();
+//					finalRecord.put("id", uid);
+//
+//					vModel.put("record", finalRecord);
+//					vModel.put("currentRecordIndex", pseudoNumberOfRecords);
+//					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+//					
+//				}
+//			
+//			}else {
+//				new Gson().fromJson(reader, Object.class);
+//			}
+//		}
+//		reader.endArray();
+//		reader.close();
+//		inputStream.close();
+//		
+//		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
 		
-		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount) ;
+//		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount) ;
 		
-		
+		RandomAccessFile raf = new RandomAccessFile( dataFilePath,"rw");
+		JsonParser jsonparser= new JsonParser();
+		Object object= jsonparser.parseList(dataFilePath);
+		JsonArray jsonArray=  (JsonArray)object;
+        long numSplits = 10; 
+        long sourceSize = raf.length();
+        long bytesPerSplit = sourceSize/numSplits ;
+        long remainingBytes = sourceSize % numSplits;
+        
+        for(int destIx=1; destIx <= numSplits; destIx++) {
+            BufferedOutputStream bw = new BufferedOutputStream(new FileOutputStream("split."+destIx));
+            if(bytesPerSplit > maxReadBufferSize) {
+                long numReads = bytesPerSplit/maxReadBufferSize;
+                long numRemainingRead = bytesPerSplit % maxReadBufferSize;
+                for(int i=0; i<numReads; i++) {
+                    readWrite(raf, bw, maxReadBufferSize);
+                }
+                if(numRemainingRead > 0) {
+                    readWrite(raf, bw, numRemainingRead);
+                }
+            }else {
+                readWrite(raf, bw, bytesPerSplit);
+            }
+            bw.close();
+        }
+        if(remainingBytes > 0) {
+            BufferedOutputStream bw = new BufferedOutputStream(new FileOutputStream("split."+(numSplits+1)));
+            readWrite(raf, bw, remainingBytes);
+            bw.close();
+        }
+            raf.close();
 
 	}
 
+	static void readWrite(RandomAccessFile raf, BufferedOutputStream bw, long numBytes) throws IOException {
+        byte[] buf = new byte[(int) numBytes];
+        int val = raf.read(buf);
+        if(val != -1) {
+            bw.write(buf);
+        }
+	}
 	public String getSha256Hash(String input) throws NoSuchAlgorithmException {
 
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -455,5 +496,27 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		return hashString;
 	}
 	
+	
+	public void pseudoData(ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
+			throws JSONException, IOException, NoSuchAlgorithmException {
 
+    	ObjectMapper objectMapper = new ObjectMapper();
+		new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+
+		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
+		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
+		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+		int counter = 0;
+		reader.beginArray();
+		while (reader.hasNext()) {
+			counter++;
+		if(counter > 5000 && counter <= 10000) {
+	    	pseudoIngest(paramsSchema,datasetIngest);
+	    }
+	    else {
+	    	ingest(paramsSchema,datasetIngest);
+	    }
+	}
+
+  }		
 }
