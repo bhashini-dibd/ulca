@@ -398,13 +398,12 @@ const SearchAndDownloadRecords = (props) => {
 
   const handleSubmitBtn = () => {
     const obj = { ...basicFilterState, ...advFilterState };
-    console.log(languagePair);
     const criteria = {
       sourceLanguage: getArrayValue([languagePair.source]),
       targetLanguage: getArrayValue(languagePair.target),
       ...getObjectValue(obj),
-      groupBy: false,
-      multipleContributors: false,
+      // groupBy: false,
+      multipleContributors: state.checkedA,
       originalSourceSentence: state.checkedC,
     };
     console.log(criteria);
@@ -587,12 +586,12 @@ const SearchAndDownloadRecords = (props) => {
     return (
       <div>
         {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
-        {datasetType["parallel-corpus"] &&
+        {/* {datasetType["parallel-corpus"] &&
           renderCheckBox(
             "checkedB",
             "primary",
             "Source sentences manually translated by multiple translators"
-          )}
+          )} */}
         {datasetType["parallel-corpus"] &&
           renderCheckBox(
             "checkedC",
