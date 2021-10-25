@@ -51,28 +51,34 @@
       "active": true,
       "values": [
         {
-          "value": 0,
-          "label": "0.0"
+          "code": 0,
+          "label": "0.0",
+          "active": true
         },
         {
-          "value": 0.5,
-          "label": "0.5"
+          "code": 0.5,
+          "label": "0.5",
+          "active": true
         },
         {
-          "value": 0.6,
-          "label": "0.6"
+          "code": 0.6,
+          "label": "0.6",
+          "active": true
         },
         {
-          "value": 0.7,
-          "label": "0.7"
+          "code": 0.7,
+          "label": "0.7",
+          "active": true
         },
         {
-          "value": 0.8,
-          "label": "0.8"
+          "code": 0.8,
+          "label": "0.8",
+          "active": true
         },
         {
-          "value": 0.9,
-          "label": "0.9"
+          "code": 0.9,
+          "label": "0.9",
+          "active": true
         }
       ]
     },
@@ -82,28 +88,34 @@
       "active": true,
       "values": [
         {
-          "value": 0.5,
-          "label": "0.5"
+          "code": 0.5,
+          "label": "0.5",
+          "active": true
         },
         {
-          "value": 0.6,
-          "label": "0.6"
+          "code": 0.6,
+          "label": "0.6",
+          "active": true
         },
         {
-          "value": 0.7,
-          "label": "0.7"
+          "code": 0.7,
+          "label": "0.7",
+          "active": true
         },
         {
-          "value": 0.8,
-          "label": "0.8"
+          "code": 0.8,
+          "label": "0.8",
+          "active": true
         },
         {
-          "value": 0.9,
-          "label": "0.9"
+          "code": 0.9,
+          "label": "0.9",
+          "active": true
         },
         {
-          "value": 1,
-          "label": "1.0"
+          "code": 1,
+          "label": "1.0",
+          "active": true
         }
       ]
     },
