@@ -113,9 +113,9 @@ const ContributionList = (props) => {
     }
   }, [data]);
   
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  });
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // });
   // useEffect(() => {
   //   document.querySelectorAll(`button`).forEach((element) => {
   //     element.classList.forEach((list) => {
@@ -215,6 +215,7 @@ const ContributionList = (props) => {
   const handleDialogSubmit = () => {};
 
   const processTableClickedNextOrPrevious = (sortOrder, page) => {
+    window.scrollTo(0, 0);
     dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
   };
 
