@@ -141,8 +141,14 @@ public class BenchmarkService {
 			}
 			List<BenchmarkProcess> isExistBmProcess = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetIdAndMetric(modelId,bm.getBenchmarkId(),bm.getMetric());
 			if(isExistBmProcess != null && isExistBmProcess.size()>0 ) {
-				String message = "Benchmark has already been executed for benchmarkId : " + bm.getBenchmarkId() + " and metric : " + bm.getMetric();
-				throw new BenchmarkNotAllowedException(message);
+				
+				for(BenchmarkProcess existingBm : isExistBmProcess) {
+					String status = existingBm.getStatus();
+					if(status.equalsIgnoreCase("Completed") || status.equalsIgnoreCase("In-Progress") ) {
+						String message = "Benchmark has already been executed for benchmarkId : " + bm.getBenchmarkId() + " and metric : " + bm.getMetric();
+						throw new BenchmarkNotAllowedException(message);
+					 }
+					}
 			}
 			String serviceRequestNumber = Utility.getBenchmarkExecuteReferenceNumber();
 			
