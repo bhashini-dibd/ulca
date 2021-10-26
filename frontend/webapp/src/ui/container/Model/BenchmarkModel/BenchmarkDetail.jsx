@@ -82,7 +82,7 @@ const SearchModelDetail = (props) => {
   );
   useEffect(() => {
     window.scrollTo(0, 0);
-  });
+  },[]);
 
   useEffect(() => {
     setMetric(metricArray[0]);
