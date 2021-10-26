@@ -1,7 +1,7 @@
 
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
-import searchIcon from "../../../../assets/searchIcon.svg"
+import searchIcon from "../../../../assets/Group 10143.svg"
 import {
     Typography
 } from '@material-ui/core';

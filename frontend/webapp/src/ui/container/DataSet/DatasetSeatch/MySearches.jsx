@@ -117,11 +117,12 @@ const MySearches = (props) => {
 
   const renderAction = (rowData) => {
     const status = rowData[4].toLowerCase();
-
-    history.push({
-      pathname: `/search-and-download-rec/${status}/${rowData[0]}`,
-      pageInfo: page,
-    });
+if(status==='completed'){
+  history.push({
+    pathname: `/search-and-download-rec/${status}/${rowData[0]}`,
+    pageInfo: page,
+  });
+}
     // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`)
   };
 

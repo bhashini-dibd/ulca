@@ -24,8 +24,8 @@ const AudioRecord = (props) => {
     const output = document.getElementById("asrCardOutput");
     output.innerText = "";
     setData(null);
-    setRecordAudio(RecordState.START);
     streaming.connect(SOCKET_URL, languageCode, function (action, id) {
+      setRecordAudio(RecordState.START);
       if (action === null) {
         streaming.startStreaming(
           function (transcript) {
@@ -62,6 +62,7 @@ const AudioRecord = (props) => {
   const onStop = (data) => {
     setData(data.url);
   };
+
 
   return (
     <Card className={classes.asrCard}>

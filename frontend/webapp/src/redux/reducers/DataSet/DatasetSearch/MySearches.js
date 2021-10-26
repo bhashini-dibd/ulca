@@ -3,14 +3,22 @@ import {
   getLanguageLabel,
   FilterByDomain,
   FilterByCollection,
+  getLanguageName,
 } from "../../../../utils/getLabel";
 import getDatasetName from "../../../../utils/getDataset";
+import { translate } from "../../../../assets/localisation";
+import imageArray from "../../../../utils/getModelIcons";
+import AdvanceFilterIcon from "../../../../assets/training-dataset.svg";
+import LanguageIcon from "../../../../assets/LanguageIcon.svg";
+import DomainIcon from "../../../../assets/domainIcon.svg";
+import TaskIcon from "../../../../assets/task_alt_black_24dp.svg";
 
 const initialState = {
   responseData: [],
   filteredData: [],
 };
 
+const colorArr = imageArray.map((image) => image.color);
 const dateConversion = (value) => {
   var myDate = new Date(value);
   let result = myDate.toLocaleString("en-IN", {
@@ -23,6 +31,91 @@ const dateConversion = (value) => {
     hour12: true,
   });
   return result.toUpperCase();
+};
+
+const getLanguages = (arr) => {
+  return arr.map((val) => getLanguageName(val)).join(", ");
+};
+
+const getSearchInfo = (searchCriteria) => {
+  let result = [];
+  const keys = Object.keys(searchCriteria);
+  const keysToIgnore = [
+    "groupBy",
+    "multipleContributors",
+    "originalSourceSentence",
+    "serviceRequestNumber",
+    "userId",
+    "minScore",
+    "maxScore",
+  ];
+  keys.forEach((key, i) => {
+    if (keysToIgnore.indexOf(key) < 0 && searchCriteria[key] !== undefined) {
+      if (key === "datasetType") {
+        result.push({
+          title: translate(key),
+          para: getDatasetName(searchCriteria[key]),
+          key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: TaskIcon,
+        });
+      } else if (key === "sourceLanguage" || key === "targetLanguage") {
+        result.push({
+          title: translate(key),
+          para: getLanguages(searchCriteria[key]),
+          key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: LanguageIcon,
+        });
+      } else if (key === "license") {
+        result.push({
+          title: translate(key),
+          para: Array.isArray(searchCriteria[key])
+            ? searchCriteria[key].join(",").toUpperCase()
+            : searchCriteria[key],
+          key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: AdvanceFilterIcon,
+        });
+      } else if (key === "collectionMethod") {
+        result.push({
+          title: translate(key),
+          para: Array.isArray(searchCriteria[key])
+            ? searchCriteria[key].join(",").replace("-", " ")
+            : searchCriteria[key],
+          key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: AdvanceFilterIcon,
+        });
+      } else {
+        result.push({
+          title: translate(key),
+          para: Array.isArray(searchCriteria[key])
+            ? searchCriteria[key].join(",")
+            : searchCriteria[key],
+          key,
+          color:
+            colorArr.length - 1 >= i
+              ? colorArr[i]
+              : colorArr[i - (colorArr.length - 1)],
+          imageUrl: key === "domain" ? DomainIcon : AdvanceFilterIcon,
+        });
+      }
+    }
+  });
+  return result;
 };
 
 const getMySearches = (payload) => {
@@ -66,11 +159,13 @@ const getMySearches = (payload) => {
         count: searchDetails && searchDetails.count,
         sampleUrl: searchDetails && searchDetails.datasetSample,
         downloadUrl: searchDetails && searchDetails.dataset,
-        sourceLanguage: element.searchCriteria.sourceLanguage,
-        targetLanguage: element.searchCriteria.targetLanguage,
-        datasetType: element.searchCriteria.datasetType,
-        domain: element.searchCriteria.domain,
-        collection: element.searchCriteria.collectionMethod,
+        // sourceLanguage: element.searchCriteria.sourceLanguage,
+        // targetLanguage: element.searchCriteria.targetLanguage,
+        // datasetType: element.searchCriteria.datasetType,
+        // domain: element.searchCriteria.domain,
+        // collection: element.searchCriteria.collectionMethod,
+        searchValues: element.searchCriteria,
+        searchInfo: getSearchInfo(element.searchCriteria),
       });
     }
   });

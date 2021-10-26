@@ -13,8 +13,6 @@ import SearchResult from "./SearchResult";
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../styles/Dataset";
 import Snackbar from "../../../components/common/Snackbar";
-import BreadCrum from "../../../components/common/Breadcrum";
-import UrlConfig from "../../../../configs/internalurlmapping";
 import { PageChange } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import C from "../../../../redux/actions/constants";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,11 +22,16 @@ import RequestNumberCreation from "./RequestNumberCreation";
 import { useHistory, useParams } from "react-router";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import MultiAutocomplete from "../../../components/common/Autocomplete";
-import { Language, FilterBy } from "../../../../configs/DatasetItems";
+import { FilterBy } from "../../../../configs/DatasetItems";
 import SubmitSearchRequest from "../../../../redux/actions/api/DataSet/DatasetSearch/SubmitSearchRequest";
 import DatasetType from "../../../../configs/DatasetItems";
 import getLanguageLabel from "../../../../utils/getLabel";
-import {translate} from "../../../../assets/localisation";
+import SearchAndDownloadAPI from "../../../../redux/actions/api/DataSet/DatasetSearch/SearchAndDownload";
+import APITransport from "../../../../redux/actions/apitransport/apitransport";
+import { getFilter } from "../../../../redux/actions/api/DataSet/DatasetSearch/GetFilters";
+import SingleAutoComplete from "../../../components/common/SingleAutoComplete";
+import { filterItems } from "../../../../configs/filterItems";
+import SearchDescription from "./SearchDescription";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -47,28 +50,32 @@ const StyledMenu = withStyles({})((props) => (
 ));
 const SearchAndDownloadRecords = (props) => {
   const { classes } = props;
-  const url = UrlConfig.dataset;
-  const urlMySearch = UrlConfig.mySearches;
+
+  const [datasetType, setDatasetType] = useState({
+    "parallel-corpus": true,
+  });
+
+  const filters = useSelector((state) => state.mySearchOptions.filters);
+  const Language = filters.filter((elem) => elem.filterType === "language");
+  const basicFilter = filters.filter((elem) => elem.filterType === "basic");
+  const advFilter = filters.filter((elem) => elem.filterType === "advance");
+
   const dispatch = useDispatch();
   const param = useParams();
   const history = useHistory();
+  const { params, srno } = param;
+  const [open, setOpen] = useState(false);
+  const [advFilterState, setAdvFilterState] = useState({});
+  const [basicFilterState, setBasicFilterState] = useState({});
   const [languagePair, setLanguagePair] = useState({
     source: "",
     target: [],
   });
-  // const [filterBy, setFilterBy] = useState({
-  //     domain: [],
-  //     source: [],
-  //     collectionMethod: []
-  // });
+
   const [filterBy, setFilterBy] = useState({
     domain: "",
     source: "",
     collectionMethod: "",
-  });
-
-  const [datasetType, setDatasetType] = useState({
-    "parallel-corpus": true,
   });
 
   const [count, setCount] = useState(0);
@@ -80,46 +87,49 @@ const SearchAndDownloadRecords = (props) => {
   const previousUrl = useRef();
 
   const detailedReport = useSelector((state) => state.mySearchReport);
+  let data = detailedReport.responseData.filter((val) => {
+    return val.sr_no === srno;
+  });
 
   useEffect(() => {
+    const dataset = Object.keys(datasetType)[0];
+    const apiData = new SearchAndDownloadAPI(dataset);
+    dispatch(APITransport(apiData));
     previousUrl.current = params;
 
-    let data = detailedReport.responseData.filter((val) => {
-      return val.sr_no === srno;
-    });
     if (data[0]) {
+      const { searchValues } = data[0];
       setCount(data[0].count);
       setUrls({
         downloadSample: data[0].sampleUrl,
         downloadAll: data[0].downloadUrl,
       });
 
-      let target = data[0].targetLanguage
-        ? getLanguageLabel(data[0].targetLanguage)
-        : getLanguageLabel(data[0].sourceLanguage);
+      let target = data[0].searchValues.targetLanguage
+        ? getLanguageLabel(data[0].searchValues.targetLanguage)
+        : getLanguageLabel(data[0].searchValues.sourceLanguage);
       let source =
-        data[0].sourceLanguage &&
-        Language.filter((val) => val.value === data[0].sourceLanguage[0])[0]
-          .label;
+        data[0].searchValues.sourceLanguage &&
+        getLanguageLabel(data[0].searchValues.sourceLanguage)[0];
       let domain =
-        data[0].domain &&
-        FilterBy.domain.filter((val) => val.value === data[0].domain[0])[0]
-          .label;
-      let collectionMethod =
-        data[0].collection &&
-        FilterBy.collectionMethod.filter(
-          (val) => val.value === data[0].collection[0]
-        )[0].label;
-      let label =
-        data[0].search_criteria && data[0].search_criteria.split("|")[0];
-      setFilterBy({
-        ...filterBy,
+        data[0].searchValues.domain &&
+        FilterBy.domain.filter(
+          (val) => val.value === data[0].searchValues.domain[0]
+        )[0];
+      let collectionSource = searchValues.collectionSource;
+      // let collectionMethod = data[0].collection && FilterBy.collectionMethod.filter(val => val.value === data[0].collection[0])[0].label
+      // let label = data[0].search_criteria && data[0].search_criteria.split('|')[0]
+      setBasicFilterState({
+        ...basicFilterState,
         domain,
-        collectionMethod,
+        collectionSource: { value: collectionSource },
       });
       setLanguagePair({ target, source });
+
+      setFilterState(searchValues);
+
       //   setLanguagePair({ target, source: getLanguageLabel(data[0].sourceLanguage)})
-      setDatasetType({ [data[0].datasetType]: true });
+      setDatasetType({ [data[0].searchValues.datasetType]: true });
 
       setLabel(label);
     } else if (
@@ -132,13 +142,67 @@ const SearchAndDownloadRecords = (props) => {
   }, []);
 
   useEffect(() => {
+    const searchValues =
+      data.length && data[0].hasOwnProperty("searchValues")
+        ? data[0]["searchValues"]
+        : {};
+    const searchKeys = Object.keys(searchValues);
+    setOpen(hasAdvFilter(searchKeys));
+  }, []);
+
+  const hasAdvFilter = (searchKeys) => {
+    for (let i = 0; i < advFilter.length; i++) {
+      if (searchKeys.indexOf(advFilter[i].value) > -1) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const getFilterInfo = (key, searchValue) => {
+    let result = {};
+    advFilter.forEach((filter) => {
+      if (filter.value === key) {
+        if (Array.isArray(searchValue)) {
+          filter.values.forEach((value) => {
+            if (Array.isArray(searchValue) && value.value === searchValue[0]) {
+              result = {
+                ...value,
+                type: "array",
+              };
+            }
+          });
+        } else {
+          result = {
+            value: searchValue,
+            type: "text",
+          };
+        }
+      }
+    });
+    return result;
+  };
+  const setFilterState = (searchValues) => {
+    const searchKeys = Object.keys(searchValues);
+    const updatedFilterState = {};
+    advFilter.forEach((filter) => {
+      if (searchKeys.indexOf(filter.value) > -1) {
+        updatedFilterState[filter.value] = getFilterInfo(
+          filter.value,
+          searchValues[filter.value]
+        );
+      }
+    });
+    setAdvFilterState({
+      ...advFilterState,
+      ...updatedFilterState,
+    });
+  };
+
+  useEffect(() => {
     if (previousUrl.current !== params && previousUrl.current !== "initiate") {
       setLanguagePair({ target: [], source: "" });
-      setFilterBy({
-        domain: "",
-        source: "",
-        collectionMethod: "",
-      });
+      clearfilter();
       setLabel("Parallel Dataset");
       setDatasetType({ "parallel-corpus": true });
     }
@@ -157,6 +221,25 @@ const SearchAndDownloadRecords = (props) => {
   const handleFilterByChange = (value, property) => {
     setFilterBy({ ...filterBy, [property]: value });
   };
+  const handleDropDownChange = (value, id, type = "array") => {
+    let filter = { ...advFilterState };
+    if (type === "array") {
+      filter[id] = { ...value, type };
+    } else {
+      filter[id] = { value, type };
+    }
+    setAdvFilterState({ ...advFilterState, ...filter });
+  };
+  console.log(advFilterState, basicFilterState);
+  const handleBasicFilter = (value, id, type = "array") => {
+    let filter = { ...basicFilterState };
+    if (type === "array") {
+      filter[id] = { ...value, type };
+    } else {
+      filter[id] = { value, type };
+    }
+    setBasicFilterState({ ...basicFilterState, ...filter });
+  };
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: "",
@@ -170,7 +253,6 @@ const SearchAndDownloadRecords = (props) => {
   const [label, setLabel] = useState("Parallel Dataset");
   const [srcError, setSrcError] = useState(false);
   const [tgtError, setTgtError] = useState(false);
-  const { params, srno } = param;
   const renderPage = () => {
     let data = detailedReport.responseData.filter((val) => {
       return val.sr_no === srno;
@@ -202,12 +284,12 @@ const SearchAndDownloadRecords = (props) => {
     setSrcError(false);
     setTgtError(false);
   };
-  const getLabel = () => {
-    if (datasetType["parallel-corpus"]) return "Target Language *";
-    // else if (datasetType['ocr-corpus'])
-    //     return "Script *"
-    else return "Language *";
-  };
+  // const getLabel = () => {
+  //   if (datasetType["parallel-corpus"]) return "Target Language *";
+  //   // else if (datasetType['ocr-corpus'])
+  //   //     return "Script *"
+  //   else return "Language *";
+  // };
 
   const getTitle = () => {
     if (datasetType["parallel-corpus"]) return "Select Language Pair";
@@ -216,25 +298,21 @@ const SearchAndDownloadRecords = (props) => {
     else return "Select Language";
   };
   const clearfilter = () => {
-    setFilterBy({
-      domain: "",
-      source: "",
-      collectionMethod: "",
-    });
+    setOpen(false);
+    setAdvFilterState({});
+    setBasicFilterState({});
     setLanguagePair({
       source: "",
       target: [],
     });
+    setState({
+      checkedA: false,
+      checkedB: false,
+      checkedC: false,
+    });
   };
 
-  const makeSubmitAPICall = (
-    src,
-    tgt,
-    domain,
-    collectionMethod,
-    type,
-    originalSourceSentence = false
-  ) => {
+  const makeSubmitAPICall = (type, criteria) => {
     const Dataset = Object.keys(type)[0];
     setSnackbarInfo({
       ...snackbar,
@@ -242,14 +320,7 @@ const SearchAndDownloadRecords = (props) => {
       message: "Please wait while we process your request.",
       variant: "info",
     });
-    const apiObj = new SubmitSearchRequest(
-      Dataset,
-      tgt,
-      src,
-      domain,
-      collectionMethod,
-      originalSourceSentence
-    );
+    const apiObj = new SubmitSearchRequest(Dataset, criteria);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       headers: apiObj.getHeaders().headers,
@@ -304,29 +375,41 @@ const SearchAndDownloadRecords = (props) => {
     // }
   };
 
+  const getObjectValue = (obj) => {
+    let updatedObj = {};
+    let objKeys = Object.keys(obj);
+    objKeys.forEach((key) => {
+      updatedObj[key] =
+        obj[key].type === "array"
+          ? filterItems.indexOf(key) > -1
+            ? obj[key].code
+            : [obj[key].code]
+          : obj[key].code;
+    });
+    return updatedObj;
+  };
+
+  const getArrayValue = (arr) => {
+    let updatedArr = arr.map((element) => {
+      return element.code;
+    });
+    return updatedArr;
+  };
+
   const handleSubmitBtn = () => {
-    let tgt = languagePair.target.map((trgt) => trgt.value);
-    //let domain = filterBy.domain.map(domain => domain.value)
-    //let collectionMethod = filterBy.collectionMethod.map(method => method.value)
-    let domain = filterBy.domain && [
-      getFilterValueForLabel("domain", filterBy.domain).value,
-    ];
-    let collectionMethod = filterBy.collectionMethod && [
-      getFilterValueForLabel("collectionMethod", filterBy.collectionMethod)
-        .value,
-    ];
+    const obj = { ...basicFilterState, ...advFilterState };
+    const criteria = {
+      sourceLanguage: getArrayValue([languagePair.source]),
+      targetLanguage: getArrayValue(languagePair.target),
+      ...getObjectValue(obj),
+      // groupBy: false,
+      multipleContributors: state.checkedA,
+      originalSourceSentence: state.checkedC,
+    };
+    console.log(criteria);
     if (datasetType["parallel-corpus"]) {
       if (languagePair.source && languagePair.target.length) {
-        let source = getValueForLabel(languagePair.source).value;
-        makeSubmitAPICall(
-          source,
-          tgt,
-          domain,
-          collectionMethod,
-          datasetType,
-          state.checkedC
-        );
-        //  makeSubmitAPICall(languagePair.source, tgt, domain, collectionMethod, datasetType)
+        makeSubmitAPICall(datasetType, criteria);
       } else if (!languagePair.source && !languagePair.target.length) {
         setSrcError(true);
         setTgtError(true);
@@ -335,13 +418,14 @@ const SearchAndDownloadRecords = (props) => {
     } else {
       if (!languagePair.target.length) setTgtError(true);
       else {
-        makeSubmitAPICall(null, tgt, domain, collectionMethod, datasetType);
+        makeSubmitAPICall(datasetType, criteria);
       }
     }
   };
   const handleChange = (label, value) => {
     setLabel(label);
     handleDatasetClick(value);
+    dispatch(getFilter(value));
   };
   const [anchorEl, openEl] = useState(null);
   const handleClose = () => {
@@ -350,15 +434,6 @@ const SearchAndDownloadRecords = (props) => {
 
   const renderDatasetButtons = () => {
     return (
-      // DatasetType.map((type, i) => {
-      //     return (
-      // <Button size='small' className={classes.innerButton} variant="outlined"
-      //     color={datasetType[type.value] && "primary"}
-      //     key={i}
-      //     onClick={() => handleDatasetClick(type.value)}
-      // >
-      //     {type.label}
-      // </Button>
       <>
         <Button
           className={classes.menuStyle}
@@ -415,28 +490,12 @@ const SearchAndDownloadRecords = (props) => {
       />
     );
   };
-  // const renderFilterByfield = (id, label, value, filter) => {
-  //     return (
-  //         <TextField className={classes.subHeader}
-  //             fullWidth
-  //             select
-  //             id={id}
-  //             label={label}
-  //             value={value}
-  //             onChange={(event) => handleFilterByChange(event.target.value, id)}
-  //         >
-  //             {filter.map((option) => (
-  //                 <MenuItem key={option.value} value={option.value}>
-  //                     {option.label}
-  //                 </MenuItem>
-  //             ))}
-  //         </TextField>
-  //     )
-  // }
+
   const renderFilterByfield = (id, label, value, filter) => {
     let filterByOptions = FilterBy[id].map((data) => data.label);
     return (
       <Autocomplete
+        disabled={!languagePair.target.length}
         value={filterBy[id] ? filterBy[id] : null}
         id={id}
         options={filterByOptions}
@@ -459,7 +518,7 @@ const SearchAndDownloadRecords = (props) => {
           <TextField
             fullWidth
             {...params}
-            label={`${translate("label.sourceLanguage")} *`}
+            label="Source Language *"
             variant="standard"
             error={srcError}
             helperText={srcError && "This field is mandatory"}
@@ -488,15 +547,11 @@ const SearchAndDownloadRecords = (props) => {
   };
   const renderclearNsubmitButtons = () => {
     return (
-      /* <div className={classes.clearNSubmit}>
-                      <Button size="large"  variant="outlined" onClick={clearfilter}>
-                          Clear
-                  </Button>
-                      <Button size="large" className={classes.buttonStyle} variant="contained" color="primary" onClick={handleSubmitBtn}>
-                          Submit
-                  </Button>
-                  </div> */
-      <Grid container className={classes.clearNSubmit}>
+      <Grid
+        container
+        className={classes.clearNSubmit}
+        style={{ marginTop: open ? "2rem" : "18rem" }}
+      >
         <Grid item xs={3}></Grid>
         <Grid item xs={9}>
           <Grid container spacing={2}>
@@ -512,6 +567,7 @@ const SearchAndDownloadRecords = (props) => {
             </Grid>
             <Grid item xs={6}>
               <Button
+                disabled={!languagePair.target.length}
                 fullWidth
                 size="large"
                 variant="contained"
@@ -526,9 +582,112 @@ const SearchAndDownloadRecords = (props) => {
       </Grid>
     );
   };
+  const renderAdvanceFilter = () => {
+    return (
+      <div>
+        {renderCheckBox("checkedA", "primary", "Vetted by multiple annotators")}
+        {/* {datasetType["parallel-corpus"] &&
+          renderCheckBox(
+            "checkedB",
+            "primary",
+            "Source sentences manually translated by multiple translators"
+          )} */}
+        {datasetType["parallel-corpus"] &&
+          renderCheckBox(
+            "checkedC",
+            "primary",
+            " Original sentence in source language"
+          )}
+      </div>
+    );
+  };
 
-  return (
-    <div>
+  const renderSubFilters = () => {
+    const values = Object.values(advFilterState).map((val) => val.code);
+    return advFilter.map((filter) => {
+      if (values.indexOf(filter.parent) > -1) {
+        return (
+          <Grid
+            className={classes.subHeader}
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            lg={12}
+            xl={12}
+          >
+            {filter.type !== "text" ? (
+              <SingleAutoComplete
+                handleChange={handleDropDownChange}
+                disabled={!languagePair.target.length}
+                id={filter.value}
+                labels={filter.values}
+                placeholder={`Select ${filter.label}`}
+              />
+            ) : (
+              <TextField
+                disabled={!languagePair.target.length}
+                id={filter.value}
+                label={`Select ${filter.label}`}
+                fullWidth
+                value={
+                  advFilterState[filter.value]
+                    ? advFilterState[filter.value].value
+                    : ""
+                }
+                onChange={(e) =>
+                  handleDropDownChange(e.target.value, filter.value, "text")
+                }
+              />
+            )}
+          </Grid>
+        );
+      }
+    });
+  };
+
+  const renderLanguage = () => {
+    return (
+      <>
+        {" "}
+        {Language.map((val) => {
+          if (val.input === "single-select") {
+            return (
+              <div className={classes.subHeader}>
+                <SingleAutoComplete
+                  handleChange={handleLanguagePairChange}
+                  id={"source"}
+                  value={languagePair.source}
+                  labels={val.values}
+                  placeholder={`${val.label} *`}
+                />
+              </div>
+            );
+          }
+          return (
+            <div className={classes.subHeader}>
+              <MultiAutocomplete
+                id="language-target"
+                options={val.values}
+                filter="target"
+                value={languagePair.target}
+                handleOnChange={handleLanguagePairChange}
+                label={`${val.label} *`}
+                error={tgtError}
+                helperText="This field is mandatory"
+                disabled={
+                  !languagePair.source && datasetType["parallel-corpus"]
+                }
+              />
+            </div>
+          );
+        })}
+      </>
+    );
+  };
+
+  const renderFilters = () => {
+    return (
       <Grid container spacing={3}>
         <Grid
           className={classes.leftSection}
@@ -540,9 +699,6 @@ const SearchAndDownloadRecords = (props) => {
           xl={4}
         >
           <Grid container spacing={2}>
-            {/* <Grid className={classes.breadcrum} item xs={12} sm={12} md={12} lg={12} xl={12}>
-                            <BreadCrum links={(params === 'inprogress' || params === 'completed') ? [url, urlMySearch] : [url]} activeLink="Search & Download Records" />
-                        </Grid> */}
             <Grid
               item
               className={
@@ -563,11 +719,8 @@ const SearchAndDownloadRecords = (props) => {
               <Typography className={classes.subHeader} variant="body1">
                 {getTitle()}
               </Typography>
-              <div className={classes.subHeader}>
-                {datasetType["parallel-corpus"] &&
-                  renderTexfield("select-source-language", "Source Language *")}
-              </div>
-              <div className={classes.autoComplete}>
+              {renderLanguage()}
+              {/* <div className={classes.autoComplete}>
                 <MultiAutocomplete
                   id="language-target"
                   options={getTargetLang()}
@@ -577,63 +730,128 @@ const SearchAndDownloadRecords = (props) => {
                   label={getLabel()}
                   error={tgtError}
                   helperText="This field is mandatory"
+                  disabled={
+                    !languagePair.source && datasetType["parallel-corpus"]
+                  }
                 />
-              </div>
+              </div> */}
               <Typography className={classes.subHeader} variant="body1">
                 Filter by
               </Typography>
               <Grid container spacing={1}>
-                <Grid
-                  className={classes.subHeader}
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                >
-                  {renderFilterByfield(
-                    "domain",
-                    "Select Domain",
-                    filterBy.domain,
-                    FilterBy.domain
-                  )}
-                </Grid>
-                <Grid
-                  className={classes.subHeader}
-                  item
-                  xs={12}
-                  sm={12}
-                  md={12}
-                  lg={12}
-                  xl={12}
-                >
-                  {renderFilterByfield(
-                    "collectionMethod",
-                    "Select Collection Method",
-                    filterBy.collectionMethod,
-                    FilterBy.collectionMethod
-                  )}
-                </Grid>
+                {basicFilter.map((filter) => {
+                  if (filter.active)
+                    return (
+                      <Grid
+                        className={classes.subHeader}
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                      >
+                        {filter.type !== "text" ? (
+                          <SingleAutoComplete
+                            handleChange={handleBasicFilter}
+                            disabled={!languagePair.target.length}
+                            id={filter.value}
+                            value={
+                              basicFilterState[filter.value]
+                                ? basicFilterState[filter.value]
+                                : ""
+                            }
+                            labels={filter.values}
+                            placeholder={`Select ${filter.label}`}
+                          />
+                        ) : (
+                          <TextField
+                            disabled={!languagePair.target.length}
+                            id={filter.value}
+                            label={`Select ${filter.label}`}
+                            value={
+                              basicFilterState[filter.value]
+                                ? basicFilterState[filter.value].value
+                                : ""
+                            }
+                            onChange={(e) =>
+                              handleBasicFilter(
+                                e.target.value,
+                                filter.value,
+                                "text"
+                              )
+                            }
+                            fullWidth
+                          />
+                        )}
+                      </Grid>
+                    );
+                })}
               </Grid>
-
-              {renderCheckBox(
-                "checkedA",
-                "primary",
-                "Vetted by multiple annotators"
-              )}
-              {datasetType["parallel-corpus"] &&
-                renderCheckBox(
-                  "checkedB",
-                  "primary",
-                  "Source sentences manually translated by multiple translators"
-                )}
-              {datasetType["parallel-corpus"] &&
-                renderCheckBox(
-                  "checkedC",
-                  "primary",
-                  " Original sentence in source language"
-                )}
+              <div className={classes.advanceFilter}>
+                <Button
+                  disabled={!languagePair.target.length}
+                  style={{ color: "#FD7F23" }}
+                  variant="outlined"
+                  size="small"
+                  onClick={() => setOpen(!open)}
+                >
+                  Advanced filter
+                </Button>
+              </div>
+              <div className={classes.advanceFilterContainer}>
+                {open &&
+                  advFilter.map((filter) => {
+                    if (filter.active && filter.parent === null)
+                      return (
+                        <Grid
+                          className={classes.subHeader}
+                          item
+                          xs={12}
+                          sm={12}
+                          md={12}
+                          lg={12}
+                          xl={12}
+                        >
+                          {filter.type !== "text" ? (
+                            <SingleAutoComplete
+                              handleChange={handleDropDownChange}
+                              disabled={!languagePair.target.length}
+                              id={filter.value}
+                              labels={filter.values}
+                              placeholder={`Select ${filter.label}`}
+                              value={
+                                advFilterState[filter.value]
+                                  ? advFilterState[filter.value]
+                                  : ""
+                              }
+                            />
+                          ) : (
+                            <TextField
+                              disabled={!languagePair.target.length}
+                              id={filter.value}
+                              label={`Select ${filter.label}`}
+                              fullWidth
+                              value={
+                                advFilterState[filter.value]
+                                  ? advFilterState[filter.value].value
+                                  : ""
+                              }
+                              onChange={(e) =>
+                                handleDropDownChange(
+                                  e.target.value,
+                                  filter.value,
+                                  "text"
+                                )
+                              }
+                            />
+                          )}
+                        </Grid>
+                      );
+                  })}
+                {renderSubFilters()}
+                {open && renderAdvanceFilter()}
+              </div>
               {renderclearNsubmitButtons()}
             </Grid>
           </Grid>
@@ -651,6 +869,47 @@ const SearchAndDownloadRecords = (props) => {
           {renderPage()}
         </Grid>
       </Grid>
+    );
+  };
+  const renderPostSubmit = () => {
+    return (
+      <Grid container spacing={3}>
+        <Grid
+          className={classes.leftSection}
+          item
+          xs={12}
+          sm={5}
+          md={4}
+          lg={4}
+          xl={4}
+        >
+          {data[0] &&
+            data[0].searchInfo.map((val) => (
+              <SearchDescription
+                title={val.title}
+                para={val.para}
+                color={val.color}
+                image={val.imageUrl}
+              />
+            ))}
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sm={7}
+          md={8}
+          lg={8}
+          xl={8}
+          className={classes.parent}
+        >
+          {renderPage()}
+        </Grid>
+      </Grid>
+    );
+  };
+  return (
+    <div>
+      {params === "completed" ? renderPostSubmit() : renderFilters()}
       {snackbar.open && (
         <Snackbar
           open={snackbar.open}

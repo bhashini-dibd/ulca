@@ -92,5 +92,5 @@ const localization_EN_Data = {
 };
 
 export function translate(locale_text) {
-  return localization_EN_Data[locale_text];
+  return localization_EN_Data[locale_text] ? localization_EN_Data[locale_text] : "";
 }

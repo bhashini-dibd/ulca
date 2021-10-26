@@ -34,7 +34,8 @@ const RequestNumberCreation = (props) => {
           <Button
             className={classes.mySearches}
             color="primary"
-            variant="outlined"
+            variant="contained"
+            size="large"
             onClick={() =>
               history.push(`${process.env.PUBLIC_URL}/my-searches`)
             }
