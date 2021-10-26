@@ -16,8 +16,8 @@
       "active": true,
       "datasetType": "monolingual-corpus",
       "values": {
-        "master": "/mongolingualCorpusFilters.json",
-        "jsonPath": "$.mongolingualCorpusFilters"
+        "master": "/monolingualCorpusFilters.json",
+        "jsonPath": "$.monolingualCorpusFilters"
       }
     },
     {

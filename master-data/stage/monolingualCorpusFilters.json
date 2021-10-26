@@ -1,5 +1,5 @@
 {
-  "mongolingualCorpusFilters": [
+  "monolingualCorpusFilters": [
     {
       "code": "sourceLanguage",
       "label": "Source Language",
@@ -46,7 +46,7 @@
       "code": "submitterName",
       "label": "Submitter",
       "active": true,
-      "values": []
+      "values": {}
     }
   ],
   "relatedMaster": true
