@@ -15,7 +15,5 @@ public interface ModelDao extends MongoRepository<ModelExtended, String> {
 
 	List<ModelExtended> findByUserId(String userId);
 
-	ModelExtended findByModelId(String modelId);
-
 
 }

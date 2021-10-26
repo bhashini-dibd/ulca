@@ -9,15 +9,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,12 +21,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -41,22 +34,14 @@ import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
-import com.ulca.model.exception.ModelNotFoundException;
-import com.ulca.model.exception.ModelStatusChangeException;
-import com.ulca.model.exception.ModelValidationException;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelSearchRequest;
-import com.ulca.model.request.ModelStatusChangeRequest;
 import com.ulca.model.response.ModelComputeResponse;
-import com.ulca.model.response.ModelLeaderboardFiltersMetricResponse;
-import com.ulca.model.response.ModelLeaderboardFiltersResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
-import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 
-import io.swagger.model.Benchmark;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
@@ -75,25 +60,15 @@ public class ModelService {
 
 	@Autowired
 	ModelDao modelDao;
-
-	@Autowired
-	BenchmarkProcessDao benchmarkProcessDao;
 	
 	@Autowired
-	BenchmarkDao benchmarkDao;
-
-	@Autowired
-	private MongoTemplate mongoTemplate;
+	BenchmarkProcessDao benchmarkProcessDao;
 
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
 
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
-	
-	@Autowired
-	WebClient.Builder builder;
-	
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -115,32 +90,25 @@ public class ModelService {
 		} else {
 			list = modelDao.findByUserId(userId);
 		}
-
+		
 		List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
-		for (ModelExtended model : list) {
+		for(ModelExtended model : list) {
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			modelDtoList.add(modelDto);
-
+			
 		}
-
+		
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
 	}
 
-	public ModelListResponseDto getModelDescription(String modelId) {
+	public ModelExtended getMode(String modelId) {
 		Optional<ModelExtended> result = modelDao.findById(modelId);
 
 		if (!result.isEmpty()) {
-			
-			ModelExtended model = result.get();
-			ModelListResponseDto modelDto = new ModelListResponseDto();
-			BeanUtils.copyProperties(model, modelDto);
-			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
-			modelDto.setBenchmarkPerformance(benchmarkProcess);
-			
-			return modelDto;
+			return result.get();
 		}
 		return null;
 	}
@@ -180,19 +148,15 @@ public class ModelService {
 
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getModel(modelFilePath);
-		
-		validateModel(modelObj);
-		
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(new Date().toString());
 		modelObj.setPublishedOn(new Date().toString());
-		modelObj.setStatus("unpublished");
+		modelObj.setStatus("published");
 		if (modelObj != null) {
 			try {
 				modelDao.save(modelObj);
 			} catch (DuplicateKeyException ex) {
-				ex.printStackTrace();
-				throw new DuplicateKeyException("Model with same name and version exist in system");
+				throw new DuplicateKeyException("Model with same name exist in system");
 			}
 		}
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
@@ -217,43 +181,8 @@ public class ModelService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		return modelObj;
-	}
-	
-	private Boolean validateModel(ModelExtended model) throws ModelValidationException {
-		
-		if(model.getName() == null || model.getName().isBlank()) 
-			throw new ModelValidationException("name is required field");
-		
-		if(model.getVersion() == null || model.getVersion().isBlank())
-			throw new ModelValidationException("version is required field");
-		
-		if(model.getDescription() == null ||  model.getDescription().isBlank())
-			throw new ModelValidationException("description is required field");
-		
-		if(model.getTask() == null)
-			throw new ModelValidationException("task is required field");
-		
-		if(model.getLanguages() == null)
-			throw new ModelValidationException("languages is required field");
-		
-		if(model.getLicense() == null)
-			throw new ModelValidationException("license is required field");
-		
-		if(model.getDomain() == null)
-			throw new ModelValidationException("domain is required field");
-		
-		if(model.getSubmitter() == null)
-			throw new ModelValidationException("submitter is required field");
-		
-		if(model.getInferenceEndPoint() == null)
-			throw new ModelValidationException("inferenceEndPoint is required field");
-		
-		if(model.getTrainingDataset() == null)
-			throw new ModelValidationException("trainingDataset is required field");
-		
-		return true;
 	}
 
 	public ModelSearchResponse searchModel(ModelSearchRequest request) {
@@ -288,8 +217,6 @@ public class ModelService {
 		return new ModelSearchResponse("Model Search Result", list, list.size());
 
 	}
-	
-	
 
 	public ModelComputeResponse computeModel(ModelComputeRequest compute)
 			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
@@ -302,118 +229,5 @@ public class ModelService {
 
 		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
 	}
-
-
-	public ModelLeaderboardFiltersResponse leaderBoardFilters_bkp() {
-
-		log.info("******** Entry ModelService:: leaderBoardFilters *******");
-
-		ModelLeaderboardFiltersResponse response = new ModelLeaderboardFiltersResponse();
-
-		ModelTask.TypeEnum[] list = ModelTask.TypeEnum.values();
-		for (ModelTask.TypeEnum type : list) {
-			log.info(type.toString());
-		}
-
-		ModelLeaderboardFiltersMetricResponse metric = new ModelLeaderboardFiltersMetricResponse();
-		String[] translation = { "bleu", "sacrebleu", "meteor", "lepor" };
-		metric.setTranslation(Arrays.asList(translation));
-		String[] asr = { "wer", "cer" };
-		metric.setAsr(Arrays.asList(asr));
-
-		String[] documentLayoutBenchmarkMetric = { "precision", "recall", "h1-mean" };
-		metric.setDocumentLayout(Arrays.asList(documentLayoutBenchmarkMetric));
-
-		String[] ocr = { "wer", "cer" };
-		metric.setOcr(Arrays.asList(ocr));
-
-		String[] tts = { "wer", "cer" };
-		metric.setTts(Arrays.asList(tts));
-
-		response.setMetric(metric);
-		response.setSourceLanguage(LanguagePair.SourceLanguageEnum.values());
-		response.setTargetLanguage(LanguagePair.TargetLanguageEnum.values());
-
-		response.setTask(list);
-
-		return response;
-
-	}
-	
-	public Object leaderBoardFilters() throws IOException {
-
-		log.info("******** Entry ModelService:: leaderBoardFilters *******");
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		
-		String commonFilterUrl = "https://raw.githubusercontent.com/ULCA-IN/ulca/model_api/master-data/dev/modelFilter.json";
-		String commonFilterData = builder.build().get().uri(commonFilterUrl).retrieve().bodyToMono(String.class).block();
-		
-		JSONObject filters =  new JSONObject(commonFilterData);
-		
-		JSONObject benchmarkDataset = new JSONObject();
-		ModelTask task = new ModelTask();
-		task.setType(ModelTask.TypeEnum.TRANSLATION);
-		List<Benchmark>  trans = benchmarkDao.findByTask(task);
-		String transData = objectMapper.writeValueAsString(trans);
-		JSONArray transJson =  new JSONArray(transData);
-		benchmarkDataset.put("translation", transJson);
-		
-		task = new ModelTask();
-		task.setType(ModelTask.TypeEnum.ASR);
-		List<Benchmark>  asr = benchmarkDao.findByTask(task);
-		String asrData = objectMapper.writeValueAsString(asr);
-		JSONArray asrJson =  new JSONArray(asrData);
-		benchmarkDataset.put("asr", asrJson);
-		
-		task = new ModelTask();
-		task.setType(ModelTask.TypeEnum.OCR);
-		List<Benchmark>  ocr = benchmarkDao.findByTask(task);
-		String ocrData = objectMapper.writeValueAsString(ocr);
-		JSONArray ocrJson =  new JSONArray(ocrData);
-		benchmarkDataset.put("ocr", ocrJson);
-		
-		task = new ModelTask();
-		task.setType(ModelTask.TypeEnum.TTS);
-		List<Benchmark>  tts = benchmarkDao.findByTask(task);
-		String ttsData = objectMapper.writeValueAsString(tts);
-		JSONArray ttsJson =  new JSONArray(ttsData);
-		benchmarkDataset.put("tts", ttsJson);
-		
-		task = new ModelTask();
-        task.setType(ModelTask.TypeEnum.DOCUMENT_LAYOUT);
-		List<Benchmark>  document = benchmarkDao.findByTask(task);
-		String documentData = objectMapper.writeValueAsString(document);
-		JSONArray documentJson =  new JSONArray(documentData);
-		benchmarkDataset.put("document", documentJson);
-		
-		filters.put("benchmarkDataset", benchmarkDataset);
-		
-		Object  filterObj = objectMapper.readValue(filters.toString(), Object.class);
-		
-		
-		return filterObj;
-		
-	}
-
-	public ModelStatusChangeResponse changeStatus(@Valid ModelStatusChangeRequest request) {
-		
-		String userId = request.getUserId();
-		String modelId = request.getModelId();
-		String status = request.getStatus().toString();
-		ModelExtended model = modelDao.findByModelId(modelId);
-		if(model == null) {
-			throw new ModelNotFoundException("model with modelId : " + modelId + " not found");
-		}
-		if(!model.getUserId().equalsIgnoreCase(userId)) {
-			throw new ModelStatusChangeException("Not the submitter of model. So, can not " + status + " it.", status);
-		}
-		model.setStatus(status);
-		modelDao.save(model);
-		
-		return new ModelStatusChangeResponse("Model " + status +  " successfull.");
-	}
-	
-	
 
 }
