@@ -38,7 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.benchmark.request.AsrComputeRequest;
 import com.ulca.benchmark.request.AsrComputeResponse;
-import com.ulca.model.dao.AsrCallBackRequest;
+//import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.ASRInference;
@@ -72,12 +72,12 @@ public class AsrBenchmark {
 	WebClient.Builder builder;
 
 	
+	/*
 
 	public String compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
 			byte[] base64audioContent)
 			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
 
-		log.info("calling the inference end point");
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
@@ -107,8 +107,6 @@ public class AsrBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
 
-			log.info("response CallBackUrl:: ");
-			log.info(responseStr);
 			ASRResponse asrResponse = new ASRResponse();
 			Sentences sentences = new Sentences();
 			Sentence sentence = new Sentence();
@@ -124,6 +122,7 @@ public class AsrBenchmark {
 		
 	}
 	
+	*/
 	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
@@ -135,6 +134,7 @@ public class AsrBenchmark {
 		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+		String userId = model.getUserId();
 		reader.beginArray();
 		
 		List<String> ip = new ArrayList<String>();
@@ -142,47 +142,44 @@ public class AsrBenchmark {
 		
 		String baseLocation = fileMap.get("baseLocation")  + File.separator ;
 		JSONArray corpus = new JSONArray();
+		int totalRecords = 0;
+		int failedRecords = 0;
 		while (reader.hasNext()) {
 			
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
-			log.info("dataRow :: " + dataRow);
+			
 			JSONObject inputJson =  new JSONObject(dataRow);
 			String audioFilename = inputJson.getString("audioFilename");
 			String audioPath = baseLocation + audioFilename;
 			
 			byte[] bytes = Files.readAllBytes(Paths.get(audioPath));
-			//byte[] bytes = FileUtils.readFileToByteArray(new File(audioPath));
-			
-
-			//String encoded = Base64.getEncoder().encodeToString(bytes, 0);                                       
-
-			//byte[] decoded = Base64.getDecoder().decode(encoded, 0);
-			//String resultText = compute(callBackUrl, schema, Base64.getMimeEncoder().encode(bytes));
-			
-			// Encode the speech.
-			//byte[] encodedAudio = Base64.encodeBase64(audio.getBytes());
-		
-			
-			//byte[] encodedAudio = Base64.encodeBase64(bytes);
-			
-			//String resultText = compute(callBackUrl, schema, encodedAudio);
 			
 			AsrComputeRequest request = new AsrComputeRequest();
 			request.setCallbackUrl(callBackUrl);
 			request.setFilePath(audioPath);
 			
+			log.info("start time for calling the inference end point");
+			log.info("dataRow :: " + dataRow);
 			ASRInference asrInference = (ASRInference) schema;
 			request.setSourceLanguage(asrInference.getRequest().getConfig().getLanguage().getSourceLanguage().toString());
 			
-			String resultText = asrComputeInternal(request);		
+			String resultText = asrComputeInternal(request);	
+			log.info("result :: " + resultText);
+			log.info("end time for calling the inference end point");
 			
 			String targetText = inputJson.getString("text");
-			JSONObject target =  new JSONObject();
-			target.put("tgt", targetText);
-			target.put("mtgt", resultText);
-			corpus.put(target);
+			totalRecords++;
+			if(resultText != null) {
+				JSONObject target =  new JSONObject();
+				target.put("tgt", targetText);
+				target.put("mtgt", resultText);
+				corpus.put(target);
+			}else {
+				failedRecords++;
+			}
+			
 		}
 		reader.endArray();
 		reader.close();
@@ -197,8 +194,16 @@ public class AsrBenchmark {
 		JSONObject metricRequest  = new JSONObject();
 		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
 		metricRequest.put("modelId", model.getModelId());
+		metricRequest.put("modelName", model.getName());
+		if(benchmark.getLanguages() != null && benchmark.getLanguages().getTargetLanguage() != null) {
+			String targetLanguage = benchmark.getLanguages().getTargetLanguage().toString();
+			metricRequest.put("targetLanguage", targetLanguage);
+		}
+		
+		metricRequest.put("userId", userId);
 		metricRequest.put("modelTaskType", model.getTask().getType().toString());
 		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
+		log.info("total recoords :: " + totalRecords + " failedRecords :: " + failedRecords);
 		log.info("data before sending to metric");
 		log.info(metricRequest.toString());
 		
@@ -209,7 +214,7 @@ public class AsrBenchmark {
 	public String asrComputeInternal(AsrComputeRequest request) {
 		
 		AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
-				.body(Mono.just(request), AsrCallBackRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
+				.body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
 				.block();
 		
 		return response.getData().getTranscript();

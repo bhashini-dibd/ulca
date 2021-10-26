@@ -21,6 +21,7 @@ import {
   TableHead,
   Box,
   Table,
+  TablePagination,
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -32,6 +33,7 @@ import {
   filterBenchmark,
   clearFilterBenchmark,
 } from "../../../../redux/actions/api/Model/ModelView/FilterBenchmark";
+import CustomPagination from "../../../components/common/CustomPagination";
 
 const BenchmarkModal = (props) => {
   const { classes } = props;
@@ -69,18 +71,15 @@ const BenchmarkModal = (props) => {
 
   const fetchModalFooter = () => {
     return (
-      <>
-        <Divider style={{ margin: "5px" }} />
-        <Button
-          color="primary"
-          style={{ float: "right", marginTop: "5px", borderRadius: "22px" }}
-          variant="contained"
-          onClick={props.makeSubmitAPICall}
-          disabled={submitStatus}
-        >
-          Submit
-        </Button>
-      </>
+      <Button
+        color="primary"
+        style={{ float: "right", marginTop: "20px", borderRadius: "22px" }}
+        variant="contained"
+        onClick={props.makeSubmitAPICall}
+        disabled={submitStatus}
+      >
+        Submit
+      </Button>
     );
   };
 
@@ -149,6 +148,13 @@ const BenchmarkModal = (props) => {
   };
   const columns = [
     {
+      name: "benchmarkId",
+      label: "Benchmark Id",
+      options: {
+        display: "excluded",
+      },
+    },
+    {
       name: "datasetName",
       label: "Benchmark Dataset",
       options: {
@@ -187,8 +193,8 @@ const BenchmarkModal = (props) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           return renderSelectButton(
             "DATASET",
-            tableMeta.rowIndex,
-            tableMeta.rowData[3],
+            tableMeta.rowData[0],
+            tableMeta.rowData[4],
             tableMeta.rowIndex
           );
         },
@@ -203,18 +209,53 @@ const BenchmarkModal = (props) => {
       },
     },
     customToolbar: fetchModalToolBar,
-    customFooter: fetchModalFooter,
     print: false,
     viewColumns: false,
     selectableRows: false,
     download: false,
     search: false,
     filter: false,
+    // pagination: true,
+    // customFooter: fetchModalFooter,
+    customFooter: (
+      count,
+      page,
+      rowsPerPage,
+      changeRowsPerPage,
+      changePage,
+      textLabels
+    ) => {
+      return (
+        <Grid container>
+          <Grid item xs={11} sm={11} md={11} lg={11} xl={11}>
+            <CustomPagination
+              count={count}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              changeRowsPerPage={changeRowsPerPage}
+              changePage={changePage}
+              textLabels={textLabels}
+            />
+          </Grid>
+          <Grid
+            style={{ display: "flex", alignItems: "center" }}
+            item
+            xs={1}
+            sm={1}
+            md={1}
+            lg={1}
+            xl={1}
+          >
+            {fetchModalFooter()}
+          </Grid>
+        </Grid>
+      );
+    },
     expandableRows: true,
     rowsExpanded: selectedIndex,
     customRowRenderer: (data, dataIndex, rowIndex) => {},
     renderExpandableRow: (rowData, rowMeta) => {
-      const rows = data[rowMeta.rowIndex].metric;
+      const rows = data[rowMeta.dataIndex].metric;
       return (
         <>
           <TableRow>
@@ -237,6 +278,7 @@ const BenchmarkModal = (props) => {
                     </TableHead>
                     <TableBody>
                       {rows.map((row, i) => {
+                        console.log(row);
                         return (
                           <TableRow
                             key={i}
@@ -254,7 +296,7 @@ const BenchmarkModal = (props) => {
                                 "METRIC",
                                 i,
                                 row.selected,
-                                rowMeta.rowIndex,
+                                rowMeta.dataIndex,
                                 row.isMetricDisabled
                               )}
                             </TableCell>
@@ -363,6 +405,7 @@ const BenchmarkModal = (props) => {
         MUIDataTableHeadCell: {
           fixedHeader: {
             position: "initial",
+            width: "120px",
           },
         },
         MuiToolbar: {

@@ -4,9 +4,11 @@
       "label": "Parallel Dataset",
       "filters": [
         {
-          "filter": "languagepair",
-          "label": "Language Pairs",
+          "filter": "sourceLanguage",
+          "label": "Source Language",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "pa",
@@ -127,18 +129,147 @@
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "targetLanguage",
+          "label": "Target Language",
+          "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
+          "values": [
+            {
+              "value": "pa",
+              "label": "Punjabi"
+            },
+            {
+              "value": "bn",
+              "label": "Bengali"
+            },
+            {
+              "value": "en",
+              "label": "English"
+            },
+            {
+              "value": "ta",
+              "label": "Tamil"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "kok",
+              "label": "Konkani"
+            },
+            {
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
+            }
+          ]
+        },
+        {
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "auto-aligned",
               "label": "Auto Aligned",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "filter": "alignmentTool",
                   "label": "Alignment Tool",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
                     {
                       "value": "LaBSE",
@@ -151,44 +282,68 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentScore",
-                  "label": "Alignment Score Range",
+                  "filter": "minScore",
+                  "label": "Min Alignment Score",
                   "type": "drop-down",
+                  "datasetType": "single-value",
+                  "active": true,
                   "values": [
                     {
-                      "value": [
-                        0,
-                        0.5
-                      ],
-                      "label": "<0.5"
+                      "value": 0,
+                      "label": "0.0"
                     },
                     {
-                      "value": [
-                        0.5,
-                        0.6
-                      ],
-                      "label": "0.5-0.6"
+                      "value": 0.5,
+                      "label": "0.5"
                     },
                     {
-                      "value": [
-                        0.6,
-                        0.7
-                      ],
-                      "label": "0.6-0.7"
+                      "value": 0.6,
+                      "label": "0.6"
                     },
                     {
-                      "value": [
-                        0.7,
-                        0.8
-                      ],
-                      "label": "0.8-0.9"
+                      "value": 0.7,
+                      "label": "0.7"
                     },
                     {
-                      "value": [
-                        0.9,
-                        1
-                      ],
-                      "label": "0.9-1.0"
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    }
+                  ]
+                },
+                {
+                  "filter": "maxScore",
+                  "label": "Max Alignment Score",
+                  "type": "drop-down",
+                  "datasetType": "single-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    },
+                    {
+                      "value": 1.0,
+                      "label": "1.0"
                     }
                   ]
                 }
@@ -200,9 +355,11 @@
               "type": "drop-down",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentTool",
+                  "filter": "alignmentTool",
                   "label": "Alignment Tool",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
                     {
                       "value": "LaBSE",
@@ -211,44 +368,68 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.alignmentScore",
-                  "label": "Alignment Score Range",
+                  "filter": "minScore",
+                  "label": "Min Alignment Score",
                   "type": "drop-down",
+                  "datasetType": "single-value",
+                  "active": true,
                   "values": [
                     {
-                      "value": [
-                        0,
-                        0.5
-                      ],
-                      "label": "<0.5"
+                      "value": 0,
+                      "label": "0.0"
                     },
                     {
-                      "value": [
-                        0.5,
-                        0.6
-                      ],
-                      "label": "0.5-0.6"
+                      "value": 0.5,
+                      "label": "0.5"
                     },
                     {
-                      "value": [
-                        0.6,
-                        0.7
-                      ],
-                      "label": "0.6-0.7"
+                      "value": 0.6,
+                      "label": "0.6"
                     },
                     {
-                      "value": [
-                        0.7,
-                        0.8
-                      ],
-                      "label": "0.8-0.9"
+                      "value": 0.7,
+                      "label": "0.7"
                     },
                     {
-                      "value": [
-                        0.9,
-                        1
-                      ],
-                      "label": "0.9-1.0"
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    }
+                  ]
+                },
+                {
+                  "filter": "maxScore",
+                  "label": "Max Alignment Score",
+                  "type": "drop-down",
+                  "datasetType": "single-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    },
+                    {
+                      "value": 1.0,
+                      "label": "1.0"
                     }
                   ]
                 }
@@ -259,9 +440,11 @@
               "label": "Machine Translated",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.translationModel",
+                  "filter": "translationModel",
                   "label": "Translation Model",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
                     {
                       "value": "Google",
@@ -270,9 +453,11 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": []
                 }
               ]
@@ -282,9 +467,11 @@
               "label": "Machine Translated Post Edited",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.translationModel",
+                  "filter": "translationModel",
                   "label": "Translation Model",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
                     {
                       "value": "Google",
@@ -293,9 +480,47 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
+                  "values": []
+                }
+              ]
+            },
+            {
+              "value": "manual-aligned",
+              "label": "Manually Aligned",
+              "sub-filters": [
+                {
+                  "filter": "editingTool",
+                  "label": "Editing Tool",
+                  "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
+                  "values": []
+                }
+              ]
+            },
+            {
+              "value": "mauall-translated",
+              "label": "Manually Translated",
+              "sub-filters": [
+                {
+                  "filter": "editingTool",
+                  "label": "Editing Tool",
+                  "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
+                  "values": []
+                },
+                {
+                  "filter": "evaluationMethod",
+                  "label": "Evaluation Method",
+                  "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": []
                 }
               ]
@@ -306,6 +531,8 @@
           "filter": "domain",
           "label": "Domain",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "entertainment",
@@ -409,37 +636,74 @@
           "filter": "collectionSource",
           "label": "Collection Source",
           "type": "text",
+          "datasetType": "single-value",
+          "active": false,
           "values": []
         },
         {
           "filter": "license",
           "label": "License",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "CC-BY-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "CC-BY-SA-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "CC-BY-ND-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "CC-BY-ND-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "CC-BY-ND-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "CC-BY-NC-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "CC-BY-NC-SA-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "MIT"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "GPL-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "BSD-3-CLAUSE"
+            },
+            {
+              "value": "private-commercial",
+              "label": "PRIVATE COMMERCIAL"
+            },
+            {
+              "value": "unknown-license",
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "Project Anuvaad",
-              "label": "Project Anuvaad"
-            },
-            {
-              "value": "Samanantar",
-              "label": "Samanantar"
-            },
-            {
-              "value": "ai4bharat",
-              "label": "Ai4Bharat"
-            }
-          ]
+          "datasetType": "single-value",
+          "active": true,
+          "type": "text",
+          "values": []
         }
       ]
     },
@@ -450,14 +714,124 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
+              "value": "pa",
+              "label": "Punjabi"
+            },
+            {
+              "value": "bn",
+              "label": "Bengali"
+            },
+            {
               "value": "en",
-              "label": "En"
+              "label": "English"
+            },
+            {
+              "value": "ta",
+              "label": "Tamil"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
             },
             {
               "value": "hi",
-              "label": "Hi"
+              "label": "Hindi"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "kok",
+              "label": "Konkani"
+            },
+            {
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
             }
           ]
         },
@@ -465,21 +839,113 @@
           "filter": "domain",
           "label": "Domain",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
+            {
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
+            },
+            {
+              "value": "general",
+              "label": "General"
+            },
+            {
+              "value": "government-press-release",
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
             {
               "value": "legal",
               "label": "Legal"
             },
             {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
               "value": "news",
               "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
             }
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "",
@@ -491,29 +957,74 @@
           "filter": "collectionSource",
           "label": "Collection Source",
           "type": "text",
+          "datasetType": "single-value",
+          "active": false,
           "values": []
         },
         {
           "filter": "license",
           "label": "License",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "CC-BY-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "CC-BY-SA-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "CC-BY-ND-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "CC-BY-ND-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "CC-BY-ND-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "CC-BY-NC-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "CC-BY-NC-SA-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "MIT"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "GPL-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "BSD-3-CLAUSE"
+            },
+            {
+              "value": "private-commercial",
+              "label": "PRIVATE COMMERCIAL"
+            },
+            {
+              "value": "unknown-license",
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "Project Anuvaad",
-              "label": "Project Anuvaad"
-            }
-          ]
+          "type": "text",
+          "datasetType": "single-value",
+          "active": true,
+          "values": []
         }
       ]
     },
@@ -524,10 +1035,12 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": "as",
-              "label": "Assamese"
+              "value": "pa",
+              "label": "Punjabi"
             },
             {
               "value": "bn",
@@ -538,40 +1051,108 @@
               "label": "English"
             },
             {
-              "value": "gu",
-              "label": "Gujarati"
-            },
-            {
-              "value": "hi",
-              "label": "Hindi"
+              "value": "ta",
+              "label": "Tamil"
             },
             {
               "value": "ml",
               "label": "Malayalam"
             },
             {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
               "value": "mr",
               "label": "Marathi"
             },
             {
-              "value": "ne",
-              "label": "Nepali"
+              "value": "gu",
+              "label": "Gujarati"
             },
             {
               "value": "or",
               "label": "Odia"
             },
             {
-              "value": "pa",
-              "label": "Punjabi"
+              "value": "as",
+              "label": "Assamese"
             },
             {
-              "value": "ta",
-              "label": "Tamil"
+              "value": "kok",
+              "label": "Konkani"
             },
             {
-              "value": "te",
-              "label": "Telugu"
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
             }
           ]
         },
@@ -579,34 +1160,124 @@
           "filter": "domain",
           "label": "Domain",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": "education",
-              "label": "Education"
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
             },
             {
               "value": "general",
               "label": "General"
             },
             {
+              "value": "government-press-release",
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
               "value": "news",
               "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
             }
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "machine-generated-transcript",
               "label": "Machine Generated Transcript",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.asrModel",
+                  "filter": "asrModel",
                   "label": "ASR Model",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
                     {
                       "value": "gogle asr",
@@ -615,9 +1286,11 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
                     {
                       "value": "wer",
@@ -626,6 +1299,96 @@
                   ]
                 }
               ]
+            },
+            {
+              "value": "auto-aligned",
+              "label": "Auto Aligned",
+              "sub-filters": [
+                {
+                  "filter": "alignmentTool",
+                  "label": "Alignment Tool",
+                  "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": "AENAES",
+                      "label": "AENAES"
+                    }
+                  ]
+                },
+                {
+                  "filter": "minScore",
+                  "label": "Min Alignment Score",
+                  "type": "drop-down",
+                  "datasetType": "single-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": 0,
+                      "label": "0.0"
+                    },
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    }
+                  ]
+                },
+                {
+                  "filter": "maxScore",
+                  "label": "Max Alignment Score",
+                  "type": "drop-down",
+                  "datasetType": "single-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    },
+                    {
+                      "value": 1.0,
+                      "label": "1.0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "manual-transcribed",
+              "label": "Manually Transcribed",
+              "sub-filters": []
             }
           ]
         },
@@ -633,42 +1396,97 @@
           "filter": "collectionSource",
           "label": "Collection Source",
           "type": "text",
+          "datasetType": "single-value",
+          "active": false,
           "values": []
         },
         {
           "filter": "license",
           "label": "License",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "CC-BY-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "CC-BY-SA-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "CC-BY-ND-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "CC-BY-ND-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "CC-BY-ND-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "CC-BY-NC-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "CC-BY-NC-SA-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "MIT"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "GPL-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "BSD-3-CLAUSE"
+            },
+            {
+              "value": "private-commercial",
+              "label": "PRIVATE COMMERCIAL"
+            },
+            {
+              "value": "unknown-license",
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "anuvaad",
-              "label": "Anuvaad"
-            },
-            {
-              "value": "ekstep",
-              "label": "Ekstep"
-            }
-          ]
+          "type": "text",
+          "datasetType": "single-value",
+          "active": true,
+          "values": []
         },
         {
           "filter": "format",
           "label": "Format",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "wav",
-              "label": "Wav"
+              "label": "WAV"
+            },
+            {
+              "value": "pcm",
+              "label": "PCM"
+            },
+            {
+              "value": "flac",
+              "label": "FLAC"
+            },
+            {
+              "value": "mp3",
+              "label": "MP3"
             }
           ]
         },
@@ -676,10 +1494,12 @@
           "filter": "channel",
           "label": "Channel",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "stereo",
+              "label": "Stereo"
             },
             {
               "value": "mono",
@@ -691,6 +1511,8 @@
           "filter": "samplingRate",
           "label": "Sampling Rate",
           "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
           "values": [
             {
               "value": null,
@@ -710,10 +1532,12 @@
           "filter": "bitsPerSample",
           "label": "Bits per Sample",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "eight",
+              "label": "Eight"
             },
             {
               "value": "sixteen",
@@ -722,17 +1546,36 @@
           ]
         },
         {
-          "filter": "numberOfSpeakers",
-          "label": "Number of Speakers",
+          "filter": "minNoOfSpeakers",
+          "label": "Min Number of Speakers",
           "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
           "values": [
-            {
-              "value": null,
-              "label": "None"
-            },
             {
               "value": 1,
               "label": "1"
+            },
+            {
+              "value": 5,
+              "label": "5"
+            }
+          ]
+        },
+        {
+          "filter": "maxNoOfSpeakers",
+          "label": "Max Number of Speakers",
+          "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
+          "values": [
+            {
+              "value": 5,
+              "label": "5"
+            },
+            {
+              "value": 10,
+              "label": "10"
             }
           ]
         },
@@ -740,6 +1583,8 @@
           "filter": "gender",
           "label": "Gender",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "female",
@@ -748,17 +1593,68 @@
             {
               "value": "male",
               "label": "Male"
+            },
+            {
+              "value": "transgender",
+              "label": "Transgender"
+            },
+            {
+              "value": "non-specified",
+              "label": "Non Specified"
+            },
+            {
+              "value": "others",
+              "label": "Others"
             }
           ]
         },
         {
-          "filter": "age",
-          "label": "Age",
+          "filter": "minAge",
+          "label": "Min Age",
           "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": 0,
+              "label": "0"
+            },
+            {
+              "value": 10,
+              "label": "10"
+            },
+            {
+              "value": 20,
+              "label": "60"
+            },
+            {
+              "value": 60,
+              "label": "60"
+            }
+          ]
+        },
+        {
+          "filter": "maxAge",
+          "label": "Min Age",
+          "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
+          "values": [
+            {
+              "value": 10,
+              "label": "10"
+            },
+            {
+              "value": 20,
+              "label": "20"
+            },
+            {
+              "value": 60,
+              "label": "60"
+            },
+            {
+              "value": 100,
+              "label": "100"
             }
           ]
         },
@@ -766,17 +1662,29 @@
           "filter": "dialect",
           "label": "Dialect",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "hi-thethi",
+              "label": "hi-thethi"
+            },
+            {
+              "value": "hi-magahi",
+              "label": "hi-magahi"
+            },
+            {
+              "value": "ta-madurai",
+              "label": "ta-madurai"
             }
           ]
         },
         {
-          "filter": "snr.methodDetails.snrTool",
+          "filter": "snrTool",
           "label": "SNR Tool",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "WADASNR",
@@ -785,15 +1693,17 @@
           ]
         },
         {
-          "filter": "snr.methodDetails.snr",
+          "filter": "snr",
           "label": "SNR Range",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": [
-                0,
-                1
-              ],
+              "value": {
+                "minScore": 0,
+                "maxScore": 1
+              },
               "label": "0.0-1.0"
             }
           ]
@@ -807,38 +1717,124 @@
         {
           "filter": "sourceLanguage",
           "label": "Language",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": "as",
-              "label": "As"
+              "value": "pa",
+              "label": "Punjabi"
             },
             {
               "value": "bn",
-              "label": "Bn"
+              "label": "Bengali"
             },
             {
               "value": "en",
-              "label": "En"
-            },
-            {
-              "value": "hi",
-              "label": "Hi"
-            },
-            {
-              "value": "ml",
-              "label": "Ml"
-            },
-            {
-              "value": "mr",
-              "label": "Mr"
-            },
-            {
-              "value": "or",
-              "label": "Or"
+              "label": "English"
             },
             {
               "value": "ta",
-              "label": "Ta"
+              "label": "Tamil"
+            },
+            {
+              "value": "ml",
+              "label": "Malayalam"
+            },
+            {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
+              "value": "mr",
+              "label": "Marathi"
+            },
+            {
+              "value": "gu",
+              "label": "Gujarati"
+            },
+            {
+              "value": "or",
+              "label": "Odia"
+            },
+            {
+              "value": "as",
+              "label": "Assamese"
+            },
+            {
+              "value": "kok",
+              "label": "Konkani"
+            },
+            {
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
             }
           ]
         },
@@ -846,10 +1842,16 @@
           "filter": "domain",
           "label": "Domain",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": "education",
-              "label": "Education"
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
             },
             {
               "value": "general",
@@ -857,31 +1859,245 @@
             },
             {
               "value": "government-press-release",
-              "label": "Government-Press-Release"
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
             },
             {
               "value": "legal",
               "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
+              "value": "news",
+              "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
             }
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "web-scraping-ocr",
               "label": "Web Scraping OCR",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.ocrTool",
+                  "filter": "ocrTool",
                   "label": "OCR Tool",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
+                    {
+                      "value": "google cloud vision",
+                      "label": "Google Cloud Vision"
+                    },
+                    {
+                      "value": "tesseract",
+                      "label": "Tesseract"
+                    },
                     {
                       "value": "anuvaad ocr",
                       "label": "Anuvaad OCR"
+                    },
+                    {
+                      "value": "microsoft azure computer vision",
+                      "label": "Microsoft Azure Computer Vision"
+                    },
+                    {
+                      "value": "calamari",
+                      "label": "Calamari"
+                    },
+                    {
+                      "value": "ocropus",
+                      "label": "Ccropus"
+                    },
+                    {
+                      "value": "amazon textract",
+                      "label": "Amazon Textract"
+                    },
+                    {
+                      "value": "abbyy cloud ocr",
+                      "label": "Abby Cloud OCR"
+                    },
+                    {
+                      "value": "unknown",
+                      "label": "Unknown"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "screen-capture",
+              "label": "Screen Capture",
+              "sub-filters": [
+                {
+                  "filter": "ocrTool",
+                  "label": "OCR Tool",
+                  "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": "google cloud vision",
+                      "label": "Google Cloud Vision"
+                    },
+                    {
+                      "value": "tesseract",
+                      "label": "Tesseract"
+                    },
+                    {
+                      "value": "anuvaad ocr",
+                      "label": "Anuvaad OCR"
+                    },
+                    {
+                      "value": "microsoft azure computer vision",
+                      "label": "Microsoft Azure Computer Vision"
+                    },
+                    {
+                      "value": "calamari",
+                      "label": "Calamari"
+                    },
+                    {
+                      "value": "ocropus",
+                      "label": "Ccropus"
+                    },
+                    {
+                      "value": "amazon textract",
+                      "label": "Amazon Textract"
+                    },
+                    {
+                      "value": "abbyy cloud ocr",
+                      "label": "Abby Cloud OCR"
+                    },
+                    {
+                      "value": "unknown",
+                      "label": "Unknown"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "scanned-ocr",
+              "label": "Scanned OCR",
+              "sub-filters": [
+                {
+                  "filter": "ocrTool",
+                  "label": "OCR Tool",
+                  "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": "google cloud vision",
+                      "label": "Google Cloud Vision"
+                    },
+                    {
+                      "value": "tesseract",
+                      "label": "Tesseract"
+                    },
+                    {
+                      "value": "anuvaad ocr",
+                      "label": "Anuvaad OCR"
+                    },
+                    {
+                      "value": "microsoft azure computer vision",
+                      "label": "Microsoft Azure Computer Vision"
+                    },
+                    {
+                      "value": "calamari",
+                      "label": "Calamari"
+                    },
+                    {
+                      "value": "ocropus",
+                      "label": "Ccropus"
+                    },
+                    {
+                      "value": "amazon textract",
+                      "label": "Amazon Textract"
+                    },
+                    {
+                      "value": "abbyy cloud ocr",
+                      "label": "Abby Cloud OCR"
+                    },
+                    {
+                      "value": "unknown",
+                      "label": "Unknown"
                     }
                   ]
                 }
@@ -893,34 +2109,81 @@
           "filter": "collectionSource",
           "label": "Collection Source",
           "type": "text",
+          "datasetType": "single-value",
+          "active": false,
           "values": []
         },
         {
           "filter": "license",
           "label": "License",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "CC-BY-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "CC-BY-SA-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "CC-BY-ND-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "CC-BY-ND-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "CC-BY-ND-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "CC-BY-NC-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "CC-BY-NC-SA-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "MIT"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "GPL-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "BSD-3-CLAUSE"
+            },
+            {
+              "value": "private-commercial",
+              "label": "PRIVATE COMMERCIAL"
+            },
+            {
+              "value": "unknown-license",
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "Project Anuvaad",
-              "label": "Project Anuvaad"
-            }
-          ]
+          "type": "text",
+          "datasetType": "single-value",
+          "active": true,
+          "values": []
         },
         {
           "filter": "format",
           "label": "Format",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "png",
@@ -932,6 +2195,8 @@
           "filter": "dpi",
           "label": "DPI",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "300_dpi",
@@ -947,6 +2212,8 @@
           "filter": "imageTextType",
           "label": "Image Text Type",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "computer-typed-text",
@@ -963,10 +2230,12 @@
           "filter": "sourceLanguage",
           "label": "Language",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": "as",
-              "label": "Assamese"
+              "value": "pa",
+              "label": "Punjabi"
             },
             {
               "value": "bn",
@@ -977,40 +2246,108 @@
               "label": "English"
             },
             {
-              "value": "gu",
-              "label": "Gujarati"
-            },
-            {
-              "value": "hi",
-              "label": "Hindi"
+              "value": "ta",
+              "label": "Tamil"
             },
             {
               "value": "ml",
               "label": "Malayalam"
             },
             {
+              "value": "te",
+              "label": "Telugu"
+            },
+            {
+              "value": "kn",
+              "label": "Kannada"
+            },
+            {
+              "value": "hi",
+              "label": "Hindi"
+            },
+            {
               "value": "mr",
               "label": "Marathi"
             },
             {
-              "value": "ne",
-              "label": "Nepali"
+              "value": "gu",
+              "label": "Gujarati"
             },
             {
               "value": "or",
               "label": "Odia"
             },
             {
-              "value": "pa",
-              "label": "Punjabi"
+              "value": "as",
+              "label": "Assamese"
             },
             {
-              "value": "ta",
-              "label": "Tamil"
+              "value": "kok",
+              "label": "Konkani"
             },
             {
-              "value": "te",
-              "label": "Telugu"
+              "value": "sa",
+              "label": "Sanskrit"
+            },
+            {
+              "value": "ks",
+              "label": "Kashmiri"
+            },
+            {
+              "value": "ne",
+              "label": "Nepali"
+            },
+            {
+              "value": "ur",
+              "label": "Urdu"
+            },
+            {
+              "value": "sd",
+              "label": "Sindhi"
+            },
+            {
+              "value": "si",
+              "label": "Sinhala"
+            },
+            {
+              "value": "doi",
+              "label": "Dogri"
+            },
+            {
+              "value": "mai",
+              "label": "Maithili"
+            },
+            {
+              "value": "mni",
+              "label": "Manipuri"
+            },
+            {
+              "value": "brx",
+              "label": "Bodo"
+            },
+            {
+              "value": "sat",
+              "label": "Santali"
+            },
+            {
+              "value": "lus",
+              "label": "Lushai"
+            },
+            {
+              "value": "njz",
+              "label": "Ngungwel"
+            },
+            {
+              "value": "pnr",
+              "label": "Panim"
+            },
+            {
+              "value": "kha",
+              "label": "Khasi"
+            },
+            {
+              "value": "grt",
+              "label": "Garo"
             }
           ]
         },
@@ -1018,34 +2355,124 @@
           "filter": "domain",
           "label": "Domain",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": "education",
-              "label": "Education"
+              "value": "entertainment",
+              "label": "Entertainment"
+            },
+            {
+              "value": "financial",
+              "label": "Financial"
             },
             {
               "value": "general",
               "label": "General"
             },
             {
+              "value": "government-press-release",
+              "label": "Government Press Release"
+            },
+            {
+              "value": "healthcare",
+              "label": "Healthcare"
+            },
+            {
+              "value": "legal",
+              "label": "Legal"
+            },
+            {
+              "value": "lifestyle",
+              "label": "Lifestyle"
+            },
+            {
               "value": "news",
               "label": "News"
+            },
+            {
+              "value": "sports",
+              "label": "Sports"
+            },
+            {
+              "value": "agriculture",
+              "label": "Agriculture"
+            },
+            {
+              "value": "automobile",
+              "label": "Automobile"
+            },
+            {
+              "value": "tourism",
+              "label": "Tourism"
+            },
+            {
+              "value": "movies",
+              "label": "Movies"
+            },
+            {
+              "value": "subtitles",
+              "label": "Subtitles"
+            },
+            {
+              "value": "technology",
+              "label": "Technology"
+            },
+            {
+              "value": "parliamentary",
+              "label": "Parliamentary"
+            },
+            {
+              "value": "art-and-culture",
+              "label": "Art and Culture"
+            },
+            {
+              "value": "economy",
+              "label": "Economy"
+            },
+            {
+              "value": "history",
+              "label": "History"
+            },
+            {
+              "value": "philosophy",
+              "label": "Philosophy"
+            },
+            {
+              "value": "religion",
+              "label": "Religion"
+            },
+            {
+              "value": "national-security-and-defence",
+              "label": "National Security and Defence"
+            },
+            {
+              "value": "literature",
+              "label": "Literature"
+            },
+            {
+              "value": "geography",
+              "label": "Geography"
             }
           ]
         },
         {
-          "filter": "collectionMethod.collectionDescription",
+          "filter": "collectionMethod",
           "label": "Collection Method",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "machine-generated-transcript",
               "label": "Machine Generated Transcript",
               "sub-filters": [
                 {
-                  "filter": "collectionMethod.collectionDetails.asrModel",
+                  "filter": "asrModel",
                   "label": "ASR Model",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
                     {
                       "value": "gogle asr",
@@ -1054,9 +2481,11 @@
                   ]
                 },
                 {
-                  "filter": "collectionMethod.collectionDetails.evaluationMethod",
+                  "filter": "evaluationMethod",
                   "label": "Evaluation Method",
                   "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
                   "values": [
                     {
                       "value": "wer",
@@ -1065,6 +2494,96 @@
                   ]
                 }
               ]
+            },
+            {
+              "value": "auto-aligned",
+              "label": "Auto Aligned",
+              "sub-filters": [
+                {
+                  "filter": "alignmentTool",
+                  "label": "Alignment Tool",
+                  "type": "drop-down",
+                  "datasetType": "multi-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": "AENAES",
+                      "label": "AENAES"
+                    }
+                  ]
+                },
+                {
+                  "filter": "minScore",
+                  "label": "Min Alignment Score",
+                  "type": "drop-down",
+                  "datasetType": "single-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": 0,
+                      "label": "0.0"
+                    },
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    }
+                  ]
+                },
+                {
+                  "filter": "maxScore",
+                  "label": "Max Alignment Score",
+                  "type": "drop-down",
+                  "datasetType": "single-value",
+                  "active": true,
+                  "values": [
+                    {
+                      "value": 0.5,
+                      "label": "0.5"
+                    },
+                    {
+                      "value": 0.6,
+                      "label": "0.6"
+                    },
+                    {
+                      "value": 0.7,
+                      "label": "0.7"
+                    },
+                    {
+                      "value": 0.8,
+                      "label": "0.8"
+                    },
+                    {
+                      "value": 0.9,
+                      "label": "0.9"
+                    },
+                    {
+                      "value": 1.0,
+                      "label": "1.0"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "value": "manual-transcribed",
+              "label": "Manually Transcribed",
+              "sub-filters": []
             }
           ]
         },
@@ -1072,42 +2591,97 @@
           "filter": "collectionSource",
           "label": "Collection Source",
           "type": "text",
+          "datasetType": "single-value",
+          "active": false,
           "values": []
         },
         {
           "filter": "license",
           "label": "License",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "cc-by-4.0",
-              "label": "Cc-By-4.0"
+              "label": "CC-BY-4.0"
+            },
+            {
+              "value": "cc-by-sa-4.0",
+              "label": "CC-BY-SA-4.0"
+            },
+            {
+              "value": "cc-by-nd-2.0",
+              "label": "CC-BY-ND-2.0"
+            },
+            {
+              "value": "cc-by-nd-4.0",
+              "label": "CC-BY-ND-4.0"
+            },
+            {
+              "value": "cc-by-nc-3.0",
+              "label": "CC-BY-ND-3.0"
+            },
+            {
+              "value": "cc-by-nc-4.0",
+              "label": "CC-BY-NC-4.0"
+            },
+            {
+              "value": "cc-by-nc-sa-4.0",
+              "label": "CC-BY-NC-SA-4.0"
+            },
+            {
+              "value": "mit",
+              "label": "MIT"
+            },
+            {
+              "value": "gpl-3.0",
+              "label": "GPL-3.0"
+            },
+            {
+              "value": "bsd-3-clause",
+              "label": "BSD-3-CLAUSE"
+            },
+            {
+              "value": "private-commercial",
+              "label": "PRIVATE COMMERCIAL"
+            },
+            {
+              "value": "unknown-license",
+              "label": "UNKNOWN LICENSE"
             }
           ]
         },
         {
-          "filter": "submitter.name",
+          "filter": "submitterName",
           "label": "Submitter",
-          "type": "drop-down",
-          "values": [
-            {
-              "value": "anuvaad",
-              "label": "Anuvaad"
-            },
-            {
-              "value": "ekstep",
-              "label": "Ekstep"
-            }
-          ]
+          "type": "text",
+          "datasetType": "single-value",
+          "active": true,
+          "values": []
         },
         {
           "filter": "format",
           "label": "Format",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "wav",
-              "label": "Wav"
+              "label": "WAV"
+            },
+            {
+              "value": "pcm",
+              "label": "PCM"
+            },
+            {
+              "value": "flac",
+              "label": "FLAC"
+            },
+            {
+              "value": "mp3",
+              "label": "MP3"
             }
           ]
         },
@@ -1115,10 +2689,12 @@
           "filter": "channel",
           "label": "Channel",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "stereo",
+              "label": "Stereo"
             },
             {
               "value": "mono",
@@ -1130,6 +2706,8 @@
           "filter": "samplingRate",
           "label": "Sampling Rate",
           "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
           "values": [
             {
               "value": null,
@@ -1149,10 +2727,12 @@
           "filter": "bitsPerSample",
           "label": "Bits per Sample",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "eight",
+              "label": "Eight"
             },
             {
               "value": "sixteen",
@@ -1161,17 +2741,36 @@
           ]
         },
         {
-          "filter": "numberOfSpeakers",
-          "label": "Number of Speakers",
+          "filter": "minNoOfSpeakers",
+          "label": "Min Number of Speakers",
           "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
           "values": [
-            {
-              "value": null,
-              "label": "None"
-            },
             {
               "value": 1,
               "label": "1"
+            },
+            {
+              "value": 5,
+              "label": "5"
+            }
+          ]
+        },
+        {
+          "filter": "maxNoOfSpeakers",
+          "label": "Max Number of Speakers",
+          "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
+          "values": [
+            {
+              "value": 5,
+              "label": "5"
+            },
+            {
+              "value": 10,
+              "label": "10"
             }
           ]
         },
@@ -1179,6 +2778,8 @@
           "filter": "gender",
           "label": "Gender",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "female",
@@ -1187,17 +2788,68 @@
             {
               "value": "male",
               "label": "Male"
+            },
+            {
+              "value": "transgender",
+              "label": "Transgender"
+            },
+            {
+              "value": "non-specified",
+              "label": "Non Specified"
+            },
+            {
+              "value": "others",
+              "label": "Others"
             }
           ]
         },
         {
-          "filter": "age",
-          "label": "Age",
+          "filter": "minAge",
+          "label": "Min Age",
           "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": 0,
+              "label": "0"
+            },
+            {
+              "value": 10,
+              "label": "10"
+            },
+            {
+              "value": 20,
+              "label": "60"
+            },
+            {
+              "value": 60,
+              "label": "60"
+            }
+          ]
+        },
+        {
+          "filter": "maxAge",
+          "label": "Min Age",
+          "type": "drop-down",
+          "datasetType": "single-value",
+          "active": true,
+          "values": [
+            {
+              "value": 10,
+              "label": "10"
+            },
+            {
+              "value": 20,
+              "label": "20"
+            },
+            {
+              "value": 60,
+              "label": "60"
+            },
+            {
+              "value": 100,
+              "label": "100"
             }
           ]
         },
@@ -1205,17 +2857,29 @@
           "filter": "dialect",
           "label": "Dialect",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": null,
-              "label": "None"
+              "value": "hi-thethi",
+              "label": "hi-thethi"
+            },
+            {
+              "value": "hi-magahi",
+              "label": "hi-magahi"
+            },
+            {
+              "value": "ta-madurai",
+              "label": "ta-madurai"
             }
           ]
         },
         {
-          "filter": "snr.methodDetails.snrTool",
+          "filter": "snrTool",
           "label": "SNR Tool",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
               "value": "WADASNR",
@@ -1224,15 +2888,17 @@
           ]
         },
         {
-          "filter": "snr.methodDetails.snr",
+          "filter": "snr",
           "label": "SNR Range",
           "type": "drop-down",
+          "datasetType": "multi-value",
+          "active": true,
           "values": [
             {
-              "value": [
-                0,
-                1
-              ],
+              "value": {
+                "minScore": 0,
+                "maxScore": 1
+              },
               "label": "0.0-1.0"
             }
           ]

@@ -97,7 +97,7 @@ function a11yProps(index) {
 
 const SubHeader = (props) => {
     const { classes } = props;
-    var role = JSON.parse(localStorage.getItem("userDetails")).roles[0];
+    var role = localStorage.getItem("userDetails") && JSON.parse(localStorage.getItem("userDetails")).roles[0];
     const history = useHistory();
     const handleClick = (url) => {
         history.push(`${process.env.PUBLIC_URL}${url}`);
@@ -112,7 +112,7 @@ const SubHeader = (props) => {
                     <Tabs value={props.value}  onChange={props.handleChange}>
                         {
                             props.tabs.map((tab, index) => {
-                                if(tab.roles.includes(role)){
+                                if(tab.roles.includes(role) ||(tab.public)){
                                 return (
                                     <Tab label={tab.name} {...a11yProps(index)} onClick={() => handleClick(tab.url)} />
                                 )

@@ -1,0 +1,44 @@
+{
+    "gender": [
+      {
+        "code": "male",
+        "values":[
+            {
+                "name": "Male",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "female",
+        "values":[
+            {
+                "name": "Female",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "transgender",
+        "values":[
+            {
+                "name": "Transgender",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "others",
+        "values":[
+            {
+                "name": "Others",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      }
+    ]
+  }

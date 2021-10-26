@@ -158,7 +158,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+                $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
       security:
         - authToken: []
   /v0.2/model/status-check:
@@ -184,7 +184,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+                $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
   /v0.2/model/search:
     post:
       tags:
@@ -208,7 +208,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+                $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
   /v0.2/model/try-me:
     post:
       tags:
@@ -232,7 +232,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+                $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
   /v0.2/model/benchmark/start:
     post:
       tags:
@@ -256,7 +256,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+                $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
   /v0.2/model/benchmark/status-check:
     post:
       tags:
@@ -280,7 +280,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+                $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
   /v0.2/model/benchmark/publish:
     post:
       tags:
@@ -304,7 +304,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+                $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
   /v0.2/model/benchmark/detailed-result:
     post:
       tags:
@@ -328,12 +328,12 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
+                $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/StatusCode'
 components:
   schemas:
     DatasetSubmitRequest:
       allOf:
-        - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/Dataset'
+        - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/Dataset'
         - type: object
       type: object
       description: request to submit the dataset
@@ -342,10 +342,10 @@ components:
       properties:
         type:
           description: one of the defined possible values
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetType'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/DatasetType'
     ReferenceDatasetRequest:
       allOf:
-        - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/Dataset'
+        - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/Dataset'
         - type: object
       required:
         - type
@@ -354,7 +354,7 @@ components:
       properties:
         type:
           description: one of the defined possible values
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetType'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/DatasetType'
         referenceDatasetId:
           type: string
           description: original dataset identifier from which referenced dataset is drived.
@@ -380,17 +380,17 @@ components:
       properties:
         type:
           description: one of the defined possible values
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetType'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/DatasetType'
         criterions:
           type: array
           description: comma separted system defined tags
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/SearchParams'
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/SearchParams'
         groupby:
           type: array
           description: groupby based upon the entity
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/SearchParams'
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/SearchParams'
             minItems: 1
         starttime:
           type: string
@@ -409,7 +409,7 @@ components:
           type: array
           description: collection of value and label
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/DataPoint'
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/DataPoint'
     DatasetStatusRequest:
       type: object
       required:
@@ -432,7 +432,7 @@ components:
         dataset:
           type: object
           description: uploaded dataset and its system representation
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/Dataset'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/Dataset'
         status:
           type: string
           description: status of each stage
@@ -444,7 +444,7 @@ components:
         progress:
           type: object
           description: detailed for the dataset as it can be longer running operation
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DatasetProgressInformation'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/DatasetProgressInformation'
     
     DatasetIngestRequest:
       type: object
@@ -464,18 +464,18 @@ components:
         params:
           type: object
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ParallelDatasetParamsSchema'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/MonolingualParamsSchema'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRParamsSchema'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DocumentOCRParamsSchema'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/ParallelDatasetParamsSchema'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/MonolingualParamsSchema'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/ASRParamsSchema'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/DocumentOCRParamsSchema'
         rows:
           type: array
           items:
             oneOf:
-              - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ParallelDatasetRowSchema'
-              - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/MonolingualRowSchema'
-              - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRRowSchema'
-              - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/DocumentOCRRowSchema'
+              - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/ParallelDatasetRowSchema'
+              - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/MonolingualRowSchema'
+              - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/ASRRowSchema'
+              - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/dataset-schema.yml#/components/schemas/DocumentOCRRowSchema'
             minItems: 100
   
     ModelSubmitRequest:
@@ -483,7 +483,7 @@ components:
       description: starting the workflow for model life-cycle
       properties:
         model:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/Model'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/Model'
     ModelSubmitResponse:
       type: object
       description: 'ULCA will acknowledge the submission, however model is not published yet'
@@ -517,11 +517,11 @@ components:
         contributor:
           type: object
           description: submitter of the dataset
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Contributor'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor'
         timelines:
           type: array
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Timeline'
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Timeline'
     ModelSearchRequest:
       required:
         - criterions
@@ -531,17 +531,17 @@ components:
       properties:
         type:
           description: one of the defined possible values
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ModelTask'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/ModelTask'
         criterions:
           type: array
           description: comma separted system defined tags
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/SearchParams'
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/SearchParams'
         groupby:
           type: array
           description: groupby based upon the entity
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/SearchParams'
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/SearchParams'
             minItems: 1
         starttime:
           type: string
@@ -560,7 +560,7 @@ components:
           type: array
           description: collection of model
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/Model'
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/Model'
     ModelTryMeRequest:
       type: object
       properties:
@@ -570,9 +570,9 @@ components:
         requestSchema:
           type: object
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/translation-schemas.yml#/components/schemas/TranslateRequest'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/audio-schema.yml#/components/schemas/SpeechRecognitionRequest'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRRequest'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/translation-schemas.yml#/components/schemas/TranslateRequest'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/audio-schema.yml#/components/schemas/SpeechRecognitionRequest'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRRequest'
     ModelTryMeResponse:
       type: object
       properties:
@@ -582,9 +582,9 @@ components:
         requestSchema:
           type: object
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/translation-schemas.yml#/components/schemas/TranslateResponse'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/audio-schema.yml#/components/schemas/SpeechRecognitionResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRResponse'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/translation-schemas.yml#/components/schemas/TranslateResponse'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/audio-schema.yml#/components/schemas/SpeechRecognitionResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/document-ocr-schema.yml#/components/schemas/DocumentOCRResponse'
     ModelBenchmarkRequest:
       type: object
       properties:
@@ -595,7 +595,7 @@ components:
           type: array
           description: you can run benchmarking on subset of available benchmarks
           items:
-            $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/Benchmarks'
+            $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/Benchmarks'
     ModelBenchmarkStatusRequest:
       type: object
       required:
@@ -621,10 +621,10 @@ components:
             - completed
         results:
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkPublishRequest:
       type: object
       properties:
@@ -633,10 +633,10 @@ components:
           description: identifier provided by ULCA system
         results:
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkPublishResponse:
       type: object
       properties:
@@ -645,10 +645,10 @@ components:
           description: identifier provided by ULCA system
         results:
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
     ModelBenchmarkDetailResultRequest:
       type: object
       properties:
@@ -663,10 +663,10 @@ components:
           description: identifier provided by ULCA system
         results:
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/TranslationBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/DocumentLayoutBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/DocumentOCRBenchmarkResult'
+            - $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-benchmark-schema.yml#/components/schemas/ASRBenchmarkResult'
     
     HttpSuccessResponse:
       type: object
