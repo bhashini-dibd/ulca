@@ -1,0 +1,44 @@
+{
+    "imageTextTypes": [
+      {
+        "code": "scene-text",
+        "values":[
+            {
+                "name": "Scene Text",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "typewriter-typed-text",
+        "values":[
+            {
+                "name": "Typewriter Typed Text",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "computer-typed-text",
+        "values":[
+            {
+                "name": "Computer Typed Text",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "handwritten-text",
+        "values":[
+            {
+                "name": "Handwritten Text",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      }
+    ]
+  }

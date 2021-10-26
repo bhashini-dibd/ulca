@@ -8,6 +8,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,9 +20,13 @@ import org.springframework.stereotype.Service;
 
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.dao.BenchmarkTaskTrackerDao;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
+import com.ulca.benchmark.model.BenchmarkError;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.BenchmarkTaskTracker;
 import com.ulca.benchmark.service.AsrBenchmark;
+import com.ulca.benchmark.service.BmProcessTrackerService;
 import com.ulca.benchmark.service.TranslationBenchmark;
 import com.ulca.benchmark.util.UnzipUtility;
 import com.ulca.model.dao.ModelDao;
@@ -46,6 +51,12 @@ public class KafkaBenchmarkDownloadConsumer {
 
 	@Autowired
 	BenchmarkDao benchmarkDao;
+	
+	@Autowired
+	BenchmarkTaskTrackerDao benchmarkTaskTrackerDao;
+	
+	@Autowired
+	BmProcessTrackerService bmProcessTrackerService;
 
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
@@ -64,6 +75,15 @@ public class KafkaBenchmarkDownloadConsumer {
 		try {
 
 			String benchmarkProcessId = bmDsDownload.getBenchmarkProcessId();
+			
+			List<BenchmarkTaskTracker> list = benchmarkTaskTrackerDao.findByBenchmarkProcessId(benchmarkProcessId);
+			
+			if(list.size() > 0) {
+				log.info("Duplicate Benchmark Process. Skipping Benchamrk Processing. benchmarkProcessId :: " + benchmarkProcessId);
+				return;
+			}
+			bmProcessTrackerService.createTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.inprogress);
+			
 			String downloadFolder = bmDsDownloadFolder + "/benchmark-dataset";
 			
 			Path targetLocation = Paths.get(downloadFolder).toAbsolutePath().normalize();
@@ -71,16 +91,22 @@ public class KafkaBenchmarkDownloadConsumer {
 			try {
 				Files.createDirectories(targetLocation);
 			} catch (Exception ex) {
+				BenchmarkError error = new BenchmarkError();
+				error.setCause(ex.getMessage());
+				error.setMessage("file download failed");
+				error.setCode("2000_FILE_DOWNLOAD_FAILURE");
+				bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.failed, error);
+				bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
 				throw new Exception("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
 			}
 			
 
-			List<BenchmarkProcess> bmProcessList = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
-
-			for (BenchmarkProcess bmProcess : bmProcessList) {
+			BenchmarkProcess bmProcess = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
+			
+			if(bmProcess != null) {
 
 				String bmDatasetId = bmProcess.getBenchmarkDatasetId();
-				String fileName = benchmarkProcessId + bmDatasetId + ".zip";
+				String fileName = benchmarkProcessId + ".zip";
 
 				String modelId = bmProcess.getModelId();
 				Optional<ModelExtended> modelOpt = modelDao.findById(modelId);
@@ -89,22 +115,38 @@ public class KafkaBenchmarkDownloadConsumer {
 				Optional<Benchmark> benchmarkOpt = benchmarkDao.findById(bmDatasetId);
 				Benchmark benchmark = benchmarkOpt.get();
 				String datasetUrl = benchmark.getDataset();
-
+				
+				Map<String, String> fileMap = null;
+				
 				try {
 					String filePath = downloadUsingNIO(datasetUrl, downloadFolder, fileName);
 
 					log.info("filePath :: " + filePath);
 					
-
-					Map<String, String> fileMap = null;
-
-					String serviceRequestNumber = benchmarkProcessId + bmDatasetId;
+					String serviceRequestNumber = benchmarkProcessId ;
 					
 					log.info("serviceRequestNumber :: " + serviceRequestNumber);
 					
-
 					fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
+					
+					bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.completed);
+					
+				}catch (IOException e) {
+					
+					BenchmarkError error = new BenchmarkError();
+					error.setCause(e.getMessage());
+					error.setMessage("file download failed");
+					error.setCode("2000_FILE_DOWNLOAD_FAILURE");
+					bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.failed, error);
+					bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
+					return;
+				}
 
+				try {
+					
+					bmProcessTrackerService.createTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.inprogress);
+					bmProcessTrackerService.createTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.benchmark, BenchmarkTaskTracker.StatusEnum.inprogress);
+					
 					ModelTask.TypeEnum type = model.getTask().getType();
 
 					switch (type) {
@@ -131,12 +173,26 @@ public class KafkaBenchmarkDownloadConsumer {
 
 					}
 
-					log.info(filePath);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.completed);
+					
+					
+				} catch (Exception e) {
+					
+					log.info("Unhadled Exception :: " + e.getMessage());
+					log.info("cause :: " + e.getClass());
+					BenchmarkError error = new BenchmarkError();
+					error.setCause(e.getMessage());
+					error.setMessage("benchmark ingest failed");
+					error.setCode("2000_BENCHMARK_INGEST_FAILURE");
+					bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.failed, error);
+					bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
 					e.printStackTrace();
+					
 				}
 
+			
+			} else {
+				log.info("Benchmark Process Not Found. benchmarkProcessId :: "  + benchmarkProcessId);
 			}
 
 		} catch (Exception ex) {
@@ -150,7 +206,7 @@ public class KafkaBenchmarkDownloadConsumer {
 		log.info("************ Entry KafkaBenchmarkDownloadConsumer :: downloadUsingNIO *********");
 		URL url = new URL(urlStr);
 		String file = downloadFolder + "/" + fileName;
-		log.info("file path indownloadUsingNIO");
+		log.info("file path in downloadUsingNIO");
 		log.info(file);
 		log.info(url.getPath());
 		ReadableByteChannel rbc = Channels.newChannel(url.openStream());

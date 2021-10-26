@@ -13,7 +13,7 @@ class TranslationBLEUScoreEval(ModelMetricEval):
     def __init__(self):
         self.bleu = BLEU()
 
-    def machine_translation_metric_eval(self, ground_truth, machine_translation):
+    def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
 
         try:
             return self.bleu.corpus_score(machine_translation, [ground_truth]).score

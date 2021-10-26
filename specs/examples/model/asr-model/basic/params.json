@@ -1,5 +1,6 @@
 {
    "name": "Vakyansh ASR",
+   "version": "v1.0",
    "description": "Vakyansh aims to host the key essentials of Automatic Speech Recognition (ASR) technology, focusing on Indian languages. It is a resource that allows people to build applications that leverage speech recognition",
    "task": {
       "type" : "asr"

@@ -23,7 +23,13 @@ export const menuItems = {
             name: 'Submit Dataset',
             url: '/dataset/upload',
             roles:["CONTRIBUTOR-USER"]
-        }],
+        },
+        // {
+        //     name: 'Readymade Dataset',
+        //     url: '/dataset/readymade-datasets',
+        //     roles:["CONTRIBUTOR-USER"]
+        // }
+    ],
 
     models: [
         {
@@ -34,13 +40,26 @@ export const menuItems = {
         {
             name: 'Explore Models',
             url: '/model/explore-models',
-            roles:["READONLY-USER","CONTRIBUTOR-USER"]
+            roles:["READONLY-USER","CONTRIBUTOR-USER"],
+            public: true
+        },
+        // {
+        //     name: 'Model Leaderboard',
+        //     url: '/model/leaderboard',
+        //     roles:["CONTRIBUTOR-USER"]
+        // },
+        {
+            name: 'Benchmark Datasets',
+            url: '/model/benchmark-datasets',
+            roles:["CONTRIBUTOR-USER"],
+            public: true
         },
         {
             name: 'Submit Model',
             url: '/model/upload',
             roles:["CONTRIBUTOR-USER"]
-        }],
+        },
+    ],
     profile: [
         {
             name: 'Change Password',

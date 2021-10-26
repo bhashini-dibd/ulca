@@ -8,6 +8,7 @@ from logging.config import dictConfig
 import config
 from flask_mail import Mail
 import threading
+from src.services.mismatchcron import AlertCronProcessor
 
 log = logging.getLogger('file')
 
@@ -28,8 +29,10 @@ for blueprint in vars(routes).values():
 
 def start_cron():
     with app.test_request_context():
-        cron = src.services.metriccronjob.CronProcessor(threading.Event())
-        cron.start()
+        metriccron  =   src.services.metriccronjob.CronProcessor(threading.Event())
+        metriccron.start()
+        alertcron   =   AlertCronProcessor(threading.Event())
+        alertcron.start()
 if __name__ == "__main__":
     log.info("starting module")
     start_cron()

@@ -1,2 +1,2 @@
-from .utils import DataUtils
-from .static import LANG_CODES
+from .datautils import DataUtils
+from .staticcofigs import LANG_CODES

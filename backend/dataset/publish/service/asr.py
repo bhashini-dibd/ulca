@@ -1,4 +1,5 @@
 import logging
+import re
 import time
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, asr_prefix, \
@@ -151,27 +152,57 @@ class ASRService:
     '''
     def get_asr_dataset(self, query):
         log.info(f'Fetching ASR datasets for SRN -- {query["serviceRequestNumber"]}')
-        pt.task_event_search(query, None)
+        pt.task_event_search(query, None, dataset_type_asr)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionMode"])
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
             if 'license' in query.keys():
-                tags.extend(query["licence"])
+                tags.extend(query["license"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'channel' in query.keys():
-                tags.append(query["channel"])
+                tags.extend(query["channel"])
             if 'gender' in query.keys():
-                tags.append(query["gender"])
+                tags.extend(query["gender"])
+            if 'format' in query.keys():
+                tags.extend(query["format"])
+            if 'bitsPerSample' in query.keys():
+                tags.extend(query["bitsPerSample"])
+            if 'dialect' in query.keys():
+                tags.extend(query["dialect"])
+            if 'snrTool' in query.keys():
+                tags.extend(query["snrTool"])
             if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
+                tags.extend(query["datasetId"])
+            if 'collectionSource' in query.keys():
+                coll_source = [re.compile(cs, re.IGNORECASE) for cs in query["collectionSource"]]
+                db_query["collectionSource"] = {"$in": coll_source}
+            if 'submitterName' in query.keys():
+                db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
+            if 'samplingRate' in query.keys():
+                db_query["samplingRate"] = query["samplingRate"]
+            no_of_speakers_query, age_query = {}, {}
+            if 'minNoOfSpeakers' in query.keys():
+                no_of_speakers_query["$gte"] = query["minNoOfSpeakers"]
+            if 'maxNoOfSpeakers' in query.keys():
+                no_of_speakers_query["$lte"] = query["maxNoOfSpeakers"]
+            if no_of_speakers_query:
+                db_query["numberOfSpeakers"] = no_of_speakers_query
+            if 'noOfSpeakers' in query.keys():
+                db_query["numberOfSpeakers"] = query["noOfSpeakers"]
+            if 'minAge' in query.keys():
+                no_of_speakers_query["$gte"] = query["minAge"]
+            if 'maxAge' in query.keys():
+                no_of_speakers_query["$lte"] = query["maxAge"]
+            if age_query:
+                db_query["age"] = age_query
+            if 'age' in query.keys():
+                db_query["age"] = query["age"]
             if 'multipleContributors' in query.keys():
                 if query['multipleContributors']:
                     db_query[f'collectionMethod.1'] = {"$exists": True}
@@ -188,19 +219,21 @@ class ASRService:
                 size = sample_size if count > sample_size else count
                 path, path_sample = utils.push_result_to_object_store(result, query["serviceRequestNumber"], size)
                 if path:
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": hours, "dataset": path, "datasetSample": path_sample}
-                    pt.task_event_search(op, None)
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                          "count": hours, "dataset": path, "datasetSample": path_sample}
+                    pt.task_event_search(op, None, dataset_type_asr)
                 else:
                     log.error(f'There was an error while pushing result to S3')
                     error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_asr, "serviceRequestNumber": query["serviceRequestNumber"],
                                                    "message": "There was an error while pushing result to object store"}
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
-                    pt.task_event_search(op, error)
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                          "count": 0, "sample": [], "dataset": None, "datasetSample": None}
+                    pt.task_event_search(op, error, dataset_type_asr)
             else:
                 log.info(f'No records retrieved for SRN -- {query["serviceRequestNumber"]}')
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None,
-                      "datasetSample": None}
-                pt.task_event_search(op, None)
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                      "count": 0, "sample": [], "dataset": None, "datasetSample": None}
+                pt.task_event_search(op, None, dataset_type_asr)
             log.info(f'Done!')
             return op
         except Exception as e:

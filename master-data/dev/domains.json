@@ -1,0 +1,254 @@
+{
+    "domains": [
+      {
+        "code": "general",
+        "values":[
+            {
+                "name": "General",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "news",
+        "values":[
+            {
+                "name": "News",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "education",
+        "values":[
+            {
+                "name": "Education",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "LEGAL",
+        "values":[
+            {
+                "name": "Legal",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "government-press-release",
+        "values":[
+            {
+                "name": "Government Press Release",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "healthcare",
+        "values":[
+            {
+                "name": "Healthcare",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "agriculture",
+        "values":[
+            {
+                "name": "Agriculture",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "automobile",
+        "values":[
+            {
+                "name": "Automobile",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "tourism",
+        "values":[
+            {
+                "name": "Tourism",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "financial",
+        "values":[
+            {
+                "name": "Financial",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "movies",
+        "values":[
+            {
+                "name": "Movies",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "subtitles",
+        "values":[
+            {
+                "name": "Subtitles",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "sports",
+        "values":[
+            {
+                "name": "Sports",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "technology",
+        "values":[
+            {
+                "name": "Technology",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "lifestyle",
+        "values":[
+            {
+                "name": "Lifestyle",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "entertainment",
+        "values":[
+            {
+                "name": "Entertainment",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "art-and-culture",
+        "values":[
+            {
+                "name": "Art and Culture",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "parliamentary",
+        "values":[
+            {
+                "name": "Parliamentary",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "economy",
+        "values":[
+            {
+                "name": "Economy",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "history",
+        "values":[
+            {
+                "name": "History",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "philosophy",
+        "values":[
+            {
+                "name": "Philosophy",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "religion",
+        "values":[
+            {
+                "name": "Religion",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "national-security-and-defence",
+        "values":[
+            {
+                "name": "National Security and Defence",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "literature",
+        "values":[
+            {
+                "name": "Literature",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      },
+      {
+        "code": "geography",
+        "values":[
+            {
+                "name": "Geography",
+                "locale": "en"
+            }
+        ],
+        "active": true
+      }
+    ]
+  }

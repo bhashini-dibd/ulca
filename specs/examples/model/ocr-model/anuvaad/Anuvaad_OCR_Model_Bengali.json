@@ -1,5 +1,6 @@
 {
     "name": "Anuvaad OCR - Bengali",
+    "version": "v1.0",
     "description": "Anuvaad OCR aims to host tools for image to text conversion with the goal to enable automation of digitization of scanned documents belonging to Indian languages. We have built upon the open-source OCR engine Tesseract 4.0.  We have done custom training for Hindi and  Tamil and have significantly reduced the errors for these language models as compared to the ones available in the Tesseract repository. Work for other Indian languages is in progress but the service can still be used for English, Bengali, Telugu, Kannada and Malayalam with Tesseract base models.", 
     "refUrl": "https://github.com/project-anuvaad/anuvaad/tree/develop/anuvaad-etl/anuvaad-extractor/document-processor/ocr/tesseract_ulca",
     "task": {
@@ -10,7 +11,7 @@
           "sourceLanguage": "bn"
        }
     ],
-    "license": "cc-by-4.0",
+    "license": "mit",
     "domain": [
        "general"
     ],

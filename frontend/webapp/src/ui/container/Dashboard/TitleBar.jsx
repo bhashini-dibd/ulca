@@ -5,6 +5,7 @@ import { withStyles, Button, Menu, MenuItem, MuiThemeProvider } from "@material-
 import HeaderStyles from "../../styles/HeaderStyles";
 import DownIcon from '@material-ui/icons/ArrowDropDown';
 import Theme from "../../theme/theme-default";
+import { translate } from "../../../assets/localisation";
 
 const StyledMenu = withStyles({
 })((props) => (
@@ -90,7 +91,7 @@ const TitleBar = (props) => {
                         < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.tempGrid}>
                             <Typography variant="body2" gutterBottom>
                                 {/* {props.label} */}
-                                Total Count
+                                {translate("label.totalCount")}
                             </Typography>
                             <Typography variant="subtitle1">
                                 {/* {props.totValue} */}

@@ -37,10 +37,11 @@ class StoreRepo:
             return None
 
     #deleting record by key
-    def delete(self, key):
+    def delete(self, keys):
         try:
             client = self.get_redis_instance()
-            client.delete(key)
+            for key in keys:
+                client.delete(key)
             return 1
         except Exception as e:
             log.exception("Exception in REPO: delete | Cause: " + str(e), None, e)
