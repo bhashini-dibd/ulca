@@ -33,6 +33,7 @@ import com.ulca.dataset.dao.DatasetKafkaTransactionErrorLogDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.service.DatasetErrorPublishService;
+import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.kakfa.model.FileDownload;
 import com.ulca.dataset.model.DatasetKafkaTransactionErrorLog;
@@ -79,7 +80,8 @@ public class KafkaFileDownloadConsumer {
 	@Value("${kafka.ulca.ds.ingest.ip.topic}")
 	private String datasetIngestTopic;
 	
-	
+	@Autowired
+	NotificationService notificationService;
 																																						
 	@KafkaListener(groupId = "${kafka.ulca.ds.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.ds.filedownload.ip.topic}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
@@ -151,6 +153,8 @@ public class KafkaFileDownloadConsumer {
 				
 				//send error event for download failure
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , null, null) ;
+				
+				notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 				e.printStackTrace();
 				
 				return;

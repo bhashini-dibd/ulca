@@ -1,5 +1,6 @@
 {
    "name": "Anuvaad Translation Malayalam-English",
+   "version": "v1.0",
    "description": "Anuvaad-NMT is a set of domain specific(legal) Transformer-base (~100 M) bilingual NMT models trained on Legal datasets obtained from various public sources like Indiakanoon, law commission etc. The models were trained using OpenNMT-py framework with sentencepiece tokenisation, and productionised using Ctranslate2 binary framework. Currently the bilingual models are released for following 9 languages- English to Indic(Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Punjabi, Tamil, Telugu) and Indic to English, a total of 18 bilingual models.",
    "refUrl": "https://github.com/project-anuvaad/anuvaad",
    "task": {

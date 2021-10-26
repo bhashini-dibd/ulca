@@ -32,14 +32,22 @@ const CardComponent = (props) => {
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Domain</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{FilterByDomain([data.domain])[0].label}</Typography>
                                 </Grid>
+                                {data.publishedOn ? 
                                 <Grid item xs={3} sm={3} md={3} lg={4} xl={4}>
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Submitter</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{data.submitter}</Typography>
-                                </Grid>
-                                <Grid item>
+                                </Grid>:<Grid>
+                                    <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Submitter</Typography>
+                                    <Typography variant="body2" style={{ color: "#ffffff" }}>{data.submitter}</Typography>
+                                </Grid>}
+                                {data.publishedOn && <Grid item>
                                     <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Published On</Typography>
                                     <Typography variant="body2" style={{ color: "#ffffff" }}>{data.publishedOn.split(",")[0]}</Typography>
-                                </Grid>
+                                </Grid>}
+                                {/* {data.metrics && <Grid item>
+                                    <Typography variant="caption" style={{ color: "#ffffff", opacity: '0.6' }} gutterBottom>Metrics</Typography>
+                                    <Typography variant="body2" style={{ color: "#ffffff" }}>{data.metrics}</Typography>
+                                </Grid>} */}
                             </Grid>
                         </div>
                     </Grid>

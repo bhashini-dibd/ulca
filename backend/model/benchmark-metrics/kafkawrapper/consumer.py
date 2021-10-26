@@ -12,7 +12,7 @@ from configs.configs import model_task_type_translation, model_task_type_asr
 from kafka import KafkaConsumer
 # from processtracker.processtracker import ProcessTracker
 # from kafkawrapper.producer import Producer
-# from kafkawrapper.redis_util import RedisUtil
+from kafkawrapper.redis_util import RedisUtil
 
 log = logging.getLogger('file')
 
@@ -43,9 +43,9 @@ def consume():
                     data = msg.value
                     if data:
                         log.info(f'{prefix} | Received on Topic: " + msg.topic + " | Partition: {str(msg.partition)}')
-                        # if check_relay(data):
-                        #     log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
-                        #     break
+                        if check_relay(data):
+                            log.info(f'RELAY record with benchmarkingProcessId: {data["benchmarkingProcessId"]}')
+                            break
 
                         benchmarking_process_id = data["benchmarkingProcessId"]
                         log.info(f'data received from benchmarking -- id {benchmarking_process_id}')
@@ -71,16 +71,15 @@ def handle_json(x):
         return {}
 
 # Method to check if a record is getting relayed
-# def check_relay(data):
-#     repo = RedisUtil()
-#     record = repo.search([data["record"]["id"]])
-#     if record:
-#         return True
-#     else:
-#         rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "mode": data["userMode"],
-#                "datasetType": data["datasetType"]}
-#         repo.upsert(data["record"]["id"], rec, True)
-#         return False
+def check_relay(data):
+    repo = RedisUtil()
+    record = repo.search([data["benchmarkingProcessId"]])
+    if record:
+        return True
+    else:
+        rec = {"benchmarkingProcessId": data["benchmarkingProcessId"], "modelTaskType": data["modelTaskType"]}
+        repo.upsert(data["benchmarkingProcessId"], rec, True)
+        return False
 
 # Log config
 dictConfig({

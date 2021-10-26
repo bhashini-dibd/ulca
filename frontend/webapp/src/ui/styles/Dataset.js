@@ -25,9 +25,15 @@ const DataSet = (theme) => ({
     marginTop: "1vh",
   },
   computeBtn: {
-    borderRadius: "20px",
+    backgroundColor: '#FD7F23',
+    float: 'right',
+    marginRight: '30px',
+    marginTop: '33px',
+    '&:hover': {
+      backgroundColor: '#FD7F23',
+    }
   },
-  tableRow:{display:"none"},
+  tableRow: { display: "none" },
 
   divStyle: {
     padding: "5% 10% 5% 3.125rem",
@@ -121,7 +127,7 @@ const DataSet = (theme) => ({
   },
   buttonStyle: {
     marginLeft: "0.7rem",
-    borderRadius: "1rem",
+    // borderRadius: "1rem",
   },
   iconStyle: { marginRight: ".5rem" },
   thumbsUpIcon: {
@@ -178,7 +184,7 @@ const DataSet = (theme) => ({
     marginBottom: "1.938rem",
   },
   clearNSubmit: {
-    marginTop: "4rem",
+    // marginTop: "20rem",
     float: "right",
   },
   parent: {
@@ -215,12 +221,13 @@ const DataSet = (theme) => ({
   },
   yourSearchQuery: {
     marginBottom: "2%",
+    color: '#FD7F23'
   },
   serReqNoTypo: {
     marginBottom: "7%",
   },
   mySearches: {
-    marginTop: "1%",
+    marginTop: "3%",
     width: "60%",
     //  textTransform:'inherit'
   },
@@ -232,6 +239,7 @@ const DataSet = (theme) => ({
     padding: "5% 14% 2% 4%",
     width: "70%",
     minHeight: "3.5rem",
+    backgroundColor: '#D6EAF8'
   },
   downloadBtnDiv: {
     margin: "10%",
@@ -370,10 +378,10 @@ const DataSet = (theme) => ({
     // alignItems: 'center'
   },
   modelTitle: {
-    marginTop: "25px",
-    padding: 0,
+    marginTop: "20px",
+    // padding: 0,
   },
-  mainTitle: { marginTop: "10px" },
+  mainTitle: { marginTop: "33px", marginLeft: '38px' },
   backButton: {
     boxShadow: "none",
     padding: "0",
@@ -440,9 +448,13 @@ const DataSet = (theme) => ({
     padding: 0,
   },
   modelPara: {
-    marginTop: "15px ",
+    //marginTop: "15px ",
     //textTransform: 'capitalize'
     "&:first-letter": { textTransform: "capitalize" },
+    display: "-webkit-box",
+    "-webkit-line-clamp": "2",
+    "-webkit-box-orient": "vertical",
+    overflow: "hidden",
   },
   mainPaper: {
     border: "none",
@@ -472,6 +484,7 @@ const DataSet = (theme) => ({
     marginLeft: 0,
     width: "220px",
     textAlign: "left",
+    float: "right",
   },
   searchIcon: {
     padding: theme.spacing(0, 2),
@@ -498,9 +511,17 @@ const DataSet = (theme) => ({
     fontStyle: "italic",
     fontSize: "14px",
   },
+  inputRoot: {
+    width: "100%",
+  },
   filterBtn: {
     borderRadius: "22px",
   },
+  advanceFilter: {
+    textAlign: 'right',
+    color: "#FD7F23"
+  },
+  advanceFilterContainer: { maxHeight: "16rem", overflowY: 'auto', overflowX: "hidden", marginTop: "2rem" }
 });
 
 export default DataSet;

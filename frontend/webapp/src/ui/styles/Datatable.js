@@ -122,6 +122,12 @@ const style = createMuiTheme({
       root: {
         padding: 0,
       },
+      gutters: {
+        padding: 0,
+        "@media (min-width: 600px)": {
+          padding: 0,
+        },
+      },
     },
     MuiFormControlLabel: {
       root: {

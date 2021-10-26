@@ -12,6 +12,7 @@ import TableHead from "@material-ui/core/TableHead";
 import Paper from "@material-ui/core/Paper";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
+import { translate } from "../../../../assets/localisation";
 
 const ExpandTable = (props) => {
   const { rows, renderStatus, color, classes } = props;
@@ -32,7 +33,7 @@ const ExpandTable = (props) => {
             borderRight: `2px solid ${color ? "#E2F2FD" : "#E9F7EF"}`,
           }}
         >
-          <TableCell colSpan={8}>
+          <TableCell colSpan={9}>
             <>
               <Box style={{ margin: "0 80px" }}>
                 <Table size="small" aria-label="purchases">
@@ -40,11 +41,15 @@ const ExpandTable = (props) => {
                     <TableRow>
                       {/* <TableCell></TableCell> */}
                       {/* <TableCell></TableCell> */}
-                      <TableCell>Benchmark Dataset</TableCell>
-                      <TableCell>Metric</TableCell>
-                      <TableCell>Score</TableCell>
-                      <TableCell>Benchmark Run Date</TableCell>
-                      <TableCell>Status</TableCell>
+                      <TableCell>
+                        {translate("label.benchmarkDataset")}
+                      </TableCell>
+                      <TableCell> {translate("label.metric")}</TableCell>
+                      <TableCell> {translate("label.score")}</TableCell>
+                      <TableCell>
+                        {translate("label.benchmarkRunDate")}
+                      </TableCell>
+                      <TableCell>{translate("label.status")}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
