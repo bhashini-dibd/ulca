@@ -1,4 +1,7 @@
 const localization_EN_Data = {
+  "datasetType": "Datatset Type",
+  "sourceLanguage": "Source Language",
+  "targetLanguage": "Target Language",
   "label.sourceLanguage": "Source Language",
   "label.downloadAll": "Download All",
   "label.downloadSample": "Download sample",
@@ -85,9 +88,9 @@ const localization_EN_Data = {
   "label.domain": "Domain",
   "label.submitModel": "Submit Model",
   "label.howToSubmitModel": "How to submit model?",
-  "label.instructions1":"Provide a meaningful name to your model.",
-  "label.instructions2":"Browse the file containing the parameters of the model.",
-  "label.instructions3":"Make sure the file should be in JSON format.",
+  "label.instructions1": "Provide a meaningful name to your model.",
+  "label.instructions2": "Browse the file containing the parameters of the model.",
+  "label.instructions3": "Make sure the file should be in JSON format.",
 
 };
 
