@@ -126,12 +126,14 @@
       "active": true,
       "values": [
         {
-          "value": 0,
-          "label": "0"
+          "code": 0,
+          "label": "0",
+          "active": true
         },
         {
-          "value": 18,
-          "label": "18"
+          "code": 18,
+          "label": "18",
+          "active": true
         }
       ]
     },
@@ -141,12 +143,14 @@
       "active": true,
       "values": [
         {
-          "value": 18,
-          "label": "18"
+          "code": 18,
+          "label": "18",
+          "active": true
         },
         {
-          "value": 30,
-          "label": "30"
+          "code": 30,
+          "label": "30",
+          "active": true
         }
       ]
     },
@@ -162,12 +166,14 @@
       "active": true,
       "values": [
         {
-          "value": 1,
-          "label": "1"
+          "code": 1,
+          "label": "1",
+          "active": true
         },
         {
-          "value": 5,
-          "label": "5"
+          "code": 5,
+          "label": "5",
+          "active": true
         }
       ]
     },
@@ -177,12 +183,14 @@
       "active": true,
       "values": [
         {
-          "value": 5,
-          "label": "5"
+          "code": 5,
+          "label": "5",
+          "active": true
         },
         {
-          "value": 10,
-          "label": "10"
+          "code": 10,
+          "label": "10",
+          "active": true
         }
       ]
     },
@@ -198,20 +206,24 @@
       "active": true,
       "values": [
         {
-          "value": 0,
-          "label": "0"
+          "code": 0,
+          "label": "0",
+          "active": true
         },
         {
-          "value": 10,
-          "label": "10"
+          "code": 10,
+          "label": "10",
+          "active": true
         },
         {
-          "value": 20,
-          "label": "60"
+          "code": 20,
+          "label": "60",
+          "active": true
         },
         {
-          "value": 60,
-          "label": "60"
+          "code": 60,
+          "label": "60",
+          "active": true
         }
       ]
     },
@@ -221,20 +233,24 @@
       "active": true,
       "values": [
         {
-          "value": 10,
-          "label": "10"
+          "code": 10,
+          "label": "10",
+          "active": true
         },
         {
-          "value": 20,
-          "label": "20"
+          "code": 20,
+          "label": "20",
+          "active": true
         },
         {
-          "value": 60,
-          "label": "60"
+          "code": 60,
+          "label": "60",
+          "active": true
         },
         {
-          "value": 100,
-          "label": "100"
+          "code": 100,
+          "label": "100",
+          "active": true
         }
       ]
     },
