@@ -26,7 +26,6 @@ public class BenchmarkProcess {
 	String benchmarkProcessId;
 	String benchmarkDatasetId;
 	String benchmarkDatasetName;
-	String modelName;
 	double score;
 	String metric;
 	String status;

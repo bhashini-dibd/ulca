@@ -26,7 +26,7 @@ import javax.validation.constraints.*;
 
 public class Model   {
 
-  //@Indexed(unique=true)
+  @Indexed(unique=true)
   @JsonProperty("name")
   private String name = null;
 
