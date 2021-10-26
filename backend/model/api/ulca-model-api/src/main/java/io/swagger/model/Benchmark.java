@@ -1,17 +1,18 @@
 package io.swagger.model;
 
-import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import org.apache.kafka.common.MetricName;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * the benchmark dataset for model task.
@@ -21,251 +22,342 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-26T01:12:13.097Z[GMT]")
 
 @Document(collection = "benchmark")
-public class Benchmark   {
-	
+public class Benchmark {
+
 	@Id
-  @JsonProperty("benchmarkId")
-  private String benchmarkId = null;
+	@JsonProperty("benchmarkId")
+	private String benchmarkId = null;
+	
+	@JsonProperty("url")
+	private String url;
 
-  @JsonProperty("name")
-  private String name = null;
+	@JsonProperty("name")
+	private String name = null;
 
-  @JsonProperty("description")
-  private String description = null;
- 
-  @JsonProperty("metricName")
-  private MetricName metricName = null;
+	@JsonProperty("description")
+	private String description = null;
+	
+	@JsonProperty("status")
+	private String status = null;
 
-  @JsonProperty("score")
-  private BigDecimal score = null;
+	@JsonProperty("metric")
+	private List<String> metric = null;
 
-  
-  @JsonProperty("dataset")
-  private String dataset = null;
+	@JsonProperty("dataset")
+	private String dataset = null;
 
-  @JsonProperty("domain")
-  private Domain domain = null;
-  
-  @JsonProperty("task")
-  private ModelTask task = null;
-  
+	@JsonProperty("domain")
+	private Domain domain = null;
 
-  @JsonProperty("createdOn")
-  private String createdOn = null;
+	@JsonProperty("task")
+	private ModelTask task = null;
 
-  @JsonProperty("submittedOn")
-  private String submittedOn = null;
+	@JsonProperty("languages")
+	private LanguagePairs languages = null;
 
-  public Benchmark benchmarkId(String benchmarkId) {
-    this.benchmarkId = benchmarkId;
-    return this;
-  }
+	@JsonProperty("submitter")
+	private Submitter submitter = null;
 
-  /**
-   * auto-generated unique identification of benchmark data
-   * @return benchmarkId
-   **/
-  @Schema(description = "auto-generated unique identification of benchmark data")
-  
-    public String getBenchmarkId() {
-    return benchmarkId;
-  }
+	@JsonProperty("createdOn")
+	private String createdOn = null;
 
-  public void setBenchmarkId(String benchmarkId) {
-    this.benchmarkId = benchmarkId;
-  }
+	@JsonProperty("submittedOn")
+	private String submittedOn = null;
 
-  public Benchmark name(String name) {
-    this.name = name;
-    return this;
-  }
+	public Benchmark benchmarkId(String benchmarkId) {
+		this.benchmarkId = benchmarkId;
+		return this;
+	}
 
-  /**
-   * name of the benchmark
-   * @return name
-   **/
-  @Schema(required = true, description = "name of the benchmark")
-      @NotNull
+	/**
+	 * auto-generated unique identification of benchmark data
+	 * 
+	 * @return benchmarkId
+	 **/
+	@Schema(description = "auto-generated unique identification of benchmark data")
 
-    public String getName() {
-    return name;
-  }
+	public String getBenchmarkId() {
+		return benchmarkId;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	public void setBenchmarkId(String benchmarkId) {
+		this.benchmarkId = benchmarkId;
+	}
 
-  public Benchmark description(String description) {
-    this.description = description;
-    return this;
-  }
+	public Benchmark name(String name) {
+		this.name = name;
+		return this;
+	}
 
-  /**
-   * description of the benchmark including how it has been curated
-   * @return description
-   **/
-  @Schema(example = "benchmark sentences for government press release domain", required = true, description = "description of the benchmark including how it has been curated")
-      @NotNull
+	
+	public String getUrl() {
+		return url;
+	}
 
-  @Size(min=50,max=200)   public String getDescription() {
-    return description;
-  }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
-  
-  public Benchmark dataset(String dataset) {
-	    this.dataset = dataset;
-	    return this;
-	  }
+	public String getStatus() {
+		return status;
+	}
 
-	  /**
-	   * description of the benchmark including how it has been curated
-	   * @return description
-	   **/
-	  @Schema(example = "benchmark dataset url", required = true, description = "benchmark dataset url")
-	      @NotNull
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
-	  @Size(min=50,max=200)   public String getDataset() {
-	    return dataset;
-	  }
+	/**
+	 * name of the benchmark
+	 * 
+	 * @return name
+	 **/
+	@Schema(required = true, description = "name of the benchmark")
+	@NotNull
 
-	  public void setDataset(String dataset) {
-	    this.dataset = dataset;
-	  }
-	  
+	public String getName() {
+		return name;
+	}
 
-  public Benchmark domain(Domain domain) {
-    this.domain = domain;
-    return this;
-  }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  /**
-   * Get domain
-   * @return domain
-   **/
-  @Schema(required = true, description = "")
-      @NotNull
+	public Benchmark description(String description) {
+		this.description = description;
+		return this;
+	}
 
-    @Valid
-    public Domain getDomain() {
-    return domain;
-  }
+	/**
+	 * description of the benchmark including how it has been curated
+	 * 
+	 * @return description
+	 **/
+	@Schema(example = "benchmark sentences for government press release domain", required = true, description = "description of the benchmark including how it has been curated")
+	@NotNull
 
-  public void setDomain(Domain domain) {
-    this.domain = domain;
-  }
-  
-  public Benchmark task(ModelTask task) {
-	    this.task = task;
-	    return this;
-	  }
+	@Size(min = 50, max = 200)
+	public String getDescription() {
+		return description;
+	}
 
-	  /**
-	   * Get task
-	   * @return task
-	   **/
-	  @Schema(required = true, description = "")
-	      @NotNull
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-	    @Valid
-	    public ModelTask getTask() {
-	    return task;
-	  }
+	public Benchmark metric(List<String> metric) {
+		this.metric = metric;
+		return this;
+	}
 
-	  public void setTask(ModelTask task) {
-	    this.task = task;
-	  }
+	public List<String> getMetric() {
+		return metric;
+	}
 
-  public Benchmark createdOn(String createdOn) {
-    this.createdOn = createdOn;
-    return this;
-  }
+	public void setMetric(List<String> metric) {
+		this.metric = metric;
+	}
 
-  /**
-   * timestamp when benchmark is created
-   * @return createdOn
-   **/
-  @Schema(description = "timestamp when benchmark is created")
-  
-    public String getCreatedOn() {
-    return createdOn;
-  }
+	public Benchmark dataset(String dataset) {
+		this.dataset = dataset;
+		return this;
+	}
 
-  public void setCreatedOn(String createdOn) {
-    this.createdOn = createdOn;
-  }
+	/**
+	 * description of the benchmark including how it has been curated
+	 * 
+	 * @return description
+	 **/
+	@Schema(example = "benchmark dataset url", required = true, description = "benchmark dataset url")
+	@NotNull
 
-  public Benchmark submittedOn(String submittedOn) {
-    this.submittedOn = submittedOn;
-    return this;
-  }
+	@Size(min = 50, max = 200)
+	public String getDataset() {
+		return dataset;
+	}
 
-  /**
-   * timestamp when benchmark is submitted/published
-   * @return submittedOn
-   **/
-  @Schema(description = "timestamp when benchmark is submitted/published")
-  
-    public String getSubmittedOn() {
-    return submittedOn;
-  }
+	public void setDataset(String dataset) {
+		this.dataset = dataset;
+	}
 
-  public void setSubmittedOn(String submittedOn) {
-    this.submittedOn = submittedOn;
-  }
+	public Benchmark domain(Domain domain) {
+		this.domain = domain;
+		return this;
+	}
 
+	/**
+	 * Get domain
+	 * 
+	 * @return domain
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
 
-  @Override
-  public boolean equals(java.lang.Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    Benchmark benchmark = (Benchmark) o;
-    return Objects.equals(this.benchmarkId, benchmark.benchmarkId) &&
-        Objects.equals(this.name, benchmark.name) &&
-        Objects.equals(this.description, benchmark.description) &&
-        Objects.equals(this.dataset, benchmark.dataset) &&
-        Objects.equals(this.domain, benchmark.domain) &&
-        Objects.equals(this.task, benchmark.task) &&
-        Objects.equals(this.createdOn, benchmark.createdOn) &&
-        Objects.equals(this.submittedOn, benchmark.submittedOn);
-  }
+	@Valid
+	public Domain getDomain() {
+		return domain;
+	}
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(benchmarkId, name, description, domain, createdOn, submittedOn);
-  }
+	public void setDomain(Domain domain) {
+		this.domain = domain;
+	}
 
-  @Override
-  public String toString() {
-    StringBuilder sb = new StringBuilder();
-    sb.append("class Benchmark {\n");
-    
-    sb.append("    benchmarkId: ").append(toIndentedString(benchmarkId)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    dataset: ").append(toIndentedString(dataset)).append("\n");
-    sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
-    sb.append("    task: ").append(toIndentedString(task)).append("\n");
-    sb.append("    createdOn: ").append(toIndentedString(createdOn)).append("\n");
-    sb.append("    submittedOn: ").append(toIndentedString(submittedOn)).append("\n");
-    sb.append("}");
-    return sb.toString();
-  }
+	public Benchmark task(ModelTask task) {
+		this.task = task;
+		return this;
+	}
 
-  /**
-   * Convert the given object to string with each line indented by 4 spaces
-   * (except the first line).
-   */
-  private String toIndentedString(java.lang.Object o) {
-    if (o == null) {
-      return "null";
-    }
-    return o.toString().replace("\n", "\n    ");
-  }
+	/**
+	 * Get task
+	 * 
+	 * @return task
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
+
+	@Valid
+	public ModelTask getTask() {
+		return task;
+	}
+
+	public void setTask(ModelTask task) {
+		this.task = task;
+	}
+
+	public Benchmark languages(LanguagePairs languages) {
+		this.languages = languages;
+		return this;
+	}
+
+	/**
+	 * Get languages
+	 * 
+	 * @return languages
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
+
+	@Valid
+	public LanguagePairs getLanguages() {
+		return languages;
+	}
+
+	public void setLanguages(LanguagePairs languages) {
+		this.languages = languages;
+	}
+
+	public Benchmark submitter(Submitter submitter) {
+		this.submitter = submitter;
+		return this;
+	}
+
+	/**
+	 * Get submitter
+	 * 
+	 * @return submitter
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
+
+	@Valid
+	public Submitter getSubmitter() {
+		return submitter;
+	}
+
+	public void setSubmitter(Submitter submitter) {
+		this.submitter = submitter;
+	}
+
+	public Benchmark createdOn(String createdOn) {
+		this.createdOn = createdOn;
+		return this;
+	}
+
+	/**
+	 * timestamp when benchmark is created
+	 * 
+	 * @return createdOn
+	 **/
+	@Schema(description = "timestamp when benchmark is created")
+
+	public String getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(String createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public Benchmark submittedOn(String submittedOn) {
+		this.submittedOn = submittedOn;
+		return this;
+	}
+
+	/**
+	 * timestamp when benchmark is submitted/published
+	 * 
+	 * @return submittedOn
+	 **/
+	@Schema(description = "timestamp when benchmark is submitted/published")
+
+	public String getSubmittedOn() {
+		return submittedOn;
+	}
+
+	public void setSubmittedOn(String submittedOn) {
+		this.submittedOn = submittedOn;
+	}
+
+	@Override
+	public boolean equals(java.lang.Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
+		Benchmark benchmark = (Benchmark) o;
+		return Objects.equals(this.benchmarkId, benchmark.benchmarkId) && Objects.equals(this.name, benchmark.name)
+				&& Objects.equals(this.description, benchmark.description)
+				&& Objects.equals(this.dataset, benchmark.dataset) && Objects.equals(this.domain, benchmark.domain)
+				&& Objects.equals(this.task, benchmark.task) && 
+				Objects.equals(this.languages, benchmark.languages) &&
+				Objects.equals(this.submitter, benchmark.submitter) &&
+				Objects.equals(this.createdOn, benchmark.createdOn) && 
+				Objects.equals(this.submittedOn, benchmark.submittedOn);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(benchmarkId, name, description, domain, createdOn, submittedOn);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("class Benchmark {\n");
+
+		sb.append("    benchmarkId: ").append(toIndentedString(benchmarkId)).append("\n");
+		sb.append("    name: ").append(toIndentedString(name)).append("\n");
+		sb.append("    description: ").append(toIndentedString(description)).append("\n");
+		sb.append("    dataset: ").append(toIndentedString(dataset)).append("\n");
+		sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
+		sb.append("    task: ").append(toIndentedString(task)).append("\n");
+		sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
+		sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
+		sb.append("    createdOn: ").append(toIndentedString(createdOn)).append("\n");
+		sb.append("    submittedOn: ").append(toIndentedString(submittedOn)).append("\n");
+		sb.append("}");
+		return sb.toString();
+	}
+
+	/**
+	 * Convert the given object to string with each line indented by 4 spaces
+	 * (except the first line).
+	 */
+	private String toIndentedString(java.lang.Object o) {
+		if (o == null) {
+			return "null";
+		}
+		return o.toString().replace("\n", "\n    ");
+	}
 }
