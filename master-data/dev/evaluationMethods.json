@@ -1,0 +1,16 @@
+{
+    "evaluationMethods": [
+        {
+            "code": "wer",
+            "label": "WER",
+            "active": true,
+            "collectionMethod": [
+                "machine-generated-transcript"
+            ],
+            "datasetType": [
+                "asr-corpus",
+                "asr-unlabeled-corpus"
+            ]
+        }
+    ]
+}

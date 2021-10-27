@@ -148,6 +148,24 @@
       "label": "Submitter",
       "active": true,
       "values": []
+    },
+    {
+      "code": "editingTool",
+      "label": "Editing Tool",
+      "active": true,
+      "values": {
+        "master": "/editingTools.json",
+        "jsonPath": "$.editingTools"
+      }
+    },
+    {
+      "code": "evaluationMethod",
+      "label": "Evaluation Method",
+      "active": true,
+      "values": {
+        "master": "/evaluationMethods.json",
+        "jsonPath": "$.evaluationMethods"
+      }
     }
   ],
   "relatedMaster": true
