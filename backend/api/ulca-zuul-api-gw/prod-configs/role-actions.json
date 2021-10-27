@@ -164,6 +164,11 @@
             "role":"ADMIN",
             "actionID": "1bdbb278-3f7e-4680-b892-519294a07518",
             "active":true
+        },
+        {
+            "role":"EXTERNAL-CONSORTIUM-MEMBER",
+            "actionID": "a4c9f08d-0968-403d-ab1f-008b1b1aff44",
+            "active":true
         }
     ]
 }

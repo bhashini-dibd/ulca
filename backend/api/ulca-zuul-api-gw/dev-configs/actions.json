@@ -206,7 +206,7 @@
             "module":"ULCA-API-MODEL",
             "active":true,
             "whiteList":true,
-            "description":"Open to fetch benchmark datasets"
+            "description":"Open API to fetch benchmark datasets"
         },
         {
             "id":"d8812e00-cc10-470d-9957-045425ba7ff8",

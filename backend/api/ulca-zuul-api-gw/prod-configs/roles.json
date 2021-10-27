@@ -29,6 +29,11 @@
             "code":"BENCHMARK-DATASET-SUBMITTER",
             "active":true,
             "description":"Specific role to submit benchmark datasets"
+        },
+        {
+            "code":"EXTERNAL-CONSORTIUM-MEMBER",
+            "active":true,
+            "description":"Specific role to submit models, fetch models and run benchmarks"
         }
     ]
 }
