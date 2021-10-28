@@ -132,6 +132,7 @@ public class KafkaBenchmarkDownloadConsumer {
 					bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.completed);
 					
 				}catch (IOException e) {
+					log.info("Benchmark Process Failed. benchmarkProcessId :: "  + benchmarkProcessId + " cause :: " + e.getMessage());
 					
 					BenchmarkError error = new BenchmarkError();
 					error.setCause(e.getMessage());
@@ -178,11 +179,11 @@ public class KafkaBenchmarkDownloadConsumer {
 					
 				} catch (Exception e) {
 					
-					log.info("Unhadled Exception :: " + e.getMessage());
-					log.info("cause :: " + e.getClass());
+					log.info("Benchmark Process Failed. benchmarkProcessId :: "  + benchmarkProcessId + " cause :: " + e.getMessage());
+					
 					BenchmarkError error = new BenchmarkError();
 					error.setCause(e.getMessage());
-					error.setMessage("benchmark ingest failed");
+					error.setMessage("Benchmark Ingest Failed");
 					error.setCode("2000_BENCHMARK_INGEST_FAILURE");
 					bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.failed, error);
 					bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
