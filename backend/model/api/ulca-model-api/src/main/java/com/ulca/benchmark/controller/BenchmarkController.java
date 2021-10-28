@@ -16,6 +16,7 @@ import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSubmitRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.response.BenchmarkListByModelResponse;
+import com.ulca.benchmark.response.BenchmarkListByUserIdResponse;
 import com.ulca.benchmark.response.BenchmarkSearchResponse;
 import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
@@ -23,6 +24,7 @@ import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.service.BenchmarkService;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
+import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 import io.swagger.model.Benchmark;
@@ -44,6 +46,14 @@ public class BenchmarkController {
 		BenchmarkSubmitResponse benchmark = benchmarkService.submitBenchmark(request);
 
 		return new ResponseEntity<>(benchmark, HttpStatus.OK);
+	}
+	
+	@GetMapping("/listByUserId")
+	public BenchmarkListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
+			@RequestParam(required = false) Integer endPage) {
+		log.info("******** Entry BenchMarkController:: listByUserId *******");
+
+		return benchmarkService.benchmarkListByUserId(userId, startPage, endPage);
 	}
 
 	@PostMapping("/execute")

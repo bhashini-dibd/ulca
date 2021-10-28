@@ -35,6 +35,7 @@ import com.ulca.benchmark.request.BenchmarkListByModelRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.response.BenchmarkDto;
 import com.ulca.benchmark.response.BenchmarkListByModelResponse;
+import com.ulca.benchmark.response.BenchmarkListByUserIdResponse;
 import com.ulca.benchmark.response.BenchmarkSearchResponse;
 import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
@@ -47,6 +48,7 @@ import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
+import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 
@@ -323,6 +325,27 @@ public class BenchmarkService {
 			return list;
 		}
 		return list;
+	}
+
+	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
+		log.info("******** Entry ModelService:: modelListByUserId *******");
+		List<Benchmark> list = new ArrayList<>();
+
+		if (startPage != null) {
+			int startPg = startPage - 1;
+			for (int i = startPg; i < endPage; i++) {
+				Pageable paging = PageRequest.of(i, PAGE_SIZE);
+				Page<Benchmark> benchmarkList = benchmarkDao.findByUserId(userId, paging);
+				list.addAll(benchmarkList.toList());
+			}
+		} else {
+			list = benchmarkDao.findByUserId(userId);
+		}
+
+		
+		
+
+		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size());
 	}
 
 }
