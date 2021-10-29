@@ -187,6 +187,11 @@
       },
       {
         "role": "CONTRIBUTOR-USER",
+        "actionID": "d8812e00-cc10-470d-9957-045425ba7ff8",
+        "active": true
+      },
+      {
+        "role": "CONTRIBUTOR-USER",
         "actionID": "63b59091-ad6a-4147-bc7d-a10712147c05",
         "active": true
       },
