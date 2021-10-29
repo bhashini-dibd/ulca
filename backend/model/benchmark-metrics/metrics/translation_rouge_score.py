@@ -14,7 +14,7 @@ class TranslationRougeScoreEval(ModelMetricEval):
     def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         try:
             rougescore = self.rouge.compute(predictions=machine_translation, references=ground_truth)
-            return float(list(list(rougescore['rougeL'])[2])[2]) #f-measure of 'rougeL'
+            return float(list(list(rougescore['rougeL'])[1])[2]) #f-measure of 'rougeL'
         except Exception as e:
             log.exception(f"Exception in calculating ROUGE Score: {str(e)}")
             return None
