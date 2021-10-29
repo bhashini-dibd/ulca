@@ -15,6 +15,7 @@ import lombok.Setter;
 
 public class BenchmarkDto  extends Benchmark{
 	
+	private List<String> metric;
 	private List<String> availableMetric;
 
 }

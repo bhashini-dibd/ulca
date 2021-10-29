@@ -1,44 +1,19 @@
 package com.ulca.benchmark.response;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import io.swagger.model.Benchmark;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@Getter
 @Setter
-public class BenchmarkSubmitResponse implements Serializable {
-	
-		private static final long serialVersionUID = 1L;
-		
-			private String message;
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class BenchmarkSubmitResponse {
 
-			Data data;
-			
-			public BenchmarkSubmitResponse(Benchmark benchmark, String datasetId, String timestamp) {
-				super();
-				this.message = message;
-				this.data = new Data(benchmark);
-			}
-
-			@Getter
-			@Setter
-			private class Data{  
-				 private  Benchmark benchmark;
-
-				public Data(Benchmark benchmark) {
-					super();
-					this.benchmark = benchmark;
-					
-				}
-				 
-			}  
-
-	}
-
+	private String message;
+	private String benchamrkId;
+	private String status;
 }

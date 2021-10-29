@@ -2,8 +2,6 @@ package org.ulca.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Map;
-
 public class UMSResponse {
 
     @JsonProperty("count")

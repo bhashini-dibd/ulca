@@ -5,28 +5,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import Theme from "../../theme/theme-default";
 
 export default function ResponsiveDialog(props) {
-  
-
-//   const getMuiTheme = () => createMuiTheme({
-//     overrides: {
-
-//       MuiDialog: {
-//             paperWidthSm:{
-//                     width:"30%",
-//                     minWidth:"300px"
-//             }
-//     },
-   
-//     }
-// });
-
-  
-
-  const {title,message, open,handleSubmit, handleClose,actionButton, actionButton2  } = props;
+    const {title,message, open,handleSubmit, handleClose,actionButton, actionButton2  } = props;
   return (
     
     <MuiThemeProvider theme={Theme}> 

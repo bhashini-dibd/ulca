@@ -17,6 +17,11 @@ import {
   InputBase,
   TableCell,
   TableRow,
+  TableBody,
+  TableHead,
+  Box,
+  Table,
+  TablePagination,
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -28,6 +33,7 @@ import {
   filterBenchmark,
   clearFilterBenchmark,
 } from "../../../../redux/actions/api/Model/ModelView/FilterBenchmark";
+import CustomPagination from "../../../components/common/CustomPagination";
 
 const BenchmarkModal = (props) => {
   const { classes } = props;
@@ -35,6 +41,9 @@ const BenchmarkModal = (props) => {
   const data = useSelector((state) => state.getBenchMarkDetails.filteredData);
   const benchmarkInfo = useSelector(
     (state) => state.getBenchMarkDetails.benchmarkInfo
+  );
+  const submitStatus = useSelector(
+    (state) => state.getBenchMarkDetails.submitStatus
   );
   const selectedIndex = useSelector(
     (state) => state.getBenchMarkDetails.selectedIndex
@@ -62,18 +71,15 @@ const BenchmarkModal = (props) => {
 
   const fetchModalFooter = () => {
     return (
-      <>
-        <Divider style={{ margin: "5px" }} />
-        <Button
-          color="primary"
-          style={{ float: "right", marginTop: "5px", borderRadius: "22px" }}
-          variant="contained"
-          onClick={props.makeSubmitAPICall}
-          disabled={benchmarkInfo.length ? false : true}
-        >
-          Submit
-        </Button>
-      </>
+      <Button
+        color="primary"
+        style={{ float: "right", marginTop: "20px", borderRadius: "22px" }}
+        variant="contained"
+        onClick={props.makeSubmitAPICall}
+        disabled={submitStatus}
+      >
+        Submit
+      </Button>
     );
   };
 
@@ -116,7 +122,13 @@ const BenchmarkModal = (props) => {
     );
   };
 
-  const renderSelectButton = (type, index, status, parentIndex) => {
+  const renderSelectButton = (
+    type,
+    index,
+    status,
+    parentIndex,
+    disabled = false
+  ) => {
     return (
       <Button
         variant="outlined"
@@ -126,24 +138,22 @@ const BenchmarkModal = (props) => {
         }}
         className={classes.filterBtn}
         onClick={() => {
-          if (type === "DATASET") {
-            const modal = document.querySelectorAll(
-              `#MUIDataTableBodyRow-${index}`
-            )[1];
-            if (modal.style.backgroundColor) {
-              modal.style.backgroundColor = "";
-            } else {
-              modal.style.backgroundColor = "#E2F2FD";
-            }
-          }
           dispatch(getBenchmarkMetric(type, index, parentIndex));
         }}
+        disabled={disabled}
       >
         {status ? <CheckIcon style={{ color: "#FFFFFF" }} /> : "Select"}
       </Button>
     );
   };
   const columns = [
+    {
+      name: "benchmarkId",
+      label: "Benchmark Id",
+      options: {
+        display: "excluded",
+      },
+    },
     {
       name: "datasetName",
       label: "Benchmark Dataset",
@@ -183,8 +193,8 @@ const BenchmarkModal = (props) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           return renderSelectButton(
             "DATASET",
-            tableMeta.rowIndex,
-            tableMeta.rowData[3],
+            tableMeta.rowData[0],
+            tableMeta.rowData[4],
             tableMeta.rowIndex
           );
         },
@@ -199,47 +209,109 @@ const BenchmarkModal = (props) => {
       },
     },
     customToolbar: fetchModalToolBar,
-    customFooter: fetchModalFooter,
     print: false,
     viewColumns: false,
     selectableRows: false,
     download: false,
     search: false,
     filter: false,
+    // pagination: true,
+    // customFooter: fetchModalFooter,
+    customFooter: (
+      count,
+      page,
+      rowsPerPage,
+      changeRowsPerPage,
+      changePage,
+      textLabels
+    ) => {
+      return (
+        <Grid container>
+          <Grid item xs={11} sm={11} md={11} lg={11} xl={11}>
+            <CustomPagination
+              count={count}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              changeRowsPerPage={changeRowsPerPage}
+              changePage={changePage}
+              textLabels={textLabels}
+            />
+          </Grid>
+          <Grid
+            style={{ display: "flex", alignItems: "center" }}
+            item
+            xs={1}
+            sm={1}
+            md={1}
+            lg={1}
+            xl={1}
+          >
+            {fetchModalFooter()}
+          </Grid>
+        </Grid>
+      );
+    },
     expandableRows: true,
     rowsExpanded: selectedIndex,
     customRowRenderer: (data, dataIndex, rowIndex) => {},
     renderExpandableRow: (rowData, rowMeta) => {
-      const rows = data[rowMeta.rowIndex].metric;
+      const rows = data[rowMeta.dataIndex].metric;
       return (
         <>
           <TableRow>
-            {/* <TableCell></TableCell> */}
-            <TableCell><strong>Metric</strong></TableCell>
-            {/* <TableCell align="left">Description</TableCell> */}
-            <TableCell><strong>Action</strong></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
+            <TableCell colSpan={6}>
+              <>
+                <Box style={{ margin: "0 80px" }}>
+                  <Table size="small" aria-label="purchases">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>
+                          <strong>Metric</strong>
+                        </TableCell>
+                        {/* <TableCell align="left">Description</TableCell> */}
+                        <TableCell>
+                          <strong>Action</strong>
+                        </TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.map((row, i) => {
+                        console.log(row);
+                        return (
+                          <TableRow
+                            key={i}
+                            style={{
+                              backgroundColor: "rgba(254, 191, 44, 0.1)",
+                            }}
+                          >
+                            {/* <TableCell></TableCell> */}
+                            <TableCell>
+                              {row.metricName.toUpperCase()}
+                            </TableCell>
+                            {/* <TableCell align="left">{row.description}</TableCell> */}
+                            <TableCell>
+                              {renderSelectButton(
+                                "METRIC",
+                                i,
+                                row.selected,
+                                rowMeta.dataIndex,
+                                row.isMetricDisabled
+                              )}
+                            </TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </Box>
+              </>
+            </TableCell>
           </TableRow>
-          {rows.map((row, i) => {
-            return (
-              <TableRow key={i} style={{ backgroundColor: "#E2F2FD" }}>
-                {/* <TableCell></TableCell> */}
-                <TableCell>{row.metricName.toUpperCase()}</TableCell>
-                {/* <TableCell align="left">{row.description}</TableCell> */}
-                <TableCell>
-                  {renderSelectButton(
-                    "METRIC",
-                    i,
-                    row.selected,
-                    rowMeta.rowIndex
-                  )}
-                </TableCell>
-                <TableCell></TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            );
-          })}
+          <TableRow className={classes.tableRow}></TableRow>
         </>
       );
     },
@@ -264,15 +336,52 @@ const BenchmarkModal = (props) => {
             width: "100%",
           },
         },
+        MUIDataTableToolbar: {
+          root: {
+            "@media (max-width: 599.95px)": {
+              display: "flex !important",
+            },
+          },
+        },
+        MUIDataTableBodyRow: {
+          root: {
+            "&:nth-child(odd)": {
+              backgroundColor: "#D6EAF8",
+            },
+            "&:nth-child(even)": {
+              backgroundColor: "#E9F7EF",
+            },
+          },
+        },
         MUIDataTable: {
           paper: {
             padding: "21px",
             width: "65.375rem",
+            "@media (max-width:1090px)": {
+              width: "55.375rem",
+            },
+            "@media (max-width:930px)": {
+              width: "45.375rem",
+            },
+            "@media (max-width:760px)": {
+              width: "35.375rem",
+            },
+            "@media (max-width:605px)": {
+              width: "30.375rem",
+            },
+            "@media (max-width:530px)": {
+              width: "25.375rem",
+            },
+            "@media (max-width:450px)": {
+              width: "20.375rem",
+            },
           },
           responsiveBase: {
-            overflow: "initial",
-            minHeight: "35rem",
-            maxHeight: "35rem",
+            oveflow: "initial",
+            overflowX: "hidden",
+            overflowY: "auto",
+            minHeight: "34vh",
+            maxHeight: "34vh",
           },
         },
         MUIDataTableSelectCell: {
@@ -296,6 +405,7 @@ const BenchmarkModal = (props) => {
         MUIDataTableHeadCell: {
           fixedHeader: {
             position: "initial",
+            width: "120px",
           },
         },
         MuiToolbar: {
@@ -314,13 +424,15 @@ const BenchmarkModal = (props) => {
           root: {
             border: "none",
             borderBottom: "5px solid white",
-            backgroundColor: "#F3F3F3",
+            // backgroundColor: "#F3F3F3",
           },
         },
         MuiTableRow: {
           root: {
             border: "1px solid #3A3A3A1A",
             opacity: 1,
+            "&$hover:hover:nth-child(odd)": { backgroundColor: "#D6EAF8" },
+            "&$hover:hover:nth-child(even)": { backgroundColor: "#E9F7EF" },
           },
         },
       },

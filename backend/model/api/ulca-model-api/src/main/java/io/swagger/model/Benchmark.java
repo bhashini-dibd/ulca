@@ -8,10 +8,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
@@ -27,21 +29,16 @@ public class Benchmark {
 	@Id
 	@JsonProperty("benchmarkId")
 	private String benchmarkId = null;
-	
-	@JsonProperty("url")
-	private String url;
 
+	@Indexed(unique=true)
 	@JsonProperty("name")
 	private String name = null;
 
 	@JsonProperty("description")
 	private String description = null;
 	
-	@JsonProperty("status")
-	private String status = null;
-
-	@JsonProperty("metric")
-	private List<String> metric = null;
+	@JsonProperty("userId")
+	private String userId = null;
 
 	@JsonProperty("dataset")
 	private String dataset = null;
@@ -53,7 +50,7 @@ public class Benchmark {
 	private ModelTask task = null;
 
 	@JsonProperty("languages")
-	private LanguagePairs languages = null;
+    private LanguagePair languages = null;
 
 	@JsonProperty("submitter")
 	private Submitter submitter = null;
@@ -63,6 +60,9 @@ public class Benchmark {
 
 	@JsonProperty("submittedOn")
 	private String submittedOn = null;
+	
+	@JsonProperty("status")
+	private String status = null;
 
 	public Benchmark benchmarkId(String benchmarkId) {
 		this.benchmarkId = benchmarkId;
@@ -87,23 +87,6 @@ public class Benchmark {
 	public Benchmark name(String name) {
 		this.name = name;
 		return this;
-	}
-
-	
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	/**
@@ -144,18 +127,19 @@ public class Benchmark {
 		this.description = description;
 	}
 
-	public Benchmark metric(List<String> metric) {
-		this.metric = metric;
+	public Benchmark userId(String userId) {
+		this.userId = userId;
 		return this;
 	}
-
-	public List<String> getMetric() {
-		return metric;
+	
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setMetric(List<String> metric) {
-		this.metric = metric;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
+
 
 	public Benchmark dataset(String dataset) {
 		this.dataset = dataset;
@@ -223,11 +207,10 @@ public class Benchmark {
 		this.task = task;
 	}
 
-	public Benchmark languages(LanguagePairs languages) {
+	public Benchmark languages(LanguagePair languages) {
 		this.languages = languages;
 		return this;
 	}
-
 	/**
 	 * Get languages
 	 * 
@@ -235,20 +218,21 @@ public class Benchmark {
 	 **/
 	@Schema(required = true, description = "")
 	@NotNull
-
-	@Valid
-	public LanguagePairs getLanguages() {
+	public LanguagePair getLanguages() {
 		return languages;
 	}
 
-	public void setLanguages(LanguagePairs languages) {
+	public void setLanguages(LanguagePair languages) {
 		this.languages = languages;
 	}
-
+	
+	
 	public Benchmark submitter(Submitter submitter) {
 		this.submitter = submitter;
 		return this;
 	}
+
+	
 
 	/**
 	 * Get submitter
@@ -307,6 +291,20 @@ public class Benchmark {
 		this.submittedOn = submittedOn;
 	}
 
+
+	public Benchmark status(String status) {
+		this.status = status;
+		return this;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	@Override
 	public boolean equals(java.lang.Object o) {
 		if (this == o) {
@@ -318,12 +316,14 @@ public class Benchmark {
 		Benchmark benchmark = (Benchmark) o;
 		return Objects.equals(this.benchmarkId, benchmark.benchmarkId) && Objects.equals(this.name, benchmark.name)
 				&& Objects.equals(this.description, benchmark.description)
+				&& Objects.equals(this.userId, benchmark.userId)
 				&& Objects.equals(this.dataset, benchmark.dataset) && Objects.equals(this.domain, benchmark.domain)
 				&& Objects.equals(this.task, benchmark.task) && 
 				Objects.equals(this.languages, benchmark.languages) &&
 				Objects.equals(this.submitter, benchmark.submitter) &&
 				Objects.equals(this.createdOn, benchmark.createdOn) && 
-				Objects.equals(this.submittedOn, benchmark.submittedOn);
+				Objects.equals(this.submittedOn, benchmark.submittedOn) &&
+				Objects.equals(this.description, benchmark.description);
 	}
 
 	@Override
@@ -339,6 +339,7 @@ public class Benchmark {
 		sb.append("    benchmarkId: ").append(toIndentedString(benchmarkId)).append("\n");
 		sb.append("    name: ").append(toIndentedString(name)).append("\n");
 		sb.append("    description: ").append(toIndentedString(description)).append("\n");
+		sb.append("    description: ").append(toIndentedString(userId)).append("\n");
 		sb.append("    dataset: ").append(toIndentedString(dataset)).append("\n");
 		sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 		sb.append("    task: ").append(toIndentedString(task)).append("\n");
@@ -346,6 +347,7 @@ public class Benchmark {
 		sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
 		sb.append("    createdOn: ").append(toIndentedString(createdOn)).append("\n");
 		sb.append("    submittedOn: ").append(toIndentedString(submittedOn)).append("\n");
+		sb.append("    submittedOn: ").append(toIndentedString(status)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}

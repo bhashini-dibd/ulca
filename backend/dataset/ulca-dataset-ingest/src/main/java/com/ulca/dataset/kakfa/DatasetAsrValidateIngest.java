@@ -32,6 +32,7 @@ import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.AsrDatasetRowDataSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.AsrParamsSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
+import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.AsrParamsSchema;
@@ -60,6 +61,9 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 	
 	@Autowired
 	DatasetService datasetService;
+	
+	@Autowired
+	NotificationService notificationService;
 
 	public void validateIngest(DatasetIngest datasetIngest)  {
 
@@ -89,6 +93,9 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			//send error event for download failure
 			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString(), null) ;
 			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
+			
 			return;
 		}
 		
@@ -113,6 +120,8 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), null) ;
 
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 			
 			return;
 		}
@@ -154,6 +163,9 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), null) ;
 			//update redis when ingest failed
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
+			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 			
 			return;
 		}
@@ -222,7 +234,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		vModel.put("userMode", mode);
 		
 		 
-		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetType);
+		taskTrackerRedisDao.intialize(serviceRequestNumber,datasetType, datasetName, userId);
 		 
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 		String basePath  = datasetIngest.getBaseLocation()  + File.separator;

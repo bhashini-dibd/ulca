@@ -1,0 +1,26 @@
+[
+    {
+        "metric_name":"bleu", "metric_implementation":"TranslationBLEUScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"wer", "metric_implementation":"ASRWEREval", "score_context":"default"
+    },
+    {
+        "metric_name":"cer", "metric_implementation":"ASRCEREval", "score_context":"default"
+    },
+    {
+        "metric_name":"meteor", "metric_implementation":"TranslationMeteorScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"rouge", "metric_implementation":"TranslationRougeScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"bert", "metric_implementation":"TranslationBertScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"gleu", "metric_implementation":"TranslationGleuScoreEval", "score_context":"default"
+    },
+    {
+        "metric_name":"ribes", "metric_implementation":"TranslationRibesScoreEval", "score_context":"default"
+    }
+]

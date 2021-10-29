@@ -5,7 +5,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.net.ssl.SSLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -13,11 +16,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ulca.model.dao.AsrCallBackRequest;
+//import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
 
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.model.OCRRequest;
@@ -29,6 +35,7 @@ import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
 @Slf4j
 @Service
@@ -60,6 +67,7 @@ public class ModelInferenceEndPointService {
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
 			ASRRequest request = asrInference.getRequest();
 
+			/*
 			AsrCallBackRequest asrCallBackRequest = new AsrCallBackRequest();
 			AsrCallBackRequest.Config config = asrCallBackRequest.getConfig();
 
@@ -70,16 +78,44 @@ public class ModelInferenceEndPointService {
 			lang.setValue(request.getConfig().getLanguage().getSourceLanguage().toString());
 			config.setLanguage(lang);
 			asrCallBackRequest.setConfig(config);
-			AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
-			audio.setAudioUri(request.getAudio().getAudioUri());
-			asrCallBackRequest.setAudio(audio);
+			
+			asrCallBackRequest.setAudio(asrInference.ge.);
+			//AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
+			//request.getAudio()
+			//audio.setAudioUri(request.getAudio().getAudioUri());
+			//asrCallBackRequest.setAudio(audio);
 
+*/
 			// WebClient.Builder builder = WebClient.builder();
+			
+			 ASRResponse response  = null;
+			SslContext sslContext;
+			try {
+				sslContext = SslContextBuilder
+				        .forClient()
+				        .trustManager(InsecureTrustManagerFactory.INSTANCE)
+				        .build();
+				
+				 HttpClient httpClient = HttpClient.create().secure(t -> t.sslContext(sslContext));
+				 //builder.clientConnector(new ReactorClientHttpConnector(httpClient)).
+				    
+				  /*response = builder.build().post().uri(callBackUrl)
+							.body(Mono.just(request), ASRRequest.class).retrieve().bodyToMono(ASRResponse.class)
+							.block(); 
+				 */
+				 response = builder.clientConnector(new ReactorClientHttpConnector(httpClient)).build().post().uri(callBackUrl)
+							.body(Mono.just(request), ASRRequest.class).retrieve().bodyToMono(ASRResponse.class)
+							.block(); 
+				 
+			} catch (SSLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		   
 
-			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(asrCallBackRequest), AsrCallBackRequest.class).retrieve().bodyToMono(String.class)
-					.block();
+			
 
+			/*
 			ObjectMapper objectMapper = new ObjectMapper();
 
 			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
@@ -94,7 +130,12 @@ public class ModelInferenceEndPointService {
 			asrResponse.setOutput(sentences);
 
 			asrResponse.setOutput(null);
-			asrInference.setResponse(asrResponse);
+			*/
+			ObjectMapper objectMapper = new ObjectMapper();
+			log.info("testing the output response" );
+			log.info(objectMapper.writeValueAsString(response));
+			
+			asrInference.setResponse(response);
 			schema = asrInference;
 
 		}
@@ -151,6 +192,7 @@ public class ModelInferenceEndPointService {
 			
 			return response;
 		}
+		/*
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
@@ -166,18 +208,18 @@ public class ModelInferenceEndPointService {
 			lang.setValue(request.getConfig().getLanguage().getSourceLanguage().toString());
 			config.setLanguage(lang);
 			asrCallBackRequest.setConfig(config);
-			AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
+			//AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
 			
 			if(compute.getAudioUri() != null) {
 				log.info("compute audio uri");
 				log.info(compute.getAudioUri());
-				audio.setAudioUri(compute.getAudioUri());
+				//audio.setAudioUri(compute.getAudioUri());
 			}else if(compute.getAudioContent() != null) {
 				log.info("compute audio content");
-				audio.setAudioContent(compute.getAudioContent());
+				//audio.setAudioContent(compute.getAudioContent());
 			}
 			
-			asrCallBackRequest.setAudio(audio);
+			//asrCallBackRequest.setAudio(audio);
 
 			// WebClient.Builder builder = WebClient.builder();
 
@@ -201,6 +243,7 @@ public class ModelInferenceEndPointService {
 			
 			return response;
 		}
+		*/
 		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;

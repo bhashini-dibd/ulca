@@ -4,7 +4,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.model.ASRConfig;
-import io.swagger.model.ASRFile;
+import io.swagger.model.ASRFiles;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -14,17 +14,17 @@ import javax.validation.constraints.*;
  * ASRRequest
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-10-08T06:58:56.160Z[GMT]")
 
 
 public class ASRRequest   {
   @JsonProperty("audio")
-  private ASRFile audio = null;
+  private ASRFiles audio = null;
 
   @JsonProperty("config")
   private ASRConfig config = null;
 
-  public ASRRequest audio(ASRFile audio) {
+  public ASRRequest audio(ASRFiles audio) {
     this.audio = audio;
     return this;
   }
@@ -37,11 +37,11 @@ public class ASRRequest   {
       @NotNull
 
     @Valid
-    public ASRFile getAudio() {
+    public ASRFiles getAudio() {
     return audio;
   }
 
-  public void setAudio(ASRFile audio) {
+  public void setAudio(ASRFiles audio) {
     this.audio = audio;
   }
 
