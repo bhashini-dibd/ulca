@@ -70,6 +70,10 @@
             <artifactId>lettuce-core</artifactId>
             <version>6.1.5.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
