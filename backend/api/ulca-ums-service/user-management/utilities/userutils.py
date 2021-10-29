@@ -145,7 +145,7 @@ class UserUtils:
         if not role_codes:
             log.info("Reading roles from remote location")
             role_codes,role_details = UserUtils.read_role_codes()
-        log.info(role_codes,role_details)
+        log.info(role_codes)
         for role in roles:
             try:
                 if role not in role_codes:
