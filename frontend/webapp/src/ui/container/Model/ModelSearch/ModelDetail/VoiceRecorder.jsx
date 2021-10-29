@@ -15,17 +15,23 @@ const AudioRecord = (props) => {
   const [streaming, setStreaming] = useState(new StreamingClient());
   const { classes, language } = props;
   const [recordAudio, setRecordAudio] = useState("");
+  const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
   const languageArr = vakyanshLanguage.filter(
     (lang) => lang.label === language
   );
   const languageCode = languageArr.length ? languageArr[0].value : "";
   const handleStart = (data) => {
+    setStreamingState("start");
     const output = document.getElementById("asrCardOutput");
     output.innerText = "";
     setData(null);
     streaming.connect(SOCKET_URL, languageCode, function (action, id) {
+      setStreamingState("listen");
       setRecordAudio(RecordState.START);
+      setTimeout(() => {
+        handleStop();
+      }, 61000);
       if (action === null) {
         streaming.startStreaming(
           function (transcript) {
@@ -41,6 +47,7 @@ const AudioRecord = (props) => {
   };
 
   const handleStop = (value) => {
+    setStreamingState("");
     const output = document.getElementById("asrCardOutput");
     streaming.punctuateText(
       output.innerText,
@@ -62,7 +69,6 @@ const AudioRecord = (props) => {
   const onStop = (data) => {
     setData(data.url);
   };
-
 
   return (
     <Card className={classes.asrCard}>
@@ -101,7 +107,11 @@ const AudioRecord = (props) => {
 
         <div className={classes.center}>
           <Typography style={{ height: "12px" }} variant="caption">
-            {recordAudio === "start" ? "Listening..." : ""}
+            {streamingState === "start"
+              ? "Please wait..."
+              : streamingState === "listen"
+              ? "Listening..."
+              : ""}
           </Typography>{" "}
         </div>
         <div className={classes.centerAudio}>
