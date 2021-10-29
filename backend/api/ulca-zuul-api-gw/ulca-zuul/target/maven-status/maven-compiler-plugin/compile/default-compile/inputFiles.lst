@@ -8,7 +8,7 @@
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/filters/error/ErrorFilterFilter.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/utils/UserUtils.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/filters/pre/RbacFilter.java
-/Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/utils/RedisConfiguration.java
+/Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/config/RedisConfiguration.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/models/RoleAction.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/constants/RequestContextConstants.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/models/Action.java
