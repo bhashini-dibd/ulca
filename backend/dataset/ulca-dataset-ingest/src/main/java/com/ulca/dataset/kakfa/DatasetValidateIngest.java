@@ -1,6 +1,9 @@
 package com.ulca.dataset.kakfa;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -60,11 +63,13 @@ public interface DatasetValidateIngest {
 	}
 
 	public default boolean isFileAvailable(String filePath) {
-		File f = new File(filePath);
+		
+		Path path = Paths.get(filePath);
+		boolean exists = Files.exists(path);
 		
         // Check if the specified file
         // Exists or not
-        if (f.exists()) {
+        if (exists) {
         	return true;
         }
         

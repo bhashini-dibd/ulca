@@ -1,10 +1,11 @@
 
 import { withStyles } from '@material-ui/core/styles';
 import DatasetStyle from '../../../styles/Dataset';
-import searchIcon from "../../../../assets/searchIcon.svg"
+import searchIcon from "../../../../assets/Group 10143.svg"
 import {
     Typography
 } from '@material-ui/core';
+import { translate } from '../../../../assets/localisation';
 const SearchResult = (props) => {
     const { classes } = props;
     return (
@@ -15,7 +16,7 @@ const SearchResult = (props) => {
                     alt="Search Icon"
                 />
                 {/* <SearchRoundedIcon className={classes.FindInPageIcon} color="primary" /> */}
-                <Typography variant="h5" color="textSecondary">Your search result will appear here  </Typography>
+                <Typography variant="h5" color="textSecondary">{translate("label.searchResultHere")}</Typography>
             </div>
         </div>
     )

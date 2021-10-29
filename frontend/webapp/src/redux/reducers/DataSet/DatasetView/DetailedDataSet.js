@@ -9,23 +9,40 @@ const initialState = {
 
 const getRecordCount = (value) =>
 {
-
+    
     let valueArray = value.processedCount;
     var countDetails = {}
     valueArray.length> 0 && valueArray.forEach(element =>{
+        
         if(element.type==="success"){
-            countDetails["success"] = element.count;
+            if(element.hasOwnProperty("validateSuccessSeconds")){
+                countDetails["success"] = (Number(element.validateSuccessSeconds)/3600).toFixed(3) + " hrs"
+            }else if(element.hasOwnProperty("publishSuccessSeconds")){
+                let hrs =(Number(element.publishSuccessSeconds)/3600).toFixed(3) + " hrs"
+                countDetails["success"] =  hrs
+            }
+            else{
+                countDetails["success"] = String(element.count);
+            }
+            
         }
         else if(element.type==="failed"){
-            countDetails["failed"] = element.count;
+            if(element.hasOwnProperty("validateErrorSeconds")){
+                countDetails["failed"] = (Number(element.validateErrorSeconds)/3600).toFixed(3) + " hrs"
+            }else if(element.hasOwnProperty("publishErrorSeconds")){
+                countDetails["failed"] = (Number(element.publishErrorSeconds)/3600).toFixed(3) + " hrs"
+            }else{
+                countDetails["failed"] = String(element.count);
+            }
+            
         }
     })
-
-   
 
     return countDetails;
 
 }
+
+
 
 const getDetailedReport = (payload) => {
     
@@ -33,6 +50,8 @@ const getDetailedReport = (payload) => {
     let refreshStatus = false;
     payload.forEach(element => {
         let count = element.details ? getRecordCount( JSON.parse(element.details)):""
+    
+        
         responseData.push(
             {
                     srNo                    : element.serviceRequestNumber,

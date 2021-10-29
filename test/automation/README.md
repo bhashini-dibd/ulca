@@ -2,7 +2,7 @@
 
 ## Overview 
 
-The code in this repo could be utilized to automate procedures for submitting,searching and downloading datasets from ULCA website.
+The code in this repo could be utilized to automate procedures for submitting/searching datasets and submitting/benchmarking/publishing models from ULCA website.
 
 >IMPORTANT : This Script requires Browser and its Respective Driver [Supported Browsers - Chrome, Firefox, Opera].
 
@@ -53,15 +53,49 @@ The code in this repo could be utilized to automate procedures for submitting,se
         * [optional] -mt (--m-translators) : flag for manually translated by multiple translators
         * [optional] -org (--org-source) : flag for original sentencence in source language
 
-* ### For Model (Transalation purpose)
+* ### For Model
 
-        python3 automate.py -m -n "model-name" -i "input-string"
+    1. **Uploading a Model:**
 
-    Arguments:
+            python3 automate.py -m -n 'model-1' -i 'model-1.json'
 
-    * -d (--model) : Flag for Model functions.
-    * -n (--name) : Name of the model
-    * -i (--input) : Input string that has to be translated.
+        Arguments:
+
+        * -m (--model) : Flag for Model Functions
+        * -n (--name) : Model Name
+        * -i (--input)  : Valid Model File (.json)
+  
+    2. **Running Benchmark on a Model:**
+
+            python3 automate.py -m -n 'model-1' -b 'benchmark1' --metric 'metric1'
+
+        Arguments:
+
+        * -m (--model) : Flag for Model Functions
+        * -n (--name) : Model Name
+        * -b (--benchmark) : Benchamrk Name to be run
+        * --metric  : Metric name
+
+    3. **Publish/Unpublish a Model:**
+
+            python3 automate.py -m -n 'model-1' --publish
+
+        Arguments:
+
+        * -m (--model) : Flag for Model Functions
+        * -n (--name) : Model Name
+        * --publish : flag fo publishing a model
+        * --unpublish  : flag fo unpublishing a model
+     
+    4. **Model Task functions: (eg:translation)**
+
+            python3 automate.py -m -t 'translation' -n "model-name" -i "input-string-or-url"
+
+        Arguments:
+
+        * -m (--model) : Flag for Model Functions
+        * -n (--name) : Model Name
+        * -i (--input)  : Input for Model Task (eg: sentence for Translation Task,URL for OCR/ASR task)
 
 * ### For Updating Schema
 
@@ -79,6 +113,14 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
     * --chart-data : Flag for getting chart data[languages with its counts] 
 
+* ### For running test on website
+
+        python3 automate.py --test-website
+
+    Arguments:
+
+    * --test-website : Flag for testing elements of website on a browser 
+
 To view script usage help from terminal, run:
 
     python3 automate.py -h
@@ -87,12 +129,13 @@ To view script usage help from terminal, run:
 
 1. config.py - contains data used for automation.
 2. driver_script.py - contains code for loading browsers/driver.
-3. core_script.py - contains core functions for automation.
-4. dataset_script.py - contains functions for dataset related automation.
-5. model_script.py - contains functions for model related automation.
-6. automate.py - main file for automation.
-7. schema.yml - contains the schema used for automation.
-8. requirements.txt - contains python-packages required to run automation. 
+3. elements.py - contains xpaths of elements in the website.
+4. core_script.py - contains core functions for automation.
+5. dataset_script.py - contains functions for dataset related automation.
+6. model_script.py - contains functions for model related automation.
+7. automate.py - main file for automation.
+8. schema.yml - contains the schema used for automation.
+9. requirements.txt - contains python-packages required to run automation. 
 
 ### Requirements
 

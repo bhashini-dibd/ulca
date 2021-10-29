@@ -1,0 +1,1 @@
+from .notifier_consumer import consumer_to_notify

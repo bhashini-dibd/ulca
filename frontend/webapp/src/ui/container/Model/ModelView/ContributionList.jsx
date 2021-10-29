@@ -30,6 +30,12 @@ import clearBenchMark from "../../../../redux/actions/api/Model/ModelView/ClearB
 import SubmitBenchmark from "../../../../redux/actions/api/Model/ModelView/SubmitBenchmark";
 import Spinner from "../../../components/common/Spinner";
 import RunBenchmarkAPI from "../../../../redux/actions/api/Model/ModelView/RunBenchmark";
+import SwitchModelStatus from "../../../../redux/actions/api/Model/ModelView/SwitchModelStatus";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import myContribFilter from "../../../../redux/actions/api/Model/ModelView/myContribFilter";
+import Search from "../../../components/Datasets&Model/Search";
+import getSearchedValues from "../../../../redux/actions/api/Model/ModelView/GetSearchedValues";
+import { translate } from "../../../../assets/localisation";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -59,9 +65,13 @@ const ContributionList = (props) => {
   );
   const id = popoverOpen ? "simple-popover" : undefined;
   const [openModal, setOpenModal] = useState(false);
-
+  const [openDialog, setOpenDialog] = useState(false);
+  const [modelStatusInfo, setModelStatusInfo] = useState({
+    modelId: "",
+    status: "",
+  });
   const status = useSelector((state) => state.getBenchMarkDetails.status);
-
+  const $ = require("jquery");
   useEffect(() => {
     (myContributionReport.filteredData.length === 0 ||
       myContributionReport.refreshStatus ||
@@ -70,12 +80,53 @@ const ContributionList = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("inside useeffect");
     if (status === "completed") {
       setLoading(false);
       setOpenModal(true);
     }
   });
+
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].submitRefNumber === added) {
+        let page = Math.floor(i / PageInfo.count);
+        async function dispatchPageAction(i) {
+          await dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
+          let element = await document.getElementById(
+            `MUIDataTableBodyRow-${i}`
+          );
+          let oldIndex = index;
+          setIndex([...oldIndex, i]);
+          element &&
+            element.scrollIntoView({
+              behavior: "smooth",
+            });
+          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+            duration: 1500,
+            iterations: 5,
+            easing: "ease-in-out",
+          });
+        }
+        dispatchPageAction(i);
+        return;
+      }
+    }
+  }, [data]);
+  
+  // useEffect(() => {
+  //   window.scrollTo(0, 0);
+  // });
+  // useEffect(() => {
+  //   document.querySelectorAll(`button`).forEach((element) => {
+  //     element.classList.forEach((list) => {
+  //       if (list.includes("MUIDataTableHeadCell-toolButton-")) {
+  //         document.querySelector(`.${list}`).removeAttribute("title");
+  //       }
+  //     });
+  //   });
+  // }, []);
+
+  console.log(index);
 
   const MyContributionListApi = () => {
     dispatch(ClearReport());
@@ -97,6 +148,7 @@ const ContributionList = (props) => {
     dispatch(clearFilter(data, C.CLEAR_MODEL_FILTER));
   };
   const apply = (data) => {
+    console.log(data);
     handleClose();
     dispatch(FilterTable(data, C.MODEL_CONTRIBUTION_TABLE));
   };
@@ -119,32 +171,41 @@ const ContributionList = (props) => {
         state: result,
       });
   };
-
+  const handleSearch = (value) => {
+    dispatch(getSearchedValues(value));
+  };
   const fetchHeaderButton = () => {
     return (
-      <>
-        {/* <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterListIcon className={classes.iconStyle} />Filter</Button> */}
-        <Button
-          color={"primary"}
-          size="medium"
-          variant="outlined"
-          className={classes.ButtonRefresh}
-          onClick={() => MyContributionListApi()}
-        >
-          <Cached className={classes.iconStyle} />
-          Refresh
-        </Button>
-        <Button
-          color={"default"}
-          size="medium"
-          variant="default"
-          className={classes.buttonStyle}
-          onClick={handleViewChange}
-        >
-          {" "}
-          {view ? <List size="large" /> : <GridOn />}
-        </Button>
-      </>
+      <Grid container spacing={1}>
+        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+          <Button
+            color={"default"}
+            size="medium"
+            variant="outlined"
+            className={classes.ButtonRefresh}
+            onClick={handleShowFilter}
+          >
+            {" "}
+            <FilterListIcon className={classes.iconStyle} />
+            {translate("button.filter")}
+          </Button>
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+          <Button
+            color={"primary"}
+            size="medium"
+            variant="outlined"
+            className={classes.ButtonRefresh}
+            onClick={() => MyContributionListApi()}
+          >
+            <Cached className={classes.iconStyle} />
+            {translate("button.refresh")}
+          </Button>
+        </Grid>
+      </Grid>
     );
   };
   const handleRowClick = (id, name, status) => {
@@ -154,6 +215,7 @@ const ContributionList = (props) => {
   const handleDialogSubmit = () => {};
 
   const processTableClickedNextOrPrevious = (sortOrder, page) => {
+    window.scrollTo(0, 0);
     dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
   };
 
@@ -220,7 +282,7 @@ const ContributionList = (props) => {
     setLoading(true);
     dispatch(clearBenchMark());
     setBenchmarkInfo({ type, domain: [domain], modelId });
-    const apiObj = new RunBenchmarkAPI(type, [domain]);
+    const apiObj = new RunBenchmarkAPI(type, [domain], modelId);
     dispatch(APITransport(apiObj));
   };
 
@@ -246,33 +308,90 @@ const ContributionList = (props) => {
     });
   };
 
-  const renderActionButtons = (status, type, domain, modelId) => {
-    if (status !== "Failed" && status !== "In Progress") {
+  const toggleModelStatusAPI = (modelId, status) => {
+    const toggledStatus =
+      status === "unpublished"
+        ? "published"
+        : status === "published" && "unpublished";
+    const apiObj = new SwitchModelStatus(modelId, toggledStatus);
+    fetch(apiObj.apiEndPoint(), {
+      method: "POST",
+      body: JSON.stringify(apiObj.getBody()),
+      headers: apiObj.getHeaders().headers,
+    })
+      .then(async (res) => {
+        handleDialogClose();
+        if (res.ok) {
+          MyContributionListApi();
+        }
+      })
+      .catch((err) => {
+        handleDialogClose();
+        console.log(err);
+      });
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const openConfirmationDialog = (status, modelId) => {
+    setOpenDialog(true);
+    setModelStatusInfo({ status, modelId });
+  };
+
+  const isDisabled = (benchmarkPerformance) => {
+    for (let i = 0; i < benchmarkPerformance.length; i++) {
+      if (benchmarkPerformance[i].status === "In-Progress") {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const renderActionButtons = (
+    benchmarkPerformance,
+    status,
+    type,
+    domain,
+    modelId
+  ) => {
+    if (status !== "failed" && status !== "In Progress") {
       return (
         <Grid container spacing={1}>
           <Grid item>
-            <Button
-              className={classes.benchmarkActionButtons}
-              style={{ color: "#FD7F23", fontSize: "1rem" }}
-              size="small"
-              variant="contained"
-              onClick={() => handleRunBenchMarkClick(type, domain, modelId)}
-            >
-              Run Benchmark
-            </Button>
+            {status !== "published" && (
+              <Button
+                className={classes.benchmarkActionButtons}
+                style={{ color: "#FD7F23", fontSize: "1rem" }}
+                size="small"
+                variant="contained"
+                onClick={() => handleRunBenchMarkClick(type, domain, modelId)}
+              >
+                Run Benchmark
+              </Button>
+            )}
           </Grid>
           <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
-            {/* <Button
+            <Button
               size="small"
               variant="contained"
               className={classes.benchmarkActionButtons}
+              disabled={
+                status === "failed" ||
+                status === "In Progress" ||
+                isDisabled(benchmarkPerformance)
+                  ? true
+                  : false
+              }
               style={{
-                color: status === "Published" ? "#F54336" : "#139D60",
+                color: status === "published" ? "#F54336" : "#139D60",
                 fontSize: "1rem",
               }}
+              onClick={() => openConfirmationDialog(status, modelId)}
             >
-              {status === "Published" ? "Unpublish" : "Publish"}
-            </Button> */}
+              {status === "published" ? "Unpublish" : "Publish"}
+            </Button>
           </Grid>
         </Grid>
       );
@@ -282,13 +401,13 @@ const ContributionList = (props) => {
 
   const returnColor = (status) => {
     switch (status) {
-      case "Failed":
+      case "failed":
         return "#F54336";
-      case "Completed":
+      case "completed":
         return "#139D60";
-      case "Submitted":
+      case "submitted":
         return "#139D60";
-      case "Published":
+      case "published":
         return "#2A61AD";
       default:
         return "#FD7F23";
@@ -307,6 +426,28 @@ const ContributionList = (props) => {
       </Typography>
     );
   };
+
+  const renderConfirmationDialog = () => {
+    const { status, modelId } = modelStatusInfo;
+    return (
+      <Dialog
+        title={`${
+          status === "published" ? "Unpublish Model" : "Publish Model"
+        }`}
+        message={`${
+          status === "published"
+            ? "After the model is unpublished, it will not be available for public use. Are you sure you want to unpublish the model?"
+            : "After the model is published, it will be available for public use. Are you sure you want to publish the model?"
+        }`}
+        handleSubmit={() => toggleModelStatusAPI(modelId, status)}
+        handleClose={handleDialogClose}
+        actionButton="Cancel"
+        actionButton2="Yes"
+        open={openDialog}
+      />
+    );
+  };
+
   const columns = [
     {
       name: "submitRefNumber",
@@ -326,7 +467,6 @@ const ContributionList = (props) => {
         display: view ? "excluded" : true,
       },
     },
-
     {
       name: "modelName",
       label: "Model Name",
@@ -334,6 +474,24 @@ const ContributionList = (props) => {
         filter: false,
         sort: true,
         display: view ? "excluded" : true,
+      },
+    },
+    {
+      name: "version",
+      label: "Version",
+      options: {
+        filter: false,
+        sort: true,
+        display: view ? "excluded" : true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          if (tableMeta.rowData) {
+            return (
+              <Typography style={{ textTransform: "none" }} variant="body2">
+                {tableMeta.rowData[3]}
+              </Typography>
+            );
+          }
+        },
       },
     },
     {
@@ -346,8 +504,8 @@ const ContributionList = (props) => {
       },
     },
     {
-      name: "licence",
-      label: "Licence",
+      name: "license",
+      label: "License",
       options: {
         filter: false,
         sort: true,
@@ -372,7 +530,7 @@ const ContributionList = (props) => {
         display: view ? "excluded" : true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
-            return renderStatus(tableMeta.rowData[6]);
+            return renderStatus(tableMeta.rowData[7]);
           }
         },
       },
@@ -387,9 +545,10 @@ const ContributionList = (props) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
             return renderActionButtons(
-              tableMeta.rowData[6],
+              tableMeta.rowData[9],
+              tableMeta.rowData[7],
               tableMeta.rowData[1],
-              tableMeta.rowData[3],
+              tableMeta.rowData[4],
               tableMeta.rowData[0]
             );
           }
@@ -424,41 +583,42 @@ const ContributionList = (props) => {
     // },
     //     onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
+    search: false,
     filter: false,
     displaySelectToolbar: false,
-    fixedHeader: false,
     filterType: "checkbox",
+    fixedHeader: false,
     download: false,
     expandableRows: true,
-    // onRowExpansionChange: (
-    //   currentRowsExpanded,
-    //   allRowsExpanded,
-    //   rowsExpanded
-    // ) => {
-    //   const currentIndex = currentRowsExpanded[0].index;
-
-    //   setIndex([...index, currentIndex]);
-    // },
+    onRowExpansionChange: (
+      currentRowsExpanded,
+      allRowsExpanded,
+      rowsExpanded
+    ) => {
+      let newIndex = [];
+      if (!allRowsExpanded.length) {
+        setIndex([]);
+      }
+      allRowsExpanded.forEach((row) => {
+        newIndex.push(row.dataIndex);
+      });
+      setIndex(newIndex);
+    },
     rowsExpanded: index,
     expandableRowsHeader: true,
     expandableRowsOnClick: false,
-    isRowExpandable: (dataIndex, expandedRows) => {
-      if (data[dataIndex].benchmarkPerformance.length) {
-        return true;
-      }
-      return false;
-    },
-
+    // isRowExpandable: (dataIndex, expandedRows) => expandedRows.data.filter(d=>index.indexOf(d.index) > -1),
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
-      return (
-        <RenderExpandTable
-          rows={rowData[8]}
-          color={even_odd}
-          renderStatus={renderStatus}
-        />
-      );
+      if (rowData[9].length)
+        return (
+          <RenderExpandTable
+            rows={rowData[9]}
+            color={even_odd}
+            renderStatus={renderStatus}
+          />
+        );
     },
     print: false,
     viewColumns: false,
@@ -477,6 +637,10 @@ const ContributionList = (props) => {
         default:
       }
     },
+  };
+
+  const handleCheckboxClick = (value, prop) => {
+    dispatch(myContribFilter(value, prop));
   };
 
   const { classes } = props;
@@ -540,6 +704,7 @@ const ContributionList = (props) => {
           filter={myContributionReport.filter}
           selectedFilter={myContributionReport.selectedFilter}
           clearAll={clearAll}
+          handleCheckboxClick={handleCheckboxClick}
           apply={apply}
         />
       )}
@@ -554,6 +719,7 @@ const ContributionList = (props) => {
         />
       )}
       {openModal && renderBenchmarkModal()}
+      {openDialog && renderConfirmationDialog()}
     </div>
   );
 };

@@ -8,18 +8,19 @@ import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
+import { translate } from "../../../assets/localisation";
 
 const styles = (theme) => ({
   root: {
     margin: 0,
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   closeButton: {
     position: "absolute",
     right: theme.spacing(1),
     top: theme.spacing(1),
-    color: theme.palette.grey[500]
-  }
+    color: theme.palette.grey[500],
+  },
 });
 
 const DialogTitle = withStyles(styles)((props) => {
@@ -42,15 +43,15 @@ const DialogTitle = withStyles(styles)((props) => {
 
 const DialogContent = withStyles((theme) => ({
   root: {
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }))(MuiDialogContent);
 
 const DialogActions = withStyles((theme) => ({
   root: {
     margin: 0,
-    padding: theme.spacing(1)
-  }
+    padding: theme.spacing(1),
+  },
 }))(MuiDialogActions);
 
 export default function CustomizedDialogs() {
@@ -66,38 +67,33 @@ export default function CustomizedDialogs() {
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Open dialog
+        {translate("button.openDialog")}
       </Button>
       <Dialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
         open={open}
       >
-        <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          
-        </DialogTitle>
+        <DialogTitle
+          id="customized-dialog-title"
+          onClose={handleClose}
+        ></DialogTitle>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            
-          </Typography>
+          <Typography gutterBottom></Typography>
         </DialogContent>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            
-          </Typography>
+          <Typography gutterBottom></Typography>
         </DialogContent>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            
-          </Typography>
+          <Typography gutterBottom></Typography>
         </DialogContent>
 
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="primary">
-            Dowmload sample
+            {translate("label.downloadSample")}
           </Button>
           <Button autoFocus onClick={handleClose} color="primary">
-            Download All
+            {translate("label.downloadAll")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -50,6 +50,8 @@ const Login = (props) => {
 
 
   useEffect(() => {
+    localStorage.removeItem('userInfo')
+    localStorage.removeItem('userDetails')
    dispatch(Logout())
 }, []);
 

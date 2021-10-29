@@ -9,6 +9,7 @@ import urlconfig from '../../../configs/internalurlmapping';
 import thumbsUpIcon from "../../../assets/OrangeThumbsUp.svg"
 import { useDispatch } from "react-redux";
 import getMenuOption from "../../../redux/actions/api/Common/getMenuOption";
+import {translate} from '../../../assets/localisation';
 
 const SubmissionStatus = (props) => {
     const { classes } = props
@@ -32,7 +33,7 @@ const SubmissionStatus = (props) => {
                         history.push(`${process.env.PUBLIC_URL}/${type}/my-contribution/true`)
                     }}
                 >
-                    Go to My Contribution
+                    {translate("button.gotoMyContrib")}
                 </Button>
             </Paper>
         </div>

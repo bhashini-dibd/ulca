@@ -32,6 +32,7 @@ import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.model.deserializer.OcrDatasetParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.OcrDatasetRowDataSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
+import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.DatasetType;
@@ -56,10 +57,13 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 	private String validateTopic;
 
 	@Autowired
-	TaskTrackerRedisDao taskTrackerRedisDao;
+	DatasetService datasetService;
 	
 	@Autowired
-	DatasetService datasetService;
+	NotificationService notificationService;
+	
+	@Autowired
+	TaskTrackerRedisDao taskTrackerRedisDao;
 	
 	public void validateIngest(DatasetIngest datasetIngest) {
 
@@ -88,6 +92,10 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 			//send error event for download failure
 			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString(), null) ;
+			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
+			
 			return;
 		}
 	
@@ -111,6 +119,9 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(),null) ;
 
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
+			
 			return;
 		}
 		//update the dataset
@@ -153,6 +164,10 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(),null) ;
 			//update redis when ingest failed
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
+			
+			//notify failed dataset submit
+			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
+			
 			return;
 		}
 		
@@ -224,7 +239,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
 		
-		taskTrackerRedisDao.intialize(serviceRequestNumber);
+		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetName, userId);
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 		
 		String basePath  = datasetIngest.getBaseLocation()  + File.separator;
@@ -290,7 +305,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 					// send error event
 					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("imageFilename")+ " Not available ", serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
 					
-					log.info("record :: " +numberOfRecords + "failed " );
 				}
 
 				

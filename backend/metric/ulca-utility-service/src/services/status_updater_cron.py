@@ -1,5 +1,5 @@
 from threading import Thread
-from config import error_cron_interval_sec
+from config import status_cron_interval_sec, process_db_schema,process_col, pending_jobs_duration, tasks_col
 import logging
 from logging.config import dictConfig
 from repositories import StatusUpdaterRepo
@@ -16,28 +16,31 @@ class StatusCronProcessor(Thread):
     # Cron JOB to update filter set params
     def run(self):
         run = 0
-        while not self.stopped.wait(error_cron_interval_sec):
+        while not self.stopped.wait(status_cron_interval_sec):
             log.info(f'Job status updater cron run :{run}')
             try:
                 pending_srns = self.get_pending_tasks()
                 if pending_srns:
                     for srn in pending_srns:
-                        log.info(f"Updating status for srn -{srn}")
                         condition = {'serviceRequestNumber':srn}
-                        query = {'$set':{'status':'Abandoned'}}
-                        repo.update(condition,query)
-                        
+                        query = {'$set':{'status':'Completed','manuallyUpdated':True}}
+                        multi ={'multi':True}
+                        repo.update(condition,query,False,process_db_schema,process_col)
+                        repo.update(condition,query,True,process_db_schema,tasks_col)
+                        log.info(f"Updated status for srn -{srn}")
+                log.info('Completed run!')      
                 run += 1
             except Exception as e:
                 run += 1
                 log.exception(f'Exception on Metric Cron Processor on run : {run} , exception : {e}')
 
     def get_pending_tasks(self):
-        lastday = datetime.now() - timedelta(days=1)
-        query = [{ '$match':{'serviceRequestType':'dataset','status':'Pending'}},
-                 {'$project': {'startedOn': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber':'$serviceRequestNumber'}},
-                    { '$match':{'startedOn':{ '$lt': lastday }}} ]
-        aggresult = repo.aggregate(query)
+        lastday = (datetime.now() - timedelta(hours=pending_jobs_duration))
+        query = [{ '$match':{'serviceRequestAction':'submit','status':{'$in':['In-Progress','Pending']}}}, {
+                                                     '$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
+                                                     {'$match': {'date': {'$lt': lastday}}}]
+        log.info(f"Query :{query}")
+        aggresult = repo.aggregate(query,process_db_schema,process_col)
         if not aggresult:
             log.info("0 pending srns found >>")
             return None

@@ -14,8 +14,14 @@ import modelTableView from "./Model/ModelView/TableStatus";
 import modelStatus from "./Model/ModelSubmit/SubmitModel";
 import searchFilter from "./Model/ModelSearch/Benchmark";
 import searchModel from "./Model/ModelSearch/SearchModel";
+import BenchmarkSearch from "./Model/BenchmarkModel/Benchmark";
+import BenchmarkList from "./Model/BenchmarkModel/BenchmarkModel";
 import getMenuInfo from "./Common/getMenuInfo";
 import getBenchMarkDetails from "./Model/ModelView/RunBenchmark";
+import SearchReadymadeDataset from "./DataSet/ReadymadeDataset/SearchReadymade";
+import searchReadymade from "./DataSet/ReadymadeDataset/Readymade";
+import benchmarkDetails from './Model/BenchmarkModel/BenchmarkDetails';
+import benchmarkTableDetails from './Model/ModelSearch/BenchmarkTable';
 
 const index = {
   apiStatus,
@@ -33,9 +39,15 @@ const index = {
   modelTableView,
   modelStatus,
   searchModel,
+  SearchReadymadeDataset,
   searchFilter,
   getMenuInfo,
   getBenchMarkDetails,
+  searchReadymade,
+  BenchmarkSearch,
+  BenchmarkList,
+  benchmarkDetails,
+  benchmarkTableDetails
 };
 
 export default index;
