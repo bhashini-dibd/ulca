@@ -9,15 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +23,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -48,15 +44,12 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
 import com.ulca.model.response.ModelComputeResponse;
-import com.ulca.model.response.ModelLeaderboardFiltersMetricResponse;
-import com.ulca.model.response.ModelLeaderboardFiltersResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 
-import io.swagger.model.Benchmark;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
@@ -128,6 +121,7 @@ public class ModelService {
 	}
 
 	public ModelListResponseDto getModelDescription(String modelId) {
+		log.info("******** Entry ModelService:: getModelDescription *******");
 		Optional<ModelExtended> result = modelDao.findById(modelId);
 
 		if (!result.isEmpty()) {
