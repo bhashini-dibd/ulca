@@ -35,5 +35,5 @@
             "active":true,
             "description":"Specific role to submit models, fetch models and run benchmarks"
         }
-    ]
-}
+      ]
+  }
