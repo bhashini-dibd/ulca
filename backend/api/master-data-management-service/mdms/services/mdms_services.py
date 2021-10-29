@@ -19,6 +19,8 @@ class MasterDataServices():
             from_git = self.get_from_remote_source(not_on_store_list,None)
             if from_git:
                 master_data.update(from_git)
+                for master in from_git:
+                    model.upsert(master,from_git[master],None)
         return master_data
 
     #deciding master and properties to return
