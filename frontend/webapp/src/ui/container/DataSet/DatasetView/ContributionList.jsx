@@ -11,6 +11,7 @@ import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/Datas
 import {
   FilterTable,
   clearFilter,
+  PageChange,
 } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import C from "../../../../redux/actions/constants";
 
@@ -56,6 +57,32 @@ const ContributionList = (props) => {
       added) &&
       MyContributionListApi();
   }, []);
+
+  useEffect(() => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].submitRefNumber === added) {
+        let page = Math.floor(i / 10);
+        async function dispatchPageAction(i) {
+          await dispatch(PageChange(page, C.PAGE_CHANGE));
+          let element = await document.getElementById(
+            `MUIDataTableBodyRow-${i}`
+          );
+          if (element) {
+            element.scrollIntoView({
+              behavior: "smooth",
+            });
+            element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+              duration: 1500,
+              iterations: 5,
+              easing: "ease-in-out",
+            });
+          }
+        }
+        dispatchPageAction(i);
+        return;
+      }
+    }
+  }, [data]);
 
   function a11yProps(index) {
     return {
@@ -114,6 +141,7 @@ const ContributionList = (props) => {
           clearAll={clearAll}
           apply={apply}
           PageInfo={PageInfo}
+          added={added}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>

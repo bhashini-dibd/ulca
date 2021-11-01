@@ -47,30 +47,31 @@ const ContributionList = (props) => {
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
 
-  useEffect(() => {
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].submitRefNumber === added) {
-        let page = Math.floor(i / 10);
-        async function dispatchPageAction(i) {
-          await dispatch(PageChange(page, C.PAGE_CHANGE));
-          let element = await document.getElementById(
-            `MUIDataTableBodyRow-${i}`
-          );
-          element &&
-            element.scrollIntoView({
-              behavior: "smooth",
-            });
-          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
-            duration: 1500,
-            iterations: 5,
-            easing: "ease-in-out",
-          });
-        }
-        dispatchPageAction(i);
-        return;
-      }
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   for (let i = 0; i < data.length; i++) {
+  //     if (data[i].submitRefNumber === added) {
+  //       let page = Math.floor(i / 10);
+  //       async function dispatchPageAction(i) {
+  //         await dispatch(PageChange(page, C.PAGE_CHANGE));
+  //         let element = await document.getElementById(
+  //           `MUIDataTableBodyRow-${i}`
+  //         );
+  //         if (element) {
+  //           element.scrollIntoView({
+  //             behavior: "smooth",
+  //           });
+  //           element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
+  //             duration: 1500,
+  //             iterations: 5,
+  //             easing: "ease-in-out",
+  //           });
+  //         }
+  //       }
+  //       dispatchPageAction(i);
+  //       return;
+  //     }
+  //   }
+  // }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
