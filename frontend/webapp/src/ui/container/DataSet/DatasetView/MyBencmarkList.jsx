@@ -1,12 +1,9 @@
-import { withStyles, Link, Button, Grid } from "@material-ui/core";
-import BreadCrum from "../../../components/common/Breadcrum";
+import { withStyles, Button, Grid } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import DataSet from "../../../styles/Dataset";
-import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
-import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
 import {
   PageChange,
   RowChange,
@@ -14,17 +11,8 @@ import {
   clearFilter,
   tableView,
 } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
-import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import Dialog from "../../../components/common/Dialog";
-import {
-  Cached,
-  DeleteOutline,
-  VerticalAlignTop,
-  GridOn,
-  List,
-} from "@material-ui/icons";
-import UrlConfig from "../../../../configs/internalurlmapping";
-import { useParams } from "react-router";
+import { Cached } from "@material-ui/icons";
 import C from "../../../../redux/actions/constants";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
@@ -34,27 +22,25 @@ import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/
 
 const ContributionList = (props) => {
   const history = useHistory();
-  const dispatch = useDispatch(ClearReport);
-  const myContributionReport = useSelector(
-    (state) => state.myContributionReport
-  );
+  const dispatch = useDispatch();
+  const {
+    data,
+    myContributionReport,
+    MyContributionListApi,
+    added,
+    handleShowFilter,
+    popoverOpen,
+    id,
+    handleClose,
+    clearAll,
+    apply,
+    anchorEl,
+  } = props;
   const PageInfo = useSelector((state) => state.pageChangeDetails);
   const [open, setOpen] = useState(false);
   const view = useSelector((state) => state.tableView.view);
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
-  const { added } = useParams();
-  const data = myContributionReport.filteredData;
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const popoverOpen = Boolean(anchorEl);
-  const id = popoverOpen ? "simple-popover" : undefined;
-
-  useEffect(() => {
-    (myContributionReport.filteredData.length === 0 ||
-      myContributionReport.refreshStatus ||
-      added) &&
-      MyContributionListApi();
-  }, []);
 
   useEffect(() => {
     for (let i = 0; i < data.length; i++) {
@@ -84,30 +70,6 @@ const ContributionList = (props) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   });
-
-  const MyContributionListApi = () => {
-    dispatch(ClearReport());
-    const userObj = new MyContributionList(
-      "SAVE",
-      "A_FBTTR-VWSge-1619075981554",
-      "241006445d1546dbb5db836c498be6381606221196566"
-    );
-    dispatch(APITransport(userObj));
-  };
-
-  const handleShowFilter = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const clearAll = (data) => {
-    dispatch(clearFilter(data, C.CLEAR_FILTER));
-  };
-  const apply = (data) => {
-    handleClose();
-    dispatch(FilterTable(data, C.CONTRIBUTION_TABLE));
-  };
 
   const handleViewChange = () => {
     dispatch(tableView(!view, C.CONTRIBUTION_TABLE_VIEW));
@@ -278,38 +240,12 @@ const ContributionList = (props) => {
   const { classes } = props;
   return (
     <div>
-      {/* <div className={classes.breadcrum}>
-                                <BreadCrum links={[UrlConfig.dataset]} activeLink="My Contribution" />
-                        </div> */}
-
-      {/* <div className={classes.title}>
-                                
-                        </div> */}
-
-      {view ? (
-        data.length > 0 && (
-          <GridView
-            data={data}
-            rowChange={tableRowchange}
-            handleRowClick={handleRowClick}
-            handleViewChange={handleViewChange}
-            handleShowFilter={handleShowFilter}
-            MyContributionListApi={MyContributionListApi}
-            view={view}
-            page={PageInfo.page}
-            handleCardClick={handleCardClick}
-            handleChangePage={processTableClickedNextOrPrevious}
-            rowsPerPage={PageInfo.count}
-          ></GridView>
-        )
-      ) : (
-        <MUIDataTable
-        //   title={`My Contribution`}
-          data={data}
-          columns={columns}
-          options={options}
-        />
-      )}
+      <MUIDataTable
+        title={`My Contribution`}
+        data={data}
+        columns={columns}
+        options={options}
+      />
 
       {open && (
         <Dialog

@@ -23,15 +23,29 @@ import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/
 const ContributionList = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { data, myContributionReport, MyContributionListApi, added } = props;
-  const PageInfo = useSelector((state) => state.pageChangeDetails);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const popoverOpen = Boolean(anchorEl);
+  const id = popoverOpen ? "simple-popover" : undefined;
+  const {
+    data,
+    myContributionReport,
+    MyContributionListApi,
+    added,
+    clearAll,
+    apply,
+    PageInfo,
+  } = props;
+
+  const handleShowFilter = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const [open, setOpen] = useState(false);
   const view = useSelector((state) => state.tableView.view);
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const popoverOpen = Boolean(anchorEl);
-  const id = popoverOpen ? "simple-popover" : undefined;
 
   useEffect(() => {
     for (let i = 0; i < data.length; i++) {
@@ -61,20 +75,6 @@ const ContributionList = (props) => {
   useEffect(() => {
     window.scrollTo(0, 0);
   });
-
-  const handleShowFilter = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const clearAll = (data) => {
-    dispatch(clearFilter(data, C.CLEAR_FILTER));
-  };
-  const apply = (data) => {
-    handleClose();
-    dispatch(FilterTable(data, C.CONTRIBUTION_TABLE));
-  };
 
   const handleViewChange = () => {
     dispatch(tableView(!view, C.CONTRIBUTION_TABLE_VIEW));
@@ -245,38 +245,12 @@ const ContributionList = (props) => {
   const { classes } = props;
   return (
     <div>
-      {/* <div className={classes.breadcrum}>
-                                <BreadCrum links={[UrlConfig.dataset]} activeLink="My Contribution" />
-                        </div> */}
-
-      {/* <div className={classes.title}>
-                                
-                        </div> */}
-
-      {view ? (
-        data.length > 0 && (
-          <GridView
-            data={data}
-            rowChange={tableRowchange}
-            handleRowClick={handleRowClick}
-            handleViewChange={handleViewChange}
-            handleShowFilter={handleShowFilter}
-            MyContributionListApi={MyContributionListApi}
-            view={view}
-            page={PageInfo.page}
-            handleCardClick={handleCardClick}
-            handleChangePage={processTableClickedNextOrPrevious}
-            rowsPerPage={PageInfo.count}
-          ></GridView>
-        )
-      ) : (
-        <MUIDataTable
-          title={`My Contribution`}
-          data={data}
-          columns={columns}
-          options={options}
-        />
-      )}
+      <MUIDataTable
+        title={`My Contribution`}
+        data={data}
+        columns={columns}
+        options={options}
+      />
 
       {open && (
         <Dialog
@@ -299,8 +273,8 @@ const ContributionList = (props) => {
           handleClose={handleClose}
           filter={myContributionReport.filter}
           selectedFilter={myContributionReport.selectedFilter}
-          clearAll={clearAll}
-          apply={apply}
+          clearAll={(data) => clearAll(data, handleClose)}
+          apply={(data) => apply(data, handleClose)}
         />
       )}
     </div>

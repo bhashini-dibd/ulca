@@ -8,6 +8,11 @@ import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetVie
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import { useParams } from "react-router";
 import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
+import {
+  FilterTable,
+  clearFilter,
+} from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
+import C from "../../../../redux/actions/constants";
 
 const ContributionList = (props) => {
   const [value, setValue] = useState(0);
@@ -19,6 +24,16 @@ const ContributionList = (props) => {
     (state) => state.myContributionReport
   );
   const data = myContributionReport.filteredData;
+  const PageInfo = useSelector((state) => state.pageChangeDetails);
+
+  const clearAll = (data, handleClose) => {
+    handleClose();
+    dispatch(clearFilter(data, C.CLEAR_FILTER));
+  };
+  const apply = (data, handleClose) => {
+    handleClose();
+    dispatch(FilterTable(data, C.CONTRIBUTION_TABLE));
+  };
 
   const tabs = [
     { label: "Dataset", index: 0 },
@@ -96,11 +111,20 @@ const ContributionList = (props) => {
         <MyDatasetList
           data={data}
           myContributionReport={myContributionReport}
+          clearAll={clearAll}
+          apply={apply}
+          PageInfo={PageInfo}
         />
       </TabPanel>
-      {/* <TabPanel value={value} index={1}>
-        <MyBencmarkList />
-      </TabPanel> */}
+      <TabPanel value={value} index={1}>
+        <MyBencmarkList
+          data={data}
+          myContributionReport={myContributionReport}
+          clearAll={clearAll}
+          apply={apply}
+          PageInfo={PageInfo}
+        />
+      </TabPanel>
     </Box>
   );
 };
