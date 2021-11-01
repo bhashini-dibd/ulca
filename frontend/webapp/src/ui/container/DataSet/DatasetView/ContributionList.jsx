@@ -5,6 +5,7 @@ import MyBencmarkList from "./MyBencmarkList";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
+import MyBenchmarkList from "../../../../redux/actions/api/DataSet/DatasetView/MyBenchmarkList";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import { useParams } from "react-router";
 import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
@@ -14,6 +15,7 @@ import {
   PageChange,
 } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import C from "../../../../redux/actions/constants";
+import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/GetBenchMarkSearch";
 
 const ContributionList = (props) => {
   const [value, setValue] = useState(0);
@@ -24,16 +26,29 @@ const ContributionList = (props) => {
   const myContributionReport = useSelector(
     (state) => state.myContributionReport
   );
-  const data = myContributionReport.filteredData;
-  const PageInfo = useSelector((state) => state.pageChangeDetails);
 
-  const clearAll = (data, handleClose) => {
+  const myBenchmarkReport = useSelector((state) => state.myBenchmarkReport);
+
+  const data = myContributionReport.filteredData;
+  const benchmarkData = myBenchmarkReport.filteredData;
+  const PageInfo = useSelector((state) => state.pageChangeDetails);
+  const BenchmarkPageInfo = useSelector((state) => state.benchmarkPageDetails);
+  const clearAllDataset = (data, handleClose) => {
     handleClose();
     dispatch(clearFilter(data, C.CLEAR_FILTER));
   };
-  const apply = (data, handleClose) => {
+  const applyDataset = (data, handleClose) => {
     handleClose();
     dispatch(FilterTable(data, C.CONTRIBUTION_TABLE));
+  };
+
+  const clearAllBenchmark = (data, handleClose) => {
+    handleClose();
+    dispatch(clearFilter(data, C.CLEAR_BENCHMARK_FILTER));
+  };
+  const applyBenchmark = (data, handleClose) => {
+    handleClose();
+    dispatch(FilterTable(data, C.CONTRIBUTION_BENCHMARK_TABLE));
   };
 
   const tabs = [
@@ -41,9 +56,27 @@ const ContributionList = (props) => {
     { label: "Benchmark Dataset", index: 1 },
   ];
 
+  const handleSearch = (value) => {
+    dispatch(getSearchedValue(value));
+  };
+
+  const handleBenchmarkSearch = (value) => {
+    dispatch(getSearchedValue(value));
+  };
+
   const MyContributionListApi = () => {
     dispatch(ClearReport());
     const userObj = new MyContributionList(
+      "SAVE",
+      "A_FBTTR-VWSge-1619075981554",
+      "241006445d1546dbb5db836c498be6381606221196566"
+    );
+    dispatch(APITransport(userObj));
+  };
+
+  const MyBenchmarkListApi = () => {
+    dispatch(ClearReport());
+    const userObj = new MyBenchmarkList(
       "SAVE",
       "A_FBTTR-VWSge-1619075981554",
       "241006445d1546dbb5db836c498be6381606221196566"
@@ -56,6 +89,9 @@ const ContributionList = (props) => {
       myContributionReport.refreshStatus ||
       added) &&
       MyContributionListApi();
+    (myBenchmarkReport.filteredData.length === 0 ||
+      myBenchmarkReport.refreshStatus) &&
+      MyBenchmarkListApi();
   }, []);
 
   useEffect(() => {
@@ -138,19 +174,23 @@ const ContributionList = (props) => {
         <MyDatasetList
           data={data}
           myContributionReport={myContributionReport}
-          clearAll={clearAll}
-          apply={apply}
+          clearAll={clearAllDataset}
+          apply={applyDataset}
           PageInfo={PageInfo}
           added={added}
+          MyContributionListApi={MyContributionListApi}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <MyBencmarkList
-          data={data}
-          myContributionReport={myContributionReport}
-          clearAll={clearAll}
-          apply={apply}
-          PageInfo={PageInfo}
+          data={benchmarkData}
+          myContributionReport={myBenchmarkReport}
+          clearAll={clearAllBenchmark}
+          apply={applyBenchmark}
+          PageInfo={BenchmarkPageInfo}
+          MyContributionListApi={MyBenchmarkListApi}
+          getSearchedValue={getSearchedValue}
+          handleSearch={handleSearch}
         />
       </TabPanel>
     </Box>

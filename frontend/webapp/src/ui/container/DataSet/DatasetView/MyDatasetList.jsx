@@ -7,16 +7,12 @@ import MUIDataTable from "mui-datatables";
 import {
   PageChange,
   RowChange,
-  FilterTable,
-  clearFilter,
-  tableView,
 } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import Dialog from "../../../components/common/Dialog";
 import { Cached } from "@material-ui/icons";
 import C from "../../../../redux/actions/constants";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
-import GridView from "./GridView";
 import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/GetSearchedValues";
 
@@ -30,7 +26,6 @@ const ContributionList = (props) => {
     data,
     myContributionReport,
     MyContributionListApi,
-    added,
     clearAll,
     apply,
     PageInfo,
@@ -47,49 +42,9 @@ const ContributionList = (props) => {
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
 
-  // useEffect(() => {
-  //   for (let i = 0; i < data.length; i++) {
-  //     if (data[i].submitRefNumber === added) {
-  //       let page = Math.floor(i / 10);
-  //       async function dispatchPageAction(i) {
-  //         await dispatch(PageChange(page, C.PAGE_CHANGE));
-  //         let element = await document.getElementById(
-  //           `MUIDataTableBodyRow-${i}`
-  //         );
-  //         if (element) {
-  //           element.scrollIntoView({
-  //             behavior: "smooth",
-  //           });
-  //           element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
-  //             duration: 1500,
-  //             iterations: 5,
-  //             easing: "ease-in-out",
-  //           });
-  //         }
-  //       }
-  //       dispatchPageAction(i);
-  //       return;
-  //     }
-  //   }
-  // }, []);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   });
-
-  const handleViewChange = () => {
-    dispatch(tableView(!view, C.CONTRIBUTION_TABLE_VIEW));
-  };
-  const handleCardClick = (event) => {
-    let sId = event.currentTarget.id;
-    data.forEach((element) => {
-      if (element.submitRefNumber == sId) {
-        history.push(
-          `${process.env.PUBLIC_URL}/dataset-status/${element.status}/${element.datasetName}/${element.submitRefNumber}`
-        );
-      }
-    });
-  };
 
   const handleSearch = (value) => {
     dispatch(getSearchedValue(value));
@@ -117,7 +72,7 @@ const ContributionList = (props) => {
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button
             color={"primary"}
-            size="medium"
+            size="small"
             variant="outlined"
             className={classes.buttonStyle}
             onClick={() => MyContributionListApi()}
@@ -140,10 +95,6 @@ const ContributionList = (props) => {
 
   const processTableClickedNextOrPrevious = (sortOrder, page) => {
     dispatch(PageChange(page, C.PAGE_CHANGE));
-  };
-
-  const tableRowchange = (event) => {
-    rowChange(event.target.value);
   };
 
   const rowChange = (rowsPerPage) => {
