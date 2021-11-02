@@ -1,0 +1,14 @@
+{
+    "audioChannels": [
+      {
+        "code": "stereo",
+        "label": "Stereo",
+        "active": true
+      },
+      {
+        "code": "mono",
+        "label": "Mono",
+        "active": true
+      }
+    ]
+  }
