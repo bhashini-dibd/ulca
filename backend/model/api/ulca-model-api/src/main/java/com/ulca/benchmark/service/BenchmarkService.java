@@ -317,6 +317,42 @@ public class BenchmarkService {
 		
 	}
 	
+
+	List<String> getMetric(String task) {
+		List<String> list = null;
+		if (task.equalsIgnoreCase("translation")) {
+			String[] metric = { "bleu","meteor","rouge","ribes","gleu","bert" };
+			list = new ArrayList<>(Arrays.asList(metric));
+			return list;
+		}
+
+		if (task.equalsIgnoreCase("asr")) {
+			String[] metric = { "wer","cer" };
+			list = new ArrayList<>(Arrays.asList(metric));
+			return list;
+		}
+		if (task.equalsIgnoreCase("ocr")) {
+
+			String[] metric = { "wer","cer"};
+			list = new ArrayList<>(Arrays.asList(metric));
+			return list;
+		}
+		if (task.equalsIgnoreCase("tts")) {
+
+			String[] metric = { "wer" };
+			list = new ArrayList<>(Arrays.asList(metric));
+			return list;
+		}
+
+		if (task.equalsIgnoreCase("document-layout")) {
+			String[] metric = { "precision", "recall", "h1-mean" };
+			list = new ArrayList<>(Arrays.asList(metric));
+			return list;
+		}
+		return list;
+	}
+
+
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
 		log.info("******** Entry ModelService:: modelListByUserId *******");
 		List<Benchmark> list = new ArrayList<>();
