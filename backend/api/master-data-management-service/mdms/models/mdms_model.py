@@ -33,7 +33,7 @@ class StoreModel:
             client.set(key, json.dumps(value),ex=expiry_seconds)
             return 1
         except Exception as e:
-            log.exception("Exception in REPO: upsert | Cause: " + str(e), None, e)
+            log.exception("Exception in REPO: upsert | Cause: " + str(e))
             return None
 
     #deleting record by key
@@ -44,7 +44,7 @@ class StoreModel:
                 client.delete(key)
             return 1
         except Exception as e:
-            log.exception("Exception in REPO: delete | Cause: " + str(e), None, e)
+            log.exception("Exception in REPO: delete | Cause: " + str(e))
             return None
 
     #searching record by key
@@ -58,7 +58,7 @@ class StoreModel:
                     result[key]=json.loads(val)
             return result
         except Exception as e:
-            log.exception("Exception in REPO: search | Cause: " + str(e), None, e)
+            log.exception("Exception in REPO: search | Cause: " + str(e))
             return None
 
 
