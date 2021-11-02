@@ -17,8 +17,8 @@ class MdUtils:
             file            =   requests.get(git_path, allow_redirects=True)
             parsed          =   json.loads(file.content)
             return parsed
-        except Exception as exc:
-            log.exception("Exception while reading from git: " +str(exc))
+        except Exception as exe:
+            log.exception(f"Exception while reading from git:{exe} " )
             return None
 
     #parsing json using jsonpath expression
