@@ -1,0 +1,39 @@
+{
+    "processStates": [
+      {
+        "code": "pending",
+        "label": "Pending",
+        "active": true
+      },
+      {
+        "code": "in-progress",
+        "label": "In Progress",
+        "active": true
+      },
+      {
+        "code": "completed",
+        "label": "Completed",
+        "active": true
+      },
+      {
+        "code": "failed",
+        "label": "Failed",
+        "active": true
+      },
+      {
+        "code": "published",
+        "label": "Published",
+        "active": true
+      },
+      {
+        "code": "na",
+        "label": "N/A",
+        "active": true
+      },
+      {
+        "code": "submitted",
+        "label": "Submitted",
+        "active": true
+      }
+    ]
+  }
