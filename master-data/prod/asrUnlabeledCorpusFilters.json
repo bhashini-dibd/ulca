@@ -259,6 +259,98 @@
       "label": "Age",
       "active": true,
       "values": []
+    },
+    {
+      "code": "evaluationMethod",
+      "label": "Evaluation Method",
+      "active": true,
+      "values": {
+        "master": "/evaluationMethods.json",
+        "jsonPath": "$.evaluationMethods"
+      }
+    },
+    {
+      "code": "alignmentTool",
+      "label": "Alignment Tool",
+      "active": true,
+      "values": {
+        "master": "/alignmentTools.json",
+        "jsonPath": "$.alignmentTools"
+      }
+    },
+    {
+      "code": "minScore",
+      "label": "Min Alignment Score",
+      "active": true,
+      "values": [
+        {
+          "code": 0,
+          "label": "0.0",
+          "active": true
+        },
+        {
+          "code": 0.5,
+          "label": "0.5",
+          "active": true
+        },
+        {
+          "code": 0.6,
+          "label": "0.6",
+          "active": true
+        },
+        {
+          "code": 0.7,
+          "label": "0.7",
+          "active": true
+        },
+        {
+          "code": 0.8,
+          "label": "0.8",
+          "active": true
+        },
+        {
+          "code": 0.9,
+          "label": "0.9",
+          "active": true
+        }
+      ]
+    },
+    {
+      "code": "maxScore",
+      "label": "Max Alignment Score",
+      "active": true,
+      "values": [
+        {
+          "code": 0.5,
+          "label": "0.5",
+          "active": true
+        },
+        {
+          "code": 0.6,
+          "label": "0.6",
+          "active": true
+        },
+        {
+          "code": 0.7,
+          "label": "0.7",
+          "active": true
+        },
+        {
+          "code": 0.8,
+          "label": "0.8",
+          "active": true
+        },
+        {
+          "code": 0.9,
+          "label": "0.9",
+          "active": true
+        },
+        {
+          "code": 1,
+          "label": "1.0",
+          "active": true
+        }
+      ]
     }
   ],
   "relatedMaster": true
