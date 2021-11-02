@@ -31,7 +31,7 @@ class MasterDataServices():
             if not jsonpath:
                 master_data     =   utils.read_from_git(git_file_location)
                 if not master_data:
-                    return post_error("Exception occurred",str(exc)) 
+                    return post_error("Exception occurred",None) 
                 if "relatedMaster" not in master_data.keys():
                     master_data_dict[master]    =   master_data[master] 
                 else:
@@ -67,7 +67,7 @@ class MasterDataServices():
             log.info("Getting master filenames from git")
             master_data_files       =   utils.read_from_git(config.git_master_data_api)
             if master_data_files:
-                masters             =   [master["name"] for master in master_data_files]
+                masters             =   [master["name"].replace(".json","") for master in master_data_files]
                 log.info(f"master list: {masters}")
         
         master_data     =       self.get_from_remote_source(masters,None)
