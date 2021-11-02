@@ -68,6 +68,7 @@ class MasterDataServices():
             master_data_files       =   utils.read_from_git(config.git_master_data_api)
             if master_data_files:
                 masters             =   [master["name"] for master in master_data_files]
+                log.info(f"master list: {masters}")
         
         master_data     =       self.get_from_remote_source(masters,None)
         for master in master_data:
