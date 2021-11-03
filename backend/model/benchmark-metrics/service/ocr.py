@@ -12,13 +12,13 @@ log = logging.getLogger('file')
 prod = Producer()
 repo = BenchMarkingProcessRepo()
 
-class TranslationMetricEvalHandler:
+class OcrMetricEvalHandler:
     def __init__(self):
         pass
 
-    def execute_translation_metric_eval(self, request):
+    def execute_ocr_metric_eval(self, request):
         try:
-            log.info("Executing Translation Metric Evaluation....  {}".format(datetime.now()))
+            log.info("Executing Ocr Metric Evaluation....  {}".format(datetime.now()))
             metric_mgr = MetricManager.getInstance()
             if 'benchmarkDatasets' in request.keys():
                 for benchmark in request["benchmarkDatasets"]:
@@ -34,7 +34,7 @@ class TranslationMetricEvalHandler:
 
                     ground_truth = [corpus_sentence["tgt"] for corpus_sentence in benchmark["corpus"]]
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
-                    eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation, request['targetLanguage'])
+                    eval_score = metric_inst.ocr_metric_eval(ground_truth, machine_translation)
                     if eval_score:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': float(np.round(eval_score, 3))}
                         repo.insert(doc)
