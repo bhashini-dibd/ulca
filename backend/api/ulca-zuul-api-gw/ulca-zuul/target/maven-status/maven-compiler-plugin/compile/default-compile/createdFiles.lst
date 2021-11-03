@@ -17,5 +17,4 @@ org/ulca/filters/error/ErrorFilterFilter.class
 org/ulca/utils/UserUtils.class
 org/ulca/filters/pre/RbacFilter.class
 org/ulca/models/RoleAction.class
-org/ulca/config/RedisConfiguration.class
 org/ulca/exceptions/RateLimitExceededException$1.class
