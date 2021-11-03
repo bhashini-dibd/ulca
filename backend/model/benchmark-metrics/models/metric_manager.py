@@ -41,11 +41,16 @@ class MetricManager:
         for metric in metric_list:
             m_class = vars(metric_pkg)[metric["metric_implementation"]]
             m_inst = m_class()
-            self.metric_map[metric["metric_name"]] = m_inst
 
-    def get_metric_execute(self, metric):
-        if metric in self.metric_map.keys():
-            return self.metric_map[metric]
+            if not metric["task_type"] in self.metric_map.keys():
+                self.metric_map[metric["task_type"]] = {}
+
+            self.metric_map[metric["task_type"]][metric["metric_name"]] = m_inst
+
+    def get_metric_execute(self, metric, task_type):
+        if task_type in self.metric_map.keys():
+            if metric in self.metric_map[task_type].keys():
+                return self.metric_map[task_type][metric]
 
         return None
 

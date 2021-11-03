@@ -6,9 +6,10 @@ from logging.config import dictConfig
 
 from service.asr import ASRMetricEvalHandler
 from service.translation import TranslationMetricEvalHandler
+from service.ocr import OcrMetricEvalHandler
 
 from configs.configs import kafka_bootstrap_server_host, metric_eval_input_topic, metric_eval_consumer_grp
-from configs.configs import model_task_type_translation, model_task_type_asr
+from configs.configs import model_task_type_translation, model_task_type_asr, model_task_type_ocr
 from kafka import KafkaConsumer
 # from processtracker.processtracker import ProcessTracker
 # from kafkawrapper.producer import Producer
@@ -33,7 +34,7 @@ def consume():
     try:
         topics = [metric_eval_input_topic]
         consumer = instantiate(topics)
-        asr_handler, translation_handler = ASRMetricEvalHandler(), TranslationMetricEvalHandler()
+        asr_handler, translation_handler, ocr_handler = ASRMetricEvalHandler(), TranslationMetricEvalHandler(), OcrMetricEvalHandler()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "MODEL-METRIC-EVAL-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -54,6 +55,8 @@ def consume():
                             translation_handler.execute_translation_metric_eval(data)
                         if data["modelTaskType"] == model_task_type_asr:
                             asr_handler.execute_asr_metric_eval(data)
+                        if data["modelTaskType"] == model_task_type_ocr:
+                            ocr_handler.execute_ocr_metric_eval(data)
                     else:
                         break
                 except Exception as e:

@@ -1,0 +1,58 @@
+{
+    "ocrTools": [
+      {
+        "code": "google-cloud-vision",
+        "label": "Google Cloud Vision",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture"]
+      },
+      {
+        "code": "tesseract",
+        "label": "Tesseract",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture"]
+      },
+      {
+        "code": "anuvaad-ocr",
+        "label": "Anuvaad OCR",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture"]
+      },
+      {
+        "code": "microsoft-azure-computer-vision",
+        "label": "Microsoft Azure Computer Vision",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture"]
+      },
+      {
+        "code": "calamari",
+        "label": "Calamari",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture"]
+      },
+      {
+        "code": "ocropus",
+        "label": "Ocropus",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture"]
+      },
+      {
+        "code": "amazon-textract",
+        "label": "Amazon Textract",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture"]
+      },
+      {
+        "code": "abbyy-cloud-ocr",
+        "label": "Abbyy Cloud OCR",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture"]
+      },
+      {
+        "code": "unknown",
+        "label": "Unknown",
+        "active": true,
+        "collectionMethods": ["web-scraping-ocr", "screen-capture", "scanned-ocr"]
+      }
+    ]
+  }
