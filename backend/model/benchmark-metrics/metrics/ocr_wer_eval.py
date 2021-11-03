@@ -1,27 +1,25 @@
 import logging
 from logging.config import dictConfig
-from datasets import load_metric
 from models.model_metric_eval import ModelMetricEval
+import fastwer
 
 log = logging.getLogger('file')
 
-class TranslationRougeScoreEval(ModelMetricEval):
+class OCRWEREval(ModelMetricEval):
+    """
+    Implementation of metric evaluation of OCR type models
+    using WER(Word Error Rate)
+    """
 
-    def __init__(self):
-        self.rouge = load_metric('rouge')
+    def ocr_metric_eval(self, ground_truth, machine_translation):
 
-
-    def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         try:
-            rougescore = self.rouge.compute(predictions=machine_translation, references=ground_truth)
-            return float(list(list(rougescore['rougeL'])[1])[2]) #f-measure of 'rougeL'
+            return fastwer.score(machine_translation, ground_truth)
         except Exception as e:
-            log.exception(f"Exception in calculating ROUGE Score: {str(e)}")
+            log.exception(f"Exception in calculating WER: {str(e)}")
             return None
 
-
-
-#LogConfig
+# Log config
 dictConfig({
     'version': 1,
     'formatters': {'default': {

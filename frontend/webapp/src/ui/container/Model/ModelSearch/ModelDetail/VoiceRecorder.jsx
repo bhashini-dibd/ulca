@@ -7,7 +7,11 @@ import Stop from "../../../../../assets/stopIcon.svg";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { RecordState } from "audio-react-recorder";
 import config from "../../../../../configs/configs";
-import StreamingClient from "../../../../../utils/streaming_client";
+// import StreamingClient from "../../../../../utils/streaming_client";
+import {
+  StreamingClient,
+  SocketStatus,
+} from "@project-sunbird/open-speech-streaming-client";
 import { vakyanshLanguage } from "../../../../../configs/DatasetItems";
 const SOCKET_URL = config.SOCKET_URL;
 
@@ -30,18 +34,23 @@ const AudioRecord = (props) => {
       setStreamingState("listen");
       setRecordAudio(RecordState.START);
       setTimeout(() => {
-        handleStop();
+        setRecordAudio(RecordState.STOP);
+        setStreamingState("");
       }, 61000);
-      if (action === null) {
+      if (action === SocketStatus.CONNECTED) {
         streaming.startStreaming(
           function (transcript) {
             const output = document.getElementById("asrCardOutput");
-            output.innerText = transcript;
+            if (output) output.innerText = transcript;
           },
           function (errorMsg) {
-            handleStop();
+            console.log("errorMsg", errorMsg);
           }
         );
+      } else if (action === SocketStatus.TERMINATED) {
+        handleStop();
+      } else {
+        console.log("Action", action, id);
       }
     });
   };
@@ -56,7 +65,7 @@ const AudioRecord = (props) => {
         output.innerText = text;
       },
       (status, error) => {
-        alert("Failed to punctuate");
+        // alert("Failed to punctuate");
       }
     );
     streaming.stopStreaming((blob) => {
