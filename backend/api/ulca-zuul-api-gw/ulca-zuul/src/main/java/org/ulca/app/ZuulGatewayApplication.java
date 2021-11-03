@@ -45,6 +45,9 @@ public class ZuulGatewayApplication {
     @Value(value = "${redis.pass}")
     private String pass;
 
+    @Value(value = "${redis.ratelimit.db}")
+    private Integer ratelimitDb;
+
     @Bean
     public JedisConnectionFactory connectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
@@ -52,7 +55,7 @@ public class ZuulGatewayApplication {
         configuration.setHostName(host);
         configuration.setPort(Integer.parseInt(port));
         configuration.setPassword(pass);
-        configuration.setDatabase(10);
+        configuration.setDatabase(ratelimitDb);
         return new JedisConnectionFactory(configuration);
     }
 
@@ -134,5 +137,13 @@ public class ZuulGatewayApplication {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public Integer getRatelimitDb() {
+        return ratelimitDb;
+    }
+
+    public void setRatelimitDb(Integer ratelimitDb) {
+        this.ratelimitDb = ratelimitDb;
     }
 }
