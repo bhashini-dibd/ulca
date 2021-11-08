@@ -13,6 +13,7 @@ import {
   SocketStatus,
 } from "@project-sunbird/open-speech-streaming-client";
 import { vakyanshLanguage } from "../../../../../configs/DatasetItems";
+import { translate } from "../../../../../assets/localisation";
 const SOCKET_URL = config.SOCKET_URL;
 
 const AudioRecord = (props) => {
@@ -29,14 +30,13 @@ const AudioRecord = (props) => {
     setStreamingState("start");
     const output = document.getElementById("asrCardOutput");
     output.innerText = "";
-    setData(null);
+    setData("");
     streaming.connect(SOCKET_URL, languageCode, function (action, id) {
+      setInterval(() => {
+        handleStop();
+      }, 61000);
       setStreamingState("listen");
       setRecordAudio(RecordState.START);
-      setTimeout(() => {
-        setRecordAudio(RecordState.STOP);
-        setStreamingState("");
-      }, 61000);
       if (action === SocketStatus.CONNECTED) {
         streaming.startStreaming(
           function (transcript) {
@@ -94,6 +94,9 @@ const AudioRecord = (props) => {
         </Typography>
       </Grid>
       <CardContent>
+        <Typography variant={"caption"}>
+          {translate("label.maxDuration")}
+        </Typography>
         {recordAudio === "start" ? (
           <div className={classes.center}>
             <img
