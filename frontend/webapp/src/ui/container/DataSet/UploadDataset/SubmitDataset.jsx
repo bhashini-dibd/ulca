@@ -48,7 +48,7 @@ const SubmitDataset = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const history = useHistory();
   const [selectedOption, setOptionLabel] = useState("");
-
+  const { roles } = JSON.parse(localStorage.getItem("userDetails"));
   // const handleClick = (event) => {
   //     setAnchorEl(event.currentTarget)
   // };
@@ -331,21 +331,23 @@ const SubmitDataset = (props) => {
                           }}
                         />
                       </Grid>
-                      {/* <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              color="primary"
-                              checked={isChecked}
-                              onChange={() => {
-                                setIsChecked(!isChecked);
-                                setOptionLabel("");
-                              }}
-                            />
-                          }
-                          label="It is a Benchmark Dataset"
-                        />
-                      </Grid> */}
+                      {roles[0] === "BENCHMARK-DATASET-CONTRIBUTOR" && (
+                        <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                color="primary"
+                                checked={isChecked}
+                                onChange={() => {
+                                  setIsChecked(!isChecked);
+                                  setOptionLabel("");
+                                }}
+                              />
+                            }
+                            label="It is a Benchmark Dataset"
+                          />
+                        </Grid>
+                      )}
                       {/* {isChecked && (
                         <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                           <Typography

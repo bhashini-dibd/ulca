@@ -3,17 +3,17 @@ export const menuItems = {
     {
       name: "My Contribution",
       url: "/dataset/my-contribution",
-      roles: ["CONTRIBUTOR-USER"],
+      roles: ["CONTRIBUTOR-USER","BENCHMARK-DATASET-CONTRIBUTOR"],
     },
     {
       name: "My Searches",
       url: "/my-searches",
-      roles: ["READONLY-USER", "CONTRIBUTOR-USER"],
+      roles: ["READONLY-USER", "CONTRIBUTOR-USER","BENCHMARK-DATASET-CONTRIBUTOR"],
     },
     {
       name: "Search & Download Records",
       url: "/search-and-download-rec/initiate/-1",
-      roles: ["CONTRIBUTOR-USER", "READONLY-USER"],
+      roles: ["CONTRIBUTOR-USER", "READONLY-USER","BENCHMARK-DATASET-CONTRIBUTOR"],
     },
     // {
     //     name: 'Explore Readymade Datasets',
@@ -22,7 +22,7 @@ export const menuItems = {
     {
       name: "Submit Dataset",
       url: "/dataset/upload",
-      roles: ["CONTRIBUTOR-USER"],
+      roles: ["CONTRIBUTOR-USER","BENCHMARK-DATASET-CONTRIBUTOR"],
     },
     // {
     //     name: 'Readymade Dataset',
@@ -35,7 +35,7 @@ export const menuItems = {
     {
       name: "My Contribution",
       url: "/model/my-contribution",
-      roles: ["CONTRIBUTOR-USER", "EXTERNAL-CONSORTIUM-MEMBER"],
+      roles: ["CONTRIBUTOR-USER", "EXTERNAL-CONSORTIUM-MEMBER","BENCHMARK-DATASET-CONTRIBUTOR"],
     },
     {
       name: "Explore Models",
@@ -44,6 +44,7 @@ export const menuItems = {
         "READONLY-USER",
         "CONTRIBUTOR-USER",
         "EXTERNAL-CONSORTIUM-MEMBER",
+        "BENCHMARK-DATASET-CONTRIBUTOR"
       ],
       public: true,
     },
@@ -55,13 +56,13 @@ export const menuItems = {
     {
       name: "Benchmark Datasets",
       url: "/model/benchmark-datasets",
-      roles: ["CONTRIBUTOR-USER", "EXTERNAL-CONSORTIUM-MEMBER"],
+      roles: ["CONTRIBUTOR-USER", "EXTERNAL-CONSORTIUM-MEMBER","BENCHMARK-DATASET-CONTRIBUTOR"],
       public: true,
     },
     {
       name: "Submit Model",
       url: "/model/upload",
-      roles: ["CONTRIBUTOR-USER","EXTERNAL-CONSORTIUM-MEMBER"],
+      roles: ["CONTRIBUTOR-USER","EXTERNAL-CONSORTIUM-MEMBER","BENCHMARK-DATASET-CONTRIBUTOR"],
     },
   ],
   profile: [
