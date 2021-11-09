@@ -26,13 +26,8 @@ import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
 import com.ulca.benchmark.service.BenchmarkService;
 import com.ulca.model.exception.RequestParamValidationException;
-import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
-import com.ulca.model.response.ModelListByUserIdResponse;
-import com.ulca.model.response.ModelListResponseDto;
-import com.ulca.model.response.ModelSearchResponse;
 
-import io.swagger.model.Benchmark;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -96,8 +91,6 @@ public class BenchmarkController {
 		log.info("******** Entry BenchmarkController:: searchBenchmark *******");
 		return benchmarkService.searchBenchmark(request,startPage,endPage);
 	}
-	
-	
 	
 	@GetMapping("/process/status")
 	public ResponseEntity<BmProcessListByProcessIdResponse> processStatus(@RequestParam String benchmarkProcessId){

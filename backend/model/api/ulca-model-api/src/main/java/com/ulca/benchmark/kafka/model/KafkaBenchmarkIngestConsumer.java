@@ -9,7 +9,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,16 +20,12 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkDao;
-import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
 import com.ulca.benchmark.util.UnzipUtility;
-import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.Benchmark;
 import io.swagger.model.Domain;
 import io.swagger.model.LanguagePair;
-import io.swagger.model.LanguagePairs;
-import io.swagger.model.ModelTask;
 import io.swagger.model.Submitter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,7 +60,6 @@ public class KafkaBenchmarkIngestConsumer {
 			} catch (Exception ex) {
 				throw new Exception("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
 			}
-			
 
 			Optional<Benchmark> benchmarkOpt = benchmarkDao.findById(benchmarkId);
 			Benchmark benchmark = benchmarkOpt.get();

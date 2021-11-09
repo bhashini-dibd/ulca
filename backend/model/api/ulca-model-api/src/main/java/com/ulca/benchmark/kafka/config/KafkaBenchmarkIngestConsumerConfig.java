@@ -27,10 +27,6 @@ public class KafkaBenchmarkIngestConsumerConfig {
 	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 
-	// config for json data
-	
-			
-	
 	@Bean
 	public ConsumerFactory<String, BenchmarkIngest> benchmarkIngestConsumerFactory() {
 		Map<String, Object> configs = new HashMap<>();
