@@ -131,7 +131,12 @@ const HostedInferASR = (props) => {
       {/* <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
 
       <Grid className={classes.grid} item xl={5} lg={5} md={5} sm={12} xs={12}>
-        <AudioRecord modelId={modelId} handleApicall={handleApicall} language={language}/>
+        <AudioRecord
+          modelId={modelId}
+          handleApicall={handleApicall}
+          language={language}
+          streaming={props.streaming}
+        />
       </Grid>
       <Grid className={classes.grid} item xl={6} lg={6} md={6} sm={12} xs={12}>
         <Card className={classes.asrCard}>
@@ -195,7 +200,7 @@ const HostedInferASR = (props) => {
         <Card className={classes.asrCard}>
           <Grid container className={classes.cardHeader}>
             <Typography variant="h6" className={classes.titleCard}>
-            {translate("label.output")}
+              {translate("label.output")}
             </Typography>
           </Grid>
           <CardContent>{target}</CardContent>

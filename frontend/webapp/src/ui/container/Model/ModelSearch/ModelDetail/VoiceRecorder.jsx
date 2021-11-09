@@ -17,7 +17,7 @@ import { translate } from "../../../../../assets/localisation";
 const SOCKET_URL = config.SOCKET_URL;
 
 const AudioRecord = (props) => {
-  const [streaming, setStreaming] = useState(new StreamingClient());
+  const [streaming, setStreaming] = useState(props.streaming);
   const { classes, language } = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
@@ -65,16 +65,18 @@ const AudioRecord = (props) => {
   const handleStop = async (value) => {
     setStreamingState("");
     const output = document.getElementById("asrCardOutput");
-    streaming.punctuateText(
-      output.innerText,
-      "https://inference.vakyansh.in/punctuate",
-      (status, text) => {
-        output.innerText = text;
-      },
-      (status, error) => {
-        // alert("Failed to punctuate");
-      }
-    );
+    if (output) {
+      streaming.punctuateText(
+        output.innerText,
+        "https://inference.vakyansh.in/punctuate",
+        (status, text) => {
+          output.innerText = text;
+        },
+        (status, error) => {
+          // alert("Failed to punctuate");
+        }
+      );
+    }
     streaming.stopStreaming((blob) => {
       const urlBlob = window.URL.createObjectURL(blob);
       onStop({ url: urlBlob });

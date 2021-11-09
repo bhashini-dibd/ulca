@@ -16,12 +16,14 @@ import HostedInferASR from "./HostedInferASR";
 import HostedInferOCR from "./HostedInferOCR";
 import BenchmarkTable from "./BenchmarkTable";
 import { translate } from "../../../../../assets/localisation";
+import { StreamingClient } from "@project-sunbird/open-speech-streaming-client";
 
 const SearchModelDetail = (props) => {
   const { classes } = props;
   const history = useHistory();
   const [data, setData] = useState("");
   const [modelTry, setModelTry] = useState(false);
+  const [streaming, setStreaming] = useState(new StreamingClient());
   const location = useLocation();
   const params = useParams();
   useEffect(() => {
@@ -72,6 +74,9 @@ const SearchModelDetail = (props) => {
   ];
   const { prevUrl } = location.state;
   const handleCardNavigation = () => {
+    streaming.stopStreaming((blob) => {
+      clearTimeout();
+    });
     // const { prevUrl } = location.state
     if (prevUrl === "explore-models") {
       history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
@@ -98,6 +103,7 @@ const SearchModelDetail = (props) => {
               language={data.language}
               inferenceEndPoint={data.inferenceEndPoint}
               modelId={params.srno}
+              streaming={streaming}
             />
           );
         case "ocr":
