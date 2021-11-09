@@ -1,7 +1,7 @@
 import { Grid, Typography, CardContent, Card } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../../styles/Dataset";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
@@ -13,10 +13,11 @@ import {
   SocketStatus,
 } from "@project-sunbird/open-speech-streaming-client";
 import { vakyanshLanguage } from "../../../../../configs/DatasetItems";
+import { translate } from "../../../../../assets/localisation";
 const SOCKET_URL = config.SOCKET_URL;
 
 const AudioRecord = (props) => {
-  const [streaming, setStreaming] = useState(new StreamingClient());
+  const [streaming, setStreaming] = useState(props.streaming);
   const { classes, language } = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
@@ -29,14 +30,10 @@ const AudioRecord = (props) => {
     setStreamingState("start");
     const output = document.getElementById("asrCardOutput");
     output.innerText = "";
-    setData(null);
+    setData("");
     streaming.connect(SOCKET_URL, languageCode, function (action, id) {
       setStreamingState("listen");
       setRecordAudio(RecordState.START);
-      setTimeout(() => {
-        setRecordAudio(RecordState.STOP);
-        setStreamingState("");
-      }, 61000);
       if (action === SocketStatus.CONNECTED) {
         streaming.startStreaming(
           function (transcript) {
@@ -55,24 +52,37 @@ const AudioRecord = (props) => {
     });
   };
 
-  const handleStop = (value) => {
+  useEffect(() => {
+    if (streamingState === "listen" && data === "") {
+      console.log("inside useEffect");
+      setTimeout(async () => {
+        console.log("inside setTimeout");
+        handleStop();
+      }, 61000);
+    }
+  }, [streamingState, data]);
+
+  const handleStop = async (value) => {
     setStreamingState("");
     const output = document.getElementById("asrCardOutput");
-    streaming.punctuateText(
-      output.innerText,
-      "https://inference.vakyansh.in/punctuate",
-      (status, text) => {
-        output.innerText = text;
-      },
-      (status, error) => {
-        // alert("Failed to punctuate");
-      }
-    );
+    if (output) {
+      streaming.punctuateText(
+        output.innerText,
+        "https://inference.vakyansh.in/punctuate",
+        (status, text) => {
+          output.innerText = text;
+        },
+        (status, error) => {
+          // alert("Failed to punctuate");
+        }
+      );
+    }
     streaming.stopStreaming((blob) => {
       const urlBlob = window.URL.createObjectURL(blob);
       onStop({ url: urlBlob });
     });
     setRecordAudio(RecordState.STOP);
+    clearTimeout();
   };
 
   const onStop = (data) => {
@@ -94,6 +104,9 @@ const AudioRecord = (props) => {
         </Typography>
       </Grid>
       <CardContent>
+        <Typography variant={"caption"}>
+          {translate("label.maxDuration")}
+        </Typography>
         {recordAudio === "start" ? (
           <div className={classes.center}>
             <img
