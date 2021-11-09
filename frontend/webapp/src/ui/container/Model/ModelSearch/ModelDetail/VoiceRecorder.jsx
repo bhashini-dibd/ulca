@@ -1,7 +1,7 @@
 import { Grid, Typography, CardContent, Card } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../../styles/Dataset";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
@@ -32,9 +32,6 @@ const AudioRecord = (props) => {
     output.innerText = "";
     setData("");
     streaming.connect(SOCKET_URL, languageCode, function (action, id) {
-      setInterval(() => {
-        handleStop();
-      }, 61000);
       setStreamingState("listen");
       setRecordAudio(RecordState.START);
       if (action === SocketStatus.CONNECTED) {
@@ -55,7 +52,17 @@ const AudioRecord = (props) => {
     });
   };
 
-  const handleStop = (value) => {
+  useEffect(() => {
+    if (streamingState === "listen" && data === "") {
+      console.log("inside useEffect");
+      setTimeout(async () => {
+        console.log("inside setTimeout");
+        handleStop();
+      }, 61000);
+    }
+  }, [streamingState, data]);
+
+  const handleStop = async (value) => {
     setStreamingState("");
     const output = document.getElementById("asrCardOutput");
     streaming.punctuateText(
@@ -73,6 +80,7 @@ const AudioRecord = (props) => {
       onStop({ url: urlBlob });
     });
     setRecordAudio(RecordState.STOP);
+    clearTimeout();
   };
 
   const onStop = (data) => {
