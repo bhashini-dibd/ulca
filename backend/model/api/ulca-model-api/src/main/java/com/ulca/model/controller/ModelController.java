@@ -41,6 +41,13 @@ public class ModelController {
 
 	@Autowired
 	ModelService modelService;
+	
+	@PostMapping("/submit")
+	public ModelExtended submitModel(@Valid @RequestBody ModelExtended request) {
+
+	log.info("******** Entry ModelController:: modelSubmit *******");
+	return modelService.modelSubmit(request);
+	}
 
 	@GetMapping("/listByUserId")
 	public ModelListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
@@ -84,15 +91,6 @@ public class ModelController {
 		log.info("******** Entry ModelController:: computeModel *******");
 		return modelService.computeModel(request);
 
-	}
-	
-	
-	@GetMapping("/leaderboard/filters")
-	public ResponseEntity<Object>   leaderBoardFilters() throws IOException {
-
-		log.info("******** Entry ModelController:: leaderBoardFilters *******");
-		
-		return new ResponseEntity<>(modelService.leaderBoardFilters(), HttpStatus.OK); 
 	}
 	
 }

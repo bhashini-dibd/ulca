@@ -16,11 +16,8 @@ import io.swagger.model.ModelTask;
 public interface BenchmarkDao extends MongoRepository<Benchmark, String> {
 
 	Benchmark findByBenchmarkId(String benchmarkId);
-
 	List<Benchmark> findByTask(ModelTask task);
-
 	Page<Benchmark> findByUserId(String userId, Pageable paging);
-
 	List<Benchmark> findByUserId(String userId);
 	
 }

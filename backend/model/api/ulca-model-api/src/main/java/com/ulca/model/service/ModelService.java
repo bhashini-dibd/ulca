@@ -9,15 +9,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +23,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -48,15 +44,12 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
 import com.ulca.model.response.ModelComputeResponse;
-import com.ulca.model.response.ModelLeaderboardFiltersMetricResponse;
-import com.ulca.model.response.ModelLeaderboardFiltersResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 
-import io.swagger.model.Benchmark;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
@@ -128,6 +121,7 @@ public class ModelService {
 	}
 
 	public ModelListResponseDto getModelDescription(String modelId) {
+		log.info("******** Entry ModelService:: getModelDescription *******");
 		Optional<ModelExtended> result = modelDao.findById(modelId);
 
 		if (!result.isEmpty()) {
@@ -299,99 +293,6 @@ public class ModelService {
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
 		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
-	}
-
-
-	public ModelLeaderboardFiltersResponse leaderBoardFilters_bkp() {
-
-		log.info("******** Entry ModelService:: leaderBoardFilters *******");
-
-		ModelLeaderboardFiltersResponse response = new ModelLeaderboardFiltersResponse();
-
-		ModelTask.TypeEnum[] list = ModelTask.TypeEnum.values();
-		for (ModelTask.TypeEnum type : list) {
-			log.info(type.toString());
-		}
-
-		ModelLeaderboardFiltersMetricResponse metric = new ModelLeaderboardFiltersMetricResponse();
-		String[] translation = { "bleu", "sacrebleu", "meteor", "lepor" };
-		metric.setTranslation(Arrays.asList(translation));
-		String[] asr = { "wer", "cer" };
-		metric.setAsr(Arrays.asList(asr));
-
-		String[] documentLayoutBenchmarkMetric = { "precision", "recall", "h1-mean" };
-		metric.setDocumentLayout(Arrays.asList(documentLayoutBenchmarkMetric));
-
-		String[] ocr = { "wer", "cer" };
-		metric.setOcr(Arrays.asList(ocr));
-
-		String[] tts = { "wer", "cer" };
-		metric.setTts(Arrays.asList(tts));
-
-		response.setMetric(metric);
-		response.setSourceLanguage(LanguagePair.SourceLanguageEnum.values());
-		response.setTargetLanguage(LanguagePair.TargetLanguageEnum.values());
-
-		response.setTask(list);
-
-		return response;
-
-	}
-	
-	public Object leaderBoardFilters() throws IOException {
-
-		log.info("******** Entry ModelService:: leaderBoardFilters *******");
-		
-		ObjectMapper objectMapper = new ObjectMapper();
-		
-		String commonFilterUrl = "https://raw.githubusercontent.com/ULCA-IN/ulca/model_api/master-data/dev/modelFilter.json";
-		String commonFilterData = builder.build().get().uri(commonFilterUrl).retrieve().bodyToMono(String.class).block();
-		
-		JSONObject filters =  new JSONObject(commonFilterData);
-		
-		JSONObject benchmarkDataset = new JSONObject();
-		ModelTask task = new ModelTask();
-		task.setType(ModelTask.TypeEnum.TRANSLATION);
-		List<Benchmark>  trans = benchmarkDao.findByTask(task);
-		String transData = objectMapper.writeValueAsString(trans);
-		JSONArray transJson =  new JSONArray(transData);
-		benchmarkDataset.put("translation", transJson);
-		
-		task = new ModelTask();
-		task.setType(ModelTask.TypeEnum.ASR);
-		List<Benchmark>  asr = benchmarkDao.findByTask(task);
-		String asrData = objectMapper.writeValueAsString(asr);
-		JSONArray asrJson =  new JSONArray(asrData);
-		benchmarkDataset.put("asr", asrJson);
-		
-		task = new ModelTask();
-		task.setType(ModelTask.TypeEnum.OCR);
-		List<Benchmark>  ocr = benchmarkDao.findByTask(task);
-		String ocrData = objectMapper.writeValueAsString(ocr);
-		JSONArray ocrJson =  new JSONArray(ocrData);
-		benchmarkDataset.put("ocr", ocrJson);
-		
-		task = new ModelTask();
-		task.setType(ModelTask.TypeEnum.TTS);
-		List<Benchmark>  tts = benchmarkDao.findByTask(task);
-		String ttsData = objectMapper.writeValueAsString(tts);
-		JSONArray ttsJson =  new JSONArray(ttsData);
-		benchmarkDataset.put("tts", ttsJson);
-		
-		task = new ModelTask();
-        task.setType(ModelTask.TypeEnum.DOCUMENT_LAYOUT);
-		List<Benchmark>  document = benchmarkDao.findByTask(task);
-		String documentData = objectMapper.writeValueAsString(document);
-		JSONArray documentJson =  new JSONArray(documentData);
-		benchmarkDataset.put("document", documentJson);
-		
-		filters.put("benchmarkDataset", benchmarkDataset);
-		
-		Object  filterObj = objectMapper.readValue(filters.toString(), Object.class);
-		
-		
-		return filterObj;
-		
 	}
 
 	public ModelStatusChangeResponse changeStatus(@Valid ModelStatusChangeRequest request) {
