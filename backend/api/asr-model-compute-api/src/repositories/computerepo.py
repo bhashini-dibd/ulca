@@ -3,7 +3,7 @@ import os
 from pydub import AudioSegment
 import base64
 import json
-from config import shared_storage_path,vakyansh_audiouri_link,vakyansh_audicontent_link
+from config import shared_storage_path
 import base64
 import requests
 import logging
@@ -107,19 +107,16 @@ class ASRComputeRepo:
         API call to model endpoint for audio content
         """
         try:
-            headers =   {"Content-Type": "application/json"}
-            body    =   {"config": {"language": {"value": lang},"transcriptionFormat": transformat,"audioFormat": audioformat},
-                        "audio": {"audioContent": str(data)}}
+            headers =   {"Content-Type": "text/plain"}
+            body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
+                        "audio": [{"audioContent": str(data)}]}
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
-            response = requests.post(url=request_url, headers = headers, json = body)
+            response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             content = response.content
             response_data = json.loads(content)
-            if response.status_code != 200:
-                log.info(f'Requestfailed due to {response_data["message"]}')
-                return None
-            
             log.info("Received response from vakyanch end point to transcribe asr data")
+            log.info(f"Response : {response_data}")
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')

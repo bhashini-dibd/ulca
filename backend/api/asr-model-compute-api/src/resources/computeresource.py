@@ -46,13 +46,16 @@ class ComputeAudioResource(Resource):
         audio_file_path     =   body["filePath"]
         lang                =   body["sourceLanguage"]
         callback_url        =   body["callbackUrl"]
-        transformat         =   "TRANSCRIPT"
-        audioformat         =   "WAV"
+        transformat         =   "transcript"
+        audioformat         =   "wav"
         try:
             result = asrrepo.process_asr_from_audio_file(lang,audio_file_path,callback_url,transformat,audioformat)
-            res = CustomResponse(Status.SUCCESS.value,result,None)
-            log.info("response successfully generated.")
-            return res.getres()
+            if result.get("status") == "SUCCESS":
+                res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
+                log.info("response successfully generated.")
+                return res.getres()
+            else:
+                return post_error("Request Failed",result["status_text"]), 400
         except Exception as e:
             log.info(f'Exception on ComputeAudioResource {e}')
 
