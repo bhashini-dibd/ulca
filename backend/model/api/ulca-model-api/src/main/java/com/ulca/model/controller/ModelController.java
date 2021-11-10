@@ -93,13 +93,4 @@ public class ModelController {
 
 	}
 	
-	
-	@GetMapping("/leaderboard/filters")
-	public ResponseEntity<Object>   leaderBoardFilters() throws IOException {
-
-		log.info("******** Entry ModelController:: leaderBoardFilters *******");
-		
-		return new ResponseEntity<>(modelService.leaderBoardFilters(), HttpStatus.OK); 
-	}
-	
 }
