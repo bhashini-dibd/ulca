@@ -53,6 +53,13 @@ const AudioRecord = (props) => {
   };
 
   useEffect(() => {
+    const output = document.getElementById("asrCardOuput");
+    if (output && output.innerText !== "" && data === "") {
+      output.innerText = "";
+    }
+  }, [document.getElementById("asrCardOuput")]);
+
+  useEffect(() => {
     if (streamingState === "listen" && data === "") {
       console.log("inside useEffect");
       setTimeout(async () => {
