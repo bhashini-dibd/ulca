@@ -17,7 +17,7 @@ import { translate } from "../../../../../assets/localisation";
 const SOCKET_URL = config.SOCKET_URL;
 
 const AudioRecord = (props) => {
-  const [streaming, setStreaming] = useState(props.streaming);
+  const streaming = props.streaming;
   const { classes, language } = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
@@ -52,12 +52,6 @@ const AudioRecord = (props) => {
     });
   };
 
-  useEffect(() => {
-    const output = document.getElementById("asrCardOuput");
-    if (output && output.innerText !== "" && data === "") {
-      output.innerText = "";
-    }
-  }, [document.getElementById("asrCardOuput")]);
 
   useEffect(() => {
     if (streamingState === "listen" && data === "") {
