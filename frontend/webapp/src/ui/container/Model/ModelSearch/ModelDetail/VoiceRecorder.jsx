@@ -52,12 +52,9 @@ const AudioRecord = (props) => {
     });
   };
 
-
   useEffect(() => {
     if (streamingState === "listen" && data === "") {
-      console.log("inside useEffect");
       setTimeout(async () => {
-        console.log("inside setTimeout");
         handleStop();
       }, 61000);
     }
