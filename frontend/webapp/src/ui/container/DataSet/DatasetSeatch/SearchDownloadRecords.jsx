@@ -791,10 +791,12 @@ const SearchAndDownloadRecords = (props) => {
               <div className={classes.advanceFilter}>
                 <Button
                   disabled={!languagePair.target.length}
-                  style={{ color: "#FD7F23" }}
-                  variant="outlined"
+                  // style={{ color: "#FD7F23" }}
+                  // variant="outlined"
                   size="small"
                   onClick={() => setOpen(!open)}
+                  variant="contained"
+                  color="primary"
                 >
                   Advanced filter
                 </Button>
