@@ -17,7 +17,7 @@ import { translate } from "../../../../../assets/localisation";
 const SOCKET_URL = config.SOCKET_URL;
 
 const AudioRecord = (props) => {
-  const [streaming, setStreaming] = useState(props.streaming);
+  const streaming = props.streaming;
   const { classes, language } = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
@@ -54,9 +54,7 @@ const AudioRecord = (props) => {
 
   useEffect(() => {
     if (streamingState === "listen" && data === "") {
-      console.log("inside useEffect");
       setTimeout(async () => {
-        console.log("inside setTimeout");
         handleStop();
       }, 61000);
     }

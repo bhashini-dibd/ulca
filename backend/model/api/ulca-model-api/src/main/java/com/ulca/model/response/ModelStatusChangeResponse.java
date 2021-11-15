@@ -1,7 +1,5 @@
 package com.ulca.model.response;
 
-import com.ulca.model.request.ModelStatusChangeRequest;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;

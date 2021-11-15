@@ -23,7 +23,7 @@ const SearchModelDetail = (props) => {
   const history = useHistory();
   const [data, setData] = useState("");
   const [modelTry, setModelTry] = useState(false);
-  const [streaming, setStreaming] = useState(new StreamingClient());
+  const streaming = new StreamingClient();
   const location = useLocation();
   const params = useParams();
   useEffect(() => {
@@ -74,9 +74,11 @@ const SearchModelDetail = (props) => {
   ];
   const { prevUrl } = location.state;
   const handleCardNavigation = () => {
-    streaming.stopStreaming((blob) => {
-      clearTimeout();
-    });
+    if (data.task === "asr" && streaming.isStreaming === true) {
+      streaming.stopStreaming((blob) => {
+        clearTimeout();
+      });
+    }
     // const { prevUrl } = location.state
     if (prevUrl === "explore-models") {
       history.push(`${process.env.PUBLIC_URL}/model/explore-models`);

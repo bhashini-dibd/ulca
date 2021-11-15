@@ -24,7 +24,7 @@ import { menuItems } from "../../../configs/menuItems";
 import Dialog from "./Dialog";
 import { useDispatch, useSelector } from "react-redux";
 import { initialSearchFilter } from "../../../redux/actions/api/Model/ModelSearch/Benchmark";
-import bhashiniLogo from "../../../assets/bhashiniogo.png";
+import bhashiniLogo from "../../../assets/Bhashini_en.svg";
 import { Link } from "@material-ui/core";
 import SubHeader from "./SubHeader";
 import getMenuType from "../../../redux/actions/api/Common/getMenuType";
