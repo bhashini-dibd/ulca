@@ -12,10 +12,12 @@ const updateDate = (data) => {
 };
 
 const getBenchmarkTableDetails = (data) => {
-  data.benchmarkPerformance = updateDate(data.benchmarkPerformance);
-  return {
-    benchmarkPerformance: data.benchmarkPerformance,
-  };
+  if (data !== undefined) {
+    data.benchmarkPerformance = updateDate(data.benchmarkPerformance);
+    return {
+      benchmarkPerformance: data.benchmarkPerformance,
+    };
+  }
 };
 
 const dateConversion = (value) => {
