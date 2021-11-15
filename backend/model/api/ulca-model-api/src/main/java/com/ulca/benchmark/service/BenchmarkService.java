@@ -354,15 +354,15 @@ public class BenchmarkService {
 
 
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
-		log.info("******** Entry ModelService:: modelListByUserId *******");
-		List<Benchmark> list = new ArrayList<>();
+		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
+		List<Benchmark> list = new ArrayList<Benchmark>();
 
 		if (startPage != null) {
 			int startPg = startPage - 1;
 			for (int i = startPg; i < endPage; i++) {
 				Pageable paging = PageRequest.of(i, PAGE_SIZE);
 				Page<Benchmark> benchmarkList = benchmarkDao.findByUserId(userId, paging);
-				list.addAll(benchmarkList.toList());
+				list.addAll(benchmarkList.getContent());
 			}
 		} else {
 			list = benchmarkDao.findByUserId(userId);
