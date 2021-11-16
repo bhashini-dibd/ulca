@@ -3,7 +3,18 @@ package com.ulca.benchmark.response;
 import java.util.List;
 
 import io.swagger.model.Benchmark;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class BenchmarkListByUserIdResponse {
 
 	
@@ -11,11 +22,6 @@ public class BenchmarkListByUserIdResponse {
 	private List<Benchmark>  benchmark;
 	private int count;
 	
-	public BenchmarkListByUserIdResponse(String message, List<Benchmark> benchmark, int count) {
-		this.message = message;
-		this.benchmark = benchmark;
-		this.count = count;
-	}
-
+	
 	
 }

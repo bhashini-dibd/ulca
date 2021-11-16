@@ -354,8 +354,9 @@ public class BenchmarkService {
 
 
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
-		log.info("******** Entry ModelService:: modelListByUserId *******");
-		List<Benchmark> list = new ArrayList<>();
+		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
+		
+		List<Benchmark> list = new ArrayList<Benchmark>();
 
 		if (startPage != null) {
 			int startPg = startPage - 1;
@@ -367,7 +368,8 @@ public class BenchmarkService {
 		} else {
 			list = benchmarkDao.findByUserId(userId);
 		}
-
+		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
+		
 		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size());
 	}
 
