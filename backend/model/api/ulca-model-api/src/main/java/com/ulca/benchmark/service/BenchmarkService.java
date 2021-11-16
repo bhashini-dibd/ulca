@@ -355,6 +355,7 @@ public class BenchmarkService {
 
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
 		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
+		
 		List<Benchmark> list = new ArrayList<Benchmark>();
 
 		if (startPage != null) {
@@ -362,12 +363,13 @@ public class BenchmarkService {
 			for (int i = startPg; i < endPage; i++) {
 				Pageable paging = PageRequest.of(i, PAGE_SIZE);
 				Page<Benchmark> benchmarkList = benchmarkDao.findByUserId(userId, paging);
-				list.addAll(benchmarkList.getContent());
+				list.addAll(benchmarkList.toList());
 			}
 		} else {
 			list = benchmarkDao.findByUserId(userId);
 		}
-
+		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
+		
 		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size());
 	}
 
