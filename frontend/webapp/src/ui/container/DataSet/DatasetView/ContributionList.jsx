@@ -103,7 +103,7 @@ const ContributionList = (props) => {
           let element = await document.getElementById(
             `MUIDataTableBodyRow-${i}`
           );
-          if (element) {
+          element &&
             element.scrollIntoView({
               behavior: "smooth",
             });
