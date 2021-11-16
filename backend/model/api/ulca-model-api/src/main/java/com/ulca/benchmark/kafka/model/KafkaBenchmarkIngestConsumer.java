@@ -26,6 +26,7 @@ import com.ulca.benchmark.util.UnzipUtility;
 import io.swagger.model.Benchmark;
 import io.swagger.model.Domain;
 import io.swagger.model.LanguagePair;
+import io.swagger.model.ModelTask;
 import io.swagger.model.Submitter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -97,6 +98,14 @@ public class KafkaBenchmarkIngestConsumer {
 				
 				LanguagePair languages = objectMapper.readValue(params.get("languages").toString(), LanguagePair.class);
 				benchmark.setLanguages(languages);
+			}
+			if(params.has("taskType")) {
+				
+				ModelTask.TypeEnum type = ModelTask.TypeEnum.fromValue(params.getString("taskType"));
+				ModelTask task = new ModelTask();
+				task.setType(type);
+				benchmark.setTask(task);
+				
 			}
 			benchmark.setStatus(BenchmarkSubmissionType.COMPLETED.toString());
 			
