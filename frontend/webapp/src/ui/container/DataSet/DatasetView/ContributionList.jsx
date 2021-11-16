@@ -52,7 +52,7 @@ const ContributionList = (props) => {
   };
 
   const tabs = [
-    { label: "Dataset", index: 0 },
+    { label: "Submitted Dataset", index: 0 },
     { label: "Benchmark Dataset", index: 1 },
   ];
 

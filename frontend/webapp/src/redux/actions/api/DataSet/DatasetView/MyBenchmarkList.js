@@ -9,7 +9,7 @@ export default class MyCOntribution extends API {
     this.type = C.GET_BENCHMARK_CONTRIBUTION_LIST;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
     this.endpoint = `${super.apiEndPointAuto()}${
-      ENDPOINTS.getContributionList
+      ENDPOINTS.getBenchmarkList
     }`;
   }
 
@@ -22,7 +22,7 @@ export default class MyCOntribution extends API {
   processResponse(res) {
     super.processResponse(res);
     if (res) {
-      this.report = res.data;
+      this.report = res;
     }
   }
 
