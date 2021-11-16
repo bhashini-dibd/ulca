@@ -1,0 +1,34 @@
+{
+  "datasetTypes": [
+    {
+      "code": "parallel-corpus",
+      "label": "Parallel Dataset",
+      "active": true
+    },
+    {
+      "code": "monolingual-corpus",
+      "label": "Monolingual Dataset",
+      "active": true
+    },
+    {
+      "code": "asr-corpus",
+      "label": "ASR/TTS Dataset",
+      "active": true
+    },
+    {
+      "code": "asr-unlabeled-corpus",
+      "label": "ASR Unlabeled Dataset",
+      "active": true
+    },
+    {
+      "code": "ocr-corpus",
+      "label": "OCR Dataset",
+      "active": true
+    },
+    {
+      "code": "document-layout-corpus",
+      "label": "Document Layout Dataset",
+      "active": true
+    }
+  ]
+}

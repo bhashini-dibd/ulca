@@ -22,7 +22,7 @@ class ASRMetricEvalHandler:
             metric_mgr = MetricManager.getInstance()
             if 'benchmarkDatasets' in request.keys():
                 for benchmark in request["benchmarkDatasets"]:
-                    metric_inst = metric_mgr.get_metric_execute(benchmark["metric"])
+                    metric_inst = metric_mgr.get_metric_execute(benchmark["metric"], request["modelTaskType"])
                     if not metric_inst:
                         log.info("Metric definition not found")
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}

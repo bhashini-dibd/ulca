@@ -19,6 +19,19 @@ import { useParams } from "react-router";
 
 const BenchmarkTable = (props) => {
   const history = useHistory();
+  const convertDate = (date) => {
+    return date
+      .toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: true,
+      })
+      .toUpperCase();
+  };
   const columns = [
     {
       name: "benchmarkDatasetId",
@@ -61,6 +74,11 @@ const BenchmarkTable = (props) => {
       options: {
         filter: false,
         sort: true,
+        customBodyRender: (rowData) => {
+          const date = new Date(rowData);
+          return <>{convertDate(date)}</>;
+        },
+        sortDirection: "desc",
       },
     },
   ];
@@ -77,7 +95,6 @@ const BenchmarkTable = (props) => {
       pagination: {
         rowsPerPage: "Rows per page",
       },
-      options: { sortDirection: "desc" },
     },
     onRowClick: (rowData) =>
       history.push(

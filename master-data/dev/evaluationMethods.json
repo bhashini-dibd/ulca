@@ -1,0 +1,38 @@
+{
+    "evaluationMethods": [
+        {
+            "code": "TranscriptionEvaluationMethod1",
+            "label": "Transcription Evaluation Method1",
+            "active": true,
+            "collectionMethod": [
+                "machine-generated-transcript"
+            ],
+            "datasetType": [
+                "asr-corpus",
+                "asr-unlabeled-corpus"
+            ]
+        },
+        {
+            "code": "MTAutomaticEvaluationMethod",
+            "label": "MTAutomatic EvaluationMethod",
+            "active": true,
+            "collectionMethod": [
+                "machine-translated"
+            ],
+            "datasetType": [
+                "parallel-corpus"
+            ]
+        },
+        {
+            "code": "MachineTranslatedEvaluationMethod2",
+            "label": "Machine Translated Evaluation Method2",
+            "active": true,
+            "collectionMethod": [
+                "machine-translated"
+            ],
+            "datasetType": [
+                "parallel-corpus"
+            ]
+        }
+    ]
+}

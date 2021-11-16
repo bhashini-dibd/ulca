@@ -74,7 +74,7 @@ const SearchDescription = (props) => {
               >
                 {para[0] !== undefined && para
                   ? para.replace(para[0], para[0].toUpperCase())
-                  : ""}
+                  : typeof para === 'number' ? para : ""}
               </Typography>
             ) : (
               <Typography
