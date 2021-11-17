@@ -68,15 +68,11 @@ const getContributionList = (state, payload) => {
   let filter = { status: [], datasetType: [] };
   let refreshStatus = false;
   payload.forEach((element) => {
-    let getType =
-      element.datasetType !== "Benchmark"
-        ? getDatasetName(element.datasetType)
-        : element.datasetType;
     responseData.push({
       submitRefNumber: element.serviceRequestNumber,
-      datasetName: element.datasetName,
+      datasetName: element.name,
       submittedOn: dateConversion(element.submittedOn),
-      datasetType: getType ? getType : "Unidentified",
+      datasetType: element.task.type,
       status: element.status,
       color:
         element.status === "Completed"
@@ -89,7 +85,7 @@ const getContributionList = (state, payload) => {
     });
     !statusFilter.includes(element.status) && statusFilter.push(element.status);
     !datatypeFilter.includes(element.datasetName) &&
-      datatypeFilter.push(getType ? getType : "Unidentified");
+      datatypeFilter.push(element.task.type);
     if (element.status === "In-Progress" || element.status === "Pending") {
       refreshStatus = true;
     }
@@ -134,7 +130,7 @@ const isFilterSelected = (selectedFilter) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_BENCHMARK_CONTRIBUTION_LIST:
-      return getContributionList(state, action.payload);
+      return getContributionList(state, action.payload.benchmark);
 
     case C.CONTRIBUTION_BENCHMARK_TABLE:
       return getFilterValue(action.payload, state);

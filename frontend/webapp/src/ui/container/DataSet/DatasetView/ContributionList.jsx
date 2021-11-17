@@ -20,7 +20,7 @@ import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/
 const ContributionList = (props) => {
   const [value, setValue] = useState(0);
   const { added } = useParams();
-
+  const { roles } = JSON.parse(localStorage.getItem("userDetails"));
   const dispatch = useDispatch();
 
   const myContributionReport = useSelector(
@@ -52,8 +52,16 @@ const ContributionList = (props) => {
   };
 
   const tabs = [
-    { label: "Submitted Dataset", index: 0 },
-    { label: "Benchmark Dataset", index: 1 },
+    {
+      label: "Submitted Dataset",
+      index: 0,
+      roles: ["CONTRIBUTOR-USER", "BENCHMARK-DATASET-CONTRIBUTOR"],
+    },
+    {
+      label: "Benchmark Dataset",
+      index: 1,
+      roles: ["BENCHMARK-DATASET-CONTRIBUTOR"],
+    },
   ];
 
   const handleSearch = (value) => {
@@ -76,12 +84,14 @@ const ContributionList = (props) => {
 
   const MyBenchmarkListApi = () => {
     dispatch(ClearReport());
-    const userObj = new MyBenchmarkList(
-      "SAVE",
-      "A_FBTTR-VWSge-1619075981554",
-      "241006445d1546dbb5db836c498be6381606221196566"
-    );
-    dispatch(APITransport(userObj));
+    if (tabs[1].roles.includes(roles[0])) {
+      const userObj = new MyBenchmarkList(
+        "SAVE",
+        "A_FBTTR-VWSge-1619075981554",
+        "241006445d1546dbb5db836c498be6381606221196566"
+      );
+      dispatch(APITransport(userObj));
+    }
   };
 
   useEffect(() => {
@@ -170,9 +180,11 @@ const ContributionList = (props) => {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          {tabs.map((tab) => (
-            <Tab label={tab.label} {...a11yProps(tab.index)} />
-          ))}
+          {tabs.map((tab) => {
+            if (tab.roles.includes(roles[0])) {
+              return <Tab label={tab.label} {...a11yProps(tab.index)} />;
+            }
+          })}
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
