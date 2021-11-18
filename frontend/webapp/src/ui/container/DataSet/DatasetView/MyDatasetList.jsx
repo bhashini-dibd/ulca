@@ -14,7 +14,6 @@ import C from "../../../../redux/actions/constants";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
 import Search from "../../../components/Datasets&Model/Search";
-import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/GetSearchedValues";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -43,7 +42,7 @@ const ContributionList = (props) => {
   const view = useSelector((state) => state.tableView.view);
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
-
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   });
