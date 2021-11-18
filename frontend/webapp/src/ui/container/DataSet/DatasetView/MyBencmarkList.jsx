@@ -122,7 +122,7 @@ const ContributionList = (props) => {
     },
     {
       name: "datasetType",
-      label: "Dataset Type",
+      label: "Task",
       options: {
         filter: false,
         sort: true,
