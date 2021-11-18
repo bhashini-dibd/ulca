@@ -41,13 +41,6 @@ public class ModelController {
 
 	@Autowired
 	ModelService modelService;
-	
-	@PostMapping("/submit")
-	public ModelExtended submitModel(@Valid @RequestBody ModelExtended request) {
-
-	log.info("******** Entry ModelController:: modelSubmit *******");
-	return modelService.modelSubmit(request);
-	}
 
 	@GetMapping("/listByUserId")
 	public ModelListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
