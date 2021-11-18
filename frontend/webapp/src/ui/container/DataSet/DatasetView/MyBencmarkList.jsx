@@ -28,8 +28,6 @@ const ContributionList = (props) => {
     clearAll,
     apply,
     PageInfo,
-    getSearchedValue,
-    handleSearch,
   } = props;
 
   const handleShowFilter = (event) => {
@@ -52,8 +50,8 @@ const ContributionList = (props) => {
       <Grid container spacing={0}>
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Search
-            value={props.searchValue}
-            handleSearch={(e) => handleSearch(e.target.value)}
+            searchValue={props.searchValue}
+            handleSearch={(e) => props.handleSearch(e.target.value)}
           />
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>

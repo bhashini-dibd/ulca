@@ -29,6 +29,8 @@ const ContributionList = (props) => {
     clearAll,
     apply,
     PageInfo,
+    handleSearch,
+    searchValue,
   } = props;
 
   const handleShowFilter = (event) => {
@@ -46,15 +48,14 @@ const ContributionList = (props) => {
     window.scrollTo(0, 0);
   });
 
-  const handleSearch = (value) => {
-    dispatch(getSearchedValue(value));
-  };
-
   const fetchHeaderButton = () => {
     return (
       <Grid container spacing={0}>
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+          <Search
+            searchValue={searchValue}
+            handleSearch={(e) => handleSearch(e.target.value)}
+          />
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button

@@ -15,7 +15,8 @@ import {
   PageChange,
 } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
 import C from "../../../../redux/actions/constants";
-import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/GetBenchMarkSearch";
+import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetView/GetSearchedValues";
+import getBenchmarkValue from "../../../../redux/actions/api/DataSet/DatasetView/GetBenchMarkSearch";
 
 const ContributionList = (props) => {
   const [value, setValue] = useState(0);
@@ -67,13 +68,18 @@ const ContributionList = (props) => {
     },
   ];
 
+  useEffect(() => {
+
+  }, [search]);
+
   const handleSearch = (value) => {
-    setSearch({ ...search, benchmarkDataset: value });
+    setSearch({ ...search, dataset: value });
     dispatch(getSearchedValue(value));
   };
 
   const handleBenchmarkSearch = (value) => {
-    dispatch(getSearchedValue(value));
+    setSearch({ ...search, benchmarkDataset: value });
+    dispatch(getBenchmarkValue(value));
   };
 
   const MyContributionListApi = () => {
@@ -176,6 +182,7 @@ const ContributionList = (props) => {
     setValue(newValue);
   };
 
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -200,6 +207,8 @@ const ContributionList = (props) => {
           PageInfo={PageInfo}
           added={added}
           MyContributionListApi={MyContributionListApi}
+          handleSearch={handleSearch}
+          searchValue={search.dataset}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -210,8 +219,7 @@ const ContributionList = (props) => {
           apply={applyBenchmark}
           PageInfo={BenchmarkPageInfo}
           MyContributionListApi={MyBenchmarkListApi}
-          getSearchedValue={getSearchedValue}
-          handleSearch={handleSearch}
+          handleSearch={handleBenchmarkSearch}
           searchValue={search.benchmarkDataset}
         />
       </TabPanel>
