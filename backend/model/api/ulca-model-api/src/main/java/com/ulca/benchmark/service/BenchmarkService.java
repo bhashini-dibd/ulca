@@ -91,19 +91,11 @@ public class BenchmarkService {
 
 	public BenchmarkSubmitResponse submitBenchmark(BenchmarkSubmitRequest request) throws RequestParamValidationException {
 
-		ModelTask.TypeEnum type = ModelTask.TypeEnum.fromValue(request.getTask());
-		if(type == null) {
-			throw new RequestParamValidationException("ModelTask " + request.getTask() + " Not Valid ");
-		}
-		ModelTask task = new ModelTask();
-		task.setType(type);
-		
 		Benchmark benchmark = new Benchmark();
-		benchmark.setName(request.getName());
+		benchmark.setName(request.getDatasetName());
 		benchmark.setUserId(request.getUserId());
-		benchmark.setDataset(request.getDataset());
+		benchmark.setDataset(request.getUrl());
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());		
-		benchmark.setTask(task);
 		benchmark.setSubmittedOn(new Date().toString());	
 		benchmark.setCreatedOn(new Date().toString());
 		benchmarkDao.save(benchmark);
@@ -354,8 +346,9 @@ public class BenchmarkService {
 
 
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
-		log.info("******** Entry ModelService:: modelListByUserId *******");
-		List<Benchmark> list = new ArrayList<>();
+		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
+		
+		List<Benchmark> list = new ArrayList<Benchmark>();
 
 		if (startPage != null) {
 			int startPg = startPage - 1;
@@ -367,7 +360,8 @@ public class BenchmarkService {
 		} else {
 			list = benchmarkDao.findByUserId(userId);
 		}
-
+		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
+		
 		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size());
 	}
 

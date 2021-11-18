@@ -12,7 +12,9 @@ org/ulca/cache/ZuulConfigCache.class
 org/ulca/utils/ExceptionUtils.class
 org/ulca/models/UMSResponse.class
 org/ulca/config/ZuulConfig.class
+org/ulca/exceptions/RateLimitExceededException.class
 org/ulca/filters/error/ErrorFilterFilter.class
 org/ulca/utils/UserUtils.class
 org/ulca/filters/pre/RbacFilter.class
 org/ulca/models/RoleAction.class
+org/ulca/exceptions/RateLimitExceededException$1.class

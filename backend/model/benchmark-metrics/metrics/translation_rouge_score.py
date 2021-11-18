@@ -1,7 +1,6 @@
 import logging
-from rouge import Rouge
 from logging.config import dictConfig
-import statistics
+from datasets import load_metric
 from models.model_metric_eval import ModelMetricEval
 
 log = logging.getLogger('file')
@@ -9,18 +8,13 @@ log = logging.getLogger('file')
 class TranslationRougeScoreEval(ModelMetricEval):
 
     def __init__(self):
-        self.rouge = Rouge()
+        self.rouge = load_metric('rouge')
 
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
-        rougescore = []
         try:
-            for gt,mt in zip(ground_truth,machine_translation):
-                score = self.rouge.get_scores(mt,gt,avg=True)
-                score = score['rouge-l']['f']
-                rougescore.append(score)
-            #score = rouge.get_scores(ground_truth,machine_translation,avg=True)
-            return statistics.mean(rougescore)
+            rougescore = self.rouge.compute(predictions=machine_translation, references=ground_truth)
+            return float(list(list(rougescore['rougeL'])[1])[2]) #f-measure of 'rougeL'
         except Exception as e:
             log.exception(f"Exception in calculating ROUGE Score: {str(e)}")
             return None

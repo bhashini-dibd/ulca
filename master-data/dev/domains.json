@@ -2,252 +2,127 @@
     "domains": [
       {
         "code": "general",
-        "values":[
-            {
-                "name": "General",
-                "locale": "en"
-            }
-        ],
+        "label": "General",
         "active": true
       },
       {
         "code": "news",
-        "values":[
-            {
-                "name": "News",
-                "locale": "en"
-            }
-        ],
+        "label": "News",
         "active": true
       },
       {
         "code": "education",
-        "values":[
-            {
-                "name": "Education",
-                "locale": "en"
-            }
-        ],
+        "label": "Education",
         "active": true
       },
       {
-        "code": "LEGAL",
-        "values":[
-            {
-                "name": "Legal",
-                "locale": "en"
-            }
-        ],
+        "code": "legal",
+        "label": "Legal",
         "active": true
       },
       {
         "code": "government-press-release",
-        "values":[
-            {
-                "name": "Government Press Release",
-                "locale": "en"
-            }
-        ],
+        "label": "Government Press Release",
         "active": true
       },
       {
         "code": "healthcare",
-        "values":[
-            {
-                "name": "Healthcare",
-                "locale": "en"
-            }
-        ],
+        "label": "Healthcare",
         "active": true
       },
       {
         "code": "agriculture",
-        "values":[
-            {
-                "name": "Agriculture",
-                "locale": "en"
-            }
-        ],
+        "label": "Agriculture",
         "active": true
       },
       {
         "code": "automobile",
-        "values":[
-            {
-                "name": "Automobile",
-                "locale": "en"
-            }
-        ],
+        "label": "Automobile",
         "active": true
       },
       {
         "code": "tourism",
-        "values":[
-            {
-                "name": "Tourism",
-                "locale": "en"
-            }
-        ],
+        "label": "Tourism",
         "active": true
       },
       {
         "code": "financial",
-        "values":[
-            {
-                "name": "Financial",
-                "locale": "en"
-            }
-        ],
+        "label": "Financial",
         "active": true
       },
       {
         "code": "movies",
-        "values":[
-            {
-                "name": "Movies",
-                "locale": "en"
-            }
-        ],
+        "label": "Movies",
         "active": true
       },
       {
         "code": "subtitles",
-        "values":[
-            {
-                "name": "Subtitles",
-                "locale": "en"
-            }
-        ],
+        "label": "Subtitles",
         "active": true
       },
       {
         "code": "sports",
-        "values":[
-            {
-                "name": "Sports",
-                "locale": "en"
-            }
-        ],
+        "label": "Sports",
         "active": true
       },
       {
         "code": "technology",
-        "values":[
-            {
-                "name": "Technology",
-                "locale": "en"
-            }
-        ],
+        "label": "Technology",
         "active": true
       },
       {
         "code": "lifestyle",
-        "values":[
-            {
-                "name": "Lifestyle",
-                "locale": "en"
-            }
-        ],
+        "label": "Lifestyle",
         "active": true
       },
       {
         "code": "entertainment",
-        "values":[
-            {
-                "name": "Entertainment",
-                "locale": "en"
-            }
-        ],
+        "label": "Entertainment",
         "active": true
       },
       {
         "code": "art-and-culture",
-        "values":[
-            {
-                "name": "Art and Culture",
-                "locale": "en"
-            }
-        ],
+        "label": "Art and Culture",
         "active": true
       },
       {
         "code": "parliamentary",
-        "values":[
-            {
-                "name": "Parliamentary",
-                "locale": "en"
-            }
-        ],
+        "label": "Parliamentary",
         "active": true
       },
       {
         "code": "economy",
-        "values":[
-            {
-                "name": "Economy",
-                "locale": "en"
-            }
-        ],
+        "label": "Economy",
         "active": true
       },
       {
         "code": "history",
-        "values":[
-            {
-                "name": "History",
-                "locale": "en"
-            }
-        ],
+        "label": "History",
         "active": true
       },
       {
         "code": "philosophy",
-        "values":[
-            {
-                "name": "Philosophy",
-                "locale": "en"
-            }
-        ],
+        "label": "Philosophy",
         "active": true
       },
       {
         "code": "religion",
-        "values":[
-            {
-                "name": "Religion",
-                "locale": "en"
-            }
-        ],
+        "label": "Religion",
         "active": true
       },
       {
         "code": "national-security-and-defence",
-        "values":[
-            {
-                "name": "National Security and Defence",
-                "locale": "en"
-            }
-        ],
+        "label": "National Security and Defence",
         "active": true
       },
       {
         "code": "literature",
-        "values":[
-            {
-                "name": "Literature",
-                "locale": "en"
-            }
-        ],
+        "label": "Literature",
         "active": true
       },
       {
         "code": "geography",
-        "values":[
-            {
-                "name": "Geography",
-                "locale": "en"
-            }
-        ],
+        "label": "Geography",
         "active": true
       }
     ]
