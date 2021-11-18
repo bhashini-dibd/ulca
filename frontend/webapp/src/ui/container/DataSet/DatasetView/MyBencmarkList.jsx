@@ -225,6 +225,7 @@ const ContributionList = (props) => {
           selectedFilter={myContributionReport.selectedFilter}
           clearAll={(data) => clearAll(data, handleClose)}
           apply={(data) => apply(data, handleClose)}
+          task={props.task}
         />
       )}
     </div>

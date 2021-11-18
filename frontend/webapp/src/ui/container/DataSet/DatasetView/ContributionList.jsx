@@ -68,9 +68,7 @@ const ContributionList = (props) => {
     },
   ];
 
-  useEffect(() => {
-
-  }, [search]);
+  useEffect(() => {}, [search]);
 
   const handleSearch = (value) => {
     setSearch({ ...search, dataset: value });
@@ -184,7 +182,6 @@ const ContributionList = (props) => {
     setValue(newValue);
   };
 
-
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -211,6 +208,7 @@ const ContributionList = (props) => {
           MyContributionListApi={MyContributionListApi}
           handleSearch={handleSearch}
           searchValue={search.dataset}
+          task={false}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -223,6 +221,7 @@ const ContributionList = (props) => {
           MyContributionListApi={MyBenchmarkListApi}
           handleSearch={handleBenchmarkSearch}
           searchValue={search.benchmarkDataset}
+          task={true}
         />
       </TabPanel>
     </Box>

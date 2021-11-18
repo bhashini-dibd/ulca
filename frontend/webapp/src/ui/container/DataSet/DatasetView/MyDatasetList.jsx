@@ -42,7 +42,7 @@ const ContributionList = (props) => {
   const view = useSelector((state) => state.tableView.view);
   const [message, setMessage] = useState("Do you want to delete");
   const [title, setTitle] = useState("Delete");
-  
+
   useEffect(() => {
     window.scrollTo(0, 0);
   });
@@ -227,6 +227,7 @@ const ContributionList = (props) => {
           selectedFilter={myContributionReport.selectedFilter}
           clearAll={(data) => clearAll(data, handleClose)}
           apply={(data) => apply(data, handleClose)}
+          task={props.task}
         />
       )}
     </div>
