@@ -22,7 +22,10 @@ const ContributionList = (props) => {
   const { added } = useParams();
   const { roles } = JSON.parse(localStorage.getItem("userDetails"));
   const dispatch = useDispatch();
-
+  const [search, setSearch] = useState({
+    dataset: "",
+    benchmarkDataset: "",
+  });
   const myContributionReport = useSelector(
     (state) => state.myContributionReport
   );
@@ -65,6 +68,7 @@ const ContributionList = (props) => {
   ];
 
   const handleSearch = (value) => {
+    setSearch({ ...search, benchmarkDataset: value });
     dispatch(getSearchedValue(value));
   };
 
@@ -208,6 +212,7 @@ const ContributionList = (props) => {
           MyContributionListApi={MyBenchmarkListApi}
           getSearchedValue={getSearchedValue}
           handleSearch={handleSearch}
+          searchValue={search.benchmarkDataset}
         />
       </TabPanel>
     </Box>

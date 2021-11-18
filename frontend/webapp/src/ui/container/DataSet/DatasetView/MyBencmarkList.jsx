@@ -51,7 +51,10 @@ const ContributionList = (props) => {
     return (
       <Grid container spacing={0}>
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
-          <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+          <Search
+            value={props.searchValue}
+            handleSearch={(e) => handleSearch(e.target.value)}
+          />
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button
