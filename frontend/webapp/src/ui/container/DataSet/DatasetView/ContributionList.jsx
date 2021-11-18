@@ -62,24 +62,26 @@ const ContributionList = (props) => {
         let page = Math.floor(i / 10);
         async function dispatchPageAction(i) {
           await dispatch(PageChange(page, C.PAGE_CHANGE));
-          let element = await document.getElementById(
-            `MUIDataTableBodyRow-${i}`
+          let element = document.querySelector(
+            `[data-testid=MUIDataTableBodyRow-${i}]`
           );
-          element &&
-            element.scrollIntoView({
-              behavior: "smooth",
-            });
-          let previousColor = element.style.backgroundColor;
-          element.style.backgroundColor = "rgba(254, 191, 44, 0.1)";
-          element.style.transitionTimingFunction = "ease-out";
-          element.style.transitionDelay = "0.1s";
-          element.style.transition = "0.2s";
-          setTimeout(() => {
-            element.style.backgroundColor = previousColor;
-            element.style.transitionTimingFunction = "";
-            element.style.transitionDelay = "";
-            element.style.transition = "";
-          }, 4000);
+          if (element) {
+            element &&
+              element.scrollIntoView({
+                behavior: "smooth",
+              });
+            let previousColor = element.style.backgroundColor;
+            element.style.backgroundColor = "rgba(254, 191, 44, 0.1)";
+            element.style.transitionTimingFunction = "ease-out";
+            element.style.transitionDelay = "0.1s";
+            element.style.transition = "0.2s";
+            setTimeout(() => {
+              element.style.backgroundColor = previousColor;
+              element.style.transitionTimingFunction = "";
+              element.style.transitionDelay = "";
+              element.style.transition = "";
+            }, 4000);
+          }
         }
         dispatchPageAction(i);
         return;
