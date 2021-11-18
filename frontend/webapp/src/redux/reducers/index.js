@@ -1,11 +1,13 @@
 import apiStatus from "./apistatus/apistatus";
 import myContributionReport from "./DataSet/DatasetView/myContribution";
+import myBenchmarkReport from "./DataSet/DatasetView/myBenchmarkList";
 import detailedReport from "./DataSet/DatasetView/DetailedDataSet";
 import dashboardReport from "./Dashboard/languageDatasets";
 import mySearchReport from "./DataSet/DatasetSearch/MySearches";
 import mySearchOptions from "./DataSet/DatasetSearch/SearchAndDownload";
 import errorData from "./DataSet/DatasetView/ErrorDownload";
 import pageChangeDetails from "./DataSet/DatasetView/PageInfo";
+import benchmarkPageDetails from "./DataSet/DatasetView/PageBenchmarkInfo";
 import searchPageDetails from "./DataSet/DatasetSearch/SearchPageInfo";
 import tableView from "./DataSet/DatasetView/TableStatus";
 import modelContributionReport from "./Model/ModelView/myContribution";
@@ -20,8 +22,8 @@ import getMenuInfo from "./Common/getMenuInfo";
 import getBenchMarkDetails from "./Model/ModelView/RunBenchmark";
 import SearchReadymadeDataset from "./DataSet/ReadymadeDataset/SearchReadymade";
 import searchReadymade from "./DataSet/ReadymadeDataset/Readymade";
-import benchmarkDetails from './Model/BenchmarkModel/BenchmarkDetails';
-import benchmarkTableDetails from './Model/ModelSearch/BenchmarkTable';
+import benchmarkDetails from "./Model/BenchmarkModel/BenchmarkDetails";
+import benchmarkTableDetails from "./Model/ModelSearch/BenchmarkTable";
 
 const index = {
   apiStatus,
@@ -47,7 +49,9 @@ const index = {
   BenchmarkSearch,
   BenchmarkList,
   benchmarkDetails,
-  benchmarkTableDetails
+  benchmarkTableDetails,
+  myBenchmarkReport,
+  benchmarkPageDetails,
 };
 
 export default index;
