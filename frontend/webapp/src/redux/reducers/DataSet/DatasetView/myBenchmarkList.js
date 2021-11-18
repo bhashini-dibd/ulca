@@ -69,7 +69,7 @@ const getContributionList = (state, payload) => {
   let refreshStatus = false;
   payload.forEach((element) => {
     responseData.push({
-      submitRefNumber: element.serviceRequestNumber,
+      submitRefNumber: element.benchmarkId,
       datasetName: element.name,
       submittedOn: dateConversion(element.submittedOn),
       datasetType: element.task.type,

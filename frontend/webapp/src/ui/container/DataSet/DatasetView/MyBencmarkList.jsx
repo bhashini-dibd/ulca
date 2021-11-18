@@ -83,10 +83,11 @@ const ContributionList = (props) => {
       //       {/* <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button> */}
     );
   };
-  const handleRowClick = (id, name, status) => {
-    history.push(
-      `${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${id}`
-    );
+  const handleRowClick = (id) => {
+    history.push({
+      pathname: `${process.env.PUBLIC_URL}/model/benchmark-details/${id}`,
+      state: { prevUrl: "benchmark-dataset" },
+    });
   };
 
   const handleDialogSubmit = () => {};
@@ -163,8 +164,7 @@ const ContributionList = (props) => {
       options: { sortDirection: "desc" },
     },
     onRowClick: (rowData) =>
-      rowData[2] !== "Benchmark" &&
-      handleRowClick(rowData[0], rowData[1], rowData[4]),
+      rowData[2] !== "Benchmark" && handleRowClick(rowData[0]),
     // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
     search: false,
