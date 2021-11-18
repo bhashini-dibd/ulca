@@ -97,21 +97,22 @@ const ContributionList = (props) => {
           );
           let oldIndex = index;
           setIndex([...oldIndex, i]);
-          element &&
+          if (element) {
             element.scrollIntoView({
               behavior: "smooth",
             });
-          let previousColor = element.style.backgroundColor;
-          element.style.backgroundColor = "rgba(254, 191, 44, 0.1)";
-          element.style.transitionTimingFunction = "ease-out";
-          element.style.transitionDelay = "0.1s";
-          element.style.transition = "0.2s";
-          setTimeout(() => {
-            element.style.backgroundColor = previousColor;
-            element.style.transitionTimingFunction = "";
-            element.style.transitionDelay = "";
-            element.style.transition = "";
-          }, 4000);
+            let previousColor = element.style.backgroundColor;
+            element.style.backgroundColor = "rgba(254, 191, 44, 0.1)";
+            element.style.transitionTimingFunction = "ease-out";
+            element.style.transitionDelay = "0.1s";
+            element.style.transition = "0.2s";
+            setTimeout(() => {
+              element.style.backgroundColor = previousColor;
+              element.style.transitionTimingFunction = "";
+              element.style.transitionDelay = "";
+              element.style.transition = "";
+            }, 4000);
+          }
         }
         dispatchPageAction(i);
         return;
