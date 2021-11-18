@@ -50,6 +50,8 @@ export const Language = [
   { value: "si", label: "Sinhalese" },
   { value: "kha", label: "Khasi" },
   { value: "sa", label: "Sanskrit" },
+  { value: "bo", label: "Bhojpuri" },
+  { value: "raj", label: "Rajasthani" },
 ];
 
 export const FilterBy = {
