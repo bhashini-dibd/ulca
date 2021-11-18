@@ -1,6 +1,7 @@
 from logging import exception
 import os
 from pydub import AudioSegment
+from models.response import CustomResponse, post_error
 import base64
 import json
 from config import shared_storage_path
@@ -99,7 +100,7 @@ class ASRComputeRepo:
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
-            return []
+            return {"status_text":"Incorrect inference endpoint or invalid response"}
 
 
     def make_base64_audio_processor_call(self,data,lang,callbackurl,transformat,audioformat):
@@ -120,7 +121,7 @@ class ASRComputeRepo:
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
-            return []
+            return {"status_text":"Incorrect inference endpoint or invalid response"}
 
 
 
