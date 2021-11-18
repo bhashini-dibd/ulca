@@ -92,9 +92,7 @@ const ContributionList = (props) => {
         let page = Math.floor(i / PageInfo.count);
         async function dispatchPageAction(i) {
           await dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
-          let element = await document.getElementById(
-            `MUIDataTableBodyRow-${i}`
-          );
+          let element = document.querySelector(`[data-testid=MUIDataTableBodyRow-${i}]`);
           let oldIndex = index;
           setIndex([...oldIndex, i]);
           if (element) {
