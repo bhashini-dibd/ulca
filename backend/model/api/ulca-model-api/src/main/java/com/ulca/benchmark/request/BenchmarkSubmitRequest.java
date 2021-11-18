@@ -17,16 +17,11 @@ public class BenchmarkSubmitRequest   {
 	@NotBlank(message="userId is required")
 	private final String userId;
 	
-	@NotBlank(message="name is required")
-	private final String name;
+	@NotBlank(message="datasetName is required")
+	private final String datasetName;
 
-	@NotBlank(message="dataset is required")
+	@NotBlank(message="url is required")
 	@URL
-    private final String dataset;
+    private final String url;
 	
-	@NotBlank(message="task is required")
-	private String task;
-
-
-
 }

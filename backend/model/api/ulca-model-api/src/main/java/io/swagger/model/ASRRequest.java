@@ -1,6 +1,5 @@
 package io.swagger.model;
 
-import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -20,12 +19,12 @@ import javax.validation.constraints.*;
 
 public class ASRRequest   {
   @JsonProperty("audio")
-  private List<ASRFiles> audio = null;
+  private ASRFiles audio = null;
 
   @JsonProperty("config")
   private ASRConfig config = null;
 
-  public ASRRequest audio(List<ASRFiles> audio) {
+  public ASRRequest audio(ASRFiles audio) {
     this.audio = audio;
     return this;
   }
@@ -38,11 +37,11 @@ public class ASRRequest   {
       @NotNull
 
     @Valid
-    public List<ASRFiles> getAudio() {
+    public ASRFiles getAudio() {
     return audio;
   }
 
-  public void setAudio(List<ASRFiles> audio) {
+  public void setAudio(ASRFiles audio) {
     this.audio = audio;
   }
 
