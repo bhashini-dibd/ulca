@@ -18,6 +18,8 @@ const initialState = {
   filteredData: [],
 };
 
+const parsedFilter = require('../../../../configs/filters.json');
+
 const colorArr = imageArray.map((image) => image.color);
 const dateConversion = (value) => {
   var myDate = new Date(value);
@@ -46,8 +48,6 @@ const getSearchInfo = (searchCriteria) => {
     "originalSourceSentence",
     "serviceRequestNumber",
     "userId",
-    "minScore",
-    "maxScore",
   ];
   keys.forEach((key, i) => {
     if (keysToIgnore.indexOf(key) < 0 && searchCriteria[key] !== undefined) {
@@ -61,6 +61,7 @@ const getSearchInfo = (searchCriteria) => {
               ? colorArr[i]
               : colorArr[i - (colorArr.length - 1)],
           imageUrl: TaskIcon,
+          datasetType: searchCriteria['datasetType']
         });
       } else if (key === "sourceLanguage" || key === "targetLanguage") {
         result.push({
@@ -148,11 +149,9 @@ const getMySearches = (payload) => {
           .join(", ");
       newArr.push({
         sr_no: element.serviceRequestNumber,
-        search_criteria: `${dataSet} | ${langauge} ${
-          tLanguage ? " | " + tLanguage : ""
-        } ${domain ? " | " + domain : ""} ${
-          collection ? " | " + collection : ""
-        }`,
+        search_criteria: `${dataSet} | ${langauge} ${tLanguage ? " | " + tLanguage : ""
+          } ${domain ? " | " + domain : ""} ${collection ? " | " + collection : ""
+          }`,
         searched_on: dateConversion(element.timestamp),
         status: element.status.length > 0 && element.status[0].status,
 
@@ -165,14 +164,35 @@ const getMySearches = (payload) => {
         // domain: element.searchCriteria.domain,
         // collection: element.searchCriteria.collectionMethod,
         searchValues: element.searchCriteria,
-        searchInfo: getSearchInfo(element.searchCriteria),
+        searchInfo: updateFilterSequence(getSearchInfo(element.searchCriteria)),
       });
     }
   });
   newArr = newArr.reverse();
-
   return newArr;
 };
+
+const updateFilterSequence = (data) => {
+  let basicFilter = ['datasetType', ...parsedFilter[data[0]['datasetType']].filters.filter(elem => elem.filterType === 'basic' || elem.filterType === 'language').map(val => val.value)];
+  const firstSequence = data.filter(val => {
+    return basicFilter.includes(val.key);
+  })
+
+  let advFilter = parsedFilter[data[0]['datasetType']].filters.filter(elem => elem.filterType === 'advance').map(val => val.value);
+  const secondSequence = [];
+  advFilter = [...new Set(advFilter)];
+
+  advFilter.forEach(filter => {
+    data.forEach(val => {
+      if (filter === val.key) {
+        secondSequence.push(val);
+      }
+    })
+  })
+  console.log(advFilter);
+  return [...firstSequence, ...secondSequence];
+}
+
 const getFilteredData = (value, data) => {
   const newState = data.filter((val) => {
     return (

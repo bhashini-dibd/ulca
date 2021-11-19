@@ -2,42 +2,22 @@
     "gender": [
       {
         "code": "male",
-        "values":[
-            {
-                "name": "Male",
-                "locale": "en"
-            }
-        ],
+        "label": "Male",
         "active": true
       },
       {
         "code": "female",
-        "values":[
-            {
-                "name": "Female",
-                "locale": "en"
-            }
-        ],
+        "label": "Female",
         "active": true
       },
       {
         "code": "transgender",
-        "values":[
-            {
-                "name": "Transgender",
-                "locale": "en"
-            }
-        ],
+        "label": "Transgender",
         "active": true
       },
       {
         "code": "others",
-        "values":[
-            {
-                "name": "Others",
-                "locale": "en"
-            }
-        ],
+        "label": "Others",
         "active": true
       }
     ]

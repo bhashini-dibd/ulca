@@ -31,3 +31,14 @@ class ModelMetricEval():
         Returns the evaluation score
         """
         pass
+
+    def ocr_metric_eval(self, ground_truth, machine_translation):
+        """
+        Functional interface for OCR type model
+
+        ground_truth        : golden data/human vetted sentences
+        machine_translation : model generated sentences
+        
+        Returns the evaluation score
+        """
+        pass

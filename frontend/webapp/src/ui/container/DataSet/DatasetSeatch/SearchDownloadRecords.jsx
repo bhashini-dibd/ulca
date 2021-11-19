@@ -399,8 +399,8 @@ const SearchAndDownloadRecords = (props) => {
   const handleSubmitBtn = () => {
     const obj = { ...basicFilterState, ...advFilterState };
     const criteria = {
-      sourceLanguage: getArrayValue([languagePair.source]),
-      targetLanguage: getArrayValue(languagePair.target),
+      sourceLanguage: getArrayValue(datasetType["parallel-corpus"] ? [languagePair.source] : languagePair.target),
+      targetLanguage: datasetType["parallel-corpus"] ? getArrayValue(languagePair.target) : null,
       ...getObjectValue(obj),
       // groupBy: false,
       multipleContributors: state.checkedA,
@@ -791,10 +791,12 @@ const SearchAndDownloadRecords = (props) => {
               <div className={classes.advanceFilter}>
                 <Button
                   disabled={!languagePair.target.length}
-                  style={{ color: "#FD7F23" }}
-                  variant="outlined"
+                  // style={{ color: "#FD7F23" }}
+                  // variant="outlined"
                   size="small"
                   onClick={() => setOpen(!open)}
+                  variant="contained"
+                  color="primary"
                 >
                   Advanced filter
                 </Button>

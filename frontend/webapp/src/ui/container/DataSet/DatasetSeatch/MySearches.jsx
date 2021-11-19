@@ -48,18 +48,26 @@ const MySearches = (props) => {
         let page = Math.floor(i / 10);
         async function dispatchPageAction(i) {
           await dispatch(PageChange(page, C.SEARCH_PAGE_NO));
-          let element = await document.getElementById(
-            `MUIDataTableBodyRow-${i}`
+          let element = document.querySelector(
+            `[data-testid=MUIDataTableBodyRow-${i}]`
           );
-          element &&
-            element.scrollIntoView({
-              behavior: "smooth",
-            });
-          element.animate([{ backgroundColor: "rgba(254, 191, 44, 0.1)" }], {
-            duration: 1500,
-            iterations: 5,
-            easing: "ease-in-out",
-          });
+          if (element) {
+            element &&
+              element.scrollIntoView({
+                behavior: "smooth",
+              });
+            let previousColor = element.style.backgroundColor;
+            element.style.backgroundColor = "rgba(254, 191, 44, 0.1)";
+            element.style.transitionTimingFunction = "ease-out";
+            element.style.transitionDelay = "0.1s";
+            element.style.transition = "0.2s";
+            setTimeout(() => {
+              element.style.backgroundColor = previousColor;
+              element.style.transitionTimingFunction = "";
+              element.style.transitionDelay = "";
+              element.style.transition = "";
+            }, 4000);
+          }
         }
         dispatchPageAction(i);
         return;
@@ -117,12 +125,12 @@ const MySearches = (props) => {
 
   const renderAction = (rowData) => {
     const status = rowData[4].toLowerCase();
-if(status==='completed'){
-  history.push({
-    pathname: `/search-and-download-rec/${status}/${rowData[0]}`,
-    pageInfo: page,
-  });
-}
+    if (status === "completed") {
+      history.push({
+        pathname: `/search-and-download-rec/${status}/${rowData[0]}`,
+        pageInfo: page,
+      });
+    }
     // history.push(`${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`)
   };
 
