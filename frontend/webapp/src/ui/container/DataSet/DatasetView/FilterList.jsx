@@ -85,7 +85,9 @@ const FilterList = (props) => {
         <Grid container className={classes.filterContainer}>
           <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
             <Typography variant="body2" className={classes.filterTypo}>
-              {translate("label.datasetType")}
+              {!props.task
+                ? translate("label.datasetType")
+                : translate("label.task")}
             </Typography>
             <FormGroup>
               {filter.datasetType.map((type) => {

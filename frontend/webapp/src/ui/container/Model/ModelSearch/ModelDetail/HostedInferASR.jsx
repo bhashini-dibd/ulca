@@ -91,7 +91,6 @@ const HostedInferASR = (props) => {
       .then(async (response) => {
         const rsp_data = await response.json();
         setApiCall(false);
-        console.log(response);
         if (!response.ok) {
           setSnackbarInfo({
             ...snackbar,
@@ -102,9 +101,16 @@ const HostedInferASR = (props) => {
           });
         } else {
           if (status) {
-            setTargetAudio(rsp_data.data.transcript);
+            setTargetAudio(rsp_data.data.source);
           } else {
-            setTarget(rsp_data.data.transcript);
+            setSnackbarInfo({
+              ...snackbar,
+              open: false,
+              message: "",
+              timeOut: 0,
+              variant: "",
+            });
+            setTarget(rsp_data.data.source);
           }
 
           setTranslationState(true);
