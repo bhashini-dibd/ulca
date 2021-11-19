@@ -17,9 +17,10 @@ class ETACalculatorResource(Resource):
         query   =   body["query"] if body.get("query") else None
         
         try:
-            service.calculate_average_eta(query)
-            res = CustomResponse(Status.SUCCESS.value,None,None)
+            result = service.calculate_average_eta(query)
+            res = CustomResponse(Status.SUCCESS.value,result,None)
             log.info("response successfully generated.")
             return res.getres()
         except Exception as e:
             log.info(f'Exception on NotifierResource {e}')
+            return None

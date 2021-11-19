@@ -43,10 +43,11 @@ class ETACalculatorService:
                 sub_df          =   extracted_df[(extracted_df["datasetType"] == dtype )]
                 weighted_avg    =   numpy.average(sub_df.timeTaken,weights=sub_df.outputCount)
                 weights[dtype]  =   weighted_avg
-                print(f"Weighted Average for {dtype} = { weighted_avg}")
-            del extracted_df
+            log.info(str(weights))
+            return weights
         except Exception as e:
             log.exception(f'{e}')
+            return 
 
 
 
