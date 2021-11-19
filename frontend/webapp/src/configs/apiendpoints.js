@@ -1,11 +1,12 @@
 const endpoints = {
   getContributionList: "/ulca/apis/v0/dataset/listByUserId",
+  getBenchmarkList: "/ulca/apis/v0/benchmark/listByUserId",
   getDetailReport: "/ulca/apis/v0/dataset/getByServiceRequestNumber",
   dataSetSearchApi: "/ulca/data-metric/v0/store/search",
   login: "/ulca/user-mgmt/v1/users/login",
   datasetSubmit: "/ulca/apis/v0/dataset/corpus/submit",
   getSearchOptions: "/ulca/mdms/v0/fetch-master/bulk",
-  datasetBenchmarkSubmit:"/ulca/apis/v0/benchmark/submit",
+  datasetBenchmarkSubmit: "/ulca/apis/v0/benchmark/submit",
   mySearches: "/ulca/apis/v0/dataset/corpus/search/listByUserId",
   submitSearchReq: "/ulca/apis/v0/dataset/corpus/search",
   errorReport: "/ulca/error-consumer/v0/error/report",
