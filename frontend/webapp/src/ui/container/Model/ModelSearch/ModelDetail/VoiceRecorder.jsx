@@ -1,4 +1,4 @@
-import { Grid, Typography, CardContent, Card } from "@material-ui/core";
+import { Grid, Typography, CardContent, Card, Tooltip } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../../styles/Dataset";
 import { useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import {
 } from "@project-sunbird/open-speech-streaming-client";
 import { vakyanshLanguage } from "../../../../../configs/DatasetItems";
 import { translate } from "../../../../../assets/localisation";
+import LightTooltip from "../../../../components/common/LightTooltip";
 const SOCKET_URL = config.SOCKET_URL;
 
 const AudioRecord = (props) => {
@@ -93,11 +94,15 @@ const AudioRecord = (props) => {
         <Typography variant="h6" className={classes.titleCard}>
           Hosted inference API{" "}
           {
-            <InfoOutlinedIcon
-              className={classes.buttonStyle}
-              fontSize="small"
-              color="disabled"
-            />
+            <LightTooltip
+              arrow
+              placement="right"
+              title={translate("label.hostedInference")}><InfoOutlinedIcon
+                className={classes.buttonStyle}
+                fontSize="small"
+                color="disabled"
+              />
+            </LightTooltip>
           }
         </Typography>
       </Grid>
@@ -130,8 +135,8 @@ const AudioRecord = (props) => {
             {streamingState === "start"
               ? "Please wait..."
               : streamingState === "listen"
-              ? "Listening..."
-              : ""}
+                ? "Listening..."
+                : ""}
           </Typography>{" "}
         </div>
         <div className={classes.centerAudio}>
