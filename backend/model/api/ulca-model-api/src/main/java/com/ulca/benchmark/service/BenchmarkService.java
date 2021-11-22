@@ -274,9 +274,11 @@ public class BenchmarkService {
 			List<BenchmarkProcess> benchmarkProcess = benchmarkprocessDao.findByBenchmarkDatasetId(benchmarkId);
 			List<BenchmarkProcess> bmProcessPublished = new ArrayList<BenchmarkProcess>();
 			for(BenchmarkProcess bm : benchmarkProcess) {
-				ModelExtended model = modelDao.findByModelId(bm.getModelId());
-				if(model.getStatus().equalsIgnoreCase("published")) {
-					bmProcessPublished.add(bm);
+				if(bm.getStatus().equalsIgnoreCase("Completed")) {
+					ModelExtended model = modelDao.findByModelId(bm.getModelId());
+					if(model.getStatus().equalsIgnoreCase("published")) {
+						bmProcessPublished.add(bm);
+					}
 				}
 			}
 			/* 
