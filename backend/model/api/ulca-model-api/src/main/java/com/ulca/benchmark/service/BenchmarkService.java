@@ -277,6 +277,7 @@ public class BenchmarkService {
 				if(bm.getStatus().equalsIgnoreCase("Completed")) {
 					ModelExtended model = modelDao.findByModelId(bm.getModelId());
 					if(model.getStatus().equalsIgnoreCase("published")) {
+						bm.setModelName(model.getName());
 						bmProcessPublished.add(bm);
 					}
 				}
