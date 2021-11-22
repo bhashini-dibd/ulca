@@ -1,7 +1,7 @@
 import os
 
 DEBUG = False
-API_URL_PREFIX = "/ulca/cron-manager/"
+API_URL_PREFIX = "/ulca/cron-manager"
 HOST = '0.0.0.0'
 PORT = 5001
 
