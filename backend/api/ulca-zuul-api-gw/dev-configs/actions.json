@@ -271,6 +271,14 @@
         "active": true,
         "whiteList": false,
         "description": "API to bust cache"
+      },
+      {
+        "id": "d2cf506f-1e4e-4614-ac59-26305fa4d376",
+        "uri": "/ulca/cron-manager/v1/get/estimate",
+        "module": "CRON-MANAGER",
+        "active": true,
+        "whiteList": true,
+        "description": "API to calculate ETA for dataset tasks "
       }
     ]
   }
