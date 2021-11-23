@@ -20,6 +20,9 @@ class ETACalculatorService:
                             {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                             {"$unwind":"$tasks"},{ "$project": { "datasetType":"$searchCriteria.datasetType","startTime": "$tasks.startTime", "endTime": "$tasks.endTime","_id":0,"outputCount":"$tasks.details.count" }}]
             result      =   repo.aggregate(query)
+            if not result:
+                log.info("No output for the executed query")
+                return
             search_df   =   pd.DataFrame(result)
             log.info(f"Count of search items:{len(search_df)}")
             extracted   =   []

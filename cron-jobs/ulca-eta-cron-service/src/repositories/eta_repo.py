@@ -1,13 +1,13 @@
 import logging
 from logging.config import dictConfig
-from config import ulca_db_cluster, process_db, process_collection
+from config import ulca_db_cluster, process_db, eta_collection
 import pymongo
 log = logging.getLogger('file')
 
 
 mongo_instance = None
 
-class ProcessRepo:
+class ETARepo:
     
     def __init__(self):
         pass
@@ -16,7 +16,7 @@ class ProcessRepo:
     def instantiate(self):
         global mongo_instance
         client = pymongo.MongoClient(ulca_db_cluster)
-        mongo_instance = client[process_db][process_collection]
+        mongo_instance = client[process_db][eta_collection]
         return mongo_instance
 
     #geting the mongo clent object
@@ -27,19 +27,21 @@ class ProcessRepo:
         else:
             return mongo_instance
 
-    #aggregate operation on mongo
-    def aggregate(self, query):
-        log.info(f"Mongo aggregation : {query}")
+    #insert operation on mongo
+    def insert(self, data):
+        col = self.get_mongo_instance()
+        if isinstance(data, dict):
+            data = [data]
+        col.insert_many(data)
+        return len(data)
+
+    #mongo upsert 
+    def upsert(self, object_in):
         try:
-            col     =   self.get_mongo_instance()
-            res     =   col.aggregate(query) 
-            result  =   []
-            for record in res:
-                result.append(record)
-            return result
+            col = self.get_mongo_instance()
+            col.update({},object_in, upsert=True)
         except Exception as e:
-            log.exception(f'Exception in repo search: {e}')
-            return []
+            log.exception(f'Exception in repo upsert: {e}', e)
     
 
 
