@@ -5,13 +5,17 @@ import { withStyles } from "@material-ui/styles";
 import AdminPanelStyle from "../../styles/AdminPanel";
 import { useSelector, useDispatch } from "react-redux";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserDetailsAPI from "../../../redux/actions/api/Admin/UserDetails";
+import UpdateUserInfo from "./UpdateUserInfo";
 
 const ViewUserDetail = (props) => {
   // reducer and action dispatcher intialization
   const data = useSelector((state) => state.getUserDetails.userDetails);
   const dispatch = useDispatch();
+
+  //state initialization
+  const [openModal, setOpenModal] = useState(false);
 
   //useEffect when the component is mounted
   useEffect(() => {
@@ -19,12 +23,22 @@ const ViewUserDetail = (props) => {
     dispatch(APITransport(objUserDetails));
   }, []);
 
+  //click events
+
+  const handleOpen = () => {
+    setOpenModal(true);
+  };
+
+  const handleClose = () => {
+    setOpenModal(false);
+  };
+
   //function to render the action button in the table
   const renderActions = () => {
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-          <IconButton>
+          <IconButton onClick={handleOpen}>
             <Tooltip placement="right" title="Edit Details">
               <EditIcon fontSize="small" />
             </Tooltip>
@@ -65,12 +79,17 @@ const ViewUserDetail = (props) => {
   };
 
   return (
-    <MUIDataTable
-      title="User Details"
-      columns={columns}
-      data={data}
-      options={options}
-    />
+    <>
+      <MUIDataTable
+        title="User Details"
+        columns={columns}
+        data={data}
+        options={options}
+      />
+      {openModal && (
+        <UpdateUserInfo open={openModal} handleClose={handleClose} />
+      )}
+    </>
   );
 };
 
