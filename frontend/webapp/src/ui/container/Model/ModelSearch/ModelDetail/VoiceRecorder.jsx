@@ -97,7 +97,7 @@ const AudioRecord = (props) => {
             <LightTooltip
               arrow
               placement="right"
-              title={translate("label.hostedInference")}><InfoOutlinedIcon
+              title={translate("label.hostedInferenceASR")}><InfoOutlinedIcon
                 className={classes.buttonStyle}
                 fontSize="small"
                 color="disabled"
