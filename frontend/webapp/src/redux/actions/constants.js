@@ -93,6 +93,12 @@ const constants = {
 
   GET_BENCHMARK_DETAILS: "GET_BENCHMARK_DETAILS",
   GET_METRIC_DETAILS: "GET_METRIC_DETAILS",
+
+  /**
+   * action for Admin Panel
+   */
+
+  GET_USER_DETAILS: "GET_USER_DETAILS",
 };
 
 export default constants;
