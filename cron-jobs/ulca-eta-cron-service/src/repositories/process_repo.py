@@ -31,13 +31,14 @@ class ProcessRepo:
     def aggregate(self, query):
         log.info(f"Mongo aggregation : {query}")
         try:
-            res =   mongo_instance.aggregate(query) 
+            col = self.get_mongo_instance()
+            res =   col.aggregate(query) 
             result = []
             for record in res:
                 result.append(record)
             return result
         except Exception as e:
-            log.exception(f'Exception in repo search: {e}', e)
+            log.exception(f'Exception in repo search: {e}')
             return []
 
     
