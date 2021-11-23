@@ -179,6 +179,15 @@ public class ModelService {
 		modelObj.setSubmittedOn(new Date().toString());
 		modelObj.setPublishedOn(new Date().toString());
 		modelObj.setStatus("unpublished");
+		
+		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+		schema = modelInferenceEndPointService.validateCallBackUrl(callBackUrl, schema);
+		inferenceAPIEndPoint.setSchema(schema);
+		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
+		//modelDao.save(modelObj);
+		
 		if (modelObj != null) {
 			try {
 				modelDao.save(modelObj);
@@ -187,13 +196,6 @@ public class ModelService {
 				throw new DuplicateKeyException("Model with same name and version exist in system");
 			}
 		}
-		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
-		schema = modelInferenceEndPointService.validateCallBackUrl(callBackUrl, schema);
-		inferenceAPIEndPoint.setSchema(schema);
-		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
-		modelDao.save(modelObj);
 
 		return new UploadModelResponse("Model Saved Successfully", modelObj);
 	}
