@@ -8,8 +8,12 @@ import APITransport from "../../../redux/actions/apitransport/apitransport";
 import { useEffect, useState } from "react";
 import UserDetailsAPI from "../../../redux/actions/api/Admin/UserDetails";
 import UpdateUserInfo from "./UpdateUserInfo";
+import { Switch } from "@material-ui/core";
 
 const ViewUserDetail = (props) => {
+  //destructuring of props
+  const { classes } = props;
+
   // reducer and action dispatcher intialization
   const data = useSelector((state) => state.getUserDetails.userDetails);
   const status = useSelector((state) => state.getUserDetails.status);
@@ -17,12 +21,6 @@ const ViewUserDetail = (props) => {
 
   //state initialization
   const [openModal, setOpenModal] = useState(false);
-
-  //Search User API Call
-  const makeSearchUserAPICall = () => {
-    const objUserDetails = new UserDetailsAPI();
-    dispatch(APITransport(objUserDetails));
-  };
 
   //useEffect when the component is mounted
   useEffect(() => {
@@ -43,13 +41,32 @@ const ViewUserDetail = (props) => {
   };
 
   //function to render the action button in the table
-  const renderActions = () => {
+  const renderActions = (isActive) => {
     return (
       <Grid container spacing={1}>
+        <Grid
+          item
+          xs={12}
+          sm={6}
+          md={6}
+          lg={6}
+          xl={6}
+          className={classes.switchGrid}
+        >
+          <Tooltip placement="left" title="Active/Inactive">
+            <Switch
+              checked={isActive}
+              // onChange={handleChange}
+              color="primary"
+              name="checkedB"
+              inputProps={{ "aria-label": "primary checkbox" }}
+            />
+          </Tooltip>
+        </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
           <IconButton onClick={handleOpen}>
             <Tooltip placement="right" title="Edit Details">
-              <EditIcon fontSize="small" />
+              <EditIcon fontSize="medium" />
             </Tooltip>
           </IconButton>
         </Grid>
@@ -90,12 +107,17 @@ const ViewUserDetail = (props) => {
       },
     },
     {
+      name: "isActive",
+      label: "Active/Inactive",
+      options: { display: "excluded" },
+    },
+    {
       name: "action",
       label: "Action",
       options: {
         sort: false,
-        customBodyRender: (rowData) => {
-          return renderActions();
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return renderActions(tableMeta.rowData[6]);
         },
       },
     },
