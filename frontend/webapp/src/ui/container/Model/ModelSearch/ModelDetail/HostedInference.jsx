@@ -146,7 +146,7 @@ const HostedInference = (props) => {
                   <LightTooltip 
                   arrow
                   placement="right"
-                  title={translate("label.hostedInference")}>
+                  title={translate("label.hostedInferenceTranslation")}>
                     <InfoOutlinedIcon
                       className={classes.buttonStyle}
                       fontSize="small"
