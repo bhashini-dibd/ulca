@@ -57,7 +57,7 @@ const ViewUserDetail = (props) => {
         hour: "numeric",
         minute: "numeric",
         second: "numeric",
-        hour12: true,
+        hour12: false,
       })
       .toUpperCase();
   };
