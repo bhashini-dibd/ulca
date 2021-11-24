@@ -12,15 +12,24 @@ import UpdateUserInfo from "./UpdateUserInfo";
 const ViewUserDetail = (props) => {
   // reducer and action dispatcher intialization
   const data = useSelector((state) => state.getUserDetails.userDetails);
+  const status = useSelector((state) => state.getUserDetails.status);
   const dispatch = useDispatch();
 
   //state initialization
   const [openModal, setOpenModal] = useState(false);
 
-  //useEffect when the component is mounted
-  useEffect(() => {
+  //Search User API Call
+  const makeSearchUserAPICall = () => {
     const objUserDetails = new UserDetailsAPI();
     dispatch(APITransport(objUserDetails));
+  };
+
+  //useEffect when the component is mounted
+  useEffect(() => {
+    if (status === "Started") {
+      const objUserDetails = new UserDetailsAPI();
+      dispatch(APITransport(objUserDetails));
+    }
   }, []);
 
   //click events

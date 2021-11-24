@@ -222,26 +222,27 @@ const Header = (props) => {
                       handleMenuItemClick={handleMenuItemClick}
                     /> */}
                 </div>
-                <div
-                  className={
-                    authenticate() ? classes.options : classes.datasetOption
-                  }
-                >
+                {roles.indexOf("ADMIN") !== -1 && (
                   <div
-                    className={classes.model}
-                    style={type === "models" ? { background: "#f5f5f5" } : {}}
+                    className={
+                      authenticate() ? classes.options : classes.datasetOption
+                    }
                   >
-                    <Button
-                      className={classes.menuBtn}
-                      variant="text"
-                      onClick={(e) => handleMenuTypeClick("admin")}
+                    <div
+                      className={classes.model}
+                      style={type === "models" ? { background: "#f5f5f5" } : {}}
                     >
-                      {/* {translate("label.a")} */}
-                      Admin
-                      {/* {authenticate() && <DownIcon color="action" />} */}
-                    </Button>
-                  </div>
-                  {/* 
+                      <Button
+                        className={classes.menuBtn}
+                        variant="text"
+                        onClick={(e) => handleMenuTypeClick("admin")}
+                      >
+                        {/* {translate("label.a")} */}
+                        Admin
+                        {/* {authenticate() && <DownIcon color="action" />} */}
+                      </Button>
+                    </div>
+                    {/* 
                     <MenuItems
                       id={"dataset-menu"}
                       anchorEl={anchorModel}
@@ -249,7 +250,8 @@ const Header = (props) => {
                       menuOptions={menuItems.models}
                       handleMenuItemClick={handleMenuItemClick}
                     /> */}
-                </div>
+                  </div>
+                )}
               </>
             }
             {authenticate() ? (

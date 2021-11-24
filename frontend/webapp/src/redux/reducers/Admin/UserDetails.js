@@ -1,6 +1,9 @@
 import C from "../../actions/constants";
 
-const initialState = [];
+const initialState = {
+  userDetails: [],
+  status: "Started",
+};
 
 const convertDate = (date) => {
   const mydate = new Date(date);
@@ -25,11 +28,13 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_USER_DETAILS:
       return {
+        ...state,
         userDetails: getUserDetails(action.payload),
+        status: "Completed",
       };
     default:
       return {
-        userDetails: initialState,
+        ...state,
       };
   }
 };
