@@ -1,6 +1,5 @@
-from utilities import MODULE_CONTEXT, userutils
 from db import get_db
-from utilities import UserUtils,EnumVals
+from utilities import UserUtils,EnumVals, normalize_bson_to_json
 from .response import post_error
 from config import USR_MONGO_COLLECTION
 import time
@@ -18,7 +17,7 @@ class UserManagementModel(object):
             collections = get_db()[USR_MONGO_COLLECTION]
             #inserting user records on db
             results = collections.insert(records)
-            log.info("Count of users created : {}".format(len(results)), MODULE_CONTEXT)
+            log.info("Count of users created : {}".format(len(results)))
             if len(records) != len(results):
                 return post_error("Database exception", "Some of the users were not created due to databse error", None)
             #email notification for registered users
@@ -40,11 +39,11 @@ class UserManagementModel(object):
                 #updating user record
                 results = collections.update({"userID": user["userID"]}, {'$set': user})
                 if 'writeError' in list(results.keys()):
-                    log.info("User{} updation failed due to {}".format((i+1),str(results)), MODULE_CONTEXT)
-                    return post_error("db error", "some of the records where not updated", None)
-                log.info("User{} updated".format(i+1), MODULE_CONTEXT)
+                    log.info("User{} updation failed due to {}".format((i+1),str(results)))
+                    return post_error("Database error", "some of the records where not updated", None)
+                log.info("User{} updated".format(i+1))
         except Exception as e:
-            log.exception("Database connection exception ",  MODULE_CONTEXT, e)
+            log.exception(f"Database connection exception : {e} ")
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)
 
 
@@ -59,32 +58,32 @@ class UserManagementModel(object):
             #fetching all verified users from db when skip_pgination = True
             if skip_pagination==True:
                 log.info("Fetching all verified users from database")
-                out = collections.find({"is_verified":True},exclude)
+                out = collections.find({"isVerified":True},exclude)
                 record_count=out.count()
             #fetching users with pagination(skip & limit) when skip_pagination != True
             elif not user_ids and not user_names and not role_codes and not org_codes :
                 log.info("Fetching verified users from database with pagination property")
-                out = collections.find({"is_verified":True},exclude).sort([("_id",-1)]).skip(offset).limit(limit_value)
-                record_count=collections.find({"is_verified":True}).count()
+                out = collections.find({"isVerified":True},exclude).sort([("_id",-1)]).skip(offset).limit(limit_value)
+                record_count=collections.find({"isVerified":True}).count()
             else:
                 log.info("Fetching verified users from database matching user properties")
                 out = collections.find(
                 {'$or': [
-                    {'userID': {'$in': user_ids},'is_verified': True},
-                    {'userName': {'$in': user_names},'is_verified': True},
-                    {'roles.roleCode': {'$in': role_codes},'is_verified': True},
-                    {'orgID': {'$in': org_codes},'is_verified': True}
+                    {'userID':{'$in': user_ids},'isVerified': True},
+                    {'email': {'$in': user_names},'isVerified': True},
+                    {'roles': {'$in': role_codes},'isVerified': True},
+                    {'orgID': {'$in': org_codes},'isVerified': True}
                 ]}, exclude)
                 record_count=out.count()          
             result = []
             for record in out:
-                result.append(record)
+                result.append(normalize_bson_to_json(record))
             if not result:
                 return None
             return result,record_count
 
         except Exception as e:
-            log.exception("db connection exception ",  MODULE_CONTEXT, e)
+            log.exception(f"Exception on user search {str(e)}")
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)
 
     def onboard_users(self,users):

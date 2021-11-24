@@ -20,13 +20,12 @@ class UserManagementRepositories:
             users_data["email"]         =   user["email"]
             users_data["firstName"]     =   user["firstName"]
             users_data["password"]      =   hashed.decode("utf-8")
+            users_data["roles"]         =   user["roles"]
             
             if "lastName" in user:
                 users_data["lastName"]  =   user["lastName"]
             if "phoneNo" in user:
                 users_data["phoneNo"]   =   user["phoneNo"]
-            if "roles" in user:
-                users_data["roles"]     =   user["roles"]
                 
             users_data["isVerified"]   =   False
             users_data["isActive"]     =   False
@@ -63,9 +62,9 @@ class UserManagementRepositories:
         else:
             return True
 
-    def search_users(self,user_ids, user_names, role_codes,org_codes,offset,limit_value,skip_pagination):
+    def search_users(self,user_ids, user_emails, role_codes,org_codes,offset,limit_value,skip_pagination):
         result = userModel.get_user_by_keys(
-            user_ids, user_names, role_codes,org_codes,offset,limit_value,skip_pagination)
+            user_ids, user_emails, role_codes,org_codes,offset,limit_value,skip_pagination)
         if result is not None:
             return result
 

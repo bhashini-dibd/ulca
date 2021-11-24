@@ -2,7 +2,7 @@ import uuid
 import time
 import re
 import bcrypt
-from db import get_db
+import db
 from models.response import post_error
 import jwt
 import secrets
@@ -110,7 +110,7 @@ class UserUtils:
         """
         try:
             #connecting to mongo instance/collection
-            collections = get_db()[USR_MONGO_COLLECTION]  
+            collections = db.get_db()[USR_MONGO_COLLECTION]  
             #searching username with verification status = True 
             user_record = collections.find({"email": email}) 
             if user_record.count() != 0:
@@ -149,6 +149,7 @@ class UserUtils:
         for role in roles:
             try:
                 if role not in role_codes:
+                    log.info(f"Role --{role} is not a valid role ")
                     return False
             except Exception:
                 return post_error("Roles missing","No roles are read from json,empty json or invalid path",None)
@@ -168,7 +169,7 @@ class UserUtils:
             key_payload = {"email": email, "publicKey":str(uuid.uuid4()), "privateKey": uuid.uuid4().hex, "createdOn": datetime.utcnow()}
             log.info("New API key issued for {}".format(email), MODULE_CONTEXT) 
             #connecting to mongo instance/collection
-            collections = get_db()[USR_KEY_MONGO_COLLECTION]
+            collections = db.get_db()[USR_KEY_MONGO_COLLECTION]
             #inserting api-key records on db
             collections.insert(key_payload)
             del key_payload["_id"]
@@ -190,7 +191,7 @@ class UserUtils:
         """
         try:
             #connecting to mongo instance/collection
-            collections = get_db()[USR_TOKEN_MONGO_COLLECTION]  
+            collections = db.get_db()[USR_TOKEN_MONGO_COLLECTION]  
             #searching for token from database    
             result = collections.find({"token": token},{"_id": 0, "user": 1, "active": 1, "secret_key": 1})
             if result.count() == 0:
@@ -229,7 +230,7 @@ class UserUtils:
             if temp:
                 document = USR_TEMP_TOKEN_MONGO_COLLECTION 
                 #connecting to mongo instance/collection
-                collections = get_db()[document] 
+                collections = db.get_db()[document] 
                 #searching for database record matching token, getting user_name
                 result = collections.find({"token": token}, {"_id": 0, "user": 1})
                 if result.count() == 0:
@@ -247,7 +248,7 @@ class UserUtils:
             return post_error("Database connection exception", "An error occurred while connecting to the database", None)
         try:
             #connecting to mongo instance/collection
-            collections_usr = get_db()[USR_MONGO_COLLECTION]
+            collections_usr = db.get_db()[USR_MONGO_COLLECTION]
             #searching for database record matching username
             result_usr = collections_usr.find({"email": usr_payload["email"],"is_verified":True}, {"_id": 0, "password": 0})
             for record in result_usr:
@@ -266,7 +267,7 @@ class UserUtils:
         try: 
             
             #connecting to mongo instance/collection
-            collections = get_db()[USR_KEY_MONGO_COLLECTION] 
+            collections = db.get_db()[USR_KEY_MONGO_COLLECTION] 
             if keys:
                 result = collections.find({"email":value},{"email":1,"publicKey":1,"privateKey":1,"_id":0})
                 if result.count() ==0:
@@ -302,7 +303,7 @@ class UserUtils:
         """
         try:
             #connecting to mongo instance/collection
-            collections = get_db()[USR_TOKEN_MONGO_COLLECTION] 
+            collections = db.get_db()[USR_TOKEN_MONGO_COLLECTION] 
             #searching for token against the user_name
             record = collections.find({"user": user_name, "active": True}, {"_id": 0, "token": 1, "secret_key": 1})
             if record.count() == 0:
@@ -340,11 +341,11 @@ class UserUtils:
         -Email Validation
         -Password Validation 
         """
-        obj_keys = {'firstName','email','password'}
+        obj_keys = {'firstName','email','password','roles'}
         for key in obj_keys:
             if (user.get(key) == None) :
                     log.info("Mandatory key checks failed")
-                    return post_error("Data Missing","firstName,email and password are mandatory for user creation",None)
+                    return post_error("Data Missing","firstName,email,roles and password are mandatory for user creation",None)
         log.info("Mandatory key checks successful")
 
         if len(user["firstName"]) > config.NAME_MAX_LENGTH:
@@ -397,40 +398,40 @@ class UserUtils:
         
         try:
             #connecting to mongo instance/collection
-            collections = get_db()[USR_MONGO_COLLECTION]
+            collections = db.get_db()[USR_MONGO_COLLECTION]
             #searching User Id with verification status = True 
-            record = collections.find({'userID': user_id,"is_verified":True})
+            record = collections.find({'userID': user_id,"isVerified":True})
             if record.count() == 0:
-                log_info("User Id validation failed, no such user", MODULE_CONTEXT)
+                log.info("User Id validation failed, no such verified user")
                 return post_error("Data not valid", "No such verified user with the given Id", None)
             for value in record:
-                if value["is_active"]== False:
-                    log_info("User Id validation failed,inactive user", MODULE_CONTEXT)
+                if value["isActive"]== False:
+                    log.info("User Id validation failed,inactive user")
                     return post_error("Not active", "This operation is not allowed for an inactive user", None)
-            log_info("User Id validation successful", MODULE_CONTEXT)          
+            log.info("User Id validation successful")          
         except Exception as e:
-            log_exception("Database connection exception ",  MODULE_CONTEXT, e)
+            log.exception(f"Database connection exception {e}")
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)
 
-        if user.get("email") != None:
-            email_availability_status = UserUtils.email_availability(user["email"])
-            if email_availability_status is not None:
-                log_info("Email validation failed, already taken", MODULE_CONTEXT)
-                return email_availability_status
-            email_validity = UserUtils.validate_email_format(user["email"])
-            if email_validity == False:
-                log_info("Email validation failed, format error", MODULE_CONTEXT)
-                return post_error("Data not valid", "Email Id given is not valid", None)  
-            log_info("Email validated", MODULE_CONTEXT) 
+        # if user.get("email") != None:
+        #     email_availability_status = UserUtils.email_availability(user["email"])
+        #     if email_availability_status is not None:
+        #         log_info("Email validation failed, already taken", MODULE_CONTEXT)
+        #         return email_availability_status
+        #     email_validity = UserUtils.validate_email_format(user["email"])
+        #     if email_validity == False:
+        #         log_info("Email validation failed, format error", MODULE_CONTEXT)
+        #         return post_error("Data not valid", "Email Id given is not valid", None)  
+        #     log_info("Email validated", MODULE_CONTEXT) 
 
         rolecodes=[]
         if user.get("roleCode") != None:
             rolecodes.append(str(user["roleCode"]))
             role_validity = UserUtils.validate_rolecodes(rolecodes) 
             if role_validity == False:
-                log_info("Role validation failed", MODULE_CONTEXT)
+                log.info("Role validation failed")
                 return post_error("Invalid data", "Rolecode given is not valid", None)
-            log_info("Role validated", MODULE_CONTEXT)
+            log.info("Role validated")
             user["roles_new"]=[]
             roles_to_update={}
             roles_to_update["roleCode"]=str(user["roleCode"]).upper()
@@ -451,7 +452,7 @@ class UserUtils:
 
         try:
             #connecting to mongo instance/collection
-            collections = get_db()[USR_MONGO_COLLECTION]
+            collections = db.get_db()[USR_MONGO_COLLECTION]
             #fetching the user details from db
             result = collections.find({'email': user_email}, {
                 'password': 1, '_id': 0,'isActive':1,'isVerified':1})
@@ -550,7 +551,7 @@ class UserUtils:
 
         try:
             #connecting to mongo instance/collection
-            collections = get_db()[USR_MONGO_COLLECTION]
+            collections = db.get_db()[USR_MONGO_COLLECTION]
             #searching for record matching user_name
             valid = collections.find({"email":user_email,"isVerified":True})
             if valid.count() == 0:
