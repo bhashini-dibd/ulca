@@ -92,7 +92,9 @@ const ContributionList = (props) => {
         let page = Math.floor(i / PageInfo.count);
         async function dispatchPageAction(i) {
           await dispatch(PageChange(page, C.MODEL_PAGE_CHANGE));
-          let element = document.querySelector(`[data-testid=MUIDataTableBodyRow-${i}]`);
+          let element = document.querySelector(
+            `[data-testid=MUIDataTableBodyRow-${i}]`
+          );
           let oldIndex = index;
           setIndex([...oldIndex, i]);
           if (element) {
@@ -432,6 +434,16 @@ const ContributionList = (props) => {
     );
   };
 
+  const convertDate = (date) => {
+    return date
+      .toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .toUpperCase();
+  };
+
   const renderConfirmationDialog = () => {
     const { status, modelId } = modelStatusInfo;
     return (
@@ -524,6 +536,11 @@ const ContributionList = (props) => {
         filter: false,
         sort: true,
         display: view ? "excluded" : true,
+        customBodyRender: (rowData) => {
+          const date = new Date(rowData);
+          return <>{convertDate(date)}</>;
+        },
+        sortDirection: "desc",
       },
     },
     {
