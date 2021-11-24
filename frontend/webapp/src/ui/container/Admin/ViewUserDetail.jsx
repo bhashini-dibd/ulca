@@ -48,6 +48,20 @@ const ViewUserDetail = (props) => {
     );
   };
 
+  const convertDate = (date) => {
+    return date
+      .toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: true,
+      })
+      .toUpperCase();
+  };
+
   //columns to be displayed in the table
   const columns = [
     { name: "uId", label: "UID", options: { display: "excluded" } },
@@ -55,7 +69,17 @@ const ViewUserDetail = (props) => {
     { name: "name", label: "Name", options: { sort: false } },
     { name: "role", label: "Role", options: { sort: false } },
     { name: "org", label: "Organization", options: { sort: false } },
-    { name: "createdOn", label: "Timestamp", options: { sort: false } },
+    {
+      name: "createdOn",
+      label: "Timestamp",
+      options: {
+        sort: false,
+        customBodyRender: (rowData) => {
+          return <div>{convertDate(rowData)}</div>;
+        },
+        sortDirection: "desc",
+      },
+    },
     {
       name: "action",
       label: "Action",
