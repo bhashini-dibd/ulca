@@ -16,16 +16,17 @@ const initialState = {
 
 const dateConversion = (value) => {
   var myDate = new Date(value);
-  let result = myDate.toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    // hour: "numeric",
-    // minute: "numeric",
-    // second: "numeric",
-    // hour12: true,
-  });
-  return result.toUpperCase();
+  // let result = myDate.toLocaleString("en-IN", {
+  //   day: "2-digit",
+  //   month: "2-digit",
+  //   year: "numeric",
+  //   // hour: "numeric",
+  //   // minute: "numeric",
+  //   // second: "numeric",
+  //   // hour12: true,
+  // });
+  // return result.toUpperCase();
+  return myDate.getTime();
 };
 
 const isFilterSelected = (keys, values) => {
@@ -52,7 +53,9 @@ const getUpdatedFilters = (data, values, keys) => {
 const getFilterValue = (payload, data) => {
   let { filterValues } = payload;
   const filterKeys = Object.keys(filterValues);
-  const filterValue = Object.values(filterValues).map(val=>val.map(e=>e.toLowerCase()));
+  const filterValue = Object.values(filterValues).map((val) =>
+    val.map((e) => e.toLowerCase())
+  );
   if (isFilterSelected(filterKeys, filterValue)) {
     data.filteredData = Object.assign(
       [],
