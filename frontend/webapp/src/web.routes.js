@@ -272,6 +272,8 @@ export default function App() {
             authenticate={authenticateUser}
             currentMenu="view-user-details"
             dontShowHeader={false}
+            type={"admin"}
+            index={0}
           />
 
           {/* <Route
