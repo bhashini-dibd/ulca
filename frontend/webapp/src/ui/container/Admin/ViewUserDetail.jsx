@@ -1,6 +1,6 @@
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@material-ui/icons/Edit";
-import { Grid, IconButton, Tooltip } from "@material-ui/core";
+import { Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import AdminPanelStyle from "../../styles/AdminPanel";
 import { useSelector, useDispatch } from "react-redux";
@@ -91,7 +91,16 @@ const ViewUserDetail = (props) => {
   //columns to be displayed in the table
   const columns = [
     { name: "uId", label: "UID", options: { display: "excluded" } },
-    { name: "userId", label: "User ID", options: { sort: false } },
+    {
+      name: "userId",
+      label: "User ID",
+      options: {
+        sort: false,
+        customBodyRender: (rowData) => {
+          return <Typography variant="body2" className={classes.userIdTypo}>{rowData}</Typography>;
+        },
+      },
+    },
     { name: "name", label: "Name", options: { sort: false } },
     { name: "role", label: "Role", options: { sort: false } },
     { name: "org", label: "Organization", options: { sort: false } },

@@ -3,6 +3,9 @@ const AdminPanel = (theme) => ({
     display: "flex",
     alignItems: "center",
   },
+  userIdTypo: {
+    textTransform: "none",
+  },
 });
 
 export default AdminPanel;
