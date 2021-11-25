@@ -15,11 +15,15 @@ class ASRCEREval(ModelMetricEval):
     def asr_metric_eval(self, ground_truth, machine_translation):
 
         try:
+            log.info("machine_translation :", machine_translation)
+            log.info("ground_truth :", ground_truth)
             eval_score = fastwer.score(machine_translation, ground_truth, char_level=True)
             log.info("CER score :", eval_score)
             if np.isnan(eval_score):
+                log.error("Unable to calculate CER score")
                 return None
             else:
+                log.info("CER score not NaN")
                 return eval_score
         except Exception as e:
             log.exception(f"Exception in calculating CER: {str(e)}")
