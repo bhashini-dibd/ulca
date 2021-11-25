@@ -16,6 +16,18 @@ import { translate } from "../../../../assets/localisation";
 
 const ExpandTable = (props) => {
   const { rows, renderStatus, color, classes } = props;
+
+  const convertDate = (date) => {
+    let myDate = new Date(date);
+    return myDate
+      .toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .toUpperCase();
+  };
+
   const renderTable = () => {
     const returnTypo = (value) => {
       return (
@@ -66,7 +78,7 @@ const ExpandTable = (props) => {
                           <TableCell>{row.benchmarkDatasetName}</TableCell>
                           <TableCell>{row.metric.toUpperCase()}</TableCell>
                           <TableCell>{row.score ? row.score : "--"}</TableCell>
-                          <TableCell>{row.createdOn}</TableCell>
+                          <TableCell>{convertDate(row.createdOn)}</TableCell>
                           <TableCell>{renderStatus(row.status)}</TableCell>
                           {/* <TableCell></TableCell> */}
                           {/* <TableCell></TableCell> */}
