@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.ulca.benchmark.constant.BenchmarkConstants;
 import com.ulca.benchmark.request.BenchmarkListByModelRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSubmitRequest;
@@ -43,7 +44,14 @@ public class BenchmarkController {
 	public ResponseEntity<BenchmarkSubmitResponse> submitBenchmark(@Valid @RequestBody BenchmarkSubmitRequest request) throws RequestParamValidationException {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
-		BenchmarkSubmitResponse response = benchmarkService.submitBenchmark(request);
+		BenchmarkSubmitResponse response =new BenchmarkSubmitResponse();
+		try {
+			   response = benchmarkService.submitBenchmark(request);
+		} catch(DuplicateKeyException ex) {
+			
+			throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
+			
+		}
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
