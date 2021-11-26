@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.ulca.benchmark.constant.BenchmarkConstants;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
@@ -98,7 +100,16 @@ public class BenchmarkService {
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());		
 		benchmark.setSubmittedOn(new Date().toString());	
 		benchmark.setCreatedOn(new Date().toString());
-		benchmarkDao.save(benchmark);
+		
+		if (benchmark != null) {
+			try {
+				benchmarkDao.save(benchmark);
+			} catch (DuplicateKeyException ex) {
+				ex.printStackTrace();
+				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
+			}
+		}
+		
 		
 		//send data to benchmark ingest topic to download benmark and validate and update
 		
