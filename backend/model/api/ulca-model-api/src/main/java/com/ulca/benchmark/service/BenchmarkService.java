@@ -17,19 +17,30 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.constant.BenchmarkConstants;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.dao.BenchmarkProcessTrackerDao;
 import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
 import com.ulca.benchmark.exception.BenchmarkNotFoundException;
 import com.ulca.benchmark.kafka.model.BenchmarkIngest;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.BenchmarkProcessTracker;
+import com.ulca.benchmark.model.BenchmarkProcessTracker.ServiceRequestActionEnum;
+import com.ulca.benchmark.model.BenchmarkProcessTracker.ServiceRequestTypeEnum;
+import com.ulca.benchmark.model.BenchmarkProcessTracker.StatusEnum;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
@@ -84,6 +95,9 @@ public class BenchmarkService {
 	@Autowired
 	ModelDao modelDao;
 	
+	@Autowired
+	BenchmarkProcessTrackerDao benchmarkProcessTrackerDao;
+	
 
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
@@ -109,6 +123,104 @@ public class BenchmarkService {
 				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 			}
 		}
+		
+		BenchmarkProcessTracker benchmarkprocessTracker = new BenchmarkProcessTracker();
+		benchmarkprocessTracker.setId(benchmark.getBenchmarkId());
+		benchmarkprocessTracker.setDatasetId(benchmark.getBenchmarkId());
+		//	benchmarkprocessTracker.setServiceRequestNumber(Utility.getDatasetSubmitReferenceNumber());
+		benchmarkprocessTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
+		benchmarkprocessTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
+		benchmarkprocessTracker.setStatus(StatusEnum.pending.toString());
+		benchmarkprocessTracker.setStartTime(new Date().toString());
+
+		benchmarkProcessTrackerDao.insert(benchmarkprocessTracker);
+//
+//		FileDownload fileDownload = new FileDownload();
+//		fileDownload.setUserId(userId);
+//		fileDownload.setDatasetId(dataset.getDatasetId());
+//		fileDownload.setDatasetName(dataset.getDatasetName());
+//		//fileDownload.setDatasetType(request.getType());
+//		fileDownload.setFileUrl(request.getUrl());
+//		fileDownload.setServiceRequestNumber(processTracker.getServiceRequestNumber());
+//		
+//		//datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
+//		
+//		
+//		try {
+//			
+//			 ListenableFuture<SendResult<String, FileDownload>> future = datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
+//				
+//				 future.addCallback(new ListenableFutureCallback<SendResult<String, FileDownload>>() {
+//
+//					    public void onSuccess(SendResult<String, FileDownload> result) {
+//					    	log.info("message sent successfully to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
+//					    }
+//
+//					    @Override
+//					    public void onFailure(Throwable ex) {
+//					    	log.info("Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
+//					    	log.info("Error message :: " + ex.getMessage());
+//					    	
+//					    	DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
+//					    	error.setServiceRequestNumber(processTracker.getServiceRequestNumber());
+//					    	error.setAttempt(0);
+//					    	error.setCreatedOn(new Date().toString());
+//					    	error.setLastModifiedOn(new Date().toString());
+//					    	error.setFailed(false);
+//					    	error.setSuccess(false);
+//					    	error.setStage("download");
+//					    	List<String> er = new ArrayList<String>();
+//					    	er.add(ex.getMessage());
+//					    	error.setErrors(er);
+//					    	ObjectMapper mapper = new ObjectMapper();
+//						
+//								String dataRow;
+//								try {
+//									dataRow = mapper.writeValueAsString(fileDownload);
+//							    	error.setData(dataRow);
+//							    	datasetKafkaTransactionErrorLogDao.save(error);
+//							    	
+//								} catch (JsonProcessingException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
+//								
+//					    	
+//					    }
+//					});
+//				 
+//				 
+//			
+//		}catch ( KafkaException ex) {
+//			log.info("Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
+//			log.info("Error message :: " + ex.getMessage());
+//			DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
+//	    	error.setServiceRequestNumber(processTracker.getServiceRequestNumber());
+//	    	error.setAttempt(0);
+//	    	error.setCreatedOn(new Date().toString());
+//	    	error.setLastModifiedOn(new Date().toString());
+//	    	error.setFailed(false);
+//	    	error.setSuccess(false);
+//	    	error.setStage("download");
+//	    	List<String> er = new ArrayList<String>();
+//	    	er.add(ex.getMessage());
+//	    	error.setErrors(er);
+//	    	ObjectMapper mapper = new ObjectMapper();
+//		
+//				String dataRow;
+//				try {
+//					dataRow = mapper.writeValueAsString(fileDownload);
+//			    	error.setData(dataRow);
+//			    	datasetKafkaTransactionErrorLogDao.save(error);
+//			    	
+//				} catch (JsonProcessingException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
+//				
+//			throw ex;
+//		}
 		
 		
 		//send data to benchmark ingest topic to download benmark and validate and update
