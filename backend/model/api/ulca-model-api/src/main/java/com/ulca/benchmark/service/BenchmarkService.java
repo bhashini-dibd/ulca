@@ -105,7 +105,7 @@ public class BenchmarkService {
 			try {
 				benchmarkDao.save(benchmark);
 			} catch (DuplicateKeyException ex) {
-				ex.printStackTrace();
+				log.info("benchmark with same name exists.: " + benchmark.getName());
 				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 			}
 		}

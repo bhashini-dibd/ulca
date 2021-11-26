@@ -44,15 +44,7 @@ public class BenchmarkController {
 	public ResponseEntity<BenchmarkSubmitResponse> submitBenchmark(@Valid @RequestBody BenchmarkSubmitRequest request) throws RequestParamValidationException {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
-		BenchmarkSubmitResponse response =new BenchmarkSubmitResponse();
-		try {
-			   response = benchmarkService.submitBenchmark(request);
-		} catch(DuplicateKeyException ex) {
-			
-			throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
-			
-		}
-
+		BenchmarkSubmitResponse response = benchmarkService.submitBenchmark(request);
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
 	
