@@ -128,7 +128,7 @@ const localization_EN_Data = {
   "label.hostedInferenceTranslation":
     "Once you enter some input in Source language, ULCA will hit the inference endpoint of the hosted model, to get the translation. This can cause a slight delay in receiving the response.",
   "label.hostedInferenceASR":
-    "Please start speaking after the listening model is enabled. Once you start speaking, ULCA will hit the inference endpoint of the hosted model, to get the transcription.",
+    "Please start speaking after the listening mode is enabled. Once you start speaking, ULCA will hit the inference endpoint of the hosted model, to get the transcription.",
   "button.cancel": "Cancel",
 };
 
