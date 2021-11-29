@@ -27,6 +27,7 @@ const endpoints = {
   benchmarkDetails: "/ulca/apis/v0/benchmark/getBenchmark",
   toggleModelStatus: "/ulca/apis/v0/model/status/change",
   getUserDetails: "/ulca/user-mgmt/v1/users/search",
+  updateUserDetails: "/ulca/user-mgmt/v1/users/update",
 };
 
 export default endpoints;

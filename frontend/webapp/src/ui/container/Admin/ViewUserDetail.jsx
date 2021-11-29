@@ -9,7 +9,8 @@ import { useEffect, useState } from "react";
 import UserDetailsAPI from "../../../redux/actions/api/Admin/UserDetails";
 import UpdateUserInfo from "./UpdateUserInfo";
 import { Switch } from "@material-ui/core";
-import { roles } from "../../../configs/AdminConfig";
+import UpdateUserDetails from "../../../redux/actions/api/Admin/UpdateUserDetails";
+import Snackbar from "../../components/common/Snackbar";
 
 const ViewUserDetail = (props) => {
   //destructuring of props
@@ -22,6 +23,12 @@ const ViewUserDetail = (props) => {
 
   //state initialization
   const [openModal, setOpenModal] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    variant: "success",
+    timeOut: 3000,
+  });
   const [info, setInfo] = useState({
     userName: "",
     fullName: "",
@@ -83,15 +90,31 @@ const ViewUserDetail = (props) => {
     setCheckBoxState(e.target.checked);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (!info.fullName.trim() || !info.orgValue || !info.role.length) {
-      alert("Profile details are mandatory");
+      setSnackbar({
+        ...snackbar,
+        variant: "error",
+        message: "Profile details are mandatory",
+        open: true,
+      });
     } else {
       if (checkboxState) {
         if (!info.pwd || !info.confirmPwd) {
-          alert("Please fill password");
+          setSnackbar({
+            ...snackbar,
+            variant: "error",
+            message: "Please fill password",
+            open: true,
+          });
         } else if (info.pwd !== info.confirmPwd) {
-          alert("Password and Confirm Password is different");
+          setSnackbar({
+            ...snackbar,
+            variant: "error",
+            message: "Password and Confirm Password is different",
+            open: true,
+          });
         } else {
           updateUserDetailAPI();
           handleClose();
@@ -103,9 +126,54 @@ const ViewUserDetail = (props) => {
     }
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbar({
+      ...snackbar,
+      message: "",
+      open: false,
+    });
+  };
+
   //API Call for updating user details
   const updateUserDetailAPI = () => {
-    console.log("API to be called");
+    let userInfo = {
+      firstName: info.fullName,
+      email: info.userName,
+      roles: info.role.map((val) => val.label),
+    };
+    if (checkboxState) {
+      userInfo.password = info.confirmPwd;
+    }
+    console.log(userInfo);
+    const obj = new UpdateUserDetails(userInfo);
+    fetch(obj.apiEndPoint(), {
+      method: "post",
+      headers: obj.getHeaders().headers,
+      body: JSON.stringify(obj.getBody()),
+    }).then(async (res) => {
+      let rsp_data = await res.json();
+      if (res.ok) {
+        setSnackbar({
+          ...snackbar,
+          variant: "success",
+          message: rsp_data.message,
+          open: true,
+        });
+      } else {
+        setSnackbar({
+          ...snackbar,
+          variant: "error",
+          message: rsp_data.message,
+          open: true,
+        });
+      }
+      setTimeout(() => {
+        setSnackbar({
+          ...snackbar,
+          open: false,
+        });
+      }, 3000);
+    });
   };
 
   //function to render the action button in the table
@@ -233,6 +301,17 @@ const ViewUserDetail = (props) => {
           handleSubmit={handleSubmit}
           checkboxState={checkboxState}
           handleCheckBoxClick={handleCheckBoxClick}
+          handleSnackbarClose={handleSnackbarClose}
+        />
+      )}
+      {snackbar && (
+        <Snackbar
+          open={snackbar.open}
+          message={snackbar.message}
+          variant={snackbar.variant}
+          hide={snackbar.timeOut}
+          handleClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
         />
       )}
     </>
