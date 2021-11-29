@@ -42,10 +42,16 @@ const ViewUserDetail = (props) => {
   //useEffect when the component is mounted
   useEffect(() => {
     if (status === "Started") {
-      const objUserDetails = new UserDetailsAPI();
-      dispatch(APITransport(objUserDetails));
+      makeUserDetailsAPICall();
     }
   }, []);
+
+  //API Call for fetching user details
+
+  const makeUserDetailsAPICall = () => {
+    const objUserDetails = new UserDetailsAPI();
+    dispatch(APITransport(objUserDetails));
+  };
 
   //click events
   const handleOpen = (tableData) => {
@@ -144,7 +150,6 @@ const ViewUserDetail = (props) => {
     if (checkboxState) {
       userInfo.password = info.confirmPwd;
     }
-    console.log(userInfo);
     const obj = new UpdateUserDetails(userInfo);
     fetch(obj.apiEndPoint(), {
       method: "post",
@@ -153,6 +158,7 @@ const ViewUserDetail = (props) => {
     }).then(async (res) => {
       let rsp_data = await res.json();
       if (res.ok) {
+        makeUserDetailsAPICall();
         setSnackbar({
           ...snackbar,
           variant: "success",
