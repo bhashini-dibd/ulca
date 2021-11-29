@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import UserDetailsAPI from "../../../redux/actions/api/Admin/UserDetails";
 import UpdateUserInfo from "./UpdateUserInfo";
 import { Switch } from "@material-ui/core";
+import { roles } from "../../../configs/AdminConfig";
 
 const ViewUserDetail = (props) => {
   //destructuring of props
@@ -21,7 +22,12 @@ const ViewUserDetail = (props) => {
 
   //state initialization
   const [openModal, setOpenModal] = useState(false);
-
+  const [info, setInfo] = useState({
+    userName: "",
+    fullName: "",
+    role: [],
+    orgValue: "",
+  });
   //useEffect when the component is mounted
   useEffect(() => {
     if (status === "Started") {
@@ -31,9 +37,30 @@ const ViewUserDetail = (props) => {
   }, []);
 
   //click events
-
-  const handleOpen = () => {
+  const handleOpen = (tableData) => {
+    setInfo({
+      userName: tableData[1],
+      fullName: tableData[2],
+      role: tableData[3].split(",").map((data) => {
+        return { label: data, value: data };
+      }),
+      orgValue: { label: tableData[4], value: tableData[4] },
+    });
     setOpenModal(true);
+  };
+
+  const handleRoleChange = (data, val) => {
+    setInfo({
+      ...info,
+      role: data,
+    });
+  };
+
+  const handleOrgChange = (data, val) => {
+    setInfo({
+      ...info,
+      orgValue: data,
+    });
   };
 
   const handleClose = () => {
@@ -41,7 +68,7 @@ const ViewUserDetail = (props) => {
   };
 
   //function to render the action button in the table
-  const renderActions = (isActive) => {
+  const renderActions = (tableData) => {
     return (
       <Grid container spacing={1}>
         <Grid
@@ -55,7 +82,7 @@ const ViewUserDetail = (props) => {
         >
           <Tooltip placement="left" title="Active/Inactive">
             <Switch
-              checked={isActive}
+              checked={tableData[6]}
               // onChange={handleChange}
               color="primary"
               name="checkedB"
@@ -64,7 +91,7 @@ const ViewUserDetail = (props) => {
           </Tooltip>
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-          <IconButton onClick={handleOpen}>
+          <IconButton onClick={() => handleOpen(tableData)}>
             <Tooltip placement="right" title="Edit Details">
               <EditIcon fontSize="medium" />
             </Tooltip>
@@ -97,7 +124,11 @@ const ViewUserDetail = (props) => {
       options: {
         sort: false,
         customBodyRender: (rowData) => {
-          return <Typography variant="body2" className={classes.userIdTypo}>{rowData}</Typography>;
+          return (
+            <Typography variant="body2" className={classes.userIdTypo}>
+              {rowData}
+            </Typography>
+          );
         },
       },
     },
@@ -126,7 +157,7 @@ const ViewUserDetail = (props) => {
       options: {
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return renderActions(tableMeta.rowData[6]);
+          return renderActions(tableMeta.rowData);
         },
       },
     },
@@ -151,7 +182,13 @@ const ViewUserDetail = (props) => {
         options={options}
       />
       {openModal && (
-        <UpdateUserInfo open={openModal} handleClose={handleClose} />
+        <UpdateUserInfo
+          open={openModal}
+          handleClose={handleClose}
+          info={info}
+          handleRoleChange={handleRoleChange}
+          handleOrgChange={handleOrgChange}
+        />
       )}
     </>
   );

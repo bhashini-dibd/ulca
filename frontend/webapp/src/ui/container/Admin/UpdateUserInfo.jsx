@@ -1,96 +1,108 @@
-import {
-  Grid,
-  TextField,
-  Typography,
-  Button,
-  IconButton,
-  Tooltip,
-} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import Modal from "../../components/common/Modal";
 import AdminPanelStyle from "../../styles/AdminPanel";
-import Autocomplete from "../../components/common/Autocomplete";
-import CloseIcon from "@material-ui/icons/Close";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Box from "@material-ui/core/Box";
+import EditInfo from "./EditInfo";
+import EditProfile from "./EditProfile";
+import EditAccount from "./EditAccount";
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`vertical-tabpanel-${index}`}
+      aria-labelledby={`vertical-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={0}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `vertical-tab-${index}`,
+    "aria-controls": `vertical-tabpanel-${index}`,
+    style: {
+      width: "5rem",
+    },
+  };
+}
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: 750,
+    backgroundColor: theme.palette.background.paper,
+  },
+}));
 
 const UpdateUserInfo = (props) => {
   //fetching props
-  const { open, handleClose, classes } = props;
+  const { open, handleClose, info, handleRoleChange, handleOrgChange } = props;
 
-  // function returning TextField
+  //declaring and initializing constants
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0);
+  const [checkboxState, setCheckBoxState] = useState(false);
 
-  const renderTextField = (label) => {
-    return (
-      <TextField fullWidth variant="outlined" color="primary" label={label} />
-    );
+  //event handler
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const handleCheckBoxClick = (e) => {
+    setCheckBoxState(e.target.checked);
   };
 
   return (
     <Modal open={open} handleClose={handleClose}>
-      <Grid container spacing={2}>
-        <Grid
-          item
-          xs={11}
-          sm={11}
-          md={11}
-          lg={11}
-          xl={11}
-          style={{ display: "flex", alignItems: "center" }}
+      <div className={classes.root}>
+        <Tabs
+          // orientation="vertical"
+          value={value}
+          onChange={handleChange}
+          aria-label="Vertical tabs example"
         >
-          <Typography variant="h5">Edit Profile</Typography>
-        </Grid>
-        <Grid item xs={1} sm={1} md={1} lg={1} xl={1}>
-          <IconButton onClick={handleClose}>
-            <Tooltip placement="right" title="Close">
-              <CloseIcon fontSize="small" />
-            </Tooltip>
-          </IconButton>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {renderTextField("User ID")}
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {renderTextField("Name")}
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {renderTextField("Password")}
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {renderTextField("Confirm Password")}
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          <Autocomplete
-            id="org"
-            label="Organization"
-            options={[{ label: "IIT Madras", value: "iitMadras" }]}
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          <Autocomplete
-            id="role"
-            label="Role"
-            options={[
-              { label: "Contributor", value: "contributor" },
-              { label: "Benchmark Dataset Contributor", value: "bmd" },
-            ]}
-          />
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Button fullWidth size="large" color="default" variant="contained">
-            Clear
-          </Button>
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
-          <Button
-            onClick={handleClose}
-            fullWidth
-            size="large"
-            color="primary"
-            variant="contained"
-          >
-            Submit
-          </Button>
-        </Grid>
-      </Grid>
+          <Tab label="Profile" {...a11yProps(0)} />
+          <Tab label="Security" {...a11yProps(1)} />
+        </Tabs>
+        <TabPanel value={value} index={0}>
+          <EditInfo handleClose={handleClose}>
+            <EditProfile
+              info={info}
+              handleRoleChange={handleRoleChange}
+              handleOrgChange={handleOrgChange}
+            />
+          </EditInfo>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <EditInfo>
+            <EditAccount
+              checked={checkboxState}
+              handleChange={handleCheckBoxClick}
+            />
+          </EditInfo>
+        </TabPanel>
+      </div>
     </Modal>
   );
 };

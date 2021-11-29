@@ -17,13 +17,9 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     borderRadius: "20px",
     position: "absolute",
-    width: "35vw",
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
-    "@media (max-width: 1000px)": {
-      width: "65vw",
-    },
   },
 }));
 
