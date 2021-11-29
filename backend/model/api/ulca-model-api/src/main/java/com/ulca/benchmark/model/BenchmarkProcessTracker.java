@@ -12,23 +12,26 @@ import org.springframework.validation.annotation.Validated;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * Process Tracker entity
+ * Benchmark Process Tracker entity
  */
-@Schema(description = "Process Tracker entity")
+@Schema(description = "Benchmark Process Tracker entity")
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-08T12:36:29.236Z[GMT]")
 
 
-@Document(collection = "ulca-pt-processes")
+@Document(collection = "ulca-bpt-processes")
 public class BenchmarkProcessTracker {
 	
 	@Id
 	@JsonProperty("id")
 	private String id = null;
 
+	@JsonProperty("userId")
+	private String userId = null;
 	
 	@JsonProperty("datasetId")
 	private String datasetId = null;
@@ -184,6 +187,14 @@ public class BenchmarkProcessTracker {
 	 **/
 	@Schema(description = "Id of the user")
 
+	public String getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	
 	public BenchmarkProcessTracker datasetId(String datasetId) {
 		this.datasetId = datasetId;
@@ -400,7 +411,8 @@ public class BenchmarkProcessTracker {
 			return false;
 		}
 		BenchmarkProcessTracker processTracker = (BenchmarkProcessTracker) o;
-		return  Objects.equals(this.datasetId, processTracker.datasetId)
+		return  Objects.equals(this.userId, processTracker.userId)
+				&&Objects.equals(this.datasetId, processTracker.datasetId)
 				&& Objects.equals(this.serviceRequestNumber, processTracker.serviceRequestNumber)
 				&& Objects.equals(this.serviceRequestType, processTracker.serviceRequestType)
 				&& Objects.equals(this.serviceRequestAction, processTracker.serviceRequestAction)
@@ -414,7 +426,7 @@ public class BenchmarkProcessTracker {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(datasetId, serviceRequestNumber, serviceRequestType, serviceRequestAction, status,
+		return Objects.hash(userId,datasetId, serviceRequestNumber, serviceRequestType, serviceRequestAction, status,
 				details, startTime, endTime, lastModified, error);
 	}
 
@@ -422,7 +434,7 @@ public class BenchmarkProcessTracker {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("class ProcessTracker {\n");
-
+		sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
 		sb.append("    datasetId: ").append(toIndentedString(datasetId)).append("\n");
 		sb.append("    serviceRequestNumber: ").append(toIndentedString(serviceRequestNumber)).append("\n");
 		sb.append("    serviceRequestType: ").append(toIndentedString(serviceRequestType)).append("\n");

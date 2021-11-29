@@ -42,6 +42,7 @@ import com.ulca.benchmark.model.BenchmarkProcessTracker.ServiceRequestActionEnum
 import com.ulca.benchmark.model.BenchmarkProcessTracker.ServiceRequestTypeEnum;
 import com.ulca.benchmark.model.BenchmarkProcessTracker.StatusEnum;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
+import com.ulca.benchmark.model.BenchmarkTaskTracker;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSubmitRequest;
@@ -123,113 +124,24 @@ public class BenchmarkService {
 				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 			}
 		}
-		
+		String serviceRequestNumber=Utility.getBenchmarkDatasetSubmitReferenceNumber();
 		BenchmarkProcessTracker benchmarkprocessTracker = new BenchmarkProcessTracker();
 		benchmarkprocessTracker.setId(benchmark.getBenchmarkId());
+		benchmarkprocessTracker.setUserId(benchmark.getUserId());
 		benchmarkprocessTracker.setDatasetId(benchmark.getBenchmarkId());
-		//	benchmarkprocessTracker.setServiceRequestNumber(Utility.getDatasetSubmitReferenceNumber());
+	    benchmarkprocessTracker.setServiceRequestNumber(serviceRequestNumber);
 		benchmarkprocessTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
-		benchmarkprocessTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
+		benchmarkprocessTracker.setServiceRequestType(ServiceRequestTypeEnum.benchmark);
 		benchmarkprocessTracker.setStatus(StatusEnum.pending.toString());
 		benchmarkprocessTracker.setStartTime(new Date().toString());
 
 		benchmarkProcessTrackerDao.insert(benchmarkprocessTracker);
-//
-//		FileDownload fileDownload = new FileDownload();
-//		fileDownload.setUserId(userId);
-//		fileDownload.setDatasetId(dataset.getDatasetId());
-//		fileDownload.setDatasetName(dataset.getDatasetName());
-//		//fileDownload.setDatasetType(request.getType());
-//		fileDownload.setFileUrl(request.getUrl());
-//		fileDownload.setServiceRequestNumber(processTracker.getServiceRequestNumber());
-//		
-//		//datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
-//		
-//		
-//		try {
-//			
-//			 ListenableFuture<SendResult<String, FileDownload>> future = datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
-//				
-//				 future.addCallback(new ListenableFutureCallback<SendResult<String, FileDownload>>() {
-//
-//					    public void onSuccess(SendResult<String, FileDownload> result) {
-//					    	log.info("message sent successfully to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
-//					    }
-//
-//					    @Override
-//					    public void onFailure(Throwable ex) {
-//					    	log.info("Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
-//					    	log.info("Error message :: " + ex.getMessage());
-//					    	
-//					    	DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
-//					    	error.setServiceRequestNumber(processTracker.getServiceRequestNumber());
-//					    	error.setAttempt(0);
-//					    	error.setCreatedOn(new Date().toString());
-//					    	error.setLastModifiedOn(new Date().toString());
-//					    	error.setFailed(false);
-//					    	error.setSuccess(false);
-//					    	error.setStage("download");
-//					    	List<String> er = new ArrayList<String>();
-//					    	er.add(ex.getMessage());
-//					    	error.setErrors(er);
-//					    	ObjectMapper mapper = new ObjectMapper();
-//						
-//								String dataRow;
-//								try {
-//									dataRow = mapper.writeValueAsString(fileDownload);
-//							    	error.setData(dataRow);
-//							    	datasetKafkaTransactionErrorLogDao.save(error);
-//							    	
-//								} catch (JsonProcessingException e) {
-//									// TODO Auto-generated catch block
-//									e.printStackTrace();
-//								}
-//								
-//					    	
-//					    }
-//					});
-//				 
-//				 
-//			
-//		}catch ( KafkaException ex) {
-//			log.info("Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
-//			log.info("Error message :: " + ex.getMessage());
-//			DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
-//	    	error.setServiceRequestNumber(processTracker.getServiceRequestNumber());
-//	    	error.setAttempt(0);
-//	    	error.setCreatedOn(new Date().toString());
-//	    	error.setLastModifiedOn(new Date().toString());
-//	    	error.setFailed(false);
-//	    	error.setSuccess(false);
-//	    	error.setStage("download");
-//	    	List<String> er = new ArrayList<String>();
-//	    	er.add(ex.getMessage());
-//	    	error.setErrors(er);
-//	    	ObjectMapper mapper = new ObjectMapper();
-//		
-//				String dataRow;
-//				try {
-//					dataRow = mapper.writeValueAsString(fileDownload);
-//			    	error.setData(dataRow);
-//			    	datasetKafkaTransactionErrorLogDao.save(error);
-//			    	
-//				} catch (JsonProcessingException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				
-//				
-//			throw ex;
-//		}
-		
-		
-		//send data to benchmark ingest topic to download benmark and validate and update
-		
+
 		BenchmarkIngest benchmarkIngest = new BenchmarkIngest();
 		benchmarkIngest.setBenchmarkId(benchmark.getBenchmarkId());
 		benchmarkIngestKafkaTemplate.send(benchmarkIngestTopic, benchmarkIngest);
 		
-		return new BenchmarkSubmitResponse("Benchmark has been Submitted", benchmark.getBenchmarkId(), benchmark.getStatus());
+		return new BenchmarkSubmitResponse("Benchmark has been Submitted", serviceRequestNumber, StatusEnum.pending.toString());
 	}
 
 	@Transactional
