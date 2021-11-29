@@ -2,13 +2,19 @@ import {
   Checkbox,
   FormControlLabel,
   Grid,
-  Switch,
   TextField,
   Typography,
 } from "@material-ui/core";
 
 const EditAccount = (props) => {
-  const { checked, handleChange, value, handlePwdChange } = props;
+  const {
+    checked,
+    handleChange,
+    value,
+    handleTextFieldChange,
+    pwd,
+    confirmPwd,
+  } = props;
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -33,8 +39,9 @@ const EditAccount = (props) => {
               fullWidth
               variant="outlined"
               label="Password"
-              value={value}
-              onChange={handlePwdChange}
+              value={pwd}
+              type="password"
+              onChange={(e) => handleTextFieldChange(e.target.value, "pwd")}
               color="primary"
             />
           </Grid>
@@ -43,8 +50,11 @@ const EditAccount = (props) => {
               fullWidth
               variant="outlined"
               label="Confirm Password"
-              value={value}
-              onChange={handlePwdChange}
+              value={confirmPwd}
+              type="password"
+              onChange={(e) =>
+                handleTextFieldChange(e.target.value, "confirmPwd")
+              }
               color="primary"
             />
           </Grid>

@@ -5,7 +5,7 @@ import SingleAutoComplete from "../../components/common/SingleAutoComplete";
 
 const EditProfile = (props) => {
   const { userName, fullName, role, orgValue } = props.info;
-  const { handleRoleChange, handleOrgChange } = props;
+  const { handleRoleChange, handleOrgChange, handleTextFieldChange } = props;
   return (
     <Grid container spacing={2} style={{ width: "auto" }}>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -27,6 +27,7 @@ const EditProfile = (props) => {
           variant="outlined"
           label="Full Name"
           color="primary"
+          onChange={(e) => handleTextFieldChange(e.target.value, "fullName")}
           value={fullName}
         />
       </Grid>

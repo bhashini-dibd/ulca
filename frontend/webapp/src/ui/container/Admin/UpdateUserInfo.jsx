@@ -57,7 +57,14 @@ const useStyles = makeStyles((theme) => ({
 
 const UpdateUserInfo = (props) => {
   //fetching props
-  const { open, handleClose, info, handleRoleChange, handleOrgChange } = props;
+  const {
+    open,
+    handleClose,
+    info,
+    handleRoleChange,
+    handleOrgChange,
+    handleTextFieldChange,
+  } = props;
 
   //declaring and initializing constants
   const classes = useStyles();
@@ -91,14 +98,16 @@ const UpdateUserInfo = (props) => {
               info={info}
               handleRoleChange={handleRoleChange}
               handleOrgChange={handleOrgChange}
+              handleTextFieldChange={handleTextFieldChange}
             />
           </EditInfo>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <EditInfo>
+          <EditInfo handleClose={handleClose}>
             <EditAccount
               checked={checkboxState}
               handleChange={handleCheckBoxClick}
+              handleTextFieldChange={handleTextFieldChange}
             />
           </EditInfo>
         </TabPanel>

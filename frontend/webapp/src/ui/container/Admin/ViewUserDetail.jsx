@@ -27,6 +27,8 @@ const ViewUserDetail = (props) => {
     fullName: "",
     role: [],
     orgValue: "",
+    pwd: "",
+    confirmPwd: "",
   });
   //useEffect when the component is mounted
   useEffect(() => {
@@ -65,6 +67,13 @@ const ViewUserDetail = (props) => {
 
   const handleClose = () => {
     setOpenModal(false);
+  };
+
+  const handleTextFieldChange = (value, prop) => {
+    setInfo({
+      ...info,
+      [prop]: value,
+    });
   };
 
   //function to render the action button in the table
@@ -186,6 +195,7 @@ const ViewUserDetail = (props) => {
           open={openModal}
           handleClose={handleClose}
           info={info}
+          handleTextFieldChange={handleTextFieldChange}
           handleRoleChange={handleRoleChange}
           handleOrgChange={handleOrgChange}
         />
