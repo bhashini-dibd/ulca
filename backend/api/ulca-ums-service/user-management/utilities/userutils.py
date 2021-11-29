@@ -6,6 +6,7 @@ import db
 from models.response import post_error
 import jwt
 import secrets
+from .orgUtils import OrgUtils
 from utilities import MODULE_CONTEXT
 from .app_enums import EnumVals
 import config
@@ -15,8 +16,8 @@ import requests
 from flask_mail import Mail, Message
 from app import mail
 from flask import render_template
-from collections import Counter
 from config import USR_MONGO_COLLECTION,USR_TEMP_TOKEN_MONGO_COLLECTION,USR_KEY_MONGO_COLLECTION
+
 import logging
 
 log = logging.getLogger('file')
@@ -144,7 +145,7 @@ class UserUtils:
         global role_details
         if not role_codes:
             log.info("Reading roles from remote location")
-            role_codes,role_details = UserUtils.read_role_codes()
+            role_codes = UserUtils.read_role_codes()
         log.info(role_codes)
         for role in roles:
             try:
@@ -376,7 +377,15 @@ class UserUtils:
             phone_validity = UserUtils.validate_phone(user["phoneNo"])          
             if phone_validity is False:
                 return post_error("Data not valid", "Phone number given is not valid", None)
-        log.info("Phone number  validated")
+            log.info("Phone number  validated")
+
+        # if user.get("orgID") != None:
+        #     org_validity =OrgUtils.validate_org(str(user["orgID"]).upper())
+        #     if org_validity is not None:
+        #         log.info("Org validation failed")
+        #         return org_validity
+        #     log.info("Org validated")
+
 
 
 
@@ -392,18 +401,17 @@ class UserUtils:
         -Model Validation 
         """
         global role_details
-        if user.get("userID") == None:
-            return post_error("Data Missing", "userID not found", None)
-        user_id = user["userID"]
-        
+        if user.get("email") == None:
+            return post_error("Data Missing", "email not found", None)
+        email = user["email"]
         try:
             #connecting to mongo instance/collection
             collections = db.get_db()[USR_MONGO_COLLECTION]
             #searching User Id with verification status = True 
-            record = collections.find({'userID': user_id,"isVerified":True})
+            record = collections.find({'email': email,"isVerified":True})
             if record.count() == 0:
                 log.info("User Id validation failed, no such verified user")
-                return post_error("Data not valid", "No such verified user with the given Id", None)
+                return post_error("Data not valid", "No such verified user with the given email", None)
             for value in record:
                 if value["isActive"]== False:
                     log.info("User Id validation failed,inactive user")
@@ -413,33 +421,41 @@ class UserUtils:
             log.exception(f"Database connection exception {e}")
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)
 
-        # if user.get("email") != None:
-        #     email_availability_status = UserUtils.email_availability(user["email"])
-        #     if email_availability_status is not None:
-        #         log_info("Email validation failed, already taken", MODULE_CONTEXT)
-        #         return email_availability_status
-        #     email_validity = UserUtils.validate_email_format(user["email"])
-        #     if email_validity == False:
-        #         log_info("Email validation failed, format error", MODULE_CONTEXT)
-        #         return post_error("Data not valid", "Email Id given is not valid", None)  
-        #     log_info("Email validated", MODULE_CONTEXT) 
-
-        rolecodes=[]
-        if user.get("roleCode") != None:
-            rolecodes.append(str(user["roleCode"]))
+        if user.get("roles") != None:
+            rolecodes = user["roles"]
+            if not isinstance(rolecodes,list):
+                return post_error("Invalid data", "roles should be a list of values", None)
             role_validity = UserUtils.validate_rolecodes(rolecodes) 
             if role_validity == False:
                 log.info("Role validation failed")
                 return post_error("Invalid data", "Rolecode given is not valid", None)
-            log.info("Role validated")
-            user["roles_new"]=[]
-            roles_to_update={}
-            roles_to_update["roleCode"]=str(user["roleCode"]).upper()
-            role_desc=[x["description"] for x in role_details if x["code"]==user["roleCode"] ]
-            roles_to_update["roleDesc"]=role_desc[0]
-            user["roles_new"].append(roles_to_update)
 
-       
+        # if user.get("orgID") != None:
+            #validate org
+        if user.get("firstName") != None:
+            if len(user["firstName"]) > config.NAME_MAX_LENGTH:
+                return post_error("Invalid data", "firstName given is too long", None)
+
+        if user.get("phoneNo") != None:
+            phone_validity = UserUtils.validate_phone(user["phoneNo"])          
+            if phone_validity is False:
+                return post_error("Data not valid", "Phone number given is not valid", None)
+            log.info("Phone number  validated")
+        
+        if user.get("password") != None:
+            password_validity = UserUtils.validate_password(user["password"])
+            if password_validity is not None:
+                log.info("Password validation failed")
+                return password_validity
+            log.info("Password validated")
+        
+        # if user.get("orgID") != None:
+        #     org_validity =OrgUtils.validate_org(str(user["orgID"]).upper())
+        #     if org_validity is not None:
+        #         log.info("Org validation failed")
+        #         return org_validity
+        #     log.info("Org validated")
+        
 
 
     @staticmethod
@@ -457,26 +473,25 @@ class UserUtils:
             result = collections.find({'email': user_email}, {
                 'password': 1, '_id': 0,'isActive':1,'isVerified':1})
             if result.count() == 0:
-                log.info("{} is not a verified user".format(user_email), MODULE_CONTEXT)
+                log.info("{} is not a verified user".format(user_email))
                 return post_error("Not verified", "This email address is not registered with ULCA. Please sign up.", None)
             for value in result:
                 if value["isVerified"]== False:
-                    log.info("{} is not a verified user".format(user_email), MODULE_CONTEXT)
+                    log.info("{} is not a verified user".format(user_email))
                     return post_error("Not active", "User account is not verified. Please click on the verification link sent on your email address to complete the verification process.", None)
                 if value["isActive"]== False:
-                    log.info("{} is not an active user".format(user_email), MODULE_CONTEXT)
+                    log.info("{} is not an active user".format(user_email))
                     return post_error("Not active", "This operation is not allowed for an inactive user", None)
                 password_in_db = value["password"].encode("utf-8")
                 try:
                     if bcrypt.checkpw(password.encode("utf-8"), password_in_db)== False:
-                        log.info("Password validation failed for {}".format(user_email), MODULE_CONTEXT)
+                        log.info("Password validation failed for {}".format(user_email))
                         return post_error("Invalid Credentials", "Incorrect username or password", None)
                 except Exception as e:
-                    log.exception("exception while decoding password",  MODULE_CONTEXT, e)
+                    log.exception(f"exception while decoding password : {e}")
                     return post_error("exception while decoding password", "exception:{}".format(str(e)), None)                   
         except Exception as e:
-            log.exception(
-                "Exception while validating email and password for login"+str(e),  MODULE_CONTEXT, e)
+            log.exception("Exception while validating email and password for login"+str(e))
             return post_error("Database exception","Exception occurred:{}".format(str(e)),None)
 
 
@@ -493,17 +508,14 @@ class UserUtils:
                 parsed = json.load(stream)
                 roles = parsed['roles']
                 rolecodes = []
-                role_details=[]
                 for role in roles:
                     if role["active"]:
                         rolecodes.append(role["code"])
-                        role_details.append(role)
-            return rolecodes,role_details
+            return rolecodes
         except Exception as exc:
-            log.exception("Exception while reading roles: " +
-                          str(exc), MODULE_CONTEXT, exc)
+            log.exception("Exception while reading roles: " +str(exc))
             return post_error("CONFIG_READ_ERROR",
-                       "Exception while reading roles: " + str(exc), MODULE_CONTEXT)
+                       "Exception while reading roles: " + str(exc))
 
 
     @staticmethod

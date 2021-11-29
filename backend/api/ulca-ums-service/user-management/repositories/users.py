@@ -26,7 +26,7 @@ class UserManagementRepositories:
                 users_data["lastName"]  =   user["lastName"]
             if "phoneNo" in user:
                 users_data["phoneNo"]   =   user["phoneNo"]
-                
+
             users_data["isVerified"]   =   False
             users_data["isActive"]     =   False
             users_data["registeredTime"]   =   datetime.datetime.utcnow()
@@ -43,19 +43,18 @@ class UserManagementRepositories:
         records                         =   []
         for user in users:
             users_data                  =   {}
-            users_data["userID"]        =   user["userID"]
-            if user.get("name")         !=  None:
-                users_data["name"]      =   user["name"]
-            if user.get("email")        !=  None:
-                users_data["email"]     =   user["email"]
+            users_data["email"]         =   user["email"]
+            if user.get("password")     !=  None:
+                updated_hash = UserUtils.hash_password(user["password"])
+                decoded_pwd = updated_hash.decode("utf-8")
+                users_data["password"]  = decoded_pwd  
+            if user.get("firstName")    !=  None:
+                users_data["firstName"] =   user["firstName"]
             if user.get("phoneNo")      !=  None:
                 users_data["phoneNo"]   =   user["phoneNo"]
-            if user.get("description")      !=  None:
-                users_data["description"]    =  user["description"]
-            if user.get("roles_new")        !=  None:
-                users_data["roles"]          =  user["roles_new"]
+            if user.get("roles")        !=  None:
+                users_data["roles"]     =  user["roles"]
             records.append(users_data)
-
         result = userModel.update_users_by_uid(records)
         if result is not None:
             return result

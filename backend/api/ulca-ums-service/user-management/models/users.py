@@ -37,7 +37,7 @@ class UserManagementModel(object):
                 #connecting to mongo instance/collection
                 collections = get_db()[USR_MONGO_COLLECTION]
                 #updating user record
-                results = collections.update({"userID": user["userID"]}, {'$set': user})
+                results = collections.update({"email": user["email"]}, {'$set': user})
                 if 'writeError' in list(results.keys()):
                     log.info("User{} updation failed due to {}".format((i+1),str(results)))
                     return post_error("Database error", "some of the records where not updated", None)
