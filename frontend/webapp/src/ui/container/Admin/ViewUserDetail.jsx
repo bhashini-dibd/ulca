@@ -30,6 +30,8 @@ const ViewUserDetail = (props) => {
     pwd: "",
     confirmPwd: "",
   });
+  const [checkboxState, setCheckBoxState] = useState(false);
+
   //useEffect when the component is mounted
   useEffect(() => {
     if (status === "Started") {
@@ -66,6 +68,7 @@ const ViewUserDetail = (props) => {
   };
 
   const handleClose = () => {
+    setCheckBoxState(false);
     setOpenModal(false);
   };
 
@@ -74,6 +77,35 @@ const ViewUserDetail = (props) => {
       ...info,
       [prop]: value,
     });
+  };
+
+  const handleCheckBoxClick = (e) => {
+    setCheckBoxState(e.target.checked);
+  };
+
+  const handleSubmit = () => {
+    if (!info.fullName.trim() || !info.orgValue || !info.role.length) {
+      alert("Profile details are mandatory");
+    } else {
+      if (checkboxState) {
+        if (!info.pwd || !info.confirmPwd) {
+          alert("Please fill password");
+        } else if (info.pwd !== info.confirmPwd) {
+          alert("Password and Confirm Password is different");
+        } else {
+          updateUserDetailAPI();
+          handleClose();
+        }
+      } else {
+        updateUserDetailAPI();
+        handleClose();
+      }
+    }
+  };
+
+  //API Call for updating user details
+  const updateUserDetailAPI = () => {
+    console.log("API to be called");
   };
 
   //function to render the action button in the table
@@ -198,6 +230,9 @@ const ViewUserDetail = (props) => {
           handleTextFieldChange={handleTextFieldChange}
           handleRoleChange={handleRoleChange}
           handleOrgChange={handleOrgChange}
+          handleSubmit={handleSubmit}
+          checkboxState={checkboxState}
+          handleCheckBoxClick={handleCheckBoxClick}
         />
       )}
     </>

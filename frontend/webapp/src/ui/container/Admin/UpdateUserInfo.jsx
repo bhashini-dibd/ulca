@@ -64,20 +64,18 @@ const UpdateUserInfo = (props) => {
     handleRoleChange,
     handleOrgChange,
     handleTextFieldChange,
+    handleSubmit,
+    checkboxState,
+    handleCheckBoxClick,
   } = props;
 
   //declaring and initializing constants
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-  const [checkboxState, setCheckBoxState] = useState(false);
 
   //event handler
   const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
-
-  const handleCheckBoxClick = (e) => {
-    setCheckBoxState(e.target.checked);
   };
 
   return (
@@ -93,7 +91,7 @@ const UpdateUserInfo = (props) => {
           <Tab label="Security" {...a11yProps(1)} />
         </Tabs>
         <TabPanel value={value} index={0}>
-          <EditInfo handleClose={handleClose}>
+          <EditInfo handleClose={handleClose} handleSubmit={handleSubmit}>
             <EditProfile
               info={info}
               handleRoleChange={handleRoleChange}
@@ -103,7 +101,7 @@ const UpdateUserInfo = (props) => {
           </EditInfo>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <EditInfo handleClose={handleClose}>
+          <EditInfo handleClose={handleClose} handleSubmit={handleSubmit}>
             <EditAccount
               checked={checkboxState}
               handleChange={handleCheckBoxClick}
