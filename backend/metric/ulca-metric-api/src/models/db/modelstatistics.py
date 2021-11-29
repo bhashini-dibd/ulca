@@ -26,8 +26,9 @@ class AggregateModelData(object):
                 for record in result:
                     rec = {}
                     rec["_id"]      =   record["_id"]["model"]
-
-                    if record["_id"]["model"] and len(record["_id"]["model"])>9:
+                    if record["_id"]["model"] == None:
+                        rec["label"]    =   "Undefined"
+                    elif record["_id"]["model"] and len(record["_id"]["model"])>9:
                         rec["label"]    =   str(record["_id"]["model"]).title()
                     else:
                         rec["label"]    =   record["_id"]["model"]
