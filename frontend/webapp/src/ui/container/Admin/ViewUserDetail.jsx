@@ -8,9 +8,12 @@ import APITransport from "../../../redux/actions/apitransport/apitransport";
 import { useEffect, useState } from "react";
 import UserDetailsAPI from "../../../redux/actions/api/Admin/UserDetails";
 import UpdateUserInfo from "./UpdateUserInfo";
-import { Switch } from "@material-ui/core";
+import { Switch, Button } from "@material-ui/core";
 import UpdateUserDetails from "../../../redux/actions/api/Admin/UpdateUserDetails";
 import Snackbar from "../../components/common/Snackbar";
+import Search from "../../components/Datasets&Model/Search";
+import Filter from "../../components/common/Filter";
+import FilterListIcon from "@material-ui/icons/FilterList";
 
 const ViewUserDetail = (props) => {
   //destructuring of props
@@ -22,6 +25,9 @@ const ViewUserDetail = (props) => {
   const dispatch = useDispatch();
 
   //state initialization
+  const [anchorEl, setAnchorEl] = useState(null);
+  const popoverOpen = Boolean(anchorEl);
+  const id = popoverOpen ? "simple-popover" : undefined;
   const [openModal, setOpenModal] = useState(false);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -38,7 +44,7 @@ const ViewUserDetail = (props) => {
     confirmPwd: "",
   });
   const [checkboxState, setCheckBoxState] = useState(false);
-
+  const [searchState, setSearchState] = useState("");
   //useEffect when the component is mounted
   useEffect(() => {
     if (status === "Started") {
@@ -140,6 +146,17 @@ const ViewUserDetail = (props) => {
     });
   };
 
+  const handleSearch = (event) => {
+    setSearchState(event.target.value);
+  };
+
+  const handleShowFilter = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleFilterClose = () => {
+    setAnchorEl(null);
+  };
+
   //API Call for updating user details
   const updateUserDetailAPI = () => {
     let userInfo = {
@@ -216,6 +233,30 @@ const ViewUserDetail = (props) => {
     );
   };
 
+  //render Custom Toolbar
+  const renderToolbar = () => {
+    return (
+      <Grid container>
+        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+          <Search searchValue={searchState} handleSearch={handleSearch} />
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+          <Button
+            color={"default"}
+            size="medium"
+            variant="outlined"
+            style={{ borderRadius: "20px" }}
+            onClick={handleShowFilter}
+          >
+            {" "}
+            <FilterListIcon className={classes.iconStyle} />
+            Filter
+          </Button>
+        </Grid>
+      </Grid>
+    );
+  };
+
   const convertDate = (date) => {
     return date
       .toLocaleString("en-IN", {
@@ -286,6 +327,7 @@ const ViewUserDetail = (props) => {
     viewColumns: false,
     selectableRows: false,
     search: false,
+    customToolbar: renderToolbar,
   };
 
   return (
@@ -319,6 +361,24 @@ const ViewUserDetail = (props) => {
           handleClose={handleSnackbarClose}
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
         />
+      )}
+      {popoverOpen && (
+        <Filter
+          id={id}
+          open={popoverOpen}
+          anchorEl={anchorEl}
+          handleClose={handleFilterClose}
+          selectedFilter={[]}
+        >
+          <Grid container className={classes.filterContainer}>
+            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+              <Typography variant="h6">Role</Typography>
+            </Grid>
+            <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
+              <Typography variant="h6">Organisation</Typography>
+            </Grid>
+          </Grid>
+        </Filter>
       )}
     </>
   );

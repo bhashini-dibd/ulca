@@ -6,6 +6,9 @@ const AdminPanel = (theme) => ({
   userIdTypo: {
     textTransform: "none",
   },
+  filterContainer: {
+    marginBottom: "20px",
+  },
 });
 
 export default AdminPanel;
