@@ -1,6 +1,14 @@
 import MUIDataTable from "mui-datatables";
 import EditIcon from "@material-ui/icons/Edit";
-import { Grid, IconButton, Tooltip, Typography } from "@material-ui/core";
+import {
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import AdminPanelStyle from "../../styles/AdminPanel";
 import { useSelector, useDispatch } from "react-redux";
@@ -20,9 +28,10 @@ const ViewUserDetail = (props) => {
   const { classes } = props;
 
   // reducer and action dispatcher intialization
-  const data = useSelector((state) => state.getUserDetails.userDetails);
+  const data = useSelector((state) => state.getUserDetails.filteredUserDetails);
   const status = useSelector((state) => state.getUserDetails.status);
   const dispatch = useDispatch();
+  const filters = useSelector((state) => state.getUserDetails.filters);
 
   //state initialization
   const [anchorEl, setAnchorEl] = useState(null);
@@ -233,6 +242,22 @@ const ViewUserDetail = (props) => {
     );
   };
 
+  //render filter options
+  const renderFilterOptions = (property) => {
+    return (
+      <FormGroup>
+        {filters[property].map((type) => {
+          return (
+            <FormControlLabel
+              control={<Checkbox name={type} color="primary" />}
+              label={type}
+            />
+          );
+        })}
+      </FormGroup>
+    );
+  };
+
   //render Custom Toolbar
   const renderToolbar = () => {
     return (
@@ -373,9 +398,11 @@ const ViewUserDetail = (props) => {
           <Grid container className={classes.filterContainer}>
             <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
               <Typography variant="h6">Role</Typography>
+              {renderFilterOptions("roles")}
             </Grid>
             <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>
               <Typography variant="h6">Organisation</Typography>
+              {renderFilterOptions("org")}
             </Grid>
           </Grid>
         </Filter>

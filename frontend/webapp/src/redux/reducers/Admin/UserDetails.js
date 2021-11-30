@@ -2,6 +2,12 @@ import C from "../../actions/constants";
 
 const initialState = {
   userDetails: [],
+  filteredUserDetails: [],
+  filters: {
+    role: [],
+    org: [],
+  },
+  selectedFilter: [],
   status: "Started",
 };
 
@@ -27,10 +33,26 @@ const getUserDetails = (payload) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_USER_DETAILS:
+      const data = getUserDetails(action.payload);
+      let filters = {
+        roles: [],
+        org: [],
+      };
+      data.forEach((elem) => {
+        filters.roles.push(elem.role);
+        filters.org.push(elem.org);
+      });
+      const selectedFilter = [];
+      filters.roles = [...new Set(filters.roles)];
+      filters.org = [...new Set(filters.org)];
+
       return {
         ...state,
-        userDetails: getUserDetails(action.payload),
+        userDetails: data,
+        filteredUserDetails: data,
         status: "Completed",
+        filters,
+        selectedFilter,
       };
     default:
       return {
