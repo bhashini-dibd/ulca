@@ -17,20 +17,32 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.constant.BenchmarkConstants;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.dao.BenchmarkProcessTrackerDao;
 import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
 import com.ulca.benchmark.exception.BenchmarkNotFoundException;
 import com.ulca.benchmark.kafka.model.BenchmarkIngest;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.BenchmarkProcessTracker;
+import com.ulca.benchmark.model.BenchmarkProcessTracker.ServiceRequestActionEnum;
+import com.ulca.benchmark.model.BenchmarkProcessTracker.ServiceRequestTypeEnum;
+import com.ulca.benchmark.model.BenchmarkProcessTracker.StatusEnum;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
+import com.ulca.benchmark.model.BenchmarkTaskTracker;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSubmitRequest;
@@ -84,6 +96,9 @@ public class BenchmarkService {
 	@Autowired
 	ModelDao modelDao;
 	
+	@Autowired
+	BenchmarkProcessTrackerDao benchmarkProcessTrackerDao;
+	
 
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
@@ -109,15 +124,24 @@ public class BenchmarkService {
 				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 			}
 		}
-		
-		
-		//send data to benchmark ingest topic to download benmark and validate and update
-		
+		String serviceRequestNumber=Utility.getBenchmarkDatasetSubmitReferenceNumber();
+		BenchmarkProcessTracker benchmarkprocessTracker = new BenchmarkProcessTracker();
+		benchmarkprocessTracker.setId(benchmark.getBenchmarkId());
+		benchmarkprocessTracker.setUserId(benchmark.getUserId());
+		benchmarkprocessTracker.setDatasetId(benchmark.getBenchmarkId());
+	    benchmarkprocessTracker.setServiceRequestNumber(serviceRequestNumber);
+		benchmarkprocessTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
+		benchmarkprocessTracker.setServiceRequestType(ServiceRequestTypeEnum.benchmark);
+		benchmarkprocessTracker.setStatus(StatusEnum.pending.toString());
+		benchmarkprocessTracker.setStartTime(new Date().toString());
+
+		benchmarkProcessTrackerDao.insert(benchmarkprocessTracker);
+
 		BenchmarkIngest benchmarkIngest = new BenchmarkIngest();
 		benchmarkIngest.setBenchmarkId(benchmark.getBenchmarkId());
 		benchmarkIngestKafkaTemplate.send(benchmarkIngestTopic, benchmarkIngest);
 		
-		return new BenchmarkSubmitResponse("Benchmark has been Submitted", benchmark.getBenchmarkId(), benchmark.getStatus());
+		return new BenchmarkSubmitResponse("Benchmark has been Submitted", serviceRequestNumber, StatusEnum.pending.toString());
 	}
 
 	@Transactional

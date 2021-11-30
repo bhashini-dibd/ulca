@@ -13,4 +13,8 @@ public class Utility {
 	    return m + new Random().nextInt(9 * m);
 	}
 
+	public static String getBenchmarkDatasetSubmitReferenceNumber() {
+		return "44"+generateRandomDigits(8);
+	}
+
 }
