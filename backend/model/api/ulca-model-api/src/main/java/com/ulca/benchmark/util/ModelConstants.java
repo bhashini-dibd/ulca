@@ -17,7 +17,7 @@ public final class ModelConstants {
 	public List<String> getMetricList(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu","meteor","rouge","ribes","gleu","bert" };
+			String[] metric = { "bleu","meteor","ribes","gleu","bert" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}

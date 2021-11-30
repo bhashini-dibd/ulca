@@ -31,16 +31,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.constant.BenchmarkConstants;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
-import com.ulca.benchmark.dao.BenchmarkProcessTrackerDao;
+import com.ulca.benchmark.dao.BenchmarkDatasetSubmitStatusDao;
 import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
 import com.ulca.benchmark.exception.BenchmarkNotFoundException;
 import com.ulca.benchmark.kafka.model.BenchmarkIngest;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
-import com.ulca.benchmark.model.BenchmarkProcessTracker;
-import com.ulca.benchmark.model.BenchmarkProcessTracker.ServiceRequestActionEnum;
-import com.ulca.benchmark.model.BenchmarkProcessTracker.ServiceRequestTypeEnum;
-import com.ulca.benchmark.model.BenchmarkProcessTracker.StatusEnum;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus.ServiceRequestActionEnum;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus.ServiceRequestTypeEnum;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus.StatusEnum;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
 import com.ulca.benchmark.model.BenchmarkTaskTracker;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
@@ -96,10 +96,10 @@ public class BenchmarkService {
 	@Autowired
 	ModelDao modelDao;
 	
-	@Autowired
-	BenchmarkProcessTrackerDao benchmarkProcessTrackerDao;
 	
-
+	@Autowired
+	BenchmarkSubmtStatusService bmSubmtStatusService;
+	
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
 	
@@ -125,23 +125,14 @@ public class BenchmarkService {
 			}
 		}
 		String serviceRequestNumber=Utility.getBenchmarkDatasetSubmitReferenceNumber();
-		BenchmarkProcessTracker benchmarkprocessTracker = new BenchmarkProcessTracker();
-		benchmarkprocessTracker.setId(benchmark.getBenchmarkId());
-		benchmarkprocessTracker.setUserId(benchmark.getUserId());
-		benchmarkprocessTracker.setDatasetId(benchmark.getBenchmarkId());
-	    benchmarkprocessTracker.setServiceRequestNumber(serviceRequestNumber);
-		benchmarkprocessTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
-		benchmarkprocessTracker.setServiceRequestType(ServiceRequestTypeEnum.benchmark);
-		benchmarkprocessTracker.setStatus(StatusEnum.pending.toString());
-		benchmarkprocessTracker.setStartTime(new Date().toString());
-
-		benchmarkProcessTrackerDao.insert(benchmarkprocessTracker);
-
+		bmSubmtStatusService.createStatus(serviceRequestNumber, request.getUserId(), benchmark.getBenchmarkId());
+		
 		BenchmarkIngest benchmarkIngest = new BenchmarkIngest();
 		benchmarkIngest.setBenchmarkId(benchmark.getBenchmarkId());
+		benchmarkIngest.setServiceRequestNumber(serviceRequestNumber);
 		benchmarkIngestKafkaTemplate.send(benchmarkIngestTopic, benchmarkIngest);
 		
-		return new BenchmarkSubmitResponse("Benchmark has been Submitted", serviceRequestNumber, StatusEnum.pending.toString());
+		return new BenchmarkSubmitResponse("Benchmark Dataset has been Submitted", serviceRequestNumber, StatusEnum.pending.toString());
 	}
 
 	@Transactional
@@ -165,6 +156,7 @@ public class BenchmarkService {
 			if(benchmark == null ) {
 				throw new BenchmarkNotFoundException("Benchmark : " + bm.getBenchmarkId() + " not found ");
 			}
+			
 			List<BenchmarkProcess> isExistBmProcess = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetIdAndMetric(modelId,bm.getBenchmarkId(),bm.getMetric());
 			if(isExistBmProcess != null && isExistBmProcess.size()>0 ) {
 				
@@ -347,7 +339,7 @@ public class BenchmarkService {
 		
 	}
 	
-
+/*
 	List<String> getMetric(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
@@ -381,7 +373,7 @@ public class BenchmarkService {
 		}
 		return list;
 	}
-
+*/
 
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
 		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");

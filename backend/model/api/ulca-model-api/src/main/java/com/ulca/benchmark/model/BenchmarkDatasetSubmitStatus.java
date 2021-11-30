@@ -18,13 +18,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 /**
  * Benchmark Process Tracker entity
  */
-@Schema(description = "Benchmark Process Tracker entity")
+@Schema(description = "Benchmark Dataset Submit Status entity")
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-08T12:36:29.236Z[GMT]")
 
 
-@Document(collection = "ulca-bpt-processes")
-public class BenchmarkProcessTracker {
+@Document(collection = "ulca-bm-submit-status")
+public class BenchmarkDatasetSubmitStatus {
 	
 	@Id
 	@JsonProperty("id")
@@ -33,8 +33,8 @@ public class BenchmarkProcessTracker {
 	@JsonProperty("userId")
 	private String userId = null;
 	
-	@JsonProperty("datasetId")
-	private String datasetId = null;
+	@JsonProperty("benchmarkId")
+	private String benchmarkId = null;
 
 	@JsonProperty("serviceRequestNumber")
 	@Indexed(unique=true)
@@ -44,10 +44,7 @@ public class BenchmarkProcessTracker {
 	 * Type of the service request
 	 */
 	public enum ServiceRequestTypeEnum {
-		dataset("datatset"),
-
-		model("model"),
-
+		
 		benchmark("benchmark");
 
 		private String value;
@@ -169,7 +166,7 @@ public class BenchmarkProcessTracker {
 	private String lastModified = null;
 
 	@JsonProperty("error")
-	private Error error = null;
+	private BenchmarkError error = null;
 
 	
 	public String getId() {
@@ -196,27 +193,27 @@ public class BenchmarkProcessTracker {
 		this.userId = userId;
 	}
 	
-	public BenchmarkProcessTracker datasetId(String datasetId) {
-		this.datasetId = datasetId;
+	public BenchmarkDatasetSubmitStatus benchmarkId(String benchmarkId) {
+		this.benchmarkId = benchmarkId;
 		return this;
 	}
 
 	/**
-	 * Unique identifier of the dataset
+	 * Unique identifier of the benchmarkId
 	 * 
 	 * @return datasetId
 	 **/
-	@Schema(description = "Unique identifier of the dataset")
+	@Schema(description = "Unique identifier of the benchmark")
 
-	public String getDatasetId() {
-		return datasetId;
+	public String getBenchmarkId() {
+		return benchmarkId;
 	}
 
-	public void setDatasetId(String datasetId) {
-		this.datasetId = datasetId;
+	public void setBenchmarkId(String benchmarkId) {
+		this.benchmarkId = benchmarkId;
 	}
 
-	public BenchmarkProcessTracker serviceRequestNumber(String serviceRequestNumber) {
+	public BenchmarkDatasetSubmitStatus serviceRequestNumber(String serviceRequestNumber) {
 		this.serviceRequestNumber = serviceRequestNumber;
 		return this;
 	}
@@ -237,7 +234,7 @@ public class BenchmarkProcessTracker {
 		this.serviceRequestNumber = serviceRequestNumber;
 	}
 
-	public BenchmarkProcessTracker serviceRequestType(ServiceRequestTypeEnum serviceRequestType) {
+	public BenchmarkDatasetSubmitStatus serviceRequestType(ServiceRequestTypeEnum serviceRequestType) {
 		this.serviceRequestType = serviceRequestType;
 		return this;
 	}
@@ -257,7 +254,7 @@ public class BenchmarkProcessTracker {
 		this.serviceRequestType = serviceRequestType;
 	}
 
-	public BenchmarkProcessTracker serviceRequestAction(ServiceRequestActionEnum serviceRequestAction) {
+	public BenchmarkDatasetSubmitStatus serviceRequestAction(ServiceRequestActionEnum serviceRequestAction) {
 		this.serviceRequestAction = serviceRequestAction;
 		return this;
 	}
@@ -298,7 +295,7 @@ public class BenchmarkProcessTracker {
 		this.status = status;
 	}
 
-	public BenchmarkProcessTracker details(Object details) {
+	public BenchmarkDatasetSubmitStatus details(Object details) {
 		this.details = details;
 		return this;
 	}
@@ -318,7 +315,7 @@ public class BenchmarkProcessTracker {
 		this.details = details;
 	}
 
-	public BenchmarkProcessTracker startTime(String startTime) {
+	public BenchmarkDatasetSubmitStatus startTime(String startTime) {
 		this.startTime = startTime;
 		return this;
 	}
@@ -339,7 +336,7 @@ public class BenchmarkProcessTracker {
 		this.startTime = startTime;
 	}
 
-	public BenchmarkProcessTracker endTime(String endTime) {
+	public BenchmarkDatasetSubmitStatus endTime(String endTime) {
 		this.endTime = endTime;
 		return this;
 	}
@@ -360,7 +357,7 @@ public class BenchmarkProcessTracker {
 		this.endTime = endTime;
 	}
 
-	public BenchmarkProcessTracker lastModified(String lastModified) {
+	public BenchmarkDatasetSubmitStatus lastModified(String lastModified) {
 		this.lastModified = lastModified;
 		return this;
 	}
@@ -381,7 +378,7 @@ public class BenchmarkProcessTracker {
 		this.lastModified = lastModified;
 	}
 
-	public BenchmarkProcessTracker error(Error error) {
+	public BenchmarkDatasetSubmitStatus error(BenchmarkError error) {
 		this.error = error;
 		return this;
 	}
@@ -394,11 +391,11 @@ public class BenchmarkProcessTracker {
 	@Schema(description = "")
 
 	@Valid
-	public Error getError() {
+	public BenchmarkError getError() {
 		return error;
 	}
 
-	public void setError(Error error) {
+	public void setError(BenchmarkError error) {
 		this.error = error;
 	}
 
@@ -410,9 +407,9 @@ public class BenchmarkProcessTracker {
 		if (o == null || getClass() != o.getClass()) {
 			return false;
 		}
-		BenchmarkProcessTracker processTracker = (BenchmarkProcessTracker) o;
+		BenchmarkDatasetSubmitStatus processTracker = (BenchmarkDatasetSubmitStatus) o;
 		return  Objects.equals(this.userId, processTracker.userId)
-				&&Objects.equals(this.datasetId, processTracker.datasetId)
+				&&Objects.equals(this.benchmarkId, processTracker.benchmarkId)
 				&& Objects.equals(this.serviceRequestNumber, processTracker.serviceRequestNumber)
 				&& Objects.equals(this.serviceRequestType, processTracker.serviceRequestType)
 				&& Objects.equals(this.serviceRequestAction, processTracker.serviceRequestAction)
@@ -426,7 +423,7 @@ public class BenchmarkProcessTracker {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userId,datasetId, serviceRequestNumber, serviceRequestType, serviceRequestAction, status,
+		return Objects.hash(userId,benchmarkId, serviceRequestNumber, serviceRequestType, serviceRequestAction, status,
 				details, startTime, endTime, lastModified, error);
 	}
 
@@ -435,7 +432,7 @@ public class BenchmarkProcessTracker {
 		StringBuilder sb = new StringBuilder();
 		sb.append("class ProcessTracker {\n");
 		sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
-		sb.append("    datasetId: ").append(toIndentedString(datasetId)).append("\n");
+		sb.append("    benchmarkId: ").append(toIndentedString(benchmarkId)).append("\n");
 		sb.append("    serviceRequestNumber: ").append(toIndentedString(serviceRequestNumber)).append("\n");
 		sb.append("    serviceRequestType: ").append(toIndentedString(serviceRequestType)).append("\n");
 		sb.append("    serviceRequestAction: ").append(toIndentedString(serviceRequestAction)).append("\n");
