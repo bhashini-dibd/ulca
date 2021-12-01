@@ -32,6 +32,9 @@ const ViewUserDetail = (props) => {
   const status = useSelector((state) => state.getUserDetails.status);
   const dispatch = useDispatch();
   const filters = useSelector((state) => state.getUserDetails.filters);
+  const selectedFilter = useSelector(
+    (state) => state.getUserDetails.selectedFilter
+  );
 
   //state initialization
   const [anchorEl, setAnchorEl] = useState(null);
@@ -242,6 +245,20 @@ const ViewUserDetail = (props) => {
     );
   };
 
+  const isChecked = (type, property) => {
+    return selectedFilter[property].indexOf(type) > -1 ? false : true;
+  };
+
+  const isDisabled = () => {
+    const keys = Object.keys(selectedFilter);
+    for (let i = 0; i < keys.length; i++) {
+      if (selectedFilter[keys[i]].length > 0) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   //render filter options
   const renderFilterOptions = (property) => {
     return (
@@ -249,7 +266,21 @@ const ViewUserDetail = (props) => {
         {filters[property].map((type) => {
           return (
             <FormControlLabel
-              control={<Checkbox name={type} color="primary" />}
+              control={
+                <Checkbox
+                  name={type}
+                  color="primary"
+                  onChange={() => {
+                    dispatch({
+                      type: "SELECT_ADMIN_FILTER",
+                      payload: {
+                        type: property,
+                        value: type,
+                      },
+                    });
+                  }}
+                />
+              }
               label={type}
             />
           );
@@ -294,6 +325,12 @@ const ViewUserDetail = (props) => {
         hour12: false,
       })
       .toUpperCase();
+  };
+
+  const handleClear = () => {
+    dispatch({
+      type: "CLEAR_ADMIN_FILTER",
+    });
   };
 
   //columns to be displayed in the table
@@ -393,7 +430,9 @@ const ViewUserDetail = (props) => {
           open={popoverOpen}
           anchorEl={anchorEl}
           handleClose={handleFilterClose}
-          selectedFilter={[]}
+          selectedFilter={selectedFilter}
+          handleClear={handleClear}
+          isDisabled={isDisabled()}
         >
           <Grid container className={classes.filterContainer}>
             <Grid item xs={6} sm={6} md={6} lg={6} xl={6}>

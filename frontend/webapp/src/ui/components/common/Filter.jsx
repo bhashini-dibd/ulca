@@ -11,25 +11,11 @@ const Filter = (props) => {
     handleClose,
     classes,
     handleApply,
-    handleClear,
-    selectedFilter,
+    handleClear,    
+    isDisabled
   } = props;
 
-  const isChecked = (type, property) => {
-    return selectedFilter[property].indexOf(type) > -1 ? true : false;
-  };
-
-  const isDisabled = () => {
-    const keys = Object.keys(selectedFilter);
-    for (let i = 0; i < keys.length; i++) {
-      if (selectedFilter[keys[i]].length > 0) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  return (
+    return (
     <Popover
       id={id}
       open={open}
@@ -58,7 +44,7 @@ const Filter = (props) => {
         variant="contained"
         className={classes.applyBtn}
         onClick={handleApply}
-        disabled={isDisabled()}
+        disabled={isDisabled}
       >
         {translate("button.apply")}
       </Button>
@@ -66,7 +52,7 @@ const Filter = (props) => {
         variant="outlined"
         className={classes.clrBtn}
         onClick={handleClear}
-        disabled={isDisabled()}
+        disabled={isDisabled}
       >
         {translate("button.clearAll")}
       </Button>

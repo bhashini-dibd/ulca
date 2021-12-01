@@ -4,10 +4,13 @@ const initialState = {
   userDetails: [],
   filteredUserDetails: [],
   filters: {
-    role: [],
+    roles: [],
     org: [],
   },
-  selectedFilter: [],
+  selectedFilter: {
+    roles: [],
+    org: [],
+  },
   status: "Started",
 };
 
@@ -30,6 +33,18 @@ const getUserDetails = (payload) => {
   });
 };
 
+const updateSelectedFilter = (type, payload, prevState) => {
+  console.log(type, payload, prevState);
+  let updatedFilterObj = prevState;
+  if (updatedFilterObj[type].includes(payload)) {
+    console.log("inside if", updatedFilterObj[type].indexOf(payload));
+    updatedFilterObj[type].splice(updatedFilterObj[type].indexOf(payload), 1);
+  } else {
+    updatedFilterObj[type].push(payload);
+  }
+  return updatedFilterObj;
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_USER_DETAILS:
@@ -42,7 +57,6 @@ const reducer = (state = initialState, action) => {
         filters.roles.push(elem.role);
         filters.org.push(elem.org);
       });
-      const selectedFilter = [];
       filters.roles = [...new Set(filters.roles)];
       filters.org = [...new Set(filters.org)];
 
@@ -52,7 +66,23 @@ const reducer = (state = initialState, action) => {
         filteredUserDetails: data,
         status: "Completed",
         filters,
-        selectedFilter,
+      };
+
+    case C.CLEAR_ADMIN_FILTER:
+      return {
+        ...state,
+        filteredUserDetails: state.userDetails,
+        selectedFilter: { roles: [], org: [] },
+      };
+    case C.SELECT_ADMIN_FILTER:
+      console.log(action.payload);
+      return {
+        ...state,
+        selectedFilter: updateSelectedFilter(
+          action.payload.type,
+          action.payload.value,
+          state.selectedFilter
+        ),
       };
     default:
       return {
