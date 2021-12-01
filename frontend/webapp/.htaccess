@@ -6,5 +6,5 @@
  RewriteCond %{REQUEST_FILENAME} -l [OR]
  RewriteCond %{REQUEST_FILENAME} -d
  RewriteRule ^.*$ – [NC,L]
- RewriteRule ^(.*) /intro/index.html [NC,L]
+ RewriteRule ^(.*) /ulca/index.html [NC,L]
  </IfModule>
