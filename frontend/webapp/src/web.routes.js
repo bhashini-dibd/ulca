@@ -8,7 +8,8 @@ export default function App() {
       <div>
         <Switch>
           <Route
-            exact={`${process.env.PUBLIC_URL}/intro`}
+            exact
+            path={`${process.env.PUBLIC_URL}/intro`}
             component={Dashboard}
           />
         </Switch>
