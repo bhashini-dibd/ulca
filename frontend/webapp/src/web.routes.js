@@ -74,7 +74,12 @@ export default function App() {
         <Switch>
           <Route
             exact
-            path={`${process.env.PUBLIC_URL}/`}
+            path={`${process.env.PUBLIC_URL}`}
+            component={Dashboard}
+          />
+          <Route
+            exact
+            path={`${process.env.PUBLIC_URL}/ulca`}
             component={Dashboard}
           />
           <Route
