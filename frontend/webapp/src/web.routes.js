@@ -7,7 +7,11 @@ export default function App() {
       <div>
         <Switch>
           <Route
-            exact={`${process.env.PUBLIC_URL}/ulca/`}
+            exact={`${process.env.PUBLIC_URL}/ulca/intro`}
+            component={Dashboard}
+          />
+          <Route
+            exact={`${process.env.PUBLIC_URL}/intro`}
             component={Dashboard}
           />
         </Switch>
