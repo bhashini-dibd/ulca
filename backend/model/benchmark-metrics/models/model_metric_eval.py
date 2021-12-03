@@ -42,3 +42,16 @@ class ModelMetricEval():
         Returns the evaluation score
         """
         pass
+
+    def preprocess_data(self, in_data, lang):
+        """
+        Interface to add preprocessing required before metric evaluation.
+        All metric implementations should override this method to implement
+        tokenization, normalisation or any preprocessing required.
+
+        in_data             : ground_truth or machine_translation to be preprocessed
+        language            : model output language
+
+        Returns the preprocessed list of sentences
+        """
+        pass
