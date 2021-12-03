@@ -7,17 +7,12 @@ import history from "./web.history";
 import Dashboard from "./Layout";
 export default function App() {
   return (
-
-    
     <Router history={history} basename="">
-      
       <div>
         <Switch>
-          <Route exact path={`${process.env.PUBLIC_URL}`}
+          <Route exact path={`${process.env.PUBLIC_URL}/ulca`}
             component={Dashboard}
-            
           />
-
         </Switch>
       </div>
     </Router>
