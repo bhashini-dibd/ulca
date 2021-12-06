@@ -9,6 +9,8 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -20,7 +22,13 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkDao;
+import com.ulca.benchmark.dao.BenchmarkDatasetSubmitStagesDao;
+import com.ulca.benchmark.dao.BenchmarkDatasetSubmitStatusDao;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStages;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus;
+import com.ulca.benchmark.model.BenchmarkError;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
+import com.ulca.benchmark.service.BenchmarkSubmtStatusService;
 import com.ulca.benchmark.util.UnzipUtility;
 
 import io.swagger.model.Benchmark;
@@ -43,6 +51,11 @@ public class KafkaBenchmarkIngestConsumer {
 	@Autowired
 	BenchmarkDao benchmarkDao;
 	
+	@Autowired
+	BenchmarkSubmtStatusService bmSubmtStatusService;
+	
+	@Autowired
+	BenchmarkDatasetSubmitStagesDao bmsubmtStagesDao;
 	
 	@KafkaListener(groupId = "${kafka.ulca.bm.ingest.ip.topic.group.id}", topics = "${kafka.ulca.bm.ingest.ip.topic}", containerFactory = "benchmarkIngestafkaListenerContainerFactory")
 	public void ingestBenchmark(BenchmarkIngest bmIngest) {
@@ -52,34 +65,69 @@ public class KafkaBenchmarkIngestConsumer {
 		try {
 
 			String benchmarkId = bmIngest.getBenchmarkId();
-			String downloadFolder = bmIngestDownloadFolder + "/benchmark";
+			String serviceRequestNumber = bmIngest.getServiceRequestNumber();
 			
-			Path targetLocation = Paths.get(downloadFolder).toAbsolutePath().normalize();
-
-			try {
-				Files.createDirectories(targetLocation);
-			} catch (Exception ex) {
-				throw new Exception("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
+			List<BenchmarkDatasetSubmitStages> list = bmsubmtStagesDao.findAllByServiceRequestNumber(serviceRequestNumber);
+			if(list != null && list.size() > 0) {
+				log.info("Benchmark Dataset Submit already in progress. serviceRequestNumber :: " + serviceRequestNumber);
+				return;
 			}
+			bmSubmtStatusService.updateStatus(serviceRequestNumber, BenchmarkDatasetSubmitStatus.StatusEnum.inprogress);
+			bmSubmtStatusService.createStages(serviceRequestNumber, BenchmarkDatasetSubmitStages.ToolEnum.download, BenchmarkDatasetSubmitStages.StatusEnum.inprogress);
+			
+			Map<String,String> fileMap = null;
+			Benchmark benchmark = null;
+			
+			try {
+				
+				String downloadFolder = bmIngestDownloadFolder + "/benchmark";
+				Path targetLocation = Paths.get(downloadFolder).toAbsolutePath().normalize();
 
-			Optional<Benchmark> benchmarkOpt = benchmarkDao.findById(benchmarkId);
-			Benchmark benchmark = benchmarkOpt.get();
-			String datasetUrl = benchmark.getDataset();
+				try {
+					Files.createDirectories(targetLocation);
+				} catch (Exception ex) {
+					throw new IOException("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
+				}
+				
+				Optional<Benchmark> benchmarkOpt = benchmarkDao.findById(benchmarkId);
+				benchmark = benchmarkOpt.get();
+				String datasetUrl = benchmark.getDataset();
+				
+				String fileName =  benchmarkId + ".zip";
+				
+				String filePath = downloadUsingNIO(datasetUrl, downloadFolder, fileName);
+				log.info("filePath :: " + filePath);
+				
+				log.info("serviceRequestNumber :: " + serviceRequestNumber);
+				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
+				
+			}catch (IOException ex) {
+				
+				BenchmarkError error = new BenchmarkError();
+				error.setCause(ex.getMessage());
+				error.setMessage("file download failed");
+				error.setCode("1000_FILE_DOWNLOAD_FAILURE");
+				bmSubmtStatusService.updateStatus(serviceRequestNumber, BenchmarkDatasetSubmitStatus.StatusEnum.failed);
+				bmSubmtStatusService.updateStagesWithErrorAndEndTime(serviceRequestNumber, BenchmarkDatasetSubmitStages.ToolEnum.download,BenchmarkDatasetSubmitStages.StatusEnum.failed, error);
+				
+				ex.printStackTrace();
+				
+				//update the benchmark dataset status 
+				benchmark.setStatus(BenchmarkSubmissionType.FAILED.toString());
+				benchmarkDao.save(benchmark);
+				
+				return;
+			}
+			bmSubmtStatusService.updateStages(serviceRequestNumber, BenchmarkDatasetSubmitStages.ToolEnum.download, BenchmarkDatasetSubmitStages.StatusEnum.completed);
 			
-			String fileName =  benchmarkId + ".zip";
-			
-			String filePath = downloadUsingNIO(datasetUrl, downloadFolder, fileName);
-			log.info("filePath :: " + filePath);
-			
-			String serviceRequestNumber =  benchmarkId;
-			log.info("serviceRequestNumber :: " + serviceRequestNumber);
-			Map<String, String> fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
+			bmSubmtStatusService.createStages(serviceRequestNumber, BenchmarkDatasetSubmitStages.ToolEnum.validate, BenchmarkDatasetSubmitStages.StatusEnum.inprogress);
 			
 			String paramsFilePath = fileMap.get("baseLocation")  + File.separator + "params.json";
 			
 			ObjectMapper objectMapper = new ObjectMapper();
 			File file = new File(paramsFilePath);
 			Object obj = objectMapper.readValue(file, Object.class);
+			
 			String benchmarkJsonStr = objectMapper.writeValueAsString(obj);
 			
 			JSONObject params =  new JSONObject(benchmarkJsonStr);
@@ -110,6 +158,8 @@ public class KafkaBenchmarkIngestConsumer {
 			benchmark.setStatus(BenchmarkSubmissionType.COMPLETED.toString());
 			
 			benchmarkDao.save(benchmark);
+			bmSubmtStatusService.updateStatus(serviceRequestNumber, BenchmarkDatasetSubmitStatus.StatusEnum.completed);
+			bmSubmtStatusService.updateStages(serviceRequestNumber, BenchmarkDatasetSubmitStages.ToolEnum.validate, BenchmarkDatasetSubmitStages.StatusEnum.completed);
 			
 
 		} catch (Exception ex) {
