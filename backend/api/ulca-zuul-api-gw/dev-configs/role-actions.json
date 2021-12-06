@@ -344,6 +344,21 @@
         "role": "BENCHMARK-DATASET-CONTRIBUTOR",
         "actionID": "1bdbb278-3f7e-4680-b892-519294a07518",
         "active": true
+      },
+      {
+        "role": "ADMIN",
+        "actionID": "7a275ce1-2882-49de-9875-cff890fab88f",
+        "active": true
+      },
+      {
+        "role": "ADMIN",
+        "actionID": "d9927b51-d0b8-4c96-99dd-d13c89864792",
+        "active": true
+      },
+      {
+        "role": "ADMIN",
+        "actionID": "4bfad84c-9a9e-4875-8d79-3e686ea4d72d",
+        "active": true
       }
     ]
   }
