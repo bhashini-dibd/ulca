@@ -56,10 +56,9 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "node homepage.js",
+        "build": "react-scripts build",
         "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "hompage-update": "node homepage.js"
+        "eject": "react-scripts eject"
     },
     "eslintConfig": {
         "extends": [

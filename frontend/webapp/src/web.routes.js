@@ -74,16 +74,6 @@ export default function App() {
         <Switch>
           <Route
             exact
-            path={`${process.env.PUBLIC_URL.replace(
-              process.env.PUBLIC_URL.substr(
-                process.env.PUBLIC_URL.lastIndexOf("/")
-              ),
-              ""
-            )}/`}
-            component={Dashboard}
-          />
-          <Route
-            exact
             path={`${process.env.PUBLIC_URL}/`}
             component={Dashboard}
           />
