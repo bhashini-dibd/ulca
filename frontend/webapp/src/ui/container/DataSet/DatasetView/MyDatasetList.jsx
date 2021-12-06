@@ -47,6 +47,16 @@ const ContributionList = (props) => {
     window.scrollTo(0, 0);
   });
 
+  const convertDate = (date) => {
+    return date
+      .toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .toUpperCase();
+  };
+
   const fetchHeaderButton = () => {
     return (
       <Grid container spacing={0}>
@@ -137,6 +147,11 @@ const ContributionList = (props) => {
         filter: false,
         sort: true,
         display: view ? "excluded" : true,
+        customBodyRender: (rowData) => {
+          const date = new Date(rowData);
+          return <>{convertDate(date)}</>;
+        },
+        sortDirection: "desc",
       },
     },
     {

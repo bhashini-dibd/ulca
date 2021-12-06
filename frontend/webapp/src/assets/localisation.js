@@ -125,7 +125,9 @@ const localization_EN_Data = {
     "Browse the file containing the parameters of the model.",
   "label.instructions3": "Make sure the file should be in JSON format.",
   "label.task": "Task",
-  "label.hostedInference": "Once you enter some input in Source language, ULCA will hit the inference endpoint of the hosted model, to get the translation. This can cause a slight delay in receiving the response."
+  "label.hostedInferenceTranslation": "Once you enter some input in Source language, ULCA will hit the inference endpoint of the hosted model, to get the translation. This can cause a slight delay in receiving the response.",
+  "label.hostedInferenceASR": "Please start speaking after the listening mode is enabled. Once you start speaking, ULCA will hit the inference endpoint of the hosted model, to get the transcription."
+
 };
 
 export function translate(locale_text) {

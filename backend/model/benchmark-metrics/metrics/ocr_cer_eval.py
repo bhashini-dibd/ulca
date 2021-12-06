@@ -2,6 +2,7 @@ import logging
 from logging.config import dictConfig
 from models.model_metric_eval import ModelMetricEval
 import fastwer
+import numpy as np
 
 log = logging.getLogger('file')
 
@@ -14,7 +15,12 @@ class OCRCEREval(ModelMetricEval):
     def ocr_metric_eval(self, ground_truth, machine_translation):
 
         try:
-            return fastwer.score(machine_translation, ground_truth, char_level=True)
+            eval_score = fastwer.score(machine_translation, ground_truth, char_level=True)
+            if np.isnan(eval_score):
+                log.error("Unable to calculate CER score")
+                return None
+            else:
+                return eval_score
         except Exception as e:
             log.exception(f"Exception in calculating CER: {str(e)}")
             return None
