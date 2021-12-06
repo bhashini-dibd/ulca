@@ -23,7 +23,7 @@
       {
         "code": "rogue",
         "label": "ROGUE",
-        "active": true
+        "active": false
       },
       {
         "code": "bert",
