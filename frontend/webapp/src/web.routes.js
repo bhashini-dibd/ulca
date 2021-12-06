@@ -69,12 +69,11 @@ const PrivateRoute = ({
 
 export default function App() {
   return (
-    <Router history={history} basename="/">
-      <div>
+    <Router history={history} basename="">
         <Switch>
           <Route
             exact
-            path={`${process.env.PUBLIC_URL}/`}
+            path={`${process.env.PUBLIC_URL}`}
             component={Dashboard}
           />
           <Route
@@ -282,7 +281,6 @@ export default function App() {
             component={Reset}
           /> */}
         </Switch>
-      </div>
     </Router>
   );
 }
