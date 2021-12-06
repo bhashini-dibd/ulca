@@ -17,6 +17,7 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import { translate } from "../../../../../assets/localisation";
+import Snackbar from "../../../../components/common/Snackbar";
 
 const HostedInferASR = (props) => {
   const {
@@ -94,22 +95,29 @@ const HostedInferASR = (props) => {
           setSnackbarInfo({
             ...snackbar,
             open: true,
-            message:
-              "The model is not accessible currently. Please try again later",
+            message: rsp_data.message,
             timeOut: 40000,
             variant: "error",
           });
         } else {
           if (status) {
-            setTargetAudio(rsp_data.data.transcript);
+            setTargetAudio(rsp_data.data.source);
           } else {
-            setTarget(rsp_data.data.transcript);
+            setSnackbarInfo({
+              ...snackbar,
+              open: false,
+              message: "",
+              timeOut: 0,
+              variant: "",
+            });
+            setTarget(rsp_data.data.source);
           }
 
           setTranslationState(true);
         }
       })
       .catch((error) => {
+        console.log(error);
         setApiCall(false);
         setSnackbarInfo({
           ...snackbar,
@@ -126,82 +134,132 @@ const HostedInferASR = (props) => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
   return (
-    <Grid container>
-      {apiCall && <Spinner />}
-      {/* <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
+    <>
+      <Grid container>
+        {apiCall && <Spinner />}
+        {/* <Typography className={classes.hosted}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography> */}
 
-      <Grid className={classes.grid} item xl={5} lg={5} md={5} sm={12} xs={12}>
-        <AudioRecord modelId={modelId} handleApicall={handleApicall} language={language}/>
-      </Grid>
-      <Grid className={classes.grid} item xl={6} lg={6} md={6} sm={12} xs={12}>
-        <Card className={classes.asrCard}>
-          <Grid container className={classes.cardHeader}>
-            <Typography variant="h6" className={classes.titleCard}>
-              {translate("label.output")}
-            </Typography>
-          </Grid>
-          <CardContent id="asrCardOutput">{targetAudio}</CardContent>
-        </Card>
-      </Grid>
+        <Grid
+          className={classes.grid}
+          item
+          xl={5}
+          lg={5}
+          md={5}
+          sm={12}
+          xs={12}
+        >
+          <AudioRecord
+            modelId={modelId}
+            handleApicall={handleApicall}
+            language={language}
+            streaming={props.streaming}
+          />
+        </Grid>
+        <Grid
+          className={classes.grid}
+          item
+          xl={6}
+          lg={6}
+          md={6}
+          sm={12}
+          xs={12}
+        >
+          <Card className={classes.asrCard}>
+            <Grid container className={classes.cardHeader}>
+              <Typography variant="h6" className={classes.titleCard}>
+                {translate("label.output")}
+              </Typography>
+            </Grid>
+            <CardContent id="asrCardOutput">{targetAudio}</CardContent>
+          </Card>
+        </Grid>
 
-      <Typography variant={"body1"}>{translate("label.disclaimer")}</Typography>
+        <Typography variant={"body1"}>
+          {translate("label.disclaimer")}
+        </Typography>
 
-      <Typography style={{ width: "95%" }} variant={"body2"}>
-        {translate("label.transcriptionNote")}
-      </Typography>
+        <Typography style={{ width: "95%" }} variant={"body2"}>
+          {translate("label.transcriptionNote")}
+        </Typography>
 
-      <Grid className={classes.grid} item xl={5} lg={5} md={5} sm={12} xs={12}>
-        <Card className={classes.asrCard}>
-          <Grid container className={classes.cardHeader}>
-            <Typography variant="h6" className={classes.titleCard}>
-              {translate("label.notes")}
-            </Typography>
-          </Grid>
-          <CardContent>
-            <Typography variant={"caption"}>
-              {translate("label.maxDuration")}
-            </Typography>
-            <TextField
-              style={{ marginTop: "15px", marginBottom: "10px" }}
-              fullWidth
-              color="primary"
-              label="Paste the public repository URL"
-              value={url}
-              error={error.url ? true : false}
-              helperText={error.url}
-              onChange={(e) => {
-                setUrl(e.target.value);
-                setError({ ...error, url: false });
-              }}
-            />
-          </CardContent>
-          <CardActions
-            style={{ justifyContent: "flex-end", paddingRight: "20px" }}
-          >
-            <Button
-              color="primary"
-              className={classes.computeBtnUrl}
-              disabled={url ? false : true}
-              variant="contained"
-              size={"small"}
-              onClick={handleSubmit}
+        <Grid
+          className={classes.grid}
+          item
+          xl={5}
+          lg={5}
+          md={5}
+          sm={12}
+          xs={12}
+        >
+          <Card className={classes.asrCard}>
+            <Grid container className={classes.cardHeader}>
+              <Typography variant="h6" className={classes.titleCard}>
+                {translate("label.notes")}
+              </Typography>
+            </Grid>
+            <CardContent>
+              <Typography variant={"caption"}>
+                {translate("label.maxDuration")}
+              </Typography>
+              <TextField
+                style={{ marginTop: "15px", marginBottom: "10px" }}
+                fullWidth
+                color="primary"
+                label="Paste the public repository URL"
+                value={url}
+                error={error.url ? true : false}
+                helperText={error.url}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  setError({ ...error, url: false });
+                }}
+              />
+            </CardContent>
+            <CardActions
+              style={{ justifyContent: "flex-end", paddingRight: "20px" }}
             >
-              {translate("button.convert")}
-            </Button>
-          </CardActions>
-        </Card>
+              <Button
+                color="primary"
+                className={classes.computeBtnUrl}
+                disabled={url ? false : true}
+                variant="contained"
+                size={"small"}
+                onClick={handleSubmit}
+              >
+                {translate("button.convert")}
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
+        <Grid
+          className={classes.grid}
+          item
+          xl={6}
+          lg={6}
+          md={6}
+          sm={12}
+          xs={12}
+        >
+          <Card className={classes.asrCard}>
+            <Grid container className={classes.cardHeader}>
+              <Typography variant="h6" className={classes.titleCard}>
+                {translate("label.output")}
+              </Typography>
+            </Grid>
+            <CardContent>{target}</CardContent>
+          </Card>
+        </Grid>
       </Grid>
-      <Grid className={classes.grid} item xl={6} lg={6} md={6} sm={12} xs={12}>
-        <Card className={classes.asrCard}>
-          <Grid container className={classes.cardHeader}>
-            <Typography variant="h6" className={classes.titleCard}>
-            {translate("label.output")}
-            </Typography>
-          </Grid>
-          <CardContent>{target}</CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+      {snackbar.open && (
+        <Snackbar
+          open={snackbar.open}
+          handleClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          message={snackbar.message}
+          variant={snackbar.variant}
+        />
+      )}
+    </>
   );
 };
 export default withStyles(DatasetStyle)(HostedInferASR);

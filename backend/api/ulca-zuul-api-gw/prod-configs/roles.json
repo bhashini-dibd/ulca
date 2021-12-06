@@ -19,6 +19,26 @@
             "code":"CONTRIBUTOR-SME",
             "active":true,
             "description":"Has access to CRUD operations on benchmark"
-        }
-    ]
-}
+        },
+        {
+            "code":"READONLY-USER",
+            "active":true,
+            "description":"Has access to Search features on ULCA"
+        },
+        {
+            "code":"BENCHMARK-DATASET-SUBMITTER",
+            "active":true,
+            "description":"Specific role to submit benchmark datasets"
+        },
+        {
+            "code":"EXTERNAL-CONSORTIUM-MEMBER",
+            "active":true,
+            "description":"Specific role to submit models, fetch models and run benchmarks"
+        },
+        {
+          "code":"BENCHMARK-DATASET-CONTRIBUTOR",
+          "active":true,
+          "description":"Role that is CONTRIBUTOR-USER + BENCHMARK-DATASET-SUBMITTER"
+      }
+      ]
+  }

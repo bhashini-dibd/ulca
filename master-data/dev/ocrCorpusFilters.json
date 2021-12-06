@@ -1,0 +1,89 @@
+{
+  "ocrCorpusFilters": [
+    {
+      "code": "sourceLanguage",
+      "label": "Source Language",
+      "active": true,
+      "values": {
+        "master": "/languages.json",
+        "jsonPath": "$.languages"
+      }
+    },
+    {
+      "code": "collectionMethod",
+      "label": "Collection Method",
+      "active": true,
+      "values": {
+        "master": "/collectionMethods.json",
+        "jsonPath": "$.collectionMethods"
+      }
+    },
+    {
+      "code": "domain",
+      "label": "Domain",
+      "active": true,
+      "values": {
+        "master": "/domains.json",
+        "jsonPath": "$.domains"
+      }
+    },
+    {
+      "code": "ocrTool",
+      "label": "OCR Tool",
+      "active": true,
+      "values": {
+        "master": "/ocrTools.json",
+        "jsonPath": "$.ocrTools"
+      }
+    },
+    {
+      "code": "collectionSource",
+      "label": "Collection Source",
+      "active": true,
+      "values": []
+    },
+    {
+      "code": "license",
+      "label": "License",
+      "active": true,
+      "values": {
+        "master": "/licenses.json",
+        "jsonPath": "$.licenses"
+      }
+    },
+    {
+      "code": "submitterName",
+      "label": "Submitter",
+      "active": true,
+      "values": []
+    },
+    {
+      "code": "format",
+      "label": "Format",
+      "active": true,
+      "values": {
+        "master": "/imageTypes.json",
+        "jsonPath": "$.imageTypes"
+      }
+    },
+    {
+      "code": "dpi",
+      "label": "DPI",
+      "active": true,
+      "values": {
+        "master": "/dpi.json",
+        "jsonPath": "$.dpi"
+      }
+    },
+    {
+      "code": "imageTextType",
+      "label": "Image Text Type",
+      "active": true,
+      "values": {
+        "master": "/imageTextTypes.json",
+        "jsonPath": "$.imageTextTypes"
+      }
+    }
+  ],
+  "relatedMaster": true
+}

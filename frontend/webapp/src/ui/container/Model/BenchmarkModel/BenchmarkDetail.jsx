@@ -82,7 +82,7 @@ const SearchModelDetail = (props) => {
   );
   useEffect(() => {
     window.scrollTo(0, 0);
-  },[]);
+  }, []);
 
   useEffect(() => {
     setMetric(metricArray[0]);
@@ -224,8 +224,9 @@ const SearchModelDetail = (props) => {
           >
             {prevUrl === "explore-models"
               ? "Back to Benchmark Datasets"
+              : prevUrl === "benchmark-dataset"
+              ? "Back to My Contribution"
               : "Back to Model Description"}
-            {/* Back to Benchmark Datasets */}
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
