@@ -6,30 +6,31 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
 public final class ModelConstants {
-	
-	
-	public List<String> getMetricList(String task) {
+
+	public List<String> getMetricListByModelTask(String task) {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu","meteor","rouge","ribes","gleu","bert" };
+
+			/*
+			 * rouge has been temporarily removed
+			 */
+			String[] metric = { "bleu", "meteor", "ribes", "gleu", "bert" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
-
 		if (task.equalsIgnoreCase("asr")) {
-			String[] metric = { "wer","cer" };
+			String[] metric = { "wer", "cer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
 		if (task.equalsIgnoreCase("ocr")) {
 
-			String[] metric = { "wer"};
+			String[] metric = { "wer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
@@ -39,7 +40,6 @@ public final class ModelConstants {
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
-
 		if (task.equalsIgnoreCase("document-layout")) {
 			String[] metric = { "precision", "recall", "h1-mean" };
 			list = new ArrayList<>(Arrays.asList(metric));
@@ -47,6 +47,5 @@ public final class ModelConstants {
 		}
 		return list;
 	}
-	
 
 }
