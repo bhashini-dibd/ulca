@@ -68,7 +68,6 @@ const PrivateRoute = ({
 };
 
 export default function App() {
-  console.log(process.env.PUBLIC_URL);
   return (
     <Router history={history} basename="/">
       <div>
