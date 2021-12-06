@@ -20,6 +20,5 @@ public class DatasetListByUserIdResponseDto {
 	private  String datasetType;
 	private  String submittedOn;
 	private  String status;
-	private  String benchmarkId;
 	
 }
