@@ -69,7 +69,7 @@ const PrivateRoute = ({
 
 export default function App() {
   return (
-    <Router history={history} basename="">
+    <Router history={history} basename="/">
         <Switch>
           <Route
             exact
