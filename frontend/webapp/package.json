@@ -2,6 +2,7 @@
     "name": "ulca",
     "version": "0.1.0",
     "private": true,
+    "homepage": "/ulca",
     "dependencies": {
         "@material-ui/core": "^4.11.4",
         "@material-ui/data-grid": "^4.0.0-alpha.37",
@@ -56,7 +57,7 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build",
+        "build": "react-scripts build && mkdir build/ulca && mv build/manifest.json build/ulca && mv build/static build/ulca/static",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
     },
