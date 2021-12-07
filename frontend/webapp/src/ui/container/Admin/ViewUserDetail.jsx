@@ -103,6 +103,10 @@ const ViewUserDetail = (props) => {
     setOpenModal(false);
   };
 
+  const handleChange = (email, status) => {
+    console.log("data", email, status)
+  }
+
   const handleTextFieldChange = (value, prop) => {
     setInfo({
       ...info,
@@ -227,7 +231,7 @@ const ViewUserDetail = (props) => {
           <Tooltip placement="left" title="Active/Inactive">
             <Switch
               checked={tableData[6]}
-              // onChange={handleChange}
+              onChange={() => handleChange(tableData[1], tableData[6])}
               color="primary"
               name="checkedB"
               inputProps={{ "aria-label": "primary checkbox" }}
