@@ -320,10 +320,10 @@ const ViewUserDetail = (props) => {
   const renderToolbar = () => {
     return (
       <Grid container>
-        <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Search searchValue={searchState} handleSearch={handleSearch} />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        {/* <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button
             color={"default"}
             size="medium"
@@ -335,7 +335,7 @@ const ViewUserDetail = (props) => {
             <FilterListIcon className={classes.iconStyle} />
             Filter
           </Button>
-        </Grid>
+        </Grid> */}
       </Grid>
     );
   };
