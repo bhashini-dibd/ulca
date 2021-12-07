@@ -1,18 +1,24 @@
 import logging
 from datetime import datetime
 from logging.config import dictConfig
-from repositories import ProcessRepo
+from repositories import ProcessRepo, ETARepo
 import pandas as pd
 import numpy 
 from datetime import datetime
 from dateutil import parser
 log         =   logging.getLogger('file')
 
-repo = ProcessRepo()
-
+repo        =   ProcessRepo()
+eta_repo    =   ETARepo()
 class ETACalculatorService:
 
     def calculate_average_eta(self,query):
+        """
+        Function to estimate the time taken
+
+        Aggregating db values to get start time & end time w.r.t dataset types,
+        Calculating weighted average and adding a buffer time as 20% of the avg
+        """
         log.info('Calculating average ETA!')
         try:
             if not query:
@@ -42,16 +48,30 @@ class ETACalculatorService:
             del search_df
             extracted_df        =   pd.DataFrame(extracted)
             datatypes           =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus"]
-            weights             =   {}
+            weights             =   {"type":"dataset-search"} #defining the eta type
             for dtype in datatypes:
                 sub_df          =   extracted_df[(extracted_df["datasetType"] == dtype )]
                 weighted_avg    =   numpy.average(sub_df.timeTaken,weights=sub_df.outputCount)
-                weights[dtype]  =   weighted_avg
+                weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
             log.info(str(weights))
             return weights
         except Exception as e:
             log.exception(f'{e}')
             return 
+
+    def fetch_estimates(self,eta_type):
+        """
+        Fetching pre calculated eta values from db
+        """
+        if not eta_type:
+            query   =   {}
+        else:
+            query   =   {"type":eta_type}
+
+        exclude =   {"_id":0,"type":0}
+        result  =   eta_repo.search(query,exclude)
+        return result
+
 
 
 

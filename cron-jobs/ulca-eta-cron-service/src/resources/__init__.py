@@ -1,1 +1,1 @@
-from .eta_resource import ETACalculatorResource
+from .eta_resource import ETACalculatorResource, ETAResource

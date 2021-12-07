@@ -36,12 +36,28 @@ class ETARepo:
         return len(data)
 
     #mongo upsert 
-    def upsert(self, object_in):
+    def upsert(self, condition, object_in):
         try:
             col = self.get_mongo_instance()
-            col.update({},object_in, upsert=True)
+            col.update(condition,object_in, upsert=True)
         except Exception as e:
             log.exception(f'Exception in repo upsert: {e}', e)
+
+    # Searches the object from mongo collection
+    def search(self, query, exclude=None, offset=None, res_limit=None):
+        try:
+            col = self.get_mongo_instance()
+            if offset is None and res_limit is None:
+                res = col.find(query, exclude).sort([('_id', 1)])
+            else:
+                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+            result = []
+            for record in res:
+                result.append(record)
+            return result
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return []
     
 
 

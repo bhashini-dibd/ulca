@@ -1,4 +1,4 @@
-from threading import Thread
+from threading import Condition, Thread
 from config import eta_cron_interval_sec
 import logging
 from logging.config import dictConfig
@@ -19,11 +19,13 @@ class ETACronProcessor(Thread):
         while not self.stopped.wait(eta_cron_interval_sec):
             log.info(f'ETA Cron Processor run :{run}')
             try:
+                # Real time calculation of eta
                 estimates = service.calculate_average_eta(query=None)
                 if estimates:
-                    query = {"$set":estimates}
+                    query       =   {"$set":estimates}
+                    condition   =   {"type":"dataset-search"} 
                     log.info("Updating db with latest estimates!")
-                    repo.upsert(query)  
+                    repo.upsert(condition,query)  
                 run += 1
             except Exception as e:
                 run += 1
