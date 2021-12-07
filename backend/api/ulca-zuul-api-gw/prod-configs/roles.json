@@ -34,6 +34,11 @@
             "code":"EXTERNAL-CONSORTIUM-MEMBER",
             "active":true,
             "description":"Specific role to submit models, fetch models and run benchmarks"
-        }
+        },
+        {
+          "code":"BENCHMARK-DATASET-CONTRIBUTOR",
+          "active":true,
+          "description":"Role that is CONTRIBUTOR-USER + BENCHMARK-DATASET-SUBMITTER"
+      }
       ]
   }

@@ -121,6 +121,30 @@
         "description": "API to get token status"
       },
       {
+        "id": "7a275ce1-2882-49de-9875-cff890fab88f",
+        "uri": "/ulca/user-mgmt/v1/users/search",
+        "module": "ULCA-UMS",
+        "active": true,
+        "whiteList": false,
+        "description": "API to search users"
+      },
+      {
+        "id": "d9927b51-d0b8-4c96-99dd-d13c89864792",
+        "uri": "/ulca/user-mgmt/v1/users/update",
+        "module": "ULCA-UMS",
+        "active": true,
+        "whiteList": false,
+        "description": "API to update user details"
+      },
+      {
+        "id": "4bfad84c-9a9e-4875-8d79-3e686ea4d72d",
+        "uri": "/ulca/user-mgmt/v1/users/update/active/status",
+        "module": "ULCA-UMS",
+        "active": true,
+        "whiteList": false,
+        "description": "API to activate/deactivate a user "
+      },
+      {
         "id": "3ac962a1-de14-4609-91b0-6b4bcb87b856",
         "uri": "/ulca/publish/v0/cluster/set",
         "module": "ULCA-PUBLISH",
@@ -271,6 +295,14 @@
         "active": true,
         "whiteList": false,
         "description": "API to bust cache"
+      },
+      {
+        "id": "d2cf506f-1e4e-4614-ac59-26305fa4d376",
+        "uri": "/ulca/cron-manager/v1/get/estimate",
+        "module": "CRON-MANAGER",
+        "active": true,
+        "whiteList": true,
+        "description": "API to calculate ETA for dataset tasks "
       }
     ]
   }

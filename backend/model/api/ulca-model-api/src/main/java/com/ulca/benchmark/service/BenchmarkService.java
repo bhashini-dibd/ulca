@@ -12,23 +12,37 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.KafkaException;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.benchmark.constant.BenchmarkConstants;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.dao.BenchmarkDatasetSubmitStatusDao;
 import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
 import com.ulca.benchmark.exception.BenchmarkNotFoundException;
 import com.ulca.benchmark.kafka.model.BenchmarkIngest;
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus.ServiceRequestActionEnum;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus.ServiceRequestTypeEnum;
+import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus.StatusEnum;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
+import com.ulca.benchmark.model.BenchmarkTaskTracker;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSubmitRequest;
@@ -82,7 +96,10 @@ public class BenchmarkService {
 	@Autowired
 	ModelDao modelDao;
 	
-
+	
+	@Autowired
+	BenchmarkSubmtStatusService bmSubmtStatusService;
+	
 	@Autowired
 	BenchmarkProcessDao benchmarkprocessDao;
 	
@@ -98,15 +115,25 @@ public class BenchmarkService {
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());		
 		benchmark.setSubmittedOn(new Date().toString());	
 		benchmark.setCreatedOn(new Date().toString());
-		benchmarkDao.save(benchmark);
 		
-		//send data to benchmark ingest topic to download benmark and validate and update
+		if (benchmark != null) {
+			try {
+				benchmarkDao.save(benchmark);
+			} catch (DuplicateKeyException ex) {
+				log.info("benchmark with same name exists.: " + benchmark.getName());
+				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
+			}
+		}
+		String serviceRequestNumber=Utility.getBenchmarkDatasetSubmitReferenceNumber();
+		bmSubmtStatusService.createStatus(serviceRequestNumber, request.getUserId(), benchmark.getBenchmarkId());
 		
 		BenchmarkIngest benchmarkIngest = new BenchmarkIngest();
 		benchmarkIngest.setBenchmarkId(benchmark.getBenchmarkId());
+		benchmarkIngest.setServiceRequestNumber(serviceRequestNumber);
 		benchmarkIngestKafkaTemplate.send(benchmarkIngestTopic, benchmarkIngest);
 		
-		return new BenchmarkSubmitResponse("Benchmark has been Submitted", benchmark.getBenchmarkId(), benchmark.getStatus());
+		String message = "Benchmark Dataset has been Submitted";
+		return new BenchmarkSubmitResponse(message, serviceRequestNumber, benchmark.getBenchmarkId(), benchmark.getCreatedOn());
 	}
 
 	@Transactional
@@ -130,6 +157,7 @@ public class BenchmarkService {
 			if(benchmark == null ) {
 				throw new BenchmarkNotFoundException("Benchmark : " + bm.getBenchmarkId() + " not found ");
 			}
+			
 			List<BenchmarkProcess> isExistBmProcess = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetIdAndMetric(modelId,bm.getBenchmarkId(),bm.getMetric());
 			if(isExistBmProcess != null && isExistBmProcess.size()>0 ) {
 				
@@ -318,6 +346,7 @@ public class BenchmarkService {
 	}
 	
 
+
 //	List<String> getMetric(String task) {
 //		List<String> list = null;
 //		if (task.equalsIgnoreCase("translation")) {
@@ -351,6 +380,7 @@ public class BenchmarkService {
 //		}
 //		return list;
 //	}
+
 
 
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {

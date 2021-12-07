@@ -14,4 +14,5 @@ import lombok.Setter;
 public class BenchmarkIngest {
 
 	private String benchmarkId;
+	private String serviceRequestNumber;
 }
