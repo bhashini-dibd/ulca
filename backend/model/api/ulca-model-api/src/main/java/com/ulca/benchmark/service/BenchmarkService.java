@@ -132,7 +132,8 @@ public class BenchmarkService {
 		benchmarkIngest.setServiceRequestNumber(serviceRequestNumber);
 		benchmarkIngestKafkaTemplate.send(benchmarkIngestTopic, benchmarkIngest);
 		
-		return new BenchmarkSubmitResponse("Benchmark Dataset has been Submitted", serviceRequestNumber, StatusEnum.pending.toString());
+		String message = "Benchmark Dataset has been Submitted";
+		return new BenchmarkSubmitResponse(message, serviceRequestNumber, benchmark.getBenchmarkId(), benchmark.getCreatedOn());
 	}
 
 	@Transactional
