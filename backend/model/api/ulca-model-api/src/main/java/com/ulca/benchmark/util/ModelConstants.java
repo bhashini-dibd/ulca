@@ -16,10 +16,12 @@ public final class ModelConstants {
 		List<String> list = null;
 		if (task.equalsIgnoreCase("translation")) {
 
+
 			/*
 			 * rouge has been temporarily removed
 			 */
 			String[] metric = { "bleu", "meteor", "ribes", "gleu", "bert" };
+
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
