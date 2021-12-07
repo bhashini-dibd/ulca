@@ -184,7 +184,7 @@ const ChartRender = (props) => {
                     <div class="text-center">
                         <h2 class="text-center text-black mt-3">Benchmark Dashboard</h2>
                         <div class="join">
-                      <a className="bh-btn-primary" href="https://meity.ulcacontrib.org/model/benchmark-datasets" target="_self" rel="noopener noreferrer"><span>Explore Benchmark Datasets</span></a>
+                      <a className="bh-btn-primary" href="https://bhashini.gov.in/ulca/model/benchmark-datasets" target="_self" rel="noopener noreferrer"><span>Explore Benchmark Datasets</span></a>
                   </div>
                     </div>
                     
