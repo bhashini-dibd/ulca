@@ -132,7 +132,7 @@ public class KafkaBenchmarkIngestConsumer {
 			
 			JSONObject params =  new JSONObject(benchmarkJsonStr);
 			if(params.has("description")) {
-				benchmark.setDataset(params.getString("description"));
+				benchmark.setDescription(params.getString("description"));
 			}
 			if(params.has("submitter")) {
 				Submitter submitter = objectMapper.readValue(params.get("submitter").toString(), Submitter.class);
