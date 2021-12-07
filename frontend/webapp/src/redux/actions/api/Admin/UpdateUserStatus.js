@@ -33,7 +33,7 @@ export default class UpdateUserStatus extends API {
     getBody() {
         return {
             email: this.email,
-            status: this.status,
+            is_active: this.status,
         };
     }
 

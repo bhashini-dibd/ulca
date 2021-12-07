@@ -22,6 +22,7 @@ import Snackbar from "../../components/common/Snackbar";
 import Search from "../../components/Datasets&Model/Search";
 import Filter from "../../components/common/Filter";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import UpdateUserStatus from "../../../redux/actions/api/Admin/UpdateUserStatus";
 
 const ViewUserDetail = (props) => {
   //destructuring of props
@@ -104,8 +105,30 @@ const ViewUserDetail = (props) => {
   };
 
   const handleChange = (email, status) => {
-    console.log("data", email, status)
-  }
+    const obj = new UpdateUserStatus(email, !status);
+    fetch(obj.apiEndPoint(), {
+      method: "post",
+      headers: obj.getHeaders().headers,
+      body: JSON.stringify(obj.getBody()),
+    }).then(async (res) => {
+      let rsp_data = await res.json();
+      console.log(rsp_data);
+      if (!res.ok) {
+        setSnackbar({
+          message: rsp_data.message,
+          open: true,
+          variant: "error",
+        });
+      } else {
+        makeUserDetailsAPICall();
+        setSnackbar({
+          message: rsp_data.message,
+          open: true,
+          variant: "success",
+        });
+      }
+    });
+  };
 
   const handleTextFieldChange = (value, prop) => {
     setInfo({
