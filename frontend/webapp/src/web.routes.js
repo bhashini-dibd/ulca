@@ -70,13 +70,15 @@ const PrivateRoute = ({
 export default function App() {
   console.log(process.env.PUBLIC_URL);
   return (
-    <Router history={history} basename="">
+    <Router history={history} basename="/">
       <Switch>
         <Route
           exact
-          path={`${process.env.PUBLIC_URL.substr(
-            0,
-            process.env.PUBLIC_URL.lastIndexOf("/")
+          path={`${process.env.PUBLIC_URL.replace(
+            process.env.PUBLIC_URL.substr(
+              process.env.PUBLIC_URL.lastIndexOf("/")
+            ),
+            ""
           )}/`}
           component={Dashboard}
         />
