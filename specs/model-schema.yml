@@ -51,7 +51,7 @@ components:
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
         task:
-          $ref: '#/components/schemas/ModelTask'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask'
         languages:
           $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs'
         license:
@@ -106,19 +106,6 @@ components:
           - $ref: '#/components/schemas/FileUploadRequest'
       description: hosted location of the file which would be sent for the validation
         of the Inference API endpoint.
-
-    ModelTask:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - translation
-          - tts
-          - asr
-          - document-layout
-          - ocr
-      description: the category of model under which it has been released or trained
 
     TrainingDataset:
       required:

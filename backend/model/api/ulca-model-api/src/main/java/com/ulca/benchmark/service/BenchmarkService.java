@@ -190,14 +190,18 @@ public class BenchmarkService {
 			for(Benchmark bm : list) {
 				BenchmarkDto dto = new BenchmarkDto();
 				BeanUtils.copyProperties(bm, dto);
-				List<String> metricList = modelConstants.getMetricList(bm.getTask().getType().toString());
+				List<String> metricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
 				dto.setMetric(new ArrayList<>(metricList));
 				List<BenchmarkProcess> bmProcList = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetId(request.getModelId(),bm.getBenchmarkId());
+				List<String> allMetricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
 				for(BenchmarkProcess bmProc : bmProcList) {
-					String status = bmProc.getStatus();
-					if(status != null && !status.isBlank() && (status.equalsIgnoreCase("Completed") || status.equalsIgnoreCase("In-Progress"))) {
-						metricList.remove(bmProc.getMetric());
+					if(allMetricList.contains(bmProc.getMetric())) {
+						String status = bmProc.getStatus();
+						if(status != null && !status.isBlank() && (status.equalsIgnoreCase("Completed") || status.equalsIgnoreCase("In-Progress"))) {
+							metricList.remove(bmProc.getMetric());
+						}	
 					}
+					
 				}
 				dto.setAvailableMetric(metricList);
 				dtoList.add(dto);
@@ -269,12 +273,13 @@ public class BenchmarkService {
 		if (result != null) {
 			GetBenchmarkByIdResponse bmDto = new GetBenchmarkByIdResponse();
 			BeanUtils.copyProperties(result, bmDto);
-			List<String> metricList = modelConstants.getMetricList(result.getTask().getType().toString());
+			List<String> metricList = modelConstants.getMetricListByModelTask(result.getTask().getType().toString());
 			bmDto.setMetric(metricList);
 			List<BenchmarkProcess> benchmarkProcess = benchmarkprocessDao.findByBenchmarkDatasetId(benchmarkId);
 			List<BenchmarkProcess> bmProcessPublished = new ArrayList<BenchmarkProcess>();
+			List<String> allMetricList = modelConstants.getMetricListByModelTask(result.getTask().getType().toString());
 			for(BenchmarkProcess bm : benchmarkProcess) {
-				if(bm.getStatus().equalsIgnoreCase("Completed")) {
+				if(bm.getStatus().equalsIgnoreCase("Completed") && allMetricList.contains(bm.getMetric())) {
 					ModelExtended model = modelDao.findByModelId(bm.getModelId());
 					if(model.getStatus().equalsIgnoreCase("published")) {
 						bm.setModelName(model.getName());
@@ -313,39 +318,39 @@ public class BenchmarkService {
 	}
 	
 
-	List<String> getMetric(String task) {
-		List<String> list = null;
-		if (task.equalsIgnoreCase("translation")) {
-			String[] metric = { "bleu","meteor","rouge","ribes","gleu","bert" };
-			list = new ArrayList<>(Arrays.asList(metric));
-			return list;
-		}
-
-		if (task.equalsIgnoreCase("asr")) {
-			String[] metric = { "wer","cer" };
-			list = new ArrayList<>(Arrays.asList(metric));
-			return list;
-		}
-		if (task.equalsIgnoreCase("ocr")) {
-
-			String[] metric = { "wer","cer"};
-			list = new ArrayList<>(Arrays.asList(metric));
-			return list;
-		}
-		if (task.equalsIgnoreCase("tts")) {
-
-			String[] metric = { "wer" };
-			list = new ArrayList<>(Arrays.asList(metric));
-			return list;
-		}
-
-		if (task.equalsIgnoreCase("document-layout")) {
-			String[] metric = { "precision", "recall", "h1-mean" };
-			list = new ArrayList<>(Arrays.asList(metric));
-			return list;
-		}
-		return list;
-	}
+//	List<String> getMetric(String task) {
+//		List<String> list = null;
+//		if (task.equalsIgnoreCase("translation")) {
+//			String[] metric = { "bleu","meteor","rouge","ribes","gleu","bert" };
+//			list = new ArrayList<>(Arrays.asList(metric));
+//			return list;
+//		}
+//
+//		if (task.equalsIgnoreCase("asr")) {
+//			String[] metric = { "wer","cer" };
+//			list = new ArrayList<>(Arrays.asList(metric));
+//			return list;
+//		}
+//		if (task.equalsIgnoreCase("ocr")) {
+//
+//			String[] metric = { "wer","cer"};
+//			list = new ArrayList<>(Arrays.asList(metric));
+//			return list;
+//		}
+//		if (task.equalsIgnoreCase("tts")) {
+//
+//			String[] metric = { "wer" };
+//			list = new ArrayList<>(Arrays.asList(metric));
+//			return list;
+//		}
+//
+//		if (task.equalsIgnoreCase("document-layout")) {
+//			String[] metric = { "precision", "recall", "h1-mean" };
+//			list = new ArrayList<>(Arrays.asList(metric));
+//			return list;
+//		}
+//		return list;
+//	}
 
 
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {

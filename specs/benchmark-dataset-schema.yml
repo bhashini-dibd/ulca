@@ -79,7 +79,7 @@ components:
           type: string
           description: user defined name for the benchmark dataset
         taskType:
-          $ref: '#/components/schemas/TaskType'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask'
         description:
           type: string
           description: description of the benchmark dataset type
@@ -93,18 +93,6 @@ components:
           $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License'
         submitter:
           $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter'
-
-    TaskType:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - translation
-          - tts
-          - asr
-          - ocr
-      description: the category of model under which it would be run against the provided benchmark
 
     TranslationBenchmarkDatasetParamsSchema:
       allOf:
