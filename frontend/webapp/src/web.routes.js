@@ -69,8 +69,7 @@ const PrivateRoute = ({
 
 export default function App() {
   return (
-    <Router history={history} basename="ulca/">
-      <div>
+    <Router history={history} basename="/">
         <Switch>
           <Route
             exact
@@ -282,7 +281,6 @@ export default function App() {
             component={Reset}
           /> */}
         </Switch>
-      </div>
     </Router>
   );
 }

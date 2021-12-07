@@ -14,6 +14,6 @@ import lombok.Setter;
 public class BenchmarkSubmitResponse {
 
 	private String message;
-	private String benchamrkId;
+	private String serviceRequestNumber;
 	private String status;
 }
