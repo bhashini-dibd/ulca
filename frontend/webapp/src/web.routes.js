@@ -68,6 +68,7 @@ const PrivateRoute = ({
 };
 
 export default function App() {
+  console.log(process.env.PUBLIC_URL);
   return (
     <Router history={history} basename="">
       <Switch>
@@ -79,7 +80,11 @@ export default function App() {
           )}/`}
           component={Dashboard}
         />
-        <Route exact path={`${process.env.PUBLIC_URL}/`} component={Dashboard} />
+        <Route
+          exact
+          path={`${process.env.PUBLIC_URL}/`}
+          component={Dashboard}
+        />
         <Route
           exact
           path={`${process.env.PUBLIC_URL}/user/:page`}
