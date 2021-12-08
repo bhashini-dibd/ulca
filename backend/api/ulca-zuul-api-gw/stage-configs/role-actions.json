@@ -221,37 +221,37 @@
       "active": true
     },
     {
-      "role": "EXTERNAL-CONSORTIUM-MEMBER",
+      "role": "MODEL-ONLY-USER",
       "actionID": "a4c9f08d-0968-403d-ab1f-008b1b1aff44",
       "active": true
     },
     {
-      "role": "EXTERNAL-CONSORTIUM-MEMBER",
+      "role": "MODEL-ONLY-USER",
       "actionID": "edcb16f8-3c8c-41b1-8e7e-1b2f3bf09145",
       "active": true
     },
     {
-      "role": "EXTERNAL-CONSORTIUM-MEMBER",
+      "role": "MODEL-ONLY-USER",
       "actionID": "d8812e00-cc10-470d-9957-045425ba7ff8",
       "active": true
     },
     {
-      "role": "EXTERNAL-CONSORTIUM-MEMBER",
+      "role": "MODEL-ONLY-USER",
       "actionID": "63b59091-ad6a-4147-bc7d-a10712147c05",
       "active": true
     },
     {
-      "role": "EXTERNAL-CONSORTIUM-MEMBER",
+      "role": "MODEL-ONLY-USER",
       "actionID": "889e497c-1df3-4b55-880d-0252c896f2c0",
       "active": true
     },
     {
-      "role": "EXTERNAL-CONSORTIUM-MEMBER",
+      "role": "MODEL-ONLY-USER",
       "actionID": "162bf6e7-b9cd-4c2a-baa1-0e7e4c77e6eb",
       "active": true
     },
     {
-      "role": "EXTERNAL-CONSORTIUM-MEMBER",
+      "role": "MODEL-ONLY-USER",
       "actionID": "9253e82c-d33a-4011-acb2-733c14ee6c85",
       "active": true
     },
@@ -343,6 +343,21 @@
     {
       "role": "BENCHMARK-DATASET-CONTRIBUTOR",
       "actionID": "1bdbb278-3f7e-4680-b892-519294a07518",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "7a275ce1-2882-49de-9875-cff890fab88f",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "d9927b51-d0b8-4c96-99dd-d13c89864792",
+      "active": true
+    },
+    {
+      "role": "ADMIN",
+      "actionID": "4bfad84c-9a9e-4875-8d79-3e686ea4d72d",
       "active": true
     }
   ]
