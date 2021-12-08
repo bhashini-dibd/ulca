@@ -23,6 +23,7 @@ import Search from "../../components/Datasets&Model/Search";
 import Filter from "../../components/common/Filter";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import UpdateUserStatus from "../../../redux/actions/api/Admin/UpdateUserStatus";
+import searchUserDetails from "../../../redux/actions/api/Admin/SearchUserDetails";
 
 const ViewUserDetail = (props) => {
   //destructuring of props
@@ -187,6 +188,7 @@ const ViewUserDetail = (props) => {
 
   const handleSearch = (event) => {
     setSearchState(event.target.value);
+    dispatch(searchUserDetails(event.target.value));
   };
 
   const handleShowFilter = (event) => {

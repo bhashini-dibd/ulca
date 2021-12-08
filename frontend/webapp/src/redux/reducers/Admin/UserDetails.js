@@ -33,6 +33,30 @@ const getUserDetails = (payload) => {
   });
 };
 
+const searchUserDetails = (searchedValue, userDetails) => {
+  let filteredUserDetails = userDetails.filter((user) => {
+    return (
+      (user["name"] &&
+        user["name"].toLowerCase().includes(searchedValue.toLowerCase())) ||
+      (user["userId"] &&
+        user["userId"].toLowerCase().includes(searchedValue.toLowerCase())) ||
+      (user["role"] &&
+        user["role"].toLowerCase().includes(searchedValue.toLowerCase())) ||
+      (user["org"] &&
+        user["org"].toLowerCase().includes(searchedValue.toLowerCase()))
+    );
+  });
+  if (searchedValue !== "") {
+    return {
+      filteredUserDetails,
+    };
+  } else {
+    return {
+      filteredUserDetails: userDetails,
+    };
+  }
+};
+
 const updateSelectedFilter = (type, payload, prevState) => {
   console.log(type, payload, prevState);
   let updatedFilterObj = prevState;
@@ -83,6 +107,12 @@ const reducer = (state = initialState, action) => {
           action.payload.value,
           state.selectedFilter
         ),
+      };
+
+    case C.SEARCH_USER_DETAILS:
+      return {
+        ...state,
+        ...searchUserDetails(action.payload, state.userDetails),
       };
     default:
       return {
