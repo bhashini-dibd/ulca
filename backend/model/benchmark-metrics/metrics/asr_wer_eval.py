@@ -15,6 +15,8 @@ class ASRWEREval(ModelMetricEval):
     def asr_metric_eval(self, ground_truth, machine_translation):
 
         try:
+            log.info(f"ground_truth : {str(ground_truth)}")
+            log.info(f"machine_translation : {str(machine_translation)}")
             eval_score = fastwer.score(machine_translation, ground_truth)
             if np.isnan(eval_score):
                 log.error("Unable to calculate WER score")
