@@ -14,7 +14,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import LoginStyles from "../../styles/Login";
 import LoginApi from "../../../redux/actions/api/UserManagement/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
@@ -50,8 +50,10 @@ const Login = (props) => {
 
 
   useEffect(() => {
-   dispatch(Logout())
-}, []);
+    localStorage.removeItem('userInfo')
+    localStorage.removeItem('userDetails')
+    dispatch(Logout())
+  }, []);
 
 
 
@@ -110,8 +112,13 @@ const Login = (props) => {
       } else {
         localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
         localStorage.setItem(`userDetails`, JSON.stringify(rsp_data.data.userDetails));
+        const roles = rsp_data.data.userDetails.roles;
+        if (roles.indexOf('EXTERNAL-CONSORTIUM-MEMBER') === -1) {
+          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/dashboard'}`)
+        } else {
+          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/model/explore-models'}`)
 
-        history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/dashboard'}`)
+        }
       }
     }).catch((error) => {
       setLoading(false)

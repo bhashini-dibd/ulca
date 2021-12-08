@@ -64,6 +64,8 @@ if __name__ == "__main__":
                         help="multiple translators for downloading")
     parser.add_argument("-org", "--org-source", action="store_true",
                         help="orginal source sentences")
+    parser.add_argument("-b", "--benchmark", help="Benchamrk Name",
+                        type=str, default="")
 
     args = parser.parse_args()
     update_schema_flag = args.update_schema
@@ -76,7 +78,7 @@ if __name__ == "__main__":
     model_flag = args.model
     wrapper_flag = args.wrapper
 
-    inpfile = args.input.strip()
+    inp = args.input.strip()
     name = args.name.strip()
     url = args.url.strip()
 
@@ -89,6 +91,7 @@ if __name__ == "__main__":
     m_transl = args.m_translators
     m_anno = args.m_annotators
     org_source = args.org_source
+    benchmark = args.benchmark.strip()
 
     # enabling-terminal-color-in-windows-only
     if os.name.lower() == 'nt':
@@ -106,12 +109,6 @@ if __name__ == "__main__":
     # loading the driver
     driver = driver_script.load_driver(config.DEFAULT_BROWSER)
 
-    # running test script
-    if test_flag:
-        driver = core.test_elements_with_browser(driver)
-        driver_script.close_driver(driver)
-        sys.exit(0)
-
     # getting chart data
     if chart_flag:
         driver = core.get_chart_data(typex, groupby, src, tgt, driver)
@@ -124,13 +121,18 @@ if __name__ == "__main__":
     if login_flag or (not login_status):
         driver_script.close_driver(driver)
         sys.exit(0)
+        # running test script
+    if test_flag:
+        driver = core.test_elements_with_browser(driver)
+        driver_script.close_driver(driver)
+        sys.exit(0)
     # dataset related processes
     elif dataset_flag:
         if name != "":
             driver = dataset.perform_upload_with_status(name, url, driver)
-        elif inpfile != "":
+        elif inp != "":
             driver = dataset.perform_upload_with_csv(
-                inpfile, driver)
+                inp, driver)
         else:
             driver = dataset.perform_search_and_download(typex, tgt, src,
                                                          domain, coll_mtd,
@@ -138,13 +140,19 @@ if __name__ == "__main__":
                                                          org_source, driver)
     # model related processes
     elif model_flag:
-        driver = model.perform_translate(name, typex, inpfile, driver)
-        # driver = model.submit_model(dataset_name, csvfile, driver)
+        if typex != "-corpus":
+            driver = model.perform_translate(name, typex, inp, driver)
+        else:
+            status, driver = model.submit_model(name, inp, driver)
+            if status:
+                driver = model.run_benchmark(name, benchmark, driver)
+            if status:
+                driver = model.check_benchmark_status(driver)
     # wrapper process
     elif wrapper_flag:
         print('wrapper method still in-progress.')
     else:
-        print("no argument found. choices=[-l,-s,-d]")
+        print("no argument found. choices=[-l,-m,-d]")
         print("-h for help")
 
     # performs logount and closes browser-driver

@@ -12,5 +12,4 @@ public class UploadModelResponse {
 	String message;
 	ModelExtended data;
 	
-	
 }

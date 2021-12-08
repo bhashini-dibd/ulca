@@ -1,272 +1,150 @@
-// import { ReactMic } from 'react-mic';
-// import {
-//     Grid,
-//     Typography,
-//     TextField,
-//     Button,
-//     CardContent, Card,CardActions
-// } from '@material-ui/core';
-// import { withStyles } from '@material-ui/core/styles';
-// import DatasetStyle from '../../../../styles/Dataset';
-// import { useState, useEffect, useRef } from 'react';
-// import Start from "../../../../../assets/start.svg";
-// import Stop from "../../../../../assets/stopIcon.svg";
-// import { CollectionsOutlined, SettingsSystemDaydreamTwoTone } from '@material-ui/icons';
-// import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
-// import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-    
-
-// const AudioRecord = (props) => {
-//     const { classes,modelId} = props;
-//     const [recordAudio, setRecordAudio] = useState(false);
-//     const [base, setBase] = useState("");
-//     const [data, setData] = useState(null);
-
-
-
-    
-//     const blobToBase64 = (blob) => {
-//         var reader = new FileReader();
-//         reader.readAsDataURL(blob.blob); 
-//         reader.onloadend = function() {
-//             let base64data = reader.result;      
-//             setBase(base64data)
-//         }
-                
-//     };
-//     const handleStop =  (data) =>{
-//         setData(data.blobURL)
-//         blobToBase64(data)
-//     }
-
-   
-
-//     const handleCompute = () => {
-//         const apiObj = new HostedInferenceAPI(modelId,base,"asr",true);
-//         fetch(apiObj.apiEndPoint(), {
-//             method: 'POST',
-//             headers: apiObj.getHeaders().headers,
-//             body: JSON.stringify(apiObj.getBody())
-//         }).then(async resp => {
-//             let rsp_data = await resp.json();
-//             if (resp.ok) {
-//                 if (rsp_data.hasOwnProperty('translation') && rsp_data.translation) {
-//                     // setTarget(rsp_data.translation.output[0].target)
-//                     //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
-//                     // setTranslationState(true)
-//                 }
-//             } else {
-//                 // setSnackbarInfo({
-//                 //     ...snackbar,
-//                 //     open: true,
-//                 //     message: "The model is not accessible currently. Please try again later",
-//                 //     variant: 'error'
-//                 // })
-//                 // Promise.reject(rsp_data);
-//             }
-//         }).catch(err => {
-//             console.log(err)
-//             // setSnackbarInfo({
-//             //     ...snackbar,
-//             //     open: true,
-//             //     message: "The model is not accessible currently. Please try again later",
-//             //     variant: 'error'
-//             // })
-//         })
-//     };
-
-//     const handleData = (data) =>{
-//     }
-
-//     const handleClick = (value) =>{
-//         setRecordAudio(value)
-//     }
-// return (
-
-//     <Card className={classes.asrCard}>
-
-//     <Grid container className={classes.cardHeader}>
-//                 <Typography variant='h6' className={classes.titleCard}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
-//         </Grid>
-//                         <CardContent>
-//         {recordAudio ?<div className={classes.center}><img src={Stop} alt="" onClick={()=>handleClick(false)} style={{cursor:"pointer"}}/> </div>:
-//         <div className={classes.center}><img src={Start} alt ="" onClick={()=>handleClick(true)} style={{cursor:"pointer"}}/> </div>
-//         }
-
-// <div className={classes.center}><Typography style = {{height:"12px"}}variant="caption">{recordAudio ? "Recording..." : ""}</Typography> </div>
-//         <div style={{display:"none"}}>
-//     <ReactMic 
-//     record={recordAudio}
-//     visualSetting= "none"
-//     onStop={handleStop}
-//     onData={handleData}
-//     strokeColor="#000000"
-//     channelCount={1}
-//     sampleRate={16000}
-//     mimeType="audio/wav" 
-//     backgroundColor="#FF4081" />
-//     </div>
-//     <div  className={classes.centerAudio}>
-//   <audio  src={ data } controls id="sample" >
-//       </audio>
-//       </div>
-  
-//                         </CardContent>
-//                         <CardActions style={{justifyContent:"flex-end",paddingRight:"20px"}}>
-//                         <Button
-//                         color="primary"
-//                         variant="contained"
-//                         size={'small'}
-
-//                         onClick={()=>handleCompute()}
-//                     >
-//                         Convert
-//                     </Button>
-//       </CardActions>
-//                     </Card>
-                    
-  
-// )
-// }
-
-// export default  withStyles(DatasetStyle)(AudioRecord);
-
-
-import { ReactMic } from 'react-mic';
-import {
-    Grid,
-    Typography,
-    TextField,
-    Button,
-    CardContent, Card,CardActions
-} from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import DatasetStyle from '../../../../styles/Dataset';
-import { useState, useEffect, useRef } from 'react';
+import { Grid, Typography, CardContent, Card, Tooltip } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import DatasetStyle from "../../../../styles/Dataset";
+import { useEffect, useState } from "react";
 import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
-import { CollectionsOutlined, SettingsSystemDaydreamTwoTone } from '@material-ui/icons';
-import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import AudioReactRecorder, { RecordState } from 'audio-react-recorder'; 
+import { RecordState } from "audio-react-recorder";
+import config from "../../../../../configs/configs";
+// import StreamingClient from "../../../../../utils/streaming_client";
+import {
+  StreamingClient,
+  SocketStatus,
+} from "@project-sunbird/open-speech-streaming-client";
+import { vakyanshLanguage } from "../../../../../configs/DatasetItems";
+import { translate } from "../../../../../assets/localisation";
+import LightTooltip from "../../../../components/common/LightTooltip";
+const SOCKET_URL = config.SOCKET_URL;
 
 const AudioRecord = (props) => {
-    const { classes,modelId} = props;
-    const [recordAudio, setRecordAudio] = useState("");
-    const [base, setBase] = useState("");
-    const [data, setData] = useState("");
+  const streaming = props.streaming;
+  const { classes, language } = props;
+  const [recordAudio, setRecordAudio] = useState("");
+  const [streamingState, setStreamingState] = useState("");
+  const [data, setData] = useState("");
+  const languageArr = vakyanshLanguage.filter(
+    (lang) => lang.label === language
+  );
+  const languageCode = languageArr.length ? languageArr[0].value : "";
+  const handleStart = (data) => {
+    setStreamingState("start");
+    const output = document.getElementById("asrCardOutput");
+    output.innerText = "";
+    setData("");
+    streaming.connect(SOCKET_URL, languageCode, function (action, id) {
+      setStreamingState("listen");
+      setRecordAudio(RecordState.START);
+      if (action === SocketStatus.CONNECTED) {
+        streaming.startStreaming(
+          function (transcript) {
+            const output = document.getElementById("asrCardOutput");
+            if (output) output.innerText = transcript;
+          },
+          function (errorMsg) {
+            console.log("errorMsg", errorMsg);
+          }
+        );
+      } else if (action === SocketStatus.TERMINATED) {
+        handleStop();
+      } else {
+        console.log("Action", action, id);
+      }
+    });
+  };
 
+  useEffect(() => {
+    if (streamingState === "listen" && data === "") {
+      setTimeout(async () => {
+        handleStop();
+      }, 61000);
+    }
+  }, [streamingState, data]);
 
-
-    const blobToBase64 = (blob) => {
-        var reader = new FileReader();
-        reader.readAsDataURL(blob.blob); 
-        reader.onloadend = function() {
-            let base64data = reader.result;      
-            setBase(base64data)
+  const handleStop = async (value) => {
+    setStreamingState("");
+    const output = document.getElementById("asrCardOutput");
+    if (output) {
+      streaming.punctuateText(
+        output.innerText,
+        "https://inference.vakyansh.in/punctuate",
+        (status, text) => {
+          output.innerText = text;
+        },
+        (status, error) => {
+          // alert("Failed to punctuate");
         }
-                
-    };
-
-
-    
- 
-
-   
-
-    const handleCompute = () => {
-        props.handleApicall(modelId,base,"asr",true)
-        // const apiObj = new HostedInferenceAPI(modelId,base,"asr",true);
-        // fetch(apiObj.apiEndPoint(), {
-        //     method: 'POST',
-        //     headers: apiObj.getHeaders().headers,
-        //     body: JSON.stringify(apiObj.getBody())
-        // }).then(async resp => {
-        //     let rsp_data = await resp.json();
-        //     if (resp.ok) {
-        //         if (rsp_data.hasOwnProperty('translation') && rsp_data.translation) {
-        //             // setTarget(rsp_data.translation.output[0].target)
-        //             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
-        //             // setTranslationState(true)
-        //         }
-        //     } else {
-        //         // setSnackbarInfo({
-        //         //     ...snackbar,
-        //         //     open: true,
-        //         //     message: "The model is not accessible currently. Please try again later",
-        //         //     variant: 'error'
-        //         // })
-        //         // Promise.reject(rsp_data);
-        //     }
-        // }).catch(err => {
-        //     console.log(err)
-        //     // setSnackbarInfo({
-        //     //     ...snackbar,
-        //     //     open: true,
-        //     //     message: "The model is not accessible currently. Please try again later",
-        //     //     variant: 'error'
-        //     // })
-        // })
-    };
-
-    const handleStart = (data) =>{
-        setData(null)
-        setRecordAudio(RecordState.START)
+      );
     }
+    streaming.stopStreaming((blob) => {
+      const urlBlob = window.URL.createObjectURL(blob);
+      onStop({ url: urlBlob });
+    });
+    setRecordAudio(RecordState.STOP);
+    clearTimeout();
+  };
 
-    const handleStop = (value) =>{
+  const onStop = (data) => {
+    setData(data.url);
+  };
 
-        setRecordAudio(RecordState.STOP)
-    }
-
-    const onStop = (data) =>{
-        setData(data.url)
-        setBase(blobToBase64(data))
-    }
-
-return (
-
+  return (
     <Card className={classes.asrCard}>
+      <Grid container className={classes.cardHeader}>
+        <Typography variant="h6" className={classes.titleCard}>
+          Hosted inference API{" "}
+          {
+            <LightTooltip
+              arrow
+              placement="right"
+              title={translate("label.hostedInferenceASR")}><InfoOutlinedIcon
+                className={classes.buttonStyle}
+                fontSize="small"
+                color="disabled"
+              />
+            </LightTooltip>
+          }
+        </Typography>
+      </Grid>
+      <CardContent>
+        <Typography variant={"caption"}>
+          {translate("label.maxDuration")}
+        </Typography>
+        {recordAudio === "start" ? (
+          <div className={classes.center}>
+            <img
+              src={Stop}
+              alt=""
+              onClick={() => handleStop()}
+              style={{ cursor: "pointer" }}
+            />{" "}
+          </div>
+        ) : (
+          <div className={classes.center}>
+            <img
+              src={Start}
+              alt=""
+              onClick={() => handleStart()}
+              style={{ cursor: "pointer" }}
+            />{" "}
+          </div>
+        )}
 
-    <Grid container className={classes.cardHeader}>
-                <Typography variant='h6' className={classes.titleCard}>Hosted inference API {< InfoOutlinedIcon className={classes.buttonStyle} fontSize="small" color="disabled" />}</Typography>
-        </Grid>
-                        <CardContent>
-        {recordAudio==="start" ?<div className={classes.center}><img src={Stop} alt="" onClick={()=>handleStop()} style={{cursor:"pointer"}}/> </div>:
-        <div className={classes.center}><img src={Start} alt ="" onClick={()=>handleStart()} style={{cursor:"pointer"}}/> </div>
-        }
+        <div className={classes.center}>
+          <Typography style={{ height: "12px" }} variant="caption">
+            {streamingState === "start"
+              ? "Please wait..."
+              : streamingState === "listen"
+                ? "Listening..."
+                : ""}
+          </Typography>{" "}
+        </div>
+        <div className={classes.centerAudio}>
+          {data && <audio src={data} controls id="sample"></audio>}
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
-<div className={classes.center}><Typography style = {{height:"12px"}}variant="caption">{recordAudio==="start" ? "Recording..." : ""}</Typography> </div>
-       
-<div style={{display:"none"}}>
- <AudioReactRecorder state={recordAudio} onStop={onStop} style ={{display:"none"}}/>
-
-      </div>
-      <div  className={classes.centerAudio}>
-      {data ? <audio  src={ data } controls id="sample" >
-       </audio>
-       :<audio  src={ "test" } controls id="sample" >
-       </audio>}
-       </div>
-  
-                        </CardContent>
-                        <CardActions style={{justifyContent:"flex-end",paddingRight:"20px"}}>
-                        <Button
-                        color="primary"
-                        variant="contained"
-                        size={'small'}
-                        disabled= {data ? false:true}
-                        onClick={()=>handleCompute()}
-                    >
-                        Convert
-                    </Button>
-      </CardActions>
-                    </Card>
-                    
-  
-)
-}
-
-export default  withStyles(DatasetStyle)(AudioRecord);
-
-
+export default withStyles(DatasetStyle)(AudioRecord);

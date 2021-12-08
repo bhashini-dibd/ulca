@@ -1,4 +1,5 @@
 #!groovy
+import hudson.model.*
 node('server_build_slave') {
 
 try {
@@ -30,6 +31,10 @@ docker push anuvaadio/$image_name:$commit_id
 sudo rm -rf target/
 '''
 
+def matcher = manager.getLogMatcher(".*tagged anuvaadio.(.*).*")
+def buildMsg = matcher.group(1)
+manager.addShortText(buildMsg)
+   
         }
 }
 

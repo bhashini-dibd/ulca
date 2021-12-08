@@ -14,6 +14,7 @@ components:
     Model:
       required:
       - name
+      - version
       - description
       - task
       - languages
@@ -30,6 +31,12 @@ components:
           type: string
           description: model name that you want your users to see
           example: vakyansh asr model
+        version:
+          maxLength: 20
+          minLength: 1
+          type: string
+          description: version for the model
+          example: v1
         description:
           maxLength: 1000
           minLength: 25
@@ -44,15 +51,15 @@ components:
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
         task:
-          $ref: '#/components/schemas/ModelTask'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask'
         languages:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePairs'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs'
         license:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/License'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License'
         domain:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain'
         submitter:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Submitter'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter'
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         trainingDataset:
@@ -99,19 +106,6 @@ components:
           - $ref: '#/components/schemas/FileUploadRequest'
       description: hosted location of the file which would be sent for the validation
         of the Inference API endpoint.
-
-    ModelTask:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - translation
-          - tts
-          - asr
-          - document-layout
-          - ocr
-      description: the category of model under which it has been released or trained
 
     TrainingDataset:
       required:
@@ -178,7 +172,7 @@ components:
       type: object
       properties:
         audio:
-          $ref: '#/components/schemas/ASRFile'
+          $ref: '#/components/schemas/ASRFiles'
         config:
           $ref: '#/components/schemas/ASRConfig'
 
@@ -303,7 +297,7 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
     OCRConfig:
       required:
@@ -315,7 +309,7 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
     TTSConfig:
       required:
@@ -327,7 +321,7 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
 
     ASRConfig:
       required:
@@ -339,22 +333,22 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
         audioFormat:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioFormat'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat'
         channel:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioChannel'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel'
         samplingRate:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioSampleRate'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate'
         bitsPerSample:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample'
         transcriptionFormat:
           $ref: '#/components/schemas/TranscriptionFormat'
         profanityFilter:
           type: boolean
           example: true
         domain:
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain'
         detailed:
           type: boolean
           description: "to specify whether details are required in output like SNR,\
@@ -380,7 +374,13 @@ components:
           - srt
           - transcript
           - alternatives
-  
+
+    ASRFiles:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/ASRFile'
+
     ASRFile:
       required:
       - audioContent | audioUri

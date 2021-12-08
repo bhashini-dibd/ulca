@@ -69,10 +69,11 @@ https://github.com/ULCA-IN/ulca
 
 | Service | Build Status |
 |---------| ----------- |
-|  Ingest  |  [![Build Status](http://jenkins.idc.tarento.com/buildStatus/icon?job=ULCA%2FBuild%2Fingest)](http://jenkins.idc.tarento.com/job/ULCA/job/Build/job/ingest/) |
-| Publish |[![Build Status](http://jenkins.idc.tarento.com/buildStatus/icon?job=ULCA%2FBuild%2Fpublish)](http://jenkins.idc.tarento.com/job/ULCA/job/Build/job/publish/)|
-| User Management | [![Build Status](http://jenkins.idc.tarento.com/buildStatus/icon?job=ULCA%2FBuild%2Fuser-management)](http://jenkins.idc.tarento.com/job/ULCA/job/Build/job/user-management/) |
-| Validate | [![Build Status](http://jenkins.idc.tarento.com/buildStatus/icon?job=ULCA%2FBuild%2Fvalidate)](http://jenkins.idc.tarento.com/job/ULCA/job/Build/job/validate/)|
+|  Ingest  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fstaging%2Fbuild-master%2Fdataset-ingest)](https://jenkins.ulcacontrib.org/job/ULCA/job/staging/job/build-master/job/dataset-ingest/) |
+| Publish | [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fstaging%2Fbuild-master%2Fpublish)](https://jenkins.ulcacontrib.org/job/ULCA/job/staging/job/build-master/job/publish/) |
+| User Management | [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fstaging%2Fbuild-master%2Fuser-management)](https://jenkins.ulcacontrib.org/job/ULCA/job/staging/job/build-master/job/user-management/) |
+| Validate | [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fstaging%2Fbuild-master%2Fvalidate)](https://jenkins.ulcacontrib.org/job/ULCA/job/staging/job/build-master/job/validate/) |
+|  Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/run-tests/) |
 
 
 # Contribution

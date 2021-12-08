@@ -11,25 +11,33 @@ import AudioRecord from "./VoiceRecorder";
 import Footer from "../../../../components/common/Footer";
 import Theme from "../../../../theme/theme-default";
 import { MuiThemeProvider } from "@material-ui/core/styles";
-import { Grid, Typography, Button, Divider } from "@material-ui/core";
+import { Grid, Typography, Button, Divider, Card } from "@material-ui/core";
 import HostedInferASR from "./HostedInferASR";
 import HostedInferOCR from "./HostedInferOCR";
+import BenchmarkTable from "./BenchmarkTable";
+import { translate } from "../../../../../assets/localisation";
+import { StreamingClient } from "@project-sunbird/open-speech-streaming-client";
 
 const SearchModelDetail = (props) => {
   const { classes } = props;
   const history = useHistory();
   const [data, setData] = useState("");
   const [modelTry, setModelTry] = useState(false);
+  const streaming = new StreamingClient();
   const location = useLocation();
   const params = useParams();
   useEffect(() => {
     setData(location.state);
   }, [location]);
   const description = [
-    {
-      title: "Description",
-      para: data.description,
-    },
+    // {
+    //   title: "Version",
+    //   para: data.version,
+    // }, ,
+    // {
+    //   title: "Description",
+    //   para: data.description,
+    // },
     {
       title: "Source URL",
       para: data.refUrl,
@@ -55,9 +63,22 @@ const SearchModelDetail = (props) => {
       title: "Published On",
       para: data.publishedOn,
     },
+    {
+      title: "Training Dataset",
+      para:
+        data.trainingDataset !== undefined
+          ? data.trainingDataset["description"]
+          : "NA",
+      // para:"Trained on the datasets curated as part of Anuvaad project.Trained on the datasets curated as part of Anuvaad project."
+    },
   ];
   const { prevUrl } = location.state;
   const handleCardNavigation = () => {
+    if (data.task === "asr" && streaming.isStreaming === true) {
+      streaming.stopStreaming((blob) => {
+        clearTimeout();
+      });
+    }
     // const { prevUrl } = location.state
     if (prevUrl === "explore-models") {
       history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
@@ -81,8 +102,10 @@ const SearchModelDetail = (props) => {
             <HostedInferASR
               task={data.task}
               source={data.source}
+              language={data.language}
               inferenceEndPoint={data.inferenceEndPoint}
               modelId={params.srno}
+              streaming={streaming}
             />
           );
         case "ocr":
@@ -120,28 +143,51 @@ const SearchModelDetail = (props) => {
             onClick={() => handleCardNavigation()}
           >
             {prevUrl === "explore-models"
-              ? "Back to Model List"
-              : "Back to My Contribution"}
+              ? translate("label.backToModelList")
+              : translate("label.backToMyContrib")}
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h5" className={classes.mainTitle}>
-              {data.modelName}
-            </Typography>
-            {!params.model && (
-              <Button
-                color="primary"
-                className={classes.computeBtn}
-                variant="contained"
-                size={"small"}
-                onClick={() => handleClick()}
-              >
-                Try Model
-              </Button>
-            )}
+            <Grid container>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Card
+                  style={{
+                    height: "100px",
+                    backgroundColor: "#0F2749",
+                    borderRadius: "8px",
+                    marginTop: "1%",
+                  }}
+                >
+                  <Grid container>
+                    <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
+                      <Typography
+                        variant="h4"
+                        color="secondary"
+                        className={classes.mainTitle}
+                      >
+                        {data.modelName} {data.version}
+                      </Typography>
+                    </Grid>
+                    {!params.model && (
+                      <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+                        <Button
+                          color="primary"
+                          className={classes.computeBtn}
+                          variant="contained"
+                          size={"small"}
+                          onClick={() => handleClick()}
+                        >
+                          {translate("label.tryModel")}
+                        </Button>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Card>
+              </Grid>
+            </Grid>
           </div>
           {/* <hr style={{marginTop: "19px",opacity:'0.3' }}></hr> */}
-          <Divider className={classes.gridCompute} />
+          {/* <Divider className={classes.gridCompute} /> */}
           {params.model ? (
             <Grid container>
               <Grid
@@ -164,17 +210,64 @@ const SearchModelDetail = (props) => {
                 xl={4}
                 style={{ paddingLeft: "24px" }}
               >
-                {description.map((des) => (
-                  <ModelDescription title={des.title} para={des.para} />
-                ))}
+                <Grid container spacing={2} style={{ marginTop: "2%" }}>
+                  {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Typography variant="h6" className={classes.modelTitle}>Version</Typography>
+                    <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.version}</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Typography variant="h6" className={classes.modelTitle}>Description</Typography>
+                    <Typography style={{ fontSize: '20px', fontFamily: 'Roboto', textAlign: "justify" }} className={classes.modelPara}>{data.description}</Typography>
+
+                  </Grid> */}
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Grid container spacing={1}>
+                      {description.map((des, i) => (
+                        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                          <ModelDescription
+                            title={des.title}
+                            para={des.para}
+                            index={i}
+                          />
+                        </Grid>
+                      ))}
+                    </Grid>
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           ) : (
-            <Grid container>
-              <Grid item xs={12} sm={12} md={9} lg={9} xl={9}>
-                {description.map((des) => (
-                  <ModelDescription title={des.title} para={des.para} />
-                ))}
+            <Grid container spacing={3}>
+              {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Typography variant="h6" className={classes.modelTitle}>Version</Typography>
+                <Typography variant="body1" style={{ textAlign: "justify" }} className={classes.modelPara}>{data.version}</Typography>
+              </Grid> */}
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Typography variant="h5" className={classes.modelTitle}>
+                  {translate("label.description")}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  style={{ textAlign: "justify", marginTop: "15px" }}
+                >
+                  {data.description}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid container spacing={2}>
+                  {description.map((des, i) => (
+                    <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+                      <ModelDescription
+                        title={des.title}
+                        para={des.para}
+                        index={i}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <BenchmarkTable modelId={params.srno} />
               </Grid>
             </Grid>
           )}

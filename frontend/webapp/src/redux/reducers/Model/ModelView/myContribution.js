@@ -4,60 +4,70 @@ import {
   getLanguageName,
   FilterByDomain,
   FilterByCollection,
+  getTaskName,
 } from "../../../../utils/getLabel";
 const initialState = {
   responseData: [],
   filteredData: [],
   refreshStatus: false,
-  filter: { status: [], modelType: [] },
-  selectedFilter: { status: [], modelType: [] },
+  filter: { status: [], task: [], license: [], domain: [] },
+  selectedFilter: { status: [], task: [], license: [], domain: [] },
 };
 
 const dateConversion = (value) => {
   var myDate = new Date(value);
-  let result = myDate.toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: true,
+  // let result = myDate.toLocaleString("en-IN", {
+  //   day: "2-digit",
+  //   month: "2-digit",
+  //   year: "numeric",
+  //   // hour: "numeric",
+  //   // minute: "numeric",
+  //   // second: "numeric",
+  //   // hour12: true,
+  // });
+  // return result.toUpperCase();
+  return myDate.getTime();
+};
+
+const isFilterSelected = (keys, values) => {
+  for (let i = 0; i < keys.length; i++) {
+    if (values[i].length) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const getUpdatedFilters = (data, values, keys) => {
+  let updatedFilter = data;
+  keys.forEach((key, i) => {
+    if (values[i].length) {
+      updatedFilter = updatedFilter.filter((val) => {
+        return values[i].indexOf(val[key].toLowerCase()) > -1;
+      });
+    }
   });
-  return result.toUpperCase();
+  return updatedFilter;
 };
 
 const getFilterValue = (payload, data) => {
   let { filterValues } = payload;
-  let statusFilter = [];
-  let filterResult = [];
-  if (
-    filterValues &&
-    filterValues.hasOwnProperty("status") &&
-    filterValues.status.length > 0
-  ) {
-    statusFilter = data.responseData.filter((value) => {
-      if (value.status && filterValues.status.includes(value.status)) {
-        return value;
-      }
-    });
+  const filterKeys = Object.keys(filterValues);
+  const filterValue = Object.values(filterValues).map((val) =>
+    val.map((e) => e.toLowerCase())
+  );
+  if (isFilterSelected(filterKeys, filterValue)) {
+    data.filteredData = Object.assign(
+      [],
+      JSON.parse(
+        JSON.stringify(
+          getUpdatedFilters(data.responseData, filterValue, filterKeys)
+        )
+      )
+    );
   } else {
-    statusFilter = data.responseData;
+    data.filteredData = data.responseData;
   }
-  if (
-    filterValues &&
-    filterValues.hasOwnProperty("modelType") &&
-    filterValues.modelType.length > 0
-  ) {
-    filterResult = statusFilter.filter((value) => {
-      if (value.modelType && filterValues.modelType.includes(value.modelType)) {
-        return value;
-      }
-    });
-  } else {
-    filterResult = statusFilter;
-  }
-  data.filteredData = filterResult;
   data.selectedFilter = filterValues;
   return data;
 };
@@ -81,15 +91,26 @@ const getDomainDetails = (data) => {
 
 const getClearFilter = (data) => {
   data.filteredData = data.responseData;
-  data.selectedFilter = { status: [], modelType: [] };
+  data.selectedFilter = { status: [], task: [], license: [], domain: [] };
   return data;
+};
+
+const convertDate = (data) => {
+  return data.map((element) => {
+    element.createdOn = element.createdOn
+      ? dateConversion(element.createdOn)
+      : "";
+    return element;
+  });
 };
 
 const getContributionList = (state, payload) => {
   let responseData = [];
   let statusFilter = [];
   let modelFilter = [];
-  let filter = { status: [], modelType: [] };
+  let domain = [];
+  let license = [];
+  let filter = { status: [], task: [], domain: [], license: [] };
   let refreshStatus = false;
   payload.forEach((element) => {
     let sLanguage =
@@ -103,14 +124,18 @@ const getContributionList = (state, payload) => {
       getLanguageName(element.languages[0].targetLanguage);
     let lang = tLanguage ? sLanguage + " - " + tLanguage : sLanguage;
     responseData.push({
-      benchmarkPerformance: element.benchmarkPerformance,
+      benchmarkPerformance: convertDate(element.benchmarkPerformance),
+      version: element.version ? element.version : "v1.0",
       submitRefNumber: element.modelId,
       modelName: element.name,
       description: element.description,
       submittedOn: dateConversion(element.submittedOn),
-      task: element.task.type,
+      task:
+        element.task.type !== "translation"
+          ? element.task.type.toUpperCase()
+          : element.task.type,
       domain: getDomainDetails(element.domain),
-      status: "Published",
+      status: element.status,
       endPoint: element.inferenceEndPoint,
       language: lang,
       source:
@@ -119,7 +144,7 @@ const getContributionList = (state, payload) => {
         element.languages &&
         element.languages.length > 0 &&
         element.languages[0].targetLanguage,
-      licence: element.license,
+      license: element.license.toUpperCase(),
       submitter: element.submitter.name,
       trainingDataset: element.trainingDataset,
       action: "View Result",
@@ -134,17 +159,28 @@ const getContributionList = (state, payload) => {
     });
     !statusFilter.includes(element.status) &&
       element.status &&
-      statusFilter.push(element.status);
-    !modelFilter.includes(element.datasetName) &&
-      element.datasetName &&
-      modelFilter.push(getDatasetName(element.datasetType));
+      statusFilter.push(capitalizeLetter(element.status));
+
+    !modelFilter.includes(element.task.type) &&
+      element.task.type &&
+      modelFilter.push(getTaskName(element.task.type));
+
+    !license.includes(element.license) &&
+      element.license &&
+      license.push(element.license.toUpperCase());
+
+    !domain.includes(...element.domain) &&
+      element.domain &&
+      domain.push(capitalizeLetter(...element.domain));
     if (element.status === "In-Progress" || element.status === "Pending") {
       refreshStatus = true;
     }
   });
 
   filter.status = [...new Set(statusFilter)];
-  filter.modelType = [...new Set(modelFilter)];
+  filter.task = [...new Set(modelFilter)];
+  filter.license = [...new Set(license)];
+  filter.domain = [...new Set(domain)];
 
   responseData = responseData.reverse();
   let filteredData = getFilterValue(
@@ -153,6 +189,39 @@ const getContributionList = (state, payload) => {
   );
   filteredData.filter = filter;
   return filteredData;
+};
+
+const capitalizeLetter = (data) => {
+  return data.length ? data.replace(data[0], data[0].toUpperCase()) : "";
+};
+
+const updateSelectedFilter = (obj, prevState) => {
+  const updatedState = Object.assign({}, JSON.parse(JSON.stringify(prevState)));
+  updatedState[obj.prop].indexOf(obj.value) > -1
+    ? updatedState[obj.prop].splice(updatedState[obj.prop].indexOf, 1)
+    : updatedState[obj.prop].push(obj.value);
+  return updatedState;
+};
+
+const getSearchedValues = (value, data) => {
+  const newState = data.filter((val) => {
+    return (
+      (val["version"] &&
+        val["version"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["status"] &&
+        val["status"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["domain"] &&
+        val["domain"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["license"] &&
+        val["license"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["task"] &&
+        val["task"].toLowerCase().includes(value.toLowerCase())) ||
+      (val["modelName"] &&
+        val["modelName"].toLowerCase().includes(value.toLowerCase()))
+    );
+  });
+
+  return newState;
 };
 
 const reducer = (state = initialState, action) => {
@@ -164,6 +233,19 @@ const reducer = (state = initialState, action) => {
     case C.CLEAR_MODEL_CONTRIBUTION_LIST:
       return {
         ...initialState,
+      };
+    case C.GET_MODEL_SEARCH_VALUES:
+      return {
+        ...state,
+        filteredData: getSearchedValues(action.payload, state.responseData),
+      };
+    case C.GET_SELECTED_FILTER:
+      return {
+        ...state,
+        selectedFilter: updateSelectedFilter(
+          action.payload,
+          state.selectedFilter
+        ),
       };
     case C.CLEAR_MODEL_FILTER:
       return getClearFilter(state);

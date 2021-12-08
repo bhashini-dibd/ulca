@@ -61,7 +61,7 @@ public class SearchKafkaPublishService {
 		searchCriteria.setServiceRequestNumber(processTracker.getServiceRequestNumber());
 		//searchCriteria.setGroupBy(request.getGroupby());
 		searchCriteria.setDatasetType(request.getDatasetType().toString());
-		
+		searchCriteria.setUserId(userId);		
 		log.info(searchCriteria.toString());
 		
 		datasetSearchKafkaTemplate.send(datasetSearchTopic, searchCriteria);

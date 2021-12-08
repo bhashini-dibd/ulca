@@ -7,9 +7,11 @@ Created on Sat Jul 24 11:47:15 2021.
 """
 import time
 import pandas
-import core_script as core
-import config
 from termcolor import colored
+
+import config
+import elements as ele
+import core_script as core
 
 
 def perform_upload(dataset_name, dataset_url, driver):
@@ -46,18 +48,18 @@ def perform_upload(dataset_name, dataset_url, driver):
             status = False
             status_str = "DATASET-URL EMPTY !"
     if status:
-        driver = core.get_url(core.ULCA_DATASET_SUBMIT_URL, driver)
+        driver = core.get_url(core.ULCA_DS_SUBMIT_URL, driver)
         status, status_str = core.perform_webpage_function(
-            core.ELE_SUBMITNAME_INP, "input", driver, input_data=dataset_name)
+            ele.DS_SUBMIT_NAME_INP, "input", driver, input_data=dataset_name)
     if status:
         status, status_str = core.perform_webpage_function(
-            core.ELE_SUBMITURL_INP, "input", driver, input_data=dataset_url)
+            ele.DS_SUBMIT_URL_INP, "input", driver, input_data=dataset_url)
     if status:
         status, status_str = core.perform_webpage_function(
-            core.ELE_SUBMITDATA_BTN, "click", driver)
+            ele.DS_SUBMIT_SUBMIT_BTN, "click", driver)
     if status:
         status, status_str = core.perform_webpage_function(
-            core.ELE_SUBMITSRN_TXT, "text", driver)
+            ele.DS_SUBMIT_SRN_TXT, "text", driver)
         if status:
             status_str = int(status_str.strip().split(" ")[-1])
         else:
@@ -89,7 +91,7 @@ def generate_log_file(srn, driver):
     filename = "logFile="
     driver.refresh()
     time.sleep(config.COMMON_WAIT_TIME)
-    status, status_str = core.perform_webpage_function(core.ELE_CLOG_A,
+    status, status_str = core.perform_webpage_function(ele.DS_CONTRIB_LOG_A,
                                                        "href", driver)
     if status:
         logfile = core.get_file("{}-log.csv".format(srn), status_str)
@@ -123,43 +125,43 @@ def get_contrib_data(driver):
     driver.refresh()
     time.sleep(config.COMMON_WAIT_TIME)
     status, status_str = core.perform_webpage_function(
-        core.ELE_CDOWNLOADSTATUS_TXT, "text", driver)
+        ele.DS_CONTRIB_DWN_STTS_TXT, "text", driver)
     if status:
         download_status = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CINGESTSTATUS_TXT, "text", driver)
+            ele.DS_CONTRIB_ING_STTS_TXT, "text", driver)
     if status:
         ingest_status = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CINGESTSC_TXT, "text", driver)
+            ele.DS_CONTRIB_ING_SC_TXT, "text", driver)
     if status:
         ingest_sc = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CINGESTFC_TXT, "text", driver)
+            ele.DS_CONTRIB_ING_FC_TXT, "text", driver)
     if status:
         ingest_fc = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CVALIDATESTATUS_TXT, "text", driver)
+            ele.DS_CONTRIB_VLD_STTS_TXT, "text", driver)
     if status:
         validate_status = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CVALIDATESC_TXT, "text", driver)
+            ele.DS_CONTRIB_VLD_SC_TXT, "text", driver)
     if status:
         validate_sc = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CVALIDATEFC_TXT, "text", driver)
+            ele.DS_CONTRIB_VLD_FC_TXT, "text", driver)
     if status:
         validate_fc = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CPUBLISHSTATUS_TXT, "text", driver)
+            ele.DS_CONTRIB_PBL_STTS_TXT, "text", driver)
     if status:
         publish_status = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CPUBLISHSC_TXT, "text", driver)
+            ele.DS_CONTRIB_PBL_SC_TXT, "text", driver)
     if status:
         publish_sc = status_str
         status, status_str = core.perform_webpage_function(
-            core.ELE_CPUBLISHFC_TXT, "text", driver)
+            ele.DS_CONTRIB_PBL_FC_TXT, "text", driver)
     if status:
         publish_fc = status_str
         status_str = {"DOWNLOAD": download_status,
@@ -262,17 +264,17 @@ def get_upload_status(srn, dataset_name, driver):
         A Browser window object.
 
     """
-    driver = core.get_url(core.ULCA_DATASET_CONTRIB_URL, driver)
+    driver = core.get_url(core.ULCA_DS_CONTRIB_URL, driver)
     print("CONTRIB-STATUS : ", end="", flush=True)
     status, status_str = core.perform_webpage_function(
-        core.ELE_CONTRIBNAME_TXT, "text", driver)
+        ele.DS_CONTRB_NAME_TXT, "text", driver)
     if status:
         if status_str.lower() != dataset_name.lower():
             status = False
             status_str = "dataset name not found."
     if status:
         status, status_str = core.perform_webpage_function(
-            core.ELE_CONTRIBSTATUS_TXT, "text", driver)
+            ele.DS_CONTRB_STATUS_TXT, "text", driver)
         while status_str.lower() == "in-progress":
             print(colored("PENDING", "blue"))
             print()
@@ -283,11 +285,11 @@ def get_upload_status(srn, dataset_name, driver):
             driver.refresh()
             time.sleep(config.COMMON_WAIT_TIME)
             status, status_str = core.perform_webpage_function(
-                core.ELE_CONTRIBSTATUS_TXT, "text", driver)
+                ele.DS_CONTRB_STATUS_TXT, "text", driver)
         final_status = status_str
     if status:
         status, status_str = core.perform_webpage_function(
-            core.ELE_CONTRIBNAME_TXT, "click", driver)
+            ele.DS_CONTRB_NAME_TXT, "click", driver)
     if status:
         if final_status.lower() == "failed":
             status = False
@@ -426,9 +428,9 @@ def perform_search(dataset_type, tgts, src, domain, collection_method,
                 status = False
                 status_str = "Not valid Collection Method."
     if status:
-        driver = core.get_url(core.ULCA_DATASET_SEARCH_URL, driver)
+        driver = core.get_url(core.ULCA_DS_SD_URL, driver)
         status, status_str = core.perform_webpage_function(
-            core.ELE_SEARCHTYPELIST_BTN, "click", driver)
+            ele.DS_SD_TYPELIST_BTN, "click", driver)
     if status:
         dt_element = ['DATASET-TYPE='+dataset_type.upper(),
                       '//*[@value="'+dataset_type+'"]']
@@ -437,44 +439,44 @@ def perform_search(dataset_type, tgts, src, domain, collection_method,
     if status:
         if dataset_type == "parallel-corpus":
             status, status_str = core.perform_webpage_function(
-                core.ELE_SEARCHSOURCE_INP, "dropdown", driver,
+                ele.DS_SD_SRCLANG_INP, "dropdown", driver,
                 input_data=core.LANGUAGE_DICT[src])
         if status:
             if original_source:
                 status, status_str = core.perform_webpage_function(
-                    core.ELE_SEARCHORGSOURCE_CB, "click", driver)
+                    ele.DS_SD_OS_CB, "click", driver)
         if status:
             if manually_translated:
                 status, status_str = core.perform_webpage_function(
-                    core.ELE_SEARCHMANTRANS_CB, "click", driver)
+                    ele.DS_SD_MT_CB, "click", driver)
     if status:
         for tgt in tgts:
             status, status_str = core.perform_webpage_function(
-                core.ELE_SEARCHTARGET_INP, "dropdown", driver,
+                ele.DS_SD_TGTLANG_INP, "dropdown", driver,
                 input_data=core.LANGUAGE_DICT[tgt])
             if status is False:
                 break
     if status:
         if domain != "":
             status, status_str = core.perform_webpage_function(
-                core.ELE_SEARCHDOMAIN_INP, "dropdown", driver,
+                ele.DS_SD_DOMAIN_INP, "dropdown", driver,
                 input_data=domain.replace("-", ""))
     if status:
         if collection_method != "":
             status, status_str = core.perform_webpage_function(
-                core.ELE_SEARCHCOLL_INP, "dropdown", driver,
+                ele.DS_SD_COLLM_INP, "dropdown", driver,
                 input_data=collection_method.replace("-", ""))
     if status:
         if multiple_annotators:
             status, status_str = core.perform_webpage_function(
-                core.ELE_SEARCHMULANNO_CB, "click", driver)
+                ele.DS_SD_MA_CB, "click", driver)
 
     if status:
         status, status_str = core.perform_webpage_function(
-            core.ELE_SEARCHSUBMIT_CB, "click", driver)
+            ele.DS_SD_SUBMIT_BTN, "click", driver)
     if status:
         status, status_str = core.perform_webpage_function(
-            core.ELE_SEARCHSRN_CB, "text", driver)
+            ele.DS_SD_SRN_TXT, "text", driver)
         time.sleep(config.COMMON_WAIT_TIME)
     if status:
         status_str = int(status_str.split(" ")[-1])
@@ -506,9 +508,9 @@ def perform_download(dataset_type, tgt, srn, driver):
     status = True
     status_str = ""
     print("DOWNLOAD : ", flush=True, end="")
-    driver = core.get_url(core.ULCA_DATASET_MYSEARCHS_URL, driver)
+    driver = core.get_url(core.ULCA_DS_MYSRCH_URL, driver)
     status, status_str = core.perform_webpage_function(
-        core.ELE_MYSEARCHNAME_TXT, "text", driver)
+        ele.DS_MYSRCH_NAME_TXT, "text", driver)
     if status:
         search_dataset = status_str.strip().split(" ")[0].lower()
         search_tgt = status_str.strip().split(" ")[-1].lower()
@@ -517,7 +519,7 @@ def perform_download(dataset_type, tgt, srn, driver):
     if status:
         if ((search_dataset == org_dataset) and (search_tgt == org_tgt)):
             status, status_str = core.perform_webpage_function(
-                core.ELE_MYSEARCHSTATUS_TXT, "text", driver)
+                ele.DS_MYSRCH_STTS_TXT, "text", driver)
             if status:
                 while status_str == "In-Progress":
                     print(colored("PENDING", "blue"))
@@ -528,13 +530,13 @@ def perform_download(dataset_type, tgt, srn, driver):
                     driver.refresh()
                     time.sleep(config.COMMON_WAIT_TIME)
                     status, status_str = core.perform_webpage_function(
-                        core.ELE_MYSEARCHSTATUS_TXT, "text", driver)
+                        ele.DS_MYSRCH_STTS_TXT, "text", driver)
                 if status_str == "Failed":
                     status = False
                     status_str = "searching failed"
                 else:
                     status, status_str = core.perform_webpage_function(
-                        core.ELE_MYSEARCHCOUNT_TXT, "text", driver)
+                        ele.DS_MYSRCH_CNT_TXT, "text", driver)
                 if status:
                     if status_str == "0":
                         status = True
@@ -542,15 +544,15 @@ def perform_download(dataset_type, tgt, srn, driver):
                     else:
                         count_str = "count="+str(status_str)
                         status, status_str = core.perform_webpage_function(
-                            core.ELE_MYSEARCHNAME_TXT, "click", driver)
+                            ele.DS_MYSRCH_NAME_TXT, "click", driver)
                         if status:
                             status, status_str = core.perform_webpage_function(
-                                core.ELE_SAMPLEFILE_A, "href", driver)
+                                ele.DS_MYSRCH_SMPFILE_A, "href", driver)
                         if status:
                             smple = core.get_file("{}-sample.json".format(srn),
                                                   status_str)
                             status, status_str = core.perform_webpage_function(
-                                core.ELE_ALLFILE_A, "href", driver)
+                                ele.DS_MYSRCH_ALLFILE_A, "href", driver)
                         if status:
                             all_file = core.get_file("{}-all.json".format(srn),
                                                      status_str.strip())

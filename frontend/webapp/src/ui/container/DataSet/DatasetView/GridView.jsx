@@ -1,9 +1,10 @@
-import { withStyles, Typography, Card, Grid } from "@material-ui/core";
+import { withStyles, Typography } from "@material-ui/core";
 import DataSet from "../../../styles/Dataset";
 import { Paper, Button } from "@material-ui/core";
-import { Cached, DeleteOutline, FilterList,GridOn,ViewList } from '@material-ui/icons';
+import { Cached, FilterList,GridOn,ViewList } from '@material-ui/icons';
 import ContributionCard from "./ContributionCard"
 import TablePagination from '@material-ui/core/TablePagination';
+import { translate } from "../../../../assets/localisation";
 
 const GridView = (props) => {
     const { classes,data,handleViewChange,rowChange,handleShowFilter,MyContributionListApi,view,page,handleChangePage,rowsPerPage,count, handleCardClick} = props;
@@ -19,8 +20,8 @@ const GridView = (props) => {
     const fetchHeaderButton = () => {
         return <>
                 
-                <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterList className={classes.iconStyle} />Filter</Button>
-                <Button color={"primary"} size="medium" variant="outlined" className={classes.buttonStyle} onClick={ MyContributionListApi}><Cached className={classes.iconStyle} />Refresh</Button>
+                <Button color={"default"} size="medium" variant="outlined" className={classes.ButtonRefresh} onClick={handleShowFilter}> <FilterList className={classes.iconStyle} />{translate("button.filter")}</Button>
+                <Button color={"primary"} size="medium" variant="outlined" className={classes.buttonStyle} onClick={ MyContributionListApi}><Cached className={classes.iconStyle} />{translate("button.refresh")}</Button>
                 <Button color={"default"} size="medium" variant="default" className={classes.buttonStyle} onClick={handleViewChange}> {view ? <ViewList size = {"large"} /> : <GridOn />}</Button>
                 
                 
@@ -29,7 +30,7 @@ const GridView = (props) => {
     return (
         <Paper className = {classes.paper}>
             <div className = {classes.gridHeader}>
-                <Typography variant={'h6'} className={classes.gridTypo}>My Contribution</Typography>
+                <Typography variant={'h6'} className={classes.gridTypo}>{translate("label.myContrib")}</Typography>
                 {fetchHeaderButton()}
             </div>
             <div className = {classes.gridData}>

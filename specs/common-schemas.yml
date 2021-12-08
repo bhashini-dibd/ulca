@@ -53,6 +53,8 @@ components:
           - kha
           - grt
           - sa
+          - raj
+          - bho
         targetLanguageName:
           type: string
           description: human name associated with the language code
@@ -89,6 +91,8 @@ components:
           - kha
           - grt
           - sa
+          - raj
+          - bho
       description: "language pair, make targetLanguage null to reuse the object to\
         \ indicate single language"
     LanguagePairs:
@@ -375,3 +379,16 @@ components:
           - $ref: '#/components/schemas/LanguagePair'
           - $ref: '#/components/schemas/Source'
           - $ref: '#/components/schemas/CollectionMethod'
+    ModelTask:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - translation
+          - tts
+          - asr
+          - document-layout
+          - ocr
+      description: the category of model under which it has been released or trained
+
