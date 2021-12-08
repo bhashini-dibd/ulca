@@ -37,8 +37,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.benchmark.request.AsrComputeRequest;
-import com.ulca.benchmark.request.AsrComputeResponse;
-//import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.ASRInference;
@@ -213,12 +211,14 @@ public class AsrBenchmark {
 	
 	public String asrComputeInternal(AsrComputeRequest request) {
 		
-		AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
-				.body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
+		ASRResponse response = builder.build().post().uri(asrcomputeurl)
+				.body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(ASRResponse.class)
 				.block();
 		
-		if(response != null && response.getData() != null) {
-			return response.getData().getTranscript();
+		if(response != null && response.getOutput() != null && response.getOutput().size() > 0) {
+			Sentence output = response.getOutput().get(0);
+			String outputText = output.getSource();
+			return outputText;
 		}
 		
 		return null;
