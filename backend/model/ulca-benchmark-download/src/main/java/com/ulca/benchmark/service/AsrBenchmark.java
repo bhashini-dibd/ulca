@@ -38,7 +38,6 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ulca.benchmark.request.AsrComputeRequest;
 import com.ulca.benchmark.request.AsrComputeResponse;
-//import com.ulca.model.dao.AsrCallBackRequest;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.ASRInference;
@@ -218,7 +217,7 @@ public class AsrBenchmark {
 				.block();
 		
 		if(response != null && response.getData() != null) {
-			return response.getData().getTranscript();
+			return response.getData().getSource();
 		}
 		
 		return null;
