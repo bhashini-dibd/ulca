@@ -136,8 +136,7 @@ const Header = (props) => {
               onClick={() => {
                 dispatch(getMenuType(""));
                 dispatch(getMenuOption(""));
-                authenticate() &&
-                  history.push(`${process.env.PUBLIC_URL}/dashboard`);
+                window.location = `https://bhashini.gov.in/ulca/intro`;
               }}
             >
               {translate("label.ulca")}
