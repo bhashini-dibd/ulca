@@ -57,6 +57,7 @@ const ContributionList = (props) => {
   const [index, setIndex] = useState([]);
   const { added } = useParams();
   const data = myContributionReport.filteredData;
+  const [searchValue, setSearchValue] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const popoverOpen = Boolean(anchorEl);
   const [selectionOpen, setSelectionOpen] = React.useState(null);
@@ -133,9 +134,7 @@ const ContributionList = (props) => {
   //   });
   // }, []);
 
-  console.log(index);
-
-  const MyContributionListApi = () => {
+  const MyContributionListApi = async () => {
     dispatch(ClearReport());
     const userObj = new MyContributionList(
       "SAVE",
@@ -179,6 +178,8 @@ const ContributionList = (props) => {
       });
   };
   const handleSearch = (value) => {
+    setSearchValue(value);
+    processTableClickedNextOrPrevious("", 0);
     dispatch(getSearchedValues(value));
   };
   const fetchHeaderButton = () => {
