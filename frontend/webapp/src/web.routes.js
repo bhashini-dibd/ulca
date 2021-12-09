@@ -32,6 +32,7 @@ import SearchModelDetail from "./ui/container/Model/ModelSearch/ModelDetail/Sear
 import Leaderboard from "./ui/container/Model/ModelLeaderboard/Leaderboard";
 import BenchmarkModels from "./ui/container/Model/BenchmarkModel/BenchmarkDataset";
 import BenchmarkDetails from "./ui/container/Model/BenchmarkModel/BenchmarkDetail";
+import ViewUserDetails from "./ui/container/Admin/ViewUserDetail";
 
 const PrivateRoute = ({
   path,
@@ -262,15 +263,24 @@ export default function App() {
           index={2}
         />
 
-        <PrivateRoute
-          path={`${process.env.PUBLIC_URL}/filter-list`}
-          component={FilterList}
-          authenticate={authenticateUser}
-          currentMenu="pop-up"
-          dontShowHeader={false}
-          type={"dataset"}
-          index={2}
-        />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/filter-list`}
+            component={FilterList}
+            authenticate={authenticateUser}
+            currentMenu="pop-up"
+            dontShowHeader={false}
+            type={"dataset"}
+            index={2}
+          />
+          <PrivateRoute
+            path={`${process.env.PUBLIC_URL}/admin/view-user-details`}
+            component={ViewUserDetails}
+            authenticate={authenticateUser}
+            currentMenu="view-user-details"
+            dontShowHeader={false}
+            type={"admin"}
+            index={0}
+          />
 
         {/* <Route
             path={`${process.env.PUBLIC_URL}/model/leaderboard`}

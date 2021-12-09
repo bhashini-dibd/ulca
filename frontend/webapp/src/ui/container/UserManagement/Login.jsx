@@ -113,11 +113,15 @@ const Login = (props) => {
         localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
         localStorage.setItem(`userDetails`, JSON.stringify(rsp_data.data.userDetails));
         const roles = rsp_data.data.userDetails.roles;
-        if (roles.indexOf('EXTERNAL-CONSORTIUM-MEMBER') === -1) {
-          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/dashboard'}`)
-        } else {
-          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/model/explore-models'}`)
-
+        if(!roles.includes("ADMIN")){
+          if (roles.indexOf('EXTERNAL-CONSORTIUM-MEMBER') === -1) {
+            history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/dashboard'}`)
+          } else {
+            history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/model/explore-models'}`)
+  
+          }
+        }else{
+          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/admin/view-user-details'}`)
         }
       }
     }).catch((error) => {
