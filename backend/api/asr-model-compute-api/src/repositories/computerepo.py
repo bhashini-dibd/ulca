@@ -87,7 +87,7 @@ class ASRComputeRepo:
         API call to model endpoint for audio urls
         """
         try:
-            headers =   {"Content-Type": "text/plain"}
+            headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
                         "audio": [{"audioUri": url}]}
             log.info(f"Request body : {body}")
@@ -95,6 +95,7 @@ class ASRComputeRepo:
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             content = response.content
+            log.info(content)
             response_data = json.loads(content)
             log.info(f"Response : {response_data}")
             return response_data
@@ -108,13 +109,14 @@ class ASRComputeRepo:
         API call to model endpoint for audio content
         """
         try:
-            headers =   {"Content-Type": "text/plain"}
+            headers =   {"Content-Type": "application/json"}
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
                         "audio": [{"audioContent": str(data)}]}
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             content = response.content
+            log.info(content)
             response_data = json.loads(content)
             log.info("Received response from vakyanch end point to transcribe asr data")
             log.info(f"Response : {response_data}")

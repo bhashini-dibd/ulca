@@ -22,6 +22,6 @@ public class AsrComputeResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public class Data {
-    	public String transcript;
+    	public String source;
     }
 }
