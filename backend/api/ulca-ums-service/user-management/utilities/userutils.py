@@ -415,7 +415,7 @@ class UserUtils:
             for value in record:
                 if value["isActive"]== False:
                     log.info("User Id validation failed,inactive user")
-                    return post_error("Not active", "This operation is not allowed for an inactive user", None)
+                    return post_error("Not active", "User account is inactive", None)
             log.info("User Id validation successful")          
         except Exception as e:
             log.exception(f"Database connection exception {e}")
@@ -481,7 +481,7 @@ class UserUtils:
                     return post_error("Not active", "User account is not verified. Please click on the verification link sent on your email address to complete the verification process.", None)
                 if value["isActive"]== False:
                     log.info("{} is not an active user".format(user_email))
-                    return post_error("Not active", "This operation is not allowed for an inactive user", None)
+                    return post_error("Not active", "User account is inactive", None)
                 password_in_db = value["password"].encode("utf-8")
                 try:
                     if bcrypt.checkpw(password.encode("utf-8"), password_in_db)== False:
@@ -572,7 +572,7 @@ class UserUtils:
             for value in valid:
                 if value["isActive"]== False:
                     log.info("Given email/username is inactive")
-                    return post_error("Not active", "This operation is not allowed for an inactive user", None)
+                    return post_error("Not active", "User account is inactive", None)
         except Exception as e:
             log.exception("exception while validating username/email"+str(e),  MODULE_CONTEXT, e)
             return post_error("Database exception","Exception occurred:{}".format(str(e)),None)
