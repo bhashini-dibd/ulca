@@ -74,6 +74,7 @@ export default class UserDetails extends API {
         key: this.userDetails.publicKey,
         sig: hash,
         payload: urlSha,
+        "Content-Type": "application/json",
       },
     };
     return this.headers;

@@ -99,7 +99,6 @@ const reducer = (state = initialState, action) => {
         selectedFilter: { roles: [], org: [] },
       };
     case C.SELECT_ADMIN_FILTER:
-      console.log(action.payload);
       return {
         ...state,
         selectedFilter: updateSelectedFilter(
@@ -114,6 +113,17 @@ const reducer = (state = initialState, action) => {
         ...state,
         ...searchUserDetails(action.payload, state.userDetails),
       };
+
+    case C.TOGGLE_USER_STATUS:
+      console.log(action.payload);
+      return {
+        ...state,
+        ...searchUserDetails(
+          action.payload.searchState,
+          getUserDetails(action.payload.data)
+        ),
+      };
+
     default:
       return {
         ...state,
