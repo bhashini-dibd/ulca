@@ -193,27 +193,27 @@ class ActivateDeactivateUser(Resource):
 
     def post(self):
         body = request.get_json()
-        if "userName" not in body or not body["userName"]:
-            return post_error("Data Missing","userName not found",None), 400
+        if "email" not in body or not body["email"]:
+            return post_error("Data Missing","email not found",None), 400
         if "is_active" not in body:
             return post_error("Data Missing","is_active not found",None), 400
-        user_email = body["userName"]
+        user_email = body["email"]
         status= body["is_active"]
 
         if not isinstance(status,bool):
             return post_error("Invalid format", "is_active status should be either true or false", None), 400
-        log.info("Request received for updating activation status of {}".format(user_email),MODULE_CONTEXT)
+        log.info("Request received for updating activation status of {}".format(user_email))
         try:
             result = authRepo.activate_deactivate_user(user_email,status)
             if result is not None:
-                log.info("Updation of activation status for {} failed".format(user_email),MODULE_CONTEXT)
+                log.info("Updation of activation status for {} failed".format(user_email))
                 return result, 400
             else:
-                log.info("Updation of activation status for {} successful".format(user_email),MODULE_CONTEXT)
+                log.info("Updation of activation status for {} successful".format(user_email))
                 res = CustomResponse(Status.SUCCESS.value, None)
                 return res.getresjson(), 200           
         except Exception as e:
-            log.exception("Exception while activate/deactivate user api call: " + str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while activate/deactivate user api call: " + str(e))
             return post_error("Exception occurred", "Exception while deactivate user api call:{}".format(str(e)), None), 400
 
 

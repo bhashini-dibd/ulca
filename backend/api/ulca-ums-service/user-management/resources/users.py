@@ -1,12 +1,12 @@
 from flask_restful import Resource
 from repositories import UserManagementRepositories
 from models import CustomResponse, Status, post_error
-from utilities import UserUtils, MODULE_CONTEXT
+from utilities import UserUtils
 from flask import request, jsonify
 import config
 import logging
 
-log = logging.getLogger('file')
+log         =   logging.getLogger('file')
 userRepo    =   UserManagementRepositories()
 
 class CreateUsers(Resource):
@@ -48,12 +48,12 @@ class UpdateUsers(Resource):
             return post_error("Data Missing", "users not found", None), 400
 
         users = body['users']
-        log.info("Updation request received for {} user/s".format(len(users)), MODULE_CONTEXT)
+        log.info("Updation request received for {} user/s".format(len(users)))
         log.info("User/s validation started")
         for i,user in enumerate(users):
             validity = UserUtils.validate_user_input_updation(user)
             if validity is not None:
-                log.info("User validation failed for user{}".format(i+1), MODULE_CONTEXT)
+                log.info("User validation failed for user{}".format(i+1))
                 return validity, 400
         log.info("Users are validated")
 
@@ -64,31 +64,30 @@ class UpdateUsers(Resource):
                 res = CustomResponse(Status.SUCCESS_USR_UPDATION.value, None)
                 return res.getresjson(), 200
             else:
-                log.info("User updation failed | {}".format(str(result)), MODULE_CONTEXT)
+                log.info("User updation failed | {}".format(str(result)))
                 return result, 400
 
         except Exception as e:
-            log.exception("Exception while updating user records: " +
-                          str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while updating user records: " + str(e))
             return post_error("Exception occurred", "Exception while performing user updation:{}".format(str(e)), None), 400
 
 
 class SearchUsers(Resource):
 
     def post(self):
-        user_ids = []
-        user_names = []
-        role_codes = []
-        org_codes = []
-        offset = None
-        limit_value = None
-        skip_pagination=None
+        user_ids        =   []
+        user_emails     =   []
+        role_codes      =   []
+        org_codes       =   []
+        offset          =   None
+        limit_value     =   None
+        skip_pagination =   None
 
         body = request.get_json()
         if "userIDs" in body:
             user_ids    =   body['userIDs']
-        if "userNames" in body:
-            user_names  =   body['userNames']
+        if "emails" in body:
+            user_emails =   body['emails']
         if "roleCodes" in body:
             role_codes  =   body['roleCodes']
         if "orgCodes" in body:
@@ -98,15 +97,15 @@ class SearchUsers(Resource):
         if "limit" in body:
             limit_value =   body['limit']      
         if "skip_pagination" in body:
-            skip_pagination=body['skip_pagination']
+            skip_pagination =   body['skip_pagination']
         
-        log.info("User/s search request received | {}".format(str(body)), MODULE_CONTEXT)
+        log.info("User/s search request received | {}".format(str(body)))
         
-        if not user_ids and not user_names and not role_codes and not org_codes and not offset and not limit_value:
+        if not user_ids and not user_emails and not role_codes and not org_codes and not offset and not limit_value:
             offset      =   config.OFFSET_VALUE
             limit_value =   config.LIMIT_VALUE
         try:
-            result = userRepo.search_users(user_ids, user_names, role_codes,org_codes,offset,limit_value,skip_pagination)
+            result = userRepo.search_users(user_ids, user_emails, role_codes,org_codes,offset,limit_value,skip_pagination)
             log.info("User/s search successful")
             if result == None:
                 log.info("No users matching the search criterias")
@@ -115,8 +114,7 @@ class SearchUsers(Resource):
             res = CustomResponse(Status.SUCCESS_USR_SEARCH.value, result[0],result[1])
             return res.getresjson(), 200
         except Exception as e:
-            log.exception("Exception while searching user records: " +
-                          str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while searching user records: " +str(e))
             return post_error("Exception occurred", "Exception while performing user search:{}".format(str(e)), None), 400
 
 

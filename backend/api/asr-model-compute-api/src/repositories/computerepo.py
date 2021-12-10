@@ -110,8 +110,8 @@ class ASRComputeRepo:
         """
         try:
             headers =   {"Content-Type": "application/json"}
-            body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
-                        "audio": [{"audioContent": str(data)}]}
+            body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat,
+                        "punctuation": False,"enableInverseTextNormalization": False},"audio": [{"audioContent": str(data)}]}
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
