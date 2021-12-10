@@ -26,7 +26,7 @@ Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(
-    ActivateDeactivateUser,"/v1/users/activate-user"
+    ActivateDeactivateUser,"/v1/users/update/active/status"
 )
 
 Api(USER_MANAGEMENT_BLUEPRINT).add_resource(

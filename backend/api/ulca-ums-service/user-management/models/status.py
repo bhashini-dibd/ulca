@@ -11,6 +11,9 @@ class Status(enum.Enum):
     SUCCESS_USR_TOKEN       =   {"message" : "Search is successful"}
     SUCCESS_RESET_PWD       =   {"message" : "Your password has been changed successfully"}
     SUCCESS_FORGOT_PWD      =   {"message" : "Password reset link sent. Please check your email."}
+    EMPTY_USR_SEARCH        =   {"message" : "Search result is empty"}
+    SUCCESS_USR_SEARCH      =   {"message" : "Search result is ready"}
+    SUCCESS_USR_UPDATION    =   {"message" : "User details updated successfully"}
 
 
    

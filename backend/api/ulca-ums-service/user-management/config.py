@@ -34,14 +34,14 @@ ADMIN_ROLE_KEY          =   os.environ.get('UMS_ADMIN_ROLE_KEY', 'ADMIN')
 LOGIN_AUTENTICATOR      =   os.environ.get('UMS_LOGIN_AUTENTICATORS',['ULCA'])
 
 #external file read configs
-ROLE_CODES_URL          =   os.environ.get('UMS_ROLE_CODES_URL','https://raw.githubusercontent.com/project-anuvaad/ULCA/zuul-gw/backend/api/ulca-zuul-api-gw/dev-configs/roles.json')
+ROLE_CODES_URL          =   os.environ.get('UMS_ROLE_CODES_URL','https://raw.githubusercontent.com/ULCA-IN/ulca/zuul-gw/backend/api/ulca-zuul-api-gw/dev-configs/roles.json')
 ROLE_CODES_DIR_PATH     =   os.environ.get('UMS_ROLE_DIR_PATH','/app/configs/') 
 ROLE_CODES_FILE_NAME    =   os.environ.get('UMS_ROLES_FILE_NAME','roles.json')
 
 #gmail server configs
 MAIL_SETTINGS           =   {
                                 "MAIL_SERVER"   : os.environ.get('ULCA_EMAIL_SERVER','smtp.gmail.com'),
-                                "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT',465)),
+                                "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT','465')),
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
                                 "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxx'),
