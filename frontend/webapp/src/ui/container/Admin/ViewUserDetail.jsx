@@ -13,15 +13,14 @@ import { withStyles } from "@material-ui/styles";
 import AdminPanelStyle from "../../styles/AdminPanel";
 import { useSelector, useDispatch } from "react-redux";
 import APITransport from "../../../redux/actions/apitransport/apitransport";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import UserDetailsAPI from "../../../redux/actions/api/Admin/UserDetails";
 import UpdateUserInfo from "./UpdateUserInfo";
-import { Switch, Button } from "@material-ui/core";
+import { Switch } from "@material-ui/core";
 import UpdateUserDetails from "../../../redux/actions/api/Admin/UpdateUserDetails";
 import Snackbar from "../../components/common/Snackbar";
 import Search from "../../components/Datasets&Model/Search";
 import Filter from "../../components/common/Filter";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import UpdateUserStatus from "../../../redux/actions/api/Admin/UpdateUserStatus";
 import searchUserDetails from "../../../redux/actions/api/Admin/SearchUserDetails";
 
@@ -59,11 +58,26 @@ const ViewUserDetail = (props) => {
   });
   const [checkboxState, setCheckBoxState] = useState(false);
   const [searchState, setSearchState] = useState("");
+  const refHook = useRef(false);
+
   //useEffect when the component is mounted
   useEffect(() => {
     if (status === "Started") {
       makeUserDetailsAPICall();
     }
+  }, []);
+
+  useEffect(() => {
+    if (!refHook.current) {
+      makeUserDetailsAPICall();
+      refHook.current = true;
+    }
+  });
+
+  useEffect(() => {
+    return () => {
+      refHook.current = false;
+    };
   }, []);
 
   //API Call for fetching user details
@@ -121,7 +135,29 @@ const ViewUserDetail = (props) => {
           variant: "error",
         });
       } else {
-        makeUserDetailsAPICall();
+        const objUserDetails = new UserDetailsAPI();
+        fetch(objUserDetails.apiEndPoint(), {
+          method: "post",
+          headers: objUserDetails.getHeaders().headers,
+          body: JSON.stringify(objUserDetails.getBody()),
+        }).then(async (res) => {
+          let rsp_data = await res.json();
+          if (res.ok) {
+            dispatch({
+              type: "TOGGLE_USER_STATUS",
+              payload: {
+                data: rsp_data.data,
+                searchState,
+              },
+            });
+          } else {
+            setSnackbar({
+              message: rsp_data.message,
+              open: true,
+              variant: "error",
+            });
+          }
+        });
         setSnackbar({
           message: rsp_data.message,
           open: true,
@@ -264,7 +300,10 @@ const ViewUserDetail = (props) => {
           </Tooltip>
         </Grid>
         <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-          <IconButton onClick={() => handleOpen(tableData)}>
+          <IconButton
+            onClick={() => handleOpen(tableData)}
+            disabled={!tableData[6]}
+          >
             <Tooltip placement="right" title="Edit Details">
               <EditIcon fontSize="medium" />
             </Tooltip>
