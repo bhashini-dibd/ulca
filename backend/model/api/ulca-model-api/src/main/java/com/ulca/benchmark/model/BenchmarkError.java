@@ -24,7 +24,7 @@ public class BenchmarkError   {
   private String message = null;
 
   @JsonProperty("cause")
-  private Object cause = null;
+  private String cause = null;
 
   @JsonProperty("report")
   private String report = null;
@@ -67,7 +67,7 @@ public class BenchmarkError   {
     this.message = message;
   }
 
-  public BenchmarkError cause(Object cause) {
+  public BenchmarkError cause(String cause) {
     this.cause = cause;
     return this;
   }
@@ -82,7 +82,7 @@ public class BenchmarkError   {
     return cause;
   }
 
-  public void setCause(Object cause) {
+  public void setCause(String cause) {
     this.cause = cause;
   }
 

@@ -84,7 +84,7 @@ const Footer = (props) => {
                 <ul className={classes.bhasini}>
                   <Typography variant="body1">
                     <li>
-                      <Link color="while" href="#">
+                      <Link color="while" href="https://bhashini.gov.in/images/Bhashini_-_Whitepaper.pdf">
                         {translate("link.whitePaper")}
                       </Link>
                     </li>
@@ -94,7 +94,7 @@ const Footer = (props) => {
                     <li>
                       <Link
                         color="while"
-                        href="https://bhashini.uniteframework.io/en/ecosystem"
+                        href="https://bhashini.gov.in/en/ecosystem"
                       >
                         {translate("link.ecosystem")}
                       </Link>
@@ -107,7 +107,7 @@ const Footer = (props) => {
                           <Link
                             className="bh-btn-primary"
                             color="while"
-                            href="https://uat.vakyansh.in/hi/home.html"
+                            href="https://bhashini.gov.in/bhashadaan"
                             target="_self"
                             rel="noopener noreferrer"
                           >
@@ -171,7 +171,7 @@ const Footer = (props) => {
                   <li>
                     <Link
                       color="while"
-                      href="https://bhashini.uniteframework.io/en/web-information-manager"
+                      href="https://bhashini.gov.in/en/web-information-manager"
                       target="_self"
                     >
                       {translate("link.webInfo")}
@@ -182,7 +182,7 @@ const Footer = (props) => {
                   <li>
                     <Link
                       color="white"
-                      href="https://bhashini.uniteframework.io/en/privacy-policy"
+                      href="https://bhashini.gov.in/en/privacy-policy"
                       target="_self"
                     >
                       {translate("link.privacyPolicy")}
@@ -193,7 +193,7 @@ const Footer = (props) => {
                   <li>
                     <Link
                       color="white"
-                      href="https://bhashini.uniteframework.io/en/terms-conditions"
+                      href="https://bhashini.gov.in/en/terms-conditions"
                       target="_self"
                     >
                       {" "}

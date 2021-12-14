@@ -34,13 +34,20 @@ class TextLanguageCheck(BaseValidator):
 
             for text, lang in zip(text_list, lang_list):
                 # Skipping for few languages as the current model doesnt support them
-                if lang in ['brx', 'doi', 'kok', 'mai', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt']:
+                if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt']:
                     continue
 
                 try:
                     detector = Detector(text)
-                    if detector.language.code != lang or detector.language.confidence<50:
-                        return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
+                    # The language detection model does not support these languages,
+                    # So check for closest possible language to rule out non-Indic languages
+                    # TODO: Temporary implementation for now, need better solution
+                    if lang in ['doi', 'kok', 'mai']:
+                        if detector.language.code not in ['hi', 'mr', 'bh', 'ne', 'sa'] or detector.language.confidence<50:
+                            return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
+                    else:
+                        if detector.language.code != lang or detector.language.confidence<50:
+                            return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
                 except Exception as e:
                     return {"message": "Unable to detect language, text snippet too small", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 

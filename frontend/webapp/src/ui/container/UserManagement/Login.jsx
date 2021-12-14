@@ -14,7 +14,7 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import LoginStyles from "../../styles/Login";
 import LoginApi from "../../../redux/actions/api/UserManagement/Login";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
@@ -52,8 +52,8 @@ const Login = (props) => {
   useEffect(() => {
     localStorage.removeItem('userInfo')
     localStorage.removeItem('userDetails')
-   dispatch(Logout())
-}, []);
+    dispatch(Logout())
+  }, []);
 
 
 
@@ -112,8 +112,17 @@ const Login = (props) => {
       } else {
         localStorage.setItem(`userInfo`, JSON.stringify(rsp_data.data.userKeys));
         localStorage.setItem(`userDetails`, JSON.stringify(rsp_data.data.userDetails));
-
-        history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/dashboard'}`)
+        const roles = rsp_data.data.userDetails.roles;
+        if(!roles.includes("ADMIN")){
+          if (roles.indexOf('EXTERNAL-CONSORTIUM-MEMBER') === -1) {
+            history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/dashboard'}`)
+          } else {
+            history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/model/explore-models'}`)
+  
+          }
+        }else{
+          history.push(`${process.env.PUBLIC_URL}${props.location.from ? props.location.from : '/admin/view-user-details'}`)
+        }
       }
     }).catch((error) => {
       setLoading(false)

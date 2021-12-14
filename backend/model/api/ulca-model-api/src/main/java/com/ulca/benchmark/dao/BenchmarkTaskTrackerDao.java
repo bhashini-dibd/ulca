@@ -8,5 +8,4 @@ import com.ulca.benchmark.model.BenchmarkTaskTracker;
 @Repository
 public interface BenchmarkTaskTrackerDao extends MongoRepository<BenchmarkTaskTracker, String> {
 
-	
 }
