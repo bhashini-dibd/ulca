@@ -5,19 +5,24 @@ from src.db import ModelRepo
 
 repo    =   ModelRepo()
 class AggregateModelData(object):
+    """
+    Processing model aggregation
+    #from mongo
+    """
     def __init__(self):
         pass
 
     def data_aggregator(self, request_object):
         try:
-            count   =   repo.count({"task.type":{"$ne":None}})
+            count   =   repo.count({"task.type":{"$ne":None}})  # counting models where the task type is defined
             match_params = None
             if "criterions" in request_object:
-                match_params = request_object["criterions"]
+                match_params = request_object["criterions"] # where conditions
             grpby_params = None
             if "groupby" in request_object:
-                grpby_params = request_object["groupby"]
+                grpby_params = request_object["groupby"]  #grouping fields
 
+            #aggregating the model types; initial chart
             if (match_params ==  None and grpby_params == None):
                 query   =   [{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
@@ -27,7 +32,7 @@ class AggregateModelData(object):
                     rec = {}
                     rec["_id"]      =   record["_id"]["model"]
                     if record["_id"]["model"] == None:
-                        continue; #rec["label"]    =   "Others"
+                        continue; #ingnoring the models whose task types are not defined
                     elif record["_id"]["model"] and len(record["_id"]["model"])>9:
                         rec["label"]    =   str(record["_id"]["model"]).title()
                     else:
@@ -36,7 +41,7 @@ class AggregateModelData(object):
                     chart_data.append(rec)
                 return chart_data,count
 
-
+            #1st levl drill down on model selected and languages  
             if grpby_params[0]["field"] == "language":
                 query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }}, { '$unwind': "$languages" },
                             { "$group": {"_id": {"lang1":"$languages.sourceLanguage","lang2":"$languages.targetLanguage"},
@@ -47,15 +52,16 @@ class AggregateModelData(object):
                 for record in result:
                     rec = {}
                     if match_params[0]["value"] == "TRANSLATION":
-                        rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
+                        rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]  # label :language pairs seperated by '-'
                         rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
                     else:
-                        rec["_id"]      =   record["_id"]["lang1"]
+                        rec["_id"]      =   record["_id"]["lang1"] # label :language 
                         rec["label"]    =   str(record["_id"]["lang1"]).title()
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count
 
+            #1st levl drill down on model selected and submitters
             if grpby_params[0]["field"] == "submitter":
                 query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }},
                             { "$group": {"_id": {"submitter":"$submitter.name"},

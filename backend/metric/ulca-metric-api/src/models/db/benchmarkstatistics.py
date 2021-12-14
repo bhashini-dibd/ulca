@@ -5,19 +5,24 @@ from src.db import BenchRepo
 
 repo    =   BenchRepo()
 class AggregateBenchmarkData(object):
+    """
+    Processing benchmark aggregation
+    #from mongo
+    """
     def __init__(self):
         pass
 
     def data_aggregator(self, request_object):
         try:
-            count   =   repo.count({})
+            count   =   repo.count({}) # total count of bm entries on db
             match_params = None
             if "criterions" in request_object:
-                match_params = request_object["criterions"]
+                match_params = request_object["criterions"]  # where conditions
             grpby_params = None
             if "groupby" in request_object:
-                grpby_params = request_object["groupby"]
+                grpby_params = request_object["groupby"]  #grouping fields
 
+            #aggregating the bm based on types; initial chart
             if (match_params ==  None and grpby_params == None):
                 query   =   [{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
@@ -34,7 +39,7 @@ class AggregateBenchmarkData(object):
                     chart_data.append(rec)
                 return chart_data,count
 
-
+            #1st levl drill down on bm type selected and languages  
             if grpby_params[0]["field"] == "language":
                 query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }}, { '$unwind': "$languages" },{ "$group": {"_id": {"lang1":"$languages.sourceLanguage","lang2":"$languages.targetLanguage"},
                             "count": { "$sum": 1 }}}]
@@ -53,6 +58,7 @@ class AggregateBenchmarkData(object):
                     chart_data.append(rec)
                 return chart_data,count
 
+            #1st levl drill down on bm type selected and submitters  
             if grpby_params[0]["field"] == "submitter":
                 query   =   [ { '$match':{ "task.type" : match_params[0]["value"] }},{ "$group": {"_id": {"submitter":"$submitter.name"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
@@ -66,6 +72,7 @@ class AggregateBenchmarkData(object):
                     chart_data.append(rec)
                 return chart_data,count
 
+            #1st levl drill down on bm type selected and domains  
             if grpby_params[0]["field"] == "domain":
                 query   =  [ { '$match':{ "task.type" :  match_params[0]["value"] }},{"$unwind":"$domain"},{ "$group": {"_id": {"domain":"$domain"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")

@@ -1,18 +1,31 @@
 from src.db import get_data_store
 from sqlalchemy import text
-from config import TIME_CONVERSION_VAL
-from src.models.api_enums import LANG_CODES
+from config import TIME_CONVERSION_VAL, mdms_bulk_fetch_url
 import logging
+import requests
+import json
 from logging.config import dictConfig
 log = logging.getLogger('file')
 
+masterDataVals = None
 
 
 class QueryUtils:
+    
     def __init__(self):
-        pass
+        #labels for charts are fetched back from "MDMS Service"
+        masterData      =   self.get_master_data()
+        dtypes          =   [x for x in masterData["datasetTypes"] if x["active"]==True ] 
+        dtype_codes     =   [x["code"] for x in dtypes] 
+        self.mdmstype   =   dict(zip(dtype_codes,dtypes))
+        langs           =   [x for x in masterData["languages"] if x["active"]==True]
+        lang_codes      =   [x["code"] for x in langs] 
+        self.mdmslang   =   dict(zip(lang_codes,langs)) 
 
     def query_runner(self,query):
+        """
+        Executing Druid query
+        """
         try:
             collection      =   get_data_store()
             log.info("Query executed : {}".format(query))
@@ -26,6 +39,9 @@ class QueryUtils:
             return []
 
     def result_formater(self,result_parsed,group_by_field,dtype):
+        """
+        Formatting the results, labelling
+        """
         try:
             aggs={}
             for item in result_parsed:
@@ -76,6 +92,9 @@ class QueryUtils:
             return []
     
     def result_formater_for_lang_pairs(self,result_parsed,dtype,lang):
+        """
+        Formatting the results for language pairs, labelling
+        """
         try:
             aggs ={}
             for item in result_parsed:  
@@ -116,7 +135,8 @@ class QueryUtils:
                 if value == 0:
                     continue
                 elem={}
-                label = LANG_CODES.get(val)
+                # label = LANG_CODES.get(val)
+                label = self.mdmslang.get(val)["label"]
                 if label == None:
                     label = val
                 elem["_id"]=val
@@ -129,6 +149,15 @@ class QueryUtils:
             return []
 
     def del_count_calculation(self,attribute,attribute_list):
+        """
+        Druid updates and "isDelete"
+        isDelete field on Druid indicates whether a filed is deleted or not.
+        record A: isDelete = False ==> record is inserted;present
+        record A: isDelete = True ==> record is deleted
+        record A: isDelete = False & isDelete = True ==> record is updated
+        actual count of record A : count(isDelete(False)) - count(isDelete(True))
+
+        """
         aggs = {}
         for item in attribute_list:
             if aggs.get(item[attribute]) == None:
@@ -153,6 +182,31 @@ class QueryUtils:
                 aggs_parsed[val] = (agg[False]-agg[True])
 
         return aggs_parsed
+
+    def get_master_data(self,masterNames=None):
+        """
+        MDMS API call
+        """
+        global masterDataVals
+        if not masterDataVals:
+            try:
+                if not masterNames:
+                    masterNames= ["datasetTypes","languages"]
+                headers =   {"Content-Type": "application/json"}
+                body    =   {"masterNames": masterNames}
+                log.info("Intiating request to fetch masters; on url : %s"%mdms_bulk_fetch_url)
+                response = requests.post(url=mdms_bulk_fetch_url, headers = headers, json = body)
+                content = response.content
+                response_data = json.loads(content)
+                if "data" not in response_data:
+                    return
+                log.info("Successfully retrieved masters from MDMS")
+                return response_data["data"]
+            except Exception as e:
+                log.exception("Exception while fetching masters from MDMS: " +str(e))
+                return None
+        else:
+            return masterDataVals
 
 # Log config
 dictConfig({
