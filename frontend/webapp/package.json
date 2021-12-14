@@ -2,12 +2,13 @@
     "name": "ulca",
     "version": "0.1.0",
     "private": true,
+    "homepage": "/ulca",
     "dependencies": {
         "@material-ui/core": "^4.11.4",
         "@material-ui/data-grid": "^4.0.0-alpha.37",
         "@material-ui/icons": "^4.11.2",
         "@material-ui/lab": "^4.0.0-alpha.58",
-        "@project-sunbird/open-speech-streaming-client": "^1.0.4",
+        "@project-sunbird/open-speech-streaming-client": "^1.0.5",
         "@szhsin/react-menu": "^1.10.0",
         "@testing-library/jest-dom": "^5.12.0",
         "@testing-library/react": "^11.2.7",
@@ -49,7 +50,6 @@
         "redux-persist": "^6.0.0",
         "redux-thunk": "^2.3.0",
         "register-service-worker": "^1.7.2",
-        "shelljs": "^0.8.4",
         "socket.io-client": "^4.3.2",
         "use-media-recorder": "^2.0.4",
         "web-vitals": "^1.1.2"

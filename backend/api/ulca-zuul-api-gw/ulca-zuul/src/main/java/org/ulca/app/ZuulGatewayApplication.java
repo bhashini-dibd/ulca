@@ -51,7 +51,6 @@ public class ZuulGatewayApplication {
     @Bean
     public JedisConnectionFactory connectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        logger.info("host: {}, port: {}, pass: {}", host, port, pass);
         configuration.setHostName(host);
         configuration.setPort(Integer.parseInt(port));
         configuration.setPassword(pass);
@@ -110,7 +109,6 @@ public class ZuulGatewayApplication {
 
     @Bean
     RedisClient redisClient() {
-        logger.info("host: {}, port: {}, pass: {}", this.host, this.port, this.pass);
         RedisURI uri = RedisURI.Builder.redis(this.host, Integer.parseInt(this.port))
                 .withPassword(this.pass)
                 .build();

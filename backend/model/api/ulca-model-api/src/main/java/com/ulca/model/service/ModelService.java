@@ -129,9 +129,8 @@ public class ModelService {
 			ModelExtended model = result.get();
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
-			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelId(model.getModelId());
+			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelIdAndStatus(model.getModelId(), "Completed");
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
-			
 			return modelDto;
 		}
 		return null;
