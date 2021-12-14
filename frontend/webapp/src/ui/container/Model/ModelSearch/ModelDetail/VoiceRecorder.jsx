@@ -18,9 +18,12 @@ import {
   StreamingClient,
   SocketStatus,
 } from "@project-sunbird/open-speech-streaming-client";
-import { vakyanshLanguage } from "../../../../../configs/DatasetItems";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
+import GetMasterDataAPI from "../../../../../redux/actions/api/Common/getMasterData";
+import { useDispatch, useSelector } from "react-redux";
+import APITransport from "../../../../../redux/actions/apitransport/apitransport";
+
 const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
 
 const AudioRecord = (props) => {
@@ -29,44 +32,54 @@ const AudioRecord = (props) => {
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
-  const languageArr = vakyanshLanguage.filter(
-    (lang) => lang.label === language
-  );
-  const languageCode = languageArr.length ? languageArr[0].value : "";
+  const { languages } = useSelector((state) => state.getMasterData);
+  const languageArr = languages.filter((lang) => lang.label === language);
+  const languageCode = languageArr.length ? languageArr[0].code : "";
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!languages.length) {
+      const obj = new GetMasterDataAPI(["languages"]);
+      dispatch(APITransport(obj));
+    }
+  }, []);
+
   const handleStart = (data) => {
     setStreamingState("start");
     const output = document.getElementById("asrCardOutput");
     output.innerText = "";
     setData("");
-    streaming.connect(
-      REACT_SOCKET_URL,
-      languageCode,
-      function (action, id) {
-        setStreamingState("listen");
-        setRecordAudio(RecordState.START);
-        if (action === SocketStatus.CONNECTED) {
-          streaming.startStreaming(
-            function (transcript) {
-              const output = document.getElementById("asrCardOutput");
-              if (output) output.innerText = transcript;
-            },
-            function (errorMsg) {
-              console.log("errorMsg", errorMsg);
-            }
-          );
-        } else if (action === SocketStatus.TERMINATED) {
-          handleStop();
-        } else {
-          console.log("Action", action, id);
-        }
+    streaming.connect(REACT_SOCKET_URL, languageCode, function (action, id) {
+      setStreamingState("listen");
+      setRecordAudio(RecordState.START);
+      if (action === SocketStatus.CONNECTED) {
+        streaming.startStreaming(
+          function (transcript) {
+            const output = document.getElementById("asrCardOutput");
+            if (output) output.innerText = transcript;
+          },
+          function (errorMsg) {
+            console.log("errorMsg", errorMsg);
+          }
+        );
+      } else if (action === SocketStatus.TERMINATED) {
+        setStreamingState("");
+        streaming.stopStreaming((blob) => {
+         });
+        setRecordAudio(RecordState.STOP);
+        clearTimeout();
+      } else {
+        console.log("Action", action, id);
       }
-    );
+    });
   };
 
   useEffect(() => {
     if (streamingState === "listen" && data === "") {
       setTimeout(async () => {
-        handleStop();
+        setStreamingState("");
+        streaming.stopStreaming((blob) => {});
+        setRecordAudio(RecordState.STOP);
+        clearTimeout();
       }, 61000);
     }
   }, [streamingState, data]);
