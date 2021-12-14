@@ -27,6 +27,7 @@ import APITransport from "../../../../../redux/actions/apitransport/apitransport
 const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
 
 const AudioRecord = (props) => {
+  console.log(REACT_SOCKET_URL);
   const streaming = props.streaming;
   const { classes, language } = props;
   const [recordAudio, setRecordAudio] = useState("");
@@ -63,8 +64,7 @@ const AudioRecord = (props) => {
         );
       } else if (action === SocketStatus.TERMINATED) {
         setStreamingState("");
-        streaming.stopStreaming((blob) => {
-         });
+        streaming.stopStreaming((blob) => {});
         setRecordAudio(RecordState.STOP);
         clearTimeout();
       } else {
