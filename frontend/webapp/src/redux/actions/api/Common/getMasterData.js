@@ -7,7 +7,6 @@ export default class GetMasterData extends API {
   constructor(masterNamesArr, timeout = 200000) {
     super("POST", timeout, false);
     this.type = C.GET_MASTER_DATA;
-    this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getMasterData}`;
     this.masterNamesArr = masterNamesArr;
   }
@@ -36,14 +35,8 @@ export default class GetMasterData extends API {
   }
 
   getHeaders() {
-    let res = this.apiEndPoint();
-    let urlSha = md5(res);
-    let hash = md5(this.userDetails.privateKey + "|" + urlSha);
     this.headers = {
       headers: {
-        key: this.userDetails.publicKey,
-        sig: hash,
-        payload: urlSha,
         "Content-Type": "application/json",
       },
     };
