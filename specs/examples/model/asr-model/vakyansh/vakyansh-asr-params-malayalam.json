@@ -88,7 +88,7 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "https://model-api.vakyansh.in/v1/recognize/ml",
+       "callbackUrl": "http://aws-model-api.vakyansh.in/asr/v1/recognize/ml",
        "schema": {
           "taskType": "asr",
           "request": {

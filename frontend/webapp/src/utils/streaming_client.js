@@ -1,5 +1,5 @@
 const hark = require("hark");
-const io = require("socket.io-client");
+const { io } = require("socket.io-client");
 const $ = require("jquery");
 
 export default function StreamingClient() {

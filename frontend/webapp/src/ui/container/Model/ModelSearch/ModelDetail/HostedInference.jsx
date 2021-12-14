@@ -1,3 +1,4 @@
+import { Tooltip } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../../styles/Dataset";
 import { useHistory } from "react-router";
@@ -21,6 +22,7 @@ import { useState } from "react";
 import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
+import LightTooltip from "../../../../components/common/LightTooltip";
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -141,11 +143,16 @@ const HostedInference = (props) => {
               <Typography variant="h6" className={classes.hosted}>
                 Hosted inference API{" "}
                 {
-                  <InfoOutlinedIcon
-                    className={classes.buttonStyle}
-                    fontSize="small"
-                    color="disabled"
-                  />
+                  <LightTooltip 
+                  arrow
+                  placement="right"
+                  title={translate("label.hostedInferenceTranslation")}>
+                    <InfoOutlinedIcon
+                      className={classes.buttonStyle}
+                      fontSize="small"
+                      color="disabled"
+                    />
+                  </LightTooltip>
                 }
               </Typography>
             </Grid>

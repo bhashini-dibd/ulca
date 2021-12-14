@@ -50,6 +50,8 @@ export const Language = [
   { value: "si", label: "Sinhalese" },
   { value: "kha", label: "Khasi" },
   { value: "sa", label: "Sanskrit" },
+  { value: "bho", label: "Bhojpuri" },
+  { value: "raj", label: "Rajasthani" },
 ];
 
 export const FilterBy = {
@@ -133,7 +135,7 @@ export const FilterBy = {
 
 export const vakyanshLanguage = [
   { label: "Hindi", value: "hi" },
-  { label: "English", value: "en-IN" },
+  { label: "English", value: "en" },
   { label: "Tamil", value: "ta" },
   { label: "Telugu", value: "te" },
   { label: "Gujarati", value: "gu" },
@@ -147,10 +149,9 @@ export const vakyanshLanguage = [
   { label: "Maithili", value: "mai" },
   { label: "Punjabi", value: "pa" },
   { label: "Dogri", value: "doi" },
-  { label: "English-BIO", value: "en-IN-BIO" },
   { label: "Rajasthani", value: "raj" },
-  { label: "Malayalam", value: "mal" },
-  { label: "Bhojpuri", value: "bo" },
+  { label: "Malayalam", value: "ml" },
+  { label: "Bhojpuri", value: "bho" },
   { label: "Assamese", value: "as" },
 ];
 export default DatasetItems;

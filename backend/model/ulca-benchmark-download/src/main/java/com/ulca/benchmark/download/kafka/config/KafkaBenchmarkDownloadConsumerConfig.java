@@ -15,7 +15,6 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import com.ulca.benchmark.kafka.model.BmDatasetDownload;
-import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 
 
 @Configuration
@@ -26,10 +25,7 @@ public class KafkaBenchmarkDownloadConsumerConfig {
 	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 
-	// config for json data
-	
-			
-	
+	// config for Benchmark Download
 	@Bean
 	public ConsumerFactory<String, BmDatasetDownload> benchmarkDownloadConsumerFactory() {
 		Map<String, Object> configs = new HashMap<>();

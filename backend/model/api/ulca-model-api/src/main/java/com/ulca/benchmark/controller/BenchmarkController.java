@@ -1,12 +1,12 @@
 package com.ulca.benchmark.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,19 +18,19 @@ import com.ulca.benchmark.request.BenchmarkListByModelRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSubmitRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
+
 import com.ulca.benchmark.response.BenchmarkListByModelResponse;
+import com.ulca.benchmark.response.BenchmarkListByUserIdResponse;
 import com.ulca.benchmark.response.BenchmarkSearchResponse;
 import com.ulca.benchmark.response.BenchmarkSubmitResponse;
 import com.ulca.benchmark.response.ExecuteBenchmarkResponse;
 import com.ulca.benchmark.response.GetBenchmarkByIdResponse;
-import com.ulca.benchmark.service.BenchmarkService;
-import com.ulca.model.exception.RequestParamValidationException;
-import com.ulca.model.request.ModelSearchRequest;
-import com.ulca.model.response.BmProcessListByProcessIdResponse;
-import com.ulca.model.response.ModelListResponseDto;
-import com.ulca.model.response.ModelSearchResponse;
 
-import io.swagger.model.Benchmark;
+import com.ulca.benchmark.service.BenchmarkService;
+
+import com.ulca.model.exception.RequestParamValidationException;
+import com.ulca.model.response.BmProcessListByProcessIdResponse;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -47,8 +47,15 @@ public class BenchmarkController {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
 		BenchmarkSubmitResponse response = benchmarkService.submitBenchmark(request);
-
 		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/listByUserId")
+	public BenchmarkListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
+			@RequestParam(required = false) Integer endPage) {
+		log.info("******** Entry BenchMarkController:: listByUserId *******");
+
+		return benchmarkService.benchmarkListByUserId(userId, startPage, endPage);
 	}
 
 	@PostMapping("/execute")
@@ -86,8 +93,6 @@ public class BenchmarkController {
 		log.info("******** Entry BenchmarkController:: searchBenchmark *******");
 		return benchmarkService.searchBenchmark(request,startPage,endPage);
 	}
-	
-	
 	
 	@GetMapping("/process/status")
 	public ResponseEntity<BmProcessListByProcessIdResponse> processStatus(@RequestParam String benchmarkProcessId){
