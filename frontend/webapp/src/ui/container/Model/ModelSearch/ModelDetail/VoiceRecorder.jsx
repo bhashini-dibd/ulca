@@ -1,4 +1,10 @@
-import { Grid, Typography, CardContent, Card, Tooltip } from "@material-ui/core";
+import {
+  Grid,
+  Typography,
+  CardContent,
+  Card,
+  Tooltip,
+} from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../../styles/Dataset";
 import { useEffect, useState } from "react";
@@ -15,7 +21,7 @@ import {
 import { vakyanshLanguage } from "../../../../../configs/DatasetItems";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
-const SOCKET_URL = config.SOCKET_URL;
+const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
 
 const AudioRecord = (props) => {
   const streaming = props.streaming;
@@ -32,25 +38,29 @@ const AudioRecord = (props) => {
     const output = document.getElementById("asrCardOutput");
     output.innerText = "";
     setData("");
-    streaming.connect(SOCKET_URL, languageCode, function (action, id) {
-      setStreamingState("listen");
-      setRecordAudio(RecordState.START);
-      if (action === SocketStatus.CONNECTED) {
-        streaming.startStreaming(
-          function (transcript) {
-            const output = document.getElementById("asrCardOutput");
-            if (output) output.innerText = transcript;
-          },
-          function (errorMsg) {
-            console.log("errorMsg", errorMsg);
-          }
-        );
-      } else if (action === SocketStatus.TERMINATED) {
-        handleStop();
-      } else {
-        console.log("Action", action, id);
+    streaming.connect(
+      REACT_SOCKET_URL,
+      languageCode,
+      function (action, id) {
+        setStreamingState("listen");
+        setRecordAudio(RecordState.START);
+        if (action === SocketStatus.CONNECTED) {
+          streaming.startStreaming(
+            function (transcript) {
+              const output = document.getElementById("asrCardOutput");
+              if (output) output.innerText = transcript;
+            },
+            function (errorMsg) {
+              console.log("errorMsg", errorMsg);
+            }
+          );
+        } else if (action === SocketStatus.TERMINATED) {
+          handleStop();
+        } else {
+          console.log("Action", action, id);
+        }
       }
-    });
+    );
   };
 
   useEffect(() => {
@@ -67,7 +77,7 @@ const AudioRecord = (props) => {
     if (output) {
       streaming.punctuateText(
         output.innerText,
-        "https://inference.vakyansh.in/punctuate",
+        `${REACT_SOCKET_URL}punctuate`,
         (status, text) => {
           output.innerText = text;
         },
@@ -97,7 +107,9 @@ const AudioRecord = (props) => {
             <LightTooltip
               arrow
               placement="right"
-              title={translate("label.hostedInferenceASR")}><InfoOutlinedIcon
+              title={translate("label.hostedInferenceASR")}
+            >
+              <InfoOutlinedIcon
                 className={classes.buttonStyle}
                 fontSize="small"
                 color="disabled"
@@ -135,8 +147,8 @@ const AudioRecord = (props) => {
             {streamingState === "start"
               ? "Please wait..."
               : streamingState === "listen"
-                ? "Listening..."
-                : ""}
+              ? "Listening..."
+              : ""}
           </Typography>{" "}
         </div>
         <div className={classes.centerAudio}>

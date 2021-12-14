@@ -3,17 +3,27 @@ export const menuItems = {
     {
       name: "My Contribution",
       url: "/dataset/my-contribution",
-      roles: ["CONTRIBUTOR-USER","BENCHMARK-DATASET-CONTRIBUTOR"],
+      roles: ["CONTRIBUTOR-USER", "BENCHMARK-DATASET-CONTRIBUTOR", "ADMIN"],
     },
     {
       name: "My Searches",
       url: "/my-searches",
-      roles: ["READONLY-USER", "CONTRIBUTOR-USER","BENCHMARK-DATASET-CONTRIBUTOR"],
+      roles: [
+        "READONLY-USER",
+        "CONTRIBUTOR-USER",
+        "BENCHMARK-DATASET-CONTRIBUTOR",
+        "ADMIN",
+      ],
     },
     {
       name: "Search & Download Records",
       url: "/search-and-download-rec/initiate/-1",
-      roles: ["CONTRIBUTOR-USER", "READONLY-USER","BENCHMARK-DATASET-CONTRIBUTOR"],
+      roles: [
+        "CONTRIBUTOR-USER",
+        "READONLY-USER",
+        "BENCHMARK-DATASET-CONTRIBUTOR",
+        "ADMIN",
+      ],
     },
     // {
     //     name: 'Explore Readymade Datasets',
@@ -22,7 +32,7 @@ export const menuItems = {
     {
       name: "Submit Dataset",
       url: "/dataset/upload",
-      roles: ["CONTRIBUTOR-USER","BENCHMARK-DATASET-CONTRIBUTOR"],
+      roles: ["CONTRIBUTOR-USER", "BENCHMARK-DATASET-CONTRIBUTOR", "ADMIN"],
     },
     // {
     //     name: 'Readymade Dataset',
@@ -35,7 +45,12 @@ export const menuItems = {
     {
       name: "My Contribution",
       url: "/model/my-contribution",
-      roles: ["CONTRIBUTOR-USER", "EXTERNAL-CONSORTIUM-MEMBER","BENCHMARK-DATASET-CONTRIBUTOR"],
+      roles: [
+        "CONTRIBUTOR-USER",
+        "EXTERNAL-CONSORTIUM-MEMBER",
+        "BENCHMARK-DATASET-CONTRIBUTOR",
+        "ADMIN",
+      ],
     },
     {
       name: "Explore Models",
@@ -44,7 +59,8 @@ export const menuItems = {
         "READONLY-USER",
         "CONTRIBUTOR-USER",
         "EXTERNAL-CONSORTIUM-MEMBER",
-        "BENCHMARK-DATASET-CONTRIBUTOR"
+        "BENCHMARK-DATASET-CONTRIBUTOR",
+        "ADMIN",
       ],
       public: true,
     },
@@ -56,13 +72,30 @@ export const menuItems = {
     {
       name: "Benchmark Datasets",
       url: "/model/benchmark-datasets",
-      roles: ["CONTRIBUTOR-USER", "EXTERNAL-CONSORTIUM-MEMBER","BENCHMARK-DATASET-CONTRIBUTOR"],
+      roles: [
+        "CONTRIBUTOR-USER",
+        "EXTERNAL-CONSORTIUM-MEMBER",
+        "BENCHMARK-DATASET-CONTRIBUTOR",
+        "ADMIN",
+      ],
       public: true,
     },
     {
       name: "Submit Model",
       url: "/model/upload",
-      roles: ["CONTRIBUTOR-USER","EXTERNAL-CONSORTIUM-MEMBER","BENCHMARK-DATASET-CONTRIBUTOR"],
+      roles: [
+        "CONTRIBUTOR-USER",
+        "EXTERNAL-CONSORTIUM-MEMBER",
+        "BENCHMARK-DATASET-CONTRIBUTOR",
+        "ADMIN",
+      ],
+    },
+  ],
+  admin: [
+    {
+      name: "User Details",
+      url: "/admin/view-user-details",
+      roles: ["ADMIN"],
     },
   ],
   profile: [

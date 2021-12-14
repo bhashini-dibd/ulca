@@ -326,6 +326,7 @@ components:
     ASRConfig:
       required:
       - language
+      - audioFormat
       type: object
       properties:
         modelId:

@@ -36,6 +36,7 @@ import myContribFilter from "../../../../redux/actions/api/Model/ModelView/myCon
 import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValues from "../../../../redux/actions/api/Model/ModelView/GetSearchedValues";
 import { translate } from "../../../../assets/localisation";
+import { useRef } from "react";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -57,6 +58,7 @@ const ContributionList = (props) => {
   const [index, setIndex] = useState([]);
   const { added } = useParams();
   const data = myContributionReport.filteredData;
+  const [searchValue, setSearchValue] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const popoverOpen = Boolean(anchorEl);
   const [selectionOpen, setSelectionOpen] = React.useState(null);
@@ -71,7 +73,8 @@ const ContributionList = (props) => {
     status: "",
   });
   const status = useSelector((state) => state.getBenchMarkDetails.status);
-  const $ = require("jquery");
+  const refHook = useRef(false);
+
   useEffect(() => {
     (myContributionReport.filteredData.length === 0 ||
       myContributionReport.refreshStatus ||
@@ -85,6 +88,19 @@ const ContributionList = (props) => {
       setOpenModal(true);
     }
   });
+
+  useEffect(() => {
+    if (!refHook.current) {
+      MyContributionListApi();
+      refHook.current = true;
+    }
+  });
+
+  useEffect(() => {
+    return () => {
+      refHook.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     for (let i = 0; i < data.length; i++) {
@@ -133,9 +149,7 @@ const ContributionList = (props) => {
   //   });
   // }, []);
 
-  console.log(index);
-
-  const MyContributionListApi = () => {
+  const MyContributionListApi = async () => {
     dispatch(ClearReport());
     const userObj = new MyContributionList(
       "SAVE",
@@ -143,6 +157,7 @@ const ContributionList = (props) => {
       "241006445d1546dbb5db836c498be6381606221196566"
     );
     dispatch(APITransport(userObj));
+    refHook.current = false;
   };
 
   const handleShowFilter = (event) => {
@@ -179,6 +194,8 @@ const ContributionList = (props) => {
       });
   };
   const handleSearch = (value) => {
+    setSearchValue(value);
+    processTableClickedNextOrPrevious("", 0);
     dispatch(getSearchedValues(value));
   };
   const fetchHeaderButton = () => {
@@ -329,7 +346,26 @@ const ContributionList = (props) => {
       .then(async (res) => {
         handleDialogClose();
         if (res.ok) {
-          MyContributionListApi();
+          const userObj = new MyContributionList(
+            "SAVE",
+            "A_FBTTR-VWSge-1619075981554",
+            "241006445d1546dbb5db836c498be6381606221196566"
+          );
+          fetch(userObj.apiEndPoint(), {
+            method: "get",
+            headers: userObj.getHeaders().headers,
+          }).then(async (resp) => {
+            let resp_data = await resp.json();
+            if (resp.ok) {
+              dispatch({
+                type: "TOGGLE_MODEL_STATUS",
+                payload: {
+                  data: resp_data.data,
+                  searchValue,
+                },
+              });
+            }
+          });
         }
       })
       .catch((err) => {

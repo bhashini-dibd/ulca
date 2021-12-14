@@ -72,7 +72,7 @@ const getContributionList = (state, payload) => {
       submitRefNumber: element.benchmarkId,
       datasetName: element.name,
       submittedOn: dateConversion(element.submittedOn),
-      datasetType: element.task.type,
+      datasetType: element.task ? element.task.type : "",
       status: element.status,
       color:
         element.status === "Completed"
@@ -85,6 +85,7 @@ const getContributionList = (state, payload) => {
     });
     !statusFilter.includes(element.status) && statusFilter.push(element.status);
     !datatypeFilter.includes(element.datasetName) &&
+      element.task &&
       datatypeFilter.push(element.task.type);
     if (element.status === "In-Progress" || element.status === "Pending") {
       refreshStatus = true;

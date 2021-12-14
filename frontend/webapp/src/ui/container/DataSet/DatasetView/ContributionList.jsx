@@ -2,7 +2,7 @@ import MyDatasetList from "./MyDatasetList";
 import { Tabs, Tab, Box, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
 import MyBencmarkList from "./MyBencmarkList";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
 import MyBenchmarkList from "../../../../redux/actions/api/DataSet/DatasetView/MyBenchmarkList";
@@ -30,6 +30,8 @@ const ContributionList = (props) => {
   const myContributionReport = useSelector(
     (state) => state.myContributionReport
   );
+
+  const refHook = useRef(false);
 
   const myBenchmarkReport = useSelector((state) => state.myBenchmarkReport);
 
@@ -110,6 +112,20 @@ const ContributionList = (props) => {
     (myBenchmarkReport.filteredData.length === 0 ||
       myBenchmarkReport.refreshStatus) &&
       MyBenchmarkListApi();
+  }, []);
+
+  useEffect(() => {
+    if (!refHook.current) {
+      MyContributionListApi();
+      MyBenchmarkListApi();
+      refHook.current = true;
+    }
+  });
+
+  useEffect(() => {
+    return () => {
+      refHook.current = false;
+    };
   }, []);
 
   useEffect(() => {

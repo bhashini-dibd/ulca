@@ -110,6 +110,9 @@ const Header = (props) => {
     if (type === "models") {
       history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
       dispatch(getMenuOption(1));
+    } else if (type === "admin") {
+      history.push(`${process.env.PUBLIC_URL}/admin/view-user-details`);
+      dispatch(getMenuOption(1));
     } else {
       history.push(
         `${process.env.PUBLIC_URL}/search-and-download-rec/initiate/-1`
@@ -218,6 +221,36 @@ const Header = (props) => {
                       handleMenuItemClick={handleMenuItemClick}
                     /> */}
                 </div>
+                {roles.indexOf("ADMIN") !== -1 && (
+                  <div
+                    className={
+                      authenticate() ? classes.options : classes.datasetOption
+                    }
+                  >
+                    <div
+                      className={classes.model}
+                      style={type === "models" ? { background: "#f5f5f5" } : {}}
+                    >
+                      <Button
+                        className={classes.menuBtn}
+                        variant="text"
+                        onClick={(e) => handleMenuTypeClick("admin")}
+                      >
+                        {/* {translate("label.a")} */}
+                        Admin
+                        {/* {authenticate() && <DownIcon color="action" />} */}
+                      </Button>
+                    </div>
+                    {/* 
+                    <MenuItems
+                      id={"dataset-menu"}
+                      anchorEl={anchorModel}
+                      handleClose={handleClose}
+                      menuOptions={menuItems.models}
+                      handleMenuItemClick={handleMenuItemClick}
+                    /> */}
+                  </div>
+                )}
               </>
             }
             {authenticate() ? (

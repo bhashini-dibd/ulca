@@ -224,6 +224,13 @@ const getSearchedValues = (value, data) => {
   return newState;
 };
 
+const updateModelStatus = (respData, searchValue) => {
+  if (searchValue === "") {
+    return respData;
+  }
+  return getSearchedValues(searchValue, respData);
+};
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_MODEL_CONTRIBUTION_LIST:
@@ -249,6 +256,17 @@ const reducer = (state = initialState, action) => {
       };
     case C.CLEAR_MODEL_FILTER:
       return getClearFilter(state);
+
+    case C.TOGGLE_MODEL_STATUS:
+      return {
+        ...state,
+        responseData: getContributionList(state, action.payload.data)
+          .responseData,
+        filteredData: updateModelStatus(
+          getContributionList(state, action.payload.data).responseData,
+          action.payload.searchValue
+        ),
+      };
     default:
       return {
         ...state,
