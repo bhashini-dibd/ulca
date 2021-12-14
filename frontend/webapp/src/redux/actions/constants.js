@@ -2,6 +2,7 @@ const constants = {
   APISTATUS: "APISTATUS",
   GET_ERROR_REPORT: "GET_ERROR_REPORT",
   LOGOUT: "LOGOUT",
+  GET_MASTER_DATA: "GET_MASTER_DATA",
   /**
    * action for Dataset report
    */
