@@ -15,12 +15,18 @@ class QueryUtils:
     def __init__(self):
         #labels for charts are fetched back from "MDMS Service"
         masterData      =   self.get_master_data()
-        dtypes          =   [x for x in masterData["datasetTypes"] if x["active"]==True ] 
-        dtype_codes     =   [x["code"] for x in dtypes] 
-        self.mdmstype   =   dict(zip(dtype_codes,dtypes))
+        domains         =   [x for x in masterData["domains"] if x["active"]==True ] 
+        domain_codes    =   [x["code"] for x in domains] 
+        mdmsdomain      =   dict(zip(domain_codes,domains))
         langs           =   [x for x in masterData["languages"] if x["active"]==True]
         lang_codes      =   [x["code"] for x in langs] 
-        self.mdmslang   =   dict(zip(lang_codes,langs)) 
+        mdmslang        =   dict(zip(lang_codes,langs)) 
+        collmethods     =   [x for x in masterData["collectionMethods"] if x["active"]==True]
+        collmethod_codes=   [x["code"] for x in collmethods] 
+        mdmscolmethods  =   dict(zip(collmethod_codes,collmethods)) 
+        mdmsdomain.update(mdmslang)
+        mdmsdomain.update(mdmscolmethods)
+        self.mdmsconfigs=   mdmsdomain 
 
     def query_runner(self,query):
         """
@@ -82,8 +88,11 @@ class QueryUtils:
                     if group_by_field == "primarySubmitterName": 
                         elem["label"] = val
                     else:
-                        title=val.split('-')
-                        elem["label"]=" ".join(title).title()
+                        label = self.mdmsconfigs.get(val)["label"]
+                        elem["label"] = label
+                        if not label:
+                            title=val.split('-')
+                            elem["label"]=" ".join(title).title()
                 elem["value"]=value
                 chart_data.append(elem)                 
             return chart_data
@@ -136,7 +145,7 @@ class QueryUtils:
                     continue
                 elem={}
                 # label = LANG_CODES.get(val)
-                label = self.mdmslang.get(val)["label"]
+                label =  self.mdmsconfigs.get(val)["label"]
                 if label == None:
                     label = val
                 elem["_id"]=val
@@ -191,7 +200,7 @@ class QueryUtils:
         if not masterDataVals:
             try:
                 if not masterNames:
-                    masterNames= ["datasetTypes","languages"]
+                    masterNames= ["datasetTypes","languages","collectionMethods","domains"]
                 headers =   {"Content-Type": "application/json"}
                 body    =   {"masterNames": masterNames}
                 log.info("Intiating request to fetch masters; on url : %s"%mdms_bulk_fetch_url)
