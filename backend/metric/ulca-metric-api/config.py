@@ -40,4 +40,4 @@ data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabe
 
 email_service_url           =   os.environ.get('UTILITY_SERVICE_NOTIFY_COUNT_URL','http://utility-service:5001//ulca/apis/v1/send/mail')
 mismatch_email_service_url  =   os.environ.get('UTILITY_SERVICE_NOTIFY_MISMATCH_URL','http://utility-service:5001//ulca/apis/v1/notify/mismatch') 
-mdms_bulk_fetch_url         =   os.environ.get('ULCA_MDMS_BULK_FETCH_URL','http://localhost:5001/ulca/mdms/v0/fetch-master/bulk')
+mdms_bulk_fetch_url         =   os.environ.get('ULCA_MDMS_BULK_FETCH_URL','http://master-data-management:5001/ulca/mdms/v0/fetch-master/bulk')
