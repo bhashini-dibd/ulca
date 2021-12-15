@@ -44,6 +44,12 @@ const AudioRecord = (props) => {
     }
   }, []);
 
+  useEffect(() => {
+    return () => {
+      streaming.isStreaming ? streaming.disconnect() : console.log("unmounted");
+    };
+  }, []);
+
   const handleStart = (data) => {
     setStreamingState("start");
     const output = document.getElementById("asrCardOutput");
@@ -75,9 +81,23 @@ const AudioRecord = (props) => {
 
   useEffect(() => {
     if (streamingState === "listen" && data === "") {
-      setTimeout(async () => {
+      setTimeout(() => {
         setStreamingState("");
-        streaming.stopStreaming((blob) => {});
+        streaming.stopStreaming((blob) => {
+          const output = document.getElementById("asrCardOutput");
+          if (output) {
+            streaming.punctuateText(
+              output.innerText,
+              `${REACT_SOCKET_URL}punctuate`,
+              (status, text) => {
+                output.innerText = text;
+              },
+              (status, error) => {
+                // alert("Failed to punctuate");
+              }
+            );
+          }
+        });
         setRecordAudio(RecordState.STOP);
         clearTimeout();
       }, 61000);
