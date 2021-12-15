@@ -62,7 +62,11 @@ class AggregateModelData(object):
                             rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
                     else:
                         rec["_id"]      =   record["_id"]["lang1"] # label :language 
-                        rec["label"]    =   str(record["_id"]["lang1"]).title()
+                        try:
+                            rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]
+                        except:
+                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"]}')
+                            rec["label"]    =   str(record["_id"]["lang1"]).title()
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count

@@ -64,7 +64,7 @@ class AggregateBenchmarkData(object):
                     else:
                         rec["_id"]      =   record["_id"]["lang1"]
                         try:
-                            rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())
+                            rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]
                         except:
                             log.info(f'Language code not found on MDMS : {record["_id"]["lang1"]}')
                             rec["label"]    =   str(record["_id"]["lang1"]).title()
@@ -96,7 +96,7 @@ class AggregateBenchmarkData(object):
                     rec = {}
                     rec["_id"]      =   record["_id"]["domain"]
                     try:
-                        rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["domain"]).lower())
+                        rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["domain"]).lower())["label"]
                     except:
                         log.info(f'Language code not found on MDMS : {record["_id"]["domain"]}')
                         rec["label"]    =   str(record["_id"]["domain"]).title()
