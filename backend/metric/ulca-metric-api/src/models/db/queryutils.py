@@ -185,10 +185,12 @@ class QueryUtils:
         """
         MDMS API call
         """
+
         global masterDataVals
         if not masterDataVals:
             try:
                 if not masterNames:
+                    log.info("Getting mdms configs from MDMS service")
                     masterNames= ["datasetTypes","languages","collectionMethods","domains"]
                 headers =   {"Content-Type": "application/json"}
                 body    =   {"masterNames": masterNames}
@@ -217,6 +219,7 @@ class QueryUtils:
                 log.exception("Exception while fetching masters from MDMS: " +str(e))
                 return None
         else:
+            log.info("Returning mdms configs from local")
             return masterDataVals
 
 # Log config

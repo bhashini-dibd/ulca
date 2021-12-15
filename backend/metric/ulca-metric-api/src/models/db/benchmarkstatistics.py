@@ -2,15 +2,18 @@ import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
 from src.db import BenchRepo
+from .queryutils import QueryUtils
 
 repo    =   BenchRepo()
+utils   =   QueryUtils()
+
 class AggregateBenchmarkData(object):
     """
     Processing benchmark aggregation
     #from mongo
     """
     def __init__(self):
-        pass
+        self.mdmsconfigs  = utils.get_master_data()
 
     def data_aggregator(self, request_object):
         try:
@@ -30,6 +33,8 @@ class AggregateBenchmarkData(object):
                 chart_data = []
                 for record in result:
                     rec = {}
+                    if record["_id"]["model"] == None:
+                        continue
                     rec["_id"]      =   record["_id"]["model"]
                     if len(record["_id"]["model"])>9:
                         rec["label"]    =   str(record["_id"]["model"]).title()
@@ -50,10 +55,19 @@ class AggregateBenchmarkData(object):
                     rec = {}
                     if match_params[0]["value"] == "TRANSLATION":
                         rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]
-                        rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
+                        try:
+                            rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]+"-"+self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
+                        except:
+                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
+                            rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
+
                     else:
                         rec["_id"]      =   record["_id"]["lang1"]
-                        rec["label"]    =   str(record["_id"]["lang1"]).title()
+                        try:
+                            rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())
+                        except:
+                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"]}')
+                            rec["label"]    =   str(record["_id"]["lang1"]).title()
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count
@@ -81,7 +95,11 @@ class AggregateBenchmarkData(object):
                 for record in result:
                     rec = {}
                     rec["_id"]      =   record["_id"]["domain"]
-                    rec["label"]    =   str(record["_id"]["domain"]).title()
+                    try:
+                        rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["domain"]).lower())
+                    except:
+                        log.info(f'Language code not found on MDMS : {record["_id"]["domain"]}')
+                        rec["label"]    =   str(record["_id"]["domain"]).title()
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
                 return chart_data,count

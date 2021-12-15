@@ -2,15 +2,17 @@ import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
 from src.db import ModelRepo
+from .queryutils import QueryUtils
 
 repo    =   ModelRepo()
+utils   =   QueryUtils()
 class AggregateModelData(object):
     """
     Processing model aggregation
     #from mongo
     """
     def __init__(self):
-        pass
+        self.mdmsconfigs  = utils.get_master_data()
 
     def data_aggregator(self, request_object):
         try:
@@ -53,7 +55,11 @@ class AggregateModelData(object):
                     rec = {}
                     if match_params[0]["value"] == "TRANSLATION":
                         rec["_id"]      =   record["_id"]["lang1"]+"-"+record["_id"]["lang2"]  # label :language pairs seperated by '-'
-                        rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
+                        try:
+                            rec["label"]    =   self.mdmsconfigs.get(str(record["_id"]["lang1"]).lower())["label"]+"-"+self.mdmsconfigs.get(str(record["_id"]["lang2"]).lower())["label"]
+                        except:
+                            log.info(f'Language code not found on MDMS : {record["_id"]["lang1"], record["_id"]["lang2"]}')
+                            rec["label"]    =   str(record["_id"]["lang1"]).title()+"-"+str(record["_id"]["lang2"]).title()
                     else:
                         rec["_id"]      =   record["_id"]["lang1"] # label :language 
                         rec["label"]    =   str(record["_id"]["lang1"]).title()
