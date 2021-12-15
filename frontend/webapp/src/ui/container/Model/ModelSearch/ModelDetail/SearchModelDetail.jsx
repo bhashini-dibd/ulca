@@ -30,11 +30,13 @@ const SearchModelDetail = (props) => {
     setData(location.state);
   }, [location]);
 
-  useEffect(() => {
-    return () => {
-      setStreaming(null);
-    };
-  }, []);
+  console.log(streaming);
+
+  // useEffect(() => {
+  //   return () => {
+  //     streaming.disconnect();
+  //   };
+  // }, []);
 
   const description = [
     // {
