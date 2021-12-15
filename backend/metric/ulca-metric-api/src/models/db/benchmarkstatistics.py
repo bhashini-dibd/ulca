@@ -17,7 +17,7 @@ class AggregateBenchmarkData(object):
 
     def data_aggregator(self, request_object):
         try:
-            count   =   repo.count({}) # total count of bm entries on db
+            count   =   repo.count({"task.type":{"$ne":None}})  # total count of bm entries on db
             match_params = None
             if "criterions" in request_object:
                 match_params = request_object["criterions"]  # where conditions
