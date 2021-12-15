@@ -14,19 +14,7 @@ class QueryUtils:
     
     def __init__(self):
         #labels for charts are fetched back from "MDMS Service"
-        masterData      =   self.get_master_data()
-        domains         =   [x for x in masterData["domains"] if x["active"]==True ] 
-        domain_codes    =   [x["code"] for x in domains] 
-        mdmsdomain      =   dict(zip(domain_codes,domains))
-        langs           =   [x for x in masterData["languages"] if x["active"]==True]
-        lang_codes      =   [x["code"] for x in langs] 
-        mdmslang        =   dict(zip(lang_codes,langs)) 
-        collmethods     =   [x for x in masterData["collectionMethods"] if x["active"]==True]
-        collmethod_codes=   [x["code"] for x in collmethods] 
-        mdmscolmethods  =   dict(zip(collmethod_codes,collmethods)) 
-        mdmsdomain.update(mdmslang)
-        mdmsdomain.update(mdmscolmethods)
-        self.mdmsconfigs=   mdmsdomain 
+        self.mdmsconfigs=   self.get_master_data() 
 
     def query_runner(self,query):
         """
@@ -210,7 +198,20 @@ class QueryUtils:
                 if "data" not in response_data:
                     return
                 log.info("Successfully retrieved masters from MDMS")
-                return response_data["data"]
+                response_data   =   response_data["data"]
+                domains         =   [x for x in response_data["domains"] if x["active"]==True ] 
+                domain_codes    =   [x["code"] for x in domains] 
+                mdmsdomain      =   dict(zip(domain_codes,domains))
+                langs           =   [x for x in response_data["languages"] if x["active"]==True]
+                lang_codes      =   [x["code"] for x in langs] 
+                mdmslang        =   dict(zip(lang_codes,langs)) 
+                collmethods     =   [x for x in response_data["collectionMethods"] if x["active"]==True]
+                collmethod_codes=   [x["code"] for x in collmethods] 
+                mdmscolmethods  =   dict(zip(collmethod_codes,collmethods)) 
+                mdmsdomain.update(mdmslang)   # extending the dict
+                mdmsdomain.update(mdmscolmethods) # extending the dict
+                masterDataVals = mdmsdomain
+                return masterDataVals
             except Exception as e:
                 log.exception("Exception while fetching masters from MDMS: " +str(e))
                 return None
