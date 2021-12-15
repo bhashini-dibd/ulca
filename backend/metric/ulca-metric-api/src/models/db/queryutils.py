@@ -76,8 +76,9 @@ class QueryUtils:
                     if group_by_field == "primarySubmitterName": 
                         elem["label"] = val
                     else:
-                        label = self.mdmsconfigs.get(val)["label"]
-                        elem["label"] = label
+                        label = self.mdmsconfigs.get(val)
+                        if label:
+                            elem["label"] = label["label"]
                         if not label:
                             title=val.split('-')
                             elem["label"]=" ".join(title).title()
