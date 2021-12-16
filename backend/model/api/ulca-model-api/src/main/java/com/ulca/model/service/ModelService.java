@@ -285,7 +285,7 @@ public class ModelService {
 	
 
 	public ModelComputeResponse computeModel(ModelComputeRequest compute)
-			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
+			throws URISyntaxException, IOException {
 
 		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();
