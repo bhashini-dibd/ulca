@@ -79,7 +79,7 @@ public class ModelController {
 	}
 	
 	@PostMapping("/compute")
-	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
+	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws URISyntaxException, IOException {
 
 		log.info("******** Entry ModelController:: computeModel *******");
 		return modelService.computeModel(request);
