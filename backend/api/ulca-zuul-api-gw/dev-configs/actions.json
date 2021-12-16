@@ -285,7 +285,7 @@
       "uri": "/ulca/mdms/v0/fetch-master/bulk",
       "module": "MDMS",
       "active": true,
-      "whiteList": false,
+      "whiteList": true,
       "description": "API to fetch MDMS data in buklk"
     },
     {

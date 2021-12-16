@@ -234,18 +234,12 @@ components:
 
     OCRRequest:
       required:
-      - imageUri
+      - image
       - config
       type: object
       properties:
-        imageUri:
-          type: array
-          description: list of paths on gcp/s3 bucket or https url
-          example: gs://bucket/testimg.jpeg
-          items:
-            maxItems: 10
-            minItems: 1
-            type: string
+        image:
+          $ref: '#/components/schemas/ImageFiles'
         config:
           $ref: '#/components/schemas/OCRConfig'
 
@@ -376,6 +370,26 @@ components:
           - transcript
           - alternatives
 
+    ImageFiles:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/ImageFile'
+
+    ImageFile:
+      required:
+      - imageContent | imageUri
+      type: object
+      properties:
+        imageContent:
+          type: string
+          description: image content
+          format: byte
+        imageUri:
+          type: string
+          description: path on gcp/s3 bucket or https url
+          example: gs://bucket/testimg.jpeg
+
     ASRFiles:
       type: array
       description: list of
@@ -438,4 +452,3 @@ components:
       description: token issued by authenticating the user
       name: auth-token
       in: header
-
