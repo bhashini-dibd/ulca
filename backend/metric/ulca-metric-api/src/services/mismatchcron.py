@@ -1,6 +1,5 @@
 from threading import Thread
 from config import mismatch_cron_interval_sec, mismatch_email_service_url
-import config
 import logging
 from src.db import ModelRepo
 import requests

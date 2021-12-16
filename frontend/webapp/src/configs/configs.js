@@ -7,8 +7,8 @@ const configs = {
     ? process.env.SALT
     : "85U62e26b2aJ68dae8eQc188e0c8z8J9",
   BASE_DASHBOARD: "https://sangrah-dev-api.anuvaad.org",
-  REACT_SOCKET_URL: process.env.REACT_SOCKET_URL
-    ? process.env.REACT_SOCKET_URL
+  REACT_SOCKET_URL: process.env.REACT_APP_SOCKET_URL
+    ? process.env.REACT_APP_SOCKET_URL
     : "https://inference.vakyansh.in/",
 };
 

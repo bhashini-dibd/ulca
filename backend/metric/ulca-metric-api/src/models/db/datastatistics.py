@@ -1,21 +1,22 @@
-
 from .queryutils import QueryUtils
 from config import DRUID_DB_SCHEMA , TIME_CONVERSION_VAL
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
 
-
 utils = QueryUtils()
 
 class AggregateDatasetModel(object):
+    """
+    Processing dataset aggregation
+    #from druid
+    """
     def __init__(self):
         pass
 
-
     def data_aggregator(self, request_object):
         try:
-            #query fields
+            #query fields ; druid filed names
             count   =   "count"
             total   =   "total"
             src     =   "sourceLanguage"
@@ -25,16 +26,18 @@ class AggregateDatasetModel(object):
             duration=   "durationInSeconds"
 
             dtype = request_object["type"]
-            match_params = None
+            match_params = None 
             if "criterions" in request_object:
-                match_params = request_object["criterions"]
+                match_params = request_object["criterions"]  # where conditions
             grpby_params = None
             if "groupby" in request_object:
-                grpby_params = request_object["groupby"]
+                grpby_params = request_object["groupby"]   #grouping fields
 
+            #ASR charts are displayed in hours; initial chart
             if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
                 sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
             else:
+                #Charts except ASR are displayed in record counts; initial chart
                 sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
             sumtotal_result = utils.query_runner(sumtotal_query)
             true_count = 0
@@ -48,7 +51,7 @@ class AggregateDatasetModel(object):
             if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
                 sumtotal = sumtotal/TIME_CONVERSION_VAL
 
-            #aggregate query for language pairs
+            #aggregate query for language pairs; 1st level drill down for the chart
             if grpby_params == None and len(match_params) ==1:
                 if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
@@ -57,6 +60,7 @@ class AggregateDatasetModel(object):
                 params = match_params[0]
                 value = params["value"]
 
+                #parallel corpus src and tgt are interchangable ; eg : one 'en-hi' record is considered as 'hi-en' as well and is also counted while checking for 'hi' pairs
                 if dtype == "parallel-corpus":
                     sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
                                     GROUP BY {src}, {tgt},{delete}'
@@ -67,9 +71,9 @@ class AggregateDatasetModel(object):
 
                 result_parsed = utils.query_runner(qry_for_lang_pair)
                 chart_data =  utils.result_formater_for_lang_pairs(result_parsed,dtype,value)
-
                 return chart_data,sumtotal
-            #aggregate query for groupby field
+
+            #aggregate query for language groupby ; 1st level drill down for the chart
             if grpby_params != None and len(match_params) ==2:
                 params = grpby_params[0]
                 grp_field  = params["field"]
@@ -87,7 +91,8 @@ class AggregateDatasetModel(object):
                 result_parsed = utils.query_runner(query)
                 chart_data = utils.result_formater(result_parsed,grp_field,dtype)
                 return chart_data,sumtotal
-            #aggregate query for groupby,matching
+
+            #aggregate query for groupby & matching together; 2nd level drill down
             if grpby_params != None and len(match_params) ==3:
                 params = grpby_params[0]
                 grp_field  = params["field"]
