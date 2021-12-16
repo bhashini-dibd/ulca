@@ -23,12 +23,21 @@ const SearchModelDetail = (props) => {
   const history = useHistory();
   const [data, setData] = useState("");
   const [modelTry, setModelTry] = useState(false);
-  const [streaming,setStreaming] = useState(new StreamingClient());
+  const [streaming, setStreaming] = useState(new StreamingClient());
   const location = useLocation();
   const params = useParams();
   useEffect(() => {
     setData(location.state);
   }, [location]);
+
+  console.log(streaming);
+
+  // useEffect(() => {
+  //   return () => {
+  //     streaming.disconnect();
+  //   };
+  // }, []);
+
   const description = [
     // {
     //   title: "Version",

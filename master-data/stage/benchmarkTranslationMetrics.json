@@ -21,8 +21,8 @@
         "active": true
       },
       {
-        "code": "rogue",
-        "label": "ROGUE",
+        "code": "rouge",
+        "label": "ROUGE",
         "active": false
       },
       {
