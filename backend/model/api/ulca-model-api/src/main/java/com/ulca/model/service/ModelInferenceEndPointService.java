@@ -8,11 +8,13 @@ import java.util.List;
 import javax.net.ssl.SSLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.model.request.Input;
@@ -35,6 +37,15 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
+
+import java.io.IOException;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+
 @Slf4j
 @Service
 public class ModelInferenceEndPointService {
@@ -44,7 +55,7 @@ public class ModelInferenceEndPointService {
 
 	public OneOfInferenceAPIEndPointSchema validateCallBackUrl(String callBackUrl,
 			OneOfInferenceAPIEndPointSchema schema)
-			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
+			throws URISyntaxException, IOException {
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
@@ -84,29 +95,37 @@ public class ModelInferenceEndPointService {
 			}
 
 			ObjectMapper objectMapper = new ObjectMapper();
-			log.info("logging asr inferenct point response" );
-			log.info(objectMapper.writeValueAsString(response));
-			
+			log.info("logging asr inference point response"  + objectMapper.writeValueAsString(response));
 			asrInference.setResponse(response);
 			schema = asrInference;
 
 		}
 		
+		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 			OCRRequest request = ocrInference.getRequest();
 
-			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
-
-			log.info("response test for OCRRRequest" + responseStr);
 			ObjectMapper objectMapper = new ObjectMapper();
-
-			OCRResponse response = objectMapper.readValue(responseStr, OCRResponse.class);
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder()
+			        .url(callBackUrl)
+			        .post(body)
+			        .build();
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			String responseJsonStr = httpResponse.body().string();
+			OCRResponse response = objectMapper.readValue(responseJsonStr, OCRResponse.class);
 			ocrInference.setResponse(response);
 			schema = ocrInference;
 
+			log.info("logging ocr inference point response" + responseJsonStr);
 		}
+	
 
 		return schema;
 
@@ -114,7 +133,7 @@ public class ModelInferenceEndPointService {
 
 	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
 			ModelComputeRequest compute)
-			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
+			throws URISyntaxException, IOException {
 
 		ModelComputeResponse response = new ModelComputeResponse();
 
@@ -151,18 +170,25 @@ public class ModelInferenceEndPointService {
 			OCRRequest request = ocrInference.getRequest();
 			request.setImageUri(imageUrlList);
 
-			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
-
-			log.info("response test for OCRRRequest" + responseStr);
 			ObjectMapper objectMapper = new ObjectMapper();
-
-			OCRResponse ocrResponse = objectMapper.readValue(responseStr, OCRResponse.class);
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder()
+			        .url(callBackUrl)
+			        .post(body)
+			        .build();
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			OCRResponse ocrResponse  = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
 			
 			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
 			
-
 		}
+		
 		
 		return response;
 	}
