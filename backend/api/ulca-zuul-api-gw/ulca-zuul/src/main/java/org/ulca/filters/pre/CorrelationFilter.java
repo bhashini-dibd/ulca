@@ -2,19 +2,12 @@ package org.ulca.filters.pre;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import org.ulca.cache.ZuulConfigCache;
-import org.ulca.models.Action;
-import org.ulca.utils.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.springframework.boot.logging.LoggerGroup;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.ulca.constants.RequestContextConstants.*;
 
@@ -61,7 +54,6 @@ public class CorrelationFilter extends ZuulFilter {
         ctx.set(CORRELATION_ID_KEY, correlationId);
         ctx.addZuulRequestHeader(ZUUL_REQUEST_ID_HEADER_KEY, requestId);
         ctx.addZuulRequestHeader(CORRELATION_ID_HEADER_NAME, correlationId);
-        logger.debug(RECEIVED_REQUEST_MESSAGE, ctx.getRequest().getRequestURI());
         return null;
     }
 

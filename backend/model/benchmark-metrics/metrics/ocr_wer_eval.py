@@ -1,7 +1,7 @@
 import logging
 from logging.config import dictConfig
 from models.model_metric_eval import ModelMetricEval
-import fastwer
+from datasets import load_metric
 import numpy as np
 
 log = logging.getLogger('file')
@@ -12,15 +12,22 @@ class OCRWEREval(ModelMetricEval):
     using WER(Word Error Rate)
     """
 
+    def __init__(self):
+        self.wer_score = load_metric('wer')
+        pass
+
     def ocr_metric_eval(self, ground_truth, machine_translation):
 
         try:
-            eval_score = fastwer.score(machine_translation, ground_truth)
-            if np.isnan(eval_score):
-                log.error("Unable to calculate WER score")
-                return None
+            if ground_truth and machine_translation:
+                eval_score = self.wer_score.compute(predictions=machine_translation, references=ground_truth)
+                if np.isnan(eval_score):
+                    log.error("Unable to calculate WER score")
+                    return None
+                else:
+                    return eval_score*100
             else:
-                return eval_score
+                return None
         except Exception as e:
             log.exception(f"Exception in calculating WER: {str(e)}")
             return None

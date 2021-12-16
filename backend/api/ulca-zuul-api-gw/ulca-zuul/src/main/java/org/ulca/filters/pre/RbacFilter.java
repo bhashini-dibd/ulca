@@ -145,11 +145,8 @@ public class RbacFilter extends ZuulFilter {
             String sigHash = privateKey.trim() + "|" + payload;
             String hash = bytesToHex(digest.digest(sigHash.trim().getBytes(StandardCharsets.UTF_8)));
             Boolean sig = hash.equals(signature.trim());
-            if(!sig){
-                logger.info("payload: {}", payload);
-                logger.info("Signature: {}", signature);
-                logger.info("Hash: {}", hash);
-            }
+            if(!sig)
+                logger.info("The signature doesn't match!");
             return sig;
         }catch (Exception e) {
             logger.error("Exception while verifying signature: ", e);
