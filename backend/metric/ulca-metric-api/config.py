@@ -20,10 +20,6 @@ TIME_CONVERSION_VAL     =   os.environ.get('ASR_DATA_CONERSION_VAL',3600)
 if isinstance(TIME_CONVERSION_VAL, str):
     TIME_CONVERSION_VAL  =  eval(TIME_CONVERSION_VAL)
 
-DATA_FILTER_SET_FILE_PATH   =   os.environ.get('GIT_DATA_FILTER_PARAMS_FILE','https://raw.githubusercontent.com/ULCA-IN/ulca/develop/master-data/dev/datasetFilterParams.json')
-FILTER_DIR_NAME             =   os.environ.get('FILTER_DIR_NAME','/opt/')
-FILTER_FILE_NAME            =   os.environ.get('FILTER_FILE_NAME','datasetFilterParams-new.json')
-
 metric_cron_interval_sec     =   os.environ.get('METRIC_CRON_INTERVAL_SEC',864000)#
 if isinstance(metric_cron_interval_sec, str):
     metric_cron_interval_sec  =  eval(metric_cron_interval_sec)
@@ -43,5 +39,5 @@ data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabe
 
 
 email_service_url           =   os.environ.get('UTILITY_SERVICE_NOTIFY_COUNT_URL','http://utility-service:5001//ulca/apis/v1/send/mail')
-mismatch_email_service_url  =   os.environ.get('UTILITY_SERVICE_NOTIFY_MISMATCH_URL','http://utility-service:5001//ulca/apis/v1/notify/mismatch')
-config_file_link            =   os.environ.get('ULCA_FILTER_CONFIGS_FILE_LINK',f'https://ulca-datasets.s3.amazonaws.com/errors/datasetFilterParams.json')  
+mismatch_email_service_url  =   os.environ.get('UTILITY_SERVICE_NOTIFY_MISMATCH_URL','http://utility-service:5001//ulca/apis/v1/notify/mismatch') 
+mdms_bulk_fetch_url         =   os.environ.get('ULCA_MDMS_BULK_FETCH_URL','http://master-data-management:5001/ulca/mdms/v0/fetch-master/bulk')
