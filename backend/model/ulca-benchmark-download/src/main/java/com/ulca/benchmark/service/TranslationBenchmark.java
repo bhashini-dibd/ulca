@@ -36,6 +36,11 @@ import io.swagger.model.Sentences;
 import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -58,7 +63,7 @@ public class TranslationBenchmark {
 
 	public TranslationResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
 			List<String> sourceSentences)
-			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
+			throws URISyntaxException, IOException {
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
@@ -72,13 +77,23 @@ public class TranslationBenchmark {
 				sentences.add(sentense);
 			}
 			request.setInput(sentences);
-
-			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
-
+			
 			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder()
+			        .url(callBackUrl)
+			        .post(body)
+			        .build();
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			String responseJsonStr = httpResponse.body().string();
+			
 
-			TranslationResponse translation = objectMapper.readValue(responseStr, TranslationResponse.class);
+			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 			
 			return translation;
 			
