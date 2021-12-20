@@ -196,6 +196,7 @@ components:
       - parallel-corpus
       - monolingual-corpus
       - asr-corpus
+      - tts-corpus
       - asr-unlabeled-corpus
       - ocr-corpus
       - document-layout-corpus

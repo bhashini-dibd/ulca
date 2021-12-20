@@ -88,7 +88,7 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "http://aws-model-api.vakyansh.in/asr/v1/recognize/sa",
+       "callbackUrl": "https://meity-dev-asr.ulcacontrib.org/asr/v1/recognize/sa",
        "schema": {
           "taskType": "asr",
           "request": {
