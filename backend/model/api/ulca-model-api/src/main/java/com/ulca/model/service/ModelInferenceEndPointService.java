@@ -60,13 +60,22 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
 			TranslationRequest request = translationInference.getRequest();
-
-			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
-
+			
 			ObjectMapper objectMapper = new ObjectMapper();
-
-			TranslationResponse response = objectMapper.readValue(responseStr, TranslationResponse.class);
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder()
+			        .url(callBackUrl)
+			        .post(body)
+			        .build();
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			String responseJsonStr = httpResponse.body().string();
+			
+			TranslationResponse response = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 			translationInference.setResponse(response);
 			schema = translationInference;
 
@@ -149,13 +158,23 @@ public class ModelInferenceEndPointService {
 				sentences.add(sentense);
 			}
 			request.setInput(sentences);
-
-			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(request), TranslationRequest.class).retrieve().bodyToMono(String.class).block();
-
+			
+			
 			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder()
+			        .url(callBackUrl)
+			        .post(body)
+			        .build();
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			String responseJsonStr = httpResponse.body().string();
 
-			TranslationResponse translation = objectMapper.readValue(responseStr, TranslationResponse.class);
+			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 
 			response.setOutputText(translation.getOutput().get(0).getTarget());
 			
