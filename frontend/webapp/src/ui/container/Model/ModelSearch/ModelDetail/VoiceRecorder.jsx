@@ -23,6 +23,7 @@ import LightTooltip from "../../../../components/common/LightTooltip";
 import GetMasterDataAPI from "../../../../../redux/actions/api/Common/getMasterData";
 import { useDispatch, useSelector } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
+import { useRef } from "react";
 
 const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
 
@@ -37,6 +38,8 @@ const AudioRecord = (props) => {
   const languageArr = languages.filter((lang) => lang.label === language);
   const languageCode = languageArr.length ? languageArr[0].code : "";
   const dispatch = useDispatch();
+  const timerRef = useRef();
+
   useEffect(() => {
     if (!languages.length) {
       const obj = new GetMasterDataAPI(["languages"]);
@@ -47,15 +50,23 @@ const AudioRecord = (props) => {
   useEffect(() => {
     return () => {
       streaming.isStreaming ? streaming.disconnect() : console.log("unmounted");
+      if (typeof timerRef.current === "number") clearTimeout(timerRef.current);
+      timerRef.current = undefined;
     };
   }, []);
 
   const handleStart = (data) => {
+    if (typeof timerRef.current === "number") {
+      clearTimeout(timerRef.current);
+    }
     setStreamingState("start");
     const output = document.getElementById("asrCardOutput");
     output.innerText = "";
     setData("");
     streaming.connect(REACT_SOCKET_URL, languageCode, function (action, id) {
+      timerRef.current = setTimeout(() => {
+        if (streaming.isStreaming) handleStop();
+      }, 61000);
       setStreamingState("listen");
       setRecordAudio(RecordState.START);
       if (action === SocketStatus.CONNECTED) {
@@ -72,39 +83,13 @@ const AudioRecord = (props) => {
         setStreamingState("");
         streaming.stopStreaming((blob) => {});
         setRecordAudio(RecordState.STOP);
-        clearTimeout();
       } else {
         console.log("Action", action, id);
       }
     });
   };
 
-  useEffect(() => {
-    if (streamingState === "listen" && data === "") {
-      setTimeout(() => {
-        setStreamingState("");
-        streaming.stopStreaming((blob) => {
-          const output = document.getElementById("asrCardOutput");
-          if (output) {
-            streaming.punctuateText(
-              output.innerText,
-              `${REACT_SOCKET_URL}punctuate`,
-              (status, text) => {
-                output.innerText = text;
-              },
-              (status, error) => {
-                // alert("Failed to punctuate");
-              }
-            );
-          }
-        });
-        setRecordAudio(RecordState.STOP);
-        clearTimeout();
-      }, 61000);
-    }
-  }, [streamingState, data]);
-
-  const handleStop = async (value) => {
+  const handleStop = (value) => {
     setStreamingState("");
     const output = document.getElementById("asrCardOutput");
     if (output) {
@@ -124,7 +109,7 @@ const AudioRecord = (props) => {
       onStop({ url: urlBlob });
     });
     setRecordAudio(RecordState.STOP);
-    clearTimeout();
+    if (typeof timerRef.current === "number") clearTimeout(timerRef.current);
   };
 
   const onStop = (data) => {
