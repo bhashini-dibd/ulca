@@ -26,6 +26,8 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
+import io.swagger.model.ImageFile;
+import io.swagger.model.ImageFiles;
 import io.swagger.model.OCRRequest;
 import io.swagger.model.OCRResponse;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
@@ -184,10 +186,15 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 			
-			List<String> imageUrlList = new ArrayList<String>();
-			imageUrlList.add(compute.getImageUri());
+			
+			ImageFiles imageFiles = new ImageFiles();
+			ImageFile imageFile = new ImageFile();
+			imageFile.setImageUri(compute.getImageUri());
+			imageFiles.add(imageFile);
+			
+			
 			OCRRequest request = ocrInference.getRequest();
-			request.setImageUri(imageUrlList);
+			request.setImage(imageFiles);
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
