@@ -127,7 +127,7 @@ const MySearches = (props) => {
     const status = rowData[4].toLowerCase();
     if (status === "completed") {
       history.push({
-        pathname: `/search-and-download-rec/${status}/${rowData[0]}`,
+        pathname: `${process.env.PUBLIC_URL}/search-and-download-rec/${status}/${rowData[0]}`,
         pageInfo: page,
       });
     }

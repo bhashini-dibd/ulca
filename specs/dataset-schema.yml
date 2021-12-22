@@ -47,6 +47,7 @@ components:
             - $ref: '#/components/schemas/ParallelDatasetParamsSchema'
             - $ref: '#/components/schemas/MonolingualParamsSchema'
             - $ref: '#/components/schemas/AsrParamsSchema'
+            - $ref: '#/components/schemas/TtsParamsSchema'
             - $ref: '#/components/schemas/AsrUnlabeledParamsSchema'
             - $ref: '#/components/schemas/OcrDatasetParamsSchema'
             - $ref: '#/components/schemas/DocumentLayoutParamsSchema'
@@ -61,6 +62,7 @@ components:
             - $ref: '#/components/schemas/ParallelDatasetRowSchema'
             - $ref: '#/components/schemas/MonolingualRowSchema'
             - $ref: '#/components/schemas/AsrRowSchema'
+            - $ref: '#/components/schemas/TtsRowSchema'
             - $ref: '#/components/schemas/AsrUnlabeledRowSchema'
             - $ref: '#/components/schemas/OcrDatasetRowSchema'
             - $ref: '#/components/schemas/DocumentLayoutRowSchema'
@@ -156,10 +158,10 @@ components:
           type: string
           description: age range
           enum:
-            - "0-9"
-            - "10-19"
-            - "20-29"
-            - "30-39"
+            - "1-10"
+            - "11-20"
+            - "21-60"
+            - "61-100"
         dialect:
           type: string
           description: valid dialact of the submitted language.
@@ -206,10 +208,10 @@ components:
           type: string
           description: age range
           enum:
-            - "0-9"
-            - "10-20"
+            - "1-10"
+            - "11-20"
             - "21-60"
-            - "60-100"
+            - "61-100"
         dialect:
           type: string
           description: valid dialact of the submitted language.
@@ -228,6 +230,16 @@ components:
           description: "Time of the audio where the processing end. Format : hh:mm:ss"
         collectionMethod: 
           $ref: '#/components/schemas/CollectionMethodAudio'
+
+    TtsParamsSchema:
+      allOf:
+        - $ref: '#/components/schemas/AsrParamsSchema'
+        - type: object
+
+    TtsRowSchema:
+      allOf:
+        - $ref: '#/components/schemas/AsrRowSchema'
+        - type: object
 
     AsrUnlabeledParamsSchema:
       allOf:
@@ -799,6 +811,7 @@ components:
               - auto-aligned
               - machine-generated-transcript
               - manual-transcribed
+              - studio-recorded
         collectionDetails:
           oneOf:
             - $ref: '#/components/schemas/CollectionDetailsAudioAutoAligned'
