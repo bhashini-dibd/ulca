@@ -194,6 +194,11 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 							list.add(collectionDescriptionEnum);
 							ocrCollectionMethod.setCollectionDescription(list);
 
+							/*
+							 * collectionDetails is non mandatory
+							 */
+							if (node.get("collectionMethod").has("collectionDetails")) { 
+								
 							if (!node.get("collectionMethod").get("collectionDetails").has("ocrTool")) {
 								errorList.add("collectionDetails should contain ocrTool");
 							} else if (!node.get("collectionMethod").get("collectionDetails").get("ocrTool")
@@ -220,6 +225,7 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 									errorList.add("ocrToolEnum should be one of specified values");
 								}
 							}
+						 }
 
 						} catch (Exception e) {
 							log.info("collection method not proper");
