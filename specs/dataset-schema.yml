@@ -158,10 +158,10 @@ components:
           type: string
           description: age range
           enum:
-            - "0-9"
-            - "10-19"
-            - "20-29"
-            - "30-39"
+            - "1-10"
+            - "11-20"
+            - "21-60"
+            - "61-100"
         dialect:
           type: string
           description: valid dialact of the submitted language.
@@ -208,10 +208,10 @@ components:
           type: string
           description: age range
           enum:
-            - "0-9"
-            - "10-20"
+            - "1-10"
+            - "11-20"
             - "21-60"
-            - "60-100"
+            - "61-100"
         dialect:
           type: string
           description: valid dialact of the submitted language.
