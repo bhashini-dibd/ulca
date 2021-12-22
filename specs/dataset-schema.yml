@@ -811,6 +811,7 @@ components:
               - auto-aligned
               - machine-generated-transcript
               - manual-transcribed
+              - studio-recorded
         collectionDetails:
           oneOf:
             - $ref: '#/components/schemas/CollectionDetailsAudioAutoAligned'
