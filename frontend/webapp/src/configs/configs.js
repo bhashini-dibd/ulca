@@ -9,7 +9,7 @@ const configs = {
   BASE_DASHBOARD: "https://sangrah-dev-api.anuvaad.org",
   REACT_SOCKET_URL: process.env.REACT_APP_SOCKET_URL
     ? process.env.REACT_APP_SOCKET_URL
-    : "https://inference.vakyansh.in/",
+    : "https://meity-dev-asr.ulcacontrib.org/",
 };
 
 export default configs;
