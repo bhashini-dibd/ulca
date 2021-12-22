@@ -367,12 +367,17 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 								.asText();
 						CollectionMethodAudio.CollectionDescriptionEnum collectionDescriptionEnum = CollectionMethodAudio.CollectionDescriptionEnum
 								.fromValue(collectionDescription);
-
+						
 						CollectionMethodAudio collectionMethodAudio = new CollectionMethodAudio();
 						List<CollectionMethodAudio.CollectionDescriptionEnum> list = new ArrayList<CollectionMethodAudio.CollectionDescriptionEnum>();
 						list.add(collectionDescriptionEnum);
 						collectionMethodAudio.setCollectionDescription(list);
-
+						
+						/*
+						 * collectionDetails is non mandatory
+						 */
+						if (node.get("collectionMethod").has("collectionDetails")) { 
+							
 						switch (collectionDescriptionEnum) {
 						case AUTO_ALIGNED:
 							if (node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {
@@ -456,6 +461,7 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 							log.info("manual-transcribed");
 							break;
 						}
+					}
 					} catch (Exception e) {
 						log.info("collection method not proper");
 						errorList.add("collectionMethod field value not proper.");
