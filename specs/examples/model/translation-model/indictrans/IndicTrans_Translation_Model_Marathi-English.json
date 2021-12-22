@@ -87,7 +87,7 @@
       ]
    },
    "inferenceEndPoint": {
-      "callbackUrl": "https://users-auth.anuvaad.org/aai4b-nmt-inference/v0/translate",
+      "callbackUrl": "https://meity-dev.ulcacontrib.org/aai4b-nmt-inference/v0/translate",
       "schema": {
          "taskType": "translation",
          "request": {
