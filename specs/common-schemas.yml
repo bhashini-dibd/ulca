@@ -298,6 +298,7 @@ components:
       - pcm
       - mp3
       - flac
+      - sph
     AudioChannel:
       type: string
       description: number of channel in the audio
