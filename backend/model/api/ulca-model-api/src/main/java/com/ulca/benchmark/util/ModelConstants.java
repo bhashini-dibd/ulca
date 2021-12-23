@@ -32,7 +32,7 @@ public final class ModelConstants {
 		}
 		if (task.equalsIgnoreCase("ocr")) {
 
-			String[] metric = { "wer" };
+			String[] metric = { "wer", "cer" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
