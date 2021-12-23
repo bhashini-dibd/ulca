@@ -40,6 +40,7 @@ import io.swagger.model.Domain;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.ModelTask;
 import io.swagger.model.OcrBenchmarkDatasetParamsSchema;
+import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import io.swagger.model.TranslationBenchmarkDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
@@ -231,21 +232,15 @@ public class KafkaBenchmarkIngestConsumer {
 		}else {
 			errorList.add("taskType field should be present");
 		}
-
 		
 		if(params.has("version")) {
 			benchmark.setVersion(params.getString("version"));
 		}
 		
 		if(params.has("collectionSource")) {
-			
-			ModelTask.TypeEnum type = ModelTask.TypeEnum.fromValue(params.getJSONObject("taskType").getString("type"));
-			ModelTask task = new ModelTask();
-			task.setType(type);
-			benchmark.setTask(task);
-			
+			Source collectionSource = objectMapper.readValue(params.get("collectionSource").toString(), Source.class);
+			benchmark.setCollectionSource(collectionSource);			
 		}
-		
 		
 		if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.TRANSLATION)) {
 			TranslationBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, TranslationBenchmarkDatasetParamsSchema.class);
@@ -261,7 +256,6 @@ public class KafkaBenchmarkIngestConsumer {
 			OcrBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, OcrBenchmarkDatasetParamsSchema.class);
 			benchmark.setParamSchema(paramSchema);
 		}
-		
 		
 		benchmark.setStatus(BenchmarkSubmissionType.COMPLETED.toString());
 		
