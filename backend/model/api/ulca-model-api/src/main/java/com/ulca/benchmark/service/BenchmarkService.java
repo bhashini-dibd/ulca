@@ -116,14 +116,19 @@ public class BenchmarkService {
 		benchmark.setSubmittedOn(new Date().toString());	
 		benchmark.setCreatedOn(new Date().toString());
 		
-		if (benchmark != null) {
+		Benchmark existingBenchmark =	benchmarkDao.findByName(request.getDatasetName());
+		if (existingBenchmark == null) {
 			try {
 				benchmarkDao.save(benchmark);
 			} catch (DuplicateKeyException ex) {
 				log.info("benchmark with same name exists.: " + benchmark.getName());
 				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 			}
+		} else {
+			log.info(BenchmarkConstants.datasetNameUniqueErrorMsg + "benchmark name :: " + request.getDatasetName());
+			throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 		}
+		
 		String serviceRequestNumber=Utility.getBenchmarkDatasetSubmitReferenceNumber();
 		bmSubmtStatusService.createStatus(serviceRequestNumber, request.getUserId(), benchmark.getBenchmarkId());
 		
@@ -203,19 +208,18 @@ public class BenchmarkService {
 		log.info("******** Entry BenchmarkService:: listByTaskID *******");
 
 		BenchmarkListByModelResponse response = null;
-		Benchmark benchmark = new Benchmark();
 		
-		ModelExtended model= modelDao.findByModelId(request.getModelId());
 		List<BenchmarkDto> dtoList = new ArrayList<BenchmarkDto>();
 		
+		ModelExtended model= modelDao.findByModelId(request.getModelId());
 		LanguagePairs lps = model.getLanguages();
+		
 		for(LanguagePair lp : lps) {
-			benchmark.setLanguages(lp);
-			benchmark.setTask(model.getTask());
-			Example<Benchmark> example = Example.of(benchmark);
-			List<Benchmark> list = benchmarkDao.findAll(example);
+			
+			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(),lp);
 			
 			for(Benchmark bm : list) {
+				
 				BenchmarkDto dto = new BenchmarkDto();
 				BeanUtils.copyProperties(bm, dto);
 				List<String> metricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
