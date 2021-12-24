@@ -19,6 +19,11 @@
         "code": "flac",
         "label": "FLAC",
         "active": true
+      },
+      {
+        "code": "sph",
+        "label": "SPH",
+        "active": true
       }
     ]
   }

@@ -1,6 +1,14 @@
 {
   "collectionMethods": [
     {
+      "code": "studio-recorded",
+      "label": "Studio Recorded",
+      "active": true,
+      "datasetType": [
+        "tts-corpus"
+      ]
+    },
+    {
       "code": "machine-generated-transcript",
       "label": "Machine Generated Transcript",
       "active": true,
