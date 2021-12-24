@@ -12,7 +12,7 @@
       },
       {
         "code": "asr-corpus",
-        "label": "ASR/TTS Dataset",
+        "label": "ASR Dataset",
         "active": true
       },
       {
@@ -28,6 +28,11 @@
       {
         "code": "document-layout-corpus",
         "label": "Document Layout Dataset",
+        "active": true
+      },
+      {
+        "code": "tts-corpus",
+        "label": "TTS Dataset",
         "active": true
       }
     ]
