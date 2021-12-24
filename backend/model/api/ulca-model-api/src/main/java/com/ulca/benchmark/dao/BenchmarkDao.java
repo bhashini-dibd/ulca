@@ -26,5 +26,9 @@ public interface BenchmarkDao extends MongoRepository<Benchmark, String> {
 	
 	Benchmark findByName(String name);
 	List<Benchmark> findByTaskAndLanguages(@NotNull @Valid ModelTask task, LanguagePair lp);
+	List<Benchmark> findByTaskAndLanguages(ModelTask modelTask, LanguagePair lp, Pageable paging);
+	List<Benchmark> findByTask(ModelTask modelTask, Pageable paging);
+	List<Benchmark> findByLanguages(LanguagePair lp, Pageable paging);
+	List<Benchmark> findByLanguages(LanguagePair lp);
 	
 }
