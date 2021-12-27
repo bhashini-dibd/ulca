@@ -34,6 +34,7 @@ const HostedInferASR = (props) => {
   });
   const [translation, setTranslationState] = useState(false);
   const [target, setTarget] = useState("");
+  const [fileData, setFileData] = useState("");
   const [targetAudio, setTargetAudio] = useState("");
   const handleCompute = () => setTranslationState(true);
   const [open, setOpen] = useState(false);
@@ -41,6 +42,8 @@ const HostedInferASR = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const [file, setFile] = useState([]);
   const validURL = (str) => {
     var pattern = new RegExp(
       "^((ft|htt)ps?:\\/\\/)?" + // protocol
@@ -118,8 +121,76 @@ const HostedInferASR = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
+
+  const handleFile = (e) => {
+    setFile(e.target.files);
+  };
+
+  const handleFileSubmit = () => {
+    console.log("make API call for file submit");
+  };
+
   return (
     <>
+      <Grid container>
+        {apiCall && <Spinner />}
+        <Grid
+          className={classes.grid}
+          item
+          xl={5}
+          lg={5}
+          md={5}
+          sm={12}
+          xs={12}
+        >
+          <Card className={classes.asrCard}>
+            <Grid container className={classes.cardHeader}>
+              <Typography variant="h6" className={classes.titleCard}>
+                Upload image from local drive
+              </Typography>
+            </Grid>
+            <CardContent>
+              <TextField
+                style={{ marginTop: "15px" }}
+                fullWidth
+                variant="outlined"
+                color="primary"
+                // label="Paste the public repository URL"
+                onChange={handleFile}
+                type="file"
+              />
+              <Button
+                color="primary"
+                style={{ float: "right", marginTop: "10px" }}
+                disabled={file.length ? false : true}
+                variant="contained"
+                size={"small"}
+                onClick={handleFileSubmit}
+              >
+                {translate("button.convert")}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid
+          className={classes.grid}
+          item
+          xl={6}
+          lg={6}
+          md={6}
+          sm={12}
+          xs={12}
+        >
+          <Card className={classes.asrCard}>
+            <Grid container className={classes.cardHeader}>
+              <Typography variant="h6" className={classes.titleCard}>
+                {translate("label.output")}
+              </Typography>
+            </Grid>
+            <CardContent>{fileData}</CardContent>
+          </Card>
+        </Grid>
+      </Grid>
       <Grid container>
         {apiCall && <Spinner />}
         <Grid
