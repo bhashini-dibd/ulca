@@ -83,12 +83,10 @@ public class TranslationBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			System.out.println("callback URL :: " + callBackUrl);
-			System.out.println("Request JSON :: " + requestJson);
 			
 			//OkHttpClient client = new OkHttpClient();
 			
-			 OkHttpClient client = new OkHttpClient.Builder()
+			OkHttpClient client = new OkHttpClient.Builder()
 				      .readTimeout(60, TimeUnit.SECONDS)
 				      .build();
 			 
@@ -102,7 +100,6 @@ public class TranslationBenchmark {
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = httpResponse.body().string();
 			
-			System.out.println("response :: " + responseJsonStr);
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 			
 			return translation;
