@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 from logging.config import dictConfig
 from models.model_metric_eval import ModelMetricEval

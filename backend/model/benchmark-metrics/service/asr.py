@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import logging
 from datetime import datetime
 import numpy as np
@@ -34,7 +35,7 @@ class ASRMetricEvalHandler:
 
                     ground_truth = [corpus_sentence["tgt"] for corpus_sentence in benchmark["corpus"]]
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
-                    log.info("Size of ground_truth: ", len(ground_truth))
+                    log.info("Size of ground_truth.... {}".format(len(ground_truth)))
                     log.info(f"Ground Truth : {str(ground_truth)}")
                     eval_score = metric_inst.asr_metric_eval(ground_truth, machine_translation)
                     if eval_score:
