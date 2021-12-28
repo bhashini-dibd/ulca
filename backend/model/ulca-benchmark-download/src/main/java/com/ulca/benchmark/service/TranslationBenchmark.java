@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -41,13 +42,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
 public class TranslationBenchmark {
 
-	private final int chunkSize = 20;
+	private final int chunkSize = 5;
 	
 	@Autowired
 	private KafkaTemplate<String, String> benchmarkMetricKafkaTemplate;
@@ -81,18 +83,23 @@ public class TranslationBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			
+			//OkHttpClient client = new OkHttpClient();
+			
+			OkHttpClient client = new OkHttpClient.Builder()
+				      .readTimeout(60, TimeUnit.SECONDS)
+				      .build();
+			 
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
 			        .post(body)
 			        .build();
-			
+			        
 			Response httpResponse = client.newCall(httpRequest).execute();
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = httpResponse.body().string();
 			
-
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 			
 			return translation;
