@@ -19,6 +19,7 @@ import com.ulca.dataset.kakfa.DatasetErrorPublishService;
 import com.ulca.dataset.kakfa.DatasetMonolingualValidateIngest;
 import com.ulca.dataset.kakfa.DatasetOcrValidateIngest;
 import com.ulca.dataset.kakfa.DatasetParallelCorpusValidateIngest;
+import com.ulca.dataset.kakfa.DatasetTtsValidateIngest;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.Dataset;
 import com.ulca.dataset.model.ProcessTracker;
@@ -35,6 +36,9 @@ public class KafkaDatasetIngestConsumer {
 
 	@Autowired
 	DatasetAsrValidateIngest datasetAsrValidateIngest;
+	
+	@Autowired
+	DatasetTtsValidateIngest datasetTtsValidateIngest;
 
 	@Autowired
 	DatasetAsrUnlabeledValidateIngest datasetAsrUnlabeledValidateIngest;
@@ -103,6 +107,11 @@ public class KafkaDatasetIngestConsumer {
 				datasetAsrValidateIngest.validateIngest(datasetIngest);
 				break;
 
+			case TTS_CORPUS:
+				log.info("calling the tts validate service");
+				datasetTtsValidateIngest.validateIngest(datasetIngest);
+				break;
+				
 			case ASR_UNLABELED_CORPUS:
 				log.info("calling the asr-unlabeled-corpus validate service");
 				datasetAsrUnlabeledValidateIngest.validateIngest(datasetIngest);
