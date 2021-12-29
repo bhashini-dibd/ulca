@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_asr, dataset_type_asr_unlabeled, asr_minimum_words_per_min
+from configs.configs import dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts, asr_minimum_words_per_min
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -17,7 +17,7 @@ class AudioMetadataCheck(BaseValidator):
     def execute(self, request):
         log.info('----Executing the audio file metadata check----')
         try:
-            if request["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled]:
+            if request["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts]:
                 audio_file = request['record']['fileLocation']
                 try:
                     if os.path.exists(audio_file) and os.path.isfile(audio_file):

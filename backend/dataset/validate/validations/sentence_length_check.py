@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, validate_text_length_threshold
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, validate_text_length_threshold
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -22,6 +22,8 @@ class SentenceLengthCheck(BaseValidator):
             if request["datasetType"] == dataset_type_ocr:
                 text_list.append(record['groundTruth'])
             if request["datasetType"] == dataset_type_monolingual:
+                text_list.append(record['text'])
+            if request["datasetType"] == dataset_type_tts:
                 text_list.append(record['text'])
 
             for text in text_list:
