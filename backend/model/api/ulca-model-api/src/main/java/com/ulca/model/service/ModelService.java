@@ -165,6 +165,36 @@ public class ModelService {
 			throw new Exception("Could not store file " + fileName + ". Please try again!", ex);
 		}
 	}
+	
+	public String storeModelTryMeFile(MultipartFile file) throws Exception {
+		// Normalize file name
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		String uploadFolder = modelUploadFolder + "/model/tryme";
+		try {
+			// Check if the file's name contains invalid characters
+			if (fileName.contains("..")) {
+				throw new Exception("Filename contains invalid path sequence " + fileName);
+			}
+
+			// Copy file to the target location (Replacing existing file with the same name)
+			Path targetLocation = Paths.get(uploadFolder).toAbsolutePath().normalize();
+
+			try {
+				Files.createDirectories(targetLocation);
+			} catch (Exception ex) {
+				throw new Exception("Could not create the directory where the uploaded files will be stored.", ex);
+			}
+			Path filePath = targetLocation.resolve(fileName);
+
+			log.info("filePath :: " + filePath.toAbsolutePath());
+
+			Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+			return filePath.toAbsolutePath().toString();
+		} catch (IOException ex) {
+			throw new Exception("Could not store file " + fileName + ". Please try again!", ex);
+		}
+	}
 
 	@Transactional
 	public UploadModelResponse uploadModel(MultipartFile file, String userId) throws Exception {
@@ -199,6 +229,8 @@ public class ModelService {
 		return new UploadModelResponse("Model Saved Successfully", modelObj);
 	}
 
+	
+	
 	public ModelExtended getModel(String modelFilePath) {
 
 		ModelExtended modelObj = null;
@@ -295,6 +327,22 @@ public class ModelService {
 
 		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
 	}
+	
+	public ModelComputeResponse tryMeOcrImageContent(MultipartFile file, String modelId) throws Exception {
+
+		String imageFilePath = storeModelTryMeFile(file);
+		
+		ModelExtended modelObj = modelDao.findById(modelId).get();
+		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+		
+		ModelComputeResponse response = modelInferenceEndPointService.compute(callBackUrl, schema, imageFilePath);
+		
+		return response;
+		
+	}
+	
 
 	public ModelStatusChangeResponse changeStatus(@Valid ModelStatusChangeRequest request) {
 		

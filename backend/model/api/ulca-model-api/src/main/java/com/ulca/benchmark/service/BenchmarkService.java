@@ -116,14 +116,19 @@ public class BenchmarkService {
 		benchmark.setSubmittedOn(new Date().toString());	
 		benchmark.setCreatedOn(new Date().toString());
 		
-		if (benchmark != null) {
+		Benchmark existingBenchmark =	benchmarkDao.findByName(request.getDatasetName());
+		if (existingBenchmark == null) {
 			try {
 				benchmarkDao.save(benchmark);
 			} catch (DuplicateKeyException ex) {
 				log.info("benchmark with same name exists.: " + benchmark.getName());
 				throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 			}
+		} else {
+			log.info(BenchmarkConstants.datasetNameUniqueErrorMsg + "benchmark name :: " + request.getDatasetName());
+			throw new DuplicateKeyException(BenchmarkConstants.datasetNameUniqueErrorMsg);
 		}
+		
 		String serviceRequestNumber=Utility.getBenchmarkDatasetSubmitReferenceNumber();
 		bmSubmtStatusService.createStatus(serviceRequestNumber, request.getUserId(), benchmark.getBenchmarkId());
 		
@@ -203,19 +208,18 @@ public class BenchmarkService {
 		log.info("******** Entry BenchmarkService:: listByTaskID *******");
 
 		BenchmarkListByModelResponse response = null;
-		Benchmark benchmark = new Benchmark();
 		
-		ModelExtended model= modelDao.findByModelId(request.getModelId());
 		List<BenchmarkDto> dtoList = new ArrayList<BenchmarkDto>();
 		
+		ModelExtended model= modelDao.findByModelId(request.getModelId());
 		LanguagePairs lps = model.getLanguages();
+		
 		for(LanguagePair lp : lps) {
-			benchmark.setLanguages(lp);
-			benchmark.setTask(model.getTask());
-			Example<Benchmark> example = Example.of(benchmark);
-			List<Benchmark> list = benchmarkDao.findAll(example);
+			
+			List<Benchmark> list = benchmarkDao.findByTaskAndLanguages(model.getTask(),lp);
 			
 			for(Benchmark bm : list) {
+				
 				BenchmarkDto dto = new BenchmarkDto();
 				BeanUtils.copyProperties(bm, dto);
 				List<String> metricList = modelConstants.getMetricListByModelTask(bm.getTask().getType().toString());
@@ -245,37 +249,87 @@ public class BenchmarkService {
 	
 	public BenchmarkSearchResponse searchBenchmark(BenchmarkSearchRequest request, Integer startPage, Integer endPage) {
 
-		Benchmark benchmark = new Benchmark();
-		Example<Benchmark> example = Example.of(benchmark);
-		List<Benchmark> list = new ArrayList<>();
+		log.info("***********  BenchmarkService :: searchBenchmark *********");	
+		
+		ModelTask modelTask = null;
+		LanguagePair lp = null;
+		
+		List<Benchmark> list = null;
 		
 		if (request.getTask() != null && !request.getTask().isBlank()) {
-			ModelTask modelTask = new ModelTask();
+		    modelTask = new ModelTask();
 			modelTask.setType(TypeEnum.fromValue(request.getTask()));
-			benchmark.setTask(modelTask);
+			
 		}
 
 		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
-			LanguagePair lp = new LanguagePair();
+			lp = new LanguagePair();
 			lp.setSourceLanguage(SourceLanguageEnum.fromValue(request.getSourceLanguage()));
 
 			if (request.getTargetLanguage() != null && !request.getTargetLanguage().isBlank()) {
 				lp.setTargetLanguage(TargetLanguageEnum.fromValue(request.getTargetLanguage()));
 			}
-			benchmark.setLanguages(lp);
+			
 		}
 		
-		if (startPage != null) {
-			int startPg = startPage - 1;
-			for (int i = startPg; i < endPage; i++) {
-				Pageable paging = PageRequest.of(i, PAGE_SIZE);
-			  list = (List<Benchmark>) benchmarkDao.findAll(example,paging);
+		if(modelTask != null && lp != null ) {
+			if (startPage != null) {
+				int startPg = startPage - 1;
+				for (int i = startPg; i < endPage; i++) {
+					Pageable paging = PageRequest.of(i, PAGE_SIZE);
+					list = (List<Benchmark>) benchmarkDao.findByTaskAndLanguages(modelTask,lp,paging);
+				}
+			} else {
+				 list = benchmarkDao.findByTaskAndLanguages(modelTask,lp);
 			}
+			
+			return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
+			
+		} else if(modelTask != null && lp == null ) {
+			if (startPage != null) {
+				int startPg = startPage - 1;
+				for (int i = startPg; i < endPage; i++) {
+					Pageable paging = PageRequest.of(i, PAGE_SIZE);
+					list = (List<Benchmark>) benchmarkDao.findByTask(modelTask,paging);
+				}
+			} else {
+				 list = benchmarkDao.findByTask(modelTask);
+			}
+			
+			return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
+			
+		} else if(modelTask == null && lp != null ) {
+			if (startPage != null) {
+				int startPg = startPage - 1;
+				for (int i = startPg; i < endPage; i++) {
+					Pageable paging = PageRequest.of(i, PAGE_SIZE);
+					list = (List<Benchmark>) benchmarkDao.findByLanguages(lp,paging);
+				}
+			} else {
+				 list = benchmarkDao.findByLanguages(lp);
+			}
+			
+			return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
+		}else if(modelTask == null && lp == null ) {
+			if (startPage != null) {
+				int startPg = startPage - 1;
+				for (int i = startPg; i < endPage; i++) {
+					Pageable paging = PageRequest.of(i, PAGE_SIZE);
+					list = (List<Benchmark>) benchmarkDao.findAll(paging);
+				}
+			} else {
+				 list = benchmarkDao.findAll();
+			}
+			
+			return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
 		} else {
-			 list =benchmarkDao.findAll(example);
+			log.info("search parameters not valid");
 		}
+		
 
-		return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
+		return new BenchmarkSearchResponse("search parameters not valid", list, 0);
+		
+		
 
 	}
 	

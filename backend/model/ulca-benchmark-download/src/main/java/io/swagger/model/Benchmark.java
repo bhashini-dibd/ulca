@@ -1,6 +1,5 @@
 package io.swagger.model;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -30,13 +29,19 @@ public class Benchmark {
 	@JsonProperty("benchmarkId")
 	private String benchmarkId = null;
 
-	@Indexed(unique=true)
+	@Indexed(unique = true)
 	@JsonProperty("name")
 	private String name = null;
 
+	@JsonProperty("version")
+	private String version = "1";
+
+	@JsonProperty("license")
+	private License license = null;
+
 	@JsonProperty("description")
 	private String description = null;
-	
+
 	@JsonProperty("userId")
 	private String userId = null;
 
@@ -50,17 +55,23 @@ public class Benchmark {
 	private ModelTask task = null;
 
 	@JsonProperty("languages")
-    private LanguagePair languages = null;
+	private LanguagePair languages = null;
 
 	@JsonProperty("submitter")
 	private Submitter submitter = null;
+
+	@JsonProperty("collectionSource")
+	private Source collectionSource = null;
+
+	@JsonProperty("paramSchema")
+	private Object paramSchema = null;
 
 	@JsonProperty("createdOn")
 	private String createdOn = null;
 
 	@JsonProperty("submittedOn")
 	private String submittedOn = null;
-	
+
 	@JsonProperty("status")
 	private String status = null;
 
@@ -105,6 +116,48 @@ public class Benchmark {
 		this.name = name;
 	}
 
+	public Benchmark version(String version) {
+		this.version = version;
+		return this;
+	}
+
+	/**
+	 * params schema version
+	 * 
+	 * @return version
+	 **/
+	@Schema(description = "params schema version")
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public Benchmark license(License license) {
+		this.license = license;
+		return this;
+	}
+
+	/**
+	 * Get license
+	 * 
+	 * @return license
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
+
+	@Valid
+	public License getLicense() {
+		return license;
+	}
+
+	public void setLicense(License license) {
+		this.license = license;
+	}
+
 	public Benchmark description(String description) {
 		this.description = description;
 		return this;
@@ -131,7 +184,7 @@ public class Benchmark {
 		this.userId = userId;
 		return this;
 	}
-	
+
 	public String getUserId() {
 		return userId;
 	}
@@ -139,7 +192,6 @@ public class Benchmark {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-
 
 	public Benchmark dataset(String dataset) {
 		this.dataset = dataset;
@@ -211,6 +263,7 @@ public class Benchmark {
 		this.languages = languages;
 		return this;
 	}
+
 	/**
 	 * Get languages
 	 * 
@@ -225,14 +278,11 @@ public class Benchmark {
 	public void setLanguages(LanguagePair languages) {
 		this.languages = languages;
 	}
-	
-	
+
 	public Benchmark submitter(Submitter submitter) {
 		this.submitter = submitter;
 		return this;
 	}
-
-	
 
 	/**
 	 * Get submitter
@@ -249,6 +299,47 @@ public class Benchmark {
 
 	public void setSubmitter(Submitter submitter) {
 		this.submitter = submitter;
+	}
+
+	public Benchmark collectionSource(Source collectionSource) {
+		this.collectionSource = collectionSource;
+		return this;
+	}
+
+	/**
+	 * various sources, url from where the information is collected.
+	 * 
+	 * @return collectionSource
+	 **/
+	@Schema(example = "[\"https://main.sci.gov.in\"]", description = "various sources, url from where the information is collected.")
+
+	@Valid
+	public Source getCollectionSource() {
+		return collectionSource;
+	}
+
+	public void setCollectionSource(Source collectionSource) {
+		this.collectionSource = collectionSource;
+	}
+
+	public Benchmark paramSchema(Object paramSchema) {
+		this.paramSchema = paramSchema;
+		return this;
+	}
+
+	/**
+	 * timestamp when benchmark is created
+	 * 
+	 * @return createdOn
+	 **/
+	@Schema(description = "timestamp when benchmark is created")
+
+	public Object getParamSchema() {
+		return paramSchema;
+	}
+
+	public void setParamSchema(Object paramSchema) {
+		this.paramSchema = paramSchema;
 	}
 
 	public Benchmark createdOn(String createdOn) {
@@ -291,12 +382,11 @@ public class Benchmark {
 		this.submittedOn = submittedOn;
 	}
 
-
 	public Benchmark status(String status) {
 		this.status = status;
 		return this;
 	}
-	
+
 	public String getStatus() {
 		return status;
 	}
@@ -304,7 +394,7 @@ public class Benchmark {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	@Override
 	public boolean equals(java.lang.Object o) {
 		if (this == o) {
@@ -316,14 +406,13 @@ public class Benchmark {
 		Benchmark benchmark = (Benchmark) o;
 		return Objects.equals(this.benchmarkId, benchmark.benchmarkId) && Objects.equals(this.name, benchmark.name)
 				&& Objects.equals(this.description, benchmark.description)
-				&& Objects.equals(this.userId, benchmark.userId)
-				&& Objects.equals(this.dataset, benchmark.dataset) && Objects.equals(this.domain, benchmark.domain)
-				&& Objects.equals(this.task, benchmark.task) && 
-				Objects.equals(this.languages, benchmark.languages) &&
-				Objects.equals(this.submitter, benchmark.submitter) &&
-				Objects.equals(this.createdOn, benchmark.createdOn) && 
-				Objects.equals(this.submittedOn, benchmark.submittedOn) &&
-				Objects.equals(this.description, benchmark.description);
+				&& Objects.equals(this.userId, benchmark.userId) && Objects.equals(this.dataset, benchmark.dataset)
+				&& Objects.equals(this.domain, benchmark.domain) && Objects.equals(this.task, benchmark.task)
+				&& Objects.equals(this.languages, benchmark.languages)
+				&& Objects.equals(this.submitter, benchmark.submitter)
+				&& Objects.equals(this.createdOn, benchmark.createdOn)
+				&& Objects.equals(this.submittedOn, benchmark.submittedOn)
+				&& Objects.equals(this.description, benchmark.description);
 	}
 
 	@Override
