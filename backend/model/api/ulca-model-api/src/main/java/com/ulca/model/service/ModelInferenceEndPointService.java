@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.net.ssl.SSLException;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -26,6 +27,8 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
+import io.swagger.model.ImageFile;
+import io.swagger.model.ImageFiles;
 import io.swagger.model.OCRRequest;
 import io.swagger.model.OCRResponse;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
@@ -37,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
-
+import java.io.File;
 import java.io.IOException;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -184,10 +187,15 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 			
-			List<String> imageUrlList = new ArrayList<String>();
-			imageUrlList.add(compute.getImageUri());
+			
+			ImageFiles imageFiles = new ImageFiles();
+			ImageFile imageFile = new ImageFile();
+			imageFile.setImageUri(compute.getImageUri());
+			imageFiles.add(imageFile);
+			
+			
 			OCRRequest request = ocrInference.getRequest();
-			request.setImageUri(imageUrlList);
+			request.setImage(imageFiles);
 
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
@@ -211,5 +219,46 @@ public class ModelInferenceEndPointService {
 		
 		return response;
 	}
+	
+	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
+			String  imagePath)
+			throws URISyntaxException, IOException {
+
+		ModelComputeResponse response = new ModelComputeResponse();
+		
+		io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+		
+		byte[] bytes = FileUtils.readFileToByteArray(new File(imagePath));
+		
+		ImageFile imageFile = new ImageFile();
+		imageFile.setImageContent(bytes);
+		
+		ImageFiles imageFiles = new ImageFiles();
+		imageFiles.add(imageFile);
+		
+		OCRRequest request = ocrInference.getRequest();
+		request.setImage(imageFiles);
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		String requestJson = objectMapper.writeValueAsString(request);
+		
+		OkHttpClient client = new OkHttpClient();
+		RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+		Request httpRequest = new Request.Builder()
+		        .url(callBackUrl)
+		        .post(body)
+		        .build();
+		
+		Response httpResponse = client.newCall(httpRequest).execute();
+		
+		OCRResponse ocrResponse  = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
+		
+		response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+
+		FileUtils.delete(new File(imagePath));
+		
+		return response;
+	}
+	
 
 }
