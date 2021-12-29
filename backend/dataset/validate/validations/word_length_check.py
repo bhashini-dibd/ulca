@@ -31,7 +31,7 @@ class WordLengthCheck(BaseValidator):
                 word_sum = 0
                 for word in words:
                     word_sum = word_sum + len(word)
-                if word_sum/len(words) < 3:
+                if word_sum/len(words) <= 2:
                     return {"message": "Average Word length too short", "code": "WORD_LENGTH_TOO_SHORT", "status": "FAILED"}
 
             log.info('----word length check  -> Passed----')

@@ -65,7 +65,7 @@ class AudioMetadataCheck(BaseValidator):
                         return {"message": error_message, "code": "INCORRECT_BITS_PER_SAMPLE", "status": "FAILED"}
 
 
-                if request["datasetType"] == dataset_type_asr:
+                if request["datasetType"] in [dataset_type_asr, dataset_type_tts]:
                     num_words = len(list(request['record']['text'].split()))
                     words_per_minute = (num_words/request['record']['durationInSeconds'])*60
                     if words_per_minute < asr_minimum_words_per_min:
