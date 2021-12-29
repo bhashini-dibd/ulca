@@ -149,6 +149,7 @@ const HostedInferASR = (props) => {
           xs={12}
         >
           <AudioRecord
+            submitter={props.submitter}
             modelId={modelId}
             handleApicall={handleApicall}
             language={language}
