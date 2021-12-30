@@ -2,7 +2,7 @@ import logging
 import re
 import time
 from logging.config import dictConfig
-from configs.configs import ds_batch_size, no_of_parallel_processes, tts_prefix, \
+from configs.configs import ds_batch_size, tts_prefix, \
     sample_size, offset, limit, tts_immutable_keys, tts_non_tag_keys, dataset_type_tts, user_mode_pseudo, \
     tts_search_ignore_keys, tts_updatable_keys
 from repository.tts import TTSRepo
@@ -24,15 +24,15 @@ pt = ProcessTracker()
 metrics = MetricEvent()
 service = DatasetService()
 
-class ASRService:
+class TTSService:
     def __init__(self):
         pass
 
     '''
-    Method to load ASR dataset into the mongo db
+    Method to load TTS dataset into the mongo db
     params: request (record to be inserted)
     '''
-    def load_asr_dataset(self, request):
+    def load_tts_dataset(self, request):
         try:
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
@@ -80,10 +80,10 @@ class ASRService:
                          "datasetType": dataset_type_tts})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'ASR - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'TTS - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
-            return {"message": "EXCEPTION while loading ASR dataset!!", "status": "FAILED"}
+            return {"message": "EXCEPTION while loading TTS dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
 
     '''
@@ -151,7 +151,7 @@ class ASRService:
     params: query (query for search)
     '''
     def get_tts_dataset(self, query):
-        log.info(f'Fetching ASR datasets for SRN -- {query["serviceRequestNumber"]}')
+        log.info(f'Fetching TTS datasets for SRN -- {query["serviceRequestNumber"]}')
         pt.task_event_search(query, None, dataset_type_tts)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
@@ -248,7 +248,7 @@ class ASRService:
         log.info(f'Deleting ASR datasets....')
         d, u = 0, 0
         try:
-            records = self.dataset_type_tts({"datasetId": delete_req["datasetId"]})
+            records = self.get_tts_dataset({"datasetId": delete_req["datasetId"]})
             for record in records:
                 if len(record["datasetId"]) == 1:
                     repo.delete(record["id"])

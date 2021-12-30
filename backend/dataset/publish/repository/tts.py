@@ -31,7 +31,7 @@ class TTSRepo:
             db_cli.command({'shardCollection': f'{db}.{tts_collection}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
-            log.info(f'Setting the Mongo DB Local for ASR DS.... | {datetime.now()}')
+            log.info(f'Setting the Mongo DB Local for TTS DS.... | {datetime.now()}')
             client = pymongo.MongoClient(db_cluster)
             ulca_db = client[db]
             ulca_db.drop_collection(tts_collection)
