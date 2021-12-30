@@ -30,8 +30,6 @@ const SearchModelDetail = (props) => {
     setData(location.state);
   }, [location]);
 
-  console.log(streaming);
-
   // useEffect(() => {
   //   return () => {
   //     streaming.disconnect();
@@ -113,6 +111,7 @@ const SearchModelDetail = (props) => {
               source={data.source}
               language={data.language}
               inferenceEndPoint={data.inferenceEndPoint}
+              submitter={data.submitter}
               modelId={params.srno}
               streaming={streaming}
             />

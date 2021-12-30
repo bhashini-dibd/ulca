@@ -3,6 +3,8 @@ import {
   Typography,
   CardContent,
   Card,
+  CardActions,
+  Button,
   Tooltip,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
@@ -11,7 +13,7 @@ import { useEffect, useState } from "react";
 import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
-import { RecordState } from "audio-react-recorder";
+import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import config from "../../../../../configs/configs";
 // import StreamingClient from "../../../../../utils/streaming_client";
 import {
@@ -30,7 +32,7 @@ const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
 const AudioRecord = (props) => {
   console.log(REACT_SOCKET_URL);
   const streaming = props.streaming;
-  const { classes, language } = props;
+  const { classes, language, modelId } = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
@@ -39,7 +41,7 @@ const AudioRecord = (props) => {
   const languageCode = languageArr.length ? languageArr[0].code : "";
   const dispatch = useDispatch();
   const timerRef = useRef();
-
+  const [base, setBase] = useState("");
   useEffect(() => {
     if (!languages.length) {
       const obj = new GetMasterDataAPI(["languages"]);
@@ -112,8 +114,35 @@ const AudioRecord = (props) => {
     if (typeof timerRef.current === "number") clearTimeout(timerRef.current);
   };
 
+  const blobToBase64 = (blob) => {
+    var reader = new FileReader();
+    reader.readAsDataURL(blob.blob);
+    reader.onloadend = function () {
+      let base64data = reader.result;
+      setBase(base64data);
+    };
+  };
+
   const onStop = (data) => {
     setData(data.url);
+  };
+
+  const handleCompute = () => {
+    props.handleApicall(modelId, base, "asr", true);
+  };
+
+  const handleStartRecording = (data) => {
+    setData(null);
+    setRecordAudio(RecordState.START);
+  };
+
+  const handleStopRecording = (value) => {
+    setRecordAudio(RecordState.STOP);
+  };
+
+  const onStopRecording = (data) => {
+    setData(data.url);
+    setBase(blobToBase64(data));
   };
 
   return (
@@ -136,43 +165,99 @@ const AudioRecord = (props) => {
           }
         </Typography>
       </Grid>
-      <CardContent>
-        <Typography variant={"caption"}>
-          {translate("label.maxDuration")}
-        </Typography>
-        {recordAudio === "start" ? (
-          <div className={classes.center}>
-            <img
-              src={Stop}
-              alt=""
-              onClick={() => handleStop()}
-              style={{ cursor: "pointer" }}
-            />{" "}
-          </div>
-        ) : (
-          <div className={classes.center}>
-            <img
-              src={Start}
-              alt=""
-              onClick={() => handleStart()}
-              style={{ cursor: "pointer" }}
-            />{" "}
-          </div>
-        )}
+      {props.submitter === "Vakyansh" ? (
+        <CardContent>
+          <Typography variant={"caption"}>
+            {translate("label.maxDuration")}
+          </Typography>
+          {recordAudio === "start" ? (
+            <div className={classes.center}>
+              <img
+                src={Stop}
+                alt=""
+                onClick={() => handleStop()}
+                style={{ cursor: "pointer" }}
+              />{" "}
+            </div>
+          ) : (
+            <div className={classes.center}>
+              <img
+                src={Start}
+                alt=""
+                onClick={() => handleStart()}
+                style={{ cursor: "pointer" }}
+              />{" "}
+            </div>
+          )}
 
-        <div className={classes.center}>
-          <Typography style={{ height: "12px" }} variant="caption">
-            {streamingState === "start"
-              ? "Please wait..."
-              : streamingState === "listen"
-              ? "Listening..."
-              : ""}
-          </Typography>{" "}
-        </div>
-        <div className={classes.centerAudio}>
-          {data && <audio src={data} controls id="sample"></audio>}
-        </div>
-      </CardContent>
+          <div className={classes.center}>
+            <Typography style={{ height: "12px" }} variant="caption">
+              {streamingState === "start"
+                ? "Please wait..."
+                : streamingState === "listen"
+                ? "Listening..."
+                : ""}
+            </Typography>{" "}
+          </div>
+          <div className={classes.centerAudio}>
+            {data && <audio src={data} controls id="sample"></audio>}
+          </div>
+        </CardContent>
+      ) : (
+        <CardContent>
+          {recordAudio === "start" ? (
+            <div className={classes.center}>
+              <img
+                src={Stop}
+                alt=""
+                onClick={() => handleStopRecording()}
+                style={{ cursor: "pointer" }}
+              />{" "}
+            </div>
+          ) : (
+            <div className={classes.center}>
+              <img
+                src={Start}
+                alt=""
+                onClick={() => handleStartRecording()}
+                style={{ cursor: "pointer" }}
+              />{" "}
+            </div>
+          )}
+          <div className={classes.center}>
+            <Typography style={{ height: "12px" }} variant="caption">
+              {recordAudio === "start" ? "Recording..." : ""}
+            </Typography>{" "}
+          </div>
+          <div style={{ display: "none" }}>
+            <AudioReactRecorder
+              state={recordAudio}
+              onStop={onStopRecording}
+              style={{ display: "none" }}
+            />
+          </div>
+          <div className={classes.centerAudio}>
+            {data ? (
+              <audio src={data} controls id="sample"></audio>
+            ) : (
+              <audio src={"test"} controls id="sample"></audio>
+            )}
+          </div>
+          <CardActions
+            style={{ justifyContent: "flex-end", paddingRight: "20px" }}
+          >
+            <Button
+              color="primary"
+              variant="contained"
+              size={"small"}
+              disabled={data ? false : true}
+              onClick={() => handleCompute()}
+            >
+              Convert
+            </Button>
+          </CardActions>
+        </CardContent>
+      )}
     </Card>
   );
 };
