@@ -3,12 +3,13 @@ from logging.config import dictConfig
 from repository.parallel import ParallelRepo
 from repository.datasetrepo import DatasetRepo
 from repository.asr import ASRRepo
+from repository.tts import TTSRepo
 from repository.ocr import OCRRepo
 from repository.monolingual import MonolingualRepo
 from repository.asrunlabeled import ASRUnlabeledRepo
 from utils.datasetutils import DatasetUtils
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, \
-    dataset_type_asr_unlabeled
+    dataset_type_asr_unlabeled, dataset_type_tts
 
 log = logging.getLogger('file')
 
@@ -16,6 +17,7 @@ mongo_instance = None
 parallelrepo = ParallelRepo()
 datasetrepo = DatasetRepo()
 asrrepo = ASRRepo()
+ttsrepo = TTSRepo()
 ocrrepo = OCRRepo()
 monorepo = MonolingualRepo()
 asrunlabeledrepo = ASRUnlabeledRepo()
@@ -39,6 +41,7 @@ class DatasetService:
             ocrrepo.set_ocr_collection()
             monorepo.set_monolingual_collection()
             asrunlabeledrepo.set_asr_unlabeled_collection()
+            ttsrepo.set_tts_collection()
         elif request["col"] == dataset_type_parallel:
             parallelrepo.set_parallel_collection()
         elif request["col"] == dataset_type_asr:
@@ -49,6 +52,8 @@ class DatasetService:
             monorepo.set_monolingual_collection()
         elif request["col"] == dataset_type_asr_unlabeled:
             asrunlabeledrepo.set_asr_unlabeled_collection()
+        elif request["col"] == dataset_type_tts:
+            ttsrepo.set_tts_collection()
 
     '''
     Method to check and process duplicate records.
