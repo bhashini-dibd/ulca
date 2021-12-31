@@ -78,7 +78,7 @@ class ASRComputeRepo:
 
         except Exception as e:
             log.info(f'Exception while processing request: {e}')
-            return []
+            return {}
 
 
     
@@ -118,12 +118,12 @@ class ASRComputeRepo:
             content = response.content
             log.info(content)
             response_data = json.loads(content)
-            log.info("Received response from vakyanch end point to transcribe asr data")
+            log.info("Received response from inference end point to transcribe asr data")
             log.info(f"Response : {response_data}")
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
-            return {"status_text":"Incorrect inference endpoint or invalid response"}
+            return {}
 
 
 

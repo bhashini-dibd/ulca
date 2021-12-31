@@ -51,11 +51,11 @@ class ComputeAudioResource(Resource):
         try:
             result = asrrepo.process_asr_from_audio_file(lang,audio_file_path,callback_url,transformat,audioformat)
             if result.get("status") == "SUCCESS":
-                res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
-                log.info("response successfully generated.")
-                return res.getres()
+                res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)              
             else:
-                return post_error("Request Failed",result["status_text"]), 400
+                res = CustomResponse(Status.SUCCESS.value,None,None)
+            log.info("response successfully generated.")
+            return res.getres()
         except Exception as e:
             log.info(f'Exception on ComputeAudioResource {e}')
 
