@@ -64,7 +64,7 @@ const constants = {
   GET_MENU_OPTION: "GET_MENU_OPTION",
   TOGGLE_MODEL_STATUS: "TOGGLE_MODEL_STATUS",
   GET_MODEL_SEARCH_VALUES: "GET_MODEL_SEARCH_VALUES",
-
+  GET_MODEL_DETAIL: "GET_MODEL_DETAIL",
   /**
    * action for model benchmark
    */

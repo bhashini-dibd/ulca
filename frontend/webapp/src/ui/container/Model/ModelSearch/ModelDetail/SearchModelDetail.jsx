@@ -17,18 +17,30 @@ import HostedInferOCR from "./HostedInferOCR";
 import BenchmarkTable from "./BenchmarkTable";
 import { translate } from "../../../../../assets/localisation";
 import { StreamingClient } from "@project-sunbird/open-speech-streaming-client";
+import GetModelDetails from "../../../../../redux/actions/api/Model/ModelSearch/GetModelDetails";
+import APITransport from "../../../../../redux/actions/apitransport/apitransport";
+import { useDispatch, useSelector } from "react-redux";
 
 const SearchModelDetail = (props) => {
   const { classes } = props;
   const history = useHistory();
-  const [data, setData] = useState("");
+  // const [data, setData] = useState("");
   const [modelTry, setModelTry] = useState(false);
   const [streaming, setStreaming] = useState(new StreamingClient());
   const location = useLocation();
   const params = useParams();
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.getModelDetails.result);
+  const modelName = useSelector((state) => state.getModelDetails.modelName);
+
+  // useEffect(() => {
+  //   if (location) setData(location.state);
+  // }, [location]);
+
   useEffect(() => {
-    setData(location.state);
-  }, [location]);
+    const obj = new GetModelDetails(params.srno);
+    dispatch(APITransport(obj));
+  }, []);
 
   // useEffect(() => {
   //   return () => {
@@ -36,50 +48,10 @@ const SearchModelDetail = (props) => {
   //   };
   // }, []);
 
-  const description = [
-    // {
-    //   title: "Version",
-    //   para: data.version,
-    // }, ,
-    // {
-    //   title: "Description",
-    //   para: data.description,
-    // },
-    {
-      title: "Source URL",
-      para: data.refUrl,
-    },
-    {
-      title: "Task",
-      para: data.task,
-    },
-
-    {
-      title: "Languages",
-      para: data.language,
-    },
-    {
-      title: "Domain",
-      para: data.domain,
-    },
-    {
-      title: "Submitter",
-      para: data.submitter,
-    },
-    {
-      title: "Published On",
-      para: data.publishedOn,
-    },
-    {
-      title: "Training Dataset",
-      para:
-        data.trainingDataset !== undefined
-          ? data.trainingDataset["description"]
-          : "NA",
-      // para:"Trained on the datasets curated as part of Anuvaad project.Trained on the datasets curated as part of Anuvaad project."
-    },
-  ];
-  const { prevUrl } = location.state;
+  const description = data;
+  const [prevUrl, setUrl] = useState(
+    location.state ? location.state.prevUrl : "explore-models"
+  );
   const handleCardNavigation = () => {
     if (data.task === "asr" && streaming.isStreaming === true) {
       streaming.stopStreaming((blob) => {
@@ -173,7 +145,7 @@ const SearchModelDetail = (props) => {
                         color="secondary"
                         className={classes.mainTitle}
                       >
-                        {data.modelName} {data.version}
+                        {modelName}
                       </Typography>
                     </Grid>
                     {!params.model && (

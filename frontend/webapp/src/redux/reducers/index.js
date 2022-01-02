@@ -26,6 +26,7 @@ import benchmarkDetails from "./Model/BenchmarkModel/BenchmarkDetails";
 import benchmarkTableDetails from "./Model/ModelSearch/BenchmarkTable";
 import getUserDetails from "./Admin/UserDetails";
 import getMasterData from "./Common/getMasterData";
+import getModelDetails from "./Model/ModelSearch/GetModelDetail";
 
 const index = {
   apiStatus,
@@ -56,6 +57,7 @@ const index = {
   benchmarkPageDetails,
   getUserDetails,
   getMasterData,
+  getModelDetails,
 };
 
 export default index;
