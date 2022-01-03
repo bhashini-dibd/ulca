@@ -30,6 +30,7 @@ const endpoints = {
   updateUserDetails: "/ulca/user-mgmt/v1/users/update",
   updateUserStatus: "/ulca/user-mgmt/v1/users/update/active/status",
   getMasterData: "/ulca/mdms/v0/fetch-master/bulk",
+  getModel: "/ulca/apis/v0/model/getModel",
 };
 
 export default endpoints;

@@ -132,7 +132,7 @@ const HostedInferASR = (props) => {
 
   return (
     <>
-      <Grid container>
+      {/* <Grid container>
         {apiCall && <Spinner />}
         <Grid
           className={classes.grid}
@@ -190,7 +190,7 @@ const HostedInferASR = (props) => {
             <CardContent>{fileData}</CardContent>
           </Card>
         </Grid>
-      </Grid>
+      </Grid> */}
       <Grid container>
         {apiCall && <Spinner />}
         <Grid
