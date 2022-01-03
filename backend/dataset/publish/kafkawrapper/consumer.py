@@ -51,7 +51,7 @@ def consume():
                         if check_relay(data):
                             break
                         log.info(
-                            f'PROCESSING - start - ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+                            f'PROCESSING - start - ID: {data["record"]["id"]}, Dataset: {data["datasetType"]}, SRN: {data["serviceRequestNumber"]}')
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.load_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:
@@ -64,7 +64,7 @@ def consume():
                             au_service.load_asr_unlabeled_dataset(data)
                         if data["datasetType"] == dataset_type_tts:
                             tts_service.load_tts_dataset(data)
-                        log.info(f'PROCESSING - end - ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+                        log.info(f'PROCESSING - end - ID: {data["record"]["id"]}, Dataset: {data["datasetType"]}, SRN: {data["serviceRequestNumber"]}')
                         break
                     else:
                         break
