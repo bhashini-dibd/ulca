@@ -59,7 +59,7 @@ const ViewUserDetail = (props) => {
   const [checkboxState, setCheckBoxState] = useState(false);
   const [searchState, setSearchState] = useState("");
   const refHook = useRef(false);
-
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   //useEffect when the component is mounted
   useEffect(() => {
     if (status === "Started") {
@@ -443,7 +443,11 @@ const ViewUserDetail = (props) => {
       options: {
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return renderActions(tableMeta.rowData);
+          return userDetails && tableMeta.rowData[1] !== userDetails.email ? (
+            renderActions(tableMeta.rowData)
+          ) : (
+            <></>
+          );
         },
       },
     },
