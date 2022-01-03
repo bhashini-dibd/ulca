@@ -43,17 +43,24 @@ class DatasetService:
             asrunlabeledrepo.set_asr_unlabeled_collection()
             ttsrepo.set_tts_collection()
         elif request["col"] == dataset_type_parallel:
+            log.info("Parallel Dataset.....")
             parallelrepo.set_parallel_collection()
         elif request["col"] == dataset_type_asr:
+            log.info("ASR Dataset.....")
             asrrepo.set_asr_collection()
         elif request["col"] == dataset_type_ocr:
+            log.info("OCR Dataset.....")
             ocrrepo.set_ocr_collection()
         elif request["col"] == dataset_type_monolingual:
+            log.info("Monolingual Dataset.....")
             monorepo.set_monolingual_collection()
         elif request["col"] == dataset_type_asr_unlabeled:
+            log.info("ASR Unlabeled Dataset.....")
             asrunlabeledrepo.set_asr_unlabeled_collection()
         elif request["col"] == dataset_type_tts:
+            log.info("TTS Dataset.....")
             ttsrepo.set_tts_collection()
+        log.info("Done!")
 
     '''
     Method to check and process duplicate records.
