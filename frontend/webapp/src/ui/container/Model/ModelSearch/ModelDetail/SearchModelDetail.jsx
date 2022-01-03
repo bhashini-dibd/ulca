@@ -31,7 +31,7 @@ const SearchModelDetail = (props) => {
   const params = useParams();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getModelDetails.result);
-  const modelName = useSelector((state) => state.getModelDetails.modelName);
+  const { modelName, task } = useSelector((state) => state.getModelDetails);
 
   // useEffect(() => {
   //   if (location) setData(location.state);
@@ -179,7 +179,7 @@ const SearchModelDetail = (props) => {
                 lg={8}
                 xl={8}
               >
-                {renderHostedInfer(data.task)}
+                {renderHostedInfer(task)}
               </Grid>
               <Grid
                 item

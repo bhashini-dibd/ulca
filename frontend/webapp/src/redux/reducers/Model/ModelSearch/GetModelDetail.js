@@ -1,6 +1,8 @@
 import C from "../../../actions/constants";
 import { getLanguageName, FilterByDomain } from "../../../../utils/getLabel";
 
+const initialState = { result: [], modelName: "", task: "" };
+
 const getModelDetails = (payload) => {
   const target = payload["languages"][0]["targetLanguage"];
   const source = payload["languages"][0]["sourceLanguage"];
@@ -23,17 +25,17 @@ const getModelDetails = (payload) => {
   ];
 };
 
-const reducer = (state, action) => {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_MODEL_DETAIL:
       return {
         result: getModelDetails(action.payload),
         modelName: `${action.payload.name} ${action.payload.version}`,
+        task: action.payload["task"]["type"],
       };
     default:
       return {
-        result: [],
-        modelName: "",
+        ...state,
       };
   }
 };
