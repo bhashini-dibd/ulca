@@ -31,7 +31,15 @@ const SearchModelDetail = (props) => {
   const params = useParams();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.getModelDetails.result);
-  const { modelName, task } = useSelector((state) => state.getModelDetails);
+  const {
+    modelName,
+    task,
+    source,
+    language,
+    inferenceEndPoint,
+    submitter,
+    target,
+  } = useSelector((state) => state.getModelDetails);
 
   // useEffect(() => {
   //   if (location) setData(location.state);
@@ -53,7 +61,7 @@ const SearchModelDetail = (props) => {
     location.state ? location.state.prevUrl : "explore-models"
   );
   const handleCardNavigation = () => {
-    if (data.task === "asr" && streaming.isStreaming === true) {
+    if (task === "asr" && streaming.isStreaming === true) {
       streaming.stopStreaming((blob) => {
         clearTimeout();
       });
@@ -79,11 +87,11 @@ const SearchModelDetail = (props) => {
         case "asr":
           return (
             <HostedInferASR
-              task={data.task}
-              source={data.source}
-              language={data.language}
-              inferenceEndPoint={data.inferenceEndPoint}
-              submitter={data.submitter}
+              task={task}
+              source={source}
+              language={language}
+              inferenceEndPoint={inferenceEndPoint}
+              submitter={submitter}
               modelId={params.srno}
               streaming={streaming}
             />
@@ -91,19 +99,19 @@ const SearchModelDetail = (props) => {
         case "ocr":
           return (
             <HostedInferOCR
-              task={data.task}
-              source={data.source}
-              inferenceEndPoint={data.inferenceEndPoint}
+              task={task}
+              source={source}
+              inferenceEndPoint={inferenceEndPoint}
               modelId={params.srno}
             />
           );
         default:
           return (
             <HostedInference
-              task={data.task}
+              task={task}
               modelId={params.srno}
-              source={data.source}
-              target={data.target}
+              source={source}
+              target={target}
             />
           );
       }
