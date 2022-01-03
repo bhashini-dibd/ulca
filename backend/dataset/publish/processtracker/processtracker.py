@@ -4,7 +4,7 @@ from datetime import datetime
 from logging.config import dictConfig
 
 from configs.configs import pt_search_tool, pt_delete_tool, pt_inprogress_status, pt_success_status, pt_failed_status, \
-    dataset_type_asr, dataset_type_asr_unlabeled
+    dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts
 from .ptrepo import PTRepo
 from events.notifier import NotifierEvent
 
@@ -22,7 +22,7 @@ class ProcessTracker:
     '''
     def update_task_details(self, data):
         if 'datasetType' in data.keys():
-            if data["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled]:
+            if data["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts]:
                 if data["status"] == "SUCCESS":
                     if 'isUpdate' not in data.keys():
                         repo.redis_key_inc(data["serviceRequestNumber"], data["durationInSeconds"], False)
