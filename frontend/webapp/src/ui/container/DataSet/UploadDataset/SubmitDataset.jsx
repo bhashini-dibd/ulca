@@ -205,6 +205,11 @@ const SubmitDataset = (props) => {
     return pattern.test(str.replace(/\s\s+/g, ""));
   };
 
+  const spaceInBetween = (str) => {
+    const pattern = new RegExp(/\s+/, "g");
+    return pattern.test(str);
+  };
+
   const handleSubmitDataset = (e) => {
     if (dataset.name.trim() === "" || dataset.url.trim() === "") {
       setError({
@@ -214,8 +219,10 @@ const SubmitDataset = (props) => {
       });
     } else if (dataset.name.length > 256) {
       setError({ ...error, name: "Max 256 characters allowed" });
+    } else if (spaceInBetween(dataset.url.trim())) {
+      setError({ ...error, url: "URL contains space in between" });
     } else if (!validURL(dataset.url)) {
-      setError({ ...error, url: "‘Invalid URL" });
+      setError({ ...error, url: "Invalid URL" });
     } else {
       handleApicall();
       setSnackbarInfo({

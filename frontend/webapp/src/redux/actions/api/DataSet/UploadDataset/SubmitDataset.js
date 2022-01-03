@@ -23,7 +23,7 @@ export default class SubmitDatasetAPI extends API {
   getBody() {
     let bodyData = {
       datasetName: this.fileDetails.name,
-      url: this.fileDetails.url,
+      url: this.fileDetails.url.trim(),
     };
     bodyData.userId = JSON.parse(localStorage.getItem("userDetails")).userID;
     return bodyData;
