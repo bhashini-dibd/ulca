@@ -7,6 +7,7 @@ from logging.config import dictConfig
 from service.parallel import ParallelService
 from service.asr import ASRService
 from service.ocr import OCRService
+from service.tts import TTSService
 from service.monolingual import MonolingualService
 from service.asrunlabeled import ASRUnlabeledService
 
