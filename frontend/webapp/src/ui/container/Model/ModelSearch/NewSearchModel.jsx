@@ -40,7 +40,7 @@ const NewSearchModel =() => {
     const filter = useSelector(state => state.searchFilter);
     const type = ModelTask.map(task => task.value);
     const [value, setValue] = useState(type.indexOf(filter.type))
-    const [searchValue,setSearchValue] = useState("");
+    const { searchValue } = useSelector((state) => state.BenchmarkList);
     const [anchorEl, setAnchorEl] = useState(null);
    
     const popoverOpen = Boolean(anchorEl);
@@ -49,8 +49,7 @@ const NewSearchModel =() => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
         makeModelSearchAPICall(ModelTask[newValue].value);
-        setSearchValue("");
-        // dispatch(SearchList(searchValue))
+        dispatch(SearchList(""))
 
     }
     const dispatch = useDispatch();
@@ -89,7 +88,6 @@ const apply = (data) => {
     }
 
     const handleSearch=(event)=>{
-        setSearchValue(event.target.value);
         dispatch(SearchList(event.target.value))
     }
     return (

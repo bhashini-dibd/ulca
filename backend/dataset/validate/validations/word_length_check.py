@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -23,13 +23,15 @@ class WordLengthCheck(BaseValidator):
                 text_list.append(record['groundTruth'])
             if request["datasetType"] == dataset_type_monolingual:
                 text_list.append(record['text'])
+            if request["datasetType"] == dataset_type_tts:
+                text_list.append(record['text'])
 
             for text in text_list:
                 words = list(text.split())
                 word_sum = 0
                 for word in words:
                     word_sum = word_sum + len(word)
-                if word_sum/len(words) < 3:
+                if word_sum/len(words) <= 2:
                     return {"message": "Average Word length too short", "code": "WORD_LENGTH_TOO_SHORT", "status": "FAILED"}
 
             log.info('----word length check  -> Passed----')

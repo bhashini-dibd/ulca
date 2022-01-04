@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, shared_storage_path
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, dataset_type_tts, shared_storage_path
 import hashlib
 import logging
 from logging.config import dictConfig
@@ -70,6 +70,16 @@ class CaseDedup(BaseValidator):
                     request['record']['audioHash'] = hash_str
                 else:
                     return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+
+            if request["datasetType"] == dataset_type_tts:
+                audio_file = request['record']['fileLocation']
+                hash_str = self.hash_file(audio_file)
+                if hash_str:
+                    request['record']['audioHash'] = hash_str
+                else:
+                    return {"message": "Exception while hashing the files", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
+
+                request['record']['textHash'] = self.create_hash(request['record']['text'], request['record']['sourceLanguage'])
 
             return super().execute(request)
         except Exception as e:
