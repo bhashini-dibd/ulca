@@ -27,24 +27,32 @@ import { useDispatch, useSelector } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import { useRef } from "react";
 
-const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
+// const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
 
 const AudioRecord = (props) => {
-  console.log(REACT_SOCKET_URL);
   const streaming = props.streaming;
   const { classes, language, modelId } = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
-  const { languages } = useSelector((state) => state.getMasterData);
+  const { languages, inferenceEndpoints } = useSelector(
+    (state) => state.getMasterData
+  );
+  const vakyanshEndPoint =
+    inferenceEndpoints &&
+    inferenceEndpoints.filter(
+      (e) => e.active && e.submitter.indexOf("Vakyansh") > -1
+    );
+
   const languageArr = languages.filter((lang) => lang.label === language);
   const languageCode = languageArr.length ? languageArr[0].code : "";
   const dispatch = useDispatch();
   const timerRef = useRef();
   const [base, setBase] = useState("");
+
   useEffect(() => {
     if (!languages.length) {
-      const obj = new GetMasterDataAPI(["languages"]);
+      const obj = new GetMasterDataAPI(["languages", "inferenceEndpoints"]);
       dispatch(APITransport(obj));
     }
   }, []);
@@ -61,43 +69,49 @@ const AudioRecord = (props) => {
     if (typeof timerRef.current === "number") {
       clearTimeout(timerRef.current);
     }
-    setStreamingState("start");
-    const output = document.getElementById("asrCardOutput");
-    output.innerText = "";
-    setData("");
-    streaming.connect(REACT_SOCKET_URL, languageCode, function (action, id) {
-      timerRef.current = setTimeout(() => {
-        if (streaming.isStreaming) handleStop();
-      }, 61000);
-      setStreamingState("listen");
-      setRecordAudio(RecordState.START);
-      if (action === SocketStatus.CONNECTED) {
-        streaming.startStreaming(
-          function (transcript) {
-            const output = document.getElementById("asrCardOutput");
-            if (output) output.innerText = transcript;
-          },
-          function (errorMsg) {
-            console.log("errorMsg", errorMsg);
-          }
-        );
-      } else if (action === SocketStatus.TERMINATED) {
-        setStreamingState("");
-        streaming.stopStreaming((blob) => {});
-        setRecordAudio(RecordState.STOP);
-      } else {
-        console.log("Action", action, id);
-      }
-    });
+    if (vakyanshEndPoint.length) {
+      setStreamingState("start");
+      const output = document.getElementById("asrCardOutput");
+      output.innerText = "";
+      setData("");
+      const { code } = vakyanshEndPoint[0];
+      streaming.connect(code, languageCode, function (action, id) {
+        timerRef.current = setTimeout(() => {
+          if (streaming.isStreaming) handleStop();
+        }, 61000);
+        setStreamingState("listen");
+        setRecordAudio(RecordState.START);
+        if (action === SocketStatus.CONNECTED) {
+          streaming.startStreaming(
+            function (transcript) {
+              const output = document.getElementById("asrCardOutput");
+              if (output) output.innerText = transcript;
+            },
+            function (errorMsg) {
+              console.log("errorMsg", errorMsg);
+            }
+          );
+        } else if (action === SocketStatus.TERMINATED) {
+          setStreamingState("");
+          streaming.stopStreaming((blob) => {});
+          setRecordAudio(RecordState.STOP);
+        } else {
+          console.log("Action", action, id);
+        }
+      });
+    } else {
+      alert("Endpoint missing from master config");
+    }
   };
 
   const handleStop = (value) => {
     setStreamingState("");
     const output = document.getElementById("asrCardOutput");
     if (output) {
+      const { code } = vakyanshEndPoint[0];
       streaming.punctuateText(
         output.innerText,
-        `${REACT_SOCKET_URL}punctuate`,
+        `${code}punctuate`,
         (status, text) => {
           output.innerText = text;
         },
