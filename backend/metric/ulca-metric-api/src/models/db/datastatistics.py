@@ -53,7 +53,7 @@ class AggregateDatasetModel(object):
 
             #aggregate query for language pairs; 1st level drill down for the chart
             if grpby_params == None and len(match_params) ==1:
-                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
                 else:
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
