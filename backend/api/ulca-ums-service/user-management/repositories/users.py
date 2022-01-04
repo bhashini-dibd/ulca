@@ -44,10 +44,6 @@ class UserManagementRepositories:
         for user in users:
             users_data                  =   {}
             users_data["email"]         =   user["email"]
-            if user.get("password")     !=  None:
-                updated_hash = UserUtils.hash_password(user["password"])
-                decoded_pwd = updated_hash.decode("utf-8")
-                users_data["password"]  = decoded_pwd  
             if user.get("firstName")    !=  None:
                 users_data["firstName"] =   user["firstName"]
             if user.get("phoneNo")      !=  None:
