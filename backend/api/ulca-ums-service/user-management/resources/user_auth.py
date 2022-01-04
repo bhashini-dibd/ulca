@@ -199,12 +199,14 @@ class ActivateDeactivateUser(Resource):
             return post_error("Data Missing","is_active not found",None), 400
         user_email = body["email"]
         status= body["is_active"]
+        from_id = None
+        from_id=request.headers["x-user-id"]
 
         if not isinstance(status,bool):
             return post_error("Invalid format", "is_active status should be either true or false", None), 400
         log.info("Request received for updating activation status of {}".format(user_email))
         try:
-            result = authRepo.activate_deactivate_user(user_email,status)
+            result = authRepo.activate_deactivate_user(user_email,status,from_id)
             if result is not None:
                 log.info("Updation of activation status for {} failed".format(user_email))
                 return result, 400

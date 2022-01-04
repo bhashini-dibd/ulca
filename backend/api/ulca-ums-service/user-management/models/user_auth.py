@@ -211,7 +211,7 @@ class UserAuthenticationModel(object):
 
         
 
-    def activate_deactivate_user(self,user_email,status):
+    def activate_deactivate_user(self,user_email,status,from_id):
         """"Resetting activation status of verified users"""
 
         try:
@@ -229,6 +229,9 @@ class UserAuthenticationModel(object):
                     # if validity is not None:
                     #     log.info("{} belongs to an inactive org {}, hence operation failed".format(user_email,user["orgID"]), MODULE_CONTEXT)
                     #     return validity
+                    if user["userID"] == from_id:
+                        log.info("Self activation/deactivation not allowed")
+                        return post_error("Invalid Request", "You are not allowed to change your status", None)
                     #updating active status on database
                     results = collections.update(user, {"$set": {"isActive": status}})
                     if 'writeError' in list(results.keys()):
