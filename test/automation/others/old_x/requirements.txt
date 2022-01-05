@@ -1,6 +1,0 @@
-pyyaml
-pandas
-selenium
-requests
-argparse
-termcolor
