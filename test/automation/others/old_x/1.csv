@@ -1,0 +1,4 @@
+Dataset Name,Dataset URL
+ulca-parallel-ds-positive-tc-a4,https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca-parallel-ds-positive-testcase-04.zip
+ulca-asr-ds-negat-tc-a4,https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca-asr-ds-negative-testcase-04.zip
+ulca-ocr-ds-negat-tc-a7,https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca-ocr-ds-negative-testcase-07.zip
