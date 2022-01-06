@@ -12,6 +12,6 @@ process_db                =   os.environ.get('ULCA_PROC_TRACKER_DB', 'ulca-proce
 process_collection        =   os.environ.get('ULCA_PROC_TRACKER_PROC_COL', 'ulca-pt-processes')
 dataset_collection        =   os.environ.get('ULCA_PROC_TRACKER_DS_COL', 'dataset')
 eta_collection            =   os.environ.get('ULCA_PROC_TRACKER_ETA_COL', 'ulca-pt-estimates') 
-eta_cron_interval_sec     =   os.environ.get('ETA_CRON_INTERVAL_SEC',200)#86400
+eta_cron_interval_sec     =   os.environ.get('ETA_CRON_INTERVAL_SEC',86400)#86400
 
 
