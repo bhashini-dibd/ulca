@@ -37,7 +37,7 @@ class ETACalculatorService:
                                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                                         {"$unwind":"$tasks"},{ "$project": { "datasetType":"$searchCriteria.datasetType","startTime": "$tasks.startTime", "endTime": "$tasks.endTime","_id":0,"outputCount":"$tasks.details.count" }}]
                 queries             =   [{"collection":process_collection, "query":ds_search_query,"type":"dataset-search"}, {"collection":dataset_collection, "query":ds_submit_query,"type":"dataset-submit"}]
-            result             =   [] #defining the eta type
+            eta_results = []
             for query in queries:
                 weights             =   {}
                 weights["type"]     =   query["type"]
@@ -76,8 +76,8 @@ class ETACalculatorService:
                     except:
                         continue
                     log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
-                result.append(weights)
-            return result
+                eta_results.append(weights)
+            return eta_results
         except Exception as e:
             log.exception(f'{e}')
             
