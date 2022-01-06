@@ -16,7 +16,7 @@ class ProcessRepo:
     def instantiate(self):
         global mongo_instance
         client = pymongo.MongoClient(ulca_db_cluster)
-        mongo_instance = client[process_db][process_collection]
+        mongo_instance = client[process_db]
         return mongo_instance
 
     #geting the mongo clent object
@@ -28,10 +28,11 @@ class ProcessRepo:
             return mongo_instance
 
     #aggregate operation on mongo
-    def aggregate(self, query):
+    def aggregate(self, query,collection):
         log.info(f"Mongo aggregation : {query}")
         try:
-            col     =   self.get_mongo_instance()
+            client  =   self.get_mongo_instance()
+            col     =   client[collection]
             res     =   col.aggregate(query) 
             result  =   []
             for record in res:

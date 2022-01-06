@@ -6,13 +6,15 @@ import pandas as pd
 import numpy 
 from datetime import datetime
 from dateutil import parser
+from config import dataset_collection,process_collection
+import json
 log         =   logging.getLogger('file')
 
 repo        =   ProcessRepo()
 eta_repo    =   ETARepo()
 class ETACalculatorService:
 
-    def calculate_average_eta(self,query):
+    def calculate_average_eta(self,queries):
         """
         Function to estimate the time taken
 
@@ -21,43 +23,61 @@ class ETACalculatorService:
         """
         log.info('Calculating average ETA!')
         try:
-            if not query:
-                query   =   [{ "$match": { "$and": [{ "status": "Completed" },{"serviceRequestAction" : "search"}]}},
-                            {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
-                            {"$unwind":"$tasks"},{ "$project": { "datasetType":"$searchCriteria.datasetType","startTime": "$tasks.startTime", "endTime": "$tasks.endTime","_id":0,"outputCount":"$tasks.details.count" }}]
-            result      =   repo.aggregate(query)
-            if not result:
-                log.info("No results returned for the query")
-                return
-            
-            search_df   =   pd.DataFrame(result)
-            log.info(f"Count of search items:{len(search_df)}")
-            extracted   =   []
-            for index, row in search_df.iterrows():
-                new_fields = {}
-                new_fields["datasetType"]       =   row["datasetType"]
-                new_fields["outputCount"]       =   row["outputCount"]
-                try:
-                    new_fields["startTimeStamp"]    =   datetime.timestamp(parser.parse(str(row["startTime"])))    #datetime.strptime(str(row["startTime"]))
-                    new_fields["endTimeStamp"]      =   datetime.timestamp(parser.parse(str(row["endTime"])))
-                except:
-                    log.info(f'Improper time format found :{row["startTime"]} ********** {row["endTime"]}')
-                    continue
-                new_fields["timeTaken"]         =   new_fields["endTimeStamp"] - new_fields["startTimeStamp"]
-                extracted.append(new_fields)
-            del search_df
-            extracted_df        =   pd.DataFrame(extracted)
-            datatypes           =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus"]
-            weights             =   {"type":"dataset-search"} #defining the eta type
-            for dtype in datatypes:
-                sub_df          =   extracted_df[(extracted_df["datasetType"] == dtype )]
-                weighted_avg    =   numpy.average(sub_df.timeTaken,weights=sub_df.outputCount)
-                weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
-            log.info(str(weights))
-            return weights
+            if not queries:
+                ds_submit_query     =   [{ "$addFields": { "datasetId": { "$toString": "$_id" }}},
+                                        {"$lookup":{"from": "ulca-pt-processes","localField": "datasetId","foreignField": "datasetId","as": "processes"}},
+                                        {"$unwind":"$processes"},
+                                        { "$match": { "$and": [{ "processes.status": "Completed" },{"processes.serviceRequestAction" : "submit"},{ "processes.manuallyUpdated": { "$exists": False }}]}},
+                                        {"$lookup":{"from": "ulca-pt-tasks","localField": "processes.serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
+                                        {"$unwind":"$tasks"},
+                                        { "$match": { "$and": [{ "tasks.status": "Completed" },{"tasks.tool" : "publish"}]}},
+                                        { "$project": { "datasetType":"$datasetType","startTime": "$processes.startTime", "endTime": "$tasks.endTime","outputCount":"$tasks.details","_id":0}}]
+
+                ds_search_query     =   [{ "$match": { "$and": [{ "status": "Completed" },{"serviceRequestAction" : "search"}]}},
+                                        {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
+                                        {"$unwind":"$tasks"},{ "$project": { "datasetType":"$searchCriteria.datasetType","startTime": "$tasks.startTime", "endTime": "$tasks.endTime","_id":0,"outputCount":"$tasks.details.count" }}]
+                queries             =   [{"collection":process_collection, "query":ds_search_query,"type":"dataset-search"}, {"collection":dataset_collection, "query":ds_submit_query,"type":"dataset-submit"}]
+            result             =   [] #defining the eta type
+            for query in queries:
+                result      =   repo.aggregate(query["query"],query["collection"])
+                if not result:
+                    log.info("No results returned for the query")
+                    return
+                
+                search_df   =   pd.DataFrame(result)
+                log.info(f"Count of search items:{len(search_df)}")
+                extracted   =   []
+                for index, row in search_df.iterrows():
+                    new_fields = {}
+                    new_fields["datasetType"]       =   row["datasetType"]
+                    if isinstance(row["outputCount"],str):
+                        count_data = json.loads(row["outputCount"])
+                        new_fields["outputCount"] = [x for x in count_data["processedCount"] if x["type"]=="success"][0]["count"]
+                    else:
+                        new_fields["outputCount"]       =   row["outputCount"]
+                    try:
+                        new_fields["startTimeStamp"]    =   datetime.timestamp(parser.parse(str(row["startTime"])))    #datetime.strptime(str(row["startTime"]))
+                        new_fields["endTimeStamp"]      =   datetime.timestamp(parser.parse(str(row["endTime"])))
+                    except:
+                        log.info(f'Improper time format found :{row["startTime"]} ********** {row["endTime"]}')
+                        continue
+                    new_fields["timeTaken"]         =   new_fields["endTimeStamp"] - new_fields["startTimeStamp"]
+                    extracted.append(new_fields)
+                del search_df
+                extracted_df        =   pd.DataFrame(extracted)
+                datatypes           =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus","tts-corpus"]
+                weights             =   {}
+                weights["type"]     =   query["type"]
+                for dtype in datatypes:
+                    sub_df          =   extracted_df[(extracted_df["datasetType"] == dtype )]
+                    weighted_avg    =   numpy.average(sub_df.timeTaken,weights=sub_df.outputCount)
+                    weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
+                    log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
+                result.append(weights)
+            return result
         except Exception as e:
             log.exception(f'{e}')
-            return 
+            
 
     def fetch_estimates(self,eta_type):
         """

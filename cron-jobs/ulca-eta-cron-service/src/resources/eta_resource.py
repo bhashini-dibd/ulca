@@ -17,7 +17,7 @@ class ETACalculatorResource(Resource):
         query   =   body["query"] if body.get("query") else None
         
         try:
-            result  = service.calculate_average_eta(query)
+            result  = service.calculate_average_eta([query])
             res     = CustomResponse(Status.SUCCESS.value,result,None)
             log.info("response successfully generated.")
             return res.getres()

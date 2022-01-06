@@ -22,10 +22,11 @@ class ETACronProcessor(Thread):
                 # Real time calculation of eta
                 estimates = service.calculate_average_eta(query=None)
                 if estimates:
-                    query       =   {"$set":estimates}
-                    condition   =   {"type":"dataset-search"} 
-                    log.info("Updating db with latest estimates!")
-                    repo.upsert(condition,query)  
+                    for est in estimates:
+                        query       =   {"$set":est}
+                        condition   =   {"type":est["type"]} 
+                        log.info("Updating db with latest estimates!")
+                        repo.upsert(condition,query)  
                 run += 1
             except Exception as e:
                 run += 1
