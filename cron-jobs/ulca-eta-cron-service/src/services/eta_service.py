@@ -39,6 +39,8 @@ class ETACalculatorService:
                 queries             =   [{"collection":process_collection, "query":ds_search_query,"type":"dataset-search"}, {"collection":dataset_collection, "query":ds_submit_query,"type":"dataset-submit"}]
             result             =   [] #defining the eta type
             for query in queries:
+                weights             =   {}
+                weights["type"]     =   query["type"]
                 result      =   repo.aggregate(query["query"],query["collection"])
                 if not result:
                     log.info("No results returned for the query")
@@ -66,8 +68,6 @@ class ETACalculatorService:
                 del search_df
                 extracted_df        =   pd.DataFrame(extracted)
                 datatypes           =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus","tts-corpus"]
-                weights             =   {}
-                weights["type"]     =   query["type"]
                 for dtype in datatypes:
                     try:
                         sub_df          =   extracted_df[(extracted_df["datasetType"] == dtype )]

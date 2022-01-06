@@ -21,6 +21,7 @@ class ETACronProcessor(Thread):
             try:
                 # Real time calculation of eta
                 estimates = service.calculate_average_eta(queries=None)
+                log.info(str(estimates))
                 if estimates:
                     for est in estimates:
                         query       =   {"$set":est}
