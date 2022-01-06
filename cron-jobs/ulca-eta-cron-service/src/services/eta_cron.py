@@ -20,7 +20,7 @@ class ETACronProcessor(Thread):
             log.info(f'ETA Cron Processor run :{run}')
             try:
                 # Real time calculation of eta
-                estimates = service.calculate_average_eta(query=None)
+                estimates = service.calculate_average_eta(queries=None)
                 if estimates:
                     for est in estimates:
                         query       =   {"$set":est}
