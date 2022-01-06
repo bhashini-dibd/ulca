@@ -131,6 +131,10 @@ export const FilterBy = {
       value: "tourism",
       label: "Tourism",
     },
+    {
+      value:"parliamentary",
+      label:"Parliamentary"
+    }
   ],
 };
 
