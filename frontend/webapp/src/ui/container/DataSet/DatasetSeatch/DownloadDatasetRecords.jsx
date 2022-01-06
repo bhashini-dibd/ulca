@@ -6,7 +6,7 @@ import { translate } from "../../../../assets/localisation";
 
 const DownloadDatasetRecords = (props) => {
     const renderSentence = () => {
-        if (props.datasetType === 'ASR / TTS Dataset' || props.datasetType === 'ASR Unlabeled Dataset')
+        if (props.datasetType === 'ASR Dataset' || props.datasetType === 'TTS Dataset' || props.datasetType === 'ASR Unlabeled Dataset')
             return "#Hours"
         else if (props.datasetType === 'OCR Dataset')
             return "#Images"

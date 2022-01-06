@@ -160,7 +160,7 @@ const getMySearches = (payload) => {
         downloadUrl: searchDetails && searchDetails.dataset,
         // sourceLanguage: element.searchCriteria.sourceLanguage,
         // targetLanguage: element.searchCriteria.targetLanguage,
-        // datasetType: element.searchCriteria.datasetType,
+        datasetType: element.searchCriteria.datasetType,
         // domain: element.searchCriteria.domain,
         // collection: element.searchCriteria.collectionMethod,
         searchValues: element.searchCriteria,
