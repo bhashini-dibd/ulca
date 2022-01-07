@@ -86,7 +86,7 @@ public class ModelController {
 
 	}
 	
-	@PostMapping("/tryMeOcrImageContent")
+	@PostMapping("/tryMe")
 	public ModelComputeResponse tryMeOcrImageContent(@RequestParam("file") MultipartFile file,@RequestParam(required = true) String userId, @RequestParam(required = true) String modelId) throws Exception {
 		log.info("******** Entry ModelController:: tryMeOcrImageContent *******");
 		return modelService.tryMeOcrImageContent(file, modelId);
