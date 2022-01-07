@@ -19,6 +19,9 @@ import {
 import { useState } from "react";
 import OCRModal from "./OCRModal";
 import { translate } from "../../../../../assets/localisation";
+import OCRFileUpload from "../../../../../redux/actions/api/Model/ModelSearch/FileUpload";
+import { useDispatch } from "react-redux";
+import APITransport from '../../../../../redux/actions/apitransport/apitransport';
 
 const HostedInferASR = (props) => {
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
@@ -38,6 +41,7 @@ const HostedInferASR = (props) => {
   const [targetAudio, setTargetAudio] = useState("");
   const handleCompute = () => setTranslationState(true);
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   // const url = UrlConfig.dataset
   const handleClose = () => {
     setOpen(false);
@@ -127,12 +131,13 @@ const HostedInferASR = (props) => {
   };
 
   const handleFileSubmit = () => {
-    console.log("make API call for file submit");
+    const obj = new OCRFileUpload(file, modelId);
+    dispatch(APITransport(obj));
   };
 
   return (
     <>
-      {/* <Grid container>
+      <Grid container>
         {apiCall && <Spinner />}
         <Grid
           className={classes.grid}
@@ -190,7 +195,7 @@ const HostedInferASR = (props) => {
             <CardContent>{fileData}</CardContent>
           </Card>
         </Grid>
-      </Grid> */}
+      </Grid>
       <Grid container>
         {apiCall && <Spinner />}
         <Grid
