@@ -107,6 +107,11 @@ const constants = {
   CLEAR_ADMIN_FILTER: "CLEAR_ADMIN_FILTER",
   SEARCH_USER_DETAILS: "SEARCH_USER_DETAILS",
   TOGGLE_USER_STATUS: "TOGGLE_USER_STATUS",
+
+  /**
+   * action for File Upload
+   */
+  DOCUMENTUPLOAD: "DOCUMENTUPLOAD",
 };
 
 export default constants;
