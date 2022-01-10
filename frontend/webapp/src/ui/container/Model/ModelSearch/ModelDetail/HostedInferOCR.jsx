@@ -21,7 +21,7 @@ import OCRModal from "./OCRModal";
 import { translate } from "../../../../../assets/localisation";
 import OCRFileUpload from "../../../../../redux/actions/api/Model/ModelSearch/FileUpload";
 import { useDispatch } from "react-redux";
-import APITransport from '../../../../../redux/actions/apitransport/apitransport';
+import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 
 const HostedInferASR = (props) => {
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
@@ -41,6 +41,7 @@ const HostedInferASR = (props) => {
   const [targetAudio, setTargetAudio] = useState("");
   const handleCompute = () => setTranslationState(true);
   const [open, setOpen] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
   // const url = UrlConfig.dataset
   const handleClose = () => {
@@ -127,12 +128,26 @@ const HostedInferASR = (props) => {
   };
 
   const handleFile = (e) => {
-    setFile(e.target.files);
+    if (e.target.files) {
+      setDisabled(false);
+      setFile(e.target.files);
+    }
   };
 
   const handleFileSubmit = () => {
+    setFileData("");
+    setDisabled(true);
     const obj = new OCRFileUpload(file, modelId);
-    dispatch(APITransport(obj));
+    // dispatch(APITransport(obj));
+    fetch(obj.apiEndPoint(), {
+      method: "post",
+      body: obj.getFormData(),
+    }).then(async (res) => {
+      let rsp_data = await res.json();
+      if (res.ok) {
+        setFileData(rsp_data.outputText);
+      }
+    });
   };
 
   return (
@@ -167,7 +182,7 @@ const HostedInferASR = (props) => {
               <Button
                 color="primary"
                 style={{ float: "right", marginTop: "10px" }}
-                disabled={file.length ? false : true}
+                disabled={disabled}
                 variant="contained"
                 size={"small"}
                 onClick={handleFileSubmit}
