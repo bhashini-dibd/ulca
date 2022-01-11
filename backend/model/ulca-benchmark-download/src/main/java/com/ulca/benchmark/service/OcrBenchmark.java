@@ -20,7 +20,7 @@ import javax.sound.sampled.AudioFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -230,7 +230,11 @@ public class OcrBenchmark {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestJson = objectMapper.writeValueAsString(request);
 		
-		OkHttpClient client = new OkHttpClient();
+		//OkHttpClient client = new OkHttpClient();
+		OkHttpClient client = new OkHttpClient.Builder()
+			      .readTimeout(60, TimeUnit.SECONDS)
+			      .build();
+		
 		RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 		Request httpRequest = new Request.Builder()
 		        .url(callBackUrl)

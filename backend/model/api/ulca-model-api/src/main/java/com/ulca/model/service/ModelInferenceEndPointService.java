@@ -250,10 +250,19 @@ public class ModelInferenceEndPointService {
 		        .build();
 		
 		Response httpResponse = client.newCall(httpRequest).execute();
+		String responseJsonStr = httpResponse.body().string();
 		
-		OCRResponse ocrResponse  = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
+		OCRResponse ocrResponse  = objectMapper.readValue(responseJsonStr, OCRResponse.class);
+		if(ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0) {
+			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+		}else {
+			log.info("Ocr try me response is null or not proper" );
+			log.info("callBackUrl :: " + callBackUrl);
+			log.info("Request Json :: " + requestJson);
+			log.info("ResponseJson :: " + responseJsonStr);
+			
+		}
 		
-		response.setOutputText(ocrResponse.getOutput().get(0).getSource());
 
 		FileUtils.delete(new File(imagePath));
 		

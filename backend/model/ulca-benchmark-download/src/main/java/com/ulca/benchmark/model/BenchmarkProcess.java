@@ -1,7 +1,6 @@
 package com.ulca.benchmark.model;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -18,18 +17,18 @@ import lombok.Setter;
 @Document(collection = "benchmarkprocess")
 public class BenchmarkProcess {
 	
-
 	@Id
     String id;
 	
 	String modelId;
-	
 	String benchmarkProcessId;
 	String benchmarkDatasetId;
 	String benchmarkDatasetName;
+	String modelName;
+	String modelVersion;
 	double score;
 	String metric;
-	String status;
+	String status; // Completed/In-Progress/Failed
 	String createdOn;
 	String lastModifiedOn;
 
