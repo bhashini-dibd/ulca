@@ -21,7 +21,9 @@ import OCRModal from "./OCRModal";
 import { translate } from "../../../../../assets/localisation";
 import OCRFileUpload from "../../../../../redux/actions/api/Model/ModelSearch/FileUpload";
 import { useDispatch } from "react-redux";
-import APITransport from '../../../../../redux/actions/apitransport/apitransport';
+import APITransport from "../../../../../redux/actions/apitransport/apitransport";
+import Snackbar from "../../../../components/common/Snackbar";
+
 
 const HostedInferASR = (props) => {
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
@@ -51,12 +53,12 @@ const HostedInferASR = (props) => {
   const validURL = (str) => {
     var pattern = new RegExp(
       "^((ft|htt)ps?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?" + // port
-        "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
-        "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?" + // port
+      "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
+      "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
       "i"
     );
     return pattern.test(str);
@@ -127,12 +129,27 @@ const HostedInferASR = (props) => {
   };
 
   const handleFile = (e) => {
-    setFile(e.target.files);
+    if (e.target.files) {
+      setFile(e.target.files);
+    }
   };
 
   const handleFileSubmit = () => {
+    setFileData("");
+    setSnackbarInfo({ ...snackbar, open: true, message: 'Please wait while we process your request...', variant: "info" })
     const obj = new OCRFileUpload(file, modelId);
-    dispatch(APITransport(obj));
+    // dispatch(APITransport(obj));
+    fetch(obj.apiEndPoint(), {
+      method: "post",
+      body: obj.getFormData(),
+    }).then(async (res) => {
+      let rsp_data = await res.json();
+      if (res.ok) {
+        setFileData(rsp_data.outputText);
+      } else {
+        setSnackbarInfo({ ...snackbar, open: true, message: rsp_data.message, variant: 'error' });
+      }
+    });
   };
 
   return (
@@ -278,6 +295,16 @@ const HostedInferASR = (props) => {
           message={url}
           handleClose={handleClose}
           title="Ocr Image"
+        />
+      )}
+      {snackbar.open && (
+        <Snackbar
+          open={snackbar.open}
+          handleClose={handleSnackbarClose}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          message={snackbar.message}
+          variant={snackbar.variant}
+          hide="6000"
         />
       )}
     </>
