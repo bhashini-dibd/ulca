@@ -111,7 +111,7 @@ const AudioRecord = (props) => {
       const { code } = vakyanshEndPoint[0];
       streaming.punctuateText(
         output.innerText,
-        `${code}punctuate/${languageCode}`,
+        `${code}asr/v1/punctuate/${languageCode}`,
         (status, text) => {
           output.innerText = text;
         },
