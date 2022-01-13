@@ -127,7 +127,7 @@ const SearchModelDetail = (props) => {
     },
     {
       name: "modelName",
-      label: "Model Name",
+      label: "Model",
     },
     {
       name: "score",
