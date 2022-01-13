@@ -418,9 +418,23 @@ const BenchmarkModal = (props) => {
           },
         },
         MUIDataTableHeadCell: {
+          root: {
+            minWidth: "100%",
+          },
           fixedHeader: {
             position: "initial",
-            width: "120px",
+            "&:nth-child(2)": {
+              width: "30%",
+            },
+            "&:nth-child(3)": {
+              width: "10%",
+            },
+            "&:nth-child(4)": {
+              width: "50%",
+            },
+            "&:nth-child(5)": {
+              width: "10%",
+            },
           },
         },
         MuiToolbar: {
