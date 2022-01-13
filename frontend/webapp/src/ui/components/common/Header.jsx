@@ -139,7 +139,7 @@ const Header = (props) => {
               onClick={() => {
                 dispatch(getMenuType(""));
                 dispatch(getMenuOption(""));
-                window.location = `https://bhashini.gov.in/ulca/intro`;
+                window.location = `${process.env.REACT_APP_INTRO_URL}/ulca/intro`;
               }}
             >
               {translate("label.ulca")}
