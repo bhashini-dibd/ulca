@@ -183,7 +183,7 @@ const ChartRender = (props) => {
                         <h2 class="text-center text-black mt-3">Model Dashboard</h2>
                         <p class="ft-20">ULCA hosts a catalog of models in Indian languages</p>
                     <div class="join">
-                      <a class="bh-btn-primary" href="https://bhashini.gov.in/ulca/model/explore-models" target="_self" rel="noopener noreferrer">Explore ULCA Models </a>
+                      <a class="bh-btn-primary" href={`${process.env.REACT_APP_BASE_URL}/ulca/model/explore-models`} target="_self" rel="noopener noreferrer">Explore ULCA Models </a>
                   </div>
                    
                    
