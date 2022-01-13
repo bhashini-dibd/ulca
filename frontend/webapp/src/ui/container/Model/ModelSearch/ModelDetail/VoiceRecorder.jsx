@@ -113,6 +113,7 @@ const AudioRecord = (props) => {
         output.innerText,
         `${code}asr/v1/punctuate/${languageCode}`,
         (status, text) => {
+          console.log(text);
           output.innerText = text;
         },
         (status, error) => {
