@@ -34,6 +34,7 @@ import {
   clearFilterBenchmark,
 } from "../../../../redux/actions/api/Model/ModelView/FilterBenchmark";
 import CustomPagination from "../../../components/common/CustomPagination";
+import { useEffect } from "react";
 
 const BenchmarkModal = (props) => {
   const { classes } = props;
@@ -55,6 +56,20 @@ const BenchmarkModal = (props) => {
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
   const [selectedFilters, setSelectedFilters] = useState([]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        props.handleCloseModal();
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      document.removeEventListener("keydown", props.handleCloseModal);
+    };
+  }, []);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -380,8 +395,8 @@ const BenchmarkModal = (props) => {
             oveflow: "initial",
             overflowX: "hidden",
             overflowY: "auto",
-            minHeight: "60vh",
-            maxHeight: "60vh",
+            minHeight: "51vh",
+            maxHeight: "51vh",
           },
         },
         MUIDataTableSelectCell: {
@@ -459,7 +474,6 @@ const BenchmarkModal = (props) => {
       style={{
         width: "fit-content",
         margin: "auto",
-        marginTop: "120px",
       }}
     >
       <div
