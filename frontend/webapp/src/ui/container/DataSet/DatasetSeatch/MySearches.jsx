@@ -171,7 +171,8 @@ const MySearches = (props) => {
             <div style={{ textTransform: "none" }}>
               {tableMeta.rowData[4] !== "In-Progress" &&
                 (tableMeta.rowData[5] === "asr-corpus" ||
-                tableMeta.rowData[5] === "asr-unlabeled-corpus"
+                  tableMeta.rowData[5] === "asr-unlabeled-corpus" ||
+                  tableMeta.rowData[5] === "tts-corpus"
                   ? `${tableMeta.rowData[3]} hrs`
                   : tableMeta.rowData[3])}
             </div>
