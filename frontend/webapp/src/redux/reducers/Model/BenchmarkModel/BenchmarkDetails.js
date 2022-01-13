@@ -51,7 +51,7 @@ const getBenchmarkDetails = (data) => {
           )} - ${getLanguageName(data.languages.targetLanguage)}`
         : getLanguageName(data.languages.sourceLanguage),
     domain: data.domain ? data.domain.join(", ") : "",
-    modelName: `${data.name} ${data.version}`,
+    modelName: `${data.name}`,
     metric: data.metric ? data.metric.join(", ") : "",
     task: data.task.type,
     metricArray: data.metric,

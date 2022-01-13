@@ -126,8 +126,20 @@ const SearchModelDetail = (props) => {
       label: "#Position",
     },
     {
+      name: "modelVersion",
+      label: "Version",
+      options: {
+        display: 'excluded'
+      }
+    },
+    {
       name: "modelName",
       label: "Model",
+      options: {
+        customBodyRender: (value, data) => {
+          return <Typography variant="body2">{`${data.rowData[2]} ${data.rowData[1]}`}</Typography>
+        }
+      }
     },
     {
       name: "score",
@@ -225,8 +237,8 @@ const SearchModelDetail = (props) => {
             {prevUrl === "explore-models"
               ? "Back to Benchmark Datasets"
               : prevUrl === "benchmark-dataset"
-              ? "Back to My Contribution"
-              : "Back to Model Description"}
+                ? "Back to My Contribution"
+                : "Back to Model Description"}
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
