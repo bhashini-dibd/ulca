@@ -61,7 +61,7 @@ const FilterBenchmark = (props) => {
             md={12}
             lg={12}
             xl={12}
-            style={{ margin: "21px", height: "209.75px", width: "175px" }}
+            style={{ margin: "21px", height: "290.75px", width: "175px" }}
           >
             <Typography variant="h6" className={classes.filterTypo}>
               {translate("label.domain")}
