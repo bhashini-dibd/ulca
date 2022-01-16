@@ -65,7 +65,7 @@ Unlike ASR and OCR, there might be multiple correct alternatives to the referenc
 - It has been shown to correlate with human judgment on sentence-level and system-level evaluation.
 - Model based approach and hence computationally expensive
 - Value lies in range of 0 to 1, closest to 1 being the best
-- Supported Languages : Here
+- Supported Languages : [Here](https://github.com/google-research/bert/blob/master/multilingual.md#list-of-languages "Here")
 - Library used : [bert-score](https://github.com/Tiiiger/bert_score "bert-score")
 - Reference implementation : [Here](https://github.com/huggingface/datasets/blob/master/metrics/bertscore/bertscore.py "Here")
 - Tokenizer : Default
