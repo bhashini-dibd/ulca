@@ -1,13 +1,14 @@
-#Evaluvation Metrics
+# Evaluvation Metrics
+
 Repo contains various metrics implementations to evaluate the corpus level performance of ASR/OCR/Translation models submitted to to ULCA.
 
-##ASR & OCR METRICS
+## ASR & OCR METRICS
 
 The output of OCR/ASR engines often contains a number of mistakes such as misspelt words or spurious characters. In order to obtain a measure that is independent of the text size, the number of mistakes is usually normalized to the length of the expected content (the ground truth text). The quotient between the number of mistakes and the text length is known as the error rate. Since its error rate, lower the best. values will be in range of 0 to 1, where closer to 0 means the best probable output.
 
 The error rate is usually calculated at two different levels:
 
-###WER
+### WER
 
 - The WER is derived from the Levenshtein distance, working at the word level instead of the phoneme level.
 - This kind of measurement, however, provides no details on the nature of translation errors and further work is therefore required to identify the main source(s) of error and to focus any research effort.
@@ -17,7 +18,7 @@ The error rate is usually calculated at two different levels:
 - Library used : [Jiwer](https://github.com/jitsi/jiwer "Jiwer")
 - Reference implementation : [Here](https://github.com/huggingface/datasets/blob/master/metrics/wer/wer.py "Here")
 
-###CER
+### CER
 
 - CER is similar to Word Error Rate (WER), but operates on character instead of word.
 - CER = (S + D + I) / N = (S + D + I) / (S + D + C) where S is the number of substitutions, D is the number of deletions, I is the number of insertions, C is the number of correct characters, N is the number of characters in the reference (N=S+D+C).
@@ -26,11 +27,11 @@ The error rate is usually calculated at two different levels:
 - Library used : [Jiwer](https://github.com/jitsi/jiwer "Jiwer")
 - Reference implementation : [Here](https://github.com/huggingface/datasets/blob/master/metrics/cer/cer.py "Here")
 
-##TRANSLATION METRICS
+## TRANSLATION METRICS
 
 Unlike ASR and OCR, there might be multiple correct alternatives to the reference content, when it comes to translation. All these cases must be considered.  Wrt translation metrics, generally the values will be in range of 0 to 1, where values closer to 1 means more accurate it is.
 
-###BLEU SCORE
+### BLEU SCORE
 
 - Bilingual Evaluation Understudy Score
 - BLEU is a quality metric score for MT systems that attempts to measure the correspondence between a machine translation output and a human translation.
@@ -38,7 +39,7 @@ Unlike ASR and OCR, there might be multiple correct alternatives to the referenc
 - Reference implementation : [Here](https://github.com/AI4Bharat/indicTrans/blob/main/compute_bleu.sh "Here")
 - Tokenizer : [Indicnlp](https://github.com/anoopkunchukuttan/indic_nlp_library "Indicnlp")
 
-###RIBES SCORE
+### RIBES SCORE
 
 - Rank-based Intuitive Bilingual Evaluation Score
 - Different from BLEU's micro-average precision, RIBES calculates the macro-average precision by averaging the best RIBES score for each pair of hypothesis and its corresponding references
@@ -46,7 +47,7 @@ Unlike ASR and OCR, there might be multiple correct alternatives to the referenc
 - Reference implementation : [Here](https://www.nltk.org/_modules/nltk/translate/ribes_score.html "Here")
 - Tokenizer : [Indicnlp](https://github.com/anoopkunchukuttan/indic_nlp_library "Indicnlp")
 
-###GLEU SCORE
+### GLEU SCORE
 
 - Google-BLEU
 - correlates quite well with the BLEU metric on a corpus level but does not have its drawbacks for our per sentence reward objective
@@ -58,7 +59,7 @@ Unlike ASR and OCR, there might be multiple correct alternatives to the referenc
 - Reference implementation : [Here](https://www.nltk.org/_modules/nltk/translate/gleu_score.html "Here")
 - Tokenizer : [Indicnlp](https://github.com/anoopkunchukuttan/indic_nlp_library "Indicnlp")
 
-###BERT SCORE
+### BERT SCORE
 
 - BERTScore leverages the pre-trained contextual embeddings from BERT and matches words in candidate and reference sentences by cosine similarity.
 - It has been shown to correlate with human judgment on sentence-level and system-level evaluation.
@@ -84,6 +85,7 @@ Unlike ASR and OCR, there might be multiple correct alternatives to the referenc
 
 
 ## Prerequisites
+
 - python 3.7
 - ubuntu 16.04
 
@@ -97,4 +99,5 @@ python app.py
 ```
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
