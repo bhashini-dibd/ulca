@@ -37,6 +37,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.util.ModelConstants;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.exception.FileExtensionNotSupportedException;
@@ -89,6 +90,9 @@ public class ModelService {
 	@Autowired
 	WebClient.Builder builder;
 	
+	@Autowired
+	ModelConstants modelConstants;
+	
 
 	public ModelExtended modelSubmit(ModelExtended model) {
 
@@ -133,6 +137,9 @@ public class ModelService {
 			ModelExtended model = result.get();
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
+			List<String> metricList = modelConstants.getMetricListByModelTask(model.getTask().getType().toString());
+			modelDto.setMetric(metricList);
+			
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelIdAndStatus(model.getModelId(), "Completed");
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			return modelDto;
