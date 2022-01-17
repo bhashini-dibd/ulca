@@ -128,7 +128,7 @@ public class ModelService {
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
 	}
 
-	public ModelListResponseDto getModelDescription(String modelId) {
+	public ModelListResponseDto getModelByModelId(String modelId) {
 		log.info("******** Entry ModelService:: getModelDescription *******");
 		Optional<ModelExtended> result = modelDao.findById(modelId);
 
@@ -229,7 +229,7 @@ public class ModelService {
 	public UploadModelResponse uploadModel(MultipartFile file, String userId) throws Exception {
 
 		String modelFilePath = storeModelFile(file);
-		ModelExtended modelObj = getModel(modelFilePath);
+		ModelExtended modelObj = getUploadedModel(modelFilePath);
 		
 		validateModel(modelObj);
 		
@@ -260,7 +260,7 @@ public class ModelService {
 
 	
 	
-	public ModelExtended getModel(String modelFilePath) {
+	public ModelExtended getUploadedModel(String modelFilePath) {
 
 		ModelExtended modelObj = null;
 		ObjectMapper objectMapper = new ObjectMapper();
