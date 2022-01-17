@@ -48,6 +48,8 @@ class UpdateUsers(Resource):
             return post_error("Data Missing", "users not found", None), 400
 
         users = body['users']
+        user_id = None
+        user_id=request.headers["x-user-id"]
         log.info("Updation request received for {} user/s".format(len(users)))
         log.info("User/s validation started")
         for i,user in enumerate(users):
@@ -58,7 +60,7 @@ class UpdateUsers(Resource):
         log.info("Users are validated")
 
         try:
-            result = userRepo.update_users(users)
+            result = userRepo.update_users(users,user_id)
             if result== True:
                 log.info("User/s updation successful")
                 res = CustomResponse(Status.SUCCESS_USR_UPDATION.value, None)

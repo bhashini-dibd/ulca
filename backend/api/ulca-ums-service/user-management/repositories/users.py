@@ -39,7 +39,7 @@ class UserManagementRepositories:
         if result is not None:
             return result
 
-    def update_users(self,users):
+    def update_users(self,users,user_id):
         records                         =   []
         for user in users:
             users_data                  =   {}
@@ -50,8 +50,12 @@ class UserManagementRepositories:
                 users_data["phoneNo"]   =   user["phoneNo"]
             if user.get("roles")        !=  None:
                 users_data["roles"]     =  user["roles"]
+            if user.get("password")     !=  None:
+                hashed                   =   UserUtils.hash_password(user["password"])
+                users_data["password"]   =   hashed.decode("utf-8")
+
             records.append(users_data)
-        result = userModel.update_users_by_uid(records)
+        result = userModel.update_users_by_uid(records,user_id)
         if result is not None:
             return result
         else:
