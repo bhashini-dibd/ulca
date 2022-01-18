@@ -102,5 +102,13 @@ public class ModelControllerExceptionHandler {
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 	
+	@ExceptionHandler(FileExtensionNotSupportedException.class)
+	  public final ResponseEntity<Object> handleFileExtensionNotSupportedException(FileExtensionNotSupportedException ex, WebRequest request) {
+		
+		String errorCode = "File Extension Not Supported" ;
+		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
+	
 	
 }

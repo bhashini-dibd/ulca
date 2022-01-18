@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,8 +37,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.util.ModelConstants;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.exception.FileExtensionNotSupportedException;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.exception.ModelStatusChangeException;
 import com.ulca.model.exception.ModelValidationException;
@@ -51,6 +54,7 @@ import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 
+import io.swagger.model.ImageFormat;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
@@ -85,6 +89,9 @@ public class ModelService {
 	
 	@Autowired
 	WebClient.Builder builder;
+	
+	@Autowired
+	ModelConstants modelConstants;
 	
 
 	public ModelExtended modelSubmit(ModelExtended model) {
@@ -121,7 +128,7 @@ public class ModelService {
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
 	}
 
-	public ModelListResponseDto getModelDescription(String modelId) {
+	public ModelListResponseDto getModelByModelId(String modelId) {
 		log.info("******** Entry ModelService:: getModelDescription *******");
 		Optional<ModelExtended> result = modelDao.findById(modelId);
 
@@ -130,6 +137,9 @@ public class ModelService {
 			ModelExtended model = result.get();
 			ModelListResponseDto modelDto = new ModelListResponseDto();
 			BeanUtils.copyProperties(model, modelDto);
+			List<String> metricList = modelConstants.getMetricListByModelTask(model.getTask().getType().toString());
+			modelDto.setMetric(metricList);
+			
 			List<BenchmarkProcess> benchmarkProcess = benchmarkProcessDao.findByModelIdAndStatus(model.getModelId(), "Completed");
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			return modelDto;
@@ -168,8 +178,26 @@ public class ModelService {
 	}
 	
 	public String storeModelTryMeFile(MultipartFile file) throws Exception {
+		
 		// Normalize file name
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+		/*
+		 * check file extension
+		 */
+		String fileExtension = FilenameUtils.getExtension(fileName);
+		try {
+			ImageFormat imageformat = ImageFormat.fromValue(fileExtension);
+			if(imageformat == null && !fileExtension.equalsIgnoreCase("jpg")) {
+				log.info("Extension " + fileExtension + " not supported. It should be jpg/jpeg/bmp/png/tiff format");
+				throw new FileExtensionNotSupportedException("Extension " + fileExtension + " not supported. It should be jpeg/bmp/png/tiff format");
+			}
+		}catch(FileExtensionNotSupportedException ex) {
+			
+			throw new FileExtensionNotSupportedException("Extension " + fileExtension + " not supported. It should be jpg/jpeg/bmp/png/tiff format");
+			
+		}
+		
 		String uploadFolder = modelUploadFolder + "/model/tryme";
 		try {
 			// Check if the file's name contains invalid characters
@@ -201,7 +229,7 @@ public class ModelService {
 	public UploadModelResponse uploadModel(MultipartFile file, String userId) throws Exception {
 
 		String modelFilePath = storeModelFile(file);
-		ModelExtended modelObj = getModel(modelFilePath);
+		ModelExtended modelObj = getUploadedModel(modelFilePath);
 		
 		validateModel(modelObj);
 		
@@ -232,7 +260,7 @@ public class ModelService {
 
 	
 	
-	public ModelExtended getModel(String modelFilePath) {
+	public ModelExtended getUploadedModel(String modelFilePath) {
 
 		ModelExtended modelObj = null;
 		ObjectMapper objectMapper = new ObjectMapper();
