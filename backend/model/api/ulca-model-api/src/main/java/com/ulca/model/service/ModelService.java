@@ -188,13 +188,13 @@ public class ModelService {
 		String fileExtension = FilenameUtils.getExtension(fileName);
 		try {
 			ImageFormat imageformat = ImageFormat.fromValue(fileExtension);
-			if(imageformat == null) {
-				log.info("Extension " + fileExtension + " not supported. It should be jpeg/bmp/png/tiff format");
+			if(imageformat == null && !fileExtension.equalsIgnoreCase("jpg")) {
+				log.info("Extension " + fileExtension + " not supported. It should be jpg/jpeg/bmp/png/tiff format");
 				throw new FileExtensionNotSupportedException("Extension " + fileExtension + " not supported. It should be jpeg/bmp/png/tiff format");
 			}
 		}catch(FileExtensionNotSupportedException ex) {
 			
-			throw new FileExtensionNotSupportedException("Extension " + fileExtension + " not supported. It should be jpeg/bmp/png/tiff format");
+			throw new FileExtensionNotSupportedException("Extension " + fileExtension + " not supported. It should be jpg/jpeg/bmp/png/tiff format");
 			
 		}
 		
