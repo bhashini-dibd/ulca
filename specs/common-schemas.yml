@@ -331,6 +331,16 @@ components:
       - transgender
       - non-specified
       - others
+    Encoding:
+      type: string
+      description: encoding used for representing the input/output binary data
+      enum:
+      - base64
+      - base85
+      - base36
+      - base32
+      - ascii
+      - ascii85
     ProcessStage:
       type: string
       description: various life-cycle stage of model when benchmarking
