@@ -99,6 +99,7 @@ const localization_EN_Data = {
   "label.readymadeDataset": "Readymade Dataset",
   "button.convert": "Convert",
   "label.maxDuration": "Max duration: 1 min",
+  "label.maxCharacters": "Max characters: 150",
   "label.transcriptionNote":
     "Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.",
   "label.disclaimer": "Disclaimer : ",
