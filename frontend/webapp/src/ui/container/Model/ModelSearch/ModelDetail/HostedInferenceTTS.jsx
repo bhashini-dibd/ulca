@@ -45,7 +45,7 @@ const StyledMenu = withStyles({})((props) => (
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
-  const [gender, setGender] = useState("Male");
+  const [gender, setGender] = useState("Female");
   const [audio, setAudio] = useState(null);
   const history = useHistory();
   const [translation, setTranslationState] = useState(false);

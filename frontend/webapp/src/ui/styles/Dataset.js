@@ -443,6 +443,7 @@ const DataSet = (theme) => ({
   actionButtons: {
     marginBottom: "13px",
     float: "right",
+    marginRight: "20px",
   },
   translateCard: {
     padding: 0,
