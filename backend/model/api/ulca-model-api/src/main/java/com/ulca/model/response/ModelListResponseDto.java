@@ -18,6 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ModelListResponseDto extends ModelExtended {
 	
+	private List<String> metric;
 	List<BenchmarkProcess> benchmarkPerformance ;
 
 }

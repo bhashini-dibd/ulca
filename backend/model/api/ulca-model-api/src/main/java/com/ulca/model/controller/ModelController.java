@@ -54,7 +54,7 @@ public class ModelController {
 	public ModelListResponseDto getModel( @RequestParam(required = true) String modelId ) {
 		log.info("******** Entry ModelController:: getModel *******");
 
-		return modelService.getModelDescription(modelId);
+		return modelService.getModelByModelId(modelId);
 	}
 	
 	@PostMapping("/upload")
