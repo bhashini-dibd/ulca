@@ -3,6 +3,7 @@ package com.ulca.model.service;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.net.ssl.SSLException;
@@ -240,6 +241,43 @@ public class ModelInferenceEndPointService {
 			OCRResponse ocrResponse  = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
 			
 			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+			
+		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+			io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
+			
+			
+			TTSRequest request = ttsInference.getRequest();
+			
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder()
+			        .url(callBackUrl)
+			        .post(body)
+			        .build();
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			
+			String ttsResponseStr = httpResponse.body().string(); 
+			
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			TTSResponse ttsResponse  = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
+			
+			String encodedString = Base64.getEncoder().encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
+			response.setOutputText(encodedString);
 			
 		}
 		
