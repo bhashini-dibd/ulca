@@ -220,23 +220,34 @@ const HostedInference = (props) => {
           <Grid container className={classes.cardHeader}>
             <Grid
               item
-              xs={12}
-              sm={12}
-              md={12}
-              lg={12}
-              xl={12}
+              xs={8}
+              sm={8}
+              md={8}
+              lg={8}
+              xl={8}
               className={classes.headerContent}
             >
               <Typography variant="h6" className={classes.hosted}>
                 Input Text
               </Typography>
             </Grid>
+            <Grid
+              item
+              xs={3}
+              sm={3}
+              md={3}
+              lg={3}
+              xl={3}
+              className={classes.headerContent}
+            >
+              {renderGenderDropDown()}
+            </Grid>
           </Grid>
         </CardContent>
         <CardContent>
-          <Grid container>
+          {/* <Grid container>
             <Grid item>{renderGenderDropDown()}</Grid>
-          </Grid>
+          </Grid> */}
         </CardContent>
         <CardContent>
           <textarea
@@ -300,7 +311,7 @@ const HostedInference = (props) => {
           style={{
             display: "flex",
             justifyContent: "center",
-            padding:"8vh"
+            padding: "8vh",
           }}
         >
           {audio ? (
