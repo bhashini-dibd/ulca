@@ -1,7 +1,7 @@
 package io.swagger.model;
 
 import java.util.Objects;
-import io.swagger.model.ASRFile;
+import io.swagger.model.AudioFile;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +14,10 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "list of")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-10-08T06:58:56.160Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-01-20T07:00:55.103Z[GMT]")
 
 
-public class ASRFiles extends ArrayList<ASRFile>  {
+public class AudioFiles extends ArrayList<AudioFile>  {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -38,7 +38,7 @@ public class ASRFiles extends ArrayList<ASRFile>  {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ASRFiles {\n");
+    sb.append("class AudioFiles {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();
