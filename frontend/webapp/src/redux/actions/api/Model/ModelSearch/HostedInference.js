@@ -15,6 +15,7 @@ export default class HostedInference extends API {
     record,
     source,
     inferenceEndPoint,
+    gender,
     timeout = 2000
   ) {
     super("POST", timeout, false);
@@ -24,6 +25,7 @@ export default class HostedInference extends API {
     this.record = record;
     this.source = source;
     this.inferenceEndPoint = inferenceEndPoint;
+    this.gender = gender;
     this.endpoint = `${super.apiEndPointAuto()}${
       this.task === "asr" ? ENDPOINTS.hostedVoice : ENDPOINTS.hostedInference
     }`;
@@ -66,6 +68,9 @@ export default class HostedInference extends API {
       bodyData.imageUri = this.input;
       bodyData.source = this.source;
       bodyData.inferenceEndPoint = this.inferenceEndPoint;
+    } else if (this.task === "tts") {
+      bodyData.input = [{ source: this.input }];
+      bodyData.gender = this.gender;
     }
     bodyData.userId =
       localStorage.getItem("userDetails") &&
