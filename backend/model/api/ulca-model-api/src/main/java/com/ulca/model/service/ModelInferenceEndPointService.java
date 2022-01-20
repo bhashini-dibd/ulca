@@ -35,6 +35,7 @@ import io.swagger.model.OCRResponse;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.Sentence;
 import io.swagger.model.Sentences;
+import io.swagger.model.TTSConfig;
 import io.swagger.model.TTSRequest;
 import io.swagger.model.TTSResponse;
 import io.swagger.model.TranslationRequest;
@@ -258,7 +259,10 @@ public class ModelInferenceEndPointService {
 				sentences.add(sentense);
 			}
 			request.setInput(sentences);
-
+			TTSConfig config = request.getConfig();
+			config.setGender(compute.getGender());
+			request.setConfig(config);
+			
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
