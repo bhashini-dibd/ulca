@@ -14,6 +14,7 @@ import { MuiThemeProvider } from "@material-ui/core/styles";
 import { Grid, Typography, Button, Divider, Card } from "@material-ui/core";
 import HostedInferASR from "./HostedInferASR";
 import HostedInferOCR from "./HostedInferOCR";
+import HostedInferTTS from "./HostedInferenceTTS";
 import BenchmarkTable from "./BenchmarkTable";
 import { translate } from "../../../../../assets/localisation";
 import { StreamingClient } from "@project-sunbird/open-speech-streaming-client";
@@ -99,6 +100,15 @@ const SearchModelDetail = (props) => {
         case "ocr":
           return (
             <HostedInferOCR
+              task={task}
+              source={source}
+              inferenceEndPoint={inferenceEndPoint}
+              modelId={params.srno}
+            />
+          );
+        case "tts":
+          return (
+            <HostedInferTTS
               task={task}
               source={source}
               inferenceEndPoint={inferenceEndPoint}
