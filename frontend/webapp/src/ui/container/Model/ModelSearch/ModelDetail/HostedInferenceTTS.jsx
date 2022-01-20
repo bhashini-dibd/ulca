@@ -46,6 +46,7 @@ const StyledMenu = withStyles({})((props) => (
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
   const [gender, setGender] = useState("Male");
+  const [audio, setAudio] = useState(null);
   const history = useHistory();
   const [translation, setTranslationState] = useState(false);
   const [sourceText, setSourceText] = useState("");
@@ -73,8 +74,30 @@ const HostedInference = (props) => {
     setSourceText("");
     setTarget("");
   };
+
+  const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  };
+
   const handleCompute = () => {
     setLoading(true);
+    setAudio(null);
     const apiObj = new HostedInferenceAPI(
       modelId,
       sourceText,
@@ -94,7 +117,10 @@ const HostedInference = (props) => {
         setLoading(false);
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setTarget(rsp_data.outputText);
+            const blob = b64toBlob(rsp_data.outputText, "audio/wav");
+            console.log(blob);
+            const urlBlob = window.URL.createObjectURL(blob);
+            setAudio(urlBlob);
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
             setTranslationState(true);
           }
@@ -141,9 +167,7 @@ const HostedInference = (props) => {
           onClick={(e) => openEl(e.currentTarget)}
           variant="text"
         >
-          <Typography variant="body1">
-            {gender}
-          </Typography>
+          <Typography variant="body1">{gender}</Typography>
           <DownIcon />
         </Button>
         <StyledMenu
@@ -272,7 +296,21 @@ const HostedInference = (props) => {
             </Grid>
           </Grid>
         </CardContent>
-        <CardContent></CardContent>
+        <CardContent
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            padding:"8vh"
+          }}
+        >
+          {audio ? (
+            <audio controls>
+              <source src={audio}></source>
+            </audio>
+          ) : (
+            <></>
+          )}
+        </CardContent>
       </Card>
       {snackbar.open && (
         <Snackbar
