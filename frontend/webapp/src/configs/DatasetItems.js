@@ -2,7 +2,8 @@ export const DatasetItems = [
 
     { value: 'parallel-corpus', label: 'Parallel Dataset' },
     { value: 'monolingual-corpus', label: 'Monolingual Dataset' },
-    { value: 'asr-corpus', label: 'ASR / TTS Dataset' },
+    { value: 'asr-corpus', label: 'ASR Dataset' },
+    { value: 'tts-corpus', label: 'TTS Dataset' },
     { value: 'ocr-corpus', label: 'OCR Dataset' },
     { value: 'asr-unlabeled-corpus', label: 'ASR Unlabeled Dataset' },
 
