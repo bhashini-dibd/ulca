@@ -245,6 +245,7 @@ const HostedInference = (props) => {
           </Grid>
         </CardContent>
         <CardContent>
+            <Typography variant="caption">{translate("label.maxCharacters")}</Typography>
           {/* <Grid container>
             <Grid item>{renderGenderDropDown()}</Grid>
           </Grid> */}
