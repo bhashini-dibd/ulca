@@ -9,20 +9,20 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ASRFile
+ * AudioFile
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-01-20T07:00:55.103Z[GMT]")
 
 
-public class ASRFile   {
+public class AudioFile   {
   @JsonProperty("audioContent")
   private byte[] audioContent = null;
 
   @JsonProperty("audioUri")
   private String audioUri = null;
 
-  public ASRFile audioContent(byte[] audioContent) {
+  public AudioFile audioContent(byte[] audioContent) {
     this.audioContent = audioContent;
     return this;
   }
@@ -41,7 +41,7 @@ public class ASRFile   {
     this.audioContent = audioContent;
   }
 
-  public ASRFile audioUri(String audioUri) {
+  public AudioFile audioUri(String audioUri) {
     this.audioUri = audioUri;
     return this;
   }
@@ -69,9 +69,9 @@ public class ASRFile   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ASRFile asRFile = (ASRFile) o;
-    return Objects.equals(this.audioContent, asRFile.audioContent) &&
-        Objects.equals(this.audioUri, asRFile.audioUri);
+    AudioFile audioFile = (AudioFile) o;
+    return Objects.equals(this.audioContent, audioFile.audioContent) &&
+        Objects.equals(this.audioUri, audioFile.audioUri);
   }
 
   @Override
@@ -82,7 +82,7 @@ public class ASRFile   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ASRFile {\n");
+    sb.append("class AudioFile {\n");
     
     sb.append("    audioContent: ").append(toIndentedString(audioContent)).append("\n");
     sb.append("    audioUri: ").append(toIndentedString(audioUri)).append("\n");
