@@ -34,6 +34,8 @@ import io.swagger.model.OCRResponse;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import io.swagger.model.Sentence;
 import io.swagger.model.Sentences;
+import io.swagger.model.TTSRequest;
+import io.swagger.model.TTSResponse;
 import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -137,6 +139,31 @@ public class ModelInferenceEndPointService {
 
 			log.info("logging ocr inference point response" + responseJsonStr);
 		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+			io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
+			TTSRequest request = ttsInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder()
+			        .url(callBackUrl)
+			        .post(body)
+			        .build();
+			
+			Response httpResponse = client.newCall(httpRequest).execute();
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			String responseJsonStr = httpResponse.body().string();
+			TTSResponse response = objectMapper.readValue(responseJsonStr, TTSResponse.class);
+			ttsInference.setResponse(response);
+			schema = ttsInference;
+
+			log.info("logging tts inference point response" + responseJsonStr);
+		}
+		
 	
 
 		return schema;
