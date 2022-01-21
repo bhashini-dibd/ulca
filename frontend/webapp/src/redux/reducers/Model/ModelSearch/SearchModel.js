@@ -1,9 +1,6 @@
 import C from "../../../actions/constants";
-import getDatasetName from "../../../../utils/getDataset";
 import {
   getLanguageName,
-  FilterByDomain,
-  FilterByCollection,
 } from "../../../../utils/getLabel";
 
 const initialState = {
@@ -110,9 +107,7 @@ const getContributionList = (state, payload) => {
   let submitterFilter = [];
   let domainFilter = [];
   let filter = { language: [], domainFilter: [], submitter: [] };
-  let refreshStatus = false;
   payload.forEach((element) => {
-    console.log(element);
     let sLanguage =
       element.languages.length > 0 &&
       element.languages[0].sourceLanguage &&
