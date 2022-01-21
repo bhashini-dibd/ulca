@@ -31,7 +31,7 @@ const SearchModelDetail = (props) => {
   const location = useLocation();
   const params = useParams();
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.getModelDetails.result);
+  const data = useSelector((state) => state.getModelDetails);
   const {
     modelName,
     task,
@@ -57,7 +57,8 @@ const SearchModelDetail = (props) => {
   //   };
   // }, []);
 
-  const description = data;
+  const description = data.result;
+
   const [prevUrl, setUrl] = useState(
     location.state ? location.state.prevUrl : "explore-models"
   );

@@ -40,6 +40,7 @@ const reducer = (state = initialState, action) => {
       const source = action.payload["languages"][0]["sourceLanguage"];
       return {
         result: getModelDetails(action.payload),
+        description: action.payload.description,
         modelName: `${action.payload.name} ${action.payload.version}`,
         task: action.payload["task"]["type"],
         source: action.payload["languages"][0]["sourceLanguage"],
