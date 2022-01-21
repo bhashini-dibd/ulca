@@ -8,6 +8,7 @@ import io.swagger.model.AudioBitsPerSample;
 import io.swagger.model.AudioChannel;
 import io.swagger.model.AudioFormat;
 import io.swagger.model.Domain;
+import io.swagger.model.Encoding;
 import io.swagger.model.LanguagePair;
 import io.swagger.model.TranscriptionFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,13 +18,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /**
- * ASRConfig
+ * AudioConfig
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-01-20T07:00:55.103Z[GMT]")
 
 
-public class ASRConfig   {
+public class AudioConfig   {
   @JsonProperty("modelId")
   private String modelId = null;
 
@@ -94,7 +95,10 @@ public class ASRConfig   {
   @JsonProperty("model")
   private ModelEnum model = null;
 
-  public ASRConfig modelId(String modelId) {
+  @JsonProperty("encoding")
+  private Encoding encoding = null;
+
+  public AudioConfig modelId(String modelId) {
     this.modelId = modelId;
     return this;
   }
@@ -113,7 +117,7 @@ public class ASRConfig   {
     this.modelId = modelId;
   }
 
-  public ASRConfig language(LanguagePair language) {
+  public AudioConfig language(LanguagePair language) {
     this.language = language;
     return this;
   }
@@ -134,7 +138,7 @@ public class ASRConfig   {
     this.language = language;
   }
 
-  public ASRConfig audioFormat(AudioFormat audioFormat) {
+  public AudioConfig audioFormat(AudioFormat audioFormat) {
     this.audioFormat = audioFormat;
     return this;
   }
@@ -143,8 +147,9 @@ public class ASRConfig   {
    * Get audioFormat
    * @return audioFormat
    **/
-  @Schema(description = "")
-  
+  @Schema(required = true, description = "")
+      @NotNull
+
     @Valid
     public AudioFormat getAudioFormat() {
     return audioFormat;
@@ -154,7 +159,7 @@ public class ASRConfig   {
     this.audioFormat = audioFormat;
   }
 
-  public ASRConfig channel(AudioChannel channel) {
+  public AudioConfig channel(AudioChannel channel) {
     this.channel = channel;
     return this;
   }
@@ -174,16 +179,16 @@ public class ASRConfig   {
     this.channel = channel;
   }
 
-  public ASRConfig samplingRate(BigDecimal samplingRate) {
+  public AudioConfig samplingRate(BigDecimal samplingRate) {
     this.samplingRate = samplingRate;
     return this;
   }
 
   /**
-   * Get samplingRate
+   * sample rate of the audio file in kHz
    * @return samplingRate
    **/
-  @Schema(description = "")
+  @Schema(example = "44", description = "sample rate of the audio file in kHz")
   
     @Valid
     public BigDecimal getSamplingRate() {
@@ -194,7 +199,7 @@ public class ASRConfig   {
     this.samplingRate = samplingRate;
   }
 
-  public ASRConfig bitsPerSample(AudioBitsPerSample bitsPerSample) {
+  public AudioConfig bitsPerSample(AudioBitsPerSample bitsPerSample) {
     this.bitsPerSample = bitsPerSample;
     return this;
   }
@@ -214,7 +219,7 @@ public class ASRConfig   {
     this.bitsPerSample = bitsPerSample;
   }
 
-  public ASRConfig transcriptionFormat(TranscriptionFormat transcriptionFormat) {
+  public AudioConfig transcriptionFormat(TranscriptionFormat transcriptionFormat) {
     this.transcriptionFormat = transcriptionFormat;
     return this;
   }
@@ -234,7 +239,7 @@ public class ASRConfig   {
     this.transcriptionFormat = transcriptionFormat;
   }
 
-  public ASRConfig profanityFilter(Boolean profanityFilter) {
+  public AudioConfig profanityFilter(Boolean profanityFilter) {
     this.profanityFilter = profanityFilter;
     return this;
   }
@@ -253,7 +258,7 @@ public class ASRConfig   {
     this.profanityFilter = profanityFilter;
   }
 
-  public ASRConfig domain(Domain domain) {
+  public AudioConfig domain(Domain domain) {
     this.domain = domain;
     return this;
   }
@@ -273,7 +278,7 @@ public class ASRConfig   {
     this.domain = domain;
   }
 
-  public ASRConfig detailed(Boolean detailed) {
+  public AudioConfig detailed(Boolean detailed) {
     this.detailed = detailed;
     return this;
   }
@@ -292,7 +297,7 @@ public class ASRConfig   {
     this.detailed = detailed;
   }
 
-  public ASRConfig punctuation(Boolean punctuation) {
+  public AudioConfig punctuation(Boolean punctuation) {
     this.punctuation = punctuation;
     return this;
   }
@@ -311,7 +316,7 @@ public class ASRConfig   {
     this.punctuation = punctuation;
   }
 
-  public ASRConfig model(ModelEnum model) {
+  public AudioConfig model(ModelEnum model) {
     this.model = model;
     return this;
   }
@@ -330,6 +335,26 @@ public class ASRConfig   {
     this.model = model;
   }
 
+  public AudioConfig encoding(Encoding encoding) {
+    this.encoding = encoding;
+    return this;
+  }
+
+  /**
+   * Get encoding
+   * @return encoding
+   **/
+  @Schema(description = "")
+  
+    @Valid
+    public Encoding getEncoding() {
+    return encoding;
+  }
+
+  public void setEncoding(Encoding encoding) {
+    this.encoding = encoding;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -339,30 +364,31 @@ public class ASRConfig   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ASRConfig asRConfig = (ASRConfig) o;
-    return Objects.equals(this.modelId, asRConfig.modelId) &&
-        Objects.equals(this.language, asRConfig.language) &&
-        Objects.equals(this.audioFormat, asRConfig.audioFormat) &&
-        Objects.equals(this.channel, asRConfig.channel) &&
-        Objects.equals(this.samplingRate, asRConfig.samplingRate) &&
-        Objects.equals(this.bitsPerSample, asRConfig.bitsPerSample) &&
-        Objects.equals(this.transcriptionFormat, asRConfig.transcriptionFormat) &&
-        Objects.equals(this.profanityFilter, asRConfig.profanityFilter) &&
-        Objects.equals(this.domain, asRConfig.domain) &&
-        Objects.equals(this.detailed, asRConfig.detailed) &&
-        Objects.equals(this.punctuation, asRConfig.punctuation) &&
-        Objects.equals(this.model, asRConfig.model);
+    AudioConfig audioConfig = (AudioConfig) o;
+    return Objects.equals(this.modelId, audioConfig.modelId) &&
+        Objects.equals(this.language, audioConfig.language) &&
+        Objects.equals(this.audioFormat, audioConfig.audioFormat) &&
+        Objects.equals(this.channel, audioConfig.channel) &&
+        Objects.equals(this.samplingRate, audioConfig.samplingRate) &&
+        Objects.equals(this.bitsPerSample, audioConfig.bitsPerSample) &&
+        Objects.equals(this.transcriptionFormat, audioConfig.transcriptionFormat) &&
+        Objects.equals(this.profanityFilter, audioConfig.profanityFilter) &&
+        Objects.equals(this.domain, audioConfig.domain) &&
+        Objects.equals(this.detailed, audioConfig.detailed) &&
+        Objects.equals(this.punctuation, audioConfig.punctuation) &&
+        Objects.equals(this.model, audioConfig.model) &&
+        Objects.equals(this.encoding, audioConfig.encoding);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, profanityFilter, domain, detailed, punctuation, model);
+    return Objects.hash(modelId, language, audioFormat, channel, samplingRate, bitsPerSample, transcriptionFormat, profanityFilter, domain, detailed, punctuation, model, encoding);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ASRConfig {\n");
+    sb.append("class AudioConfig {\n");
     
     sb.append("    modelId: ").append(toIndentedString(modelId)).append("\n");
     sb.append("    language: ").append(toIndentedString(language)).append("\n");
@@ -376,6 +402,7 @@ public class ASRConfig   {
     sb.append("    detailed: ").append(toIndentedString(detailed)).append("\n");
     sb.append("    punctuation: ").append(toIndentedString(punctuation)).append("\n");
     sb.append("    model: ").append(toIndentedString(model)).append("\n");
+    sb.append("    encoding: ").append(toIndentedString(encoding)).append("\n");
     sb.append("}");
     return sb.toString();
   }
