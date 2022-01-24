@@ -1,21 +1,8 @@
-import { withStyles, Link, Button } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { withStyles } from "@material-ui/core";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import DataSet from "../../../../styles/Dataset";
-import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import MUIDataTable from "mui-datatables";
-import BenchmarkTableAPI from "../../../../../redux/actions/api/Model/ModelSearch/BenchmarkTable";
-// import { PageChange, RowChange, FilterTable, clearFilter, tableView } from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction"
-// import ClearReport from "../../../../redux/actions/api/DataSet/DatasetView/DatasetAction";
-// import Dialog from "../../../components/common/Dialog"
-// import { Cached, DeleteOutline, VerticalAlignTop, GridOn, List } from '@material-ui/icons';
-// import UrlConfig from '../../../../configs/internalurlmapping';
-import { useParams } from "react-router";
-// import C from "../../../../redux/actions/constants";
-// import FilterListIcon from '@material-ui/icons/FilterList';
-// import FilterList from "./FilterList";
-// import GridView from "./GridView";
 
 const BenchmarkTable = (props) => {
   const history = useHistory();
@@ -112,23 +99,11 @@ const BenchmarkTable = (props) => {
     selectableRows: "none",
   };
 
-  const { classes } = props;
-  const dispatch = useDispatch();
-  const data = useSelector(
-    (state) => state.benchmarkTableDetails.benchmarkPerformance
-  );
-  useEffect(() => {
-    const APIObj = new BenchmarkTableAPI(props.modelId);
-    dispatch(APITransport(APIObj));
-  }, []);
-  return (
-    <MUIDataTable
-      title={`Benchmark Details`}
-      data={data}
-      columns={columns}
-      options={options}
-    />
-  );
+  const { classes, data } = props;
+
+  console.log(data);
+
+  return <MUIDataTable data={data} columns={columns} options={options} />;
 };
 
 export default withStyles(DataSet)(BenchmarkTable);
