@@ -99,9 +99,7 @@ const BenchmarkTable = (props) => {
     selectableRows: "none",
   };
 
-  const { classes, data } = props;
-
-  console.log(data);
+  const { data } = props;
 
   return <MUIDataTable data={data} columns={columns} options={options} />;
 };

@@ -318,6 +318,11 @@ const SearchModelDetail = (props) => {
                     width: 500,
                   }}
                 >
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Typography style={{ marginTop: "3%" }} variant="h5">
+                      Benchmarkings
+                    </Typography>
+                  </Grid>
                   <AppBar
                     color="transparent"
                     style={{ border: "none" }}
