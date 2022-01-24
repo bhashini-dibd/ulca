@@ -145,6 +145,9 @@ const themeDefault = createMuiTheme({
       label: {
         fontFamily: '"Roboto" ,sans-serif',
         fontSize: "0.875rem",
+        "@media (max-width:640px)": {
+          fontSize: "10px",
+        },
       },
     },
 
