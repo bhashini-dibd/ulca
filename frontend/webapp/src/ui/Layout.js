@@ -1,15 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 
 import { useSelector } from "react-redux";
 
 import { useHistory } from "react-router-dom";
-import Header from "./components/common/Header";
-import Footer from "./components/common/Footer";
+// import Header from "./components/common/Header";
+// import Footer from "./components/common/Footer";
 import Theme from "./theme/theme-default";
 import { withStyles, MuiThemeProvider } from "@material-ui/core/styles";
 import GlobalStyles from "./styles/Styles";
 import Spinner from "./components/common/Spinner";
 import Snackbar from "./components/common/Snackbar";
+
+const Header = React.lazy(() => import("./components/common/Header"));
+const Footer = React.lazy(() => import("./components/common/Footer"));
 
 function App(props) {
   const Component = props.component;
@@ -23,7 +26,6 @@ function App(props) {
       return <Spinner />;
     }
   };
-  
 
   const handleClose = () => {
     setPopup(false);
@@ -52,13 +54,23 @@ function App(props) {
   return (
     <MuiThemeProvider theme={Theme}>
       <div className={classes.root}>
-        <Header type={type} index={index} className={classes.headerContainer} />
+        <Suspense fallback={<div>Loading....</div>}>
+          <Header
+            type={type}
+            index={index}
+            className={classes.headerContainer}
+          />
+        </Suspense>
         <div className={classes.container}>
           {renderSpinner()}
           {renderError()}
-          <Component />
+          <Suspense fallback={<div>Loading....</div>}>
+            <Component />
+          </Suspense>
         </div>
-        <Footer />
+        <Suspense fallback={<div>Loading....</div>}>
+          <Footer />
+        </Suspense>
       </div>
     </MuiThemeProvider>
   );

@@ -1,15 +1,17 @@
+import BlueCard from "../../assets/card.svg";
+import GreenCard from "../../assets/card2.svg";
+
 const GlobalStyles = (theme) => ({
   container: {
-
     maxWidth: "1272px",
     width: "100%",
     margin: "2rem auto",
     // background: theme.palette.background.default,
-    fontFamily: theme.typography.fontFamily
+    fontFamily: theme.typography.fontFamily,
   },
 
   headerContainer: {
-    height: "70px"
+    height: "70px",
   },
   root: {
     // background: "#F8F8F8",
@@ -19,7 +21,7 @@ const GlobalStyles = (theme) => ({
     position: "relative",
     minHeight: "720px",
     display: "flex",
-    flexDirection:"column"
+    flexDirection: "column",
   },
   appBar: {
     backgroundColor: theme.palette.primary.dark,
@@ -31,35 +33,42 @@ const GlobalStyles = (theme) => ({
   },
 
   typeTypo: {
-    color: 'black',
+    color: "black",
     backgroundColor: "#FFD981",
-    borderRadius: '24px',
-    padding: '5px 10px',
-    width: 'fit-content',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    borderRadius: "24px",
+    padding: "5px 10px",
+    width: "fit-content",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   card: {
-    marginBottom: '20px', height: '270px'
+    marginBottom: "20px",
+    height: "270px",
+    background: `url(${BlueCard})`,
+    backgroundRepeat: "no-repeat",
+  },
+  card2: {
+    marginBottom: "20px",
+    height: "270px",
+    background: `url(${GreenCard})`,
+    backgroundRepeat: "no-repeat",
   },
   cardGrid: {
-    marginTop: '20px'
+    marginTop: "20px",
   },
   modelname: {
-    boxSizing:'border-box',
-    marginTop: '15px',
-    height: '64px',
-    backgroundColor: 'white',
-    maxWidth: '350px',
-    width: 'auto',
-    display: 'flex',
-    alignItems: 'center',
-    padding: '0 15px',
-    borderRadius: '12px'
-  }
-
-
+    boxSizing: "border-box",
+    marginTop: "15px",
+    height: "64px",
+    backgroundColor: "white",
+    maxWidth: "350px",
+    width: "auto",
+    display: "flex",
+    alignItems: "center",
+    padding: "0 15px",
+    borderRadius: "12px",
+  },
 });
 
 export default GlobalStyles;
