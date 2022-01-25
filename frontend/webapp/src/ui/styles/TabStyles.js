@@ -47,6 +47,7 @@ const styles = (theme) => ({
     alignItems: "flex-end",
     "@media (max-width:750px)": {
       justifyContent: "flex-start",
+      marginBottom: "1%",
     },
   },
   iconStyle: { marginRight: ".5rem" },

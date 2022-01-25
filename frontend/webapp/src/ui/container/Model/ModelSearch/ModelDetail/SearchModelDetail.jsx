@@ -7,11 +7,20 @@ import HostedInference from "./HostedInference";
 import { useLocation } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import Header from "../../../../components/common/Header";
-import AudioRecord from "./VoiceRecorder";
 import Footer from "../../../../components/common/Footer";
 import Theme from "../../../../theme/theme-default";
 import { MuiThemeProvider } from "@material-ui/core/styles";
-import { Grid, Typography, Button, Divider, Card } from "@material-ui/core";
+import BenchmarkTableAPI from "../../../../../redux/actions/api/Model/ModelSearch/BenchmarkTable";
+import {
+  Grid,
+  Typography,
+  Button,
+  Tabs,
+  Tab,
+  AppBar,
+  Box,
+  Card,
+} from "@material-ui/core";
 import HostedInferASR from "./HostedInferASR";
 import HostedInferOCR from "./HostedInferOCR";
 import HostedInferTTS from "./HostedInferenceTTS";
@@ -21,11 +30,40 @@ import { StreamingClient } from "@project-sunbird/open-speech-streaming-client";
 import GetModelDetails from "../../../../../redux/actions/api/Model/ModelSearch/GetModelDetails";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`full-width-tabpanel-${index}`}
+      aria-labelledby={`full-width-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
 
 const SearchModelDetail = (props) => {
   const { classes } = props;
   const history = useHistory();
-  // const [data, setData] = useState("");
+  const [value, setValue] = React.useState(0);
+  const [index, setIndex] = useState(0);
+  const [metric, setMetric] = useState("");
   const [modelTry, setModelTry] = useState(false);
   const [streaming, setStreaming] = useState(new StreamingClient());
   const location = useLocation();
@@ -42,20 +80,23 @@ const SearchModelDetail = (props) => {
     target,
   } = useSelector((state) => state.getModelDetails);
 
-  // useEffect(() => {
-  //   if (location) setData(location.state);
-  // }, [location]);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const { benchmarkPerformance, metricArray } = useSelector(
+    (state) => state.benchmarkTableDetails
+  );
+
+  useEffect(() => {
+    const APIObj = new BenchmarkTableAPI(params.srno);
+    dispatch(APITransport(APIObj));
+  }, []);
 
   useEffect(() => {
     const obj = new GetModelDetails(params.srno);
     dispatch(APITransport(obj));
   }, []);
-
-  // useEffect(() => {
-  //   return () => {
-  //     streaming.disconnect();
-  //   };
-  // }, []);
 
   const description = data.result;
 
@@ -81,6 +122,11 @@ const SearchModelDetail = (props) => {
       pathname: `${process.env.PUBLIC_URL}/search-model/${params.srno}/model`,
       state: data,
     });
+  };
+
+  const handleIndexChange = (metric) => {
+    setIndex(metricArray.indexOf(metric));
+    setMetric(metric);
   };
 
   const renderHostedInfer = (task) => {
@@ -266,7 +312,46 @@ const SearchModelDetail = (props) => {
                 </Grid>
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <BenchmarkTable modelId={params.srno} />
+                <Box
+                  sx={{
+                    bgcolor: "background.paper",
+                    width: 500,
+                  }}
+                >
+                  <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                    <Typography style={{ marginTop: "3%" }} variant="h5">
+                      Benchmarkings
+                    </Typography>
+                  </Grid>
+                  <AppBar
+                    color="transparent"
+                    style={{ border: "none" }}
+                    position="static"
+                  >
+                    <Tabs
+                      value={value}
+                      onChange={handleChange}
+                      variant="scrollable"
+                      scrollButtons={false}
+                      aria-label="scrollable prevent tabs example"
+                    >
+                      {metricArray.map((metric) => (
+                        <Tab
+                          label={metric}
+                          onClick={() => handleIndexChange(metric)}
+                        />
+                      ))}
+                    </Tabs>
+                  </AppBar>
+                  <TabPanel value={value} index={index}>
+                    <BenchmarkTable
+                      modelId={params.srno}
+                      data={benchmarkPerformance.filter(
+                        (benchmark) => benchmark.metric === metricArray[index]
+                      )}
+                    />
+                  </TabPanel>
+                </Box>
               </Grid>
             </Grid>
           )}

@@ -2,6 +2,7 @@ import C from "../../../actions/constants";
 
 const initialState = {
   benchmarkPerformance: [],
+  metricArray: [],
 };
 
 const updateDate = (data) => {
@@ -16,6 +17,7 @@ const getBenchmarkTableDetails = (data) => {
     data.benchmarkPerformance = updateDate(data.benchmarkPerformance);
     return {
       benchmarkPerformance: data.benchmarkPerformance,
+      metricArray:data.metric
     };
   }
 };

@@ -145,6 +145,9 @@ const themeDefault = createMuiTheme({
       label: {
         fontFamily: '"Roboto" ,sans-serif',
         fontSize: "0.875rem",
+        "@media (max-width:640px)": {
+          fontSize: "10px",
+        },
       },
     },
 
@@ -165,6 +168,9 @@ const themeDefault = createMuiTheme({
         letterSpacing: "0.16px",
         textAlign: "center",
         height: "19px",
+        "@media (max-width:640px)": {
+          fontSize: "14px",
+        },
       },
       sizeLarge: {
         height: "40px",
@@ -275,7 +281,7 @@ themeDefault.typography.h4 = {
   fontFamily: '"Rowdies", cursive,"Roboto" ,sans-serif',
   fontWeight: "300",
   "@media (max-width:550px)": {
-    fontSize: "1rem",
+    fontSize: "0.9rem",
   },
 };
 themeDefault.typography.h5 = {

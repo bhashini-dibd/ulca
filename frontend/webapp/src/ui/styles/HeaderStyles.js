@@ -1,114 +1,120 @@
 const HeaderStyles = (theme) => ({
-
   toolbar: {
     minHeight: "54px",
     maxWidth: "1272px",
     width: "98%",
     margin: "0 auto",
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
     padding: "0",
-    boxSizing: "border-box"
+    boxSizing: "border-box",
   },
   appBar: {
-    boxSizing: "border-box"
+    boxSizing: "border-box",
   },
   title: {
-    color: 'white',
+    color: "white",
     marginLeft: "-6px",
     "@media (max-width:670px)": {
-      display: 'none'
+      display: "none",
     },
   },
   alignItems: {
-    display: 'flex',
-    alignItems: 'center',
+    display: "flex",
+    alignItems: "center",
   },
   iconButton: {
-    color: 'black',
+    color: "black",
     borderRadius: 0,
-    maxHeight: '100%'
+    maxHeight: "100%",
   },
   menu: {
-    width: '100%',
-    display: 'flex',
+    width: "100%",
+    display: "flex",
     alignItems: "center",
-    cursor: "pointer"
+    cursor: "pointer",
   },
   datasetOption: {
-    marginLeft: '8.4%',
+    marginLeft: "8.4%",
     "@media (max-width:670px)": {
-      marginLeft: '2%'
-    }
+      marginLeft: "2%",
+    },
   },
   options: {
-    marginLeft: '1.875%',
+    marginLeft: "1.875%",
     "@media (max-width:670px)": {
-      marginLeft: '2%'
-    }
+      marginLeft: "2%",
+    },
   },
   profile: {
-    marginLeft: 'auto',
+    marginLeft: "auto",
     // marginRight: '-1%'
   },
   menuBtn: {
     height: "54px",
     minWidth: "110px",
+    "@media (max-width:670px)": {
+      minWidth: "50px",
+      fontSize: "10px !important",
+    },
     // color: 'white'
   },
   menuBtn2: {
     height: "37px",
     width: "88px",
     marginRight: "10px",
-    backgroundColor: 'white',
+    backgroundColor: "white",
     "&:hover": {
-
-      backgroundColor: 'white',
-    }
+      backgroundColor: "white",
+    },
   },
   styledMenu: {
     padding: "9px",
     marginTop: "5px",
     "&:hover": {
-      color: '#2C2799',
-      backgroundColor: " rgba(44,39,153, .05)"
-    }
+      color: "#2C2799",
+      backgroundColor: " rgba(44,39,153, .05)",
+    },
   },
   styledMenu1: {
     padding: "9px",
     marginTop: "10px",
-    boxShadow: "0px 3px 6px #00000029 !important"
+    boxShadow: "0px 3px 6px #00000029 !important",
   },
   profileName: {
-    marginLeft: '0.5rem',
+    marginLeft: "0.5rem",
     "@media (max-width:800px)": {
-      display: 'none'
+      display: "none",
     },
   },
   homeBtn: {
-    display: 'none',
+    display: "none",
     "@media (max-width:425px)": {
-      display: 'block'
-    }
+      display: "block",
+    },
   },
   avatar: {
     width: "36px",
     height: "36px",
     backgroundColor: "#2A61AD",
     fontSize: "14px",
-    color: "#FFFFFF"
+    color: "#FFFFFF",
+    "@media (max-width:640px)": {
+      width: "26px",
+      height: "26px",
+    },
   },
 
   dataset: {
     "@media (max-width:425px)": {
-      display: 'none'
-    }
+      display: "none",
+    },
   },
   datasetMobile: {
-    display: 'none',
+    display: "none",
     "@media (max-width:425px)": {
-      display: 'block'
-    }
+      display: "block",
+    },
   },
   // model: {
   //   "@media (max-width:425px)": {
@@ -116,67 +122,63 @@ const HeaderStyles = (theme) => ({
   //   }
   // },
   modelMobile: {
-    display: 'none',
+    display: "none",
     "@media (max-width:425px)": {
-      display: 'block'
-    }
+      display: "block",
+    },
   },
   signIn: {
-
-    color: 'white'
+    color: "white",
   },
   signUp: {
-
-    color: 'white'
+    color: "white",
   },
   desktopAuth: {
     "@media (max-width:400px)": {
-      display: 'none'
-    }
+      display: "none",
+    },
   },
   mobileAuth: {
-    display: 'none',
+    display: "none",
     "@media (max-width:400px)": {
-      display: 'block'
-    }
+      display: "block",
+    },
   },
   selectGrid: {
-    boxShadow: '3px 0 2px -2px #00000029',
-    height: '54px',
-    alignContent: 'center',
-    display: 'grid'
+    boxShadow: "3px 0 2px -2px #00000029",
+    height: "54px",
+    alignContent: "center",
+    display: "grid",
   },
   toolGrid: {
-    alignItems: 'center'
+    alignItems: "center",
   },
   tempGrid: {
-    paddingLeft: '1rem',
-    boxShadow: '3px 0 2px -2px #00000029',
-    height: '54px',
-    alignContent: 'center',
-    display: 'grid'
+    paddingLeft: "1rem",
+    boxShadow: "3px 0 2px -2px #00000029",
+    height: "54px",
+    alignContent: "center",
+    display: "grid",
   },
   bhashiniLogo: {
-    paddingRight: '12px',
+    paddingRight: "12px",
     boxShadow: "3px 0 2px -2px #00000029",
-    marginRight: '14px',
-    display: 'block',
+    marginRight: "14px",
+    display: "block",
     "@media (max-width:670px)": {
-      width:'100px'
-    }
+      width: "100px",
+    },
   },
 
-
   btnStyle: {
-    padding: '0px',
-    justifyContent: 'left',
+    padding: "0px",
+    justifyContent: "left",
     fontSize: "1.125rem",
     // fontFamily: '"Poppins","lato" ,sans-serif',
     fontWeight: "500 !important",
     "&:hover": {
-
-      backgroundColor: 'white',
-    }
+      backgroundColor: "white",
+    },
   },
 });
 export default HeaderStyles;
