@@ -74,6 +74,7 @@ def firefox_driver_func():
         print("#using Mozilla Firefox")
     except Exception:
         print("#Browser not working - Mozilla Firefox")
+        print(Exception)
         driver = None
     return driver
 
