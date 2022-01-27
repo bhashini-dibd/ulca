@@ -13,7 +13,7 @@ stage('compress build folder')
 withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
 {
 sh '''
-cd frontend/webapp
+cd frontend/main/webapp
 if [ -f "$(pwd)/build" ]
 then
   sudo rm -rf $(pwd)/build
