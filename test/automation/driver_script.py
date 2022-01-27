@@ -43,6 +43,7 @@ def chrome_driver_func():
         print("#Using Google Chrome")
     except Exception:
         print("#Browser not working - Google Chrome")
+        print(Exception)
         driver = None
     return driver
 
