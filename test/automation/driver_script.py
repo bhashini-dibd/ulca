@@ -41,9 +41,9 @@ def chrome_driver_func():
         options.add_experimental_option("prefs", prefs)
         driver = webdriver.Chrome(config.CHROME_DRIVER_PATH, options=options)
         print("#Using Google Chrome")
-    except Exception:
+    except Exception as e:
         print("#Browser not working - Google Chrome")
-        print(Exception)
+        print(e)
         driver = None
     return driver
 
