@@ -23,7 +23,7 @@ const SpeechToSpeechFilter = (props) => {
     );
   };
   return (
-    <Grid container spacing={5} style={{ marginTop: "5%" }}>
+    <Grid container spacing={5}>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         {renderSingleAutoComplete(
           filter.src,

@@ -3,7 +3,7 @@ export const ModelTask = [
   { value: "asr", label: "ASR" },
   { value: "tts", label: "TTS" },
   { value: "ocr", label: "OCR" },
-  { value: 'sts', label: 'Speech To Speech' }
+  { value: 'sts', label: 'STS' }
 ];
 export const DatasetItems = [
   { value: "parallel-corpus", label: "Parallel Dataset" },
