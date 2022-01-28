@@ -204,7 +204,19 @@ const ContributionList = (props) => {
         <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
           <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
+          <Button
+            color={"default"}
+            size="small"
+            variant="outlined"
+            className={classes.ButtonRefreshMobile}
+            onClick={handleShowFilter}
+          >
+            {" "}
+            <FilterListIcon className={classes.iconStyle} />
+          </Button>
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGrid}>
           <Button
             color={"default"}
             size="medium"
@@ -217,7 +229,7 @@ const ContributionList = (props) => {
             {translate("button.filter")}
           </Button>
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGrid}>
           <Button
             color={"primary"}
             size="medium"
@@ -229,6 +241,17 @@ const ContributionList = (props) => {
             {translate("button.refresh")}
           </Button>
         </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
+          <Button
+            color={"primary"}
+            size="small"
+            variant="outlined"
+            className={classes.ButtonRefreshMobile}
+            onClick={() => MyContributionListApi()}
+          >
+            <Cached className={classes.iconStyle} />
+          </Button>
+        </Grid>
       </Grid>
     );
   };
@@ -236,7 +259,7 @@ const ContributionList = (props) => {
     // history.push(`${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${id}`)
   };
 
-  const handleDialogSubmit = () => {};
+  const handleDialogSubmit = () => { };
 
   const processTableClickedNextOrPrevious = (sortOrder, page) => {
     window.scrollTo(0, 0);
@@ -422,8 +445,8 @@ const ContributionList = (props) => {
               className={classes.benchmarkActionButtons}
               disabled={
                 status === "failed" ||
-                status === "In Progress" ||
-                isDisabled(benchmarkPerformance)
+                  status === "In Progress" ||
+                  isDisabled(benchmarkPerformance)
                   ? true
                   : false
               }
@@ -484,14 +507,12 @@ const ContributionList = (props) => {
     const { status, modelId } = modelStatusInfo;
     return (
       <Dialog
-        title={`${
-          status === "published" ? "Unpublish Model" : "Publish Model"
-        }`}
-        message={`${
-          status === "published"
+        title={`${status === "published" ? "Unpublish Model" : "Publish Model"
+          }`}
+        message={`${status === "published"
             ? "After the model is unpublished, it will not be available for public use. Are you sure you want to unpublish the model?"
             : "After the model is published, it will be available for public use. Are you sure you want to publish the model?"
-        }`}
+          }`}
         handleSubmit={() => toggleModelStatusAPI(modelId, status)}
         handleClose={handleDialogClose}
         actionButton="Cancel"
