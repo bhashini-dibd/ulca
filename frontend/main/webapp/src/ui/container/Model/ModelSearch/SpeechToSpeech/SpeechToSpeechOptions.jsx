@@ -10,11 +10,12 @@ import {
 import { withStyles } from "@material-ui/styles";
 import { translate } from "../../../../../assets/localisation";
 import DatasetStyle from "../../../../styles/Dataset";
+import MyAccordion from "../../../../components/common/Accordion";
 
 const SpeechToSpeechOptions = (props) => {
   const {
     classes,
-    target,
+    audio,
     recordAudio,
     AudioReactRecorder,
     Stop,
@@ -29,11 +30,21 @@ const SpeechToSpeechOptions = (props) => {
     handleSubmit,
     setUrl,
     setError,
+    output,
   } = props;
   const renderVoiceRecorder = () => {
     return (
       <Card className={classes.asrCard}>
+        <Grid container className={classes.cardHeader}>
+          <Typography variant="h6" className={classes.titleCard}>
+            {/* {translate("label.notes")} */}
+            Live Recording Inference
+          </Typography>
+        </Grid>
         <CardContent>
+          <Typography variant={"caption"}>
+            {translate("label.maxDuration")}
+          </Typography>
           {recordAudio === "start" ? (
             <div className={classes.center}>
               <img
@@ -48,7 +59,7 @@ const SpeechToSpeechOptions = (props) => {
               <img
                 src={Start}
                 alt=""
-                onClick={() => handleStartRecording()}
+                onClick={handleStartRecording}
                 style={{ cursor: "pointer" }}
               />{" "}
             </div>
@@ -69,7 +80,7 @@ const SpeechToSpeechOptions = (props) => {
             {data ? (
               <audio src={data} controls id="sample"></audio>
             ) : (
-              <audio src={"test"} controls id="sample"></audio>
+              <audio src="sample" controls id="sample"></audio>
             )}
           </div>
           <CardActions
@@ -95,7 +106,8 @@ const SpeechToSpeechOptions = (props) => {
       <Card className={classes.asrCard}>
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
-            {translate("label.notes")}
+            {/* {translate("label.notes")} */}
+            Batch Inference
           </Typography>
         </Grid>
         <CardContent>
@@ -103,7 +115,7 @@ const SpeechToSpeechOptions = (props) => {
             {translate("label.maxDuration")}
           </Typography>
           <TextField
-            style={{ marginTop: "15px", marginBottom: "10px" }}
+            style={{ marginTop: "15px", marginBottom: "37px" }}
             fullWidth
             color="primary"
             label="Paste the public repository URL"
@@ -134,6 +146,69 @@ const SpeechToSpeechOptions = (props) => {
     );
   };
 
+  const renderAccordionDetails = (placeholder, textAreaLabel, value) => {
+    return (
+      <Grid container>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <textarea
+            disabled
+            placeholder={placeholder}
+            rows={3}
+            value={value}
+            className={classes.textArea}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <textarea
+            placeholder={textAreaLabel}
+            rows={3}
+            className={classes.textArea}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Grid container spacing="2">
+            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+              <Button fullWidth variant="outlined" size="small" color="primary">
+                Clear
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+              <Button
+                fullWidth
+                variant="contained"
+                size="small"
+                color="primary"
+              >
+                Submit
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    );
+  };
+
+  const renderAccordion = () => {
+    return (
+      <div>
+        <MyAccordion label={"ASR Output"}>
+          {renderAccordionDetails(
+            "ASR Output",
+            "Corrected ASR Output",
+            output.asr
+          )}
+        </MyAccordion>
+        <MyAccordion label={"Translation Output"}>
+          {renderAccordionDetails(
+            "Translation Output",
+            "Corrected Translation Output",
+            output.translation
+          )}
+        </MyAccordion>
+      </div>
+    );
+  };
+
   const renderOutput = () => {
     return (
       <Card className={classes.asrCard}>
@@ -142,7 +217,9 @@ const SpeechToSpeechOptions = (props) => {
             {translate("label.output")}
           </Typography>
         </Grid>
-        <CardContent>{target}</CardContent>
+        <CardContent>
+          <audio src={audio} controls></audio>
+        </CardContent>
       </Card>
     );
   };
@@ -155,9 +232,21 @@ const SpeechToSpeechOptions = (props) => {
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderURLInput()}
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-        {renderOutput()}
-      </Grid>
+      {audio ? (
+        <>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Typography variant="h5" style={{ marginBottom: "1%" }}>
+              Intermediate Output
+            </Typography>
+            {renderAccordion()}
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {renderOutput()}
+          </Grid>
+        </>
+      ) : (
+        <></>
+      )}
     </Grid>
   );
 };

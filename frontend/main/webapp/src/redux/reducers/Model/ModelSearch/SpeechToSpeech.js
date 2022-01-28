@@ -9,7 +9,11 @@ const initialState = {
 const updateModelType = (data, prevState) => {
   const updatedObj = JSON.parse(JSON.stringify(prevState));
   data.forEach((elem) => {
-    updatedObj[elem.task.type].push({ value: elem.modelId, label: elem.name });
+    updatedObj[elem.task.type].push({
+      value: elem.modelId,
+      label: elem.name,
+      inferenceEndPoint: elem.inferenceEndPoint,
+    });
     updatedObj[elem.task.type] = getUniqueListBy(
       updatedObj[elem.task.type],
       "value"

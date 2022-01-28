@@ -12,6 +12,7 @@ import Snackbar from "../../../../components/common/Snackbar";
 import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
+import ComputeAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 
 const SpeechToSpeech = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const SpeechToSpeech = () => {
   const [data, setData] = useState("");
   const [url, setUrl] = useState("");
   const [recordAudio, setRecordAudio] = useState("");
+  const [audio, setAudio] = useState("");
   const [error, setError] = useState({ url: "" });
   const [base, setBase] = useState("");
   const [snackbar, setSnackbarInfo] = useState({
@@ -36,12 +38,17 @@ const SpeechToSpeech = () => {
     tts: "",
   });
 
+  const [output, setOutput] = useState({
+    asr: "",
+    translation: "",
+  });
+
   const handleChange = (data, id) => {
     setFilter({ ...filter, [id]: data });
   };
 
   const handleStartRecording = (data) => {
-    setData(null);
+    setData("");
     setRecordAudio(RecordState.START);
   };
 
@@ -99,10 +106,98 @@ const SpeechToSpeech = () => {
     return pattern.test(str);
   };
 
+  const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  };
+
+  const makeComputeAPICall = (type) => {
+    setAudio(null);
+    const apiObj = new ComputeAPI(
+      filter.asr.value, //modelId
+      type === "url" ? url : base, //input URL
+      "asr", //task
+      type === "voice" ? true : false, //boolean record audio
+      filter.src.value, //source
+      filter.asr.inferenceEndPoint, //inference endpoint
+      "" //gender
+    );
+    console.log(apiObj.getBody(), url, base);
+    fetch(apiObj.apiEndPoint(), {
+      method: "post",
+      body: JSON.stringify(apiObj.getBody()),
+      headers: apiObj.getHeaders().headers,
+    }).then(async (resp) => {
+      let rsp_data = await resp.json();
+      if (resp.ok) {
+        setOutput((prev) => ({ ...prev, asr: rsp_data.data.source }));
+        const obj = new ComputeAPI(
+          filter.translation.value,
+          rsp_data.data.source,
+          "translation",
+          "",
+          "",
+          filter.translation.inferenceEndPoint,
+          ""
+        );
+        fetch(obj.apiEndPoint(), {
+          method: "post",
+          body: JSON.stringify(obj.getBody()),
+          headers: obj.getHeaders().headers,
+        }).then(async (translationResp) => {
+          let rsp_data = await translationResp.json();
+          if (translationResp.ok) {
+            setOutput((prev) => ({
+              ...prev,
+              translation: rsp_data.outputText,
+            }));
+            const obj = new ComputeAPI(
+              filter.tts.value,
+              rsp_data.outputText,
+              "tts",
+              "",
+              "",
+              filter.tts.inferenceEndPoint,
+              "female"
+            );
+            fetch(obj.apiEndPoint(), {
+              method: "post",
+              headers: obj.getHeaders().headers,
+              body: JSON.stringify(obj.getBody()),
+            }).then(async (ttsResp) => {
+              let rsp_data = await ttsResp.json();
+              if (ttsResp.ok) {
+                const blob = b64toBlob(rsp_data.outputText, "audio/wav");
+                const urlBlob = window.URL.createObjectURL(blob);
+                setAudio(urlBlob);
+              }
+            });
+          }
+        });
+      }
+    });
+  };
+
   const handleUrlSubmit = (e) => {
     if (!validURL(url)) {
       setError({ ...error, url: "Invalid URL" });
     } else {
+      makeComputeAPICall("url");
       setSnackbarInfo({
         ...snackbar,
         open: true,
@@ -113,7 +208,7 @@ const SpeechToSpeech = () => {
   };
 
   const handleCompute = () => {
-    console.log("Compute");
+    makeComputeAPICall("voice");
   };
 
   return (
@@ -135,6 +230,8 @@ const SpeechToSpeech = () => {
             Stop={Stop}
             data={data}
             url={url}
+            base={base}
+            setBase={setBase}
             error={error}
             setUrl={setUrl}
             setError={setError}
@@ -145,6 +242,8 @@ const SpeechToSpeech = () => {
             AudioReactRecorder={AudioReactRecorder}
             recordAudio={recordAudio}
             handleCompute={handleCompute}
+            audio={audio}
+            output={output}
           />
         </Grid>
       </Grid>
