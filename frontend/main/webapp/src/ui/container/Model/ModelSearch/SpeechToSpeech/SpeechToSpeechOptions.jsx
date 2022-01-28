@@ -31,6 +31,14 @@ const SpeechToSpeechOptions = (props) => {
     setUrl,
     setError,
     output,
+    handleTextAreaChange,
+    textArea,
+    makeTTSAPICall,
+    makeTranslationAPICall,
+    source,
+    target,
+    clearAsr,
+    clearTranslation,
   } = props;
   const renderVoiceRecorder = () => {
     return (
@@ -38,7 +46,7 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
             {/* {translate("label.notes")} */}
-            Live Recording Inference
+            {`Live Recording Inference - ${source ? source.label : ""}`}
           </Typography>
         </Grid>
         <CardContent>
@@ -107,7 +115,7 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
             {/* {translate("label.notes")} */}
-            Batch Inference
+            {`Batch Inference - ${source ? source.label : ""}`}
           </Typography>
         </Grid>
         <CardContent>
@@ -146,7 +154,15 @@ const SpeechToSpeechOptions = (props) => {
     );
   };
 
-  const renderAccordionDetails = (placeholder, textAreaLabel, value) => {
+  const renderAccordionDetails = (
+    placeholder,
+    textAreaLabel,
+    value,
+    prop,
+    input,
+    handleSubmitClick,
+    handleClearSubmit
+  ) => {
     return (
       <Grid container>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -163,12 +179,20 @@ const SpeechToSpeechOptions = (props) => {
             placeholder={textAreaLabel}
             rows={3}
             className={classes.textArea}
+            value={input}
+            onChange={(e) => handleTextAreaChange(e, prop)}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container spacing="2">
             <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-              <Button fullWidth variant="outlined" size="small" color="primary">
+              <Button
+                fullWidth
+                variant="outlined"
+                size="small"
+                color="primary"
+                onClick={handleClearSubmit}
+              >
                 Clear
               </Button>
             </Grid>
@@ -178,6 +202,8 @@ const SpeechToSpeechOptions = (props) => {
                 variant="contained"
                 size="small"
                 color="primary"
+                onClick={handleSubmitClick}
+                disabled={input.trim() ? false : true}
               >
                 Submit
               </Button>
@@ -195,14 +221,22 @@ const SpeechToSpeechOptions = (props) => {
           {renderAccordionDetails(
             "ASR Output",
             "Corrected ASR Output",
-            output.asr
+            output.asr,
+            "asr",
+            textArea.asr,
+            makeTranslationAPICall,
+            clearAsr
           )}
         </MyAccordion>
         <MyAccordion label={"Translation Output"}>
           {renderAccordionDetails(
             "Translation Output",
             "Corrected Translation Output",
-            output.translation
+            output.translation,
+            "translation",
+            textArea.translation,
+            makeTTSAPICall,
+            clearTranslation
           )}
         </MyAccordion>
       </div>
@@ -211,13 +245,19 @@ const SpeechToSpeechOptions = (props) => {
 
   const renderOutput = () => {
     return (
-      <Card className={classes.asrCard}>
+      <Card style={{ borderRadius: "10px" }}>
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
-            {translate("label.output")}
+            {`${translate("label.output")} - ${target ? target.label : ""}`}
           </Typography>
         </Grid>
-        <CardContent>
+        <CardContent
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <audio src={audio} controls></audio>
         </CardContent>
       </Card>

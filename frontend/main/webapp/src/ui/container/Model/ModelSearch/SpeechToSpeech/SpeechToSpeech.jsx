@@ -25,6 +25,10 @@ const SpeechToSpeech = () => {
   const [audio, setAudio] = useState("");
   const [error, setError] = useState({ url: "" });
   const [base, setBase] = useState("");
+  const [textArea, setTextArea] = useState({
+    asr: "",
+    translation: "",
+  });
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: "",
@@ -49,6 +53,9 @@ const SpeechToSpeech = () => {
 
   const handleStartRecording = (data) => {
     setData("");
+    setAudio("");
+    setOutput({ asr: "", translation: "" });
+    setTextArea({ asr: "", translation: "" });
     setRecordAudio(RecordState.START);
   };
 
@@ -126,6 +133,85 @@ const SpeechToSpeech = () => {
     return blob;
   };
 
+  const handleTextAreaChange = (e, prop) => {
+    setTextArea((prev) => ({ ...prev, [prop]: e.target.value }));
+  };
+
+  const makeTranslationAPICall = () => {
+    setTextArea((prev) => ({ ...prev, translation: "", asr: "" }));
+    setOutput((prev) => ({ ...prev, asr: textArea.asr }));
+    const obj = new ComputeAPI(
+      filter.translation.value,
+      textArea.asr,
+      "translation",
+      false,
+      filter.src,
+      filter.translation.inferenceEndPoint,
+      ""
+    );
+
+    fetch(obj.apiEndPoint(), {
+      method: "post",
+      headers: obj.getHeaders().headers,
+      body: JSON.stringify(obj.getBody()),
+    }).then(async (translationResp) => {
+      let rsp_data = await translationResp.json();
+      if (translationResp.ok) {
+        setOutput((prev) => ({
+          ...prev,
+          translation: rsp_data.outputText,
+        }));
+        const obj = new ComputeAPI(
+          filter.tts.value,
+          rsp_data.outputText,
+          "tts",
+          "",
+          "",
+          filter.tts.inferenceEndPoint,
+          "female"
+        );
+        fetch(obj.apiEndPoint(), {
+          method: "post",
+          headers: obj.getHeaders().headers,
+          body: JSON.stringify(obj.getBody()),
+        }).then(async (ttsResp) => {
+          let rsp_data = await ttsResp.json();
+          if (ttsResp.ok) {
+            const blob = b64toBlob(rsp_data.outputText, "audio/wav");
+            const urlBlob = window.URL.createObjectURL(blob);
+            setAudio(urlBlob);
+          }
+        });
+      }
+    });
+  };
+
+  const makeTTSAPICall = () => {
+    setTextArea((prev) => ({ ...prev, translation: "" }));
+    setOutput((prev) => ({ ...prev, translation: textArea.translation }));
+    const obj = new ComputeAPI(
+      filter.tts.value,
+      textArea.translation,
+      "tts",
+      "",
+      "",
+      filter.tts.inferenceEndPoint,
+      "female"
+    );
+    fetch(obj.apiEndPoint(), {
+      method: "post",
+      headers: obj.getHeaders().headers,
+      body: JSON.stringify(obj.getBody()),
+    }).then(async (ttsResp) => {
+      let rsp_data = await ttsResp.json();
+      if (ttsResp.ok) {
+        const blob = b64toBlob(rsp_data.outputText, "audio/wav");
+        const urlBlob = window.URL.createObjectURL(blob);
+        setAudio(urlBlob);
+      }
+    });
+  };
+
   const makeComputeAPICall = (type) => {
     setAudio(null);
     const apiObj = new ComputeAPI(
@@ -137,7 +223,6 @@ const SpeechToSpeech = () => {
       filter.asr.inferenceEndPoint, //inference endpoint
       "" //gender
     );
-    console.log(apiObj.getBody(), url, base);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: JSON.stringify(apiObj.getBody()),
@@ -193,6 +278,14 @@ const SpeechToSpeech = () => {
     });
   };
 
+  const clearTranslation = () => {
+    setTextArea((prev) => ({ ...prev, translation: "" }));
+  };
+
+  const clearAsr = () => {
+    setTextArea((prev) => ({ ...prev, asr: "" }));
+  };
+
   const handleUrlSubmit = (e) => {
     if (!validURL(url)) {
       setError({ ...error, url: "Invalid URL" });
@@ -235,6 +328,8 @@ const SpeechToSpeech = () => {
             error={error}
             setUrl={setUrl}
             setError={setError}
+            makeTTSAPICall={makeTTSAPICall}
+            makeTranslationAPICall={makeTranslationAPICall}
             onStopRecording={onStopRecording}
             handleStartRecording={handleStartRecording}
             handleStopRecording={handleStopRecording}
@@ -244,6 +339,12 @@ const SpeechToSpeech = () => {
             handleCompute={handleCompute}
             audio={audio}
             output={output}
+            handleTextAreaChange={handleTextAreaChange}
+            textArea={textArea}
+            source={filter.src}
+            target={filter.tgt}
+            clearAsr={clearAsr}
+            clearTranslation={clearTranslation}
           />
         </Grid>
       </Grid>

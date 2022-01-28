@@ -97,7 +97,7 @@ const NewSearchModel = () => {
       searchValue={searchValue}
       handleChange={handleChange}
       value={value}
-      tabs={ModelTask}
+      tabs={ModelTask.filter((val) => val.value !== "sts")}
     >
       <TabPanel value={value} index={value}>
         {searchModelResult.filteredData.length ? (
