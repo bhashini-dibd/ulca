@@ -60,6 +60,7 @@ def perform_webpage_function(element_data, function, driver, inp_data=None, mult
         status = True
         status_str = None
     except Exception as e:
+        print("BUTTON NOT FOUND")
         print(e.args)
         status = False
         status_str = "ELEMENT=" + element_data["name"] + " - NOT FOUND"

@@ -64,7 +64,6 @@ const ChartRender = (props) => {
   const options = DatasetItems;
 
   const fetchChartData = async (dataType, value, criterions) => {
-    debugger;
     let apiObj = new FetchLanguageDataSets(dataType, value, criterions);
     fetch(apiObj.apiEndPoint(), {
       method: "post",

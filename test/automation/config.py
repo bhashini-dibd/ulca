@@ -13,7 +13,7 @@ ULCA_DOMAIN = "stage"  # environment/domain-for-ULCA-website[stage,meity,dev]
 
 AUTOMATION_BROWSER = "chrome"  # supported-chrome,firefox,opera
 BROWSER_HEADLESS_MODE = True  # if True then hidden-mode
-CHROME_DRIVER_PATH = "./chromedriver"  # path for chromedriver
+CHROME_DRIVER_PATH = "/usr/lib/chromium-browser/chromedriver"  # path for chromedriver
 FIREFOX_DRIVER_PATH = "./geckodriver"  # path for firefox-geckodriver
 OPERA_DRIVER_PATH = "./operadriver"  # path for operadriver
 
