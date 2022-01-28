@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import Dataset from "./components/Chart";
 import Model from "./components/ModelChart";
 import Benchmark from "./components/BenchmarkChart";
-import InfiniteScroll from "react-infinite-scroll-component";
-import { useEffect } from "react";
 
 function App(props) {
   const componentObj = [
@@ -12,28 +10,14 @@ function App(props) {
     { component: <Benchmark /> },
   ];
   const [data, setData] = useState([]);
-  const [index, setIndex] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
 
-  const fetchNextComp = () => {
-    if (index < componentObj.length) {
-      console.log("inside if");
-      setData((prev) => [...prev, componentObj[index].component]);
-      setIndex((prev) => prev + 1);
-    } else if (index === componentObj.length) {
-      setHasMore(false);
+  window.addEventListener("scroll", (e) => {
+    if (window.pageYOffset > 300) {
+      const comps = componentObj.map((elem) => elem.component);
+      setData(comps);
     }
-  };
+  });
 
-  return (
-    <InfiniteScroll
-      dataLength={data.length}
-      loader={<div>Loading charts....</div>}
-      next={fetchNextComp}
-      hasMore={hasMore}
-    >
-      {data}
-    </InfiniteScroll>
-  );
+  return <div>{data}</div>;
 }
 export default App;
