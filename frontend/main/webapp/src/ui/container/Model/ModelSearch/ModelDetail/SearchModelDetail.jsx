@@ -10,7 +10,6 @@ import Header from "../../../../components/common/Header";
 import Footer from "../../../../components/common/Footer";
 import Theme from "../../../../theme/theme-default";
 import { MuiThemeProvider } from "@material-ui/core/styles";
-import BenchmarkTableAPI from "../../../../../redux/actions/api/Model/ModelSearch/BenchmarkTable";
 import {
   Grid,
   Typography,
@@ -78,20 +77,13 @@ const SearchModelDetail = (props) => {
     inferenceEndPoint,
     submitter,
     target,
+    benchmarkPerformance,
+    metricArray,
   } = useSelector((state) => state.getModelDetails);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  const { benchmarkPerformance, metricArray } = useSelector(
-    (state) => state.benchmarkTableDetails
-  );
-
-  useEffect(() => {
-    const APIObj = new BenchmarkTableAPI(params.srno);
-    dispatch(APITransport(APIObj));
-  }, []);
 
   useEffect(() => {
     const obj = new GetModelDetails(params.srno);
@@ -195,9 +187,7 @@ const SearchModelDetail = (props) => {
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Grid container>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-                <Card
-                  className={classes.modelNameCard}
-                >
+                <Card className={classes.modelNameCard}>
                   <Grid container>
                     <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
                       <Typography
