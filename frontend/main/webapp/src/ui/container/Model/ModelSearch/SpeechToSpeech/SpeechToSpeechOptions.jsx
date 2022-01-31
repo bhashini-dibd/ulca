@@ -172,6 +172,7 @@ const SpeechToSpeechOptions = (props) => {
             rows={3}
             value={value}
             className={classes.textArea}
+            style={{ color: "grey", border: "1px solid grey" }}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -181,6 +182,7 @@ const SpeechToSpeechOptions = (props) => {
             className={classes.textArea}
             value={input}
             onChange={(e) => handleTextAreaChange(e, prop)}
+            style={{ border: "1px solid black" }}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -217,7 +219,7 @@ const SpeechToSpeechOptions = (props) => {
   const renderAccordion = () => {
     return (
       <div>
-        <MyAccordion label={"ASR Output"}>
+        <MyAccordion label={"ASR Output"} color="#D6EAF8">
           {renderAccordionDetails(
             "ASR Output",
             "Corrected ASR Output",
@@ -228,7 +230,7 @@ const SpeechToSpeechOptions = (props) => {
             clearAsr
           )}
         </MyAccordion>
-        <MyAccordion label={"Translation Output"}>
+        <MyAccordion label={"Translation Output"} color="#E9F7EF">
           {renderAccordionDetails(
             "Translation Output",
             "Corrected Translation Output",
@@ -275,13 +277,13 @@ const SpeechToSpeechOptions = (props) => {
       {audio ? (
         <>
           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            {renderOutput()}
+          </Grid>
+          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
             <Typography variant="h5" style={{ marginBottom: "1%" }}>
               Intermediate Output
             </Typography>
             {renderAccordion()}
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            {renderOutput()}
           </Grid>
         </>
       ) : (

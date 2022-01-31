@@ -7,9 +7,9 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 const MyAccordion = (props) => {
-  const { label, children } = props;
+  const { label, children, color } = props;
   return (
-    <Accordion>
+    <Accordion style={{ backgroundColor: color }}>
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
@@ -17,7 +17,9 @@ const MyAccordion = (props) => {
       >
         <Typography variant="h6">{label}</Typography>
       </AccordionSummary>
-      <AccordionDetails>{children}</AccordionDetails>
+      <AccordionDetails style={{ backgroundColor: "white" }}>
+        {children}
+      </AccordionDetails>
     </Accordion>
   );
 };
