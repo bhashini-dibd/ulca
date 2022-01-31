@@ -56,7 +56,16 @@ const SpeechToSpeech = () => {
     setAudio("");
     setOutput({ asr: "", translation: "" });
     setTextArea({ asr: "", translation: "" });
-    setRecordAudio(RecordState.START);
+    if (checkFilter()) {
+      setSnackbarInfo({
+        ...snackbar,
+        open: true,
+        message: "Please select all the drop down values...",
+        variant: "error",
+      });
+    } else {
+      setRecordAudio(RecordState.START);
+    }
   };
 
   const handleStopRecording = (value) => {
@@ -212,7 +221,30 @@ const SpeechToSpeech = () => {
     });
   };
 
+  const setSnackbarError = (errorMsg) => {
+    setSnackbarInfo({
+      ...snackbar,
+      open: true,
+      message: errorMsg,
+      variant: "error",
+    });
+    setTimeout(() => {
+      setSnackbarInfo({
+        ...snackbar,
+        open: false,
+        message: "",
+        variant: null,
+      });
+    }, 3000);
+  };
+
   const makeComputeAPICall = (type) => {
+    setSnackbarInfo({
+      ...snackbar,
+      open: true,
+      message: "Please wait while we process your request...",
+      variant: "info",
+    });
     setAudio(null);
     const apiObj = new ComputeAPI(
       filter.asr.value, //modelId
@@ -227,55 +259,66 @@ const SpeechToSpeech = () => {
       method: "post",
       body: JSON.stringify(apiObj.getBody()),
       headers: apiObj.getHeaders().headers,
-    }).then(async (resp) => {
-      let rsp_data = await resp.json();
-      if (resp.ok) {
-        setOutput((prev) => ({ ...prev, asr: rsp_data.data.source }));
-        const obj = new ComputeAPI(
-          filter.translation.value,
-          rsp_data.data.source,
-          "translation",
-          "",
-          "",
-          filter.translation.inferenceEndPoint,
-          ""
+    })
+      .then(async (resp) => {
+        let rsp_data = await resp.json();
+        if (resp.ok && rsp_data !== null) {
+          setOutput((prev) => ({ ...prev, asr: rsp_data.data.source }));
+          const obj = new ComputeAPI(
+            filter.translation.value,
+            rsp_data.data.source,
+            "translation",
+            "",
+            "",
+            filter.translation.inferenceEndPoint,
+            ""
+          );
+          fetch(obj.apiEndPoint(), {
+            method: "post",
+            body: JSON.stringify(obj.getBody()),
+            headers: obj.getHeaders().headers,
+          }).then(async (translationResp) => {
+            let rsp_data = await translationResp.json();
+            if (translationResp.ok) {
+              setOutput((prev) => ({
+                ...prev,
+                translation: rsp_data.outputText,
+              }));
+              const obj = new ComputeAPI(
+                filter.tts.value,
+                rsp_data.outputText,
+                "tts",
+                "",
+                "",
+                filter.tts.inferenceEndPoint,
+                "female"
+              );
+              fetch(obj.apiEndPoint(), {
+                method: "post",
+                headers: obj.getHeaders().headers,
+                body: JSON.stringify(obj.getBody()),
+              }).then(async (ttsResp) => {
+                let rsp_data = await ttsResp.json();
+                if (ttsResp.ok) {
+                  const blob = b64toBlob(rsp_data.outputText, "audio/wav");
+                  const urlBlob = window.URL.createObjectURL(blob);
+                  setAudio(urlBlob);
+                }
+              });
+            }
+          });
+        } else {
+          setSnackbarError(
+            "Unable to process your request at the moment. Please try after sometime."
+          );
+        }
+      })
+      .catch(async (error) => {
+        console.log(error);
+        setSnackbarError(
+          "Unable to process your request at the moment. Please try after sometime."
         );
-        fetch(obj.apiEndPoint(), {
-          method: "post",
-          body: JSON.stringify(obj.getBody()),
-          headers: obj.getHeaders().headers,
-        }).then(async (translationResp) => {
-          let rsp_data = await translationResp.json();
-          if (translationResp.ok) {
-            setOutput((prev) => ({
-              ...prev,
-              translation: rsp_data.outputText,
-            }));
-            const obj = new ComputeAPI(
-              filter.tts.value,
-              rsp_data.outputText,
-              "tts",
-              "",
-              "",
-              filter.tts.inferenceEndPoint,
-              "female"
-            );
-            fetch(obj.apiEndPoint(), {
-              method: "post",
-              headers: obj.getHeaders().headers,
-              body: JSON.stringify(obj.getBody()),
-            }).then(async (ttsResp) => {
-              let rsp_data = await ttsResp.json();
-              if (ttsResp.ok) {
-                const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-                const urlBlob = window.URL.createObjectURL(blob);
-                setAudio(urlBlob);
-              }
-            });
-          }
-        });
-      }
-    });
+      });
   };
 
   const clearTranslation = () => {
@@ -286,17 +329,27 @@ const SpeechToSpeech = () => {
     setTextArea((prev) => ({ ...prev, asr: "" }));
   };
 
+  const checkFilter = () => {
+    const { src, tgt, asr, translation, tts } = filter;
+    if (src && tgt && asr && translation && tts) {
+      return false;
+    }
+    return true;
+  };
+
   const handleUrlSubmit = (e) => {
     if (!validURL(url)) {
       setError({ ...error, url: "Invalid URL" });
-    } else {
-      makeComputeAPICall("url");
+    }
+    if (checkFilter()) {
       setSnackbarInfo({
         ...snackbar,
         open: true,
-        message: "Please wait while we process your request...",
-        variant: "info",
+        message: "Please select all the drop down values...",
+        variant: "error",
       });
+    } else {
+      makeComputeAPICall("url");
     }
   };
 
