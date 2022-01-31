@@ -1,9 +1,17 @@
-import { Grid } from "@material-ui/core";
+import { Grid, Button } from "@material-ui/core";
 import SingleAutoComplete from "../../../../components/common/SingleAutoComplete";
-import { Language } from "../../../../../configs/DatasetItems";
 
 const SpeechToSpeechFilter = (props) => {
-  const { handleChange, filter, asr, tts, translation } = props;
+  const {
+    handleChange,
+    filter,
+    asr,
+    tts,
+    translation,
+    handleClick,
+    sourceLanguage,
+    targetLanguage,
+  } = props;
   const renderSingleAutoComplete = (
     value,
     id,
@@ -28,7 +36,7 @@ const SpeechToSpeechFilter = (props) => {
         {renderSingleAutoComplete(
           filter.src,
           "src",
-          Language,
+          sourceLanguage,
           "Source Language",
           false
         )}
@@ -37,7 +45,7 @@ const SpeechToSpeechFilter = (props) => {
         {renderSingleAutoComplete(
           filter.tgt,
           "tgt",
-          Language,
+          targetLanguage,
           "Target Language",
           false
         )}
@@ -56,6 +64,17 @@ const SpeechToSpeechFilter = (props) => {
       </Grid>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         {renderSingleAutoComplete(filter.tts, "tts", tts, "TTS Model", false)}
+      </Grid>
+      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Button
+          style={{ float: "right" }}
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={handleClick}
+        >
+          Reset
+        </Button>
       </Grid>
     </Grid>
   );

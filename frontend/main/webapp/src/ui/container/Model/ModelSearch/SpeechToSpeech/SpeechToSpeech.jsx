@@ -16,7 +16,7 @@ import ComputeAPI from "../../../../../redux/actions/api/Model/ModelSearch/Hoste
 
 const SpeechToSpeech = () => {
   const dispatch = useDispatch();
-  const { asr, tts, translation } = useSelector(
+  const { asr, tts, translation, sourceLanguage, targetLanguage } = useSelector(
     (state) => state.getBulkModelSearch
   );
   const [data, setData] = useState("");
@@ -78,7 +78,7 @@ const SpeechToSpeech = () => {
   }, []);
 
   const makeModelSearchAPICall = (type, src, tgt) => {
-    const apiObj = new SearchModel(type, src.value, tgt.value, true);
+    const apiObj = new SearchModel(type, src, tgt, true);
     dispatch(APITransport(apiObj));
   };
 
@@ -97,12 +97,12 @@ const SpeechToSpeech = () => {
   };
 
   useEffect(() => {
-    if (filter.src && filter.tgt) {
-      makeModelSearchAPICall("asr", filter.src, { value: "" });
-      makeModelSearchAPICall("translation", filter.src, filter.tgt);
-      makeModelSearchAPICall("tts", filter.tgt, { value: "" });
-    }
-  }, [filter.src, filter.tgt]);
+    // if (filter.src && filter.tgt) {
+    makeModelSearchAPICall("asr", "", "");
+    makeModelSearchAPICall("translation", "", "");
+    makeModelSearchAPICall("tts", "", "");
+    // }
+  }, []);
 
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
@@ -367,6 +367,8 @@ const SpeechToSpeech = () => {
             translation={translation}
             filter={filter}
             handleChange={handleChange}
+            sourceLanguage={sourceLanguage}
+            targetLanguage={targetLanguage}
           />
         </Grid>
         <Divider />
