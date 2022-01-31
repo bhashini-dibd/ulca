@@ -9,6 +9,8 @@ const initialState = {
   inferenceEndPoint: "",
   submitter: "",
   language: "",
+  metricArray: [],
+  benchmarkPerformance: [],
 };
 
 const getModelDetails = (payload) => {
@@ -50,6 +52,8 @@ const reducer = (state = initialState, action) => {
         language: target
           ? `${getLanguageName(source)}-${getLanguageName(target)}`
           : `${getLanguageName(source)}`,
+        benchmarkPerformance: action.payload.benchmarkPerformance,
+        metricArray: action.payload.metric,
       };
     default:
       return {

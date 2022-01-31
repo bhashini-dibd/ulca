@@ -1,5 +1,3 @@
-import BlueCard from "../../../assets/card.svg";
-import GreenCard from "../../../assets/card2.svg";
 import Record from "../../../assets/record.svg";
 import { Grid, Typography, withStyles } from "@material-ui/core";
 import CommonStyles from "../../styles/Styles";
@@ -8,7 +6,7 @@ import {
   getTaskName,
   FilterByDomain,
 } from "../../../utils/getLabel";
-import React, { Suspense } from "react";
+import React from "react";
 
 const CardComponent = (props) => {
   const { value, classes } = props;
