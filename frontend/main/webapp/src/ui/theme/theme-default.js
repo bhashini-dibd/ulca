@@ -35,6 +35,13 @@ const themeDefault = createMuiTheme({
         minWidth: "210px",
       },
     },
+    MuiMenuItem:{
+      root: {
+        "@media (max-width:670px)": {
+          fontSize: '0.875rem'
+        },
+      },
+    },
     MUIDataTableFilter: {
       root: {
         backgroundColor: "white",
@@ -49,6 +56,12 @@ const themeDefault = createMuiTheme({
       root: {
         fontFamily: '"Roboto" ,sans-serif',
       },
+      padding:{
+        "@media (max-width:670px)": {
+          padding: "0px",
+          paddingLeft:'9px',
+        },
+      }
     },
     MUIDataTable: {
       paper: {
@@ -169,7 +182,7 @@ const themeDefault = createMuiTheme({
         textAlign: "center",
         height: "19px",
         "@media (max-width:640px)": {
-          fontSize: "14px",
+          fontSize: "10px",
         },
       },
       sizeLarge: {

@@ -31,10 +31,23 @@ const DataSet = (theme) => ({
     marginTop: '33px',
     '&:hover': {
       backgroundColor: '#FD7F23',
-    }
+    },
+    "@media (max-width:640px)": {
+      fontSize: '12px',
+      marginRight: '0px',
+      marginTop: '25px',
+    },
   },
   tableRow: { display: "none" },
-
+  modelNameCard: {
+    height: "100px",
+    backgroundColor: "#0F2749",
+    borderRadius: "8px",
+    marginTop: "1%",
+    "@media (max-width:640px)": {
+      height: '80px'
+    },
+  },
   divStyle: {
     padding: "5% 10% 5% 3.125rem",
   },
@@ -166,6 +179,28 @@ const DataSet = (theme) => ({
   ButtonRefresh: {
     marginLeft: "auto",
     borderRadius: "1rem",
+    "@media (max-width:870px)": {
+      display: 'none'
+    }
+  },
+  ButtonRefreshMobile: {
+    display:'none',
+    borderRadius: "1rem",
+    "@media (max-width:870px)": {
+      display: 'block'
+    }
+  },
+  filterGrid: {
+    display:'block',
+    "@media (max-width:870px)": {
+      display: 'none'
+    }
+  },
+  filterGridMobile: {
+    display:'none',
+    "@media (max-width:870px)": {
+      display: 'block'
+    }
   },
   searchDivStyle: {
     //padding: '0% 4%',

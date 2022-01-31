@@ -14,6 +14,7 @@ import C from "../../../../redux/actions/constants";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
 import Search from "../../../components/Datasets&Model/Search";
+import { translate } from "../../../../assets/localisation";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -69,7 +70,19 @@ const ContributionList = (props) => {
             }}
           />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
+          <Button
+            color={"default"}
+            size="small"
+            variant="outlined"
+            className={classes.ButtonRefreshMobile}
+            onClick={handleShowFilter}
+          >
+            {" "}
+            <FilterListIcon className={classes.iconStyle} />
+          </Button>
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGrid}>
           <Button
             color={"default"}
             size="medium"
@@ -79,19 +92,30 @@ const ContributionList = (props) => {
           >
             {" "}
             <FilterListIcon className={classes.iconStyle} />
-            Filter
+            {translate("button.filter")}
           </Button>
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGrid}>
+          <Button
+            color={"primary"}
+            size="medium"
+            variant="outlined"
+            className={classes.ButtonRefresh}
+            onClick={() => MyContributionListApi()}
+          >
+            <Cached className={classes.iconStyle} />
+            {translate("button.refresh")}
+          </Button>
+        </Grid>
+        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
           <Button
             color={"primary"}
             size="small"
             variant="outlined"
-            className={classes.buttonStyle}
+            className={classes.ButtonRefreshMobile}
             onClick={() => MyContributionListApi()}
           >
             <Cached className={classes.iconStyle} />
-            Refresh
           </Button>
         </Grid>
       </Grid>

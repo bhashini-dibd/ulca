@@ -75,6 +75,10 @@ const HeaderStyles = (theme) => ({
       color: "#2C2799",
       backgroundColor: " rgba(44,39,153, .05)",
     },
+    "@media (max-width:670px)": {
+      padding: "0px",
+      overflow:'hidden'
+    },
   },
   styledMenu1: {
     padding: "9px",
