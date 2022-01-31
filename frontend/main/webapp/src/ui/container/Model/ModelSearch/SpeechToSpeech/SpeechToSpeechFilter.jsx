@@ -30,6 +30,7 @@ const SpeechToSpeechFilter = (props) => {
       />
     );
   };
+
   return (
     <Grid container spacing={5}>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -51,19 +52,35 @@ const SpeechToSpeechFilter = (props) => {
         )}
       </Grid>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-        {renderSingleAutoComplete(filter.asr, "asr", asr, "ASR Model", false)}
+        {renderSingleAutoComplete(
+          filter.asr,
+          "asr",
+          asr.filter((a) => a.sourceLanguage === filter.src.value),
+          "ASR Model",
+          false
+        )}
       </Grid>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         {renderSingleAutoComplete(
           filter.translation,
           "translation",
-          translation,
+          translation.filter(
+            (a) =>
+              a.sourceLanguage === filter.src.value &&
+              a.targetLanguage === filter.tgt.value
+          ),
           "Translation Model",
           false
         )}
       </Grid>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-        {renderSingleAutoComplete(filter.tts, "tts", tts, "TTS Model", false)}
+        {renderSingleAutoComplete(
+          filter.tts,
+          "tts",
+          tts.filter((a) => a.sourceLanguage === filter.tgt.value),
+          "TTS Model",
+          false
+        )}
       </Grid>
       <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
         <Button

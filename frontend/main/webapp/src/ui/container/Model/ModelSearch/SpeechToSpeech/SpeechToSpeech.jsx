@@ -357,6 +357,10 @@ const SpeechToSpeech = () => {
     makeComputeAPICall("voice");
   };
 
+  const handleResetBtnClick = () => {
+    setFilter({ asr: "", tts: "", translation: "", src: "", tgt: "" });
+  };
+
   return (
     <>
       <Grid container spacing={5}>
@@ -366,6 +370,7 @@ const SpeechToSpeech = () => {
             tts={tts}
             translation={translation}
             filter={filter}
+            handleClick={handleResetBtnClick}
             handleChange={handleChange}
             sourceLanguage={sourceLanguage}
             targetLanguage={targetLanguage}
