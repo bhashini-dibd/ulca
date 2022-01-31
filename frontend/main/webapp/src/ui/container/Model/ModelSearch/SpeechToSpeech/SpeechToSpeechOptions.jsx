@@ -188,7 +188,7 @@ const SpeechToSpeechOptions = (props) => {
             className={classes.textArea}
             value={input}
             onChange={(e) => handleTextAreaChange(e, prop)}
-            style={{ border: "1px solid black" }}
+            style={{ border: "1px solid grey" }}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
