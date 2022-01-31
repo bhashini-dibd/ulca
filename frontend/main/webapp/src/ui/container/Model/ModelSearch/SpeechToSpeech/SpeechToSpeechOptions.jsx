@@ -114,16 +114,14 @@ const SpeechToSpeechOptions = (props) => {
       <Card className={classes.asrCard}>
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
-            {/* {translate("label.notes")} */}
             {`Batch Inference - ${source ? source.label : ""}`}
           </Typography>
         </Grid>
-        <CardContent>
+        <CardContent style={{ height: "90px" }}>
           <Typography variant={"caption"}>
             {translate("label.maxDuration")}
           </Typography>
           <TextField
-            style={{ marginTop: "15px", marginBottom: "37px" }}
             fullWidth
             color="primary"
             label="Paste the public repository URL"
@@ -135,13 +133,21 @@ const SpeechToSpeechOptions = (props) => {
               setError({ ...error, url: false });
             }}
           />
+          <div
+            style={{
+              display: "flex",
+              marginTop: "5.5vh",
+              justifyContent: "center",
+            }}
+          >
+            <audio controls src={url}></audio>
+          </div>
         </CardContent>
         <CardActions
-          style={{ justifyContent: "flex-end", paddingRight: "20px" }}
+          style={{ justifyContent: "flex-end", marginTop: "7.6vh",marginRight:'1vw' }}
         >
           <Button
             color="primary"
-            className={classes.computeBtnUrl}
             disabled={url ? false : true}
             variant="contained"
             size={"small"}
