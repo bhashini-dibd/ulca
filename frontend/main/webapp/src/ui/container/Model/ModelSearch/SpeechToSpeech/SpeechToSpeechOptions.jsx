@@ -3,14 +3,19 @@ import {
   Card,
   Typography,
   CardContent,
-  CardActions,
   Button,
   TextField,
+  Tabs,
+  Tab,
+  AppBar,
+  MuiThemeProvider,
+  createTheme,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { translate } from "../../../../../assets/localisation";
 import DatasetStyle from "../../../../styles/Dataset";
 import MyAccordion from "../../../../components/common/Accordion";
+import TabPanel from "../../../../components/common/TabPanel";
 
 const SpeechToSpeechOptions = (props) => {
   const {
@@ -35,24 +40,16 @@ const SpeechToSpeechOptions = (props) => {
     textArea,
     makeTTSAPICall,
     makeTranslationAPICall,
-    source,
-    target,
+    index,
+    handleTabChange,
     clearAsr,
     clearTranslation,
   } = props;
+
   const renderVoiceRecorder = () => {
     return (
-      <Card className={classes.asrCard}>
-        <Grid container className={classes.cardHeader}>
-          <Typography variant="h6" className={classes.titleCard}>
-            {/* {translate("label.notes")} */}
-            {`Live Recording Inference - ${source ? source.label : ""}`}
-          </Typography>
-        </Grid>
-        <CardContent>
-          <Typography variant={"caption"}>
-            {translate("label.maxDuration")}
-          </Typography>
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           {recordAudio === "start" ? (
             <div className={classes.center}>
               <img
@@ -72,6 +69,8 @@ const SpeechToSpeechOptions = (props) => {
               />{" "}
             </div>
           )}
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <div className={classes.center}>
             <Typography style={{ height: "12px" }} variant="caption">
               {recordAudio === "start" ? "Recording..." : ""}
@@ -86,41 +85,58 @@ const SpeechToSpeechOptions = (props) => {
           </div>
           <div className={classes.centerAudio}>
             {data ? (
-              <audio src={data} controls id="sample"></audio>
+              <audio
+                src={data}
+                style={{ minWidth: "100%" }}
+                controls
+                id="sample"
+              ></audio>
             ) : (
-              <audio src="sample" controls id="sample"></audio>
+              <audio
+                src="sample"
+                style={{ minWidth: "100%" }}
+                controls
+                id="sample"
+              ></audio>
             )}
           </div>
-          <CardActions
-            style={{ justifyContent: "flex-end", paddingRight: "20px" }}
-          >
-            <Button
-              color="primary"
-              variant="contained"
-              size={"small"}
-              disabled={data ? false : true}
-              onClick={() => handleCompute()}
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+              <Typography variant={"caption"}>
+                {translate("label.maxDuration")}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={2}
+              lg={2}
+              xl={2}
+              style={{ display: "flex", justifyContent: "flex-end" }}
             >
-              Convert
-            </Button>
-          </CardActions>
-        </CardContent>
-      </Card>
+              <Button
+                color="primary"
+                variant="contained"
+                size={"small"}
+                disabled={data ? false : true}
+                onClick={() => handleCompute()}
+              >
+                Convert
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     );
   };
 
   const renderURLInput = () => {
     return (
-      <Card className={classes.asrCard}>
-        <Grid container className={classes.cardHeader}>
-          <Typography variant="h6" className={classes.titleCard}>
-            {`Batch Inference - ${source ? source.label : ""}`}
-          </Typography>
-        </Grid>
-        <CardContent style={{ height: "90px" }}>
-          <Typography variant={"caption"}>
-            {translate("label.maxDuration")}
-          </Typography>
+      <Grid container spacing={1}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <TextField
             fullWidth
             color="primary"
@@ -133,6 +149,8 @@ const SpeechToSpeechOptions = (props) => {
               setError({ ...error, url: false });
             }}
           />
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <div
             style={{
               display: "flex",
@@ -140,23 +158,38 @@ const SpeechToSpeechOptions = (props) => {
               justifyContent: "center",
             }}
           >
-            <audio controls src={url}></audio>
+            <audio style={{ minWidth: "100%" }} controls src={url}></audio>
           </div>
-        </CardContent>
-        <CardActions
-          style={{ justifyContent: "flex-end", marginTop: "7.6vh",marginRight:'1vw' }}
-        >
-          <Button
-            color="primary"
-            disabled={url ? false : true}
-            variant="contained"
-            size={"small"}
-            onClick={handleSubmit}
-          >
-            {translate("button.convert")}
-          </Button>
-        </CardActions>
-      </Card>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Grid container>
+            <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+              <Typography variant={"caption"}>
+                {translate("label.maxDuration")}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={2}
+              lg={2}
+              xl={2}
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <Button
+                color="primary"
+                disabled={url ? false : true}
+                variant="contained"
+                size={"small"}
+                onClick={handleSubmit}
+              >
+                {translate("button.convert")}
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     );
   };
 
@@ -253,10 +286,10 @@ const SpeechToSpeechOptions = (props) => {
 
   const renderOutput = () => {
     return (
-      <Card style={{ borderRadius: "10px" }}>
+      <Card className={classes.asrCard}>
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
-            {`${translate("label.output")} - ${target ? target.label : ""}`}
+            {`${translate("label.output")}`}
           </Typography>
         </Grid>
         <CardContent
@@ -266,35 +299,112 @@ const SpeechToSpeechOptions = (props) => {
             alignItems: "center",
           }}
         >
-          <audio src={audio} controls></audio>
+          {/* <audio src={audio} controls></audio> */}
         </CardContent>
       </Card>
     );
   };
 
+  const getTheme = () =>
+    createTheme({
+      overrides: {
+        PrivateTabIndicator: {
+          colorSecondary: {
+            backgroundColor: "#2A61AD",
+          },
+        },
+        MuiButton: {
+          root: {
+            minWidth: "25",
+            borderRadius: "none",
+          },
+          label: {
+            textTransform: "none",
+            fontFamily: '"Roboto", "Segoe UI"',
+            fontSize: "16px",
+            //fontWeight: "500",
+            //lineHeight: "1.14",
+            letterSpacing: "0.16px",
+            textAlign: "center",
+            height: "19px",
+            "@media (max-width:640px)": {
+              fontSize: "10px",
+            },
+          },
+          sizeLarge: {
+            height: "40px",
+            borderRadius: "20px",
+          },
+          sizeMedium: {
+            height: "40px",
+            borderRadius: "20px",
+          },
+          sizeSmall: {
+            height: "30px",
+            borderRadius: "20px",
+          },
+        },
+        MuiTab: {
+          textColorInherit: {
+            fontFamily: "Rowdies",
+            fontWeight: 300,
+            fontSize: "1.125rem",
+            textTransform: "none",
+            "&.Mui-selected": {
+              color: "#2A61AD",
+            },
+          },
+        },
+      },
+    });
+
+  const renderTabs = () => {
+    return (
+      <Card className={classes.asrCard}>
+        <Grid container className={classes.cardHeader}>
+          <MuiThemeProvider theme={getTheme}>
+            <AppBar
+              className={classes.appTab}
+              position="static"
+              style={{
+                background: "transparent",
+                border: "none",
+                margin: 0,
+                padding: "0% 1vw",
+                color: "#3A3A3A",
+              }}
+            >
+              <Tabs value={index} onChange={handleTabChange}>
+                <Tab label={"Live Recording Inference"} />
+                <Tab label={"Batch Inference"} />
+              </Tabs>
+            </AppBar>
+            <TabPanel value={index} index={0}>
+              {renderVoiceRecorder()}
+            </TabPanel>
+            <TabPanel value={index} index={1}>
+              {renderURLInput()}
+            </TabPanel>
+          </MuiThemeProvider>
+        </Grid>
+      </Card>
+    );
+  };
+
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={2}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        {renderVoiceRecorder()}
+        {renderTabs()}
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        {renderURLInput()}
+        {renderOutput()}
       </Grid>
-      {audio ? (
-        <>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            {renderOutput()}
-          </Grid>
-          <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-            <Typography variant="h5" style={{ marginBottom: "1%" }}>
-              Intermediate Output
-            </Typography>
-            {renderAccordion()}
-          </Grid>
-        </>
-      ) : (
-        <></>
-      )}
+      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Typography variant="h5" style={{ marginBottom: "1%" }}>
+          Intermediate Output
+        </Typography>
+        {renderAccordion()}
+      </Grid>
     </Grid>
   );
 };

@@ -1,4 +1,10 @@
-import { Grid, Button } from "@material-ui/core";
+import {
+  Grid,
+  Button,
+  MuiThemeProvider,
+  createTheme,
+  Typography,
+} from "@material-ui/core";
 import SingleAutoComplete from "../../../../components/common/SingleAutoComplete";
 
 const SpeechToSpeechFilter = (props) => {
@@ -11,7 +17,18 @@ const SpeechToSpeechFilter = (props) => {
     handleClick,
     sourceLanguage,
     targetLanguage,
+    disabled,
   } = props;
+
+  const getTheme = () =>
+    createTheme({
+      MuiFormLabel: {
+        root: {
+          fontSize: "1rem",
+        },
+      },
+    });
+
   const renderSingleAutoComplete = (
     value,
     id,
@@ -20,20 +37,35 @@ const SpeechToSpeechFilter = (props) => {
     disabled
   ) => {
     return (
-      <SingleAutoComplete
-        value={value}
-        id={id}
-        labels={labels}
-        placeholder={placeholder}
-        handleChange={handleChange}
-        disabled={false}
-      />
+      <MuiThemeProvider theme={getTheme}>
+        <SingleAutoComplete
+          value={value}
+          id={id}
+          labels={labels}
+          placeholder={placeholder}
+          handleChange={handleChange}
+          disabled={false}
+        />
+      </MuiThemeProvider>
     );
   };
 
   return (
-    <Grid container spacing={5}>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+    <Grid container spacing={2}>
+      <Grid
+        style={{ marginTop: "1vh" }}
+        item
+        xs={12}
+        sm={12}
+        md={12}
+        lg={12}
+        xl={12}
+      >
+        <Typography variant="body" component={"i"}>
+          Select the STS details
+        </Typography>
+      </Grid>
+      <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
         {renderSingleAutoComplete(
           filter.src,
           "src",
@@ -42,7 +74,7 @@ const SpeechToSpeechFilter = (props) => {
           false
         )}
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
         {renderSingleAutoComplete(
           filter.tgt,
           "tgt",
@@ -51,7 +83,7 @@ const SpeechToSpeechFilter = (props) => {
           false
         )}
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
         {renderSingleAutoComplete(
           filter.asr,
           "asr",
@@ -60,7 +92,7 @@ const SpeechToSpeechFilter = (props) => {
           false
         )}
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
         {renderSingleAutoComplete(
           filter.translation,
           "translation",
@@ -73,7 +105,7 @@ const SpeechToSpeechFilter = (props) => {
           false
         )}
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
         {renderSingleAutoComplete(
           filter.tts,
           "tts",
@@ -82,15 +114,28 @@ const SpeechToSpeechFilter = (props) => {
           false
         )}
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={1}
+        lg={1}
+        xl={1}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-end",
+        }}
+      >
         <Button
-          style={{ float: "right" }}
           variant="contained"
           size="large"
+          style={{ display: "flex", justifyContent: "center" }}
           color="primary"
           onClick={handleClick}
+          disabled={disabled}
         >
-          Reset
+          Clear
         </Button>
       </Grid>
     </Grid>

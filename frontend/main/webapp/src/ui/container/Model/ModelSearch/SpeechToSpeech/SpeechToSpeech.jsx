@@ -47,6 +47,8 @@ const SpeechToSpeech = () => {
     translation: "",
   });
 
+  const [index, setIndex] = useState(0);
+
   const handleChange = (data, id) => {
     setFilter({ ...filter, [id]: data });
   };
@@ -106,6 +108,10 @@ const SpeechToSpeech = () => {
 
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
+  };
+
+  const handleTabChange = (e, val) => {
+    setIndex(val);
   };
 
   const validURL = (str) => {
@@ -364,7 +370,7 @@ const SpeechToSpeech = () => {
   return (
     <>
       <Grid container spacing={5}>
-        <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <SpeechToSpeechFilter
             asr={asr}
             tts={tts}
@@ -377,7 +383,7 @@ const SpeechToSpeech = () => {
           />
         </Grid>
         <Divider />
-        <Grid item xs={12} sm={12} md={8} lg={8} xl={8}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <SpeechToSpeechOptions
             Start={Start}
             Stop={Stop}
@@ -401,10 +407,10 @@ const SpeechToSpeech = () => {
             output={output}
             handleTextAreaChange={handleTextAreaChange}
             textArea={textArea}
-            source={filter.src}
-            target={filter.tgt}
             clearAsr={clearAsr}
             clearTranslation={clearTranslation}
+            index={index}
+            handleTabChange={handleTabChange}
           />
         </Grid>
       </Grid>
