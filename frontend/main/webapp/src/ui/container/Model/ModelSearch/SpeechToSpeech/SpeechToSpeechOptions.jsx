@@ -10,11 +10,12 @@ import {
   AppBar,
   MuiThemeProvider,
   createTheme,
+  CardActions,
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import { translate } from "../../../../../assets/localisation";
 import DatasetStyle from "../../../../styles/Dataset";
-import MyAccordion from "../../../../components/common/Accordion";
+// import MyAccordion from "../../../../components/common/Accordion";
 import TabPanel from "../../../../components/common/TabPanel";
 
 const SpeechToSpeechOptions = (props) => {
@@ -200,47 +201,68 @@ const SpeechToSpeechOptions = (props) => {
     prop,
     input,
     handleSubmitClick,
-    handleClearSubmit
+    handleClearSubmit,
+    color
   ) => {
     return (
-      <Grid container>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <textarea
-            disabled
-            placeholder={placeholder}
-            rows={3}
-            value={value}
-            className={classes.textArea}
-            style={{ color: "grey", border: "1px solid grey" }}
-          />
+      <Card className={classes.asrCard}>
+        <Grid
+          container
+          className={classes.cardHeader}
+          style={{ backgroundColor: color }}
+        >
+          <Typography variant="h6" className={classes.titleCard}>
+            {placeholder}
+          </Typography>
         </Grid>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <textarea
-            placeholder={textAreaLabel}
-            rows={3}
-            className={classes.textArea}
-            value={input}
-            onChange={(e) => handleTextAreaChange(e, prop)}
-            style={{ border: "1px solid grey" }}
-          />
-        </Grid>
+        <CardContent>
+          <Grid container spacing={1}>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <textarea
+                disabled
+                placeholder={placeholder}
+                rows={2}
+                value={value}
+                className={classes.textArea}
+                style={{ color: "grey", border: "1px solid grey" }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <textarea
+                placeholder={textAreaLabel}
+                rows={2}
+                className={classes.textArea}
+                value={input}
+                onChange={(e) => handleTextAreaChange(e, prop)}
+                style={{ border: "1px solid grey" }}
+              />
+            </Grid>
+          </Grid>
+        </CardContent>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container spacing="2">
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={10}
+              lg={10}
+              xl={10}
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
               <Button
-                fullWidth
                 variant="outlined"
                 size="small"
                 color="primary"
+                disabled={input.trim() ? false : true}
                 onClick={handleClearSubmit}
               >
                 Clear
               </Button>
             </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
               <Button
-                fullWidth
-                variant="contained"
+                variant="outlined"
                 size="small"
                 color="primary"
                 onClick={handleSubmitClick}
@@ -251,14 +273,14 @@ const SpeechToSpeechOptions = (props) => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Card>
     );
   };
 
   const renderAccordion = () => {
     return (
-      <div>
-        <MyAccordion label={"ASR Output"} color="#D6EAF8">
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           {renderAccordionDetails(
             "ASR Output",
             "Corrected ASR Output",
@@ -266,10 +288,11 @@ const SpeechToSpeechOptions = (props) => {
             "asr",
             textArea.asr,
             makeTranslationAPICall,
-            clearAsr
+            clearAsr,
+            "#D6EAF8"
           )}
-        </MyAccordion>
-        <MyAccordion label={"Translation Output"} color="#E9F7EF">
+        </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           {renderAccordionDetails(
             "Translation Output",
             "Corrected Translation Output",
@@ -277,10 +300,11 @@ const SpeechToSpeechOptions = (props) => {
             "translation",
             textArea.translation,
             makeTTSAPICall,
-            clearTranslation
+            clearTranslation,
+            "#E9F7EF"
           )}
-        </MyAccordion>
-      </div>
+        </Grid>
+      </Grid>
     );
   };
 
@@ -297,9 +321,24 @@ const SpeechToSpeechOptions = (props) => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            position: "relative",
+            top: "25%",
           }}
         >
-          {/* <audio src={audio} controls></audio> */}
+          {audio ? (
+            <audio
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignContent: "center",
+              }}
+              src={audio}
+              controls
+            ></audio>
+          ) : (
+            <></>
+          )}
         </CardContent>
       </Card>
     );
@@ -392,19 +431,23 @@ const SpeechToSpeechOptions = (props) => {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={3}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderTabs()}
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderOutput()}
       </Grid>
-      <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-        <Typography variant="h5" style={{ marginBottom: "1%" }}>
-          Intermediate Output
-        </Typography>
-        {renderAccordion()}
-      </Grid>
+      {audio ? (
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Typography variant="h5" style={{ marginBottom: "1%" }}>
+            Intermediate Output
+          </Typography>
+          {renderAccordion()}
+        </Grid>
+      ) : (
+        <></>
+      )}
     </Grid>
   );
 };
