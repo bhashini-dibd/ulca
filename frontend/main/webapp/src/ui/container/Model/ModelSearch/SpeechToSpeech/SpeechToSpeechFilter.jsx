@@ -44,7 +44,7 @@ const SpeechToSpeechFilter = (props) => {
           labels={labels}
           placeholder={placeholder}
           handleChange={handleChange}
-          disabled={false}
+          disabled={disabled}
         />
       </MuiThemeProvider>
     );
@@ -80,7 +80,7 @@ const SpeechToSpeechFilter = (props) => {
           "tgt",
           targetLanguage,
           "Target Language",
-          false
+          filter.src.value ? false : true
         )}
       </Grid>
       <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
@@ -89,7 +89,7 @@ const SpeechToSpeechFilter = (props) => {
           "asr",
           asr.filter((a) => a.sourceLanguage === filter.src.value),
           "ASR Model",
-          false
+          filter.tgt.value ? false : true
         )}
       </Grid>
       <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
@@ -102,7 +102,7 @@ const SpeechToSpeechFilter = (props) => {
               a.targetLanguage === filter.tgt.value
           ),
           "Translation Model",
-          false
+          filter.tgt.value ? false : true
         )}
       </Grid>
       <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
@@ -111,7 +111,7 @@ const SpeechToSpeechFilter = (props) => {
           "tts",
           tts.filter((a) => a.sourceLanguage === filter.tgt.value),
           "TTS Model",
-          false
+          filter.tgt.value ? false : true
         )}
       </Grid>
       <Grid

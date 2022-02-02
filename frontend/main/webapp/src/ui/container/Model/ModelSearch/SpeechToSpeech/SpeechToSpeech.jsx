@@ -50,7 +50,21 @@ const SpeechToSpeech = () => {
   const [index, setIndex] = useState(0);
 
   const handleChange = (data, id) => {
-    setFilter({ ...filter, [id]: data !== null ? data : "" });
+    switch (id) {
+      case "src":
+        if (data === null)
+          setFilter({ src: "", tgt: "", asr: "", tts: "", translation: "" });
+        else setFilter({ ...filter, [id]: data });
+        break;
+      case "tgt":
+        if (data === null)
+          setFilter({ ...filter, tgt: "", asr: "", tts: "", translation: "" });
+        else setFilter({ ...filter, [id]: data });
+        break;
+      default:
+        setFilter({ ...filter, [id]: data !== null ? data : "" });
+        break;
+    }
   };
 
   const handleStartRecording = (data) => {
