@@ -116,7 +116,7 @@ const SpeechToSpeechOptions = (props) => {
               md={2}
               lg={2}
               xl={2}
-              style={{ display: "flex", justifyContent: "flex-end" }}
+              className={classes.flexEndStyle}
             >
               <Button
                 color="primary"
@@ -176,7 +176,7 @@ const SpeechToSpeechOptions = (props) => {
               md={2}
               lg={2}
               xl={2}
-              style={{ display: "flex", justifyContent: "flex-end" }}
+              className={classes.flexEndStyle}
             >
               <Button
                 color="primary"
@@ -217,14 +217,25 @@ const SpeechToSpeechOptions = (props) => {
         </Grid>
         <CardContent>
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Grid
+              item
+              xs={12}
+              sm={12}
+              md={12}
+              lg={12}
+              xl={12}
+              style={{ position: "relative" }}
+            >
               <textarea
                 disabled
                 placeholder={placeholder}
                 rows={2}
                 value={value}
                 className={classes.textArea}
-                style={{ color: "grey", border: "1px solid grey" }}
+                style={{
+                  color: "grey",
+                  border: "1px solid grey",
+                }}
               />
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -248,7 +259,7 @@ const SpeechToSpeechOptions = (props) => {
               md={10}
               lg={10}
               xl={10}
-              style={{ display: "flex", justifyContent: "flex-end" }}
+              className={classes.flexEndStyle}
             >
               <Button
                 variant="outlined"
@@ -402,17 +413,7 @@ const SpeechToSpeechOptions = (props) => {
       <Card className={classes.asrCard}>
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
-            <AppBar
-              className={classes.appTab}
-              position="static"
-              style={{
-                background: "transparent",
-                border: "none",
-                margin: 0,
-                padding: "0% 1vw",
-                color: "#3A3A3A",
-              }}
-            >
+            <AppBar className={classes.appTab} position="static">
               <Tabs value={index} onChange={handleTabChange}>
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
