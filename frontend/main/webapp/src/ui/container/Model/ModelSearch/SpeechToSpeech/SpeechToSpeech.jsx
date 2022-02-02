@@ -385,6 +385,11 @@ const SpeechToSpeech = () => {
     setTextArea({ ...textArea, [prop]: output[prop] });
   };
 
+  const isDisabled = () => {
+    const { asr, tts, translation, src, tgt } = filter;
+    return asr || tts || translation || src || tgt ? false : true;
+  };
+
   return (
     <>
       <Grid container spacing={5}>
@@ -398,6 +403,7 @@ const SpeechToSpeech = () => {
             handleChange={handleChange}
             sourceLanguage={sourceLanguage}
             targetLanguage={targetLanguage}
+            disabled={isDisabled()}
           />
         </Grid>
         <Divider />
