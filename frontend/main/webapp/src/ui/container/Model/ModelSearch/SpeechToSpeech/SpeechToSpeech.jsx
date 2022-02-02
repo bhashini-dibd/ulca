@@ -50,7 +50,7 @@ const SpeechToSpeech = () => {
   const [index, setIndex] = useState(0);
 
   const handleChange = (data, id) => {
-    setFilter({ ...filter, [id]: data });
+    setFilter({ ...filter, [id]: data !== null ? data : "" });
   };
 
   const handleStartRecording = (data) => {
