@@ -11,7 +11,10 @@ import {
   MuiThemeProvider,
   createTheme,
   CardActions,
+  IconButton,
+  Tooltip,
 } from "@material-ui/core";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { withStyles } from "@material-ui/styles";
 import { translate } from "../../../../../assets/localisation";
 import DatasetStyle from "../../../../styles/Dataset";
@@ -45,6 +48,7 @@ const SpeechToSpeechOptions = (props) => {
     handleTabChange,
     clearAsr,
     clearTranslation,
+    handleCopyClick
   } = props;
 
   const renderVoiceRecorder = () => {
@@ -235,8 +239,18 @@ const SpeechToSpeechOptions = (props) => {
                 style={{
                   color: "grey",
                   border: "1px solid grey",
+                  margin: 0,
+                  padding: 0,
                 }}
               />
+              <IconButton
+                style={{ position: "absolute", top: "0", right: "10px" }}
+                onClick={()=>handleCopyClick(prop)}
+              >
+                <Tooltip title="copy">
+                  <FileCopyIcon color="primary" fontSize="small" />
+                </Tooltip>
+              </IconButton>
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <textarea
@@ -265,7 +279,7 @@ const SpeechToSpeechOptions = (props) => {
                 variant="outlined"
                 size="small"
                 color="primary"
-                disabled={input.trim() ? false : true}
+                disabled={input && input.trim() ? false : true}
                 onClick={handleClearSubmit}
               >
                 Clear
@@ -277,7 +291,7 @@ const SpeechToSpeechOptions = (props) => {
                 size="small"
                 color="primary"
                 onClick={handleSubmitClick}
-                disabled={input.trim() ? false : true}
+                disabled={input && input.trim() ? false : true}
               >
                 Submit
               </Button>

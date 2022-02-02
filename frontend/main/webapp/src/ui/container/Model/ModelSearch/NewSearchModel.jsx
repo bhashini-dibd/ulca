@@ -126,6 +126,7 @@ const NewSearchModel = () => {
       handleChange={handleChange}
       value={value}
       tabs={ModelTask}
+      showFilter={ModelTask[value].value}
     >
       <TabPanel value={value} index={value}>
         {renderTabs()}

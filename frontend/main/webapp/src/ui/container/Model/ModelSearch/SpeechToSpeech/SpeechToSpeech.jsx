@@ -367,6 +367,10 @@ const SpeechToSpeech = () => {
     setFilter({ asr: "", tts: "", translation: "", src: "", tgt: "" });
   };
 
+  const handleCopyClick = (prop) => {
+    setTextArea({ ...textArea, [prop]: output[prop] });
+  };
+
   return (
     <>
       <Grid container spacing={5}>
@@ -411,6 +415,7 @@ const SpeechToSpeech = () => {
             clearTranslation={clearTranslation}
             index={index}
             handleTabChange={handleTabChange}
+            handleCopyClick={handleCopyClick}
           />
         </Grid>
       </Grid>
