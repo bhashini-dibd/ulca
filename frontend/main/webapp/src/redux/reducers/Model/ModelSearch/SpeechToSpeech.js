@@ -9,82 +9,35 @@ const initialState = {
   targetLanguage: [],
 };
 
-const getLanguage = (prop, asrArr, translationArr, ttsArr) => {
-  let src = [];
-  asrArr.forEach((asr) =>
-    Language.forEach((lang) => {
-      if (asr[prop] === lang.value) {
-        src.push(lang);
+const getLanguage = (asrArr, translationArr, ttsArr) => {
+  const asrLang = [...new Set(asrArr.map((asr) => asr.sourceLanguage))];
+  const ttsLang = [...new Set(ttsArr.map((tts) => tts.sourceLanguage))];
+  const language = translationArr.filter((translation) => {
+    return (
+      asrLang.indexOf(translation.sourceLanguage) > -1 &&
+      ttsLang.indexOf(translation.targetLanguage) > -1
+    );
+  });
+  let sourceLanguage = [];
+  let targetLanguage = [];
+  language.forEach((lang) => {
+    Language.forEach((elem) => {
+      if (elem.value === lang.sourceLanguage) {
+        sourceLanguage.push(elem);
       }
-    })
-  );
-  translationArr.forEach((asr) =>
-    Language.forEach((lang) => {
-      if (asr[prop] === lang.value) {
-        src.push(lang);
-      }
-    })
-  );
-  ttsArr.forEach((asr) =>
-    Language.forEach((lang) => {
-      if (asr[prop] === lang.value) {
-        src.push(lang);
-      }
-    })
-  );
-  return getUniqueListBy(src, "value");
-};
-const getTargetLanguage = (tgtArr, translationArr, ttsArr) => {
-  const translationLang = translationArr.map(
-    (translation) => translation.targetLanguage
-  );
-  const ttsLang = ttsArr.map((asr) => asr.sourceLanguage);
-  let sourceLanguage = "";
-  if (ttsLang.length > translationLang.length) {
-    sourceLanguage = ttsLang.filter(function (n) {
-      return translationLang.indexOf(n.sourceLanguage) !== -1;
     });
-  } else {
-    sourceLanguage = translationArr.filter(function (n) {
-      return ttsLang.indexOf(n.targetLanguage) !== -1;
-    });
-  }
-  const src = [];
-  sourceLanguage.forEach((source) =>
-    Language.forEach((lang) => {
-      if (source["targetLanguage"] === lang.value) {
-        src.push(lang);
+  });
+  language.forEach((lang) => {
+    Language.forEach((elem) => {
+      if (elem.value === lang.targetLanguage) {
+        targetLanguage.push(elem);
       }
-    })
-  );
-
-  return getUniqueListBy(src, "value");
-};
-const getSourceLanguage = (srcArr, asrArr, translationArr) => {
-  const asrLang = asrArr.map((asr) => asr.sourceLanguage);
-  const translationLang = translationArr.map(
-    (translation) => translation.sourceLanguage
-  );
-  let sourceLanguage = "";
-  if (asrLang.length > translationLang.length) {
-    sourceLanguage = asrArr.filter(function (n) {
-      return translationLang.indexOf(n.sourceLanguage) !== -1;
     });
-  } else {
-    sourceLanguage = translationArr.filter(function (n) {
-      return asrLang.indexOf(n.sourceLanguage) !== -1;
-    });
-  }
-  const src = [];
-  sourceLanguage.forEach((source) =>
-    Language.forEach((lang) => {
-      if (source["sourceLanguage"] === lang.value) {
-        src.push(lang);
-      }
-    })
-  );
-
-  return getUniqueListBy(src, "value");
+  });
+  return {
+    sourceLanguage: getUniqueListBy(sourceLanguage, "value"),
+    targetLanguage: getUniqueListBy(targetLanguage, "value"),
+  };
 };
 
 const updateModelType = (data, prevState) => {
@@ -108,17 +61,17 @@ const updateModelType = (data, prevState) => {
       "value"
     );
   });
-  updatedObj["sourceLanguage"] = getSourceLanguage(
-    updatedObj["sourceLanguage"],
+  updatedObj["sourceLanguage"] = getLanguage(
     updatedObj["asr"],
-    updatedObj["translation"]
-  );
-
-  updatedObj["targetLanguage"] = getTargetLanguage(
-    updatedObj["targetLanguage"],
     updatedObj["translation"],
     updatedObj["tts"]
-  );
+  ).sourceLanguage;
+
+  updatedObj["targetLanguage"] = getLanguage(
+    updatedObj["asr"],
+    updatedObj["translation"],
+    updatedObj["tts"]
+  ).targetLanguage;
   return updatedObj;
 };
 

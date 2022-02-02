@@ -13,6 +13,7 @@ import Start from "../../../../../assets/start.svg";
 import Stop from "../../../../../assets/stopIcon.svg";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import ComputeAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
+import { Language } from "../../../../../configs/DatasetItems";
 
 const SpeechToSpeech = () => {
   const dispatch = useDispatch();
@@ -54,12 +55,27 @@ const SpeechToSpeech = () => {
       case "src":
         if (data === null)
           setFilter({ src: "", tgt: "", asr: "", tts: "", translation: "" });
-        else setFilter({ ...filter, [id]: data });
+        else
+          setFilter({
+            ...filter,
+            [id]: data,
+            tgt: "",
+            asr: "",
+            tts: "",
+            translation: "",
+          });
         break;
       case "tgt":
         if (data === null)
           setFilter({ ...filter, tgt: "", asr: "", tts: "", translation: "" });
-        else setFilter({ ...filter, [id]: data });
+        else
+          setFilter({
+            ...filter,
+            [id]: data,
+            asr: "",
+            tts: "",
+            translation: "",
+          });
         break;
       default:
         setFilter({ ...filter, [id]: data !== null ? data : "" });
@@ -388,6 +404,26 @@ const SpeechToSpeech = () => {
     return asr || tts || translation || src || tgt ? false : true;
   };
 
+  function getUniqueListBy(arr, key) {
+    return [...new Map(arr.map((item) => [item[key], item])).values()];
+  }
+
+  const renderTargetVal = () => {
+    let updatedTargets = [];
+    targetLanguage.forEach((lang) => {
+      translation.forEach((tr) => {
+        if (
+          tr.sourceLanguage === filter.src.value &&
+          tr.targetLanguage === lang.value
+        ) {
+          updatedTargets.push(lang);
+        }
+      });
+    });
+    updatedTargets = [...new Set(updatedTargets)];
+    return getUniqueListBy(updatedTargets, "value");
+  };
+
   return (
     <>
       <Grid container spacing={5}>
@@ -400,7 +436,7 @@ const SpeechToSpeech = () => {
             handleClick={handleResetBtnClick}
             handleChange={handleChange}
             sourceLanguage={sourceLanguage}
-            targetLanguage={targetLanguage}
+            targetLanguage={renderTargetVal()}
             disabled={isDisabled()}
           />
         </Grid>
