@@ -34,7 +34,58 @@ const getLanguage = (prop, asrArr, translationArr, ttsArr) => {
   );
   return getUniqueListBy(src, "value");
 };
-const getTargetLanguage = (tgtArr, asr, translation, tts) => {};
+const getTargetLanguage = (tgtArr, translationArr, ttsArr) => {
+  const translationLang = translationArr.map(
+    (translation) => translation.targetLanguage
+  );
+  const ttsLang = ttsArr.map((asr) => asr.sourceLanguage);
+  let sourceLanguage = "";
+  if (ttsLang.length > translationLang.length) {
+    sourceLanguage = ttsLang.filter(function (n) {
+      return translationLang.indexOf(n.sourceLanguage) !== -1;
+    });
+  } else {
+    sourceLanguage = translationArr.filter(function (n) {
+      return ttsLang.indexOf(n.targetLanguage) !== -1;
+    });
+  }
+  const src = [];
+  sourceLanguage.forEach((source) =>
+    Language.forEach((lang) => {
+      if (source["targetLanguage"] === lang.value) {
+        src.push(lang);
+      }
+    })
+  );
+
+  return getUniqueListBy(src, "value");
+};
+const getSourceLanguage = (srcArr, asrArr, translationArr) => {
+  const asrLang = asrArr.map((asr) => asr.sourceLanguage);
+  const translationLang = translationArr.map(
+    (translation) => translation.sourceLanguage
+  );
+  let sourceLanguage = "";
+  if (asrLang.length > translationLang.length) {
+    sourceLanguage = asrArr.filter(function (n) {
+      return translationLang.indexOf(n.sourceLanguage) !== -1;
+    });
+  } else {
+    sourceLanguage = translationArr.filter(function (n) {
+      return asrLang.indexOf(n.sourceLanguage) !== -1;
+    });
+  }
+  const src = [];
+  sourceLanguage.forEach((source) =>
+    Language.forEach((lang) => {
+      if (source["sourceLanguage"] === lang.value) {
+        src.push(lang);
+      }
+    })
+  );
+
+  return getUniqueListBy(src, "value");
+};
 
 const updateModelType = (data, prevState) => {
   const updatedObj = JSON.parse(JSON.stringify(prevState));
@@ -57,15 +108,14 @@ const updateModelType = (data, prevState) => {
       "value"
     );
   });
-  updatedObj["sourceLanguage"] = getLanguage(
-    "sourceLanguage",
+  updatedObj["sourceLanguage"] = getSourceLanguage(
+    updatedObj["sourceLanguage"],
     updatedObj["asr"],
-    updatedObj["translation"],
-    updatedObj["tts"]
+    updatedObj["translation"]
   );
-  updatedObj["targetLanguage"] = getLanguage(
-    "targetLanguage",
-    updatedObj["asr"],
+
+  updatedObj["targetLanguage"] = getTargetLanguage(
+    updatedObj["targetLanguage"],
     updatedObj["translation"],
     updatedObj["tts"]
   );

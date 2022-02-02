@@ -113,11 +113,9 @@ const SpeechToSpeech = () => {
   };
 
   useEffect(() => {
-    // if (filter.src && filter.tgt) {
     makeModelSearchAPICall("asr", "", "");
     makeModelSearchAPICall("translation", "", "");
     makeModelSearchAPICall("tts", "", "");
-    // }
   }, []);
 
   const handleSnackbarClose = () => {
