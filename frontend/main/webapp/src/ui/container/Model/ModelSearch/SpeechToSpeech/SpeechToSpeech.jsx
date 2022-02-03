@@ -337,14 +337,16 @@ const SpeechToSpeech = () => {
                   const blob = b64toBlob(rsp_data.outputText, "audio/wav");
                   const urlBlob = window.URL.createObjectURL(blob);
                   setAudio(urlBlob);
+                } else {
+                  setSnackbarError(rsp_data.message);
                 }
               });
+            } else {
+              setSnackbarError(rsp_data.message);
             }
           });
         } else {
-          setSnackbarError(
-            "Unable to process your request at the moment. Please try after sometime."
-          );
+          setSnackbarError(rsp_data.message);
         }
       })
       .catch(async (error) => {
