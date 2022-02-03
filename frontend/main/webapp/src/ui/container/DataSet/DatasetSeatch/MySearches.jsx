@@ -107,7 +107,7 @@ const MySearches = (props) => {
         <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
           <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
+        <Grid className={classes.refreshGrid} item xs={2} sm={2} md={2} lg={2} xl={2}>
           <Button
             color={"primary"}
             size="medium"
@@ -117,6 +117,17 @@ const MySearches = (props) => {
           >
             <Cached className={classes.iconStyle} />
             {translate("button.refresh")}
+          </Button>
+        </Grid>
+        <Grid className={classes.refreshGridMobile} item xs={2} sm={2} md={2} lg={2} xl={2}>
+          <Button
+            color={"primary"}
+            size="medium"
+            variant="outlined"
+            className={classes.ButtonRefreshMobile}
+            onClick={() => MySearchListApi()}
+          >
+            <Cached className={classes.iconStyle} />
           </Button>
         </Grid>
       </Grid>
