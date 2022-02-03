@@ -53,9 +53,13 @@ const SpeechToSpeech = () => {
   const handleChange = (data, id) => {
     switch (id) {
       case "src":
-        if (data === null)
+        if (data === null) {
           setFilter({ src: "", tgt: "", asr: "", tts: "", translation: "" });
-        else
+          setBase("");
+          setUrl("");
+          setAudio("");
+          setData("");
+        } else
           setFilter({
             ...filter,
             [id]: data,
@@ -181,6 +185,12 @@ const SpeechToSpeech = () => {
   };
 
   const makeTranslationAPICall = () => {
+    setSnackbarInfo({
+      ...snackbar,
+      open: true,
+      message: "Please wait while we process your request...",
+      variant: "info",
+    });
     setTextArea((prev) => ({ ...prev, translation: "", asr: "" }));
     setOutput((prev) => ({ ...prev, asr: textArea.asr }));
     const obj = new ComputeAPI(
@@ -223,13 +233,24 @@ const SpeechToSpeech = () => {
             const blob = b64toBlob(rsp_data.outputText, "audio/wav");
             const urlBlob = window.URL.createObjectURL(blob);
             setAudio(urlBlob);
+            setSnackbarInfo({ ...snackbar, open: false, message: "" });
+          } else {
+            setSnackbarError(rsp_data.message);
           }
         });
+      } else {
+        setSnackbarError(rsp_data.message);
       }
     });
   };
 
   const makeTTSAPICall = () => {
+    setSnackbarInfo({
+      ...snackbar,
+      open: true,
+      message: "Please wait while we process your request...",
+      variant: "info",
+    });
     setTextArea((prev) => ({ ...prev, translation: "" }));
     setOutput((prev) => ({ ...prev, translation: textArea.translation }));
     const obj = new ComputeAPI(
@@ -251,6 +272,9 @@ const SpeechToSpeech = () => {
         const blob = b64toBlob(rsp_data.outputText, "audio/wav");
         const urlBlob = window.URL.createObjectURL(blob);
         setAudio(urlBlob);
+        setSnackbarInfo({ ...snackbar, open: false, message: "" });
+      } else {
+        setSnackbarError(rsp_data.message);
       }
     });
   };
@@ -337,6 +361,7 @@ const SpeechToSpeech = () => {
                   const blob = b64toBlob(rsp_data.outputText, "audio/wav");
                   const urlBlob = window.URL.createObjectURL(blob);
                   setAudio(urlBlob);
+                  setSnackbarInfo({ ...snackbar, open: false, message: "" });
                 } else {
                   setSnackbarError(rsp_data.message);
                 }
@@ -395,6 +420,10 @@ const SpeechToSpeech = () => {
 
   const handleResetBtnClick = () => {
     setFilter({ asr: "", tts: "", translation: "", src: "", tgt: "" });
+    setBase("");
+    setUrl("");
+    setAudio("");
+    setData("");
   };
 
   const handleCopyClick = (prop) => {
