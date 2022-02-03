@@ -190,6 +190,18 @@ const DataSet = (theme) => ({
       display: 'block'
     }
   },
+  refreshGrid: {
+    display:'block',
+    "@media (max-width:870px)": {
+      display: 'none'
+    }
+  },
+  refreshGridMobile: {
+    display:'none',
+    "@media (max-width:870px)": {
+      display: 'block'
+    }
+  },
   filterGrid: {
     display:'block',
     "@media (max-width:870px)": {
