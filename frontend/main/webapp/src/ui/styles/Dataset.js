@@ -25,17 +25,17 @@ const DataSet = (theme) => ({
     marginTop: "1vh",
   },
   computeBtn: {
-    backgroundColor: '#FD7F23',
-    float: 'right',
-    marginRight: '30px',
-    marginTop: '33px',
-    '&:hover': {
-      backgroundColor: '#FD7F23',
+    backgroundColor: "#FD7F23",
+    float: "right",
+    marginRight: "30px",
+    marginTop: "33px",
+    "&:hover": {
+      backgroundColor: "#FD7F23",
     },
     "@media (max-width:640px)": {
-      fontSize: '12px',
-      marginRight: '0px',
-      marginTop: '25px',
+      fontSize: "12px",
+      marginRight: "0px",
+      marginTop: "25px",
     },
   },
   tableRow: { display: "none" },
@@ -45,7 +45,7 @@ const DataSet = (theme) => ({
     borderRadius: "8px",
     marginTop: "1%",
     "@media (max-width:640px)": {
-      height: '80px'
+      height: "80px",
     },
   },
   divStyle: {
@@ -180,27 +180,39 @@ const DataSet = (theme) => ({
     marginLeft: "auto",
     borderRadius: "1rem",
     "@media (max-width:870px)": {
-      display: 'none'
-    }
+      display: "none",
+    },
   },
   ButtonRefreshMobile: {
-    display:'none',
+    display: "none",
     borderRadius: "1rem",
     "@media (max-width:870px)": {
-      display: 'block'
-    }
+      display: "block",
+    },
   },
-  filterGrid: {
+  refreshGrid: {
     display:'block',
     "@media (max-width:870px)": {
       display: 'none'
     }
   },
-  filterGridMobile: {
+  refreshGridMobile: {
     display:'none',
     "@media (max-width:870px)": {
       display: 'block'
     }
+  },
+  filterGrid: {
+    display: "block",
+    "@media (max-width:870px)": {
+      display: "none",
+    },
+  },
+  filterGridMobile: {
+    display: "none",
+    "@media (max-width:870px)": {
+      display: "block",
+    },
   },
   searchDivStyle: {
     //padding: '0% 4%',
@@ -256,7 +268,7 @@ const DataSet = (theme) => ({
   },
   yourSearchQuery: {
     marginBottom: "2%",
-    color: '#FD7F23'
+    color: "#FD7F23",
   },
   serReqNoTypo: {
     marginBottom: "7%",
@@ -274,7 +286,7 @@ const DataSet = (theme) => ({
     padding: "5% 14% 2% 4%",
     width: "70%",
     minHeight: "3.5rem",
-    backgroundColor: '#D6EAF8'
+    backgroundColor: "#D6EAF8",
   },
   downloadBtnDiv: {
     margin: "10%",
@@ -416,7 +428,7 @@ const DataSet = (theme) => ({
     marginTop: "20px",
     // padding: 0,
   },
-  mainTitle: { marginTop: "33px", marginLeft: '38px' },
+  mainTitle: { marginTop: "33px", marginLeft: "38px" },
   backButton: {
     boxShadow: "none",
     padding: "0",
@@ -554,10 +566,26 @@ const DataSet = (theme) => ({
     borderRadius: "22px",
   },
   advanceFilter: {
-    textAlign: 'right',
-    color: "#FD7F23"
+    textAlign: "right",
+    color: "#FD7F23",
   },
-  advanceFilterContainer: { maxHeight: "16rem", overflowY: 'auto', overflowX: "hidden", marginTop: "2rem" }
+  advanceFilterContainer: {
+    maxHeight: "16rem",
+    overflowY: "auto",
+    overflowX: "hidden",
+    marginTop: "2rem",
+  },
+  appTab: {
+    background: "transparent",
+    border: "none",
+    margin: 0,
+    padding: "0% 1vw",
+    color: "#3A3A3A",
+  },
+  flexEndStyle: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
 });
 
 export default DataSet;

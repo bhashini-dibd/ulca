@@ -180,6 +180,8 @@ const themeDefault = createMuiTheme({
         //lineHeight: "1.14",
         letterSpacing: "0.16px",
         textAlign: "center",
+        display:'flex',
+        justifyContent:'center',
         height: "19px",
         "@media (max-width:640px)": {
           fontSize: "10px",

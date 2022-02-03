@@ -4,6 +4,7 @@ import {
   createTheme,
   Button,
   Typography,
+  Grid
 } from "@material-ui/core";
 import BreadCrum from "../../../components/common/Breadcrum";
 import React, { useEffect } from "react";
@@ -35,7 +36,7 @@ const DetailedStatus = (props) => {
     dispatch(APITransport(userId));
   };
 
-  const handleDownload = () => {};
+  const handleDownload = () => { };
 
   const getMuiTheme = () =>
     createTheme({
@@ -65,67 +66,90 @@ const DetailedStatus = (props) => {
   const fetchHeaderButton = () => {
     return (
       <div className={classes.headerButtons}>
-        <Typography variant="h5">{name}</Typography>
-        {
-          <Button
-            color={"primary"}
-            size="medium"
-            className={classes.ButtonRefresh}
-            variant="outlined"
-            disabled={
-              status.toLowerCase() === "in-progress" ||
-              status.toLowerCase() === "pending"
-                ? false
-                : true
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
+            <Typography variant="h5">{name}</Typography>
+          </Grid>
+          <Grid item>
+            {
+              <><Button
+                color={"primary"}
+                size="medium"
+                className={classes.ButtonRefresh}
+                variant="outlined"
+                disabled={
+                  status.toLowerCase() === "in-progress" ||
+                    status.toLowerCase() === "pending"
+                    ? false
+                    : true
+                }
+                onClick={() => DetailedDataSetStatusApi()}
+              >
+                <Cached className={classes.iconStyle} />
+                Refresh
+              </Button>
+                <Button
+                  color={"primary"}
+                  size="medium"
+                  className={classes.ButtonRefreshMobile}
+                  variant="outlined"
+                  disabled={
+                    status.toLowerCase() === "in-progress" ||
+                      status.toLowerCase() === "pending"
+                      ? false
+                      : true
+                  }
+                  onClick={() => DetailedDataSetStatusApi()}
+                >
+                  <Cached className={classes.iconStyle} />
+                  Refresh
+                </Button>
+              </>
             }
-            onClick={() => DetailedDataSetStatusApi()}
-          >
-            <Cached className={classes.iconStyle} />
-            Refresh
-          </Button>
-        }
-        <Button
-          color={"primary"}
-          href={errorData.consolidated_file}
-          target="_self"
-          size="medium"
-          variant="outlined"
-          disabled={
-            errorData.hasOwnProperty("consolidated_file") &&
-            errorData.consolidated_file
-              ? false
-              : true
-          }
-          className={
-            !(errorData.status !== "completed")
-              ? classes.ButtonRefresh
-              : classes.buttonStyle
-          }
-          onClick={() => handleDownload()}
-        >
-          <SaveAlt className={classes.iconStyle} />
-          {translate("button.errorSummary")}
-        </Button>
+            <Button
+              color={"primary"}
+              href={errorData.consolidated_file}
+              target="_self"
+              size="medium"
+              variant="outlined"
+              disabled={
+                errorData.hasOwnProperty("consolidated_file") &&
+                  errorData.consolidated_file
+                  ? false
+                  : true
+              }
+              className={
+                !(errorData.status !== "completed")
+                  ? classes.ButtonRefresh
+                  : classes.buttonStyle
+              }
+              onClick={() => handleDownload()}
+            >
+              <SaveAlt className={classes.iconStyle} />
+              {translate("button.errorSummary")}
+            </Button>
 
-        <Button
-          color={"primary"}
-          href={errorData.file}
-          target="_self"
-          size="medium"
-          variant="outlined"
-          disabled={
-            errorData.hasOwnProperty("file") && errorData.file ? false : true
-          }
-          className={
-            !(errorData.status !== "completed")
-              ? classes.ButtonRefresh
-              : classes.buttonStyle
-          }
-          onClick={() => handleDownload()}
-        >
-          <SaveAlt className={classes.iconStyle} />
-          {translate("button.detailErrorLog")}
-        </Button>
+            <Button
+              color={"primary"}
+              href={errorData.file}
+              target="_self"
+              size="medium"
+              variant="outlined"
+              disabled={
+                errorData.hasOwnProperty("file") && errorData.file ? false : true
+              }
+              className={
+                !(errorData.status !== "completed")
+                  ? classes.ButtonRefresh
+                  : classes.buttonStyle
+              }
+              onClick={() => handleDownload()}
+            >
+              <SaveAlt className={classes.iconStyle} />
+              {translate("button.detailErrorLog")}
+            </Button>
+          </Grid>
+        </Grid>
       </div>
     );
   };

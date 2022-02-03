@@ -27,6 +27,7 @@ import benchmarkTableDetails from "./Model/ModelSearch/BenchmarkTable";
 import getUserDetails from "./Admin/UserDetails";
 import getMasterData from "./Common/getMasterData";
 import getModelDetails from "./Model/ModelSearch/GetModelDetail";
+import getBulkModelSearch from "../reducers/Model/ModelSearch/SpeechToSpeech";
 
 const index = {
   apiStatus,
@@ -58,6 +59,7 @@ const index = {
   getUserDetails,
   getMasterData,
   getModelDetails,
+  getBulkModelSearch,
 };
 
 export default index;

@@ -17,8 +17,7 @@ function a11yProps(index) {
 }
 
 const SimpleTabs = (props) => {
-  const { classes } = props;
-
+  const { classes, showFilter } = props;
   return (
     <div>
       <AppBar className={classes.appTab} position="static" color="inherit">
@@ -36,7 +35,7 @@ const SimpleTabs = (props) => {
               })}
             </Tabs>
           </Grid>
-          <Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
+          {showFilter!=='sts' &&<Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
             <Grid container spacing={2} className={classes.gridAlign}>
               <Grid item>
                 <div className={classes.search}>
@@ -67,7 +66,7 @@ const SimpleTabs = (props) => {
                 </Button>
               </Grid>
             </Grid>
-          </Grid>
+          </Grid>}
         </Grid>
       </AppBar>
       {props.children}

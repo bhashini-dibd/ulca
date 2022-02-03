@@ -20,6 +20,7 @@ import SearchList from "../../../../redux/actions/api/Model/ModelSearch/SearchLi
 import C from "../../../../redux/actions/constants";
 import FilterList from "./ModelDetail/Filter";
 import React from "react";
+import SpeechToSpeech from "../ModelSearch/SpeechToSpeech/SpeechToSpeech";
 
 const CardComponent = React.lazy(() =>
   import("../../../components/common/CardComponent")
@@ -63,8 +64,10 @@ const NewSearchModel = () => {
   }, []);
 
   const makeModelSearchAPICall = (type) => {
-    const apiObj = new SearchModel(type, "", "");
-    dispatch(APITransport(apiObj));
+    if (type !== "sts") {
+      const apiObj = new SearchModel(type, "", "");
+      dispatch(APITransport(apiObj));
+    }
   };
 
   const handleShowFilter = (event) => {
@@ -95,6 +98,9 @@ const NewSearchModel = () => {
   };
 
   const renderTabs = () => {
+    if (ModelTask[value].value === "sts") {
+      return <SpeechToSpeech />;
+    }
     if (searchModelResult.filteredData.length)
       return (
         <Suspense fallback={<div>Loading Models...</div>}>
@@ -120,6 +126,7 @@ const NewSearchModel = () => {
       handleChange={handleChange}
       value={value}
       tabs={ModelTask}
+      showFilter={ModelTask[value].value}
     >
       <TabPanel value={value} index={value}>
         {renderTabs()}
