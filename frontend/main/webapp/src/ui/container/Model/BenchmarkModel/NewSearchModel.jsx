@@ -1,13 +1,12 @@
 import Tab from "../../../components/common/Tab";
-import DatasetItems, { ModelTask } from "../../../../configs/DatasetItems";
+import { ModelTask } from "../../../../configs/DatasetItems";
 import { useState } from "react";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import CardComponent from "../../../components/common/CardComponent";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import BenchmarkModelSearch from "../../../../redux/actions/api/Model/BenchmarkModel/SearchBenchmark";
 import updateFilter from "../../../../redux/actions/api/Model/BenchmarkModel/Benchmark";
+import { Suspense } from "react";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import {
   FilterModel,
@@ -16,6 +15,7 @@ import {
 import Record from "../../../../assets/no-record.svg";
 import { useHistory } from "react-router-dom";
 import SearchList from "../../../../redux/actions/api/Model/ModelSearch/SearchList";
+import GridView from "./GridView";
 
 import C from "../../../../redux/actions/constants";
 import FilterList from "./Filter";
@@ -49,6 +49,7 @@ const NewSearchModel = () => {
     setValue(newValue);
     makeModelSearchAPICall(ModelTask[newValue].value);
     dispatch(SearchList(""));
+    dispatch({ type: "CLEAR_FILTER_BENCHMARK" });
   };
   const dispatch = useDispatch();
   const searchModelResult = useSelector((state) => state.BenchmarkList);
@@ -87,9 +88,13 @@ const NewSearchModel = () => {
   };
 
   const handleSearch = (event) => {
-    console.log(event.target.value);
     dispatch(SearchList(event.target.value));
   };
+
+  const handleChangePage = (e, page) => {
+    dispatch({ type: "BENCHMARK_PAGE_NO", payload: page });
+  };
+
   return (
     <Tab
       handleSearch={handleSearch}
@@ -101,7 +106,15 @@ const NewSearchModel = () => {
     >
       <TabPanel value={value} index={value}>
         {searchModelResult.filteredData.length ? (
-          <CardComponent onClick={handleClick} value={searchModelResult} />
+          <Suspense fallback={<div>Loading Models...</div>}>
+            <GridView
+              data={searchModelResult}
+              handleCardClick={handleClick}
+              rowsPerPage={9}
+              page={searchModelResult.page}
+              handleChangePage={handleChangePage}
+            />
+          </Suspense>
         ) : (
           <div
             style={{

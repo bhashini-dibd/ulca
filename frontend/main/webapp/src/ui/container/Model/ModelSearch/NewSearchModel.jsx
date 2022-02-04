@@ -1,9 +1,7 @@
 import Tab from "../../../components/common/Tab";
-import DatasetItems, { ModelTask } from "../../../../configs/DatasetItems";
+import { ModelTask } from "../../../../configs/DatasetItems";
 import { Suspense, useState } from "react";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-// import CardComponent from "../../../components/common/CardComponent";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SearchModel from "../../../../redux/actions/api/Model/ModelSearch/SearchModel";
@@ -16,15 +14,11 @@ import {
 import Record from "../../../../assets/no-record.svg";
 import { useHistory } from "react-router-dom";
 import SearchList from "../../../../redux/actions/api/Model/ModelSearch/SearchList";
-
 import C from "../../../../redux/actions/constants";
 import FilterList from "./ModelDetail/Filter";
 import React from "react";
 import SpeechToSpeech from "../ModelSearch/SpeechToSpeech/SpeechToSpeech";
-
-const CardComponent = React.lazy(() =>
-  import("../../../components/common/CardComponent")
-);
+import GridView from "./GridView";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,7 +41,6 @@ const NewSearchModel = () => {
   const [value, setValue] = useState(type.indexOf(filter.type));
   const { searchValue } = useSelector((state) => state.BenchmarkList);
   const [anchorEl, setAnchorEl] = useState(null);
-
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
 
@@ -55,6 +48,7 @@ const NewSearchModel = () => {
     setValue(newValue);
     makeModelSearchAPICall(ModelTask[newValue].value);
     dispatch(SearchList(""));
+    dispatch({ type: "CLEAR_FILTER_MODEL" });
   };
   const dispatch = useDispatch();
   const searchModelResult = useSelector((state) => state.searchModel);
@@ -97,6 +91,10 @@ const NewSearchModel = () => {
     dispatch(SearchList(event.target.value));
   };
 
+  const handleChangePage = (e, page) => {
+    dispatch({ type: "EXPLORE_MODEL_PAGE_NO", payload: page });
+  };
+
   const renderTabs = () => {
     if (ModelTask[value].value === "sts") {
       return <SpeechToSpeech />;
@@ -104,7 +102,13 @@ const NewSearchModel = () => {
     if (searchModelResult.filteredData.length)
       return (
         <Suspense fallback={<div>Loading Models...</div>}>
-          <CardComponent onClick={handleClick} value={searchModelResult} />
+          <GridView
+            data={searchModelResult}
+            handleCardClick={handleClick}
+            rowsPerPage={9}
+            page={searchModelResult.page}
+            handleChangePage={handleChangePage}
+          />
         </Suspense>
       );
     return (
