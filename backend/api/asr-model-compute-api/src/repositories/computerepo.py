@@ -123,7 +123,7 @@ class ASRComputeRepo:
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
-            return {}
+            return {"status_text":"Incorrect inference endpoint or invalid response"}
 
 
 
