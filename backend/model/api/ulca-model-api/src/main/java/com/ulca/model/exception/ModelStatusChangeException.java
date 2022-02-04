@@ -10,5 +10,6 @@ public class ModelStatusChangeException extends RuntimeException {
 	
 	public ModelStatusChangeException(String message, String status) {
 		super(message);
+		this.status = status;
 	}
 }
