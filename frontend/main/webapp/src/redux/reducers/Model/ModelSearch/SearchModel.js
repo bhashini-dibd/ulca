@@ -1,7 +1,5 @@
 import C from "../../../actions/constants";
-import {
-  getLanguageName,
-} from "../../../../utils/getLabel";
+import { getLanguageName } from "../../../../utils/getLabel";
 
 const initialState = {
   responseData: [],
@@ -10,6 +8,7 @@ const initialState = {
   filter: { status: [], modelType: [] },
   selectedFilter: { language: [], domainFilter: [], submitter: [] },
   searchValue: "",
+  page: 0,
 };
 
 const dateConversion = (value) => {
@@ -98,6 +97,7 @@ const getDomainDetails = (data) => {
 const getClearFilter = (data) => {
   data.filteredData = data.responseData;
   data.selectedFilter = { language: [], domainFilter: [], submitter: [] };
+  data.page = 0;
   return data;
 };
 
@@ -217,7 +217,8 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.SUBMIT_MODEL_SEARCH:
       return { ...state, ...getContributionList(state, action.payload) };
-
+    case "EXPLORE_MODEL_PAGE_NO":
+      return { ...state, page: action.payload };
     case C.GET_SEARCHED_LIST:
       return { ...state, ...getSearchedList(state, action.payload) };
     case C.SEARCH_FILTER:

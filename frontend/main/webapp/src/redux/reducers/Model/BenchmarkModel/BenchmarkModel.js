@@ -8,6 +8,7 @@ const initialState = {
   filter: { status: [], modelType: [] },
   selectedFilter: { language: [], domainFilter: [], submitter: [] },
   searchValue: "",
+  page: 0,
 };
 
 const getFilterValue = (payload, data) => {
@@ -85,6 +86,7 @@ const getDomainDetails = (data) => {
 const getClearFilter = (data) => {
   data.filteredData = data.responseData;
   data.selectedFilter = { language: [], domainFilter: [], submitter: [] };
+  data.page = 0;
   return data;
 };
 
@@ -205,7 +207,9 @@ const reducer = (state = initialState, action) => {
         ...state,
         ...getContributionList(state, action.payload),
       };
-
+    case "BENCHMARK_PAGE_NO": {
+      return { ...state, page: action.payload };
+    }
     case C.GET_SEARCHED_LIST:
       return { ...state, ...getSearchedList(state, action.payload) };
     case C.SEARCH_BENCHMARK:

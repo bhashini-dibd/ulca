@@ -9,8 +9,7 @@ import {
 import React from "react";
 
 const CardComponent = (props) => {
-  const { value, classes } = props;
-
+  const { classes, data, index } = props;
   const renderPublishedOn = (data) => {
     if (data.publishedOn)
       return (
@@ -169,27 +168,23 @@ const CardComponent = (props) => {
   };
 
   const renderCardGrid = () => {
-    const elemArr = value.filteredData.map((data, i) => {
-      return (
-        <Grid
-          key={i}
-          item
-          xs={12}
-          sm={6}
-          md={5}
-          lg={4}
-          xl={4}
-          className={i % 2 === 0 ? classes.card : classes.card2}
-        >
-          {renderModelInfo(data)}
-        </Grid>
-      );
-    });
-    return elemArr;
+    return (
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={12}
+        lg={12}
+        xl={12}
+        className={index % 2 === 0 ? classes.card : classes.card2}
+      >
+        {renderModelInfo(data)}
+      </Grid>
+    );
   };
 
   const renderCardComp = () => {
-    if (value.filteredData.length)
+    if (data)
       return (
         <Grid container spacing={2} className={classes.cardGrid}>
           {renderCardGrid()}
@@ -198,7 +193,6 @@ const CardComponent = (props) => {
 
     return <div style={{ background: `url(${Record}) no-repeat` }}></div>;
   };
-
   return <>{renderCardComp()}</>;
 };
 
