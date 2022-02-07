@@ -43,7 +43,7 @@ const GridView = (props) => {
         page={page}
         onChangePage={handleChangePage}
         rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[9, 10, 15, 20, 25]}
+        rowsPerPageOptions={[9, 12, 18]}
         onChangeRowsPerPage={rowChange}
       />
     </>
