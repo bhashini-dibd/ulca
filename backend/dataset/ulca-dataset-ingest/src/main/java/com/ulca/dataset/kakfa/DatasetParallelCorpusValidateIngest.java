@@ -60,6 +60,12 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
 	
+	@Value("${pseudo.ingest.sample.size}")
+	private Integer pseudoSampleSize;
+	
+	@Value("${pseudo.ingest.record.threshold}")
+	private Integer pseudoRecordThreshold;
+	
 	@Autowired
 	DatasetService datasetService;
 	
@@ -75,6 +81,8 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
 	public static final String TARGET_TEXT = "targetText";
 	public static final String TARGET_TEXT_HASH = "targetTextHash";
+	
+	
 
 	public void validateIngest(DatasetIngest datasetIngest) {
 
@@ -152,10 +160,10 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			if(mode.equalsIgnoreCase("real")) {
 				ingest(paramsSchema, datasetIngest);
 			}else {
-				pseudoIngest(paramsSchema, datasetIngest);
+				initiateIngest(paramsSchema, datasetIngest);
 			}
 			
-		} catch (IOException | JSONException | NoSuchAlgorithmException | NullPointerException   e) {
+		} catch (Exception  e) {
 			
 			log.info("Exception while ingesting the dataset :: serviceRequestNumber : "+serviceRequestNumber + " error : " + e.getMessage());
 			Error error = new Error();
@@ -319,7 +327,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 	}
 
-	public void pseudoIngest(ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
+	public void pseudoIngest(ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
 			throws JSONException, IOException, NoSuchAlgorithmException {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: pseudoIngest *********");
@@ -337,6 +345,12 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		JSONObject record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
 		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
+		
+		
+		long sampleSize = recordSize/10;
+		long bufferSize = pseudoSampleSize/10;
+	
+		/*
 	    
 		FileChannel dataFileChannel = FileChannel.open(Paths.get(dataFilePath));
 	    long fileSize = dataFileChannel.size();
@@ -352,6 +366,8 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 	    	max = 1000;
 	    }
 	    long counter = min;
+	    
+	    */
 	    
 		log.info("data.json file path :: " + dataFilePath);
 		
@@ -378,16 +394,24 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
 		 
 		reader.beginArray();
+		
+		long base = sampleSize;
+		long counter = 0;
+		long maxCounter = bufferSize;
+		
+		log.info("base :: " + base);
+		log.info("counter :: " + counter);
+		log.info("maxCounter :: " + maxCounter);
+		
 		while (reader.hasNext()) {
 			numberOfRecords++;
 			
-			if(numberOfRecords == counter) {
+			if(counter < maxCounter ) {
 				pseudoNumberOfRecords++;
 				
-				min = min+buffer;
-				max = max + buffer;
-				counter = (long)(Math.random()*(max-min+1)+min);
+				++counter;	
 				
+				log.info("counter :: " + counter);
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 				
 				ObjectMapper mapper = new ObjectMapper();
@@ -437,6 +461,11 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 					
 				}
 			
+			}else if ( numberOfRecords == base ){
+				Object rowObj = new Gson().fromJson(reader, Object.class);
+				counter = base;
+				maxCounter = base + bufferSize;
+				base = base + sampleSize;
 			}else {
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 			}
@@ -471,5 +500,46 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		return hashString;
 	}
 	
+	private long getRecordSize(String dataFilePath) throws Exception {
+		
+		long numberOfRecords = 0;
+		InputStream inputStream;
+		try {
+			inputStream = Files.newInputStream(Path.of(dataFilePath));
+			JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+			reader.beginArray();
+			while (reader.hasNext()) {
+				numberOfRecords++;
+				Object rowObj = new Gson().fromJson(reader, Object.class);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new Exception("data.json file is not proper");
+			
+		}
+		
+		return numberOfRecords;
+	}
 
+	public void initiateIngest(ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
+		
+		log.info(" initiateIngest ");
+		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
+		
+		long recordSize = getRecordSize(dataFilePath);
+		
+		log.info(" total record size ::  " + recordSize);
+		
+		if(recordSize <= pseudoRecordThreshold) {
+			ingest(paramsSchema, datasetIngest);
+			return;
+		}else {
+			pseudoIngest(paramsSchema, datasetIngest, recordSize);
+		}
+		
+		
+	}
+	
 }
