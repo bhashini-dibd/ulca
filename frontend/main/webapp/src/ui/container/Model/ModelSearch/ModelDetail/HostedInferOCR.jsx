@@ -24,7 +24,6 @@ import { useDispatch } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import Snackbar from "../../../../components/common/Snackbar";
 
-
 const HostedInferASR = (props) => {
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
     props;
@@ -32,6 +31,7 @@ const HostedInferASR = (props) => {
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
   const [error, setError] = useState({ url: "" });
+  const [preview, setPreview] = useState("");
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
     message: "",
@@ -53,12 +53,12 @@ const HostedInferASR = (props) => {
   const validURL = (str) => {
     var pattern = new RegExp(
       "^((ft|htt)ps?:\\/\\/)?" + // protocol
-      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
-      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-      "(\\:\\d+)?" + // port
-      "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
-      "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
-      "(\\#[-a-z\\d_]*)?$",
+        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
+        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+        "(\\:\\d+)?" + // port
+        "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
+        "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
+        "(\\#[-a-z\\d_]*)?$",
       "i"
     );
     return pattern.test(str);
@@ -130,13 +130,20 @@ const HostedInferASR = (props) => {
 
   const handleFile = (e) => {
     if (e.target.files) {
+      const blob = URL.createObjectURL(e.target.files[0]);
+      setPreview(blob);
       setFile(e.target.files);
     }
   };
 
   const handleFileSubmit = () => {
     setFileData("");
-    setSnackbarInfo({ ...snackbar, open: true, message: 'Please wait while we process your request...', variant: "info" })
+    setSnackbarInfo({
+      ...snackbar,
+      open: true,
+      message: "Please wait while we process your request...",
+      variant: "info",
+    });
     const obj = new OCRFileUpload(file, modelId);
     // dispatch(APITransport(obj));
     fetch(obj.apiEndPoint(), {
@@ -147,7 +154,12 @@ const HostedInferASR = (props) => {
       if (res.ok) {
         setFileData(rsp_data.outputText);
       } else {
-        setSnackbarInfo({ ...snackbar, open: true, message: rsp_data.message, variant: 'error' });
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message: rsp_data.message,
+          variant: "error",
+        });
       }
     });
   };
@@ -181,6 +193,17 @@ const HostedInferASR = (props) => {
                 onChange={handleFile}
                 type="file"
               />
+              {preview ? (
+                <img
+                  style={{ marginTop: "1%" }}
+                  src={preview}
+                  alt="Preview"
+                  width="100%"
+                  height="10vh"
+                />
+              ) : (
+                <></>
+              )}
               <Button
                 color="primary"
                 style={{ float: "right", marginTop: "10px" }}
