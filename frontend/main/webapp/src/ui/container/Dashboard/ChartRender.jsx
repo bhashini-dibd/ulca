@@ -381,7 +381,9 @@ const ChartRender = (props) => {
                 ? "Submitter"
                 : "Domain"
             }`
+            
           );
+        
           setAxisValue({
             yAxis: "Count",
             xAxis:
@@ -807,6 +809,7 @@ const ChartRender = (props) => {
                     "select-source-language",
                     "Source Language *"
                   )}
+                 
                   <Typography value="" variant="h6">
                     (
                     {DashboardReport.count

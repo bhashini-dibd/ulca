@@ -102,15 +102,18 @@ const SubHeader = (props) => {
     const handleClick = (url) => {
         history.push(`${process.env.PUBLIC_URL}${url}`);
     }
+    console.log( props.tabs)
     return (
         <AppBar className={classes.appTab} position="static" color='default'>
-            <Toolbar className={classes.toolbar}>
-            <Grid container spacing={0}>
-            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-                </Grid>
-                <Grid item >
-                    <Tabs value={props.value}  onChange={props.handleChange}>
+            <Toolbar className={classes.toolbar}> 
+                {/* <div  style={{ overflowX: 'scroll'}}> */}
+                    <Tabs value={props.value}  onChange={props.handleChange}
+        //              variant="scrollable"
+        // scrollButtons="auto"
+        // aria-label="scrollable auto tabs example">
+        >
                         {
+                        
                             props.tabs.map((tab, index) => {
                                 if(tab.roles.includes(role) ||(tab.public)){
                                 return (
@@ -123,8 +126,7 @@ const SubHeader = (props) => {
                             })
                         }
                     </Tabs>
-                </Grid>
-            </Grid>
+                    {/* </div>   */}
             </Toolbar>
         </AppBar>
     );

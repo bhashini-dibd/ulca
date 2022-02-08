@@ -221,8 +221,9 @@ const SubmitModel = (props) => {
             <Grid item xs={12} sm={12} md={4} lg={4} xl={4}>
               <FormControl className={classes.form}>
                 <Typography className={classes.typography} variant="subtitle1">
-                  {translate("label.howToSubmitModel")}
+                 {translate("label.howToSubmitModel")}
                 </Typography>
+            
                 {renderInstructions()}
               </FormControl>
             </Grid>
