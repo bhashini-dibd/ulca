@@ -219,7 +219,7 @@ public class ModelInferenceEndPointService {
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if(httpResponse.code() != 200) {
 				
-				throw new ModelComputeException("Translation Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",  HttpStatus.valueOf(httpResponse.code()));
 			}
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = httpResponse.body().string();
@@ -227,7 +227,7 @@ public class ModelInferenceEndPointService {
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 
 			if(translation.getOutput() == null || translation.getOutput().size() <= 0 || translation.getOutput().get(0).getTarget().isBlank()) {
-				throw new ModelComputeException("Translation Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				throw new ModelComputeException( httpResponse.message(),"Translation Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
 				
 			}
 			
@@ -262,14 +262,14 @@ public class ModelInferenceEndPointService {
 			Response httpResponse = client.newCall(httpRequest).execute();
 			if(httpResponse.code() != 200) {
 				
-				throw new ModelComputeException("OCR Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Failed",  HttpStatus.valueOf(httpResponse.code()));
 			}
 			
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			OCRResponse ocrResponse  = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
 			
 			if(ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <=0 || ocrResponse.getOutput().get(0).getSource().isBlank()) {
-				throw new ModelComputeException("OCR Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Response is Empty",  HttpStatus.BAD_REQUEST);
 				
 			}
 				
@@ -311,7 +311,7 @@ public class ModelInferenceEndPointService {
 			//Response httpResponse = client.newCall(httpRequest).execute();
 			if(httpResponse.code() != 200) {
 				
-				throw new ModelComputeException("TTS Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+				throw new ModelComputeException( httpResponse.message(), "TTS Model Compute Failed", HttpStatus.valueOf(httpResponse.code()));
 			}
 			
 			String ttsResponseStr = httpResponse.body().string(); 
@@ -320,14 +320,14 @@ public class ModelInferenceEndPointService {
 			TTSResponse ttsResponse  = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
 			
 			if(ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <=0 || ttsResponse.getAudio().get(0).getAudioContent() == null) {
-				throw new ModelComputeException("TTS Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",  HttpStatus.BAD_REQUEST);
 				
 			}
 			
 			
 			String encodedString = Base64.getEncoder().encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
 			if(encodedString.isBlank()) {
-				throw new ModelComputeException("TTS Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
 				
 			}
 			response.setOutputText(encodedString);
