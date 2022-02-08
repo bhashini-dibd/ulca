@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -27,6 +27,8 @@ class SpecialCharacterCheck(BaseValidator):
             if request["datasetType"] == dataset_type_ocr:
                 request['record']['groundTruth'] = self.remove_special(request['record']['groundTruth'])
             if request["datasetType"] == dataset_type_monolingual:
+                request['record']['text'] = self.remove_special(request['record']['text'])
+            if request["datasetType"] == dataset_type_tts:
                 request['record']['text'] = self.remove_special(request['record']['text'])
 
             return super().execute(request)

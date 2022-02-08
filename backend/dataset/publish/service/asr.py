@@ -2,7 +2,7 @@ import logging
 import re
 import time
 from logging.config import dictConfig
-from configs.configs import ds_batch_size, no_of_parallel_processes, asr_prefix, \
+from configs.configs import ds_batch_size, asr_prefix, \
     sample_size, offset, limit, asr_immutable_keys, asr_non_tag_keys, dataset_type_asr, user_mode_pseudo, \
     asr_search_ignore_keys, asr_updatable_keys
 from repository.asr import ASRRepo

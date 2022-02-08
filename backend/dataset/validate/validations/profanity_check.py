@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, validate_profanity_reference_en, validate_profanity_reference_hi
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, validate_profanity_reference_en, validate_profanity_reference_hi
 
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
@@ -61,6 +61,9 @@ class ProfanityCheck(BaseValidator):
                 text_list.append(record['groundTruth'])
                 lang_list.append(record['sourceLanguage'])
             if request["datasetType"] == dataset_type_monolingual:
+                text_list.append(record['text'])
+                lang_list.append(record['sourceLanguage'])
+            if request["datasetType"] == dataset_type_tts:
                 text_list.append(record['text'])
                 lang_list.append(record['sourceLanguage'])
 

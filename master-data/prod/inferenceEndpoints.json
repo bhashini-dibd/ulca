@@ -1,0 +1,12 @@
+{
+    "inferenceEndpoints": [
+      {
+        "code": "https://meity-dev-asr.ulcacontrib.org/",
+        "label": "Vakyansh ASR",
+        "active": true,
+        "submitter": [
+          "Vakyansh"
+        ]
+      }
+    ]
+  }

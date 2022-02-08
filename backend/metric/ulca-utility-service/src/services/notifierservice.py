@@ -14,7 +14,7 @@ class NotifierService:
         try:
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
             utility     =   datautils.DataUtils()
-            utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":asr_count,"asr_unlabeled_count":asr_unlabeled_count,"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
+            utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":round(asr_count,4),"asr_unlabeled_count":round(asr_unlabeled_count,4),"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
@@ -41,11 +41,9 @@ class NotifierService:
             log.info(mono_count)
             asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
             asr_count = (asr_labeled[0]["total"])/3600
-            asr_count = round(asr_count,4)
             log.info(asr_count)
             asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
             asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
-            asr_unlabeled_count=round(asr_unlabeled_count,4)
             log.info(asr_unlabeled_count)
 
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
@@ -101,35 +99,35 @@ class NotifierService:
             dtypes              =   ["parallel-corpus","ocr-corpus","asr-corpus","monolingual-corpus","asr-unlabeled-corpus"]
             for data in dtypes:
                 if data == "ocr-corpus":
-                    mongo_count =   ocr_count
+                    mongo_count =   round(ocr_count)
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
                     label       =   "OCR Dataset"
 
                 if data == "asr-corpus":
-                    mongo_count =   asr_count
+                    mongo_count =   round(asr_count)
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
                     label       =   "ASR/TTS Dataset"
 
                 if data == "parallel-corpus":
-                    mongo_count =   parallel_count
+                    mongo_count =   round(parallel_count)
                     request     =   {"type":"parallel-corpus","criterions":[{"field":"sourceLanguage","value":"en"}],"groupby":None}
                     label       =   "Parallel Dataset"
                     
                 if data == "monolingual-corpus":
-                    mongo_count =   monolingual_count
+                    mongo_count =   round(monolingual_count)
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
                     label       =   "Monolingual Dataset"
                              
                 if data == "asr-unlabeled-corpus":
-                    mongo_count =   asr_unlabeled_count
+                    mongo_count =   round(asr_unlabeled_count)
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
                     label       =   "ASR Unlabeled Dataset"
                 utility     =   datautils.DataUtils()
                 druid_count =   utility.get_statistics_from_metrics_service(request)
-                print(druid_count)
+                log.info(f"Data Type: {label} Druid Count: {druid_count} Mongo Count: {mongo_count}")
                 if druid_count == False:
                     return
-                if (druid_count < (mongo_count-10)) or (druid_count > (mongo_count)):
+                if (round(druid_count) < (mongo_count-10)) or (round(druid_count) > (mongo_count)):
                     mismatch.append({"Data Type": label,"Druid Count": druid_count,"Mongo Count": mongo_count})
             if mismatch:
                 return mismatch
