@@ -110,5 +110,12 @@ public class ModelControllerExceptionHandler {
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 	
+	@ExceptionHandler(ModelComputeException.class)
+	  public final ResponseEntity<Object> handleModelComputeException(ModelComputeException ex, WebRequest request) {
+		
+		ErrorDetails errorDetails = new ErrorDetails(ex.getErrorCode(),ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails, ex.getStatus());
+	  }
+	
 	
 }

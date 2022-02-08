@@ -11,6 +11,7 @@ import javax.net.ssl.SSLException;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
@@ -203,11 +205,20 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
+			if(httpResponse.code() != 200) {
+				
+				throw new ModelComputeException("Translation Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+			}
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = httpResponse.body().string();
 
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 
+			if(translation.getOutput() == null || translation.getOutput().size() <= 0 || translation.getOutput().get(0).getTarget().isBlank()) {
+				throw new ModelComputeException("Translation Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				
+			}
+			
 			response.setOutputText(translation.getOutput().get(0).getTarget());
 			
 			return response;
@@ -237,10 +248,19 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
+			if(httpResponse.code() != 200) {
+				
+				throw new ModelComputeException("OCR Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+			}
 			
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			OCRResponse ocrResponse  = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
 			
+			if(ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <=0 || ocrResponse.getOutput().get(0).getSource().isBlank()) {
+				throw new ModelComputeException("OCR Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				
+			}
+				
 			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
 			
 		}
@@ -274,13 +294,27 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
+			if(httpResponse.code() != 200) {
+				
+				throw new ModelComputeException("TTS Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+			}
 			
 			String ttsResponseStr = httpResponse.body().string(); 
 			
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			TTSResponse ttsResponse  = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
 			
+			if(ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <=0 || ttsResponse.getAudio().get(0).getAudioContent() == null) {
+				throw new ModelComputeException("TTS Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				
+			}
+			
+			
 			String encodedString = Base64.getEncoder().encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
+			if(encodedString.isBlank()) {
+				throw new ModelComputeException("TTS Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				
+			}
 			response.setOutputText(encodedString);
 			
 		}
