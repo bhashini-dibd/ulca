@@ -3,6 +3,8 @@ package com.ulca.model.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.validation.Valid;
 
@@ -79,7 +81,7 @@ public class ModelController {
 	}
 	
 	@PostMapping("/compute")
-	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws URISyntaxException, IOException {
+	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		log.info("******** Entry ModelController:: computeModel *******");
 		return modelService.computeModel(request);

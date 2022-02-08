@@ -2,11 +2,20 @@ package com.ulca.model.service;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +73,7 @@ public class ModelInferenceEndPointService {
 
 	public OneOfInferenceAPIEndPointSchema validateCallBackUrl(String callBackUrl,
 			OneOfInferenceAPIEndPointSchema schema)
-			throws URISyntaxException, IOException {
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
@@ -151,14 +160,17 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
 			        .post(body)
 			        .build();
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			OkHttpClient newClient = getTrustAllCertsClient();
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+			
+			//Response httpResponse = client.newCall(httpRequest).execute();
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = httpResponse.body().string();
 			TTSResponse response = objectMapper.readValue(responseJsonStr, TTSResponse.class);
@@ -176,7 +188,7 @@ public class ModelInferenceEndPointService {
 
 	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
 			ModelComputeRequest compute)
-			throws URISyntaxException, IOException {
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		ModelComputeResponse response = new ModelComputeResponse();
 
@@ -286,14 +298,17 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
 			        .post(body)
 			        .build();
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			OkHttpClient newClient = getTrustAllCertsClient();
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+			
+			//Response httpResponse = client.newCall(httpRequest).execute();
 			if(httpResponse.code() != 200) {
 				
 				throw new ModelComputeException("TTS Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
@@ -372,5 +387,31 @@ public class ModelInferenceEndPointService {
 		return response;
 	}
 	
+	public static OkHttpClient getTrustAllCertsClient() throws NoSuchAlgorithmException, KeyManagementException {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[]{};
+                }
+            }
+        };
+
+        SSLContext sslContext = SSLContext.getInstance("SSL");
+        sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+        OkHttpClient.Builder newBuilder = new OkHttpClient.Builder();
+        newBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
+        newBuilder.hostnameVerifier((hostname, session) -> true);
+        return newBuilder.build();
+    }
 
 }
