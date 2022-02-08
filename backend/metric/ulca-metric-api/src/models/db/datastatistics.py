@@ -34,7 +34,7 @@ class AggregateDatasetModel(object):
                 grpby_params = request_object["groupby"]   #grouping fields
 
             #ASR charts are displayed in hours; initial chart
-            if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+            if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                 sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
             else:
                 #Charts except ASR are displayed in record counts; initial chart
@@ -48,12 +48,12 @@ class AggregateDatasetModel(object):
                 else:
                     false_count = val[total]
             sumtotal = true_count - false_count
-            if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+            if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                 sumtotal = sumtotal/TIME_CONVERSION_VAL
 
             #aggregate query for language pairs; 1st level drill down for the chart
             if grpby_params == None and len(match_params) ==1:
-                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
                 else:
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
@@ -65,7 +65,7 @@ class AggregateDatasetModel(object):
                     sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
                                     GROUP BY {src}, {tgt},{delete}'
 
-                elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus"]:
+                elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus"]:
                     sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
                 qry_for_lang_pair  = query+sub_query
 
@@ -79,7 +79,7 @@ class AggregateDatasetModel(object):
                 grp_field  = params["field"]
                 src_val = next((item["value"] for item in match_params if item["field"] == "sourceLanguage"), False)
                 tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), False)
-                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                      query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
                             WHERE (({datatype} = \'{dtype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
                             GROUP BY {src}, {tgt}, {delete}, {grp_field}'
@@ -101,7 +101,7 @@ class AggregateDatasetModel(object):
                 tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), None)
                 sub_val = next((item["value"] for item in match_params  if item["field"] not in ["sourceLanguage","targetLanguage"]))
                 
-                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
                             WHERE (({datatype} = \'{dtype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\') OR ({src} = \'{tgt_val}\' AND {tgt} = \'{src_val}\')))\
                             AND ({sub_field} = \'{sub_val}\') GROUP BY {src}, {tgt}, {delete}, {grp_field}'

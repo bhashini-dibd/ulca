@@ -1,0 +1,52 @@
+{
+   "name": "IIIT-H LTRC Translation English-Hindi",
+   "version": "v1.0",
+   "description": "LTRC-MT is a Transformer based Hybrid (with Linguistic Feature) NMT model trained on LTRC + Publicly available parallel corpora for Indian Languages",
+   "refUrl": "http://ltrc.iiit.ac.in/",
+   "task": {
+      "type" : "translation"
+   },
+   "languages": [
+      {
+         "sourceLanguage": "en",
+         "targetLanguage": "hi"
+      }
+   ],
+   "license": "cc-by-nc-4.0",
+   "domain": [
+      "general"
+   ],
+   "submitter": {
+      "name": "LTRC, IIITH",
+      "aboutMe": "LANGUAGE TECHNOLOGIES RESEARCH CENTER, IIIT-Hyderabad, India",
+      "team": [
+         {
+            "name": "Dipti Misra Sharma",
+            "aboutMe": "PI(ILMT),LTRC,IIIT-H"
+         }
+      ]
+   },
+   "inferenceEndPoint": {
+      "callbackUrl": "http://swayam.iiit.ac.in/ULCA_mt_linker",
+      "schema": {
+         "taskType": "translation",
+         "request": {
+            "input": [
+               {
+                  "source": "How are you?"
+               }
+            ],
+            "config": {
+               "modelId":101,
+               "language": {
+                  "sourceLanguage": "en",
+                  "targetLanguage": "hi"
+               }
+            }
+         }
+      }
+   },
+   "trainingDataset": {
+          "description": "Trained on various internal datasets."
+   }
+}

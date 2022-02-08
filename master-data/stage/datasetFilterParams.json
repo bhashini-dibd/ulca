@@ -42,12 +42,22 @@
     },
     {
       "code": "asr-corpus",
-      "label": "ASR/TTS Dataset",
+      "label": "ASR Dataset",
       "active": true,
       "datasetType": "asr-corpus",
       "values": {
         "master": "/asrCorpusFilters.json",
         "jsonPath": "$.ocrCorpusFilters"
+      }
+    },
+    {
+      "code": "tts-corpus",
+      "label": "TTS Dataset",
+      "active": true,
+      "datasetType": "tts-corpus",
+      "values": {
+        "master": "/ttsCorpusFilters.json",
+        "jsonPath": "$.ttsCorpusFilters"
       }
     }
   ],

@@ -2,15 +2,25 @@ package com.ulca.model.service;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,6 +29,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
@@ -62,7 +73,7 @@ public class ModelInferenceEndPointService {
 
 	public OneOfInferenceAPIEndPointSchema validateCallBackUrl(String callBackUrl,
 			OneOfInferenceAPIEndPointSchema schema)
-			throws URISyntaxException, IOException {
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
@@ -149,14 +160,17 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
 			        .post(body)
 			        .build();
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			OkHttpClient newClient = getTrustAllCertsClient();
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+			
+			//Response httpResponse = client.newCall(httpRequest).execute();
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = httpResponse.body().string();
 			TTSResponse response = objectMapper.readValue(responseJsonStr, TTSResponse.class);
@@ -174,7 +188,7 @@ public class ModelInferenceEndPointService {
 
 	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
 			ModelComputeRequest compute)
-			throws URISyntaxException, IOException {
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		ModelComputeResponse response = new ModelComputeResponse();
 
@@ -203,11 +217,20 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
+			if(httpResponse.code() != 200) {
+				
+				throw new ModelComputeException("Translation Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+			}
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = httpResponse.body().string();
 
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 
+			if(translation.getOutput() == null || translation.getOutput().size() <= 0 || translation.getOutput().get(0).getTarget().isBlank()) {
+				throw new ModelComputeException("Translation Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				
+			}
+			
 			response.setOutputText(translation.getOutput().get(0).getTarget());
 			
 			return response;
@@ -237,10 +260,19 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
+			if(httpResponse.code() != 200) {
+				
+				throw new ModelComputeException("OCR Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+			}
 			
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			OCRResponse ocrResponse  = objectMapper.readValue(httpResponse.body().string(), OCRResponse.class);
 			
+			if(ocrResponse.getOutput() == null || ocrResponse.getOutput().size() <=0 || ocrResponse.getOutput().get(0).getSource().isBlank()) {
+				throw new ModelComputeException("OCR Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				
+			}
+				
 			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
 			
 		}
@@ -266,21 +298,38 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient();
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
 			        .post(body)
 			        .build();
 			
-			Response httpResponse = client.newCall(httpRequest).execute();
+			OkHttpClient newClient = getTrustAllCertsClient();
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+			
+			//Response httpResponse = client.newCall(httpRequest).execute();
+			if(httpResponse.code() != 200) {
+				
+				throw new ModelComputeException("TTS Model Compute Failed", httpResponse.message(), HttpStatus.valueOf(httpResponse.code()));
+			}
 			
 			String ttsResponseStr = httpResponse.body().string(); 
 			
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			TTSResponse ttsResponse  = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
 			
+			if(ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <=0 || ttsResponse.getAudio().get(0).getAudioContent() == null) {
+				throw new ModelComputeException("TTS Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				
+			}
+			
+			
 			String encodedString = Base64.getEncoder().encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
+			if(encodedString.isBlank()) {
+				throw new ModelComputeException("TTS Model Compute Response is Empty", httpResponse.message(), HttpStatus.BAD_REQUEST);
+				
+			}
 			response.setOutputText(encodedString);
 			
 		}
@@ -338,5 +387,31 @@ public class ModelInferenceEndPointService {
 		return response;
 	}
 	
+	public static OkHttpClient getTrustAllCertsClient() throws NoSuchAlgorithmException, KeyManagementException {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
+                }
+
+                @Override
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return new java.security.cert.X509Certificate[]{};
+                }
+            }
+        };
+
+        SSLContext sslContext = SSLContext.getInstance("SSL");
+        sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+
+        OkHttpClient.Builder newBuilder = new OkHttpClient.Builder();
+        newBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
+        newBuilder.hostnameVerifier((hostname, session) -> true);
+        return newBuilder.build();
+    }
 
 }

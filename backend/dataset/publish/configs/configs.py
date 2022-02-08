@@ -9,6 +9,7 @@ redis_server_pass = os.environ.get('REDIS_PASS', None)
 db_cluster = os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', "mongodb://10.30.11.136:27017/")
 db = os.environ.get('ULCA_DS_PUBLISH_DB', "ulca")
 asr_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_COL', "asr-dataset")
+tts_collection = os.environ.get('ULCA_DS_PUBLISH_TTS_COL', "tts-dataset")
 asr_unlabeled_collection = os.environ.get('ULCA_DS_PUBLISH_ASR_UNLABELED_COL', "asr-unlabeled-dataset")
 ocr_collection = os.environ.get('ULCA_DS_PUBLISH_OCR_COL', "ocr-dataset")
 parallel_collection = os.environ.get('ULCA_DS_PUBLISH_PARALLEL_COL', "parallel-dataset")
@@ -51,6 +52,11 @@ asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHa
 asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
 asr_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
+
+tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+tts_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
+tts_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
+tts_updatable_keys = ["durationInSeconds", "duration", "version"]
 
 asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
@@ -112,12 +118,14 @@ if isinstance(ulca_dataset_topic_partitions, str):
 
 ocr_prefix = os.environ.get('ULCA_OS_OCR_PREFIX', 'ocr')
 asr_prefix = os.environ.get('ULCA_OS_ASR_PREFIX', 'asr')
+tts_prefix = os.environ.get('ULCA_OS_TTS_PREFIX', 'tts')
 asr_unlabeled_prefix = os.environ.get('ULCA_OS_ASR_UNLABELED_PREFIX', 'asr-unlabeled')
 dataset_prefix = os.environ.get('ULCA_OS_DATASET_PREFIX', 'datasets')
 error_prefix = os.environ.get('ULCA_OS_ERROR_PREFIX', 'errors')
 
 dataset_type_parallel = os.environ.get('DS_TYPE_PARALLEL', 'parallel-corpus')
 dataset_type_asr = os.environ.get('DS_TYPE_ASR', 'asr-corpus')
+dataset_type_tts = os.environ.get('DS_TYPE_TTS', 'tts-corpus')
 dataset_type_asr_unlabeled = os.environ.get('DS_TYPE_ASR_UNLABELED', 'asr-unlabeled-corpus')
 dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')

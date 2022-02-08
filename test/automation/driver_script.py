@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jul 24 10:45:14 2021.
+Created on Sat Dec  4 17:35:27 2021.
 
-@author: dhiru579 @ Tarento.
+@author: dhiru579 @ Tarento
 """
 import config
 import sys
 from selenium import webdriver
-
 
 SUPPORTED_BROWSER = ["chrome", "firefox", "opera"]
 
@@ -34,6 +33,7 @@ def chrome_driver_func():
         options.add_argument("--disable-extensions")
         options.add_argument("--start-maximized")
         options.add_argument("--log-level=3")
+        options.add_argument("--use-fake-ui-for-media-stream")
         prefs = {
             "profile.password_manager_enabled": False,
             "credentials_enable_service": False,
@@ -41,11 +41,11 @@ def chrome_driver_func():
         options.add_experimental_option("prefs", prefs)
         driver = webdriver.Chrome(config.CHROME_DRIVER_PATH, options=options)
         print("#Using Google Chrome")
-        return driver
-    except Exception:
+    except Exception as e:
         print("#Browser not working - Google Chrome")
-        print("[check chrome and chromedriver is installed.]")
-        return None
+        print(e)
+        driver = None
+    return driver
 
 
 def firefox_driver_func():
@@ -68,21 +68,23 @@ def firefox_driver_func():
         options.add_argument("--disable-application-cache")
         options.add_argument("--disable-extensions")
         options.add_argument("--start-maximized")
+        options.add_argument("--use-fake-ui-for-media-stream")
         driver = webdriver.Firefox(
-            executable_path=config.FIREFOX_DRIVER_PATH, options=options)
+            executable_path=config.FIREFOX_DRIVER_PATH, options=options
+        )
         print("#using Mozilla Firefox")
-        return driver
     except Exception:
         print("#Browser not working - Mozilla Firefox")
-        print("[check firefox and geckodriver is installed.]")
-        return None
+        print(Exception)
+        driver = None
+    return driver
 
 
 def opera_driver_func():
     """
     opera_driver_func starts the opera browser with operadriver.
 
-    NOTE - headless mode(no-window-display)
+    NOTE - NO headless mode(no-window-display)
 
     Returns
     -------
@@ -93,13 +95,13 @@ def opera_driver_func():
     try:
         options = webdriver.opera.options.Options()
         driver = webdriver.Opera(
-            executable_path=config.OPERA_DRIVER_PATH, options=options)
+            executable_path=config.OPERA_DRIVER_PATH, options=options
+        )
         print("#using Opera")
-        return driver
     except Exception:
         print("#Browser not working - Opera")
-        print("[check opera and operadriver is installed.]")
-        return None
+        driver = None
+    return driver
 
 
 def load_driver(browser_name):
@@ -127,9 +129,14 @@ def load_driver(browser_name):
         elif browser_name.lower() == "opera":
             driver = opera_driver_func()
     else:
-        print("Browser \""+browser_name+"\" not Supported"
-              + "Browser-Support = " + SUPPORTED_BROWSER)
-        sys.exit(0)
+        print(
+            'Browser "'
+            + browser_name
+            + '" not Supported'
+            + "Browser-Support = "
+            + SUPPORTED_BROWSER
+        )
+        driver = None
     if driver is None:
         sys.exit(0)
     return driver

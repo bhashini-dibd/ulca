@@ -8,7 +8,6 @@ log = logging.getLogger('file')
 class TranslationBertScoreEval(ModelMetricEval):
     def __init__(self):
         self.bertscore = load_metric('bertscore')
-        pass
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         bert_sup_lang = ["en","bn", "kn", "hi", "ta", "te", "pa", "mr", "ur", "ne", "ml"]
