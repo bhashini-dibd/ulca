@@ -282,7 +282,7 @@ public class BenchmarkService {
 			} else {
 				 list = benchmarkDao.findByTaskAndLanguages(modelTask,lp);
 			}
-			
+			Collections.shuffle(list);
 			return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
 			
 		} else if(modelTask != null && lp == null ) {
@@ -295,7 +295,7 @@ public class BenchmarkService {
 			} else {
 				 list = benchmarkDao.findByTask(modelTask);
 			}
-			
+			Collections.shuffle(list);
 			return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
 			
 		} else if(modelTask == null && lp != null ) {
@@ -308,7 +308,7 @@ public class BenchmarkService {
 			} else {
 				 list = benchmarkDao.findByLanguages(lp);
 			}
-			
+			Collections.shuffle(list);
 			return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
 		}else if(modelTask == null && lp == null ) {
 			if (startPage != null) {
@@ -320,7 +320,7 @@ public class BenchmarkService {
 			} else {
 				 list = benchmarkDao.findAll();
 			}
-			
+			Collections.shuffle(list);
 			return new BenchmarkSearchResponse("Benchmark Search Result", list, list.size());
 		} else {
 			log.info("search parameters not valid");
@@ -365,6 +365,7 @@ public class BenchmarkService {
 					ModelExtended model = modelDao.findByModelId(bm.getModelId());
 					if(model.getStatus().equalsIgnoreCase("published")) {
 						bm.setModelName(model.getName());
+						bm.setModelVersion(model.getVersion());
 						bmProcessPublished.add(bm);
 					}
 				}

@@ -13,8 +13,7 @@ class OCRCEREval(ModelMetricEval):
     """
 
     def __init__(self):
-        self.cer_score = load_metric('cer')
-        pass
+        self.cer_score = load_metric('cer', revision="master")
 
     def ocr_metric_eval(self, ground_truth, machine_translation):
 

@@ -1,0 +1,31 @@
+{   
+  "datasetType": "tts-corpus",
+  "languages": {
+      "sourceLanguage": "si"
+  },
+  "collectionSource": [
+      "Path Nirvana", "https://pathnirvana.org", "https://github.com/pnfo/sinhala-tts-dataset"
+  ],
+  "domain":[
+      "general"
+  ],
+  "license":  "cc-by-sa-4.0",
+  "submitter": {
+      "name": "Path Nirvana",
+      "team": [
+          {
+              "name": "Janaka Liyanage",
+              "oauthId": {
+                "oauthId": "pathnirvana@gmail.com",
+                "provider": "google"
+            }
+          }
+      ]
+  },
+  "format": "wav",
+  "collectionMethod": {
+      "collectionDescription": [
+          "studio-recorded"
+      ]
+  }
+}

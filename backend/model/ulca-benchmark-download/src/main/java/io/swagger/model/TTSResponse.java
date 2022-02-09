@@ -3,7 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.model.ASRConfig;
+import io.swagger.model.AudioConfig;
+import io.swagger.model.AudioFiles;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
@@ -14,37 +15,38 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the response for translation.  Standard http status codes to be used.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-01-20T07:00:55.103Z[GMT]")
 
 
 public class TTSResponse   {
-  @JsonProperty("audioUri")
-  private String audioUri = null;
+  @JsonProperty("audio")
+  private AudioFiles audio = null;
 
   @JsonProperty("config")
-  private ASRConfig config = null;
+  private AudioConfig config = null;
 
-  public TTSResponse audioUri(String audioUri) {
-    this.audioUri = audioUri;
+  public TTSResponse audio(AudioFiles audio) {
+    this.audio = audio;
     return this;
   }
 
   /**
-   * path on gcp/s3 bucket or https url
-   * @return audioUri
+   * Get audio
+   * @return audio
    **/
-  @Schema(example = "gs://bucket/audio.wav", required = true, description = "path on gcp/s3 bucket or https url")
+  @Schema(required = true, description = "")
       @NotNull
 
-    public String getAudioUri() {
-    return audioUri;
+    @Valid
+    public AudioFiles getAudio() {
+    return audio;
   }
 
-  public void setAudioUri(String audioUri) {
-    this.audioUri = audioUri;
+  public void setAudio(AudioFiles audio) {
+    this.audio = audio;
   }
 
-  public TTSResponse config(ASRConfig config) {
+  public TTSResponse config(AudioConfig config) {
     this.config = config;
     return this;
   }
@@ -56,11 +58,11 @@ public class TTSResponse   {
   @Schema(description = "")
   
     @Valid
-    public ASRConfig getConfig() {
+    public AudioConfig getConfig() {
     return config;
   }
 
-  public void setConfig(ASRConfig config) {
+  public void setConfig(AudioConfig config) {
     this.config = config;
   }
 
@@ -74,13 +76,13 @@ public class TTSResponse   {
       return false;
     }
     TTSResponse ttSResponse = (TTSResponse) o;
-    return Objects.equals(this.audioUri, ttSResponse.audioUri) &&
+    return Objects.equals(this.audio, ttSResponse.audio) &&
         Objects.equals(this.config, ttSResponse.config);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(audioUri, config);
+    return Objects.hash(audio, config);
   }
 
   @Override
@@ -88,7 +90,7 @@ public class TTSResponse   {
     StringBuilder sb = new StringBuilder();
     sb.append("class TTSResponse {\n");
     
-    sb.append("    audioUri: ").append(toIndentedString(audioUri)).append("\n");
+    sb.append("    audio: ").append(toIndentedString(audio)).append("\n");
     sb.append("    config: ").append(toIndentedString(config)).append("\n");
     sb.append("}");
     return sb.toString();
