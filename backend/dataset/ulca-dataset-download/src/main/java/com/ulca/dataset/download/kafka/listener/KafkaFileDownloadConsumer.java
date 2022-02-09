@@ -95,9 +95,6 @@ public class KafkaFileDownloadConsumer {
 		String userId = file.getUserId();
 		
 		DatasetIngest datasetIngest = new DatasetIngest();
-		//disabling pseudo ingest
-		//datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
-		datasetIngest.setMode(DatasetDownloadConstants.INGEST_REAL_MODE);
 		
 		
 		Map<String,String> fileMap = null;
@@ -140,6 +137,14 @@ public class KafkaFileDownloadConsumer {
 				datasetIngest.setMd5hash(md5hash);
 				datasetIngest.setDatasetType(datasetType);
 				datasetIngest.setUserId(userId);
+				
+				if(datasetType.equals(DatasetType.PARALLEL_CORPUS)) {
+					//enabling pseudo ingest for parallel-corpus
+					datasetIngest.setMode(DatasetDownloadConstants.INGEST_PSEUDO_MODE);
+				}else {
+					datasetIngest.setMode(DatasetDownloadConstants.INGEST_REAL_MODE);
+				}
+				
 
 			} catch (IOException e) {
 				
