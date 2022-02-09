@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Toolbar, AppBar, Grid } from "@material-ui/core";
+import { Toolbar, AppBar, Grid,Box} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import { withStyles, Button, Menu, MenuItem, MuiThemeProvider } from "@material-ui/core";
+import { withStyles, Button, Menu, MenuItem, MuiThemeProvider} from "@material-ui/core";
 import HeaderStyles from "../../styles/HeaderStyles";
 import DownIcon from '@material-ui/icons/ArrowDropDown';
 import Theme from "../../theme/theme-default";
 import { translate } from "../../../assets/localisation";
+
 
 const StyledMenu = withStyles({
 })((props) => (
@@ -23,6 +24,7 @@ const StyledMenu = withStyles({
         {...props}
     />
 ));
+
 const TitleBar = (props) => {
     const { classes, options, selectedOption, handleSelectChange, page, count } = props;
     // const [options, setOptions] = useState('parallel-corpus');
@@ -51,7 +53,7 @@ const TitleBar = (props) => {
             <AppBar position="static" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Grid container className={classes.toolGrid}>
-                        < Grid item xs={0} sm={2} md={2} lg={2} xl={2} className={classes.selectGrid}>
+                        < Grid item xs={3} sm={3} md={3} lg={3} xl={3} className={classes.selectGrid}>
                             <Button className={classes.btnStyle}
                                 disabled={page !== 0 ? true : false}
                                 color="inherit"
@@ -88,7 +90,7 @@ const TitleBar = (props) => {
                                 }
                             </StyledMenu>
                         </Grid>
-                        < Grid item xs={3} sm={3} md={2} lg={2} xl={2} className={classes.tempGrid}>
+                        < Grid item xs={3} sm={3} md={3} lg={1} xl={3} className={classes.tempGrid}>
                             <Typography variant="body2" gutterBottom>
                                 {/* {props.label} */}
                                 {translate("label.totalCount")}
@@ -98,11 +100,10 @@ const TitleBar = (props) => {
                                 {count ? new Intl.NumberFormat('en').format(count) : 0}
                             </Typography>
                         </Grid>
-                        <Grid item xs={0} sm={0} md={3} lg={3} xl={3}></Grid>
-                        <Grid item xs={6} sm={6} md={5} lg={5} xl={5}>
-                            <Grid container spacing={2}>
-                                {props.children}
-                            </Grid>
+                        <Grid  xs={6} sm={6} md={6} lg={8} xl={6} container item  justify="flex-end">
+                        <div> 
+                        {props.children}
+                        </div>
                         </Grid>
                     </Grid>
                 </Toolbar>
