@@ -42,7 +42,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	@Value("${kafka.ulca.ds.ingest.ip.topic}")
 	private String datasetIngestTopic;
 	
-	@Value("${pseudo.ingest.success.threshold}")
+	@Value("${pseudo.ingest.success.percentage.threshold}")
 	private Integer successThreshold;
 	
 
