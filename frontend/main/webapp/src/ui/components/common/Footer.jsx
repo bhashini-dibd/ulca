@@ -38,7 +38,7 @@ const Footer = (props) => {
         </Grid>
         <Grid
           item
-          xs={12}
+          xs={0}
           sm={4}
           md={4}
           lg={4}
@@ -54,6 +54,7 @@ const Footer = (props) => {
                 href="mailto:contact@bhashini.gov.in"
               >
                 {translate("link.contactUs")}
+              
               </Link>
             </Typography>
           </div>
@@ -100,7 +101,7 @@ const Footer = (props) => {
                       </Link>
                     </li>
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" >
                     <li>
                       <Link color="while" href="">
                         <div className="join">
@@ -113,6 +114,7 @@ const Footer = (props) => {
                           >
                             {" "}
                             {translate("link.joinBhashaDaan")}{" "}
+                            
                           </Link>
                         </div>
                       </Link>

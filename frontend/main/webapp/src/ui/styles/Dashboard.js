@@ -38,6 +38,7 @@ const FileUploadStyles = (theme) => ({
     display: "flex",
     flexDirection: "row",
     cursor: "pointer",
+    
    
 
     // "@media (max-width:800px)": {

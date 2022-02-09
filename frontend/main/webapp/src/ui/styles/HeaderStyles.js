@@ -8,6 +8,8 @@ const HeaderStyles = (theme) => ({
     alignItems: "center",
     padding: "0",
     boxSizing: "border-box",
+    
+   
   },
   appBar: {
     boxSizing: "border-box",
@@ -163,6 +165,7 @@ const HeaderStyles = (theme) => ({
     height: "54px",
     alignContent: "center",
     display: "grid",
+    
   },
   bhashiniLogo: {
     paddingRight: "12px",
@@ -176,7 +179,7 @@ const HeaderStyles = (theme) => ({
 
   btnStyle: {
     padding: "0px",
-    justifyContent: "left",
+    justifyContent: "center",
     fontSize: "1.125rem",
     // fontFamily: '"Poppins","lato" ,sans-serif',
     fontWeight: "500 !important",

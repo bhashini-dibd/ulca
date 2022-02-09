@@ -246,7 +246,7 @@ const ChartRender = (props) => {
 
   const fetchFilterButtons = () => {
     return (
-      <div className={classes.filterButton}>
+      <div>
         <Button
           color={filterValue === "domains" ? "primary" : "default"}
           size="small"
@@ -307,7 +307,7 @@ const ChartRender = (props) => {
 
   const fetchButtonssecondLevel = () => {
     return (
-      <div className={classes.filterButton}>
+      <div >
         {filterValue !== "domains" && (
           <Button
             color={toggleValue === "domains" ? "primary" : "default"}
@@ -381,7 +381,9 @@ const ChartRender = (props) => {
                 ? "Submitter"
                 : "Domain"
             }`
+            
           );
+        
           setAxisValue({
             yAxis: "Count",
             xAxis:
@@ -807,6 +809,7 @@ const ChartRender = (props) => {
                     "select-source-language",
                     "Source Language *"
                   )}
+                 
                   <Typography value="" variant="h6">
                     (
                     {DashboardReport.count
@@ -860,7 +863,7 @@ const ChartRender = (props) => {
                   ></Label>
                 </XAxis>
                 <YAxis
-                  padding={{ top: 60 }}
+                  padding={{ top: 45 }}
                   tickInterval={10}
                   allowDecimals={false}
                   type="number"
@@ -878,6 +881,7 @@ const ChartRender = (props) => {
                     fontWeight="bold"
                     fontSize={16}
                   ></Label>
+              
                 </YAxis>
 
                 <Tooltip
