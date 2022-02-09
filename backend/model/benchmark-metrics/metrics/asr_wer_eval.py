@@ -14,7 +14,6 @@ class ASRWEREval(ModelMetricEval):
 
     def __init__(self):
         self.wer_score = load_metric('wer')
-        pass
 
     def asr_metric_eval(self, ground_truth, machine_translation):
 

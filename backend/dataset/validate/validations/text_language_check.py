@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts
 #from langdetect import detect_langs
 from polyglot.detect import Detector
 import logging
@@ -29,6 +29,9 @@ class TextLanguageCheck(BaseValidator):
                 text_list.append(record['groundTruth'])
                 lang_list.append(record['sourceLanguage'])
             if request["datasetType"] == dataset_type_monolingual:
+                text_list.append(record['text'])
+                lang_list.append(record['sourceLanguage'])
+            if request["datasetType"] == dataset_type_tts:
                 text_list.append(record['text'])
                 lang_list.append(record['sourceLanguage'])
 

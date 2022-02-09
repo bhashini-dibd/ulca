@@ -27,6 +27,7 @@ public class BenchmarkProcess {
 	String benchmarkDatasetId;
 	String benchmarkDatasetName;
 	String modelName;
+	String modelVersion;
 	double score;
 	String metric;
 	String status; // Completed/In-Progress/Failed

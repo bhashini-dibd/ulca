@@ -18,26 +18,7 @@ The code in this repo could be utilized to automate procedures for submitting/se
 
 * ### For Dataset
 
-    1. **Uploading Single Dataset:**
-
-            python3 automate.py -d -n "dataset-1" -url "https://example.com/dataset-01.zip"
-
-        Arguments:
-
-        * -d (--dataset) : Flag for Dataset Functions
-        * -n (--name) : Dataset Name
-        * -url (--url)  : Valid Dataset URL
-
-     2. **Uploading Multiple Datasets (using csv):**
-
-            python3 automate.py -d -i "1.csv"
-
-        Arguments:
-
-        * -d (--dataset) : Flag for Dataset Functions
-        * -i (--input) : input csv file (default-encoding: utf-8)
-
-     3. **Searching and Downloading Dataset**
+     1. **Searching and Downloading Dataset**
 
             python3 automate.py -d -src en -tgt ta,te -t parallel
 
@@ -54,20 +35,10 @@ The code in this repo could be utilized to automate procedures for submitting/se
         * [optional] -org (--org-source) : flag for original sentencence in source language
 
 * ### For Model
-
-    1. **Uploading a Model:**
-
-            python3 automate.py -m -n 'model-1' -i 'model-1.json'
-
-        Arguments:
-
-        * -m (--model) : Flag for Model Functions
-        * -n (--name) : Model Name
-        * -i (--input)  : Valid Model File (.json)
   
-    2. **Running Benchmark on a Model:**
+    1. **Running Benchmark on a Model:**
 
-            python3 automate.py -m -n 'model-1' -b 'benchmark1' --metric 'metric1'
+            python3 automate.py -m -n 'modelName' -b 'benchmarkDatasetName' --metric 'metricName'
 
         Arguments:
 
@@ -76,9 +47,10 @@ The code in this repo could be utilized to automate procedures for submitting/se
         * -b (--benchmark) : Benchamrk Name to be run
         * --metric  : Metric name
 
-    3. **Publish/Unpublish a Model:**
+    2. **Publish/Unpublish a Model:**
 
-            python3 automate.py -m -n 'model-1' --publish
+            python3 automate.py -m -n 'modelName' --publish
+            python3 automate.py -m -n ''modelName' --unpublish
 
         Arguments:
 
@@ -86,16 +58,6 @@ The code in this repo could be utilized to automate procedures for submitting/se
         * -n (--name) : Model Name
         * --publish : flag fo publishing a model
         * --unpublish  : flag fo unpublishing a model
-     
-    4. **Model Task functions: (eg:translation)**
-
-            python3 automate.py -m -t 'translation' -n "model-name" -i "input-string-or-url"
-
-        Arguments:
-
-        * -m (--model) : Flag for Model Functions
-        * -n (--name) : Model Name
-        * -i (--input)  : Input for Model Task (eg: sentence for Translation Task,URL for OCR/ASR task)
 
 * ### For Updating Schema
 
@@ -103,7 +65,7 @@ The code in this repo could be utilized to automate procedures for submitting/se
 
     Arguments:
 
-    * --update-schema : Flag for updating schema 
+    * --update-schema : Flag for updating schema[updates schema values for ref in code] 
 
 * ### For Chart Data
 
@@ -115,11 +77,17 @@ The code in this repo could be utilized to automate procedures for submitting/se
 
 * ### For running test on website
 
-        python3 automate.py --test-website
+        python3 automate.py --test-all
+        
+    * test functions : 
+            1. asr-recording
+            2. Leaderboards (sorted)
+            3. cards
+            4. public pages elements testing
 
     Arguments:
 
-    * --test-website : Flag for testing elements of website on a browser 
+    * --test-all : Flag for testing elements of website on a browser 
 
 To view script usage help from terminal, run:
 

@@ -58,7 +58,7 @@ class QueryUtils:
             aggs_parsed ={}
             for val in aggs:
                 agg = aggs[val]
-                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                     aggs_parsed[val] = (agg[False]-agg[True])/TIME_CONVERSION_VAL
                 else:
                     aggs_parsed[val] = (agg[False]-agg[True])
@@ -100,7 +100,7 @@ class QueryUtils:
                     check = "sourceLanguage" 
                 if item["sourceLanguage"] == lang :
                     check = "targetLanguage"
-                if dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus"]:
+                if dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","document-layout-corpus","asr-unlabeled-corpus","tts-corpus"]:
                     check = "sourceLanguage"
 
                 if aggs.get(item[check]) == None:
@@ -122,7 +122,7 @@ class QueryUtils:
             aggs_parsed ={}
             for val in aggs:
                 agg = aggs[val]
-                if dtype in ["asr-corpus","asr-unlabeled-corpus"]:
+                if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                     aggs_parsed[val] = (agg[False]-agg[True])/TIME_CONVERSION_VAL
                 else:
                     aggs_parsed[val] = (agg[False]-agg[True])
