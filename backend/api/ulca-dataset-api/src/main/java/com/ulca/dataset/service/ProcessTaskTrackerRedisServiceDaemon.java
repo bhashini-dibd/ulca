@@ -20,6 +20,7 @@ import com.ulca.dataset.model.TaskTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 import com.ulca.dataset.service.NotificationService;
 
+import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -74,6 +75,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 			} catch (Exception e) {
 				log.info("Exception while processing the fetched Redis map data :: " + entry.toString());
+				e.printStackTrace();
 			}
 
 		}
@@ -82,9 +84,18 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 	public void pseudoIngestUpdate(Map<String, String> val) {
 		
-		
+		System.out.println("printing the pseudoIngestUpdate maps ");
+		System.out.println(val.toString());
 
 		String serviceRequestNumber = val.containsKey("serviceRequestNumber") ? val.get("serviceRequestNumber") + ""
+				: null;
+		String datasetType = val.containsKey("datasetType") ? val.get("datasetType") + ""
+				: null;
+		String datasetName = val.containsKey("datasetName") ? val.get("datasetName") + ""
+				: null;
+		String datasetId = val.containsKey("datasetId") ? val.get("datasetId") + ""
+				: null;
+		String userId = val.containsKey("userId") ? val.get("userId") + ""
 				: null;
 
 		String baseLocation = val.containsKey("baseLocation") ? val.get("baseLocation") + "" : null;
@@ -104,7 +115,6 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		boolean v1 = false;
 		boolean v2 = false;
 		boolean v3 = false;
-		
 		
 		JSONObject details = new JSONObject();
 
@@ -164,7 +174,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			v3 = true;
 
 		}
-
+		
+		
 		if (v1 && v2 && v3) {
 
 			StatusEnum taskStatus = StatusEnum.completed;
@@ -172,9 +183,11 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			log.info("deleting redis entry for pseudo ingest : serviceRequestNumber :: " + serviceRequestNumber);
 			taskTrackerRedisDao.delete(serviceRequestNumber);
 			
-			double successRate = (publishSuccess/count)*100 ;
+			System.out.println(" publishSuccess :: "+ publishSuccess);
+			System.out.println("count :: " + count);
+			double successRate = ((double)publishSuccess/(double)count)*100 ;
 			
-			log.info("serviceRequestNumber :: " + serviceRequestNumber + "success rate :: " + successRate);
+			log.info("serviceRequestNumber :: " + serviceRequestNumber + " success rate :: " + successRate);
 			
 			if(successRate <= successThreshold) {
 				
@@ -188,10 +201,14 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 						taskStatus, details.toString());
 				
 				DatasetIngest datasetIngest = new DatasetIngest();
+				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
+				datasetIngest.setDatasetType(DatasetType.fromValue(datasetType));
+				datasetIngest.setDatasetName(datasetName);
+				datasetIngest.setDatasetId(datasetId);
+				datasetIngest.setUserId(userId);
 				datasetIngest.setMode(DatasetConstants.INGEST_REAL_MODE);
 				datasetIngest.setBaseLocation(baseLocation);
 				datasetIngest.setMd5hash(md5hash);
-				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
 				
 				datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
 				//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
