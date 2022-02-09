@@ -3,6 +3,8 @@ package com.ulca.model.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 import javax.validation.Valid;
 
@@ -54,7 +56,7 @@ public class ModelController {
 	public ModelListResponseDto getModel( @RequestParam(required = true) String modelId ) {
 		log.info("******** Entry ModelController:: getModel *******");
 
-		return modelService.getModelDescription(modelId);
+		return modelService.getModelByModelId(modelId);
 	}
 	
 	@PostMapping("/upload")
@@ -79,14 +81,14 @@ public class ModelController {
 	}
 	
 	@PostMapping("/compute")
-	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws URISyntaxException, IOException {
+	public ModelComputeResponse computeModel(@Valid @RequestBody ModelComputeRequest request) throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		log.info("******** Entry ModelController:: computeModel *******");
 		return modelService.computeModel(request);
 
 	}
 	
-	@PostMapping("/tryMeOcrImageContent")
+	@PostMapping("/tryMe")
 	public ModelComputeResponse tryMeOcrImageContent(@RequestParam("file") MultipartFile file,@RequestParam(required = true) String userId, @RequestParam(required = true) String modelId) throws Exception {
 		log.info("******** Entry ModelController:: tryMeOcrImageContent *******");
 		return modelService.tryMeOcrImageContent(file, modelId);

@@ -2,6 +2,8 @@ import config
 from utilities import post_error, MdUtils
 import logging
 from models import StoreModel
+import logging
+log = logging.getLogger('file')
 
 log         =   logging.getLogger('file')
 utils       =   MdUtils()
@@ -21,6 +23,7 @@ class MasterDataServices():
                 master_data.update(from_git)
                 for master in from_git:
                     model.upsert(master,from_git[master],None)
+        master_data = self.format_result(master_data)
         return master_data
 
     #deciding master and properties to return
@@ -74,6 +77,20 @@ class MasterDataServices():
         for master in master_data:
             log.info(f"Upserting {master} to redis store")
             model.upsert(master,master_data[master],None)
+    
+    def format_result(self,result):
+        try:
+            for master, values in result.items():
+                if master == "datasetFilterParams":
+                    for submaster in values: #parallel-corpus, mono etcc.. level
+                        for attrib in submaster["values"]: # filetrs specific to dtype
+                            if attrib["code"] == "collectionMethod": 
+                              attrib["values"] = [x for x in attrib["values"] if submaster["datasetType"] in x.get("datasetType",[]) ]
+            return result
+            
+        except Exception as e:
+            log.error(f"Exception while formatting the end result :{e}")
+            return None
 
 
             

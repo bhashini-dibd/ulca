@@ -249,6 +249,14 @@
       "description": "Open API to fetch benchmark datasets"
     },
     {
+      "id": "60705ffd-e7dc-4e2a-95a2-d2b3db6a5a63",
+      "uri": "/ulca/apis/v0/model/tryMe",
+      "module": "ULCA-API-MODEL",
+      "active": true,
+      "whiteList": true,
+      "description": "Open API to try models"
+    },
+    {
       "id": "d8812e00-cc10-470d-9957-045425ba7ff8",
       "uri": "/ulca/apis/v0/model/status/change",
       "module": "ULCA-API-MODEL",

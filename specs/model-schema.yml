@@ -172,9 +172,9 @@ components:
       type: object
       properties:
         audio:
-          $ref: '#/components/schemas/ASRFiles'
+          $ref: '#/components/schemas/AudioFiles'
         config:
-          $ref: '#/components/schemas/ASRConfig'
+          $ref: '#/components/schemas/AudioConfig'
 
     ASRResponse:
       description: the response for translation.  Standard http status codes to be used.
@@ -212,15 +212,13 @@ components:
     TTSResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
-      - audioUri
+      - audio
       type: object
       properties:
-        audioUri:
-          type: string
-          description: path on gcp/s3 bucket or https url
-          example: gs://bucket/audio.wav
+        audio:
+          $ref: '#/components/schemas/AudioFiles'
         config:
-          $ref: '#/components/schemas/ASRConfig'
+          $ref: '#/components/schemas/AudioConfig'
 
     OCRInference:
       required:
@@ -308,6 +306,7 @@ components:
     TTSConfig:
       required:
       - language
+      - gender
       type: object
       properties:
         modelId:
@@ -316,8 +315,10 @@ components:
           example: 103
         language:
           $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
+        gender:
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender'
 
-    ASRConfig:
+    AudioConfig:
       required:
       - language
       - audioFormat
@@ -358,6 +359,8 @@ components:
           - phone_call
           - video
           - default
+        encoding:
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding'
 
     TranscriptionFormat:
       type: object
@@ -390,13 +393,13 @@ components:
           description: path on gcp/s3 bucket or https url
           example: gs://bucket/testimg.jpeg
 
-    ASRFiles:
+    AudioFiles:
       type: array
       description: list of
       items:
-        $ref: '#/components/schemas/ASRFile'
+        $ref: '#/components/schemas/AudioFile'
 
-    ASRFile:
+    AudioFile:
       required:
       - audioContent | audioUri
       type: object
