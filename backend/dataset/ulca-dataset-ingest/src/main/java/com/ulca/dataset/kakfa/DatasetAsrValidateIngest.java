@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -56,6 +54,12 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
 	
+	@Value("${pseudo.ingest.sample.size}")
+	private Integer pseudoSampleSize;
+	
+	@Value("${pseudo.ingest.record.threshold}")
+	private Integer pseudoRecordThreshold;
+	
 	@Autowired
 	TaskTrackerRedisDao taskTrackerRedisDao;
 	
@@ -77,7 +81,6 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		String baseLocation = datasetIngest.getBaseLocation();
 		String mode = datasetIngest.getMode();
 		
-		
 		AsrParamsSchema paramsSchema = null;
 
 		Error fileError = validateFileExistence(baseLocation);
@@ -98,7 +101,6 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			
 			return;
 		}
-		
 		
 		try {
 			paramsSchema = validateParamsSchema(datasetIngest);
@@ -142,10 +144,10 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 			if(mode.equalsIgnoreCase("real")) {
 				ingest(paramsSchema, datasetIngest);
 			}else {
-				pseudoIngest(paramsSchema, datasetIngest);
+				initiateIngest(paramsSchema, datasetIngest);
 			}
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			
 			log.info("Exception while ingesting :: serviceRequestNumber : "+ serviceRequestNumber +" error :: " + e.getMessage());
 			
@@ -307,7 +309,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 	}
 
-	public void pseudoIngest(AsrParamsSchema paramsSchema, DatasetIngest datasetIngest)
+	public void pseudoIngest(AsrParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
 			throws IOException {
 
 		log.info("************ Entry DatasetAsrValidateIngest :: pseudoIngest *********");
@@ -321,35 +323,13 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		String md5hash = datasetIngest.getMd5hash();
 		DatasetType datasetType = datasetIngest.getDatasetType();
 		
-		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
-		
-		FileChannel dataFileChannel = FileChannel.open(Paths.get(dataFilePath));
-	    long fileSize = dataFileChannel.size();
-	    long min = 1; 
-	    long max = 10;
-	    long buffer = 10;
-	    if(fileSize > MB_50 && fileSize <= MB_300) {
-	    	buffer = 100;
-	    	max = 100;
-	    }
-	    if(fileSize > MB_300) {
-	    	buffer = 1000;
-	    	max = 1000;
-	    }
-	    long counter = min;
-	    
-		log.info("data.json file path :: " + dataFilePath);
-
 		ObjectMapper objectMapper = new ObjectMapper();
 		JSONObject source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+		
+		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
+		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
-
-
-		int numberOfRecords = 0;
-		int failedCount = 0;
-		int successCount = 0;
-		int pseudoNumberOfRecords = 0;
 		
 		JSONObject vModel = new JSONObject();
 		vModel.put("datasetId", datasetId);
@@ -359,22 +339,32 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
 		
-		 
-		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash);
 		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
+		
+		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash, paramsSchema.getDatasetType().toString(),datasetName, datasetId, userId);
+		
+		int numberOfRecords = 0;
+		int failedCount = 0;
+		int successCount = 0;
+		int pseudoNumberOfRecords = 0;
+		
+		long sampleSize = recordSize/10;
+		long bufferSize = pseudoSampleSize/10;
+		long base = sampleSize;
+		long counter = 0;
+		long maxCounter = bufferSize;
 		
 		String basePath  = datasetIngest.getBaseLocation()  + File.separator;
 
 		reader.beginArray();
+		
 		while (reader.hasNext()) {
 			numberOfRecords++;
 			
-			if(numberOfRecords == counter) {
-				pseudoNumberOfRecords++;
+			if(counter < maxCounter ) {
 				
-				min = min+buffer;
-				max = max + buffer;
-				counter = (long)(Math.random()*(max-min+1)+min);
+				pseudoNumberOfRecords++;
+				++counter;	
 				
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 				ObjectMapper mapper = new ObjectMapper();
@@ -395,7 +385,6 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
 					// send error event
 					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
-					
 					
 				}
 				if(rowSchema != null) {
@@ -426,6 +415,11 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 					}
 				}
 			
+			}else if ( numberOfRecords == base ){
+				Object rowObj = new Gson().fromJson(reader, Object.class);
+				counter = base;
+				maxCounter = base + bufferSize;
+				base = base + sampleSize;
 			}else {
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 			}
@@ -437,11 +431,47 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
 		
 		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount) ;
-		
 
 	}
 
-	
-	
+	public long getRecordSize(String dataFilePath) throws Exception {
+		
+		long numberOfRecords = 0;
+		InputStream inputStream;
+		try {
+			inputStream = Files.newInputStream(Path.of(dataFilePath));
+			JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+			reader.beginArray();
+			while (reader.hasNext()) {
+				numberOfRecords++;
+				Object rowObj = new Gson().fromJson(reader, Object.class);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new Exception("data.json file is not proper");
+			
+		}
+		
+		return numberOfRecords;
+	}
+
+	public void initiateIngest(AsrParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
+		
+		log.info(" initiateIngest ");
+		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
+		
+		long recordSize = getRecordSize(dataFilePath);
+		
+		log.info(" total record size ::  " + recordSize);
+		
+		if(recordSize <= pseudoRecordThreshold) {
+			ingest(paramsSchema, datasetIngest);
+			return;
+		}else {
+			pseudoIngest(paramsSchema, datasetIngest, recordSize);
+		}
+	}
 
 }

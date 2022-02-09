@@ -5,11 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
@@ -75,15 +73,11 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 	@Autowired
 	TaskTrackerRedisDao taskTrackerRedisDao;
 	
-	
-
 	public static final String SOURCE_TEXT = "sourceText";
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
 	public static final String TARGET_TEXT = "targetText";
 	public static final String TARGET_TEXT_HASH = "targetTextHash";
 	
-	
-
 	public void validateIngest(DatasetIngest datasetIngest) {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateIngest *********");
@@ -96,7 +90,6 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		String md5hash = datasetIngest.getMd5hash();
 		String baseLocation = datasetIngest.getBaseLocation();
 		String mode = datasetIngest.getMode();
-		
 		
 		ParallelDatasetParamsSchema paramsSchema = null;
 
@@ -186,11 +179,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 			
 			return;
-			
 		}
-		
-		
-
 	}
 
 	public ParallelDatasetParamsSchema validateParamsSchema(DatasetIngest datasetIngest)
@@ -346,40 +335,9 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
 		
-		
-		long sampleSize = recordSize/10;
-		long bufferSize = pseudoSampleSize/10;
-	
-		/*
-	    
-		FileChannel dataFileChannel = FileChannel.open(Paths.get(dataFilePath));
-	    long fileSize = dataFileChannel.size();
-	    long min = 1; 
-	    long max = 10;
-	    long buffer = 10;
-	    if(fileSize > MB_50 && fileSize <= MB_300) {
-	    	buffer = 100;
-	    	max = 100;
-	    }
-	    if(fileSize > MB_300) {
-	    	buffer = 1000;
-	    	max = 1000;
-	    }
-	    long counter = min;
-	    
-	    */
-	    
-		log.info("data.json file path :: " + dataFilePath);
-		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
-	
-		int numberOfRecords = 0;
-		int failedCount = 0;
-		int successCount = 0;
-		int pseudoNumberOfRecords = 0;
-		
 		JSONObject vModel = new JSONObject();
 		vModel.put("record", record);
 		vModel.put("datasetId", datasetId);
@@ -389,29 +347,31 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
 		
-		 
-		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash);
 		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
-		 
-		reader.beginArray();
 		
+		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash,paramsSchema.getDatasetType().toString(), datasetName, datasetId, userId);
+		
+		int numberOfRecords = 0;
+		int failedCount = 0;
+		int successCount = 0;
+		int pseudoNumberOfRecords = 0;
+		
+		long sampleSize = recordSize/10;
+		long bufferSize = pseudoSampleSize/10;
 		long base = sampleSize;
 		long counter = 0;
 		long maxCounter = bufferSize;
 		
-		log.info("base :: " + base);
-		log.info("counter :: " + counter);
-		log.info("maxCounter :: " + maxCounter);
+		reader.beginArray();
 		
 		while (reader.hasNext()) {
 			numberOfRecords++;
 			
 			if(counter < maxCounter ) {
-				pseudoNumberOfRecords++;
 				
+				pseudoNumberOfRecords++;
 				++counter;	
 				
-				log.info("counter :: " + counter);
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 				
 				ObjectMapper mapper = new ObjectMapper();
@@ -477,9 +437,6 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
 		
 		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount) ;
-		
-		
-
 	}
 
 	public String getSha256Hash(String input) throws NoSuchAlgorithmException {
@@ -500,7 +457,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		return hashString;
 	}
 	
-	private long getRecordSize(String dataFilePath) throws Exception {
+	public long getRecordSize(String dataFilePath) throws Exception {
 		
 		long numberOfRecords = 0;
 		InputStream inputStream;
@@ -538,7 +495,6 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		}else {
 			pseudoIngest(paramsSchema, datasetIngest, recordSize);
 		}
-		
 		
 	}
 	
