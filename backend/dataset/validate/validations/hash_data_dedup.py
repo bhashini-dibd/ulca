@@ -6,7 +6,7 @@ from logging.config import dictConfig
 log = logging.getLogger('file')
 import os
 
-class CaseDedup(BaseValidator):
+class HashDedup(BaseValidator):
     """
     Stores the hash for sentence with all lower case to facilitate deduplication based on case
     """
