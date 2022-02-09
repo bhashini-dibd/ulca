@@ -69,10 +69,10 @@ class ParallelService:
                         {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'Parallel - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'Parallel - {metadata["userMode"]} - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
-            return {"message": "EXCEPTION while loading Parallel dataset!!", "status": "FAILED"}
+            return {"message": "EXCEPTION while loading Par allel dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
 
     '''
