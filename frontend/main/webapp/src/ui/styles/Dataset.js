@@ -433,19 +433,24 @@ const DataSet = (theme) => ({
     boxShadow: "none",
     padding: "0",
   },
-  gridCompute: { marginTop: "15px " },
-  grid: { marginRight: "15px " },
+  gridCompute: { marginTop: "15px " ,
+  // paddingRight:"10px", marginLeft:"40px"
+},
+  grid: { marginRight: "15px ", paddingLeft:"30px" },
   hosted: {
     display: "flex",
     // alignItems: 'flex-end'
     alignItems: "center",
+   
   },
   translatedCard: {
     height: "300px",
     borderColor: "#2D63AB",
     borderRadius: "8px",
     marginTop: "20px",
-    marginRight: "24px",
+    marginRight: "5px",
+    marginLeft: "5px",
+    
   },
   asrCard: {
     height: "300px",
@@ -477,11 +482,12 @@ const DataSet = (theme) => ({
     borderColor: "#2D63AB",
     borderRadius: "8px",
     paddingBottom: "13px",
-    marginRight: "24px",
+    marginRight: "5px",
+    marginLeft:"5px"
   },
   cardHeader: {
     backgroundColor: "#F4F7FB",
-    height: "52px",
+    height: "62px",
     alignItems: "center",
   },
   headerContent: {

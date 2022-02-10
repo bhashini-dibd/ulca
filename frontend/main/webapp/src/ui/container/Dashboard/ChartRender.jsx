@@ -830,6 +830,7 @@ const ChartRender = (props) => {
                   {DashboardReport.count
                     ? new Intl.NumberFormat("en").format(DashboardReport.count)
                     : 0}
+                    
                   )
                 </span>
               </Typography>
@@ -837,18 +838,21 @@ const ChartRender = (props) => {
           </div>
 
           <div className={classes.title}>
-            <ResponsiveContainer width="98%" height={550}>
+            <ResponsiveContainer maxWidth="100%" height={550} >
+              
               <BarChart
                 width={900}
                 height={400}
                 data={DashboardReport.data}
                 fontSize="14px"
                 fontFamily="Roboto"
-                maxBarSize={100}
+                maxBarSize={110}
+              
+                
               >
                 <XAxis
                   dataKey="label"
-                  textAnchor={"end"}
+                  textAnchor={"middle"}
                   tick={<CustomizedAxisTick />}
                   height={130}
                   interval={0}
@@ -892,7 +896,7 @@ const ChartRender = (props) => {
                   cursor={{ fill: "none" }}
                 />
                 <Bar
-                  margin={{ top: 140, left: 20, right: 20, bottom: 20 }}
+                  margin={{ top: 140, left: 40, right: 20, bottom: 20 }}
                   dataKey="value"
                   cursor="pointer"
                   radius={[8, 8, 0, 0]}
@@ -900,6 +904,7 @@ const ChartRender = (props) => {
                   onClick={(event) => {
                     handleOnClick(page + 1, event);
                   }}
+                  
                 >
                   <LabelList
                     formatter={(value) =>
@@ -910,9 +915,11 @@ const ChartRender = (props) => {
                     dataKey="value"
                     fill="black"
                     style={{ textAnchor: "start" }}
-                    angle={-30}
+                    angle={-20}
                     clockWise={4}
+                   
                   />
+                  
                   {DashboardReport.hasOwnProperty("data") &&
                     DashboardReport.data.length > 0 &&
                     DashboardReport.data.map((entry, index) => {
@@ -921,6 +928,7 @@ const ChartRender = (props) => {
                     })}
                 </Bar>
               </BarChart>
+             
             </ResponsiveContainer>
           </div>
         </Paper>
