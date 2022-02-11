@@ -485,12 +485,9 @@ const DataSet = (theme) => ({
     borderRadius: "8px",
     paddingBottom: "13px",
     marginRight: "24px",
-<<<<<<< HEAD
     "@media (max-width:400px)": {
       marginRight: "1px",
     },
-=======
->>>>>>> 87201254947056267d47be7fe5028dc3348be0c2
   },
   cardHeader: {
     backgroundColor: "#F4F7FB",
