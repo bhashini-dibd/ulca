@@ -165,7 +165,7 @@ const HeaderStyles = (theme) => ({
     height: "54px",
     alignContent: "center",
     display: "grid",
-    
+   
   },
   bhashiniLogo: {
     paddingRight: "12px",

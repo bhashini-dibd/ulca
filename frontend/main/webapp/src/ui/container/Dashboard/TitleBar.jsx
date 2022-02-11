@@ -53,7 +53,7 @@ const TitleBar = (props) => {
             <AppBar position="static" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Grid container className={classes.toolGrid}>
-                        < Grid item xs={0} sm={3} md={3} lg={3} xl={3} className={classes.selectGrid}>
+                        < Grid item xs={0} sm={2} md={3} lg={3} xl={3} className={classes.selectGrid}>
                             <Button className={classes.btnStyle}
                                 disabled={page !== 0 ? true : false}
                                 color="inherit"
@@ -100,9 +100,10 @@ const TitleBar = (props) => {
                                 {count ? new Intl.NumberFormat('en').format(count) : 0}
                             </Typography>
                         </Grid>
-                        <Grid  xs={6} sm={6} md={6} lg={8} xl={6} container item  justify="flex-end">
-                        <div> 
-                        {props.children}
+                        <Grid  xs={12} sm={6} md={6} lg={8} xl={6} container item  justify="flex-end"  >
+                        <div   style={{color:"red","@media (max-device-width: 400px)": { color: "green" }}}
+     > 
+                        {props.children} 
                         </div>
                         </Grid>
                     </Grid>

@@ -436,7 +436,9 @@ const DataSet = (theme) => ({
   gridCompute: { marginTop: "15px " ,
   // paddingRight:"10px", marginLeft:"40px"
 },
-  grid: { marginRight: "15px ", paddingLeft:"30px" },
+  grid: { marginRight: "15px ",  "@media (max-width:400px)": {
+    marginLeft:"20px"
+  }, },
   hosted: {
     display: "flex",
     // alignItems: 'flex-end'
@@ -458,6 +460,9 @@ const DataSet = (theme) => ({
     borderColor: "#2D63AB",
     borderRadius: "8px",
     margin: "20px 20px 20px 0px",
+    "@media (max-width:400px)": {
+      marginLeft: "-15px",
+    },
   },
   computeBtnUrl: {
     marginTop: "40px",
@@ -482,8 +487,10 @@ const DataSet = (theme) => ({
     borderColor: "#2D63AB",
     borderRadius: "8px",
     paddingBottom: "13px",
-    marginRight: "5px",
-    marginLeft:"5px"
+    marginRight: "24px",
+    "@media (max-width:400px)": {
+      marginRight: "1px",
+    },
   },
   cardHeader: {
     backgroundColor: "#F4F7FB",

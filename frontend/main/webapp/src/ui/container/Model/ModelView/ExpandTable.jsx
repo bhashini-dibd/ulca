@@ -49,7 +49,7 @@ const ExpandTable = (props) => {
         >
           <TableCell colSpan={9}  >
             <>
-              <Box style={{ margin: "0 80px"   }}>
+              <Box style={{ margin: "0 10px"}} >
                 <Table size="small" aria-label="purchases">
                   <TableHead >
                     <TableRow style={{backgroundColor:"red"}}>
