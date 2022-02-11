@@ -9,7 +9,7 @@ app_port                                =   os.environ.get('ULCA_ERROR_CONSUMER_
 shared_storage_path                     =   os.environ.get('ULCA_SHARED_STORAGE_PATH', "/opt/")
 error_prefix                            =   os.environ.get('ULCA_ERROR_PREFIX', 'errors')
 pt_publish_tool                         =   os.environ.get('PT_TOOL_PUBLISH', 'publish')
-error_cron_interval_sec                 =   os.environ.get('ULCA_ERROR_CRON_JOB_INTERVAL_SEC',300)
+error_cron_interval_sec                 =   os.environ.get('ULCA_ERROR_CRON_JOB_INTERVAL_SEC',86400)#300
 if isinstance(error_cron_interval_sec, str):
     error_cron_interval_sec  =  eval(error_cron_interval_sec)
 
