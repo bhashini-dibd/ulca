@@ -1,11 +1,11 @@
-import React,{useState} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-import { Button, Grid, } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import { withStyles } from '@material-ui/core/styles';
@@ -28,9 +28,7 @@ const styles = theme => ({
         fontSize: '14px'
     },
     appTab: {
-        borderTop: "none", borderRight: "none", borderLeft: "none", 
-           
-                
+        borderTop: "none", borderRight: "none", borderLeft: "none"
     },
     toolbar: {
         minHeight: "48px",
@@ -40,13 +38,7 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         padding: "0",
-        boxSizing: "border-box",
-      
-      
-      
-      
-      
-        
+        boxSizing: "border-box"
       },
     // tablabel: {
     //     fontSize: '16px',
@@ -111,52 +103,30 @@ const SubHeader = (props) => {
         history.push(`${process.env.PUBLIC_URL}${url}`);
     }
     console.log( props.tabs)
-   
     return (
         <AppBar className={classes.appTab} position="static" color='default'>
-            
             <Toolbar className={classes.toolbar}>
             <Grid container spacing={0}>
             <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
-                
                 </Grid>
-             <Grid sx={ {
-    // display: 'flex',
-    // flexWrap: 'wrap',
-    // justifyContent: 'space-around',
-    // overflow: 'hidden',
-    
-  }}>
-                <Box>
-               
-                    <Tabs value={props.value}  onChange={props.handleChange  }  
-                    variant="scrollable"
-                    scrollButtons="auto"
-                 aria-label="visible arrows tabs example"
-       
-      
-        >     
+                <Grid item >
+                    <Tabs value={props.value}  onChange={props.handleChange}>
                         {
                             props.tabs.map((tab, index) => {
                                 if(tab.roles.includes(role) ||(tab.public)){
                                 return (
-                                    
                                     <Tab label={tab.name} {...a11yProps(index)} onClick={() => handleClick(tab.url)} />
                                 )
-                            
                                 }else{
                                     return(<Tab />)
                                     
                                 }
                             })
                         }
-                        
                     </Tabs>
-                    </Box>
-                    </Grid>
+                </Grid>
             </Grid>
             </Toolbar>
-           
         </AppBar>
     );
 }

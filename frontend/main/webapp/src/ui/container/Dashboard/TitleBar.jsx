@@ -53,7 +53,7 @@ const TitleBar = (props) => {
             <AppBar position="static" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Grid container className={classes.toolGrid}>
-                        < Grid item xs={0} sm={3} md={3} lg={3} xl={3} className={classes.selectGrid}>
+                        < Grid item xs={3} sm={3} md={3} lg={3} xl={3} className={classes.selectGrid}>
                             <Button className={classes.btnStyle}
                                 disabled={page !== 0 ? true : false}
                                 color="inherit"
