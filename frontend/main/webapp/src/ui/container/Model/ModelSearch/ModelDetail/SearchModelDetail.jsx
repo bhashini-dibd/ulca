@@ -238,7 +238,7 @@ const SearchModelDetail = (props) => {
                 md={4}
                 lg={4}
                 xl={4}
-                style={{ paddingLeft: "5px",paddingRight: "5px" }}
+                style={{ paddingLeft: "24px" }}
               >
                 <Grid container spacing={2} style={{ marginTop: "2%" }}>
                   {/* <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

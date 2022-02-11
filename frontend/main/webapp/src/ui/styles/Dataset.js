@@ -443,16 +443,13 @@ const DataSet = (theme) => ({
     display: "flex",
     // alignItems: 'flex-end'
     alignItems: "center",
-   
   },
   translatedCard: {
     height: "300px",
     borderColor: "#2D63AB",
     borderRadius: "8px",
     marginTop: "20px",
-    marginRight: "5px",
-    marginLeft: "5px",
-    
+    marginRight: "24px",
   },
   asrCard: {
     height: "300px",
@@ -488,13 +485,16 @@ const DataSet = (theme) => ({
     borderRadius: "8px",
     paddingBottom: "13px",
     marginRight: "24px",
+<<<<<<< HEAD
     "@media (max-width:400px)": {
       marginRight: "1px",
     },
+=======
+>>>>>>> 87201254947056267d47be7fe5028dc3348be0c2
   },
   cardHeader: {
     backgroundColor: "#F4F7FB",
-    height: "62px",
+    height: "52px",
     alignItems: "center",
   },
   headerContent: {

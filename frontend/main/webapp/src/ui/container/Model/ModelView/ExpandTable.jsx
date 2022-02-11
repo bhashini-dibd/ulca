@@ -42,17 +42,19 @@ const ExpandTable = (props) => {
         <TableRow
           style={{
             borderLeft: `2px solid ${color ? "#E2F2FD" : "#E9F7EF"}`,
-            borderRight: `2px solid ${color ? "#E2F2FD" : "#E9F7EF" }`,
-            
+            borderRight: `2px solid ${color ? "#E2F2FD" : "#E9F7EF"}`,
           }}
-          
         >
-          <TableCell colSpan={9}  >
+          <TableCell colSpan={9}>
             <>
+<<<<<<< HEAD
               <Box style={{ margin: "0 10px"}} >
+=======
+              <Box style={{ margin: "0 80px" }}>
+>>>>>>> 87201254947056267d47be7fe5028dc3348be0c2
                 <Table size="small" aria-label="purchases">
-                  <TableHead >
-                    <TableRow style={{backgroundColor:"red"}}>
+                  <TableHead>
+                    <TableRow>
                       {/* <TableCell></TableCell> */}
                       {/* <TableCell></TableCell> */}
                       <TableCell>

@@ -62,7 +62,7 @@ const SpeechToSpeechFilter = (props) => {
         xl={12}
       >
         <Typography variant="body" component={"i"}>
-          Select the STS details
+          This is an experimental feature
         </Typography>
       </Grid>
       <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
