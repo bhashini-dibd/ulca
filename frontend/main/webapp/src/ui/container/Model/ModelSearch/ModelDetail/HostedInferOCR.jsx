@@ -15,7 +15,12 @@ import {
   Card,
   CardActions,
   CardMedia,
+  Modal,
+  Backdrop,
+  Fade 
+  
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import OCRModal from "./OCRModal";
 import { translate } from "../../../../../assets/localisation";
@@ -24,7 +29,13 @@ import { useDispatch } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import Snackbar from "../../../../components/common/Snackbar";
 
+
+
+
 const HostedInferASR = (props) => {
+  
+  const [openModal, setOpenModal] = useState(false);
+  
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
     props;
   const history = useHistory();
@@ -164,6 +175,16 @@ const HostedInferASR = (props) => {
     });
   };
 
+  const Imagemodal = () => {
+      setOpenModal(true);
+
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+
   return (
     <>
       <Grid container>
@@ -194,16 +215,44 @@ const HostedInferASR = (props) => {
                 type="file"
               />
               {preview ? (
+                <>
                 <img
-                  style={{ marginTop: "1%" }}
+                  style={{ marginTop: "5%" }}
                   src={preview}
                   alt="Preview"
-                  width="100%"
+                  width="60%"
                   height="10vh"
+                  onClick={Imagemodal}
+
                 />
+                  <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  className={classes.imagemodal}
+                  open={openModal}
+                  onClose={handleCloseModal}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                  timeout: 500,
+              }}
+                 >
+              <Fade in={openModal}>
+             <div className={classes.imagepaper}>
+              <img
+                  style={{ maxWidth: 750 }}
+                  src={preview}
+                  alt="Preview"
+            />
+         
+          </div>
+        </Fade>
+      </Modal>
+               </>
               ) : (
                 <></>
               )}
+              
               <Button
                 color="primary"
                 style={{ float: "right", marginTop: "10px" }}
