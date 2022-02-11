@@ -334,7 +334,7 @@ const ChartRender = (props) => {
               handleLevelChange("collectionMethod_collectionDescriptions")
             }
           >
-            Collection Method
+            Collection Method  
           </Button>
         )}
         {filterValue !== "primarySubmitterName" && (
