@@ -21,7 +21,7 @@ class ETACalculatorService:
         Aggregating db values to get start time & end time w.r.t dataset types,
         Calculating weighted average and adding a buffer time as 20% of the avg
         """
-        log.info('Calculating average ETA!')
+        log.info('Fetching values from db!')
         try:
             if not queries:
                 ds_submit_query     =   [{ "$addFields": { "datasetId": { "$toString": "$_id" }}},
@@ -44,7 +44,7 @@ class ETACalculatorService:
                 result      =   repo.aggregate(query["query"],query["collection"])
                 if not result:
                     log.info("No results returned for the query")
-                    return
+                    continue
                 
                 search_df   =   pd.DataFrame(result)
                 log.info(f"Count of search items:{len(search_df)}")
