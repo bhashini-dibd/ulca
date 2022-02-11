@@ -62,7 +62,7 @@ const SpeechToSpeechFilter = (props) => {
         xl={12}
       >
         <Typography variant="body" component={"i"}>
-          This is an experimental feature
+        This is an experimental feature, where we concatenate the models submitted to ULCA to achieve Speech-To-Speech(STS) translation in Indian languages. Over time, the accuracy and performance of these models will improve, bringing us closer to the goal of realtime STS translation.
         </Typography>
       </Grid>
       <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>

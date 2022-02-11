@@ -1,7 +1,7 @@
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../../styles/Dataset";
 import { useHistory } from "react-router";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+// import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
@@ -64,12 +64,12 @@ const HostedInferASR = (props) => {
   const validURL = (str) => {
     var pattern = new RegExp(
       "^((ft|htt)ps?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?" + // port
-        "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
-        "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?" + // port
+      "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
+      "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
       "i"
     );
     return pattern.test(str);
