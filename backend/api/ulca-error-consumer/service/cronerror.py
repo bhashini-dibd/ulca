@@ -1,14 +1,14 @@
 from events.processrepo import ProcessRepo
 import threading
 from threading import Thread
-from configs.configs import error_cron_interval_sec, shared_storage_path, error_prefix, error_batch_size
+from configs.configs import error_cron_interval_sec, shared_storage_path, error_prefix, error_batch_size, redis_key_expiry
 from .cronrepo import StoreRepo
 import logging
 from events.errorrepo import ErrorRepo
 from events.processrepo import ProcessRepo
 from utils.cronjobutils import StoreUtils
 import os
-from datetime import datetime
+from datetime import datetime,timedelta
 from logging.config import dictConfig
 
 
@@ -29,15 +29,20 @@ class ErrorProcessor(Thread):
         while not self.stopped.wait(eval(str(error_cron_interval_sec))):
             log.info(f'Error Processor run :{run}')
             try:
-                log.info('Fetching SRNs from redis store')
-                srn_list = storerepo.get_unique_srns()
+                # log.info('Fetching SRNs from redis store')
+                # srn_list = storerepo.get_unique_srns() 
+                # Getting all keys(SRN.UUID) from redis and filtering out the unique SRNs is again costly in terms of storage
+                # so getting that from mongo; previous implementation : line no-33 
+                log.info('Fetching SRNs from mongo store')
+                srn_list = self.get_unique_srns()
                 if srn_list:
                     log.info(f'Error records on {len(srn_list)} SRNs present in redis store')
                     log.info(f'Error processing initiated --------------- run : {run}')
                     self.initiate_error_processing(srn_list)
                     log.info(f'Error Processing completed --------------- run : {run}')
                 else:
-                    log.info('Received 0 SRNs from redis store')
+                    log.info('Received 0 SRNs from mongo store')
+                    # log.info('Received 0 SRNs from redis store')
                 run += 1
             except Exception as e:
                 run += 1
@@ -127,6 +132,20 @@ class ErrorProcessor(Thread):
         #updating record on mongo with uploaded error count
         errorepo.update(cond,error_record,False)
         log.info(f'Updated db record for SRN after creating final report -- {srn}')
+        
+
+    def get_unique_srns(self):
+        lastday = (datetime.now() - timedelta(seconds=redis_key_expiry*2))
+        query = [{ '$match':{'serviceRequestType':'dataset','serviceRequestAction':'submit'}}, 
+                {'$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
+                {'$match': {'date': {'$lt': lastday}}}]
+        log.info(f"Query :{query}")
+        SRNlist = []
+        aggresult = prorepo.aggregate(query)
+        if aggresult:
+            for agg in aggresult:
+                SRNlist.append(agg["serviceRequestNumber"])
+        return SRNlist
         
 
 
