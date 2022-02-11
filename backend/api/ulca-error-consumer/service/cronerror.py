@@ -36,7 +36,7 @@ class ErrorProcessor(Thread):
                 log.info('Fetching SRNs from mongo store')
                 srn_list = self.get_unique_srns()
                 if srn_list:
-                    log.info(f'Error records on {len(srn_list)} SRNs present in redis store')
+                    log.info(f'{len(srn_list)} SRNs found from mongo store')
                     log.info(f'Error processing initiated --------------- run : {run}')
                     self.initiate_error_processing(srn_list)
                     log.info(f'Error Processing completed --------------- run : {run}')
@@ -80,7 +80,8 @@ class ErrorProcessor(Thread):
                     #counting keys matching the pattern, to get the count of error records on redis store against respective srn
                     error_records_count = len(error_records_keys)
                     log.info(f'{error_records_count} records found in redis store for srn -- {srn}')
-
+                    if error_records_count ==0:
+                        continue
                     keys_list=[error_records_keys[i:i + error_batch_size] for i in range(0, len(error_records_keys), error_batch_size)]
                     for i,keys in enumerate(keys_list):
                         #fetching back all the records from redis store using the srn keys
@@ -88,6 +89,7 @@ class ErrorProcessor(Thread):
                         log.info(f'Received {len(error_records)} records from redis store for srn -- {srn}')
                         if error_records:
                             zip_file,zip_file_name=self.create_error_file(error_records,srn,i)
+                        
                     log.info(f'Completed csv creation for srn-- {srn} ')  
                     #forking a new thread
                     log.info(f'Initiating upload process for srn -- {srn} on a new fork')
@@ -98,7 +100,7 @@ class ErrorProcessor(Thread):
                     remover.start()
                         
                 else:
-                    log.info(f'No new records left for uploading, for srn -- {srn}')
+                    log.info(f'The job is not yet completed for SRN --{srn}')
                 
         except Exception as e:
             log.exception(f"Exception on error processing {e}")
@@ -139,7 +141,7 @@ class ErrorProcessor(Thread):
         query = [{ '$match':{'serviceRequestType':'dataset','serviceRequestAction':'submit'}}, 
                 {'$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
                 {'$match': {'date': {'$lt': lastday}}}]
-        log.info(f"Query :{query}")
+        # log.info(f"Query :{query}")
         SRNlist = []
         aggresult = prorepo.aggregate(query)
         if aggresult:
