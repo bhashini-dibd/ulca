@@ -65,7 +65,7 @@ class ErrorProcessor(Thread):
                 if not consolidated_rec or consolidated_rec[0]["consolidatedCount"] < present_count[0]["consolidatedCount"]:
                     log.info(f'Creating consolidated error report for srn-- {srn}')
                     search_query = {"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}
-                    error_records =errorepo.search(search_query)
+                    error_records =errorepo.search(search_query,{"_id":False},None,None)
                     file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
                     headers =   ['Stage','Error Message', 'Record Count']
                     fields  =   ['stage','message','count']
