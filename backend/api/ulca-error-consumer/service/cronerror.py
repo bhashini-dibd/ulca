@@ -61,7 +61,7 @@ class ErrorProcessor(Thread):
 
                 check_query   = {"serviceRequestNumber" : srn,"uploaded" : True} 
                 consolidated_rec = errorepo.search(check_query, {"_id":False}, None, None) #  Respone - Null --> Summary report havent't generated yet
-                
+                log.info(str(consolidated_rec),"**********",str(present_count))
                 if not consolidated_rec or consolidated_rec[0]["consolidatedCount"] < present_count[0]["consolidatedCount"]:
                     log.info(f'Creating consolidated error report for srn-- {srn}')
                     search_query = {"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}
