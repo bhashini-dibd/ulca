@@ -52,23 +52,27 @@ class ErrorProcessor(Thread):
     def initiate_error_processing(self,srn_list):
         try:
             for srn in srn_list:
-                log.info(f'Creating aggregated error report for srn-- {srn}')
-                er_query = {"serviceRequestNumber": srn}
+                er_query = {"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}
                 exclude =  {"_id": False}
                 log.info(f'Search for error reports of SRN -- {srn} from db started')
                 error_records = errorepo.search(er_query, exclude, None, None)
-                error_records = [x for x in error_records if not x.get("uploaded")]
+                # error_records = [x for x in error_records if not x.get("uploaded")]
                 log.info(f'Returned {len(error_records)} records')
-                file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
-                headers =   ['Stage','Error Message', 'Record Count']
-                fields  =   ['stage','message','count']
-                storeutils.write_to_csv(error_records,file,srn,headers,fields)
-                agg_file = storeutils.file_store_upload_call(file,file.replace("/opt/",""),error_prefix)
-                update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None}
-                condition = {"serviceRequestNumber": srn, "uploaded": True}
-                errorepo.update(condition,update_query,True)
+                check_query   = {"serviceRequestNumber" : srn,"uploaded" : True} 
+                consolidated_rec = errorepo.search(check_query, exclude, None, None)
 
-                query   = {"serviceRequestNumber" : srn,"status" : "Completed"}
+                if not consolidated_rec or consolidated_rec[0]["consolidatedCount"] < len(error_records) :
+                    log.info(f'Creating aggregated error report for srn-- {srn}')
+                    file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
+                    headers =   ['Stage','Error Message', 'Record Count']
+                    fields  =   ['stage','message','count']
+                    storeutils.write_to_csv(error_records,file,srn,headers,fields)
+                    agg_file = storeutils.file_store_upload_call(file,file.replace("/opt/",""),error_prefix)
+                    update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None,"consolidatedCount":len(error_records)}
+                    condition = {"serviceRequestNumber": srn, "uploaded": True}
+                    errorepo.update(condition,update_query,True)
+
+                query   = {"serviceRequestNumber" : srn,"status" : {'$in':['Completed','Failed']}}
                 #getting record from mongo matching srn, if present
                 completed_stats = prorepo.count(query)
                 #create error file when the job is completed
@@ -138,7 +142,7 @@ class ErrorProcessor(Thread):
 
     def get_unique_srns(self):
         lastday = (datetime.now() - timedelta(seconds=redis_key_expiry*2))
-        query = [{ '$match':{'serviceRequestType':'dataset','serviceRequestAction':'submit'}}, 
+        query = [{ '$match':{'serviceRequestType':{'$in':['dataset','benchmark']},'serviceRequestAction':'submit'}}, 
                 {'$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
                 {'$match': {'date': {'$lt': lastday}}}]
         # log.info(f"Query :{query}")
