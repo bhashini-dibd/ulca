@@ -35,6 +35,7 @@ class ErrorProcessor(Thread):
                 # so getting that from mongo; previous implementation : line no-33 
                 log.info('Fetching SRNs from mongo store')
                 srn_list = self.get_unique_srns()
+                # errorepo.remove({"uploaded" : { "$exists" : False},"serviceRequestNumber":{"$nin":srn_list}})
                 if srn_list:
                     log.info(f'{len(srn_list)} SRNs found from mongo store')
                     log.info(f'Error processing initiated --------------- run : {run}')
@@ -52,23 +53,25 @@ class ErrorProcessor(Thread):
     def initiate_error_processing(self,srn_list):
         try:
             for srn in srn_list:
-                er_query = {"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}
-                exclude =  {"_id": False}
-                log.info(f'Search for error reports of SRN -- {srn} from db started')
-                error_records = errorepo.search(er_query, exclude, None, None)
-                # error_records = [x for x in error_records if not x.get("uploaded")]
-                log.info(f'Returned {len(error_records)} records')
-                check_query   = {"serviceRequestNumber" : srn,"uploaded" : True} 
-                consolidated_rec = errorepo.search(check_query, exclude, None, None)
+                #getting the total error count (summation of "count" field) for records stored on mongo
+                agg_query = [{"$match":{"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}},
+                            { "$group": { "_id" : None, "consolidatedCount" : { "$sum": "$count" } } },
+                            {"$project":{ "_id":0,"consolidatedCount":1}}]
+                present_count = errorepo.aggregate(agg_query)
 
-                if not consolidated_rec or consolidated_rec[0]["consolidatedCount"] < len(error_records) :
-                    log.info(f'Creating aggregated error report for srn-- {srn}')
+                check_query   = {"serviceRequestNumber" : srn,"uploaded" : True} 
+                consolidated_rec = errorepo.search(check_query, {"_id":False}, None, None) #  Respone - Null --> Summary report havent't generated yet
+                
+                if not consolidated_rec or consolidated_rec[0]["consolidatedCount"] < present_count:
+                    log.info(f'Creating consolidated error report for srn-- {srn}')
+                    search_query = {"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}
+                    error_records =errorepo.search(search_query)
                     file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
                     headers =   ['Stage','Error Message', 'Record Count']
                     fields  =   ['stage','message','count']
                     storeutils.write_to_csv(error_records,file,srn,headers,fields)
                     agg_file = storeutils.file_store_upload_call(file,file.replace("/opt/",""),error_prefix)
-                    update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None,"consolidatedCount":len(error_records)}
+                    update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None,"consolidatedCount":present_count}
                     condition = {"serviceRequestNumber": srn, "uploaded": True}
                     errorepo.update(condition,update_query,True)
 
@@ -86,6 +89,8 @@ class ErrorProcessor(Thread):
                     log.info(f'{error_records_count} records found in redis store for srn -- {srn}')
                     if error_records_count ==0:
                         continue
+                    log.info(f'Creating full error report for srn-- {srn}')
+                    #Errors are written into csv as batches to overcome memory exhaustion
                     keys_list=[error_records_keys[i:i + error_batch_size] for i in range(0, len(error_records_keys), error_batch_size)]
                     for i,keys in enumerate(keys_list):
                         #fetching back all the records from redis store using the srn keys
