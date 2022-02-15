@@ -155,7 +155,7 @@ const ContributionList = (props) => {
   const options = {
     textLabels: {
       body: {
-        noMatch: "No records",
+        noMatch: "No records ",
       },
       toolbar: {
         search: "Search",
@@ -167,7 +167,7 @@ const ContributionList = (props) => {
       options: { sortDirection: "desc" },
     },
     onRowClick: (rowData) =>
-      rowData[2] !== "Benchmark" && handleRowClick(rowData[0]),
+      rowData[2] !== "Benchmark" && rowData[4] !== "Failed" && handleRowClick(rowData[0]),
     // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
     search: false,
@@ -204,7 +204,6 @@ const ContributionList = (props) => {
         columns={columns}
         options={options}
       />
-
       {open && (
         <Dialog
           message={message}

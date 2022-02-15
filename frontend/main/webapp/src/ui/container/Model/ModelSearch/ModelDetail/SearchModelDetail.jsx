@@ -105,7 +105,7 @@ const SearchModelDetail = (props) => {
     if (prevUrl === "explore-models") {
       history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
     } else {
-      history.push(`${process.env.PUBLIC_URL}/model/my-contribution`);
+      history.push(`${process.env.PUBLIC_URL}/model/explore-models`);
     }
   };
 
@@ -181,7 +181,7 @@ const SearchModelDetail = (props) => {
           >
             {prevUrl === "explore-models"
               ? translate("label.backToModelList")
-              : translate("label.backToMyContrib")}
+              : translate("label.backToModelList")}
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>

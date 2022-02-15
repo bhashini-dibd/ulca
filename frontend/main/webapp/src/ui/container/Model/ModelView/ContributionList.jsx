@@ -649,7 +649,7 @@ const ContributionList = (props) => {
   const options = {
     textLabels: {
       body: {
-        noMatch: "No records",
+        noMatch: "No records ",
       },
       toolbar: {
         search: "Search",
