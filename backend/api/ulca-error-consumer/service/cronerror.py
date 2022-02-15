@@ -148,7 +148,7 @@ class ErrorProcessor(Thread):
         lastday = (datetime.now() - timedelta(seconds=redis_key_expiry*2))
         query = [{ '$match':{'serviceRequestType':{'$in':['dataset','benchmark']},'serviceRequestAction':'submit'}}, 
                 {'$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
-                {'$match': {'date': {'$lt': lastday}}}]
+                {'$match': {'date': {'$gt': lastday}}}]
         # log.info(f"Query :{query}")
         SRNlist = []
         aggresult = prorepo.aggregate(query)
