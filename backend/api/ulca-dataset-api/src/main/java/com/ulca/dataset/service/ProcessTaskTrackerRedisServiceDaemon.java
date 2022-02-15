@@ -84,9 +84,6 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 	public void pseudoIngestUpdate(Map<String, String> val) {
 		
-		System.out.println("printing the pseudoIngestUpdate maps ");
-		System.out.println(val.toString());
-
 		String serviceRequestNumber = val.containsKey("serviceRequestNumber") ? val.get("serviceRequestNumber") + ""
 				: null;
 		String datasetType = val.containsKey("datasetType") ? val.get("datasetType") + ""
@@ -183,20 +180,20 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			log.info("deleting redis entry for pseudo ingest : serviceRequestNumber :: " + serviceRequestNumber);
 			taskTrackerRedisDao.delete(serviceRequestNumber);
 			
-			System.out.println(" publishSuccess :: "+ publishSuccess);
-			System.out.println("count :: " + count);
 			double successRate = ((double)publishSuccess/(double)count)*100 ;
 			
 			log.info("serviceRequestNumber :: " + serviceRequestNumber + " success rate :: " + successRate);
 			
 			if(successRate <= successThreshold) {
 				
-				log.info(" pseudo ingest failed serviceRequestNumber :: " + serviceRequestNumber);
+				log.info(" pseudo ingest failed for serviceRequestNumber :: " + serviceRequestNumber + " due to success rate less than " + successThreshold);
 				taskStatus = com.ulca.dataset.model.TaskTracker.StatusEnum.failed;
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
 						taskStatus, details.toString());
 				
 			}else {
+				log.info(" pseudo ingest success for serviceRequestNumber :: " + serviceRequestNumber + ". Real Ingest is being Triggered");
+				
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
 						taskStatus, details.toString());
 				
