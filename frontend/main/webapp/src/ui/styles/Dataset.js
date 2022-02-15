@@ -596,6 +596,17 @@ const DataSet = (theme) => ({
     display: "flex",
     justifyContent: "flex-end",
   },
+  imagemodal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imagepaper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    // padding: theme.spacing(2, 2, 1),
+  },
 });
 
 export default DataSet;
