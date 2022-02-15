@@ -2,7 +2,7 @@ import json
 import logging
 import random
 import string
-from configs.configs import ds_completed,ds_failed,bm_completed,bm_failed,search_completed
+from configs.configs import ds_completed,ds_failed,bm_completed,bm_failed,search_completed,inference_check
 from logging.config import dictConfig
 from configs.configs import kafka_bootstrap_server_host, notifier_event_input_topic,publish_consumer_grp
 from kafka import KafkaConsumer
@@ -44,6 +44,8 @@ def consumer_to_notify():
                             notofier_event.benchmark_submission_notifier(data)
                         if data["event"] == search_completed:
                             notofier_event.data_search_notifier(data)
+                        if data["event"] == inference_check:
+                            notofier_event.model_check_notifier(data)
                     else:
                         break
                 except Exception as e:

@@ -1,8 +1,9 @@
 import logging
 from logging.config import dictConfig
 from os import name
+from re import template
 from configs import StaticConfigs
-from configs.configs import base_url,ds_contribution_endpoint,model_bm_contribution_endpoint,ds_search_list_endpoint
+from configs.configs import base_url,ds_contribution_endpoint,model_bm_contribution_endpoint,ds_search_list_endpoint, receiver_email_ids
 from utils.notifierutils import NotifierUtils
 from repository import NotifierRepo
 log     =   logging.getLogger('file')
@@ -11,13 +12,30 @@ repo    =   NotifierRepo()
 
 class NotifierEvent:
     def __init__(self,userID):
-        query           =   {"userID":userID}
-        exclude         =   {"_id":0}
-        user_details    =   repo.search(query,exclude,None,None)
-        self.user_email      =   user_details[0]["email"] 
-        self.user_name       =   user_details[0]["firstName"]
+        if userID == None:
+            self.user_email = receiver_email_ids.split(',')
+        else:
+            query           =   {"userID":userID}
+            exclude         =   {"_id":0}
+            user_details    =   repo.search(query,exclude,None,None)
+            self.user_email      =   user_details[0]["email"] 
+            self.user_name       =   user_details[0]["firstName"]
     
-    #dumping errors onto redis store
+
+    def model_check_notifier(self, data):
+        try: 
+            status = (data["event"].split('-'))[-1]
+            if status == "failed":
+                template = 'md_inf_failed.html'
+                receiver_list = self.user_email
+                subject = StaticConfigs.MD_INFR_FAILED.value
+                template_vars = {"firstname":None,"activity_link":None,"datasetName":None,"datasetType":None,"modelName": data["details"]["modelName"]}
+                utils.generate_email_notification(template, template_vars,receiver_list,subject)
+
+        except Exception as e:
+                    log.exception(f'Exception while writing errors: {e}')
+                    return False
+
     def data_submission_notifier(self, data):
         log.info(f'Request for notifying data submission updates for entityID:{data["entityID"]}')
         log.info(data)

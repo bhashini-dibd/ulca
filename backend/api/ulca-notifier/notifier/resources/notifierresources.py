@@ -1,7 +1,7 @@
 from flask_restful import Resource
 from events import NotifierEvent
 from flask import request,jsonify
-from configs.configs import ds_completed,ds_failed,bm_completed,bm_failed,search_completed
+from configs.configs import ds_completed,ds_failed,bm_completed,bm_failed,search_completed, inference_check
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -12,9 +12,9 @@ class NotifierResource(Resource):
     def post(self):
         req_criteria = request.get_json()
         log.info("Inside ulca-notifier service")
-        if req_criteria.get("event")==None or req_criteria.get("entityID")==None or req_criteria.get("userID")==None:
-            log.info('Some of the mandatory keys(event, entityID, userID) are missing ')
-            return {"message":"Some of the mandatory keys(event, entityID, userID) are missing", "data": None,"count":None},400
+        if req_criteria.get("event")==None :#or req_criteria.get("entityID")==None or req_criteria.get("userID")==None:
+            log.info('Mandatory keys(event) is missing ')
+            return {"message":"Mandatory key(event) is missing", "data": None,"count":None},400
         log.info(f'Request received for notifiying user on entityID-{req_criteria["entityID"]}')
         notifier    =   NotifierEvent(req_criteria["userID"])
         if req_criteria["event"] in [ds_completed,ds_failed]:
@@ -23,6 +23,8 @@ class NotifierResource(Resource):
             notifier.benchmark_submission_notifier(req_criteria)
         if req_criteria["event"] == search_completed:
             notifier.data_search_notifier(req_criteria)
+        if req_criteria["event"] == inference_check:
+            notifier.model_check_notifier(req_criteria)
         
         return {"message":"Request successful", "data": None,"count":None},200
 

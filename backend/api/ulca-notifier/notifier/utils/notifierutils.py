@@ -19,8 +19,13 @@ class NotifierUtils:
         timestamp   =   eval(str(time.time()).replace('.', '')[0:13])
         try:
             msg = Message(subject=subject,sender=MAIL_SENDER,recipients=receiver_list)
+            model_temp = template_vars["modelName"]
+            if isinstance(template_vars["modelName"], list):
+                model_temp = ",".join(template_vars['modelName'])
+            
             msg.html = render_template(template,firstname=template_vars["firstname"],activity_link=template_vars["activity_link"],\
-                                        datasetName=template_vars["datasetName"],datasetType=template_vars["datasetType"],modelName=template_vars["modelName"])
+                                        datasetName=template_vars["datasetName"],datasetType=template_vars["datasetType"],modelName=model_temp)
+        
             mail.send(msg)
             log.info(f"Generated email notification for {receiver_list} ")
         except Exception as e:
