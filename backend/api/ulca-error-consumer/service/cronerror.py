@@ -35,7 +35,7 @@ class ErrorProcessor(Thread):
                 # so getting that from mongo; previous implementation : line no-33 
                 log.info('Fetching SRNs from mongo store')
                 srn_list = self.get_unique_srns()
-                # errorepo.remove({"uploaded" : { "$exists" : False},"serviceRequestNumber":{"$nin":srn_list}})
+                errorepo.remove({"uploaded" : { "$exists" : False},"serviceRequestNumber":{"$nin":srn_list}}) #removing old error records from mongo
                 if srn_list:
                     log.info(f'{len(srn_list)} SRNs found from mongo store')
                     log.info(f'Error processing initiated --------------- run : {run}')
