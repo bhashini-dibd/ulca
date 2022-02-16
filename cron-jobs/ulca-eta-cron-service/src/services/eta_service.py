@@ -14,7 +14,7 @@ repo        =   ProcessRepo()
 eta_repo    =   ETARepo()
 class ETACalculatorService:
 
-    def calculate_average_eta(self,queries):
+    def calculate_average_eta(self):
         """
         Function to estimate the time taken
 
@@ -23,20 +23,24 @@ class ETACalculatorService:
         """
         log.info('Fetching values from db!')
         try:
-            if not queries:
-                ds_submit_query     =   [{ "$addFields": { "datasetId": { "$toString": "$_id" }}},
-                                        {"$lookup":{"from": "ulca-pt-processes","localField": "datasetId","foreignField": "datasetId","as": "processes"}},
-                                        {"$unwind":"$processes"},
-                                        { "$match": { "$and": [{ "processes.status": "Completed" },{"processes.serviceRequestAction" : "submit"},{ "processes.manuallyUpdated": { "$exists": False }}]}},
-                                        {"$lookup":{"from": "ulca-pt-tasks","localField": "processes.serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
-                                        {"$unwind":"$tasks"},
-                                        { "$match": { "$and": [{ "tasks.status": "Completed" },{"tasks.tool" : "publish"}]}},
-                                        { "$project": { "datasetType":"$datasetType","startTime": "$processes.startTime", "endTime": "$tasks.endTime","outputCount":"$tasks.details","_id":0}}]
+            ds_submit_query     =   [{ "$addFields": { "datasetId": { "$toString": "$_id" }}},
+                                    {"$lookup":{"from": "ulca-pt-processes","localField": "datasetId","foreignField": "datasetId","as": "processes"}},
+                                    {"$unwind":"$processes"},
+                                    { "$match": { "$and": [{ "processes.status": "Completed" },{"processes.serviceRequestAction" : "submit"},{ "processes.manuallyUpdated": { "$exists": False }}]}},
+                                    {"$lookup":{"from": "ulca-pt-tasks","localField": "processes.serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
+                                    {"$unwind":"$tasks"},
+                                    { "$match": { "$and": [{ "tasks.status": "Completed" },{"tasks.tool" : "publish"}]}},
+                                    { "$project": { "datasetType":"$datasetType","startTime": "$processes.startTime", "endTime": "$tasks.endTime","outputCount":"$tasks.details","_id":0}}]
 
-                ds_search_query     =   [{ "$match": { "$and": [{ "status": "Completed" },{"serviceRequestAction" : "search"}]}},
-                                        {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
-                                        {"$unwind":"$tasks"},{ "$project": { "datasetType":"$searchCriteria.datasetType","startTime": "$tasks.startTime", "endTime": "$tasks.endTime","_id":0,"outputCount":"$tasks.details.count" }}]
-                queries             =   [{"collection":process_collection, "query":ds_search_query,"type":"dataset-search"}, {"collection":dataset_collection, "query":ds_submit_query,"type":"dataset-submit"}]
+            ds_search_query     =   [{ "$match": { "$and": [{ "status": "Completed" },{"serviceRequestAction" : "search"}]}},
+                                    {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
+                                    {"$unwind":"$tasks"},{ "$project": { "datasetType":"$searchCriteria.datasetType","startTime": "$tasks.startTime", "endTime": "$tasks.endTime","_id":0,"outputCount":"$tasks.details.count" }}]
+            queries             =   [{"collection":process_collection, "query":ds_search_query,"type":"dataset-search"}, {"collection":dataset_collection, "query":ds_submit_query,"type":"dataset-submit"}]
+
+            """
+            TO-DO: ETA for benchmark tasks
+
+            """
             eta_results = []
             for query in queries:
                 weights             =   {}

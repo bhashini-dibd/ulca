@@ -13,11 +13,11 @@ class ETACalculatorResource(Resource):
     # reading json request and reurnung final response
     def post(self):
         log.info("Request received for ETA calculation")
-        body    =   request.get_json()
-        query   =   body["query"] if body.get("query") else None
+        # body    =   request.get_json()
+        # query   =   body["query"] if body.get("query") else None
         
         try:
-            result  = service.calculate_average_eta([query])
+            result  = service.calculate_average_eta()
             res     = CustomResponse(Status.SUCCESS.value,result,None)
             log.info("response successfully generated.")
             return res.getres()
