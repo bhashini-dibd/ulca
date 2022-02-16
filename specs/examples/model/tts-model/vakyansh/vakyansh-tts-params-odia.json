@@ -101,12 +101,12 @@
       "request": {
         "input": [
           {
-            "source": "நீங்கள் எப்படி இருக்கிறீர்கள்?"
+            "source": "ଆଜି ପାଗ ଖରାଦିନେ|"
           }
         ],
         "config": {
           "language": {
-            "sourceLanguage": "ta"
+            "sourceLanguage": "or"
           },
           "gender": "female"
         }
