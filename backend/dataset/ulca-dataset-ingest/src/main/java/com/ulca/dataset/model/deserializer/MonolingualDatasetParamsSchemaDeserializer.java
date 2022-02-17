@@ -191,6 +191,12 @@ public class MonolingualDatasetParamsSchemaDeserializer extends StdDeserializer<
 				io.swagger.model.License license = io.swagger.model.License.fromValue(licenseText);
 				if(license != null) {
 					monolingualParamsSchema.setLicense(license);
+					if(license == io.swagger.model.License.CUSTOM_LICENSE) {
+						String licenseUrl = node.get("licenseUrl").asText();
+						if(licenseUrl.isBlank()) {
+							errorList.add("custom licenseUrl field value should be present");
+						}
+					}
 				}else {
 					errorList.add("license field value should be present in license list");
 				}

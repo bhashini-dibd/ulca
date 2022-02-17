@@ -334,7 +334,7 @@ const ChartRender = (props) => {
               handleLevelChange("collectionMethod_collectionDescriptions")
             }
           >
-            Collection Method
+            Collection Method  
           </Button>
         )}
         {filterValue !== "primarySubmitterName" && (
@@ -837,7 +837,7 @@ const ChartRender = (props) => {
           </div>
 
           <div className={classes.title}>
-            <ResponsiveContainer width="98%" height={550}>
+            <ResponsiveContainer width="98%" height={550} >
               <BarChart
                 width={900}
                 height={400}
@@ -909,7 +909,7 @@ const ChartRender = (props) => {
                     position="top"
                     dataKey="value"
                     fill="black"
-                    style={{ textAnchor: "start" }}
+                    style={{ textAnchor: "start",  }}
                     angle={-30}
                     clockWise={4}
                   />
