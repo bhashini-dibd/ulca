@@ -249,6 +249,7 @@ const ContributionList = (props) => {
             className={classes.ButtonRefreshMobile}
             onClick={() => MyContributionListApi()}
           >
+            
             <Cached className={classes.iconStyle} />
           </Button>
         </Grid>
@@ -320,8 +321,10 @@ const ContributionList = (props) => {
           handleCloseModal={handleCloseModal}
           type={benchmarkInfo.type}
           domain={benchmarkInfo.domain}
+          
         />
       </Modal>
+      
     );
   };
 
@@ -646,7 +649,7 @@ const ContributionList = (props) => {
   const options = {
     textLabels: {
       body: {
-        noMatch: "No records",
+        noMatch: "No records ",
       },
       toolbar: {
         search: "Search",
