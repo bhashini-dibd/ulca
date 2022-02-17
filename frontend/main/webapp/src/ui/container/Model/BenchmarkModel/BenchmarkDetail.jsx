@@ -221,15 +221,10 @@ const SearchModelDetail = (props) => {
         },
         MUIDataTableBodyCell: {
           stackedCommon:{
-            "@media (max-width: 959.95px)": {
-             width:" 30%",
+            "@media (max-width: 400px)": {
+            width:" 30%",
              height: "auto",
-              display:" inline-block",
-              fontSize:" 16px",
-              boxSizing: "border-box",
-             
-             
-          }
+         }
          
           },
 

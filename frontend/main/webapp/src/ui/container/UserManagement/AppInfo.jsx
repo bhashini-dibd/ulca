@@ -12,7 +12,7 @@ function AppInfo(props) {
   const { classes } = props;
   const history = useHistory();
   return (
-    // <Hidden only="xs">
+     <Hidden only="xs">
       <Grid item xs={12} sm={4} md={3} lg={3} color = {"primary"}className={classes.appInfo}>
         
         <Typography className={classes.title} variant={"h2"} onClick={() => { history.push(`${process.env.PUBLIC_URL}/dashboard`)}}>ULCA</Typography>
@@ -23,7 +23,7 @@ function AppInfo(props) {
         {translate("label.ulcaInfo")}
         </Typography>
       </Grid>
-    // </Hidden>
+     </Hidden>
   );
 }
 
