@@ -295,7 +295,7 @@ const handleChangeCount = (count) =>{
 const options = {
         textLabels: {
                 body: {
-                        noMatch: "No records"
+                        noMatch: "No records "
                 },
                 toolbar: {
                         search: "Search",
@@ -327,7 +327,7 @@ const options = {
 const option2 = {
         textLabels: {
                 body: {
-                        noMatch: "No records"
+                        noMatch: "No records "
                 },
                 toolbar: {
                         search: "Search",

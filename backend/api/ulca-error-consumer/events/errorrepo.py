@@ -91,7 +91,18 @@ class ErrorRepo:
         except Exception as e:
             log.exception(f'Exception in repo upsert: {e}', e)
 
-
+     #mongo aggregate
+    def aggregate(self, query):
+        try:
+            col = self.get_mongo_instance()
+            res = col.aggregate(query)
+            result = []
+            for record in res:
+                result.append(record)
+            return result
+        except Exception as e:
+            log.exception(f'Exception in repo search: {e}', e)
+            return []
 
 # Log config
 dictConfig({

@@ -2,6 +2,8 @@ const LoginStyle = (theme) => ({
   appInfo: {
     background: "rgba(44, 39, 153, 1)",
     minHeight: "100vh",
+    
+  
   },
   title: {
     width: "20%",
