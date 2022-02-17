@@ -11,8 +11,6 @@ import io.swagger.model.ModelTask;
 import io.swagger.model.Submitter;
 import io.swagger.model.TrainingDataset;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -21,12 +19,10 @@ import javax.validation.constraints.*;
  * Model
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-02-17T09:52:14.491Z[GMT]")
 
 
 public class Model   {
-
-  //@Indexed(unique=true)
   @JsonProperty("name")
   private String name = null;
 
@@ -44,6 +40,9 @@ public class Model   {
 
   @JsonProperty("license")
   private License license = null;
+
+  @JsonProperty("licenseUrl")
+  private String licenseUrl = null;
 
   @JsonProperty("domain")
   private Domain domain = null;
@@ -76,6 +75,7 @@ public class Model   {
   public void setName(String name) {
     this.name = name;
   }
+
 
   public Model description(String description) {
     this.description = description;
@@ -179,6 +179,25 @@ public class Model   {
     this.license = license;
   }
 
+  public Model licenseUrl(String licenseUrl) {
+    this.licenseUrl = licenseUrl;
+    return this;
+  }
+
+  /**
+   * url of the custom license
+   * @return licenseUrl
+   **/
+  @Schema(description = "url of the custom license")
+  
+    public String getLicenseUrl() {
+    return licenseUrl;
+  }
+
+  public void setLicenseUrl(String licenseUrl) {
+    this.licenseUrl = licenseUrl;
+  }
+
   public Model domain(Domain domain) {
     this.domain = domain;
     return this;
@@ -279,6 +298,7 @@ public class Model   {
         Objects.equals(this.task, model.task) &&
         Objects.equals(this.languages, model.languages) &&
         Objects.equals(this.license, model.license) &&
+        Objects.equals(this.licenseUrl, model.licenseUrl) &&
         Objects.equals(this.domain, model.domain) &&
         Objects.equals(this.submitter, model.submitter) &&
         Objects.equals(this.inferenceEndPoint, model.inferenceEndPoint) &&
@@ -287,7 +307,7 @@ public class Model   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, refUrl, task, languages, license, domain, submitter, inferenceEndPoint, trainingDataset);
+    return Objects.hash(name, description, refUrl, task, languages, license, licenseUrl, domain, submitter, inferenceEndPoint, trainingDataset);
   }
 
   @Override
@@ -301,6 +321,7 @@ public class Model   {
     sb.append("    task: ").append(toIndentedString(task)).append("\n");
     sb.append("    languages: ").append(toIndentedString(languages)).append("\n");
     sb.append("    license: ").append(toIndentedString(license)).append("\n");
+    sb.append("    licenseUrl: ").append(toIndentedString(licenseUrl)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
     sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
     sb.append("    inferenceEndPoint: ").append(toIndentedString(inferenceEndPoint)).append("\n");
