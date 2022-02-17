@@ -38,6 +38,7 @@ const FileUploadStyles = (theme) => ({
     display: "flex",
     flexDirection: "row",
     cursor: "pointer",
+    
    
 
     // "@media (max-width:800px)": {
@@ -106,9 +107,11 @@ const FileUploadStyles = (theme) => ({
 
   title:{
     textAlign: "left",
-    paddingLeft:"1%",
+   paddingLeft:"1%",
     margin: "4.5vh 0 4vh 1vh",
-    "@media (max-width:600px)": {textAlign: "center",}
+    "@media (max-width:600px)": {textAlign: "center",},
+   
+  
   }
 });
 

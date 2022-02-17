@@ -23,7 +23,7 @@ function AppInfo(props) {
         {translate("label.ulcaInfo")}
         </Typography>
       </Grid>
-    </Hidden>
+     </Hidden>
   );
 }
 

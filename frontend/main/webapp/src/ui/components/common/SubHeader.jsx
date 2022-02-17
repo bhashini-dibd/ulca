@@ -102,6 +102,7 @@ const SubHeader = (props) => {
     const handleClick = (url) => {
         history.push(`${process.env.PUBLIC_URL}${url}`);
     }
+    console.log( props.tabs)
     return (
         <AppBar className={classes.appTab} position="static" color='default'>
             <Toolbar className={classes.toolbar}>
