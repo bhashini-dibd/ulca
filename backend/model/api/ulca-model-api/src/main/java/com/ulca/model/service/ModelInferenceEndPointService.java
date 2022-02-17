@@ -228,7 +228,9 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",  HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -271,7 +273,9 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Failed",  HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -320,7 +324,9 @@ public class ModelInferenceEndPointService {
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 			
 			//Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException( httpResponse.message(), "TTS Model Compute Failed", HttpStatus.valueOf(httpResponse.code()));
 			}
