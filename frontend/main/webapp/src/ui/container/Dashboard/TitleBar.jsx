@@ -101,7 +101,7 @@ const TitleBar = (props) => {
                             </Typography>
                         </Grid>
                         <Grid  xs={12} sm={6} md={6} lg={8} xl={6} container item  justify="flex-end"  >
-                        <div   style={{color:"red","@media (max-device-width: 400px)": { color: "green" }}}
+                        <div   style={{color:"red",}}
      > 
                         {props.children} 
                         </div>

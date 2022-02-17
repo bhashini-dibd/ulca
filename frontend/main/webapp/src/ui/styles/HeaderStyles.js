@@ -8,7 +8,7 @@ const HeaderStyles = (theme) => ({
     alignItems: "center",
     padding: "0",
     boxSizing: "border-box",
-    
+   
    
   },
   appBar: {
@@ -158,6 +158,16 @@ const HeaderStyles = (theme) => ({
   },
   toolGrid: {
     alignItems: "center",
+    // "@media (max-width:400px)": {
+    //  // minWidth:"100%",
+    //   // flexBasis: "400px",
+    //   // width:" 370px",
+    //   // marginButtom:"50px",
+    //   float:" right",
+    
+
+    // },
+
   },
   tempGrid: {
     paddingLeft: "1rem",
