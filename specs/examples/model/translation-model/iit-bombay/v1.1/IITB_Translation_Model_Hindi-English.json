@@ -1,15 +1,15 @@
 ﻿{
-   "name": "IITB Translation English-Marathi",
-   "version": "v1.0",
-   "description": "IITB English-Marathi Neural Machine Translation model is based on Transformer architecture. The model is trained using OpenNMT-py library and CTranslate2 library is used for inference. The model is trained on data from various sources like Samanantar, Anuvaad, ILCI, Tatoeba, LoResMT 2021, Spoken Tutorial.",
+   "name": "IITB Translation  Hindi-English",
+   "version": "v1.1",
+   "description": "IITB Hindi-English Neural Machine Translation model is based on Transformer architecture. The model is trained using OpenNMT-py library and CTranslate2 library is used for inference. The model is trained on data from various sources like Samanantar and Anuvaad.",
    "refUrl": "https://www.cfilt.iitb.ac.in/mtsystem/translate",
    "task": {
           "type" : "translation"
    },
    "languages": [
           {
-             "sourceLanguage": "en",
-             "targetLanguage": "mr"
+             "sourceLanguage": "hi",
+             "targetLanguage": "en"
           }
    ],
    "license": "mit",
@@ -59,25 +59,25 @@
           ]
    },
    "inferenceEndPoint": {
-          "callbackUrl": "https://www.cfilt.iitb.ac.in/en-mr",
+          "callbackUrl": "https://www.cfilt.iitb.ac.in/en-hi-v1/",
           "schema": {
              "taskType": "translation",
              "request": {
                "input": [
                     {
-                        "source": "The rivers in India play an important role in the lives of the people."
+                        "source": "भारत में नदियां लोगों के जीवन में महत्वपूर्ण भूमिका निभाती हैं।"
                     }
                ],
                "config": {
                     "language": {
-                        "sourceLanguage": "en",
-                        "targetLanguage": "mr"
+                        "sourceLanguage": "hi",
+                        "targetLanguage": "en"
                      }
                }
             }
       }
    },
    "trainingDataset": {
-          "description": "Trained on dataset from various sources like Samanantar, Anuvaad, ILCI, Tatoeba, LoResMT 2021, Spoken Tutorial."
+          "description": "Trained on dataset from various sources like Samanantar and Anuvaad."
    }
 }
