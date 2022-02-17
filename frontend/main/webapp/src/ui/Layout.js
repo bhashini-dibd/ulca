@@ -17,7 +17,7 @@ const Footer = React.lazy(() => import("./components/common/Footer"));
 function App(props) {
   const Component = props.component;
   const { classes, type, index, userRoles } = props;
-
+  const [show, setShow] = useState(false);
   const [popUp, setPopup] = useState(true);
   const apiStatus = useSelector((state) => state.apiStatus);
   const history = useHistory();
@@ -51,6 +51,18 @@ function App(props) {
     }
   };
 
+  useEffect(() => {
+    if (show) {
+      window.removeEventListener('scroll', (e) => { });
+    }
+  }, [show])
+
+  window.addEventListener('scroll', e => {
+    if (window.pageYOffset > 100 && !show) {
+        setShow(true);
+    }
+  })
+
   return (
     <MuiThemeProvider theme={Theme}>
       <div className={classes.root}>
@@ -68,9 +80,9 @@ function App(props) {
             <Component />
           </Suspense>
         </div>
-        <Suspense fallback={<div>Loading....</div>}>
+        {show ? <Suspense fallback={<div>Loading....</div>}>
           <Footer />
-        </Suspense>
+        </Suspense> : <></>}
       </div>
     </MuiThemeProvider>
   );

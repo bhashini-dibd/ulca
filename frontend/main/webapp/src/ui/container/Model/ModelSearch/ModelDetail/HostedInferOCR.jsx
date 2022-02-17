@@ -1,7 +1,7 @@
 import { withStyles } from "@material-ui/core/styles";
 import DatasetStyle from "../../../../styles/Dataset";
 import { useHistory } from "react-router";
-import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+// import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
@@ -15,7 +15,12 @@ import {
   Card,
   CardActions,
   CardMedia,
+  Modal,
+  Backdrop,
+  Fade 
+  
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import OCRModal from "./OCRModal";
 import { translate } from "../../../../../assets/localisation";
@@ -24,7 +29,13 @@ import { useDispatch } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import Snackbar from "../../../../components/common/Snackbar";
 
+
+
+
 const HostedInferASR = (props) => {
+  
+  const [openModal, setOpenModal] = useState(false);
+  
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
     props;
   const history = useHistory();
@@ -53,12 +64,12 @@ const HostedInferASR = (props) => {
   const validURL = (str) => {
     var pattern = new RegExp(
       "^((ft|htt)ps?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?" + // port
-        "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
-        "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?" + // port
+      "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
+      "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
       "i"
     );
     return pattern.test(str);
@@ -164,6 +175,16 @@ const HostedInferASR = (props) => {
     });
   };
 
+  const Imagemodal = () => {
+      setOpenModal(true);
+
+  }
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+
   return (
     <>
       <Grid container>
@@ -194,16 +215,44 @@ const HostedInferASR = (props) => {
                 type="file"
               />
               {preview ? (
+                <>
                 <img
-                  style={{ marginTop: "1%" }}
+                  style={{ marginTop: "5%" }}
                   src={preview}
                   alt="Preview"
-                  width="100%"
+                  width="60%"
                   height="10vh"
+                  onClick={Imagemodal}
+
                 />
+                  <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  className={classes.imagemodal}
+                  open={openModal}
+                  onClose={handleCloseModal}
+                  closeAfterTransition
+                  BackdropComponent={Backdrop}
+                  BackdropProps={{
+                  timeout: 500,
+              }}
+                 >
+              <Fade in={openModal}>
+             <div className={classes.imagepaper}>
+              <img
+                  style={{ maxWidth: 750 }}
+                  src={preview}
+                  alt="Preview"
+            />
+         
+          </div>
+        </Fade>
+      </Modal>
+               </>
               ) : (
                 <></>
               )}
+              
               <Button
                 color="primary"
                 style={{ float: "right", marginTop: "10px" }}
