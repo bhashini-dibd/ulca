@@ -38,6 +38,9 @@ public class Benchmark {
 
 	@JsonProperty("license")
 	private License license = null;
+	
+	@JsonProperty("licenseUrl")
+	private String licenseUrl = null;
 
 	@JsonProperty("description")
 	private String description = null;
@@ -157,6 +160,26 @@ public class Benchmark {
 	public void setLicense(License license) {
 		this.license = license;
 	}
+	
+	public Benchmark licenseUrl(String licenseUrl) {
+	    this.licenseUrl = licenseUrl;
+	    return this;
+	  }
+
+	  /**
+	   * url of the custom license
+	   * @return licenseUrl
+	   **/
+	  @Schema(description = "url of the custom license")
+	  
+	    public String getLicenseUrl() {
+	    return licenseUrl;
+	  }
+
+	  public void setLicenseUrl(String licenseUrl) {
+	    this.licenseUrl = licenseUrl;
+	  }
+
 
 	public Benchmark description(String description) {
 		this.description = description;
@@ -404,7 +427,10 @@ public class Benchmark {
 			return false;
 		}
 		Benchmark benchmark = (Benchmark) o;
-		return Objects.equals(this.benchmarkId, benchmark.benchmarkId) && Objects.equals(this.name, benchmark.name)
+		return Objects.equals(this.benchmarkId, benchmark.benchmarkId)
+				&& Objects.equals(this.name, benchmark.name)
+				&& Objects.equals(this.license, benchmark.license)
+				&& Objects.equals(this.licenseUrl, benchmark.licenseUrl)
 				&& Objects.equals(this.description, benchmark.description)
 				&& Objects.equals(this.userId, benchmark.userId) && Objects.equals(this.dataset, benchmark.dataset)
 				&& Objects.equals(this.domain, benchmark.domain) && Objects.equals(this.task, benchmark.task)
@@ -427,8 +453,10 @@ public class Benchmark {
 
 		sb.append("    benchmarkId: ").append(toIndentedString(benchmarkId)).append("\n");
 		sb.append("    name: ").append(toIndentedString(name)).append("\n");
+		sb.append("    license: ").append(toIndentedString(license)).append("\n");
+	    sb.append("    licenseUrl: ").append(toIndentedString(licenseUrl)).append("\n");
 		sb.append("    description: ").append(toIndentedString(description)).append("\n");
-		sb.append("    description: ").append(toIndentedString(userId)).append("\n");
+		sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
 		sb.append("    dataset: ").append(toIndentedString(dataset)).append("\n");
 		sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 		sb.append("    task: ").append(toIndentedString(task)).append("\n");
