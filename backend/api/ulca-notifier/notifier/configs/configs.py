@@ -31,6 +31,8 @@ MAIL_SETTINGS                           =   {
                                                 "MAIL_USE_SSL"  : True,
                                                 "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
                                                 "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxx')
+                                                #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','tempusermonday@gmail.com'),
+                                                #"MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','monday@911')
                                             }
 MAIL_SENDER                             =   os.environ.get('ULCA_SENDER_EMAIL','xxxxxxxxxx')
 
