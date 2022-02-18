@@ -336,18 +336,27 @@ public class ModelInferenceEndPointService {
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			TTSResponse ttsResponse  = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
 			
-			if(ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <=0 || ttsResponse.getAudio().get(0).getAudioContent() == null) {
+			if(ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <=0 ) {
 				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",  HttpStatus.BAD_REQUEST);
 				
 			}
-			
-			
-			String encodedString = Base64.getEncoder().encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
-			if(encodedString.isBlank()) {
+			if(ttsResponse.getAudio().get(0).getAudioContent() != null) {
+				String encodedString = Base64.getEncoder().encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
+				response.setOutputText(encodedString);
+			}else if(!ttsResponse.getAudio().get(0).getAudioUri().isBlank()){
+				String audioUrl = ttsResponse.getAudio().get(0).getAudioUri();
+				try {
+					String encodedString = Base64.getUrlEncoder().encodeToString(audioUrl.getBytes());
+					response.setOutputText(encodedString);
+				}catch(Exception ex) {
+					ex.printStackTrace();
+					throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Failed from audioUri",  HttpStatus.BAD_REQUEST);
+				}
+				
+			}else {
 				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
 				
 			}
-			response.setOutputText(encodedString);
 			
 		}
 		
