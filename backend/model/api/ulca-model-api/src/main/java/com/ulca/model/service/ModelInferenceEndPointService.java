@@ -364,7 +364,7 @@ public class ModelInferenceEndPointService {
 					FileUtils.delete(new File(filePath));
 				}catch(Exception ex) {
 					ex.printStackTrace();
-					throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Failed from audioUri",  HttpStatus.BAD_REQUEST);
+					throw new ModelComputeException(ex.getMessage(), "TTS Output file not available",  HttpStatus.BAD_REQUEST);
 				}
 				
 			}else {
