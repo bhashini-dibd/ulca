@@ -233,7 +233,7 @@ const HostedInferASR = (props) => {
               {preview ? (
                 <>
                 <img
-                  style={{  margin: "15px",   cursor: "pointer",
+                  style={{  margin: "10px",   cursor: "pointer",
                   maxWidth: "-webkit-fill-available",
                   border: "1px solid black" }}
                   src={preview}
@@ -343,7 +343,7 @@ const HostedInferASR = (props) => {
             </Grid>
             <CardContent>
               <TextField
-                style={{ marginTop: "15px" }}
+                style={{ marginTop: "15px " }}
                 fullWidth
                 color="primary"
                 label="Paste the public repository URL"
@@ -372,7 +372,7 @@ const HostedInferASR = (props) => {
                 alt="Ocr URL"
                 onClick={() => setOpen(true)}
                 style={{
-                  margin: "15px",
+                  margin: "15px ",
                   cursor: "pointer",
                   maxWidth: "-webkit-fill-available",
                   border: "1px solid black",
