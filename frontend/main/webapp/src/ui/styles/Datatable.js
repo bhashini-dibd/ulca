@@ -56,6 +56,7 @@ const style = createMuiTheme({
         minHeight: "674px",
         boxShadow: "0px 0px 2px #00000029",
         border: "0",
+       
       },
       responsiveBase: {
         minHeight: "560px",
@@ -71,6 +72,7 @@ const style = createMuiTheme({
         },
       },
     },
+  
     MuiGrid: {
       grid: {
         maxWidth: "100%",
@@ -141,8 +143,15 @@ const style = createMuiTheme({
 
     MUIDataTableBodyCell: {
       root: { padding: ".5rem .5rem .5rem .8rem", textTransform: "capitalize" },
+     
+      stackedParent:{
+        "@media (max-width: 400px)":{
+          display:"table-row",
+           
+        }
+      },
+     
     },
-
     MuiButton: {
       root: {
         minWidth: "25",
