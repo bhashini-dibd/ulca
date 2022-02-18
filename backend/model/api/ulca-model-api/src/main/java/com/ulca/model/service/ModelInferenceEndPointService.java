@@ -8,6 +8,7 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -20,6 +21,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -30,6 +32,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.benchmark.util.FileUtility;
 import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
@@ -71,6 +74,12 @@ public class ModelInferenceEndPointService {
 
 	@Autowired
 	WebClient.Builder builder;
+	
+	@Value("${ulca.model.upload.folder}")
+	private String modelUploadFolder;
+	
+	@Autowired
+	FileUtility fileUtility;
 
 	public OneOfInferenceAPIEndPointSchema validateCallBackUrl(String callBackUrl,
 			OneOfInferenceAPIEndPointSchema schema)
@@ -191,8 +200,6 @@ public class ModelInferenceEndPointService {
 			log.info("logging tts inference point response" + responseJsonStr);
 		}
 		
-	
-
 		return schema;
 
 	}
@@ -346,8 +353,15 @@ public class ModelInferenceEndPointService {
 			}else if(!ttsResponse.getAudio().get(0).getAudioUri().isBlank()){
 				String audioUrl = ttsResponse.getAudio().get(0).getAudioUri();
 				try {
-					String encodedString = Base64.getUrlEncoder().encodeToString(audioUrl.getBytes());
+					String fileName = UUID.randomUUID().toString();
+					String uploadFolder = modelUploadFolder + "/model";
+					String filePath = fileUtility.downloadUsingNIO(audioUrl, uploadFolder, fileName);
+					byte[] bytes = FileUtils.readFileToByteArray(new File(filePath));
+					String encodedString = Base64.getEncoder().encodeToString(bytes);
 					response.setOutputText(encodedString);
+					
+					//delete the downloaded file
+					FileUtils.delete(new File(filePath));
 				}catch(Exception ex) {
 					ex.printStackTrace();
 					throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Failed from audioUri",  HttpStatus.BAD_REQUEST);
