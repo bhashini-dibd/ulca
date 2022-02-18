@@ -24,7 +24,8 @@ public enum License {
     GPL_3_0("gpl-3.0"),
     BSD_3_CLAUSE("bsd-3-clause"),
     PRIVATE_COMMERCIAL("private-commercial"),
-    UNKNOWN_LICENSE("unknown-license");
+    UNKNOWN_LICENSE("unknown-license"),
+    CUSTOM_LICENSE("custom-license");
 
   private String value;
 

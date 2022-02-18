@@ -105,17 +105,18 @@ const SpeechToSpeechOptions = (props) => {
               ></audio>
             )}
           </div>
+          
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+            <Grid item xs={8} sm={12} md={10} lg={10} xl={10}>
               <Typography variant={"caption"}>
                 {translate("label.maxDuration")}
               </Typography>
             </Grid>
             <Grid
               item
-              xs={12}
+              xs={4}
               sm={12}
               md={2}
               lg={2}
