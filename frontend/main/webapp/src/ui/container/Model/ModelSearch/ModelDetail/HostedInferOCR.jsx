@@ -372,7 +372,7 @@ const HostedInferASR = (props) => {
                 alt="Ocr URL"
                 onClick={() => setOpen(true)}
                 style={{
-                  margin: "15px ",
+                  margin: "10px ",
                   cursor: "pointer",
                   maxWidth: "-webkit-fill-available",
                   border: "1px solid black",
