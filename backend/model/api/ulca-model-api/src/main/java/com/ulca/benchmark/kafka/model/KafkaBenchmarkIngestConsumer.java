@@ -38,6 +38,7 @@ import io.swagger.model.AsrBenchmarkDatasetParamsSchema;
 import io.swagger.model.Benchmark;
 import io.swagger.model.Domain;
 import io.swagger.model.LanguagePair;
+import io.swagger.model.License;
 import io.swagger.model.ModelTask;
 import io.swagger.model.OcrBenchmarkDatasetParamsSchema;
 import io.swagger.model.Source;
@@ -196,6 +197,7 @@ public class KafkaBenchmarkIngestConsumer {
 		String benchmarkJsonStr = objectMapper.writeValueAsString(obj);
 		JSONObject params =  new JSONObject(benchmarkJsonStr);
 		
+       
 		if (params.has("description")) {
 			benchmark.setDescription(params.getString("description"));
 		}else {
@@ -213,6 +215,22 @@ public class KafkaBenchmarkIngestConsumer {
 			benchmark.setDomain(domain);
 		}else {
 			errorList.add("domain field should be present");
+		}
+		
+		if(params.has("license")) {
+			License license = License.fromValue(params.getString("license"));
+			benchmark.setLicense(license);		
+			if(license == License.CUSTOM_LICENSE) {
+				String licenseUrl = params.getString("licenseUrl");
+				if(!licenseUrl.isBlank()) {
+					benchmark.setLicenseUrl(licenseUrl);
+				}else {
+					errorList.add("custom licenseUrl field should be present");
+				}
+			}
+			
+		}else {
+			errorList.add("license field should be present");
 		}
 		
 		if(params.has("submitter")) {

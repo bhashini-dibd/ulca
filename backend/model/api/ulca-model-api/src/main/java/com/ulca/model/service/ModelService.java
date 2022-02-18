@@ -62,6 +62,7 @@ import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
 import io.swagger.model.LanguagePair.TargetLanguageEnum;
 import io.swagger.model.LanguagePairs;
+import io.swagger.model.License;
 import io.swagger.model.ModelTask;
 import io.swagger.model.ModelTask.TypeEnum;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
@@ -296,6 +297,11 @@ public class ModelService {
 		
 		if(model.getLicense() == null)
 			throw new ModelValidationException("license is required field");
+		
+		if(model.getLicense() == License.CUSTOM_LICENSE) {
+			if(model.getLicenseUrl().isBlank())
+				throw new ModelValidationException("custom licenseUrl is required field");
+		}
 		
 		if(model.getDomain() == null)
 			throw new ModelValidationException("domain is required field");

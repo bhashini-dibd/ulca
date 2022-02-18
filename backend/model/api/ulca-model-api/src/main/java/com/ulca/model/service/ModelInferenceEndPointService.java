@@ -8,6 +8,7 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -82,7 +83,11 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder()
+				      .readTimeout(60, TimeUnit.SECONDS)
+				      .build();
+			
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
@@ -136,7 +141,11 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder()
+				      .readTimeout(60, TimeUnit.SECONDS)
+				      .build();
+			
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
@@ -168,6 +177,8 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			OkHttpClient newClient = getTrustAllCertsClient();
+			
+			
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 			
 			//Response httpResponse = client.newCall(httpRequest).execute();
@@ -217,7 +228,9 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",  HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -260,7 +273,9 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Failed",  HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -309,7 +324,9 @@ public class ModelInferenceEndPointService {
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 			
 			//Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException( httpResponse.message(), "TTS Model Compute Failed", HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -408,10 +425,11 @@ public class ModelInferenceEndPointService {
         SSLContext sslContext = SSLContext.getInstance("SSL");
         sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 
+        
         OkHttpClient.Builder newBuilder = new OkHttpClient.Builder();
         newBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
         newBuilder.hostnameVerifier((hostname, session) -> true);
-        return newBuilder.build();
+        return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
     }
 
 }
