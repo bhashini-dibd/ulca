@@ -97,12 +97,7 @@ const SpeechToSpeechOptions = (props) => {
                 id="sample"
               ></audio>
             ) : (
-              <audio
-                src="sample"
-                style={{ minWidth: "100%" }}
-                controls
-                id="sample"
-              ></audio>
+              <></>
             )}
           </div>
           
