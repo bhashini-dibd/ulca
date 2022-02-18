@@ -631,7 +631,8 @@ const DataSet = (theme) => ({
   stspart:{
     "@media (max-width:400px)": {
       paddingLeft:"2px",
-      paddingRight:"2px"
+     paddingRight:"3px"
+     
       
        },
 
