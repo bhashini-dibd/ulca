@@ -32,7 +32,7 @@ class ETACalculatorService:
                                     { "$match": { "$and": [{ "tasks.status": "Completed" },{"tasks.tool" : "publish"}]}},
                                     { "$project": { "datasetType":"$datasetType","startTime": "$processes.startTime", "endTime": "$tasks.endTime","outputCount":"$tasks.details","_id":0}}]
 
-            #ds_search_query     =   [{ "$match": { "$and": [{ "status": "Completed" },{"serviceRequestAction" : "search"}]}},
+            ds_search_query     =   [{ "$match": { "$and": [{ "status": "Completed" },{"serviceRequestAction" : "search"}]}},
                                     {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                                     {"$unwind":"$tasks"},{ "$project": { "datasetType":"$searchCriteria.datasetType","startTime": "$tasks.startTime", "endTime": "$tasks.endTime","_id":0,"outputCount":"$tasks.details.count" }}]
             
@@ -47,7 +47,10 @@ class ETACalculatorService:
             TO-DO: ETA for benchmark tasks
 
             """
-            eta_results = []
+            eta_results         =   []
+            datatypes           =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus","tts-corpus","TRANSLATION","ASR"]
+            BM_WEIGHT_TRANSLATION = 8
+            BM_WEIGHT_ASR         = 6
             for query in queries:
                 weights             =   {}
                 weights["type"]     =   query["type"]
@@ -56,13 +59,17 @@ class ETACalculatorService:
                     log.info("No results returned for the query")
                     continue
                 
-                search_df   =   pd.DataFrame(result)
+                search_df   =   pd.DataFrame(result).dropna()
                 log.info(f"Count of search items:{len(search_df)}")
                 extracted   =   []
                 for index, row in search_df.iterrows():
                     new_fields = {}
                     new_fields["datasetType"]       =   row["datasetType"]
-                    if isinstance(row["outputCount"],str):
+                    if  new_fields["datasetType"] == "TRANSLATION":
+                        new_fields["outputCount"] == BM_WEIGHT_TRANSLATION
+                    elif new_fields["datasetType"] == "ASR":
+                        new_fields["outputCount"] == BM_WEIGHT_ASR
+                    elif isinstance(row["outputCount"],str):
                         count_data = json.loads(row["outputCount"])
                         new_fields["outputCount"] = [x for x in count_data["processedCount"] if x["type"]=="success"][0]["count"]
                     else:
@@ -77,11 +84,9 @@ class ETACalculatorService:
                     extracted.append(new_fields)
                 del search_df
                 extracted_df        =   pd.DataFrame(extracted)
-                datatypes           =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus","tts-corpus"]
                 for dtype in datatypes:
                     try:
-                        sub_df          =   extracted_df[(extracted_df["datasetType"] == dtype )]
-                        weighted_avg    =   numpy.average(sub_df.timeTaken,weights=sub_df.outputCount)
+                        weighted_avg    =   numpy.average(extracted_df["timeTaken"],weights=extracted_df["outputCount"])
                         weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
                         log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
 
@@ -93,9 +98,6 @@ class ETACalculatorService:
         except Exception as e:
             log.exception(f'{e}')
             
-
-    def bm_et(query):
-
 
 
     def fetch_estimates(self,eta_type):
