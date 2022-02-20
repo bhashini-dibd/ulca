@@ -6,7 +6,7 @@ import pandas as pd
 import numpy 
 from datetime import datetime
 from dateutil import parser
-from config import dataset_collection,process_collection
+from config import dataset_collection,process_collection, bm_collection
 import json
 log         =   logging.getLogger('file')
 
@@ -23,7 +23,7 @@ class ETACalculatorService:
         """
         log.info('Fetching values from db!')
         try:
-            ds_submit_query     =   [{ "$addFields": { "datasetId": { "$toString": "$_id" }}},
+            ds_submit_query     =   [{ "$addFields": { "datasetId": { "$toString": "$_id" }}}, 
                                     {"$lookup":{"from": "ulca-pt-processes","localField": "datasetId","foreignField": "datasetId","as": "processes"}},
                                     {"$unwind":"$processes"},
                                     { "$match": { "$and": [{ "processes.status": "Completed" },{"processes.serviceRequestAction" : "submit"},{ "processes.manuallyUpdated": { "$exists": False }}]}},
@@ -32,10 +32,16 @@ class ETACalculatorService:
                                     { "$match": { "$and": [{ "tasks.status": "Completed" },{"tasks.tool" : "publish"}]}},
                                     { "$project": { "datasetType":"$datasetType","startTime": "$processes.startTime", "endTime": "$tasks.endTime","outputCount":"$tasks.details","_id":0}}]
 
-            ds_search_query     =   [{ "$match": { "$and": [{ "status": "Completed" },{"serviceRequestAction" : "search"}]}},
+            #ds_search_query     =   [{ "$match": { "$and": [{ "status": "Completed" },{"serviceRequestAction" : "search"}]}},
                                     {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                                     {"$unwind":"$tasks"},{ "$project": { "datasetType":"$searchCriteria.datasetType","startTime": "$tasks.startTime", "endTime": "$tasks.endTime","_id":0,"outputCount":"$tasks.details.count" }}]
-            queries             =   [{"collection":process_collection, "query":ds_search_query,"type":"dataset-search"}, {"collection":dataset_collection, "query":ds_submit_query,"type":"dataset-submit"}]
+            
+            bm_submit_query     =   [{ "$addFields": { "benchmarkDatasetId": { "$toString": "$_id" }}},
+                                    {"$lookup":{"from": "benchmarkprocess","localField": "benchmarkDatasetId","foreignField": "benchmarkDatasetId","as": "bmprocesses"}},
+                                    {"$unwind":"$bmprocesses"},{"$match":{"$and":[{"bmprocesses.status":"Completed"}]}},
+                                    { "$project": { "datasetType":"$task.type","startTime": "$bmprocesses.createdOn", "endTime": "$bmprocesses.lastModifiedOn","benchmarkDatasetName":"$bmprocesses.benchmarkDatasetName","_id":0}}]
+            
+            queries             =   [{"collection":dataset_collection, "query":ds_submit_query,"type":"dataset-submit"},{"collection":bm_collection, "query":bm_submit_query,"type":"benchmark-submit"},]
 
             """
             TO-DO: ETA for benchmark tasks
@@ -77,14 +83,20 @@ class ETACalculatorService:
                         sub_df          =   extracted_df[(extracted_df["datasetType"] == dtype )]
                         weighted_avg    =   numpy.average(sub_df.timeTaken,weights=sub_df.outputCount)
                         weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
-                    except:
+                        log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
+
+                    except Exception as e:
+                        log.info(f'{e}')
                         continue
-                    log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
                 eta_results.append(weights)
             return eta_results
         except Exception as e:
             log.exception(f'{e}')
             
+
+    def bm_et(query):
+
+
 
     def fetch_estimates(self,eta_type):
         """
