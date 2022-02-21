@@ -201,7 +201,7 @@ const ContributionList = (props) => {
   const fetchHeaderButton = () => {
     return (
       <Grid container spacing={1}>
-        <Grid item xs={8} sm={8} md={8} lg={8} xl={8}>
+        <Grid item xs={7} sm={8} md={8} lg={8} xl={8}>
           <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
         </Grid>
         <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
@@ -241,7 +241,7 @@ const ContributionList = (props) => {
             {translate("button.refresh")}
           </Button>
         </Grid>
-        <Grid item xs={2} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
+        <Grid item xs={3} sm={2} md={2} lg={2} xl={2} className={classes.filterGridMobile}>
           <Button
             color={"primary"}
             size="small"
@@ -249,7 +249,7 @@ const ContributionList = (props) => {
             className={classes.ButtonRefreshMobile}
             onClick={() => MyContributionListApi()}
           >
-            
+           
             <Cached className={classes.iconStyle} />
           </Button>
         </Grid>
@@ -699,7 +699,7 @@ const ContributionList = (props) => {
             rows={rowData[9]}
             color={even_odd}
             renderStatus={renderStatus}
-          />
+          />                                        
         );
     },
     print: false,

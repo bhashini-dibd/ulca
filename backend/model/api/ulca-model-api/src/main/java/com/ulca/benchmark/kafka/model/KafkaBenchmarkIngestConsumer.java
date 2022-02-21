@@ -32,12 +32,13 @@ import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus;
 import com.ulca.benchmark.model.BenchmarkError;
 import com.ulca.benchmark.model.BenchmarkSubmissionType;
 import com.ulca.benchmark.service.BenchmarkSubmtStatusService;
-import com.ulca.benchmark.util.UnzipUtility;
+import com.ulca.benchmark.util.FileUtility;
 
 import io.swagger.model.AsrBenchmarkDatasetParamsSchema;
 import io.swagger.model.Benchmark;
 import io.swagger.model.Domain;
 import io.swagger.model.LanguagePair;
+import io.swagger.model.License;
 import io.swagger.model.ModelTask;
 import io.swagger.model.OcrBenchmarkDatasetParamsSchema;
 import io.swagger.model.Source;
@@ -50,7 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 public class KafkaBenchmarkIngestConsumer {
 	
 	@Autowired
-	UnzipUtility unzipUtility;
+	FileUtility fileUtility;
 			
 	@Value("${ulca.bm.ds.ingest.folder}")
 	private String bmIngestDownloadFolder;
@@ -103,11 +104,11 @@ public class KafkaBenchmarkIngestConsumer {
 				
 				String fileName =  benchmarkId + ".zip";
 				
-				String filePath = downloadUsingNIO(datasetUrl, downloadFolder, fileName);
+				String filePath = fileUtility.downloadUsingNIO(datasetUrl, downloadFolder, fileName);
 				log.info("filePath :: " + filePath);
 				
 				log.info("serviceRequestNumber :: " + serviceRequestNumber);
-				fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
+				fileMap = fileUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
 				
 			}catch (IOException ex) {
 				
@@ -154,33 +155,11 @@ public class KafkaBenchmarkIngestConsumer {
 				benchmarkDao.save(benchmark);
 				
 			}
-			
-			
 
 		} catch (Exception ex) {
 			log.info("error in listener");
 			ex.printStackTrace();
 		}
-		
-	}
-	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {
-		log.info("************ Entry KafkaBenchmarkIngestConsumer :: downloadUsingNIO *********");
-		log.info("url :: " + urlStr);
-		URL url = new URL(urlStr);
-		String file = downloadFolder + "/" + fileName;
-		log.info("file path indownloadUsingNIO");
-		log.info(file);
-		log.info(url.getPath());
-		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
-		log.info(url.getContent().toString());
-		log.info(rbc.getClass().toString());
-		FileOutputStream fos = new FileOutputStream(file);
-		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-		fos.close();
-		rbc.close();
-
-		log.info("************ Exit KafkaBenchmarkDownloadConsumer :: downloadUsingNIO *********");
-		return file;
 	}
 	
 	private Benchmark validateBenchmarkDatasets(Benchmark benchmark, String paramsFilePath) throws JsonParseException, JsonMappingException, IOException {
@@ -196,6 +175,7 @@ public class KafkaBenchmarkIngestConsumer {
 		String benchmarkJsonStr = objectMapper.writeValueAsString(obj);
 		JSONObject params =  new JSONObject(benchmarkJsonStr);
 		
+       
 		if (params.has("description")) {
 			benchmark.setDescription(params.getString("description"));
 		}else {
@@ -213,6 +193,22 @@ public class KafkaBenchmarkIngestConsumer {
 			benchmark.setDomain(domain);
 		}else {
 			errorList.add("domain field should be present");
+		}
+		
+		if(params.has("license")) {
+			License license = License.fromValue(params.getString("license"));
+			benchmark.setLicense(license);		
+			if(license == License.CUSTOM_LICENSE) {
+				String licenseUrl = params.getString("licenseUrl");
+				if(!licenseUrl.isBlank()) {
+					benchmark.setLicenseUrl(licenseUrl);
+				}else {
+					errorList.add("custom licenseUrl field should be present");
+				}
+			}
+			
+		}else {
+			errorList.add("license field should be present");
 		}
 		
 		if(params.has("submitter")) {
