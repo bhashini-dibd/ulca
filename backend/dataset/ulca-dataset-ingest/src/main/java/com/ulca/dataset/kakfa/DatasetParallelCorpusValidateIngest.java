@@ -57,27 +57,27 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
-	
+
 	@Value("${pseudo.ingest.sample.size}")
 	private Integer pseudoSampleSize;
-	
+
 	@Value("${pseudo.ingest.record.threshold}")
 	private Integer pseudoRecordThreshold;
-	
+
 	@Autowired
 	DatasetService datasetService;
-	
+
 	@Autowired
 	NotificationService notificationService;
-	
+
 	@Autowired
 	TaskTrackerRedisDao taskTrackerRedisDao;
-	
+
 	public static final String SOURCE_TEXT = "sourceText";
 	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
 	public static final String TARGET_TEXT = "targetText";
 	public static final String TARGET_TEXT_HASH = "targetTextHash";
-	
+
 	public void validateIngest(DatasetIngest datasetIngest) {
 
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateIngest *********");
@@ -90,33 +90,35 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		String md5hash = datasetIngest.getMd5hash();
 		String baseLocation = datasetIngest.getBaseLocation();
 		String mode = datasetIngest.getMode();
-		
+
 		ParallelDatasetParamsSchema paramsSchema = null;
 
 		Error fileError = validateFileExistence(baseLocation);
-		
+
 		if (fileError != null) {
-			
-			log.info("params.json or data.json file missing :: serviceRequestNumber : "+serviceRequestNumber ); 
+
+			log.info("params.json or data.json file missing :: serviceRequestNumber : " + serviceRequestNumber);
 			processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, fileError);
-			
+
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
-			//send error event for download failure
-			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(), fileError.getMessage(), serviceRequestNumber, datasetName,"download" , datasetType.toString(), null) ;
-			
-			//notify failed dataset submit
+			// send error event for download failure
+			datasetErrorPublishService.publishDatasetError("dataset-training", fileError.getCode(),
+					fileError.getMessage(), serviceRequestNumber, datasetName, "download", datasetType.toString(),
+					null);
+
+			// notify failed dataset submit
 			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
-			
+
 			return;
 		}
-		
+
 		try {
 			paramsSchema = validateParamsSchema(datasetIngest);
 
 		} catch (IOException | JSONException | NullPointerException e) {
 
-			log.info("Exception while validating params :: "+serviceRequestNumber + " error : " + e.getMessage());
+			log.info("Exception while validating params :: " + serviceRequestNumber + " error : " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("params validation failed");
@@ -128,37 +130,27 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
 
 			// send error event
-			datasetErrorPublishService.publishDatasetError("dataset-training","1000_PARAMS_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), null) ;
-			
-			//notify failed dataset submit
+			datasetErrorPublishService.publishDatasetError("dataset-training", "1000_PARAMS_VALIDATION_FAILED",
+					e.getMessage(), serviceRequestNumber, datasetName, "ingest", datasetType.toString(), null);
+
+			// notify failed dataset submit
 			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
-			
+
 			return;
 		}
-		//update the dataset
-				if(mode.equalsIgnoreCase("real")) {
-					try {
-						ObjectMapper objectMapper = new ObjectMapper();
-						JSONObject record;
-						record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-						datasetService.updateDataset(datasetId, userId, record,md5hash);
-						
-					} catch (JsonProcessingException | JSONException e) {
-						
-						log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
-					}
-				}
-				
+
 		try {
-			if(mode.equalsIgnoreCase("real")) {
+			if (mode.equalsIgnoreCase("real")) {
+				updateDataset(datasetId, userId, md5hash, paramsSchema);
 				ingest(paramsSchema, datasetIngest);
-			}else {
-				initiateIngest(paramsSchema, datasetIngest);
+			} else {
+				initiateIngest(datasetId, userId, md5hash, paramsSchema, datasetIngest);
 			}
-			
-		} catch (Exception  e) {
-			
-			log.info("Exception while ingesting the dataset :: serviceRequestNumber : "+serviceRequestNumber + " error : " + e.getMessage());
+
+		} catch (Exception e) {
+
+			log.info("Exception while ingesting the dataset :: serviceRequestNumber : " + serviceRequestNumber
+					+ " error : " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("INGEST FAILED");
@@ -166,18 +158,19 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 			processTaskTrackerService.updateTaskTrackerWithError(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, error);
-			
+
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, StatusEnum.failed);
-			
+
 			// send error event
-			datasetErrorPublishService.publishDatasetError("dataset-training","1000_INGEST_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), null) ;
-			
-			//update redis when ingest failed
+			datasetErrorPublishService.publishDatasetError("dataset-training", "1000_INGEST_FAILED", e.getMessage(),
+					serviceRequestNumber, datasetName, "ingest", datasetType.toString(), null);
+
+			// update redis when ingest failed
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
-			
-			//notify failed dataset submit
+
+			// notify failed dataset submit
 			notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
-			
+
 			return;
 		}
 	}
@@ -186,11 +179,11 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			throws JsonParseException, JsonMappingException, IOException {
 
 		String paramsFilePath = datasetIngest.getBaseLocation() + File.separator + "params.json";
-		
+
 		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateParamsSchema *********");
 		log.info("validing file :: against params schema");
 		log.info(paramsFilePath);
-		
+
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
 		module.addDeserializer(ParallelDatasetParamsSchema.class, new ParallelDatasetParamsSchemaDeserializer());
@@ -202,10 +195,11 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 			throw new IOException("paramsValidation failed");
 
 		}
-		
+
 		return paramsSchema;
 
 	}
+
 	public void ingest(ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
 			throws JSONException, IOException, NoSuchAlgorithmException {
 
@@ -222,18 +216,17 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		JSONObject record;
 		record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
-		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
+		String dataFilePath = datasetIngest.getBaseLocation() + File.separator + "data.json";
 
 		log.info("data.json file path :: " + dataFilePath);
-		
+
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
-	
+
 		int numberOfRecords = 0;
 		int failedCount = 0;
 		int successCount = 0;
-		
-		
+
 		JSONObject vModel = new JSONObject();
 		vModel.put("record", record);
 		vModel.put("datasetId", datasetId);
@@ -242,49 +235,48 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		vModel.put("serviceRequestNumber", serviceRequestNumber);
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
-		
-		 
+
 		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetName, userId);
 		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
-		 
+
 		reader.beginArray();
 		while (reader.hasNext()) {
 
 			numberOfRecords++;
-			
+
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
 			String dataRow = mapper.writeValueAsString(rowObj);
 			SimpleModule module = new SimpleModule();
 			module.addDeserializer(ParallelDatasetRowSchema.class, new ParallelDatasetRowSchemaDeserializer());
 			mapper.registerModule(module);
-			
-			ParallelDatasetRowSchema rowSchema  = null;
-			
+
+			ParallelDatasetRowSchema rowSchema = null;
+
 			try {
-				
+
 				rowSchema = mapper.readValue(dataRow, ParallelDatasetRowSchema.class);
-							
-				
-			} catch(Exception e) {
-				
+
+			} catch (Exception e) {
+
 				failedCount++;
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
-				datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
-				
-				log.info("record :: " +numberOfRecords + "failed " );
-				log.info("tracing the error " );
+				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_ROW_DATA_VALIDATION_FAILED",
+						e.getMessage(), serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
+
+				log.info("record :: " + numberOfRecords + "failed ");
+				log.info("tracing the error ");
 				e.printStackTrace();
-				
+
 			}
-			if(rowSchema != null) {
-				
+			if (rowSchema != null) {
+
 				successCount++;
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
-				
-				JSONObject target =  new JSONObject(dataRow);
+
+				JSONObject target = new JSONObject(dataRow);
 				JSONObject finalRecord = deepMerge(record, target);
-				
+
 				if (finalRecord.has("languages")) {
 					JSONObject language = finalRecord.getJSONObject("languages");
 					String sourceLanguage = language.getString("sourceLanguage");
@@ -293,13 +285,13 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 					finalRecord.put("targetLanguage", targetLanguage);
 					finalRecord.remove("languages");
 				}
-				
+
 				UUID uid = UUID.randomUUID();
 				finalRecord.put("id", uid);
 
 				vModel.put("record", finalRecord);
 				vModel.put("currentRecordIndex", numberOfRecords);
-				
+
 				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 			}
 		}
@@ -307,12 +299,10 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		reader.close();
 		inputStream.close();
 
-		
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
-		
-		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + numberOfRecords + " success record :: " + successCount) ;
-		
-		
+
+		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
+				+ numberOfRecords + " success record :: " + successCount);
 
 	}
 
@@ -333,8 +323,8 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		ObjectMapper objectMapper = new ObjectMapper();
 		JSONObject record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
-		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
-		
+		String dataFilePath = datasetIngest.getBaseLocation() + File.separator + "data.json";
+
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
@@ -346,63 +336,66 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		vModel.put("serviceRequestNumber", serviceRequestNumber);
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
-		
+
 		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
-		
-		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash,paramsSchema.getDatasetType().toString(), datasetName, datasetId, userId);
-		
+
+		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber, baseLocation, md5hash,
+				paramsSchema.getDatasetType().toString(), datasetName, datasetId, userId);
+
 		int numberOfRecords = 0;
 		int failedCount = 0;
 		int successCount = 0;
 		int pseudoNumberOfRecords = 0;
-		
-		long sampleSize = recordSize/10;
-		long bufferSize = pseudoSampleSize/10;
+
+		long sampleSize = recordSize / 10;
+		long bufferSize = pseudoSampleSize / 10;
 		long base = sampleSize;
 		long counter = 0;
 		long maxCounter = bufferSize;
-		
+
 		reader.beginArray();
-		
+
 		while (reader.hasNext()) {
 			numberOfRecords++;
-			
-			if(counter < maxCounter ) {
-				
+
+			if (counter < maxCounter) {
+
 				pseudoNumberOfRecords++;
-				++counter;	
-				
+				++counter;
+
 				Object rowObj = new Gson().fromJson(reader, Object.class);
-				
+
 				ObjectMapper mapper = new ObjectMapper();
 				String dataRow = mapper.writeValueAsString(rowObj);
 				SimpleModule module = new SimpleModule();
 				module.addDeserializer(ParallelDatasetRowSchema.class, new ParallelDatasetRowSchemaDeserializer());
 				mapper.registerModule(module);
-				
-				ParallelDatasetRowSchema rowSchema  = null;
-				
+
+				ParallelDatasetRowSchema rowSchema = null;
+
 				try {
 					rowSchema = mapper.readValue(dataRow, ParallelDatasetRowSchema.class);
-					
-				} catch(Exception e) {
-					
+
+				} catch (Exception e) {
+
 					failedCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
-					datasetErrorPublishService.publishDatasetError("dataset-training","1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,"ingest" , datasetType.toString(), dataRow) ;
-					
-					log.info("record :: " +numberOfRecords + "failed " );
-					log.info("error message :: " + e.getMessage() );
-					
+					datasetErrorPublishService.publishDatasetError("dataset-training",
+							"1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,
+							"ingest", datasetType.toString(), dataRow);
+
+					log.info("record :: " + numberOfRecords + "failed ");
+					log.info("error message :: " + e.getMessage());
+
 				}
-				if(rowSchema != null) {
-					
+				if (rowSchema != null) {
+
 					successCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
-					
-					JSONObject target =  new JSONObject(dataRow);
+
+					JSONObject target = new JSONObject(dataRow);
 					JSONObject finalRecord = deepMerge(record, target);
-					
+
 					if (finalRecord.has("languages")) {
 						JSONObject language = finalRecord.getJSONObject("languages");
 						String sourceLanguage = language.getString("sourceLanguage");
@@ -411,32 +404,33 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 						finalRecord.put("targetLanguage", targetLanguage);
 						finalRecord.remove("languages");
 					}
-					
+
 					UUID uid = UUID.randomUUID();
 					finalRecord.put("id", uid);
 
 					vModel.put("record", finalRecord);
 					vModel.put("currentRecordIndex", pseudoNumberOfRecords);
 					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
-					
+
 				}
-			
-			}else if ( numberOfRecords == base ){
+
+			} else if (numberOfRecords == base) {
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 				counter = base;
 				maxCounter = base + bufferSize;
 				base = base + sampleSize;
-			}else {
+			} else {
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 			}
 		}
 		reader.endArray();
 		reader.close();
 		inputStream.close();
-		
+
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
-		
-		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount) ;
+
+		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber
+				+ " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount);
 	}
 
 	public String getSha256Hash(String input) throws NoSuchAlgorithmException {
@@ -456,9 +450,9 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		String hashString = hexString.toString();
 		return hashString;
 	}
-	
+
 	public long getRecordSize(String dataFilePath) throws Exception {
-		
+
 		long numberOfRecords = 0;
 		InputStream inputStream;
 		try {
@@ -469,33 +463,49 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 				numberOfRecords++;
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 			}
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new Exception("data.json file is not proper");
-			
+
 		}
-		
+
 		return numberOfRecords;
 	}
 
-	public void initiateIngest(ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
-		
+	public void initiateIngest(String datasetId, String userId, String md5hash, ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
+			
 		log.info(" initiateIngest ");
-		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
-		
+		String dataFilePath = datasetIngest.getBaseLocation() + File.separator + "data.json";
+
 		long recordSize = getRecordSize(dataFilePath);
-		
+
 		log.info(" total record size ::  " + recordSize);
-		
-		if(recordSize <= pseudoRecordThreshold) {
+
+		if (recordSize <= pseudoRecordThreshold) {
+			updateDataset(datasetId, userId, md5hash, paramsSchema);
 			ingest(paramsSchema, datasetIngest);
 			return;
-		}else {
+		} else {
 			pseudoIngest(paramsSchema, datasetIngest, recordSize);
 		}
-		
 	}
-	
+
+	// update the dataset
+	public void updateDataset(String datasetId, String userId, String md5hash, ParallelDatasetParamsSchema paramsSchema) {
+			
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			JSONObject record;
+			record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+			datasetService.updateDataset(datasetId, userId, record, md5hash);
+
+		} catch (JsonProcessingException | JSONException e) {
+
+			log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+		}
+
+	}
+
 }
