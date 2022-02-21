@@ -485,7 +485,8 @@ const DataSet = (theme) => ({
     lineHeight: "32px",
     color: "black",
     fontFamily: "Roboto",
-    //    paddingLeft:'16px'
+  
+      //  paddingLeft:'16px'
   },
   hostedCard: {
     height: "300px",
