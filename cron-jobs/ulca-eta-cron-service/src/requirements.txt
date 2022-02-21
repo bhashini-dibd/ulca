@@ -6,3 +6,4 @@ numpy==1.19.5
 pandas==1.1.2
 pip==20.1
 pymongo==3.11.3
+itsdangerous==2.0.1
