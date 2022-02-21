@@ -43,12 +43,9 @@ class ETACalculatorService:
             
             queries             =   [{"collection":dataset_collection, "query":ds_submit_query,"type":"dataset-submit"},{"collection":bm_collection, "query":bm_submit_query,"type":"benchmark-submit"},]
 
-            """
-            TO-DO: ETA for benchmark tasks
-
-            """
             eta_results         =   []
-            datatypes           =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus","tts-corpus","TRANSLATION","ASR"]
+            datatypes           =   ["parallel-corpus","monolingual-corpus","ocr-corpus","asr-corpus","asr-unlabeled-corpus","tts-corpus"]
+            bm_datatypes        =   ["TRANSLATION","ASR","TTS","OCR"]
             BM_WEIGHT_TRANSLATION = 8
             BM_WEIGHT_ASR         = 6
             for query in queries:
@@ -66,9 +63,9 @@ class ETACalculatorService:
                     new_fields = {}
                     new_fields["datasetType"]       =   row["datasetType"]
                     if  new_fields["datasetType"] == "TRANSLATION":
-                        new_fields["outputCount"] == BM_WEIGHT_TRANSLATION
+                        new_fields["outputCount"] = BM_WEIGHT_TRANSLATION
                     elif new_fields["datasetType"] == "ASR":
-                        new_fields["outputCount"] == BM_WEIGHT_ASR
+                        new_fields["outputCount"] = BM_WEIGHT_ASR
                     elif isinstance(row["outputCount"],str):
                         count_data = json.loads(row["outputCount"])
                         new_fields["outputCount"] = [x for x in count_data["processedCount"] if x["type"]=="success"][0]["count"]
@@ -84,17 +81,37 @@ class ETACalculatorService:
                     extracted.append(new_fields)
                 del search_df
                 extracted_df        =   pd.DataFrame(extracted)
-                log.info(extracted_df)
-                for dtype in datatypes:
-                    try:
-                        sub_df = extracted_df[(extracted_df["datasetType"] == dtype )]
-                        weighted_avg    =   numpy.average(sub_df.timeTaken,weights=sub_df.outputCount)
-                        weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
-                        log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
+                if (extracted_df['outputCount'] == 0).all() :
+                    main_df = extracted_df.drop(['outputCount'])
+                else:
+                    main_df = extracted_df
+                #log.info(extracted_df)
+                if str(main_df["datasetType"]) in datatypes:
+                    for dtype in datatypes:
+                        try:
+                            if dtype == main_df["datasetType"]:
 
-                    except Exception as e:
-                        log.info(f'{e}')
-                        continue
+                                weighted_avg    =   numpy.mean(main_df['timeTaken'])
+                                weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
+                                log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
+                            else :
+                                weights[dtype]  =  f'{dtype} unavailable'
+                        except Exception as e:
+                            log.info(f'{e}')
+                            continue
+                elif str(main_df["datasetType"]) in bm_datatypes:
+                    for btype in bm_datatypes:
+                        try:
+                            if btype == main_df["datasetType"]:
+
+                                weighted_avg    =   numpy.average(main_df['timeTaken'],weights=main_df["outputCount"])
+                                weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
+                                log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
+                            else :
+                                weights[dtype]  =  f'{dtype} unavailable'
+                        except Exception as e:
+                            log.info(f'{e}')
+                            continue
                 eta_results.append(weights)
             return eta_results
         except Exception as e:
