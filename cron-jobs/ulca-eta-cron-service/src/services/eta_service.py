@@ -95,9 +95,9 @@ class ETACalculatorService:
                     for dtype in datatypes:
                         try:
                             if dtype in str(main_df["datasetType"]):
-                                weighted_avg    =   numpy.mean(main_df['timeTaken'])
-                                weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
-                                log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
+                                weighted_avg_ds    =   numpy.mean(main_df['timeTaken'])
+                                weights[dtype]  =   weighted_avg_ds + (weighted_avg_ds * 0.2) #adding a buffer time as 20% of the average
+                                log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg_ds}")
                             else :
                                 weights[dtype]  =  f'{dtype} unavailable'
                         except Exception as e:
@@ -107,11 +107,11 @@ class ETACalculatorService:
                     for btype in bm_datatypes:
                         try:
                             if btype in str(main_df["datasetType"]):
-                                weighted_avg    =   numpy.average(main_df['timeTaken'],weights=main_df["outputCount"])
-                                weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
-                                log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
+                                weighted_avg_bm    =   numpy.average(main_df['timeTaken'],weights=main_df["outputCount"])
+                                weights[btype]  =   weighted_avg_bm + (weighted_avg_bm * 0.2) #adding a buffer time as 20% of the average
+                                log.info(f"Data Type : {btype} ETA type : {query['type']} ETA : {weighted_avg_bm}")
                             else :
-                                weights[dtype]  =  f'{dtype} unavailable'
+                                weights[btype]  =  f'{btype} unavailable'
                         except Exception as e:
                             log.info(f'{e}')
                             continue
