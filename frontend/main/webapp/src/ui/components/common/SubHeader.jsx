@@ -110,7 +110,8 @@ const SubHeader = (props) => {
             <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
                 </Grid>
                 <Grid item >
-                    <Tabs value={props.value}  onChange={props.handleChange}>
+                   
+                    <Tabs value={props.value}  onChange={props.handleChange}  value={false} indicatorColor="primary" textColor="primary" variant="scrollable"scrollButtons="auto">
                         {
                             props.tabs.map((tab, index) => {
                                 if(tab.roles.includes(role) ||(tab.public)){

@@ -424,7 +424,8 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
             <AppBar className={classes.appTab} position="static">
-              <Tabs value={index} onChange={handleTabChange}>
+              <Tabs      value={index} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant={"scrollable"} scrollButtons={"on"}
+  >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
               </Tabs>
@@ -442,9 +443,10 @@ const SpeechToSpeechOptions = (props) => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        {renderTabs()}
+      
+        {renderTabs()} 
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderOutput()}

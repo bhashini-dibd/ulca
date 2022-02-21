@@ -604,6 +604,7 @@ const DataSet = (theme) => ({
     margin: 0,
     padding: "0% 1vw",
     color: "#3A3A3A",
+    
   },
   flexEndStyle: {
     display: "flex",
@@ -627,6 +628,15 @@ const DataSet = (theme) => ({
 
     borderRadius:"4px"
   },
+  stspart:{
+    "@media (max-width:400px)": {
+      paddingLeft:"2px",
+     paddingRight:"3px"
+     
+      
+       },
+
+  }
 });
 
 export default DataSet;
