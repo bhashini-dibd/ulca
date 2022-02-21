@@ -204,6 +204,8 @@ const themeDefault = createMuiTheme({
       indicator: {
         // display:'none',
         backgroundColor: "#FD7F23",
+      
+       
       },
     },
     MuiTab: {

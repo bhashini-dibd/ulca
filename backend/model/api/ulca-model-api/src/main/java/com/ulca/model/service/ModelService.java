@@ -8,6 +8,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -60,6 +62,7 @@ import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
 import io.swagger.model.LanguagePair.TargetLanguageEnum;
 import io.swagger.model.LanguagePairs;
+import io.swagger.model.License;
 import io.swagger.model.ModelTask;
 import io.swagger.model.ModelTask.TypeEnum;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
@@ -295,6 +298,11 @@ public class ModelService {
 		if(model.getLicense() == null)
 			throw new ModelValidationException("license is required field");
 		
+		if(model.getLicense() == License.CUSTOM_LICENSE) {
+			if(model.getLicenseUrl().isBlank())
+				throw new ModelValidationException("custom licenseUrl is required field");
+		}
+		
 		if(model.getDomain() == null)
 			throw new ModelValidationException("domain is required field");
 		
@@ -347,7 +355,7 @@ public class ModelService {
 	
 
 	public ModelComputeResponse computeModel(ModelComputeRequest compute)
-			throws URISyntaxException, IOException {
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
 		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();

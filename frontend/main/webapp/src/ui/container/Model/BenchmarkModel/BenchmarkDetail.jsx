@@ -150,8 +150,9 @@ const SearchModelDetail = (props) => {
   const options = {
     textLabels: {
       body: {
-        noMatch: "No records available",
+        noMatch: "No records available ",
       },
+ 
     },
     print: false,
     viewColumns: false,
@@ -162,6 +163,7 @@ const SearchModelDetail = (props) => {
     search: false,
     filter: false,
   };
+
 
   const handleIndexChange = (metric) => {
     setIndex(metricArray.indexOf(metric));
@@ -183,14 +185,18 @@ const SearchModelDetail = (props) => {
         },
         MUIDataTable: {
           paper: {
+            maxWidth:"100%",
             minHeight: "560px",
             boxShadow: "0px 0px 2px #00000029",
             border: "1px solid #0000001F",
+           
           },
           responsiveBase: {
             minHeight: "560px",
+          
           },
         },
+        
         MuiTableCell: {
           head: {
             // padding: ".6rem .5rem .6rem 1.5rem",
@@ -199,6 +205,7 @@ const SearchModelDetail = (props) => {
             letterSpacing: "0.74",
             fontWeight: "bold",
             minHeight: "700px",
+           
           },
           paddingCheckbox: {
             display: "none",
@@ -212,6 +219,16 @@ const SearchModelDetail = (props) => {
             "&$hover:hover:nth-child(even)": { backgroundColor: "#E9F7EF" },
           },
         },
+        MUIDataTableBodyCell: {
+          stackedCommon:{
+            "@media (max-width: 400px)": {
+            width:" 30%",
+             height: "auto",
+         }
+         
+          },
+
+      },
         MUIDataTableHeadCell: {
           root: {
             "&$nth-child(1)": {

@@ -1,8 +1,12 @@
 package com.ulca.benchmark.util;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class UnzipUtility {
+public class FileUtility {
 
 	public Map<String, String> unzip(String zipFilePath, String destDirectory, String serviceRequestNumber)
 			throws IOException {
@@ -87,6 +91,25 @@ public class UnzipUtility {
 		} catch (Exception e) {
 			throw new IOException("Error processing zip entry '" + entry.getName() + "': " + e.getMessage());
 		}
+	}
+	
+	public String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {
+		log.info("************ Entry FileUtility :: downloadUsingNIO *********");
+		log.info("url :: " + urlStr);
+		URL url = new URL(urlStr);
+		String file = downloadFolder + "/" + fileName;
+		log.info("downloadUsingNIO file path :: " + file);
+		log.info(url.getPath());
+		ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+		log.info(url.getContent().toString());
+		log.info(rbc.getClass().toString());
+		FileOutputStream fos = new FileOutputStream(file);
+		fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+		fos.close();
+		rbc.close();
+
+		log.info("************ Exit FileUtility :: downloadUsingNIO *********");
+		return file;
 	}
 
 }

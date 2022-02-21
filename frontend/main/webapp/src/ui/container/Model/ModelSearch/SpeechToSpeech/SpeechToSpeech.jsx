@@ -43,6 +43,31 @@ const SpeechToSpeech = () => {
     tts: "",
   });
 
+  useEffect(() => {
+    if (filter.src && filter.tgt) {
+      const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value);
+      const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
+      const translationVal = translation.filter(a => a.sourceLanguage === filter.src.value && a.targetLanguage === filter.tgt.value);
+      const indictransTranslation = translationVal.filter(asr => asr.label.toLowerCase().includes('indictrans'));
+      const ttsVal = tts.filter(a => a.sourceLanguage === filter.tgt.value);
+      const vakyanshTts = ttsVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
+      if (vakyanshAsr.length) {
+        setFilter((prev) => ({ ...prev, asr: vakyanshAsr[0] }))
+      } else {
+        setFilter((prev) => ({ ...prev, asr: asrVal[0] }))
+      }
+      if (indictransTranslation.length) {
+        setFilter((prev) => ({ ...prev, translation: indictransTranslation[0] }))
+      } else {
+        setFilter((prev) => ({ ...prev, translation: translationVal[0] }))
+      } if (vakyanshTts.length) {
+        setFilter((prev) => ({ ...prev, tts: vakyanshTts[0] }))
+      } else {
+        setFilter((prev) => ({ ...prev, tts: ttsVal[0] }))
+      }
+    }
+  }, [filter.src, filter.tgt])
+
   const [output, setOutput] = useState({
     asr: "",
     translation: "",
@@ -128,8 +153,10 @@ const SpeechToSpeech = () => {
   };
 
   const onStopRecording = (data) => {
-    setData(data.url);
-    setBase(blobToBase64(data));
+    if (data && data.hasOwnProperty('url')) {
+      setData(data.url);
+      setBase(blobToBase64(data));
+    }
   };
 
   useEffect(() => {
@@ -149,12 +176,12 @@ const SpeechToSpeech = () => {
   const validURL = (str) => {
     var pattern = new RegExp(
       "^((ft|htt)ps?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?" + // port
-        "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
-        "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?" + // port
+      "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
+      "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
       "i"
     );
     return pattern.test(str);
@@ -473,6 +500,7 @@ const SpeechToSpeech = () => {
         </Grid>
         <Divider />
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+
           <SpeechToSpeechOptions
             Start={Start}
             Stop={Stop}

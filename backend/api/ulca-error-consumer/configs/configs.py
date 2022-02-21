@@ -9,7 +9,7 @@ app_port                                =   os.environ.get('ULCA_ERROR_CONSUMER_
 shared_storage_path                     =   os.environ.get('ULCA_SHARED_STORAGE_PATH', "/opt/")
 error_prefix                            =   os.environ.get('ULCA_ERROR_PREFIX', 'errors')
 pt_publish_tool                         =   os.environ.get('PT_TOOL_PUBLISH', 'publish')
-error_cron_interval_sec                 =   os.environ.get('ULCA_ERROR_CRON_JOB_INTERVAL_SEC',300)
+error_cron_interval_sec                 =   os.environ.get('ULCA_ERROR_CRON_JOB_INTERVAL_SEC',86400)#300
 if isinstance(error_cron_interval_sec, str):
     error_cron_interval_sec  =  eval(error_cron_interval_sec)
 
@@ -44,7 +44,7 @@ redis_server_password                   =   os.environ.get('REDIS_PASS','passwor
 redis_key_expiry                        =   os.environ.get('ULCA_ERROR_RECORD_EXPIRY_IN_SEC',172800)
 if isinstance(redis_key_expiry, str):
     redis_key_expiry  =  eval(redis_key_expiry)
-error_batch_size                        =   os.environ.get('ULCA_ERROR_BATCH_SIZE',100000)
+error_batch_size                        =   os.environ.get('ULCA_ERROR_BATCH_SIZE',1000)
 
 
 

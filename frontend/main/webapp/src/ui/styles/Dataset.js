@@ -62,12 +62,15 @@ const DataSet = (theme) => ({
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
+    "@media (max-width:400px)": {
+     paddingTop:"18px"
+    },
   },
   centerAudio: {
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
-    marginTop: "6px",
+   
   },
   titleCard: {
     display: "flex",
@@ -188,6 +191,7 @@ const DataSet = (theme) => ({
     borderRadius: "1rem",
     "@media (max-width:870px)": {
       display: "block",
+    
     },
   },
   refreshGrid: {
@@ -307,7 +311,7 @@ const DataSet = (theme) => ({
     opacity: "0.5",
   },
   leftSection: {
-    boxShadow: "4px 0 4px -4px #00000029",
+    boxShadow: "4px 4px 4px -4px #00000029",
   },
   popupDialog: {
     maxWidth: "46.125rem",
@@ -427,14 +431,19 @@ const DataSet = (theme) => ({
   modelTitle: {
     marginTop: "20px",
     // padding: 0,
+     
   },
   mainTitle: { marginTop: "33px", marginLeft: "38px" },
   backButton: {
     boxShadow: "none",
     padding: "0",
   },
-  gridCompute: { marginTop: "15px " },
-  grid: { marginRight: "15px " },
+  gridCompute: { marginTop: "15px " ,
+  // paddingRight:"10px", marginLeft:"40px"
+},
+  grid: { marginRight: "15px ",  "@media (max-width:400px)": {
+    marginLeft:"15px"
+  }, },
   hosted: {
     display: "flex",
     // alignItems: 'flex-end'
@@ -446,6 +455,9 @@ const DataSet = (theme) => ({
     borderRadius: "8px",
     marginTop: "20px",
     marginRight: "24px",
+    "@media (max-width:400px)": {
+      marginRight: "1px",
+    },
   },
   asrCard: {
     height: "300px",
@@ -453,6 +465,9 @@ const DataSet = (theme) => ({
     borderColor: "#2D63AB",
     borderRadius: "8px",
     margin: "20px 20px 20px 0px",
+    "@media (max-width:400px)": {
+      marginLeft: "-1px", marginRight: "1px",
+    },
   },
   computeBtnUrl: {
     marginTop: "40px",
@@ -478,11 +493,18 @@ const DataSet = (theme) => ({
     borderRadius: "8px",
     paddingBottom: "13px",
     marginRight: "24px",
+    "@media (max-width:400px)": {
+      marginRight: "1px",
+    },
   },
   cardHeader: {
     backgroundColor: "#F4F7FB",
     height: "52px",
     alignItems: "center",
+    "@media (max-width:400px)": {
+      height: "62px",
+    },
+
   },
   headerContent: {
     marginLeft: "18px",
@@ -494,6 +516,7 @@ const DataSet = (theme) => ({
   },
   translateCard: {
     padding: 0,
+   
   },
   modelPara: {
     //marginTop: "15px ",
@@ -581,11 +604,39 @@ const DataSet = (theme) => ({
     margin: 0,
     padding: "0% 1vw",
     color: "#3A3A3A",
+    
   },
   flexEndStyle: {
     display: "flex",
     justifyContent: "flex-end",
+    "@media (max-width:400px)": {
+   marginBottom:"20px"
+    },
+
   },
+  imagemodal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imagepaper: {
+    backgroundColor: theme.palette.background.paper,
+   // border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+     padding: theme.spacing(3, 3, 3),
+    
+
+    borderRadius:"4px"
+  },
+  stspart:{
+    "@media (max-width:400px)": {
+      paddingLeft:"2px",
+     paddingRight:"3px"
+     
+      
+       },
+
+  }
 });
 
 export default DataSet;

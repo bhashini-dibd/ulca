@@ -1,6 +1,5 @@
 package io.swagger.model;
 
-import java.util.ArrayList;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -20,7 +19,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "common parameters or attributes of dataset that is primarily same across the supported dataset.")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-12-09T06:19:50.878Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-02-17T09:58:25.365Z[GMT]")
 
 
 public class BenchmarkDatasetCommonParamsSchema   {
@@ -47,6 +46,9 @@ public class BenchmarkDatasetCommonParamsSchema   {
 
   @JsonProperty("license")
   private License license = null;
+
+  @JsonProperty("licenseUrl")
+  private String licenseUrl = null;
 
   @JsonProperty("submitter")
   private Submitter submitter = null;
@@ -158,10 +160,10 @@ public class BenchmarkDatasetCommonParamsSchema   {
   }
 
   /**
-   * various sources, url from where the information is collected.
+   * Get collectionSource
    * @return collectionSource
    **/
-  @Schema(example = "[\"https://main.sci.gov.in\"]", description = "various sources, url from where the information is collected.")
+  @Schema(description = "")
   
     @Valid
     public Source getCollectionSource() {
@@ -178,10 +180,10 @@ public class BenchmarkDatasetCommonParamsSchema   {
   }
 
   /**
-   * This attribute defines that `relevant business area`
+   * Get domain
    * @return domain
    **/
-  @Schema(example = "[\"news\",\"legal\"]", required = true, description = "This attribute defines that `relevant business area`")
+  @Schema(required = true, description = "")
       @NotNull
 
     @Valid
@@ -212,6 +214,25 @@ public class BenchmarkDatasetCommonParamsSchema   {
 
   public void setLicense(License license) {
     this.license = license;
+  }
+
+  public BenchmarkDatasetCommonParamsSchema licenseUrl(String licenseUrl) {
+    this.licenseUrl = licenseUrl;
+    return this;
+  }
+
+  /**
+   * url of the custom license
+   * @return licenseUrl
+   **/
+  @Schema(description = "url of the custom license")
+  
+    public String getLicenseUrl() {
+    return licenseUrl;
+  }
+
+  public void setLicenseUrl(String licenseUrl) {
+    this.licenseUrl = licenseUrl;
   }
 
   public BenchmarkDatasetCommonParamsSchema submitter(Submitter submitter) {
@@ -253,12 +274,13 @@ public class BenchmarkDatasetCommonParamsSchema   {
         Objects.equals(this.collectionSource, benchmarkDatasetCommonParamsSchema.collectionSource) &&
         Objects.equals(this.domain, benchmarkDatasetCommonParamsSchema.domain) &&
         Objects.equals(this.license, benchmarkDatasetCommonParamsSchema.license) &&
+        Objects.equals(this.licenseUrl, benchmarkDatasetCommonParamsSchema.licenseUrl) &&
         Objects.equals(this.submitter, benchmarkDatasetCommonParamsSchema.submitter);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(version, name, taskType, description, languages, collectionSource, domain, license, submitter);
+    return Objects.hash(version, name, taskType, description, languages, collectionSource, domain, license, licenseUrl, submitter);
   }
 
   @Override
@@ -274,6 +296,7 @@ public class BenchmarkDatasetCommonParamsSchema   {
     sb.append("    collectionSource: ").append(toIndentedString(collectionSource)).append("\n");
     sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
     sb.append("    license: ").append(toIndentedString(license)).append("\n");
+    sb.append("    licenseUrl: ").append(toIndentedString(licenseUrl)).append("\n");
     sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
     sb.append("}");
     return sb.toString();

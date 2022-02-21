@@ -44,6 +44,7 @@ const NewSearchModel = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
+  const [rowsPerPage, setRowsPerPage] = useState(9)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -90,10 +91,14 @@ const NewSearchModel = () => {
   const handleSearch = (event) => {
     dispatch(SearchList(event.target.value));
   };
-
-  const handleChangePage = (e, page) => {
-    dispatch({ type: "BENCHMARK_PAGE_NO", payload: page });
+  const handleRowsPerPageChange = (e, page) => {
+    setRowsPerPage(page.props.value);
   };
+
+
+  // const handleChangePage = (e, page) => {
+  //   dispatch({ type: "BENCHMARK_PAGE_NO", payload: page });
+  // };
 
   return (
     <Tab
@@ -110,9 +115,12 @@ const NewSearchModel = () => {
             <GridView
               data={searchModelResult}
               handleCardClick={handleClick}
-              rowsPerPage={9}
+              //  rowsPerPage={9}
               page={searchModelResult.page}
-              handleChangePage={handleChangePage}
+              // handleChangePage={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              handleRowsPerPageChange={handleRowsPerPageChange}
+              onPageChange={(e, page) => dispatch({ type: "BENCHMARK_PAGE_NO", payload: page })}
             />
           </Suspense>
         ) : (
