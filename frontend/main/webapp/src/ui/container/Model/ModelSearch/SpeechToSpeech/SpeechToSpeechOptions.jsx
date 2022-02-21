@@ -226,6 +226,7 @@ const SpeechToSpeechOptions = (props) => {
               xl={12}
               style={{ position: "relative" }}
             >
+             <div>
               <textarea
                 disabled
                 placeholder={placeholder}
@@ -236,17 +237,21 @@ const SpeechToSpeechOptions = (props) => {
                   color: "grey",
                   border: "1px solid grey",
                   margin: 0,
-                  padding: 0,
+                  paddingTop: '20px',
                 }}
               />
+            </div>
               <IconButton
-                style={{ position: "absolute", top: "0", right: "10px" }}
+                style={{ position: "absolute", top: "0", right: "0" ,}}
                 onClick={()=>handleCopyClick(prop)}
               >
-                <Tooltip title="copy">
+            
+                <Tooltip title="copy" style={{marginBottom:"10px"}}>
                   <FileCopyIcon color="primary" fontSize="small" />
                 </Tooltip>
+             
               </IconButton>
+            
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <textarea
