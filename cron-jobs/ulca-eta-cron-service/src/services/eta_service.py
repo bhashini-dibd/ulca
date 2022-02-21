@@ -63,7 +63,6 @@ class ETACalculatorService:
                 for index, row in search_df.iterrows():
                     new_fields = {}
                     new_fields["datasetType"]       =   row["datasetType"]
-                    log.info(new_fields["datasetType"])
                     if  row["datasetType"] == "TRANSLATION":
                         new_fields["outputCount"] = BM_WEIGHT_TRANSLATION
                         FLAG = 2
@@ -94,11 +93,8 @@ class ETACalculatorService:
                 log.info(main_df)
                 if FLAG == 1:
                     for dtype in datatypes:
-                        log.info("ds-datasets")
                         try:
-                            log.info(type(dtype))
-                            if dtype == main_df["datasetType"]:
-
+                            if dtype in str(main_df["datasetType"]):
                                 weighted_avg    =   numpy.mean(main_df['timeTaken'])
                                 weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
                                 log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
@@ -109,10 +105,8 @@ class ETACalculatorService:
                             continue
                 elif FLAG == 2:
                     for btype in bm_datatypes:
-                        log.info("bm-datasets")
                         try:
-                            if btype == main_df["datasetType"]:
-
+                            if btype in str(main_df["datasetType"]):
                                 weighted_avg    =   numpy.average(main_df['timeTaken'],weights=main_df["outputCount"])
                                 weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
                                 log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
