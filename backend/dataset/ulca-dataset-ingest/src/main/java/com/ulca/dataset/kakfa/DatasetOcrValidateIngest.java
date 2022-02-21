@@ -131,26 +131,14 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			
 			return;
 		}
-		//update the dataset
-				if(mode.equalsIgnoreCase("real")) {
-					try {
-						ObjectMapper objectMapper = new ObjectMapper();
-						JSONObject record;
-						record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-						
-						datasetService.updateDataset(datasetId, userId, record,md5hash);
-						
-					} catch (JsonProcessingException | JSONException e) {
-						
-						log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
-					}
-				}
+		
 				
 		try {
 			if(mode.equalsIgnoreCase("real")) {
+				updateDataset(datasetId, userId, md5hash,paramsSchema);
 				ingest(paramsSchema, datasetIngest);
 			}else {
-				initiateIngest(paramsSchema, datasetIngest);
+				initiateIngest(datasetId, userId, md5hash,paramsSchema, datasetIngest);
 			}
 
 		} catch (Exception e) {
@@ -480,7 +468,7 @@ public  long getRecordSize(String dataFilePath) throws Exception {
 		return numberOfRecords;
 	}
 
-	public  void initiateIngest(OcrDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
+	public  void initiateIngest(String datasetId, String userId, String md5hash,OcrDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
 		
 		log.info(" initiateIngest ");
 		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
@@ -490,6 +478,7 @@ public  long getRecordSize(String dataFilePath) throws Exception {
 		log.info(" total record size ::  " + recordSize);
 		
 		if(recordSize <= pseudoRecordThreshold) {
+			updateDataset(datasetId, userId, md5hash, paramsSchema);
 			ingest(paramsSchema, datasetIngest);
 			return;
 		}else {
@@ -497,5 +486,23 @@ public  long getRecordSize(String dataFilePath) throws Exception {
 		}
 		
 	}
+	
+	//update the dataset
+		public void updateDataset(String datasetId, String userId, String md5hash, OcrDatasetParamsSchema paramsSchema) {
+			
+			try {
+				ObjectMapper objectMapper = new ObjectMapper();
+				JSONObject record;
+				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+				datasetService.updateDataset(datasetId, userId, record,md5hash);
+				
+			} catch (JsonProcessingException | JSONException e) {
+				
+				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+			}
+			
+			
+		}
+		
 
 }
