@@ -1,5 +1,11 @@
 # ULCA-AUTOMATION
 
+
+| Service | Build Status |
+|---------| ----------- |
+|  Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+
+
 ## Overview 
 
 The code in this repo could be utilized to automate procedures for submitting/searching datasets and submitting/benchmarking/publishing models from ULCA website.
