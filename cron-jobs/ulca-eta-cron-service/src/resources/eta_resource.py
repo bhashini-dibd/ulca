@@ -19,6 +19,7 @@ class ETACalculatorResource(Resource):
         try:
             result  = service.calculate_average_eta()
             res     = CustomResponse(Status.SUCCESS.value,result,None)
+            log.info(result)
             log.info("response successfully generated.")
             return res.getres()
         except Exception as e:

@@ -59,18 +59,24 @@ class ETACalculatorService:
                 search_df   =   pd.DataFrame(result).dropna()
                 log.info(f"Count of search items:{len(search_df)}")
                 extracted   =   []
+                FLAG = 0
                 for index, row in search_df.iterrows():
                     new_fields = {}
                     new_fields["datasetType"]       =   row["datasetType"]
-                    if  new_fields["datasetType"] == "TRANSLATION":
+                    log.info(new_fields["datasetType"])
+                    if  row["datasetType"] == "TRANSLATION":
                         new_fields["outputCount"] = BM_WEIGHT_TRANSLATION
-                    elif new_fields["datasetType"] == "ASR":
+                        FLAG = 2
+                    elif row["datasetType"] == "ASR":
                         new_fields["outputCount"] = BM_WEIGHT_ASR
+                        FLAG = 2
                     elif isinstance(row["outputCount"],str):
                         count_data = json.loads(row["outputCount"])
+                        FLAG = 1
                         new_fields["outputCount"] = [x for x in count_data["processedCount"] if x["type"]=="success"][0]["count"]
                     else:
                         new_fields["outputCount"]       =   row["outputCount"]
+                        FLAG = 1
                     try:
                         new_fields["startTimeStamp"]    =   datetime.timestamp(parser.parse(str(row["startTime"])))    #datetime.strptime(str(row["startTime"]))
                         new_fields["endTimeStamp"]      =   datetime.timestamp(parser.parse(str(row["endTime"])))
@@ -85,10 +91,12 @@ class ETACalculatorService:
                     main_df = extracted_df.drop(['outputCount'])
                 else:
                     main_df = extracted_df
-                #log.info(extracted_df)
-                if str(main_df["datasetType"]) in datatypes:
+                log.info(main_df)
+                if FLAG == 1:
                     for dtype in datatypes:
+                        log.info("ds-datasets")
                         try:
+                            log.info(type(dtype))
                             if dtype == main_df["datasetType"]:
 
                                 weighted_avg    =   numpy.mean(main_df['timeTaken'])
@@ -99,8 +107,9 @@ class ETACalculatorService:
                         except Exception as e:
                             log.info(f'{e}')
                             continue
-                elif str(main_df["datasetType"]) in bm_datatypes:
+                elif FLAG == 2:
                     for btype in bm_datatypes:
+                        log.info("bm-datasets")
                         try:
                             if btype == main_df["datasetType"]:
 
@@ -113,6 +122,7 @@ class ETACalculatorService:
                             log.info(f'{e}')
                             continue
                 eta_results.append(weights)
+            log.info(eta_results)
             return eta_results
         except Exception as e:
             log.exception(f'{e}')
