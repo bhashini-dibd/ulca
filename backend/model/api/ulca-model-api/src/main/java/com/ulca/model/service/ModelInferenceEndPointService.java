@@ -8,6 +8,8 @@ import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -19,6 +21,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -29,6 +32,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.benchmark.util.FileUtility;
 import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
@@ -70,6 +74,12 @@ public class ModelInferenceEndPointService {
 
 	@Autowired
 	WebClient.Builder builder;
+	
+	@Value("${ulca.model.upload.folder}")
+	private String modelUploadFolder;
+	
+	@Autowired
+	FileUtility fileUtility;
 
 	public OneOfInferenceAPIEndPointSchema validateCallBackUrl(String callBackUrl,
 			OneOfInferenceAPIEndPointSchema schema)
@@ -82,7 +92,11 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder()
+				      .readTimeout(60, TimeUnit.SECONDS)
+				      .build();
+			
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
@@ -136,7 +150,11 @@ public class ModelInferenceEndPointService {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 			
-			OkHttpClient client = new OkHttpClient();
+			//OkHttpClient client = new OkHttpClient();
+			OkHttpClient client = new OkHttpClient.Builder()
+				      .readTimeout(60, TimeUnit.SECONDS)
+				      .build();
+			
 			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
 			Request httpRequest = new Request.Builder()
 			        .url(callBackUrl)
@@ -168,6 +186,8 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			OkHttpClient newClient = getTrustAllCertsClient();
+			
+			
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 			
 			//Response httpResponse = client.newCall(httpRequest).execute();
@@ -180,8 +200,6 @@ public class ModelInferenceEndPointService {
 			log.info("logging tts inference point response" + responseJsonStr);
 		}
 		
-	
-
 		return schema;
 
 	}
@@ -217,7 +235,9 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Failed",  HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -260,7 +280,9 @@ public class ModelInferenceEndPointService {
 			        .build();
 			
 			Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException(httpResponse.message(), "OCR Model Compute Failed",  HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -309,7 +331,9 @@ public class ModelInferenceEndPointService {
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 			
 			//Response httpResponse = client.newCall(httpRequest).execute();
-			if(httpResponse.code() != 200) {
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
 				
 				throw new ModelComputeException( httpResponse.message(), "TTS Model Compute Failed", HttpStatus.valueOf(httpResponse.code()));
 			}
@@ -319,18 +343,34 @@ public class ModelInferenceEndPointService {
 			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			TTSResponse ttsResponse  = objectMapper.readValue(ttsResponseStr, TTSResponse.class);
 			
-			if(ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <=0 || ttsResponse.getAudio().get(0).getAudioContent() == null) {
+			if(ttsResponse.getAudio() == null || ttsResponse.getAudio().size() <=0 ) {
 				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",  HttpStatus.BAD_REQUEST);
 				
 			}
-			
-			
-			String encodedString = Base64.getEncoder().encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
-			if(encodedString.isBlank()) {
+			if(ttsResponse.getAudio().get(0).getAudioContent() != null) {
+				String encodedString = Base64.getEncoder().encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
+				response.setOutputText(encodedString);
+			}else if(!ttsResponse.getAudio().get(0).getAudioUri().isBlank()){
+				String audioUrl = ttsResponse.getAudio().get(0).getAudioUri();
+				try {
+					String fileName = UUID.randomUUID().toString();
+					String uploadFolder = modelUploadFolder + "/model";
+					String filePath = fileUtility.downloadUsingNIO(audioUrl, uploadFolder, fileName);
+					byte[] bytes = FileUtils.readFileToByteArray(new File(filePath));
+					String encodedString = Base64.getEncoder().encodeToString(bytes);
+					response.setOutputText(encodedString);
+					
+					//delete the downloaded file
+					FileUtils.delete(new File(filePath));
+				}catch(Exception ex) {
+					ex.printStackTrace();
+					throw new ModelComputeException(ex.getMessage(), "TTS Output file not available",  HttpStatus.BAD_REQUEST);
+				}
+				
+			}else {
 				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
 				
 			}
-			response.setOutputText(encodedString);
 			
 		}
 		
@@ -408,10 +448,11 @@ public class ModelInferenceEndPointService {
         SSLContext sslContext = SSLContext.getInstance("SSL");
         sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
 
+        
         OkHttpClient.Builder newBuilder = new OkHttpClient.Builder();
         newBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) trustAllCerts[0]);
         newBuilder.hostnameVerifier((hostname, session) -> true);
-        return newBuilder.build();
+        return newBuilder.readTimeout(60, TimeUnit.SECONDS).build();
     }
 
 }

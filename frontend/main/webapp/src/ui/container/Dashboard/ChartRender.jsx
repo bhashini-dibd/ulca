@@ -837,15 +837,19 @@ const ChartRender = (props) => {
           </div>
 
           <div className={classes.title}>
-            <ResponsiveContainer width="98%" height={550} >
+       
+     <ResponsiveContainer width="98%" height={550} >            
               <BarChart
-                width={900}
+              style={{paddingRight:"10%"}}
+                width={800}
                 height={400}
                 data={DashboardReport.data}
                 fontSize="14px"
                 fontFamily="Roboto"
                 maxBarSize={100}
+               // barGap={-10}
               >
+           
                 <XAxis
                   dataKey="label"
                   textAnchor={"end"}
@@ -885,14 +889,14 @@ const ChartRender = (props) => {
                 </YAxis>
 
                 <Tooltip
-                  contentStyle={{ fontFamily: "Roboto", fontSize: "14px" }}
+                  contentStyle={{ fontFamily: "Roboto", fontSize: "14px"  }}
                   formatter={(value) =>
                     new Intl.NumberFormat("en").format(value)
                   }
                   cursor={{ fill: "none" }}
                 />
                 <Bar
-                  margin={{ top: 140, left: 20, right: 20, bottom: 20 }}
+                  margin={{ top: 140, left: 10, right: 50, bottom: 20 }}
                   dataKey="value"
                   cursor="pointer"
                   radius={[8, 8, 0, 0]}
@@ -901,6 +905,7 @@ const ChartRender = (props) => {
                     handleOnClick(page + 1, event);
                   }}
                 >
+                 
                   <LabelList
                     formatter={(value) =>
                       new Intl.NumberFormat("en").format(value)
@@ -909,21 +914,25 @@ const ChartRender = (props) => {
                     position="top"
                     dataKey="value"
                     fill="black"
-                    style={{ textAnchor: "start",  }}
+                    style={{ textAnchor: "start"}}
                     angle={-30}
                     clockWise={4}
                   />
+               
                   {DashboardReport.hasOwnProperty("data") &&
                     DashboardReport.data.length > 0 &&
                     DashboardReport.data.map((entry, index) => {
                       const color = colors[index < 9 ? index : index % 10];
                       return <Cell key={index} fill={`#${color}`} />;
                     })}
+                   
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
+          
           </div>
         </Paper>
+        
       </div>
       <Footer />
     </MuiThemeProvider>

@@ -62,12 +62,15 @@ const DataSet = (theme) => ({
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
+    "@media (max-width:400px)": {
+     paddingTop:"18px"
+    },
   },
   centerAudio: {
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
-    marginTop: "6px",
+   
   },
   titleCard: {
     display: "flex",
@@ -188,6 +191,7 @@ const DataSet = (theme) => ({
     borderRadius: "1rem",
     "@media (max-width:870px)": {
       display: "block",
+    
     },
   },
   refreshGrid: {
@@ -600,10 +604,15 @@ const DataSet = (theme) => ({
     margin: 0,
     padding: "0% 1vw",
     color: "#3A3A3A",
+    
   },
   flexEndStyle: {
     display: "flex",
     justifyContent: "flex-end",
+    "@media (max-width:400px)": {
+   marginBottom:"20px"
+    },
+
   },
   imagemodal: {
     display: 'flex',
@@ -612,10 +621,22 @@ const DataSet = (theme) => ({
   },
   imagepaper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+   // border: '2px solid #000',
     boxShadow: theme.shadows[5],
-    // padding: theme.spacing(2, 2, 1),
+     padding: theme.spacing(3, 3, 3),
+    
+
+    borderRadius:"4px"
   },
+  stspart:{
+    "@media (max-width:400px)": {
+      paddingLeft:"2px",
+     paddingRight:"3px"
+     
+      
+       },
+
+  }
 });
 
 export default DataSet;

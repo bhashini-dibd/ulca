@@ -97,25 +97,21 @@ const SpeechToSpeechOptions = (props) => {
                 id="sample"
               ></audio>
             ) : (
-              <audio
-                src="sample"
-                style={{ minWidth: "100%" }}
-                controls
-                id="sample"
-              ></audio>
+              <></>
             )}
           </div>
+          
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+            <Grid item xs={8} sm={12} md={10} lg={10} xl={10}>
               <Typography variant={"caption"}>
                 {translate("label.maxDuration")}
               </Typography>
             </Grid>
             <Grid
               item
-              xs={12}
+              xs={4}
               sm={12}
               md={2}
               lg={2}
@@ -428,7 +424,8 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
             <AppBar className={classes.appTab} position="static">
-              <Tabs value={index} onChange={handleTabChange}>
+              <Tabs      value={index} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant={"scrollable"} scrollButtons={"on"}
+  >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
               </Tabs>
@@ -446,9 +443,10 @@ const SpeechToSpeechOptions = (props) => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        {renderTabs()}
+      
+        {renderTabs()} 
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderOutput()}

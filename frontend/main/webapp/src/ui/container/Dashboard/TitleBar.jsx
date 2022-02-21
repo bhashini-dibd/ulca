@@ -53,7 +53,7 @@ const TitleBar = (props) => {
             <AppBar position="static" color="inherit" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <Grid container className={classes.toolGrid}>
-                        < Grid item xs={0} sm={2} md={3} lg={3} xl={3} className={classes.selectGrid}>
+                        < Grid item xs={4} sm={2} md={2} lg={2} xl={2} className={classes.selectGrid}>
                             <Button className={classes.btnStyle}
                                 disabled={page !== 0 ? true : false}
                                 color="inherit"
@@ -90,7 +90,7 @@ const TitleBar = (props) => {
                                 }
                             </StyledMenu>
                         </Grid>
-                        < Grid item xs={3} sm={3} md={3} lg={1} xl={3} className={classes.tempGrid}>
+                        < Grid item xs={3} sm={2} md={3} lg={1} xl={1} className={classes.tempGrid}>
                             <Typography variant="body2" gutterBottom>
                                 {/* {props.label} */}
                                 {translate("label.totalCount")}
@@ -101,10 +101,10 @@ const TitleBar = (props) => {
                             </Typography>
                         </Grid>
                         <Grid  xs={12} sm={6} md={6} lg={8} xl={6} container item  justify="flex-end"  >
-                        <div   style={{color:"red",}}
-     > 
+                        {/* <div   style={{color:"red"}} */}
+     
                         {props.children} 
-                        </div>
+                        {/* </div> */}
                         </Grid>
                     </Grid>
                 </Toolbar>
