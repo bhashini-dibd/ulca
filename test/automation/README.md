@@ -3,7 +3,12 @@
 
 | Service | Build Status |
 |---------| ----------- |
-|  Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Login Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Dataset Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Model Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Login Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Login Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Leaderboard Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
 
 
 ## Overview 
