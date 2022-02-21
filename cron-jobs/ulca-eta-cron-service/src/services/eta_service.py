@@ -84,9 +84,11 @@ class ETACalculatorService:
                     extracted.append(new_fields)
                 del search_df
                 extracted_df        =   pd.DataFrame(extracted)
+                log.info(extracted_df)
                 for dtype in datatypes:
                     try:
-                        weighted_avg    =   numpy.average(extracted_df["timeTaken"],weights=extracted_df["outputCount"])
+                        sub_df = extracted_df[(extracted_df["datasetType"] == dtype )]
+                        weighted_avg    =   numpy.average(sub_df.timeTaken,weights=sub_df.outputCount)
                         weights[dtype]  =   weighted_avg + (weighted_avg * 0.2) #adding a buffer time as 20% of the average
                         log.info(f"Data Type : {dtype} ETA type : {query['type']} ETA : {weighted_avg}")
 
