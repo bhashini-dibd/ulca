@@ -17,7 +17,8 @@ import {
   CardMedia,
   Modal,
   Backdrop,
-  Fade 
+  Fade ,
+  
   
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -28,7 +29,8 @@ import OCRFileUpload from "../../../../../redux/actions/api/Model/ModelSearch/Fi
 import { useDispatch } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import Snackbar from "../../../../components/common/Snackbar";
-
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 
 
@@ -39,6 +41,7 @@ const HostedInferASR = (props) => {
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
     props;
   const history = useHistory();
+  
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
   const [error, setError] = useState({ url: "" });
@@ -180,7 +183,10 @@ const HostedInferASR = (props) => {
 
   }
 
-  const handleCloseModal = () => {
+ 
+
+  const handleCloseModal = (event, reason) => {
+    if ("clickaway" == reason) return;
     setOpenModal(false);
   };
 
@@ -214,14 +220,26 @@ const HostedInferASR = (props) => {
                 onChange={handleFile}
                 type="file"
               />
+                <Button
+                color="primary"
+                style={{ float: "right", marginTop: "5px" }}
+                disabled={file.length ? false : true}
+                variant="contained"
+                size={"small"}
+                onClick={handleFileSubmit}
+              >
+                {translate("button.convert")}
+              </Button>
               {preview ? (
                 <>
                 <img
-                  style={{ marginTop: "5%" }}
+                  style={{  margin: "10px",   cursor: "pointer",
+                  maxWidth: "-webkit-fill-available",
+                  border: "1px solid black" }}
                   src={preview}
                   alt="Preview"
-                  width="60%"
-                  height="10vh"
+                  width="100%"
+                  //height="10px"
                   onClick={Imagemodal}
 
                 />
@@ -231,21 +249,42 @@ const HostedInferASR = (props) => {
                   className={classes.imagemodal}
                   open={openModal}
                   onClose={handleCloseModal}
+                 
                   closeAfterTransition
                   BackdropComponent={Backdrop}
                   BackdropProps={{
                   timeout: 500,
+
               }}
                  >
               <Fade in={openModal}>
+             
              <div className={classes.imagepaper}>
+             <div   style={{paddingLeft:"93%",paddingBottom:"20px"}}>
+              <IconButton
+                 
+                 
+                     size="small"
+                     aria-label="close"
+                     color="inherit"
+                     onClick={handleCloseModal}
+                   >
+                     <CloseIcon fontSize="small" />
+                   </IconButton>
+                   </div>
+             
               <img
-                  style={{ maxWidth: 750 }}
+                  style={{ maxWidth: 550 ,}}
                   src={preview}
                   alt="Preview"
+                 
+                 
             />
+           
          
           </div>
+        
+         
         </Fade>
       </Modal>
                </>
@@ -253,7 +292,7 @@ const HostedInferASR = (props) => {
                 <></>
               )}
               
-              <Button
+              {/* <Button
                 color="primary"
                 style={{ float: "right", marginTop: "10px" }}
                 disabled={file.length ? false : true}
@@ -262,7 +301,7 @@ const HostedInferASR = (props) => {
                 onClick={handleFileSubmit}
               >
                 {translate("button.convert")}
-              </Button>
+              </Button> */}
             </CardContent>
           </Card>
         </Grid>
@@ -304,7 +343,7 @@ const HostedInferASR = (props) => {
             </Grid>
             <CardContent>
               <TextField
-                style={{ marginTop: "15px" }}
+                style={{ marginTop: "15px " }}
                 fullWidth
                 color="primary"
                 label="Paste the public repository URL"
@@ -333,7 +372,7 @@ const HostedInferASR = (props) => {
                 alt="Ocr URL"
                 onClick={() => setOpen(true)}
                 style={{
-                  margin: "10px",
+                  margin: "10px ",
                   cursor: "pointer",
                   maxWidth: "-webkit-fill-available",
                   border: "1px solid black",
