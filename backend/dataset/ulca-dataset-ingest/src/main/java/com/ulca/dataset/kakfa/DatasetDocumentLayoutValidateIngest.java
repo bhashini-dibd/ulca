@@ -36,6 +36,7 @@ import com.ulca.dataset.service.ProcessTaskTrackerService;
 import io.swagger.model.DatasetType;
 import io.swagger.model.DocumentLayoutParamsSchema;
 import io.swagger.model.DocumentLayoutRowSchema;
+import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -128,26 +129,13 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 			
 			return;
 		}
-		if(mode.equalsIgnoreCase("real")) {
-			try {
-
-				ObjectMapper objectMapper = new ObjectMapper();
-				JSONObject record;
-				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-
-				datasetService.updateDataset(datasetId, userId, record,md5hash);
-
-			} catch (JsonProcessingException | JSONException e) {
-
-				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
-			}
-		}
 		
 		try {
 			if(mode.equalsIgnoreCase("real")) {
+				updateDataset(datasetId, userId, md5hash, paramsSchema);
 				ingest(paramsSchema, datasetIngest);
 			}else {
-				initiateIngest(paramsSchema, datasetIngest);
+				initiateIngest(datasetId, userId, md5hash, paramsSchema, datasetIngest);
 			}
 
 		} catch (Exception e) {
@@ -447,7 +435,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		return numberOfRecords;
 	}
 
-	public void initiateIngest(DocumentLayoutParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
+	public void initiateIngest(String datasetId, String userId, String md5hash, DocumentLayoutParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
 		
 		log.info(" initiateIngest ");
 		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
@@ -457,6 +445,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		log.info(" total record size ::  " + recordSize);
 		
 		if(recordSize <= pseudoRecordThreshold) {
+			updateDataset(datasetId, userId, md5hash, paramsSchema);
 			ingest(paramsSchema, datasetIngest);
 			return;
 		}else {
@@ -464,4 +453,20 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		}
 		
 	}
+	
+	//update the dataset
+		public void updateDataset(String datasetId, String userId, String md5hash, DocumentLayoutParamsSchema paramsSchema) {
+			
+			try {
+				ObjectMapper objectMapper = new ObjectMapper();
+				JSONObject record;
+				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+				datasetService.updateDataset(datasetId, userId, record,md5hash);
+				
+			} catch (JsonProcessingException | JSONException e) {
+				
+				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+			}
+			
+		}
 }
