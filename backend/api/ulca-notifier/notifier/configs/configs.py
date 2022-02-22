@@ -46,4 +46,4 @@ inference_check                         =   os.environ.get('ULCA_NOTIFIER_MD_INF
 
 
 #models
-receiver_email_ids                      =   os.environ.get('ULCA_USER_GROUP',"jainy.joy@tarento.com,siddanth.shaiva@tarento.com")
+receiver_email_ids                      =   os.environ.get('ULCA_USER_GROUP',"siddanth.shaiva@tarento.com")
