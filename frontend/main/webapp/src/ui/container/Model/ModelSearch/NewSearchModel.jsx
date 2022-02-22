@@ -38,7 +38,7 @@ function TabPanel(props) {
 const NewSearchModel = () => {
   const filter = useSelector((state) => state.searchFilter);
   const type = ModelTask.map((task) => task.value);
-  const [value, setValue] = useState(type.indexOf(filter.type));
+  const [value, setValue] = useState(0);
   const { searchValue } = useSelector((state) => state.BenchmarkList);
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
