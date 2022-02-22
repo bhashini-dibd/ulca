@@ -95,6 +95,16 @@ components:
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
+        asyncApiDetails:
+          $ref: '#/components/schemas/AsyncApiDetails'
+      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
+
+    AsyncApiDetails:
+      required:
+      - pollingUrl
+      - pollInterval
+      type: object
+      properties:
         pollingUrl:
           type: string
           format: url
@@ -102,7 +112,37 @@ components:
         pollInterval:
           type: integer
           description: polling interval in millisec to check for status
-      description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
+        asyncApiSchema:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/TranslationAsyncInference'
+          - $ref: '#/components/schemas/ASRAsyncInference'
+          - $ref: '#/components/schemas/TTSAsyncInference'
+          - $ref: '#/components/schemas/OCRAsyncInference'
+          discriminator:
+            propertyName: taskType
+            mapping: {
+              translation: TranslationAsyncInference,
+              asr: ASRAsyncInference,
+              tts: TTSAsyncInference,
+              ocr: OCRAsyncInference
+            }   
+        asyncApiPollingSchema:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/TranslationAsyncPollingInference'
+          - $ref: '#/components/schemas/ASRAsyncPollingInference'
+          - $ref: '#/components/schemas/TTSAsyncPollingInference'
+          - $ref: '#/components/schemas/OCRAsyncPollingInference'
+          discriminator:
+            propertyName: taskType
+            mapping: {
+              translation: TranslationAsyncPollingInference,
+              asr: ASRAsyncPollingInference,
+              tts: TTSAsyncPollingInference,
+              ocr: OCRAsyncPollingInference
+            }        
+      description: async api details
 
     FileUploadAPIEndPoint:
       required:
@@ -144,7 +184,37 @@ components:
           $ref: '#/components/schemas/TranslationRequest'
         response:
           $ref: '#/components/schemas/TranslationResponse'
-    
+
+    TranslationAsyncInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/TranslationRequest'
+        response:
+          $ref: '#/components/schemas/PollingRequest'
+
+    TranslationAsyncPollingInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/PollingRequest'
+        response:
+          $ref: '#/components/schemas/TranslationResponse'
+
+    PollingRequest:
+      required:
+      - requestId
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Unique identifier of request
+          example: 29837456239a87
+
     TranslationRequest:
       required:
       - input
@@ -175,6 +245,26 @@ components:
       properties:
         request:
           $ref: '#/components/schemas/ASRRequest'
+        response:
+          $ref: '#/components/schemas/ASRResponse'
+
+    ASRAsyncInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/ASRRequest'
+        response:
+          $ref: '#/components/schemas/PollingRequest'
+
+    ASRAsyncPollingInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/PollingRequest'
         response:
           $ref: '#/components/schemas/ASRResponse'
 
@@ -209,7 +299,27 @@ components:
           $ref: '#/components/schemas/TTSRequest'
         response:
           $ref: '#/components/schemas/TTSResponse'
-    
+
+    TTSAsyncInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/TTSRequest'
+        response:
+          $ref: '#/components/schemas/PollingRequest'
+
+    TTSAsyncPollingInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/PollingRequest'
+        response:
+          $ref: '#/components/schemas/TTSResponse'
+
     TTSRequest:
       required:
       - input
@@ -240,6 +350,26 @@ components:
       properties:
         request:
           $ref: '#/components/schemas/OCRRequest'
+        response:
+          $ref: '#/components/schemas/OCRResponse'
+
+    OCRAsyncInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/OCRRequest'
+        response:
+          $ref: '#/components/schemas/PollingRequest'
+
+    OCRAsyncPollingInference:
+      required:
+      - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/PollingRequest'
         response:
           $ref: '#/components/schemas/OCRResponse'
 
