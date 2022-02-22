@@ -8,7 +8,7 @@ const initialState = {
 //{"CurrentRecordIndex": 2, "ProcessedCount": [{"Type": "Success", "Count": 3}, {"Type": "Failed", "TypeDetails": {}, "Count": 0}], "TimeStamp": "2021-06-12 11:47:23.861540"}
 
 const getRecordCount = (value) => {
-    console.log(value);
+
     let valueArray = value.processedCount;
     var countDetails = {}
     Array.isArray(valueArray) && valueArray.length > 0 && valueArray.forEach(element => {
@@ -44,45 +44,44 @@ const getRecordCount = (value) => {
 
 
 const getDetailedReport = (payload) => {
+
     let responseData = [];
     let refreshStatus = false;
     payload.forEach(element => {
-        if (element.id) {
-            if (element.tool === 'pseudo') {
-                responseData.push({
+        // if (element.tool !== 'pseudo') {
+            let count = element.details ? getRecordCount(JSON.parse(element.details)) : ""
+            responseData.push(
+                {
                     srNo: element.serviceRequestNumber,
                     datasetId: element.datasetName,
-                    recordCount: null,
-                    failedCount: null,
+                    recordCount: count && count.success,
+                    failedCount: count && count.failed,
                     stage: element.tool,
                     status: element.status
-                })
-                const data = JSON.parse(element.details);
-                const stages = ['ingest', 'validate', 'publish'];
-                stages.forEach(e => {
-                    responseData.push({
-                        srNo: null,
-                        datasetId: null,
-                        recordCount: data[e]['processedCount'][0]['count'],
-                        failedCount: data[e]['processedCount'][1]['count'],
-                        stage: e,
-                        status: null
-                        //  status: data[e]['processedCount'][1]['count'] === 0 ? 'Completed' : 'Failed'
-                    })
-                })
-
-            } else {
-                responseData.push({
-                    srNo: element.serviceRequestNumber,
-                    datasetId: element.datasetName,
-                    recordCount: null,
-                    failedCount: null,
-                    stage: element.tool,
-                    status: element.status
-                })
-            }
+                }
+            )
+        // } 
+        // else if (element.tool === 'pseudo') {
+        //     const data = element.details ? JSON.parse(element.details) : "";
+        //     const success = data ? data['publish']['processedCount'][0]['count'] : null;
+        //     const failure = data ? (data['ingest']['processedCount'][0]['count'] +
+        //         data['ingest']['processedCount'][1]['count']) - data['publish']['processedCount'][0]['count'] : null
+        //     responseData.push(
+        //         {
+        //             srNo: element.serviceRequestNumber,
+        //             datasetId: element.datasetName,
+        //             recordCount: null,
+        //             failedCount: failure,
+        //             stage: element.tool,
+        //             status: element.status
+        //         }
+        //     )
+        // }
+        if (element.status === "Completed" || "Pending") {
+            refreshStatus = true
         }
-    })
+    });
+
     return { responseData, refreshStatus };
 }
 
