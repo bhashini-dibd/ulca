@@ -173,13 +173,13 @@ const FilterList = (props) => {
           </Grid>
         </Grid>
         <Button
-          disabled={
-            (
-              selectedDomain.length ||
-              selectedLanguage.length ||
-              selectedSubmitter.length
-            )
-          }
+          // disabled={
+          //  !(
+          //     selectedDomain.length ||
+          //     selectedLanguage.length ||
+          //     selectedSubmitter.length
+          //   )
+          // }
           onClick={() =>
             apply({
               domainFilter: selectedDomain,

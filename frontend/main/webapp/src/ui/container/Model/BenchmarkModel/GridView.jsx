@@ -32,11 +32,12 @@ const GridView = (props) => {
       </Grid>
     );
   };
-
+console.log("aaaa",data,"bbb",page)
   return (
     <>
       <div className={classes.gridHeader}></div>
       {data.filteredData.length > 0 && renderGrid()}
+    
       <TablePagination
         component="div"
         count={data.filteredData.length}
