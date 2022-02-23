@@ -111,7 +111,7 @@ const SubHeader = (props) => {
                 </Grid>
                 <Grid item >
                    
-                    <Tabs value={props.value}  onChange={props.handleChange}  indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto"  aria-label="scrollable prevent tabs example">
+                    <Tabs value={props.value}  onChange={props.handleChange}  indicatorColor="primary"  variant="scrollable" scrollButtons="auto"  aria-label="scrollable prevent tabs example">
                         {
                             props.tabs.map((tab, index) => {
                                 if(tab.roles.includes(role) ||(tab.public)){
