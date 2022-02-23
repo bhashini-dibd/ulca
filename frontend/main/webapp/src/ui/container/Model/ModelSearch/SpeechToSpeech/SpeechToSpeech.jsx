@@ -113,7 +113,7 @@ const SpeechToSpeech = () => {
   };
 
   const handleStartRecording = (data) => {
-    setData("");
+    setData(null);
     setAudio("");
     setOutput({ asr: "", translation: "" });
     setTextArea({ asr: "", translation: "" });

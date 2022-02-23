@@ -69,7 +69,7 @@ const SpeechToSpeechOptions = (props) => {
               <img
                 src={Start}
                 alt=""
-                onClick={handleStartRecording}
+                onClick={() => handleStartRecording()}
                 style={{ cursor: "pointer" }}
               />{" "}
             </div>
@@ -100,7 +100,7 @@ const SpeechToSpeechOptions = (props) => {
               <></>
             )}
           </div>
-          
+
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container spacing={1}>
@@ -226,32 +226,32 @@ const SpeechToSpeechOptions = (props) => {
               xl={12}
               style={{ position: "relative" }}
             >
-             <div>
-              <textarea
-                disabled
-                placeholder={placeholder}
-                rows={2}
-                value={value}
-                className={classes.textArea}
-                style={{
-                  color: "grey",
-                  border: "1px solid grey",
-                  margin: 0,
-                  paddingTop: '20px',
-                }}
-              />
-            </div>
+              <div>
+                <textarea
+                  disabled
+                  placeholder={placeholder}
+                  rows={2}
+                  value={value}
+                  className={classes.textArea}
+                  style={{
+                    color: "grey",
+                    border: "1px solid grey",
+                    margin: 0,
+                    paddingTop: '20px',
+                  }}
+                />
+              </div>
               <IconButton
-                style={{ position: "absolute", top: "0", right: "0" ,}}
-                onClick={()=>handleCopyClick(prop)}
+                style={{ position: "absolute", top: "0", right: "0", }}
+                onClick={() => handleCopyClick(prop)}
               >
-            
-                <Tooltip title="copy-paste" style={{marginBottom:"10px"}}>
+
+                <Tooltip title="copy" style={{ marginBottom: "10px" }}>
                   <FileCopyIcon color="primary" fontSize="small" />
                 </Tooltip>
-             
+
               </IconButton>
-            
+
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <textarea
@@ -429,8 +429,8 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
             <AppBar className={classes.appTab} position="static">
-              <Tabs      value={index} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant={"scrollable"} scrollButtons={"on"}
-  >
+              <Tabs value={index} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant={"scrollable"} scrollButtons={"on"}
+              >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
               </Tabs>
@@ -450,8 +450,8 @@ const SpeechToSpeechOptions = (props) => {
   return (
     <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-      
-        {renderTabs()} 
+
+        {renderTabs()}
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderOutput()}
