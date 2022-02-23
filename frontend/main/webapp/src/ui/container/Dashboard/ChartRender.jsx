@@ -840,14 +840,14 @@ const ChartRender = (props) => {
        
      <ResponsiveContainer width="98%" height={550} >            
               <BarChart
-              style={{paddingRight:"10%"}}
+             // style={{paddingRight:"10%"}}
                 width={800}
                 height={400}
                 data={DashboardReport.data}
                 fontSize="14px"
                 fontFamily="Roboto"
                 maxBarSize={100}
-               // barGap={-10}
+               
               >
            
                 <XAxis
@@ -910,6 +910,7 @@ const ChartRender = (props) => {
                     formatter={(value) =>
                       new Intl.NumberFormat("en").format(value)
                     }
+                    style={{paddingRight:"20px"}}
                     cursor={{ fill: "none" }}
                     position="top"
                     dataKey="value"
