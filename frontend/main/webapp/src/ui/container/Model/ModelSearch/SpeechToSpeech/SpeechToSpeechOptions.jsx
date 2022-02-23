@@ -246,7 +246,7 @@ const SpeechToSpeechOptions = (props) => {
                 onClick={() => handleCopyClick(prop)}
               >
 
-                <Tooltip title="copy" style={{ marginBottom: "10px" }}>
+                <Tooltip title="copy-past" style={{ marginBottom: "10px" }}>
                   <FileCopyIcon color="primary" fontSize="small" />
                 </Tooltip>
 
