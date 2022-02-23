@@ -174,7 +174,7 @@ const FilterList = (props) => {
         </Grid>
         <Button
           disabled={
-            !(
+            (
               selectedDomain.length ||
               selectedLanguage.length ||
               selectedSubmitter.length
