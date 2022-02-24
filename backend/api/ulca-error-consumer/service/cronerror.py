@@ -61,10 +61,13 @@ class ErrorProcessor(Thread):
 
                 check_query   = {"serviceRequestNumber" : srn,"uploaded" : True} 
                 consolidated_rec = errorepo.search(check_query, {"_id":False}, None, None) #  Respone - Null --> Summary report havent't generated yet
+                log.info(f'{consolidated_rec} consolidated records')
+                log.info(f'{present_count} present count')
                 if (not consolidated_rec or (consolidated_rec[0]["consolidatedCount"] < present_count[0]["consolidatedCount"])):
                     log.info(f'Creating consolidated error report for srn-- {srn}')
                     search_query = {"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}
                     error_records =errorepo.search(search_query,{"_id":False},None,None)
+                    log.info(f'{error_records} error records tot')
                     file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
                     headers =   ['Stage','Error Message', 'Record Count']
                     fields  =   ['stage','message','count']
