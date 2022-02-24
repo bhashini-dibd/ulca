@@ -67,10 +67,9 @@ class ErrorProcessor(Thread):
                     log.info(f'Creating consolidated error report for srn-- {srn}')
                     search_query = {"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}
                     error_records =errorepo.search(search_query,{"_id":False},None,None)
-                    try:
-                        file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
-                    except Exception as e:
-                        log.info(f'DatasetName not found')
+                    if "datasetName" not in error_records[0]:
+                        log.info(f'datasetName not found')
+                    file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
                     headers =   ['Stage','Error Message', 'Record Count']
                     fields  =   ['stage','message','count']
                     storeutils.write_to_csv(error_records,file,srn,headers,fields)
