@@ -1,5 +1,5 @@
 {
-    "name": "Vakyansh TTS - Telugu",
+    "name": "Vakyansh TTS - Bengali",
     "version": "v1.0",
     "description": "TTS Model trained using glow TTS vocoder and HiFi GAN",
     "refUrl": "https://github.com/Open-Speech-EkStep/vakyansh-models",
@@ -8,7 +8,7 @@
     },
     "languages": [
       {
-        "sourceLanguage": "te"
+        "sourceLanguage": "bn"
       }
     ],
     "license": "mit",
@@ -101,12 +101,12 @@
         "request": {
           "input": [
             {
-              "source": "ఈరోజు వాతావరణం ఎండగా ఉంది"
+              "source": "তুমি কেমন আছ?"
             }
           ],
           "config": {
             "language": {
-              "sourceLanguage": "te"
+              "sourceLanguage": "bn"
             },
             "gender": "female"
           }
@@ -117,4 +117,4 @@
       "description": "IndicTTS dataset open sourced by IIT Chennai. A special corpus of Indian languages covering 13 major languages of India. It comprises of 10000+ spoken sentences/uttererances each of mono and english recorded by both Male and Female native speakers. Speech waveform files are available in .wav format along with the corresponding text."
     }
   }
-
+  

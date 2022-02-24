@@ -603,7 +603,7 @@ const DataSet = (theme) => ({
     background: "transparent",
     border: "none",
     margin: 0,
-    padding: "0% 1vw",
+    padding: "0% 0% 0% 0%",
     color: "#3A3A3A",
     
   },
@@ -637,6 +637,12 @@ const DataSet = (theme) => ({
       
        },
 
+  },
+  gridcard:{
+  "@media (max-width:959px)": {
+     //  marginLeft: "20%",
+     // justifyContent:"center"
+    },
   }
 });
 
