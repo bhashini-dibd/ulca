@@ -752,6 +752,7 @@ const ContributionList = (props) => {
             handleChangePage={processTableClickedNextOrPrevious}
             rowsPerPage={PageInfo.count}
           ></GridView>
+        
         )
       ) : (
         <MuiThemeProvider theme={createMuiTheme}>
