@@ -77,6 +77,8 @@ const NewSearchModel = () => {
   const apply = (data) => {
     handleClose();
     dispatch(FilterModel(data, C.SEARCH_BENCHMARK));
+    dispatch({ type: C.BENCHMARK_PAGE_NO, payload: 0 });
+
   };
 
   const handleClick = (data) => {
@@ -120,7 +122,7 @@ const NewSearchModel = () => {
               // handleChangePage={handleChangePage}
               rowsPerPage={rowsPerPage}
               handleRowsPerPageChange={handleRowsPerPageChange}
-              onPageChange={(e, page) => dispatch({ type: "BENCHMARK_PAGE_NO", payload: page })}
+              onPageChange={(e, page) => dispatch({ type: C.BENCHMARK_PAGE_NO, payload: page })}
             />
           </Suspense>
         ) : (

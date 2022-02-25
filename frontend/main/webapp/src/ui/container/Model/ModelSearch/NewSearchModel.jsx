@@ -110,7 +110,7 @@ const NewSearchModel = () => {
             page={searchModelResult.page}
             rowsPerPage={rowsPerPage}
             handleRowsPerPageChange={handleRowsPerPageChange}
-            onPageChange={(e, page) => dispatch({ type: "EXPLORE_MODEL_PAGE_NO", payload: page })}
+            onPageChange={(e, page) => dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: page })}
           />
         </Suspense>
       );
