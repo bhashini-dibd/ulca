@@ -14,3 +14,4 @@ uuid==1.30
 flask==1.1.2
 flask-cors==3.0.8
 flask-restful==0.3.8
+itsdangerous==2.0.1

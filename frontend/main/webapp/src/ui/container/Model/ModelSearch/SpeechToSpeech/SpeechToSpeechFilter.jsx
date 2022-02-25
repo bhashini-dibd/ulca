@@ -53,7 +53,7 @@ const SpeechToSpeechFilter = (props) => {
   return (
     <Grid container spacing={2}>
       <Grid
-        style={{ marginTop: "1vh" }}
+        style={{ marginTop: "1vh",textAlign:"justify" }}
         item
         xs={12}
         sm={12}
