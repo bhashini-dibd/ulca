@@ -32,7 +32,7 @@ class ASRMetricEvalHandler:
                         prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                         return
 
-                    ground_truth = [corpus_sentence["tgt"].lower() for corpus_sentence in benchmark["corpus"]]
+                    ground_truth = [corpus_sentence["tgt"] for corpus_sentence in benchmark["corpus"]]
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
                     eval_score = metric_inst.asr_metric_eval(ground_truth, machine_translation)
                     if eval_score:
