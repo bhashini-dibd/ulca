@@ -92,6 +92,7 @@ const NewSearchModel = () => {
 
   const handleSearch = (event) => {
     dispatch(SearchList(event.target.value));
+    dispatch({ type: C.BENCHMARK_PAGE_NO, payload: 0 })
   };
   const handleRowsPerPageChange = (e, page) => {
     setRowsPerPage(page.props.value);
