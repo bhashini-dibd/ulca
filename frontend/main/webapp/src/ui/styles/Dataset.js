@@ -661,13 +661,9 @@ const DataSet = (theme) => ({
    backgroundColor:" transparent!",
   // fontFamily:"Rowdies",
    color:"gray",
-   "&:hover": {
-    // backgroundColor: "white",
-    // boxShadow: "none",
-    // TextDecoration: "None",
-    // border:"none"
+  
    
-  },
+ 
     },
   
 

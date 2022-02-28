@@ -450,7 +450,15 @@ const SpeechToSpeechOptions = (props) => {
               </Grid>
               <Grid md={3}>
               <FormControl className={classes.formControl}>
-               <Select   value={genderValue} className={classes.genderdropdown}    onChange={e => {gender ( (e.target.value).toLowerCase());
+               <Select  
+                 MenuProps={{
+                 anchorOrigin: {
+                 vertical: "bottom",
+                 horizontal: "left"
+              },
+                
+            getContentAnchorEl: null
+        }}  value={genderValue} className={classes.genderdropdown}    onChange={e => {gender ( (e.target.value).toLowerCase());
          
             
           }} >
