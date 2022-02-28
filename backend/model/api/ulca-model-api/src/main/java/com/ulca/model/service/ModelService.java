@@ -242,10 +242,9 @@ public class ModelService {
 		modelObj.setStatus("unpublished");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
-		schema = modelInferenceEndPointService.validateCallBackUrl(callBackUrl, schema);
-		inferenceAPIEndPoint.setSchema(schema);
+		//String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		//OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+		inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
 		//modelDao.save(modelObj);
 		
@@ -355,15 +354,13 @@ public class ModelService {
 	
 
 	public ModelComputeResponse computeModel(ModelComputeRequest compute)
-			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
 
 		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
-		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
+		return modelInferenceEndPointService.compute(inferenceAPIEndPoint, compute);
 	}
 	
 	public ModelComputeResponse tryMeOcrImageContent(MultipartFile file, String modelId) throws Exception {
