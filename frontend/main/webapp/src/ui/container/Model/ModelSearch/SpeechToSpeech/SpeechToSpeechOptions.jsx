@@ -1,3 +1,4 @@
+import { useState ,useEffect} from "react";
 import {
   Grid,
   Card,
@@ -13,7 +14,12 @@ import {
   CardActions,
   IconButton,
   Tooltip,
+  FormControl,
+ 
+  
 } from "@material-ui/core";
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { withStyles } from "@material-ui/styles";
 import { translate } from "../../../../../assets/localisation";
@@ -48,10 +54,13 @@ const SpeechToSpeechOptions = (props) => {
     handleTabChange,
     clearAsr,
     clearTranslation,
-    handleCopyClick
+    handleCopyClick,
+    gender,
+    genderValue,
   } = props;
-
+  
   const renderVoiceRecorder = () => {
+    console.log(genderValue,"aaaaaaa")
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -69,7 +78,7 @@ const SpeechToSpeechOptions = (props) => {
               <img
                 src={Start}
                 alt=""
-                onClick={handleStartRecording}
+                onClick={() => handleStartRecording()}
                 style={{ cursor: "pointer" }}
               />{" "}
             </div>
@@ -97,25 +106,21 @@ const SpeechToSpeechOptions = (props) => {
                 id="sample"
               ></audio>
             ) : (
-              <audio
-                src="sample"
-                style={{ minWidth: "100%" }}
-                controls
-                id="sample"
-              ></audio>
+              <></>
             )}
           </div>
+
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+            <Grid item xs={8} sm={12} md={10} lg={10} xl={10}>
               <Typography variant={"caption"}>
                 {translate("label.maxDuration")}
               </Typography>
             </Grid>
             <Grid
               item
-              xs={12}
+              xs={4}
               sm={12}
               md={2}
               lg={2}
@@ -230,27 +235,32 @@ const SpeechToSpeechOptions = (props) => {
               xl={12}
               style={{ position: "relative" }}
             >
-              <textarea
-                disabled
-                placeholder={placeholder}
-                rows={2}
-                value={value}
-                className={classes.textArea}
-                style={{
-                  color: "grey",
-                  border: "1px solid grey",
-                  margin: 0,
-                  padding: 0,
-                }}
-              />
+              <div>
+                <textarea
+                  disabled
+                  placeholder={placeholder}
+                  rows={2}
+                  value={value}
+                  className={classes.textArea}
+                  style={{
+                    color: "grey",
+                    border: "1px solid grey",
+                    margin: 0,
+                    paddingTop: '20px',
+                  }}
+                />
+              </div>
               <IconButton
-                style={{ position: "absolute", top: "0", right: "10px" }}
-                onClick={()=>handleCopyClick(prop)}
+                style={{ position: "absolute", top: "0", right: "0", }}
+                onClick={() => handleCopyClick(prop)}
               >
-                <Tooltip title="copy">
+
+                <Tooltip title="copy-paste" style={{ marginBottom: "10px" }}>
                   <FileCopyIcon color="primary" fontSize="small" />
                 </Tooltip>
+
               </IconButton>
+
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <textarea
@@ -418,8 +428,10 @@ const SpeechToSpeechOptions = (props) => {
               color: "#2A61AD",
             },
           },
+        
         },
       },
+    
     });
 
   const renderTabs = () => {
@@ -428,10 +440,34 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
             <AppBar className={classes.appTab} position="static">
-              <Tabs value={index} onChange={handleTabChange}>
+              <Grid container>
+              <Grid md={9}>
+              <Tabs value={index} onChange={handleTabChange}   variant={"scrollable"} scrollButtons={"off"} >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
+               
               </Tabs>
+              </Grid>
+              <Grid md={3}>
+              <FormControl className={classes.formControl}>
+               <Select  
+                 MenuProps={{
+                 anchorOrigin: {
+                 vertical: "bottom",
+                 horizontal: "left"
+              },
+                
+            getContentAnchorEl: null
+        }}  value={genderValue} className={classes.genderdropdown}    onChange={e => {gender ( (e.target.value).toLowerCase());
+         
+            
+          }} >
+               <MenuItem value="male">Male</MenuItem>
+               <MenuItem value="female">Female</MenuItem>
+              </Select>
+               </FormControl>
+               </Grid>
+               </Grid>
             </AppBar>
             <TabPanel value={index} index={0}>
               {renderVoiceRecorder()}
@@ -440,13 +476,14 @@ const SpeechToSpeechOptions = (props) => {
               {renderURLInput()}
             </TabPanel>
           </MuiThemeProvider>
+         
         </Grid>
       </Card>
     );
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderTabs()}
       </Grid>
@@ -456,7 +493,7 @@ const SpeechToSpeechOptions = (props) => {
       {audio ? (
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h5" style={{ marginBottom: "1%" }}>
-            Intermediate Output
+            Intermediate Output 
           </Typography>
           {renderAccordion()}
         </Grid>

@@ -17,7 +17,7 @@ storerepo   =   StoreRepo()
 errorepo    =   ErrorRepo()
 storeutils  =   StoreUtils()
 prorepo     =   ProcessRepo()
-
+error_batch_size = int(error_batch_size)
 class ErrorProcessor(Thread):
     def __init__(self, event):
         Thread.__init__(self)

@@ -83,9 +83,10 @@ const HeaderStyles = (theme) => ({
     },
   },
   styledMenu1: {
-    padding: "9px",
-    marginTop: "10px",
+   // padding: "9px",
+    //marginTop: "10px",
     boxShadow: "0px 3px 6px #00000029 !important",
+    minWidth: "142px"
   },
   profileName: {
     marginLeft: "0.5rem",

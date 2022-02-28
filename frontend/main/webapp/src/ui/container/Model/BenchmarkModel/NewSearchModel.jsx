@@ -39,15 +39,16 @@ const NewSearchModel = () => {
   const filter = useSelector((state) => state.BenchmarkSearch);
 
   const type = ModelTask.map((task) => task.value);
-  const [value, setValue] = useState(type.indexOf(filter.type));
+  const [value, setValue] = useState(0);
   const { searchValue } = useSelector((state) => state.BenchmarkList);
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
+  const [rowsPerPage, setRowsPerPage] = useState(9)
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    makeModelSearchAPICall(ModelTask[newValue].value);
+    makeModelSearchAPICall(ModelTask.filter(val => val.value !== 'sts')[newValue].value);
     dispatch(SearchList(""));
     dispatch({ type: "CLEAR_FILTER_BENCHMARK" });
   };
@@ -76,6 +77,8 @@ const NewSearchModel = () => {
   const apply = (data) => {
     handleClose();
     dispatch(FilterModel(data, C.SEARCH_BENCHMARK));
+    dispatch({ type: C.BENCHMARK_PAGE_NO, payload: 0 });
+
   };
 
   const handleClick = (data) => {
@@ -89,11 +92,16 @@ const NewSearchModel = () => {
 
   const handleSearch = (event) => {
     dispatch(SearchList(event.target.value));
+    dispatch({ type: C.BENCHMARK_PAGE_NO, payload: 0 })
+  };
+  const handleRowsPerPageChange = (e, page) => {
+    setRowsPerPage(page.props.value);
   };
 
-  const handleChangePage = (e, page) => {
-    dispatch({ type: "BENCHMARK_PAGE_NO", payload: page });
-  };
+
+  // const handleChangePage = (e, page) => {
+  //   dispatch({ type: "BENCHMARK_PAGE_NO", payload: page });
+  // };
 
   return (
     <Tab
@@ -102,7 +110,8 @@ const NewSearchModel = () => {
       searchValue={searchValue}
       handleChange={handleChange}
       value={value}
-      tabs={ModelTask.filter((val) => val.value !== "sts")}
+      tabs={ModelTask.filter(val => val.value !== 'sts')}
+      // showFilter={ModelTask[value].value}
     >
       <TabPanel value={value} index={value}>
         {searchModelResult.filteredData.length ? (
@@ -110,11 +119,16 @@ const NewSearchModel = () => {
             <GridView
               data={searchModelResult}
               handleCardClick={handleClick}
-              rowsPerPage={9}
+              //  rowsPerPage={9}
               page={searchModelResult.page}
-              handleChangePage={handleChangePage}
+              // handleChangePage={handleChangePage}
+              rowsPerPage={rowsPerPage}
+              handleRowsPerPageChange={handleRowsPerPageChange}
+              onPageChange={(e, page) => dispatch({ type: C.BENCHMARK_PAGE_NO, payload: page })}
             />
+           
           </Suspense>
+        
         ) : (
           <div
             style={{

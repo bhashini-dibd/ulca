@@ -59,7 +59,7 @@
           ]
    },
    "inferenceEndPoint": {
-          "callbackUrl": "https://www.cfilt.iitb.ac.in/en-hi",
+          "callbackUrl": "https://www.cfilt.iitb.ac.in/en-hi-v1",
           "schema": {
              "taskType": "translation",
              "request": {
