@@ -69,7 +69,7 @@ const SpeechToSpeechOptions = (props) => {
               <img
                 src={Start}
                 alt=""
-                onClick={handleStartRecording}
+                onClick={() => handleStartRecording()}
                 style={{ cursor: "pointer" }}
               />{" "}
             </div>
@@ -97,25 +97,21 @@ const SpeechToSpeechOptions = (props) => {
                 id="sample"
               ></audio>
             ) : (
-              <audio
-                src="sample"
-                style={{ minWidth: "100%" }}
-                controls
-                id="sample"
-              ></audio>
+              <></>
             )}
           </div>
+
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Grid container spacing={1}>
-            <Grid item xs={12} sm={12} md={10} lg={10} xl={10}>
+            <Grid item xs={8} sm={12} md={10} lg={10} xl={10}>
               <Typography variant={"caption"}>
                 {translate("label.maxDuration")}
               </Typography>
             </Grid>
             <Grid
               item
-              xs={12}
+              xs={4}
               sm={12}
               md={2}
               lg={2}
@@ -230,27 +226,32 @@ const SpeechToSpeechOptions = (props) => {
               xl={12}
               style={{ position: "relative" }}
             >
-              <textarea
-                disabled
-                placeholder={placeholder}
-                rows={2}
-                value={value}
-                className={classes.textArea}
-                style={{
-                  color: "grey",
-                  border: "1px solid grey",
-                  margin: 0,
-                  padding: 0,
-                }}
-              />
+              <div>
+                <textarea
+                  disabled
+                  placeholder={placeholder}
+                  rows={2}
+                  value={value}
+                  className={classes.textArea}
+                  style={{
+                    color: "grey",
+                    border: "1px solid grey",
+                    margin: 0,
+                    paddingTop: '20px',
+                  }}
+                />
+              </div>
               <IconButton
-                style={{ position: "absolute", top: "0", right: "10px" }}
-                onClick={()=>handleCopyClick(prop)}
+                style={{ position: "absolute", top: "0", right: "0", }}
+                onClick={() => handleCopyClick(prop)}
               >
-                <Tooltip title="copy">
+
+                <Tooltip title="copy-paste" style={{ marginBottom: "10px" }}>
                   <FileCopyIcon color="primary" fontSize="small" />
                 </Tooltip>
+
               </IconButton>
+
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <textarea
@@ -428,7 +429,8 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
             <AppBar className={classes.appTab} position="static">
-              <Tabs value={index} onChange={handleTabChange}>
+              <Tabs value={index} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant={"scrollable"} scrollButtons={"on"}
+              >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
               </Tabs>
@@ -446,8 +448,9 @@ const SpeechToSpeechOptions = (props) => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+
         {renderTabs()}
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>

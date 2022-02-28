@@ -7,11 +7,11 @@ const GridView = (props) => {
   const {
     classes,
     data,
-    rowChange,
     page,
-    handleChangePage,
+    handleRowsPerPageChange,
     rowsPerPage,
     handleCardClick,
+    onPageChange,
   } = props;
   const renderGrid = () => {
     return (
@@ -41,10 +41,10 @@ const GridView = (props) => {
         component="div"
         count={data.filteredData.length}
         page={page}
-        onChangePage={handleChangePage}
+        onRowsPerPageChange={handleRowsPerPageChange}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[9, 12, 18]}
-        onChangeRowsPerPage={rowChange}
+        onPageChange={onPageChange}
       />
     </>
   );

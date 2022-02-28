@@ -38,12 +38,12 @@ function TabPanel(props) {
 const NewSearchModel = () => {
   const filter = useSelector((state) => state.searchFilter);
   const type = ModelTask.map((task) => task.value);
-  const [value, setValue] = useState(type.indexOf(filter.type));
+  const [value, setValue] = useState(0);
   const { searchValue } = useSelector((state) => state.BenchmarkList);
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
-
+  const [rowsPerPage, setRowsPerPage] = useState(9)
   const handleChange = (event, newValue) => {
     setValue(newValue);
     makeModelSearchAPICall(ModelTask[newValue].value);
@@ -91,8 +91,8 @@ const NewSearchModel = () => {
     dispatch(SearchList(event.target.value));
   };
 
-  const handleChangePage = (e, page) => {
-    dispatch({ type: "EXPLORE_MODEL_PAGE_NO", payload: page });
+  const handleRowsPerPageChange = (e, page) => {
+    setRowsPerPage(page.props.value);
   };
 
   const renderTabs = () => {
@@ -105,9 +105,10 @@ const NewSearchModel = () => {
           <GridView
             data={searchModelResult}
             handleCardClick={handleClick}
-            rowsPerPage={9}
             page={searchModelResult.page}
-            handleChangePage={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            handleRowsPerPageChange={handleRowsPerPageChange}
+            onPageChange={(e,page) => dispatch({ type: "EXPLORE_MODEL_PAGE_NO", payload: page })}
           />
         </Suspense>
       );

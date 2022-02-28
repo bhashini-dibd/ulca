@@ -113,7 +113,7 @@ const SpeechToSpeech = () => {
   };
 
   const handleStartRecording = (data) => {
-    setData("");
+    setData(null);
     setAudio("");
     setOutput({ asr: "", translation: "" });
     setTextArea({ asr: "", translation: "" });
@@ -153,8 +153,10 @@ const SpeechToSpeech = () => {
   };
 
   const onStopRecording = (data) => {
-    setData(data.url);
-    setBase(blobToBase64(data));
+    if (data && data.hasOwnProperty('url')) {
+      setData(data.url);
+      setBase(blobToBase64(data));
+    }
   };
 
   useEffect(() => {
@@ -498,6 +500,7 @@ const SpeechToSpeech = () => {
         </Grid>
         <Divider />
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+
           <SpeechToSpeechOptions
             Start={Start}
             Stop={Stop}

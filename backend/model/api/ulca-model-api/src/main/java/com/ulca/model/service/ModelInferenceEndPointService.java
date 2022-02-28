@@ -43,11 +43,16 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.swagger.model.ASRRequest;
 import io.swagger.model.ASRResponse;
+import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.ImageFile;
 import io.swagger.model.ImageFiles;
+import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.OCRRequest;
 import io.swagger.model.OCRResponse;
+import io.swagger.model.OneOfAsyncApiDetailsAsyncApiPollingSchema;
+import io.swagger.model.OneOfAsyncApiDetailsAsyncApiSchema;
 import io.swagger.model.OneOfInferenceAPIEndPointSchema;
+import io.swagger.model.PollingRequest;
 import io.swagger.model.Sentence;
 import io.swagger.model.Sentences;
 import io.swagger.model.TTSConfig;
@@ -81,10 +86,12 @@ public class ModelInferenceEndPointService {
 	@Autowired
 	FileUtility fileUtility;
 
-	public OneOfInferenceAPIEndPointSchema validateCallBackUrl(String callBackUrl,
-			OneOfInferenceAPIEndPointSchema schema)
+	public InferenceAPIEndPoint validateSyncCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
 			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
 			TranslationRequest request = translationInference.getRequest();
@@ -187,7 +194,6 @@ public class ModelInferenceEndPointService {
 			
 			OkHttpClient newClient = getTrustAllCertsClient();
 			
-			
 			Response httpResponse = newClient.newCall(httpRequest).execute();
 			
 			//Response httpResponse = client.newCall(httpRequest).execute();
@@ -200,14 +206,193 @@ public class ModelInferenceEndPointService {
 			log.info("logging tts inference point response" + responseJsonStr);
 		}
 		
-		return schema;
+		inferenceAPIEndPoint.setSchema(schema);
+		return inferenceAPIEndPoint;
 
 	}
 
-	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
-			ModelComputeRequest compute)
+	public InferenceAPIEndPoint validateAsyncUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
+		String pollingUrl = asyncApiDetails.getPollingUrl();
+		Integer pollInterval = asyncApiDetails.getPollInterval();
+		
+		OneOfAsyncApiDetailsAsyncApiSchema asyncApiSchema  = asyncApiDetails.getAsyncApiSchema();
+		OneOfAsyncApiDetailsAsyncApiPollingSchema asyncApiPollingSchema = asyncApiDetails.getAsyncApiPollingSchema();
+		
+		if (asyncApiSchema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationAsyncInference")) {
+			io.swagger.model.TranslationAsyncInference translationAsyncInference = (io.swagger.model.TranslationAsyncInference) asyncApiSchema;
+			TranslationRequest request = translationAsyncInference.getRequest();
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			String responseJsonStr = httpResponse.body().string();
+			
+			PollingRequest response = objectMapper.readValue(responseJsonStr, PollingRequest.class);
+			translationAsyncInference.setResponse(response);
+			
+			while(true) {
+				Thread.sleep(pollInterval);
+				String pollRequestJson = objectMapper.writeValueAsString(response);
+				Response pollHttpResponse = okHttpClientPostCall(pollRequestJson, pollingUrl);
+				if(pollHttpResponse.code() == 202) {
+					continue;
+				}else if(pollHttpResponse.code() == 200){
+					
+					String pollResponseJsonStr = pollHttpResponse.body().string();
+					log.info(pollResponseJsonStr);
+					TranslationResponse translationResponse = objectMapper.readValue(pollResponseJsonStr, TranslationResponse.class);
+					io.swagger.model.TranslationAsyncPollingInference translationAsyncPollingInference = (io.swagger.model.TranslationAsyncPollingInference)asyncApiPollingSchema;
+					
+					translationAsyncPollingInference.setRequest(response);
+					translationAsyncPollingInference.setResponse(translationResponse);
+					
+					asyncApiDetails.setAsyncApiPollingSchema(translationAsyncPollingInference);
+					
+					break;
+					
+				}else {
+					throw new ModelComputeException( "Model Submit Failed","Model Submit Failed", HttpStatus.INTERNAL_SERVER_ERROR);
+					
+				}
+			}
+			asyncApiDetails.asyncApiSchema(translationAsyncInference);
+			inferenceAPIEndPoint.setAsyncApiDetails(asyncApiDetails);
+			
+		}
+		return inferenceAPIEndPoint;
+	}
+	
+	public Response okHttpClientPostCall(String requestJson, String url) throws IOException, KeyManagementException, NoSuchAlgorithmException{
+		
+		//OkHttpClient client = new OkHttpClient();
+		
+		/*
+		 OkHttpClient client = new OkHttpClient.Builder()
+		 		 .readTimeout(60, TimeUnit.SECONDS)
+			      .build();
+		*/	      
+		
+		
+		RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
+		Request httpRequest = new Request.Builder()
+		        .url(url)
+		        .post(body)
+		        .build();
+		
+		OkHttpClient newClient = getTrustAllCertsClient();
+		Response httpResponse = newClient.newCall(httpRequest).execute();
+		
+		
+		return httpResponse;
+	}
+	
+	public InferenceAPIEndPoint validateCallBackUrl(InferenceAPIEndPoint inferenceAPIEndPoint)
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+
+		
+		if(inferenceAPIEndPoint.isIsSyncApi()) {
+			inferenceAPIEndPoint = validateSyncCallBackUrl(inferenceAPIEndPoint);
+		}else {
+			inferenceAPIEndPoint = validateAsyncUrl(inferenceAPIEndPoint);
+		}
+		
+		return inferenceAPIEndPoint;
+		
+	}
+	
+	public ModelComputeResponse computeAsyncModel(InferenceAPIEndPoint inferenceAPIEndPoint, ModelComputeRequest compute) throws KeyManagementException, NoSuchAlgorithmException, IOException, InterruptedException {
+		ModelComputeResponse response = new ModelComputeResponse();
+		
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
+		String pollingUrl = asyncApiDetails.getPollingUrl();
+		Integer pollInterval = asyncApiDetails.getPollInterval();
+		
+		log.info("callBackUrl :: " + callBackUrl);
+		log.info("pollingUrl :: " + pollingUrl);
+		
+		OneOfAsyncApiDetailsAsyncApiSchema asyncApiSchema  = asyncApiDetails.getAsyncApiSchema();
+		//OneOfAsyncApiDetailsAsyncApiPollingSchema asyncApiPollingSchema = asyncApiDetails.getAsyncApiPollingSchema();
+		
+		if (asyncApiSchema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationAsyncInference")) {
+			io.swagger.model.TranslationAsyncInference translationAsyncInference = (io.swagger.model.TranslationAsyncInference) asyncApiSchema;
+			
+			TranslationRequest request = translationAsyncInference.getRequest();
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+			
+			Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
+			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			String responseJsonStr = httpResponse.body().string();
+			
+			log.info("********* responseJson ****** " + responseJsonStr);
+			
+			PollingRequest pollingRequest = objectMapper.readValue(responseJsonStr, PollingRequest.class);
+			translationAsyncInference.setResponse(pollingRequest);
+			
+			while(true) {
+				Thread.sleep(pollInterval);
+				String pollRequestJson = objectMapper.writeValueAsString(pollingRequest);
+				Response pollHttpResponse = okHttpClientPostCall(pollRequestJson, pollingUrl);
+				if(pollHttpResponse.code() == 202) {
+					log.info("translation in progress");		
+					continue;
+				}else if(pollHttpResponse.code() == 200){
+					
+					String pollResponseJsonStr = pollHttpResponse.body().string();
+					log.info(pollResponseJsonStr);
+					TranslationResponse translationResponse = objectMapper.readValue(pollResponseJsonStr, TranslationResponse.class);
+					
+					if(translationResponse.getOutput() == null || translationResponse.getOutput().size() <= 0 || translationResponse.getOutput().get(0).getTarget().isBlank()) {
+						throw new ModelComputeException("Translation Model Compute Response Empty","Translation Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
+					}
+					response.setOutputText(translationResponse.getOutput().get(0).getTarget());
+					break;
+					
+				}else {
+					log.info("compute model failed");
+					throw new ModelComputeException("Translation Model Compute Failed", "Translation Model Compute Failed",  HttpStatus.valueOf(pollHttpResponse.code()));
+					
+				}
+			}
+		}
+		return response;
+	}
+	
+	public ModelComputeResponse compute(InferenceAPIEndPoint inferenceAPIEndPoint, ModelComputeRequest computeRequest)
+	
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+		
+		if(inferenceAPIEndPoint.isIsSyncApi()) {
+			return computeSyncModel(inferenceAPIEndPoint, computeRequest);
+		}else {
+			return computeAsyncModel(inferenceAPIEndPoint, computeRequest);
+		}
+		
+		
+	}
+	public ModelComputeResponse computeSyncModel(InferenceAPIEndPoint inferenceAPIEndPoint, ModelComputeRequest compute)
+			
 			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
 
+		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+		
 		ModelComputeResponse response = new ModelComputeResponse();
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
@@ -377,7 +562,9 @@ public class ModelInferenceEndPointService {
 		
 		return response;
 	}
-	
+	/*
+	 * compute for OCR model
+	 */
 	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
 			String  imagePath)
 			throws URISyntaxException, IOException {
