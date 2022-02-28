@@ -126,7 +126,9 @@ const NewSearchModel = () => {
               handleRowsPerPageChange={handleRowsPerPageChange}
               onPageChange={(e, page) => dispatch({ type: C.BENCHMARK_PAGE_NO, payload: page })}
             />
+           
           </Suspense>
+        
         ) : (
           <div
             style={{
