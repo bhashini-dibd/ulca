@@ -355,6 +355,7 @@ const DataSet = (theme) => ({
     justifyContent: "left",
     fontSize: "1.125rem",
     fontWeight: "500 !important",
+   
     "&:hover": {
       backgroundColor: "white",
     },
@@ -638,12 +639,36 @@ const DataSet = (theme) => ({
        },
 
   },
+  formControl:{
+    margin: theme.spacing(1),
+    minWidth: 120,
+    //marginLeft:"5px",
+    fontSize:"16px",
+   backgroundColor:" transparent!",
+   fontFamily:"Rowdies",
+   color:"gray",
+   
+  },
   gridcard:{
   "@media (max-width:959px)": {
      //  marginLeft: "20%",
      // justifyContent:"center"
     },
-  }
+  },
+  genderdropdown:{
+  
+   fontSize:"16px",
+   backgroundColor:" transparent!",
+  // fontFamily:"Rowdies",
+   color:"gray",
+  
+   
+ 
+    },
+  
+
+
+  
 });
 
 export default DataSet;

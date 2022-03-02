@@ -4,38 +4,34 @@ import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
 
-class SpecialCharacterCheck(BaseValidator):
+class RemoveDuplicateWhitespaces(BaseValidator):
     """
-    Removes special characters from beginning
+    Removes all additional whitespaces
     """
-    # TO-DO : Check and add punctuation at the end(which punctuation to add ?)
-
-    def remove_special(self, txt):
-        if txt[0].isalnum():
-            return txt
-
-        return self.remove_special(txt[1:])
 
     def execute(self, request):
-        log.info('----Removing special characters from beginning----')
+        log.info('----Removing extra whitespaces----')
         try:
             if request["datasetType"] == dataset_type_parallel:
-                request['record']['sourceText'] = self.remove_special(request['record']['sourceText'])
-                request['record']['targetText'] = self.remove_special(request['record']['targetText'])
+                request['record']['sourceText'] = " ".join(request['record']['sourceText'].split())
+                request['record']['targetText'] = " ".join(request['record']['targetText'].split())
+
             if request["datasetType"] == dataset_type_asr:
-                request['record']['text'] = self.remove_special(request['record']['text'])
+                request['record']['text'] = " ".join(request['record']['text'].split())
+
             if request["datasetType"] == dataset_type_ocr:
-                request['record']['groundTruth'] = self.remove_special(request['record']['groundTruth'])
+                request['record']['groundTruth'] = " ".join(request['record']['groundTruth'].split())
+
             if request["datasetType"] == dataset_type_monolingual:
-                request['record']['text'] = self.remove_special(request['record']['text'])
+                request['record']['text'] = " ".join(request['record']['text'].split())
+
             if request["datasetType"] == dataset_type_tts:
-                request['record']['text'] = self.remove_special(request['record']['text'])
+                request['record']['text'] = " ".join(request['record']['text'].split())
 
             return super().execute(request)
         except Exception as e:
-            log.exception(f"Exception while removing special characters: {str(e)}")
-            return {"message": "Exception while removing special characters", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
-
+            log.exception(f"Exception while removing extra whitespaces: {str(e)}")
+            return {"message": "Exception while removing extra whitespaces", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
 # Log config
 dictConfig({

@@ -40,6 +40,9 @@ if isinstance(validate_dedup_redis_db, str):
 record_expiry_in_sec = os.environ.get('ULCA_VALIDATE_RECORD_EXPIRY_IN_SEC', 172800)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
 
+user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'pseudo')
+user_mode_real = os.environ.get('USER_MODE_REAL', 'real')
+
 ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")

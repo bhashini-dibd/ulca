@@ -91,12 +91,12 @@ const NewSearchModel = () => {
 
   const handleSearch = (event) => {
     dispatch(SearchList(event.target.value));
+    dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: 0 })
   };
 
   const handleRowsPerPageChange = (e, page) => {
     setRowsPerPage(page.props.value);
   };
-
   const renderTabs = () => {
     if (ModelTask[value].value === "sts") {
       return <SpeechToSpeech />;
@@ -112,7 +112,9 @@ const NewSearchModel = () => {
             handleRowsPerPageChange={handleRowsPerPageChange}
             onPageChange={(e, page) => dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: page })}
           />
+           
         </Suspense>
+        
       );
     return (
       <div
