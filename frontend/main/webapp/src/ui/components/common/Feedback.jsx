@@ -27,10 +27,10 @@ import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
       
    
    <DialogTitle variant="outlined"  align="center" >
-    <ThumbUpOutlinedIcon />
-   < ThumbDownAltOutlinedIcon/>
+    <ThumbUpOutlinedIcon  style={{marginRight:"30px",border:"1px solid #BBBEC1 " ,padding:"10px",borderRadius:"25px"}} />
+   < ThumbDownAltOutlinedIcon style={{border:"1px solid #BBBEC1 " ,padding:"10px",borderRadius:"25px"}}/>
   </DialogTitle>
-    <Typography  align="center" variant="h4"  style={{color:"#3498DB"}}>  Suggest an edit </Typography>
+    <Typography  align="center" variant="subtitle1"  style={{color:"#283BD1"}}>  Suggest an edit </Typography>
    <Typography align="center" variant="body" component="div"  style={{marginTop:"20px"}}>
       Your feedback will be used to help </Typography><Typography variant="body" style={{marginLeft:"70px",marginBottom:"30px"}}> to improve the product</Typography> 
       

@@ -344,6 +344,7 @@ const SpeechToSpeechOptions = (props) => {
             clearTranslation,
             "#E9F7EF"
           )}
+          {console.log(  output.asr,"kkkkk")}
         </Grid>
       </Grid>
     );

@@ -32,6 +32,7 @@ const HostedInferASR = (props) => {
     language,
   } = props;
   const history = useHistory();
+  const [data , setData] =useState(null)
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
   const [error, setError] = useState({ url: "" });
@@ -103,6 +104,7 @@ const HostedInferASR = (props) => {
         } else {
           if (status) {
             setTargetAudio(rsp_data.data.source);
+           
           } else {
             setSnackbarInfo({
               ...snackbar,
@@ -134,6 +136,12 @@ const HostedInferASR = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
+
+
+  const childData = (text) => {
+    console.log(text,"ttttttt")
+    setData(text)
+  }
  
   return (
     <>
@@ -150,13 +158,16 @@ const HostedInferASR = (props) => {
           sm={12}
           xs={12}
         >
+          
           <AudioRecord
             submitter={props.submitter}
             modelId={modelId}
             handleApicall={handleApicall}
             language={language}
             streaming={props.streaming}
+            getchildData={childData}
           />
+          {console.log(props.submitter)}
         </Grid>
         <Grid
           className={classes.grid}
@@ -174,19 +185,13 @@ const HostedInferASR = (props) => {
              </Typography>
             </Grid>
     
-            {console.log(targetAudio.length,"zzz")}
-        {/* {targetAudio.length > 0 && (<> */}
-         <CardContent id="asrCardOutput">{targetAudio}</CardContent>
-         <SimpleDialogDemo/>
-         {/* </>)} */}
+          { console.log(data,"llllll")}
+          <CardContent id="asrCardOutput"></CardContent>
+          {data && <div style={{marginTop:"158px"}}> 
         
-           
-         
-            
-           
-            
-           
-          </Card>
+         <SimpleDialogDemo/>
+          </div>} 
+        </Card>
         </Grid>
 
         <Typography variant={"body1"}>
