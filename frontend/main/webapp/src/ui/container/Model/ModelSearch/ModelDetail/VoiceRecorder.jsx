@@ -31,7 +31,7 @@ import { useRef } from "react";
 
 const AudioRecord = (props) => {
   const streaming = props.streaming;
-  const { classes, language, modelId } = props;
+  const { classes, language, modelId ,} = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
@@ -69,16 +69,20 @@ const AudioRecord = (props) => {
     if (typeof timerRef.current === "number") {
       clearTimeout(timerRef.current);
     }
+
     if (vakyanshEndPoint.length) {
       setStreamingState("start");
       const output = document.getElementById("asrCardOutput");
+      {console.log( output,"aaaaaaaaa")}
       output.innerText = "";
+     
       setData("");
       const { code } = vakyanshEndPoint[0];
       streaming.connect(code, languageCode, function (action, id) {
         timerRef.current = setTimeout(() => {
           if (streaming.isStreaming) handleStop();
         }, 61000);
+        
         setStreamingState("listen");
         setRecordAudio(RecordState.START);
         if (action === SocketStatus.CONNECTED) {
@@ -198,7 +202,7 @@ const AudioRecord = (props) => {
             <div className={classes.center}>
               <img
                 src={Start}
-                alt=""
+                alt="" 
                 onClick={() => handleStart()}
                 style={{ cursor: "pointer" }}
               />{" "}

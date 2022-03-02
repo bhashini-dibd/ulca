@@ -15,9 +15,11 @@ import {
   IconButton,
   Tooltip,
   FormControl,
- 
+  
   
 } from "@material-ui/core";
+import SimpleDialogDemo from "../../../../components/common/Feedback";
+//import ThumbsUpDownOutlinedIcon from '@mui/icons-material/ThumbsUpDownOutlined';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FileCopyIcon from "@material-ui/icons/FileCopy";
@@ -60,7 +62,7 @@ const SpeechToSpeechOptions = (props) => {
   } = props;
   
   const renderVoiceRecorder = () => {
-    console.log(genderValue,"aaaaaaa")
+   
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -97,7 +99,7 @@ const SpeechToSpeechOptions = (props) => {
               style={{ display: "none" }}
             />
           </div>
-          <div className={classes.centerAudio}>
+          <div className={classes.centerAudio} style={{height: "50px"}}>
             {data ? (
               <audio
                 src={data}
@@ -128,6 +130,7 @@ const SpeechToSpeechOptions = (props) => {
               className={classes.flexEndStyle}
             >
               <Button
+              style={{}}
                 color="primary"
                 variant="contained"
                 size={"small"}
@@ -285,6 +288,9 @@ const SpeechToSpeechOptions = (props) => {
               xl={10}
               className={classes.flexEndStyle}
             >
+              <div style={{marginRight:"400px"}}>
+               <SimpleDialogDemo/>
+               </div>
               <Button
                 variant="outlined"
                 size="small"
@@ -349,33 +355,44 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
             {`${translate("label.output")}`}
+            
           </Typography>
-        </Grid>
+        </Grid >
+        
         <CardContent
           style={{
-            display: "flex",
-            justifyContent: "center",
+           justifyContent: "center",
             alignItems: "center",
             position: "relative",
             top: "25%",
           }}
         >
           {audio ? (
+         <div>
             <audio
               style={{
                 width: "100%",
-                display: "flex",
+               
                 justifyContent: "center",
                 alignContent: "center",
               }}
               src={audio}
               controls
             ></audio>
+          <div style={{marginTop:"10%"}} >
+        <SimpleDialogDemo/>
+        </div>
+           </div>
           ) : (
             <></>
+           
           )}
-        </CardContent>
-      </Card>
+           
+         </CardContent>
+        
+        
+       
+         </Card>
     );
   };
 
@@ -486,9 +503,11 @@ const SpeechToSpeechOptions = (props) => {
     <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderTabs()}
+     
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        {renderOutput()}
+        {renderOutput() }
+        
       </Grid>
       {audio ? (
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>

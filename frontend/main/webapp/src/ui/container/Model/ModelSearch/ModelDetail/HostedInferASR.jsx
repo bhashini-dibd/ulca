@@ -6,6 +6,7 @@ import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
 import Spinner from "../../../../components/common/Spinner";
+import SimpleDialogDemo from "../../../../components/common/Feedback";
 import {
   Grid,
   Typography,
@@ -133,6 +134,7 @@ const HostedInferASR = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
+ 
   return (
     <>
       <Grid container>
@@ -168,10 +170,22 @@ const HostedInferASR = (props) => {
           <Card className={classes.asrCard}>
             <Grid container className={classes.cardHeader}>
               <Typography variant="h6" className={classes.titleCard}>
-                {translate("label.output")}
-              </Typography>
+                {translate("label.output")} 
+             </Typography>
             </Grid>
-            <CardContent id="asrCardOutput">{targetAudio}</CardContent>
+    
+            {console.log(targetAudio.length,"zzz")}
+        {/* {targetAudio.length > 0 && (<> */}
+         <CardContent id="asrCardOutput">{targetAudio}</CardContent>
+         <SimpleDialogDemo/>
+         {/* </>)} */}
+        
+           
+         
+            
+           
+            
+           
           </Card>
         </Grid>
 
@@ -247,7 +261,11 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            <CardContent>{target}</CardContent>
+          {target.length > 0 && (<><CardContent>{target}</CardContent>
+            <div style={{marginTop:"39%"}}>
+            <SimpleDialogDemo/>
+            </div></>)}
+            
           </Card>
         </Grid>
       </Grid>

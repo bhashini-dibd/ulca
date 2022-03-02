@@ -8,6 +8,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import Spinner from "../../../../components/common/Spinner";
 import { getLanguageName } from "../../../../../utils/getLabel";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
+import SimpleDialogDemo from "../../../../components/common/Feedback";
 import {
   Grid,
   Typography,
@@ -318,19 +319,25 @@ console.log("fffffffffffff",modelId, sourceText,task)
         </CardContent>
         <CardContent
           style={{
-            display: "flex",
+           display:"flex",
             justifyContent: "center",
             padding: "8vh",
           }}
         >
           {audio ? (
+            <>
             <audio controls>
               <source src={audio}></source>
             </audio>
+           </>
           ) : (
             <></>
+           
           )}
+          
         </CardContent>
+        {audio && <div style={{marginTop:"12%"}}>
+             <SimpleDialogDemo/> </div>}
       </Card>
       {snackbar.open && (
         <Snackbar

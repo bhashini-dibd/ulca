@@ -62,7 +62,8 @@ const DataSet = (theme) => ({
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
-    "@media (max-width:400px)": {
+    marginTop:"10px",
+   "@media (max-width:400px)": {
      paddingTop:"18px"
     },
   },
@@ -609,9 +610,10 @@ const DataSet = (theme) => ({
     
   },
   flexEndStyle: {
-    display: "flex",
+     display: "flex",
     justifyContent: "flex-end",
-    "@media (max-width:400px)": {
+    position:"relative",
+  "@media (max-width:400px)": {
    marginBottom:"20px"
     },
 
