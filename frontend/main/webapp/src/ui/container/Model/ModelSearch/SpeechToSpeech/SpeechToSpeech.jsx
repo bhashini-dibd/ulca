@@ -1,4 +1,3 @@
-
 import { Divider, Grid } from "@material-ui/core";
 import SpeechToSpeechFilter from "./SpeechToSpeechFilter";
 import SpeechToSpeechOptions from "./SpeechToSpeechOptions";
@@ -15,13 +14,14 @@ import Stop from "../../../../../assets/stopIcon.svg";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import ComputeAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import { Language } from "../../../../../configs/DatasetItems";
+import useRecorder from "../useRecorder";
 
 const SpeechToSpeech = () => {
+  let [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
   const dispatch = useDispatch();
   const { asr, tts, translation, sourceLanguage, targetLanguage } = useSelector(
     (state) => state.getBulkModelSearch
   );
-  const [gender,setGender] = useState("female")
   const [data, setData] = useState("");
   const [url, setUrl] = useState("");
   const [recordAudio, setRecordAudio] = useState("");
@@ -45,7 +45,19 @@ const SpeechToSpeech = () => {
     tts: "",
   });
 
-  
+  useEffect(() => {
+    if (audioURL) {
+      const audio = window.URL.createObjectURL(audioURL);
+      var reader = new window.FileReader();
+      reader.readAsDataURL(audioURL);
+      reader.onloadend = function () {
+        let base64 = reader.result;
+        console.log(base64);
+        setBase(base64);
+      }
+      setAudio(audio)
+    }
+  }, [audioURL])
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
@@ -129,12 +141,8 @@ const SpeechToSpeech = () => {
         variant: "error",
       });
     } else {
-      setRecordAudio(RecordState.START);
+      startRecording();
     }
-  };
-
-  const handleStopRecording = (value) => {
-    setRecordAudio(RecordState.STOP);
   };
 
   useEffect(() => {
@@ -145,22 +153,6 @@ const SpeechToSpeech = () => {
   const makeModelSearchAPICall = (type, src, tgt) => {
     const apiObj = new SearchModel(type, src, tgt, true);
     dispatch(APITransport(apiObj));
-  };
-
-  const blobToBase64 = (blob) => {
-    var reader = new FileReader();
-    reader.readAsDataURL(blob.blob);
-    reader.onloadend = function () {
-      let base64data = reader.result;
-      setBase(base64data);
-    };
-  };
-
-  const onStopRecording = (data) => {
-    if (data && data.hasOwnProperty('url')) {
-      setData(data.url);
-      setBase(blobToBase64(data));
-    }
   };
 
   useEffect(() => {
@@ -309,11 +301,7 @@ const SpeechToSpeech = () => {
       }
     });
   };
-const genderHandler =(value)=>{
-  setGender(value)
 
-}
-console.log('value', gender)
   const setSnackbarError = (errorMsg) => {
     setSnackbarInfo({
       ...snackbar,
@@ -384,7 +372,7 @@ console.log('value', gender)
                 "",
                 "",
                 filter.tts.inferenceEndPoint,
-                gender
+                "female"
               );
               fetch(obj.apiEndPoint(), {
                 method: "post",
@@ -521,14 +509,13 @@ console.log('value', gender)
             setError={setError}
             makeTTSAPICall={makeTTSAPICall}
             makeTranslationAPICall={makeTranslationAPICall}
-            onStopRecording={onStopRecording}
             handleStartRecording={handleStartRecording}
-            handleStopRecording={handleStopRecording}
+            handleStopRecording={stopRecording}
             handleSubmit={handleUrlSubmit}
-            AudioReactRecorder={AudioReactRecorder}
-            recordAudio={recordAudio}
+            isRecording={isRecording}
             handleCompute={handleCompute}
-            audio={audio}
+            audio={audioURL}
+            audioURI={audio}
             output={output}
             handleTextAreaChange={handleTextAreaChange}
             textArea={textArea}
@@ -537,8 +524,6 @@ console.log('value', gender)
             index={index}
             handleTabChange={handleTabChange}
             handleCopyClick={handleCopyClick}
-            gender={genderHandler}
-            genderValue={gender}
           />
         </Grid>
       </Grid>

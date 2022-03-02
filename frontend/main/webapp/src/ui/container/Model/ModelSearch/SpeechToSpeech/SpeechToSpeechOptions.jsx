@@ -1,4 +1,3 @@
-import { useState ,useEffect} from "react";
 import {
   Grid,
   Card,
@@ -14,12 +13,7 @@ import {
   CardActions,
   IconButton,
   Tooltip,
-  FormControl,
- 
-  
 } from "@material-ui/core";
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { withStyles } from "@material-ui/styles";
 import { translate } from "../../../../../assets/localisation";
@@ -31,15 +25,14 @@ const SpeechToSpeechOptions = (props) => {
   const {
     classes,
     audio,
-    recordAudio,
-    AudioReactRecorder,
+    isRecording,
     Stop,
     handleStartRecording,
     Start,
     handleStopRecording,
     data,
+    setBase,
     handleCompute,
-    onStopRecording,
     url,
     error,
     handleSubmit,
@@ -55,21 +48,19 @@ const SpeechToSpeechOptions = (props) => {
     clearAsr,
     clearTranslation,
     handleCopyClick,
-    gender,
-    genderValue,
+    audioURI
   } = props;
-  
+
   const renderVoiceRecorder = () => {
-    console.log(genderValue,"aaaaaaa")
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          {recordAudio === "start" ? (
+          {isRecording ? (
             <div className={classes.center}>
               <img
                 src={Stop}
                 alt=""
-                onClick={() => handleStopRecording()}
+                onClick={handleStopRecording}
                 style={{ cursor: "pointer" }}
               />{" "}
             </div>
@@ -78,7 +69,7 @@ const SpeechToSpeechOptions = (props) => {
               <img
                 src={Start}
                 alt=""
-                onClick={() => handleStartRecording()}
+                onClick={handleStartRecording}
                 style={{ cursor: "pointer" }}
               />{" "}
             </div>
@@ -87,20 +78,13 @@ const SpeechToSpeechOptions = (props) => {
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <div className={classes.center}>
             <Typography style={{ height: "12px" }} variant="caption">
-              {recordAudio === "start" ? "Recording..." : ""}
+              {isRecording ? "Recording..." : ""}
             </Typography>{" "}
           </div>
-          <div style={{ display: "none" }}>
-            <AudioReactRecorder
-              state={recordAudio}
-              onStop={onStopRecording}
-              style={{ display: "none" }}
-            />
-          </div>
           <div className={classes.centerAudio}>
-            {data ? (
+            {!isRecording && audio ? (
               <audio
-                src={data}
+                src={audioURI}
                 style={{ minWidth: "100%" }}
                 controls
                 id="sample"
@@ -131,7 +115,7 @@ const SpeechToSpeechOptions = (props) => {
                 color="primary"
                 variant="contained"
                 size={"small"}
-                disabled={data ? false : true}
+                disabled={audio ? false : true}
                 onClick={() => handleCompute()}
               >
                 Convert
@@ -360,7 +344,7 @@ const SpeechToSpeechOptions = (props) => {
             top: "25%",
           }}
         >
-          {audio ? (
+          {!output ? (
             <audio
               style={{
                 width: "100%",
@@ -428,10 +412,8 @@ const SpeechToSpeechOptions = (props) => {
               color: "#2A61AD",
             },
           },
-        
         },
       },
-    
     });
 
   const renderTabs = () => {
@@ -440,34 +422,11 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
             <AppBar className={classes.appTab} position="static">
-              <Grid container>
-              <Grid md={9}>
-              <Tabs value={index} onChange={handleTabChange}   variant={"scrollable"} scrollButtons={"off"} >
+              <Tabs value={index} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant={"scrollable"} scrollButtons={"on"}
+              >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
-               
               </Tabs>
-              </Grid>
-              <Grid md={3}>
-              <FormControl className={classes.formControl}>
-               <Select  
-                 MenuProps={{
-                 anchorOrigin: {
-                 vertical: "bottom",
-                 horizontal: "left"
-              },
-                
-            getContentAnchorEl: null
-        }}  value={genderValue} className={classes.genderdropdown}    onChange={e => {gender ( (e.target.value).toLowerCase());
-         
-            
-          }} >
-               <MenuItem value="male">Male</MenuItem>
-               <MenuItem value="female">Female</MenuItem>
-              </Select>
-               </FormControl>
-               </Grid>
-               </Grid>
             </AppBar>
             <TabPanel value={index} index={0}>
               {renderVoiceRecorder()}
@@ -476,7 +435,6 @@ const SpeechToSpeechOptions = (props) => {
               {renderURLInput()}
             </TabPanel>
           </MuiThemeProvider>
-         
         </Grid>
       </Card>
     );
@@ -485,15 +443,16 @@ const SpeechToSpeechOptions = (props) => {
   return (
     <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+
         {renderTabs()}
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderOutput()}
       </Grid>
-      {audio ? (
+      {!output ? (
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h5" style={{ marginBottom: "1%" }}>
-            Intermediate Output 
+            Intermediate Output
           </Typography>
           {renderAccordion()}
         </Grid>
