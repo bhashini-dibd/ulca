@@ -243,7 +243,7 @@ const SpeechToSpeechOptions = (props) => {
                   value={value}
                   className={classes.textArea}
                   style={{
-                    color: "grey",
+                    color: "#404040",
                     border: "1px solid grey",
                     margin: 0,
                     paddingTop: '20px',
