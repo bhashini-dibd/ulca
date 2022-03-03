@@ -20,6 +20,7 @@ function App(props) {
   const [show, setShow] = useState(false);
   const [popUp, setPopup] = useState(true);
   const apiStatus = useSelector((state) => state.apiStatus);
+  const updateServiceWorker = useSelector(state => state.updateServiceWorker);
   const history = useHistory();
   const renderSpinner = () => {
     if (apiStatus.progress) {
@@ -59,9 +60,11 @@ function App(props) {
 
   window.addEventListener('scroll', e => {
     if (window.pageYOffset > 100 && !show) {
-        setShow(true);
+      setShow(true);
     }
   })
+
+  console.log(updateServiceWorker)
 
   return (
     <MuiThemeProvider theme={Theme}>

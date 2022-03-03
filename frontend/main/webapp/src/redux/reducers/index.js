@@ -28,6 +28,8 @@ import getUserDetails from "./Admin/UserDetails";
 import getMasterData from "./Common/getMasterData";
 import getModelDetails from "./Model/ModelSearch/GetModelDetail";
 import getBulkModelSearch from "../reducers/Model/ModelSearch/SpeechToSpeech";
+import updateServiceWorker from '../reducers/service-worker-redux';
+
 
 const index = {
   apiStatus,
@@ -60,6 +62,7 @@ const index = {
   getMasterData,
   getModelDetails,
   getBulkModelSearch,
+  updateServiceWorker
 };
 
 export default index;
