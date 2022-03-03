@@ -167,8 +167,7 @@ const HostedInferASR = (props) => {
             streaming={props.streaming}
             getchildData={childData}
           />
-          {console.log(props.submitter)}
-        </Grid>
+          </Grid>
         <Grid
           className={classes.grid}
           item
