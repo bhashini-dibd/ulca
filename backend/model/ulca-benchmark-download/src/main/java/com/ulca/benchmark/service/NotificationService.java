@@ -20,7 +20,7 @@ public class NotificationService {
 	
 	public void notifyBenchmarkComplete(String modelId, String modelName, String userId) {
 		JSONObject msg = new JSONObject();
-		msg.put("event", "dataset-submit-completed");
+		msg.put("event", "benchmark-run-completed");
 		msg.put("entityID", modelId);
 		msg.put("userID", userId);
 		
@@ -34,7 +34,7 @@ public class NotificationService {
 	
 	public void notifyBenchmarkFailed(String modelId, String modelName, String userId) {
 		JSONObject msg = new JSONObject();
-		msg.put("event", "dataset-submit-failed");
+		msg.put("event", "benchmark-run-failed");
 		msg.put("entityID", modelId);
 		msg.put("userID", userId);
 		
