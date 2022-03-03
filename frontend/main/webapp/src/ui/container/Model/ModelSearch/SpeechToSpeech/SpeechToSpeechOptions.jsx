@@ -1,3 +1,4 @@
+import { useState ,useEffect} from "react";
 import {
   Grid,
   Card,
@@ -13,7 +14,12 @@ import {
   CardActions,
   IconButton,
   Tooltip,
+  FormControl,
+ 
+  
 } from "@material-ui/core";
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { withStyles } from "@material-ui/styles";
 import { translate } from "../../../../../assets/localisation";
@@ -48,10 +54,13 @@ const SpeechToSpeechOptions = (props) => {
     handleTabChange,
     clearAsr,
     clearTranslation,
-    handleCopyClick
+    handleCopyClick,
+    gender,
+    genderValue,
   } = props;
-
+  
   const renderVoiceRecorder = () => {
+    console.log(genderValue,"aaaaaaa")
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -234,7 +243,7 @@ const SpeechToSpeechOptions = (props) => {
                   value={value}
                   className={classes.textArea}
                   style={{
-                    color: "grey",
+                    color: "#404040",
                     border: "1px solid grey",
                     margin: 0,
                     paddingTop: '20px',
@@ -419,8 +428,10 @@ const SpeechToSpeechOptions = (props) => {
               color: "#2A61AD",
             },
           },
+        
         },
       },
+    
     });
 
   const renderTabs = () => {
@@ -429,11 +440,34 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
             <AppBar className={classes.appTab} position="static">
-              <Tabs value={index} onChange={handleTabChange}   variant={"scrollable"} scrollButtons={"off"}
-              >
+              <Grid container>
+              <Grid md={9}>
+              <Tabs value={index} onChange={handleTabChange}   variant={"scrollable"} scrollButtons={"off"} >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
+               
               </Tabs>
+              </Grid>
+              <Grid md={3}>
+              <FormControl className={classes.formControl}>
+               <Select  
+                 MenuProps={{
+                 anchorOrigin: {
+                 vertical: "bottom",
+                 horizontal: "left"
+              },
+                
+            getContentAnchorEl: null
+        }}  value={genderValue} className={classes.genderdropdown}    onChange={e => {gender ( (e.target.value).toLowerCase());
+         
+            
+          }} >
+               <MenuItem value="male">Male</MenuItem>
+               <MenuItem value="female">Female</MenuItem>
+              </Select>
+               </FormControl>
+               </Grid>
+               </Grid>
             </AppBar>
             <TabPanel value={index} index={0}>
               {renderVoiceRecorder()}
@@ -442,6 +476,7 @@ const SpeechToSpeechOptions = (props) => {
               {renderURLInput()}
             </TabPanel>
           </MuiThemeProvider>
+         
         </Grid>
       </Card>
     );

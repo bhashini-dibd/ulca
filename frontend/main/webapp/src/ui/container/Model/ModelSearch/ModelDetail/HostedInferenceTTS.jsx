@@ -39,9 +39,15 @@ const StyledMenu = withStyles({})((props) => (
       vertical: "top",
       horizontal: "",
     }}
+    PaperProps={{  
+      style: {  
+        width: 140,  
+       
+      },  
+   }} 
     {...props}
   />
-));
+))
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -94,7 +100,7 @@ const HostedInference = (props) => {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   };
-
+console.log("fffffffffffff",modelId, sourceText,task)
   const handleCompute = () => {
     setLoading(true);
     setAudio(null);
@@ -154,8 +160,8 @@ const HostedInference = (props) => {
 
   const handleChange = (val) => {
     setGender(val);
-  };
-
+     };
+  
   const renderGenderDropDown = () => {
     return (
       <>
@@ -176,6 +182,7 @@ const HostedInference = (props) => {
           open={Boolean(anchorEl)}
           onClose={(e) => handleAnchorClose(e)}
           className={classes.styledMenu1}
+        
         >
           <MenuItem
             value={"Male"}
@@ -186,6 +193,7 @@ const HostedInference = (props) => {
               handleAnchorClose();
             }}
           >
+          
             <Typography variant={"body1"}>{"Male"}</Typography>
           </MenuItem>
           <MenuItem
@@ -220,11 +228,11 @@ const HostedInference = (props) => {
           <Grid container className={classes.cardHeader}>
             <Grid
               item
-              xs={8}
-              sm={8}
-              md={8}
-              lg={8}
-              xl={8}
+              xs={9}
+              sm={9}
+              md={9}
+              lg={9}
+              xl={9}
               className={classes.headerContent}
             >
               <Typography variant="h6" className={classes.hosted}>
@@ -233,15 +241,15 @@ const HostedInference = (props) => {
             </Grid>
             <Grid
               item
-              xs={3}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
+              xs={2}
+              sm={2}
+              md={2}
+              lg={2}
+              xl={2}
               className={classes.headerContent}
             >
               {renderGenderDropDown()}
-            </Grid>
+              </Grid>
           </Grid>
         </CardContent>
         <CardContent>

@@ -1,3 +1,4 @@
+
 import { Divider, Grid } from "@material-ui/core";
 import SpeechToSpeechFilter from "./SpeechToSpeechFilter";
 import SpeechToSpeechOptions from "./SpeechToSpeechOptions";
@@ -20,6 +21,7 @@ const SpeechToSpeech = () => {
   const { asr, tts, translation, sourceLanguage, targetLanguage } = useSelector(
     (state) => state.getBulkModelSearch
   );
+  const [gender,setGender] = useState("female")
   const [data, setData] = useState("");
   const [url, setUrl] = useState("");
   const [recordAudio, setRecordAudio] = useState("");
@@ -42,6 +44,8 @@ const SpeechToSpeech = () => {
     translation: "",
     tts: "",
   });
+
+  
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
@@ -305,7 +309,11 @@ const SpeechToSpeech = () => {
       }
     });
   };
+const genderHandler =(value)=>{
+  setGender(value)
 
+}
+console.log('value', gender)
   const setSnackbarError = (errorMsg) => {
     setSnackbarInfo({
       ...snackbar,
@@ -376,7 +384,7 @@ const SpeechToSpeech = () => {
                 "",
                 "",
                 filter.tts.inferenceEndPoint,
-                "female"
+                gender
               );
               fetch(obj.apiEndPoint(), {
                 method: "post",
@@ -529,6 +537,8 @@ const SpeechToSpeech = () => {
             index={index}
             handleTabChange={handleTabChange}
             handleCopyClick={handleCopyClick}
+            gender={genderHandler}
+            genderValue={gender}
           />
         </Grid>
       </Grid>
