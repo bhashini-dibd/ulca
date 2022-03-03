@@ -186,7 +186,7 @@ const HostedInferASR = (props) => {
             </Grid>
     
           { console.log(data,"llllll")}
-          <CardContent id="asrCardOutput"></CardContent>
+          <CardContent id="asrCardOutput">{targetAudio}</CardContent>
           {data && <div style={{marginTop:"158px"}}> 
         
          <SimpleDialogDemo/>

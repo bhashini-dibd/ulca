@@ -33,9 +33,7 @@ import SimpleDialogDemo from "../../../../components/common/Feedback";
 const AudioRecord = (props) => {
   const streaming = props.streaming;
   const { classes, language, modelId ,getchildData} = props;
- // const [text, setText] = useState();
-
-  const [recordAudio, setRecordAudio] = useState("");
+ const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
   const { languages, inferenceEndpoints } = useSelector(
@@ -131,8 +129,6 @@ const AudioRecord = (props) => {
           output.innerText = text;
           console.log(text,"wwwwww")
           getchildData(text);
-        
-
         },
         (status, error) => {
           // alert("Failed to punctuate");
