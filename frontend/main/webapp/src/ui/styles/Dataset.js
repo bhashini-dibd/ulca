@@ -355,6 +355,7 @@ const DataSet = (theme) => ({
     justifyContent: "left",
     fontSize: "1.125rem",
     fontWeight: "500 !important",
+   
     "&:hover": {
       backgroundColor: "white",
     },
@@ -603,7 +604,7 @@ const DataSet = (theme) => ({
     background: "transparent",
     border: "none",
     margin: 0,
-    padding: "0% 1vw",
+    padding: "0% 0% 0% 0%",
     color: "#3A3A3A",
     
   },
@@ -611,7 +612,8 @@ const DataSet = (theme) => ({
     display: "flex",
     justifyContent: "flex-end",
     "@media (max-width:400px)": {
-   marginBottom:"20px"
+   marginBottom:"20px",
+   
     },
 
   },
@@ -637,7 +639,44 @@ const DataSet = (theme) => ({
       
        },
 
-  }
+  },
+  formControl:{
+    margin: theme.spacing(1),
+    minWidth: 120,
+    paddingLeft:"85px",
+   fontSize:"16px",
+   backgroundColor:" transparent!",
+   fontFamily:"Rowdies",
+   color:"gray",
+   "@media (max-width:400px)": {
+    paddingLeft:0,
+ 
+   
+    
+     },
+
+   
+  },
+  gridcard:{
+  "@media (max-width:959px)": {
+     //  marginLeft: "20%",
+     // justifyContent:"center"
+    },
+  },
+  genderdropdown:{
+  
+   fontSize:"16px",
+   backgroundColor:" transparent!",
+  // fontFamily:"Rowdies",
+   color:"gray",
+  
+   
+ 
+    },
+  
+
+
+  
 });
 
 export default DataSet;

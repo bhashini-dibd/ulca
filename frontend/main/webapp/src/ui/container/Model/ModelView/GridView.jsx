@@ -27,6 +27,7 @@ const GridView = (props) => {
 
         </>
     }
+   
     return (
         <Paper className={classes.paper}>
             <div className={classes.gridHeader}>

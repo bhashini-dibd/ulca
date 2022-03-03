@@ -1,3 +1,4 @@
+import { useState ,useEffect} from "react";
 import {
   Grid,
   Card,
@@ -13,7 +14,12 @@ import {
   CardActions,
   IconButton,
   Tooltip,
+  FormControl,
+ 
+  
 } from "@material-ui/core";
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import { withStyles } from "@material-ui/styles";
 import { translate } from "../../../../../assets/localisation";
@@ -48,10 +54,13 @@ const SpeechToSpeechOptions = (props) => {
     handleTabChange,
     clearAsr,
     clearTranslation,
-    handleCopyClick
+    handleCopyClick,
+    gender,
+    genderValue,
   } = props;
-
+  
   const renderVoiceRecorder = () => {
+    console.log(genderValue,"aaaaaaa")
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -234,7 +243,7 @@ const SpeechToSpeechOptions = (props) => {
                   value={value}
                   className={classes.textArea}
                   style={{
-                    color: "grey",
+                    color: "#404040",
                     border: "1px solid grey",
                     margin: 0,
                     paddingTop: '20px',
@@ -277,6 +286,7 @@ const SpeechToSpeechOptions = (props) => {
               className={classes.flexEndStyle}
             >
               <Button
+              style={{color:"#707070"}}
                 variant="outlined"
                 size="small"
                 color="primary"
@@ -288,6 +298,7 @@ const SpeechToSpeechOptions = (props) => {
             </Grid>
             <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
               <Button
+               style={{color:"#707070"}}
                 variant="outlined"
                 size="small"
                 color="primary"
@@ -419,8 +430,10 @@ const SpeechToSpeechOptions = (props) => {
               color: "#2A61AD",
             },
           },
+        
         },
       },
+    
     });
 
   const renderTabs = () => {
@@ -428,20 +441,45 @@ const SpeechToSpeechOptions = (props) => {
       <Card className={classes.asrCard}>
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
-            <AppBar className={classes.appTab} position="static">
-              <Tabs value={index} onChange={handleTabChange} indicatorColor="primary" textColor="primary" variant={"scrollable"} scrollButtons={"on"}
-              >
+          <AppBar className={classes.appTab} position="static">
+              <Grid container>
+              <Grid  item xs={12} sm={12} md={12} lg={12} xl={12} >
+              <Tabs value={index} onChange={handleTabChange}   variant={"scrollable"} scrollButtons={"off"} >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
+                <Grid  item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <FormControl className={classes.formControl}>
+               <Select  
+                 MenuProps={{
+                 anchorOrigin: {
+                 vertical: "bottom",
+                 horizontal: "left"
+              },
+                
+            getContentAnchorEl: null
+        }}  value={genderValue} className={classes.genderdropdown}    onChange={e => {gender ( (e.target.value).toLowerCase());
+         
+            
+          }} >
+               <MenuItem value="male">Male</MenuItem>
+               <MenuItem value="female">Female</MenuItem>
+              </Select>
+               </FormControl>
+               </Grid>
               </Tabs>
+             
+              </Grid>
+             
+               </Grid>
             </AppBar>
-            <TabPanel value={index} index={0}>
+           <TabPanel value={index} index={0}>
               {renderVoiceRecorder()}
             </TabPanel>
             <TabPanel value={index} index={1}>
               {renderURLInput()}
             </TabPanel>
           </MuiThemeProvider>
+         
         </Grid>
       </Card>
     );
@@ -450,7 +488,6 @@ const SpeechToSpeechOptions = (props) => {
   return (
     <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-
         {renderTabs()}
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -459,7 +496,7 @@ const SpeechToSpeechOptions = (props) => {
       {audio ? (
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h5" style={{ marginBottom: "1%" }}>
-            Intermediate Output
+            Intermediate Output 
           </Typography>
           {renderAccordion()}
         </Grid>

@@ -152,16 +152,18 @@ const FilterBenchmark = (props) => {
             </FormGroup>
           </Grid>
         </Grid>
+       
         <Button
           color="primary"
           variant="contained"
           className={classes.applyBtn}
-          disabled={isDisabled()}
+          // disabled={isDisabled()}
           onClick={() => apply(selectedFilter)}
         >
           {" "}
           {translate("button.apply")}
         </Button>
+      
         <Button
           onClick={clearAll}
           variant="outlined"

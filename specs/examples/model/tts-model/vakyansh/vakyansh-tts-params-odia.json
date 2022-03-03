@@ -1,5 +1,5 @@
 {
-  "name": "Vakyansh TTS - Tamil",
+  "name": "Vakyansh TTS - Odia",
   "version": "v1.0",
   "description": "TTS Model trained using glow TTS vocoder and HiFi GAN",
   "refUrl": "https://github.com/Open-Speech-EkStep/vakyansh-models",
@@ -8,7 +8,7 @@
   },
   "languages": [
     {
-      "sourceLanguage": "ta"
+      "sourceLanguage": "or"
     }
   ],
   "license": "mit",
@@ -101,12 +101,12 @@
       "request": {
         "input": [
           {
-            "source": "நீங்கள் எப்படி இருக்கிறீர்கள்?"
+            "source": "ଆଜି ପାଗ ଖରାଦିନେ|"
           }
         ],
         "config": {
           "language": {
-            "sourceLanguage": "ta"
+            "sourceLanguage": "or"
           },
           "gender": "female"
         }

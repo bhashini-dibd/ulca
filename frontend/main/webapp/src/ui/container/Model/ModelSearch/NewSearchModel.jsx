@@ -76,6 +76,8 @@ const NewSearchModel = () => {
   const apply = (data) => {
     handleClose();
     dispatch(FilterModel(data, C.SEARCH_FILTER));
+    dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: 0 });
+
   };
 
   const handleClick = (data) => {
@@ -89,12 +91,12 @@ const NewSearchModel = () => {
 
   const handleSearch = (event) => {
     dispatch(SearchList(event.target.value));
+    dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: 0 })
   };
 
   const handleRowsPerPageChange = (e, page) => {
     setRowsPerPage(page.props.value);
   };
-
   const renderTabs = () => {
     if (ModelTask[value].value === "sts") {
       return <SpeechToSpeech />;
@@ -108,9 +110,11 @@ const NewSearchModel = () => {
             page={searchModelResult.page}
             rowsPerPage={rowsPerPage}
             handleRowsPerPageChange={handleRowsPerPageChange}
-            onPageChange={(e,page) => dispatch({ type: "EXPLORE_MODEL_PAGE_NO", payload: page })}
+            onPageChange={(e, page) => dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: page })}
           />
+           
         </Suspense>
+        
       );
     return (
       <div
