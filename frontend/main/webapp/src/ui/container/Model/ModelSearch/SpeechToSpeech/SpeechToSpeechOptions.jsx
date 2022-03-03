@@ -286,6 +286,7 @@ const SpeechToSpeechOptions = (props) => {
               className={classes.flexEndStyle}
             >
               <Button
+              style={{color:"#707070"}}
                 variant="outlined"
                 size="small"
                 color="primary"
@@ -297,6 +298,7 @@ const SpeechToSpeechOptions = (props) => {
             </Grid>
             <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
               <Button
+               style={{color:"#707070"}}
                 variant="outlined"
                 size="small"
                 color="primary"
@@ -439,16 +441,13 @@ const SpeechToSpeechOptions = (props) => {
       <Card className={classes.asrCard}>
         <Grid container className={classes.cardHeader}>
           <MuiThemeProvider theme={getTheme}>
-            <AppBar className={classes.appTab} position="static">
+          <AppBar className={classes.appTab} position="static">
               <Grid container>
-              <Grid md={9}>
+              <Grid  item xs={12} sm={12} md={12} lg={12} xl={12} >
               <Tabs value={index} onChange={handleTabChange}   variant={"scrollable"} scrollButtons={"off"} >
                 <Tab label={"Live Recording Inference"} />
                 <Tab label={"Batch Inference"} />
-               
-              </Tabs>
-              </Grid>
-              <Grid md={3}>
+                <Grid  item xs={12} sm={12} md={12} lg={12} xl={12}>
               <FormControl className={classes.formControl}>
                <Select  
                  MenuProps={{
@@ -467,9 +466,13 @@ const SpeechToSpeechOptions = (props) => {
               </Select>
                </FormControl>
                </Grid>
+              </Tabs>
+             
+              </Grid>
+             
                </Grid>
             </AppBar>
-            <TabPanel value={index} index={0}>
+           <TabPanel value={index} index={0}>
               {renderVoiceRecorder()}
             </TabPanel>
             <TabPanel value={index} index={1}>
