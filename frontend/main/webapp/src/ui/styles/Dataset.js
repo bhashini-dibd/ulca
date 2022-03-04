@@ -612,7 +612,8 @@ const DataSet = (theme) => ({
     display: "flex",
     justifyContent: "flex-end",
     "@media (max-width:400px)": {
-   marginBottom:"20px"
+   marginBottom:"20px",
+   
     },
 
   },
@@ -642,11 +643,18 @@ const DataSet = (theme) => ({
   formControl:{
     margin: theme.spacing(1),
     minWidth: 120,
-    //marginLeft:"5px",
-    fontSize:"16px",
+    paddingLeft:"85px",
+   fontSize:"16px",
    backgroundColor:" transparent!",
    fontFamily:"Rowdies",
    color:"gray",
+   "@media (max-width:400px)": {
+    paddingLeft:0,
+ 
+   
+    
+     },
+
    
   },
   gridcard:{

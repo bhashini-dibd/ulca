@@ -2,12 +2,13 @@ const HeaderStyles = (theme) => ({
   toolbar: {
     minHeight: "54px",
     maxWidth: "1272px",
-    width: "98%",
+    width: "100%",
     margin: "0 auto",
     display: "flex",
     alignItems: "center",
     padding: "0",
     boxSizing: "border-box",
+  
    
    
   },
