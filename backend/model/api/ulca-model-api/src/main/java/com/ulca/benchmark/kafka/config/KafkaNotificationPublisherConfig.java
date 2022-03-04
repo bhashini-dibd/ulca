@@ -1,4 +1,4 @@
-package com.ulca.benchmark.download.kafka.config;
+package com.ulca.benchmark.kafka.config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class KafkaBenchmarkErrorPublisherConfig {
+public class KafkaNotificationPublisherConfig {
 
 	@Value("${kafka.ulca.bootstrap.server.host}")
     private String bootstrapAddress;
 
 	@Bean
-    public ProducerFactory<String, String> benchmarkErrorProducerFactory() {
+    public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -29,8 +29,8 @@ public class KafkaBenchmarkErrorPublisherConfig {
     }
  
     @Bean
-    public KafkaTemplate<String, String> benchmarkErrorKafkaTemplate() {
-        return new KafkaTemplate<>(benchmarkErrorProducerFactory());
+    public KafkaTemplate<String, String> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
     }
 
 }
