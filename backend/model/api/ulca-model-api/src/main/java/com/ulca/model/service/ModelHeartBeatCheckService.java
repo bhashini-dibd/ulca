@@ -50,7 +50,7 @@ public class ModelHeartBeatCheckService {
 				String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 				OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 				try {
-					schema = modelInferenceEndPointService.validateCallBackUrl(callBackUrl, schema);
+					 modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 				} catch (KeyManagementException e) {
 					// TODO Auto-generated catch block
 					notificationService.notifyNodelHeartBeatFailure(model.getName());
