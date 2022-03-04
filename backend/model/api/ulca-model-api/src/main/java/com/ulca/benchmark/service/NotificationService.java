@@ -18,25 +18,11 @@ public class NotificationService {
 	private String notifierTopic;
 	
 	
-	public void notifyBenchmarkComplete(String modelId, String modelName, String userId) {
+	public void notifyNodelHeartBeatFailure( String modelName) {
 		JSONObject msg = new JSONObject();
-		msg.put("event", "benchmark-run-completed");
-		msg.put("entityID", modelId);
-		msg.put("userID", userId);
-		
-		JSONObject details = new JSONObject();
-		details.put("modelName", modelName);
-		msg.put("details", details);
-		
-		kafkaTemplate.send(notifierTopic, msg.toString());
-		
-	}
-	
-	public void notifyBenchmarkFailed(String modelId, String modelName, String userId) {
-		JSONObject msg = new JSONObject();
-		msg.put("event", "benchmark-run-failed");
-		msg.put("entityID", modelId);
-		msg.put("userID", userId);
+		msg.put("event", "inference-check-failed");
+		//msg.put("entityID", modelId);
+		//msg.put("userID", userId);
 		
 		JSONObject details = new JSONObject();
 		details.put("modelName", modelName);
