@@ -235,7 +235,12 @@ public class ModelService {
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getUploadedModel(modelFilePath);
 		
-		validateModel(modelObj);
+		if(modelObj != null) {
+			validateModel(modelObj);
+		}else {
+			throw new ModelValidationException("Model validation failed. Check uploaded file syntax");
+		}
+		
 		
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(new Date().toString());
