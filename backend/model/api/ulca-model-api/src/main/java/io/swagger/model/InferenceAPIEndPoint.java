@@ -28,7 +28,7 @@ public class InferenceAPIEndPoint   {
   @JsonProperty("schema")
   //@JsonInclude(content = Include.NON_NULL)
   //@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL) 
-  @JsonInclude(JsonInclude.Include.NON_NULL)
+ // @JsonInclude(JsonInclude.Include.NON_NULL)
   private OneOfInferenceAPIEndPointSchema schema = null;
 
   @JsonProperty("isSyncApi")
