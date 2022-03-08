@@ -30,10 +30,9 @@ MAIL_SETTINGS                           =   {
                                                 "MAIL_USE_TLS"  : False,
                                                 "MAIL_USE_SSL"  : True,
                                                 "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
-                                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxx')
-                                                #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','tempusermonday@gmail.com'),
-                                                #"MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','monday@911')
-                                            }
+                                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxx')                                               
+                                             }
+
 MAIL_SENDER                             =   os.environ.get('ULCA_SENDER_EMAIL','xxxxxxxxxx')
 
 #events
@@ -46,4 +45,4 @@ inference_check                         =   os.environ.get('ULCA_NOTIFIER_MD_INF
 
 
 #models
-receiver_email_ids                      =   os.environ.get('ULCA_USER_GROUP',"siddanth.shaiva@tarento.com")
+receiver_email_ids                      =   os.environ.get('ULCA_USER_GROUP',"ulca-dev@tarento.com")
