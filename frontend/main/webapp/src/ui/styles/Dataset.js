@@ -444,7 +444,7 @@ const DataSet = (theme) => ({
  
     modeldescription:{
     "@media (max-width:400px)": {
-     fontSize:" 1.14rem"  
+     fontSize:" 1.11rem"  
     },
   },
   mainTitle: { marginTop: "33px", marginLeft: "38px" },
