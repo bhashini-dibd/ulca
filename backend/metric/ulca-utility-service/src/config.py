@@ -13,10 +13,13 @@ MAIL_SETTINGS               =   {
                                 "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT','465')),
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
-                                "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxxx')
+                                #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
+                                #"MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxxx')
+                                "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','notifier.tester12@gmail.com'),
+                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','Welcome@123')
                                 }
-MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
+#MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
+MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','siddanth.shaiva@tarento.com')#
 
 receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"jainy.joy@tarento.com")
 ulca_email_group            =   os.environ.get('ULCA_EMAIL_GROUP','jainy.joy@tarento.com')
@@ -28,7 +31,8 @@ data_parallel               =   os.environ.get('DATA_SCHEMA', 'parallel-dataset'
 data_ocr                    =   os.environ.get('DATA_OCR', 'ocr-dataset')
 data_mono                   =   os.environ.get('DATA_MONO', 'monolingual-dataset') 
 data_asr                    =   os.environ.get('DATA_ASR', 'asr-dataset')
-data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabeled-dataset')  
+data_asr_unlabeled          =   os.environ.get('DATA_ASR_UNLABELED', 'asr-unlabeled-dataset') 
+data_tts                    =   os.environ.get('DATA_TTS', 'tts-dataset')
 
 process_db_schema           =   os.environ.get('PROCESS_DB','ulca-process-tracker')
 process_col                 =   os.environ.get('PROCESS_COL','ulca-pt-processes')
