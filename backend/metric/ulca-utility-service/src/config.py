@@ -13,16 +13,13 @@ MAIL_SETTINGS               =   {
                                 "MAIL_PORT"     : eval(os.environ.get('ULCA_EMAIL_SECURE_PORT','465')),
                                 "MAIL_USE_TLS"  : False,
                                 "MAIL_USE_SSL"  : True,
-                                #"MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
-                                #"MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxxx')
-                                "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','notifier.tester12@gmail.com'),
-                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','Welcome@123')
+                                "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
+                                "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxxx')
                                 }
-#MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
-MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','siddanth.shaiva@tarento.com')#
+MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
 
-receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"jainy.joy@tarento.com")
-ulca_email_group            =   os.environ.get('ULCA_EMAIL_GROUP','jainy.joy@tarento.com')
+receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"siddanth.shaiva@tarento.com")
+ulca_email_group            =   os.environ.get('ULCA_EMAIL_GROUP','siddanth.shaiva@tarento.com')
 
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
 process_connection_url      =   os.environ.get('ULCA_MONGO_CLUSTER', 'mongodb://localhost:27017')
