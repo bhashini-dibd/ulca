@@ -11,8 +11,8 @@ const DataSet = (theme) => ({
     margin: "17px auto",
     padding: "0",
     "@media (max-width:400px)": {
-      overflowX:"hidden",
-      width: "365px",
+      overflow:" hidden",
+      width: "360px",
       // padding: "2px"
   
      },
