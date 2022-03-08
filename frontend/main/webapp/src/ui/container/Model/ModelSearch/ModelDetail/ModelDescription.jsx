@@ -33,7 +33,7 @@ const ModelDescription = (props) => {
                 <Grid item xs={9} sm={9} md={9} lg={9} xl={9} style={{ display: 'flex', marginTop: "5px" }}>
                     {/* <Box sx={{ display: 'flex', flexDirection: 'row' }}> */}
                     <CardContent>
-                        <Typography component="div" variant="subtitle2" style={{ marginBottom: '0px' }}>
+                        <Typography component="div" variant="subtitle2" style={{ marginBottom: '0px' ,paddingLeft:"0px"}}>
                             {title}
                         </Typography>
                         {title !== 'Source URL' || para === "NA" ?

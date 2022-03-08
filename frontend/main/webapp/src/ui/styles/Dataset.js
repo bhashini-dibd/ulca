@@ -10,6 +10,13 @@ const DataSet = (theme) => ({
     width: "100%",
     margin: "17px auto",
     padding: "0",
+    "@media (max-width:400px)": {
+      overflowX:"hidden",
+      width: "365px",
+      // padding: "2px"
+  
+     },
+
   },
   title: {
     marginBottom: "6vh",
@@ -433,6 +440,12 @@ const DataSet = (theme) => ({
     marginTop: "20px",
     // padding: 0,
      
+  },
+ 
+    modeldescription:{
+    "@media (max-width:400px)": {
+     fontSize:" 1.14rem"  
+    },
   },
   mainTitle: { marginTop: "33px", marginLeft: "38px" },
   backButton: {
