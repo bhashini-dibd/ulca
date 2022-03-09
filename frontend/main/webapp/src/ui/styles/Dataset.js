@@ -155,7 +155,7 @@ const DataSet = (theme) => ({
       marginLeft: "-3.3rem"
      },
   },
-  iconStyle: { marginRight: ".5rem" , },
+  iconStyle: { marginRight: ".5rem"  },
   thumbsUpIcon: {
     margin: "24% 0 0 24%",
     fontSize: "3.7rem",
@@ -661,11 +661,8 @@ const DataSet = (theme) => ({
     "@media (max-width:400px)": {
       paddingLeft:"2px",
      paddingRight:"3px"
-     
-      
-       },
-
-  },
+     },
+ },
   formControl:{
     margin: theme.spacing(1),
     minWidth: 120,
@@ -676,13 +673,8 @@ const DataSet = (theme) => ({
    color:"gray",
    "@media (max-width:400px)": {
     paddingLeft:0,
- 
-   
-    
-     },
-
-   
   },
+},
   gridcard:{
   "@media (max-width:959px)": {
      //  marginLeft: "20%",
@@ -699,7 +691,12 @@ const DataSet = (theme) => ({
       wordBreak: " break-all",
 
     },
-  
+    textField:{   "@media (max-width:400px)": {
+      paddingTop:"15px",
+   
+     
+      
+       },}
 
 
   
