@@ -541,7 +541,17 @@ const DataSet = (theme) => ({
     "-webkit-line-clamp": "2",
     "-webkit-box-orient": "vertical",
     overflow: "hidden",
-  },
+    "@media (max-width:400px)": {
+      marginLeft:"-14px"  ,
+      fontSize:"12px"
+    
+     },
+    },
+  cardTitle:{
+    "@media (max-width:400px)": {
+      marginLeft:"-14px"  ,
+    },
+   },
   mainPaper: {
     border: "none",
   },

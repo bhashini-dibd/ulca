@@ -22,7 +22,7 @@ const ModelDescription = (props) => {
                  <Typography style={{ marginTop: '15px' }}><Link style={{ color: "#3f51b5", fontSize: '20px', }} variant="body2" href={para}>
                      {para}</Link></Typography>} */
         <Card sx={{ display: 'flex' }} style={{ minHeight: '100px', maxHeight: '100px', backgroundColor: ImageArray[index].color }}>
-            <Grid container>
+            <Grid container >
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3} style={{ display: 'flex', marginTop: "21px", justifyContent: 'center' }}>
                     <CardMedia
                         component="img"
@@ -30,12 +30,12 @@ const ModelDescription = (props) => {
                         image={ImageArray[index].imageUrl}
                     />
                 </Grid>
-                <Grid item xs={9} sm={9} md={9} lg={9} xl={9} style={{ display: 'flex', marginTop: "5px" }}>
+                <Grid item xs={9} sm={9} md={9} lg={9} xl={9} style={{ display: 'flex', marginTop: "5px" }}  className={classes.modelCard}>
                     {/* <Box sx={{ display: 'flex', flexDirection: 'row' }}> */}
                     <CardContent>
-                        <Typography component="div" variant="subtitle2" style={{ marginBottom: '0px' ,paddingLeft:"0px"}}>
+                        <Typography component="div" variant="subtitle2" style={{ marginBottom: '0px' ,paddingLeft:"0px" }} className={classes.cardTitle}>
                             {title}
-                        </Typography>
+                        </Typography  >
                         {title !== 'Source URL' || para === "NA" ?
                             <Typography variant="body2" color="text.secondary" className={classes.modelPara} >
                                 {(para[0]!== undefined) ? para.replace(para[0], para[0].toUpperCase()) : ""}
