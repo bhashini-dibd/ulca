@@ -687,14 +687,14 @@ const DataSet = (theme) => ({
     },
   },
   genderdropdown:{
-  
-   fontSize:"16px",
+  fontSize:"16px",
    backgroundColor:" transparent!",
   // fontFamily:"Rowdies",
    color:"gray",
-  
-   
- 
+  },
+    muiTable:{
+      wordBreak: " break-all",
+
     },
   
 
