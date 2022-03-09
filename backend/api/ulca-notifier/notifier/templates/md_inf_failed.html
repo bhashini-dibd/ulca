@@ -27,8 +27,21 @@
 			</tr>
 			  <tr>
 			  	<td style="background-color: #ECECF1; padding: 40px;">
-                    <p><a style="font-size: 14px; color: #0C0F0F; margin-bottom: 20px;">Dear User,</a></p>
-			    	<p style=" margin-bottom: 30px; font-size: 14px; line-height: 1.5; color: #0C0F0F;font-weight: 400;">Model {{modelName}} is currently unavailable for inference. Please try again later.</p>						
+                    <p><a style="font-size: 14px; color: #0C0F0F; margin-bottom: 20px;">Dear User, here are the details of the Model:</a></p>
+					<table>
+						<tr>
+							<th>Model Name</th>
+							<th>Task Type</th>
+							<th>callback Url</th>
+							<th>Request</th>
+						</tr>
+						<tr>
+							<td>{{modelName}}</td>
+							<td>{{taskType}}</td>
+							<td>{{callbackUrl}}</td>
+							<td>{{request}}</td>
+						</tr>
+					</table>
 				  </td>
 			  </tr>
 			  <tr>

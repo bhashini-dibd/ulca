@@ -29,7 +29,8 @@ class NotifierEvent:
                 template = 'md_inf_failed.html'
                 receiver_list = self.user_email
                 subject = StaticConfigs.MD_INFR_FAILED.value
-                template_vars = {"firstname":None,"activity_link":None,"datasetName":None,"datasetType":None,"modelName": data["details"]["modelName"]}
+                template_vars = {"firstname":None,"activity_link":None,"datasetName":None,"datasetType":None,"modelName": data["details"]["modelName"],
+                "taskType":data["details"]["taskType"],"callbackUrl":data["details"]["callbackUrl"],"request":data["details"]["request"]}
                 utils.generate_email_notification(template, template_vars,receiver_list,subject)
 
         except Exception as e:
