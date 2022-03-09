@@ -151,8 +151,11 @@ const DataSet = (theme) => ({
   buttonStyle: {
     marginLeft: "0.7rem",
     // borderRadius: "1rem",
+    "@media (max-width:400px)": {
+      marginLeft: "-3.3rem"
+     },
   },
-  iconStyle: { marginRight: ".5rem" },
+  iconStyle: { marginRight: ".5rem" , },
   thumbsUpIcon: {
     margin: "24% 0 0 24%",
     fontSize: "3.7rem",
