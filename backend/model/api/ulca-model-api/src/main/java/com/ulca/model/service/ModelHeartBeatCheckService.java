@@ -32,7 +32,7 @@ public class ModelHeartBeatCheckService {
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
 	
-	@Scheduled(cron = "0 0 */2 * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void notifyFailedModelHeartbeatCheck() {
 		
 		log.info("*******  start ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
@@ -50,6 +50,7 @@ public class ModelHeartBeatCheckService {
 				InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 				
 				if(inferenceAPIEndPoint != null && inferenceAPIEndPoint.getCallbackUrl() != null) {
+					
 					if(!inferenceAPIEndPoint.getCallbackUrl().isBlank() && !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())) {
 						checkedUrl.add(inferenceAPIEndPoint.getCallbackUrl());
 						String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
