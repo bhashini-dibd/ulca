@@ -46,21 +46,35 @@ public class ModelHeartBeatCheckService {
 		
 		for(ModelExtended model : list) {
 			
-			InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
-			
-			if(!inferenceAPIEndPoint.getCallbackUrl().isBlank() && !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())) {
-				checkedUrl.add(inferenceAPIEndPoint.getCallbackUrl());
-				String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+			try {
+				InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 				
-				try {
-					modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
-				} catch (Exception e) {
+				if(inferenceAPIEndPoint != null && inferenceAPIEndPoint.getCallbackUrl() != null) {
+					if(!inferenceAPIEndPoint.getCallbackUrl().isBlank() && !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())) {
+						checkedUrl.add(inferenceAPIEndPoint.getCallbackUrl());
+						String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+						
+						try {
+							modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+						} catch (Exception e) {
+							heartBeatFailedModelList.add(model);
+							log.info("heartBeat Failed " + model.getName() + " :: " + callBackUrl);
+							e.printStackTrace();
+						}
+						
+					}
+				}else {
 					heartBeatFailedModelList.add(model);
-					log.info("heartBeat Failed " + model.getName() + " :: " + callBackUrl);
-					e.printStackTrace();
+					log.info("heartBeat Failed " + model.getName() + " reason :: model InferenceAPIEndPoint not defined ");
 				}
 				
+			}catch(Exception e) {
+				
+				heartBeatFailedModelList.add(model);
+				log.info("heartBeat Failed " + model.getName() + " reason :: " + e.getMessage());
+				e.printStackTrace();
 			}
+			
 		}
 		if(heartBeatFailedModelList.size() > 0) {
 			notificationService.notifyNodelHeartBeatFailure(heartBeatFailedModelList);
