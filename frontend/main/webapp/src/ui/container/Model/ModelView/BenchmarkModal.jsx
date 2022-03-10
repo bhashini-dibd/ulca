@@ -242,7 +242,7 @@ const BenchmarkModal = (props) => {
     ) => {
       return (
         <Grid container>
-          <Grid item xs={11} sm={11} md={11} lg={11} xl={11}>
+          <Grid item xs={10} sm={11} md={11} lg={11} xl={11}>
             <CustomPagination
               count={count}
               page={page}
@@ -255,7 +255,7 @@ const BenchmarkModal = (props) => {
           <Grid
             style={{ display: "flex", alignItems: "center" }}
             item
-            xs={1}
+            xs={2}
             sm={1}
             md={1}
             lg={1}
@@ -354,7 +354,10 @@ const BenchmarkModal = (props) => {
         MUIDataTableToolbar: {
           root: {
             "@media (max-width: 599.95px)": {
-              display: "flex !important",
+             // display: "flex !important",
+              whiteSpace:" nowrap",
+              marginBottom:"5px"
+             
             },
           },
         },
@@ -439,7 +442,7 @@ const BenchmarkModal = (props) => {
         },
         MuiToolbar: {
           root: {
-            marginTop: "18px",
+            marginTop: "8px",
           },
           gutters: {
             padding: "0",

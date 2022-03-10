@@ -693,13 +693,8 @@ const DataSet = (theme) => ({
     },
     textField:{   "@media (max-width:400px)": {
       paddingTop:"15px",
-   
-     
-      
-       },}
-
-
-  
+    },
+  },
 });
 
 export default DataSet;
