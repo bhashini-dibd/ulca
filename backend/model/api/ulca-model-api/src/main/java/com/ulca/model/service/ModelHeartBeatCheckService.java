@@ -35,12 +35,15 @@ public class ModelHeartBeatCheckService {
 	@Scheduled(cron = "0 0 */2 * * ?")
 	public void notifyFailedModelHeartbeatCheck() {
 		
-		log.info("Inside the cronjob");
+		log.info("*******  start ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
 		
 		List<String> checkedUrl = new ArrayList<String>();
 		
 		
 		List<ModelExtended> list = modelDao.findAll();
+		
+		List<ModelExtended> heartBeatFailedModelList  = new ArrayList<ModelExtended>();
+		
 		for(ModelExtended model : list) {
 			
 			InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
@@ -48,35 +51,22 @@ public class ModelHeartBeatCheckService {
 			if(!inferenceAPIEndPoint.getCallbackUrl().isBlank() && !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())) {
 				checkedUrl.add(inferenceAPIEndPoint.getCallbackUrl());
 				String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-				OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+				
 				try {
-					 modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
-				} catch (KeyManagementException e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
-				}catch (Exception e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
+					modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+				} catch (Exception e) {
+					heartBeatFailedModelList.add(model);
+					log.info("heartBeat Failed " + model.getName() + " :: " + callBackUrl);
 					e.printStackTrace();
 				}
 				
 			}
 		}
+		if(heartBeatFailedModelList.size() > 0) {
+			notificationService.notifyNodelHeartBeatFailure(heartBeatFailedModelList);
+		}
 		
-		
+		log.info("*******  end ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
 	}
 
 }
