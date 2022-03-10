@@ -39,7 +39,10 @@ public class NotificationService {
 		for(ModelExtended model : list) {
 			JSONObject details = new JSONObject();
 			details.put("modelName", model.getName());
-			details.put("taskType", model.getTask().getType().toString());
+			if(model.getTask() != null &&  model.getTask().getType() != null ) {
+				details.put("taskType", model.getTask().getType().toString());
+			}
+			
 			
 			if(model.getInferenceEndPoint() != null) {
 				details.put("callBackUrl",model.getInferenceEndPoint().getCallbackUrl());
