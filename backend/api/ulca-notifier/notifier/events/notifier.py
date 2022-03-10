@@ -23,14 +23,30 @@ class NotifierEvent:
     
 
     def model_check_notifier(self, data):
+        models_list = []
+        req_list = [] 
+        task_list = []
+        callbU_list = []
         try: 
             status = (data["event"].split('-'))[-1]
             if status == "failed":
                 template = 'md_inf_failed.html'
                 receiver_list = self.user_email
                 subject = StaticConfigs.MD_INFR_FAILED.value
-                template_vars = {"firstname":None,"activity_link":None,"datasetName":None,"datasetType":None,"modelName": data["details"]["modelName"],
-                "taskType":data["details"]["taskType"],"callbackUrl":data["details"]["callbackUrl"],"request":data["details"]["request"]}
+                for details in data["details"]:
+                    if "request" not in details.keys():
+                        details["request"] = 'N/A'
+                    if "taskType" not in details.keys():
+                        details["taskType"] = 'N/A'
+                    if "callBackUrl" not in details.keys():
+                        details["callBackUrl"] = 'N/A'
+                    models_list.append(details["modelName"])
+                    req_list.append(str(details["request"]))
+                    task_list.append(details["taskType"])
+                    callbU_list.append(details["callBackUrl"])
+                leng = len(models_list)
+                template_vars = {"firstname":None,"activity_link":None,"datasetName":None,"datasetType":None,"modelName": models_list,
+                "taskType":task_list,"callbackUrl":callbU_list,"request":req_list,"len":leng}
                 utils.generate_email_notification(template, template_vars,receiver_list,subject)
 
         except Exception as e:

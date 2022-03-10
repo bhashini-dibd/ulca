@@ -15,8 +15,10 @@ class NotifierResource(Resource):
         if req_criteria.get("event")==None :#or req_criteria.get("entityID")==None or req_criteria.get("userID")==None:
             log.info('Mandatory keys(event) is missing ')
             return {"message":"Mandatory key(event) is missing", "data": None,"count":None},400
-        log.info(f'Request received for notifiying user on entityID-{req_criteria["entityID"]}')
-        notifier    =   NotifierEvent(req_criteria["userID"])
+        #log.info(f'Request received for notifiying user on entityID-{req_criteria["entityID"]}')
+        if "userId" not in req_criteria.keys():
+            req_criteria['userId'] = None
+        notifier    =   NotifierEvent(req_criteria["userId"])
         if req_criteria["event"] in [ds_completed,ds_failed]:
             notifier.data_submission_notifier(req_criteria)
         if req_criteria["event"] in [bm_completed,bm_failed]:

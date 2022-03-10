@@ -26,21 +26,23 @@
 			  </td>
 			</tr>
 			  <tr>
-			  	<td style="background-color: #ECECF1; padding: 40px;">
-                    <p><a style="font-size: 14px; color: #0C0F0F; margin-bottom: 20px;">Dear User, here are the details of the Model:</a></p>
-					<table>
+			  	<td style="background-color: #ECECF1; padding: 60px;">
+                    <p><a style="font-size: 21px; color: #0C0F0F; margin-bottom: 40px;">Dear User, Models currently unavailable for inference:</a></p>
+					<table style="width: 100; border-collapse: separate;border-spacing: 0 1em;">
 						<tr>
-							<th>Model Name</th>
-							<th>Task Type</th>
-							<th>callback Url</th>
-							<th>Request</th>
+							<td>Model Name</td>
+							<td>Task Type</td>
+							<td> Request</td>
+							<td>callback Url</td>
 						</tr>
-						<tr>
-							<td>{{modelName}}</td>
-							<td>{{taskType}}</td>
-							<td>{{callbackUrl}}</td>
-							<td>{{request}}</td>
-						</tr>
+					{% for i in range(0,len) %}	
+					<tr>
+						<td>{{modelName[i]}}</td>
+						<td>{{taskType[i]}}</td>
+						<td>{{request[i]}}</td>
+						<td>{{callbackUrl[i]}}</td>
+					{% endfor %}	
+					</tr>
 					</table>
 				  </td>
 			  </tr>
