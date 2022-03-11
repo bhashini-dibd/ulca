@@ -37,51 +37,19 @@ public class NotificationService {
 		
 		JSONArray  detailsArray = new JSONArray();
 		for(ModelExtended model : list) {
-			JSONObject details = new JSONObject();
-			details.put("modelName", model.getName());
+			
 			if(model.getTask() != null &&  model.getTask().getType() != null ) {
+				JSONObject details = new JSONObject();
+				details.put("modelName", model.getName());
 				details.put("taskType", model.getTask().getType().toString());
-			}
-			
-			
-			if(model.getInferenceEndPoint() != null) {
-				details.put("callBackUrl",model.getInferenceEndPoint().getCallbackUrl());
 				
-				if(model.getInferenceEndPoint().getSchema() != null) {
+				if(model.getInferenceEndPoint() != null) {
+					details.put("callBackUrl",model.getInferenceEndPoint().getCallbackUrl());
+					detailsArray.put(details);
 					
-					OneOfInferenceAPIEndPointSchema schema = model.getInferenceEndPoint().getSchema();
-					
-					
-					if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
-						io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
-						TranslationRequest request = translationInference.getRequest();
-						JSONObject jo  = new JSONObject(request);
-						details.put("request",jo);
-						
-					}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
-						io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
-						ASRRequest request = asrInference.getRequest();
-						JSONObject jo  = new JSONObject(request);
-						details.put("request",jo);
-						
-					}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
-						io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
-						OCRRequest request = ocrInference.getRequest();
-						JSONObject jo  = new JSONObject(request);
-						details.put("request",jo);
-						
-					}if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
-						io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
-						TTSRequest request = ttsInference.getRequest();
-						JSONObject jo  = new JSONObject(request);
-						details.put("request",jo);
-						
-					}
 				}
 				
 			}
-			
-			detailsArray.put(details);
 			
 		}
 		

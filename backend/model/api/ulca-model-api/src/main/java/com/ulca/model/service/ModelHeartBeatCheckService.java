@@ -64,9 +64,6 @@ public class ModelHeartBeatCheckService {
 						}
 						
 					}
-				}else {
-					heartBeatFailedModelList.add(model);
-					log.info("heartBeat Failed " + model.getName() + " reason :: model InferenceAPIEndPoint not defined ");
 				}
 				
 			}catch(Exception e) {
