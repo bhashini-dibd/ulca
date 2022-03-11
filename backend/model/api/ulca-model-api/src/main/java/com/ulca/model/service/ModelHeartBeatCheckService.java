@@ -1,9 +1,5 @@
 package com.ulca.model.service;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +12,6 @@ import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.InferenceAPIEndPoint;
-import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,7 +27,7 @@ public class ModelHeartBeatCheckService {
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
 	
-	@Scheduled(cron = "0 0 */2 * * ?")
+	@Scheduled(cron = "0 0 */6 * * ?")
 	public void notifyFailedModelHeartbeatCheck() {
 		
 		log.info("*******  start ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
