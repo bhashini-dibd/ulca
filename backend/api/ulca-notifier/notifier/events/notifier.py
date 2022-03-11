@@ -110,7 +110,7 @@ class NotifierEvent:
                 template        =   'bm_run_failed.html'
                 subject         =   StaticConfigs.BM_RUN_FAILED.value
             link                =   f'{base_url}{model_bm_contribution_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None,"modelName":data["details"]["modelName"]}#
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
         except Exception as e:
