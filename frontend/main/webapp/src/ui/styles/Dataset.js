@@ -148,14 +148,22 @@ const DataSet = (theme) => ({
     marginBottom: ".6rem",
     boxSizing: "border-box",
   },
+  buttonStyles: {
+    marginLeft: "0.7rem",
+    // borderRadius: "1rem",
+    "@media (max-width:400px)": {
+      marginLeft: "-3rem"
+     },
+  },
   buttonStyle: {
     marginLeft: "0.7rem",
     // borderRadius: "1rem",
     "@media (max-width:400px)": {
-      marginLeft: "-3.3rem"
+      marginTop: "5px"
      },
-  },
-  iconStyle: { marginRight: ".5rem"  },
+   
+    },
+  iconStyle: { marginRight: ".5rem" ,   },
   thumbsUpIcon: {
     margin: "24% 0 0 24%",
     fontSize: "3.7rem",
@@ -203,6 +211,11 @@ const DataSet = (theme) => ({
       display: "block",
     
     },
+    "@media (max-width:400px)": {
+    marginLeft:"10px",
+    
+    },
+   
   },
   refreshGrid: {
     display:'block',
