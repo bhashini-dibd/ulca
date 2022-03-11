@@ -40,10 +40,11 @@ class NotifierEvent:
                         details["taskType"] = 'N/A'
                     if "callBackUrl" not in details.keys():
                         details["callBackUrl"] = 'N/A'
-                    models_list.append(details["modelName"])
-                    req_list.append(str(details["request"]))
-                    task_list.append(details["taskType"])
-                    callbU_list.append(details["callBackUrl"])
+                    if "Google" not in str(details["modelName"]) and "Bing" not in str(details["modelName"]):
+                        models_list.append(details["modelName"])
+                        req_list.append(str(details["request"]))
+                        task_list.append(details["taskType"])
+                        callbU_list.append(details["callBackUrl"])                 
                 leng = len(models_list)
                 template_vars = {"firstname":None,"activity_link":None,"datasetName":None,"datasetType":None,"modelName": models_list,
                 "taskType":task_list,"callbackUrl":callbU_list,"request":req_list,"len":leng}
