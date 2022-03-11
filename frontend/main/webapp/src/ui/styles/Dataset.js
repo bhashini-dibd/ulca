@@ -10,6 +10,13 @@ const DataSet = (theme) => ({
     width: "100%",
     margin: "17px auto",
     padding: "0",
+    "@media (max-width:400px)": {
+      overflow:" hidden",
+      width: "360px",
+      // padding: "2px"
+  
+     },
+
   },
   title: {
     marginBottom: "6vh",
@@ -142,11 +149,22 @@ const DataSet = (theme) => ({
     marginBottom: ".6rem",
     boxSizing: "border-box",
   },
+  buttonStyles: {
+    marginLeft: "0.7rem",
+    // borderRadius: "1rem",
+    "@media (max-width:400px)": {
+      marginLeft: "-3rem"
+     },
+  },
   buttonStyle: {
     marginLeft: "0.7rem",
     // borderRadius: "1rem",
-  },
-  iconStyle: { marginRight: ".5rem" },
+    "@media (max-width:400px)": {
+      marginTop: "5px"
+     },
+   
+    },
+  iconStyle: { marginRight: ".5rem" ,   },
   thumbsUpIcon: {
     margin: "24% 0 0 24%",
     fontSize: "3.7rem",
@@ -194,6 +212,11 @@ const DataSet = (theme) => ({
       display: "block",
     
     },
+    "@media (max-width:400px)": {
+    marginLeft:"10px",
+    
+    },
+   
   },
   refreshGrid: {
     display:'block',
@@ -435,6 +458,12 @@ const DataSet = (theme) => ({
     // padding: 0,
      
   },
+ 
+    modeldescription:{
+    "@media (max-width:400px)": {
+     fontSize:" 1.11rem"  
+    },
+  },
   mainTitle: { marginTop: "33px", marginLeft: "38px" },
   backButton: {
     boxShadow: "none",
@@ -529,7 +558,17 @@ const DataSet = (theme) => ({
     "-webkit-line-clamp": "2",
     "-webkit-box-orient": "vertical",
     overflow: "hidden",
-  },
+    "@media (max-width:400px)": {
+      marginLeft:"-14px"  ,
+      fontSize:"12px"
+    
+     },
+    },
+  cardTitle:{
+    "@media (max-width:400px)": {
+      marginLeft:"-14px"  ,
+    },
+   },
   mainPaper: {
     border: "none",
   },
@@ -612,9 +651,9 @@ const DataSet = (theme) => ({
   flexEndStyle: {
      display: "flex",
     justifyContent: "flex-end",
-    position:"relative",
-  "@media (max-width:400px)": {
-   marginBottom:"20px"
+    "@media (max-width:400px)": {
+   marginBottom:"20px",
+   
     },
 
   },
@@ -636,21 +675,20 @@ const DataSet = (theme) => ({
     "@media (max-width:400px)": {
       paddingLeft:"2px",
      paddingRight:"3px"
-     
-      
-       },
-
-  },
+     },
+ },
   formControl:{
     margin: theme.spacing(1),
     minWidth: 120,
-    //marginLeft:"5px",
-    fontSize:"16px",
+    paddingLeft:"85px",
+   fontSize:"16px",
    backgroundColor:" transparent!",
    fontFamily:"Rowdies",
    color:"gray",
-   
+   "@media (max-width:400px)": {
+    paddingLeft:0,
   },
+},
   gridcard:{
   "@media (max-width:959px)": {
      //  marginLeft: "20%",
@@ -658,19 +696,26 @@ const DataSet = (theme) => ({
     },
   },
   genderdropdown:{
-  
-   fontSize:"16px",
+  fontSize:"16px",
    backgroundColor:" transparent!",
   // fontFamily:"Rowdies",
    color:"gray",
-  
-   
- 
+  },
+    muiTable:{
+      wordBreak: " break-all",
+
     },
-  
-
-
-  
+    textField:{   "@media (max-width:400px)": {
+      paddingTop:"15px",
+    },
+  },
+  // tablesbody:{
+  //   "@media (max-width:400px)": {
+  //     marginLeft:" 137px",
+  //     width: "50%",
+  //     marginTop: "-19px"
+  //   }
+  // }
 });
 
 export default DataSet;

@@ -22,6 +22,11 @@ const GlobalStyles = (theme) => ({
     minHeight: "720px",
     display: "flex",
     flexDirection: "column",
+    // "@media (max-width:400px)": {
+    //  overflow:"hidden",
+    //  },
+   
+   
   },
   appBar: {
     backgroundColor: theme.palette.primary.dark,
@@ -47,12 +52,16 @@ const GlobalStyles = (theme) => ({
     height: "270px",
     background: `url(${BlueCard})`,
     backgroundRepeat: "no-repeat",
+    backgroundPosition: 'center',
+    display: 'flex', justifyContent: 'center'
   },
   card2: {
     marginBottom: "20px",
     height: "270px",
     background: `url(${GreenCard})`,
     backgroundRepeat: "no-repeat",
+    backgroundPosition:'center',
+    display: 'flex', justifyContent: 'center'
   },
   cardGrid: {
     marginTop: "20px",
@@ -63,6 +72,7 @@ const GlobalStyles = (theme) => ({
     height: "64px",
     backgroundColor: "white",
     maxWidth: "350px",
+    minWidth:'350px',
     width: "auto",
     display: "flex",
     alignItems: "center",
