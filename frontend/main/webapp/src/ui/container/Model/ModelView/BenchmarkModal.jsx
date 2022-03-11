@@ -173,6 +173,7 @@ const BenchmarkModal = (props) => {
       name: "datasetName",
       label: "Benchmark Dataset",
       options: {
+        setCellProps: () => ({ style: {width:"350px"}}),
         filter: false,
         sort: false,
       },
@@ -181,14 +182,16 @@ const BenchmarkModal = (props) => {
       name: "domain",
       label: "Domain",
       options: {
+        setCellProps: () => ({ style: {width:"350px"}}),
         filter: false,
         sort: false,
       },
     },
     {
       name: "description",
-      label: "Description",
+       label: "Description",
       options: {
+        setCellProps: () => ({ style: {width:"330px"}}),
         filter: false,
         sort: false,
       },
@@ -203,6 +206,7 @@ const BenchmarkModal = (props) => {
     {
       name: "Action",
       options: {
+        setCellProps: () => ({ style: {width:"350px"}}),
         filter: false,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -467,6 +471,11 @@ const BenchmarkModal = (props) => {
             "&$hover:hover:nth-child(even)": { backgroundColor: "#E9F7EF" },
           },
         },
+        MUIDataTableBodyCell: {
+          root: {
+             }
+        
+        }
       },
     });
 
@@ -505,7 +514,8 @@ const BenchmarkModal = (props) => {
       </div>
       <MuiThemeProvider theme={getMuiTheme()}>
         <MUIDataTable
-          id="benchmarkDataTable"
+      
+         id="benchmarkDataTable"
           options={options}
           data={data}
           columns={columns}

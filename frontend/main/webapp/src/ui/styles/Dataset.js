@@ -695,6 +695,13 @@ const DataSet = (theme) => ({
       paddingTop:"15px",
     },
   },
+  // tablesbody:{
+  //   "@media (max-width:400px)": {
+  //     marginLeft:" 137px",
+  //     width: "50%",
+  //     marginTop: "-19px"
+  //   }
+  // }
 });
 
 export default DataSet;
