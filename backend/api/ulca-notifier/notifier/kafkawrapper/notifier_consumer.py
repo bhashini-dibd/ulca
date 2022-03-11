@@ -38,7 +38,7 @@ def consumer_to_notify():
                     if data:
                         if "userId" not in data.keys():
                             data['userId'] = None
-                        notofier_event  =   NotifierEvent(data["userID"])
+                        notofier_event  =   NotifierEvent(data["userId"])
                         log.info(f'{prefix} | Received on Topic: {msg.topic} Partition: {str(msg.partition)}')
                         if data["event"] in [ds_completed,ds_failed]:
                             notofier_event.data_submission_notifier(data)
