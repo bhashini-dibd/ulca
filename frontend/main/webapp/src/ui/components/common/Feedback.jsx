@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
     heigth:"10px",
     color:"white",
     paddingLeft:"2px"
+    
   },
   feedbackTitle:{
     fontSize:"10px" ,
