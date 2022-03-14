@@ -88,7 +88,9 @@ const SpeechToSpeechOptions = (props) => {
                 style={{ minWidth: "100%" }}
                 controls
                 id="sample"
-              ></audio>
+              >
+                <source type="audio/wav" />
+              </audio>
             ) : (
               <></>
             )}
@@ -354,7 +356,9 @@ const SpeechToSpeechOptions = (props) => {
               }}
               src={audio}
               controls
-            ></audio>
+            >
+              <source type="audio/wav" />
+            </audio>
           ) : (
             <></>
           )}

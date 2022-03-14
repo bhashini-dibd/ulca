@@ -43,6 +43,14 @@ const useRecorder = () => {
 
 async function requestRecorder() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+    const rec = new MediaRecorder(stream);
+    let audioChunks = []
+    let blob = ""
+    rec.ondataavailable = e => {
+        audioChunks.push(e.data);
+        blob = new Blob(audioChunks, { type: "audio/mpeg-3" });
+        console.log(blob);
+    }
     return new MediaRecorder(stream);
 }
 export default useRecorder;
