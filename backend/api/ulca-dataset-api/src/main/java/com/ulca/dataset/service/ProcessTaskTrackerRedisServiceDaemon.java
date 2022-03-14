@@ -18,7 +18,6 @@ import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.TaskTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.service.NotificationService;
 
 import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
@@ -192,7 +191,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 						taskStatus, details.toString());
 				
 			}else {
-				log.info(" pseudo ingest success for serviceRequestNumber :: " + serviceRequestNumber + ". Real Ingest is being Triggered");
+				log.info("pseudo ingest success for serviceRequestNumber :: " + serviceRequestNumber + ". Real Ingest is being Triggered");
 				
 				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
 						taskStatus, details.toString());
@@ -322,14 +321,14 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 		if (v1 && v2 && v3) {
 
-			log.info("deleting for serviceRequestNumber :: " + serviceRequestNumber);
-
+			log.info("deleting redis entry for real ingest : serviceRequestNumber :: " + serviceRequestNumber);
+			log.info("serviceRequestNumber :: " + serviceRequestNumber + "ingestSuccess : "+ ingestSuccess + " ingestError : " + ingestError + " validateSuccess : " + validateSuccess + " validateError : "+ validateError + " publishSuccess : " + publishSuccess + " publishError : "+ publishError);
 			taskTrackerRedisDao.delete(serviceRequestNumber);
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
 			
 			String datasetName = val.get("datasetName");
 			String userId = val.get("userId");
-			log.info("sending notification to user. userId : " + userId + " datasetName : " + datasetName + " serviceRequestNumber : " + serviceRequestNumber);
+			log.info("sending dataset submit completion notification to User. userId : " + userId + " datasetName : " + datasetName + " serviceRequestNumber : " + serviceRequestNumber);
 			
 			notificationService.notifyDatasetComplete(serviceRequestNumber, datasetName, userId);
 			
