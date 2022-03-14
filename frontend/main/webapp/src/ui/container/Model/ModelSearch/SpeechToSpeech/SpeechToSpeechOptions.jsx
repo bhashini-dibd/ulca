@@ -289,7 +289,7 @@ const SpeechToSpeechOptions = (props) => {
               className={classes.flexEndStyle}
             >
               <div style={{marginRight:"400px"}}>
-               <SimpleDialogDemo/>
+              
                </div>
               <Button
               style={{color:"#707070"}}
@@ -382,7 +382,7 @@ const SpeechToSpeechOptions = (props) => {
               src={audio}
               controls
             ></audio>
-          <div style={{marginTop:"10%"}} >
+          <div style={{position:"absolute", right:"105px", top:"135px"}} >
         <SimpleDialogDemo/>
         </div>
            </div>

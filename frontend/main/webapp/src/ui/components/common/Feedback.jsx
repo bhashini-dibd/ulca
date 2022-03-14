@@ -1,67 +1,129 @@
 import React ,{useState}from 'react';
 import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
-import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
+import { makeStyles ,withStyles} from '@material-ui/core/styles';
+import Rating from '@material-ui/lab/Rating';
+import Popover from '@material-ui/core/Popover';
 
 
 
 
 
-  function SimpleDialog(props) {
-  const { onClose, selectedValue, open } = props;
+const useStyles = makeStyles((theme) => ({
+  typography: {
+    padding: theme.spacing(1),
+  },
+  MuiRatingLabel:{
+    paddingLeft:"19px"
+  },
+  feedbackbutton:{
+    backgroundColor:"#FD7F23",
+     position:"absolute" ,
+     height:"28px",
+     '&:hover':{
+      backgroundColor:"#FD7F23"
+     }
+  },
+  feedbackIcon:{
+    width:"12px",
+    heigth:"10px",
+    color:"white",
+    paddingLeft:"2px"
+  },
+  feedbackTitle:{
+    fontSize:"10px" ,
+    color:"white",
+    paddingLeft:"3px"
+  },
+  feedbacktypography:{
+    fontSize:"12px", 
+    borderBottom:"1px solid #ECE7E6  ", 
+    width:"225px", 
+    margin:"auto"
+  },
+  submitbutton:{
+    width:"70px",
+    margin:"10px 0px 0px 140px"
+  },
+  rating:{
+    margin:"auto", 
+    padding:"15px 20px 0px 89px"
+  },
+  
+  MuiRatinglabel:{
+    paddingRight:"10px"
+  }
+
+}));
+
+
+ function SimpleDialogDemo() {
+  const classes = useStyles();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [value, setValue] = React.useState(0);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleClose = () => {
-    onClose(selectedValue);
+    setAnchorEl(null);
   };
 
-  
-
-  return (
-    <Dialog onClose={handleClose} open={open}>
-     
-      <Typography align="center" style={{marginTop:"15px"}}>Are you satisfied with this <br/> translation?</Typography>
-      
-   
-   <DialogTitle variant="outlined"  align="center" >
-    <ThumbUpOutlinedIcon  style={{marginRight:"30px",border:"1px solid #BBBEC1 " ,padding:"10px",borderRadius:"25px"}} />
-   < ThumbDownAltOutlinedIcon style={{border:"1px solid #BBBEC1 " ,padding:"10px",borderRadius:"25px"}}/>
-  </DialogTitle>
-    <Typography  align="center" variant="subtitle1"  style={{color:"#283BD1"}}>  Suggest an edit </Typography>
-   <Typography align="center" variant="body" component="div"  style={{marginTop:"20px"}}>
-      Your feedback will be used to help </Typography><Typography variant="body" style={{marginLeft:"70px",marginBottom:"30px"}}> to improve the product</Typography> 
-      
-    </Dialog>
-  );
-}
-
-
-
-export default function SimpleDialogDemo() {
-  const [open, setOpen] = useState(false);
- 
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value) => {
-    setOpen(false);
-   
-  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   return (
     <div>
-       <Button  onClick={handleClickOpen}>
-       <ThumbsUpDownOutlinedIcon color="action" />
-      </Button>
-      <SimpleDialog
+      <Button  variant="contained" size="small" className={classes.feedbackbutton} onClick={handleClick}>
+       <ThumbUpOutlinedIcon  className={classes.feedbackIcon} />
+      < ThumbDownAltOutlinedIcon   className={classes.feedbackIcon}  />
+       <Typography variant="body2"  className={classes.feedbackTitle} > Feedback</Typography>
+       </Button>
+      <Popover
+        id={id}
         open={open}
+        anchorEl={anchorEl}
         onClose={handleClose}
-      />
+         anchorOrigin={{
+           vertical: '',
+          horizontal: 'right',
+         }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+      >
+       
+        
+     
+      <Typography className={classes.typography} align="center" style={{marginTop:"15px"}}>Are you satisfied with this <br/> translation?</Typography>
+     
+      
+        <Rating
+        className={classes.rating}
+          size="large"
+          name="simple-controlled"
+          value={value}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+         
+        />
+    
+     < Typography  className={classes.feedbacktypography} variant="body2"  > very bad   < Typography  variant="body2"  style={{ float: "right",fontSize:"12px"}} > very good </Typography>   </Typography>
+   
+  <Button variant="outlined" size="small"  color="primary"  className={classes.submitbutton}  >
+         Submit
+    </Button>
+   <Typography  className={classes.typography} align="center" variant="body2" component="div"  style={{fontSize:"12px"}}>
+      Your feedback will be used to help to improve the product</Typography> 
+      
+   
+      </Popover>
     </div>
   );
 }
+export default SimpleDialogDemo;
