@@ -63,7 +63,10 @@ class NotifierEvent:
                 template        =   'ds_submit_failed.html'
                 subject         =   StaticConfigs.DS_SUBMIT_FAILED.value
             link                =   f'{base_url}{ds_contribution_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None}
+            if "datasetName" not in data["details"].keys():
+                data["details"]["datasetName"] = 'unknown'
+            log.info(f'sgfsdfsc')
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None,"taskType":"N/A","callbackUrl":"N/A","len":"N/A"}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
             
@@ -107,7 +110,9 @@ class NotifierEvent:
                 template        =   'bm_run_failed.html'
                 subject         =   StaticConfigs.BM_RUN_FAILED.value
             link                =   f'{base_url}{model_bm_contribution_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None}
+            if "modelName" not in data["details"].keys():
+                data["details"]["modelName"] = 'unknown'
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None,"modelName":data["details"]["modelName"],"taskType":"N/A","callbackUrl":"N/A","len":"N/A"}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
         except Exception as e:
