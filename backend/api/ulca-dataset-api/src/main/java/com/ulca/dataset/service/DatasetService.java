@@ -141,12 +141,12 @@ public class DatasetService {
 				 future.addCallback(new ListenableFutureCallback<SendResult<String, FileDownload>>() {
 
 					    public void onSuccess(SendResult<String, FileDownload> result) {
-					    	log.info("message sent successfully to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
+					    	log.info("DatasetService :: datasetSubmit onSuccess message sent successfully to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
 					    }
 
 					    @Override
 					    public void onFailure(Throwable ex) {
-					    	log.info("Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
+					    	log.info("DatasetService :: datasetSubmit onFailure Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
 					    	log.info("Error message :: " + ex.getMessage());
 					    	
 					    	DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
@@ -180,7 +180,7 @@ public class DatasetService {
 				 
 			
 		}catch ( KafkaException ex) {
-			log.info("Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
+			log.info("DatasetService :: datasetSubmit Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
 			log.info("Error message :: " + ex.getMessage());
 			DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
 	    	error.setServiceRequestNumber(processTracker.getServiceRequestNumber());
@@ -205,7 +205,6 @@ public class DatasetService {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 				
 			throw ex;
 		}
