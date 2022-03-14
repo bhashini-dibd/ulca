@@ -56,17 +56,19 @@ const FilterBenchmark = (props) => {
           horizontal: "right",
         }}
       >
-        <Grid container className={classes.filterContainer}>
-          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+        <Grid container justify-content=" space-between"  className={classes.filterContainer}>
+          <Grid  item xs={6} sm={6} md={3} lg={3} xl={3} >
             <Typography variant="h6" className={classes.filterTypo}>
               Task
             </Typography>
             <FormGroup>
               {filter.task.map((type) => {
                 return (
+                  <Grid>
                   <FormControlLabel
                     control={
                       <Checkbox
+                      
                         checked={isChecked(type, "task")}
                         name={type}
                         color="primary"
@@ -75,18 +77,20 @@ const FilterBenchmark = (props) => {
                     }
                     label={type}
                   />
+                  </Grid>
                 );
               })}
             </FormGroup>
           </Grid>
-          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Grid item xs={6} sm={6} md={3} lg={3} xl={3} >
             <Typography variant="h6" className={classes.filterTypo}>
               Domain
             </Typography>
             <FormGroup>
               {filter.domain.map((type) => {
                 return (
-                  <FormControlLabel
+                  <Grid>
+                  <FormControlLabel 
                     control={
                       <Checkbox
                         checked={isChecked(type, "domain")}
@@ -99,17 +103,19 @@ const FilterBenchmark = (props) => {
                     }
                     label={type}
                   />
+                  </Grid>
                 );
               })}
             </FormGroup>
           </Grid>
-          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
             <Typography variant="h6" className={classes.filterTypo}>
               License
             </Typography>
             <FormGroup>
               {filter.license.map((type) => {
                 return (
+                  <Grid>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -121,19 +127,21 @@ const FilterBenchmark = (props) => {
                         }
                       />
                     }
-                    label={type}
+                    label={type }
                   />
+                  </Grid>
                 );
               })}
             </FormGroup>
           </Grid>
-          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+          <Grid item xs={6} sm={6} md={3} lg={3} xl={3}>
             <Typography variant="h6" className={classes.filterTypo}>
               Status
             </Typography>
             <FormGroup>
               {filter.status.map((type) => {
                 return (
+                  <Grid>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -147,6 +155,7 @@ const FilterBenchmark = (props) => {
                     }
                     label={type}
                   />
+                  </Grid>
                 );
               })}
             </FormGroup>

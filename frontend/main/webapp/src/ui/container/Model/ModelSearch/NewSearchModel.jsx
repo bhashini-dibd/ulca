@@ -53,9 +53,9 @@ const NewSearchModel = () => {
   const dispatch = useDispatch();
   const searchModelResult = useSelector((state) => state.searchModel);
   const history = useHistory();
-  useEffect(() => {
-    makeModelSearchAPICall(filter.type);
-  }, []);
+  // useEffect(() => {
+  //   makeModelSearchAPICall(filter.type);
+  // }, []);
 
   const makeModelSearchAPICall = (type) => {
     if (type !== "sts") {
