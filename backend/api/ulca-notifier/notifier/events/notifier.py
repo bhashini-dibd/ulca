@@ -23,6 +23,7 @@ class NotifierEvent:
     
 
     def model_check_notifier(self, data):
+        log.info(f'Request for notifying model unavailable updates received')
         models_list = []
         task_list = []
         callbU_list = []
@@ -64,8 +65,7 @@ class NotifierEvent:
                 subject         =   StaticConfigs.DS_SUBMIT_FAILED.value
             link                =   f'{base_url}{ds_contribution_endpoint}{data["entityID"]}'
             if "datasetName" not in data["details"].keys():
-                data["details"]["datasetName"] = 'unknown'
-            log.info(f'sgfsdfsc')
+                data["details"]["datasetName"] = 'N/A'
             template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None,"taskType":"N/A","callbackUrl":"N/A","len":"N/A"}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
@@ -111,7 +111,7 @@ class NotifierEvent:
                 subject         =   StaticConfigs.BM_RUN_FAILED.value
             link                =   f'{base_url}{model_bm_contribution_endpoint}{data["entityID"]}'
             if "modelName" not in data["details"].keys():
-                data["details"]["modelName"] = 'unknown'
+                data["details"]["modelName"] = 'N/A'
             template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None,"modelName":data["details"]["modelName"],"taskType":"N/A","callbackUrl":"N/A","len":"N/A"}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
