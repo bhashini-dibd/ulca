@@ -29,10 +29,6 @@ import com.ulca.model.response.BmProcessListByProcessIdResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
-
-
-
-
 @Slf4j
 @RestController
 @RequestMapping(value = "/ulca/apis/v0/benchmark")
@@ -60,7 +56,6 @@ public class BenchmarkController {
 
 	@PostMapping("/execute")
 	public ResponseEntity<ExecuteBenchmarkResponse> executeBenchmark(@Valid @RequestBody ExecuteBenchmarkRequest request) {
-			
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
 		
@@ -72,7 +67,6 @@ public class BenchmarkController {
 	@PostMapping("/execute/allMetric")
 	public ResponseEntity<ExecuteBenchmarkResponse> executeBenchmarkAllMetric(@Valid @RequestBody ExecuteBenchmarkAllMetricRequest request) {
 			
-
 		log.info("******** Entry BenchMarkController:: Submit *******");
 		
 		ExecuteBenchmarkResponse response = benchmarkService.executeBenchmarkAllMetric(request);
@@ -112,9 +106,5 @@ public class BenchmarkController {
 		BmProcessListByProcessIdResponse response = benchmarkService.processStatus(benchmarkProcessId);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK); 
-		
 	}
-	
-	
-
 }

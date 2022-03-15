@@ -34,7 +34,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.model.ModelInferenceResponse;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelInferenceResponseDao;
 
 import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.Benchmark;
@@ -69,6 +71,10 @@ public class TranslationBenchmark {
 	
 	@Autowired
 	WebClient.Builder builder;
+	
+	@Autowired
+	ModelInferenceResponseDao modelInferenceResponseDao;
+	
 
 	public TranslationResponse computeSync(InferenceAPIEndPoint inferenceAPIEndPoint,
 			List<String> sourceSentences)
@@ -276,6 +282,19 @@ public class TranslationBenchmark {
 		log.info(metricRequest.toString());
 		
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
+		
+		//save the model inference response
+		ModelInferenceResponse modelInferenceResponse = new ModelInferenceResponse();
+		modelInferenceResponse.setBenchmarkingProcessId(benchmarkingProcessId);
+		modelInferenceResponse.setCorpus(corpus.toString());
+		modelInferenceResponse.setBenchmarkDatasetId(benchmark.getBenchmarkId());
+		modelInferenceResponse.setMetric(metric);
+		modelInferenceResponse.setModelId(model.getModelId());
+		modelInferenceResponse.setModelName(model.getName());
+		modelInferenceResponse.setUserId(userId);
+		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
+		modelInferenceResponseDao.save(modelInferenceResponse);
+		
 	}
 	
 	private static <T> List<List<T>> partition(Collection<T> members, int maxSize)
