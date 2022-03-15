@@ -10,60 +10,14 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import TextField from '@material-ui/core/TextField';
+import FeedbackStyle from "../../styles/Feedback";
 
 
-const useStyles = makeStyles((theme) => ({
-  typography: {
-    padding: theme.spacing(1),
-  },
-  MuiRatingLabel:{
-    paddingLeft:"19px"
-  },
-  feedbackbutton:{
-    backgroundColor:"#FD7F23",
-     position:"absolute" ,
-     height:"28px",
-     '&:hover':{
-      backgroundColor:"#FD7F23"
-
-     }
-  },
-  feedbackIcon:{
-    width:"12px",
-    heigth:"10px",
-    color:"white",
-    paddingLeft:"2px"
-    
-  },
-  feedbackTitle:{
-    fontSize:"10px" ,
-    color:"white",
-    paddingLeft:"3px"
-  },
-  feedbacktypography:{
-    fontSize:"12px", 
-    borderBottom:"1px solid #ECE7E6  ", 
-    width:"225px", 
-    margin:"auto"
-  },
-  submitbutton:{
-    width:"70px",
-    margin:"10px 0px 0px 140px"
-  },
-  rating:{
-    margin:"auto", 
-    padding:"15px 20px 0px 89px"
-  },
-  
-  MuiRatinglabel:{
-    paddingRight:"10px"
-  }
-
-}));
 
 
- function SimpleDialogDemo() {
-  const classes = useStyles();
+ function SimpleDialogDemo(props) {
+  const { classes} = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
   const [value, setValue] = React.useState(0);
@@ -140,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
           component="button"
           variant="body2"
           onClick={handleClickfeedback}
+          style={{color:"#FD7F23",fontSize:"11px",textDecoration: "underline"}}
 >
   detailed Feedback
 </Link>
@@ -154,51 +109,72 @@ const useStyles = makeStyles((theme) => ({
     </Button>
     
    <Typography  className={classes.typography} align="center" variant="body2" component="div"  style={{fontSize:"12px"}}>
-      Your feedback will be used to help to improve the product</Typography> 
+   Your feedback will be used to help to improve the product </Typography> 
       
    
       </Popover>
+     
       <Popover
-       style={{maxwidth:"900px"}}
+     
         id={id1}
         open={open1}
         anchorE2={anchorE2}
         onClose={handleClosefeedback}
         anchorOrigin={{
-          vertical: 'bottom',
+          vertical: 'center',
           horizontal: 'right',
         }}
         transformOrigin={{
           vertical: '',
-          horizontal: 'right',
+          horizontal: 'left',
         }}
+        // anchorReference="anchorPosition"
+        // anchorPosition={{ top: 360, left: 1200 }}
+        
       
       >
-        <Typography className={classes.typography}>Please rate your experience...</Typography>
-        <Box  p={2}  style={{padding:"10px"}}>
+        <Typography variant="body2" className={classes.typography}>Please rate your experience...</Typography>
+        <Box  p={2}  style={{padding:"10px",}}>
               
-              <Typography  variant="body2" style={{marginTop:"10px"}}>Rate Speech to Text Quality</Typography>
+              <Typography  variant="body2" >Rate  <span  style={{fontWeight:"bold"}}>Speech to Text</span> Quality</Typography>
               <Rating name="size-medium" />
-              <Button style={{float:"right"}} variant="outlined" size="small" color="primary" >
-          Suggest an edit
+              <Button className={classes.buttonsuggest}  variant="outlined" size="small" color="primary" >
+             <Typography variant="body2"  color="primary" >Suggest an edit</Typography>   
+          
         </Button>
-              <Typography  variant="body2" style={{marginTop:"10px"}}>Rate Translate  Text Quality</Typography>
-              <Rating name="size-medium" />
-              <Button  style={{float:"right"}} variant="outlined" size="small" color="primary" >
-          Suggest an edit
+              <Typography  variant="body2" className={classes.typography1}>Rate <span style={{fontWeight:"bold"}}  >Translate  Text</span>  Quality</Typography>
+              <Rating  name="size-medium" />
+              <Button   variant="outlined" size="small" color="primary"  className={classes.buttonsuggest}>
+                <Typography variant="body2"  color="primary"> Suggest an edit</Typography>
+          
         </Button>
-              <Typography  variant="body2" style={{marginTop:"10px"}}>Rate Translated Speech Quality Quality</Typography>
+              <Typography  variant="body2" className={classes.typography1} >Rate  <span  style={{fontWeight:"bold"}}>Translated Speech</span> Quality </Typography>
               <Rating name="size-medium" />
             </Box>
-            <Typography  variant="body2">Add your comments</Typography>
-            <TextareaAutosize aria-label="empty textarea" />
-            <div>
-            <Button variant="outlined" size="small" color="primary" >
+            <div style={{  borderBottom:"1px solid #ECE7E6 ", width:"240px", margin:"auto"}}></div>
+           
+            <Typography  variant="body2" style={{marginLeft:"10px"}}>Add your comments</Typography>
+            <Grid container justifyContent="center">
+              <Grid item>
+            <TextareaAutosize
+               aria-label="minimum height"
+               minRows={4}
+               className={classes.textareaAutosize}
+               style={{ width: 250  }}
+    />
+    
+            </Grid>
+            <Grid container justifyContent="center">
+         <Grid items>
+            <Button variant="outlined" size="small" color="primary"  className={classes.submitbutton}>
           Submit
         </Button>
-        </div>
+        </Grid>
+        </Grid>
+        </Grid>
       </Popover>
+    
     </div>
   );
 }
-export default SimpleDialogDemo;
+export default  withStyles(FeedbackStyle) (SimpleDialogDemo);
