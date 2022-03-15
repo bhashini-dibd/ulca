@@ -6,11 +6,6 @@ import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
 import { makeStyles ,withStyles} from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import Popover from '@material-ui/core/Popover';
-
-
-
-
-
 const useStyles = makeStyles((theme) => ({
   typography: {
     padding: theme.spacing(1),
@@ -24,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
      height:"28px",
      '&:hover':{
       backgroundColor:"#FD7F23"
+
      }
   },
   feedbackIcon:{
