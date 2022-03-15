@@ -1,9 +1,5 @@
 package com.ulca.model.service;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +12,6 @@ import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
 
 import io.swagger.model.InferenceAPIEndPoint;
-import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,51 +27,53 @@ public class ModelHeartBeatCheckService {
 	@Autowired
 	ModelInferenceEndPointService modelInferenceEndPointService;
 	
-	@Scheduled(cron = "0 0 */2 * * ?")
+	@Scheduled(cron = "0 0 */6 * * ?")
 	public void notifyFailedModelHeartbeatCheck() {
 		
-		log.info("Inside the cronjob");
+		log.info("*******  start ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
 		
 		List<String> checkedUrl = new ArrayList<String>();
 		
 		
 		List<ModelExtended> list = modelDao.findAll();
+		
+		List<ModelExtended> heartBeatFailedModelList  = new ArrayList<ModelExtended>();
+		
 		for(ModelExtended model : list) {
 			
-			InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
-			
-			if(!inferenceAPIEndPoint.getCallbackUrl().isBlank() && !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())) {
-				checkedUrl.add(inferenceAPIEndPoint.getCallbackUrl());
-				String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-				OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
-				try {
-					 modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
-				} catch (KeyManagementException e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
-				} catch (NoSuchAlgorithmException e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
-				}catch (Exception e) {
-					// TODO Auto-generated catch block
-					notificationService.notifyNodelHeartBeatFailure(model.getName());
-					e.printStackTrace();
+			try {
+				InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
+				
+				if(inferenceAPIEndPoint != null && inferenceAPIEndPoint.getCallbackUrl() != null) {
+					
+					if(!inferenceAPIEndPoint.getCallbackUrl().isBlank() && !checkedUrl.contains(inferenceAPIEndPoint.getCallbackUrl())) {
+						checkedUrl.add(inferenceAPIEndPoint.getCallbackUrl());
+						String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+						
+						try {
+							modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+						} catch (Exception e) {
+							heartBeatFailedModelList.add(model);
+							log.info("heartBeat Failed " + model.getName() + " :: " + callBackUrl);
+							e.printStackTrace();
+						}
+						
+					}
 				}
 				
+			}catch(Exception e) {
+				
+				heartBeatFailedModelList.add(model);
+				log.info("heartBeat Failed " + model.getName() + " reason :: " + e.getMessage());
+				e.printStackTrace();
 			}
+			
+		}
+		if(heartBeatFailedModelList.size() > 0) {
+			notificationService.notifyNodelHeartBeatFailure(heartBeatFailedModelList);
 		}
 		
-		
+		log.info("*******  end ModelHeartBeatCheckService ::notifyFailedModelHeartbeatCheck ****** ");
 	}
 
 }
