@@ -54,6 +54,6 @@ file_store_host             =   os.environ.get('ULCA_FILE_STORE_SERVER_URL', 'ht
 file_store_upload_endpoint  =   os.environ.get('ULCA_FILE_STORE_UPLOAD', '/ulca/file-store/v0/file/upload')
 data_metric_host            =   os.environ.get('ULCA_DATA_METRIC_SERVER_URL', 'http://data-metric:5001')#
 data_metric_endpoint        =   os.environ.get('ULCA_DATA_METRIC_SEARCH', '/ulca/data-metric/v0/store/search')
-pending_jobs_duration       =   os.environ.get('PENDING_JOBS_DURATION_HRS',10)
+pending_jobs_duration       =   os.environ.get('PENDING_JOBS_DURATION_HRS',72)
 if isinstance(pending_jobs_duration, str):
     pending_jobs_duration =  eval(pending_jobs_duration)
