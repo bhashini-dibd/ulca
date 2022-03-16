@@ -3,6 +3,19 @@ const Feedback = (theme) => ({
 
     typography: {
         padding: theme.spacing(1),
+        marginTop:"15px"
+        
+       
+      },
+      typographys:{
+        padding: theme.spacing(1),
+        fontSize:"12px"
+       
+      },
+      typography2:{
+        margin:"30px 10px 20px 10px",
+        fontSize:"15px"
+        //padding:"10px"
       },
       MuiRatingLabel:{
         paddingLeft:"19px"
@@ -20,7 +33,7 @@ const Feedback = (theme) => ({
         width:"12px",
         heigth:"10px",
         color:"white",
-        paddingLeft:"2px"
+       
         
       },
       feedbackTitle:{
@@ -40,15 +53,17 @@ const Feedback = (theme) => ({
       },
       rating:{
         margin:"auto", 
-        padding:"15px 20px 0px 89px"
+        padding:"15px 20px 0px 55px",
+       
       },
       buttonsuggest:{
         float:"right", 
         height:"25px",
-        marginLeft:"20px"
+       // marginLeft:"20px"
+       marginRight:"10px"
       },
       typography1:{
-        marginTop:"10px"
+        margin:"10px 20px 5px 10px"
       },
       textareaAutosize:{
         backgroundColor:"#D3D1D1  ",
@@ -60,6 +75,7 @@ const Feedback = (theme) => ({
       MuiButtonlabel:{
         fontSize:"11px"
       }
+      
    
   });
   

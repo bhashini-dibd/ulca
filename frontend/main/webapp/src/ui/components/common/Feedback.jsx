@@ -1,8 +1,8 @@
 import React ,{useState}from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
-import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import { makeStyles ,withStyles} from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import Popover from '@material-ui/core/Popover';
@@ -12,8 +12,8 @@ import Box from '@material-ui/core/Box';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import TextField from '@material-ui/core/TextField';
 import FeedbackStyle from "../../styles/Feedback";
-
-
+import { translate } from "../../../assets/localisation";
+import '../../styles/css/GlobalCssSlider.css';
 
 
  function SimpleDialogDemo(props) {
@@ -22,6 +22,20 @@ import FeedbackStyle from "../../styles/Feedback";
   const [anchorE2, setAnchorE2] = React.useState(null);
   const [value, setValue] = React.useState(0);
  
+  const iconStyle = {
+    width: 100,
+    "&:hover": {
+    
+      backgroundColor: "#FFFF"
+    }
+   
+ }
+ const smallDistanceStyle = {
+  width: 100,
+  height: 100,
+  padding: 50
+}
+
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -45,12 +59,18 @@ import FeedbackStyle from "../../styles/Feedback";
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   console.log(anchorEl)
+
+  const divStyle = {
+    display: 'flex',
+    alignItems: 'center'
+  };
   return (
-    <div>
+    
+    <div >
       <Button  variant="contained" size="small" className={classes.feedbackbutton} onClick={handleClick}>
-       <ThumbUpOutlinedIcon  className={classes.feedbackIcon} />
-      < ThumbDownAltOutlinedIcon   className={classes.feedbackIcon}  />
-       <Typography variant="body2"  className={classes.feedbackTitle} > Feedback</Typography>
+       <ThumbUpAltIcon  className={classes.feedbackIcon} />
+      < ThumbDownAltIcon   className={classes.feedbackIcon}  />
+       <Typography variant="body2"  className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
        </Button>
       <Popover
         id={id}
@@ -70,10 +90,12 @@ import FeedbackStyle from "../../styles/Feedback";
        
         
      
-      <Typography className={classes.typography} align="center" style={{marginTop:"15px"}}>Are you satisfied with this <br/> translation?</Typography>
+      <Typography className={classes.typography} align="center" >   {translate("lable.feedback1")} <br/>  {translate("lable.feedbacks")}</Typography>
      
       
         <Rating
+       itemStyle={smallDistanceStyle} 
+      itemIconStyle={iconStyle}
         className={classes.rating}
           size="large"
           name="simple-controlled"
@@ -83,7 +105,7 @@ import FeedbackStyle from "../../styles/Feedback";
           }}
          
         />
-     < Typography  className={classes.feedbacktypography} variant="body2"  > very bad   < Typography  variant="body2"  style={{ float: "right",fontSize:"12px"}} > very good </Typography>   </Typography>
+     < Typography  className={classes.feedbacktypography} variant="body2"  >  {translate("lable.verybad")}  < Typography  variant="body2"  style={{ float: "right",fontSize:"12px"}} >  {translate("lable.verygood")}  </Typography>   </Typography>
    
      <div className={classes.root}>
       
@@ -94,9 +116,9 @@ import FeedbackStyle from "../../styles/Feedback";
           component="button"
           variant="body2"
           onClick={handleClickfeedback}
-          style={{color:"#FD7F23",fontSize:"11px",textDecoration: "underline"}}
+          style={{color:"#FD7F23",fontSize:"13px",textDecoration: "underline"}}
 >
-  detailed Feedback
+{translate("link.feedback")}
 </Link>
 
         </Grid>
@@ -105,11 +127,11 @@ import FeedbackStyle from "../../styles/Feedback";
     </div>
 
   <Button variant="outlined" size="small"  color="primary"  className={classes.submitbutton}  >
-         Submit
+  {translate("button.submit")}
     </Button>
     
-   <Typography  className={classes.typography} align="center" variant="body2" component="div"  style={{fontSize:"12px"}}>
-   Your feedback will be used to help to improve the product </Typography> 
+   <Typography  className={classes.typographys} align="center" variant="body2" component="div" >
+   {translate("lable.feedback2")}</Typography> 
       
    
       </Popover>
@@ -120,40 +142,43 @@ import FeedbackStyle from "../../styles/Feedback";
         open={open1}
         anchorE2={anchorE2}
         onClose={handleClosefeedback}
-        anchorOrigin={{
-          vertical: 'center',
-          horizontal: 'right',
+        // anchorOrigin={{
+        //   vertical: 'center',
+        //   horizontal: 'right',
+        // }}
+        // transformOrigin={{
+        //   vertical: '',
+        //   horizontal: 'left',
+        // }}
+        PaperProps={{
+          style: { width: '21%' },
         }}
-        transformOrigin={{
-          vertical: '',
-          horizontal: 'left',
-        }}
-        // anchorReference="anchorPosition"
-        // anchorPosition={{ top: 360, left: 1200 }}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: 214, left: 1148, }}
         
       
       >
-        <Typography variant="body2" className={classes.typography}>Please rate your experience...</Typography>
-        <Box  p={2}  style={{padding:"10px",}}>
+        <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
+        <Box  p={5}>
               
-              <Typography  variant="body2" >Rate  <span  style={{fontWeight:"bold"}}>Speech to Text</span> Quality</Typography>
+              <Typography  variant="body2"  className={classes.typography1}>Rate  <span  style={{fontWeight:"bold"}}>Speech to Text</span> Quality</Typography>
               <Rating name="size-medium" />
               <Button className={classes.buttonsuggest}  variant="outlined" size="small" color="primary" >
-             <Typography variant="body2"  color="primary" >Suggest an edit</Typography>   
+             <Typography variant="body2"  color="primary" > {translate("button.Suggest an edit")}</Typography>   
           
         </Button>
               <Typography  variant="body2" className={classes.typography1}>Rate <span style={{fontWeight:"bold"}}  >Translate  Text</span>  Quality</Typography>
               <Rating  name="size-medium" />
               <Button   variant="outlined" size="small" color="primary"  className={classes.buttonsuggest}>
-                <Typography variant="body2"  color="primary"> Suggest an edit</Typography>
+                <Typography variant="body2"  color="primary">  {translate("button.Suggest an edit")}</Typography>
           
         </Button>
               <Typography  variant="body2" className={classes.typography1} >Rate  <span  style={{fontWeight:"bold"}}>Translated Speech</span> Quality </Typography>
               <Rating name="size-medium" />
             </Box>
-            <div style={{  borderBottom:"1px solid #ECE7E6 ", width:"240px", margin:"auto"}}></div>
+            <div style={{  borderBottom:"1px solid #ECE7E6 ", width:"240px", margin:"auto" ,paddingBottom:"20px"}}></div>
            
-            <Typography  variant="body2" style={{marginLeft:"10px"}}>Add your comments</Typography>
+            <Typography  variant="body2" style={{margin:"10px 10px 10px 10px"}}> {translate("lable.feedback4")}</Typography>
             <Grid container justifyContent="center">
               <Grid item>
             <TextareaAutosize
@@ -166,8 +191,8 @@ import FeedbackStyle from "../../styles/Feedback";
             </Grid>
             <Grid container justifyContent="center">
          <Grid items>
-            <Button variant="outlined" size="small" color="primary"  className={classes.submitbutton}>
-          Submit
+            <Button variant="outlined" size="small" color="primary" style={{margin:"10px"}}  >
+            {translate("button.submit")}
         </Button>
         </Grid>
         </Grid>
