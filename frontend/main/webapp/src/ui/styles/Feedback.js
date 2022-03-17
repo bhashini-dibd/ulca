@@ -52,8 +52,7 @@ const Feedback = (theme) => ({
     margin: "10px 0px 0px 130px"
   },
   rating: {
-    margin: "auto",
-    padding: "15px 20px 0px 55px",
+    marginLeft:"60px",
     // display: 'flex',
     // justifyContent: 'center'
 
