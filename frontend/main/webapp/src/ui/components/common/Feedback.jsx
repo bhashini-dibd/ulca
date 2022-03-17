@@ -22,6 +22,9 @@ function SimpleDialogDemo(props) {
   const [anchorE2, setAnchorE2] = React.useState(null);
   const [value, setValue] = React.useState(0);
   const [detailedFeedback, setDetailedFeedback] = useState(false);
+  const [rating1, setRating1] = React.useState(0);
+  const [rating2, setRating2] = React.useState(0);
+  const [rating3, setRating3] = React.useState(0);
 
   // const iconStyle = {
   //   width: 100,
@@ -57,7 +60,7 @@ function SimpleDialogDemo(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  console.log(anchorEl)
+  // console.log(anchorEl)
 
   const divStyle = {
     display: 'flex',
@@ -105,6 +108,8 @@ function SimpleDialogDemo(props) {
           onChange={handleRatingChange}
 
         />
+
+         
         < Typography className={classes.feedbacktypography} variant="body2"  >  {translate("lable.verybad")}  < Typography variant="body2" style={{ float: "right", fontSize: "12px" }} >  {translate("lable.verygood")}  </Typography>   </Typography>
 
         <div className={classes.root}>
@@ -155,19 +160,31 @@ function SimpleDialogDemo(props) {
         <Box p={5}>
 
           <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>
-          <StyledRating name="size-medium" />
+          <StyledRating value={rating1}  onChange={(event, newValue) => {
+                console.log(event)
+            setRating1(newValue)
+          }
+  } />
           <Button className={classes.buttonsuggest} variant="outlined" size="small" color="primary" >
             <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
 
           </Button>
           <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translate  Text</span>  Quality</Typography>
-          <StyledRating name="size-medium" />
+          <StyledRating  value={rating2}  onChange={(event, newValue) => {
+                console.log(event)
+            setRating2(newValue)
+          }
+  } />
           <Button variant="outlined" size="small" color="primary" className={classes.buttonsuggest}>
             <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
 
           </Button>
           <Typography variant="body2" className={classes.typography1} >Rate  <span style={{ fontWeight: "bold" }}>Translated Speech</span> Quality </Typography>
-          <StyledRating name="size-medium" />
+          <StyledRating   value={rating3}  onChange={(event, newValue) => {
+                console.log(event)
+            setRating3(newValue)
+          }
+  } />
         </Box>
         <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "240px", margin: "auto", paddingBottom: "20px" }}></div>
 
