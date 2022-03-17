@@ -1,11 +1,10 @@
  .MuiRating-icon{
-    background: none;
-padding: 5px;
+    padding: 5px;
 
 }
-.MuiRating-icon:hover{
+/* .MuiRating-icon:hover{
     background: none;
     
     }
     .MuiRating-label{
-    } 
+    }  */

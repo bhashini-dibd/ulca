@@ -14,6 +14,8 @@ import { translate } from "../../../assets/localisation";
 import '../../styles/css/GlobalCssSlider.css';
 import { StyledRating } from './StyledRating';
 import { withStyles } from '@material-ui/core/styles';
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 
 function SimpleDialogDemo(props) {
@@ -25,6 +27,8 @@ function SimpleDialogDemo(props) {
   const [rating1, setRating1] = React.useState(0);
   const [rating2, setRating2] = React.useState(0);
   const [rating3, setRating3] = React.useState(0);
+  const [open2, setOpen2] = React.useState();
+  
 
   // const iconStyle = {
   //   width: 100,
@@ -46,8 +50,10 @@ function SimpleDialogDemo(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleClosefeedback = () => {
+  const handleClosefeedback = ( reason) => {
     setAnchorE2(null);
+    
+    
   }
   const handleClickfeedback = (event) => {
     handleClose();
@@ -74,6 +80,10 @@ function SimpleDialogDemo(props) {
     else
       setDetailedFeedback(false);
   }
+  // const handleClosePopover = (event, reason) => {
+  //   if ("clickaway" == reason) return;
+  //   open1(false);
+  // };
 
   return (
 
@@ -142,6 +152,7 @@ function SimpleDialogDemo(props) {
         open={open1}
         anchorE2={anchorE2}
         onClose={handleClosefeedback}
+         
         // anchorOrigin={{
         //   vertical: 'center',
         //   horizontal: 'right',
@@ -156,35 +167,46 @@ function SimpleDialogDemo(props) {
         anchorReference="anchorPosition"
         anchorPosition={{ top: 214, left: 1148, }}
       >
+         
+              <IconButton
+                     size="small"
+                     aria-label="close"
+                     color="inherit"
+                    onClick={() => setOpen2(false)}
+                    
+                   >
+                     <CloseIcon fontSize="small" />
+                   </IconButton>
+                  
         <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
         <Box p={5}>
 
           <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>
-          <StyledRating value={rating1}  onChange={(event, newValue) => {
-                console.log(event)
-            setRating1(newValue)
-          }
-  } />
+          <StyledRating
+           value={rating1}
+          onChange={(event, newValue) => {
+               setRating1(newValue)
+          }} />
           <Button className={classes.buttonsuggest} variant="outlined" size="small" color="primary" >
             <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
 
           </Button>
           <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translate  Text</span>  Quality</Typography>
-          <StyledRating  value={rating2}  onChange={(event, newValue) => {
-                console.log(event)
-            setRating2(newValue)
-          }
-  } />
+          <StyledRating 
+           value={rating2} 
+            onChange={(event, newValue) => {
+             setRating2(newValue)
+          } } />
           <Button variant="outlined" size="small" color="primary" className={classes.buttonsuggest}>
             <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
 
           </Button>
           <Typography variant="body2" className={classes.typography1} >Rate  <span style={{ fontWeight: "bold" }}>Translated Speech</span> Quality </Typography>
-          <StyledRating   value={rating3}  onChange={(event, newValue) => {
-                console.log(event)
-            setRating3(newValue)
-          }
-  } />
+          <StyledRating  
+           value={rating3} 
+            onChange={(event, newValue) => {
+               setRating3(newValue)
+          }} />
         </Box>
         <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "240px", margin: "auto", paddingBottom: "20px" }}></div>
 
