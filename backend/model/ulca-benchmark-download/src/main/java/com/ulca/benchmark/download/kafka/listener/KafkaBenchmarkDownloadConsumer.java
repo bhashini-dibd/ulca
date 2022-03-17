@@ -27,6 +27,7 @@ import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.model.BenchmarkTaskTracker;
 import com.ulca.benchmark.service.AsrBenchmark;
 import com.ulca.benchmark.service.BmProcessTrackerService;
+import com.ulca.benchmark.service.NotificationService;
 import com.ulca.benchmark.service.OcrBenchmark;
 import com.ulca.benchmark.service.TranslationBenchmark;
 import com.ulca.benchmark.util.UnzipUtility;
@@ -70,6 +71,9 @@ public class KafkaBenchmarkDownloadConsumer {
 	
 	@Autowired
 	OcrBenchmark ocrBenchmark;
+	
+	@Autowired
+	NotificationService notificationService;
 
 	@KafkaListener(groupId = "${kafka.ulca.bm.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.bm.filedownload.ip.topic}", containerFactory = "benchmarkDownloadKafkaListenerContainerFactory")
 	public void downloadBenchmarkDataset(BmDatasetDownload bmDsDownload) {
@@ -144,6 +148,8 @@ public class KafkaBenchmarkDownloadConsumer {
 					error.setCode("2000_FILE_DOWNLOAD_FAILURE");
 					bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.failed, error);
 					bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
+					notificationService.notifyBenchmarkFailed(modelId,  model.getName(), model.getUserId());
+					
 					return;
 				}
 
@@ -196,6 +202,7 @@ public class KafkaBenchmarkDownloadConsumer {
 					error.setCode("2000_BENCHMARK_INGEST_FAILURE");
 					bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.failed, error);
 					bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
+					notificationService.notifyBenchmarkFailed(modelId,  model.getName(), model.getUserId());
 					e.printStackTrace();
 					
 				}

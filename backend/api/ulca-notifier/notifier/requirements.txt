@@ -9,3 +9,5 @@ Flask-Cors==3.0.8
 Flask-Mail==0.9.1
 Flask-RESTful==0.3.8
 certifi==2021.5.30
+itsdangerous==2.0.1
+

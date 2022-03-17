@@ -56,6 +56,7 @@ import com.ulca.model.response.ModelSearchResponse;
 import com.ulca.model.response.ModelStatusChangeResponse;
 import com.ulca.model.response.UploadModelResponse;
 
+import io.swagger.model.AsyncApiDetails;
 import io.swagger.model.ImageFormat;
 import io.swagger.model.InferenceAPIEndPoint;
 import io.swagger.model.LanguagePair;
@@ -234,7 +235,12 @@ public class ModelService {
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getUploadedModel(modelFilePath);
 		
-		validateModel(modelObj);
+		if(modelObj != null) {
+			validateModel(modelObj);
+		}else {
+			throw new ModelValidationException("Model validation failed. Check uploaded file syntax");
+		}
+		
 		
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(new Date().toString());
@@ -242,10 +248,9 @@ public class ModelService {
 		modelObj.setStatus("unpublished");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
-		schema = modelInferenceEndPointService.validateCallBackUrl(callBackUrl, schema);
-		inferenceAPIEndPoint.setSchema(schema);
+		//String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		//OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
+		inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
 		//modelDao.save(modelObj);
 		
@@ -312,6 +317,18 @@ public class ModelService {
 		if(model.getInferenceEndPoint() == null)
 			throw new ModelValidationException("inferenceEndPoint is required field");
 		
+		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
+		if(!inferenceAPIEndPoint.isIsSyncApi()) {
+			AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
+			if(asyncApiDetails.getPollingUrl().isBlank()) {
+				throw new ModelValidationException("PollingUrl is required field for async model");
+			}
+		}else {
+			if(inferenceAPIEndPoint.getCallbackUrl().isBlank()) {
+				throw new ModelValidationException("callbackUrl is required field for sync model");
+			}
+		}
+		
 		if(model.getTrainingDataset() == null)
 			throw new ModelValidationException("trainingDataset is required field");
 		
@@ -355,15 +372,13 @@ public class ModelService {
 	
 
 	public ModelComputeResponse computeModel(ModelComputeRequest compute)
-			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException {
+			throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
 
 		String modelId = compute.getModelId();
 		ModelExtended modelObj = modelDao.findById(modelId).get();
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
-		return modelInferenceEndPointService.compute(callBackUrl, schema, compute);
+		return modelInferenceEndPointService.compute(inferenceAPIEndPoint, compute);
 	}
 	
 	public ModelComputeResponse tryMeOcrImageContent(MultipartFile file, String modelId) throws Exception {
