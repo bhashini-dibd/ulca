@@ -392,9 +392,6 @@ const SpeechToSpeechOptions = (props) => {
           )}
            
          </CardContent>
-        
-        
-       
          </Card>
     );
   };
