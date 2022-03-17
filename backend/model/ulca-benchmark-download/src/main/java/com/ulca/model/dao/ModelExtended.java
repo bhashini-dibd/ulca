@@ -23,7 +23,6 @@ public class ModelExtended extends Model {
 	@JsonProperty("publishedOn")
 	private String publishedOn;
 	
-	
 	@JsonProperty("status")
 	private String status;
 
@@ -59,7 +58,6 @@ public class ModelExtended extends Model {
 		return this;
 	}
 	
-	
 	public String getSubmittedOn() {
 		return submittedOn;
 	}
@@ -81,8 +79,6 @@ public class ModelExtended extends Model {
 		this.publishedOn = publishedOn;
 	}
 	
-	
-
 	public ModelExtended status(String status) {
 		this.status = status;
 		return this;
@@ -96,6 +92,4 @@ public class ModelExtended extends Model {
 		this.status = status;
 	}
 
-	
-	
 }
