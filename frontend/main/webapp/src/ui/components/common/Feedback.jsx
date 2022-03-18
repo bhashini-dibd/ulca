@@ -162,8 +162,8 @@ function SimpleDialogDemo(props) {
         //   horizontal: 'left',
         // }}
  
- anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
- targetOrigin={{horizontal: 'left', vertical: 'top'}}
+ anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
+ targetOrigin={{horizontal: 'right', vertical: 'center'}}
         
       >
        
