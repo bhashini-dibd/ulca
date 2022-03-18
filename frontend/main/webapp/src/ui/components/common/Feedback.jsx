@@ -161,9 +161,11 @@ function SimpleDialogDemo(props) {
         //   vertical: 'top',
         //   horizontal: 'left',
         // }}
+        anchorReference="anchorPosition"
+        anchorPosition={{ top: 180, left: 1000 }}
  
- anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
- targetOrigin={{horizontal: 'right', vertical: 'center'}}
+ anchorOrigin={{horizontal: 'right', vertical: 'center'}}
+ targetOrigin={{horizontal: '', vertical: 'center'}}
         
       >
        
