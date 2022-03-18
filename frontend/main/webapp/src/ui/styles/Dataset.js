@@ -71,14 +71,16 @@ const DataSet = (theme) => ({
     marginLeft: "auto",
     marginTop:"10px",
    "@media (max-width:400px)": {
-     paddingTop:"18px"
+     paddingTop:"6px"
     },
   },
   centerAudio: {
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
-   
+    "@media (max-width:400px)": {
+     margin:"0px",
+     },
   },
   titleCard: {
     display: "flex",
@@ -708,7 +710,18 @@ const DataSet = (theme) => ({
     textField:{   "@media (max-width:400px)": {
       paddingTop:"15px",
     },
+    
   },
+  audioCard:{
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    top: "41%",
+    "@media (max-width:400px)": {
+      top:"36%",
+    },
+
+  }
   // tablesbody:{
   //   "@media (max-width:400px)": {
   //     marginLeft:" 137px",

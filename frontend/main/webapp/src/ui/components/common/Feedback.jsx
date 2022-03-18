@@ -93,6 +93,7 @@ function SimpleDialogDemo(props) {
         < ThumbDownAltIcon className={classes.feedbackIcon} />
         <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
       </Button>
+      <div>
       <Popover
         id={id}
         open={open}
@@ -146,47 +147,50 @@ function SimpleDialogDemo(props) {
         <Typography className={classes.typographys} align="center" variant="body2" component="div" >
           {translate("lable.feedback2")}</Typography>
       </Popover>
-
-      <Popover
+  
+       <Popover
         id={id1}
         open={open1}
-        anchorE2={anchorE2}
-        onClose={handleClosefeedback}
-         
+        anchor={anchorE2}
+        onClose={handleClose}
         // anchorOrigin={{
-        //   vertical: 'center',
-        //   horizontal: 'right',
-        // }}
-        // transformOrigin={{
-        //   vertical: '',
+        //   vertical: 'top',
         //   horizontal: 'left',
         // }}
-        PaperProps={{
-          style: { width: '21%' },
-        }}
-        anchorReference="anchorPosition"
-        anchorPosition={{ top: 214, left: 1148, }}
+        // transformOrigin={{
+        //   vertical: 'top',
+        //   horizontal: 'left',
+        // }}
+ 
+ anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+ targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        
       >
-         
+       
+          <div style={{ position: "absolute",right: "5px" }}>
               <IconButton
+              
                      size="small"
                      aria-label="close"
                      color="inherit"
-                    onClick={() => setOpen2(false)}
+                    onClick={ handleClosefeedback}
                     
                    >
                      <CloseIcon fontSize="small" />
                    </IconButton>
-                  
+                   </div> 
         <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
         <Box p={5}>
 
           <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>
+         
           <StyledRating
+          //  style={{position:"fixed" ,top:"30px",left:"40px"}}
            value={rating1}
           onChange={(event, newValue) => {
                setRating1(newValue)
           }} />
+         
           <Button className={classes.buttonsuggest} variant="outlined" size="small" color="primary" >
             <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
 
@@ -230,7 +234,7 @@ function SimpleDialogDemo(props) {
           </Grid>
         </Grid>
       </Popover>
-
+      </div>
     </div>
   );
 }

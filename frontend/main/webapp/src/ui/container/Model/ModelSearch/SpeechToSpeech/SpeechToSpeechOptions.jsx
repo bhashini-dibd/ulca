@@ -88,7 +88,7 @@ const SpeechToSpeechOptions = (props) => {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <div className={classes.center}>
-            <Typography style={{ height: "12px" }} variant="caption">
+            <Typography style={{ height: "12px", }} variant="caption">
               {recordAudio === "start" ? "Recording..." : ""}
             </Typography>{" "}
           </div>
@@ -99,7 +99,7 @@ const SpeechToSpeechOptions = (props) => {
               style={{ display: "none" }}
             />
           </div>
-          <div className={classes.centerAudio} style={{height: "50px"}}>
+          <div className={classes.centerAudio} style={{height: "60px"}}>
             {data ? (
               <audio
                 src={data}
@@ -363,26 +363,21 @@ const SpeechToSpeechOptions = (props) => {
         </Grid >
         
         <CardContent
-          style={{
-           justifyContent: "center",
-            alignItems: "center",
-            position: "relative",
-            top: "25%",
-          }}
+        className={classes.audioCard}
+         
         >
           {audio ? (
          <div>
             <audio
               style={{
                 width: "100%",
-               
                 justifyContent: "center",
                 alignContent: "center",
               }}
               src={audio}
               controls
             ></audio>
-          <div style={{position:"absolute", right:"105px", top:"135px"}} >
+          <div   style={{position:"absolute", right:"100px", top:"91px"}} >
         <SimpleDialogDemo  />
         </div>
            </div>

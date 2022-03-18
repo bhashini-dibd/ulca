@@ -74,7 +74,9 @@ const Feedback = (theme) => ({
 
   MuiButtonlabel: {
     fontSize: "11px"
-  }
+  },
+  
+
 });
 
 export default Feedback;
