@@ -16,6 +16,11 @@ import { StyledRating } from './StyledRating';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import {
+  makeStyles,
+  MuiThemeProvider,
+  createMuiTheme
+} from "@material-ui/core/styles";
 
 
 function SimpleDialogDemo(props) {
@@ -27,20 +32,10 @@ function SimpleDialogDemo(props) {
   const [rating1, setRating1] = React.useState(0);
   const [rating2, setRating2] = React.useState(0);
   const [rating3, setRating3] = React.useState(0);
-  const [open2, setOpen2] = React.useState();
+  
   
 
-  // const iconStyle = {
-  //   width: 100,
-  //   "&:hover": {
-  //     backgroundColor: "#FFFFFF"
-  //   },
-  // }
-  // const smallDistanceStyle = {
-  //   width: 100,
-  //   height: 100,
-  //   padding: 50
-  // }
+  
 
 
   const handleClick = (event) => {
@@ -80,10 +75,49 @@ function SimpleDialogDemo(props) {
     else
       setDetailedFeedback(false);
   }
-  // const handleClosePopover = (event, reason) => {
-  //   if ("clickaway" == reason) return;
-  //   open1(false);
-  // };
+  const theme2 = createMuiTheme({
+    overrides: {
+      MuiButton: {
+        root: {
+         borderRadius:"50px",
+         marginLeft:"30px",
+         "@media (max-width:400px)": {
+          width: "90px",
+          height: "26px",
+         },
+       },
+     },
+      MuiPopover: {
+        root: {},
+        paper: {
+          padding:"0px 0px 0px 0px",
+          "@media (max-width:400px)": {
+           width:"100%"
+             },
+         }
+      },
+      MuiTypography:{
+        root:{
+          padding:"5px",
+          fontSize:"10px"
+
+        },
+        colorPrimary:{
+          "@media (max-width:400px)": {
+           
+            fontSize: "12px",
+             },
+          }
+
+      },
+      MuiRating:{
+        label:{
+          padding:"3px",
+          }
+        }
+    }
+  });
+  
 
   return (
 
@@ -147,29 +181,30 @@ function SimpleDialogDemo(props) {
         <Typography className={classes.typographys} align="center" variant="body2" component="div" >
           {translate("lable.feedback2")}</Typography>
       </Popover>
-  
+      <MuiThemeProvider theme={theme2}>
        <Popover
+       style={{width:"100%"}}
         id={id1}
         open={open1}
         anchor={anchorE2}
         onClose={handleClose}
-        // anchorOrigin={{
-        //   vertical: 'top',
-        //   horizontal: 'left',
-        // }}
-        // transformOrigin={{
-        //   vertical: 'top',
-        //   horizontal: 'left',
-        // }}
-        anchorReference="anchorPosition"
-        anchorPosition={{ top: 180, left: 1000 }}
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "right"
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center"
+        }}
+//         anchorReference="anchorPosition"
+//         anchorPosition={{ top: 180, left: 1000 }}
  
- anchorOrigin={{horizontal: 'right', vertical: 'center'}}
- targetOrigin={{horizontal: '', vertical: 'center'}}
+//  anchorOrigin={{horizontal: 'right', vertical: 'center'}}
+//  targetOrigin={{horizontal: '', vertical: 'center'}}
         
       >
-       
-          <div style={{ position: "absolute",right: "5px" }}>
+        
+          <div style={{ position: "absolute",right: "0px",Button:"10px" }}>
               <IconButton
               
                      size="small"
@@ -182,12 +217,13 @@ function SimpleDialogDemo(props) {
                    </IconButton>
                    </div> 
         <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
-        <Box p={5}>
+        <Box p={2}>
 
           <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>
          
           <StyledRating
           //  style={{position:"fixed" ,top:"30px",left:"40px"}}
+          size="large"
            value={rating1}
           onChange={(event, newValue) => {
                setRating1(newValue)
@@ -199,6 +235,7 @@ function SimpleDialogDemo(props) {
           </Button>
           <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translate  Text</span>  Quality</Typography>
           <StyledRating 
+            size="large"
            value={rating2} 
             onChange={(event, newValue) => {
              setRating2(newValue)
@@ -209,12 +246,13 @@ function SimpleDialogDemo(props) {
           </Button>
           <Typography variant="body2" className={classes.typography1} >Rate  <span style={{ fontWeight: "bold" }}>Translated Speech</span> Quality </Typography>
           <StyledRating  
+            size="large"
            value={rating3} 
             onChange={(event, newValue) => {
                setRating3(newValue)
           }} />
         </Box>
-        <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "240px", margin: "auto", paddingBottom: "20px" }}></div>
+        <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "300px", margin: "auto", paddingBottom: "10px" }}></div>
 
         <Typography variant="body2" style={{ margin: "10px 10px 10px 10px" }}> {translate("lable.feedback4")}</Typography>
         <Grid container justifyContent="center">
@@ -236,6 +274,7 @@ function SimpleDialogDemo(props) {
           </Grid>
         </Grid>
       </Popover>
+      </MuiThemeProvider>
       </div>
     </div>
   );

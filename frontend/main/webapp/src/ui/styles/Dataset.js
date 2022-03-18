@@ -655,7 +655,6 @@ const DataSet = (theme) => ({
     justifyContent: "flex-end",
     "@media (max-width:400px)": {
    marginBottom:"20px",
-   
     },
 
   },

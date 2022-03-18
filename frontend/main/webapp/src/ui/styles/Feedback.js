@@ -13,7 +13,7 @@ const Feedback = (theme) => ({
 
   },
   typography2: {
-    margin: "30px 10px 20px 10px",
+     margin: "25px 10px 10px 10px",
     fontSize: "15px"
     //padding:"10px"
   },
@@ -61,10 +61,15 @@ const Feedback = (theme) => ({
     float: "right",
     height: "25px",
     // marginLeft:"20px"
-    marginRight: "10px"
+    marginRight: "10px",
+    "@media (max-width:400px)": {
+      height: "38px",
+  
+     },
+    
   },
   typography1: {
-    margin: "10px 20px 5px 10px"
+   // margin: "10px 20px 5px 10px"
   },
   textareaAutosize: {
     backgroundColor: "inherit",
