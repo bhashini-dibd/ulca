@@ -90,9 +90,16 @@ function SimpleDialogDemo(props) {
       MuiPopover: {
         root: {},
         paper: {
+          
+            right: "100px",
+            bottom:"30px",
+            position:"fixed",
+            width:"430px",
+            maxHeight:"500px",
           padding:"0px 0px 0px 0px",
           "@media (max-width:400px)": {
-           width:"100%"
+           width:"100%",
+           maxHeight:"500px",
              },
          }
       },
@@ -128,7 +135,7 @@ function SimpleDialogDemo(props) {
         <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
       </Button>
       <div>
-      <Popover
+     {setAnchorEl!==null &&(<Popover
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -180,24 +187,26 @@ function SimpleDialogDemo(props) {
 
         <Typography className={classes.typographys} align="center" variant="body2" component="div" >
           {translate("lable.feedback2")}</Typography>
-      </Popover>
+      </Popover>)}
       <MuiThemeProvider theme={theme2}>
        <Popover
-       style={{width:"100%"}}
+     
         id={id1}
         open={open1}
         anchor={anchorE2}
-        onClose={handleClose}
+        onClose={handleClosefeedback}
+        
         anchorOrigin={{
-          vertical: "center",
-          horizontal: "right"
-        }}
-        transformOrigin={{
-          vertical: "top",
+          vertical: "right",
           horizontal: "center"
         }}
-//         anchorReference="anchorPosition"
-//         anchorPosition={{ top: 180, left: 1000 }}
+        transformOrigin={{
+          vertical: "center",
+          horizontal: "center"
+        }}
+        anchorReference="anchorPosition"
+  anchorPosition={{ top: 400, left: 1350 }}
+         
  
 //  anchorOrigin={{horizontal: 'right', vertical: 'center'}}
 //  targetOrigin={{horizontal: '', vertical: 'center'}}
