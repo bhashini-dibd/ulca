@@ -23,6 +23,8 @@ import {
 } from "@material-ui/core/styles";
 
 
+
+
 function SimpleDialogDemo(props) {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,6 +34,7 @@ function SimpleDialogDemo(props) {
   const [rating1, setRating1] = React.useState(0);
   const [rating2, setRating2] = React.useState(0);
   const [rating3, setRating3] = React.useState(0);
+  const [data2, setData2] = React.useState(false);
   
   
 
@@ -39,6 +42,7 @@ function SimpleDialogDemo(props) {
 
 
   const handleClick = (event) => {
+    setData2(false)
     setAnchorEl(event.currentTarget);
   };
 
@@ -47,11 +51,13 @@ function SimpleDialogDemo(props) {
   };
   const handleClosefeedback = ( reason) => {
     setAnchorE2(null);
+    handleClose();
     
     
   }
   const handleClickfeedback = (event) => {
-    handleClose();
+    setData2(true)
+     //handleClose();
     setAnchorE2(event.currentTarget);
   };
 
@@ -75,7 +81,7 @@ function SimpleDialogDemo(props) {
     else
       setDetailedFeedback(false);
   }
-  const theme2 = createMuiTheme({
+  const theme2 =({
     overrides: {
       MuiButton: {
         root: {
@@ -88,14 +94,17 @@ function SimpleDialogDemo(props) {
        },
      },
       MuiPopover: {
-        root: {},
+        root: { "@media (max-width:400px)": {
+          width:"100%",
+          maxHeight:"500px",
+            },},
         paper: {
           
-            right: "100px",
-            bottom:"30px",
-            position:"fixed",
-            width:"430px",
-            maxHeight:"500px",
+            // right: "100px",
+            // bottom:"25px",
+            // position:"fixed",
+            // width:"430px",
+            // maxHeight:"500px",
           padding:"0px 0px 0px 0px",
           "@media (max-width:400px)": {
            width:"100%",
@@ -111,17 +120,25 @@ function SimpleDialogDemo(props) {
         },
         colorPrimary:{
           "@media (max-width:400px)": {
-           
-            fontSize: "12px",
+            fontSize: "13px",
              },
           }
 
       },
       MuiRating:{
         label:{
-          padding:"3px",
+         paddingLeft:"10px"
           }
-        }
+        },
+        MuiBox:{
+          root:{
+            "@media (max-width:400px)": {
+              width:"332px",
+             
+               },
+          }
+        },
+      
     }
   });
   
@@ -134,6 +151,7 @@ function SimpleDialogDemo(props) {
         < ThumbDownAltIcon className={classes.feedbackIcon} />
         <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
       </Button>
+      {/* <Button  id="detailed" >abc</Button> */}
       <div>
      {setAnchorEl!==null &&(<Popover
         id={id}
@@ -149,7 +167,8 @@ function SimpleDialogDemo(props) {
           horizontal: 'right',
         }}
       >
-
+        
+  { data2 === false && <div>
         <Typography className={classes.typography} align="center" >   {translate("lable.feedback1")} <br />  {translate("lable.feedbacks")}</Typography>
 
         <StyledRating
@@ -170,6 +189,7 @@ function SimpleDialogDemo(props) {
             <Grid item>
 
               {detailedFeedback ? <Link
+                 id="simple-popover1"
                 component="button"
                 variant="body2"
                 onClick={handleClickfeedback}
@@ -187,33 +207,11 @@ function SimpleDialogDemo(props) {
 
         <Typography className={classes.typographys} align="center" variant="body2" component="div" >
           {translate("lable.feedback2")}</Typography>
-      </Popover>)}
-      <MuiThemeProvider theme={theme2}>
-       <Popover
-     
-        id={id1}
-        open={open1}
-        anchor={anchorE2}
-        onClose={handleClosefeedback}
-        
-        anchorOrigin={{
-          vertical: "right",
-          horizontal: "center"
-        }}
-        transformOrigin={{
-          vertical: "center",
-          horizontal: "center"
-        }}
-        anchorReference="anchorPosition"
-  anchorPosition={{ top: 400, left: 1350 }}
-         
- 
-//  anchorOrigin={{horizontal: 'right', vertical: 'center'}}
-//  targetOrigin={{horizontal: '', vertical: 'center'}}
-        
-      >
-        
-          <div style={{ position: "absolute",right: "0px",Button:"10px" }}>
+          </div>}
+          <MuiThemeProvider theme={theme2}>
+          <div>
+          {  data2 === true && <div> <div style={{ position: "absolute",right: "3px",top:"4px" }}>
+
               <IconButton
               
                      size="small"
@@ -281,9 +279,11 @@ function SimpleDialogDemo(props) {
               </Button>
             </Grid>
           </Grid>
-        </Grid>
-      </Popover>
-      </MuiThemeProvider>
+        </Grid> </div>}
+        </div>
+        </MuiThemeProvider>
+        
+      </Popover>)}
       </div>
     </div>
   );

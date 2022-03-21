@@ -64,12 +64,18 @@ const Feedback = (theme) => ({
     marginRight: "10px",
     "@media (max-width:400px)": {
       height: "38px",
+      marginRight: "5px",
   
      },
     
   },
   typography1: {
+    marginLeft: "10px",
    // margin: "10px 20px 5px 10px"
+   "@media (max-width:400px)": {
+    marginLeft: "10px",
+
+   },
   },
   textareaAutosize: {
     backgroundColor: "inherit",
