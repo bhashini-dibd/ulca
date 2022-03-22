@@ -377,7 +377,7 @@ const SpeechToSpeechOptions = (props) => {
               src={audio}
               controls
             ></audio>
-          <div   style={{position:"absolute", right:"100px", top:"91px"}} >
+          <div   style={{position:"absolute", right:"110px", top:"165px"}} >
         <SimpleDialogDemo  />
         </div>
            </div>

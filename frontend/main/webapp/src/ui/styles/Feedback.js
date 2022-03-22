@@ -24,21 +24,26 @@ const Feedback = (theme) => ({
     backgroundColor: "#FD7F23",
     position: "absolute",
     // right:"775px",
-    height: "28px",
+    height: "29px",
+    
     '&:hover': {
-      backgroundColor: "#FD7F23"
+      backgroundColor: "#FD7F23",
 
+    },
+    "@media (max-width:400px)": {
+      top:"-14px",
+      left:"7px"
     }
   },
   feedbackIcon: {
     width: "12px",
-    heigth: "10px",
+    heigth: "13px",
     color: "white",
 
 
   },
   feedbackTitle: {
-    fontSize: "10px",
+    fontSize: "12px",
     color: "white",
     paddingLeft: "3px"
   },
@@ -89,12 +94,27 @@ const Feedback = (theme) => ({
   },
   suggestbutton:{
     margin:" 10px 0px 0px 30px",
+    "@media (max-width:400px)": {
+      margin:" 5px 0px 0px 48px",
+  
+     },
   },
   buttonsubmit:{
     width: "70px",
     margin: "5px 0px 0px 55px",
     
   },
+  feedbackbuttonroot:{
+    position:"relative",
+    left:"700px",
+    top:"-10px",
+    "@media (max-width:400px)": {
+      left: "220px",
+     
+  
+     },
+  }
+  
   
 
 });

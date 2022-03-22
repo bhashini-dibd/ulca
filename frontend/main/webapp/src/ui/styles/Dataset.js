@@ -715,10 +715,10 @@ const DataSet = (theme) => ({
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
-    top: "41%",
-    "@media (max-width:400px)": {
-      top:"36%",
-    },
+     top: "15%",
+    // "@media (max-width:400px)": {
+    //   top:"36%",
+    // },
 
   }
   // tablesbody:{
