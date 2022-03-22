@@ -4,6 +4,10 @@ const Feedback = (theme) => ({
   typography: {
     padding: theme.spacing(1),
     // marginTop: "15px"
+    fontFamily: "Rowdies", 
+    fontSize: "1.3rem",
+    color:"#444542",
+   
 
 
   },
@@ -23,6 +27,7 @@ const Feedback = (theme) => ({
   feedbackbutton: {
     backgroundColor: "#FD7F23",
     position: "absolute",
+    textTransform: 'none',
     // right:"775px",
     height: "28px",
     '&:hover': {

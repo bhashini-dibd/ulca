@@ -8,7 +8,8 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import FeedbackStyle from "../../styles/Feedback";
+// import FeedbackStyle from "../../styles/Feedback";
+import DatasetStyle from "../../styles/Dataset";
 import { translate } from "../../../assets/localisation";
 import '../../styles/css/GlobalCssSlider.css';
 import { StyledRating } from './StyledRating';
@@ -21,7 +22,8 @@ import {
   createMuiTheme
 } from "@material-ui/core/styles";
 import { Form, Field } from 'react-final-form';
-import { TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core';
+
 
 
 function SimpleDialogDemo(props) {
@@ -141,9 +143,23 @@ function SimpleDialogDemo(props) {
           },
         }
       },
-
+     
     }
   });
+  const BootstrapButton = withStyles({
+    root: {
+      boxShadow: 'none',
+      textTransform: 'none',
+      fontSize: 16,
+      padding: '6px 12px',
+      border: '1px solid',
+      lineHeight: 1.5,
+     
+      borderColor: '#0063cc',
+     
+      
+    },
+  })(Button);
 
 
   // return (
@@ -326,10 +342,10 @@ function SimpleDialogDemo(props) {
                 onChange={(event, newValue) => {
                   setRating1(newValue)
                 }} />
-
-              <Button className={classes.buttonsuggest} variant="outlined" size="small" color="primary" onClick={() => setSuggestEdit("asr")}>
-                <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
-              </Button>
+               <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" disableRipple  onClick={() => setSuggestEdit("asr")}>
+               <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
+               </BootstrapButton>
+          
               <br />
               {suggestEdit === 'asr' && <TextField fullWidth variant="outlined" value={asrValue} />}
               <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translate  Text</span>  Quality</Typography>
@@ -339,11 +355,10 @@ function SimpleDialogDemo(props) {
                 onChange={(event, newValue) => {
                   setRating2(newValue)
                 }} />
-
-              <Button variant="outlined" size="small" color="primary" className={classes.buttonsuggest} onClick={() => setSuggestEdit("tts")}>
-                <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
-
-              </Button>
+              <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" disableRipple  onClick={() => setSuggestEdit("tts")}>
+              <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
+              </BootstrapButton>
+            
               <br />
               {suggestEdit === 'tts' && <TextField fullWidth variant="outlined" value={ttsValue} />}
 
@@ -354,12 +369,13 @@ function SimpleDialogDemo(props) {
                 onChange={(event, newValue) => {
                   setRating3(newValue)
                 }} />
+                
               <br />
 
             </Box>
             <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "300px", margin: "auto", paddingBottom: "10px" }}></div>
 
-            <Typography variant="body2" style={{ margin: "10px 10px 10px 10px" }}> {translate("lable.feedback4")}</Typography>
+            <Typography variant="body2" style={{ margin: "10px 10px 10px 10px",fontSize:"16px" }}> {translate("lable.feedback4")}</Typography>
             <Grid container justifyContent="center">
               <Grid item>
                 <TextareaAutosize
@@ -386,4 +402,4 @@ function SimpleDialogDemo(props) {
     </form>)}
   />
 }
-export default withStyles(FeedbackStyle)(SimpleDialogDemo);
+export default  withStyles(DatasetStyle)(SimpleDialogDemo);

@@ -736,17 +736,21 @@ const DataSet = (theme) => ({
   typography: {
     padding: theme.spacing(1),
     // marginTop: "15px"
-
+    fontFamily: "Rowdies", 
+    fontSize: "1.3rem",
+    color:"#444542",
 
   },
   typographys: {
     padding: theme.spacing(1),
-    fontSize: "12px"
+    fontSize: "14px",
+    fontFamily:"Roboto ",
+
 
   },
   typography2: {
-    margin: "25px 10px 10px 10px",
-    fontSize: "15px"
+    margin: "16px 10px 10px 0px",
+    fontSize: "16px"
     //padding:"10px"
   },
   MuiRatingLabel: {
@@ -803,7 +807,8 @@ const DataSet = (theme) => ({
 
   },
   typography1: {
-    marginLeft: "10px",
+    // marginLeft: "10px",
+    fontSize: "16px",
     // margin: "10px 20px 5px 10px"
     "@media (max-width:400px)": {
       marginLeft: "10px",
