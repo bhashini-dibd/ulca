@@ -4,6 +4,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles } from "@material-ui/core/styles";
+import { pink } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,7 +53,9 @@ export default function CheckboxesGroup() {
             <FormControlLabel
               control={
                 <Checkbox
-                color= 'primary'
+                // style ={{
+                //   color: "#00e676",
+                // }}
                   checked={Options3}
                   onChange={handleChange}
                   name="Options3"
