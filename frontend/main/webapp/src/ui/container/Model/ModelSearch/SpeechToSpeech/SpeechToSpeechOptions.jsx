@@ -29,6 +29,8 @@ import DatasetStyle from "../../../../styles/Dataset";
 // import MyAccordion from "../../../../components/common/Accordion";
 import TabPanel from "../../../../components/common/TabPanel";
 import { CustomCardComponent } from "../../../../components/common/CustomCardComponent";
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 
 const SpeechToSpeechOptions = (props) => {
   const {
@@ -61,7 +63,8 @@ const SpeechToSpeechOptions = (props) => {
     gender,
     genderValue,
     suggestEdit,
-    setSuggestEdit
+    setSuggestEdit,
+    setModal
   } = props;
 
   const renderVoiceRecorder = () => {
@@ -354,7 +357,8 @@ const SpeechToSpeechOptions = (props) => {
     return (
       <Grid container spacing={3}>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          {suggestEdit === null || suggestEdit !== 'asr' ? renderAccordionDetails(
+          {/* {suggestEdit === null || suggestEdit !== 'asr' ? */}
+          { renderAccordionDetails(
             "ASR Output",
             "Corrected ASR Output",
             output.asr,
@@ -363,13 +367,15 @@ const SpeechToSpeechOptions = (props) => {
             makeTranslationAPICall,
             clearAsr,
             "#D6EAF8"
-          ) : <CustomCardComponent title={"ASR Output"} color="#D6EAF8" className={classes.asrCard}>
+          ) }
+          {/* : <CustomCardComponent title={"ASR Output"} color="#D6EAF8" className={classes.asrCard}>
             {renderSuggestEdit(textArea.asr)}
-          </CustomCardComponent>}
+          </CustomCardComponent>} */}
 
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-          {suggestEdit === null || suggestEdit !== 'tts' ? renderAccordionDetails(
+          {/* {suggestEdit === null || suggestEdit !== 'tts' ?  */}
+          {renderAccordionDetails(
             "Translation Output",
             "Corrected Translation Output",
             output.translation,
@@ -378,9 +384,10 @@ const SpeechToSpeechOptions = (props) => {
             makeTTSAPICall,
             clearTranslation,
             "#E9F7EF"
-          ) : < CustomCardComponent title={"Translation Output"} color="#E9F7EF" className={classes.asrCard}>
+          )}
+           {/* : < CustomCardComponent title={"Translation Output"} color="#E9F7EF" className={classes.asrCard}>
             {renderSuggestEdit(textArea.tts)}
-          </CustomCardComponent>}
+          </CustomCardComponent>} */}
 
         </Grid>
       </Grid >
@@ -413,7 +420,12 @@ const SpeechToSpeechOptions = (props) => {
                 controls
               ></audio>
               <div style={{ position: "absolute", right: "100px", top: "91px" }} >
-                <SimpleDialogDemo setSuggestEdit={setSuggestEdit} />
+                {/* <SimpleDialogDemo setSuggestEdit={setSuggestEdit} /> */}
+                <Button variant="contained" size="small" className={classes.feedbackbutton} onClick={() => setModal(true)}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
               </div>
             </div>
           ) : (
@@ -422,7 +434,7 @@ const SpeechToSpeechOptions = (props) => {
           )}
 
         </CardContent>
-      </Card>
+      </Card >
     );
   };
 

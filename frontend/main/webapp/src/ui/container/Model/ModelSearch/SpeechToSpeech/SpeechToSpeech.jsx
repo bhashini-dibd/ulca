@@ -15,6 +15,8 @@ import Stop from "../../../../../assets/stopIcon.svg";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import ComputeAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import { Language } from "../../../../../configs/DatasetItems";
+import Modal from '../../../../components/common/Modal';
+import FeedbackModal from '../../../../components/common/Feedback';
 
 const SpeechToSpeech = () => {
   const dispatch = useDispatch();
@@ -46,7 +48,7 @@ const SpeechToSpeech = () => {
   });
 
   const [suggestEdit, setSuggestEdit] = useState(null)
-
+  const [modal, setModal] = useState(false);
 
 
   useEffect(() => {
@@ -512,6 +514,7 @@ const SpeechToSpeech = () => {
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
           <SpeechToSpeechOptions
+            setModal={setModal}
             Start={Start}
             Stop={Stop}
             data={data}
@@ -555,6 +558,13 @@ const SpeechToSpeech = () => {
           variant={snackbar.variant}
         />
       )}
+      {
+        modal && (
+          <Modal open={modal} handleClose={() => setModal(false)}>
+            <FeedbackModal setModal={setModal} setSuggestEdit={setSuggestEdit} suggestEdit={suggestEdit} asrValue={output.asr} ttsValue={output.translation} />
+          </Modal>
+        )
+      }
     </>
   );
 };
