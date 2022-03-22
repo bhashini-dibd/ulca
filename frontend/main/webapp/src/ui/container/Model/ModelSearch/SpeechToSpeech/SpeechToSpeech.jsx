@@ -21,7 +21,7 @@ const SpeechToSpeech = () => {
   const { asr, tts, translation, sourceLanguage, targetLanguage } = useSelector(
     (state) => state.getBulkModelSearch
   );
-  const [gender,setGender] = useState("female")
+  const [gender, setGender] = useState("female")
   const [data, setData] = useState("");
   const [url, setUrl] = useState("");
   const [recordAudio, setRecordAudio] = useState("");
@@ -45,7 +45,9 @@ const SpeechToSpeech = () => {
     tts: "",
   });
 
-  
+  const [suggestEdit, setSuggestEdit] = useState(null)
+
+
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
@@ -309,11 +311,11 @@ const SpeechToSpeech = () => {
       }
     });
   };
-const genderHandler =(value)=>{
-  setGender(value)
+  const genderHandler = (value) => {
+    setGender(value)
 
-}
-console.log('value', gender)
+  }
+  console.log('value', gender)
   const setSnackbarError = (errorMsg) => {
     setSnackbarInfo({
       ...snackbar,
@@ -516,6 +518,8 @@ console.log('value', gender)
             url={url}
             base={base}
             setBase={setBase}
+            suggestEdit={suggestEdit}
+            setSuggestEdit={setSuggestEdit}
             error={error}
             setUrl={setUrl}
             setError={setError}
