@@ -15,6 +15,7 @@ import { StyledRating } from './StyledRating';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import CheckboxesGroup from "../common/FeedbackCheckbox"
 import {
   makeStyles,
   MuiThemeProvider,
@@ -24,21 +25,23 @@ import {
 
 
 
-function SimpleDialogDemo(props) {
+function FeedbackPopover(props) {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorE2, setAnchorE2] = React.useState(null);
   const [value, setValue] = React.useState(0);
   const [detailedFeedback, setDetailedFeedback] = useState(false);
-  const [rating1, setRating1] = React.useState(0);
-  const [rating2, setRating2] = React.useState(0);
-  const [rating3, setRating3] = React.useState(0);
   const [data2, setData2] = React.useState(false);
-  
+  const [state, setState] = React.useState({
+    checkedA: true,
+    checkedB: true,
+    checkedC: true,
+    checkedD: true,
+  });
   
 
-  
-
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
+  };
 
   const handleClick = (event) => {
     setData2(false)
@@ -49,29 +52,23 @@ function SimpleDialogDemo(props) {
     setAnchorEl(null);
   };
   const handleClosefeedback = ( reason) => {
-    setAnchorE2(null);
-    handleClose();
+   handleClose();
     
     
   }
   const handleClickfeedback = (event) => {
     setData2(true)
-     //handleClose();
-    setAnchorE2(event.currentTarget);
+    
   };
 
-  const open1 = Boolean(anchorE2);
-  const id1 = open1 ? 'simple-popover' : undefined;
+ 
 
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   // console.log(anchorEl)
 
-  const divStyle = {
-    display: 'flex',
-    alignItems: 'center'
-  };
+  
 
   const handleRatingChange = (event, newValue) => {
     setValue(newValue);
@@ -98,12 +95,6 @@ function SimpleDialogDemo(props) {
           maxHeight:"500px",
             },},
         paper: {
-          
-            // right: "100px",
-            // bottom:"25px",
-            // position:"fixed",
-            // width:"430px",
-            // maxHeight:"500px",
           padding:"0px 0px 0px 0px",
           "@media (max-width:400px)": {
            width:"100%",
@@ -117,6 +108,9 @@ function SimpleDialogDemo(props) {
           fontSize:"10px"
 
         },
+        body1:{
+            fontSize:"15px"
+        },
         colorPrimary:{
           "@media (max-width:400px)": {
             fontSize: "13px",
@@ -124,11 +118,8 @@ function SimpleDialogDemo(props) {
           }
 
       },
-      MuiRating:{
-        label:{
-         paddingLeft:"10px"
-          }
-        },
+    
+
         MuiBox:{
           root:{
             "@media (max-width:400px)": {
@@ -137,6 +128,7 @@ function SimpleDialogDemo(props) {
                },
           }
         },
+        
       
     }
   });
@@ -144,14 +136,14 @@ function SimpleDialogDemo(props) {
 
   return (
 
-    <div >
+    <div style={{position:"relative",left:"700px",top:"-10px"}}>
       <Button variant="contained" size="small" className={classes.feedbackbutton} onClick={handleClick}>
         <ThumbUpAltIcon className={classes.feedbackIcon} />
         < ThumbDownAltIcon className={classes.feedbackIcon} />
         <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
       </Button>
-      {/* <Button  id="detailed" >abc</Button> */}
-      <div>
+      
+          <div>
      {setAnchorEl!==null &&(<Popover
         id={id}
         open={open}
@@ -168,7 +160,7 @@ function SimpleDialogDemo(props) {
       >
         
   { data2 === false && <div>
-        <Typography className={classes.typography} align="center" >   {translate("lable.feedback1")} <br />  {translate("lable.feedbacks")}</Typography>
+        <Typography className={classes.typography} style={{marginBottom:"10px"}} align="center" >   {translate("lable.feedback1")} <br />  {translate("lable.feedbacks")}</Typography>
 
         <StyledRating
           className={classes.rating}
@@ -179,8 +171,8 @@ function SimpleDialogDemo(props) {
 
         />
 
-         
-        {/* < Typography className={classes.feedbacktypography} variant="body2"  >  {translate("lable.verybad")}  < Typography variant="body2" style={{ float: "right", fontSize: "12px" }} >  {translate("lable.verygood")}  </Typography>   </Typography> */}
+{/* < Typography className={classes.feedbacktypography} variant="body2"  >  {translate("lable.verybad")}  < Typography variant="body2" style={{ float: "right", fontSize: "12px" }} >  {translate("lable.verygood")}  </Typography>   </Typography> */}
+       
 
         <div className={classes.root}>
 
@@ -200,7 +192,10 @@ function SimpleDialogDemo(props) {
             </Grid>
           </Grid>
         </div>
-        <Button variant="outlined" size="small" color="primary" className={classes.submitbutton}  >
+        <Button variant="outlined" size="small" color="primary" className={classes.suggestbutton}  >
+        {translate("button.Suggest an edit")}
+        </Button>
+        <Button variant="outlined" size="small" color="primary"  className={classes.buttonsubmit}  >
           {translate("button.submit")}
         </Button>
 
@@ -209,7 +204,7 @@ function SimpleDialogDemo(props) {
           </div>}
           <MuiThemeProvider theme={theme2}>
           <div>
-          {  data2 === true && <div> <div style={{ position: "absolute",right: "3px",top:"4px" }}>
+          {  data2 === true && <div> <div style={{ position: "absolute",right: "3px",top:"2px" }}>
 
               <IconButton
               
@@ -222,41 +217,12 @@ function SimpleDialogDemo(props) {
                      <CloseIcon fontSize="small" />
                    </IconButton>
                    </div> 
-        <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
-        <Box p={2}>
+        <Typography variant="body2" style={{  margin: "17px 10px -10px 10px",
+    fontSize: "16px"}}> {translate("lable.feedback3")}</Typography>
+        <Box p={5}>
 
-          <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>
-         
-          <StyledRating
-          //  style={{position:"fixed" ,top:"30px",left:"40px"}}
-          size="large"
-           value={rating1}
-          onChange={(event, newValue) => {
-               setRating1(newValue)
-          }} />
-         
-          <Button className={classes.buttonsuggest} variant="outlined" size="small" color="primary" >
-            <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
-
-          </Button>
-          <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translate  Text</span>  Quality</Typography>
-          <StyledRating 
-            size="large"
-           value={rating2} 
-            onChange={(event, newValue) => {
-             setRating2(newValue)
-          } } />
-          <Button variant="outlined" size="small" color="primary" className={classes.buttonsuggest}>
-            <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
-
-          </Button>
-          <Typography variant="body2" className={classes.typography1} >Rate  <span style={{ fontWeight: "bold" }}>Translated Speech</span> Quality </Typography>
-          <StyledRating  
-            size="large"
-           value={rating3} 
-            onChange={(event, newValue) => {
-               setRating3(newValue)
-          }} />
+      <CheckboxesGroup/>
+        
         </Box>
         <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "300px", margin: "auto", paddingBottom: "10px" }}></div>
 
@@ -287,4 +253,4 @@ function SimpleDialogDemo(props) {
     </div>
   );
 }
-export default withStyles(FeedbackStyle)(SimpleDialogDemo);
+export default withStyles(FeedbackStyle)(FeedbackPopover);

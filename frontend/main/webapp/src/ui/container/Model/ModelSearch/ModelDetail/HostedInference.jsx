@@ -23,7 +23,7 @@ import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
-import SimpleDialogDemo from "../../../../components/common/Feedback";
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -242,7 +242,7 @@ const HostedInference = (props) => {
             value={target}
             className={classes.textArea}
           />
-         <SimpleDialogDemo/></>)}
+         <FeedbackPopover/></>)}
          
         </CardContent>
       </Card>

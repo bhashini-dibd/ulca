@@ -23,6 +23,7 @@ const Feedback = (theme) => ({
   feedbackbutton: {
     backgroundColor: "#FD7F23",
     position: "absolute",
+    // right:"775px",
     height: "28px",
     '&:hover': {
       backgroundColor: "#FD7F23"
@@ -85,6 +86,14 @@ const Feedback = (theme) => ({
 
   MuiButtonlabel: {
     fontSize: "11px"
+  },
+  suggestbutton:{
+    margin:" 10px 0px 0px 30px",
+  },
+  buttonsubmit:{
+    width: "70px",
+    margin: "5px 0px 0px 55px",
+    
   },
   
 
