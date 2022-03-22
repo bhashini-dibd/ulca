@@ -7,12 +7,20 @@ import { makeStyles } from "@material-ui/core/styles";
 import { pink } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
+  
     root: {
       display: "flex"
     },
     formControl: {
       margin: theme.spacing(2)
-    }
+    },
+   
+    MuiSvgIcon:{
+      root: {
+      fill: "white",
+      }
+    },
+    
   }));
 
 export default function CheckboxesGroup() {
@@ -30,23 +38,30 @@ export default function CheckboxesGroup() {
   
     const { Options1,Options2,Options3,Options4 } = state;
    
-    Object.keys(state).forEach((element,i) => {
-          console.log(element,"fjhbjd",i);    
-    });
+    // Object.keys(state).forEach((element,i) => {
+    //       console.log(element,"fjhbjd",i);    
+    // });
     return (
       <div className={classes.root}>
+        
         <FormControl component="fieldset" className={classes.formControl}>
           
           <FormGroup>
            <FormControlLabel
               control={
-                <Checkbox  color= 'primary' checked={Options1} onChange={handleChange} name="Options1" />
+                <Checkbox  color= 'primary' checked={Options1} onChange={handleChange} name="Options1" 
+               
+                 />
               }
               label="Options 1"
+             
+             
+              
             />
             <FormControlLabel
               control={
-                <Checkbox  color= 'primary' checked={Options2} onChange={handleChange} name="Options2" />
+                <Checkbox  color= 'primary' checked={Options2} onChange={handleChange} name="Options2" 
+                />
               }
               label="Options 2"
             />

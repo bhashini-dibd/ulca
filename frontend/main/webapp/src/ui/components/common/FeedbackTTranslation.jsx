@@ -136,7 +136,7 @@ function FeedbackPopover(props) {
 
   return (
 
-    <div style={{position:"relative",left:"700px",top:"-10px"}}>
+    <div className={classes.feedbackbuttonroot} >
       <Button variant="contained" size="small" className={classes.feedbackbutton} onClick={handleClick}>
         <ThumbUpAltIcon className={classes.feedbackIcon} />
         < ThumbDownAltIcon className={classes.feedbackIcon} />
