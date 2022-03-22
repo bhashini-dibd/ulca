@@ -8,7 +8,6 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-import TextField from '@material-ui/core/TextField';
 import FeedbackStyle from "../../styles/Feedback";
 import { translate } from "../../../assets/localisation";
 import '../../styles/css/GlobalCssSlider.css';
@@ -158,60 +157,60 @@ function SimpleDialogDemo(props) {
       </Button>
       {/* <Button  id="detailed" >abc</Button> */}
       <div>
-        {setAnchorEl !== null && (<Popover
-          id={id}
-          open={open}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: '',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-        >
+     {setAnchorEl!==null &&(<Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: '',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+      >
+        
+  { data2 === false && <div>
+        <Typography className={classes.typography} align="center" >   {translate("lable.feedback1")} <br />  {translate("lable.feedbacks")}</Typography>
 
-          {data2 === false && <div>
-            <Typography className={classes.typography} align="center" >   {translate("lable.feedback1")} <br />  {translate("lable.feedbacks")}</Typography>
+        <StyledRating
+          className={classes.rating}
+          size="large"
+          name="simple-controlled"
+          value={value}
+          onChange={handleRatingChange}
 
-            <StyledRating
-              className={classes.rating}
-              size="large"
-              name="simple-controlled"
-              value={value}
-              onChange={handleRatingChange}
+        />
 
-            />
+         
+        {/* < Typography className={classes.feedbacktypography} variant="body2"  >  {translate("lable.verybad")}  < Typography variant="body2" style={{ float: "right", fontSize: "12px" }} >  {translate("lable.verygood")}  </Typography>   </Typography> */}
 
+        <div className={classes.root}>
 
-            < Typography className={classes.feedbacktypography} variant="body2"  >  {translate("lable.verybad")}  < Typography variant="body2" style={{ float: "right", fontSize: "12px" }} >  {translate("lable.verygood")}  </Typography>   </Typography>
+          <Grid container justifyContent="center">
+            <Grid item>
 
-            <div className={classes.root}>
+              {detailedFeedback ? <Link
+                 id="simple-popover1"
+                component="button"
+                variant="body2"
+                onClick={handleClickfeedback}
+                style={{ color: "#FD7F23", fontSize: "13px", textDecoration: "underline" }}
+              >
+                {translate("link.feedback")}
+              </Link> : <></>}
 
-              <Grid container justifyContent="center">
-                <Grid item>
+            </Grid>
+          </Grid>
+        </div>
+        <Button variant="outlined" size="small" color="primary" className={classes.submitbutton}  >
+          {translate("button.submit")}
+        </Button>
 
-                  {detailedFeedback ? <Link
-                    id="simple-popover1"
-                    component="button"
-                    variant="body2"
-                    onClick={handleClickfeedback}
-                    style={{ color: "#FD7F23", fontSize: "13px", textDecoration: "underline" }}
-                  >
-                    {translate("link.feedback")}
-                  </Link> : <></>}
-
-                </Grid>
-              </Grid>
-            </div>
-            <Button variant="outlined" size="small" color="primary" className={classes.submitbutton}  >
-              {translate("button.submit")}
-            </Button>
-
-            <Typography className={classes.typographys} align="center" variant="body2" component="div" >
-              {translate("lable.feedback2")}</Typography>
+        <Typography className={classes.typographys} align="center" variant="body2" component="div" >
+          {translate("lable.feedback2")}</Typography>
           </div>}
           <MuiThemeProvider theme={theme2}>
             <div>
