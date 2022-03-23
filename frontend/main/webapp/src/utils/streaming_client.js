@@ -180,7 +180,6 @@ export default function StreamingClient() {
             false,
             false
           );
-          // console.log("emitted last");
         } else {
           _this.localBuffer = data_16000;
         }
