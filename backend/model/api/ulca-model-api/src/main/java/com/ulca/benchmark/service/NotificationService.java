@@ -25,40 +25,31 @@ public class NotificationService {
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
 
-	
-	
 	@Value("${kafka.ulca.notifier.consumer.ip.topic}")
 	private String notifierTopic;
-	
-	
+
 	public void notifyNodelHeartBeatFailure(List<ModelExtended> list) {
 		JSONObject msg = new JSONObject();
 		msg.put("event", "inference-check-failed");
-		
-		JSONArray  detailsArray = new JSONArray();
-		for(ModelExtended model : list) {
-			
-			if(model.getTask() != null &&  model.getTask().getType() != null ) {
+
+		JSONArray detailsArray = new JSONArray();
+		for (ModelExtended model : list) {
+
+			if (model.getTask() != null && model.getTask().getType() != null) {
 				JSONObject details = new JSONObject();
 				details.put("modelName", model.getName());
 				details.put("taskType", model.getTask().getType().toString());
-				
-				if(model.getInferenceEndPoint() != null) {
-					details.put("callBackUrl",model.getInferenceEndPoint().getCallbackUrl());
+
+				if (model.getInferenceEndPoint() != null) {
+					details.put("callBackUrl", model.getInferenceEndPoint().getCallbackUrl());
 					detailsArray.put(details);
-					
+
 				}
-				
 			}
-			
 		}
-		
 		msg.put("details", detailsArray);
-		
 		kafkaTemplate.send(notifierTopic, msg.toString());
-		
+
 		log.info(" failed model heart beat details :: " + msg.toString());
-		
 	}
-	
 }
