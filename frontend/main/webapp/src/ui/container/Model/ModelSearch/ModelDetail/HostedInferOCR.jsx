@@ -323,7 +323,8 @@ const HostedInferASR = (props) => {
 
           { fileData.length > 0 && ( <><CardContent>{fileData}</CardContent>
           <div style={{marginTop:"33%"}}>
-            <SimpleDialogDemo/> </div></>)}
+            {/* <SimpleDialogDemo/>  */}
+            </div></>)}
               
           </Card>
         </Grid>
@@ -402,7 +403,8 @@ const HostedInferASR = (props) => {
             </Grid>
             {target.length > 0 && ( <> <CardContent>{target}</CardContent>
             <div style={{marginTop:"38%",}}>
-            <SimpleDialogDemo/> </div> </>)} 
+            {/* <SimpleDialogDemo/> */}
+             </div> </>)} 
            
           </Card>
         </Grid>
