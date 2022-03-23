@@ -10,21 +10,14 @@ const themeDefault = createMuiTheme({
       root: {
         cursor: "pointer",
         '&.MuiTableRow-hover:hover': {
-
-
           backgroundColor: "#F4F4FA"
-
         }
-
-
-
       },
       hover: {
         //   "&:hover": {
         //     color: '#2C2799',
         // backgroundColor: " rgba(44,39,153, .05)"
         // }
-
       }
     },
     MUIDataTableFilterList: {
@@ -165,7 +158,6 @@ const themeDefault = createMuiTheme({
 
       },
       label: {
-
         textTransform: "none",
         fontFamily: '"Segoe UI","Roboto"',
         fontSize: "15px",
@@ -177,18 +169,17 @@ const themeDefault = createMuiTheme({
         "@media (max-width:550px)": {
           fontSize: ".75rem",
         }
-        
       },
       sizeLarge: {
         height: "48px",
       },
+      // sizeMedium: {
+      //   height: "40px",
+      // },
       sizeSmall: {
         height: "36px",
       },
-
-
-    }
-
+    }    
   },
   palette: {
     primary: {
@@ -257,7 +248,7 @@ themeDefault.typography.body2 = {
   fontFamily: '"Roboto", sans-serif',
   fontWeight: "400",
   color: "#0C0F0F",
-  lineHeight:"22px",
+  lineHeight: "22px",
   "@media (max-width:550px)": {
     fontSize: ".7rem",
   }

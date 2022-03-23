@@ -26,13 +26,14 @@ import GetMasterDataAPI from "../../../../../redux/actions/api/Common/getMasterD
 import { useDispatch, useSelector } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import { useRef } from "react";
+import SimpleDialogDemo from "../../../../components/common/Feedback";
 
 // const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
 
 const AudioRecord = (props) => {
   const streaming = props.streaming;
-  const { classes, language, modelId } = props;
-  const [recordAudio, setRecordAudio] = useState("");
+  const { classes, language, modelId ,getchildData} = props;
+ const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
   const { languages, inferenceEndpoints } = useSelector(
@@ -50,13 +51,18 @@ const AudioRecord = (props) => {
   const timerRef = useRef();
   const [base, setBase] = useState("");
 
+  // const sendDataback=()=>{
+  //   getchildData(text);
+  // }
+  // sendDataback();
+  // console.log(text,"eeeeeee")
   useEffect(() => {
     if (!languages.length) {
       const obj = new GetMasterDataAPI(["languages", "inferenceEndpoints"]);
       dispatch(APITransport(obj));
     }
   }, []);
-
+ 
   useEffect(() => {
     return () => {
       streaming.isStreaming ? streaming.disconnect() : console.log("unmounted");
@@ -69,16 +75,20 @@ const AudioRecord = (props) => {
     if (typeof timerRef.current === "number") {
       clearTimeout(timerRef.current);
     }
+
     if (vakyanshEndPoint.length) {
       setStreamingState("start");
       const output = document.getElementById("asrCardOutput");
-      output.innerText = "";
+      {console.log( output,"aaaaaaaaa")}
+      // output.innerText = "";
+     
       setData("");
       const { code } = vakyanshEndPoint[0];
       streaming.connect(code, languageCode, function (action, id) {
         timerRef.current = setTimeout(() => {
           if (streaming.isStreaming) handleStop();
         }, 61000);
+        
         setStreamingState("listen");
         setRecordAudio(RecordState.START);
         if (action === SocketStatus.CONNECTED) {
@@ -86,7 +96,10 @@ const AudioRecord = (props) => {
             function (transcript) {
               const output = document.getElementById("asrCardOutput");
               if (output) output.innerText = transcript;
+              getchildData(transcript);
+              console.log(transcript,"vvvvvv")
             },
+          
             function (errorMsg) {
               console.log("errorMsg", errorMsg);
             }
@@ -113,8 +126,9 @@ const AudioRecord = (props) => {
         output.innerText,
         `${code}asr/v1/punctuate/${languageCode}`,
         (status, text) => {
-          console.log(text);
           output.innerText = text;
+          console.log(text,"wwwwww")
+          getchildData(text);
         },
         (status, error) => {
           // alert("Failed to punctuate");
@@ -198,7 +212,7 @@ const AudioRecord = (props) => {
             <div className={classes.center}>
               <img
                 src={Start}
-                alt=""
+                alt="" 
                 onClick={() => handleStart()}
                 style={{ cursor: "pointer" }}
               />{" "}
@@ -215,7 +229,8 @@ const AudioRecord = (props) => {
             </Typography>{" "}
           </div>
           <div className={classes.centerAudio}>
-            {data && <audio src={data} controls id="sample"></audio>}
+            {data && <audio src={data} controls id="sample"></audio>  }
+           
           </div>
         </CardContent>
       ) : (
@@ -258,6 +273,7 @@ const AudioRecord = (props) => {
               <audio src={"test"} controls id="sample"></audio>
             )}
           </div>
+         
           <CardActions
             style={{ justifyContent: "flex-end", paddingRight: "20px" }}
           >

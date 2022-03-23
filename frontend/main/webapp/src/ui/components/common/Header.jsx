@@ -123,7 +123,7 @@ const Header = (props) => {
   };
   return (
     <MuiThemeProvider theme={Theme}>
-      <AppBar color="inherit" position="static">
+      <AppBar color="inherit" position="static" >
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
             <Link href="https://bhashini.gov.in/en/">

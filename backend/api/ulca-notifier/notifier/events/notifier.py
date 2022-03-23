@@ -1,8 +1,9 @@
 import logging
 from logging.config import dictConfig
 from os import name
+from re import template
 from configs import StaticConfigs
-from configs.configs import base_url,ds_contribution_endpoint,model_bm_contribution_endpoint,ds_search_list_endpoint
+from configs.configs import base_url,ds_contribution_endpoint,model_bm_contribution_endpoint,ds_search_list_endpoint, receiver_email_ids
 from utils.notifierutils import NotifierUtils
 from repository import NotifierRepo
 log     =   logging.getLogger('file')
@@ -11,13 +12,45 @@ repo    =   NotifierRepo()
 
 class NotifierEvent:
     def __init__(self,userID):
-        query           =   {"userID":userID}
-        exclude         =   {"_id":0}
-        user_details    =   repo.search(query,exclude,None,None)
-        self.user_email      =   user_details[0]["email"] 
-        self.user_name       =   user_details[0]["firstName"]
+        if userID == None:
+            self.user_email = receiver_email_ids.split(',')
+        else:
+            query           =   {"userID":userID}
+            exclude         =   {"_id":0}
+            user_details    =   repo.search(query,exclude,None,None)
+            self.user_email      =   user_details[0]["email"] 
+            self.user_name       =   user_details[0]["firstName"]
     
-    #dumping errors onto redis store
+
+    def model_check_notifier(self, data):
+        log.info(f'Request for notifying model unavailable updates received')
+        models_list = []
+        task_list = []
+        callbU_list = []
+        try: 
+            status = (data["event"].split('-'))[-1]
+            if status == "failed":
+                template = 'md_inf_failed.html'
+                receiver_list = self.user_email
+                subject = StaticConfigs.MD_INFR_FAILED.value
+                for details in data["details"]:
+                    if "taskType" not in details.keys():
+                        details["taskType"] = 'N/A'
+                    if "callBackUrl" not in details.keys():
+                        details["callBackUrl"] = 'N/A'
+                    if "Google" not in str(details["modelName"]) and "Bing" not in str(details["modelName"]):
+                        models_list.append(details["modelName"])
+                        task_list.append(details["taskType"])
+                        callbU_list.append(details["callBackUrl"])
+                leng = len(models_list)
+                template_vars = {"firstname":None,"activity_link":None,"datasetName":None,"datasetType":None,"modelName": models_list,
+                "taskType":task_list,"callbackUrl":callbU_list,"len":leng}
+                utils.generate_email_notification(template, template_vars,receiver_list,subject)
+
+        except Exception as e:
+                    log.exception(f'Exception while writing errors: {e}')
+                    return False
+
     def data_submission_notifier(self, data):
         log.info(f'Request for notifying data submission updates for entityID:{data["entityID"]}')
         log.info(data)
@@ -31,7 +64,9 @@ class NotifierEvent:
                 template        =   'ds_submit_failed.html'
                 subject         =   StaticConfigs.DS_SUBMIT_FAILED.value
             link                =   f'{base_url}{ds_contribution_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None}
+            if "datasetName" not in data["details"].keys():
+                data["details"]["datasetName"] = 'N/A'
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None,"taskType":"N/A","callbackUrl":"N/A","len":"N/A"}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
             
@@ -75,7 +110,9 @@ class NotifierEvent:
                 template        =   'bm_run_failed.html'
                 subject         =   StaticConfigs.BM_RUN_FAILED.value
             link                =   f'{base_url}{model_bm_contribution_endpoint}{data["entityID"]}'
-            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None,"modelName":data["details"]["modelName"]}#
+            if "modelName" not in data["details"].keys():
+                data["details"]["modelName"] = 'N/A'
+            template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None,"modelName":data["details"]["modelName"],"taskType":"N/A","callbackUrl":"N/A","len":"N/A"}
             receiver_list       =   [self.user_email]
             utils.generate_email_notification(template,template_vars,receiver_list,subject)
         except Exception as e:

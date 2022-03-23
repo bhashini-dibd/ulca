@@ -15,9 +15,11 @@ import {
   IconButton,
   Tooltip,
   FormControl,
- 
+  
   
 } from "@material-ui/core";
+import SimpleDialogDemo from "../../../../components/common/Feedback";
+//import ThumbsUpDownOutlinedIcon from '@mui/icons-material/ThumbsUpDownOutlined';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FileCopyIcon from "@material-ui/icons/FileCopy";
@@ -60,7 +62,7 @@ const SpeechToSpeechOptions = (props) => {
   } = props;
   
   const renderVoiceRecorder = () => {
-    console.log(genderValue,"aaaaaaa")
+   
     return (
       <Grid container spacing={1}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -86,7 +88,7 @@ const SpeechToSpeechOptions = (props) => {
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <div className={classes.center}>
-            <Typography style={{ height: "12px" }} variant="caption">
+            <Typography style={{ height: "12px", }} variant="caption">
               {recordAudio === "start" ? "Recording..." : ""}
             </Typography>{" "}
           </div>
@@ -97,7 +99,7 @@ const SpeechToSpeechOptions = (props) => {
               style={{ display: "none" }}
             />
           </div>
-          <div className={classes.centerAudio}>
+          <div className={classes.centerAudio} style={{height: "60px"}}>
             {data ? (
               <audio
                 src={data}
@@ -128,6 +130,7 @@ const SpeechToSpeechOptions = (props) => {
               className={classes.flexEndStyle}
             >
               <Button
+              style={{}}
                 color="primary"
                 variant="contained"
                 size={"small"}
@@ -285,6 +288,9 @@ const SpeechToSpeechOptions = (props) => {
               xl={10}
               className={classes.flexEndStyle}
             >
+              <div style={{marginRight:"400px"}}>
+              
+               </div>
               <Button
               style={{color:"#707070"}}
                 variant="outlined"
@@ -340,6 +346,7 @@ const SpeechToSpeechOptions = (props) => {
             clearTranslation,
             "#E9F7EF"
           )}
+          {console.log(  output.asr,"kkkkk")}
         </Grid>
       </Grid>
     );
@@ -351,33 +358,36 @@ const SpeechToSpeechOptions = (props) => {
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
             {`${translate("label.output")}`}
+            
           </Typography>
-        </Grid>
+        </Grid >
+        
         <CardContent
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            position: "relative",
-            top: "25%",
-          }}
+        className={classes.audioCard}
+         
         >
           {audio ? (
+         <div>
             <audio
               style={{
                 width: "100%",
-                display: "flex",
                 justifyContent: "center",
                 alignContent: "center",
               }}
               src={audio}
               controls
             ></audio>
+          <div   style={{position:"absolute", right:"110px", top:"165px"}} >
+        <SimpleDialogDemo  />
+        </div>
+           </div>
           ) : (
             <></>
+           
           )}
-        </CardContent>
-      </Card>
+           
+         </CardContent>
+         </Card>
     );
   };
 
@@ -489,9 +499,11 @@ const SpeechToSpeechOptions = (props) => {
     <Grid container spacing={3} className={classes.stspart}>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
         {renderTabs()}
+     
       </Grid>
       <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
-        {renderOutput()}
+        {renderOutput() }
+        
       </Grid>
       {audio ? (
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
