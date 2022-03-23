@@ -342,7 +342,7 @@ function SimpleDialogDemo(props) {
                 onChange={(event, newValue) => {
                   setRating1(newValue)
                 }} />
-               <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" disableRipple  onClick={() => setSuggestEdit("asr")}>
+               <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("asr")}>
                <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
                </BootstrapButton>
           
@@ -355,7 +355,7 @@ function SimpleDialogDemo(props) {
                 onChange={(event, newValue) => {
                   setRating2(newValue)
                 }} />
-              <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" disableRipple  onClick={() => setSuggestEdit("tts")}>
+              <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary"   onClick={() => setSuggestEdit("tts")}>
               <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
               </BootstrapButton>
             

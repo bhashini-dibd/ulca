@@ -36,6 +36,7 @@ const DataSet = (theme) => ({
     float: "right",
     marginRight: "30px",
     marginTop: "33px",
+    lineHeight: "1.2em",
     "&:hover": {
       backgroundColor: "#FD7F23",
     },

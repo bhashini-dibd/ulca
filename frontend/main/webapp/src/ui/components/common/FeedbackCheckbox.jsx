@@ -4,17 +4,22 @@ import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import { makeStyles } from "@material-ui/core/styles";
-import { pink } from '@material-ui/core/colors';
+import { pink, red } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   
     root: {
-      display: "flex"
+      display: "flex",
+     
     },
     formControl: {
       margin: theme.spacing(2)
     },
-   
+    MuiIconButtonroot:{
+      '&.Mui-checked': {
+        color: pink[600],
+      },
+    },
     MuiSvgIcon:{
       root: {
       fill: "white",
@@ -49,7 +54,8 @@ export default function CheckboxesGroup() {
           <FormGroup>
            <FormControlLabel
               control={
-                <Checkbox  color= 'primary' checked={Options1} onChange={handleChange} name="Options1" 
+                <Checkbox 
+                 color="primary" checked={Options1} onChange={handleChange} name="Options1" 
                
                  />
               }
