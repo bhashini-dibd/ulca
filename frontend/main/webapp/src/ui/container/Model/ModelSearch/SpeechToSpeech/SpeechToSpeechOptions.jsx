@@ -278,11 +278,11 @@ const SpeechToSpeechOptions = (props) => {
           </Grid>
         </CardContent>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Grid container spacing="2">
+          <Grid container spacing="1">
             <Grid
               item
-              xs={12}
-              sm={12}
+              xs={9}
+              sm={9}
               md={10}
               lg={10}
               xl={10}
@@ -302,7 +302,7 @@ const SpeechToSpeechOptions = (props) => {
                 Clear
               </Button>
             </Grid>
-            <Grid item xs={12} sm={12} md={2} lg={2} xl={2}>
+            <Grid item xs={3} sm={3} md={2} lg={2} xl={2}>
               <Button
                style={{color:"#707070"}}
                 variant="outlined"
