@@ -242,7 +242,10 @@ const HostedInference = (props) => {
             value={target}
             className={classes.textArea}
           />
-         <FeedbackPopover/></>)}
+          <div  className={classes.feedbackPopover} style={{ }}>
+         <FeedbackPopover/>
+         </div>
+         </>)}
          
         </CardContent>
       </Card>
