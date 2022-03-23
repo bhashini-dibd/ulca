@@ -359,7 +359,7 @@ const SpeechToSpeechOptions = (props) => {
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           {/* {suggestEdit === null || suggestEdit !== 'asr' ? */}
           { renderAccordionDetails(
-            "ASR Output",
+            "Speech To Text",
             "Corrected ASR Output",
             output.asr,
             "asr",

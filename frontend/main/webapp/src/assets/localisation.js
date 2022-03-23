@@ -138,7 +138,7 @@ const localization_EN_Data = {
   "lable.verygood":"very good",
   "link.feedback":" Detailed Feedback",
   "button. Submit":" Submit",
-  "lable.feedback2":"Your feedback will be used to help to improve the product",
+  "lable.feedback2":"Your feedback will be used to help improve the product",
   "lable.feedback3":"Please rate your experience...",
   "button.Suggest an edit":"Suggest an edit",
   "lable.feedback4":"Add your comments",

@@ -27,7 +27,7 @@ import { TextField } from '@material-ui/core';
 
 
 function SimpleDialogDemo(props) {
-  const { classes, setSuggestEdit, suggestEdit, asrValue, ttsValue, setModal } = props;
+  const { classes, setSuggestEdit, suggestEdit, asrValue, ttsValue, setModal, handleOnChange } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
   const [value, setValue] = React.useState(-1);
@@ -143,7 +143,7 @@ function SimpleDialogDemo(props) {
           },
         }
       },
-     
+
     }
   });
   const BootstrapButton = withStyles({
@@ -154,10 +154,10 @@ function SimpleDialogDemo(props) {
       padding: '6px 12px',
       border: '1px solid',
       lineHeight: 1.5,
-     
+
       borderColor: '#0063cc',
-     
-      
+
+
     },
   })(Button);
 
@@ -342,12 +342,12 @@ function SimpleDialogDemo(props) {
                 onChange={(event, newValue) => {
                   setRating1(newValue)
                 }} />
-               <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("asr")}>
-               <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
-               </BootstrapButton>
-          
+              <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("asr")}>
+                <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
+              </BootstrapButton>
+
               <br />
-              {suggestEdit === 'asr' && <TextField fullWidth variant="outlined" value={asrValue} />}
+              {suggestEdit === 'asr' && <TextField fullWidth variant="outlined" onChange={(e) => handleOnChange('asr', e)} value={asrValue} />}
               <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translate  Text</span>  Quality</Typography>
               <StyledRating
                 size="large"
@@ -355,12 +355,12 @@ function SimpleDialogDemo(props) {
                 onChange={(event, newValue) => {
                   setRating2(newValue)
                 }} />
-              <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary"   onClick={() => setSuggestEdit("tts")}>
-              <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
+              <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("tts")}>
+                <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
               </BootstrapButton>
-            
+
               <br />
-              {suggestEdit === 'tts' && <TextField fullWidth variant="outlined" value={ttsValue} />}
+              {suggestEdit === 'tts' && <TextField fullWidth variant="outlined" onChange={(e) => handleOnChange('translation', e)} value={ttsValue} />}
 
               <Typography variant="body2" className={classes.typography1} >Rate  <span style={{ fontWeight: "bold" }}>Translated Speech</span> Quality </Typography>
               <StyledRating
@@ -369,13 +369,13 @@ function SimpleDialogDemo(props) {
                 onChange={(event, newValue) => {
                   setRating3(newValue)
                 }} />
-                
+
               <br />
 
             </Box>
             <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "300px", margin: "auto", paddingBottom: "10px" }}></div>
 
-            <Typography variant="body2" style={{ margin: "10px 10px 10px 10px",fontSize:"16px" }}> {translate("lable.feedback4")}</Typography>
+            <Typography variant="body2" style={{ margin: "10px 10px 10px 10px", fontSize: "16px" }}> {translate("lable.feedback4")}</Typography>
             <Grid container justifyContent="center">
               <Grid item>
                 <TextareaAutosize
@@ -402,4 +402,4 @@ function SimpleDialogDemo(props) {
     </form>)}
   />
 }
-export default  withStyles(DatasetStyle)(SimpleDialogDemo);
+export default withStyles(DatasetStyle)(SimpleDialogDemo);
