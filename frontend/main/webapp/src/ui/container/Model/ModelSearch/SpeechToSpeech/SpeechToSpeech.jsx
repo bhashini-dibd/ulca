@@ -53,7 +53,7 @@ const SpeechToSpeech = () => {
 
   const [suggestEdit, setSuggestEdit] = useState(null)
   const [modal, setModal] = useState(false);
-  const [suggestEditValues, setSuggestEditValues] = useState({ asr: output.asr, translation: output.translation })
+  const [suggestEditValues, setSuggestEditValues] = useState({asr:"",transaltion:""})
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
@@ -125,6 +125,7 @@ const SpeechToSpeech = () => {
     setData(null);
     setAudio("");
     setOutput({ asr: "", translation: "" });
+    setSuggestEditValues({ asr: "", translation: "" });
     setTextArea({ asr: "", translation: "" });
     if (checkFilter()) {
       setSnackbarInfo({
@@ -229,6 +230,8 @@ const SpeechToSpeech = () => {
     });
     setTextArea((prev) => ({ ...prev, translation: "", asr: "" }));
     setOutput((prev) => ({ ...prev, asr: textArea.asr }));
+    setSuggestEditValues((prev) => ({ ...prev, asr: textArea.asr }));
+
     const obj = new ComputeAPI(
       filter.translation.value,
       textArea.asr,
@@ -247,6 +250,10 @@ const SpeechToSpeech = () => {
       let rsp_data = await translationResp.json();
       if (translationResp.ok) {
         setOutput((prev) => ({
+          ...prev,
+          translation: rsp_data.outputText,
+        }));
+        setSuggestEditValues((prev) => ({
           ...prev,
           translation: rsp_data.outputText,
         }));
@@ -289,6 +296,8 @@ const SpeechToSpeech = () => {
     });
     setTextArea((prev) => ({ ...prev, translation: "" }));
     setOutput((prev) => ({ ...prev, translation: textArea.translation }));
+    setSuggestEditValues((prev) => ({ ...prev, translation: textArea.translation }));
+    
     const obj = new ComputeAPI(
       filter.tts.value,
       textArea.translation,
@@ -361,6 +370,8 @@ const SpeechToSpeech = () => {
         let rsp_data = await resp.json();
         if (resp.ok && rsp_data !== null) {
           setOutput((prev) => ({ ...prev, asr: rsp_data.data.source }));
+          setSuggestEditValues((prev) => ({ ...prev, asr: rsp_data.data.source }));
+
           const obj = new ComputeAPI(
             filter.translation.value,
             rsp_data.data.source,
@@ -378,6 +389,10 @@ const SpeechToSpeech = () => {
             let rsp_data = await translationResp.json();
             if (translationResp.ok) {
               setOutput((prev) => ({
+                ...prev,
+                translation: rsp_data.outputText,
+              }));
+              setSuggestEditValues((prev) => ({
                 ...prev,
                 translation: rsp_data.outputText,
               }));

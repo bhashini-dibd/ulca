@@ -160,7 +160,7 @@ function SimpleDialogDemo(props) {
 
     },
   })(Button);
-
+  console.log(asrValue, ttsValue)
 
   // return (
 
@@ -347,7 +347,12 @@ function SimpleDialogDemo(props) {
               </BootstrapButton>
 
               <br />
-              {suggestEdit === 'asr' && <TextField fullWidth variant="outlined" onChange={(e) => handleOnChange('asr', e)} value={asrValue} />}
+              {suggestEdit === 'asr' && <TextField
+                fullWidth
+                variant="outlined"
+                onChange={(e) => handleOnChange('asr', e)}
+                value={asrValue}
+              />}
               <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translate  Text</span>  Quality</Typography>
               <StyledRating
                 size="large"
@@ -360,7 +365,11 @@ function SimpleDialogDemo(props) {
               </BootstrapButton>
 
               <br />
-              {suggestEdit === 'tts' && <TextField fullWidth variant="outlined" onChange={(e) => handleOnChange('translation', e)} value={ttsValue} />}
+              {suggestEdit === 'tts' && <TextField 
+              fullWidth 
+              variant="outlined" 
+              onChange={(e) => handleOnChange('translation', e)} 
+              value={ttsValue} />}
 
               <Typography variant="body2" className={classes.typography1} >Rate  <span style={{ fontWeight: "bold" }}>Translated Speech</span> Quality </Typography>
               <StyledRating
