@@ -137,7 +137,7 @@ const HostedInferASR = (props) => {
   };
 
 
-  const childData = (text) => {s
+  const childData = (text) => {
     setData(text)
   }
  
