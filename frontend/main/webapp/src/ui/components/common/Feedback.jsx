@@ -70,7 +70,6 @@ function SimpleDialogDemo(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  // console.log(anchorEl)
 
   const divStyle = {
     display: 'flex',
@@ -160,8 +159,7 @@ function SimpleDialogDemo(props) {
 
     },
   })(Button);
-  console.log(asrValue, ttsValue)
-
+  
   // return (
 
   //   <div >

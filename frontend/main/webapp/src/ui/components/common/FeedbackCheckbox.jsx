@@ -42,10 +42,6 @@ export default function CheckboxesGroup() {
     };
   
     const { Options1,Options2,Options3,Options4 } = state;
-   
-    // Object.keys(state).forEach((element,i) => {
-    //       console.log(element,"fjhbjd",i);    
-    // });
     return (
       <div className={classes.root}>
         
