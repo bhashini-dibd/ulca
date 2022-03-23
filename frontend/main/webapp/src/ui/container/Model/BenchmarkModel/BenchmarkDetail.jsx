@@ -291,7 +291,6 @@ const SearchModelDetail = (props) => {
               style={{ textAlign: "justify", marginTop: "15px"}}
             >
               {data.description}
-              {console.log(data.description,"aaaaaaaaaaaaaa")}
             </Typography>
           </Grid>
           <Grid container style={{ marginTop: "30px" }}>

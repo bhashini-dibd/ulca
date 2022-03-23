@@ -11,11 +11,11 @@ const DataSet = (theme) => ({
     margin: "17px auto",
     padding: "0",
     "@media (max-width:400px)": {
-      overflow:" hidden",
+      overflow: " hidden",
       width: "360px",
       // padding: "2px"
-  
-     },
+
+    },
 
   },
   title: {
@@ -70,9 +70,9 @@ const DataSet = (theme) => ({
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
-    marginTop:"10px",
-   "@media (max-width:400px)": {
-     paddingTop:"6px"
+    marginTop: "10px",
+    "@media (max-width:400px)": {
+      paddingTop: "6px"
     },
   },
   centerAudio: {
@@ -80,8 +80,8 @@ const DataSet = (theme) => ({
     justifyContent: "center",
     marginLeft: "auto",
     "@media (max-width:400px)": {
-     margin:"0px",
-     },
+      margin: "0px",
+    },
   },
   titleCard: {
     display: "flex",
@@ -157,17 +157,17 @@ const DataSet = (theme) => ({
     // borderRadius: "1rem",
     "@media (max-width:400px)": {
       marginLeft: "-3rem"
-     },
+    },
   },
   buttonStyle: {
     marginLeft: "0.7rem",
     // borderRadius: "1rem",
     "@media (max-width:400px)": {
       marginTop: "5px"
-     },
-   
     },
-  iconStyle: { marginRight: ".5rem" ,   },
+
+  },
+  iconStyle: { marginRight: ".5rem", },
   thumbsUpIcon: {
     margin: "24% 0 0 24%",
     fontSize: "3.7rem",
@@ -213,22 +213,22 @@ const DataSet = (theme) => ({
     borderRadius: "1rem",
     "@media (max-width:870px)": {
       display: "block",
-    
+
     },
     "@media (max-width:400px)": {
-    marginLeft:"10px",
-    
+      marginLeft: "10px",
+
     },
-   
+
   },
   refreshGrid: {
-    display:'block',
+    display: 'block',
     "@media (max-width:870px)": {
       display: 'none'
     }
   },
   refreshGridMobile: {
-    display:'none',
+    display: 'none',
     "@media (max-width:870px)": {
       display: 'block'
     }
@@ -382,7 +382,7 @@ const DataSet = (theme) => ({
     justifyContent: "left",
     fontSize: "1.125rem",
     fontWeight: "500 !important",
-   
+
     "&:hover": {
       backgroundColor: "white",
     },
@@ -459,12 +459,12 @@ const DataSet = (theme) => ({
   modelTitle: {
     marginTop: "20px",
     // padding: 0,
-     
+
   },
- 
-    modeldescription:{
+
+  modeldescription: {
     "@media (max-width:400px)": {
-     fontSize:" 1.11rem"  
+      fontSize: " 1.11rem"
     },
   },
   mainTitle: { marginTop: "33px", marginLeft: "38px" },
@@ -472,12 +472,15 @@ const DataSet = (theme) => ({
     boxShadow: "none",
     padding: "0",
   },
-  gridCompute: { marginTop: "15px " ,
-  // paddingRight:"10px", marginLeft:"40px"
-},
-  grid: { marginRight: "15px ",  "@media (max-width:400px)": {
-    marginLeft:"15px"
-  }, },
+  gridCompute: {
+    marginTop: "15px ",
+    // paddingRight:"10px", marginLeft:"40px"
+  },
+  grid: {
+    marginRight: "15px ", "@media (max-width:400px)": {
+      marginLeft: "15px"
+    },
+  },
   hosted: {
     display: "flex",
     // alignItems: 'flex-end'
@@ -519,8 +522,8 @@ const DataSet = (theme) => ({
     lineHeight: "32px",
     color: "black",
     fontFamily: "Roboto",
-  
-      //  paddingLeft:'16px'
+
+    //  paddingLeft:'16px'
   },
   hostedCard: {
     height: "300px",
@@ -551,7 +554,7 @@ const DataSet = (theme) => ({
   },
   translateCard: {
     padding: 0,
-   
+
   },
   modelPara: {
     //marginTop: "15px ",
@@ -562,16 +565,16 @@ const DataSet = (theme) => ({
     "-webkit-box-orient": "vertical",
     overflow: "hidden",
     "@media (max-width:400px)": {
-      marginLeft:"-14px"  ,
-      fontSize:"12px"
-    
-     },
+      marginLeft: "-14px",
+      fontSize: "12px"
+
     },
-  cardTitle:{
+  },
+  cardTitle: {
     "@media (max-width:400px)": {
-      marginLeft:"-14px"  ,
+      marginLeft: "-14px",
     },
-   },
+  },
   mainPaper: {
     border: "none",
   },
@@ -649,13 +652,13 @@ const DataSet = (theme) => ({
     margin: 0,
     padding: "0% 0% 0% 0%",
     color: "#3A3A3A",
-    
+
   },
   flexEndStyle: {
-     display: "flex",
+    display: "flex",
     justifyContent: "flex-end",
     "@media (max-width:400px)": {
-   marginBottom:"20px",
+      marginBottom: "20px",
     },
 
   },
@@ -666,53 +669,54 @@ const DataSet = (theme) => ({
   },
   imagepaper: {
     backgroundColor: theme.palette.background.paper,
-   // border: '2px solid #000',
+    // border: '2px solid #000',
     boxShadow: theme.shadows[5],
-     padding: theme.spacing(3, 3, 3),
-    
+    padding: theme.spacing(3, 3, 3),
 
-    borderRadius:"4px"
+
+    borderRadius: "4px"
   },
-  stspart:{
+  stspart: {
     "@media (max-width:400px)": {
-      paddingLeft:"2px",
-     paddingRight:"3px"
-     },
- },
-  formControl:{
+      paddingLeft: "2px",
+      paddingRight: "3px"
+    },
+  },
+  formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-    paddingLeft:"85px",
-   fontSize:"16px",
-   backgroundColor:" transparent!",
-   fontFamily:"Rowdies",
-   color:"gray",
-   "@media (max-width:400px)": {
-    paddingLeft:0,
-  },
-},
-  gridcard:{
-  "@media (max-width:959px)": {
-     //  marginLeft: "20%",
-     // justifyContent:"center"
+    paddingLeft: "85px",
+    fontSize: "16px",
+    backgroundColor: " transparent!",
+    fontFamily: "Rowdies",
+    color: "gray",
+    "@media (max-width:400px)": {
+      paddingLeft: 0,
     },
   },
-  genderdropdown:{
-  fontSize:"16px",
-   backgroundColor:" transparent!",
-  // fontFamily:"Rowdies",
-   color:"gray",
+  gridcard: {
+    "@media (max-width:959px)": {
+      //  marginLeft: "20%",
+      // justifyContent:"center"
+    },
   },
-    muiTable:{
-      wordBreak: " break-all",
+  genderdropdown: {
+    fontSize: "16px",
+    backgroundColor: " transparent!",
+    // fontFamily:"Rowdies",
+    color: "gray",
+  },
+  muiTable: {
+    wordBreak: " break-all",
 
-    },
-    textField:{   "@media (max-width:400px)": {
-      paddingTop:"15px",
-    },
-    
   },
-  audioCard:{
+  textField: {
+    "@media (max-width:400px)": {
+      paddingTop: "15px",
+    },
+
+  },
+  audioCard: {
     justifyContent: "center",
     alignItems: "center",
     position: "relative",
@@ -740,7 +744,7 @@ const DataSet = (theme) => ({
       left: "215px",
      
     }
-  }
+  },
   // tablesbody:{
   //   "@media (max-width:400px)": {
   //     marginLeft:" 137px",
@@ -748,6 +752,108 @@ const DataSet = (theme) => ({
   //     marginTop: "-19px"
   //   }
   // }
+
+  typography: {
+    padding: theme.spacing(1),
+    // marginTop: "15px"
+    fontFamily: "Rowdies", 
+    fontSize: "1.3rem",
+    color:"#444542",
+
+  },
+  typographys: {
+    padding: theme.spacing(1),
+    fontSize: "14px",
+    fontFamily:"Roboto ",
+
+
+  },
+  typography2: {
+    margin: "16px 10px 10px 0px",
+    fontSize: "16px"
+    //padding:"10px"
+  },
+  MuiRatingLabel: {
+    paddingLeft: "19px"
+  },
+  feedbackbutton: {
+    backgroundColor: "#FD7F23",
+    position: "absolute",
+    // right:"775px",
+     top:"78px",
+    height: "28px",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    }
+  },
+  feedbackIcon: {
+    width: "12px",
+    heigth: "10px",
+    color: "white",
+
+
+  },
+  feedbackTitle: {
+    fontSize: "10px",
+    color: "white",
+    paddingLeft: "3px"
+  },
+  feedbacktypography: {
+    fontSize: "12px",
+    borderBottom: "1px solid #ECE7E6  ",
+    width: "225px",
+    margin: "auto"
+  },
+  submitbutton: {
+    width: "70px",
+    margin: "10px 0px 0px 130px"
+  },
+  rating: {
+    marginLeft: "60px",
+    // display: 'flex',
+    // justifyContent: 'center'
+
+  },
+  buttonsuggest: {
+    float: "right",
+    height: "25px",
+    // marginLeft:"20px"
+    marginRight: "10px",
+    "@media (max-width:400px)": {
+      height: "38px",
+      marginRight: "5px",
+
+    },
+
+  },
+  typography1: {
+    // marginLeft: "10px",
+    fontSize: "16px",
+    // margin: "10px 20px 5px 10px"
+    "@media (max-width:400px)": {
+      marginLeft: "10px",
+
+    },
+  },
+  textareaAutosize: {
+    backgroundColor: "inherit",
+    margin: "auto",
+    // border: " none"
+  },
+
+  MuiButtonlabel: {
+    fontSize: "11px"
+  },
+  suggestbutton: {
+    margin: " 10px 0px 0px 30px",
+  },
+  buttonsubmit: {
+    width: "70px",
+    margin: "5px 0px 0px 55px",
+
+  },
+
 });
 
 export default DataSet;

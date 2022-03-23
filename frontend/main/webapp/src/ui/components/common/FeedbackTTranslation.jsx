@@ -66,9 +66,6 @@ function FeedbackPopover(props) {
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
-  // console.log(anchorEl)
-
-  
 
   const handleRatingChange = (event, newValue) => {
     setValue(newValue);
