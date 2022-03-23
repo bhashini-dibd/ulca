@@ -110,9 +110,9 @@ const Feedback = (theme) => ({
     
   },
   feedbackbuttonroot:{
-    position:"relative",
-    left:"700px",
-    top:"-10px",
+    // position:"relative",
+    // left:"700px",
+    // top:"-10px",
     "@media (max-width:400px)": {
       left: "220px",
      

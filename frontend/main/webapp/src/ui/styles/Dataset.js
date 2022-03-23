@@ -36,7 +36,7 @@ const DataSet = (theme) => ({
     float: "right",
     marginRight: "30px",
     marginTop: "33px",
-    lineHeight: "1.2em",
+    lineHeight:" 1.2em",
     "&:hover": {
       backgroundColor: "#FD7F23",
     },
@@ -725,6 +725,25 @@ const DataSet = (theme) => ({
     //   top:"36%",
     // },
 
+  },
+  feedbackPopover:{
+    position:"relative",
+    left:"700px",
+    top:"-10px",
+    "@media (max-width:400px)": {
+      left: "220px",
+      top:"0px",
+    }
+
+  },
+  AsrPopover:{
+    position:"relative",
+    left:"310px",
+    top:"155px",
+    "@media (max-width:400px)": {
+      left: "215px",
+     
+    }
   },
   // tablesbody:{
   //   "@media (max-width:400px)": {

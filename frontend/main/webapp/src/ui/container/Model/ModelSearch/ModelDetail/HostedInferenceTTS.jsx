@@ -337,7 +337,8 @@ console.log("fffffffffffff",modelId, sourceText,task)
           
         </CardContent>
         {audio && <div style={{marginTop:"12%"}}>
-             <SimpleDialogDemo/> </div>}
+             {/* <SimpleDialogDemo/> */}
+              </div>}
       </Card>
       {snackbar.open && (
         <Snackbar
