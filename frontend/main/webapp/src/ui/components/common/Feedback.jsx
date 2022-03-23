@@ -109,7 +109,8 @@ function SimpleDialogDemo(props) {
           // position:"fixed",
           // width:"430px",
           // maxHeight:"500px",
-          padding: "0px 0px 0px 0px",
+          
+          padding: "13px 7px 0px 9px",
           "@media (max-width:400px)": {
             width: "100%",
             maxHeight: "500px",
@@ -126,6 +127,12 @@ function SimpleDialogDemo(props) {
           "@media (max-width:400px)": {
             fontSize: "13px",
           },
+        },
+        body2:{
+          "@media (max-width:400px)": {
+            lineHeight: "16px"
+          },
+         
         }
 
       },
@@ -288,7 +295,7 @@ function SimpleDialogDemo(props) {
   // );
   return <Form
     onSubmit={() => console.log('submit')}
-    render={() => (<form>
+    render={() => (<form style={{margin:"0px -15px",top:" 54%" }}>
       <div style={{ position: "absolute", right: "3px", top: "4px" }}>
         <IconButton
           size="small"
@@ -330,7 +337,7 @@ function SimpleDialogDemo(props) {
       <MuiThemeProvider theme={theme2}>
         {
           value <= 3 && value > 0 &&
-          <div>
+          <div style={{width:"330px", margin:"-11px"}}>
             <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
             <Box p={2}>
               <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>
@@ -346,6 +353,7 @@ function SimpleDialogDemo(props) {
 
               <br />
               {suggestEdit === 'asr' && <TextField
+              style={{fontFamily: "Roboto",fontSize: "18px",margin:"10px 0px 10px 0px"}}
                 fullWidth
                 variant="outlined"
                 onChange={(e) => handleOnChange('asr', e)}
@@ -364,6 +372,7 @@ function SimpleDialogDemo(props) {
 
               <br />
               {suggestEdit === 'tts' && <TextField 
+               style={{fontFamily: "Roboto",fontSize: "18px",margin:"12px 0px 12px 0px"}}
               fullWidth 
               variant="outlined" 
               onChange={(e) => handleOnChange('translation', e)} 
@@ -382,7 +391,7 @@ function SimpleDialogDemo(props) {
             </Box>
             <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "300px", margin: "auto", paddingBottom: "10px" }}></div>
 
-            <Typography variant="body2" style={{ margin: "10px 10px 10px 10px", fontSize: "16px" }}> {translate("lable.feedback4")}</Typography>
+            <Typography variant="body2"className={classes.typography4} > {translate("lable.feedback4")}</Typography>
             <Grid container justifyContent="center">
               <Grid item>
                 <TextareaAutosize

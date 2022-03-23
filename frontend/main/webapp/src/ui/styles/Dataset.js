@@ -759,6 +759,10 @@ const DataSet = (theme) => ({
     fontFamily: "Rowdies", 
     fontSize: "1.3rem",
     color:"#444542",
+    "@media (max-width:400px)": {
+      fontSize: "1.1rem",
+
+    },
 
   },
   typographys: {
@@ -770,8 +774,13 @@ const DataSet = (theme) => ({
   },
   typography2: {
     margin: "16px 10px 10px 0px",
-    fontSize: "16px"
+    fontSize: "16px",
+    "@media (max-width:400px)": {
+      fontSize: "14px",
+      margin: "0px 0px 0px 10px",
+    
     //padding:"10px"
+    }
   },
   MuiRatingLabel: {
     paddingLeft: "19px"
@@ -782,6 +791,10 @@ const DataSet = (theme) => ({
     // right:"775px",
      top:"78px",
     height: "28px",
+    "@media (max-width:400px)": {
+      top:"68px",
+
+    },
     '&:hover': {
       backgroundColor: "#FD7F23"
 
@@ -810,7 +823,11 @@ const DataSet = (theme) => ({
     margin: "10px 0px 0px 130px"
   },
   rating: {
-    marginLeft: "60px",
+    marginLeft: "65px",
+    "@media (max-width:400px)": {
+      marginLeft: "35px",
+
+    },
     // display: 'flex',
     // justifyContent: 'center'
 
@@ -833,12 +850,15 @@ const DataSet = (theme) => ({
     // margin: "10px 20px 5px 10px"
     "@media (max-width:400px)": {
       marginLeft: "10px",
+      fontSize: "14px",
 
     },
   },
   textareaAutosize: {
     backgroundColor: "inherit",
     margin: "auto",
+    fontFamily: "Roboto",
+    fontSize: "18px",
     // border: " none"
   },
 
@@ -853,6 +873,16 @@ const DataSet = (theme) => ({
     margin: "5px 0px 0px 55px",
 
   },
+  typography4:{
+    margin: "10px 10px 10px 10px",
+     fontSize: "16px",
+     "@media (max-width:400px)": {
+      margin: "0px 10px 0px 10px",
+     fontSize: "14px",
+    },
+  }
+  
+  
 
 });
 
