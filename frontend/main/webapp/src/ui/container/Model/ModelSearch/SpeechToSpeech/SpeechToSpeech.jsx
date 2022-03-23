@@ -46,10 +46,14 @@ const SpeechToSpeech = () => {
     translation: "",
     tts: "",
   });
+  const [output, setOutput] = useState({
+    asr: "",
+    translation: "",
+  });
 
   const [suggestEdit, setSuggestEdit] = useState(null)
   const [modal, setModal] = useState(false);
-
+  const [suggestEditValues, setSuggestEditValues] = useState({ asr: output.asr, translation: output.translation })
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
@@ -76,10 +80,7 @@ const SpeechToSpeech = () => {
     }
   }, [filter.src, filter.tgt])
 
-  const [output, setOutput] = useState({
-    asr: "",
-    translation: "",
-  });
+
 
   const [index, setIndex] = useState(0);
 
@@ -317,7 +318,6 @@ const SpeechToSpeech = () => {
     setGender(value)
 
   }
-  console.log('value', gender)
   const setSnackbarError = (errorMsg) => {
     setSnackbarInfo({
       ...snackbar,
@@ -494,6 +494,11 @@ const SpeechToSpeech = () => {
     return getUniqueListBy(updatedTargets, "value");
   };
 
+  const handleOnChange = (param, e) => {
+    console.log('inside handleChange', param, e.target.value)
+    setSuggestEditValues((prev) => ({ ...prev, [param]: e.target.value }))
+  }
+
   return (
     <>
       <Grid container spacing={5}>
@@ -561,7 +566,14 @@ const SpeechToSpeech = () => {
       {
         modal && (
           <Modal open={modal} handleClose={() => setModal(false)}>
-            <FeedbackModal setModal={setModal} setSuggestEdit={setSuggestEdit} suggestEdit={suggestEdit} asrValue={output.asr} ttsValue={output.translation} />
+            <FeedbackModal
+              setModal={setModal}
+              setSuggestEdit={setSuggestEdit}
+              suggestEdit={suggestEdit}
+              asrValue={suggestEditValues.asr}
+              ttsValue={suggestEditValues.translation}
+              handleOnChange={handleOnChange}
+            />
           </Modal>
         )
       }
