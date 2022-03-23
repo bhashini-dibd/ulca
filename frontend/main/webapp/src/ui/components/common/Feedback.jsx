@@ -337,7 +337,7 @@ function SimpleDialogDemo(props) {
       <MuiThemeProvider theme={theme2}>
         {
           value <= 3 && value > 0 &&
-          <div style={{width:"330px", margin:"-11px"}}>
+          <div className={classes.popover2} style={{}}>
             <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
             <Box p={2}>
               <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>

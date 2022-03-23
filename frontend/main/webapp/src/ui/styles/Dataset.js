@@ -880,6 +880,13 @@ const DataSet = (theme) => ({
       margin: "0px 10px 0px 10px",
      fontSize: "14px",
     },
+  },
+  popover2:{
+    "@media (max-width:400px)": {
+      width:"330px",
+       margin:"-11px"
+    },
+
   }
   
   
