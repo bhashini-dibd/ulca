@@ -8,3 +8,4 @@ class StaticConfigs(enum.Enum):
     DS_SUBMIT_FAILED                    =   "ULCA - Failed to publish dataset"
     BM_RUN_SUCCESS                      =   "ULCA - Benchmark run is completed"
     BM_RUN_FAILED                       =   "ULCA - Benchmark run failed"
+    MD_INFR_FAILED                      =   "ULCA - Model inference unavailable"

@@ -22,6 +22,11 @@ const GlobalStyles = (theme) => ({
     minHeight: "720px",
     display: "flex",
     flexDirection: "column",
+    // "@media (max-width:400px)": {
+    //  overflow:"hidden",
+    //  },
+   
+   
   },
   appBar: {
     backgroundColor: theme.palette.primary.dark,

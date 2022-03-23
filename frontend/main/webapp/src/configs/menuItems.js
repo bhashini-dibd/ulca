@@ -70,7 +70,7 @@ export const menuItems = {
     //     roles:["CONTRIBUTOR-USER"]
     // },
     {
-      name: "Benchmark Datasets",
+      name: "Benchmark Datasets ",
       url: "/model/benchmark-datasets",
       roles: [
         "CONTRIBUTOR-USER",
