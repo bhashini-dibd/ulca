@@ -429,7 +429,6 @@ const SpeechToSpeech = () => {
         }
       })
       .catch(async (error) => {
-        console.log(error);
         setSnackbarError(
           "Unable to process your request at the moment. Please try after sometime."
         );
@@ -510,7 +509,6 @@ const SpeechToSpeech = () => {
   };
 
   const handleOnChange = (param, e) => {
-    console.log('inside handleChange', param, e.target.value)
     setSuggestEditValues((prev) => ({ ...prev, [param]: e.target.value }))
   }
 

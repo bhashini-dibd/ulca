@@ -120,7 +120,6 @@ const HostedInferASR = (props) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         setApiCall(false);
         setSnackbarInfo({
           ...snackbar,
@@ -138,8 +137,7 @@ const HostedInferASR = (props) => {
   };
 
 
-  const childData = (text) => {
-    console.log(text,"ttttttt")
+  const childData = (text) => {s
     setData(text)
   }
  

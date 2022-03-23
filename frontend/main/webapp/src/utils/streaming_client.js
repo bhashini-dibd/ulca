@@ -104,11 +104,9 @@ export default function StreamingClient() {
 
     _this.speechEvents.on("speaking", function () {
       _this.isSpeaking = true;
-      // console.log('speaking');
     });
 
     _this.speechEvents.on("stopped_speaking", function () {
-      // console.log('stopped_speaking');
       _this.isSpeaking = false;
     });
   }

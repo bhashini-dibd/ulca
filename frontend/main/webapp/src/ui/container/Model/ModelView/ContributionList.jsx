@@ -170,7 +170,6 @@ const ContributionList = (props) => {
     dispatch(clearFilter(data, C.CLEAR_MODEL_FILTER));
   };
   const apply = (data) => {
-    console.log(data);
     handleClose();
     dispatch(FilterTable(data, C.MODEL_CONTRIBUTION_TABLE));
   };
@@ -396,7 +395,6 @@ const ContributionList = (props) => {
       })
       .catch((err) => {
         handleDialogClose();
-        console.log(err);
       });
   };
 

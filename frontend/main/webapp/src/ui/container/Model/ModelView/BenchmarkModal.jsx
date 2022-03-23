@@ -297,7 +297,6 @@ const BenchmarkModal = (props) => {
                     </TableHead>
                     <TableBody>
                       {rows.map((row, i) => {
-                        console.log(row);
                         return (
                           <TableRow
                             key={i}
