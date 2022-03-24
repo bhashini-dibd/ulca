@@ -70,10 +70,8 @@ export default function CheckboxesGroup() {
             <FormControlLabel
               control={
                 <Checkbox
-                // style ={{
-                //   color: "#00e676",
-                // }}
-                  checked={Options3}
+                color= 'primary'
+                 checked={Options3}
                   onChange={handleChange}
                   name="Options3"
                 />

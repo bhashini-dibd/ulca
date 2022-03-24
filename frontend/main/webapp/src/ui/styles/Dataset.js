@@ -216,7 +216,7 @@ const DataSet = (theme) => ({
 
     },
     "@media (max-width:400px)": {
-      marginLeft: "10px",
+      marginLeft: "0px",
 
     },
 

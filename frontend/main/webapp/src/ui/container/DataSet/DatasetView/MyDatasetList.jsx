@@ -241,7 +241,7 @@ const ContributionList = (props) => {
     <div>
       <MUIDataTable
        className={classes.muiTable}
-        title={`My Contribution`}
+        // title={`My Contribution `}
         data={data}
         columns={columns}
         options={options}

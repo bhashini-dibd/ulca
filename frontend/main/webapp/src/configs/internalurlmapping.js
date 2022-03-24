@@ -12,7 +12,7 @@ const internalUrls = {
         url: '/dataset/my-contribution'
     },
     mySearches: {
-        name: 'My Searches',
+        name: 'My Searches ',
         url: '/my-searches'
     },
 }
