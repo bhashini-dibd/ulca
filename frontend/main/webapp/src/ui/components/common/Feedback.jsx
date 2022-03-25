@@ -97,10 +97,10 @@ function SimpleDialogDemo(props) {
       },
       MuiPopover: {
         root: {
-          "@media (max-width:400px)": {
-            width: "100%",
-            maxHeight: "500px",
-          },
+          // "@media (max-width:400px)": {
+          //   width: "100%",
+          //   maxHeight: "500px",
+          // },
         },
         paper: {
 
@@ -111,10 +111,10 @@ function SimpleDialogDemo(props) {
           // maxHeight:"500px",
           
           padding: "13px 7px 0px 9px",
-          "@media (max-width:400px)": {
-            width: "100%",
-            maxHeight: "500px",
-          },
+          // "@media (max-width:400px)": {
+          //   width: "100%",
+          //   maxHeight: "500px",
+          // },
         }
       },
       MuiTypography: {
@@ -124,29 +124,31 @@ function SimpleDialogDemo(props) {
 
         },
         colorPrimary: {
-          "@media (max-width:400px)": {
-            fontSize: "13px",
+          "@media (max-width:650px)": {
+            fontSize: "12px",
+            height: "21px",
+           lineHeight: "0.7rem"
           },
         },
         body2:{
-          "@media (max-width:400px)": {
-            lineHeight: "16px"
-          },
+          // "@media (max-width:400px)": {
+          //   lineHeight: "16px"
+          // },
          
         }
 
       },
       MuiRating: {
         label: {
-          paddingLeft: "10px"
+          paddingLeft: "5px"
         }
       },
       MuiBox: {
         root: {
-          "@media (max-width:400px)": {
-            width: "332px",
+          // "@media (max-width:400px)": {
+          //   width: "332px",
 
-          },
+          // },
         }
       },
 
@@ -157,11 +159,14 @@ function SimpleDialogDemo(props) {
       boxShadow: 'none',
       textTransform: 'none',
       fontSize: 16,
-      padding: '6px 12px',
+      padding: '18px 25px',
       border: '1px solid',
       lineHeight: 1.5,
 
       borderColor: '#0063cc',
+      "@media (max-width:400px)": {
+        padding: '0px 0px',
+         },
 
 
     },
@@ -295,8 +300,13 @@ function SimpleDialogDemo(props) {
   // );
   return <Form
     onSubmit={() => console.log('submit')}
-    render={() => (<form style={{margin:"0px -15px",top:" 54%" }}>
-      <div style={{ position: "absolute", right: "3px", top: "4px" }}>
+    render={() => (  <div   style={{ }}> <form >
+     
+      <Grid container  style={{maxWidth:"365px" 
+        
+        }}>
+      <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}> 
+      <div style={{ position: "absolute", right: "3px", top: "4px", }}>
         <IconButton
           size="small"
           aria-label="close"
@@ -306,7 +316,11 @@ function SimpleDialogDemo(props) {
           <CloseIcon fontSize="small" />
         </IconButton>
       </div>
+      </Grid>
+      <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}> 
       <Typography className={classes.typography} align="center" >   {translate("lable.feedback1")} <br />  {translate("lable.feedbacks")}</Typography>
+      </Grid>
+      <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}> 
       <StyledRating
         className={classes.rating}
         size="large"
@@ -314,7 +328,8 @@ function SimpleDialogDemo(props) {
         value={value}
         onChange={handleRatingChange}
       />
-
+       </Grid>
+</Grid>
       {/* < Typography className={classes.feedbacktypography} variant="body2"  >  {translate("lable.verybad")}  < Typography variant="body2" style={{ float: "right", fontSize: "12px" }} >  {translate("lable.verygood")}  </Typography>   </Typography> */}
       {/* <div className={classes.root}>
           <Grid container justifyContent="center">
@@ -340,54 +355,71 @@ function SimpleDialogDemo(props) {
           <div className={classes.popover2} style={{}}>
             <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
             <Box p={2}>
+            <Grid container style={{maxWidth:"365px", scrollY:"auto"}}>
+              <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}>
               <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>
+             </Grid>
+             <Grid items  xs={10} sm={10} md={10} lg={10} xl={10}>
               <StyledRating
                 size="large"
                 value={rating1}
                 onChange={(event, newValue) => {
                   setRating1(newValue)
                 }} />
+                </Grid>
+                <Grid items  xs={2} sm={2} md={2} lg={2} xl={2}>
               <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("asr")}>
                 <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
               </BootstrapButton>
-
+              </Grid>
               <br />
+              <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}>
               {suggestEdit === 'asr' && <TextField
-              style={{fontFamily: "Roboto",fontSize: "18px",margin:"10px 0px 10px 0px"}}
+              style={{fontFamily: "Roboto",fontSize: "12px",margin:"10px 0px 10px 0px"}}
                 fullWidth
                 variant="outlined"
                 onChange={(e) => handleOnChange('asr', e)}
                 value={asrValue}
               />}
-              <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translate  Text</span>  Quality</Typography>
+              </Grid>
+               <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}>
+              <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translated Text</span>  Quality</Typography>
+              </Grid>
+              <Grid items  xs={10} sm={10} md={10} lg={10} xl={10}>
               <StyledRating
                 size="large"
                 value={rating2}
                 onChange={(event, newValue) => {
                   setRating2(newValue)
                 }} />
+                 </Grid>
+                 <Grid items  xs={2} sm={2} md={2} lg={2} xl={2}>
               <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("tts")}>
                 <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
               </BootstrapButton>
-
+              </Grid>
               <br />
+              <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}>
               {suggestEdit === 'tts' && <TextField 
-               style={{fontFamily: "Roboto",fontSize: "18px",margin:"12px 0px 12px 0px"}}
+               style={{fontFamily: "Roboto",fontSize: "12px",margin:"10px 0px 10px 0px"}}
               fullWidth 
               variant="outlined" 
               onChange={(e) => handleOnChange('translation', e)} 
               value={ttsValue} />}
-
+               </Grid>
+               <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}>
               <Typography variant="body2" className={classes.typography1} >Rate  <span style={{ fontWeight: "bold" }}>Translated Speech</span> Quality </Typography>
+              </Grid>
+              <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}>
               <StyledRating
                 size="large"
                 value={rating3}
                 onChange={(event, newValue) => {
                   setRating3(newValue)
                 }} />
-
+              </Grid>
               <br />
-
+              </Grid>
             </Box>
             <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "300px", margin: "auto", paddingBottom: "10px" }}></div>
 
@@ -415,7 +447,7 @@ function SimpleDialogDemo(props) {
         <Typography className={classes.typographys} align="center" variant="body2" component="div" >
           {translate("lable.feedback2")}</Typography>
       </MuiThemeProvider>
-    </form>)}
+     </form>  </div> )}
   />
 }
 export default withStyles(DatasetStyle)(SimpleDialogDemo);

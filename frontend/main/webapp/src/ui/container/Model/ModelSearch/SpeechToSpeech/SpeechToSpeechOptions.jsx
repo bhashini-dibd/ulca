@@ -376,7 +376,7 @@ const SpeechToSpeechOptions = (props) => {
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
           {/* {suggestEdit === null || suggestEdit !== 'tts' ?  */}
           {renderAccordionDetails(
-            "Translation Output",
+            "Translated Text",
             "Corrected Translation Output",
             output.translation,
             "translation",
@@ -399,7 +399,7 @@ const SpeechToSpeechOptions = (props) => {
       <Card className={classes.asrCard}>
         <Grid container className={classes.cardHeader}>
           <Typography variant="h6" className={classes.titleCard}>
-            {`${translate("label.output")}`}
+            {`${translate("label.translatedspeech")}`}
 
           </Typography>
         </Grid >

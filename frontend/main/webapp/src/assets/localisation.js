@@ -104,6 +104,7 @@ const localization_EN_Data = {
     "Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.",
   "label.disclaimer": "Disclaimer : ",
   "label.output": "Output",
+  "label.translatedspeech": "Translated Speech",
   "label.notes": "Notes",
   "button.translate": "Translate",
   "label.description": "Description",

@@ -759,7 +759,7 @@ const DataSet = (theme) => ({
     fontFamily: "Rowdies", 
     fontSize: "1.3rem",
     color:"#444542",
-    "@media (max-width:400px)": {
+    "@media (max-width:650px)": {
       fontSize: "1.1rem",
 
     },
@@ -769,15 +769,21 @@ const DataSet = (theme) => ({
     padding: theme.spacing(1),
     fontSize: "14px",
     fontFamily:"Roboto ",
+    "@media (max-width:650px)": {
+      fontSize: "11px",
+     
+    
+    //padding:"10px"
+    }
 
 
   },
   typography2: {
     margin: "16px 10px 10px 0px",
     fontSize: "16px",
-    "@media (max-width:400px)": {
+    "@media (max-width:650px)": {
       fontSize: "14px",
-      margin: "0px 0px 0px 10px",
+      // margin: "0px 0px 0px 10px",
     
     //padding:"10px"
     }
@@ -791,8 +797,8 @@ const DataSet = (theme) => ({
     // right:"775px",
      top:"78px",
     height: "28px",
-    "@media (max-width:400px)": {
-      top:"68px",
+    "@media (max-width:650px)": {
+       top:"68px",
 
     },
     '&:hover': {
@@ -823,9 +829,15 @@ const DataSet = (theme) => ({
     margin: "10px 0px 0px 130px"
   },
   rating: {
-    marginLeft: "65px",
-    "@media (max-width:400px)": {
-      marginLeft: "35px",
+    position:"relative ",
+    buttom:"20px",
+    left:"70px",
+    // marginLeft: "69px",
+    "@media (max-width:650px)": {
+      //  marginLeft: "35px",
+      //buttom:"20px",
+    left:"33px",
+    width:"300px"
 
     },
     // display: 'flex',
@@ -837,9 +849,9 @@ const DataSet = (theme) => ({
     height: "25px",
     // marginLeft:"20px"
     marginRight: "10px",
-    "@media (max-width:400px)": {
-      height: "38px",
-      marginRight: "5px",
+    "@media (max-width:650px)": {
+      // height: "38px",
+       marginRight: "0px",
 
     },
 
@@ -847,10 +859,12 @@ const DataSet = (theme) => ({
   typography1: {
     // marginLeft: "10px",
     fontSize: "16px",
+    marginBottom: "6px",
     // margin: "10px 20px 5px 10px"
-    "@media (max-width:400px)": {
-      marginLeft: "10px",
-      fontSize: "14px",
+    "@media (max-width:650px)": {
+      // marginLeft: "10px",
+      fontSize: "12px",
+      marginBottom: "0px",
 
     },
   },
@@ -876,19 +890,24 @@ const DataSet = (theme) => ({
   typography4:{
     margin: "10px 10px 10px 10px",
      fontSize: "16px",
-     "@media (max-width:400px)": {
-      margin: "0px 10px 0px 10px",
-     fontSize: "14px",
+     "@media (max-width:650px)": {
+      // margin: "0px 10px 0px 10px",
+     fontSize: "12px",
     },
   },
-  popover2:{
-    "@media (max-width:400px)": {
-      width:"330px",
-       margin:"-11px"
+  // popover2:{
+  //   "@media (max-width:400px)": {
+  //     width:"330px",
+  //      margin:"-11px"
+  //   },
+
+ // }
+  form:{
+    "@media (max-width:650px)": {
+     overflow:"auto",
     },
 
   }
-  
   
 
 });
