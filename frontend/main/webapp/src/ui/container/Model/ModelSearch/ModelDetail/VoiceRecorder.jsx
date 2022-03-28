@@ -50,12 +50,6 @@ const AudioRecord = (props) => {
   const dispatch = useDispatch();
   const timerRef = useRef();
   const [base, setBase] = useState("");
-
-  // const sendDataback=()=>{
-  //   getchildData(text);
-  // }
-  // sendDataback();
-  // console.log(text,"eeeeeee")
   useEffect(() => {
     if (!languages.length) {
       const obj = new GetMasterDataAPI(["languages", "inferenceEndpoints"]);
@@ -79,7 +73,6 @@ const AudioRecord = (props) => {
     if (vakyanshEndPoint.length) {
       setStreamingState("start");
       const output = document.getElementById("asrCardOutput");
-      {console.log( output,"aaaaaaaaa")}
       // output.innerText = "";
      
       setData("");
@@ -97,7 +90,6 @@ const AudioRecord = (props) => {
               const output = document.getElementById("asrCardOutput");
               if (output) output.innerText = transcript;
               getchildData(transcript);
-              console.log(transcript,"vvvvvv")
             },
           
             function (errorMsg) {
@@ -127,7 +119,6 @@ const AudioRecord = (props) => {
         `${code}asr/v1/punctuate/${languageCode}`,
         (status, text) => {
           output.innerText = text;
-          console.log(text,"wwwwww")
           getchildData(text);
         },
         (status, error) => {

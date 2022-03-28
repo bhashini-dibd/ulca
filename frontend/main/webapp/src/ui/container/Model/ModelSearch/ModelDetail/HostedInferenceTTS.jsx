@@ -101,7 +101,6 @@ const HostedInference = (props) => {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   };
-console.log("fffffffffffff",modelId, sourceText,task)
   const handleCompute = () => {
     setLoading(true);
     setAudio(null);
@@ -125,7 +124,6 @@ console.log("fffffffffffff",modelId, sourceText,task)
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
             const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-            console.log(blob);
             const urlBlob = window.URL.createObjectURL(blob);
             setAudio(urlBlob);
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
@@ -337,7 +335,8 @@ console.log("fffffffffffff",modelId, sourceText,task)
           
         </CardContent>
         {audio && <div style={{marginTop:"12%"}}>
-             <SimpleDialogDemo/> </div>}
+             {/* <SimpleDialogDemo/> */}
+              </div>}
       </Card>
       {snackbar.open && (
         <Snackbar

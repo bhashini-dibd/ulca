@@ -6,7 +6,7 @@ import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
 import Spinner from "../../../../components/common/Spinner";
-import SimpleDialogDemo from "../../../../components/common/Feedback";
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import {
   Grid,
   Typography,
@@ -120,7 +120,6 @@ const HostedInferASR = (props) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         setApiCall(false);
         setSnackbarInfo({
           ...snackbar,
@@ -139,7 +138,6 @@ const HostedInferASR = (props) => {
 
 
   const childData = (text) => {
-    console.log(text,"ttttttt")
     setData(text)
   }
  
@@ -186,9 +184,9 @@ const HostedInferASR = (props) => {
     
          
           <CardContent id="asrCardOutput">{targetAudio}</CardContent>
-          {data && <div style={{marginTop:"158px"}}> 
+          {data && <div className={classes.AsrPopover} > 
         
-         <SimpleDialogDemo/>
+         <FeedbackPopover/>
           </div>} 
         </Card>
         </Grid>
@@ -267,7 +265,7 @@ const HostedInferASR = (props) => {
             </Grid>
           {target.length > 0 && (<><CardContent>{target}</CardContent>
             <div style={{marginTop:"39%"}}>
-            <SimpleDialogDemo/>
+            {/* <SimpleDialogDemo/> */}
             </div></>)}
             
           </Card>

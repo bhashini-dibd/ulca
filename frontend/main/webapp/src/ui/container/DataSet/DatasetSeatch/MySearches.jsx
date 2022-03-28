@@ -258,7 +258,7 @@ const MySearches = (props) => {
                         </div> */}
 
       <MUIDataTable
-        title={`My Searches`}
+        // title={`My Searches `}
         data={detailedReport.filteredData}
         columns={columns}
         options={options}
