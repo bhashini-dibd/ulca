@@ -6,13 +6,11 @@ import {
 import CheckIcon from "@material-ui/icons/Check";
 import CloseIcon from "@material-ui/icons/Close";
 import DatasetStyle from "../../../styles/Dataset";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import SearchIcon from "@material-ui/icons/Search";
 
 import {
   IconButton,
   Button,
-  Divider,
   Grid,
   InputBase,
   TableCell,
@@ -21,7 +19,6 @@ import {
   TableHead,
   Box,
   Table,
-  TablePagination,
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -297,7 +294,6 @@ const BenchmarkModal = (props) => {
                     </TableHead>
                     <TableBody>
                       {rows.map((row, i) => {
-                        console.log(row);
                         return (
                           <TableRow
                             key={i}

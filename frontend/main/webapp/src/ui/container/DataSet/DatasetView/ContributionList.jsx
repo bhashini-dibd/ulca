@@ -105,22 +105,16 @@ const ContributionList = (props) => {
   };
 
   useEffect(() => {
-    (myContributionReport.filteredData.length === 0 ||
-      myContributionReport.refreshStatus ||
-      added) &&
-      MyContributionListApi();
-    (myBenchmarkReport.filteredData.length === 0 ||
-      myBenchmarkReport.refreshStatus) &&
-      MyBenchmarkListApi();
-  }, []);
-
-  useEffect(() => {
     if (!refHook.current) {
       MyContributionListApi();
-      MyBenchmarkListApi();
       refHook.current = true;
     }
   });
+
+  useEffect(()=>{
+      if(value === 1)
+      MyBenchmarkListApi()
+  },[value])
 
   useEffect(() => {
     return () => {

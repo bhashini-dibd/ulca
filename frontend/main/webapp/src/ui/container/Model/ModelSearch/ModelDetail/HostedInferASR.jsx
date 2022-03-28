@@ -6,6 +6,7 @@ import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
 import Spinner from "../../../../components/common/Spinner";
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import {
   Grid,
   Typography,
@@ -31,6 +32,7 @@ const HostedInferASR = (props) => {
     language,
   } = props;
   const history = useHistory();
+  const [data , setData] =useState(null)
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
   const [error, setError] = useState({ url: "" });
@@ -102,6 +104,7 @@ const HostedInferASR = (props) => {
         } else {
           if (status) {
             setTargetAudio(rsp_data.data.source);
+           
           } else {
             setSnackbarInfo({
               ...snackbar,
@@ -117,7 +120,6 @@ const HostedInferASR = (props) => {
         }
       })
       .catch((error) => {
-        console.log(error);
         setApiCall(false);
         setSnackbarInfo({
           ...snackbar,
@@ -133,6 +135,12 @@ const HostedInferASR = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
+
+
+  const childData = (text) => {
+    setData(text)
+  }
+ 
   return (
     <>
       <Grid container>
@@ -148,14 +156,16 @@ const HostedInferASR = (props) => {
           sm={12}
           xs={12}
         >
+          
           <AudioRecord
             submitter={props.submitter}
             modelId={modelId}
             handleApicall={handleApicall}
             language={language}
             streaming={props.streaming}
+            getchildData={childData}
           />
-        </Grid>
+          </Grid>
         <Grid
           className={classes.grid}
           item
@@ -168,11 +178,17 @@ const HostedInferASR = (props) => {
           <Card className={classes.asrCard}>
             <Grid container className={classes.cardHeader}>
               <Typography variant="h6" className={classes.titleCard}>
-                {translate("label.output")}
-              </Typography>
+                {translate("label.output")} 
+             </Typography>
             </Grid>
-            <CardContent id="asrCardOutput">{targetAudio}</CardContent>
-          </Card>
+    
+         
+          <CardContent id="asrCardOutput">{targetAudio}</CardContent>
+          {data && <div className={classes.AsrPopover} > 
+        
+         <FeedbackPopover/>
+          </div>} 
+        </Card>
         </Grid>
 
         <Typography variant={"body1"}>
@@ -247,7 +263,11 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            <CardContent>{target}</CardContent>
+          {target.length > 0 && (<><CardContent>{target}</CardContent>
+            <div style={{marginTop:"39%"}}>
+            {/* <SimpleDialogDemo/> */}
+            </div></>)}
+            
           </Card>
         </Grid>
       </Grid>
