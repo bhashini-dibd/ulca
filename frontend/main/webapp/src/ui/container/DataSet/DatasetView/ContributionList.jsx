@@ -104,15 +104,15 @@ const ContributionList = (props) => {
     }
   };
 
-  useEffect(() => {
-    (myContributionReport.filteredData.length === 0 ||
-      myContributionReport.refreshStatus ||
-      added) &&
-      MyContributionListApi();
-    (myBenchmarkReport.filteredData.length === 0 ||
-      myBenchmarkReport.refreshStatus) &&
-      MyBenchmarkListApi();
-  }, []);
+  // useEffect(() => {
+  //   (myContributionReport.filteredData.length === 0 ||
+  //     myContributionReport.refreshStatus ||
+  //     added) &&
+  //     MyContributionListApi();
+  //   (myBenchmarkReport.filteredData.length === 0 ||
+  //     myBenchmarkReport.refreshStatus) &&
+  //     MyBenchmarkListApi();
+  // }, []);
 
   useEffect(() => {
     if (!refHook.current) {
