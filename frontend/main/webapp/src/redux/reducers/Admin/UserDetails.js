@@ -58,10 +58,8 @@ const searchUserDetails = (searchedValue, userDetails) => {
 };
 
 const updateSelectedFilter = (type, payload, prevState) => {
-  console.log(type, payload, prevState);
   let updatedFilterObj = prevState;
   if (updatedFilterObj[type].includes(payload)) {
-    console.log("inside if", updatedFilterObj[type].indexOf(payload));
     updatedFilterObj[type].splice(updatedFilterObj[type].indexOf(payload), 1);
   } else {
     updatedFilterObj[type].push(payload);
@@ -115,7 +113,6 @@ const reducer = (state = initialState, action) => {
       };
 
     case C.TOGGLE_USER_STATUS:
-      console.log(action.payload);
       return {
         ...state,
         ...searchUserDetails(

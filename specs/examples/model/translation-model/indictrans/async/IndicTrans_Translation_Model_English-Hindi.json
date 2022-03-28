@@ -1,5 +1,5 @@
 {
-   "name": "IndicTrans Translation English-Hindi",
+   "name": "IndicTrans-Translation-English-Hindi",
    "version": "v0.3",
    "description": "IndicTrans is a Transformer-4x (~434 M) multilingual NMT model trained on Samanantar dataset which is the largest publicly available parallel corpora collection for Indic languages at the time of writing (14 April 2021). It is a single script model i.e we convert all the Indic data to the Devanagari script which allows for better lexical sharing between languages for transfer learning, prevents fragmentation of the subword vocabulary between Indic languages and allows using a smaller subword vocabulary. We currently release two models - Indic to English and English to Indic and support the following 11 indic languages: Assamese, Bengali, Gujarati, Hindi, Kannada, Malayalam, Marathi, Oriya, Punjabi, Tamil, Telugu.",
    "refUrl": "https://github.com/AI4Bharat/indicTrans",
@@ -87,13 +87,14 @@
       ]
    },
    "inferenceEndPoint": {
-      "callbackUrl": "https://a3e681ffbcd664219a5d0f936e8a6fd2-1339815454.ap-south-1.elb.amazonaws.com/aai4b-nmt-inference/v0/indic-indic/translate/async",
-      "schema": null,
+      "callbackUrl": "https://cdac.ulcacontrib.org/nmt-async-proxy/v0/translate/async",
+      
       "isSyncApi": false,
       "asyncApiDetails": {
-         "pollingUrl": "https://a3e681ffbcd664219a5d0f936e8a6fd2-1339815454.ap-south-1.elb.amazonaws.com/aai4b-nmt-inference/v0/indic-indic/search-translation",
+         "pollingUrl": "https://cdac.ulcacontrib.org/nmt-async-proxy/v0/search-translation",
          "pollInterval": 100,
          "asyncApiSchema": {
+            "type":"TranslationAsyncInference",
             "request": {
                "input": [
                   {
@@ -107,10 +108,17 @@
                      "targetLanguage": "hi"
                   }
                }
+            },
+            "response":{
+               "requestId": "1234567890abcd"
             }
          },
          "asyncApiPollingSchema": {
-            "requestId": "1234567890abcd"
+            "type":"TranslationAsyncPollingInference",
+            "request":{
+               "requestId": "1234567890abcd"
+            }
+            
          }
       }
    },

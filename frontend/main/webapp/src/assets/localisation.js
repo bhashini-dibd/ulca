@@ -104,6 +104,7 @@ const localization_EN_Data = {
     "Transcription is best if you directly speak into the microphone and the performance might not be the same if you use it over a conference call.",
   "label.disclaimer": "Disclaimer : ",
   "label.output": "Output",
+  "label.translatedspeech": "Translated Speech",
   "label.notes": "Notes",
   "button.translate": "Translate",
   "label.description": "Description",
@@ -131,6 +132,18 @@ const localization_EN_Data = {
   "label.hostedInferenceASR":
     "Please start speaking after the listening mode is enabled. Once you start speaking, ULCA will hit the inference endpoint of the hosted model, to get the transcription.",
   "button.cancel": "Cancel",
+  "lable.feedback1":"Are you satisfied with this  ",
+  "lable.feedbacks":" translation? ",
+  "button:feedback":" Feedback",
+  "lable.verybad":"very bad",
+  "lable.verygood":"very good",
+  "link.feedback":" Detailed Feedback",
+  "button. Submit":" Submit",
+  "lable.feedback2":"Your feedback will be used to help improve the product",
+  "lable.feedback3":"Please rate your experience...",
+  "button.Suggest an edit":"Suggest an edit",
+  "lable.feedback4":"Add your comments",
+
 };
 
 export function translate(locale_text) {

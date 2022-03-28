@@ -16,6 +16,18 @@ The code in this repo could be utilized to automate procedures for submitting/se
 
 >IMPORTANT : This Script requires Browser and its Respective Driver [Supported Browsers - Chrome, Firefox, Opera].
 
+## Tests :
+
+    * Login : Tests User Login to ULCA.
+    * Search : Tests Searching of Datasets.
+    * Download : Tests Downloading of Datasets.  
+    * Benchmark : Tests Benchmarking of Datasets against Models with Metrics.
+    * Publish/Unpublish : Tests Publish/Unpublish of Models.
+    * Chart/LeaderBoard : Tests Sorting of Chart/LeaderBoard.    
+    * ASR-Recording : Tests Recording for ASR Models.  
+    
+>Note : All examples/usage are given below
+
 ## Usage
 
 * ### For Login

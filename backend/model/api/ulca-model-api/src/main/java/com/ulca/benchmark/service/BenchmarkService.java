@@ -46,6 +46,7 @@ import com.ulca.benchmark.model.BenchmarkTaskTracker;
 import com.ulca.benchmark.request.BenchmarkMetricRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSubmitRequest;
+import com.ulca.benchmark.request.ExecuteBenchmarkAllMetricRequest;
 import com.ulca.benchmark.request.BenchmarkListByModelRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.response.BenchmarkDto;
@@ -191,6 +192,84 @@ public class BenchmarkService {
 			BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
 			benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
 			benchmarkProcessIds.add(serviceRequestNumber);
+
+		}
+
+		ExecuteBenchmarkResponse response = new ExecuteBenchmarkResponse();
+		response.setBenchmarkProcessIds(benchmarkProcessIds);
+
+		log.info("******** Exit BenchmarkService:: executeBenchmark *******");
+
+		return response;
+
+	}
+	
+	@Transactional
+	public ExecuteBenchmarkResponse executeBenchmarkAllMetric(ExecuteBenchmarkAllMetricRequest request) {
+
+		log.info("******** Entry BenchmarkService:: executeBenchmark *******");
+
+		
+		String modelId = request.getModelId();
+		Optional<ModelExtended> model = modelDao.findById(modelId);
+		if(model.isEmpty()) {
+			throw new ModelNotFoundException("Model with not modelId : " + modelId + " not available ");
+		}
+		
+		ModelExtended modelExtended = model.get();
+		
+		Benchmark benchmark = benchmarkDao.findByBenchmarkId(request.getBenchmarkId());
+		
+		if(benchmark == null ) {
+			throw new BenchmarkNotFoundException("Benchmark : " + request.getBenchmarkId() + " not found ");
+		}
+		
+		List<String> benchmarkProcessIds = new ArrayList<String>();
+		
+		List<String> metricList = modelConstants.getMetricListByModelTask(benchmark.getTask().getType().toString());
+
+		String benchmarkId = benchmark.getBenchmarkId();
+		
+		for (String metric  : metricList) {
+			
+			
+			List<BenchmarkProcess> isExistBmProcess = benchmarkprocessDao.findByModelIdAndBenchmarkDatasetIdAndMetric(modelId,benchmarkId,metric);
+			
+			Boolean isExisting = false;
+			
+			if(isExistBmProcess != null && isExistBmProcess.size()>0 ) {
+				
+				for(BenchmarkProcess existingBm : isExistBmProcess) {
+					String status = existingBm.getStatus();
+					if(status.equalsIgnoreCase("Completed") || status.equalsIgnoreCase("In-Progress") ) {
+						String message = "Benchmark has already been executed for benchmarkId : " + benchmarkId + " and metric : " + metric;
+						log.info(message);
+						isExisting = true;
+						break;
+						
+					 }
+					}
+			}
+			if(!isExisting) {
+				String serviceRequestNumber = Utility.getBenchmarkExecuteReferenceNumber();
+				
+				BenchmarkProcess bmProcess = new BenchmarkProcess();
+				bmProcess.setBenchmarkDatasetId(benchmarkId);
+				bmProcess.setBenchmarkProcessId(serviceRequestNumber);
+				bmProcess.setMetric(benchmarkId);
+				bmProcess.setBenchmarkDatasetName(benchmark.getName());
+				bmProcess.setModelId(modelId);
+				bmProcess.setModelName(modelExtended.getName());
+				bmProcess.setStatus("In-Progress");
+				bmProcess.setCreatedOn(new Date().toString());
+				bmProcess.setLastModifiedOn(new Date().toString());
+				benchmarkprocessDao.save(bmProcess);
+				
+				BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
+				benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
+				benchmarkProcessIds.add(serviceRequestNumber);
+			}
+			
 
 		}
 

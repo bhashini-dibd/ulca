@@ -15,11 +15,11 @@ const GridView = (props) => {
   } = props;
   const renderGrid = () => {
     return (
-      <Grid container className={classes.gridcard}  >
+      <Grid container>
         {data.filteredData.map((element, i) => {
           if (i >= page * rowsPerPage && i < page * rowsPerPage + rowsPerPage) {
             return (
-              <Grid item xs={12}  sm={12} md={4} lg={4} xl={4} key={i}>
+              <Grid item xs={12} sm={12} md={6} lg={4} xl={4} key={i}>
                 <CardComponent
                   index={i}
                   data={element}

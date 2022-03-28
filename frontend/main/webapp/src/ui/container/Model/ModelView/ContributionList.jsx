@@ -75,12 +75,12 @@ const ContributionList = (props) => {
   const status = useSelector((state) => state.getBenchMarkDetails.status);
   const refHook = useRef(false);
 
-  useEffect(() => {
-    (myContributionReport.filteredData.length === 0 ||
-      myContributionReport.refreshStatus ||
-      added) &&
-      MyContributionListApi();
-  }, []);
+  // useEffect(() => {
+  //   (myContributionReport.filteredData.length === 0 ||
+  //     myContributionReport.refreshStatus ||
+  //     added) &&
+  //     MyContributionListApi();
+  // }, []);
 
   useEffect(() => {
     if (status === "completed") {
@@ -170,7 +170,6 @@ const ContributionList = (props) => {
     dispatch(clearFilter(data, C.CLEAR_MODEL_FILTER));
   };
   const apply = (data) => {
-    console.log(data);
     handleClose();
     dispatch(FilterTable(data, C.MODEL_CONTRIBUTION_TABLE));
   };
@@ -396,7 +395,6 @@ const ContributionList = (props) => {
       })
       .catch((err) => {
         handleDialogClose();
-        console.log(err);
       });
   };
 

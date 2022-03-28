@@ -31,7 +31,8 @@ MAIL_SETTINGS                           =   {
                                                 "MAIL_USE_SSL"  : True,
                                                 "MAIL_USERNAME" : os.environ.get('ULCA_EMAIL','xxxxxxxxxx'),
                                                 "MAIL_PASSWORD" : os.environ.get('ULCA_EMAIL_PASSWORD','xxxxxxx')
-                                            }
+                                             }
+
 MAIL_SENDER                             =   os.environ.get('ULCA_SENDER_EMAIL','xxxxxxxxxx')
 
 #events
@@ -40,3 +41,8 @@ ds_failed                               =   os.environ.get('ULCA_NOTIFIER_DS_SUB
 bm_completed                            =   os.environ.get('ULCA_NOTIFIER_BM_RUN_COMPLETED_STATUS','benchmark-run-completed')
 bm_failed                               =   os.environ.get('ULCA_NOTIFIER_BM_RUN_FAILED_STATUS','benchmark-run-failed')
 search_completed                        =   os.environ.get('ULCA_NOTIFIER_DS_SEARCH_COMPLETED_STATUS','search-records-completed')
+inference_check                         =   os.environ.get('ULCA_NOTIFIER_MD_INF_CHECK_STATUS','inference-check-failed')
+
+
+#models
+receiver_email_ids                      =   os.environ.get('ULCA_USER_GROUP',"ulca-dev@tarento.com")
