@@ -71,14 +71,15 @@ class ErrorProcessor(Thread):
                     log.info(f'error_records {error_records}')
                     if len(error_records) == 0:
                         log.info(f'error_records NULL')
-                    file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
-                    headers =   ['Stage','Error Message', 'Record Count']
-                    fields  =   ['stage','message','count']
-                    storeutils.write_to_csv(error_records,file,srn,headers,fields)
-                    agg_file = storeutils.file_store_upload_call(file,file.replace("/opt/",""),error_prefix)
-                    update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None,"consolidatedCount":present_count[0]["consolidatedCount"]}
-                    condition = {"serviceRequestNumber": srn, "uploaded": True}
-                    errorepo.update(condition,update_query,True)
+                    else :
+                        file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
+                        headers =   ['Stage','Error Message', 'Record Count']
+                        fields  =   ['stage','message','count']
+                        storeutils.write_to_csv(error_records,file,srn,headers,fields)
+                        agg_file = storeutils.file_store_upload_call(file,file.replace("/opt/",""),error_prefix)
+                        update_query = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "consolidated_file": agg_file, "file": None, "count" : None,"consolidatedCount":present_count[0]["consolidatedCount"]}
+                        condition = {"serviceRequestNumber": srn, "uploaded": True}
+                        errorepo.update(condition,update_query,True)
 
                 query   = {"serviceRequestNumber" : srn,"status" : {'$in':['Completed','Failed']}}
                 #getting record from mongo matching srn, if present
