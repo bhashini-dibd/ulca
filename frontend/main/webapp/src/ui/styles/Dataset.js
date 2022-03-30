@@ -860,6 +860,9 @@ const DataSet = (theme) => ({
     },
 
   },
+  buttonsuggestlable:{
+    lineHeight:"16px"
+  },
   typography1: {
     // marginLeft: "10px",
     fontSize: "16px",
