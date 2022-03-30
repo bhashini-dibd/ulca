@@ -87,11 +87,11 @@
       ]
    },
    "inferenceEndPoint": {
-      "callbackUrl": "https://a3e681ffbcd664219a5d0f936e8a6fd2-1339815454.ap-south-1.elb.amazonaws.com/aai4b-nmt-inference/v0/en-indic/translate/async",
+      "callbackUrl": "https://cdac.ulcacontrib.org/nmt-async-proxy/v0/translate/async",
       
       "isSyncApi": false,
       "asyncApiDetails": {
-         "pollingUrl": "https://a3e681ffbcd664219a5d0f936e8a6fd2-1339815454.ap-south-1.elb.amazonaws.com/aai4b-nmt-inference/v0/en-indic/search-translation",
+         "pollingUrl": "https://cdac.ulcacontrib.org/nmt-async-proxy/v0/search-translation",
          "pollInterval": 100,
          "asyncApiSchema": {
             "type":"TranslationAsyncInference",
