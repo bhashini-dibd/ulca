@@ -11,12 +11,9 @@ public class NotificationService {
 
 	@Autowired
 	private KafkaTemplate<String, String> kafkaTemplate;
-
-	
 	
 	@Value("${kafka.ulca.notifier.consumer.ip.topic}")
 	private String notifierTopic;
-	
 	
 	public void notifyBenchmarkComplete(String modelId, String modelName, String userId) {
 		JSONObject msg = new JSONObject();
@@ -43,7 +40,6 @@ public class NotificationService {
 		msg.put("details", details);
 		
 		kafkaTemplate.send(notifierTopic, msg.toString());
-		
 	}
 	
 }
