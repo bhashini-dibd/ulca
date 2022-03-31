@@ -1,5 +1,5 @@
 {
-  "ocrCorpusFilters": [
+  "ocrCorpuFilters": [
     {
       "code": "sourceLanguage",
       "label": "Source Language",
@@ -40,7 +40,7 @@
       "code": "collectionSource",
       "label": "Collection Source",
       "active": true,
-      "values": []
+      "values": {}
     },
     {
       "code": "license",
@@ -55,7 +55,7 @@
       "code": "submitterName",
       "label": "Submitter",
       "active": true,
-      "values": []
+      "values": {}
     },
     {
       "code": "format",
