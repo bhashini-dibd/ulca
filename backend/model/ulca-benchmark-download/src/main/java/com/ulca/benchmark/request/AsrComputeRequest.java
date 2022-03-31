@@ -13,7 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AsrComputeRequest {
 	
-	
 	String callbackUrl;
 	String filePath;
 	String sourceLanguage;

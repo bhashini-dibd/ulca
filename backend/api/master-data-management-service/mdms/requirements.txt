@@ -10,3 +10,5 @@ uuid==1.30
 validators==0.18.2
 Jinja2==3.0.3
 itsdangerous==2.0.1
+Werkzeug==0.16.1
+

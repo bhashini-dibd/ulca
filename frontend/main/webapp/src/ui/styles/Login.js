@@ -2,6 +2,12 @@ const LoginStyle = (theme) => ({
   appInfo: {
     background: "rgba(44, 39, 153, 1)",
     minHeight: "100vh",
+    color: theme.palette.primary.contrastText,
+    "@media (max-width:650px)": {
+      background: "white",
+      minHeight: "15vh",
+     
+    },
     
   
   },
@@ -14,6 +20,13 @@ const LoginStyle = (theme) => ({
     letterSpacing: "3.9px",
     textAlign: "left",
     color: theme.palette.primary.contrastText,
+    "@media (max-width:650px)": {
+      margin: "5% 10% 5% 40%",
+      color: "black",
+     
+    },
+  
+
   },
   subTitle: {
     width: "80%",
