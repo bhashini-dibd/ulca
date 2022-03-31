@@ -15,13 +15,15 @@ import Stop from "../../../../../assets/stopIcon.svg";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import ComputeAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import { Language } from "../../../../../configs/DatasetItems";
+import Modal from '../../../../components/common/Modal';
+import FeedbackModal from '../../../../components/common/Feedback';
 
 const SpeechToSpeech = () => {
   const dispatch = useDispatch();
   const { asr, tts, translation, sourceLanguage, targetLanguage } = useSelector(
     (state) => state.getBulkModelSearch
   );
-  const [gender,setGender] = useState("female")
+  const [gender, setGender] = useState("female")
   const [data, setData] = useState("");
   const [url, setUrl] = useState("");
   const [recordAudio, setRecordAudio] = useState("");
@@ -44,8 +46,14 @@ const SpeechToSpeech = () => {
     translation: "",
     tts: "",
   });
+  const [output, setOutput] = useState({
+    asr: "",
+    translation: "",
+  });
 
-  
+  const [suggestEdit, setSuggestEdit] = useState(null)
+  const [modal, setModal] = useState(false);
+  const [suggestEditValues, setSuggestEditValues] = useState({asr:"",transaltion:""})
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
@@ -72,10 +80,7 @@ const SpeechToSpeech = () => {
     }
   }, [filter.src, filter.tgt])
 
-  const [output, setOutput] = useState({
-    asr: "",
-    translation: "",
-  });
+
 
   const [index, setIndex] = useState(0);
 
@@ -120,6 +125,7 @@ const SpeechToSpeech = () => {
     setData(null);
     setAudio("");
     setOutput({ asr: "", translation: "" });
+    setSuggestEditValues({ asr: "", translation: "" });
     setTextArea({ asr: "", translation: "" });
     if (checkFilter()) {
       setSnackbarInfo({
@@ -224,6 +230,8 @@ const SpeechToSpeech = () => {
     });
     setTextArea((prev) => ({ ...prev, translation: "", asr: "" }));
     setOutput((prev) => ({ ...prev, asr: textArea.asr }));
+    setSuggestEditValues((prev) => ({ ...prev, asr: textArea.asr }));
+
     const obj = new ComputeAPI(
       filter.translation.value,
       textArea.asr,
@@ -242,6 +250,10 @@ const SpeechToSpeech = () => {
       let rsp_data = await translationResp.json();
       if (translationResp.ok) {
         setOutput((prev) => ({
+          ...prev,
+          translation: rsp_data.outputText,
+        }));
+        setSuggestEditValues((prev) => ({
           ...prev,
           translation: rsp_data.outputText,
         }));
@@ -284,6 +296,8 @@ const SpeechToSpeech = () => {
     });
     setTextArea((prev) => ({ ...prev, translation: "" }));
     setOutput((prev) => ({ ...prev, translation: textArea.translation }));
+    setSuggestEditValues((prev) => ({ ...prev, translation: textArea.translation }));
+    
     const obj = new ComputeAPI(
       filter.tts.value,
       textArea.translation,
@@ -309,11 +323,10 @@ const SpeechToSpeech = () => {
       }
     });
   };
-const genderHandler =(value)=>{
-  setGender(value)
+  const genderHandler = (value) => {
+    setGender(value)
 
-}
-console.log('value', gender)
+  }
   const setSnackbarError = (errorMsg) => {
     setSnackbarInfo({
       ...snackbar,
@@ -357,6 +370,8 @@ console.log('value', gender)
         let rsp_data = await resp.json();
         if (resp.ok && rsp_data !== null) {
           setOutput((prev) => ({ ...prev, asr: rsp_data.data.source }));
+          setSuggestEditValues((prev) => ({ ...prev, asr: rsp_data.data.source }));
+
           const obj = new ComputeAPI(
             filter.translation.value,
             rsp_data.data.source,
@@ -374,6 +389,10 @@ console.log('value', gender)
             let rsp_data = await translationResp.json();
             if (translationResp.ok) {
               setOutput((prev) => ({
+                ...prev,
+                translation: rsp_data.outputText,
+              }));
+              setSuggestEditValues((prev) => ({
                 ...prev,
                 translation: rsp_data.outputText,
               }));
@@ -410,7 +429,6 @@ console.log('value', gender)
         }
       })
       .catch(async (error) => {
-        console.log(error);
         setSnackbarError(
           "Unable to process your request at the moment. Please try after sometime."
         );
@@ -490,6 +508,10 @@ console.log('value', gender)
     return getUniqueListBy(updatedTargets, "value");
   };
 
+  const handleOnChange = (param, e) => {
+    setSuggestEditValues((prev) => ({ ...prev, [param]: e.target.value }))
+  }
+
   return (
     <>
       <Grid container spacing={5}>
@@ -510,12 +532,15 @@ console.log('value', gender)
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
           <SpeechToSpeechOptions
+            setModal={setModal}
             Start={Start}
             Stop={Stop}
             data={data}
             url={url}
             base={base}
             setBase={setBase}
+            suggestEdit={suggestEdit}
+            setSuggestEdit={setSuggestEdit}
             error={error}
             setUrl={setUrl}
             setError={setError}
@@ -551,6 +576,20 @@ console.log('value', gender)
           variant={snackbar.variant}
         />
       )}
+      {
+        modal && (
+          <Modal open={modal} handleClose={() => setModal(false)}>
+            <FeedbackModal
+              setModal={setModal}
+              setSuggestEdit={setSuggestEdit}
+              suggestEdit={suggestEdit}
+              asrValue={suggestEditValues.asr}
+              ttsValue={suggestEditValues.translation}
+              handleOnChange={handleOnChange}
+            />
+          </Modal>
+        )
+      }
     </>
   );
 };

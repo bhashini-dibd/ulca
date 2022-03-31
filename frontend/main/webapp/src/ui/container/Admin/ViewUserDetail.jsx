@@ -127,7 +127,6 @@ const ViewUserDetail = (props) => {
       body: JSON.stringify(obj.getBody()),
     }).then(async (res) => {
       let rsp_data = await res.json();
-      console.log(rsp_data);
       if (!res.ok) {
         setSnackbar({
           message: rsp_data.message,
