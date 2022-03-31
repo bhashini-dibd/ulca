@@ -50,12 +50,6 @@ const AudioRecord = (props) => {
   const dispatch = useDispatch();
   const timerRef = useRef();
   const [base, setBase] = useState("");
-
-  // const sendDataback=()=>{
-  //   getchildData(text);
-  // }
-  // sendDataback();
-  // console.log(text,"eeeeeee")
   useEffect(() => {
     if (!languages.length) {
       const obj = new GetMasterDataAPI(["languages", "inferenceEndpoints"]);
@@ -79,7 +73,6 @@ const AudioRecord = (props) => {
     if (vakyanshEndPoint.length) {
       setStreamingState("start");
       const output = document.getElementById("asrCardOutput");
-      {console.log( output,"aaaaaaaaa")}
       // output.innerText = "";
      
       setData("");
@@ -91,13 +84,13 @@ const AudioRecord = (props) => {
         
         setStreamingState("listen");
         setRecordAudio(RecordState.START);
+        
         if (action === SocketStatus.CONNECTED) {
           streaming.startStreaming(
             function (transcript) {
               const output = document.getElementById("asrCardOutput");
               if (output) output.innerText = transcript;
               getchildData(transcript);
-              console.log(transcript,"vvvvvv")
             },
           
             function (errorMsg) {
@@ -127,7 +120,6 @@ const AudioRecord = (props) => {
         `${code}asr/v1/punctuate/${languageCode}`,
         (status, text) => {
           output.innerText = text;
-          console.log(text,"wwwwww")
           getchildData(text);
         },
         (status, error) => {
@@ -151,7 +143,6 @@ const AudioRecord = (props) => {
       setBase(base64data);
     };
   };
-
   const onStop = (data) => {
     setData(data.url);
   };
@@ -173,7 +164,9 @@ const AudioRecord = (props) => {
     setData(data.url);
     setBase(blobToBase64(data));
   };
-
+  
+ 
+   
   return (
     <Card className={classes.asrCard}>
       <Grid container className={classes.cardHeader}>
@@ -230,7 +223,7 @@ const AudioRecord = (props) => {
           </div>
           <div className={classes.centerAudio}>
             {data && <audio src={data} controls id="sample"></audio>  }
-           
+      
           </div>
         </CardContent>
       ) : (
