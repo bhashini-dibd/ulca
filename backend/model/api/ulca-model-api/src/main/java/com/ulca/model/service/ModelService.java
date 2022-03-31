@@ -416,10 +416,30 @@ public class ModelService {
 		ModelFeedback feedback = new ModelFeedback();
 		BeanUtils.copyProperties(request, feedback);
 		
-		ModelFeedbackSubmitResponse response = new ModelFeedbackSubmitResponse();
+		
 		
 		modelFeedbackDao.save(feedback);
 		
+		String feedbackId = feedback.getFeedbackId();
+		
+		if(request.getTaskType() != null && !request.getTaskType().isBlank() && request.getTaskType().equalsIgnoreCase("sts")) {
+			
+			List<ModelFeedbackSubmitRequest> detailedFeedback = request.getDetailedFeedback();
+			for(ModelFeedbackSubmitRequest modelFeedback : detailedFeedback ) {
+				
+				ModelFeedback mfeedback = new ModelFeedback();
+				BeanUtils.copyProperties(modelFeedback, mfeedback);
+				
+				mfeedback.setStsfeedbackId(feedbackId);	
+				modelFeedbackDao.save(mfeedback);
+				
+			}
+		}
+		
+		
+		
+		
+		ModelFeedbackSubmitResponse response = new ModelFeedbackSubmitResponse();
 		response.setMessage("model feedback submitted successful");
 		return response;
 	}
