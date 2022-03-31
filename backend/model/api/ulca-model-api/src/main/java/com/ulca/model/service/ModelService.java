@@ -42,14 +42,18 @@ import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.util.ModelConstants;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelFeedback;
+import com.ulca.model.dao.ModelFeedbackDao;
 import com.ulca.model.exception.FileExtensionNotSupportedException;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.exception.ModelStatusChangeException;
 import com.ulca.model.exception.ModelValidationException;
 import com.ulca.model.request.ModelComputeRequest;
+import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelFeedbackSubmitResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
@@ -83,6 +87,9 @@ public class ModelService {
 	
 	@Autowired
 	BenchmarkDao benchmarkDao;
+	
+	@Autowired
+	ModelFeedbackDao modelFeedbackDao;
 
 
 	@Value("${ulca.model.upload.folder}")
@@ -416,5 +423,28 @@ public class ModelService {
 	}
 	
 	
+	public ModelFeedbackSubmitResponse modelFeedbackSubmit(ModelFeedbackSubmitRequest request) {
+		
+		ModelFeedback feedback = new ModelFeedback();
+		BeanUtils.copyProperties(request, feedback);
+		
+		ModelFeedbackSubmitResponse response = new ModelFeedbackSubmitResponse();
+		
+		modelFeedbackDao.save(feedback);
+		
+		response.setMessage("model feedback submitted successful");
+		return response;
+	}
+	
+	public List<ModelFeedback>  getModelFeedbackByModelId(String modelId) {
+		
+		return modelFeedbackDao.findByModelId(modelId);
+		
+	}
 
+	public List<ModelFeedback>  getModelFeedbackByTaskType(String taskType) {
+		
+		return modelFeedbackDao.findByTaskType(taskType);
+		
+	}
 }
