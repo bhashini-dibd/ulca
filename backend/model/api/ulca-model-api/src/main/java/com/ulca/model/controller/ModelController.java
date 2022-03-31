@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -16,10 +17,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelFeedback;
+
 import com.ulca.model.request.ModelComputeRequest;
+import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelFeedbackSubmitResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
@@ -86,4 +94,24 @@ public class ModelController {
 		return modelService.tryMeOcrImageContent(file, modelId);
 	}
 	
+	@PostMapping("/feedback/submit")
+	public ModelFeedbackSubmitResponse modelFeedbackSubmit(@Valid @RequestBody ModelFeedbackSubmitRequest request) throws URISyntaxException, IOException, KeyManagementException, NoSuchAlgorithmException, InterruptedException {
+
+		log.info("******** Entry ModelController:: modelFeedbackSubmit *******");
+		return modelService.modelFeedbackSubmit(request);
+
+	}
+	
+	@GetMapping("/feedback/getByModelId")
+	public List<ModelFeedback> getModelFeedbackByModelId(@RequestParam(required = true) String modelId ) {
+		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
+		return modelService.getModelFeedbackByModelId(modelId);
+
+	}
+	@GetMapping("/feedback/getByTaskType")
+	public List<ModelFeedback> getModelFeedbackByTaskType(@RequestParam(required = true) String taskType ) {
+		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
+		return modelService.getModelFeedbackByTaskType(taskType);
+
+	}
 }
