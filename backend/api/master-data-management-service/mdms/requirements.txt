@@ -8,4 +8,6 @@ redis==3.5.3
 requests==2.23.0
 uuid==1.30
 validators==0.18.2
+Jinja2==3.0.3
+itsdangerous==2.0.1
 
