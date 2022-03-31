@@ -131,6 +131,7 @@ function SimpleDialogDemo(props) {
           },
         },
         body2:{
+         
           // "@media (max-width:400px)": {
           //   lineHeight: "16px"
           // },
@@ -158,10 +159,10 @@ function SimpleDialogDemo(props) {
     root: {
       boxShadow: 'none',
       textTransform: 'none',
-      fontSize: 16,
+      fontSize: 10,
       padding: '18px 25px',
       border: '1px solid',
-      lineHeight: 1.5,
+      lineHeight: 1.1,
 
       borderColor: '#0063cc',
       "@media (max-width:400px)": {
@@ -369,7 +370,7 @@ function SimpleDialogDemo(props) {
                 </Grid>
                 <Grid items  xs={2} sm={2} md={2} lg={2} xl={2}>
               <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("asr")}>
-                <Typography variant="body2" color="primary" > {translate("button.Suggest an edit")}</Typography>
+                <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}> {translate("button.Suggest an edit")}</Typography>
               </BootstrapButton>
               </Grid>
               <br />
@@ -395,7 +396,7 @@ function SimpleDialogDemo(props) {
                  </Grid>
                  <Grid items  xs={2} sm={2} md={2} lg={2} xl={2}>
               <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("tts")}>
-                <Typography variant="body2" color="primary">  {translate("button.Suggest an edit")}</Typography>
+                <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
               </BootstrapButton>
               </Grid>
               <br />
