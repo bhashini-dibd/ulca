@@ -84,6 +84,7 @@ const AudioRecord = (props) => {
         
         setStreamingState("listen");
         setRecordAudio(RecordState.START);
+        
         if (action === SocketStatus.CONNECTED) {
           streaming.startStreaming(
             function (transcript) {
@@ -142,7 +143,6 @@ const AudioRecord = (props) => {
       setBase(base64data);
     };
   };
-
   const onStop = (data) => {
     setData(data.url);
   };
@@ -164,7 +164,9 @@ const AudioRecord = (props) => {
     setData(data.url);
     setBase(blobToBase64(data));
   };
-
+  
+ 
+   
   return (
     <Card className={classes.asrCard}>
       <Grid container className={classes.cardHeader}>
@@ -221,7 +223,7 @@ const AudioRecord = (props) => {
           </div>
           <div className={classes.centerAudio}>
             {data && <audio src={data} controls id="sample"></audio>  }
-           
+      
           </div>
         </CardContent>
       ) : (

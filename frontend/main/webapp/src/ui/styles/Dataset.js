@@ -204,9 +204,13 @@ const DataSet = (theme) => ({
   ButtonRefresh: {
     marginLeft: "auto",
     borderRadius: "1rem",
+    fontSize:"13px",
+    whiteSpace:" nowrap",
     "@media (max-width:870px)": {
       display: "none",
+     
     },
+    
   },
   ButtonRefreshMobile: {
     display: "none",
@@ -855,6 +859,13 @@ const DataSet = (theme) => ({
 
     },
 
+  },
+  buttonsuggestlable:{
+    lineHeight:"16px",
+    "@media (max-width:650px)": {
+      lineHeight:"11px",
+
+    },
   },
   typography1: {
     // marginLeft: "10px",
