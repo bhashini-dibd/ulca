@@ -1,1 +1,1 @@
-from .mdms_resources import MasterDataResource,FeedbackDataResource, BulkMasterDataResource, CacheBustResource
+from .mdms_resources import MasterDataResource, BulkMasterDataResource, CacheBustResource

@@ -3,48 +3,10 @@ from flask import request
 import logging
 from utilities import post_error,CustomResponse,Status
 from services import MasterDataServices
-import json
 
 log = logging.getLogger('file')
 
 mdserve = MasterDataServices()
-
-#jsonn = '/home/siddanth/Desktop/feed.json'
-jsonn ="""
-{
-  "sts": {
-    "initialQuestion": {
-      "question": "Are you satisfied with this translation?",
-      "answerType": "5-star-rating",
-      "editbox": "false"
-    },
-    "detailedQuestions": [
-      {
-        "taskType": "asr",
-        "question": "Rate Speech to Text Quality",
-        "answerType": "5-star-rating",
-        "editbox": "true"
-      },
-      {
-        "taskType": "translation",
-        "question": "Rate Translated Text Quality",
-        "answerType": "5-star-rating",
-        "editbox": "true"
-      },
-      {
-        "taskType": "tts",
-        "question": "Rate Translated Speech Quality",
-        "answerType": "5-star-rating",
-        "editbox": "false"
-      },
-      {
-        "question": "Add your comments",
-        "answerType": "freetext"
-      }
-    ]
-  }
- }
-"""
 
 class MasterDataResource(Resource):
 
@@ -69,32 +31,6 @@ class MasterDataResource(Resource):
         except Exception as e:
             log.error(f"Request to mdms failed due to  {e}")
             return post_error("Service Exception on MasterDataResource",f"Exception occurred:{e}"), 400
-
-class FeedbackDataResource(Resource):
-
-    # reading json request and returning final response for master data search
-    def post(self):
-        body = request.get_json()
-        log.info(f"Request for feedback data received")
-        if body.get("feedbackType") == None :
-            log.error("Data Missing-masterName and locale are mandatory")
-            return post_error("Request Failed","Data Missing-masterName is mandatory"), 400
-        master       =  body["feedback"]
-        feedbackType = body["feedbackType"]
-        try:
-            #result = mdserve.get_feedbackQns_from_git(master)
-            result = json.loads(jsonn)
-            if feedbackType in result.keys():
-                final = result.get(feedbackType)
-            if not result:
-                return post_error("Not found", "masterName is not valid") , 400
-            log.info(f"Request to mdms fetch succesfull ")
-            return CustomResponse(Status.SUCCESS.value,final).getresjson(), 200
-            
-        except Exception as e:
-            log.error(f"Request to mdms failed due to  {e}")
-            return post_error("Service Exception on MasterDataResource",f"Exception occurred:{e}"), 400
-
 
 class BulkMasterDataResource(Resource):
 

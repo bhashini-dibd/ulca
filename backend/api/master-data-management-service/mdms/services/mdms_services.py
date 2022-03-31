@@ -48,17 +48,7 @@ class MasterDataServices():
                 master_data = self.get_sub_master({"master":f"/{master}.json","jsonPath":jsonpath})
                 master_data_dict[master]     =   master_data[master]
         return master_data_dict
-    
-    def get_feedbackQns_from_git(self,master_list):
-        master_data_dict = {}
-        for master in master_list:
-            git_file_location   =   f"{config.git_folder_prefix}/{master}.json"
-            master_data     =   utils.read_from_git(git_file_location)
-            if not master_data:
-                return post_error("Exception occurred",None) 
-            master_data_dict = master_data
-        return master_data_dict
-                
+            
 
     #recursive function for sub master data retrieval
     def get_sub_master(self,sub_master_obj):
