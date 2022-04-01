@@ -116,6 +116,12 @@ const constants = {
    * action for File Upload
    */
   DOCUMENTUPLOAD: "DOCUMENTUPLOAD",
+
+  /**
+   * action for Feedback Modal
+   */
+
+  SUBMIT_FEEDBACK: "SUBMIT_FEEDBACK"
 };
 
 export default constants;
