@@ -602,6 +602,7 @@ const SpeechToSpeech = () => {
       }
     })
     setModal(false);
+    setTimeout(()=>setSnackbarInfo((prev) => ({ ...prev, open: false })),3000)
   }
 
   return (
