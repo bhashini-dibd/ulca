@@ -1,37 +1,37 @@
 import requests
+from config import shared_storage_folder
 import json
+import urllib.request
+import os
 import logging
 from logging.config import dictConfig
-
 log = logging.getLogger('file')
 from jsonpath_ng import jsonpath, parse
-
+from .response import post_error
 
 class MdUtils:
-    # reading file from git
-    def read_from_git(self, git_path):
+    #reading file from git 
+    def read_from_git(self,git_path):
         log.info(f"reading from git: {git_path}")
         try:
-            file = requests.get(git_path, allow_redirects=True)
-            parsed = json.loads(file.content)
+            file            =   requests.get(git_path, allow_redirects=True)
+            log.info(f'file content {file.content}')
+            parsed          =   json.loads(file.content)
             return parsed
         except Exception as exe:
-            log.exception(f"Exception while reading from git:{exe} ")
+            log.exception(f"Exception while reading from git:{exe} " )
             return None
 
-    # parsing json using jsonpath expression
-    def jsonpath_parsing(self, json_data, expression):
+    #parsing json using jsonpath expression
+    def jsonpath_parsing(self,json_data,expression):
         log.info("parsing json using jsonpath")
-        path_expression = parse(expression)
-        try:
-            values = path_expression.find(json_data)[0].value
-            return values
-        except Exception as e:
-            log.exception(f"Exception while parsing json using jsonpath: {e}")
-            log.info(f'path_expression: {path_expression}')
-            log.info(f'json_data: {json_data}')
-            return None
+        path_expression =   parse(expression)
+        values          =   path_expression.find(json_data)[0].value
+        return values
 
+
+
+        
 
 # Log config
 dictConfig({
