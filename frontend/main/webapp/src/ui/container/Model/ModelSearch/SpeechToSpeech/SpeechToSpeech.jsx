@@ -694,6 +694,9 @@ const SpeechToSpeech = () => {
               handleFeedbackSubmit={handleFeedbackSubmit}
               comment={comment}
               handleCommentChange={handleCommentChange}
+              setComment={setComment}
+              setSuggestEditValues={setSuggestEditValues}
+              output={output}
             />
           </Modal>
         )

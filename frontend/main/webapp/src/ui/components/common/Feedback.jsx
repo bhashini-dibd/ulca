@@ -27,7 +27,8 @@ import { TextField } from '@material-ui/core';
 
 
 function SimpleDialogDemo(props) {
-  const { classes, setSuggestEdit, suggestEdit, asrValue, ttsValue, setModal, handleOnChange, handleFeedbackSubmit, handleCommentChange, comment } = props;
+  const { classes, setSuggestEdit, suggestEdit, asrValue, ttsValue, setModal, handleOnChange, 
+    handleFeedbackSubmit, handleCommentChange, comment,setComment, setSuggestEditValues,output} = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
   const [value, setValue] = React.useState(-1);
@@ -38,7 +39,12 @@ function SimpleDialogDemo(props) {
   const [data2, setData2] = React.useState(false);
 
   useEffect(() => {
-    return () => handleClose()
+    return () => {
+      handleClose();
+      setSuggestEdit(null);
+      setSuggestEditValues({ asr: output.asr, translation: output.translation })
+      setComment("")
+    }
   }, [])
 
 
