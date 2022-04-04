@@ -13,6 +13,7 @@ import base64
 import requests
 import json
 from time import sleep
+import uuid
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -46,13 +47,19 @@ class ASRAudioChunk:
         """
         Creating Audio Chunks
         """
-        filepath = r"/home/kafka/asr_creation_final/chunk_dir/sample_youtube_audio.wav"
+        # filepath = r"/home/kafka/asr_creation_final/chunk_dir/sample_youtube_audio.wav"
 
-        output_file = r"/home/kafka/asr_creation_final/chunk_dir/final_youtube_audio.wav"
-        input_file = r"/home/kafka/asr_creation_final/chunk_dir/temp_youtube_audio.wav"
+        # output_file = r"/home/kafka/asr_creation_final/chunk_dir/final_youtube_audio.wav"
+        # input_file = r"/home/kafka/asr_creation_final/chunk_dir/temp_youtube_audio.wav"
         url = youtube_url
-        #url = "https://www.youtube.com/watch?v=7IZ-jATBq9A"
-        folder_name= "/home/kafka/asr_creation_final/chunk_dir/"
+        folder_name= shared_storage_path + str(uuid.uuid4()) + "/"
+
+        filepath = f'{folder_name}sample-youtube-audio.wav'
+        input_file = f'{folder_name}temp_youtube_audio.wav'
+        input_file_enhanced = f'{folder_name}temp_youtube_audio_enhanced.wav'
+        output_file = f'{folder_name}final_youtube_audio.wav'
+
+        # folder_name= "/home/kafka/asr_creation_final/chunk_dir/"
 
         #create folder
         if os.path.exists(folder_name):
@@ -69,9 +76,9 @@ class ASRAudioChunk:
 
         subprocess.call(["ffmpeg -loglevel error -y -i {} -ar {} -ac {} -bits_per_raw_sample {} -vn {}".format(filepath, 16000, 1, 16, input_file)], shell=True)
         os.remove(filepath)
-        subprocess.call(["python3 -m denoiser.enhance --dns48 --noisy_dir='/home/kafka/asr_dataset_creation_test/chunk_dir/' --out_dir='/home/kafka/asr_dataset_creation_test/chunk_dir/'"], shell=True)
-        input_file = r"/home/kafka/asr_dataset_creation_test/chunk_dir/temp_youtube_audio_enhanced.wav"
-        subprocess.call(["ffmpeg -i {} -ar {} -ac {} -bits_per_raw_sample {} -vn {}".format(input_file, 16000, 1, 16, output_file)], shell=True)
+        subprocess.call(["python3 -m denoiser.enhance --dns48 --noisy_dir={} --out_dir={}".format(folder_name, folder_name)], shell=True)
+        # input_file = r"/home/kafka/asr_dataset_creation_test/chunk_dir/temp_youtube_audio_enhanced.wav"
+        subprocess.call(["ffmpeg -i {} -ar {} -ac {} -bits_per_raw_sample {} -vn {}".format(input_file_enhanced, 16000, 1, 16, output_file)], shell=True)
 
 
         wav_audio = WAVE(output_file)
@@ -115,6 +122,9 @@ class ASRAudioChunk:
                 inference = make_vakyansh_model_inference_call(encoded_data)
                 audio_list.append({"audioContent":str(encoded_data), "inference":inference})
                 counter = counter+1
+
+        if os.path.exists(folder_name):
+            shutil.rmtree(folder_name)
 
         mongo_repo.insert(audio_list)
         for audio_dict in audio_list:
