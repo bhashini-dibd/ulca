@@ -503,7 +503,7 @@ const BenchmarkModal = (props) => {
       >
         <IconButton
           onClick={props.handleCloseModal}
-          style={{ position: "absolute", padding: "20px" }}
+          style={{ position: "absolute", padding: "10px" }}
         >
           <CloseIcon color="action" />
         </IconButton>
