@@ -1,4 +1,5 @@
-FROM python:3.7-slim
+#FROM python:3.7-slim
+FROM anuvaadio/validate:4
 COPY / /app
 WORKDIR /app
 RUN pip3 install -r requirements.txt
