@@ -50,6 +50,7 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
+import com.ulca.model.response.GetModelFeedbackListResponse;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelFeedbackSubmitResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
@@ -460,10 +461,23 @@ public class ModelService {
 		
 	}
 
-	public List<ModelFeedback>  getModelFeedbackByTaskType(String taskType) {
+	public List<GetModelFeedbackListResponse>  getModelFeedbackByTaskType(String taskType) {
 		
-		return modelFeedbackDao.findByTaskType(taskType);
+		List<GetModelFeedbackListResponse>  response = new ArrayList<GetModelFeedbackListResponse>();
+		List<ModelFeedback>  feedbackList =  modelFeedbackDao.findByTaskType(taskType);
 		
+			for(ModelFeedback feedback : feedbackList) {
+				
+				GetModelFeedbackListResponse res = new GetModelFeedbackListResponse();
+				BeanUtils.copyProperties(feedback, res);
+				
+				if(taskType.equalsIgnoreCase("sts")) {
+					List<ModelFeedback>  stsDetailedFd =  modelFeedbackDao.findByStsFeedbackId(feedback.getFeedbackId());
+					res.setDetailedFeedback(stsDetailedFd);
+				}
+				response.add(res);
+			}
+		return response;
 	}
 
 }
