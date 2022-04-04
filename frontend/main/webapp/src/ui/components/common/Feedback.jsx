@@ -380,9 +380,10 @@ function SimpleDialogDemo(props) {
                     }} />
                 </Grid>
                 <Grid items xs={2} sm={2} md={2} lg={2} xl={2}>
-                  <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("asr")}>
-                    <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}> {translate("button.Suggest an edit")}</Typography>
-                  </BootstrapButton>
+                <Button  className={classes.buttonsuggest} variant="outlined" color="primary"  onClick={() => setSuggestEdit("asr")}>
+                <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
+      </Button>
+                  
                 </Grid>
                 <br />
                 <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -406,9 +407,10 @@ function SimpleDialogDemo(props) {
                     }} />
                 </Grid>
                 <Grid items xs={2} sm={2} md={2} lg={2} xl={2}>
-                  <BootstrapButton className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("tts")}>
-                    <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
-                  </BootstrapButton>
+                <Button  className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("tts")}>
+                <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
+      </Button>
+                  
                 </Grid>
                 <br />
                 <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -453,7 +455,7 @@ function SimpleDialogDemo(props) {
         }
         <Grid container justifyContent="center">
           <Grid items>
-            <Button type="submit" variant="outlined" size="small" color="primary" style={{ margin: "10px",color:"white",backgroundColor:"#3f51b5" }} disabled={value > 0 ? false : true} >
+            <Button type="submit" variant="outlined" size="medium" color="primary" style={{ margin: "10px",color:"white",backgroundColor:"#3f51b5" }} disabled={value > 0 ? false : true} >
               {translate("button.submit")}
             </Button>
           </Grid>

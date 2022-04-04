@@ -64,7 +64,8 @@ const DataSet = (theme) => ({
   marginValue: { marginTop: "18px", color: "#0C0F0FB3" },
 
   list: {
-   // marginLeft: "-20px",
+   marginLeft: "-20px",
+  
   },
   center: {
     display: "flex",
@@ -858,16 +859,22 @@ const DataSet = (theme) => ({
     height: "25px",
     // marginLeft:"20px"
     marginRight: "10px",
+    padding: "21px 7px 13px 6px",
+   
+    borderColor:"#3f51b5",
     "@media (max-width:650px)": {
       // height: "38px",
        marginRight: "0px",
+       padding: "7px 12px 4px 13px",
 
     },
 
   },
   buttonsuggestlable:{
+    textTransform:" lowercase",
     lineHeight:"16px",
     whiteSpace: "nowrap",
+    height: "25px",
     "@media (max-width:650px)": {
       lineHeight:"21px",
       wordBreak:"break-all"
