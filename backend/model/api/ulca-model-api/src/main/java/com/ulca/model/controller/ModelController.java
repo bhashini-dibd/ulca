@@ -26,6 +26,7 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
+import com.ulca.model.response.GetModelFeedbackListResponse;
 import com.ulca.model.response.ModelComputeResponse;
 import com.ulca.model.response.ModelFeedbackSubmitResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
@@ -109,7 +110,7 @@ public class ModelController {
 
 	}
 	@GetMapping("/feedback/getByTaskType")
-	public List<ModelFeedback> getModelFeedbackByTaskType(@RequestParam(required = true) String taskType ) {
+	public List<GetModelFeedbackListResponse> getModelFeedbackByTaskType(@RequestParam(required = true) String taskType ) {
 		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
 		return modelService.getModelFeedbackByTaskType(taskType);
 

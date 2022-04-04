@@ -12,4 +12,6 @@ public interface ModelFeedbackDao extends MongoRepository<ModelFeedback, String>
 
 	List<ModelFeedback>  findByTaskType(String taskType);
 
+	List<ModelFeedback> findByStsFeedbackId(String feedbackId);
+
 }
