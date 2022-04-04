@@ -71,8 +71,8 @@ class ASRAudioChunk:
 
 
         yt = YouTube(url)
-        yt.streams.filter(type = "audio").first().download(folder_name)
-        os.rename(yt.streams.filter(type = "audio").first().default_filename, filepath)
+        yt.streams.filter(type = "audio").first().download()
+        shutil.move(yt.streams.filter(type = "audio").first().default_filename, filepath)
 
         subprocess.call(["ffmpeg -loglevel error -y -i {} -ar {} -ac {} -bits_per_raw_sample {} -vn {}".format(filepath, 16000, 1, 16, input_file)], shell=True)
         os.remove(filepath)
