@@ -100,6 +100,9 @@ function SimpleDialogDemo(props) {
             height: "26px",
           },
         },
+        label:{
+          textTransform:'none'
+        }
       },
       MuiPopover: {
         root: {
@@ -455,7 +458,7 @@ function SimpleDialogDemo(props) {
         }
         <Grid container justifyContent="center">
           <Grid items>
-            <Button type="submit" variant="outlined" size="medium" color="primary" style={{ margin: "10px",color:"white",backgroundColor:"#3f51b5" }} disabled={value > 0 ? false : true} >
+            <Button type="submit" variant="contained" size="small" color="primary" style={{ margin: "10px"}} disabled={value > 0 ? false : true} >
               {translate("button.submit")}
             </Button>
           </Grid>
