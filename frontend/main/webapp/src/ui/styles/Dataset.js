@@ -871,7 +871,7 @@ const DataSet = (theme) => ({
 
   },
   buttonsuggestlable:{
-    textTransform:" lowercase",
+    textTransform:" none",
     lineHeight:"16px",
     whiteSpace: "nowrap",
     height: "25px",
