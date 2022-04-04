@@ -57,7 +57,8 @@ const SpeechToSpeech = () => {
 
   const [suggestEdit, setSuggestEdit] = useState(null)
   const [modal, setModal] = useState(false);
-  const [suggestEditValues, setSuggestEditValues] = useState({ asr: "", transaltion: "" })
+  const [suggestEditValues, setSuggestEditValues] = useState({ asr: "", translation: "" })
+  const [comment, setComment] = useState("")
   const { feedbackQns } = useSelector((state) => state.getMasterData);
 
   useEffect(() => {
@@ -536,6 +537,10 @@ const SpeechToSpeech = () => {
       {
         feedbackQuestion: "Are you satisfied with this translation?",
         feedbackQuestionResponse: initialRating
+      },
+      {
+        feedbackQuestion: "Add your comments",
+        feedbackQuestionResponse: comment
       }
     ]
 
@@ -549,7 +554,7 @@ const SpeechToSpeech = () => {
           {
             feedbackQuestion: "Rate Speech to Text Quality?",
             feedbackQuestionResponse: asrRating,
-            suggestedOutput: suggestEditValues.asr
+            suggestedOutput: output.asr === suggestEditValues.asr ? null : suggestEditValues.asr
           }
         ]
       },
@@ -562,7 +567,7 @@ const SpeechToSpeech = () => {
           {
             feedbackQuestion: "Rate Translated Text Quality",
             feedbackQuestionResponse: translationRating,
-            suggestedOutput: suggestEditValues.transaltion
+            suggestedOutput: output.translation === suggestEditValues.translation ? null : suggestEditValues.translation
           }
         ]
       },
@@ -581,6 +586,8 @@ const SpeechToSpeech = () => {
       },
 
     ]
+
+    console.log(detailedFeedback)
     const apiObj = new SubmitFeedback(
       'sts', //taskType
       base.replace("data:audio/wav;base64,", ""), //input
@@ -602,7 +609,11 @@ const SpeechToSpeech = () => {
       }
     })
     setModal(false);
-    setTimeout(()=>setSnackbarInfo((prev) => ({ ...prev, open: false })),3000)
+    setTimeout(() => setSnackbarInfo((prev) => ({ ...prev, open: false })), 3000)
+  }
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
   }
 
   return (
@@ -681,6 +692,8 @@ const SpeechToSpeech = () => {
               handleOnChange={handleOnChange}
               questions={getQuestions()}
               handleFeedbackSubmit={handleFeedbackSubmit}
+              comment={comment}
+              handleCommentChange={handleCommentChange}
             />
           </Modal>
         )

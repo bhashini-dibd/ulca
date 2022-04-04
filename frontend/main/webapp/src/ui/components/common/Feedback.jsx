@@ -27,7 +27,7 @@ import { TextField } from '@material-ui/core';
 
 
 function SimpleDialogDemo(props) {
-  const { classes, setSuggestEdit, suggestEdit, asrValue, ttsValue, setModal, handleOnChange, handleFeedbackSubmit } = props;
+  const { classes, setSuggestEdit, suggestEdit, asrValue, ttsValue, setModal, handleOnChange, handleFeedbackSubmit, handleCommentChange, comment } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
   const [value, setValue] = React.useState(-1);
@@ -303,7 +303,7 @@ function SimpleDialogDemo(props) {
   console.log(props.questions)
 
   return <Form
-    onSubmit={()=>handleFeedbackSubmit(value,rating1,rating2,rating3)}
+    onSubmit={() => handleFeedbackSubmit(value, rating1, rating2, rating3)}
     render={({ handleSubmit }) => (<form onSubmit={handleSubmit}>
       <Grid container style={{
         maxWidth: "365px"
@@ -435,6 +435,8 @@ function SimpleDialogDemo(props) {
                   minRows={4}
                   className={classes.textareaAutosize}
                   style={{ width: 250 }}
+                  onChange={handleCommentChange}
+                  value={comment}
                 />
 
               </Grid>
@@ -443,7 +445,7 @@ function SimpleDialogDemo(props) {
         }
         <Grid container justifyContent="center">
           <Grid items>
-            <Button type="submit" variant="outlined" size="small" color="primary" style={{ margin: "10px" }}  >
+            <Button type="submit" variant="outlined" size="small" color="primary" style={{ margin: "10px" }} disabled={value > 0 ? false : true} >
               {translate("button.submit")}
             </Button>
           </Grid>
