@@ -32,6 +32,7 @@ const endpoints = {
   getMasterData: "/ulca/mdms/v0/fetch-master/bulk",
   getModel: "/ulca/apis/v0/model/getModel",
   ocrDocumentUpload: "/ulca/apis/v0/model/tryMe",
+  submitFeedback:"/ulca/apis/v0/model/feedback/submit"
 };
 
 export default endpoints;

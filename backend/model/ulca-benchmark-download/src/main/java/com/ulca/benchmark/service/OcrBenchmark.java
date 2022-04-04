@@ -81,59 +81,7 @@ public class OcrBenchmark {
 	
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
-
 	
-	/*
-
-	public String compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
-			byte[] base64audioContent)
-			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
-
-		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
-
-			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
-			ASRRequest request = asrInference.getRequest();
-
-			AsrCallBackRequest asrCallBackRequest = new AsrCallBackRequest();
-			AsrCallBackRequest.Config config = asrCallBackRequest.getConfig();
-
-			config.setAudioFormat(request.getConfig().getAudioFormat().toString().toUpperCase());
-			config.setTranscriptionFormat(
-					request.getConfig().getTranscriptionFormat().getValue().toString().toUpperCase());
-			AsrCallBackRequest.Language lang = config.getLanguage();
-			lang.setValue(request.getConfig().getLanguage().getSourceLanguage().toString());
-			config.setLanguage(lang);
-			asrCallBackRequest.setConfig(config);
-			AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
-			
-			audio.setAudioContent(base64audioContent);
-			asrCallBackRequest.setAudio(audio);
-
-			// WebClient.Builder builder = WebClient.builder();
-
-			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(asrCallBackRequest), AsrCallBackRequest.class).retrieve().bodyToMono(String.class)
-					.block();
-
-			ObjectMapper objectMapper = new ObjectMapper();
-			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
-
-			ASRResponse asrResponse = new ASRResponse();
-			Sentences sentences = new Sentences();
-			Sentence sentence = new Sentence();
-			sentence.setTarget(jsonNode.get("transcript").asText());
-			sentences.add(sentence);
-			asrResponse.setOutput(sentences);
-			
-			return jsonNode.get("transcript").asText() ;
-			
-		}
-		
-		return null;
-		
-	}
-	
-	*/
 	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
