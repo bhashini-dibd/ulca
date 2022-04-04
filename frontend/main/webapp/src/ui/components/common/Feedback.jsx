@@ -301,9 +301,10 @@ function SimpleDialogDemo(props) {
   // );
   return <Form
     onSubmit={() => console.log('submit')}
-    render={() => (  <div   style={{ }}> <form >
+    render={() => (  <div   > 
+    <form  className={classes.Divform} >
      
-      <Grid container  style={{maxWidth:"365px" 
+      <Grid container  style={{maxWidth:"365px" ,
         
         }}>
       <Grid items  xs={12} sm={12} md={12} lg={12} xl={12}> 

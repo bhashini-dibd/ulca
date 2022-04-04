@@ -64,7 +64,7 @@ const DataSet = (theme) => ({
   marginValue: { marginTop: "18px", color: "#0C0F0FB3" },
 
   list: {
-    marginLeft: "-20px",
+   // marginLeft: "-20px",
   },
   center: {
     display: "flex",
@@ -666,6 +666,11 @@ const DataSet = (theme) => ({
     },
 
   },
+  Gridroot:{
+    "@media (max-width:650px)": {
+      marginLeft: "15px",
+    },
+  },
   imagemodal: {
     display: 'flex',
     alignItems: 'center',
@@ -840,7 +845,7 @@ const DataSet = (theme) => ({
     "@media (max-width:650px)": {
       //  marginLeft: "35px",
       //buttom:"20px",
-    left:"33px",
+    left:"40px",
     width:"300px"
 
     },
@@ -906,17 +911,14 @@ const DataSet = (theme) => ({
      fontSize: "12px",
     },
   },
-  // popover2:{
-  //   "@media (max-width:400px)": {
-  //     width:"330px",
-  //      margin:"-11px"
-  //   },
-
- // }
-  form:{
-    "@media (max-width:650px)": {
-     overflow:"auto",
-    },
+  
+  Divform:{
+    "@media (max-width:400px)": {
+    
+    // maxHeight:"auto",
+   
+    // overflow:" auto"
+     },
 
   }
   
