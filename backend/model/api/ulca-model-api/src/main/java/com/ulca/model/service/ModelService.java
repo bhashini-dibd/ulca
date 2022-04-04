@@ -45,6 +45,7 @@ import com.ulca.model.exception.FileExtensionNotSupportedException;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.exception.ModelStatusChangeException;
 import com.ulca.model.exception.ModelValidationException;
+import com.ulca.model.exception.RequestParamValidationException;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
@@ -413,14 +414,23 @@ public class ModelService {
 	
 	public ModelFeedbackSubmitResponse modelFeedbackSubmit(ModelFeedbackSubmitRequest request) {
 		
+		String taskType = request.getTaskType();
+		if(taskType == null || (!taskType.equalsIgnoreCase("translation") && !taskType.equalsIgnoreCase("asr") && !taskType.equalsIgnoreCase("ocr") && !taskType.equalsIgnoreCase("tts") && !taskType.equalsIgnoreCase("sts"))) {
+			
+			throw new RequestParamValidationException("Model taskType should be one of { translation, asr, ocr, tts or sts }");
+		}
+		
 		ModelFeedback feedback = new ModelFeedback();
 		BeanUtils.copyProperties(request, feedback);
 		
-		
+		feedback.setCreatedAt(new Date().toString());
+		feedback.setUpdatedAt(new Date().toString());
 		
 		modelFeedbackDao.save(feedback);
 		
 		String feedbackId = feedback.getFeedbackId();
+		String userId = feedback.getUserId();
+		
 		
 		if(request.getTaskType() != null && !request.getTaskType().isBlank() && request.getTaskType().equalsIgnoreCase("sts")) {
 			
@@ -430,17 +440,17 @@ public class ModelService {
 				ModelFeedback mfeedback = new ModelFeedback();
 				BeanUtils.copyProperties(modelFeedback, mfeedback);
 				
-				mfeedback.setStsfeedbackId(feedbackId);	
+				mfeedback.setStsFeedbackId(feedbackId);	
+				mfeedback.setUserId(userId);
+				mfeedback.setCreatedAt(new Date().toString());
+				mfeedback.setUpdatedAt(new Date().toString());
+				
 				modelFeedbackDao.save(mfeedback);
 				
 			}
 		}
 		
-		
-		
-		
-		ModelFeedbackSubmitResponse response = new ModelFeedbackSubmitResponse();
-		response.setMessage("model feedback submitted successful");
+		ModelFeedbackSubmitResponse response = new ModelFeedbackSubmitResponse("model feedback submitted successful", feedbackId);
 		return response;
 	}
 	

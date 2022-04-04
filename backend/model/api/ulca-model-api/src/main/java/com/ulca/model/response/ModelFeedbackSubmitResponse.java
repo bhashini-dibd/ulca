@@ -14,5 +14,27 @@ import lombok.Setter;
 public class ModelFeedbackSubmitResponse {
 	
 	private String message;
+	
+	Data data;
+
+	public ModelFeedbackSubmitResponse(String message, String feedbackId) {
+		super();
+		this.message = message;
+		this.data = new Data(feedbackId);
+	}
+	
+	@Getter
+	@Setter
+	private class Data{  
+		 private  String feedbackId;
+		 
+		public Data(String feedbackId) {
+			super();
+			this.feedbackId = feedbackId;
+			
+		}
+		 
+	}  
+	
 
 }
