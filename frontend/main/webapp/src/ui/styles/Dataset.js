@@ -867,8 +867,10 @@ const DataSet = (theme) => ({
   },
   buttonsuggestlable:{
     lineHeight:"16px",
+    whiteSpace: "nowrap",
     "@media (max-width:650px)": {
-      lineHeight:"11px",
+      lineHeight:"21px",
+      wordBreak:"break-all"
 
     },
   },

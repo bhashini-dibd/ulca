@@ -166,13 +166,15 @@ function SimpleDialogDemo(props) {
       boxShadow: 'none',
       textTransform: 'none',
       fontSize: 10,
-      padding: '18px 25px',
+      padding: '18px 5px',
       border: '1px solid',
       lineHeight: 1.1,
 
       borderColor: '#0063cc',
       "@media (max-width:400px)": {
         padding: '0px 0px',
+      
+       
       },
 
 
@@ -451,7 +453,7 @@ function SimpleDialogDemo(props) {
         }
         <Grid container justifyContent="center">
           <Grid items>
-            <Button type="submit" variant="outlined" size="small" color="primary" style={{ margin: "10px" }} disabled={value > 0 ? false : true} >
+            <Button type="submit" variant="outlined" size="small" color="primary" style={{ margin: "10px",color:"white",backgroundColor:"#3f51b5" }} disabled={value > 0 ? false : true} >
               {translate("button.submit")}
             </Button>
           </Grid>
