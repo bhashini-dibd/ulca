@@ -14,12 +14,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "model_feedback")
+@Document(collection = "model-feedback")
 public class ModelFeedback {
 
 	@Id
     String feedbackId;
-	String stsfeedbackId;
+	String stsFeedbackId;
 	String taskType;
 	String modelId;
 	String stsPerformanceId;
