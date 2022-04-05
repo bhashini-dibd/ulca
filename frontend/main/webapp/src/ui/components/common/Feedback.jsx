@@ -321,7 +321,7 @@ function SimpleDialogDemo(props) {
 
       }}>
         <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
-          <div style={{ position: "absolute", right: "3px", top: "4px", }}>
+          <div  className={classes.iconbutton}>
             <IconButton
               size="small"
               aria-label="close"
@@ -333,7 +333,7 @@ function SimpleDialogDemo(props) {
           </div>
         </Grid>
         <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
-          <Typography className={classes.typography} align="center" >{translate("lable.feedback1")} <br />  {translate("lable.feedbacks")}</Typography>
+          <Typography className={classes.typography} align="center" >{translate("lable.Areyousatisfiedwiththis")} <br />  {translate("lable. translation")}</Typography>
         </Grid>
         <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
           <StyledRating
@@ -368,7 +368,7 @@ function SimpleDialogDemo(props) {
         {
           value <= 3 && value > 0 &&
           <div className={classes.popover2} style={{}}>
-            <Typography variant="body2" className={classes.typography2}> {translate("lable.feedback3")}</Typography>
+            <Typography variant="body2" className={classes.typography2}> {translate("lable.Pleaserateyourexperience")}</Typography>
             <Box p={2}>
               <Grid container style={{ maxWidth: "365px", scrollY: "auto" }}>
                 <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -440,7 +440,7 @@ function SimpleDialogDemo(props) {
             </Box>
             <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "300px", margin: "auto", paddingBottom: "10px" }}></div>
 
-            <Typography variant="body2" className={classes.typography4} > {translate("lable.feedback4")}</Typography>
+            <Typography variant="body2" className={classes.Addyourcomments} > {translate("lable.Addyourcomments")}</Typography>
             <Grid container justifyContent="center">
               <Grid item>
                 <TextareaAutosize
@@ -464,7 +464,7 @@ function SimpleDialogDemo(props) {
           </Grid>
         </Grid>
         <Typography className={classes.typographys} align="center" variant="body2" component="div" >
-          {translate("lable.feedback2")}</Typography>
+          {translate("lable.feedbackwillbeusedtohelpimprovetheproduct")}</Typography>
       </MuiThemeProvider>
     </form>)}
   />
