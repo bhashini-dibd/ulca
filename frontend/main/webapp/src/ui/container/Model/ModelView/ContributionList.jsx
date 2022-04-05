@@ -199,7 +199,7 @@ const ContributionList = (props) => {
   };
   const fetchHeaderButton = () => {
     return (
-      <Grid container spacing={1}>
+      <Grid container spacing={1} className={classes.Gridroot}>
         <Grid item xs={7} sm={8} md={8} lg={8} xl={8}>
           <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
         </Grid>
@@ -539,14 +539,18 @@ const ContributionList = (props) => {
       options: {
         filter: false,
         sort: true,
-        display: view ? "excluded" : true,
+       display: view ? "excluded" : true,
+       
       },
     },
     {
       name: "modelName",
       label: "Model Name",
+      
       options: {
+       
         filter: false,
+        setCellProps: sort  => ({ style: { width:"100px" } }),
         sort: true,
         display: view ? "excluded" : true,
       },
@@ -755,7 +759,7 @@ const ContributionList = (props) => {
       ) : (
         <MuiThemeProvider theme={createMuiTheme}>
           <MUIDataTable
-            title={`My Contribution`}
+           // title={`My Contribution`}
             data={data}
             columns={columns}
             options={options}

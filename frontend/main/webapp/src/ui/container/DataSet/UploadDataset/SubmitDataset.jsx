@@ -247,7 +247,7 @@ const SubmitDataset = (props) => {
                 </div> */}
         <Paper elevation={3} className={classes.divStyle}>
           <Grid container spacing={5}>
-            <Grid item xs={12} sm={12} md={5} lg={5} xl={5}>
+            <Grid item xs={12} sm={12} md={12} lg={4} xl={4}>
               <FormControl className={classes.form}>
                 <Typography className={classes.typography} variant="subtitle1">
                   {translate("label.howToSubmit")}
@@ -260,7 +260,7 @@ const SubmitDataset = (props) => {
                 <Divider orientation="vertical" />
               </Grid>
             </Hidden>
-            <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
+            <Grid item xs={12} sm={12} md={12} lg={7} xl={7}>
               <FormControl className={classes.form}>
                 <Grid container spacing={6}>
                   <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
