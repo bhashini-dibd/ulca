@@ -27,12 +27,10 @@ public class BmProcessTrackerService {
 			BenchmarkTaskTracker.StatusEnum status) {
 
 		BenchmarkTaskTracker taskTracker = new BenchmarkTaskTracker();
-
 		taskTracker.setBenchmarkProcessId(benchmarkProcessId);
 		taskTracker.setTool(tool);
 		taskTracker.setStatus(status.toString());
 		taskTracker.setStartTime(new Date().toString());
-
 		benchmarkTaskTrackerDao.save(taskTracker);
 
 	}
@@ -77,9 +75,7 @@ public class BmProcessTrackerService {
 			}
 			taskTracker.setStatus(status.toString());
 			benchmarkTaskTrackerDao.save(taskTracker);
-
 		}
-
 	}
 
 	public void updateBmProcess(String benchmarkProcessId, String status) {

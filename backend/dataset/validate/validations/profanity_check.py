@@ -82,7 +82,7 @@ class ProfanityCheck(BaseValidator):
                         return {"message": "Exception while executing profanity check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
                     offensive_txt, similarity_perc = possible_match
-                    if similarity_perc > 60:
+                    if similarity_perc > 90:
                         error_msg = 'Offensive text found'
                         return {"message": error_msg, "code": "OFFENSIVE_TEXT_FOUND", "status": "FAILED"}
 

@@ -102,7 +102,6 @@ const SubHeader = (props) => {
     const handleClick = (url) => {
         history.push(`${process.env.PUBLIC_URL}${url}`);
     }
-    console.log( props.tabs)
     return (
         <AppBar className={classes.appTab} position="static" color='default'>
             <Toolbar className={classes.toolbar}>
@@ -111,7 +110,7 @@ const SubHeader = (props) => {
                 </Grid>
                 <Grid item >
                    
-                    <Tabs value={props.value}  onChange={props.handleChange}  value={false} indicatorColor="primary" textColor="primary" variant="scrollable"scrollButtons="auto">
+                    <Tabs value={props.value}  onChange={props.handleChange}  indicatorColor="primary"  variant="scrollable" scrollButtons="auto"  aria-label="scrollable prevent tabs example">
                         {
                             props.tabs.map((tab, index) => {
                                 if(tab.roles.includes(role) ||(tab.public)){

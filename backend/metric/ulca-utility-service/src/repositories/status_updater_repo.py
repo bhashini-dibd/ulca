@@ -26,6 +26,17 @@ class StatusUpdaterRepo:
             print(e)
             log.info(f'Exception while updating document : {e}')
 
+    def find(self, query, db, col):
+        try:
+            col = self.get_mongo_instance(db,col)
+            res = col.find(query)
+            results = []
+            for record in res:
+                results.append(record)
+            return results
+        except Exception as e:
+            log.exception(f'Exception in repo find: {e}',e)
+            return []
 
     def aggregate(self, query,db,col):
         

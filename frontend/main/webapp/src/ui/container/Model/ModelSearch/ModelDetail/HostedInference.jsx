@@ -23,6 +23,7 @@ import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
+// import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -230,17 +231,22 @@ const HostedInference = (props) => {
               <Typography variant="h6" className={classes.hosted}>
                 {tgtLang}
               </Typography>
-            </Grid>
+             </Grid>
           </Grid>
         </CardContent>
         <CardContent>
-          <textarea
+          {target.length > 0 && (<>  <textarea
             disabled
             placeholder="Output"
             rows={6}
             value={target}
             className={classes.textArea}
           />
+          <div  className={classes.feedbackPopover} style={{ }}>
+         {/* <FeedbackPopover/> */}
+         </div>
+         </>)}
+         
         </CardContent>
       </Card>
       {/* <TextField fullWidth
@@ -254,6 +260,7 @@ const HostedInference = (props) => {
                         }}
                     /> */}
       {snackbar.open && (
+      
         <Snackbar
           open={snackbar.open}
           handleClose={handleSnackbarClose}
@@ -261,7 +268,10 @@ const HostedInference = (props) => {
           message={snackbar.message}
           variant={snackbar.variant}
         />
+      
+     
       )}
+        
     </Grid>
     //  </Grid>
 

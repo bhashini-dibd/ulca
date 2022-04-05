@@ -102,7 +102,7 @@ const DetailedStatus = (props) => {
                   onClick={() => DetailedDataSetStatusApi()}
                 >
                   <Cached className={classes.iconStyle} />
-                  Refresh
+                  Refresh 
                 </Button>
               </>
             }

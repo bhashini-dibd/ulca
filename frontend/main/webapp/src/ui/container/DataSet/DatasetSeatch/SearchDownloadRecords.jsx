@@ -230,7 +230,6 @@ const SearchAndDownloadRecords = (props) => {
     }
     setAdvFilterState({ ...advFilterState, ...filter });
   };
-  console.log(advFilterState, basicFilterState);
   const handleBasicFilter = (value, id, type = "array") => {
     let filter = { ...basicFilterState };
     if (type === "array") {
@@ -406,7 +405,6 @@ const SearchAndDownloadRecords = (props) => {
       multipleContributors: state.checkedA,
       originalSourceSentence: state.checkedC,
     };
-    console.log(criteria);
     if (datasetType["parallel-corpus"]) {
       if (languagePair.source && languagePair.target.length) {
         makeSubmitAPICall(datasetType, criteria);
