@@ -48,7 +48,7 @@ function Youtube() {
        };
        console.log('aaaa', toSenddata )
       
-      fetch('',toSenddata,{
+      fetch('https://dev-auth.ulcacontrib.org/ulca/apis/asr/v1/audio/breakdown',toSenddata,{
       method: 'POST',
       mode: 'cors',
       headers: {
