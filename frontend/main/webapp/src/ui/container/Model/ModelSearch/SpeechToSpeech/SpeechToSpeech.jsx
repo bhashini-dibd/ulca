@@ -1,7 +1,8 @@
+
 import { Divider, Grid } from "@material-ui/core";
 import SpeechToSpeechFilter from "./SpeechToSpeechFilter";
 import SpeechToSpeechOptions from "./SpeechToSpeechOptions";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import SearchModel from "../../../../../redux/actions/api/Model/ModelSearch/SearchModel";
@@ -14,12 +15,17 @@ import Stop from "../../../../../assets/stopIcon.svg";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import ComputeAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import { Language } from "../../../../../configs/DatasetItems";
+import Modal from '../../../../components/common/Modal';
+import FeedbackModal from '../../../../components/common/Feedback';
+import GetMasterDataAPI from "../../../../../redux/actions/api/Common/getMasterData";
+import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 
 const SpeechToSpeech = () => {
   const dispatch = useDispatch();
   const { asr, tts, translation, sourceLanguage, targetLanguage } = useSelector(
     (state) => state.getBulkModelSearch
   );
+  const [gender, setGender] = useState("female")
   const [data, setData] = useState("");
   const [url, setUrl] = useState("");
   const [recordAudio, setRecordAudio] = useState("");
@@ -42,6 +48,25 @@ const SpeechToSpeech = () => {
     translation: "",
     tts: "",
   });
+  const [output, setOutput] = useState({
+    asr: "",
+    translation: "",
+  });
+
+  const [outputBase64, setOutputBase64] = useState("");
+
+  const [suggestEdit, setSuggestEdit] = useState(null)
+  const [modal, setModal] = useState(false);
+  const [suggestEditValues, setSuggestEditValues] = useState({ asr: "", translation: "" })
+  const [comment, setComment] = useState("")
+  const { feedbackQns } = useSelector((state) => state.getMasterData);
+
+  useEffect(() => {
+    if (!feedbackQns) {
+      const obj = new GetMasterDataAPI(["feedbackQns"]);
+      dispatch(APITransport(obj));
+    }
+  }, [])
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
@@ -68,10 +93,7 @@ const SpeechToSpeech = () => {
     }
   }, [filter.src, filter.tgt])
 
-  const [output, setOutput] = useState({
-    asr: "",
-    translation: "",
-  });
+
 
   const [index, setIndex] = useState(0);
 
@@ -113,9 +135,10 @@ const SpeechToSpeech = () => {
   };
 
   const handleStartRecording = (data) => {
-    setData("");
+    setData(null);
     setAudio("");
     setOutput({ asr: "", translation: "" });
+    setSuggestEditValues({ asr: "", translation: "" });
     setTextArea({ asr: "", translation: "" });
     if (checkFilter()) {
       setSnackbarInfo({
@@ -220,6 +243,8 @@ const SpeechToSpeech = () => {
     });
     setTextArea((prev) => ({ ...prev, translation: "", asr: "" }));
     setOutput((prev) => ({ ...prev, asr: textArea.asr }));
+    setSuggestEditValues((prev) => ({ ...prev, asr: textArea.asr }));
+    setOutputBase64("")
     const obj = new ComputeAPI(
       filter.translation.value,
       textArea.asr,
@@ -241,6 +266,10 @@ const SpeechToSpeech = () => {
           ...prev,
           translation: rsp_data.outputText,
         }));
+        setSuggestEditValues((prev) => ({
+          ...prev,
+          translation: rsp_data.outputText,
+        }));
         const obj = new ComputeAPI(
           filter.tts.value,
           rsp_data.outputText,
@@ -258,6 +287,7 @@ const SpeechToSpeech = () => {
           let rsp_data = await ttsResp.json();
           if (ttsResp.ok) {
             const blob = b64toBlob(rsp_data.outputText, "audio/wav");
+            setOutputBase64(rsp_data.outputText);
             const urlBlob = window.URL.createObjectURL(blob);
             setAudio(urlBlob);
             setSnackbarInfo({ ...snackbar, open: false, message: "" });
@@ -280,6 +310,8 @@ const SpeechToSpeech = () => {
     });
     setTextArea((prev) => ({ ...prev, translation: "" }));
     setOutput((prev) => ({ ...prev, translation: textArea.translation }));
+    setSuggestEditValues((prev) => ({ ...prev, translation: textArea.translation }));
+
     const obj = new ComputeAPI(
       filter.tts.value,
       textArea.translation,
@@ -297,6 +329,7 @@ const SpeechToSpeech = () => {
       let rsp_data = await ttsResp.json();
       if (ttsResp.ok) {
         const blob = b64toBlob(rsp_data.outputText, "audio/wav");
+        setOutputBase64(rsp_data.outputText);
         const urlBlob = window.URL.createObjectURL(blob);
         setAudio(urlBlob);
         setSnackbarInfo({ ...snackbar, open: false, message: "" });
@@ -305,7 +338,10 @@ const SpeechToSpeech = () => {
       }
     });
   };
+  const genderHandler = (value) => {
+    setGender(value)
 
+  }
   const setSnackbarError = (errorMsg) => {
     setSnackbarInfo({
       ...snackbar,
@@ -349,6 +385,8 @@ const SpeechToSpeech = () => {
         let rsp_data = await resp.json();
         if (resp.ok && rsp_data !== null) {
           setOutput((prev) => ({ ...prev, asr: rsp_data.data.source }));
+          setSuggestEditValues((prev) => ({ ...prev, asr: rsp_data.data.source }));
+
           const obj = new ComputeAPI(
             filter.translation.value,
             rsp_data.data.source,
@@ -369,6 +407,10 @@ const SpeechToSpeech = () => {
                 ...prev,
                 translation: rsp_data.outputText,
               }));
+              setSuggestEditValues((prev) => ({
+                ...prev,
+                translation: rsp_data.outputText,
+              }));
               const obj = new ComputeAPI(
                 filter.tts.value,
                 rsp_data.outputText,
@@ -376,7 +418,7 @@ const SpeechToSpeech = () => {
                 "",
                 "",
                 filter.tts.inferenceEndPoint,
-                "female"
+                gender
               );
               fetch(obj.apiEndPoint(), {
                 method: "post",
@@ -386,6 +428,7 @@ const SpeechToSpeech = () => {
                 let rsp_data = await ttsResp.json();
                 if (ttsResp.ok) {
                   const blob = b64toBlob(rsp_data.outputText, "audio/wav");
+                  setOutputBase64(rsp_data.outputText);
                   const urlBlob = window.URL.createObjectURL(blob);
                   setAudio(urlBlob);
                   setSnackbarInfo({ ...snackbar, open: false, message: "" });
@@ -402,7 +445,6 @@ const SpeechToSpeech = () => {
         }
       })
       .catch(async (error) => {
-        console.log(error);
         setSnackbarError(
           "Unable to process your request at the moment. Please try after sometime."
         );
@@ -482,6 +524,98 @@ const SpeechToSpeech = () => {
     return getUniqueListBy(updatedTargets, "value");
   };
 
+  const handleOnChange = (param, e) => {
+    setSuggestEditValues((prev) => ({ ...prev, [param]: e.target.value }))
+  }
+
+  const getQuestions = useCallback(() => {
+    return feedbackQns.filter(elem => elem.code === 'sts')
+  }, [feedbackQns])
+
+  const handleFeedbackSubmit = (initialRating, asrRating, translationRating, ttsRating) => {
+    const feedback = [
+      {
+        feedbackQuestion: "Are you satisfied with this translation?",
+        feedbackQuestionResponse: initialRating
+      },
+      {
+        feedbackQuestion: "Add your comments",
+        feedbackQuestionResponse: comment
+      }
+    ]
+
+    const detailedFeedback = [
+      {
+        taskType: 'asr',
+        modelId: filter.asr.value,
+        input: base.replace("data:audio/wav;base64,", ""),
+        ouput: output.asr,
+        feedback: [
+          {
+            feedbackQuestion: "Rate Speech to Text Quality?",
+            feedbackQuestionResponse: asrRating,
+            suggestedOutput: output.asr === suggestEditValues.asr ? null : suggestEditValues.asr
+          }
+        ]
+      },
+      {
+        taskType: 'translation',
+        modelId: filter.translation.value,
+        input: output.asr,
+        ouput: output.translation,
+        feedback: [
+          {
+            feedbackQuestion: "Rate Translated Text Quality",
+            feedbackQuestionResponse: translationRating,
+            suggestedOutput: output.translation === suggestEditValues.translation ? null : suggestEditValues.translation
+          }
+        ]
+      },
+      {
+        taskType: 'tts',
+        modelId: filter.tts.value,
+        input: output.translation,
+        ouput: outputBase64,
+        feedback: [
+          {
+            feedbackQuestion: "Rate Translated Speech Quality",
+            feedbackQuestionResponse: ttsRating,
+
+          }
+        ]
+      },
+
+    ]
+
+    console.log(detailedFeedback)
+    const apiObj = new SubmitFeedback(
+      'sts', //taskType
+      base.replace("data:audio/wav;base64,", ""), //input
+      outputBase64, //output
+      feedback, //feedback
+      detailedFeedback //detailedFeedback
+    );
+
+    setSnackbarInfo({ open: true, message: 'Please wait while we process your request...', variant: 'info' })
+
+    fetch(apiObj.apiEndPoint(), {
+      method: 'POST',
+      body: JSON.stringify(apiObj.getBody()),
+      headers: apiObj.getHeaders().headers
+    }).then(async res => {
+      const rsp_data = await res.json();
+      if (res.ok) {
+        setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'success' })
+      }
+    })
+    setModal(false);
+    setTimeout(() => setSnackbarInfo((prev) => ({ ...prev, open: false })), 3000)
+  }
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  }
+
   return (
     <>
       <Grid container spacing={5}>
@@ -502,12 +636,15 @@ const SpeechToSpeech = () => {
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
 
           <SpeechToSpeechOptions
+            setModal={setModal}
             Start={Start}
             Stop={Stop}
             data={data}
             url={url}
             base={base}
             setBase={setBase}
+            suggestEdit={suggestEdit}
+            setSuggestEdit={setSuggestEdit}
             error={error}
             setUrl={setUrl}
             setError={setError}
@@ -529,6 +666,8 @@ const SpeechToSpeech = () => {
             index={index}
             handleTabChange={handleTabChange}
             handleCopyClick={handleCopyClick}
+            gender={genderHandler}
+            genderValue={gender}
           />
         </Grid>
       </Grid>
@@ -541,6 +680,27 @@ const SpeechToSpeech = () => {
           variant={snackbar.variant}
         />
       )}
+      {
+        modal && (
+          <Modal open={modal} handleClose={() => setModal(false)}>
+            <FeedbackModal
+              setModal={setModal}
+              setSuggestEdit={setSuggestEdit}
+              suggestEdit={suggestEdit}
+              asrValue={suggestEditValues.asr}
+              ttsValue={suggestEditValues.translation}
+              handleOnChange={handleOnChange}
+              questions={getQuestions()}
+              handleFeedbackSubmit={handleFeedbackSubmit}
+              comment={comment}
+              handleCommentChange={handleCommentChange}
+              setComment={setComment}
+              setSuggestEditValues={setSuggestEditValues}
+              output={output}
+            />
+          </Modal>
+        )
+      }
     </>
   );
 };

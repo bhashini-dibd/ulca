@@ -16,6 +16,8 @@ class StatusCronProcessor(Thread):
     # Cron JOB to update filter set params
     def run(self):
         run = 0
+        task_list = ['validate','publish','ingest']
+        status_list = ['In-Progress','Pending']
         while not self.stopped.wait(status_cron_interval_sec):
             log.info(f'Job status updater cron run :{run}')
             try:
@@ -23,10 +25,14 @@ class StatusCronProcessor(Thread):
                 if pending_srns:
                     for srn in pending_srns:
                         condition = {'serviceRequestNumber':srn}
-                        query = {'$set':{'status':'Completed','manuallyUpdated':True}}
+                        query_pro = {'$set':{'status':'Failed','manuallyUpdated':True}}
                         multi ={'multi':True}
-                        repo.update(condition,query,False,process_db_schema,process_col)
-                        repo.update(condition,query,True,process_db_schema,tasks_col)
+                        repo.update(condition,query_pro,False,process_db_schema,process_col)
+                        tasks_res = repo.find(condition,process_db_schema,tasks_col)
+                        if tasks_res:
+                            for task in tasks_res:
+                                if str(task['tool']) in task_list and str(task['status']) in status_list:
+                                    repo.update(condition,query_pro,True,process_db_schema,tasks_col)
                         log.info(f"Updated status for srn -{srn}")
                 log.info('Completed run!')      
                 run += 1

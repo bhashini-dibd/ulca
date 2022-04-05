@@ -35,9 +35,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.model.ModelInferenceResponse;
 import com.ulca.benchmark.request.AsrComputeRequest;
 import com.ulca.benchmark.request.AsrComputeResponse;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelInferenceResponseDao;
 
 import io.swagger.model.ASRInference;
 import io.swagger.model.ASRRequest;
@@ -68,59 +70,12 @@ public class AsrBenchmark {
 	
 	@Autowired
 	WebClient.Builder builder;
+	
+	@Autowired
+	ModelInferenceResponseDao modelInferenceResponseDao;
 
 	
-	/*
-
-	public String compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema,
-			byte[] base64audioContent)
-			throws MalformedURLException, URISyntaxException, JsonMappingException, JsonProcessingException {
-
-		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
-
-			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
-			ASRRequest request = asrInference.getRequest();
-
-			AsrCallBackRequest asrCallBackRequest = new AsrCallBackRequest();
-			AsrCallBackRequest.Config config = asrCallBackRequest.getConfig();
-
-			config.setAudioFormat(request.getConfig().getAudioFormat().toString().toUpperCase());
-			config.setTranscriptionFormat(
-					request.getConfig().getTranscriptionFormat().getValue().toString().toUpperCase());
-			AsrCallBackRequest.Language lang = config.getLanguage();
-			lang.setValue(request.getConfig().getLanguage().getSourceLanguage().toString());
-			config.setLanguage(lang);
-			asrCallBackRequest.setConfig(config);
-			AsrCallBackRequest.Audio audio = asrCallBackRequest.getAudio();
-			
-			audio.setAudioContent(base64audioContent);
-			asrCallBackRequest.setAudio(audio);
-
-			// WebClient.Builder builder = WebClient.builder();
-
-			String responseStr = builder.build().post().uri(callBackUrl)
-					.body(Mono.just(asrCallBackRequest), AsrCallBackRequest.class).retrieve().bodyToMono(String.class)
-					.block();
-
-			ObjectMapper objectMapper = new ObjectMapper();
-			JsonNode jsonNode = objectMapper.readValue(responseStr, JsonNode.class);
-
-			ASRResponse asrResponse = new ASRResponse();
-			Sentences sentences = new Sentences();
-			Sentence sentence = new Sentence();
-			sentence.setTarget(jsonNode.get("transcript").asText());
-			sentences.add(sentence);
-			asrResponse.setOutput(sentences);
-			
-			return jsonNode.get("transcript").asText() ;
-			
-		}
-		
-		return null;
-		
-	}
 	
-	*/
 	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
@@ -206,6 +161,18 @@ public class AsrBenchmark {
 		log.info(metricRequest.toString());
 		
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
+		
+		//save the model inference response
+		ModelInferenceResponse modelInferenceResponse = new ModelInferenceResponse();
+		modelInferenceResponse.setBenchmarkingProcessId(benchmarkingProcessId);
+		modelInferenceResponse.setCorpus(corpus.toString());
+		modelInferenceResponse.setBenchmarkDatasetId(benchmark.getBenchmarkId());
+		modelInferenceResponse.setMetric(metric);
+		modelInferenceResponse.setModelId(model.getModelId());
+		modelInferenceResponse.setModelName(model.getName());
+		modelInferenceResponse.setUserId(userId);
+		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
+		modelInferenceResponseDao.save(modelInferenceResponse);
 		
 	}
 	

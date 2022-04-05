@@ -217,7 +217,7 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.SUBMIT_MODEL_SEARCH:
       return { ...state, ...getContributionList(state, action.payload) };
-    case "EXPLORE_MODEL_PAGE_NO":
+    case C.EXPLORE_MODEL_PAGE_NO:
       return { ...state, page: action.payload };
     case C.GET_SEARCHED_LIST:
       return { ...state, ...getSearchedList(state, action.payload) };

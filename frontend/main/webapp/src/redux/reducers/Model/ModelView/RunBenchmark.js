@@ -98,11 +98,6 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
         benchmarkId: val.benchmarkId,
       });
       val.metric.forEach((e) => {
-        console.log(
-          updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric,
-          e.selected,
-          val.benchmarkId
-        );
         if (e.selected) {
           if (
             updatedBenchmarkInfo[updatedBenchmarkInfo.length - 1].metric ===
