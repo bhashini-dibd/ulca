@@ -880,6 +880,12 @@ const DataSet = (theme) => ({
       wordBreak:"break-all"
 
     },
+   
+  },
+  iconbutton:{
+    position: "absolute",
+     right: "3px",
+      top: "4px",
   },
   typography1: {
     // marginLeft: "10px",
@@ -912,7 +918,7 @@ const DataSet = (theme) => ({
     margin: "5px 0px 0px 55px",
 
   },
-  typography4:{
+  Addyourcomments:{
     margin: "10px 10px 10px 10px",
      fontSize: "16px",
      "@media (max-width:650px)": {
@@ -920,18 +926,6 @@ const DataSet = (theme) => ({
      fontSize: "12px",
     },
   },
-  
-  Divform:{
-    "@media (max-width:400px)": {
-    
-    // maxHeight:"auto",
-   
-    // overflow:" auto"
-     },
-
-  }
-  
-
 });
 
 export default DataSet;
