@@ -904,6 +904,7 @@ const DataSet = (theme) => ({
     margin: "auto",
     fontFamily: "Roboto",
     fontSize: "18px",
+    width: "250px",
     // border: " none"
   },
 
@@ -918,6 +919,12 @@ const DataSet = (theme) => ({
     margin: "5px 0px 0px 55px",
 
   },
+  textfield:{
+    fontFamily: "Roboto",
+    fontSize: "12px",
+    margin: "10px 0px 10px 0px"
+    
+  },
   Addyourcomments:{
     margin: "10px 10px 10px 10px",
      fontSize: "16px",
@@ -926,6 +933,20 @@ const DataSet = (theme) => ({
      fontSize: "12px",
     },
   },
+  border:{
+    borderBottom: "1px solid #ECE7E6 ",
+    width: "300px",
+    margin: "auto", 
+    paddingBottom: "10px"
+
+  },
+  submitbutton:{
+    margin: "10px"
+
+  },
+  feedbackgrid:{
+    maxWidth: "350px"
+  }
 });
 
 export default DataSet;

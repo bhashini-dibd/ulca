@@ -316,11 +316,9 @@ function SimpleDialogDemo(props) {
   return <Form
     onSubmit={() => handleFeedbackSubmit(value, rating1, rating2, rating3)}
     render={({ handleSubmit }) => (<form onSubmit={handleSubmit}>
-      <Grid container style={{
-        maxWidth: "365px"
-
-      }}>
-        <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+      <Grid container className={classes.feedbackgrid} 
+       >
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <div  className={classes.iconbutton}>
             <IconButton
               size="small"
@@ -332,10 +330,10 @@ function SimpleDialogDemo(props) {
             </IconButton>
           </div>
         </Grid>
-        <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography className={classes.typography} align="center" >{translate("lable.Areyousatisfiedwiththis")} <br />  {translate("lable. translation")}</Typography>
         </Grid>
-        <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <StyledRating
             className={classes.rating}
             size="large"
@@ -370,8 +368,8 @@ function SimpleDialogDemo(props) {
           <div className={classes.popover2} style={{}}>
             <Typography variant="body2" className={classes.typography2}> {translate("lable.Pleaserateyourexperience")}</Typography>
             <Box p={2}>
-              <Grid container style={{ maxWidth: "365px", scrollY: "auto" }}>
-                <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+              <Grid container className={classes.feedbackgrid} >
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   <Typography variant="body2" className={classes.typography1}>Rate  <span style={{ fontWeight: "bold" }}>Speech to Text</span> Quality</Typography>
                 </Grid>
                 <Grid items xs={10} sm={10} md={10} lg={10} xl={10}>
@@ -382,26 +380,27 @@ function SimpleDialogDemo(props) {
                       setRating1(newValue)
                     }} />
                 </Grid>
-                <Grid items xs={2} sm={2} md={2} lg={2} xl={2}>
+                <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                 <Button  className={classes.buttonsuggest} variant="outlined" color="primary"  onClick={() => setSuggestEdit("asr")}>
                 <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
       </Button>
                   
                 </Grid>
                 <br />
-                <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   {suggestEdit === 'asr' && <TextField
-                    style={{ fontFamily: "Roboto", fontSize: "12px", margin: "10px 0px 10px 0px" }}
+                   className={classes.textfield}
+                   
                     fullWidth
                     variant="outlined"
                     onChange={(e) => handleOnChange('asr', e)}
                     value={asrValue}
                   />}
                 </Grid>
-                <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   <Typography variant="body2" className={classes.typography1}>Rate <span style={{ fontWeight: "bold" }}  >Translated Text</span>  Quality</Typography>
                 </Grid>
-                <Grid items xs={10} sm={10} md={10} lg={10} xl={10}>
+                <Grid item xs={10} sm={10} md={10} lg={10} xl={10}>
                   <StyledRating
                     size="large"
                     value={rating2}
@@ -409,25 +408,25 @@ function SimpleDialogDemo(props) {
                       setRating2(newValue)
                     }} />
                 </Grid>
-                <Grid items xs={2} sm={2} md={2} lg={2} xl={2}>
+                <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
                 <Button  className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("tts")}>
                 <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
       </Button>
                   
                 </Grid>
                 <br />
-                <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   {suggestEdit === 'tts' && <TextField
-                    style={{ fontFamily: "Roboto", fontSize: "12px", margin: "10px 0px 10px 0px" }}
-                    fullWidth
+                   className={classes.textfield}
+                   fullWidth
                     variant="outlined"
                     onChange={(e) => handleOnChange('translation', e)}
                     value={ttsValue} />}
                 </Grid>
-                <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   <Typography variant="body2" className={classes.typography1} >Rate  <span style={{ fontWeight: "bold" }}>Translated Speech</span> Quality </Typography>
                 </Grid>
-                <Grid items xs={12} sm={12} md={12} lg={12} xl={12}>
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   <StyledRating
                     size="large"
                     value={rating3}
@@ -438,7 +437,7 @@ function SimpleDialogDemo(props) {
                 <br />
               </Grid>
             </Box>
-            <div style={{ borderBottom: "1px solid #ECE7E6 ", width: "300px", margin: "auto", paddingBottom: "10px" }}></div>
+            <div  className={classes.border} ></div>
 
             <Typography variant="body2" className={classes.Addyourcomments} > {translate("lable.Addyourcomments")}</Typography>
             <Grid container justifyContent="center">
@@ -447,7 +446,6 @@ function SimpleDialogDemo(props) {
                   aria-label="minimum height"
                   minRows={4}
                   className={classes.textareaAutosize}
-                  style={{ width: 250 }}
                   onChange={handleCommentChange}
                   value={comment}
                 />
@@ -457,8 +455,8 @@ function SimpleDialogDemo(props) {
           </div>
         }
         <Grid container justifyContent="center">
-          <Grid items>
-            <Button type="submit" variant="contained" size="small" color="primary" style={{ margin: "10px"}} disabled={value > 0 ? false : true} >
+          <Grid item>
+            <Button type="submit" variant="contained" size="small" color="primary" className={classes.submitbutton}  disabled={value > 0 ? false : true} >
               {translate("button.submit")}
             </Button>
           </Grid>
