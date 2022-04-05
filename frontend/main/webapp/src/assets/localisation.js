@@ -132,17 +132,17 @@ const localization_EN_Data = {
   "label.hostedInferenceASR":
     "Please start speaking after the listening mode is enabled. Once you start speaking, ULCA will hit the inference endpoint of the hosted model, to get the transcription.",
   "button.cancel": "Cancel",
-  "lable.feedback1":"Are you satisfied with this  ",
-  "lable.feedbacks":" translation? ",
+  "lable.Areyousatisfiedwiththis":"Are you satisfied with this  ",
+  "lable. translation":" translation? ",
   "button:feedback":" Feedback",
   "lable.verybad":"very bad",
   "lable.verygood":"very good",
   "link.feedback":" Detailed Feedback",
   "button. Submit":" Submit",
-  "lable.feedback2":"Your feedback will be used to help improve the product",
-  "lable.feedback3":"Please rate your experience...",
+  "lable.feedbackwillbeusedtohelpimprovetheproduct":"Your feedback will be used to help improve the product",
+  "lable.Pleaserateyourexperience":"Please rate your experience...",
   "button.Suggest an edit":"Suggest an edit",
-  "lable.feedback4":"Add your comments",
+  "lable.Addyourcomments":"Add your comments",
 
 };
 

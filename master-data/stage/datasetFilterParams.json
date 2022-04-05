@@ -47,7 +47,7 @@
       "datasetType": "asr-corpus",
       "values": {
         "master": "/asrCorpusFilters.json",
-        "jsonPath": "$.asrCorpusFilters"
+        "jsonPath": "$.ocrCorpusFilters"
       }
     },
     {

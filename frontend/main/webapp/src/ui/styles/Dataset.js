@@ -64,7 +64,8 @@ const DataSet = (theme) => ({
   marginValue: { marginTop: "18px", color: "#0C0F0FB3" },
 
   list: {
-    marginLeft: "-20px",
+   marginLeft: "-20px",
+  
   },
   center: {
     display: "flex",
@@ -666,6 +667,11 @@ const DataSet = (theme) => ({
     },
 
   },
+  Gridroot:{
+    "@media (max-width:650px)": {
+      marginLeft: "15px",
+    },
+  },
   imagemodal: {
     display: 'flex',
     alignItems: 'center',
@@ -840,7 +846,7 @@ const DataSet = (theme) => ({
     "@media (max-width:650px)": {
       //  marginLeft: "35px",
       //buttom:"20px",
-    left:"33px",
+    left:"40px",
     width:"300px"
 
     },
@@ -853,19 +859,33 @@ const DataSet = (theme) => ({
     height: "25px",
     // marginLeft:"20px"
     marginRight: "10px",
+    padding: "21px 7px 13px 6px",
+   
+    borderColor:"#3f51b5",
     "@media (max-width:650px)": {
       // height: "38px",
        marginRight: "0px",
+       padding: "7px 12px 4px 13px",
 
     },
 
   },
   buttonsuggestlable:{
+    textTransform:" none",
     lineHeight:"16px",
+    whiteSpace: "nowrap",
+    height: "25px",
     "@media (max-width:650px)": {
-      lineHeight:"11px",
+      lineHeight:"21px",
+      wordBreak:"break-all"
 
     },
+   
+  },
+  iconbutton:{
+    position: "absolute",
+     right: "3px",
+      top: "4px",
   },
   typography1: {
     // marginLeft: "10px",
@@ -898,7 +918,7 @@ const DataSet = (theme) => ({
     margin: "5px 0px 0px 55px",
 
   },
-  typography4:{
+  Addyourcomments:{
     margin: "10px 10px 10px 10px",
      fontSize: "16px",
      "@media (max-width:650px)": {
@@ -906,21 +926,6 @@ const DataSet = (theme) => ({
      fontSize: "12px",
     },
   },
-  // popover2:{
-  //   "@media (max-width:400px)": {
-  //     width:"330px",
-  //      margin:"-11px"
-  //   },
-
- // }
-  form:{
-    "@media (max-width:650px)": {
-     overflow:"auto",
-    },
-
-  }
-  
-
 });
 
 export default DataSet;

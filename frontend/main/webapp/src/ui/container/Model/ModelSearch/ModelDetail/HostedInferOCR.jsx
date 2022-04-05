@@ -31,7 +31,7 @@ import APITransport from "../../../../../redux/actions/apitransport/apitransport
 import Snackbar from "../../../../components/common/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import SimpleDialogDemo from "../../../../components/common/Feedback";
+// import SimpleDialogDemo from "../../../../components/common/Feedback";
 
 
 const HostedInferASR = (props) => {
