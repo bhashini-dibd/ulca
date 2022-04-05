@@ -211,7 +211,7 @@ const MySearches = (props) => {
   const options = {
     textLabels: {
       body: {
-        noMatch: "No records ",
+        noMatch: "No records",
       },
       toolbar: {
         search: "Search",
@@ -258,7 +258,7 @@ const MySearches = (props) => {
                         </div> */}
 
       <MUIDataTable
-        title={`My Searches`}
+        // title={`My Searches `}
         data={detailedReport.filteredData}
         columns={columns}
         options={options}

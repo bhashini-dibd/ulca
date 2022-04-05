@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ulca.benchmark.request.BenchmarkListByModelRequest;
 import com.ulca.benchmark.request.BenchmarkSearchRequest;
 import com.ulca.benchmark.request.BenchmarkSubmitRequest;
+import com.ulca.benchmark.request.ExecuteBenchmarkAllMetricRequest;
 import com.ulca.benchmark.request.ExecuteBenchmarkRequest;
 import com.ulca.benchmark.response.BenchmarkListByModelResponse;
 import com.ulca.benchmark.response.BenchmarkListByUserIdResponse;
@@ -27,10 +28,6 @@ import com.ulca.model.exception.RequestParamValidationException;
 import com.ulca.model.response.BmProcessListByProcessIdResponse;
 
 import lombok.extern.slf4j.Slf4j;
-
-
-
-
 
 @Slf4j
 @RestController
@@ -58,8 +55,7 @@ public class BenchmarkController {
 	}
 
 	@PostMapping("/execute")
-	public ResponseEntity<ExecuteBenchmarkResponse> executeBenchmark(
-			@Valid @RequestBody ExecuteBenchmarkRequest request) {
+	public ResponseEntity<ExecuteBenchmarkResponse> executeBenchmark(@Valid @RequestBody ExecuteBenchmarkRequest request) {
 
 		log.info("******** Entry BenchMarkController:: Submit *******");
 		
@@ -67,6 +63,17 @@ public class BenchmarkController {
 
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
+	
+	@PostMapping("/execute/allMetric")
+	public ResponseEntity<ExecuteBenchmarkResponse> executeBenchmarkAllMetric(@Valid @RequestBody ExecuteBenchmarkAllMetricRequest request) {
+			
+		log.info("******** Entry BenchMarkController:: Submit *******");
+		
+		ExecuteBenchmarkResponse response = benchmarkService.executeBenchmarkAllMetric(request);
+
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
 
 	@GetMapping("/getBenchmark")
 	public GetBenchmarkByIdResponse getBenchmarkById( @RequestParam(required = true) String benchmarkId ) {
@@ -99,9 +106,5 @@ public class BenchmarkController {
 		BmProcessListByProcessIdResponse response = benchmarkService.processStatus(benchmarkProcessId);
 		
 		return new ResponseEntity<>(response, HttpStatus.OK); 
-		
 	}
-	
-	
-
 }

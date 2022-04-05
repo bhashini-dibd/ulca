@@ -31,7 +31,7 @@ import APITransport from "../../../../../redux/actions/apitransport/apitransport
 import Snackbar from "../../../../components/common/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-
+// import SimpleDialogDemo from "../../../../components/common/Feedback";
 
 
 const HostedInferASR = (props) => {
@@ -319,8 +319,13 @@ const HostedInferASR = (props) => {
               <Typography variant="h6" className={classes.titleCard}>
                 {translate("label.output")}
               </Typography>
-            </Grid>
-            <CardContent>{fileData}</CardContent>
+             </Grid>
+
+          { fileData.length > 0 && ( <><CardContent>{fileData}</CardContent>
+          <div style={{marginTop:"33%"}}>
+            {/* <SimpleDialogDemo/>  */}
+            </div></>)}
+              
           </Card>
         </Grid>
       </Grid>
@@ -396,7 +401,11 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            <CardContent>{target}</CardContent>
+            {target.length > 0 && ( <> <CardContent>{target}</CardContent>
+            <div style={{marginTop:"38%",}}>
+            {/* <SimpleDialogDemo/> */}
+             </div> </>)} 
+           
           </Card>
         </Grid>
       </Grid>

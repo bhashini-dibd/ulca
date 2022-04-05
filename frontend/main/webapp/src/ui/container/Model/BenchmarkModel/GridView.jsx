@@ -37,7 +37,7 @@ const GridView = (props) => {
     <>
       <div className={classes.gridHeader}></div>
       {data.filteredData.length > 0 && renderGrid()}
-      <TablePagination
+    <TablePagination
         component="div"
         count={data.filteredData.length}
         page={page}

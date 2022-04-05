@@ -189,7 +189,6 @@ const updateFilterSequence = (data) => {
       }
     })
   })
-  console.log(advFilter);
   return [...firstSequence, ...secondSequence];
 }
 

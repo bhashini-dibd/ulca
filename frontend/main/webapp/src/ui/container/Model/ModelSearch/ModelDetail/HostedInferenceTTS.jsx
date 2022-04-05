@@ -8,6 +8,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import Spinner from "../../../../components/common/Spinner";
 import { getLanguageName } from "../../../../../utils/getLabel";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
+// import SimpleDialogDemo from "../../../../components/common/Feedback";
 import {
   Grid,
   Typography,
@@ -39,9 +40,15 @@ const StyledMenu = withStyles({})((props) => (
       vertical: "top",
       horizontal: "",
     }}
+    PaperProps={{  
+      style: {  
+        width: 140,  
+       
+      },  
+   }} 
     {...props}
   />
-));
+))
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -94,7 +101,6 @@ const HostedInference = (props) => {
     const blob = new Blob(byteArrays, { type: contentType });
     return blob;
   };
-
   const handleCompute = () => {
     setLoading(true);
     setAudio(null);
@@ -118,7 +124,6 @@ const HostedInference = (props) => {
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
             const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-            console.log(blob);
             const urlBlob = window.URL.createObjectURL(blob);
             setAudio(urlBlob);
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
@@ -154,8 +159,8 @@ const HostedInference = (props) => {
 
   const handleChange = (val) => {
     setGender(val);
-  };
-
+     };
+  
   const renderGenderDropDown = () => {
     return (
       <>
@@ -176,6 +181,7 @@ const HostedInference = (props) => {
           open={Boolean(anchorEl)}
           onClose={(e) => handleAnchorClose(e)}
           className={classes.styledMenu1}
+        
         >
           <MenuItem
             value={"Male"}
@@ -186,6 +192,7 @@ const HostedInference = (props) => {
               handleAnchorClose();
             }}
           >
+          
             <Typography variant={"body1"}>{"Male"}</Typography>
           </MenuItem>
           <MenuItem
@@ -220,11 +227,11 @@ const HostedInference = (props) => {
           <Grid container className={classes.cardHeader}>
             <Grid
               item
-              xs={8}
-              sm={8}
-              md={8}
-              lg={8}
-              xl={8}
+              xs={9}
+              sm={9}
+              md={9}
+              lg={9}
+              xl={9}
               className={classes.headerContent}
             >
               <Typography variant="h6" className={classes.hosted}>
@@ -233,15 +240,15 @@ const HostedInference = (props) => {
             </Grid>
             <Grid
               item
-              xs={3}
-              sm={3}
-              md={3}
-              lg={3}
-              xl={3}
+              xs={2}
+              sm={2}
+              md={2}
+              lg={2}
+              xl={2}
               className={classes.headerContent}
             >
               {renderGenderDropDown()}
-            </Grid>
+              </Grid>
           </Grid>
         </CardContent>
         <CardContent>
@@ -310,19 +317,26 @@ const HostedInference = (props) => {
         </CardContent>
         <CardContent
           style={{
-            display: "flex",
+           display:"flex",
             justifyContent: "center",
             padding: "8vh",
           }}
         >
           {audio ? (
+            <>
             <audio controls>
               <source src={audio}></source>
             </audio>
+           </>
           ) : (
             <></>
+           
           )}
+          
         </CardContent>
+        {audio && <div style={{marginTop:"12%"}}>
+             {/* <SimpleDialogDemo/> */}
+              </div>}
       </Card>
       {snackbar.open && (
         <Snackbar
