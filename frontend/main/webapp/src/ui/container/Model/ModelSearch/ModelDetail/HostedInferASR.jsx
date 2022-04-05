@@ -6,7 +6,7 @@ import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
 import Spinner from "../../../../components/common/Spinner";
-import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+// import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import {
   Grid,
   Typography,
@@ -186,7 +186,7 @@ const HostedInferASR = (props) => {
           <CardContent id="asrCardOutput">{targetAudio}</CardContent>
           {data && <div className={classes.AsrPopover} > 
         
-         <FeedbackPopover/>
+         {/* <FeedbackPopover/> */}
           </div>} 
         </Card>
         </Grid>

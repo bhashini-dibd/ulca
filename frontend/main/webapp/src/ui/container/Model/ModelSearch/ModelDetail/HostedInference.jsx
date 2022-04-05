@@ -23,7 +23,7 @@ import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
-import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+// import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -243,7 +243,7 @@ const HostedInference = (props) => {
             className={classes.textArea}
           />
           <div  className={classes.feedbackPopover} style={{ }}>
-         <FeedbackPopover/>
+         {/* <FeedbackPopover/> */}
          </div>
          </>)}
          
