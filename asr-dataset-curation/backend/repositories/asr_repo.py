@@ -76,7 +76,7 @@ class ASRAudioChunk:
 
         subprocess.call(["ffmpeg -loglevel error -y -i {} -ar {} -ac {} -bits_per_raw_sample {} -vn {}".format(filepath, 16000, 1, 16, input_file)], shell=True)
         os.remove(filepath)
-        subprocess.call(["python3 -m denoiser.enhance --dns48 --noisy_dir={} --out_dir={}".format(folder_name, folder_name)], shell=True)
+        subprocess.call(["python3 -m denoiser.enhance --dns48 --noisy_dir={} --out_dir={} --num_workers=1".format(folder_name, folder_name)], shell=True)
         # input_file = r"/home/kafka/asr_dataset_creation_test/chunk_dir/temp_youtube_audio_enhanced.wav"
         subprocess.call(["ffmpeg -i {} -ar {} -ac {} -bits_per_raw_sample {} -vn {}".format(input_file_enhanced, 16000, 1, 16, output_file)], shell=True)
 
