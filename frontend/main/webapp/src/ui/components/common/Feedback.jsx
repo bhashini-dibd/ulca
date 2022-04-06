@@ -390,8 +390,7 @@ function SimpleDialogDemo(props) {
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   {suggestEdit === 'asr' && <TextField
                    className={classes.textfield}
-                   
-                    fullWidth
+                   fullWidth
                     variant="outlined"
                     onChange={(e) => handleOnChange('asr', e)}
                     value={asrValue}
