@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, NativeSelect, Input, Button,CardContent,Card } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
+import Content from "./Content";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,62 +26,80 @@ const useStyles = makeStyles((theme) => ({
 function Youtube() {
   const classes = useStyles();
   const [gender, setGender] = useState('');
-  const [url, seturl] = useState("")
+  const [audioUrl, setaudioUrl] = useState("")
   const [domian, setdomian] = useState("");
   const [language, setlanguage] = useState("");
+  const[url,seturl] = useState();
   const history =useHistory();
 
    function handleSubmit(e) {
     e.preventDefault();
-    let temp=matchYoutubeUrl(url)
+    let temp=matchYoutubeUrl(audioUrl)
     if (gender !== "" &&
     domian !== "" &&
     language !== ""&&temp) {
-      history.push('/Content')
+      // history.push('/Content')
       console.log('domian', gender )
 
       const toSenddata ={ 
-        url,
+        audioUrl,
         domian,
         language,
         gender,
    
        };
-       console.log('aaaa', toSenddata )
+      //  console.log('aaaa', url )
+      //  let variable = {"data": toSenddata}
       
-      fetch('https://dev-auth.ulcacontrib.org/ulca/apis/asr/v1/audio/breakdown',toSenddata,{
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        "Content-type": "application/json",
-        // "Accept": "*/*",
-        // "Access-Control-Allow-Headers": "*",
-        // "Access-Control-Allow-Methods": "*",
-        // "Access-Control-Allow-Origin": "*",
-        //"Authorization": token
-      },
-     body:JSON.stringify(toSenddata)
-    })
-    .then(response => { console.log( response)
-      return response.json()})
-    .then(json => console.log(json))
+       fetch('https://dev-auth.ulcacontrib.org/ulca/apis/asr/v1/audio/breakdown', {
+        method: 'post',
+        body: JSON.stringify( toSenddata),
+         headers: {
+          "Content-Type": "application/json"
+        }
+        
+      })
+      .then(async response => {
+       let rsp_data = await response.json();
+       console.log(rsp_data)
+       seturl(rsp_data)
+      })
+      console.log( JSON.stringify( toSenddata))
+      
+    //   fetch('https://dev-auth.ulcacontrib.org/ulca/apis/asr/v1/audio/breakdown',toSenddata,{
+    //   method: 'POST',
+    //   mode: 'cors',
+    //   headers: {
+    //     "Content-type": "application/json",
+    //     // "Accept": "*/*",
+    //     // "Access-Control-Allow-Headers": "*",
+    //     // "Access-Control-Allow-Methods": "*",
+    //     // "Access-Control-Allow-Origin": "*",
+    //     //"Authorization": token
+    //   },
+    //  body:JSON.stringify(toSenddata)
+    // })
+    // .then(response => { console.log( response)
+    //   return response.json()})
+    // .then(json => console.log(json))
     }
    }
+   console.log('aaaa', url )
 
   function matchYoutubeUrl() {
     let regexQuery = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
     let res = new RegExp(regexQuery, "i");
-    return res.test(url);
+    return res.test(audioUrl);
 
   }
 
   return (
     <div className={classes.root} >
       
-      <FormControl className={classes.formControlmain}>
+   { url ?  ( <Content url ={url} />): ( <FormControl className={classes.formControlmain}>
       
     
-        <Input type="text" placeholder="type youtube url" onChange={(e) => seturl(e.target.value)} required />
+        <Input type="text" placeholder="type youtube url" onChange={(e) => setaudioUrl(e.target.value)} required />
 
         {/* <Button type="button" onClick={matchYoutubeUrl} > Validate Url</Button> <br></br> */}
 
@@ -134,9 +153,9 @@ function Youtube() {
         </FormControl>
         <Button variant="contained" size="medium" onClick={handleSubmit}>submit</Button>
        
-      </FormControl>
-     
-
+      </FormControl>)
+  }
+{console.log(url)}
     </div>
 
   )

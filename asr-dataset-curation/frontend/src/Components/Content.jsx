@@ -5,6 +5,7 @@ import { Button } from "@material-ui/core";
 const useAudio = url => {
   const [audio] = useState(new Audio(url));
   const [playing, setPlaying] = useState(false);
+  
 
   const toggle = () => setPlaying(!playing);
 
@@ -25,12 +26,13 @@ const useAudio = url => {
   return [playing, toggle];
 };
 
-const Content = ({ url }) => {
+const Content = ({ url}) => {
   const [playing, toggle] = useAudio(url);
   const [audiofile , setAudioFile] = useState()
   const [base, setBase] = useState([]);
   const [data, setData] = useState("")
   const [count, setCount] = useState(0)
+  
 
 
 
@@ -38,16 +40,16 @@ const Content = ({ url }) => {
 //  const Audiourl= URL.createObjectURL(data)
 // console.log( Audiourl)
 
-  useEffect(()=>{
-    axios.get('')
-    .then(response => {
-        console.log(response)
-        setBase(response.data)
-        // let fhg =`${url}/${data}`
-        //  let audio=new Audio().play
-        //   console.log("sssss",audio);
-    })
-  })
+  // useEffect(()=>{
+  //   axios.get('')
+  //   .then(response => {
+  //       console.log(response)
+  //       setBase(response.data)
+  //       // let fhg =`${url}/${data}`
+  //       //  let audio=new Audio().play
+  //       //   console.log("sssss",audio);
+  //   })
+  // })
 
 
 
@@ -82,8 +84,12 @@ const Content = ({ url }) => {
 //   Fetchdata()
 // }, []);
 
-let encode=""
+console.log(url.data[count].audioContent)
+console.log(url)
+let encode=url.data[count].audioContent
 let temp=`data:audio/mpeg;base64,${encode}`
+
+// const byteCharacters = atob(temp)
 //console.log(stockData.data);
  console.log(temp);
   return (
@@ -91,17 +97,17 @@ let temp=`data:audio/mpeg;base64,${encode}`
      
       <div style={{marginLeft:"500px",marginTop:"100px"}} >
 
-      <audio controls><source src={temp}></source></audio>
-      {}
+      <audio controls><source src={ temp}></source></audio>
+     
 
      <Button className="primary" style={{marginBottom:"50px"}} onClick={()=>{
-       if(count < 2 ){
-       setCount(count+1)}}}>Done</Button>
+       if(count <= url.data.length   ){
+       setCount(count+1)}}}>Done{count}</Button>
 
       </div>
 
-            <p style={{marginLeft:"650px",}}>  text {} </p>
-           {console.log(temp)} 
+            <p style={{marginLeft:"450px",}}> {url.data[count].inference}  </p>
+           {console.log(url.data[count].inference)} 
       <div style={{marginLeft:"650px",marginTop:"100px"}}>
        
        
