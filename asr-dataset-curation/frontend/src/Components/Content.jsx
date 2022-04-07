@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 import axios from 'axios';
 // import stockData from './data.json';
 import { Button } from "@material-ui/core";
 const useAudio = url => {
   const [audio] = useState(new Audio(url));
   const [playing, setPlaying] = useState(false);
+ 
   
 
   const toggle = () => setPlaying(!playing);
@@ -32,9 +33,37 @@ const Content = ({ url}) => {
   const [base, setBase] = useState([]);
   const [data, setData] = useState("")
   const [count, setCount] = useState(0)
+  const [source, setSource] = useState()
+  const audioRef = useRef()
+
+  useEffect(() => {
+    updateSong(url)
+  }, [count])
   
+  const updateSong = (source) => {
+    let encode=source.data[count].audioContent
+const sliced = encode.slice(2,-1)
 
+ let temp =`data:audio/mpeg;base64,${sliced}`
 
+    setSource(temp);
+    if(audioRef.current){
+        audioRef.current.pause();
+        audioRef.current.load();
+        audioRef.current.play();
+    }
+}
+
+// function audioplay(){
+
+//   return(
+//     <div style={{marginLeft:"500px",marginTop:"100px"}} >
+//       {/* <audio controls ref="audio"> <source src={temp} /> </audio> */}
+
+//     {/* <audio controls><source src={temp}></source></audio> */}
+//     </div>
+//   )
+// }
 
 
 //  const Audiourl= URL.createObjectURL(data)
@@ -86,22 +115,34 @@ const Content = ({ url}) => {
 
 console.log(url.data[count].audioContent)
 console.log(url)
-let encode=url.data[count].audioContent
-let temp=`data:audio/mpeg;base64,${encode}`
+// let encode=url.data[count].audioContent
+// const sliced = encode.slice(2,-1)
+
+//  let temp=`data:audio/mpeg;base64,${sliced}`
+
+
+// const byteCharacters = atob(encode);
+// const byteNumbers = new Array(byteCharacters.length);
+// for (let i = 0; i < byteCharacters.length; i++) {
+//   byteNumbers[i] = byteCharacters.charCodeAt(i);
+// }
+// const byteArray = new Uint8Array(byteNumbers);
+// const blob = new Blob([byteArray], {type: 'audio/mp3'});
 
 // const byteCharacters = atob(temp)
 //console.log(stockData.data);
- console.log(temp);
+//  console.log(sliced);
   return (
     <div>
      
       <div style={{marginLeft:"500px",marginTop:"100px"}} >
 
-      <audio controls><source src={ temp}></source></audio>
-     
-
+      {/* <audio controls><source src={audioplay}></source></audio> */}
+      <audio controls ref={audioRef}>
+    <source src={source} type='audio/mpeg' />
+</audio>
      <Button className="primary" style={{marginBottom:"50px"}} onClick={()=>{
-       if(count <= url.data.length   ){
+       if(count < url.data.length -1  ){
        setCount(count+1)}}}>Done{count}</Button>
 
       </div>
