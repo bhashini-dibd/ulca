@@ -4,6 +4,8 @@ import { Radio, RadioGroup, FormControlLabel, FormControl, FormLabel, NativeSele
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from 'react-router-dom';
 import Content from "./Content";
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 function Youtube() {
   const classes = useStyles();
   const [gender, setGender] = useState('');
@@ -31,6 +34,11 @@ function Youtube() {
   const [language, setlanguage] = useState("");
   const[url,seturl] = useState();
   const history =useHistory();
+  const [open, setOpen] = React.useState(false);
+ 
+  // const handleToggle = () => {
+  //   setOpen(!open);
+  // };
 
    function handleSubmit(e) {
     e.preventDefault();
@@ -40,6 +48,7 @@ function Youtube() {
     language !== ""&&temp) {
       // history.push('/Content')
       console.log('domian', gender )
+      setOpen(!open);
 
       const toSenddata ={ 
         audioUrl,
@@ -62,6 +71,7 @@ function Youtube() {
       .then(async response => {
        let rsp_data = await response.json();
        console.log(rsp_data)
+       setOpen(false);
        seturl(rsp_data)
       })
       console.log( JSON.stringify( toSenddata))
@@ -156,6 +166,10 @@ function Youtube() {
       </FormControl>)
   }
 {console.log(url)}
+
+<Backdrop className={classes.backdrop} open={open} onClick={ handleSubmit}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
 
   )

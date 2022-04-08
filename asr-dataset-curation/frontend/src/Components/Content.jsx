@@ -143,17 +143,15 @@ console.log(url)
 </audio>
      <Button className="primary" style={{marginBottom:"50px"}} onClick={()=>{
        if(count < url.data.length -1  ){
-       setCount(count+1)}}}>Done{count}</Button>
+       setCount(count+1)}}}>Next</Button>
 
       </div>
 
             <p style={{marginLeft:"450px",}}> {url.data[count].inference}  </p>
            {console.log(url.data[count].inference)} 
-      <div style={{marginLeft:"650px",marginTop:"100px"}}>
-       
-       
-      {/* <button onClick={toggle}>{playing ? "Pause" : "Play"}</button> */}
-      </div>
+
+           
+     
     </div>
   );
 };
