@@ -1,11 +1,38 @@
 {
-"translationDetailedQns": [
+    "translationDetailedQns": [
       {
-        "code":"translation",
-        "label":"TRANSLATION",
-        "active":true,
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true,
         "taskType": "translation",
-        "question": "Please rate your experience...",
+        "question": "Incomplete translation",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true,
+        "taskType": "translation",
+        "question": "Incorrect context of words",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true,
+        "taskType": "translation",
+        "question": "Grammatically incorrect",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true,
+        "taskType": "translation",
+        "question": "Text/Numbers normalization issue",
         "answerType": "checkbox",
         "editbox": "false"
       },
@@ -13,5 +40,5 @@
         "question": "Add your comments",
         "answerType": "freetext"
       }
-]
-}
+    ]
+  }

@@ -1,30 +1,111 @@
 {
-"stsDetailedQns": [
+    "stsDetailedQns": [
       {
-        "code":"asr",
-        "label":"ASR",
-        "active":true,
+        "code": "asr",
+        "label": "ASR",
+        "active": true,
         "taskType": "asr",
-        "question": "Rate Speech to Text Quality",
-        "answerType": "5-star-rating",
-        "editbox": "true"
+        "question": "Few words missing",
+        "answerType": "checkbox",
+        "editbox": "false"
       },
       {
-       "code":"translation",
-       "label":"TRANSLATION",
-       "active":true,
+        "code": "asr",
+        "label": "ASR",
+        "active": true,
+        "taskType": "asr",
+        "question": "Few words misspelt",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "asr",
+        "label": "ASR",
+        "active": true,
+        "taskType": "asr",
+        "question": "Issue with text/digits normalization",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "asr",
+        "label": "ASR",
+        "active": true,
+        "taskType": "asr",
+        "question": "Punctuation/delimiter issue",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true,
         "taskType": "translation",
-        "question": "Rate Translated Text Quality",
-        "answerType": "5-star-rating",
-        "editbox": "true"
+        "question": "Incomplete translation",
+        "answerType": "checkbox",
+        "editbox": "false"
       },
       {
-      "code":"tts",
-       "label":"TTS",
-       "active":true,
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true,
+        "taskType": "translation",
+        "question": "Incorrect context of words",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true,
+        "taskType": "translation",
+        "question": "Grammatically incorrect",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "translation",
+        "label": "TRANSLATION",
+        "active": true,
+        "taskType": "translation",
+        "question": "Text/Numbers normalization issue",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "tts",
+        "label": "TTS",
+        "active": true,
         "taskType": "tts",
-        "question": "Rate Translated Speech Quality",
-        "answerType": "5-star-rating",
+        "question": "Spoken words are unclear",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "tts",
+        "label": "TTS",
+        "active": true,
+        "taskType": "tts",
+        "question": "Incorrect pronunciation",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "tts",
+        "label": "TTS",
+        "active": true,
+        "taskType": "tts",
+        "question": "Few words missing",
+        "answerType": "checkbox",
+        "editbox": "false"
+      },
+      {
+        "code": "tts",
+        "label": "TTS",
+        "active": true,
+        "taskType": "tts",
+        "question": "Incorrect pauses",
+        "answerType": "checkbox",
         "editbox": "false"
       },
       {
@@ -32,4 +113,4 @@
         "answerType": "freetext"
       }
     ]
-}
+  }
