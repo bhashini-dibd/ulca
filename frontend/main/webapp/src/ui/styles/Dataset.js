@@ -512,7 +512,7 @@ const DataSet = (theme) => ({
     },
   },
   computeBtnUrl: {
-    marginTop: "40px",
+    marginTop: "55px",
     "@media (max-width:1000px)": {
       marginTop: "10px",
     },
@@ -746,23 +746,7 @@ const DataSet = (theme) => ({
     }
 
   },
-  AsrPopover:{
-    position:"relative",
-    left:"310px",
-    top:"155px",
-    "@media (max-width:400px)": {
-      left: "215px",
-     
-    }
-  },
-  // tablesbody:{
-  //   "@media (max-width:400px)": {
-  //     marginLeft:" 137px",
-  //     width: "50%",
-  //     marginTop: "-19px"
-  //   }
-  // }
-
+ 
   typography: {
     padding: theme.spacing(1),
     // marginTop: "15px"
@@ -948,12 +932,12 @@ const DataSet = (theme) => ({
     maxWidth: "350px"
   },
   translatfeedbackbutton:{
-    position: "relative",
-     left: "680px",
-      top: "-10px",
+    float: "right",
+    marginTop:"-20px" ,
+    marginRight: "20px",
+    backgroundColor:"#FD7F23",
       "@media (max-width:650px)": {
-        left: "225px",
-        top: "-20px",
+        marginRight: "5px",
       
       },
   },
@@ -964,24 +948,31 @@ const DataSet = (theme) => ({
 
     }
   },
-  translationsuggestbutton:{
-   
-    position:"relative",
-    top: "7px",
-    left: "97px",
-  },
-  translationsuggestgrid:{
-    padding:"0px 10px 10px 10px",
-
-  },
-  translationtextfield:{
-    marginLeft:"50px",
-    "@media (max-width:650px)": {
-      margin:"10px 0px 0px 30px",
+  ocrfeedbackbutton:{
+    float: "right",
+    marginTop: "10px",
+     marginRight: "20px",
+     backgroundColor:"#FD7F23",
+     "@media (max-width:650px)": {
+      marginTop: "25px",
     
     },
 
   },
+  
+  translationsuggestgrid:{
+    padding:"0px 10px 10px 10px",
+    textAlign: "center"
+
+  },
+  // translationtextfield:{
+  //   marginLeft:"50px",
+  //   "@media (max-width:650px)": {
+  //     margin:"10px 0px 0px 30px",
+    
+  //   },
+
+  // },
 });
 
 export default DataSet;

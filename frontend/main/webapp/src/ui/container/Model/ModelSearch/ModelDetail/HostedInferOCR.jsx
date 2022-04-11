@@ -6,6 +6,9 @@ import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
 import Spinner from "../../../../components/common/Spinner";
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
+import Modals from '../../../../components/common/Modal';
 import {
   Grid,
   Typography,
@@ -15,7 +18,7 @@ import {
   Card,
   CardActions,
   CardMedia,
-  Modal,
+   Modal,
   Backdrop,
   Fade ,
   
@@ -31,7 +34,7 @@ import APITransport from "../../../../../redux/actions/apitransport/apitransport
 import Snackbar from "../../../../components/common/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-// import SimpleDialogDemo from "../../../../components/common/Feedback";
+import  FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 
 
 const HostedInferASR = (props) => {
@@ -57,6 +60,7 @@ const HostedInferASR = (props) => {
   const [targetAudio, setTargetAudio] = useState("");
   const handleCompute = () => setTranslationState(true);
   const [open, setOpen] = useState(false);
+  const [modal, setModal] = useState(false);
   const dispatch = useDispatch();
   // const url = UrlConfig.dataset
   const handleClose = () => {
@@ -324,6 +328,14 @@ const HostedInferASR = (props) => {
           { fileData.length > 0 && ( <><CardContent>{fileData}</CardContent>
           <div style={{marginTop:"33%"}}>
             {/* <SimpleDialogDemo/>  */}
+            <div >
+               <Button variant="contained" size="small" className={classes.ocrfeedbackbutton} onClick={() => setModal(true)}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+              </div>
+         
             </div></>)}
               
           </Card>
@@ -404,6 +416,13 @@ const HostedInferASR = (props) => {
             {target.length > 0 && ( <> <CardContent>{target}</CardContent>
             <div style={{marginTop:"38%",}}>
             {/* <SimpleDialogDemo/> */}
+            <div >
+               <Button variant="contained" style={{ float: "right",marginBottom: "13px", marginRight: "20px",backgroundColor:"#FD7F23",borderRadius:"15px"}} onClick={() => setModal(true)}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+              </div>
              </div> </>)} 
            
           </Card>
@@ -427,6 +446,18 @@ const HostedInferASR = (props) => {
           hide="6000"
         />
       )}
+          <Modals
+  open={modal}
+  onClose={() => setModal(false)}
+  aria-labelledby="simple-modal-title"
+  aria-describedby="simple-modal-description"
+>
+  <FeedbackPopover
+  setModal={setModal}
+  suggestion={true}
+  />
+</Modals>
+        
     </>
   );
 };

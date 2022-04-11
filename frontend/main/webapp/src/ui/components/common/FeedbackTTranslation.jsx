@@ -37,6 +37,7 @@ function FeedbackPopover(props) {
   const [data2, setData2] = React.useState(false);
   const [opened, setOpened] = React.useState(false);
   const [textfield, setTextfield] = React.useState(null);
+  const [start, setStart] = React.useState(0);
  
   const [state, setState] = React.useState({
     checkedA: true,
@@ -87,12 +88,13 @@ const onSubmit=()=>{
   const id = open ? 'simple-popover' : undefined;
 
   const handleRatingChange = (event, newValue) => {
-    setValue(newValue);
+    // setValue(newValue);
+    setStart(newValue)
     if (newValue <= 3)
       setDetailedFeedback(true);
     else
       setDetailedFeedback(false);
-  }
+    }
   const theme2 =({
     overrides: {
       MuiButton: {
@@ -173,12 +175,7 @@ const onSubmit=()=>{
             </IconButton>
           </div>
         </Grid>
-        </Grid>
-        {( value === 0  ||  value > 3 ) &&
-          (<Grid container    className={classes.feedbackgrid}
-          >
-            
-           <Grid item  justifyContent= "center" xs={12} sm={12} md={12} lg={12} xl={12}>
+        <Grid item  justifyContent= "center" xs={12} sm={12} md={12} lg={12} xl={12}>
              <Typography className={classes.typography} align="center" >{translate("lable.Areyousatisfiedwiththis")} <br />  {translate("lable. translation")}</Typography>
            </Grid>
            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -186,11 +183,31 @@ const onSubmit=()=>{
                className={classes.rating}
                size="large"
                name="simple-controlled"
-               value={value}
+               value={start}
                onChange={handleRatingChange}
+              
+            
+              // }}
              />
            </Grid>
+        </Grid>
+        {( value === 0  ||  value > 3 ) &&
+          (<Grid container  justifyContent="center"  className={classes.feedbackgrid}
+          >
+            
+          
            {/* {value <= 3 && (<Button onClick={()=>setValue(1)}>abc</Button>)} */}
+           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{textAlign: "center",padding:"5px"}}>
+           <Link
+                 id="simple-popover1"
+                component="button"
+                variant="body2"
+                onClick={()=>setValue(true)}
+                style={{ color: "#FD7F23", fontSize: "13px", textDecoration: "underline" }}
+              >
+                {translate("link.feedback")}
+              </Link>
+              </Grid>
            
 { suggestion &&
            <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.translationsuggestgrid}>
@@ -198,10 +215,13 @@ const onSubmit=()=>{
            {translate("button.Suggest an edit")}
            </Button>
            </Grid>}
-           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{paddingTop:"5px"}}>
+           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{paddingTop:"5px",marginLeft:"5px"}}>
            { textfield &&  <TextField
+             id="filled-multiline-static"
                        className={classes.translationtextfield}
                     fullWidth
+                    multiline
+                    maxRows={4}
                       size="small"
                        variant="outlined"
                        // onChange={(e) => handleOnChange('translation', e)}
@@ -242,7 +262,7 @@ const onSubmit=()=>{
         }
         <Grid container justifyContent="center">
           <Grid item>
-            <Button type="submit" variant="contained" size="small" color="primary" className={classes.submitbutton}  disabled={value > 0 ? false : true} >
+            <Button type="submit" variant="contained" size="small" color="primary" className={classes.submitbutton}  disabled={value < 0 ? true : false} >
               {translate("button.submit")}
             </Button>
           </Grid>

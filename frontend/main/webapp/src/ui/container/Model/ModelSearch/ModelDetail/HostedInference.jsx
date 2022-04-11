@@ -251,8 +251,8 @@ const HostedInference = (props) => {
             className={classes.textArea}
           />
          
-          <div className={classes.translatfeedbackbutton}    >
-               <Button variant="contained" size="small" className={classes.feedbackbuttons} onClick={() => setModal(true)}>
+          <div   >
+               <Button variant="contained" size="small"  className={classes.translatfeedbackbutton}   onClick={() => setModal(true)}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
