@@ -22,11 +22,11 @@ class StatusCronProcessor(Thread):
             log.info(f'Job status updater cron run :{run}')
             try:
                 pending_srns = self.get_pending_tasks()
+                queued_srns = self.get_queued_srns()
                 if pending_srns:
                     for srn in pending_srns:
                         condition = {'serviceRequestNumber':srn}
                         query_pro = {'$set':{'status':'Queued','manuallyUpdated':True}}
-                        set_failed = {'$set':{'status':'Failed','manuallyUpdated':True}}
                         multi ={'multi':True}
                         repo.update(condition,query_pro,False,process_db_schema,process_col)
                         tasks_res = repo.find(condition,process_db_schema,tasks_col)
@@ -34,18 +34,19 @@ class StatusCronProcessor(Thread):
                             for task in tasks_res:
                                 if str(task['tool']) in task_list and str(task['status']) in status_list:
                                     repo.update(condition,query_pro,True,process_db_schema,tasks_col)
-                        log.info(f"Updated status for srn -{srn}")
-                queued_res = repo.find(q_condition,process_db_schema,tasks_col)
-                queued_srns = self.get_queued_srns()
+                        log.info(f"Updated status for srn -{srn}")   
+                    log.info('Completed run!')
                 if queued_srns:
                     for que in queued_srns:
                         q_condition = {'serviceRequestNumber':que}
+                        set_failed = {'$set':{'status':'Failed','manuallyUpdated':True}}
                         repo.update(q_condition,set_failed,False,process_db_schema,process_col)   
+                        queued_res = repo.find(q_condition,process_db_schema,tasks_col)
                         if queued_res:    
                             for que_det in queued_res:               
-                                if str(que_det['tool']) in task_list and str(que_det['status']) in status_list:
+                                if str(que_det['tool']) in task_list and str(que_det['status']) in status_list and str(que_det['status'])=="Queued":
                                     repo.update(q_condition,set_failed,True,process_db_schema,tasks_col)
-                log.info(f"Updated status for srn -{que}")
+                        log.info(f"Updated status for srn -{que}")
                 log.info('Completed run!')      
                 run += 1
             except Exception as e:
