@@ -1,38 +1,38 @@
 {
-    "asrDetailedQns": [
+    "ocrDetailedQns": [
       {
-        "code": "asr",
-        "label": "ASR",
+        "code": "ocr",
+        "label": "OCR",
         "active": true,
-        "taskType": "asr",
-        "question": "Few words missing",
+        "taskType": "ocr",
+        "question": "Few characters/words missing",
         "answerType": "checkbox",
         "editbox": "false"
       },
       {
-        "code": "asr",
-        "label": "ASR",
+        "code": "ocr",
+        "label": "OCR",
         "active": true,
-        "taskType": "asr",
+        "taskType": "ocr",
         "question": "Few words misspelt",
         "answerType": "checkbox",
         "editbox": "false"
       },
       {
-        "code": "asr",
-        "label": "ASR",
+        "code": "ocr",
+        "label": "OCR",
         "active": true,
-        "taskType": "asr",
-        "question": "Issue with text/digits normalization",
+        "taskType": "ocr",
+        "question": "Completely irrelevant",
         "answerType": "checkbox",
         "editbox": "false"
       },
       {
-        "code": "asr",
-        "label": "ASR",
+        "code": "ocr",
+        "label": "OCR",
         "active": true,
-        "taskType": "asr",
-        "question": "Punctuation/delimiter issue",
+        "taskType": "ocr",
+        "question": "Output was empty",
         "answerType": "checkbox",
         "editbox": "false"
       },
@@ -41,4 +41,4 @@
         "answerType": "freetext"
       }
     ]
-  }
+}
