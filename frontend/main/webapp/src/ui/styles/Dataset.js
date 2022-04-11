@@ -946,7 +946,42 @@ const DataSet = (theme) => ({
   },
   feedbackgrid:{
     maxWidth: "350px"
-  }
+  },
+  translatfeedbackbutton:{
+    position: "relative",
+     left: "680px",
+      top: "-10px",
+      "@media (max-width:650px)": {
+        left: "225px",
+        top: "-20px",
+      
+      },
+  },
+  feedbackbuttons:{
+    backgroundColor:"#FD7F23",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    }
+  },
+  translationsuggestbutton:{
+   
+    position:"relative",
+    top: "7px",
+    left: "97px",
+  },
+  translationsuggestgrid:{
+    padding:"0px 10px 10px 10px",
+
+  },
+  translationtextfield:{
+    marginLeft:"50px",
+    "@media (max-width:650px)": {
+      margin:"10px 0px 0px 30px",
+    
+    },
+
+  },
 });
 
 export default DataSet;

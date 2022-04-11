@@ -8,7 +8,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import Spinner from "../../../../components/common/Spinner";
 import { getLanguageName } from "../../../../../utils/getLabel";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
-// import SimpleDialogDemo from "../../../../components/common/Feedback";
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import {
   Grid,
   Typography,
@@ -27,6 +27,10 @@ import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
+import Modal from '../../../../components/common/Modal';
+
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -59,6 +63,7 @@ const HostedInference = (props) => {
   const [sourceText, setSourceText] = useState("");
   const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState("");
+  const [modal, setModal] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
     label: "English",
@@ -334,8 +339,14 @@ const HostedInference = (props) => {
           )}
           
         </CardContent>
-        {audio && <div style={{marginTop:"12%"}}>
-             {/* <SimpleDialogDemo/> */}
+        {audio && <div >
+        <div     >
+               <Button variant="contained" size="small" style={{display:"absolute",left:"700px",top:"15px",backgroundColor:"#FD7F23"}} onClick={() => setModal(true)}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+              </div>
               </div>}
       </Card>
       {snackbar.open && (
@@ -347,6 +358,17 @@ const HostedInference = (props) => {
           variant={snackbar.variant}
         />
       )}
+       <Modal
+  open={modal}
+  onClose={() => setModal(false)}
+  aria-labelledby="simple-modal-title"
+  aria-describedby="simple-modal-description"
+>
+  <FeedbackPopover
+  setModal={setModal}
+  suggestion={false}
+  />
+</Modal>
     </Grid>
   );
 };

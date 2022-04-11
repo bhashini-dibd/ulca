@@ -7,6 +7,10 @@ import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSear
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Spinner from "../../../../components/common/Spinner";
 import { getLanguageName } from "../../../../../utils/getLabel";
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
+import Modal from '../../../../components/common/Modal';
+
 import {
   Grid,
   Typography,
@@ -23,7 +27,7 @@ import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
-// import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -32,6 +36,9 @@ const HostedInference = (props) => {
   const [sourceText, setSourceText] = useState("");
   const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState("");
+  const [modal, setModal] = useState(false);
+  
+  
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
     label: "English",
@@ -235,6 +242,7 @@ const HostedInference = (props) => {
           </Grid>
         </CardContent>
         <CardContent>
+          <div>
           {target.length > 0 && (<>  <textarea
             disabled
             placeholder="Output"
@@ -242,10 +250,18 @@ const HostedInference = (props) => {
             value={target}
             className={classes.textArea}
           />
-          <div  className={classes.feedbackPopover} style={{ }}>
-         {/* <FeedbackPopover/> */}
-         </div>
+         
+          <div className={classes.translatfeedbackbutton}    >
+               <Button variant="contained" size="small" className={classes.feedbackbuttons} onClick={() => setModal(true)}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+              </div>
+             
+        
          </>)}
+         </div>
          
         </CardContent>
       </Card>
@@ -271,8 +287,21 @@ const HostedInference = (props) => {
       
      
       )}
+        <Modal
+  open={modal}
+  onClose={() => setModal(false)}
+  aria-labelledby="simple-modal-title"
+  aria-describedby="simple-modal-description"
+>
+  <FeedbackPopover
+  setModal={setModal}
+  suggestion={true}
+  />
+</Modal>
+        
         
     </Grid>
+    
     //  </Grid>
 
     //   </div>
