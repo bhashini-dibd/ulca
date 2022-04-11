@@ -232,8 +232,8 @@ const HostedInference = (props) => {
           <Grid container className={classes.cardHeader}>
             <Grid
               item
-              xs={9}
-              sm={9}
+              xs={7}
+              sm={7}
               md={9}
               lg={9}
               xl={9}
@@ -245,8 +245,8 @@ const HostedInference = (props) => {
             </Grid>
             <Grid
               item
-              xs={2}
-              sm={2}
+              xs={3}
+              sm={3}
               md={2}
               lg={2}
               xl={2}
