@@ -6,7 +6,10 @@ import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
 import Spinner from "../../../../components/common/Spinner";
-// import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+ import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+ import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
+import Modal from '../../../../components/common/Modal';
 import {
   Grid,
   Typography,
@@ -45,6 +48,7 @@ const HostedInferASR = (props) => {
   const [target, setTarget] = useState("");
   const [targetAudio, setTargetAudio] = useState("");
   const handleCompute = () => setTranslationState(true);
+  const [modal, setModal] = useState(false);
   // const url = UrlConfig.dataset
   const handleClose = () => {
     // setAnchorEl(null);
@@ -184,9 +188,16 @@ const HostedInferASR = (props) => {
     
          
           <CardContent id="asrCardOutput">{targetAudio}</CardContent>
-          {data && <div className={classes.AsrPopover} > 
+          {data && <div  > 
         
          {/* <FeedbackPopover/> */}
+         <div    >
+               <Button variant="contained" size="small" style={{float: "right",marginTop: "140px", marginRight: "20px",backgroundColor:"#FD7F23"}}  onClick={() => setModal(true)}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+              </div>
           </div>} 
         </Card>
         </Grid>
@@ -264,8 +275,15 @@ const HostedInferASR = (props) => {
               </Typography>
             </Grid>
           {target.length > 0 && (<><CardContent>{target}</CardContent>
-            <div style={{marginTop:"39%"}}>
+            <div>
             {/* <SimpleDialogDemo/> */}
+            <div >
+               <Button variant="contained" size="small" style={{ float: "right",marginTop: "140px", marginRight: "20px",backgroundColor:"#FD7F23"}} onClick={() => setModal(true)}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+              </div>
             </div></>)}
             
           </Card>
@@ -280,6 +298,17 @@ const HostedInferASR = (props) => {
           variant={snackbar.variant}
         />
       )}
+        <Modal
+  open={modal}
+  onClose={() => setModal(false)}
+  aria-labelledby="simple-modal-title"
+  aria-describedby="simple-modal-description"
+>
+  <FeedbackPopover
+  setModal={setModal}
+  suggestion={true}
+  />
+</Modal>
     </>
   );
 };
