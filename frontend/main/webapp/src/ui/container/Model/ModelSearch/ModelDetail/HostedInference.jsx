@@ -37,8 +37,8 @@ const HostedInference = (props) => {
   const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState("");
   const [modal, setModal] = useState(false);
-  
-  
+
+
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
     label: "English",
@@ -151,10 +151,10 @@ const HostedInference = (props) => {
               <Typography variant="h6" className={classes.hosted}>
                 Hosted inference API{" "}
                 {
-                  <LightTooltip 
-                  arrow
-                  placement="right"
-                  title={translate("label.hostedInferenceTranslation")}>
+                  <LightTooltip
+                    arrow
+                    placement="right"
+                    title={translate("label.hostedInferenceTranslation")}>
                     <InfoOutlinedIcon
                       className={classes.buttonStyle}
                       fontSize="small"
@@ -238,31 +238,31 @@ const HostedInference = (props) => {
               <Typography variant="h6" className={classes.hosted}>
                 {tgtLang}
               </Typography>
-             </Grid>
+            </Grid>
           </Grid>
         </CardContent>
         <CardContent>
           <div>
-          {target.length > 0 && (<>  <textarea
-            disabled
-            placeholder="Output"
-            rows={6}
-            value={target}
-            className={classes.textArea}
-          />
-         
-          <div   >
-               <Button variant="contained" size="small"  className={classes.translatfeedbackbutton}   onClick={() => setModal(true)}>
+            {target.length > 0 && (<>  <textarea
+              disabled
+              placeholder="Output"
+              rows={6}
+              value={target}
+              className={classes.textArea}
+            />
+
+              <div   >
+                <Button variant="contained" size="small" className={classes.translatfeedbackbutton} onClick={() => setModal(true)}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
                 </Button>
               </div>
-             
-        
-         </>)}
-         </div>
-         
+
+
+            </>)}
+          </div>
+
         </CardContent>
       </Card>
       {/* <TextField fullWidth
@@ -276,7 +276,7 @@ const HostedInference = (props) => {
                         }}
                     /> */}
       {snackbar.open && (
-      
+
         <Snackbar
           open={snackbar.open}
           handleClose={handleSnackbarClose}
@@ -284,24 +284,25 @@ const HostedInference = (props) => {
           message={snackbar.message}
           variant={snackbar.variant}
         />
-      
-     
+
+
       )}
-        <Modal
-  open={modal}
-  onClose={() => setModal(false)}
-  aria-labelledby="simple-modal-title"
-  aria-describedby="simple-modal-description"
->
-  <FeedbackPopover
-  setModal={setModal}
-  suggestion={true}
-  />
-</Modal>
-        
-        
+      <Modal
+        open={modal}
+        onClose={() => setModal(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <FeedbackPopover
+          setModal={setModal}
+          suggestion={true}
+          taskType='translation'
+        />
+      </Modal>
+
+
     </Grid>
-    
+
     //  </Grid>
 
     //   </div>

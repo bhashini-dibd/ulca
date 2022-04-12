@@ -18,11 +18,11 @@ import {
   Card,
   CardActions,
   CardMedia,
-   Modal,
+  Modal,
   Backdrop,
-  Fade ,
-  
-  
+  Fade,
+
+
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
@@ -34,17 +34,17 @@ import APITransport from "../../../../../redux/actions/apitransport/apitransport
 import Snackbar from "../../../../components/common/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import  FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 
 
 const HostedInferASR = (props) => {
-  
+
   const [openModal, setOpenModal] = useState(false);
-  
+
   const { classes, title, para, modelId, task, source, inferenceEndPoint } =
     props;
   const history = useHistory();
-  
+
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
   const [error, setError] = useState({ url: "" });
@@ -183,11 +183,11 @@ const HostedInferASR = (props) => {
   };
 
   const Imagemodal = () => {
-      setOpenModal(true);
+    setOpenModal(true);
 
   }
 
- 
+
 
   const handleCloseModal = (event, reason) => {
     if ("clickaway" == reason) return;
@@ -224,7 +224,7 @@ const HostedInferASR = (props) => {
                 onChange={handleFile}
                 type="file"
               />
-                <Button
+              <Button
                 color="primary"
                 style={{ float: "right", marginTop: "5px" }}
                 disabled={file.length ? false : true}
@@ -236,66 +236,68 @@ const HostedInferASR = (props) => {
               </Button>
               {preview ? (
                 <>
-                <img
-                  style={{  margin: "10px",   cursor: "pointer",
-                  maxWidth: "-webkit-fill-available",
-                  border: "1px solid black" }}
-                  src={preview}
-                  alt="Preview"
-                  width="100%"
-                  //height="10px"
-                  onClick={Imagemodal}
+                  <img
+                    style={{
+                      margin: "10px", cursor: "pointer",
+                      maxWidth: "-webkit-fill-available",
+                      border: "1px solid black"
+                    }}
+                    src={preview}
+                    alt="Preview"
+                    width="100%"
+                    //height="10px"
+                    onClick={Imagemodal}
 
-                />
+                  />
                   <Modal
-                  aria-labelledby="transition-modal-title"
-                  aria-describedby="transition-modal-description"
-                  className={classes.imagemodal}
-                  open={openModal}
-                  onClose={handleCloseModal}
-                 
-                  closeAfterTransition
-                  BackdropComponent={Backdrop}
-                  BackdropProps={{
-                  timeout: 500,
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.imagemodal}
+                    open={openModal}
+                    onClose={handleCloseModal}
 
-              }}
-                 >
-              <Fade in={openModal}>
-             
-             <div className={classes.imagepaper}>
-             <div   style={{paddingLeft:"93%",paddingBottom:"20px"}}>
-              <IconButton
-                 
-                 
-                     size="small"
-                     aria-label="close"
-                     color="inherit"
-                     onClick={handleCloseModal}
-                   >
-                     <CloseIcon fontSize="small" />
-                   </IconButton>
-                   </div>
-             
-              <img
-                  style={{ maxWidth: 550 ,}}
-                  src={preview}
-                  alt="Preview"
-                 
-                 
-            />
-           
-         
-          </div>
-        
-         
-        </Fade>
-      </Modal>
-               </>
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                      timeout: 500,
+
+                    }}
+                  >
+                    <Fade in={openModal}>
+
+                      <div className={classes.imagepaper}>
+                        <div style={{ paddingLeft: "93%", paddingBottom: "20px" }}>
+                          <IconButton
+
+
+                            size="small"
+                            aria-label="close"
+                            color="inherit"
+                            onClick={handleCloseModal}
+                          >
+                            <CloseIcon fontSize="small" />
+                          </IconButton>
+                        </div>
+
+                        <img
+                          style={{ maxWidth: 550, }}
+                          src={preview}
+                          alt="Preview"
+
+
+                        />
+
+
+                      </div>
+
+
+                    </Fade>
+                  </Modal>
+                </>
               ) : (
                 <></>
               )}
-              
+
               {/* <Button
                 color="primary"
                 style={{ float: "right", marginTop: "10px" }}
@@ -323,21 +325,21 @@ const HostedInferASR = (props) => {
               <Typography variant="h6" className={classes.titleCard}>
                 {translate("label.output")}
               </Typography>
-             </Grid>
+            </Grid>
 
-          { fileData.length > 0 && ( <><CardContent>{fileData}</CardContent>
-          <div style={{marginTop:"33%"}}>
-            {/* <SimpleDialogDemo/>  */}
-            <div >
-               <Button variant="contained" size="small" className={classes.ocrfeedbackbutton} onClick={() => setModal(true)}>
-                  <ThumbUpAltIcon className={classes.feedbackIcon} />
-                  <ThumbDownAltIcon className={classes.feedbackIcon} />
-                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
-                </Button>
-              </div>
-         
-            </div></>)}
-              
+            {fileData.length > 0 && (<><CardContent>{fileData}</CardContent>
+              <div style={{ marginTop: "33%" }}>
+                {/* <SimpleDialogDemo/>  */}
+                <div >
+                  <Button variant="contained" size="small" className={classes.ocrfeedbackbutton} onClick={() => setModal(true)}>
+                    <ThumbUpAltIcon className={classes.feedbackIcon} />
+                    <ThumbDownAltIcon className={classes.feedbackIcon} />
+                    <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                  </Button>
+                </div>
+
+              </div></>)}
+
           </Card>
         </Grid>
       </Grid>
@@ -413,18 +415,18 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            {target.length > 0 && ( <> <CardContent>{target}</CardContent>
-            <div style={{marginTop:"33%",}}>
-            {/* <SimpleDialogDemo/> */}
-            <div >
-               <Button variant="contained" style={{ float: "right",marginBottom: "13px", marginRight: "20px",backgroundColor:"#FD7F23",borderRadius:"15px"}} onClick={() => setModal(true)}>
-                  <ThumbUpAltIcon className={classes.feedbackIcon} />
-                  <ThumbDownAltIcon className={classes.feedbackIcon} />
-                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
-                </Button>
-              </div>
-             </div> </>)} 
-           
+            {target.length > 0 && (<> <CardContent>{target}</CardContent>
+              <div style={{ marginTop: "33%", }}>
+                {/* <SimpleDialogDemo/> */}
+                <div >
+                  <Button variant="contained" style={{ float: "right", marginBottom: "13px", marginRight: "20px", backgroundColor: "#FD7F23", borderRadius: "15px" }} onClick={() => setModal(true)}>
+                    <ThumbUpAltIcon className={classes.feedbackIcon} />
+                    <ThumbDownAltIcon className={classes.feedbackIcon} />
+                    <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                  </Button>
+                </div>
+              </div> </>)}
+
           </Card>
         </Grid>
       </Grid>
@@ -446,18 +448,19 @@ const HostedInferASR = (props) => {
           hide="6000"
         />
       )}
-          <Modals
-  open={modal}
-  onClose={() => setModal(false)}
-  aria-labelledby="simple-modal-title"
-  aria-describedby="simple-modal-description"
->
-  <FeedbackPopover
-  setModal={setModal}
-  suggestion={true}
-  />
-</Modals>
-        
+      <Modals
+        open={modal}
+        onClose={() => setModal(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <FeedbackPopover
+          setModal={setModal}
+          suggestion={true}
+          taskType="ocr"
+        />
+      </Modals>
+
     </>
   );
 };

@@ -6,8 +6,8 @@ import UrlConfig from "../../../../../configs/internalurlmapping";
 import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSearch/HostedInference";
 import AudioRecord from "./VoiceRecorder";
 import Spinner from "../../../../components/common/Spinner";
- import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
- import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import Modal from '../../../../components/common/Modal';
 import {
@@ -35,7 +35,7 @@ const HostedInferASR = (props) => {
     language,
   } = props;
   const history = useHistory();
-  const [data , setData] =useState(null)
+  const [data, setData] = useState(null)
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
   const [error, setError] = useState({ url: "" });
@@ -56,12 +56,12 @@ const HostedInferASR = (props) => {
   const validURL = (str) => {
     var pattern = new RegExp(
       "^((ft|htt)ps?:\\/\\/)?" + // protocol
-        "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
-        "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
-        "(\\:\\d+)?" + // port
-        "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
-        "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
-        "(\\#[-a-z\\d_]*)?$",
+      "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name and extension
+      "((\\d{1,3}\\.){3}\\d{1,3}))" + // OR ip (v4) address
+      "(\\:\\d+)?" + // port
+      "(\\/[-a-z\\d%@_.~+&:]*)*" + // path
+      "(\\?[;&a-z\\d%@_.,~+&:=-]*)?" + // query string
+      "(\\#[-a-z\\d_]*)?$",
       "i"
     );
     return pattern.test(str);
@@ -108,7 +108,7 @@ const HostedInferASR = (props) => {
         } else {
           if (status) {
             setTargetAudio(rsp_data.data.source);
-           
+
           } else {
             setSnackbarInfo({
               ...snackbar,
@@ -144,7 +144,7 @@ const HostedInferASR = (props) => {
   const childData = (text) => {
     setData(text)
   }
- 
+
   return (
     <>
       <Grid container>
@@ -160,7 +160,7 @@ const HostedInferASR = (props) => {
           sm={12}
           xs={12}
         >
-          
+
           <AudioRecord
             submitter={props.submitter}
             modelId={modelId}
@@ -169,7 +169,7 @@ const HostedInferASR = (props) => {
             streaming={props.streaming}
             getchildData={childData}
           />
-          </Grid>
+        </Grid>
         <Grid
           className={classes.grid}
           item
@@ -182,24 +182,24 @@ const HostedInferASR = (props) => {
           <Card className={classes.asrCard}>
             <Grid container className={classes.cardHeader}>
               <Typography variant="h6" className={classes.titleCard}>
-                {translate("label.output")} 
-             </Typography>
+                {translate("label.output")}
+              </Typography>
             </Grid>
-    
-         
-          <CardContent id="asrCardOutput">{targetAudio}</CardContent>
-          {data && <div  > 
-        
-         {/* <FeedbackPopover/> */}
-         <div    >
-               <Button variant="contained" size="small" style={{float: "right",marginTop: "140px", marginRight: "20px",backgroundColor:"#FD7F23"}}  onClick={() => setModal(true)}>
+
+
+            <CardContent id="asrCardOutput">{targetAudio}</CardContent>
+            {data && <div  >
+
+              {/* <FeedbackPopover/> */}
+              <div    >
+                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
                 </Button>
               </div>
-          </div>} 
-        </Card>
+            </div>}
+          </Card>
         </Grid>
 
         <Typography variant={"body1"}>
@@ -274,18 +274,18 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-          {target.length > 0 && (<><CardContent>{target}</CardContent>
-            <div>
-            {/* <SimpleDialogDemo/> */}
-            <div >
-               <Button variant="contained" size="small" style={{ float: "right",marginTop: "140px", marginRight: "20px",backgroundColor:"#FD7F23"}} onClick={() => setModal(true)}>
-                  <ThumbUpAltIcon className={classes.feedbackIcon} />
-                  <ThumbDownAltIcon className={classes.feedbackIcon} />
-                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
-                </Button>
-              </div>
-            </div></>)}
-            
+            {target.length > 0 && (<><CardContent>{target}</CardContent>
+              <div>
+                {/* <SimpleDialogDemo/> */}
+                <div >
+                  <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
+                    <ThumbUpAltIcon className={classes.feedbackIcon} />
+                    <ThumbDownAltIcon className={classes.feedbackIcon} />
+                    <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                  </Button>
+                </div>
+              </div></>)}
+
           </Card>
         </Grid>
       </Grid>
@@ -298,17 +298,18 @@ const HostedInferASR = (props) => {
           variant={snackbar.variant}
         />
       )}
-        <Modal
-  open={modal}
-  onClose={() => setModal(false)}
-  aria-labelledby="simple-modal-title"
-  aria-describedby="simple-modal-description"
->
-  <FeedbackPopover
-  setModal={setModal}
-  suggestion={true}
-  />
-</Modal>
+      <Modal
+        open={modal}
+        onClose={() => setModal(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <FeedbackPopover
+          setModal={setModal}
+          suggestion={true}
+          taskType='asr'
+        />
+      </Modal>
     </>
   );
 };

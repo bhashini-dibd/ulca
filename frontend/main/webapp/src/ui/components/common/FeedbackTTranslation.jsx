@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
-import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
-import Popover from '@material-ui/core/Popover';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
 import DatasetStyle from "../../styles/Dataset";
 import { translate } from "../../../assets/localisation";
@@ -16,21 +12,19 @@ import { withStyles } from '@material-ui/core/styles';
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import CheckboxesGroup from "../common/FeedbackCheckbox"
-import Dialog from '@material-ui/core/Dialog';
-import { Form, Field } from 'react-final-form'
+import { Form } from 'react-final-form'
 import { TextField } from '@material-ui/core';
+import { useSelector } from "react-redux";
 
 import {
-  makeStyles,
   MuiThemeProvider,
-  createMuiTheme
 } from "@material-ui/core/styles";
 
 
 
 
 function FeedbackPopover(props) {
-  const { classes,setModal,suggestion} = props;
+  const { classes, setModal, suggestion,taskType } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [value, setValue] = React.useState(0);
   const [detailedFeedback, setDetailedFeedback] = useState(false);
@@ -38,14 +32,13 @@ function FeedbackPopover(props) {
   const [opened, setOpened] = React.useState(false);
   const [textfield, setTextfield] = React.useState(null);
   const [start, setStart] = React.useState(0);
- 
+  const questions = useSelector((state) => state.getMasterData.feedbackQns[0].values).filter(question=>question.code === taskType)
   const [state, setState] = React.useState({
     checkedA: true,
     checkedB: true,
     checkedC: true,
     checkedD: true,
   });
-  
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -56,32 +49,19 @@ function FeedbackPopover(props) {
     setAnchorEl(event.currentTarget);
   };
 
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
-  const handleClosefeedback = ( reason) => {
-   handleClose();
-  
-    
-    
-  }
-  const handleClickfeedback = (event) => {
-    setData2(true)
-    
-  };
   const handleClickOpen = () => {
     setOpened(true);
   };
   const handleClose = () => {
     setOpened(false);
   };
-//  const  handleChangeclose = () =>{
-//   setOpenes(false)
-//  }
-const onSubmit=()=>{
- 
-}
- 
+  //  const  handleChangeclose = () =>{
+  //   setOpenes(false)
+  //  }
+  const onSubmit = () => {
+
+  }
+
 
 
   const open = Boolean(anchorEl);
@@ -94,191 +74,182 @@ const onSubmit=()=>{
       setDetailedFeedback(true);
     else
       setDetailedFeedback(false);
-    }
-  const theme2 =({
+  }
+  const theme2 = ({
     overrides: {
       MuiButton: {
         root: {
-         borderRadius:"50px",
-         marginLeft:"30px",
-         "@media (max-width:400px)": {
-          width: "90px",
-          height: "26px",
-         },
-       },
-     },
-      MuiPopover: {
-        root: { "@media (max-width:400px)": {
-          width:"100%",
-          maxHeight:"500px",
-            },},
-        paper: {
-          padding:"0px 0px 0px 0px",
+          borderRadius: "50px",
+          marginLeft: "30px",
           "@media (max-width:400px)": {
-           width:"100%",
-           maxHeight:"500px",
-             },
-         }
+            width: "90px",
+            height: "26px",
+          },
+        },
       },
-      MuiTypography:{
-        root:{
-          padding:"5px",
-          fontSize:"10px"
+      MuiPopover: {
+        root: {
+          "@media (max-width:400px)": {
+            width: "100%",
+            maxHeight: "500px",
+          },
+        },
+        paper: {
+          padding: "0px 0px 0px 0px",
+          "@media (max-width:400px)": {
+            width: "100%",
+            maxHeight: "500px",
+          },
+        }
+      },
+      MuiTypography: {
+        root: {
+          padding: "5px",
+          fontSize: "10px"
 
         },
-        body1:{
-            fontSize:"15px"
+        body1: {
+          fontSize: "15px"
         },
-        colorPrimary:{
+        colorPrimary: {
           "@media (max-width:400px)": {
             fontSize: "13px",
-             },
-          }
+          },
+        }
 
       },
-    
 
-        MuiBox:{
-          root:{
-            "@media (max-width:400px)": {
-              width:"332px",
-             
-               },
-          }
-        },
-        
-      
+
+      MuiBox: {
+        root: {
+          "@media (max-width:400px)": {
+            width: "332px",
+
+          },
+        }
+      },
+
+
     }
   });
-  
 
- 
 
-    return (
-      <Form
-    onSubmit={onSubmit}
-   
-    render={({ handleSubmit,  }) => (
-      <form onSubmit={handleSubmit}>
-        
-        <Grid container className={classes.feedbackgrid} 
-       >
-        <Grid item  xs={12} sm={12} md={12} lg={12} xl={12}>
-          <div  className={classes.iconbutton}>
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={() => setModal(false)}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </div>
-        </Grid>
-        <Grid item  justifyContent= "center" xs={12} sm={12} md={12} lg={12} xl={12}>
-             <Typography className={classes.typography} align="center" >{translate("lable.Areyousatisfiedwiththis")} <br />  {translate("lable. translation")}</Typography>
-           </Grid>
-           <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-             <StyledRating
-               className={classes.rating}
-               size="large"
-               name="simple-controlled"
-               value={start}
-               onChange={handleRatingChange}
-              
-            
-              // }}
-             />
-           </Grid>
-        </Grid>
-        {( value === 0  ||  value > 3 ) &&
-          (<Grid container  justifyContent="center"  className={classes.feedbackgrid}
-          >
-            
-          
-           {/* {value <= 3 && (<Button onClick={()=>setValue(1)}>abc</Button>)} */}
-           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{textAlign: "center",padding:"7px 0px 18px 0px"}}>
-           <Link
-                 id="simple-popover1"
-                component="button"
-                variant="body2"
-                onClick={()=>setValue(true)}
-                style={{ color: "#FD7F23", fontSize: "13px", textDecoration: "underline" }}
-              >
-                {translate("link.feedback")}
-              </Link>
-              </Grid>
-           
-{ suggestion &&
-           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.translationsuggestgrid}>
-          <Button variant="outlined" size="small" color="primary" className={classes.translationsuggestbutton} onClick={() =>setTextfield(true)} >
-           {translate("button.Suggest an edit")}
-           </Button>
-           </Grid>}
-           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{paddingTop:"5px",marginLeft:"5px"}}>
-           { textfield &&  <TextField
-             id="filled-multiline-static"
-                       className={classes.translationtextfield}
-                    fullWidth
-                    multiline
-                    maxRows={4}
-                      size="small"
-                       variant="outlined"
-                       // onChange={(e) => handleOnChange('translation', e)}
-                       // value={ttsValue}
-                        />}
-                        </Grid>
-          
-          </Grid>  )
-        }
-               
-     
-     
-      <MuiThemeProvider theme={theme2}>
-        {
-          value <= 3 && value > 0 &&
-          <div className={classes.popover2} style={{}}> <Typography variant="body2" style={{  margin: "17px 10px -10px 10px",
-               fontSize: "16px"}}> {translate("lable.Pleaserateyourexperience")}</Typography>
-                 
 
-           <CheckboxesGroup/>
-           <div  className={classes.border} ></div>
 
-<Typography variant="body2" className={classes.Addyourcomments} > {translate("lable.Addyourcomments")}</Typography>
-<Grid container justifyContent="center">
-  <Grid item>
-    <TextareaAutosize
-      aria-label="minimum height"
-      minRows={4}
-      className={classes.textareaAutosize}
-      // onChange={handleCommentChange}
-      // value={comment}
-    />
+  return (
+    <Form
+      onSubmit={onSubmit}
 
-  </Grid>
-</Grid>
-          </div>
-          
-        }
-        <Grid container justifyContent="center">
-          <Grid item>
-            <Button type="submit" variant="contained" size="small" color="primary" style={{textTransform: "capitalize"}} className={classes.submitbutton}   >
-              {translate("button.submit")}
-            </Button>
+      render={({ handleSubmit, }) => (
+        <form onSubmit={handleSubmit}>
+
+          <Grid container className={classes.feedbackgrid}>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <div className={classes.iconbutton}>
+                <IconButton
+                  size="small"
+                  aria-label="close"
+                  color="inherit"
+                  onClick={() => setModal(false)}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
+              </div>
+            </Grid>
+            <Grid item justifyContent="center" xs={12} sm={12} md={12} lg={12} xl={12}>
+              <Typography className={classes.typography} align="center" >{translate("lable.Areyousatisfiedwiththis")} <br />  {translate("lable. translation")}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+              <StyledRating
+                className={classes.rating}
+                size="large"
+                name="simple-controlled"
+                value={start}
+                onChange={handleRatingChange} />
+            </Grid>
           </Grid>
-        </Grid>
-        <Typography className={classes.typographys} align="center" variant="body2" component="div" >
-          {translate("lable.feedbackwillbeusedtohelpimprovetheproduct")}</Typography>
-      </MuiThemeProvider>
-        
-       
-      </form>
-    )}
-  />
-    )
-    
-  
+          {(value === 0 || value > 3) &&
+            (<Grid container justifyContent="center" className={classes.feedbackgrid}
+            >
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ textAlign: "center", padding: "7px 0px 18px 0px" }}>
+                <Link
+                  id="simple-popover1"
+                  component="button"
+                  variant="body2"
+                  onClick={() => setValue(true)}
+                  style={{ color: "#FD7F23", fontSize: "13px", textDecoration: "underline" }}
+                >
+                  {translate("link.feedback")}
+                </Link>
+              </Grid>
 
-  }
-  
+              {suggestion &&
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.translationsuggestgrid}>
+                  <Button variant="outlined" size="small" color="primary" className={classes.translationsuggestbutton} onClick={() => setTextfield(true)} >
+                    {translate("button.Suggest an edit")}
+                  </Button>
+                </Grid>}
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ paddingTop: "5px", marginLeft: "5px" }}>
+                {textfield && <TextField
+                  id="filled-multiline-static"
+                  className={classes.translationtextfield}
+                  fullWidth
+                  multiline
+                  maxRows={4}
+                  size="small"
+                  variant="outlined"
+                />}
+              </Grid>
+
+            </Grid>)
+          }
+
+
+
+          <MuiThemeProvider theme={theme2}>
+            {
+              value <= 3 && value > 0 &&
+              <div className={classes.popover2} style={{}}> <Typography variant="body2" style={{
+                margin: "17px 10px -10px 10px",
+                fontSize: "16px"
+              }}> {translate("lable.Pleaserateyourexperience")}</Typography>
+
+
+                <CheckboxesGroup questions={questions} />
+                <div className={classes.border} ></div>
+
+                <Typography variant="body2" className={classes.Addyourcomments} > {translate("lable.Addyourcomments")}</Typography>
+                <Grid container justifyContent="center">
+                  <Grid item>
+                    <TextareaAutosize
+                      aria-label="minimum height"
+                      minRows={4}
+                      className={classes.textareaAutosize} />
+
+                  </Grid>
+                </Grid>
+              </div>
+
+            }
+            <Grid container justifyContent="center">
+              <Grid item>
+                <Button type="submit" variant="contained" size="small" color="primary" style={{ textTransform: "capitalize" }} className={classes.submitbutton}   >
+                  {translate("button.submit")}
+                </Button>
+              </Grid>
+            </Grid>
+            <Typography className={classes.typographys} align="center" variant="body2" component="div" >
+              {translate("lable.feedbackwillbeusedtohelpimprovetheproduct")}</Typography>
+          </MuiThemeProvider>
+
+
+        </form>
+      )}
+    />
+  )
+
+
+
+}
+
 export default withStyles(DatasetStyle)(FeedbackPopover);

@@ -44,12 +44,12 @@ const StyledMenu = withStyles({})((props) => (
       vertical: "top",
       horizontal: "",
     }}
-    PaperProps={{  
-      style: {  
-        width: 140,  
-       
-      },  
-   }} 
+    PaperProps={{
+      style: {
+        width: 140,
+
+      },
+    }}
     {...props}
   />
 ))
@@ -164,8 +164,8 @@ const HostedInference = (props) => {
 
   const handleChange = (val) => {
     setGender(val);
-     };
-  
+  };
+
   const renderGenderDropDown = () => {
     return (
       <>
@@ -186,7 +186,7 @@ const HostedInference = (props) => {
           open={Boolean(anchorEl)}
           onClose={(e) => handleAnchorClose(e)}
           className={classes.styledMenu1}
-        
+
         >
           <MenuItem
             value={"Male"}
@@ -197,7 +197,7 @@ const HostedInference = (props) => {
               handleAnchorClose();
             }}
           >
-          
+
             <Typography variant={"body1"}>{"Male"}</Typography>
           </MenuItem>
           <MenuItem
@@ -253,11 +253,11 @@ const HostedInference = (props) => {
               className={classes.headerContent}
             >
               {renderGenderDropDown()}
-              </Grid>
+            </Grid>
           </Grid>
         </CardContent>
         <CardContent>
-            <Typography variant="caption">{translate("label.maxCharacters")}</Typography>
+          <Typography variant="caption">{translate("label.maxCharacters")}</Typography>
           {/* <Grid container>
             <Grid item>{renderGenderDropDown()}</Grid>
           </Grid> */}
@@ -322,32 +322,32 @@ const HostedInference = (props) => {
         </CardContent>
         <CardContent
           style={{
-           display:"flex",
+            display: "flex",
             justifyContent: "center",
             padding: "8vh",
           }}
         >
           {audio ? (
             <>
-            <audio controls>
-              <source src={audio}></source>
-            </audio>
-           </>
+              <audio controls>
+                <source src={audio}></source>
+              </audio>
+            </>
           ) : (
             <></>
-           
+
           )}
-          
+
         </CardContent>
         {audio && <div >
-        <div     >
-               <Button variant="contained" size="small" style={{ float: "right", marginRight: "25px",backgroundColor:"#FD7F23"}} onClick={() => setModal(true)}>
-                  <ThumbUpAltIcon className={classes.feedbackIcon} />
-                  <ThumbDownAltIcon className={classes.feedbackIcon} />
-                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
-                </Button>
-              </div>
-              </div>}
+          <div     >
+            <Button variant="contained" size="small" style={{ float: "right", marginRight: "25px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
+              <ThumbUpAltIcon className={classes.feedbackIcon} />
+              <ThumbDownAltIcon className={classes.feedbackIcon} />
+              <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+            </Button>
+          </div>
+        </div>}
       </Card>
       {snackbar.open && (
         <Snackbar
@@ -358,17 +358,18 @@ const HostedInference = (props) => {
           variant={snackbar.variant}
         />
       )}
-       <Modal
-  open={modal}
-  onClose={() => setModal(false)}
-  aria-labelledby="simple-modal-title"
-  aria-describedby="simple-modal-description"
->
-  <FeedbackPopover
-  setModal={setModal}
-  suggestion={false}
-  />
-</Modal>
+      <Modal
+        open={modal}
+        onClose={() => setModal(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <FeedbackPopover
+          setModal={setModal}
+          suggestion={false}
+          taskType="tts"
+        />
+      </Modal>
     </Grid>
   );
 };
