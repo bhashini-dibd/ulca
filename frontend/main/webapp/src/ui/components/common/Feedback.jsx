@@ -27,8 +27,8 @@ import { TextField } from '@material-ui/core';
 
 
 function SimpleDialogDemo(props) {
-  const { classes, setSuggestEdit, suggestEdit, asrValue, ttsValue, setModal, handleOnChange, 
-    handleFeedbackSubmit, handleCommentChange, comment,setComment, setSuggestEditValues,output} = props;
+  const { classes, setSuggestEdit, suggestEdit, asrValue, ttsValue, setModal, handleOnChange,
+    handleFeedbackSubmit, handleCommentChange, comment, setComment, setSuggestEditValues, output } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorE2, setAnchorE2] = React.useState(null);
   const [value, setValue] = React.useState(-1);
@@ -100,8 +100,8 @@ function SimpleDialogDemo(props) {
             height: "26px",
           },
         },
-        label:{
-          textTransform:'none'
+        label: {
+          textTransform: 'none'
         }
       },
       MuiPopover: {
@@ -176,8 +176,8 @@ function SimpleDialogDemo(props) {
       borderColor: '#0063cc',
       "@media (max-width:400px)": {
         padding: '0px 0px',
-      
-       
+
+
       },
 
 
@@ -316,10 +316,10 @@ function SimpleDialogDemo(props) {
   return <Form
     onSubmit={() => handleFeedbackSubmit(value, rating1, rating2, rating3)}
     render={({ handleSubmit }) => (<form onSubmit={handleSubmit}>
-      <Grid container className={classes.feedbackgrid} 
-       >
+      <Grid container className={classes.feedbackgrid}
+      >
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-          <div  className={classes.iconbutton}>
+          <div className={classes.iconbutton}>
             <IconButton
               size="small"
               aria-label="close"
@@ -381,16 +381,15 @@ function SimpleDialogDemo(props) {
                     }} />
                 </Grid>
                 <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-                <Button  className={classes.buttonsuggest} variant="outlined" color="primary"  onClick={() => setSuggestEdit("asr")}>
-                <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
-      </Button>
-                  
+                  <Button className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("asr")}>
+                    <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
+                  </Button>
+
                 </Grid>
                 <br />
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   {suggestEdit === 'asr' && <TextField
-                   className={classes.textfield}
-                   
+                    className={classes.textfield}
                     fullWidth
                     variant="outlined"
                     onChange={(e) => handleOnChange('asr', e)}
@@ -409,16 +408,16 @@ function SimpleDialogDemo(props) {
                     }} />
                 </Grid>
                 <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-                <Button  className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("tts")}>
-                <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
-      </Button>
-                  
+                  <Button className={classes.buttonsuggest} variant="outlined" color="primary" onClick={() => setSuggestEdit("tts")}>
+                    <Typography variant="body2" color="primary" className={classes.buttonsuggestlable}>  {translate("button.Suggest an edit")}</Typography>
+                  </Button>
+
                 </Grid>
                 <br />
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                   {suggestEdit === 'tts' && <TextField
-                   className={classes.textfield}
-                   fullWidth
+                    className={classes.textfield}
+                    fullWidth
                     variant="outlined"
                     onChange={(e) => handleOnChange('translation', e)}
                     value={ttsValue} />}
@@ -437,7 +436,7 @@ function SimpleDialogDemo(props) {
                 <br />
               </Grid>
             </Box>
-            <div  className={classes.border} ></div>
+            <div className={classes.border} ></div>
 
             <Typography variant="body2" className={classes.Addyourcomments} > {translate("lable.Addyourcomments")}</Typography>
             <Grid container justifyContent="center">
@@ -456,7 +455,7 @@ function SimpleDialogDemo(props) {
         }
         <Grid container justifyContent="center">
           <Grid item>
-            <Button type="submit" variant="contained" size="small" color="primary" className={classes.submitbutton}  disabled={value > 0 ? false : true} >
+            <Button type="submit" variant="contained" size="small" color="primary" className={classes.submitbutton} disabled={value > 0 ? false : true} >
               {translate("button.submit")}
             </Button>
           </Grid>

@@ -1,0 +1,19 @@
+{
+    "ttsFeedbackQns":[
+      {
+      "code":"tts",
+      "label":"TTS",
+      "active":true,
+      "initialQuestion" : {
+          "question": "Are you satisfied with this translation?",
+          "answerType": "5-star-rating",
+          "editbox": "false"
+        },
+       "values" : {
+           "master":"/ttsDetailedQns.json",
+           "jsonPath":"$.ttsDetailedQns" 
+       }
+      }
+    ],
+    "relatedMaster": true
+    }
