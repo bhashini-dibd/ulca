@@ -197,7 +197,7 @@ const onSubmit=()=>{
             
           
            {/* {value <= 3 && (<Button onClick={()=>setValue(1)}>abc</Button>)} */}
-           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{textAlign: "center",padding:"5px"}}>
+           <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{textAlign: "center",padding:"7px 0px 18px 0px"}}>
            <Link
                  id="simple-popover1"
                 component="button"
@@ -262,7 +262,7 @@ const onSubmit=()=>{
         }
         <Grid container justifyContent="center">
           <Grid item>
-            <Button type="submit" variant="contained" size="small" color="primary" className={classes.submitbutton}  disabled={value < 0 ? true : false} >
+            <Button type="submit" variant="contained" size="small" color="primary" style={{textTransform: "capitalize"}} className={classes.submitbutton}   >
               {translate("button.submit")}
             </Button>
           </Grid>

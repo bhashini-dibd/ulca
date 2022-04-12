@@ -341,7 +341,7 @@ const HostedInference = (props) => {
         </CardContent>
         {audio && <div >
         <div     >
-               <Button variant="contained" size="small" style={{ float: "right",marginTop: "17px", marginRight: "25px",backgroundColor:"#FD7F23"}} onClick={() => setModal(true)}>
+               <Button variant="contained" size="small" style={{ float: "right", marginRight: "25px",backgroundColor:"#FD7F23"}} onClick={() => setModal(true)}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>

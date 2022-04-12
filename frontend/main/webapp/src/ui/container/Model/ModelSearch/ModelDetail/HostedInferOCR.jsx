@@ -414,7 +414,7 @@ const HostedInferASR = (props) => {
               </Typography>
             </Grid>
             {target.length > 0 && ( <> <CardContent>{target}</CardContent>
-            <div style={{marginTop:"38%",}}>
+            <div style={{marginTop:"33%",}}>
             {/* <SimpleDialogDemo/> */}
             <div >
                <Button variant="contained" style={{ float: "right",marginBottom: "13px", marginRight: "20px",backgroundColor:"#FD7F23",borderRadius:"15px"}} onClick={() => setModal(true)}>

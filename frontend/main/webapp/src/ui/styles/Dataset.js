@@ -820,7 +820,8 @@ const DataSet = (theme) => ({
   },
   submitbutton: {
     width: "70px",
-    margin: "10px 0px 0px 130px"
+    margin: "10px 0px 0px 130px",
+    textTransform: "capitalize"
   },
   rating: {
     position:"relative ",
@@ -868,8 +869,8 @@ const DataSet = (theme) => ({
   },
   iconbutton:{
     position: "absolute",
-     right: "3px",
-      top: "4px",
+     right: "15px",
+      top: "5px",
   },
   typography1: {
     // marginLeft: "10px",
