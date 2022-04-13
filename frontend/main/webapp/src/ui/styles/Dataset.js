@@ -955,7 +955,7 @@ const DataSet = (theme) => ({
   },
   ocrfeedbackbutton:{
     float: "right",
-    marginTop: "10px",
+    // marginTop: "10px",
      marginRight: "20px",
      backgroundColor:"#FD7F23",
      '&:hover': {

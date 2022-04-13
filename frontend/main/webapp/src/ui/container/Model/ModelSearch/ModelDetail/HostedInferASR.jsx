@@ -211,6 +211,7 @@ const HostedInferASR = (props) => {
             <CardContent id="asrCardOutput">{targetAudio}</CardContent>
             { targetAudio.length > 0 &&  (<>
             <div    >
+              
                 <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />

@@ -221,7 +221,7 @@ function FeedbackPopover(props) {
 
               {suggestion &&
                 <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className={classes.translationsuggestgrid}>
-                  <Button variant="outlined" size="small" color="primary" className={classes.translationsuggestbutton} onClick={() => setTextfield(true)} >
+                  <Button variant="outlined" size="small" color="primary" className={classes.translationsuggestbutton} onClick={() => setTextfield(true)} disabled={start > 0 ? false : true} >
                     {translate("button.Suggest an edit")}
                   </Button>
                 </Grid>}
