@@ -22,3 +22,11 @@ class MongoUtil:
     def insert(self, data):
         col = self.get_mongo_instance()
         col.insert_many(data)
+
+    def update(self, cond,object_in,upsert_flag):
+        col = self.get_mongo_instance()
+        col.update(cond, object_in,upsert = upsert_flag)
+
+    def delete(self, rec_id):
+        col = self.get_mongo_instance()
+        col.delete_one({"audioId": rec_id})
