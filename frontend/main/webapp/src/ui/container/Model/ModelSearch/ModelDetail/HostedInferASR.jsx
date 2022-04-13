@@ -19,7 +19,7 @@ import {
   Card,
   CardActions,
 } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { translate } from "../../../../../assets/localisation";
 import Snackbar from "../../../../components/common/Snackbar";
 import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
@@ -50,6 +50,8 @@ const HostedInferASR = (props) => {
   const [target, setTarget] = useState("");
   const [targetAudio, setTargetAudio] = useState("");
   const handleCompute = () => setTranslationState(true);
+  const [suggestEditValues, setSuggestEditValues] = useState("")
+
   const [modal, setModal] = useState(false);
   // const url = UrlConfig.dataset
   const handleClose = () => {
@@ -111,7 +113,6 @@ const HostedInferASR = (props) => {
         } else {
           if (status) {
             setTargetAudio(rsp_data.data.source);
-
           } else {
             setSnackbarInfo({
               ...snackbar,
@@ -122,7 +123,6 @@ const HostedInferASR = (props) => {
             });
             setTarget(rsp_data.data.source);
           }
-
           setTranslationState(true);
         }
       })
@@ -149,7 +149,7 @@ const HostedInferASR = (props) => {
   }
 
   const handleFeedbackSubmit = (feedback) => {
-    const apiObj = new SubmitFeedback('asr', "", data, feedback)
+    const apiObj = new SubmitFeedback('asr', "", targetAudio, feedback)
     fetch(apiObj.apiEndPoint(), {
       method: 'post',
       headers: apiObj.getHeaders().headers,
@@ -165,6 +165,11 @@ const HostedInferASR = (props) => {
       });
     setTimeout(() => setSnackbarInfo({ open: false, message: "", variant: null }), 3000);
   }
+
+  const handleOnChange = (e) => {
+    setSuggestEditValues(e.target.value)
+  }
+
 
   return (
     <>
@@ -211,8 +216,7 @@ const HostedInferASR = (props) => {
             <CardContent id="asrCardOutput">{targetAudio}</CardContent>
             { targetAudio.length > 0 &&  (<>
             <div    >
-              
-                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
+                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(targetAudio)}}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
@@ -226,7 +230,7 @@ const HostedInferASR = (props) => {
 
              
               <div    >
-                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
+                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(data)}}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
@@ -312,7 +316,7 @@ const HostedInferASR = (props) => {
             
                 {/* <SimpleDialogDemo/> */}
                 <div >
-                  <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
+                  <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(target)}}>
                     <ThumbUpAltIcon className={classes.feedbackIcon} />
                     <ThumbDownAltIcon className={classes.feedbackIcon} />
                     <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
@@ -341,9 +345,12 @@ const HostedInferASR = (props) => {
         <FeedbackPopover
           setModal={setModal}
           suggestion={true}
+          target={targetAudio}
+          suggestEditValues={suggestEditValues}
+          handleOnChange={handleOnChange}
+          setSuggestEditValues={setSuggestEditValues}
           taskType='asr'
           handleSubmit={handleFeedbackSubmit}
-          target={target}
         />
       </Modal>
     </>
