@@ -28,23 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function CheckboxesGroup({ questions }) {
+export default function CheckboxesGroup({ questions, handleChange, state }) {
   const classes = useStyles();
-
-  const generateState = ()=>{
-    const obj = {}
-     questions.forEach((q,i)=>{
-      obj[i] = false;
-    });
-    return obj
-  }
-
-  const [state, setState] = useState(generateState());
-
-  const handleChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.checked });
-  };
-
 
   return (
     <div className={classes.root}>

@@ -35,6 +35,7 @@ import Snackbar from "../../../../components/common/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 
 
 const HostedInferASR = (props) => {
@@ -193,6 +194,24 @@ const HostedInferASR = (props) => {
     if ("clickaway" == reason) return;
     setOpenModal(false);
   };
+
+  const handleFeedbackSubmit = (feedback) => {
+    const apiObj = new SubmitFeedback('ocr', "", target, feedback)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'post',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+      .then(async resp => {
+        const rsp_data = await resp.json();
+        if (resp.ok) {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'success' })
+        } else {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'error' })
+        }
+      });
+    setTimeout(() => setSnackbarInfo({ open: false, message: "", variant: null }), 3000);
+  }
 
 
   return (
@@ -458,6 +477,7 @@ const HostedInferASR = (props) => {
           setModal={setModal}
           suggestion={true}
           taskType="ocr"
+          handleSubmit={handleFeedbackSubmit}
         />
       </Modals>
 

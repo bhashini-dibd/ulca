@@ -30,6 +30,7 @@ import LightTooltip from "../../../../components/common/LightTooltip";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import Modal from '../../../../components/common/Modal';
+import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 
 
 const StyledMenu = withStyles({})((props) => (
@@ -70,7 +71,7 @@ const HostedInference = (props) => {
   });
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
-
+  const [base,setBase] = useState("");
   // useEffect(() => {
   // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
   // }, []);
@@ -128,6 +129,7 @@ const HostedInference = (props) => {
         setLoading(false);
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
+            setBase(rsp_data.outputText)
             const blob = b64toBlob(rsp_data.outputText, "audio/wav");
             const urlBlob = window.URL.createObjectURL(blob);
             setAudio(urlBlob);
@@ -215,6 +217,24 @@ const HostedInference = (props) => {
       </>
     );
   };
+
+  const handleFeedbackSubmit = (feedback) => {
+    const apiObj = new SubmitFeedback('tts', sourceText, base, feedback)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'post',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+      .then(async resp => {
+        const rsp_data = await resp.json();
+        if (resp.ok) {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'success' })
+        } else {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'error' })
+        }
+      });
+    setTimeout(() => setSnackbarInfo({ open: false, message: "", variant: null }), 3000);
+  }
 
   return (
     <Grid
@@ -368,6 +388,7 @@ const HostedInference = (props) => {
           setModal={setModal}
           suggestion={false}
           taskType="tts"
+          handleSubmit={handleFeedbackSubmit}
         />
       </Modal>
     </Grid>

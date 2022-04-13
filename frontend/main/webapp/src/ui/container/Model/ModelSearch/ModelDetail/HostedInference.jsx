@@ -28,6 +28,7 @@ import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
 import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -100,28 +101,24 @@ const HostedInference = (props) => {
         });
       });
   };
-  // const renderTexfield = () => {
-  //     //  let labels = Language.map(lang => lang.label)
-  //     return (
-  //         <Autocomplete
-  //            // className={classes.titleDropdown}
-  //             value={"English"}
-  //             id="source"
-  //             disabled
-  //             //  options={labels}
-  //             // onChange={(event, data) => handleLanguagePairChange(data, 'source')}
-  //           //  renderInput={(params) => <TextField fullWidth {...params} variant="standard"
-  //             // />}
-  //         />
-  //     )
-  // }
-  // const handleLanguagePairChange = (value, property) => {
-  // 	let sLang =  Language.filter(val => val.label ===value )[0]
-  // 	if(sLang){
-  // 		fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
-  //     setSourceLanguage(sLang);
-  // 	}
-  // };
+
+  const handleFeedbackSubmit = (feedback) => {
+    const apiObj = new SubmitFeedback('translation', sourceText, target, feedback)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'post',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+      .then(async resp => {
+        const rsp_data = await resp.json();
+        if (resp.ok) {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'success' })
+        } else {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'error' })
+        }
+      });
+    setTimeout(() => setSnackbarInfo({ open: false, message: "", variant: null }), 3000);
+  }
 
   return (
     // <div>
@@ -297,6 +294,7 @@ const HostedInference = (props) => {
           setModal={setModal}
           suggestion={true}
           taskType='translation'
+          handleSubmit={handleFeedbackSubmit}
         />
       </Modal>
 

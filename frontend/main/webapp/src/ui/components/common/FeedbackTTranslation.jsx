@@ -15,6 +15,7 @@ import CheckboxesGroup from "../common/FeedbackCheckbox"
 import { Form } from 'react-final-form'
 import { TextField } from '@material-ui/core';
 import { useSelector } from "react-redux";
+import SubmitFeedback from "../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 
 import {
   MuiThemeProvider,
@@ -24,21 +25,40 @@ import {
 
 
 function FeedbackPopover(props) {
-  const { classes, setModal, suggestion,taskType } = props;
+  const { classes, setModal, suggestion, taskType, handleSubmit } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [value, setValue] = React.useState(0);
   const [detailedFeedback, setDetailedFeedback] = useState(false);
   const [data2, setData2] = React.useState(false);
   const [opened, setOpened] = React.useState(false);
   const [textfield, setTextfield] = React.useState(null);
+  const [textArea,setTextArea] = useState("")
   const [start, setStart] = React.useState(0);
-  const questions = useSelector((state) => state.getMasterData.feedbackQns[0].values).filter(question=>question.code === taskType)
+  const questions = useSelector((state) => state.getMasterData.feedbackQns[0].values).filter(question => question.code === taskType)
   const [state, setState] = React.useState({
     checkedA: true,
     checkedB: true,
     checkedC: true,
     checkedD: true,
   });
+
+  const generateState = () => {
+    const obj = {}
+    questions.forEach((q, i) => {
+      obj[i] = false;
+    });
+    return obj
+  }
+
+  const [checkboxState, setCheckboxState] = useState(generateState());
+
+  const handleCheckboxChange = (event) => {
+    setCheckboxState({ ...checkboxState, [event.target.name]: event.target.checked });
+  };
+
+  const handleTextAreaChange = (e)=>{
+    setTextArea(e.target.value)
+  }
 
   const handleChange = (event) => {
     setState({ ...state, [event.target.name]: event.target.checked });
@@ -55,20 +75,37 @@ function FeedbackPopover(props) {
   const handleClose = () => {
     setOpened(false);
   };
-  //  const  handleChangeclose = () =>{
-  //   setOpenes(false)
-  //  }
+
   const onSubmit = () => {
+    const feedback = [
+      {
+        feedbackQuestion: "Are you satisfied with this translation?",
+        feedbackQuestionResponse: start
+      },
+      {
+        feedbackQuestion: "Add your comments",
+        feedbackQuestionResponse: textArea
+      }
+    ]
 
+    const keys = Object.keys(checkboxState);
+    keys.forEach((key) => {
+      feedback.push(
+        {
+          feedbackQuestion: questions[key].question,
+          feedbackQuestionResponse: checkboxState[key] === true ? true : null
+        }
+      )
+    })
+    handleSubmit(feedback)
+    setModal(false)
   }
-
-
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
   const handleRatingChange = (event, newValue) => {
-    // setValue(newValue);
+
     setStart(newValue)
     if (newValue <= 3)
       setDetailedFeedback(true);
@@ -134,15 +171,11 @@ function FeedbackPopover(props) {
   });
 
 
-
-
   return (
     <Form
       onSubmit={onSubmit}
-
-      render={({ handleSubmit, }) => (
+      render={({ handleSubmit }) => (
         <form onSubmit={handleSubmit}>
-
           <Grid container className={classes.feedbackgrid}>
             <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
               <div className={classes.iconbutton}>
@@ -215,7 +248,7 @@ function FeedbackPopover(props) {
               }}> {translate("lable.Pleaserateyourexperience")}</Typography>
 
 
-                <CheckboxesGroup questions={questions} />
+                <CheckboxesGroup questions={questions} handleChange={handleCheckboxChange} state={checkboxState} />
                 <div className={classes.border} ></div>
 
                 <Typography variant="body2" className={classes.Addyourcomments} > {translate("lable.Addyourcomments")}</Typography>
@@ -224,7 +257,10 @@ function FeedbackPopover(props) {
                     <TextareaAutosize
                       aria-label="minimum height"
                       minRows={4}
-                      className={classes.textareaAutosize} />
+                      className={classes.textareaAutosize}
+                      onChange={handleTextAreaChange}
+                      value={textArea}
+                      />
 
                   </Grid>
                 </Grid>
@@ -233,7 +269,7 @@ function FeedbackPopover(props) {
             }
             <Grid container justifyContent="center">
               <Grid item>
-                <Button type="submit" variant="contained" size="small" color="primary" style={{ textTransform: "capitalize" }} className={classes.submitbutton}   >
+                <Button type="submit" variant="contained" size="small" color="primary" style={{ textTransform: "capitalize" }} className={classes.submitbutton}>
                   {translate("button.submit")}
                 </Button>
               </Grid>

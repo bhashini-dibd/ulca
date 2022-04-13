@@ -22,6 +22,7 @@ import {
 import { useState } from "react";
 import { translate } from "../../../../../assets/localisation";
 import Snackbar from "../../../../components/common/Snackbar";
+import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 
 const HostedInferASR = (props) => {
   const {
@@ -35,7 +36,8 @@ const HostedInferASR = (props) => {
     language,
   } = props;
   const history = useHistory();
-  const [data, setData] = useState(null)
+  const [data, setData] = useState(null);
+  const [base,setBase64] = useState("")
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
   const [error, setError] = useState({ url: "" });
@@ -89,6 +91,7 @@ const HostedInferASR = (props) => {
       inferenceEndPoint
     );
     setApiCall(true);
+    setBase64(url);
     fetch(apiObj.apiEndPoint(), {
       method: "post",
       body: JSON.stringify(apiObj.getBody()),
@@ -141,8 +144,26 @@ const HostedInferASR = (props) => {
   };
 
 
-  const childData = (text) => {
+  const childData = (text,base64="") => {
     setData(text)
+  }
+
+  const handleFeedbackSubmit = (feedback) => {
+    const apiObj = new SubmitFeedback('asr', "", data, feedback)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'post',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+      .then(async resp => {
+        const rsp_data = await resp.json();
+        if (resp.ok) {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'success' })
+        } else {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'error' })
+        }
+      });
+    setTimeout(() => setSnackbarInfo({ open: false, message: "", variant: null }), 3000);
   }
 
   return (
@@ -308,6 +329,7 @@ const HostedInferASR = (props) => {
           setModal={setModal}
           suggestion={true}
           taskType='asr'
+          handleSubmit={handleFeedbackSubmit}
         />
       </Modal>
     </>
