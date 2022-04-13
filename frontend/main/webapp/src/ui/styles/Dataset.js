@@ -935,7 +935,7 @@ const DataSet = (theme) => ({
   translatfeedbackbutton:{
     float: "right",
     marginTop:"-20px" ,
-    marginRight: "20px",
+    marginRight: "15px",
     backgroundColor:"#FD7F23",
     '&:hover': {
       backgroundColor: "#FD7F23"
