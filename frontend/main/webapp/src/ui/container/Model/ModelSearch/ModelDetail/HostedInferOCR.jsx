@@ -68,6 +68,9 @@ const HostedInferASR = (props) => {
     setOpen(false);
   };
 
+  const [suggestEditValues, setSuggestEditValues] = useState("")
+
+
   const [file, setFile] = useState([]);
   const validURL = (str) => {
     var pattern = new RegExp(
@@ -214,6 +217,10 @@ const HostedInferASR = (props) => {
   }
 
 
+  const handleOnChange = (e) => {
+    setSuggestEditValues(e.target.value)
+  }
+
   return (
     <>
       <Grid container>
@@ -346,11 +353,12 @@ const HostedInferASR = (props) => {
               </Typography>
             </Grid>
 
-            {fileData.length > 0 && (<><CardContent>{fileData}</CardContent>
+            {fileData.length > 0 && (<>
+            <CardContent>{fileData}</CardContent>
               <div style={{ marginTop: "33%" }}>
                 {/* <SimpleDialogDemo/>  */}
                 <div >
-                  <Button variant="contained" size="small" className={classes.ocrfeedbackbutton} onClick={() => setModal(true)}>
+                  <Button variant="contained" size="small" className={classes.ocrfeedbackbutton} onClick={() => {setModal(true);setSuggestEditValues(fileData)}}>
                     <ThumbUpAltIcon className={classes.feedbackIcon} />
                     <ThumbDownAltIcon className={classes.feedbackIcon} />
                     <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
@@ -434,11 +442,12 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            {target.length > 0 && (<> <CardContent>{target}</CardContent>
+            {target.length > 0 && 
+            (<> <CardContent>{target}</CardContent>
               <div style={{ marginTop: "33%", }}>
                 {/* <SimpleDialogDemo/> */}
                 <div >
-                  <Button variant="contained" style={{ float: "right", marginBottom: "13px", marginRight: "20px", backgroundColor: "#FD7F23", borderRadius: "15px" }} onClick={() => setModal(true)}>
+                  <Button variant="contained" style={{ float: "right", marginBottom: "13px", marginRight: "20px", backgroundColor: "#FD7F23", borderRadius: "15px" }} onClick={() => {setModal(true); setSuggestEditValues(target)}}>
                     <ThumbUpAltIcon className={classes.feedbackIcon} />
                     <ThumbDownAltIcon className={classes.feedbackIcon} />
                     <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
@@ -476,9 +485,12 @@ const HostedInferASR = (props) => {
         <FeedbackPopover
           setModal={setModal}
           suggestion={true}
-          taskType="ocr"
-          handleSubmit={handleFeedbackSubmit}
           target={target}
+          suggestEditValues={suggestEditValues}
+          handleOnChange={handleOnChange}
+          setSuggestEditValues={setSuggestEditValues}
+          taskType='ocr'
+          handleSubmit={handleFeedbackSubmit}
         />
       </Modals>
 
