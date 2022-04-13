@@ -25,14 +25,14 @@ import {
 
 
 function FeedbackPopover(props) {
-  const { classes, setModal, suggestion, taskType, handleSubmit,target , handleOnChange} = props;
+  const { classes, setModal, suggestion, taskType, handleSubmit, target, handleOnChange, suggestEditValues } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [value, setValue] = React.useState(0);
   const [detailedFeedback, setDetailedFeedback] = useState(false);
   const [data2, setData2] = React.useState(false);
   const [opened, setOpened] = React.useState(false);
   const [textfield, setTextfield] = React.useState(null);
-  const [textArea,setTextArea] = useState("")
+  const [textArea, setTextArea] = useState("")
   const [start, setStart] = React.useState(0);
   const questions = useSelector((state) => state.getMasterData.feedbackQns[0].values).filter(question => question.code === taskType)
   const [state, setState] = React.useState({
@@ -56,7 +56,7 @@ function FeedbackPopover(props) {
     setCheckboxState({ ...checkboxState, [event.target.name]: event.target.checked });
   };
 
-  const handleTextAreaChange = (e)=>{
+  const handleTextAreaChange = (e) => {
     setTextArea(e.target.value)
   }
 
@@ -85,6 +85,9 @@ function FeedbackPopover(props) {
       {
         feedbackQuestion: "Add your comments",
         feedbackQuestionResponse: textArea
+      },
+      {
+        suggestedOutput: target !== undefined && suggestEditValues !== undefined ? (target === suggestEditValues ? null : suggestEditValues) : null
       }
     ]
 
@@ -222,20 +225,20 @@ function FeedbackPopover(props) {
                     {translate("button.Suggest an edit")}
                   </Button>
                 </Grid>}
-                {textfield && 
-              <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ paddingTop: "5px", marginLeft: "5px" }}>
-               <TextField
-                  id="filled-multiline-static"
-                  className={classes.translationtextfield}
-                  onChange={(e) => handleOnChange(" ", e)}
-                  value={target}
-                  fullWidth
-                  multiline
-                  maxRows={4}
-                  size="small"
-                  variant="outlined"
-                />
-              </Grid>}
+              {textfield &&
+                <Grid item xs={12} sm={12} md={12} lg={12} xl={12} style={{ paddingTop: "5px", marginLeft: "5px" }}>
+                  <TextField
+                    id="filled-multiline-static"
+                    className={classes.translationtextfield}
+                    onChange={(e) => handleOnChange(e)}
+                    value={suggestEditValues}
+                    fullWidth
+                    multiline
+                    maxRows={4}
+                    size="small"
+                    variant="outlined"
+                  />
+                </Grid>}
 
             </Grid>)
           }
@@ -263,7 +266,7 @@ function FeedbackPopover(props) {
                       className={classes.textareaAutosize}
                       onChange={handleTextAreaChange}
                       value={textArea}
-                      />
+                    />
 
                   </Grid>
                 </Grid>
