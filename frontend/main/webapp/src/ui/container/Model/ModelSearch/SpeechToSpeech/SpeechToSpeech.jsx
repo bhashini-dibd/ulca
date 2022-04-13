@@ -58,6 +58,7 @@ const SpeechToSpeech = () => {
   const [suggestEdit, setSuggestEdit] = useState(null)
   const [modal, setModal] = useState(false);
   const [suggestEditValues, setSuggestEditValues] = useState({ asr: "", translation: "" })
+  
   const [comment, setComment] = useState("")
   const { feedbackQns } = useSelector((state) => state.getMasterData);
 

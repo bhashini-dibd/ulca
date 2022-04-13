@@ -38,6 +38,8 @@ const HostedInference = (props) => {
   const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState("");
   const [modal, setModal] = useState(false);
+  const [suggestEdit, setSuggestEdit] = useState(null)
+  const [suggestEditValues, setSuggestEditValues] = useState({  translation: "" })
 
 
   const [sourceLanguage, setSourceLanguage] = useState({
@@ -58,6 +60,9 @@ const HostedInference = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
+  const handleOnChange = (param, e) => {
+    setSuggestEditValues((prev) => ({ ...prev, [param]: e.target.value }))
+  }
   const clearAll = () => {
     setSourceText("");
     setTarget("");
@@ -293,8 +298,13 @@ const HostedInference = (props) => {
         <FeedbackPopover
           setModal={setModal}
           suggestion={true}
+          target={target}
+          handleOnChange={handleOnChange}
+          setSuggestEdit={setSuggestEdit}
+          setSuggestEditValues={setSuggestEditValues}
           taskType='translation'
           handleSubmit={handleFeedbackSubmit}
+         
         />
       </Modal>
 
