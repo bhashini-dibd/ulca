@@ -275,7 +275,7 @@ function FeedbackPopover(props) {
             }
             <Grid container justifyContent="center">
               <Grid item>
-                <Button type="submit" variant="contained" size="small" color="primary" style={{ textTransform: "capitalize" }} className={classes.submitbutton}>
+                <Button type="submit" variant="contained" size="small" color="primary" style={{ textTransform: "capitalize" }} className={classes.submitbutton} disabled={start > 0 ? false : true}>
                   {translate("button.submit")}
                 </Button>
               </Grid>

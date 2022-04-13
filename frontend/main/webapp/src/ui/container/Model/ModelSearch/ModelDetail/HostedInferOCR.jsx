@@ -478,6 +478,7 @@ const HostedInferASR = (props) => {
           suggestion={true}
           taskType="ocr"
           handleSubmit={handleFeedbackSubmit}
+          target={target}
         />
       </Modals>
 
