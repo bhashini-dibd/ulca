@@ -207,11 +207,23 @@ const HostedInferASR = (props) => {
               </Typography>
             </Grid>
 
-
+          
             <CardContent id="asrCardOutput">{targetAudio}</CardContent>
-            {data && 
+            { targetAudio.length > 0 &&  (<>
+            <div    >
+                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+              </div>
+           
+           
+           </>)}
+           
+            {data && (
 
-              
+             
               <div    >
                 <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
@@ -219,7 +231,7 @@ const HostedInferASR = (props) => {
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
                 </Button>
              
-            </div>}
+            </div>)}
           </Card>
         </Grid>
 
@@ -297,7 +309,7 @@ const HostedInferASR = (props) => {
             </Grid>
             {target.length > 0 && (<><CardContent>{target}</CardContent>
             
-                
+                {/* <SimpleDialogDemo/> */}
                 <div >
                   <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
                     <ThumbUpAltIcon className={classes.feedbackIcon} />

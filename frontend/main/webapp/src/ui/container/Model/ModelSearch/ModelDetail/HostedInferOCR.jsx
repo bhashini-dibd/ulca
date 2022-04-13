@@ -476,12 +476,9 @@ const HostedInferASR = (props) => {
         <FeedbackPopover
           setModal={setModal}
           suggestion={true}
-          target={target}
-          suggestEditValues={suggestEditValues}
-          handleOnChange={handleOnChange}
-          setSuggestEditValues={setSuggestEditValues}
-          taskType='ocr'
+          taskType="ocr"
           handleSubmit={handleFeedbackSubmit}
+          target={target}
         />
       </Modals>
 
