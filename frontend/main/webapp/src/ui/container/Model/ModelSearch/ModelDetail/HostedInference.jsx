@@ -39,7 +39,7 @@ const HostedInference = (props) => {
   const [target, setTarget] = useState("");
   const [modal, setModal] = useState(false);
   const [suggestEdit, setSuggestEdit] = useState(null)
-  const [suggestEditValues, setSuggestEditValues] = useState({  translation: "" })
+  const [suggestEditValues, setSuggestEditValues] = useState("")
 
 
   const [sourceLanguage, setSourceLanguage] = useState({
@@ -60,8 +60,8 @@ const HostedInference = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
-  const handleOnChange = (param, e) => {
-    setSuggestEditValues((prev) => ({ ...prev, [param]: e.target.value }))
+  const handleOnChange = (e) => {
+    setSuggestEditValues(e.target.value)
   }
   const clearAll = () => {
     setSourceText("");
@@ -81,6 +81,7 @@ const HostedInference = (props) => {
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
             setTarget(rsp_data.outputText);
+            setSuggestEditValues(rsp_data.outputText)
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
             setTranslationState(true);
           }
@@ -299,12 +300,13 @@ const HostedInference = (props) => {
           setModal={setModal}
           suggestion={true}
           target={target}
+          suggestEditValues={suggestEditValues}
           handleOnChange={handleOnChange}
           setSuggestEdit={setSuggestEdit}
           setSuggestEditValues={setSuggestEditValues}
           taskType='translation'
           handleSubmit={handleFeedbackSubmit}
-         
+
         />
       </Modal>
 
