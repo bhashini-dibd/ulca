@@ -345,6 +345,12 @@ const DataSet = (theme) => ({
   leftSection: {
     boxShadow: "4px 4px 4px -4px #00000029",
   },
+  rightSection:{
+    paddingLeft: "24px",
+    "@media (max-width:650px)": {
+      paddingLeft: "0px",
+    },
+  },
   popupDialog: {
     maxWidth: "46.125rem",
     height: "26.5rem",
@@ -512,7 +518,7 @@ const DataSet = (theme) => ({
     },
   },
   computeBtnUrl: {
-    marginTop: "40px",
+    marginTop: "55px",
     "@media (max-width:1000px)": {
       marginTop: "10px",
     },
@@ -746,23 +752,7 @@ const DataSet = (theme) => ({
     }
 
   },
-  AsrPopover:{
-    position:"relative",
-    left:"310px",
-    top:"155px",
-    "@media (max-width:400px)": {
-      left: "215px",
-     
-    }
-  },
-  // tablesbody:{
-  //   "@media (max-width:400px)": {
-  //     marginLeft:" 137px",
-  //     width: "50%",
-  //     marginTop: "-19px"
-  //   }
-  // }
-
+ 
   typography: {
     padding: theme.spacing(1),
     // marginTop: "15px"
@@ -836,7 +826,8 @@ const DataSet = (theme) => ({
   },
   submitbutton: {
     width: "70px",
-    margin: "10px 0px 0px 130px"
+    margin: "10px 0px 0px 130px",
+    textTransform: "capitalize"
   },
   rating: {
     position:"relative ",
@@ -884,8 +875,8 @@ const DataSet = (theme) => ({
   },
   iconbutton:{
     position: "absolute",
-     right: "3px",
-      top: "4px",
+     right: "15px",
+      top: "5px",
   },
   typography1: {
     // marginLeft: "10px",
@@ -904,7 +895,7 @@ const DataSet = (theme) => ({
     margin: "auto",
     fontFamily: "Roboto",
     fontSize: "18px",
-    width: "250px",
+    width: "320px",
     // border: " none"
   },
 
@@ -946,7 +937,57 @@ const DataSet = (theme) => ({
   },
   feedbackgrid:{
     maxWidth: "350px"
-  }
+  },
+  translatfeedbackbutton:{
+    float: "right",
+    marginTop:"-20px" ,
+    marginRight: "15px",
+    backgroundColor:"#FD7F23",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    },
+      "@media (max-width:650px)": {
+        marginRight: "5px",
+      
+      },
+  },
+  feedbackbuttons:{
+    backgroundColor:"#FD7F23",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    }
+  },
+  ocrfeedbackbutton:{
+    float: "right",
+    // marginTop: "10px",
+     marginRight: "20px",
+     backgroundColor:"#FD7F23",
+     '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    },
+     "@media (max-width:650px)": {
+      marginTop: "25px",
+    
+    },
+
+  },
+  
+  translationsuggestgrid:{
+    padding:"0px 10px 10px 10px",
+    textAlign: "center"
+
+  },
+  // translationtextfield:{
+  //   marginLeft:"50px",
+  //   "@media (max-width:650px)": {
+  //     margin:"10px 0px 0px 30px",
+    
+  //   },
+
+  // },
 });
 
 export default DataSet;

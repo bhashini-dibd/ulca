@@ -1,38 +1,11 @@
 {
-    "asrDetailedQns": [
+"asrDetailedQns": [
       {
-        "code": "asr",
-        "label": "ASR",
-        "active": true,
+        "code":"asr",
+        "label":"ASR",
+        "active":true,
         "taskType": "asr",
-        "question": "Few words missing",
-        "answerType": "checkbox",
-        "editbox": "false"
-      },
-      {
-        "code": "asr",
-        "label": "ASR",
-        "active": true,
-        "taskType": "asr",
-        "question": "Few words misspelt",
-        "answerType": "checkbox",
-        "editbox": "false"
-      },
-      {
-        "code": "asr",
-        "label": "ASR",
-        "active": true,
-        "taskType": "asr",
-        "question": "Issue with text/digits normalization",
-        "answerType": "checkbox",
-        "editbox": "false"
-      },
-      {
-        "code": "asr",
-        "label": "ASR",
-        "active": true,
-        "taskType": "asr",
-        "question": "Punctuation/delimiter issue",
+        "question": "Please rate your experience...",
         "answerType": "checkbox",
         "editbox": "false"
       },
@@ -40,5 +13,5 @@
         "question": "Add your comments",
         "answerType": "freetext"
       }
-    ]
-  }
+]
+}
