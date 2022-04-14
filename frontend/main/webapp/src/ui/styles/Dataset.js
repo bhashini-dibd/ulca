@@ -969,7 +969,7 @@ const DataSet = (theme) => ({
 
     },
      "@media (max-width:650px)": {
-      marginTop: "25px",
+       marginTop: "-25px",
     
     },
 
@@ -988,6 +988,19 @@ const DataSet = (theme) => ({
   //   },
 
   // },
+  textareas: {
+    backgroundColor: "inherit",
+    border: "none",
+    width: "100%",
+    resize: "none",
+    outline: "none",
+    fontSize: "14px",
+    lineHeight: "32px",
+    color: "black",
+    fontFamily: "Roboto",
+
+    //  paddingLeft:'16px'
+  },
 });
 
 export default DataSet;
