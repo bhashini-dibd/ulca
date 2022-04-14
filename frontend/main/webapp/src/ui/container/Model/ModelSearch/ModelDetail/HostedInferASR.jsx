@@ -213,10 +213,16 @@ const HostedInferASR = (props) => {
             </Grid>
 
           
-            <CardContent id="asrCardOutput">{targetAudio}</CardContent>
+            <CardContent id="asrCardOutput">
+            < textArea  rows={7} className={classes.textAreas} >
+              {targetAudio}  
+           
+              </textArea>
+             
+              </CardContent>
             { targetAudio.length > 0 &&  (<>
             <div    >
-                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(targetAudio)}}>
+                <Button variant="contained" size="small" className={classes.Asrfeedbackbutton}  onClick={() => {setModal(true); setSuggestEditValues(targetAudio)}}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
@@ -225,12 +231,13 @@ const HostedInferASR = (props) => {
            
            
            </>)}
+          
            
             {data && (
 
              
               <div    >
-                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(data)}}>
+                <Button variant="contained" size="small"  style={{float:"right",marginRight:"20px",  backgroundColor: "#FD7F23" ,marginTop:"135px"}} onClick={() => {setModal(true); setSuggestEditValues(data)}}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
@@ -312,11 +319,14 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            {target.length > 0 && (<><CardContent>{target}</CardContent>
+            {target.length > 0 && (<><CardContent >
+           < textArea  rows={7}  className={classes.textAreas} > {target}</textArea>
+             
+              </CardContent>
             
                 {/* <SimpleDialogDemo/> */}
-                <div >
-                  <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(target)}}>
+                <div  >
+                  <Button variant="contained" size="small"  className={classes.Asrfeedbackbutton}   onClick={() => {setModal(true); setSuggestEditValues(target)}}>
                     <ThumbUpAltIcon className={classes.feedbackIcon} />
                     <ThumbDownAltIcon className={classes.feedbackIcon} />
                     <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>

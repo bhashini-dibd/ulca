@@ -550,7 +550,7 @@ const ContributionList = (props) => {
       options: {
        
         filter: false,
-        setCellProps: sort  => ({ style: { width:"100px" } }),
+        // setCellProps: sort  => ({ style: { width:"100px" } }),
         sort: true,
         display: view ? "excluded" : true,
       },

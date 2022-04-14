@@ -968,6 +968,22 @@ const DataSet = (theme) => ({
     },
 
   },
+  Asrfeedbackbutton:{
+    float: "right",
+     marginTop: "15px",
+      marginRight: "20px",
+  //   display: "flex",
+  // justifyContent:" end",
+//   position: "relative",
+// bottom:" -140px",
+// right:"500px",
+       backgroundColor: "#FD7F23" ,
+       '&:hover': {
+        backgroundColor: "#FD7F23"
+  
+      },
+
+  },
   
   translationsuggestgrid:{
     padding:"0px 10px 10px 10px",
@@ -982,6 +998,20 @@ const DataSet = (theme) => ({
   //   },
 
   // },
+  textAreas: {
+    backgroundColor: "inherit",
+    border: "none",
+    width: "100%",
+    resize: "none",
+    outline: "none",
+    fontSize: "13px",
+    lineHeight: "20px",
+    color: "black",
+    fontFamily: "Roboto",
+   
+
+    //  paddingLeft:'16px'
+  },
 });
 
 export default DataSet;
