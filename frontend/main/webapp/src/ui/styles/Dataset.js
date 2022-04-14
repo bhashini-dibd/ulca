@@ -345,6 +345,12 @@ const DataSet = (theme) => ({
   leftSection: {
     boxShadow: "4px 4px 4px -4px #00000029",
   },
+  rightSection:{
+    paddingLeft: "24px",
+    "@media (max-width:650px)": {
+      paddingLeft: "0px",
+    },
+  },
   popupDialog: {
     maxWidth: "46.125rem",
     height: "26.5rem",
