@@ -895,7 +895,7 @@ const DataSet = (theme) => ({
     margin: "auto",
     fontFamily: "Roboto",
     fontSize: "18px",
-    width: "250px",
+    width: "320px",
     // border: " none"
   },
 
