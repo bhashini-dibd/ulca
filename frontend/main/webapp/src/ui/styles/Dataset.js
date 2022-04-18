@@ -940,7 +940,7 @@ const DataSet = (theme) => ({
   },
   translatfeedbackbutton:{
     float: "right",
-    marginTop:"-20px" ,
+    marginTop:"14px" ,
     marginRight: "15px",
     backgroundColor:"#FD7F23",
     '&:hover': {
@@ -969,7 +969,7 @@ const DataSet = (theme) => ({
 
     },
      "@media (max-width:650px)": {
-       marginTop: "-25px",
+       marginTop: "-10px",
     
     },
 
