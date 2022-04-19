@@ -354,8 +354,13 @@ const HostedInferASR = (props) => {
             </Grid>
 
             {fileData.length > 0 && (<>
-            <CardContent>{fileData}</CardContent>
-              <div style={{ marginTop: "33%" }}>
+            <CardContent>
+              <textarea  rows={5} className={classes.textareas}>
+              {fileData}
+              </textarea>
+             
+              </CardContent>
+              <div >
                 {/* <SimpleDialogDemo/>  */}
                 <div >
                   <Button variant="contained" size="small" className={classes.ocrfeedbackbutton} onClick={() => {setModal(true);setSuggestEditValues(fileData)}}>
@@ -443,8 +448,15 @@ const HostedInferASR = (props) => {
               </Typography>
             </Grid>
             {target.length > 0 && 
-            (<> <CardContent>{target}</CardContent>
-              <div style={{ marginTop: "33%", }}>
+            (<> 
+            <CardContent>
+               <textarea 
+                rows={5}
+                 className={classes.textareas}>
+                    {target}
+                    </textarea>
+             </CardContent>
+              <div >
                 {/* <SimpleDialogDemo/> */}
                 <div >
                   <Button variant="contained" style={{ float: "right", marginBottom: "13px", marginRight: "20px", backgroundColor: "#FD7F23", borderRadius: "15px" }} onClick={() => {setModal(true); setSuggestEditValues(target)}}>

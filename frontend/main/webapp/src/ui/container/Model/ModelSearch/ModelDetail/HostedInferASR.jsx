@@ -312,11 +312,15 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            {target.length > 0 && (<><CardContent>{target}</CardContent>
+            {target.length > 0 && (<><CardContent><textarea 
+                rows={5}
+                 className={classes.textareas}>
+                    {target}
+                    </textarea></CardContent>
             
                 {/* <SimpleDialogDemo/> */}
                 <div >
-                  <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(target)}}>
+                  <Button variant="contained" size="small" style={{ float: "right", marginTop: "-5px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(target)}}>
                     <ThumbUpAltIcon className={classes.feedbackIcon} />
                     <ThumbDownAltIcon className={classes.feedbackIcon} />
                     <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>

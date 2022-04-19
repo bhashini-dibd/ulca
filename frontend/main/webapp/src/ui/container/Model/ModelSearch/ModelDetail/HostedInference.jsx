@@ -249,7 +249,7 @@ const HostedInference = (props) => {
             {target.length > 0 && (<>  <textarea
               disabled
               placeholder="Output"
-              rows={6}
+              rows={5}
               value={target}
               className={classes.textArea}
             />
