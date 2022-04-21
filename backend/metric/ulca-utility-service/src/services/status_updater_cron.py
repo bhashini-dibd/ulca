@@ -54,6 +54,7 @@ class StatusCronProcessor(Thread):
 
     def get_pending_tasks(self):
         lastday = (datetime.now() - timedelta(hours=pending_jobs_duration))
+        log.info(f'lastday{lastday}')
         query = [{ '$match':{'serviceRequestType':'dataset','serviceRequestAction':'submit','status':{'$in':['In-Progress','Pending']}}}, {
                                                      '$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
                                                      {'$match': {'date': {'$lt': lastday}}}]
