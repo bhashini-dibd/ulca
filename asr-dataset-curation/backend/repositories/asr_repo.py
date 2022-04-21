@@ -120,15 +120,16 @@ class ASRAudioChunk:
                 #newAudio.export(folder_name + '/audio_chunk_{}.wav'.format(counter), format="wav")
                 encoded_data = base64.b64encode(open(temp_file_path, "rb").read())
                 inference = make_vakyansh_model_inference_call(encoded_data)
-                audio_list.append({"audioContent":str(encoded_data), "inference":inference})
+                audio_list.append({"audioId":str(uuid.uuid4()), "audioContent":str(encoded_data), "inference":inference})
                 counter = counter+1
 
         if os.path.exists(folder_name):
             shutil.rmtree(folder_name)
 
-        mongo_repo.insert(audio_list)
-        for audio_dict in audio_list:
-            del audio_dict['_id']
+        if audio_list:
+            mongo_repo.insert(audio_list)
+            for audio_dict in audio_list:
+                del audio_dict['_id']
         return audio_list
 
 def make_vakyansh_model_inference_call(encoded_data):
