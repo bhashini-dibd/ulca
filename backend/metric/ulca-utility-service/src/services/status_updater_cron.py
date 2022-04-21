@@ -30,6 +30,7 @@ class StatusCronProcessor(Thread):
                 if pending_srns:
                     for srn in pending_srns:
                         condition = {'serviceRequestNumber':srn}
+                        task_cond = {'serviceRequestNumber':srn,'tool':'publish'}
                         query_pro = {'$set':{'status':'Queued','manuallyUpdated':True}}
                         compl_pro = {'$set':{'status':'Completed','manuallyUpdated':True}}
                         multi ={'multi':True}
@@ -37,7 +38,10 @@ class StatusCronProcessor(Thread):
                         tasks_res = repo.find(condition,process_db_schema,tasks_col)
                         if tasks_res:
                             for task in tasks_res:
-                                if str(task['tool']) in pub and str(task['status']) in compl_list:
+                                task_cond = {'serviceRequestNumber':srn,'tool':task['tool']}
+                                if str(task['tool']) in task_list and str(task['status']) in status_list:
+                                    repo.update(task_cond,query_pro,False,process_db_schema,tasks_col)
+                                elif str(task['tool']) in pub and str(task['status']) in compl_list:
                                     log.info('tasks collection')
                                     repo.update(condition,compl_pro,False,process_db_schema,process_col)
                                 #elif str(task['tool']) in pub and str(task['status']) in status_list:
