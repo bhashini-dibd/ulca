@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from "react";
-import axios from 'axios';
+import TextField from '@material-ui/core/TextField';
 // import stockData from './data.json';
 import { Button } from "@material-ui/core";
 const useAudio = url => {
@@ -34,6 +34,9 @@ const Content = ({ url}) => {
   const [data, setData] = useState("")
   const [count, setCount] = useState(0)
   const [source, setSource] = useState()
+  const [inputVisible, setInputVisible] = useState(false);
+  const [inital, setInital] = useState("The TextField wrapper component is a complete form control including a label");
+  const [texts, setTexts] = useState(inital);
   const audioRef = useRef()
 
   useEffect(() => {
@@ -54,84 +57,30 @@ const sliced = encode.slice(2,-1)
     }
 }
 
-// function audioplay(){
-
-//   return(
-//     <div style={{marginLeft:"500px",marginTop:"100px"}} >
-//       {/* <audio controls ref="audio"> <source src={temp} /> </audio> */}
-
-//     {/* <audio controls><source src={temp}></source></audio> */}
-//     </div>
-//   )
-// }
-
-
-//  const Audiourl= URL.createObjectURL(data)
-// console.log( Audiourl)
-
-  // useEffect(()=>{
-  //   axios.get('')
-  //   .then(response => {
-  //       console.log(response)
-  //       setBase(response.data)
-  //       // let fhg =`${url}/${data}`
-  //       //  let audio=new Audio().play
-  //       //   console.log("sssss",audio);
-  //   })
-  // })
-
-
-
-//  const Fetchdata = () =>{
-//   fetch('',{
-//     method: 'GET',
-//     mode: 'cors',
-//     headers: {
-//       "Content-type": "application/json",
-//       // "Accept": "*/*",
-//       // "Access-Control-Allow-Headers": "*",
-//       // "Access-Control-Allow-Methods": "*",
-//       // "Access-Control-Allow-Origin": "*",
-//       //"Authorization": token
-//     },
-
-//    body:JSON.stringify()
-//   })
-//   .then(response => { console.log( response)
-//     return response.json()})
-//   .then(json => console.log(json))
-// //  base64String.substr(base64String.indexOf(', ') + 1));
-
-//  // var decoded = atob(encoded);
-//   let fhg =`${url}/${data}`
-//  let audio=new Audio(data).play
-//  console.log("sssss",audio);
-
-//base[count].audio_content
-//  }
-//  useEffect(() => {
-//   Fetchdata()
-// }, []);
 
 console.log(url.data[count].audioContent)
 console.log(url)
-// let encode=url.data[count].audioContent
-// const sliced = encode.slice(2,-1)
 
-//  let temp=`data:audio/mpeg;base64,${sliced}`
+fetch('https://dev-auth.ulcacontrib.org/ulca/apis/asr/v1/audio/breakdown', {
+  method: 'post',
+  body: JSON.stringify( ),
+   headers: {
+    "Content-Type": "application/json"
+  }
+  
+})
+.then(async response => {
+//  let rsp_data = await response.json();
+//  console.log(rsp_data)
+//  setOpen(false);
+//  seturl(rsp_data)
+})
+console.log( JSON.stringify( ))
 
 
-// const byteCharacters = atob(encode);
-// const byteNumbers = new Array(byteCharacters.length);
-// for (let i = 0; i < byteCharacters.length; i++) {
-//   byteNumbers[i] = byteCharacters.charCodeAt(i);
-// }
-// const byteArray = new Uint8Array(byteNumbers);
-// const blob = new Blob([byteArray], {type: 'audio/mp3'});
 
-// const byteCharacters = atob(temp)
-//console.log(stockData.data);
-//  console.log(sliced);
+
+
   return (
     <div>
      
@@ -146,8 +95,39 @@ console.log(url)
        setCount(count+1)}}}>Next</Button>
 
       </div>
+      <div  style={{marginLeft:"500px",marginTop:"100px"}}>
+      {inputVisible ? (
+        <div> <TextField
+         
+        id="filled-basic"  variant="filled"
+          style={{ margin: 8 ,width:"500px"}}
+          
+          fullWidth
+          margin="normal"
+       // ref={inputRef} // Set the Ref
+         value={texts} // Now input value uses local state
+        onChange={(e) => {
+          setTexts(e.target.value);
+        }}
+      />
+      <Button onClick={() => setInputVisible(false)  }>save</Button>
+      <Button onClick={() => {    setTexts(inital) 
+        setInputVisible(false) }}>clear</Button>
+       </div>
+       
+      ) : (
+        //<span >{texts}</span>
+        <p style={{marginLeft:"450px",}}> {url.data[count].inference}  </p>
+       
+      )}
+     
+          
 
-            <p style={{marginLeft:"450px",}}> {url.data[count].inference}  </p>
+
+         
+           </div>
+
+         
            {console.log(url.data[count].inference)} 
 
            
