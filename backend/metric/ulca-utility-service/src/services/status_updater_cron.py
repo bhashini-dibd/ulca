@@ -17,6 +17,7 @@ class StatusCronProcessor(Thread):
     def run(self):
         run = 0
         task_list = ['validate','publish','ingest']
+        pub = ['publish']
         status_list = ['In-Progress','Pending','Queued']
         compl_list = ['Completed']
         while not self.stopped.wait(status_cron_interval_sec):
@@ -36,8 +37,11 @@ class StatusCronProcessor(Thread):
                         tasks_res = repo.find(condition,process_db_schema,tasks_col)
                         if tasks_res:
                             for task in tasks_res:
-                                if str(task['tool']) in task_list and str(task['status']) in compl_list:
+                                if str(task['tool']) in pub and str(task['status']) in compl_list:
+                                    log.info('tasks collection')
                                     repo.update(condition,compl_pro,False,process_db_schema,process_col)
+                                #elif str(task['tool']) in pub and str(task['status']) in status_list:
+                                #   repo.update(condition,compl_pro,False,process_db_schema,tasks_col)
                         log.info(f"Updated status for srn -{srn}")   
                     log.info('Completed run!')
                 if queued_srns:
