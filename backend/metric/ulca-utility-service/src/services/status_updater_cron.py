@@ -24,8 +24,8 @@ class StatusCronProcessor(Thread):
             try:
                 pending_srns = self.get_pending_tasks()
                 queued_srns = self.get_queued_srns()
-                log.info(f'pending srns...{len(pending_srns)}')
-                log.info(f'queued srns...{len(queued_srns)}')
+                #log.info(f'pending srns...{len(pending_srns)}')
+                #log.info(f'queued srns...{len(queued_srns)}')
                 if pending_srns:
                     for srn in pending_srns:
                         condition = {'serviceRequestNumber':srn}
