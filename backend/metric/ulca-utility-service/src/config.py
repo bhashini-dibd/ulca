@@ -40,7 +40,7 @@ filter_cron_interval_sec     =   os.environ.get('FILTER_CRON_INTERVAL_SEC',300)#
 if isinstance(filter_cron_interval_sec, str):
     filter_cron_interval_sec =  eval(filter_cron_interval_sec)
 
-status_cron_interval_sec     =   os.environ.get('STATUS_UPDATER_CRON_INTERVAL_SEC',17200)
+status_cron_interval_sec     =   os.environ.get('STATUS_UPDATER_CRON_INTERVAL_SEC',720)
 if isinstance(status_cron_interval_sec, str):
     status_cron_interval_sec =  eval(status_cron_interval_sec)
 

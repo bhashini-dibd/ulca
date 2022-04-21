@@ -18,22 +18,26 @@ class StatusCronProcessor(Thread):
         run = 0
         task_list = ['validate','publish','ingest']
         status_list = ['In-Progress','Pending','Queued']
+        compl_list = ['Completed']
         while not self.stopped.wait(status_cron_interval_sec):
             log.info(f'Job status updater cron run :{run}')
             try:
                 pending_srns = self.get_pending_tasks()
                 queued_srns = self.get_queued_srns()
+                log.info(f'pending srns...{len(pending_srns)}')
+                log.info(f'queued srns...{len(queued_srns)}')
                 if pending_srns:
                     for srn in pending_srns:
                         condition = {'serviceRequestNumber':srn}
                         query_pro = {'$set':{'status':'Queued','manuallyUpdated':True}}
+                        compl_pro = {'$set':{'status':'Completed','manuallyUpdated':True}}
                         multi ={'multi':True}
                         repo.update(condition,query_pro,False,process_db_schema,process_col)
                         tasks_res = repo.find(condition,process_db_schema,tasks_col)
                         if tasks_res:
                             for task in tasks_res:
-                                if str(task['tool']) in task_list and str(task['status']) in status_list:
-                                    repo.update(condition,query_pro,True,process_db_schema,tasks_col)
+                                if str(task['tool']) in task_list and str(task['status']) in compl_list:
+                                    repo.update(condition,compl_pro,False,process_db_schema,process_col)
                         log.info(f"Updated status for srn -{srn}")   
                     log.info('Completed run!')
                 if queued_srns:
@@ -41,11 +45,6 @@ class StatusCronProcessor(Thread):
                         q_condition = {'serviceRequestNumber':que}
                         set_failed = {'$set':{'status':'Failed','manuallyUpdated':True}}
                         repo.update(q_condition,set_failed,False,process_db_schema,process_col)   
-                        queued_res = repo.find(q_condition,process_db_schema,tasks_col)
-                        if queued_res:    
-                            for que_det in queued_res:               
-                                if str(que_det['tool']) in task_list and str(que_det['status']) in status_list and str(que_det['status'])=="Queued":
-                                    repo.update(q_condition,set_failed,True,process_db_schema,tasks_col)
                         log.info(f"Updated status for srn -{que}")
                 log.info('Completed run!')      
                 run += 1
@@ -59,6 +58,7 @@ class StatusCronProcessor(Thread):
                                                      '$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
                                                      {'$match': {'date': {'$lt': lastday}}}]
         aggresult = repo.aggregate(query,process_db_schema,process_col)
+        log.info(f'aggregate for 1 day{aggresult}')
         if not aggresult:
             log.info("0 pending srns found >>")
             return None
@@ -74,6 +74,7 @@ class StatusCronProcessor(Thread):
                                                      '$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
                                                      {'$match': {'date': {'$lt': que_lastday}}}]  
         que_aggregate = repo.aggregate(que_query,process_db_schema,process_col)
+        log.info(f'aggregate for 5 day{que_aggregate}')
         if not que_aggregate:
             log.info("0 queued srns found >>")
             return None
