@@ -259,7 +259,7 @@ const SearchModelDetail = (props) => {
           </Button>
 
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Grid container>
+            <Grid container spacing={8}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Card
                   style={{
@@ -286,8 +286,9 @@ const SearchModelDetail = (props) => {
               Description
             </Typography>
             <Typography
+             className={classes.modeldescription}
               variant="body1"
-              style={{ textAlign: "justify", marginTop: "15px" }}
+              style={{ textAlign: "justify", marginTop: "15px"}}
             >
               {data.description}
             </Typography>

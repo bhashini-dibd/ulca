@@ -41,6 +41,10 @@ const styles = (theme) => ({
     borderTop: "none",
     borderRight: "none",
     borderLeft: "none",
+    "@media (max-width:1287px)": {
+     
+      marginLeft: "3%",
+    },
   },
   gridAlign: {
     justifyContent: "flex-end",

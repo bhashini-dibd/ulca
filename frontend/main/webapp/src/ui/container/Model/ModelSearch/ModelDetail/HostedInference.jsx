@@ -7,6 +7,10 @@ import HostedInferenceAPI from "../../../../../redux/actions/api/Model/ModelSear
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Spinner from "../../../../components/common/Spinner";
 import { getLanguageName } from "../../../../../utils/getLabel";
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
+import Modal from '../../../../components/common/Modal';
+
 import {
   Grid,
   Typography,
@@ -23,6 +27,8 @@ import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
+import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -31,6 +37,11 @@ const HostedInference = (props) => {
   const [sourceText, setSourceText] = useState("");
   const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState("");
+  const [modal, setModal] = useState(false);
+  const [suggestEdit, setSuggestEdit] = useState(null)
+  const [suggestEditValues, setSuggestEditValues] = useState("")
+
+
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
     label: "English",
@@ -49,6 +60,9 @@ const HostedInference = (props) => {
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
+  const handleOnChange = (e) => {
+    setSuggestEditValues(e.target.value)
+  }
   const clearAll = () => {
     setSourceText("");
     setTarget("");
@@ -67,6 +81,7 @@ const HostedInference = (props) => {
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
             setTarget(rsp_data.outputText);
+            setSuggestEditValues(rsp_data.outputText)
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
             setTranslationState(true);
           }
@@ -92,28 +107,24 @@ const HostedInference = (props) => {
         });
       });
   };
-  // const renderTexfield = () => {
-  //     //  let labels = Language.map(lang => lang.label)
-  //     return (
-  //         <Autocomplete
-  //            // className={classes.titleDropdown}
-  //             value={"English"}
-  //             id="source"
-  //             disabled
-  //             //  options={labels}
-  //             // onChange={(event, data) => handleLanguagePairChange(data, 'source')}
-  //           //  renderInput={(params) => <TextField fullWidth {...params} variant="standard"
-  //             // />}
-  //         />
-  //     )
-  // }
-  // const handleLanguagePairChange = (value, property) => {
-  // 	let sLang =  Language.filter(val => val.label ===value )[0]
-  // 	if(sLang){
-  // 		fetchChartData(selectedOption.value, "", [{"field": "sourceLanguage","value":  sLang.value}])
-  //     setSourceLanguage(sLang);
-  // 	}
-  // };
+
+  const handleFeedbackSubmit = (feedback) => {
+    const apiObj = new SubmitFeedback('translation', sourceText, target, feedback)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'post',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+      .then(async resp => {
+        const rsp_data = await resp.json();
+        if (resp.ok) {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'success' })
+        } else {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'error' })
+        }
+      });
+    setTimeout(() => setSnackbarInfo({ open: false, message: "", variant: null }), 3000);
+  }
 
   return (
     // <div>
@@ -143,10 +154,10 @@ const HostedInference = (props) => {
               <Typography variant="h6" className={classes.hosted}>
                 Hosted inference API{" "}
                 {
-                  <LightTooltip 
-                  arrow
-                  placement="right"
-                  title={translate("label.hostedInferenceTranslation")}>
+                  <LightTooltip
+                    arrow
+                    placement="right"
+                    title={translate("label.hostedInferenceTranslation")}>
                     <InfoOutlinedIcon
                       className={classes.buttonStyle}
                       fontSize="small"
@@ -234,13 +245,27 @@ const HostedInference = (props) => {
           </Grid>
         </CardContent>
         <CardContent>
-          <textarea
-            disabled
-            placeholder="Output"
-            rows={6}
-            value={target}
-            className={classes.textArea}
-          />
+          <div>
+            {target.length > 0 && (<>  <textarea
+              disabled
+              placeholder="Output"
+              rows={5}
+              value={target}
+              className={classes.textArea}
+            />
+
+              <div   >
+                <Button variant="contained" size="small" className={classes.translatfeedbackbutton} onClick={() => {setModal(true);setSuggestEditValues(target)}}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+              </div>
+
+
+            </>)}
+          </div>
+
         </CardContent>
       </Card>
       {/* <TextField fullWidth
@@ -254,6 +279,7 @@ const HostedInference = (props) => {
                         }}
                     /> */}
       {snackbar.open && (
+
         <Snackbar
           open={snackbar.open}
           handleClose={handleSnackbarClose}
@@ -261,8 +287,32 @@ const HostedInference = (props) => {
           message={snackbar.message}
           variant={snackbar.variant}
         />
+
+
       )}
+      <Modal
+        open={modal}
+        onClose={() => setModal(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <FeedbackPopover
+          setModal={setModal}
+          suggestion={true}
+          target={target}
+          suggestEditValues={suggestEditValues}
+          handleOnChange={handleOnChange}
+          setSuggestEdit={setSuggestEdit}
+          setSuggestEditValues={setSuggestEditValues}
+          taskType='translation'
+          handleSubmit={handleFeedbackSubmit}
+
+        />
+      </Modal>
+
+
     </Grid>
+
     //  </Grid>
 
     //   </div>

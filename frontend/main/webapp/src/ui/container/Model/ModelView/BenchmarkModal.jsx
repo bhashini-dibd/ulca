@@ -6,13 +6,11 @@ import {
 import CheckIcon from "@material-ui/icons/Check";
 import CloseIcon from "@material-ui/icons/Close";
 import DatasetStyle from "../../../styles/Dataset";
-import FilterListIcon from "@material-ui/icons/FilterList";
 import SearchIcon from "@material-ui/icons/Search";
 
 import {
   IconButton,
   Button,
-  Divider,
   Grid,
   InputBase,
   TableCell,
@@ -21,7 +19,6 @@ import {
   TableHead,
   Box,
   Table,
-  TablePagination,
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -173,6 +170,7 @@ const BenchmarkModal = (props) => {
       name: "datasetName",
       label: "Benchmark Dataset",
       options: {
+        setCellProps: () => ({ style: {width:"350px"}}),
         filter: false,
         sort: false,
       },
@@ -181,14 +179,16 @@ const BenchmarkModal = (props) => {
       name: "domain",
       label: "Domain",
       options: {
+        setCellProps: () => ({ style: {width:"350px"}}),
         filter: false,
         sort: false,
       },
     },
     {
       name: "description",
-      label: "Description",
+       label: "Description",
       options: {
+        setCellProps: () => ({ style: {width:"330px"}}),
         filter: false,
         sort: false,
       },
@@ -203,6 +203,7 @@ const BenchmarkModal = (props) => {
     {
       name: "Action",
       options: {
+        setCellProps: () => ({ style: {width:"350px"}}),
         filter: false,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -242,7 +243,7 @@ const BenchmarkModal = (props) => {
     ) => {
       return (
         <Grid container>
-          <Grid item xs={11} sm={11} md={11} lg={11} xl={11}>
+          <Grid item xs={10} sm={11} md={11} lg={11} xl={11}>
             <CustomPagination
               count={count}
               page={page}
@@ -255,7 +256,7 @@ const BenchmarkModal = (props) => {
           <Grid
             style={{ display: "flex", alignItems: "center" }}
             item
-            xs={1}
+            xs={2}
             sm={1}
             md={1}
             lg={1}
@@ -293,7 +294,6 @@ const BenchmarkModal = (props) => {
                     </TableHead>
                     <TableBody>
                       {rows.map((row, i) => {
-                        console.log(row);
                         return (
                           <TableRow
                             key={i}
@@ -354,7 +354,10 @@ const BenchmarkModal = (props) => {
         MUIDataTableToolbar: {
           root: {
             "@media (max-width: 599.95px)": {
-              display: "flex !important",
+             // display: "flex !important",
+              whiteSpace:" nowrap",
+              marginBottom:"5px"
+             
             },
           },
         },
@@ -439,7 +442,7 @@ const BenchmarkModal = (props) => {
         },
         MuiToolbar: {
           root: {
-            marginTop: "18px",
+            marginTop: "8px",
           },
           gutters: {
             padding: "0",
@@ -464,6 +467,11 @@ const BenchmarkModal = (props) => {
             "&$hover:hover:nth-child(even)": { backgroundColor: "#E9F7EF" },
           },
         },
+        MUIDataTableBodyCell: {
+          root: {
+             }
+        
+        }
       },
     });
 
@@ -495,14 +503,15 @@ const BenchmarkModal = (props) => {
       >
         <IconButton
           onClick={props.handleCloseModal}
-          style={{ position: "absolute", padding: "20px" }}
+          style={{ position: "absolute", padding: "10px" }}
         >
           <CloseIcon color="action" />
         </IconButton>
       </div>
       <MuiThemeProvider theme={getMuiTheme()}>
         <MUIDataTable
-          id="benchmarkDataTable"
+      
+         id="benchmarkDataTable"
           options={options}
           data={data}
           columns={columns}

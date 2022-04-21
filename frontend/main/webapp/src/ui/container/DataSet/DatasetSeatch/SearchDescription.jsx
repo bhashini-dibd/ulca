@@ -12,7 +12,6 @@ import {
 const SearchDescription = (props) => {
   const { classes, title, para, index, color, image } = props;
   const history = useHistory();
-  console.log('title', title)
   return (
     // <>
     //     <Typography variant="h6" className={classes.modelTitle}>{title}</Typography>

@@ -2,12 +2,13 @@ const HeaderStyles = (theme) => ({
   toolbar: {
     minHeight: "54px",
     maxWidth: "1272px",
-    width: "98%",
+    width: "100%",
     margin: "0 auto",
     display: "flex",
     alignItems: "center",
     padding: "0",
     boxSizing: "border-box",
+  
    
    
   },
@@ -83,9 +84,10 @@ const HeaderStyles = (theme) => ({
     },
   },
   styledMenu1: {
-    padding: "9px",
-    marginTop: "10px",
+   // padding: "9px",
+    //marginTop: "10px",
     boxShadow: "0px 3px 6px #00000029 !important",
+    minWidth: "142px"
   },
   profileName: {
     marginLeft: "0.5rem",

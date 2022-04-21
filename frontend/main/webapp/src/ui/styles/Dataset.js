@@ -10,6 +10,13 @@ const DataSet = (theme) => ({
     width: "100%",
     margin: "17px auto",
     padding: "0",
+    "@media (max-width:400px)": {
+      overflow: " hidden",
+      width: "360px",
+      // padding: "2px"
+
+    },
+
   },
   title: {
     marginBottom: "6vh",
@@ -29,6 +36,7 @@ const DataSet = (theme) => ({
     float: "right",
     marginRight: "30px",
     marginTop: "33px",
+    lineHeight:" 1.2em",
     "&:hover": {
       backgroundColor: "#FD7F23",
     },
@@ -56,21 +64,25 @@ const DataSet = (theme) => ({
   marginValue: { marginTop: "18px", color: "#0C0F0FB3" },
 
   list: {
-    marginLeft: "-20px",
+   marginLeft: "-20px",
+  
   },
   center: {
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
+    marginTop: "10px",
     "@media (max-width:400px)": {
-     paddingTop:"18px"
+      paddingTop: "6px"
     },
   },
   centerAudio: {
     display: "flex",
     justifyContent: "center",
     marginLeft: "auto",
-   
+    "@media (max-width:400px)": {
+      margin: "0px",
+    },
   },
   titleCard: {
     display: "flex",
@@ -141,11 +153,22 @@ const DataSet = (theme) => ({
     marginBottom: ".6rem",
     boxSizing: "border-box",
   },
+  buttonStyles: {
+    marginLeft: "0.7rem",
+    // borderRadius: "1rem",
+    "@media (max-width:400px)": {
+      marginLeft: "-3rem"
+    },
+  },
   buttonStyle: {
     marginLeft: "0.7rem",
     // borderRadius: "1rem",
+    "@media (max-width:400px)": {
+      marginTop: "5px"
+    },
+
   },
-  iconStyle: { marginRight: ".5rem" },
+  iconStyle: { marginRight: ".5rem", },
   thumbsUpIcon: {
     margin: "24% 0 0 24%",
     fontSize: "3.7rem",
@@ -182,26 +205,35 @@ const DataSet = (theme) => ({
   ButtonRefresh: {
     marginLeft: "auto",
     borderRadius: "1rem",
+    fontSize:"13px",
+    whiteSpace:" nowrap",
     "@media (max-width:870px)": {
       display: "none",
+     
     },
+    
   },
   ButtonRefreshMobile: {
     display: "none",
     borderRadius: "1rem",
     "@media (max-width:870px)": {
       display: "block",
-    
+
     },
+    "@media (max-width:400px)": {
+      marginLeft: "0px",
+
+    },
+
   },
   refreshGrid: {
-    display:'block',
+    display: 'block',
     "@media (max-width:870px)": {
       display: 'none'
     }
   },
   refreshGridMobile: {
-    display:'none',
+    display: 'none',
     "@media (max-width:870px)": {
       display: 'block'
     }
@@ -313,6 +345,12 @@ const DataSet = (theme) => ({
   leftSection: {
     boxShadow: "4px 4px 4px -4px #00000029",
   },
+  rightSection:{
+    paddingLeft: "24px",
+    "@media (max-width:650px)": {
+      paddingLeft: "0px",
+    },
+  },
   popupDialog: {
     maxWidth: "46.125rem",
     height: "26.5rem",
@@ -355,6 +393,7 @@ const DataSet = (theme) => ({
     justifyContent: "left",
     fontSize: "1.125rem",
     fontWeight: "500 !important",
+
     "&:hover": {
       backgroundColor: "white",
     },
@@ -431,19 +470,28 @@ const DataSet = (theme) => ({
   modelTitle: {
     marginTop: "20px",
     // padding: 0,
-     
+
+  },
+
+  modeldescription: {
+    "@media (max-width:400px)": {
+      fontSize: " 1.11rem"
+    },
   },
   mainTitle: { marginTop: "33px", marginLeft: "38px" },
   backButton: {
     boxShadow: "none",
     padding: "0",
   },
-  gridCompute: { marginTop: "15px " ,
-  // paddingRight:"10px", marginLeft:"40px"
-},
-  grid: { marginRight: "15px ",  "@media (max-width:400px)": {
-    marginLeft:"15px"
-  }, },
+  gridCompute: {
+    marginTop: "15px ",
+    // paddingRight:"10px", marginLeft:"40px"
+  },
+  grid: {
+    marginRight: "15px ", "@media (max-width:400px)": {
+      marginLeft: "15px"
+    },
+  },
   hosted: {
     display: "flex",
     // alignItems: 'flex-end'
@@ -470,7 +518,7 @@ const DataSet = (theme) => ({
     },
   },
   computeBtnUrl: {
-    marginTop: "40px",
+    marginTop: "55px",
     "@media (max-width:1000px)": {
       marginTop: "10px",
     },
@@ -485,7 +533,8 @@ const DataSet = (theme) => ({
     lineHeight: "32px",
     color: "black",
     fontFamily: "Roboto",
-    //    paddingLeft:'16px'
+
+    //  paddingLeft:'16px'
   },
   hostedCard: {
     height: "300px",
@@ -516,7 +565,7 @@ const DataSet = (theme) => ({
   },
   translateCard: {
     padding: 0,
-   
+
   },
   modelPara: {
     //marginTop: "15px ",
@@ -526,6 +575,16 @@ const DataSet = (theme) => ({
     "-webkit-line-clamp": "2",
     "-webkit-box-orient": "vertical",
     overflow: "hidden",
+    "@media (max-width:400px)": {
+      marginLeft: "-14px",
+      fontSize: "12px"
+
+    },
+  },
+  cardTitle: {
+    "@media (max-width:400px)": {
+      marginLeft: "-14px",
+    },
   },
   mainPaper: {
     border: "none",
@@ -602,17 +661,22 @@ const DataSet = (theme) => ({
     background: "transparent",
     border: "none",
     margin: 0,
-    padding: "0% 1vw",
+    padding: "0% 0% 0% 0%",
     color: "#3A3A3A",
-    
+
   },
   flexEndStyle: {
     display: "flex",
     justifyContent: "flex-end",
     "@media (max-width:400px)": {
-   marginBottom:"20px"
+      marginBottom: "20px",
     },
 
+  },
+  Gridroot:{
+    "@media (max-width:650px)": {
+      marginLeft: "15px",
+    },
   },
   imagemodal: {
     display: 'flex',
@@ -621,22 +685,322 @@ const DataSet = (theme) => ({
   },
   imagepaper: {
     backgroundColor: theme.palette.background.paper,
-   // border: '2px solid #000',
+    // border: '2px solid #000',
     boxShadow: theme.shadows[5],
-     padding: theme.spacing(3, 3, 3),
-    
+    padding: theme.spacing(3, 3, 3),
 
-    borderRadius:"4px"
+
+    borderRadius: "4px"
   },
-  stspart:{
+  stspart: {
     "@media (max-width:400px)": {
-      paddingLeft:"2px",
-     paddingRight:"3px"
-     
-      
-       },
+      paddingLeft: "2px",
+      paddingRight: "3px"
+    },
+  },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+    paddingLeft: "85px",
+    fontSize: "16px",
+    backgroundColor: " transparent!",
+    fontFamily: "Rowdies",
+    color: "gray",
+    "@media (max-width:400px)": {
+      paddingLeft: 0,
+    },
+  },
+  gridcard: {
+    "@media (max-width:959px)": {
+      //  marginLeft: "20%",
+      // justifyContent:"center"
+    },
+  },
+  genderdropdown: {
+    fontSize: "16px",
+    backgroundColor: " transparent!",
+    // fontFamily:"Rowdies",
+    color: "gray",
+  },
+  muiTable: {
+    wordBreak: " break-all",
 
-  }
+  },
+  textField: {
+    "@media (max-width:400px)": {
+      paddingTop: "15px",
+    },
+
+  },
+  audioCard: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+     top: "15%",
+    // "@media (max-width:400px)": {
+    //   top:"36%",
+    // },
+
+  },
+  feedbackPopover:{
+    position:"relative",
+    left:"700px",
+    top:"-10px",
+    "@media (max-width:400px)": {
+      left: "220px",
+      top:"0px",
+    }
+
+  },
+ 
+  typography: {
+    padding: theme.spacing(1),
+    // marginTop: "15px"
+    fontFamily: "Rowdies", 
+    fontSize: "1.3rem",
+    color:"#444542",
+    "@media (max-width:650px)": {
+      fontSize: "1.1rem",
+
+    },
+
+  },
+  typographys: {
+    padding: theme.spacing(1),
+    fontSize: "14px",
+    fontFamily:"Roboto ",
+    "@media (max-width:650px)": {
+      fontSize: "11px",
+     
+    
+    //padding:"10px"
+    }
+
+
+  },
+  typography2: {
+    margin: "16px 10px 10px 0px",
+    fontSize: "16px",
+    "@media (max-width:650px)": {
+      fontSize: "14px",
+      // margin: "0px 0px 0px 10px",
+    
+    //padding:"10px"
+    }
+  },
+  MuiRatingLabel: {
+    paddingLeft: "19px"
+  },
+  feedbackbutton: {
+    backgroundColor: "#FD7F23",
+    position: "absolute",
+    // right:"775px",
+     top:"72px",
+    height: "30px",
+    "@media (max-width:650px)": {
+       top:"68px",
+
+    },
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    }
+  },
+  feedbackIcon: {
+    width: "12px",
+    heigth: "10px",
+    color: "white",
+
+
+  },
+  feedbackTitle: {
+    fontSize: "10px",
+    color: "white",
+    paddingLeft: "3px"
+  },
+  feedbacktypography: {
+    fontSize: "12px",
+    borderBottom: "1px solid #ECE7E6  ",
+    width: "225px",
+    margin: "auto"
+  },
+  submitbutton: {
+    width: "70px",
+    margin: "10px 0px 0px 130px",
+    textTransform: "capitalize"
+  },
+  rating: {
+    position:"relative ",
+    buttom:"20px",
+    left:"70px",
+    // marginLeft: "69px",
+    "@media (max-width:650px)": {
+      //  marginLeft: "35px",
+      //buttom:"20px",
+    left:"40px",
+    width:"300px"
+
+    },
+    // display: 'flex',
+    // justifyContent: 'center'
+
+  },
+  buttonsuggest: {
+    float: "right",
+    height: "25px",
+    // marginLeft:"20px"
+    marginRight: "10px",
+    padding: "21px 7px 13px 6px",
+   
+    borderColor:"#3f51b5",
+    "@media (max-width:650px)": {
+      // height: "38px",
+       marginRight: "0px",
+       padding: "7px 12px 4px 13px",
+
+    },
+
+  },
+  buttonsuggestlable:{
+    textTransform:" none",
+    lineHeight:"16px",
+    whiteSpace: "nowrap",
+    height: "25px",
+    "@media (max-width:650px)": {
+      lineHeight:"21px",
+      wordBreak:"break-all"
+
+    },
+   
+  },
+  iconbutton:{
+    position: "absolute",
+     right: "15px",
+      top: "5px",
+  },
+  typography1: {
+    // marginLeft: "10px",
+    fontSize: "16px",
+    marginBottom: "6px",
+    // margin: "10px 20px 5px 10px"
+    "@media (max-width:650px)": {
+      // marginLeft: "10px",
+      fontSize: "12px",
+      marginBottom: "0px",
+
+    },
+  },
+  textareaAutosize: {
+    backgroundColor: "inherit",
+    margin: "auto",
+    fontFamily: "Roboto",
+    fontSize: "18px",
+    width: "320px",
+    // border: " none"
+  },
+
+  MuiButtonlabel: {
+    fontSize: "11px"
+  },
+  suggestbutton: {
+    margin: " 10px 0px 0px 30px",
+  },
+  buttonsubmit: {
+    width: "70px",
+    margin: "5px 0px 0px 55px",
+
+  },
+  textfield:{
+    fontFamily: "Roboto",
+    fontSize: "12px",
+    margin: "10px 0px 10px 0px"
+    
+  },
+  Addyourcomments:{
+    margin: "10px 10px 10px 10px",
+     fontSize: "16px",
+     "@media (max-width:650px)": {
+      // margin: "0px 10px 0px 10px",
+     fontSize: "12px",
+    },
+  },
+  border:{
+    borderBottom: "1px solid #ECE7E6 ",
+    width: "300px",
+    margin: "auto", 
+    paddingBottom: "10px"
+
+  },
+  submitbutton:{
+    margin: "10px"
+
+  },
+  feedbackgrid:{
+    maxWidth: "350px"
+  },
+  translatfeedbackbutton:{
+    float: "right",
+    marginTop:"14px" ,
+    marginRight: "15px",
+    backgroundColor:"#FD7F23",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    },
+      "@media (max-width:650px)": {
+        marginRight: "5px",
+      
+      },
+  },
+  feedbackbuttons:{
+    backgroundColor:"#FD7F23",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    }
+  },
+  ocrfeedbackbutton:{
+    float: "right",
+    // marginTop: "10px",
+     marginRight: "20px",
+     backgroundColor:"#FD7F23",
+     '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    },
+     "@media (max-width:650px)": {
+       marginTop: "-10px",
+    
+    },
+
+  },
+  
+  translationsuggestgrid:{
+    padding:"0px 10px 10px 10px",
+    textAlign: "center"
+
+  },
+  // translationtextfield:{
+  //   marginLeft:"50px",
+  //   "@media (max-width:650px)": {
+  //     margin:"10px 0px 0px 30px",
+    
+  //   },
+
+  // },
+  textareas: {
+    backgroundColor: "inherit",
+    border: "none",
+    width: "100%",
+    resize: "none",
+    outline: "none",
+    fontSize: "14px",
+    lineHeight: "32px",
+    color: "black",
+    fontFamily: "Roboto",
+
+    //  paddingLeft:'16px'
+  },
 });
 
 export default DataSet;

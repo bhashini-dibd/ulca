@@ -12,9 +12,9 @@ class NotifierService:
     # Cron JOB to update filter set params
     def notify_user(self,emails=None):
         try:
-            parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
+            parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
             utility     =   datautils.DataUtils()
-            utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":round(asr_count,4),"asr_unlabeled_count":round(asr_unlabeled_count,4),"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
+            utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":round(asr_count,4),"asr_unlabeled_count":round(asr_unlabeled_count,4),"tts_count":round(tts_count,4),"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
                 
         except Exception as e:
             log.exception(f'Exception : {e}')
@@ -45,7 +45,9 @@ class NotifierService:
             asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
             asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
             log.info(asr_unlabeled_count)
-
+            tts = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_tts)
+            tts_count = (tts[0]["total"])/3600
+            log.info(tts_count)
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
@@ -55,7 +57,7 @@ class NotifierService:
             log.info(f"In-Progress:{inprogress_jobs}")
             log.info(f"file:{jobfile}")
             
-            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,jobfile
+            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,jobfile
         except Exception as e:
             log.exception(f'{e}')
 
@@ -93,10 +95,10 @@ class NotifierService:
         except Exception as e:
             log.exception(f"Exception:{e}") 
 
-    def check_for_mismatch(self,parallel_count,ocr_count,monolingual_count,asr_count,asr_unlabeled_count):
+    def check_for_mismatch(self,parallel_count,ocr_count,monolingual_count,asr_count,asr_unlabeled_count,tts_count):
         try:
             mismatch = []
-            dtypes              =   ["parallel-corpus","ocr-corpus","asr-corpus","monolingual-corpus","asr-unlabeled-corpus"]
+            dtypes              =   ["parallel-corpus","ocr-corpus","asr-corpus","monolingual-corpus","asr-unlabeled-corpus","tts-corpus"]
             for data in dtypes:
                 if data == "ocr-corpus":
                     mongo_count =   round(ocr_count)
@@ -122,6 +124,10 @@ class NotifierService:
                     mongo_count =   round(asr_unlabeled_count)
                     request     =   {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
                     label       =   "ASR Unlabeled Dataset"
+                if data == "tts-corpus":
+                    mongo_count = round(tts_count)
+                    request     = {"type":f"{data}","criterions":[{"field":"sourceLanguage","value":None}],"groupby":None}
+                    label       = "TTS Dataset" 
                 utility     =   datautils.DataUtils()
                 druid_count =   utility.get_statistics_from_metrics_service(request)
                 log.info(f"Data Type: {label} Druid Count: {druid_count} Mongo Count: {mongo_count}")

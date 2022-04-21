@@ -31,7 +31,15 @@ import getMenuType from "../../../redux/actions/api/Common/getMenuType";
 import getMenuOption from "../../../redux/actions/api/Common/getMenuOption";
 import { translate } from "../../../assets/localisation";
 
-const StyledMenu = withStyles({})((props) => (
+const StyledMenu = withStyles({
+  paper: {
+    "@media (max-width:650px)": {
+      width:"120px"
+    
+     
+    },
+   },
+})((props) => (
   <Menu
     elevation={0}
     getContentAnchorEl={null}
@@ -123,7 +131,7 @@ const Header = (props) => {
   };
   return (
     <MuiThemeProvider theme={Theme}>
-      <AppBar color="inherit" position="static">
+      <AppBar color="inherit" position="static" >
         <Toolbar className={classes.toolbar}>
           <div className={classes.menu}>
             <Link href="https://bhashini.gov.in/en/">

@@ -1,10 +1,32 @@
 # ULCA-AUTOMATION
 
+
+| Service | Build Status |
+|---------| ----------- |
+| Login Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Dataset Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Model Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Benchmark Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Leaderboard Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+
+
 ## Overview 
 
 The code in this repo could be utilized to automate procedures for submitting/searching datasets and submitting/benchmarking/publishing models from ULCA website.
 
 >IMPORTANT : This Script requires Browser and its Respective Driver [Supported Browsers - Chrome, Firefox, Opera].
+
+## Tests :
+
+    * Login : Tests User Login to ULCA.
+    * Search : Tests Searching of Datasets.
+    * Download : Tests Downloading of Datasets.  
+    * Benchmark : Tests Benchmarking of Datasets against Models with Metrics.
+    * Publish/Unpublish : Tests Publish/Unpublish of Models.
+    * Chart/LeaderBoard : Tests Sorting of Chart/LeaderBoard.    
+    * ASR-Recording : Tests Recording for ASR Models.  
+    
+>Note : All examples/usage are given below
 
 ## Usage
 
