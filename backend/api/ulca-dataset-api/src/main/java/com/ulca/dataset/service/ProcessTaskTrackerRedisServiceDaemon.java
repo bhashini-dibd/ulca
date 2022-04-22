@@ -187,13 +187,13 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 				
 				log.info(" pseudo ingest failed for serviceRequestNumber :: " + serviceRequestNumber + " due to success rate less than " + successThreshold);
 				taskStatus = com.ulca.dataset.model.TaskTracker.StatusEnum.failed;
-				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.precheck,
 						taskStatus, details.toString());
 				
 			}else {
 				log.info("pseudo ingest success for serviceRequestNumber :: " + serviceRequestNumber + ". Real Ingest is being Triggered");
 				
-				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.precheck,
 						taskStatus, details.toString());
 				
 				DatasetIngest datasetIngest = new DatasetIngest();
@@ -211,7 +211,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			}
 
 		} else {
-			processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.pseudo,
+			processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.precheck,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
 		}
 

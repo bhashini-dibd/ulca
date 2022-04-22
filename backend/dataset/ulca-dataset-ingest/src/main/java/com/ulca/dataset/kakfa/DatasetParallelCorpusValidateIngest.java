@@ -58,11 +58,11 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
 
-	@Value("${pseudo.ingest.sample.size}")
-	private Integer pseudoSampleSize;
+	@Value("${precheck.ingest.sample.size}")
+	private Integer precheckSampleSize;
 
-	@Value("${pseudo.ingest.record.threshold}")
-	private Integer pseudoRecordThreshold;
+	@Value("${precheck.ingest.record.threshold}")
+	private Integer precheckRecordThreshold;
 
 	@Autowired
 	DatasetService datasetService;
@@ -116,7 +116,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		try {
 			paramsSchema = validateParamsSchema(datasetIngest);
 
-		} catch (IOException | JSONException | NullPointerException e) {
+		} catch (Exception e) {
 
 			log.info("Exception while validating params :: " + serviceRequestNumber + " error : " + e.getMessage());
 			Error error = new Error();
@@ -306,10 +306,10 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 	}
 
-	public void pseudoIngest(ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
+	public void precheckIngest(ParallelDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
 			throws JSONException, IOException, NoSuchAlgorithmException {
 
-		log.info("************ Entry DatasetParallelCorpusValidateIngest :: pseudoIngest *********");
+		log.info("************ Entry DatasetParallelCorpusValidateIngest :: precheckIngest *********");
 
 		String datasetId = datasetIngest.getDatasetId();
 		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
@@ -337,9 +337,9 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
 
-		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
+		log.info("Starting precheckIngest serviceRequestNumber :: " + serviceRequestNumber);
 
-		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber, baseLocation, md5hash,
+		taskTrackerRedisDao.intializePrecheckIngest(serviceRequestNumber, baseLocation, md5hash,
 				paramsSchema.getDatasetType().toString(), datasetName, datasetId, userId);
 
 		int numberOfRecords = 0;
@@ -348,7 +348,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 		int pseudoNumberOfRecords = 0;
 
 		long sampleSize = recordSize / 10;
-		long bufferSize = pseudoSampleSize / 10;
+		long bufferSize = precheckSampleSize / 10;
 		long base = sampleSize;
 		long counter = 0;
 		long maxCounter = bufferSize;
@@ -483,12 +483,12 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 		log.info(" total record size ::  " + recordSize);
 
-		if (recordSize <= pseudoRecordThreshold) {
+		if (recordSize <= precheckRecordThreshold) {
 			updateDataset(datasetId, userId, md5hash, paramsSchema);
 			ingest(paramsSchema, datasetIngest);
 			return;
 		} else {
-			pseudoIngest(paramsSchema, datasetIngest, recordSize);
+			precheckIngest(paramsSchema, datasetIngest, recordSize);
 		}
 	}
 
