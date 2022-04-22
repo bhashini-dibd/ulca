@@ -8,7 +8,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import Spinner from "../../../../components/common/Spinner";
 import { getLanguageName } from "../../../../../utils/getLabel";
 import DownIcon from "@material-ui/icons/ArrowDropDown";
-// import SimpleDialogDemo from "../../../../components/common/Feedback";
+import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import {
   Grid,
   Typography,
@@ -27,6 +27,11 @@ import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
+import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
+import Modal from '../../../../components/common/Modal';
+import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
+
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -40,12 +45,12 @@ const StyledMenu = withStyles({})((props) => (
       vertical: "top",
       horizontal: "",
     }}
-    PaperProps={{  
-      style: {  
-        width: 140,  
-       
-      },  
-   }} 
+    PaperProps={{
+      style: {
+        width: 140,
+
+      },
+    }}
     {...props}
   />
 ))
@@ -59,13 +64,14 @@ const HostedInference = (props) => {
   const [sourceText, setSourceText] = useState("");
   const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState("");
+  const [modal, setModal] = useState(false);
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
     label: "English",
   });
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
-
+  const [base,setBase] = useState("");
   // useEffect(() => {
   // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
   // }, []);
@@ -123,6 +129,7 @@ const HostedInference = (props) => {
         setLoading(false);
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
+            setBase(rsp_data.outputText)
             const blob = b64toBlob(rsp_data.outputText, "audio/wav");
             const urlBlob = window.URL.createObjectURL(blob);
             setAudio(urlBlob);
@@ -159,8 +166,8 @@ const HostedInference = (props) => {
 
   const handleChange = (val) => {
     setGender(val);
-     };
-  
+  };
+
   const renderGenderDropDown = () => {
     return (
       <>
@@ -181,7 +188,7 @@ const HostedInference = (props) => {
           open={Boolean(anchorEl)}
           onClose={(e) => handleAnchorClose(e)}
           className={classes.styledMenu1}
-        
+
         >
           <MenuItem
             value={"Male"}
@@ -192,7 +199,7 @@ const HostedInference = (props) => {
               handleAnchorClose();
             }}
           >
-          
+
             <Typography variant={"body1"}>{"Male"}</Typography>
           </MenuItem>
           <MenuItem
@@ -211,6 +218,24 @@ const HostedInference = (props) => {
     );
   };
 
+  const handleFeedbackSubmit = (feedback) => {
+    const apiObj = new SubmitFeedback('tts', sourceText, base, feedback)
+    fetch(apiObj.apiEndPoint(), {
+      method: 'post',
+      headers: apiObj.getHeaders().headers,
+      body: JSON.stringify(apiObj.getBody())
+    })
+      .then(async resp => {
+        const rsp_data = await resp.json();
+        if (resp.ok) {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'success' })
+        } else {
+          setSnackbarInfo({ open: true, message: rsp_data.message, variant: 'error' })
+        }
+      });
+    setTimeout(() => setSnackbarInfo({ open: false, message: "", variant: null }), 3000);
+  }
+
   return (
     <Grid
       className={classes.gridCompute}
@@ -227,8 +252,8 @@ const HostedInference = (props) => {
           <Grid container className={classes.cardHeader}>
             <Grid
               item
-              xs={9}
-              sm={9}
+              xs={7}
+              sm={7}
               md={9}
               lg={9}
               xl={9}
@@ -240,19 +265,19 @@ const HostedInference = (props) => {
             </Grid>
             <Grid
               item
-              xs={2}
-              sm={2}
+              xs={3}
+              sm={3}
               md={2}
               lg={2}
               xl={2}
               className={classes.headerContent}
             >
               {renderGenderDropDown()}
-              </Grid>
+            </Grid>
           </Grid>
         </CardContent>
         <CardContent>
-            <Typography variant="caption">{translate("label.maxCharacters")}</Typography>
+          <Typography variant="caption">{translate("label.maxCharacters")}</Typography>
           {/* <Grid container>
             <Grid item>{renderGenderDropDown()}</Grid>
           </Grid> */}
@@ -317,26 +342,32 @@ const HostedInference = (props) => {
         </CardContent>
         <CardContent
           style={{
-           display:"flex",
+            display: "flex",
             justifyContent: "center",
             padding: "8vh",
           }}
         >
           {audio ? (
             <>
-            <audio controls>
-              <source src={audio}></source>
-            </audio>
-           </>
+              <audio controls>
+                <source src={audio}></source>
+              </audio>
+            </>
           ) : (
             <></>
-           
+
           )}
-          
+
         </CardContent>
-        {audio && <div style={{marginTop:"12%"}}>
-             {/* <SimpleDialogDemo/> */}
-              </div>}
+        {audio && <div >
+          <div     >
+            <Button variant="contained" size="small" style={{ float: "right", marginRight: "25px", backgroundColor: "#FD7F23" }} onClick={() => setModal(true)}>
+              <ThumbUpAltIcon className={classes.feedbackIcon} />
+              <ThumbDownAltIcon className={classes.feedbackIcon} />
+              <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+            </Button>
+          </div>
+        </div>}
       </Card>
       {snackbar.open && (
         <Snackbar
@@ -347,6 +378,19 @@ const HostedInference = (props) => {
           variant={snackbar.variant}
         />
       )}
+      <Modal
+        open={modal}
+        onClose={() => setModal(false)}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      >
+        <FeedbackPopover
+          setModal={setModal}
+          suggestion={false}
+          taskType="tts"
+          handleSubmit={handleFeedbackSubmit}
+        />
+      </Modal>
     </Grid>
   );
 };
