@@ -138,7 +138,7 @@ public class KafkaFileDownloadConsumer {
 				datasetIngest.setDatasetType(datasetType);
 				datasetIngest.setUserId(userId);
 				
-				datasetIngest.setMode(DatasetDownloadConstants.INGEST_PSEUDO_MODE);
+				datasetIngest.setMode(DatasetDownloadConstants.INGEST_PRECHECK_MODE);
 				
 				
 

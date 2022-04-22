@@ -519,25 +519,25 @@ public class DatasetService {
 		if(!mapTemp.containsKey(TaskTracker.ToolEnum.download.toString())) {
 			TaskTracker download = new TaskTracker();
 			download.serviceRequestNumber(serviceRequestNumber);
-			download.setTool(ToolEnum.download);
+			download.setTool(ToolEnum.download.toString());
 			download.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(download);
 			
 			TaskTracker ingest = new TaskTracker();
 			ingest.serviceRequestNumber(serviceRequestNumber);
-			ingest.setTool(ToolEnum.ingest);
+			ingest.setTool(ToolEnum.ingest.toString());
 			ingest.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(ingest);
 			
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			
@@ -546,19 +546,19 @@ public class DatasetService {
 		}else if(mapTemp.get(TaskTracker.ToolEnum.download.toString()).equals(TaskTracker.StatusEnum.inprogress.toString())) {
 			TaskTracker ingest = new TaskTracker();
 			ingest.serviceRequestNumber(serviceRequestNumber);
-			ingest.setTool(ToolEnum.ingest);
+			ingest.setTool(ToolEnum.ingest.toString());
 			ingest.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(ingest);
 			
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			
@@ -568,19 +568,19 @@ public class DatasetService {
 		} else if(mapTemp.get(TaskTracker.ToolEnum.download.toString()).equals(TaskTracker.StatusEnum.failed.toString())) {
 			TaskTracker ingest = new TaskTracker();
 			ingest.serviceRequestNumber(serviceRequestNumber);
-			ingest.setTool(ToolEnum.ingest);
+			ingest.setTool(ToolEnum.ingest.toString());
 			ingest.setStatus(TaskTracker.StatusEnum.na.toString());
 			taskTrackerList.add(ingest);
 			
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.na.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.na.toString());
 			taskTrackerList.add(publish);
 			
@@ -589,19 +589,19 @@ public class DatasetService {
 		} else if(!mapTemp.containsKey(TaskTracker.ToolEnum.ingest.toString())) {
 			TaskTracker ingest = new TaskTracker();
 			ingest.serviceRequestNumber(serviceRequestNumber);
-			ingest.setTool(ToolEnum.ingest);
+			ingest.setTool(ToolEnum.ingest.toString());
 			ingest.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(ingest);
 			
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			
@@ -612,14 +612,14 @@ public class DatasetService {
 			if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
 				TaskTracker validate = new TaskTracker();
 				validate.serviceRequestNumber(serviceRequestNumber);
-				validate.setTool(ToolEnum.validate);
+				validate.setTool(ToolEnum.validate.toString());
 				validate.setStatus(TaskTracker.StatusEnum.na.toString());
 				taskTrackerList.add(validate);
 			}
 			if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
 				TaskTracker publish = new TaskTracker();
 				publish.serviceRequestNumber(serviceRequestNumber);
-				publish.setTool(ToolEnum.publish);
+				publish.setTool(ToolEnum.publish.toString());
 				publish.setStatus(TaskTracker.StatusEnum.na.toString());
 				taskTrackerList.add(publish);
 			}
@@ -631,13 +631,13 @@ public class DatasetService {
 				
 			TaskTracker validate = new TaskTracker();
 			validate.serviceRequestNumber(serviceRequestNumber);
-			validate.setTool(ToolEnum.validate);
+			validate.setTool(ToolEnum.validate.toString());
 			validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(validate);
 			
 			TaskTracker publish = new TaskTracker();
 			publish.serviceRequestNumber(serviceRequestNumber);
-			publish.setTool(ToolEnum.publish);
+			publish.setTool(ToolEnum.publish.toString());
 			publish.setStatus(TaskTracker.StatusEnum.pending.toString());
 			taskTrackerList.add(publish);
 			return taskTrackerList;
@@ -649,14 +649,14 @@ public class DatasetService {
 			if(!mapTemp.containsKey(TaskTracker.ToolEnum.validate.toString())) {
 				TaskTracker validate = new TaskTracker();
 				validate.serviceRequestNumber(serviceRequestNumber);
-				validate.setTool(ToolEnum.validate);
+				validate.setTool(ToolEnum.validate.toString());
 				validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 				taskTrackerList.add(validate);
 			}
 			if(!mapTemp.containsKey(TaskTracker.ToolEnum.publish.toString())) {
 				TaskTracker validate = new TaskTracker();
 				validate.serviceRequestNumber(serviceRequestNumber);
-				validate.setTool(ToolEnum.publish);
+				validate.setTool(ToolEnum.publish.toString());
 				validate.setStatus(TaskTracker.StatusEnum.pending.toString());
 				taskTrackerList.add(validate);
 			}
