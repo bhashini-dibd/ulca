@@ -30,7 +30,6 @@ class StatusCronProcessor(Thread):
                 if pending_srns:
                     for srn in pending_srns:
                         condition = {'serviceRequestNumber':srn}
-                        task_cond = {'serviceRequestNumber':srn,'tool':'publish'}
                         query_pro = {'$set':{'status':'Queued','manuallyUpdated':True}}
                         compl_pro = {'$set':{'status':'Completed','manuallyUpdated':True}}
                         multi ={'multi':True}
@@ -44,16 +43,16 @@ class StatusCronProcessor(Thread):
                                 elif str(task['tool']) in pub and str(task['status']) in compl_list:
                                     log.info('tasks collection')
                                     repo.update(condition,compl_pro,False,process_db_schema,process_col)
-                                #elif str(task['tool']) in pub and str(task['status']) in status_list:
-                                #   repo.update(condition,compl_pro,False,process_db_schema,tasks_col)
                         log.info(f"Updated status for srn -{srn}")   
                     log.info('Completed run!')
                 if queued_srns:
                     for que in queued_srns:
-                        q_condition = {'serviceRequestNumber':que}
+                        q_condition = {'serviceRequestNumber':que,'tool':que['tool']}
                         set_failed = {'$set':{'status':'Failed','manuallyUpdated':True}}
-                        repo.update(q_condition,set_failed,False,process_db_schema,process_col)   
-                        log.info(f"Updated status for srn -{que}")
+                        repo.update(q_condition,set_failed,False,process_db_schema,process_col)
+                        if str(task['tool']) in task_list and str(task['status']) in status_list:
+                            repo.update(q_condition,set_failed,False,process_db_schema,tasks_col)   
+                    log.info(f"Updated status for srn -{que}")
                 log.info('Completed run!')      
                 run += 1
             except Exception as e:
