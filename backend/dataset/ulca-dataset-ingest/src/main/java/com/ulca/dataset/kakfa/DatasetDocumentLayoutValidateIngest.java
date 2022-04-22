@@ -55,11 +55,11 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
 	
-	@Value("${pseudo.ingest.sample.size}")
-	private Integer pseudoSampleSize;
+	@Value("${precheck.ingest.sample.size}")
+	private Integer precheckSampleSize;
 	
-	@Value("${pseudo.ingest.record.threshold}")
-	private Integer pseudoRecordThreshold;
+	@Value("${precheck.ingest.record.threshold}")
+	private Integer precheckRecordThreshold;
 
 	@Autowired
 	TaskTrackerRedisDao taskTrackerRedisDao;
@@ -106,7 +106,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		try {
 			paramsSchema = validateParamsSchema(datasetIngest);
 
-		} catch (IOException | JSONException | NullPointerException e) {
+		} catch (Exception e) {
 			
 			log.info("Exception while validating params  :: serviceRequestNumber : "+ serviceRequestNumber +" error :: " + e.getMessage());
 			
@@ -325,7 +325,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		
 		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
 		
-		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash, paramsSchema.getDatasetType().toString(),datasetName, datasetId, userId);
+		taskTrackerRedisDao.intializePrecheckIngest(serviceRequestNumber,baseLocation, md5hash, paramsSchema.getDatasetType().toString(),datasetName, datasetId, userId);
 		
 		int numberOfRecords = 0;
 		int failedCount = 0;
@@ -333,7 +333,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		int pseudoNumberOfRecords = 0;
 		
 		long sampleSize = recordSize/10;
-		long bufferSize = pseudoSampleSize/10;
+		long bufferSize = precheckSampleSize/10;
 		long base = sampleSize;
 		long counter = 0;
 		long maxCounter = bufferSize;
@@ -444,7 +444,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 		
 		log.info(" total record size ::  " + recordSize);
 		
-		if(recordSize <= pseudoRecordThreshold) {
+		if(recordSize <= precheckRecordThreshold) {
 			updateDataset(datasetId, userId, md5hash, paramsSchema);
 			ingest(paramsSchema, datasetIngest);
 			return;
