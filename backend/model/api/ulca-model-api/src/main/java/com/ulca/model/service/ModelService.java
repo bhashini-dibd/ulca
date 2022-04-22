@@ -39,14 +39,20 @@ import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.util.ModelConstants;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
+import com.ulca.model.dao.ModelFeedback;
+import com.ulca.model.dao.ModelFeedbackDao;
 import com.ulca.model.exception.FileExtensionNotSupportedException;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.exception.ModelStatusChangeException;
 import com.ulca.model.exception.ModelValidationException;
+import com.ulca.model.exception.RequestParamValidationException;
 import com.ulca.model.request.ModelComputeRequest;
+import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
+import com.ulca.model.response.GetModelFeedbackListResponse;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelFeedbackSubmitResponse;
 import com.ulca.model.response.ModelListByUserIdResponse;
 import com.ulca.model.response.ModelListResponseDto;
 import com.ulca.model.response.ModelSearchResponse;
@@ -80,6 +86,9 @@ public class ModelService {
 	
 	@Autowired
 	BenchmarkDao benchmarkDao;
+	
+	@Autowired
+	ModelFeedbackDao modelFeedbackDao;
 
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
@@ -403,4 +412,72 @@ public class ModelService {
 		
 		return new ModelStatusChangeResponse("Model " + status +  " successfull.");
 	}
+	
+	public ModelFeedbackSubmitResponse modelFeedbackSubmit(ModelFeedbackSubmitRequest request) {
+		
+		String taskType = request.getTaskType();
+		if(taskType == null || (!taskType.equalsIgnoreCase("translation") && !taskType.equalsIgnoreCase("asr") && !taskType.equalsIgnoreCase("ocr") && !taskType.equalsIgnoreCase("tts") && !taskType.equalsIgnoreCase("sts"))) {
+			
+			throw new RequestParamValidationException("Model taskType should be one of { translation, asr, ocr, tts or sts }");
+		}
+		
+		ModelFeedback feedback = new ModelFeedback();
+		BeanUtils.copyProperties(request, feedback);
+		
+		feedback.setCreatedAt(new Date().toString());
+		feedback.setUpdatedAt(new Date().toString());
+		
+		modelFeedbackDao.save(feedback);
+		
+		String feedbackId = feedback.getFeedbackId();
+		String userId = feedback.getUserId();
+		
+		
+		if(request.getTaskType() != null && !request.getTaskType().isBlank() && request.getTaskType().equalsIgnoreCase("sts")) {
+			
+			List<ModelFeedbackSubmitRequest> detailedFeedback = request.getDetailedFeedback();
+			for(ModelFeedbackSubmitRequest modelFeedback : detailedFeedback ) {
+				
+				ModelFeedback mfeedback = new ModelFeedback();
+				BeanUtils.copyProperties(modelFeedback, mfeedback);
+				
+				mfeedback.setStsFeedbackId(feedbackId);	
+				mfeedback.setUserId(userId);
+				mfeedback.setCreatedAt(new Date().toString());
+				mfeedback.setUpdatedAt(new Date().toString());
+				
+				modelFeedbackDao.save(mfeedback);
+				
+			}
+		}
+		
+		ModelFeedbackSubmitResponse response = new ModelFeedbackSubmitResponse("model feedback submitted successful", feedbackId);
+		return response;
+	}
+	
+	public List<ModelFeedback>  getModelFeedbackByModelId(String modelId) {
+		
+		return modelFeedbackDao.findByModelId(modelId);
+		
+	}
+
+	public List<GetModelFeedbackListResponse>  getModelFeedbackByTaskType(String taskType) {
+		
+		List<GetModelFeedbackListResponse>  response = new ArrayList<GetModelFeedbackListResponse>();
+		List<ModelFeedback>  feedbackList =  modelFeedbackDao.findByTaskType(taskType);
+		
+			for(ModelFeedback feedback : feedbackList) {
+				
+				GetModelFeedbackListResponse res = new GetModelFeedbackListResponse();
+				BeanUtils.copyProperties(feedback, res);
+				
+				if(taskType.equalsIgnoreCase("sts")) {
+					List<ModelFeedback>  stsDetailedFd =  modelFeedbackDao.findByStsFeedbackId(feedback.getFeedbackId());
+					res.setDetailedFeedback(stsDetailedFd);
+				}
+				response.add(res);
+			}
+		return response;
+	}
+
 }

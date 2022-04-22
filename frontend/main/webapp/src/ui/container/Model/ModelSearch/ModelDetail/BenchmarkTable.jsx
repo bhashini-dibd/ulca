@@ -1,11 +1,16 @@
 import { withStyles } from "@material-ui/core";
-import React from "react";
+import React,{ useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import DataSet from "../../../../styles/Dataset";
 import MUIDataTable from "mui-datatables";
 
 const BenchmarkTable = (props) => {
   const history = useHistory();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const convertDate = (date) => {
     return date
       .toLocaleString("en-IN", {

@@ -33,6 +33,10 @@ import Leaderboard from "./ui/container/Model/ModelLeaderboard/Leaderboard";
 import BenchmarkModels from "./ui/container/Model/BenchmarkModel/BenchmarkDataset";
 import BenchmarkDetails from "./ui/container/Model/BenchmarkModel/BenchmarkDetail";
 import ViewUserDetails from "./ui/container/Admin/ViewUserDetail";
+import {useEffect} from 'react';
+import GetMasterDataAPI from './redux/actions/api/Common/getMasterData';
+import { useDispatch } from "react-redux";
+import APITransport from './redux/actions/apitransport/apitransport';
 
 const PrivateRoute = ({
   path,
@@ -69,7 +73,13 @@ const PrivateRoute = ({
 };
 
 export default function App() {
-  console.log(process.env.PUBLIC_URL);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+      const obj = new GetMasterDataAPI(["feedbackQns"]);
+      dispatch(APITransport(obj));
+  }, [])
+
   return (
     <Router history={history} basename="/">
       <Switch>
