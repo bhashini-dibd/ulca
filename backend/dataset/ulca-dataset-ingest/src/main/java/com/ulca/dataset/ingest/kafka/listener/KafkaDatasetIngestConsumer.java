@@ -65,7 +65,7 @@ public class KafkaDatasetIngestConsumer {
 			String mode = datasetIngest.getMode();
 			log.info("serviceRequestNumber :: " + serviceRequestNumber);
 			log.info("mode :: " + mode);
-			TaskTracker.ToolEnum tool = (mode.equalsIgnoreCase("real"))? TaskTracker.ToolEnum.ingest : TaskTracker.ToolEnum.pseudo;
+			TaskTracker.ToolEnum tool = (mode.equalsIgnoreCase("real"))? TaskTracker.ToolEnum.ingest : TaskTracker.ToolEnum.precheck;
 			List<TaskTracker> list = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool);
 			if(list.size() > 0) {
 				log.info("Duplicate ingest processing of serviceRequestNumber :: " + serviceRequestNumber + " and mode :: " + mode);

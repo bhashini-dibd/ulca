@@ -59,7 +59,7 @@ public class ProcessTaskTrackerService {
 		TaskTracker taskTracker = new TaskTracker();
 		
 		taskTracker.serviceRequestNumber(serviceRequestNumber);
-		taskTracker.setTool(tool);
+		taskTracker.setTool(tool.toString());
 		taskTracker.setStatus(status.toString());
 		taskTracker.setStartTime(new Date().toString());
 		
@@ -102,7 +102,7 @@ public void updateTaskTrackerWithDetails(String serviceRequestNumber, TaskTracke
 		}else {
 			TaskTracker taskTracker = new TaskTracker();
 			taskTracker.setServiceRequestNumber(serviceRequestNumber);
-			taskTracker.setTool(tool);
+			taskTracker.setTool(tool.toString());
 			taskTracker.setStartTime(new Date().toString());
 			taskTracker.setLastModified(new Date().toString());
 			taskTracker.setStatus(status.toString());
@@ -135,7 +135,7 @@ public void updateTaskTrackerWithDetailsAndEndTime(String serviceRequestNumber, 
 	}else {
 		TaskTracker taskTracker = new TaskTracker();
 		taskTracker.setServiceRequestNumber(serviceRequestNumber);
-		taskTracker.setTool(tool);
+		taskTracker.setTool(tool.toString());
 		taskTracker.setStartTime(new Date().toString());
 		taskTracker.setEndTime(new Date().toString());
 		taskTracker.setLastModified(new Date().toString());
@@ -158,7 +158,7 @@ public void updateTaskTrackerWithError(String serviceRequestNumber, TaskTracker.
 	}else {
 		TaskTracker taskTracker = new TaskTracker();
 		taskTracker.setServiceRequestNumber(serviceRequestNumber);
-		taskTracker.setTool(tool);
+		taskTracker.setTool(tool.toString());
 		taskTracker.setStartTime(new Date().toString());
 		taskTracker.setLastModified(new Date().toString());
 		taskTracker.setStatus(status.toString());
@@ -181,7 +181,7 @@ public void updateTaskTrackerWithErrorAndEndTime(String serviceRequestNumber, Ta
 	}else {
 		TaskTracker taskTracker = new TaskTracker();
 		taskTracker.setServiceRequestNumber(serviceRequestNumber);
-		taskTracker.setTool(tool);
+		taskTracker.setTool(tool.toString());
 		taskTracker.setStartTime(new Date().toString());
 		taskTracker.setEndTime(new Date().toString());
 		taskTracker.setLastModified(new Date().toString());

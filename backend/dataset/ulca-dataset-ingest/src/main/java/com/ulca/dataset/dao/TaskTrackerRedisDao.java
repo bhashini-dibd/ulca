@@ -1,9 +1,5 @@
 package com.ulca.dataset.dao;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -73,7 +69,7 @@ public class TaskTrackerRedisDao {
 		log.info("******* Exit TaskTrackerRedisDao : intialize ******* ");
 
 	}
-	public void intializePseudoIngest(final String serviceRequestNumber, String baseLocation, String md5hash, String datasetType, String datasetName, String datasetId, String userId) {
+	public void intializePrecheckIngest(final String serviceRequestNumber, String baseLocation, String md5hash, String datasetType, String datasetName, String datasetId, String userId) {
 
 		log.info("******* Entry TaskTrackerRedisDao : intialize ******* ");
 
@@ -86,7 +82,7 @@ public class TaskTrackerRedisDao {
 		redisTemplate.opsForHash().put(key, "datasetName", datasetName);
 		redisTemplate.opsForHash().put(key, "datasetId", datasetId);
 		redisTemplate.opsForHash().put(key, "userId", userId);
-		redisTemplate.opsForHash().put(key, "mode", "pseudo");
+		redisTemplate.opsForHash().put(key, "mode", "precheck");
 		redisTemplate.opsForHash().put(key, "ingestComplete", "0");
 		redisTemplate.opsForHash().put(key, "count", "0");
 		redisTemplate.opsForHash().put(key, "ingestError", "0");
