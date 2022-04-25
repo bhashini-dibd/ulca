@@ -65,7 +65,7 @@ public class DatasetFailedStagesServiceDaemon {
 						future.addCallback(new ListenableFutureCallback<SendResult<String, FileDownload>>() {
 
 							public void onSuccess(SendResult<String, FileDownload> result) {
-								log.info("message sent successfully to fileDownloadTopic, serviceRequestNumber :: "
+								log.info("DatasetFailedStagesServiceDaemon :: reIngestDataset - stage : download -  message sent successfully to fileDownloadTopic, serviceRequestNumber :: "
 										+ error.getServiceRequestNumber());
 								
 								error.setSuccess(true);
@@ -76,7 +76,7 @@ public class DatasetFailedStagesServiceDaemon {
 							@Override
 							public void onFailure(Throwable ex) {
 								log.info(
-										"Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "
+										"DatasetFailedStagesServiceDaemon :: reIngestDataset - stage : download - Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "
 												+ error.getServiceRequestNumber());
 								log.info("Error message :: " + ex.getMessage());
 
@@ -95,7 +95,7 @@ public class DatasetFailedStagesServiceDaemon {
 						});
 
 					} catch (KafkaException ex) {
-						log.info("Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "
+						log.info("DatasetFailedStagesServiceDaemon :: reIngestDataset - stage : download - Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "
 								+ error.getServiceRequestNumber());
 						log.info("Error message :: " + ex.getMessage());
 
@@ -130,7 +130,7 @@ public class DatasetFailedStagesServiceDaemon {
 						future.addCallback(new ListenableFutureCallback<SendResult<String, DatasetIngest>>() {
 
 							public void onSuccess(SendResult<String, DatasetIngest> result) {
-								log.info("message sent successfully to datasetIngestTopic, serviceRequestNumber :: "
+								log.info("DatasetFailedStagesServiceDaemon :: reIngestDataset - stage : ingest onSuccess - message sent successfully to datasetIngestTopic, serviceRequestNumber :: "
 										+ error.getServiceRequestNumber());
 								
 								error.setSuccess(true);
@@ -140,7 +140,7 @@ public class DatasetFailedStagesServiceDaemon {
 							@Override
 							public void onFailure(Throwable ex) {
 								log.info(
-										"Error occured while sending message to datasetIngestTopic, serviceRequestNumber :: "
+										"DatasetFailedStagesServiceDaemon :: reIngestDataset - stage : ingest onFailure - Error occured while sending message to datasetIngestTopic, serviceRequestNumber :: "
 												+ error.getServiceRequestNumber());
 								log.info("Error message :: " + ex.getMessage());
 
@@ -158,7 +158,7 @@ public class DatasetFailedStagesServiceDaemon {
 						});
 
 					} catch (KafkaException ex) {
-						log.info("Error occured while sending message to datasetIngestTopic, serviceRequestNumber :: "
+						log.info("DatasetFailedStagesServiceDaemon :: reIngestDataset - stage : ingest - Error occured while sending message to datasetIngestTopic, serviceRequestNumber :: "
 								+ error.getServiceRequestNumber());
 						log.info("Error message :: " + ex.getMessage());
 
