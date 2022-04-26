@@ -572,7 +572,7 @@ public class ModelInferenceEndPointService {
 			String responseJsonStr = httpResponse.body().string();
 
 			OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
-			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0) {
+			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0 && !ocrResponse.getOutput().get(0).getSource().isBlank()) {
 				response.setOutputText(ocrResponse.getOutput().get(0).getSource());
 			} else {
 				log.info("Ocr try me response is null or not proper");
