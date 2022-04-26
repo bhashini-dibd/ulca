@@ -50,18 +50,20 @@ class StatusCronProcessor(Thread):
                                 task_cond = {'serviceRequestNumber':srn,'tool':task['tool']}
                                 if str(task['tool']) in task_list and str(task['status']) in status_list:
                                     repo.update(task_cond,query_pro,False,process_db_schema,tasks_col)
-                                elif str(task['tool']) in pub and str(task['status']) in compl_list:
-                                    log.info('tasks collection')
-                                    repo.update(condition,compl_pro,False,process_db_schema,process_col)
                         log.info(f"Updated status for srn -{srn}")   
                     log.info('Completed run!')
                 if queued_srns:
                     for que in queued_srns:
-                        q_condition = {'serviceRequestNumber':que,'tool':que['tool']}
+                        q_condition = {'serviceRequestNumber':que}
                         set_failed = {'$set':{'status':'Failed','manuallyUpdated':True}}
                         repo.update(q_condition,set_failed,False,process_db_schema,process_col)
-                        if str(task['tool']) in task_list and str(task['status']) in status_list:
-                            repo.update(q_condition,set_failed,False,process_db_schema,tasks_col)   
+                        que_res = repo.find(q_condition,process_db_schema,tasks_col)
+                        log.info(f'QUEUED {que_res}')
+                        if que_res:
+                            for qued in que_res:
+                                que_cond = {'serviceRequestNumber':que,'tool':qued['tool']}
+                                if str(qued['tool']) in task_list and str(qued['status']) == str(status_list[2]):
+                                    repo.update(que_cond,set_failed,False,process_db_schema,tasks_col)
                     log.info(f"Updated status for srn -{que}")
                 log.info('Completed run!')      
                 run += 1
@@ -96,9 +98,10 @@ class StatusCronProcessor(Thread):
         if not que_aggregate:
             log.info("0 queued srns found >>")
             return None
-        queued_srn   = []
+        queued_srn   = dict()
         for que in que_aggregate:
-            queued_srn.append(que["serviceRequestNumber"])
+            queued_srn['srn'] = que["serviceRequestNumber"]
+            queued_srn['tool'] = que["tool"]
         log.info(f'{len(queued_srn)} queued srns found')
         return queued_srn
   
