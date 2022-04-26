@@ -4,6 +4,12 @@ import logging
 from logging.config import dictConfig
 from repositories import StatusUpdaterRepo
 from datetime import datetime,timedelta
+from services import NotifierService
+from models.response import CustomResponse
+from models.response import Status
+
+service = NotifierService()
+
 log         =   logging.getLogger('file')
 
 repo = StatusUpdaterRepo()
@@ -21,6 +27,10 @@ class StatusCronProcessor(Thread):
         status_list = ['In-Progress','Pending','Queued']
         compl_list = ['Completed']
         while not self.stopped.wait(status_cron_interval_sec):
+            service.notify_user()
+            res = CustomResponse(Status.SUCCESS.value,None,None)
+            log.info(f'response successfully generated.{res}')
+            #return res.getres()
             log.info(f'Job status updater cron run :{run}')
             try:
                 pending_srns = self.get_pending_tasks()
