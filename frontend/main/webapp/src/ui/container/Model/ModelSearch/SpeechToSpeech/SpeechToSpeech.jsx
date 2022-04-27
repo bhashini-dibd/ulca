@@ -62,12 +62,12 @@ const SpeechToSpeech = () => {
   const [comment, setComment] = useState("")
   const { feedbackQns } = useSelector((state) => state.getMasterData);
 
-  useEffect(() => {
-    if (!feedbackQns) {
-      const obj = new GetMasterDataAPI(["feedbackQns"]);
-      dispatch(APITransport(obj));
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (!feedbackQns) {
+  //     const obj = new GetMasterDataAPI(["feedbackQns"]);
+  //     dispatch(APITransport(obj));
+  //   }
+  // }, [])
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
