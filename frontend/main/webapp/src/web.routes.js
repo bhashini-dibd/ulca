@@ -37,6 +37,7 @@ import {useEffect} from 'react';
 import GetMasterDataAPI from './redux/actions/api/Common/getMasterData';
 import { useDispatch } from "react-redux";
 import APITransport from './redux/actions/apitransport/apitransport';
+import DatasetMetrics from "./ui/container/DataSet/DatasetMetrics/DatasetMetrics";
 
 const PrivateRoute = ({
   path,
@@ -197,6 +198,16 @@ export default function App() {
           dontShowHeader={false}
           type={"dataset"}
           index={3}
+        />
+        <PrivateRoute
+          path={`${process.env.PUBLIC_URL}/dataset/metrics`}
+          title={"Dataset Metrics"}
+          component={DatasetMetrics}
+          authenticate={authenticateUser}
+          currentMenu="dataset-metrics"
+          dontShowHeader={false}
+          type={"dataset"}
+          index={4}
         />
         <PrivateRoute
           path={`${process.env.PUBLIC_URL}/model/upload`}
