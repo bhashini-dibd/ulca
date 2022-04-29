@@ -1,0 +1,58 @@
+{
+    "name": "Dummy Transliteration En-Hi",
+    "version": "v1.0",
+    "description": "Dummy model to translate sentenced from Hinglish to Hindi",
+    "refUrl": "https://github.com/AI4Bharat/indicTrans",
+    "task": {
+       "type" : "transliteration"
+    },
+    "languages": [
+       {
+          "sourceLanguage": "en",
+          "targetLanguage": "hi"
+       }
+    ],
+    "license": "mit",
+    "domain": [
+       "general"
+    ],
+    "submitter": {
+       "name": "Dummy Submitter",
+       "aboutMe": "A non-profit, open-source community of engineers",
+       "team": [
+          {
+             "name": "Dummy1",
+             "aboutMe": "Dummy Organization"
+          },
+          {
+             "name": "Dummy2",
+             "aboutMe": "Dummy Organization"
+          }
+       ]
+    },
+    "inferenceEndPoint": {
+       "callbackUrl": "https://dummy.ulca.org/aai4b-nmt-inference/v0/transliterate",
+       "schema": {
+          "taskType": "transliteration",
+          "request": {
+             "input": [
+                {
+                   "source": "thumara naam kya he?"
+                }
+             ],
+             "config": {
+                "modelId":103,
+                "language": {
+                   "sourceLanguage": "en",
+                   "targetLanguage": "hi"
+                }
+             }
+          }
+       }
+    },
+    "trainingDataset": {
+       "datasetId": "2398749282",
+       "description": "trained on the general datasets from ULCA"
+    }
+ }
+ 
