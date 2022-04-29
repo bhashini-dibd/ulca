@@ -8,10 +8,10 @@ Few examples to show how a submitter can publish a transliteration model to ULCA
 {
     "input": [
         {
-            "source": "mera naam ram he"
+            "source": "vah aath saal ka tha jab usane apane maata-pita ko chhod diya."
         },
         {
-            "source": "mem dilli mem rahatha he"
+            "source": "agar kofee zyaada kadavee hai to thoda aur paanee daalalo."
         }
     ],
     "config": {
@@ -28,12 +28,12 @@ Few examples to show how a submitter can publish a transliteration model to ULCA
 {
     "output" :  [
         {        
-        "source" : "mera naam ram he",       
-        "target" : "मेरा नाम राम हे "       
+        "source" : "vah aath saal ka tha jab usane apane maata-pita ko chhod diya.",       
+        "target" : "वह आठ साल का था जब उसने अपने माता-पिता को छोड़ दिया।"       
         },
         {
-        "source" : "mem dilli mem rahatha he",       
-        "target" : "मेम दिल्ली मेम रहता हे "
+        "source" : "agar kofee zyaada kadavee hai to thoda aur paanee daalalo.",       
+        "target" : "अगर कॉफ़ी ज़्यादा कड़वी है तो थोड़ा और पानी डाललो।"
         }
           ],           
     "status" : {  
