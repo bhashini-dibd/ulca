@@ -98,10 +98,9 @@ class StatusCronProcessor(Thread):
         if not que_aggregate:
             log.info("0 queued srns found >>")
             return None
-        queued_srn   = dict()
+        queued_srn   = []
         for que in que_aggregate:
-            queued_srn['srn'] = que["serviceRequestNumber"]
-            queued_srn['tool'] = que["tool"]
+            queued_srn.append(que["serviceRequestNumber"])
         log.info(f'{len(queued_srn)} queued srns found')
         return queued_srn
   
