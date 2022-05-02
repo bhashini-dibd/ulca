@@ -35,13 +35,15 @@ class AggregateTabularDataModel(object):
             sub_query = f'WHERE ({datatype} = \'{dtype}\') GROUP BY {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter}, {datatype}'
             qry  = query+sub_query
             result_parsed = utils.query_runner(qry)
-            
+            log.info("Data queried from Druid: {} rows".format(len(result_parsed)))
+            log.info("Queried data : {}".format(str(result_parsed)))
             df = pd.DataFrame(result_parsed)
             df[collection_method] = df[collection_method].fillna('unspecified', inplace=True)
             df.loc[df[delete]==True, total] = 0-df[total]
             grouped_df = df.groupby([src, tgt, collection_method, domain, submitter, datatype])[total].sum()
             df1 = grouped_df.to_frame().reset_index()
             data_tabular = df1.to_dict('records')
+            log.info("Data counts formatted: {} rows".format(len(data_tabular)))
             return data_tabular
 
 
