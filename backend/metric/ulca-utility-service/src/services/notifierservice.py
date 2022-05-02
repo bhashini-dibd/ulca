@@ -7,7 +7,7 @@ log         =   logging.getLogger('file')
 
 repo    =   NotifierRepo()
 
-class NotifierService:
+class NotifierService():
 
     # Cron JOB to update filter set params
     def notify_user(self,emails=None):
@@ -33,31 +33,31 @@ class NotifierService:
     def calculate_counts(self):
         log.info('Calculating counts!')
         try:
-            parallel_count = repo.count_data_col({},config.data_db_schema,config.data_parallel)
-            log.info(parallel_count)
-            ocr_count = repo.count_data_col({},config.data_db_schema,config.data_ocr)
-            log.info(ocr_count)
-            mono_count = repo.count_data_col({},config.data_db_schema,config.data_mono)
-            log.info(mono_count)
-            asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
-            asr_count = (asr_labeled[0]["total"])/3600
-            log.info(asr_count)
-            asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
-            asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
-            log.info(asr_unlabeled_count)
-            tts = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_tts)
-            tts_count = (tts[0]["total"])/3600
-            log.info(tts_count)
+            parallel_count1 = repo.count_data_col({},config.data_db_schema,config.data_parallel)
+            log.info(parallel_count1)
+            ocr_count1 = repo.count_data_col({},config.data_db_schema,config.data_ocr)
+            log.info(ocr_count1)
+            mono_count1 = repo.count_data_col({},config.data_db_schema,config.data_mono)
+            log.info(mono_count1)
+            asr_labeled1 = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
+            asr_count1 = (asr_labeled1[0]["total"])/3600
+            log.info(asr_count1)
+            asr_unlabeled1 = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
+            asr_unlabeled_count1 = (asr_unlabeled1[0]["total"])/3600
+            log.info(asr_unlabeled_count1)
+            tts1 = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_tts)
+            tts_count1 = (tts1[0]["total"])/3600
+            log.info(tts_count1)
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
-            pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
-            log.info(f"Pending :{pending_jobs}")
-            log.info(f"In-Progress:{inprogress_jobs}")
-            log.info(f"file:{jobfile}")
+            pending_jobs1,inprogress_jobs1,jobfile1 = self.process_aggregation_output(aggresult)
+            log.info(f"Pending :{pending_jobs1}")
+            log.info(f"In-Progress:{inprogress_jobs1}")
+            log.info(f"file:{jobfile1}")
             
-            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,jobfile
+            return parallel_count1,ocr_count1,mono_count1,asr_count1,asr_unlabeled_count1,tts_count1,pending_jobs1,inprogress_jobs1,jobfile1
         except Exception as e:
             log.exception(f'{e}')
 

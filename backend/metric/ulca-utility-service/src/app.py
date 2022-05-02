@@ -10,28 +10,35 @@ import config
 log = logging.getLogger('file')
 from logging.config import dictConfig
 import threading
-app  = Flask(__name__)
+notify  = Flask(__name__)
 
-app.config.update(config.MAIL_SETTINGS)
+notify.config.update(config.MAIL_SETTINGS)
 #creating an instance of Mail class
-mail=Mail(app)
+mail=Mail(notify)
 
 if config.ENABLE_CORS:
-    cors    = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    cors    = CORS(notify, resources={r"/api/*": {"origins": "*"}})
 
 def start_cron():
-    with app.test_request_context():
+    with notify.test_request_context():
         statcron    =    StatusCronProcessor(threading.Event())
         statcron.start()
 
+#def start_mism():
+#    with notify.test_request_context():
+#        statmims    =    NotifierResource(threading.Event())
+#        statmims.start()
+
 for blueprint in vars(routes).values():
     if isinstance(blueprint, Blueprint):
-        app.register_blueprint(blueprint, url_prefix=config.API_URL_PREFIX)
+        notify.register_blueprint(blueprint, url_prefix=config.API_URL_PREFIX)
 
 
 if __name__ == "__main__":
     start_cron()
-    app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
+    #start_mism()
+    log.info('here')
+    notify.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
     
 # Log config
 dictConfig({
