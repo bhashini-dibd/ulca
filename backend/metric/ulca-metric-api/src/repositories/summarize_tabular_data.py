@@ -5,7 +5,7 @@ class GetTabularData(object):
         self.aggregateTabularDataModel      =   AggregateTabularDataModel()
 
 
-    def aggregate(self, search_data):
+    def aggregate(self):
 
         tabular_data = self.aggregateTabularDataModel.data_aggregator()
         return tabular_data
