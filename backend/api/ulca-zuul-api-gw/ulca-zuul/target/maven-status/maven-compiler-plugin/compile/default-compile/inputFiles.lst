@@ -13,5 +13,6 @@
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/models/Action.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/app/ZuulGatewayApplication.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/exceptions/CustomException.java
+/Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/exceptions/RateLimitExceededException.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/cache/ZuulConfigCache.java
 /Users/mahulivishal/Desktop/ulca/ulca-zuul/ulca/backend/api/ulca-zuul-api-gw/ulca-zuul/src/main/java/org/ulca/models/UMSResponse.java

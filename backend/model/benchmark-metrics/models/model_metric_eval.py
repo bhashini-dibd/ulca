@@ -9,13 +9,14 @@ class ModelMetricEval():
     for metrics(configs/metric_config.json) to be enabled in the application.
     """
 
-    def machine_translation_metric_eval(self, ground_truth, machine_translation):
+    def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         """
         Functional interface for translation type model
 
         ground_truth        : golden data/human vetted sentences
         machine_translation : model generated sentences
-        
+        language            : model output language
+
         Returns the evaluation score
         """
         pass
@@ -28,5 +29,29 @@ class ModelMetricEval():
         machine_translation : model generated sentences
         
         Returns the evaluation score
+        """
+        pass
+
+    def ocr_metric_eval(self, ground_truth, machine_translation):
+        """
+        Functional interface for OCR type model
+
+        ground_truth        : golden data/human vetted sentences
+        machine_translation : model generated sentences
+        
+        Returns the evaluation score
+        """
+        pass
+
+    def preprocess_data(self, in_data, lang):
+        """
+        Interface to add preprocessing required before metric evaluation.
+        All metric implementations should override this method to implement
+        tokenization, normalisation or any preprocessing required.
+
+        in_data             : ground_truth or machine_translation to be preprocessed
+        language            : model output language
+
+        Returns the preprocessed list of sentences
         """
         pass

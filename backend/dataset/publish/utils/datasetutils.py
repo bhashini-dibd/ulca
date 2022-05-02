@@ -43,9 +43,6 @@ class DatasetUtils:
     def push_result_to_object_store(self, result, service_req_no, size):
         log.info(f'Writing results and sample to Object Store......')
         try:
-            '''res_path = f'{shared_storage_path}{service_req_no}-ds.json'
-            with open(res_path, 'w') as f:
-                json.dump(result, f)'''
             log.info(f'Zipping the result set......')
             res_path = self.zip_result(result, service_req_no)
             res_path_sample = f'{shared_storage_path}{service_req_no}-sample.json'

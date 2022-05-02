@@ -1,28 +1,28 @@
 openapi: 3.0.0
 info:
   title: ULCA - model schema
-  description: "The documentation defines the model."
+  description: The documentation defines the model.
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
   version: 0.1.0
 servers:
-- url: /umca
+  - url: /ulca
 paths: {}
 components:
   schemas:
     Model:
       required:
-      - name
-      - version
-      - description
-      - task
-      - languages
-      - license
-      - domain
-      - submitter
-      - inferenceEndPoint
-      - trainingDataset
+        - name
+        - version
+        - description
+        - task
+        - languages
+        - license
+        - domain
+        - submitter
+        - inferenceEndPoint
+        - trainingDataset
       type: object
       properties:
         name:
@@ -41,8 +41,7 @@ components:
           maxLength: 1000
           minLength: 25
           type: string
-          description: "brief description about model, its goal, basically something\
-            \ sweet about it"
+          description: brief description about model, its goal, basically something sweet about it
           example: Speech recognition model for classroom lecture
         refUrl:
           maxLength: 200
@@ -51,24 +50,26 @@ components:
           description: github link or url giving further info about the model
           example: https://github.com/Open-Speech-EkStep/vakyansh-models
         task:
-          $ref: '#/components/schemas/ModelTask'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         languages:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
         license:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
+        licenseUrl:
+          type: string
+          description: url of the custom license
         domain:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         submitter:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Submitter
         inferenceEndPoint:
           $ref: '#/components/schemas/InferenceAPIEndPoint'
         trainingDataset:
           $ref: '#/components/schemas/TrainingDataset'
-
     InferenceAPIEndPoint:
       required:
-      - callbackUrl
-      - schema
+        - callbackUrl
+        - schema
       type: object
       properties:
         callbackUrl:
@@ -77,24 +78,71 @@ components:
         schema:
           type: object
           oneOf:
-          - $ref: '#/components/schemas/TranslationInference'
-          - $ref: '#/components/schemas/ASRInference'
-          - $ref: '#/components/schemas/TTSInference'
-          - $ref: '#/components/schemas/OCRInference'
+            - $ref: '#/components/schemas/TranslationInference'
+            - $ref: '#/components/schemas/TransliterationInference'
+            - $ref: '#/components/schemas/ASRInference'
+            - $ref: '#/components/schemas/TTSInference'
+            - $ref: '#/components/schemas/OCRInference'
           discriminator:
             propertyName: taskType
-            mapping: {
-              translation: TranslationInference,
-              asr: ASRInference,
-              tts: TTSInference,
+            mapping:
+              translation: TranslationInference
+              transliteration: TransliterationInference
+              asr: ASRInference
+              tts: TTSInference
               ocr: OCRInference
-            }
+        isSyncApi:
+          type: boolean
+          description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
+        asyncApiDetails:
+          $ref: '#/components/schemas/AsyncApiDetails'
       description: hosted location defines the end point of the model inference. specify a taskType along with Inference type
-
+    AsyncApiDetails:
+      required:
+        - pollingUrl
+        - pollInterval
+      type: object
+      properties:
+        pollingUrl:
+          type: string
+          format: url
+          description: endpoint specified for polling in async calls
+        pollInterval:
+          type: integer
+          description: polling interval in millisec to check for status
+        asyncApiSchema:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/TranslationAsyncInference'
+            - $ref: '#/components/schemas/ASRAsyncInference'
+            - $ref: '#/components/schemas/TTSAsyncInference'
+            - $ref: '#/components/schemas/OCRAsyncInference'
+          discriminator:
+            propertyName: taskType
+            mapping:
+              translation: TranslationAsyncInference
+              asr: ASRAsyncInference
+              tts: TTSAsyncInference
+              ocr: OCRAsyncInference
+        asyncApiPollingSchema:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/TranslationAsyncPollingInference'
+            - $ref: '#/components/schemas/ASRAsyncPollingInference'
+            - $ref: '#/components/schemas/TTSAsyncPollingInference'
+            - $ref: '#/components/schemas/OCRAsyncPollingInference'
+          discriminator:
+            propertyName: taskType
+            mapping:
+              translation: TranslationAsyncPollingInference
+              asr: ASRAsyncPollingInference
+              tts: TTSAsyncPollingInference
+              ocr: OCRAsyncPollingInference
+      description: async api details
     FileUploadAPIEndPoint:
       required:
-      - callbackUrl
-      - schema
+        - callbackUrl
+        - schema
       type: object
       properties:
         callbackUrl:
@@ -103,192 +151,240 @@ components:
         schema:
           type: object
           oneOf:
-          - $ref: '#/components/schemas/FileUploadRequest'
-      description: hosted location of the file which would be sent for the validation
-        of the Inference API endpoint.
-
-    ModelTask:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - translation
-          - tts
-          - asr
-          - document-layout
-          - ocr
-      description: the category of model under which it has been released or trained
-
+            - $ref: '#/components/schemas/FileUploadRequest'
+      description: hosted location of the file which would be sent for the validation of the Inference API endpoint.
     TrainingDataset:
       required:
-      - description
+        - description
       type: object
       properties:
         datasetId:
           type: string
-          description: "dataset identifier that has been exported from ULCA system,\
-            \ passing this information makes your model enriched with further information\
-            \ for the community"
+          description: dataset identifier that has been exported from ULCA system, passing this information makes your model enriched with further information for the community
         description:
           type: string
           description: explain your dataset that you have used for training your model
       description: training dataset metadata used to train the model
-
     TranslationInference:
       required:
-      - request
+        - request
       type: object
       properties:
         request:
           $ref: '#/components/schemas/TranslationRequest'
         response:
           $ref: '#/components/schemas/TranslationResponse'
-    
+    TransliterationInference:
+      required:
+        - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/TranslationRequest'
+        response:
+          $ref: '#/components/schemas/TranslationResponse'
+    TranslationAsyncInference:
+      required:
+        - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/TranslationRequest'
+        response:
+          $ref: '#/components/schemas/PollingRequest'
+    TranslationAsyncPollingInference:
+      required:
+        - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/PollingRequest'
+        response:
+          $ref: '#/components/schemas/TranslationResponse'
+    PollingRequest:
+      required:
+        - requestId
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: Unique identifier of request
+          example: 29837456239a87
     TranslationRequest:
       required:
-      - input
-      - config
+        - input
+        - config
       type: object
       properties:
         input:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TranslationConfig'
-
-
     TranslationResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
-      - output
+        - output
       type: object
       properties:
         output:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TranslationConfig'  
-
+          $ref: '#/components/schemas/TranslationConfig'
     ASRInference:
       required:
-      - request
+        - request
       type: object
       properties:
         request:
           $ref: '#/components/schemas/ASRRequest'
         response:
           $ref: '#/components/schemas/ASRResponse'
-
+    ASRAsyncInference:
+      required:
+        - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/ASRRequest'
+        response:
+          $ref: '#/components/schemas/PollingRequest'
+    ASRAsyncPollingInference:
+      required:
+        - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/PollingRequest'
+        response:
+          $ref: '#/components/schemas/ASRResponse'
     ASRRequest:
       required:
-      - audio
-      - config
+        - audio
+        - config
       type: object
       properties:
         audio:
-          $ref: '#/components/schemas/ASRFiles'
+          $ref: '#/components/schemas/AudioFiles'
         config:
-          $ref: '#/components/schemas/ASRConfig'
-
+          $ref: '#/components/schemas/AudioConfig'
     ASRResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
-      - output
+        - output
       type: object
       properties:
         output:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TranslationConfig' 
-
+          $ref: '#/components/schemas/TranslationConfig'
     TTSInference:
       required:
-      - request
+        - request
       type: object
       properties:
         request:
           $ref: '#/components/schemas/TTSRequest'
         response:
           $ref: '#/components/schemas/TTSResponse'
-    
+    TTSAsyncInference:
+      required:
+        - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/TTSRequest'
+        response:
+          $ref: '#/components/schemas/PollingRequest'
+    TTSAsyncPollingInference:
+      required:
+        - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/PollingRequest'
+        response:
+          $ref: '#/components/schemas/TTSResponse'
     TTSRequest:
       required:
-      - input
-      - config
+        - input
+        - config
       type: object
       properties:
         input:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TTSConfig'
-
-
     TTSResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
-      - audioUri
+        - audio
       type: object
       properties:
-        audioUri:
-          type: string
-          description: path on gcp/s3 bucket or https url
-          example: gs://bucket/audio.wav
+        audio:
+          $ref: '#/components/schemas/AudioFiles'
         config:
-          $ref: '#/components/schemas/ASRConfig'
-
+          $ref: '#/components/schemas/AudioConfig'
     OCRInference:
       required:
-      - request
+        - request
       type: object
       properties:
         request:
           $ref: '#/components/schemas/OCRRequest'
         response:
           $ref: '#/components/schemas/OCRResponse'
-
-    OCRRequest:
+    OCRAsyncInference:
       required:
-      - imageUri
-      - config
+        - request
       type: object
       properties:
-        imageUri:
-          type: array
-          description: list of paths on gcp/s3 bucket or https url
-          example: gs://bucket/testimg.jpeg
-          items:
-            maxItems: 10
-            minItems: 1
-            type: string
+        request:
+          $ref: '#/components/schemas/OCRRequest'
+        response:
+          $ref: '#/components/schemas/PollingRequest'
+    OCRAsyncPollingInference:
+      required:
+        - request
+      type: object
+      properties:
+        request:
+          $ref: '#/components/schemas/PollingRequest'
+        response:
+          $ref: '#/components/schemas/OCRResponse'
+    OCRRequest:
+      required:
+        - image
+        - config
+      type: object
+      properties:
+        image:
+          $ref: '#/components/schemas/ImageFiles'
         config:
           $ref: '#/components/schemas/OCRConfig'
-
     OCRResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
-      - output
+        - output
       type: object
       properties:
         output:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TranslationConfig' 
-          
+          $ref: '#/components/schemas/TranslationConfig'
     FileUploadRequest:
       type: object
       properties:
         fileName:
           type: string
           format: binary
-
     Sentences:
       type: array
       description: list of
       items:
         $ref: '#/components/schemas/Sentence'
-
     Sentence:
       required:
-      - source
+        - source
       type: object
       properties:
         source:
@@ -299,10 +395,9 @@ components:
           minLength: 1
           type: string
           description: to be used along with translation model. expected translated sentence, for reference
-
     TranslationConfig:
       required:
-      - language
+        - language
       type: object
       properties:
         modelId:
@@ -310,11 +405,10 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
-
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
     OCRConfig:
       required:
-      - language
+        - language
       type: object
       properties:
         modelId:
@@ -322,11 +416,11 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
-
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
     TTSConfig:
       required:
-      - language
+        - language
+        - gender
       type: object
       properties:
         modelId:
@@ -334,11 +428,13 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
-
-    ASRConfig:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        gender:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Gender
+    AudioConfig:
       required:
-      - language
+        - language
+        - audioFormat
       type: object
       properties:
         modelId:
@@ -346,37 +442,37 @@ components:
           description: Unique identifier of model
           example: 103
         language:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         audioFormat:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         transcriptionFormat:
           $ref: '#/components/schemas/TranscriptionFormat'
         profanityFilter:
           type: boolean
           example: true
         domain:
-          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain'
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         detailed:
           type: boolean
-          description: "to specify whether details are required in output like SNR,\
-            \ sampling rate"
+          description: to specify whether details are required in output like SNR, sampling rate
         punctuation:
           type: boolean
           example: true
         model:
           type: string
           enum:
-          - command_and_search
-          - phone_call
-          - video
-          - default
-
+            - command_and_search
+            - phone_call
+            - video
+            - default
+        encoding:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
     TranscriptionFormat:
       type: object
       properties:
@@ -384,19 +480,35 @@ components:
           type: string
           description: format of ASR output
           enum:
-          - srt
-          - transcript
-          - alternatives
-
-    ASRFiles:
+            - srt
+            - transcript
+            - alternatives
+    ImageFiles:
       type: array
       description: list of
       items:
-        $ref: '#/components/schemas/ASRFile'
-
-    ASRFile:
+        $ref: '#/components/schemas/ImageFile'
+    ImageFile:
       required:
-      - audioContent | audioUri
+        - imageContent | imageUri
+      type: object
+      properties:
+        imageContent:
+          type: string
+          description: image content
+          format: byte
+        imageUri:
+          type: string
+          description: path on gcp/s3 bucket or https url
+          example: gs://bucket/testimg.jpeg
+    AudioFiles:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/AudioFile'
+    AudioFile:
+      required:
+        - audioContent | audioUri
       type: object
       properties:
         audioContent:
@@ -407,8 +519,6 @@ components:
           type: string
           description: path on gcp/s3 bucket or https url
           example: gs://bucket/audio.wav
-
-
     ASRRecognitionStatus:
       type: object
       properties:
@@ -416,24 +526,20 @@ components:
           type: string
           description: status of ASR response
           enum:
-          - success
-          - no-match
-          - initial-silence-timeout
-          - babble-timeout
-          - error
-
+            - success
+            - no-match
+            - initial-silence-timeout
+            - babble-timeout
+            - error
     ASRRecognitionDetails:
       type: object
       properties:
         channelTag:
           type: integer
-          description: "For multi-channel audio, this is the channel number corresponding\
-            \ to the recognized result for the audio from that channel. For audioChannelCount\
-            \ = N, its output values can range from '1' to 'N'"
+          description: For multi-channel audio, this is the channel number corresponding to the recognized result for the audio from that channel. For audioChannelCount = N, its output values can range from '1' to 'N'
         languageCode:
           type: string
-          description: This language code was detected to have the most likelihood
-            of being spoken in the audio
+          description: This language code was detected to have the most likelihood of being spoken in the audio
         snr:
           type: integer
           description: sound to noise ratio of audio
@@ -443,11 +549,9 @@ components:
         bitsPerSample:
           type: integer
           description: bitsPerSample rate of audio
-
   securitySchemes:
     authToken:
       type: apiKey
       description: token issued by authenticating the user
       name: auth-token
       in: header
-

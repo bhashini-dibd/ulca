@@ -33,6 +33,7 @@ import com.ulca.dataset.dao.DatasetKafkaTransactionErrorLogDao;
 import com.ulca.dataset.dao.FileIdentifierDao;
 import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.service.DatasetErrorPublishService;
+import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.kakfa.model.FileDownload;
 import com.ulca.dataset.model.DatasetKafkaTransactionErrorLog;
@@ -79,7 +80,8 @@ public class KafkaFileDownloadConsumer {
 	@Value("${kafka.ulca.ds.ingest.ip.topic}")
 	private String datasetIngestTopic;
 	
-	
+	@Autowired
+	NotificationService notificationService;
 																																						
 	@KafkaListener(groupId = "${kafka.ulca.ds.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.ds.filedownload.ip.topic}" , containerFactory = "filedownloadKafkaListenerContainerFactory")
 	public void downloadFile(FileDownload file) {
@@ -93,9 +95,6 @@ public class KafkaFileDownloadConsumer {
 		String userId = file.getUserId();
 		
 		DatasetIngest datasetIngest = new DatasetIngest();
-		//disabling pseudo ingest
-		//datasetIngest.setMode(DatasetConstants.INGEST_PSEUDO_MODE);
-		datasetIngest.setMode(DatasetDownloadConstants.INGEST_REAL_MODE);
 		
 		
 		Map<String,String> fileMap = null;
@@ -138,6 +137,10 @@ public class KafkaFileDownloadConsumer {
 				datasetIngest.setMd5hash(md5hash);
 				datasetIngest.setDatasetType(datasetType);
 				datasetIngest.setUserId(userId);
+				
+				datasetIngest.setMode(DatasetDownloadConstants.INGEST_PRECHECK_MODE);
+				
+				
 
 			} catch (IOException e) {
 				
@@ -151,6 +154,8 @@ public class KafkaFileDownloadConsumer {
 				
 				//send error event for download failure
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_FILE_DOWNLOAD_FAILURE", e.getMessage(), serviceRequestNumber, datasetName,"download" , null, null) ;
+				
+				notificationService.notifyDatasetFailed(serviceRequestNumber, datasetName, userId);
 				e.printStackTrace();
 				
 				return;
@@ -197,13 +202,10 @@ public class KafkaFileDownloadConsumer {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
-									
 						    	
 						    }
 						});
 					 
-					 
-				
 			}catch ( KafkaException ex) {
 				log.info("Error occured while sending message to datasetIngestTopic, serviceRequestNumber :: "+serviceRequestNumber);
 				log.info("Error message :: " + ex.getMessage());
@@ -234,9 +236,8 @@ public class KafkaFileDownloadConsumer {
 					
 				throw ex;
 			}
-			
+
 			//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
-			
 			
 			log.info("************ Exit KafkaFileDownloadConsumer :: downloadFile *********");
 			
@@ -244,9 +245,7 @@ public class KafkaFileDownloadConsumer {
 			log.info("Unhadled Exception :: " + e.getMessage());
 			log.info("cause :: " + e.getClass());
 			e.printStackTrace();
-			
 		}
-		
 	}
 
 	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {

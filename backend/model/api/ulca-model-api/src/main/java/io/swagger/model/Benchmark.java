@@ -1,6 +1,5 @@
 package io.swagger.model;
 
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -8,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.validation.annotation.Validated;
 
@@ -29,14 +29,24 @@ public class Benchmark {
 	@JsonProperty("benchmarkId")
 	private String benchmarkId = null;
 
+	@Indexed(unique = true)
 	@JsonProperty("name")
 	private String name = null;
+
+	@JsonProperty("version")
+	private String version = "1";
+
+	@JsonProperty("license")
+	private License license = null;
+	
+	@JsonProperty("licenseUrl")
+	private String licenseUrl = null;
 
 	@JsonProperty("description")
 	private String description = null;
 
-	@JsonProperty("metric")
-	private List<String> metric = null;
+	@JsonProperty("userId")
+	private String userId = null;
 
 	@JsonProperty("dataset")
 	private String dataset = null;
@@ -48,16 +58,25 @@ public class Benchmark {
 	private ModelTask task = null;
 
 	@JsonProperty("languages")
-	private LanguagePairs languages = null;
+	private LanguagePair languages = null;
 
 	@JsonProperty("submitter")
 	private Submitter submitter = null;
+
+	@JsonProperty("collectionSource")
+	private Source collectionSource = null;
+
+	@JsonProperty("paramSchema")
+	private Object paramSchema = null;
 
 	@JsonProperty("createdOn")
 	private String createdOn = null;
 
 	@JsonProperty("submittedOn")
 	private String submittedOn = null;
+
+	@JsonProperty("status")
+	private String status = null;
 
 	public Benchmark benchmarkId(String benchmarkId) {
 		this.benchmarkId = benchmarkId;
@@ -100,6 +119,68 @@ public class Benchmark {
 		this.name = name;
 	}
 
+	public Benchmark version(String version) {
+		this.version = version;
+		return this;
+	}
+
+	/**
+	 * params schema version
+	 * 
+	 * @return version
+	 **/
+	@Schema(description = "params schema version")
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public Benchmark license(License license) {
+		this.license = license;
+		return this;
+	}
+
+	/**
+	 * Get license
+	 * 
+	 * @return license
+	 **/
+	@Schema(required = true, description = "")
+	@NotNull
+
+	@Valid
+	public License getLicense() {
+		return license;
+	}
+
+	public void setLicense(License license) {
+		this.license = license;
+	}
+	
+	public Benchmark licenseUrl(String licenseUrl) {
+	    this.licenseUrl = licenseUrl;
+	    return this;
+	  }
+
+	  /**
+	   * url of the custom license
+	   * @return licenseUrl
+	   **/
+	  @Schema(description = "url of the custom license")
+	  
+	    public String getLicenseUrl() {
+	    return licenseUrl;
+	  }
+
+	  public void setLicenseUrl(String licenseUrl) {
+	    this.licenseUrl = licenseUrl;
+	  }
+
+
 	public Benchmark description(String description) {
 		this.description = description;
 		return this;
@@ -122,17 +203,17 @@ public class Benchmark {
 		this.description = description;
 	}
 
-	public Benchmark metric(List<String> metric) {
-		this.metric = metric;
+	public Benchmark userId(String userId) {
+		this.userId = userId;
 		return this;
 	}
 
-	public List<String> getMetric() {
-		return metric;
+	public String getUserId() {
+		return userId;
 	}
 
-	public void setMetric(List<String> metric) {
-		this.metric = metric;
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public Benchmark dataset(String dataset) {
@@ -201,7 +282,7 @@ public class Benchmark {
 		this.task = task;
 	}
 
-	public Benchmark languages(LanguagePairs languages) {
+	public Benchmark languages(LanguagePair languages) {
 		this.languages = languages;
 		return this;
 	}
@@ -213,13 +294,11 @@ public class Benchmark {
 	 **/
 	@Schema(required = true, description = "")
 	@NotNull
-
-	@Valid
-	public LanguagePairs getLanguages() {
+	public LanguagePair getLanguages() {
 		return languages;
 	}
 
-	public void setLanguages(LanguagePairs languages) {
+	public void setLanguages(LanguagePair languages) {
 		this.languages = languages;
 	}
 
@@ -243,6 +322,47 @@ public class Benchmark {
 
 	public void setSubmitter(Submitter submitter) {
 		this.submitter = submitter;
+	}
+
+	public Benchmark collectionSource(Source collectionSource) {
+		this.collectionSource = collectionSource;
+		return this;
+	}
+
+	/**
+	 * various sources, url from where the information is collected.
+	 * 
+	 * @return collectionSource
+	 **/
+	@Schema(example = "[\"https://main.sci.gov.in\"]", description = "various sources, url from where the information is collected.")
+
+	@Valid
+	public Source getCollectionSource() {
+		return collectionSource;
+	}
+
+	public void setCollectionSource(Source collectionSource) {
+		this.collectionSource = collectionSource;
+	}
+
+	public Benchmark paramSchema(Object paramSchema) {
+		this.paramSchema = paramSchema;
+		return this;
+	}
+
+	/**
+	 * timestamp when benchmark is created
+	 * 
+	 * @return createdOn
+	 **/
+	@Schema(description = "timestamp when benchmark is created")
+
+	public Object getParamSchema() {
+		return paramSchema;
+	}
+
+	public void setParamSchema(Object paramSchema) {
+		this.paramSchema = paramSchema;
 	}
 
 	public Benchmark createdOn(String createdOn) {
@@ -285,6 +405,19 @@ public class Benchmark {
 		this.submittedOn = submittedOn;
 	}
 
+	public Benchmark status(String status) {
+		this.status = status;
+		return this;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	@Override
 	public boolean equals(java.lang.Object o) {
 		if (this == o) {
@@ -294,14 +427,18 @@ public class Benchmark {
 			return false;
 		}
 		Benchmark benchmark = (Benchmark) o;
-		return Objects.equals(this.benchmarkId, benchmark.benchmarkId) && Objects.equals(this.name, benchmark.name)
+		return Objects.equals(this.benchmarkId, benchmark.benchmarkId)
+				&& Objects.equals(this.name, benchmark.name)
+				&& Objects.equals(this.license, benchmark.license)
+				&& Objects.equals(this.licenseUrl, benchmark.licenseUrl)
 				&& Objects.equals(this.description, benchmark.description)
-				&& Objects.equals(this.dataset, benchmark.dataset) && Objects.equals(this.domain, benchmark.domain)
-				&& Objects.equals(this.task, benchmark.task) && 
-				Objects.equals(this.languages, benchmark.languages) &&
-				Objects.equals(this.submitter, benchmark.submitter) &&
-				Objects.equals(this.createdOn, benchmark.createdOn) && 
-				Objects.equals(this.submittedOn, benchmark.submittedOn);
+				&& Objects.equals(this.userId, benchmark.userId) && Objects.equals(this.dataset, benchmark.dataset)
+				&& Objects.equals(this.domain, benchmark.domain) && Objects.equals(this.task, benchmark.task)
+				&& Objects.equals(this.languages, benchmark.languages)
+				&& Objects.equals(this.submitter, benchmark.submitter)
+				&& Objects.equals(this.createdOn, benchmark.createdOn)
+				&& Objects.equals(this.submittedOn, benchmark.submittedOn)
+				&& Objects.equals(this.description, benchmark.description);
 	}
 
 	@Override
@@ -316,7 +453,10 @@ public class Benchmark {
 
 		sb.append("    benchmarkId: ").append(toIndentedString(benchmarkId)).append("\n");
 		sb.append("    name: ").append(toIndentedString(name)).append("\n");
+		sb.append("    license: ").append(toIndentedString(license)).append("\n");
+	    sb.append("    licenseUrl: ").append(toIndentedString(licenseUrl)).append("\n");
 		sb.append("    description: ").append(toIndentedString(description)).append("\n");
+		sb.append("    userId: ").append(toIndentedString(userId)).append("\n");
 		sb.append("    dataset: ").append(toIndentedString(dataset)).append("\n");
 		sb.append("    domain: ").append(toIndentedString(domain)).append("\n");
 		sb.append("    task: ").append(toIndentedString(task)).append("\n");
@@ -324,6 +464,7 @@ public class Benchmark {
 		sb.append("    submitter: ").append(toIndentedString(submitter)).append("\n");
 		sb.append("    createdOn: ").append(toIndentedString(createdOn)).append("\n");
 		sb.append("    submittedOn: ").append(toIndentedString(submittedOn)).append("\n");
+		sb.append("    submittedOn: ").append(toIndentedString(status)).append("\n");
 		sb.append("}");
 		return sb.toString();
 	}

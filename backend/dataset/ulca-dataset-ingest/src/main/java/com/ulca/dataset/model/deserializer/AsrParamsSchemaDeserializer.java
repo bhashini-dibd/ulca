@@ -197,6 +197,12 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 				io.swagger.model.License license = io.swagger.model.License.fromValue(licenseText);
 				if (license != null) {
 					asrParamsSchema.setLicense(license);
+					if(license == io.swagger.model.License.CUSTOM_LICENSE) {
+						String licenseUrl = node.get("licenseUrl").asText();
+						if(licenseUrl.isBlank()) {
+							errorList.add("custom licenseUrl field value should be present");
+						}
+					}
 				} else {
 					errorList.add("license field value should be present in license list");
 				}
@@ -367,12 +373,17 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 								.asText();
 						CollectionMethodAudio.CollectionDescriptionEnum collectionDescriptionEnum = CollectionMethodAudio.CollectionDescriptionEnum
 								.fromValue(collectionDescription);
-
+						
 						CollectionMethodAudio collectionMethodAudio = new CollectionMethodAudio();
 						List<CollectionMethodAudio.CollectionDescriptionEnum> list = new ArrayList<CollectionMethodAudio.CollectionDescriptionEnum>();
 						list.add(collectionDescriptionEnum);
 						collectionMethodAudio.setCollectionDescription(list);
-
+						
+						/*
+						 * collectionDetails is non mandatory
+						 */
+						if (node.get("collectionMethod").has("collectionDetails")) { 
+							
 						switch (collectionDescriptionEnum) {
 						case AUTO_ALIGNED:
 							if (node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {
@@ -456,6 +467,7 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 							log.info("manual-transcribed");
 							break;
 						}
+					}
 					} catch (Exception e) {
 						log.info("collection method not proper");
 						errorList.add("collectionMethod field value not proper.");

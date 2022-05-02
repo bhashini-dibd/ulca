@@ -11,7 +11,7 @@
           "sourceLanguage": "hi"
        }
     ],
-    "license": "cc-by-4.0",
+    "license": "mit",
     "domain": [
        "general"
     ],
@@ -88,7 +88,7 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "https://model-api.vakyansh.in/v1/recognize/hi",
+       "callbackUrl": "https://meity-dev-asr.ulcacontrib.org/asr/v1/recognize/hi",
        "schema": {
           "taskType": "asr",
           "request": {

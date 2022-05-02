@@ -53,6 +53,8 @@ components:
           - kha
           - grt
           - sa
+          - raj
+          - bho
         targetLanguageName:
           type: string
           description: human name associated with the language code
@@ -89,6 +91,8 @@ components:
           - kha
           - grt
           - sa
+          - raj
+          - bho
       description: "language pair, make targetLanguage null to reuse the object to\
         \ indicate single language"
     LanguagePairs:
@@ -147,6 +151,7 @@ components:
       - bsd-3-clause
       - private-commercial
       - unknown-license
+      - custom-license
     Contributor:
       required:
       - name
@@ -192,6 +197,7 @@ components:
       - parallel-corpus
       - monolingual-corpus
       - asr-corpus
+      - tts-corpus
       - asr-unlabeled-corpus
       - ocr-corpus
       - document-layout-corpus
@@ -293,6 +299,7 @@ components:
       - pcm
       - mp3
       - flac
+      - sph
     AudioChannel:
       type: string
       description: number of channel in the audio
@@ -325,6 +332,16 @@ components:
       - transgender
       - non-specified
       - others
+    Encoding:
+      type: string
+      description: encoding used for representing the input/output binary data
+      enum:
+      - base64
+      - base85
+      - base36
+      - base32
+      - ascii
+      - ascii85
     ProcessStage:
       type: string
       description: various life-cycle stage of model when benchmarking
@@ -375,3 +392,16 @@ components:
           - $ref: '#/components/schemas/LanguagePair'
           - $ref: '#/components/schemas/Source'
           - $ref: '#/components/schemas/CollectionMethod'
+    ModelTask:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - translation
+          - tts
+          - asr
+          - document-layout
+          - ocr
+      description: the category of model under which it has been released or trained
+

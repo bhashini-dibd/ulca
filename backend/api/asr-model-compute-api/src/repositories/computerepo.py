@@ -1,10 +1,10 @@
 from logging import exception
 import os
 from pydub import AudioSegment
+from models.response import CustomResponse, post_error
 import base64
-import validators
 import json
-from config import shared_storage_path,vakyansh_audiouri_link,vakyansh_audicontent_link
+from config import shared_storage_path
 import base64
 import requests
 import logging
@@ -14,13 +14,22 @@ log = logging.getLogger('file')
 
 class ASRComputeRepo:
 
-    def process_asr(self,lang,audio,userId,inference):
+    def process_asr(self,lang,audio,userId,inference,uri):
+        """
+        Processing audio urls / encoded audio content
+        If url, directly initiating the model call
+        If audio is base64 encoded :
+        - Decoding back from base64
+        - setting channel to 1
+        - Setting frame rate to 16k
+        - Encoding back to base64
+        - decoding to utf-8
+        """
         
         callbackurl =   inference["callbackUrl"]
-        transformat =   inference["schema"]["request"]["config"]["transcriptionFormat"]["value"].upper()
-        audioformat =   inference["schema"]["request"]["config"]["audioFormat"].upper()
-        url=validators.url(audio)
-        if url == True:
+        transformat =   inference["schema"]["request"]["config"]["transcriptionFormat"]["value"]
+        audioformat =   inference["schema"]["request"]["config"]["audioFormat"]
+        if uri == True:
             result = self.make_audiouri_call(audio,lang,callbackurl,transformat,audioformat)
             return result
         else:
@@ -40,70 +49,81 @@ class ASRComputeRepo:
                 encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
                 os.remove(file)
                 os.remove(processed_file)
-                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat)
+                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat,punctiation=True)
                 return result
 
             except Exception as e:
                 log.info(f'Exception while processing request: {e}')
                 return []
 
-    def process_asr_from_audio_file(self,lang,audio_file_path,callback_url,transformat,audioformat):
-        
-            try:
-                audio = AudioSegment.from_wav(audio_file_path)
-                audio = audio.set_channels(1)
-                audio = audio.set_frame_rate(16000)
-                processed_file = f'{shared_storage_path}audio-processed.wav'
-                audio.export(processed_file, format="wav")
-                encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
-                os.remove(processed_file)
-                result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callback_url,transformat,audioformat)
-                return result
+    def process_asr_from_audio_file(self,lang,audio_file_path,callback_url,transformat,audioformat,punctiation=False):
+        """
+        Processing audio files.
+        - Reading file from shared storage
+        - setting channel to 1
+        - Setting frame rate to 16k
+        - Encoding back to base64
+        - decoding to utf-8
+        """
+        try:
+            audio = AudioSegment.from_wav(audio_file_path)
+            audio = audio.set_channels(1)
+            audio = audio.set_frame_rate(16000)
+            processed_file = f'{shared_storage_path}audio-processed.wav'
+            audio.export(processed_file, format="wav")
+            encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
+            os.remove(processed_file)
+            result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callback_url,transformat,audioformat,punctiation)
+            return result
 
-            except Exception as e:
-                log.info(f'Exception while processing request: {e}')
-                return []
+        except Exception as e:
+            log.info(f'Exception while processing request: {e}')
+            return {}
 
 
     
     def make_audiouri_call(self, url,lang,callbackurl,transformat,audioformat):
+        """
+        API call to model endpoint for audio urls
+        """
         try:
             headers =   {"Content-Type": "application/json"}
-            body    =   {"config": {"language": {"value": lang},"transcriptionFormat": transformat,"audioFormat": audioformat},
-                        "audio": {"audioUri": url}}
+            body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat},
+                        "audio": [{"audioUri": url}]}
+            log.info(f"Request body : {body}")
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
-            response = requests.post(url=request_url, headers = headers, json = body)
+            response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             content = response.content
+            log.info(content)
             response_data = json.loads(content)
-            if response.status_code != 200:
-                log.info(f'Requestfailed due to {response_data}')
-                return None
+            log.info(f"Response : {response_data}")
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
-            return []
+            return {"status_text":"Incorrect inference endpoint or invalid response"}
 
 
-    def make_base64_audio_processor_call(self,data,lang,callbackurl,transformat,audioformat):
+    def make_base64_audio_processor_call(self,data,lang,callbackurl,transformat,audioformat,punctiation):
+        """
+        API call to model endpoint for audio content
+        """
         try:
             headers =   {"Content-Type": "application/json"}
-            body    =   {"config": {"language": {"value": lang},"transcriptionFormat": transformat,"audioFormat": audioformat},
-                        "audio": {"audioContent": str(data)}}
+            body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat,
+                        "punctuation": punctiation,"enableInverseTextNormalization": False},"audio": [{"audioContent": str(data)}]}
             request_url = callbackurl
             log.info("Intiating request to process asr data on %s"%request_url)
-            response = requests.post(url=request_url, headers = headers, json = body)
+            response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             content = response.content
+            log.info(content)
             response_data = json.loads(content)
-            if response.status_code != 200:
-                log.info(f'Requestfailed due to {response_data["message"]}')
-                return None
-            
-            log.info("Received response from vakyanch end point to transcribe asr data")
+            log.info("Received response from inference end point to transcribe asr data")
+            log.info(f"Response : {response_data}")
             return response_data
         except Exception as e:
             log.exception(f'Exception while making api call: {e}')
-            return []
+            return {"status_text":"Incorrect inference endpoint or invalid response"}
 
 
 

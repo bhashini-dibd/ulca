@@ -9,9 +9,10 @@ from service.asr import ASRValidate
 from service.ocr import OCRValidate
 from service.monolingual import MonolingualValidate
 from service.asr_unlabeled import ASRUnlabeledValidate
+from service.tts import TTSValidate
 
-from configs.configs import kafka_bootstrap_server_host, validate_input_topic, validate_consumer_grp, validate_output_topic
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled
+from configs.configs import kafka_bootstrap_server_host, validate_input_topic, validate_consumer_grp, validate_output_topic, user_mode_real
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, dataset_type_tts
 from kafka import KafkaConsumer
 from processtracker.processtracker import ProcessTracker
 from kafkawrapper.producer import Producer
@@ -36,7 +37,7 @@ def consume():
     try:
         topics = [validate_input_topic]
         consumer = instantiate(topics)
-        p_service, o_service, a_service, m_service, au_service = ParallelValidate(), OCRValidate(), ASRValidate(), MonolingualValidate(), ASRUnlabeledValidate()
+        p_service, o_service, a_service, m_service, au_service, t_service = ParallelValidate(), OCRValidate(), ASRValidate(), MonolingualValidate(), ASRUnlabeledValidate(), TTSValidate()
         pt = ProcessTracker()
         prod = Producer()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
@@ -65,6 +66,8 @@ def consume():
                             m_service.execute_validation_pipeline(data)
                         if data["datasetType"] == dataset_type_asr_unlabeled:
                             au_service.execute_validation_pipeline(data)
+                        if data["datasetType"] == dataset_type_tts:
+                            t_service.execute_validation_pipeline(data)
                     else:
                         break
                 except Exception as e:
@@ -86,7 +89,19 @@ def check_relay(data):
     repo = RedisUtil()
     record = repo.search([data["record"]["id"]])
     if record:
-        return True
+        record = record[0]
+        if 'mode' in record.keys():
+            if record['mode'] == user_mode_real:
+                log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+                return True
+            else:
+                rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"],
+                       "mode": data["userMode"], "datasetType": data["datasetType"]}
+                repo.upsert(data["record"]["id"], rec, True)
+                return False
+        else:
+            log.info(f'RELAY record ID: {data["record"]["id"]}, SRN: {data["serviceRequestNumber"]}')
+            return True
     else:
         rec = {"srn": data["serviceRequestNumber"], "datasetId": data["datasetId"], "mode": data["userMode"],
                "datasetType": data["datasetType"]}

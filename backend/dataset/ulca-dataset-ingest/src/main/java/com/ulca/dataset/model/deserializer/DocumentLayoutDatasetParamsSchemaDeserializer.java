@@ -112,6 +112,12 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 				io.swagger.model.License license = io.swagger.model.License.fromValue(licenseText);
 				if (license != null) {
 					docLayoutParamsSchema.setLicense(license);
+					if(license == io.swagger.model.License.CUSTOM_LICENSE) {
+						String licenseUrl = node.get("licenseUrl").asText();
+						if(licenseUrl.isBlank()) {
+							errorList.add("custom licenseUrl field value should be present");
+						}
+					}
 				} else {
 					errorList.add("license field value should be present in license list");
 				}
@@ -194,6 +200,11 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 							list.add(collectionDescriptionEnum);
 							ocrCollectionMethod.setCollectionDescription(list);
 
+							/*
+							 * collectionDetails is non mandatory
+							 */
+							if (node.get("collectionMethod").has("collectionDetails")) { 
+								
 							if (!node.get("collectionMethod").get("collectionDetails").has("ocrTool")) {
 								errorList.add("collectionDetails should contain ocrTool");
 							} else if (!node.get("collectionMethod").get("collectionDetails").get("ocrTool")
@@ -220,6 +231,7 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 									errorList.add("ocrToolEnum should be one of specified values");
 								}
 							}
+						 }
 
 						} catch (Exception e) {
 							log.info("collection method not proper");

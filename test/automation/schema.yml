@@ -1,19 +1,10 @@
-CollectionMethods:
-- web-scrapping-machine-readable
-- web-scrapping-ocr
-- manual-human-translated
-- algorithm-auto-aligned
-- algorithm-back-translated
-- human-validated
-- phone-recording
-- crowd-sourced
 DataTypes:
 - parallel-corpus
 - monolingual-corpus
 - asr-corpus
+- tts-corpus
 - asr-unlabeled-corpus
 - ocr-corpus
-- document-layout-corpus
 Domains:
 - general
 - news
@@ -70,3 +61,10 @@ Languages:
 - kha
 - grt
 - sa
+- raj
+- bho
+ModelTasks:
+- translation
+- tts
+- asr
+- ocr

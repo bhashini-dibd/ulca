@@ -33,7 +33,7 @@ public class TaskTracker   {
    */
   public enum ToolEnum {
     download("download"),
-    pseudo("pseudo"),
+    precheck("Pre-Check"),
     ingest("ingest"),
     
     validate("validate"),
@@ -67,7 +67,7 @@ public class TaskTracker   {
     }
   }
   @JsonProperty("tool")
-  private ToolEnum tool = null;
+  private String tool = null;
 
   /**
    * Status of the task
@@ -149,7 +149,7 @@ public class TaskTracker   {
     this.serviceRequestNumber = serviceRequestNumber;
   }
 
-  public TaskTracker tool(ToolEnum tool) {
+  public TaskTracker tool(String tool) {
     this.tool = tool;
     return this;
   }
@@ -160,11 +160,11 @@ public class TaskTracker   {
    **/
   @Schema(description = "Tool updating this data")
   
-    public ToolEnum getTool() {
+    public String getTool() {
     return tool;
   }
 
-  public void setTool(ToolEnum tool) {
+  public void setTool(String tool) {
     this.tool = tool;
   }
 

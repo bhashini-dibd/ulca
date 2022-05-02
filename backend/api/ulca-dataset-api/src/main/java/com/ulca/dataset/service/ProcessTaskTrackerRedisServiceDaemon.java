@@ -19,6 +19,7 @@ import com.ulca.dataset.model.ProcessTracker;
 import com.ulca.dataset.model.TaskTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
 
+import io.swagger.model.DatasetType;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -41,12 +42,15 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 	@Value("${kafka.ulca.ds.ingest.ip.topic}")
 	private String datasetIngestTopic;
 	
-	@Value("${pseudo.ingest.success.threshold}")
+	@Value("${pseudo.ingest.success.percentage.threshold}")
 	private Integer successThreshold;
 	
 
 	@Autowired
 	DatasetFileService datasetFileService;
+	
+	@Autowired
+	NotificationService notificationService;
 	
 	@Scheduled(cron = "*/10 * * * * *")
 	public void updateTaskTracker() {
@@ -70,6 +74,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 			} catch (Exception e) {
 				log.info("Exception while processing the fetched Redis map data :: " + entry.toString());
+				e.printStackTrace();
 			}
 
 		}
@@ -78,9 +83,15 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 	public void pseudoIngestUpdate(Map<String, String> val) {
 		
-		
-
 		String serviceRequestNumber = val.containsKey("serviceRequestNumber") ? val.get("serviceRequestNumber") + ""
+				: null;
+		String datasetType = val.containsKey("datasetType") ? val.get("datasetType") + ""
+				: null;
+		String datasetName = val.containsKey("datasetName") ? val.get("datasetName") + ""
+				: null;
+		String datasetId = val.containsKey("datasetId") ? val.get("datasetId") + ""
+				: null;
+		String userId = val.containsKey("userId") ? val.get("userId") + ""
 				: null;
 
 		String baseLocation = val.containsKey("baseLocation") ? val.get("baseLocation") + "" : null;
@@ -100,7 +111,6 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		boolean v1 = false;
 		boolean v2 = false;
 		boolean v3 = false;
-		
 		
 		JSONObject details = new JSONObject();
 
@@ -160,7 +170,8 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			v3 = true;
 
 		}
-
+		
+		
 		if (v1 && v2 && v3) {
 
 			StatusEnum taskStatus = StatusEnum.completed;
@@ -168,33 +179,39 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 			log.info("deleting redis entry for pseudo ingest : serviceRequestNumber :: " + serviceRequestNumber);
 			taskTrackerRedisDao.delete(serviceRequestNumber);
 			
-			double successRate = (publishSuccess/count)*100 ;
+			double successRate = ((double)publishSuccess/(double)count)*100 ;
 			
-			log.info("serviceRequestNumber :: " + serviceRequestNumber + "success rate :: " + successRate);
+			log.info("serviceRequestNumber :: " + serviceRequestNumber + " success rate :: " + successRate);
 			
 			if(successRate <= successThreshold) {
 				
-				log.info(" pseudo ingest failed serviceRequestNumber :: " + serviceRequestNumber);
+				log.info(" pseudo ingest failed for serviceRequestNumber :: " + serviceRequestNumber + " due to success rate less than " + successThreshold);
 				taskStatus = com.ulca.dataset.model.TaskTracker.StatusEnum.failed;
-				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.precheck,
 						taskStatus, details.toString());
 				
 			}else {
-				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.pseudo,
+				log.info("pseudo ingest success for serviceRequestNumber :: " + serviceRequestNumber + ". Real Ingest is being Triggered");
+				
+				processTaskTrackerService.updateTaskTrackerWithDetailsAndEndTime(serviceRequestNumber, ToolEnum.precheck,
 						taskStatus, details.toString());
 				
 				DatasetIngest datasetIngest = new DatasetIngest();
+				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
+				datasetIngest.setDatasetType(DatasetType.fromValue(datasetType));
+				datasetIngest.setDatasetName(datasetName);
+				datasetIngest.setDatasetId(datasetId);
+				datasetIngest.setUserId(userId);
 				datasetIngest.setMode(DatasetConstants.INGEST_REAL_MODE);
 				datasetIngest.setBaseLocation(baseLocation);
 				datasetIngest.setMd5hash(md5hash);
-				datasetIngest.setServiceRequestNumber(serviceRequestNumber);
 				
 				datasetIngestKafkaTemplate.send(datasetIngestTopic, datasetIngest);
 				//datasetIngestKafkaTemplate.send(datasetIngestTopic,0,null, datasetIngest);
 			}
 
 		} else {
-			processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.pseudo,
+			processTaskTrackerService.updateTaskTrackerWithDetails(serviceRequestNumber, ToolEnum.precheck,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.inprogress, details.toString());
 		}
 
@@ -304,10 +321,16 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 
 		if (v1 && v2 && v3) {
 
-			log.info("deleting for serviceRequestNumber :: " + serviceRequestNumber);
-
+			log.info("deleting redis entry for real ingest : serviceRequestNumber :: " + serviceRequestNumber);
+			log.info("serviceRequestNumber :: " + serviceRequestNumber + "ingestSuccess : "+ ingestSuccess + " ingestError : " + ingestError + " validateSuccess : " + validateSuccess + " validateError : "+ validateError + " publishSuccess : " + publishSuccess + " publishError : "+ publishError);
 			taskTrackerRedisDao.delete(serviceRequestNumber);
 			processTaskTrackerService.updateProcessTracker(serviceRequestNumber, ProcessTracker.StatusEnum.completed);
+			
+			String datasetName = val.get("datasetName");
+			String userId = val.get("userId");
+			log.info("sending dataset submit completion notification to User. userId : " + userId + " datasetName : " + datasetName + " serviceRequestNumber : " + serviceRequestNumber);
+			
+			notificationService.notifyDatasetComplete(serviceRequestNumber, datasetName, userId);
 			
 			//upload submitted-datasets file to object store and delete the file
 			datasetFileService.datasetAfterIngestCleanJob(serviceRequestNumber);

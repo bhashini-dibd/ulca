@@ -1,10 +1,32 @@
 # ULCA-AUTOMATION
 
+
+| Service | Build Status |
+|---------| ----------- |
+| Login Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Dataset Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Model Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Benchmark Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+| Leaderboard Test  |  [![Build Status](https://jenkins.ulcacontrib.org/buildStatus/icon?job=ULCA%2Fdevelop%2Ftests%2Frun-tests)](https://jenkins.ulcacontrib.org/job/ULCA/job/develop/job/tests/job/model-tests/) |
+
+
 ## Overview 
 
-The code in this repo could be utilized to automate procedures for submitting,searching and downloading datasets from ULCA website.
+The code in this repo could be utilized to automate procedures for submitting/searching datasets and submitting/benchmarking/publishing models from ULCA website.
 
 >IMPORTANT : This Script requires Browser and its Respective Driver [Supported Browsers - Chrome, Firefox, Opera].
+
+## Tests :
+
+    * Login : Tests User Login to ULCA.
+    * Search : Tests Searching of Datasets.
+    * Download : Tests Downloading of Datasets.  
+    * Benchmark : Tests Benchmarking of Datasets against Models with Metrics.
+    * Publish/Unpublish : Tests Publish/Unpublish of Models.
+    * Chart/LeaderBoard : Tests Sorting of Chart/LeaderBoard.    
+    * ASR-Recording : Tests Recording for ASR Models.  
+    
+>Note : All examples/usage are given below
 
 ## Usage
 
@@ -18,26 +40,7 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
 * ### For Dataset
 
-    1. **Uploading Single Dataset:**
-
-            python3 automate.py -d -n "dataset-1" -url "https://example.com/dataset-01.zip"
-
-        Arguments:
-
-        * -d (--dataset) : Flag for Dataset Functions
-        * -n (--name) : Dataset Name
-        * -url (--url)  : Valid Dataset URL
-
-     2. **Uploading Multiple Datasets (using csv):**
-
-            python3 automate.py -d -i "1.csv"
-
-        Arguments:
-
-        * -d (--dataset) : Flag for Dataset Functions
-        * -i (--input) : input csv file (default-encoding: utf-8)
-
-     3. **Searching and Downloading Dataset**
+     1. **Searching and Downloading Dataset**
 
             python3 automate.py -d -src en -tgt ta,te -t parallel
 
@@ -54,27 +57,29 @@ The code in this repo could be utilized to automate procedures for submitting,se
         * [optional] -org (--org-source) : flag for original sentencence in source language
 
 * ### For Model
+  
+    1. **Running Benchmark on a Model:**
 
-    1. **Uploading Model and running benchmarks:**
-
-            python3 automate.py -m -n 'model-1' -i 'model-1.json' -b 'benchmark-1'
+            python3 automate.py -m -n 'modelName' -b 'benchmarkDatasetName' --metric 'metricName'
 
         Arguments:
 
         * -m (--model) : Flag for Model Functions
         * -n (--name) : Model Name
         * -b (--benchmark) : Benchamrk Name to be run
-        * -i (--input)  : Valid Model File (.json)
+        * --metric  : Metric name
 
-     2. **Model Task functions: (eg:translation)**
+    2. **Publish/Unpublish a Model:**
 
-            python3 automate.py -m -t 'translation' -n "model-name" -i "input-string-or-url"
+            python3 automate.py -m -n 'modelName' --publish
+            python3 automate.py -m -n ''modelName' --unpublish
 
         Arguments:
 
         * -m (--model) : Flag for Model Functions
         * -n (--name) : Model Name
-        * -i (--input)  : Input for Model Task (eg: sentence for Translation Task)
+        * --publish : flag fo publishing a model
+        * --unpublish  : flag fo unpublishing a model
 
 * ### For Updating Schema
 
@@ -82,7 +87,7 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
     Arguments:
 
-    * --update-schema : Flag for updating schema 
+    * --update-schema : Flag for updating schema[updates schema values for ref in code] 
 
 * ### For Chart Data
 
@@ -94,11 +99,17 @@ The code in this repo could be utilized to automate procedures for submitting,se
 
 * ### For running test on website
 
-        python3 automate.py --test-website
+        python3 automate.py --test-all
+        
+    * test functions : 
+            1. asr-recording
+            2. Leaderboards (sorted)
+            3. cards
+            4. public pages elements testing
 
     Arguments:
 
-    * --test-website : Flag for testing elements of website on a browser 
+    * --test-all : Flag for testing elements of website on a browser 
 
 To view script usage help from terminal, run:
 
@@ -108,12 +119,13 @@ To view script usage help from terminal, run:
 
 1. config.py - contains data used for automation.
 2. driver_script.py - contains code for loading browsers/driver.
-3. core_script.py - contains core functions for automation.
-4. dataset_script.py - contains functions for dataset related automation.
-5. model_script.py - contains functions for model related automation.
-6. automate.py - main file for automation.
-7. schema.yml - contains the schema used for automation.
-8. requirements.txt - contains python-packages required to run automation. 
+3. elements.py - contains xpaths of elements in the website.
+4. core_script.py - contains core functions for automation.
+5. dataset_script.py - contains functions for dataset related automation.
+6. model_script.py - contains functions for model related automation.
+7. automate.py - main file for automation.
+8. schema.yml - contains the schema used for automation.
+9. requirements.txt - contains python-packages required to run automation. 
 
 ### Requirements
 

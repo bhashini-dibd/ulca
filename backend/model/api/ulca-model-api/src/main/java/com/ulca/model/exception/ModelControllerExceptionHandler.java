@@ -16,6 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import com.ulca.benchmark.exception.BenchmarkNotAllowedException;
 import com.ulca.benchmark.exception.BenchmarkNotFoundException;
 import com.ulca.model.exception.ErrorDetails;
+import io.netty.handler.ssl.SslHandshakeTimeoutException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,6 +31,17 @@ public class ModelControllerExceptionHandler {
 		log.info("Inside ModelControllerExceptionHandler :: handleAllExceptions ");
 		ex.printStackTrace();
 	    ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+	    		
+	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
+	
+	@ExceptionHandler(SslHandshakeTimeoutException.class)
+	  public final ResponseEntity<Object> handleSslHandshakeTimeoutException(SslHandshakeTimeoutException ex, WebRequest request) {
+		
+		String errorCode = "Request URL call has timedout";
+		log.info("Inside ModelControllerExceptionHandler :: SslHandshakeTimeoutException ");
+		ex.printStackTrace();
+	    ErrorDetails errorDetails = new ErrorDetails(errorCode,errorCode, new Date());
 	    		
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
@@ -94,6 +106,28 @@ public class ModelControllerExceptionHandler {
 	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	  }
 	
+	@ExceptionHandler(RequestParamValidationException.class)
+	  public final ResponseEntity<Object> handleRequestParamValidationException(RequestParamValidationException ex, WebRequest request) {
+		
+		String errorCode = "Validation Failed" ;
+		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
+	
+	@ExceptionHandler(FileExtensionNotSupportedException.class)
+	  public final ResponseEntity<Object> handleFileExtensionNotSupportedException(FileExtensionNotSupportedException ex, WebRequest request) {
+		
+		String errorCode = "File Extension Not Supported" ;
+		ErrorDetails errorDetails = new ErrorDetails(errorCode,ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+	  }
+	
+	@ExceptionHandler(ModelComputeException.class)
+	  public final ResponseEntity<Object> handleModelComputeException(ModelComputeException ex, WebRequest request) {
+		
+		ErrorDetails errorDetails = new ErrorDetails(ex.getErrorCode(),ex.getMessage(), new Date());
+	    return new ResponseEntity(errorDetails, ex.getStatus());
+	  }
 	
 	
 }

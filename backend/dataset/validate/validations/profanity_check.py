@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, validate_profanity_reference_en, validate_profanity_reference_hi
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, validate_profanity_reference_en, validate_profanity_reference_hi
 
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
@@ -63,6 +63,9 @@ class ProfanityCheck(BaseValidator):
             if request["datasetType"] == dataset_type_monolingual:
                 text_list.append(record['text'])
                 lang_list.append(record['sourceLanguage'])
+            if request["datasetType"] == dataset_type_tts:
+                text_list.append(record['text'])
+                lang_list.append(record['sourceLanguage'])
 
             for text, lang in zip(text_list, lang_list):
                 if lang in ['en', 'hi', 'transliterated-en']:
@@ -79,7 +82,7 @@ class ProfanityCheck(BaseValidator):
                         return {"message": "Exception while executing profanity check", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
                     offensive_txt, similarity_perc = possible_match
-                    if similarity_perc > 60:
+                    if similarity_perc > 90:
                         error_msg = 'Offensive text found'
                         return {"message": error_msg, "code": "OFFENSIVE_TEXT_FOUND", "status": "FAILED"}
 

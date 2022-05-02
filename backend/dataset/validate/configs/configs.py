@@ -12,6 +12,7 @@ asr_config_path = os.environ.get('ULCA_VALIDATE_ASR_CONFIG', 'configs/asr_config
 ocr_config_path = os.environ.get('ULCA_VALIDATE_OCR_CONFIG', 'configs/ocr_config.json')
 monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', 'configs/monolingual_config.json')
 asr_unlabeled_config_path = os.environ.get('ULCA_VALIDATE_ASR_UNLABELED_CONFIG', 'configs/asr_unlabeled_config.json')
+tts_config_path = os.environ.get('ULCA_VALIDATE_TTS_CONFIG', 'configs/tts_config.json')
 
 pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 1000)
 if isinstance(pt_update_batch, str):
@@ -39,6 +40,9 @@ if isinstance(validate_dedup_redis_db, str):
 record_expiry_in_sec = os.environ.get('ULCA_VALIDATE_RECORD_EXPIRY_IN_SEC', 172800)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATHX', '/opt/')
 
+user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'pseudo')
+user_mode_real = os.environ.get('USER_MODE_REAL', 'real')
+
 ulca_db_cluster = os.environ.get('ULCA_MONGO_CLUSTER', "mongodb://localhost:27017/")
 pt_db = os.environ.get('ULCA_PROC_TRACKER_DB', "ulca-process-tracker")
 pt_task_collection = os.environ.get('ULCA_PROC_TRACKER_TASK_COL', "ulca-pt-tasks")
@@ -53,6 +57,7 @@ dataset_type_asr = os.environ.get('DS_TYPE_ASR', 'asr-corpus')
 dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 dataset_type_asr_unlabeled = os.environ.get('DS_TYPE_ASR_UNLABELED', 'asr-unlabeled-corpus')
+dataset_type_tts = os.environ.get('DS_TYPE_TTS', 'tts-corpus')
 
 validate_text_length_threshold = os.environ.get('DS_VALIDATE_TEXT_LENGTH_THRESHOLD', 2)
 asr_minimum_words_per_min = os.environ.get('DS_VALIDATE_MINIMUM_WORDS_PER_MIN', 10)

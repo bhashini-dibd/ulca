@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts
 #from langdetect import detect_langs
 from polyglot.detect import Detector
 import logging
@@ -31,16 +31,26 @@ class TextLanguageCheck(BaseValidator):
             if request["datasetType"] == dataset_type_monolingual:
                 text_list.append(record['text'])
                 lang_list.append(record['sourceLanguage'])
+            if request["datasetType"] == dataset_type_tts:
+                text_list.append(record['text'])
+                lang_list.append(record['sourceLanguage'])
 
             for text, lang in zip(text_list, lang_list):
                 # Skipping for few languages as the current model doesnt support them
-                if lang in ['brx', 'doi', 'kok', 'mai', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt']:
+                if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt']:
                     continue
 
                 try:
                     detector = Detector(text)
-                    if detector.language.code != lang or detector.language.confidence<50:
-                        return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
+                    # The language detection model does not support these languages,
+                    # So check for closest possible language to rule out non-Indic languages
+                    # TODO: Temporary implementation for now, need better solution
+                    if lang in ['doi', 'kok', 'mai']:
+                        if detector.language.code not in ['hi', 'mr', 'bh', 'ne', 'sa'] or detector.language.confidence<50:
+                            return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
+                    else:
+                        if detector.language.code != lang or detector.language.confidence<50:
+                            return {"message": "Sentence does not match the specified language", "code": "LANGUAGE_MISMATCH", "status": "FAILED"}
                 except Exception as e:
                     return {"message": "Unable to detect language, text snippet too small", "code": "SERVER_PROCESSING_ERROR", "status": "FAILED"}
 
