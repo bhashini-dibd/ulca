@@ -30,19 +30,38 @@ class AggregateTabularDataModel(object):
             submitter        =   "primarySubmitterName"
 
             # Aggregate data for different dataset types and merge into single report
-            dtype = "ocr-corpus"
+            dtype_ocr = "ocr-corpus"
+            dtype_parallel = "parallel-corpus"
+            dtype_asr = "asr-corpus"
+            dtype_tts = "tts-corpus"
             query = f'SELECT SUM(\"{count}\") as {total},{datatype}, {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
-            sub_query = f'WHERE ({datatype} = \'{dtype}\') GROUP BY {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter}, {datatype}'
+            sub_query = f'WHERE (({datatype} = \'{dtype_ocr}\') OR ({datatype} = \'{dtype_parallel}\')) GROUP BY {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter}, {datatype}'
             qry  = query+sub_query
             result_parsed = utils.query_runner(qry)
+            query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{datatype}, {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
+            sub_query = f'WHERE (({datatype} = \'{dtype_asr}\') OR ({datatype} = \'{dtype_tts}\')) GROUP BY {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter}, {datatype}'
+            qry  = query+sub_query
+            result_parsed_duration = utils.query_runner(qry)
+            for elem in result_parsed_duration:
+                elem[total] = elem[total] / 3600
+
+            result_parsed = result_parsed + result_parsed_duration
+
             log.info("Data queried from Druid: {} rows".format(len(result_parsed)))
-            log.info("Queried data : {}".format(str(result_parsed)))
+            #log.info("Queried data : {}".format(str(result_parsed)))
             df = pd.DataFrame(result_parsed)
             #df[collection_method] = df[collection_method].fillna('unspecified', inplace=True)
             df.loc[df[delete]=='true', total] = 0-df[total]
             grouped_df = df.groupby([src, tgt, collection_method, domain, submitter, datatype])[total].sum()
             df1 = grouped_df.to_frame().reset_index()
             data_tabular = df1.to_dict('records')
+            for elem in data_tabular:
+                val = elem[collection_method]
+                if not val:
+                    elem[collection_method] = 'unspecified'
+                val = elem[tgt]
+                if not val:
+                    elem[tgt] = None
             log.info("Data counts formatted: {} rows".format(len(data_tabular)))
             return data_tabular
 
