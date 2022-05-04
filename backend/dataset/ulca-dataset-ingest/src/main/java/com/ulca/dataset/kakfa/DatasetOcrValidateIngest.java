@@ -38,6 +38,7 @@ import com.ulca.dataset.service.ProcessTaskTrackerService;
 import io.swagger.model.DatasetType;
 import io.swagger.model.OcrDatasetParamsSchema;
 import io.swagger.model.OcrDatasetRowSchema;
+import io.swagger.model.ParallelDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -55,6 +56,12 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 
 	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
+	
+	@Value("${precheck.ingest.sample.size}")
+	private Integer precheckSampleSize;
+	
+	@Value("${precheck.ingest.record.threshold}")
+	private Integer precheckRecordThreshold;
 
 	@Autowired
 	DatasetService datasetService;
@@ -104,7 +111,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			
 			paramsSchema = validateParamsSchema(datasetIngest);
 
-		} catch (IOException | JSONException | NullPointerException e) {
+		} catch (Exception e) {
 			log.info("Exception while validating params :: serviceRequestNumber : "+serviceRequestNumber + " error : " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
@@ -124,29 +131,17 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			
 			return;
 		}
-		//update the dataset
-				if(mode.equalsIgnoreCase("real")) {
-					try {
-						ObjectMapper objectMapper = new ObjectMapper();
-						JSONObject record;
-						record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-						
-						datasetService.updateDataset(datasetId, userId, record,md5hash);
-						
-					} catch (JsonProcessingException | JSONException e) {
-						
-						log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
-					}
-				}
+		
 				
 		try {
 			if(mode.equalsIgnoreCase("real")) {
+				updateDataset(datasetId, userId, md5hash,paramsSchema);
 				ingest(paramsSchema, datasetIngest);
 			}else {
-				pseudoIngest(paramsSchema, datasetIngest);
+				initiateIngest(datasetId, userId, md5hash,paramsSchema, datasetIngest);
 			}
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 
 			log.info("Exception while ingesting :: serviceRequestNumber : "+serviceRequestNumber + " error : " + e.getMessage());
 			
@@ -170,9 +165,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			
 			return;
 		}
-		
-		
-
 	}
 
 	public OcrDatasetParamsSchema validateParamsSchema(DatasetIngest datasetIngest)
@@ -196,7 +188,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 			throw new IOException("paramsValidation failed");
 		}
 		return paramsSchema;
-
 	}
 
 	public void ingest(OcrDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
@@ -322,7 +313,7 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		
 	}
 	
-	public void pseudoIngest(OcrDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
+	public void pseudoIngest(OcrDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
 			throws IOException {
 
 		log.info("************ Entry DatasetOcrValidateIngest :: pseudoIngest *********");
@@ -340,30 +331,9 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		JSONObject source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 		
 		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
-		FileChannel dataFileChannel = FileChannel.open(Paths.get(dataFilePath));
-	    long fileSize = dataFileChannel.size();
-	    long min = 1; 
-	    long max = 10;
-	    long buffer = 10;
-	    if(fileSize > MB_50 && fileSize <= MB_300) {
-	    	buffer = 100;
-	    	max = 100;
-	    }
-	    if(fileSize > MB_300) {
-	    	buffer = 1000;
-	    	max = 1000;
-	    }
-	    long counter = min;
-	    
-		log.info("data.json file path :: " + dataFilePath);
+		
 		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
-
-
-		int numberOfRecords = 0;
-		int failedCount = 0;
-		int successCount = 0;
-		int pseudoNumberOfRecords = 0;
 		
 		JSONObject vModel = new JSONObject();
 		vModel.put("datasetId", datasetId);
@@ -373,25 +343,31 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
 		
-		taskTrackerRedisDao.intializePseudoIngest(serviceRequestNumber,baseLocation, md5hash);
+		taskTrackerRedisDao.intializePrecheckIngest(serviceRequestNumber,baseLocation, md5hash, paramsSchema.getDatasetType().toString(),datasetName, datasetId, userId);
 		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
 		
+		int numberOfRecords = 0;
+		int failedCount = 0;
+		int successCount = 0;
+		int pseudoNumberOfRecords = 0;
+		
+		long sampleSize = recordSize/10;
+		long bufferSize = precheckSampleSize/10;
+		
+		long base = sampleSize;
+		long counter = 0;
+		long maxCounter = bufferSize;
+		
 		String basePath  = datasetIngest.getBaseLocation()  + File.separator;
-		
 		reader.beginArray();
-		
 		while (reader.hasNext()) {
 			
-
 			numberOfRecords++;
 			
-			if(numberOfRecords == counter) {
+			if(counter < maxCounter ) {
 				
 				pseudoNumberOfRecords++;
-				min = min+buffer;
-				max = max + buffer;
-				counter = (long)(Math.random()*(max-min+1)+min);
-				
+				++counter;	
 				
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 				ObjectMapper mapper = new ObjectMapper();
@@ -416,8 +392,6 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 					log.info("record :: " +numberOfRecords + "failed " );
 					log.info("tracing the error " );
 					e.printStackTrace();
-					
-					
 				}
 				if(rowSchema != null) {
 					
@@ -452,6 +426,11 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 					}
 				}
 			
+			}else if ( numberOfRecords == base ){
+				Object rowObj = new Gson().fromJson(reader, Object.class);
+				counter = base;
+				maxCounter = base + bufferSize;
+				base = base + sampleSize;
 			}else {
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 			}
@@ -466,6 +445,64 @@ public class DatasetOcrValidateIngest implements DatasetValidateIngest {
 		
 	}
 	
+public  long getRecordSize(String dataFilePath) throws Exception {
+		
+		long numberOfRecords = 0;
+		InputStream inputStream;
+		try {
+			inputStream = Files.newInputStream(Path.of(dataFilePath));
+			JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
+			reader.beginArray();
+			while (reader.hasNext()) {
+				numberOfRecords++;
+				Object rowObj = new Gson().fromJson(reader, Object.class);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new Exception("data.json file is not proper");
+			
+		}
+		
+		return numberOfRecords;
+	}
 
+	public  void initiateIngest(String datasetId, String userId, String md5hash,OcrDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
+		
+		log.info(" initiateIngest ");
+		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
+		
+		long recordSize = getRecordSize(dataFilePath);
+		
+		log.info(" total record size ::  " + recordSize);
+		
+		if(recordSize <= precheckRecordThreshold) {
+			updateDataset(datasetId, userId, md5hash, paramsSchema);
+			ingest(paramsSchema, datasetIngest);
+			return;
+		}else {
+			pseudoIngest(paramsSchema, datasetIngest, recordSize);
+		}
+		
+	}
+	
+	//update the dataset
+		public void updateDataset(String datasetId, String userId, String md5hash, OcrDatasetParamsSchema paramsSchema) {
+			
+			try {
+				ObjectMapper objectMapper = new ObjectMapper();
+				JSONObject record;
+				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+				datasetService.updateDataset(datasetId, userId, record,md5hash);
+				
+			} catch (JsonProcessingException | JSONException e) {
+				
+				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+			}
+			
+			
+		}
+		
 
 }

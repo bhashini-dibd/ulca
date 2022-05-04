@@ -33,10 +33,12 @@ public class TaskTrackerRedisDao {
 						: null;
 				String mode = redisTemplate.opsForHash().get(key, "mode") + "";
 				String datasetName = redisTemplate.opsForHash().get(key, "datasetName") + "";
+				String datasetType = redisTemplate.opsForHash().get(key, "datasetType") + "";
+				String datasetId = redisTemplate.opsForHash().get(key, "datasetId") + "";
 				String userId = redisTemplate.opsForHash().get(key, "userId") + "";
 				String baseLocation = redisTemplate.opsForHash().get(key, "baseLocation") + "";
 				String md5hash = redisTemplate.opsForHash().get(key, "md5hash") + "";
-
+				
 				String ingestComplete = redisTemplate.opsForHash().get(key, "ingestComplete") + "";
 				String count = redisTemplate.opsForHash().get(key, "count") + "";
 				String ingestSuccess = redisTemplate.opsForHash().get(key, "ingestSuccess") + "";
@@ -64,10 +66,11 @@ public class TaskTrackerRedisDao {
 				innerMap.put("serviceRequestNumber", serviceRequestNumber);
 				innerMap.put("mode", mode);
 				innerMap.put("datasetName", datasetName);
+				innerMap.put("datasetType", datasetType);
+				innerMap.put("datasetId", datasetId);
 				innerMap.put("userId", userId);
 				innerMap.put("baseLocation", baseLocation);
 				innerMap.put("md5hash", md5hash);
-
 				innerMap.put("ingestComplete", ingestComplete);
 				innerMap.put("count", count);
 				innerMap.put("ingestSuccess", ingestSuccess);
@@ -101,8 +104,6 @@ public class TaskTrackerRedisDao {
 		return map;
 
 	}
-
-	
 
 	public void delete(String serviceRequestNumber) {
 		log.info("******* TaskTrackerRedisDao : delete ******* ");

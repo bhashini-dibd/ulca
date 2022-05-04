@@ -33,6 +33,11 @@ import Leaderboard from "./ui/container/Model/ModelLeaderboard/Leaderboard";
 import BenchmarkModels from "./ui/container/Model/BenchmarkModel/BenchmarkDataset";
 import BenchmarkDetails from "./ui/container/Model/BenchmarkModel/BenchmarkDetail";
 import ViewUserDetails from "./ui/container/Admin/ViewUserDetail";
+import {useEffect} from 'react';
+import GetMasterDataAPI from './redux/actions/api/Common/getMasterData';
+import { useDispatch } from "react-redux";
+import APITransport from './redux/actions/apitransport/apitransport';
+import DatasetMetrics from "./ui/container/DataSet/DatasetMetrics/DatasetMetrics";
 
 const PrivateRoute = ({
   path,
@@ -69,7 +74,13 @@ const PrivateRoute = ({
 };
 
 export default function App() {
-  console.log(process.env.PUBLIC_URL);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+      const obj = new GetMasterDataAPI(["feedbackQns"]);
+      dispatch(APITransport(obj));
+  }, [])
+
   return (
     <Router history={history} basename="/">
       <Switch>
@@ -187,6 +198,16 @@ export default function App() {
           dontShowHeader={false}
           type={"dataset"}
           index={3}
+        />
+        <PrivateRoute
+          path={`${process.env.PUBLIC_URL}/dataset/reports`}
+          title={"Dataset Metrics"}
+          component={DatasetMetrics}
+          authenticate={authenticateUser}
+          currentMenu="dataset-metrics"
+          dontShowHeader={false}
+          type={"dataset"}
+          index={4}
         />
         <PrivateRoute
           path={`${process.env.PUBLIC_URL}/model/upload`}
