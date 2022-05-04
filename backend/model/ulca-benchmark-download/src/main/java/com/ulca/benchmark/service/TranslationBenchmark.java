@@ -179,7 +179,7 @@ public class TranslationBenchmark {
 		return translationResponse;
 	}
 	
-	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
+	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();
@@ -288,6 +288,9 @@ public class TranslationBenchmark {
 		modelInferenceResponse.setUserId(userId);
 		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
 		modelInferenceResponseDao.save(modelInferenceResponse);
+		
+		int datasetCount = corpus.length();
+		return datasetCount;
 		
 	}
 	

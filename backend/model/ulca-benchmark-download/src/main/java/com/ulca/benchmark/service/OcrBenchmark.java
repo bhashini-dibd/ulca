@@ -82,7 +82,7 @@ public class OcrBenchmark {
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
 	
-	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
+	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
@@ -184,6 +184,9 @@ public class OcrBenchmark {
 		modelInferenceResponse.setUserId(userId);
 		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
 		modelInferenceResponseDao.save(modelInferenceResponse);
+		
+		int datasetCount = corpus.length();
+		return datasetCount;
 		
 	}
 	
