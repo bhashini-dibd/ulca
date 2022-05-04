@@ -542,47 +542,61 @@ public class ModelInferenceEndPointService {
 	/*
 	 * compute for OCR model
 	 */
-	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema, String imagePath)
-			throws URISyntaxException, IOException {
+	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
 
-		ModelComputeResponse response = new ModelComputeResponse();
+		try {
+			
+			ModelComputeResponse response = new ModelComputeResponse();
 
-		io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 
-		byte[] bytes = FileUtils.readFileToByteArray(new File(imagePath));
+			byte[] bytes = FileUtils.readFileToByteArray(new File(imagePath));
 
-		ImageFile imageFile = new ImageFile();
-		imageFile.setImageContent(bytes);
+			ImageFile imageFile = new ImageFile();
+			imageFile.setImageContent(bytes);
 
-		ImageFiles imageFiles = new ImageFiles();
-		imageFiles.add(imageFile);
+			ImageFiles imageFiles = new ImageFiles();
+			imageFiles.add(imageFile);
 
-		OCRRequest request = ocrInference.getRequest();
-		request.setImage(imageFiles);
+			OCRRequest request = ocrInference.getRequest();
+			request.setImage(imageFiles);
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String requestJson = objectMapper.writeValueAsString(request);
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
 
-		OkHttpClient client = new OkHttpClient();
-		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-		Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
-		Response httpResponse = client.newCall(httpRequest).execute();
-		String responseJsonStr = httpResponse.body().string();
+			Response httpResponse = client.newCall(httpRequest).execute();
+			String responseJsonStr = httpResponse.body().string();
 
-		OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
-		if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0) {
-			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
-		} else {
-			log.info("Ocr try me response is null or not proper");
-			log.info("callBackUrl :: " + callBackUrl);
-			log.info("Request Json :: " + requestJson);
-			log.info("ResponseJson :: " + responseJsonStr);
+			OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
+			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0 && !ocrResponse.getOutput().get(0).getSource().isBlank()) {
+				response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+			} else {
+				log.info("Ocr try me response is null or not proper");
+				log.info("callBackUrl :: " + callBackUrl);
+				log.info("Request Json :: " + requestJson);
+				log.info("ResponseJson :: " + responseJsonStr);
+				FileUtils.delete(new File(imagePath));
+				throw new ModelComputeException("Model unable to infer the image", "Model unable to infer the image", HttpStatus.INTERNAL_SERVER_ERROR);
 
+			}
+			return response;
+			
+		}catch(Exception ex) {
+			
+			throw new ModelComputeException(ex.getMessage(), "Model unable to infer the image", HttpStatus.INTERNAL_SERVER_ERROR);
+			
+		}finally {
+			try {
+				FileUtils.delete(new File(imagePath));
+			} catch (IOException e) {
+				log.info("Unable to delete the file : " + imagePath);
+				e.printStackTrace();
+			}
 		}
-		FileUtils.delete(new File(imagePath));
-
-		return response;
 	}
 
 	public static OkHttpClient getTrustAllCertsClient() throws NoSuchAlgorithmException, KeyManagementException {

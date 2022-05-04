@@ -32,7 +32,7 @@ import SimpleDialogDemo from "../../../../components/common/Feedback";
 
 const AudioRecord = (props) => {
   const streaming = props.streaming;
-  const { classes, language, modelId ,getchildData} = props;
+  const { classes, language, modelId ,getchildData,feedback} = props;
  const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
@@ -64,6 +64,16 @@ const AudioRecord = (props) => {
       timerRef.current = undefined;
     };
   }, []);
+
+  useEffect(()=>{
+    if(streamingState === 'start'){
+      const output = document.getElementById("asrCardOutput");
+      output.innerText = "";
+      feedback.setTargetAudio("");
+      feedback.setData("");
+    }
+  },[streamingState]);
+
 
   const handleStart = (data) => {
     if (typeof timerRef.current === "number") {

@@ -121,7 +121,12 @@ const constants = {
    * action for Feedback Modal
    */
 
-  SUBMIT_FEEDBACK: "SUBMIT_FEEDBACK"
+  SUBMIT_FEEDBACK: "SUBMIT_FEEDBACK",
+
+  /**
+   * action for Dataset Metrics
+   */
+  GET_DATASET_METRICS:"GET_DATASET_METRICS"
 };
 
 export default constants;
