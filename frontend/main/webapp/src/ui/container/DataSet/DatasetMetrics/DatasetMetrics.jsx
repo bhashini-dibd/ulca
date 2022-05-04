@@ -9,35 +9,47 @@ const DatasetMetrics = () => {
   const datasetMetrics = useSelector((state) => state.datasetMetrics.result);
 
   const options = {
-    download: false,
+    download: true,
     print: false,
-    search: false,
+    search: true,
     selectableRows: false,
     filter: false,
   };
 
   const columns = [
-    { name: "datasetType", label: "Dataset Type" },
+    { name: "datasetType", label: "Dataset Type" ,options:{"viewColumns":false} },
     { name: "sourceLanguage", label: "Source Language" },
     { name: "targetLanguage", label: "Target Language" },
     { name: "domain", label: "Domain" },
     { name: "collectionMethod", label: "Collection Method" },
     { name: "submitterName", label: "Submitter" },
-    { name: "count", label: "Count" },
+    { name: "count", label: "Count",options:{ "viewColumns":false} },
   ];
 
   useEffect(() => {
     const obj = new GetReportData();
     dispatch(APITransport(obj));
   }, []);
-
+  var target=[]
+  datasetMetrics.forEach((element)=>{
+    console.log()
+    if(element.targetLanguage==null || element.targetLanguage== "" )
+    {
+      element.targetLanguage="NA"
+    }
+    console.log(element ,"dataa")
+    target.push(element)
+  })
   return (
+
     <DataTable
       title="Dataset Metrics"
       options={options}
       columns={columns}
-      data={datasetMetrics}
+       data={target}
+     
     />
+   
   );
 };
 
