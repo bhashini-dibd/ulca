@@ -200,7 +200,7 @@ export default function App() {
           index={3}
         />
         <PrivateRoute
-          path={`${process.env.PUBLIC_URL}/dataset/metrics`}
+          path={`${process.env.PUBLIC_URL}/dataset/reports`}
           title={"Dataset Metrics"}
           component={DatasetMetrics}
           authenticate={authenticateUser}

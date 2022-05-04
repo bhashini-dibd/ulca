@@ -32,7 +32,7 @@ export const menuItems = {
     },
     {
       name: 'Dataset Metrics',
-      url: "/dataset/metrics",
+      url: "/dataset/reports",
       roles: [
         "CONTRIBUTOR-USER",
         "READONLY-USER",
