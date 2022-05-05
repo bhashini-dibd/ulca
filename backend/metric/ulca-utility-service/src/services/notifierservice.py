@@ -22,9 +22,9 @@ class NotifierService():
 
     def notify_mismatch(self):
         log.info("Checking for data mismatch.......")
-        parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
+        parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
         log.info(f'pending_jobs{pending_jobs, inprogress_jobs,file}')
-        mismatch = self.check_for_mismatch(parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count)
+        mismatch = self.check_for_mismatch(parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count)
         if not mismatch:
             log.info("Data is stable ; no mismtach in counts")
             return None
