@@ -3,7 +3,8 @@ import time
 import uuid
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, user_mode_pseudo, \
-    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel, parallel_updatable_keys
+    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel, parallel_updatable_keys, \
+    parallel_derived_keys, parallel_dataset_submitter, parallel_dataset_collection_method
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -281,6 +282,8 @@ class ParallelService:
             derived_data["datasetId"] = list(set(derived_data["datasetId"]))
             derived_data["datasetType"] = metadata["datasetType"]
             derived_data["derived"] = True
+            derived_data["submitter"] = parallel_dataset_submitter
+            derived_data["collectionMethod"] = parallel_dataset_collection_method
             derived_data["tags"] = service.get_tags(derived_data, parallel_non_tag_keys)
             derived_data["id"] = str(uuid.uuid4())
             return derived_data

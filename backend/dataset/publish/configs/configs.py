@@ -48,34 +48,54 @@ if isinstance(zip_chunk_size, str):
     zip_chunk_size = eval(zip_chunk_size)
 shared_storage_path = os.environ.get('ULCA_SEARCH_SHARED_STORAGE_PATH', '/opt/')
 
-asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
-asr_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
+asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
+                      "fileLocation", "lastModifiedOn", "createdOn"]
+asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
+                    "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
+asr_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "textHash",
+                          "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
-tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-tts_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
-tts_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "textHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
+tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHash", "datasetType", "sourceLanguage",
+                      "fileLocation", "lastModifiedOn", "createdOn"]
+tts_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
+                    "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
+tts_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "textHash",
+                          "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 tts_updatable_keys = ["durationInSeconds", "duration", "version"]
 
-asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter", "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
-asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
+asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "datasetType", "sourceLanguage",
+                                "fileLocation", "lastModifiedOn", "createdOn"]
+asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
+                              "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
+asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash",
+                                    "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
-parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash", "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
-parallel_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn", "createdOn"]
-parallel_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "hashedKey", "sk", "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version", "datasetId", "sourceLanguage", "targetLanguage"]
+parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+parallel_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
+                         "createdOn"]
+parallel_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "hashedKey", "sk",
+                               "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version",
+                               "datasetId", "sourceLanguage", "targetLanguage"]
 parallel_updatable_keys = ["alignmentScore", "version"]
+parallel_derived_keys = ["submitter", "collectionMethod"]
+parallel_dataset_submitter = [{"submitter": {"name": "Derived", "aboutMe": "Record derived from associative pairs"}}]
+parallel_dataset_collection_method = [{"collectionMethod": {"collectionDescription": ["Derived"]}}]
 
-ocr_immutable_keys = ["_id", "id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType", "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
-ocr_non_tag_keys = ["_id", "id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter", "fileLocation", "lastModifiedOn", "createdOn"]
-ocr_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "imageHash", "groundTruthHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
+ocr_immutable_keys = ["_id", "id", "imageFilename", "groundTruth", "imageHash", "groundTruthHash", "datasetType",
+                      "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
+ocr_non_tag_keys = ["_id", "id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter",
+                    "fileLocation", "lastModifiedOn", "createdOn"]
+ocr_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "imageHash",
+                          "groundTruthHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 ocr_updatable_keys = ["version"]
 
 mono_immutable_keys = ["_id", "id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn"]
 mono_non_tag_keys = ["_id", "id", "text", "submitter", "lastModifiedOn", "createdOn"]
-mono_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "textHash", "lastModifiedOn", "createdOn", "version", "datasetId"]
+mono_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "textHash",
+                           "lastModifiedOn", "createdOn", "version", "datasetId"]
 mono_updatable_keys = ["version"]
 
 govt_data_whitelist_enabled = os.environ.get('ULCA_PUBLISH_GOVT_DATA_WHITELIST_ENABLED', True)
@@ -107,14 +127,14 @@ publish_input_topic = os.environ.get('KAFKA_ULCA_DS_PUBLISH_IP_TOPIC', 'ulca-ds-
 search_input_topic = os.environ.get('KAFKA_ULCA_DS_SEARCH_IP_TOPIC', 'ulca-ds-search-ip-v0')
 delete_input_topic = os.environ.get('KAFKA_ULCA_DS_DELETE_IP_TOPIC', 'ulca-ds-delete-ip-v0')
 publish_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_CONSUMER_GRP', 'ulca-ds-publish-consumer-group-v0')
-publish_search_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_SEARCH_CONSUMER_GRP', 'ulca-ds-publish-search-consumer-group-v0')
+publish_search_consumer_grp = os.environ.get('KAFKA_ULCA_DS_PUBLISH_SEARCH_CONSUMER_GRP',
+                                             'ulca-ds-publish-search-consumer-group-v0')
 error_event_input_topic = os.environ.get('KAFKA_ULCA_DS_ERROR_IP_TOPIC', 'ulca-ds-error-ip-v0')
 metric_event_input_topic = os.environ.get('KAFKA_ULCA_DS_BIEVENT_TOPIC', 'org-ulca-bievent-dataset-v3')
 notifier_input_topic = os.environ.get('KAFKA_ULCA_NOTIFIER_CONSUMER_IP_TOPIC', 'ulca-notifier-ip-v0')
 ulca_dataset_topic_partitions = os.environ.get('KAFKA_ULCA_DS_TOPIC_PARTITIONS', 12)
 if isinstance(ulca_dataset_topic_partitions, str):
     ulca_dataset_topic_partitions = eval(ulca_dataset_topic_partitions)
-
 
 ocr_prefix = os.environ.get('ULCA_OS_OCR_PREFIX', 'ocr')
 asr_prefix = os.environ.get('ULCA_OS_ASR_PREFIX', 'asr')
