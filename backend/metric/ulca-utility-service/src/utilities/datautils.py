@@ -106,15 +106,16 @@ class DataUtils:
         try:
             if isinstance(data,list):
                 log.info("Generating email notification for data count mismatch !!!!")
-                users = ulca_email_group.split(',')
+                users = receiver_email_ids.split(',')
                 tdy_date    =   datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
                 msg         =   Message(subject=f" ULCA - Alert on dataset counts {tdy_date}",sender=MAIL_SENDER,recipients=users)
                 message     =   ""
                 for i in data:
                     line = f"Dataset Type : {i['Data Type']}\t\tMongoDB Count : {i['Mongo Count']}\t\tDruid Count : {i['Druid Count']}"
                     message = f"{message}\n{line}"
-                msg.body    =   f"There is a mismatch found on ulca data stores.\n\nDetails of the unequal types:\n{message}"
-                mail.send(msg)
+                with app.app_context():
+                    msg.body    =   f"There is a mismatch found on ulca data stores.\n\nDetails of the unequal types:\n{message}"
+                    mail.send(msg)
                 log.info(f"Generated alert email ")
 
             if isinstance(data,dict):
