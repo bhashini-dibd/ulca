@@ -27,9 +27,9 @@ class StatusCronProcessor(Thread):
         status_list = ['In-Progress','Pending','Queued']
         compl_list = ['Completed']
         while not self.stopped.wait(status_cron_interval_sec):
-            usernotify = service.notify_user()
+            #usernotify = service.notify_user()
             mismatch_notify = service.notify_mismatch()
-            log.info(f'user notify {usernotify}')
+            #log.info(f'user notify {usernotify}')
             log.info(f'mismatch notified {mismatch_notify}')
             res = CustomResponse(Status.SUCCESS.value,None,None)
             log.info(f'response successfully generated.{res}')
