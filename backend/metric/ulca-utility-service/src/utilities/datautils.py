@@ -14,7 +14,7 @@ from app import mail
 IST = pytz.timezone('Asia/Kolkata')
 import os
 
-app = Flask(__name__)
+app = Flask(__name__,template_folder = '../templates')
 
 class DataUtils:
     def __init__(self):
