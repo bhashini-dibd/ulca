@@ -39,6 +39,7 @@ export const menuItems = {
         "BENCHMARK-DATASET-CONTRIBUTOR",
         "ADMIN",
       ],
+      public: true,
     }
   ],
 

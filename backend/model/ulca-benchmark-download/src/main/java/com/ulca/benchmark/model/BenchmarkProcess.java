@@ -31,5 +31,8 @@ public class BenchmarkProcess {
 	String status; // Completed/In-Progress/Failed
 	String createdOn;
 	String lastModifiedOn;
-
+	String startTime;
+	String endTime;
+	Integer recordCount;
+	
 }
