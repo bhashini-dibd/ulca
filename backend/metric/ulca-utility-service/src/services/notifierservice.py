@@ -15,7 +15,8 @@ class NotifierService():
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
             utility     =   datautils.DataUtils()
             utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":round(asr_count,4),"asr_unlabeled_count":round(asr_unlabeled_count,4),"tts_count":round(tts_count,4),"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
-                
+            resu = "Notified Users"
+            return resu
         except Exception as e:
             log.exception(f'Exception : {e}')
 
@@ -29,6 +30,7 @@ class NotifierService():
             return None
         utility     =   datautils.DataUtils()
         utility.generate_email_notification(mismatch)
+        return "Notified mismatch"
 
 
     def calculate_counts(self):
