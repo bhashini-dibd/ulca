@@ -110,6 +110,7 @@ public class KafkaBenchmarkDownloadConsumer {
 			
 
 			BenchmarkProcess bmProcess = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
+			int datasetRecordCount = 0;
 			
 			if(bmProcess != null) {
 
@@ -164,22 +165,27 @@ public class KafkaBenchmarkDownloadConsumer {
 					case TRANSLATION:
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLATION.toString());
 						
-						translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+						datasetRecordCount = translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
 								benchmarkProcessId);
+						bmProcess.setRecordCount(datasetRecordCount);
+						
 						break;
 					case ASR:
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
 						
-						asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+						datasetRecordCount = asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
 								benchmarkProcessId);
+						bmProcess.setRecordCount(datasetRecordCount);
+						
 						break;
 
 					case OCR:
 
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.OCR.toString());
 						
-						ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+						datasetRecordCount = ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
 								benchmarkProcessId);
+						bmProcess.setRecordCount(datasetRecordCount);
 						
 						break;
 
@@ -190,7 +196,7 @@ public class KafkaBenchmarkDownloadConsumer {
 					}
 
 					bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.completed);
-					
+					benchmarkProcessDao.save(bmProcess);
 					
 				} catch (Exception e) {
 					
