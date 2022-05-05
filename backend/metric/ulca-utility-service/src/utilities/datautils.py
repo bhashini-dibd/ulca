@@ -118,6 +118,8 @@ class DataUtils:
             if isinstance(data,dict):
                 users = receiver_email_ids.split(',')
                 log.info(f"Generating statistic emails for {users} ") 
+                log.info(f'data == > {data}')
+                log.info(data["ocr_count"])
                 tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
                 msg         = Message(subject=f" ULCA - Statistics {tdy_date}",
                                 sender=MAIL_SENDER,
