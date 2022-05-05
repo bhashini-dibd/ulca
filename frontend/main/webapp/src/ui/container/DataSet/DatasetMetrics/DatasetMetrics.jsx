@@ -3,21 +3,32 @@ import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GetReportData from "../../../../redux/actions/api/DataSet/DatasetMetrics/GetReportData";
+import {  Grid } from "@material-ui/core";
+import Search from "../../../components/Datasets&Model/Search";
+import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
+import zIndex from "@material-ui/core/styles/zIndex";
 
 const DatasetMetrics = () => {
   const dispatch = useDispatch();
   const datasetMetrics = useSelector((state) => state.datasetMetrics.result);
 
+  
   const options = {
     download: true,
     print: false,
-    search: true,
+    search: false,
     selectableRows: false,
     filter: false,
+   
+    sortOrder: {
+      name: 'datasetType',
+      direction: 'asc',
+  }
+
   };
 
   const columns = [
-    { name: "datasetType", label: "Dataset Type" ,options:{"viewColumns":false} },
+    { name: "datasetType", label: "Dataset Type" ,options:{"viewColumns":false } },
     { name: "sourceLanguage", label: "Source Language" },
     { name: "targetLanguage", label: "Target Language" },
     { name: "domain", label: "Domain" },
@@ -26,29 +37,50 @@ const DatasetMetrics = () => {
     { name: "count", label: "Count",options:{ "viewColumns":false} },
   ];
 
+  
+
   useEffect(() => {
     const obj = new GetReportData();
     dispatch(APITransport(obj));
   }, []);
+
+
   var target=[]
   datasetMetrics.forEach((element)=>{
     console.log()
     if(element.targetLanguage==null || element.targetLanguage== "" )
     {
-      element.targetLanguage="NA"
+      element.targetLanguage="-"
     }
     console.log(element ,"dataa")
     target.push(element)
   })
-  return (
 
-    <DataTable
+  const handleSearch = (value) => {
+    dispatch(getSearchedValue(value));
+  };
+
+  return (
+  <div>
+   <div style={{ width:"100%",position:"absolute",right:"450px",top:"165px",zIndex:"1"}}>
+   <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
+   </div>
+   <DataTable
       title="Dataset Metrics"
       options={options}
       columns={columns}
        data={target}
+      // data={value}
      
-    />
+      />
+  </div>
+     
+     
+    
+   
+   
+
+    
    
   );
 };
