@@ -6,7 +6,8 @@ import GetReportData from "../../../../redux/actions/api/DataSet/DatasetMetrics/
 import {  Grid } from "@material-ui/core";
 import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
-import zIndex from "@material-ui/core/styles/zIndex";
+
+
 
 const DatasetMetrics = () => {
   const dispatch = useDispatch();
@@ -20,12 +21,16 @@ const DatasetMetrics = () => {
     selectableRows: false,
     filter: false,
    
+   
     sortOrder: {
       name: 'datasetType',
       direction: 'asc',
-  }
+  },
+ 
+    
+};
 
-  };
+ 
 
   const columns = [
     { name: "datasetType", label: "Dataset Type" ,options:{"viewColumns":false } },
@@ -59,18 +64,21 @@ const DatasetMetrics = () => {
   const handleSearch = (value) => {
     dispatch(getSearchedValue(value));
   };
-
+const searchTerm=""
   return (
   <div>
+   
+       
    <div style={{ width:"100%",position:"absolute",right:"450px",top:"165px",zIndex:"1"}}>
    <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
    </div>
+  
    <DataTable
       title="Dataset Metrics"
       options={options}
       columns={columns}
-       data={target}
-      // data={value}
+        data={target}
+      
      
       />
   </div>
