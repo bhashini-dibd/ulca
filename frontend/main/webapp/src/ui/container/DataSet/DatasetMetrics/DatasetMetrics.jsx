@@ -3,13 +3,15 @@ import APITransport from "../../../../redux/actions/apitransport/apitransport";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import GetReportData from "../../../../redux/actions/api/DataSet/DatasetMetrics/GetReportData";
-import {  Grid } from "@material-ui/core";
 import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValue from "../../../../redux/actions/api/DataSet/DatasetSearch/GetSearchedValues";
+import { withStyles, Grid } from "@material-ui/core";
+import DataSet from "../../../styles/Dataset";
 
 
 
-const DatasetMetrics = () => {
+const DatasetMetrics = (props) => {
+  const { classes } = props;
   const dispatch = useDispatch();
   const datasetMetrics = useSelector((state) => state.datasetMetrics.result);
 
@@ -20,14 +22,18 @@ const DatasetMetrics = () => {
     search: false,
     selectableRows: false,
     filter: false,
-   
-   
+    
+    downloadOptions:{
+      filterOptions:{
+      useDisplayedColumnsOnly:true,
+      }
+    },
     sortOrder: {
       name: 'datasetType',
       direction: 'asc',
   },
- 
-    
+  
+  
 };
 
  
@@ -62,14 +68,17 @@ const DatasetMetrics = () => {
   })
 
   const handleSearch = (value) => {
-    dispatch(getSearchedValue(value));
+    console.log(value,"search value")
+    
+     dispatch(getSearchedValue(value));
   };
-const searchTerm=""
+  
+
   return (
   <div>
    
        
-   <div style={{ width:"100%",position:"absolute",right:"350px",top:"165px",zIndex:"1"}}>
+   <div className={classes.metricsSearchbar}>
    <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
    </div>
   
@@ -77,7 +86,9 @@ const searchTerm=""
       title="Dataset Metrics"
       options={options}
       columns={columns}
+      // filterOptions={filterOptions}
         data={target}
+
       
      
       />
@@ -93,4 +104,4 @@ const searchTerm=""
   );
 };
 
-export default DatasetMetrics;
+export default withStyles(DataSet)( DatasetMetrics);

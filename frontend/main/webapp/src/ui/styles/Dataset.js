@@ -1018,6 +1018,14 @@ const DataSet = (theme) => ({
     fontSize: "14px",
      lineHeight: "25px",
       color: "black"
+  },
+  metricsSearchbar:{
+    width:"100%",
+    position:"absolute",
+     right:"450px",
+    top:"165px",
+    zIndex:"1",
+
   }
 });
 
