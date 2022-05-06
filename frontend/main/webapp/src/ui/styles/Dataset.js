@@ -1022,7 +1022,7 @@ const DataSet = (theme) => ({
   metricsSearchbar:{
     width:"100%",
     position:"absolute",
-     right:"450px",
+     right:"350px",
     top:"165px",
     zIndex:"1",
 

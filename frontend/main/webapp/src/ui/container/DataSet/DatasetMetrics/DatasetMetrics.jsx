@@ -18,6 +18,7 @@ const DatasetMetrics = (props) => {
   
   const options = {
     download: true,
+    viewColumns:false,
     print: false,
     search: false,
     selectableRows: false,
@@ -40,12 +41,12 @@ const DatasetMetrics = (props) => {
 
   const columns = [
     { name: "datasetType", label: "Dataset Type" ,options:{"viewColumns":false } },
-    { name: "sourceLanguage", label: "Source Language",options:{"viewColumns":false } },
-    { name: "targetLanguage", label: "Target Language",options:{"viewColumns":false } },
-    { name: "domain", label: "Domain",options:{"viewColumns":false } },
-    { name: "collectionMethod", label: "Collection Method",options:{"viewColumns":false } },
-    { name: "submitterName", label: "Submitter",options:{"viewColumns":false } },
-    { name: "count", label: "Count",options:{ "viewColumns":false} ,options:{"viewColumns":false }},
+    { name: "sourceLanguage", label: "Source Language" },
+    { name: "targetLanguage", label: "Target Language" },
+    { name: "domain", label: "Domain" },
+    { name: "collectionMethod", label: "Collection Method" },
+    { name: "submitterName", label: "Submitter" },
+    { name: "count", label: "Count",options:{ "viewColumns":false} },
   ];
 
   
