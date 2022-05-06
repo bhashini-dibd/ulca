@@ -69,7 +69,7 @@ const searchTerm=""
   <div>
    
        
-   <div style={{ width:"100%",position:"absolute",right:"450px",top:"165px",zIndex:"1"}}>
+   <div style={{ width:"100%",position:"absolute",right:"350px",top:"165px",zIndex:"1"}}>
    <Search value="" handleSearch={(e) => handleSearch(e.target.value)} />
    </div>
   
