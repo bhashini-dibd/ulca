@@ -18,10 +18,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Document(collection = "benchmarkprocess")
 public class BenchmarkProcess {
-	
+
 	@Id
-    String id;
-	
+	String id;
+
 	String modelId;
 	String benchmarkProcessId;
 	String benchmarkDatasetId;
@@ -33,5 +33,8 @@ public class BenchmarkProcess {
 	String status; // Completed/In-Progress/Failed
 	String createdOn;
 	String lastModifiedOn;
+	String startTime;
+	String endTime;
+	Integer recordCount;
 
 }

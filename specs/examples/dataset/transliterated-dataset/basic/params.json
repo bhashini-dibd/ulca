@@ -1,0 +1,36 @@
+{
+    "datasetType": "transliteration-corpus",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": "hi"
+    },
+    "collectionSource": [
+        "http://pib.gov.in/"
+    ],
+    "domain":[
+        "news"
+    ],
+    "collectionMethod": {
+        "collectionDescription": [
+            "machine-transliterated"
+        ],
+        "collectionDetails": {
+            "translationModel": "IndicTrans"
+        }
+    },
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
+        "team": [
+            {
+                "name": "Ajitesh Sharma",
+                "aboutMe": "NLP team lead at Project Anuvaad"
+            },
+            {
+                "name": "Vishal Mauli",
+                "aboutMe": "Backend team lead at Project Anuvaad"
+            }
+        ]
+    }
+}

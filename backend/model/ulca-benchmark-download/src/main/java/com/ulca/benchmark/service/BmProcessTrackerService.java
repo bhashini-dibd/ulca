@@ -83,6 +83,7 @@ public class BmProcessTrackerService {
 		BenchmarkProcess bmProcess = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
 		bmProcess.setStatus(status);
 		bmProcess.setLastModifiedOn(new Date().toString());
+		bmProcess.setEndTime(new Date().toString());
 		benchmarkProcessDao.save(bmProcess);
 		
 
