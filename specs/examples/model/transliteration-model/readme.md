@@ -15,6 +15,8 @@ Few examples to show how a submitter can publish a transliteration model to ULCA
         }
     ],
     "config": {
+        "isSentence": "True",
+        "numSuggestions" : 1
         "language": {
                "sourceLanguage" : "en",
                "targetLanguage": "hi"
@@ -29,11 +31,11 @@ Few examples to show how a submitter can publish a transliteration model to ULCA
     "output" :  [
         {        
         "source" : "vah aath saal ka tha jab usane apane maata-pita ko chhod diya.",       
-        "target" : "वह आठ साल का था जब उसने अपने माता-पिता को छोड़ दिया।"       
+        "target" : ["वह आठ साल का था जब उसने अपने माता-पिता को छोड़ दिया।" ]      
         },
         {
         "source" : "agar kofee zyaada kadavee hai to thoda aur paanee daalalo.",       
-        "target" : "अगर कॉफ़ी ज़्यादा कड़वी है तो थोड़ा और पानी डाललो।"
+        "target" : ["अगर कॉफ़ी ज़्यादा कड़वी है तो थोड़ा और पानी डाललो।"]
         }
           ],           
     "status" : {  

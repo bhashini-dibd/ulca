@@ -180,9 +180,9 @@ components:
       type: object
       properties:
         request:
-          $ref: '#/components/schemas/TranslationRequest'
+          $ref: '#/components/schemas/TransliterationRequest'
         response:
-          $ref: '#/components/schemas/TranslationResponse'
+          $ref: '#/components/schemas/TransliterationResponse'
     TranslationAsyncInference:
       required:
         - request
@@ -230,6 +230,26 @@ components:
           $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+    TransliterationRequest:
+      required:
+        - input
+        - config
+      type: object
+      properties:
+        input:
+          $ref: '#/components/schemas/Sentences'
+        config:
+          $ref: '#/components/schemas/TransliterationConfig'
+    TransliterationResponse:
+      description: the response for translation.  Standard http status codes to be used.
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/SentencesList'
+        config:
+          $ref: '#/components/schemas/TransliterationConfig'
     ASRInference:
       required:
         - request
@@ -395,6 +415,26 @@ components:
           minLength: 1
           type: string
           description: to be used along with translation model. expected translated sentence, for reference
+    SentencesList:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/SentenceList'
+    SentenceList:
+      required:
+        - source
+      type: object
+      properties:
+        source:
+          minLength: 1
+          type: string
+          description: input sentence for the model
+        target:
+          type : array
+          description: list of sentences
+          items:
+            type: string
+            minItems: 1
     TranslationConfig:
       required:
         - language
@@ -404,6 +444,26 @@ components:
           type: integer
           description: Unique identifier of model
           example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    TransliterationConfig:
+      required:
+        - language
+      type: object
+      properties:
+        modelId:
+          type: integer
+          description: Unique identifier of model
+          example: 103
+        numSuggestions:
+          type: integer
+          description: expected number of predictions
+          example: 4
+        isSentence:
+          type: boolean
+          description: Expects sentence or words
+          default: false
+          example: false
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
     OCRConfig:
