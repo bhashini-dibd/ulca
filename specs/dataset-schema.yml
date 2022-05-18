@@ -791,6 +791,7 @@ components:
             minItems: 1
             maxItems: 10
             enum:
+              - auto-aligned
               - machine-transliterated
               - machine-transliterated-post-edited
               - manual-transliterated
