@@ -45,6 +45,7 @@ const NewSearchModel = () => {
   const id = popoverOpen ? "simple-popover" : undefined;
   const [rowsPerPage, setRowsPerPage] = useState(9)
   const handleChange = (event, newValue) => {
+    console.log("newValue -", newValue)
     setValue(newValue);
     makeModelSearchAPICall(ModelTask[newValue].value);
     dispatch(SearchList(""));
@@ -81,6 +82,7 @@ const NewSearchModel = () => {
   };
 
   const handleClick = (data) => {
+    console.log("handle click data param -", data);
     data.prevUrl = "explore-models";
     dispatch(updateFilter({ source: "", filter: "", type: data.task }));
     history.push({
@@ -95,6 +97,7 @@ const NewSearchModel = () => {
   };
 
   const handleRowsPerPageChange = (e, page) => {
+    console.log("handleRowsPerPageChange page param -",page);
     setRowsPerPage(page.props.value);
   };
   const renderTabs = () => {

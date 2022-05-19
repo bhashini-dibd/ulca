@@ -4,6 +4,7 @@ export const ModelTask = [
   { value: "asr", label: "ASR" },
   { value: "tts", label: "TTS" },
   { value: "ocr", label: "OCR" },
+  { value: "transliteration", label: "Transliteration" },
 ];
 export const DatasetItems = [
   { value: "parallel-corpus", label: "Parallel Dataset" },
@@ -12,6 +13,7 @@ export const DatasetItems = [
   { value: "ocr-corpus", label: "OCR Dataset" },
   { value: "asr-unlabeled-corpus", label: "ASR Unlabeled Dataset" },
   { value: "tts-corpus", label: "TTS Dataset" },
+ 
 ];
 
 export const DatasetReadymade = [
@@ -20,6 +22,7 @@ export const DatasetReadymade = [
   { value: "asr-corpus", label: "ASR" },
   { value: "ocr-corpus", label: "OCR" },
   { value: "asr-unlabeled-corpus", label: "ASR Unlabeled" },
+  { value: "transliteration", label: "Transliteration" },
 ];
 export const Language = [
   { value: "as", label: "Assamese" },
