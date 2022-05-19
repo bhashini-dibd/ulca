@@ -50,7 +50,7 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 	public TransliterationDatasetParamsSchema deserialize(JsonParser p, DeserializationContext ctxt)
 			throws IOException, JsonProcessingException {
 
-		log.info("******** Entry ParallelDatasetParamsSchemaDeserializer :: deserializer ********");
+		log.info("******** Entry TransliterationDatasetParamsSchemaDeserializer :: deserializer ********");
 		
 		
 		
@@ -86,8 +86,8 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 		} else {
 			String datasetType = node.get("datasetType").asText();
 			DatasetType type = DatasetType.fromValue(datasetType);
-			if (type != DatasetType.PARALLEL_CORPUS) {
-				errorList.add("datasetType field value " + DatasetType.PARALLEL_CORPUS.toString());
+			if (type != DatasetType.TRANSLITERATION_CORPUS) {
+				errorList.add("datasetType field value " + DatasetType.TRANSLITERATION_CORPUS.toString());
 			}
 			transliterationParamsSchema.setDatasetType(type);
 

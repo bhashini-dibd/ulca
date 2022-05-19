@@ -180,7 +180,7 @@ public class DatasetTransliterationValidateIngest implements DatasetValidateInge
 
 		String paramsFilePath = datasetIngest.getBaseLocation() + File.separator + "params.json";
 
-		log.info("************ Entry DatasetParallelCorpusValidateIngest :: validateParamsSchema *********");
+		log.info("************ Entry DatasetTransliterationValidateIngest :: validateParamsSchema *********");
 		log.info("validing file :: against params schema");
 		log.info(paramsFilePath);
 
