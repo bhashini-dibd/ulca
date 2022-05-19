@@ -131,7 +131,6 @@ components:
         text:
           type: string
           description: textual data in source language
-          
     TransliterationDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -155,7 +154,6 @@ components:
           $ref: '#/components/schemas/TransliterationDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
-          
     AsrParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -779,7 +777,6 @@ components:
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslated'
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslatedPostEdited'
             - $ref: '#/components/schemas/CollectionDetailsManualTranslated'
-            
     TransliterationDatasetCollectionMethod:
       type: object
       description: specifies how the dataset is curated.
@@ -794,15 +791,16 @@ components:
             minItems: 1
             maxItems: 10
             enum:
+              - auto-aligned
               - machine-transliterated
               - machine-transliterated-post-edited
               - manual-transliterated
         collectionDetails:
           oneOf:
+            - $ref: '#/components/schemas/CollectionDetailsAutoAligned'
             - $ref: '#/components/schemas/CollectionDetailsMachineTransliterated'
             - $ref: '#/components/schemas/CollectionDetailsMachineTransliteratedPostEdited'
             - $ref: '#/components/schemas/CollectionDetailsManualTransliterated'
-            
     OcrCollectionMethod:
       type: object
       description: specifies how the dataset is curated.
