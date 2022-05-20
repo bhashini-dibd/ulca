@@ -126,7 +126,13 @@ const constants = {
   /**
    * action for Dataset Metrics
    */
-  GET_DATASET_METRICS:"GET_DATASET_METRICS"
+  GET_DATASET_METRICS: "GET_DATASET_METRICS",
+
+  /**
+   * action for fetching Transliteraion value
+   */
+
+  GET_TRANSLITERATION_TEXT: "GET_TRANSLITERATION_TEXT",
 };
 
 export default constants;
