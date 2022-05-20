@@ -30,6 +30,7 @@ import GetModelDetails from "../../../../../redux/actions/api/Model/ModelSearch/
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
+import HostedInferTransliteration from "./HostedInferTransliteration";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -154,6 +155,12 @@ const SearchModelDetail = (props) => {
               modelId={params.srno}
             />
           );
+          case "transliteration":
+            return (
+              <HostedInferTransliteration
+             
+              />
+            );
         default:
           return (
             <HostedInference
