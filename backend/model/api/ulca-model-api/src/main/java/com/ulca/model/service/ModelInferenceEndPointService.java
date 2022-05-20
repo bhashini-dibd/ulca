@@ -52,6 +52,8 @@ import io.swagger.model.TTSRequest;
 import io.swagger.model.TTSResponse;
 import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
+import io.swagger.model.TransliterationRequest;
+import io.swagger.model.TransliterationResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -178,6 +180,31 @@ public class ModelInferenceEndPointService {
 			schema = ttsInference;
 
 			log.info("logging tts inference point response" + responseJsonStr);
+		}
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
+			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
+			TransliterationRequest request = transliterationInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			OkHttpClient newClient = getTrustAllCertsClient();
+
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+
+			// Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+			TransliterationResponse response = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
+			transliterationInference.setResponse(response);
+			schema = transliterationInference;
+
+			log.info("logging TransliterationInference point response" + responseJsonStr);
 		}
 
 		inferenceAPIEndPoint.setSchema(schema);
@@ -533,6 +560,52 @@ public class ModelInferenceEndPointService {
 				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
 						HttpStatus.BAD_REQUEST);
 			}
+		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
+			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
+			TransliterationRequest request = transliterationInference.getRequest();
+
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			Response httpResponse = client.newCall(httpRequest).execute();
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+
+			TransliterationResponse transliterationResponse = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
+
+			/*
+			if (transliterationResponse.getOutput() == null || transliterationResponse.getOutput().size() <= 0
+					|| transliterationResponse.getOutput().get(0).getTarget()) {
+				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Response is Empty",
+						HttpStatus.BAD_REQUEST);
+
+			}*/
+			response.setOutputText(transliterationResponse.getOutput().get(0).getTarget().toString());
+
+			return response;
 		}
 
 		return response;
