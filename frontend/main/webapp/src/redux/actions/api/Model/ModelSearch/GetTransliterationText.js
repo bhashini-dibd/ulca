@@ -27,7 +27,7 @@
    processResponse(res) {
      super.processResponse(res);
      if (res) {
-       this.report = res.data;
+       this.report = res;
      }
    }
  
