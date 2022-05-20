@@ -19,6 +19,11 @@
         "code": "ocr",
         "label": "OCR",
         "active": true
+      },
+      {
+        "code": "transliteration",
+        "label": "TRANSLITERATION",
+        "active": true
       }
     ]
   }
