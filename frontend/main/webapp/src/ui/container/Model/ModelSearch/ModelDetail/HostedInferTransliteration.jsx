@@ -18,6 +18,10 @@ import {
   setCurrentText,
   clearTransliterationResult,
 } from "../../../../../redux/actions/api/Model/ModelSearch/SetTransliterationText";
+import LightTooltip from "../../../../components/common/LightTooltip";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import { translate } from "../../../../../assets/localisation";
+import { getLanguageName } from "../../../../../utils/getLabel";
 
 function HostedInferTransliteration(props) {
   const { classes, target } = props;
@@ -26,15 +30,35 @@ function HostedInferTransliteration(props) {
     (state) => state.getTransliterationText
   );
 
-  const [transliteration, setTransliteration] = useState("");
+  const [sourceLanguage, setSourceLanguage] = useState({
+    value: "en",
+    label: "English",
+  });
+  const srcLang = getLanguageName(props.source);
+  const tgtLang = getLanguageName(props.target);
 
-  const setTransliterateValues = (e) => {
+  const [transliteration, setTransliteration] = useState("");
+  const [shouldFetchData, setShouldFetchData] = useState(true);
+
+  
+ const setTransliterateValues = (e) => {
+  if(shouldFetchData){
     setTransliteration(e.target.value);
     dispatch(setCurrentText(e.target.value));
-  };
+  } else {
+    return false;
+  }
+};
+
+const handleKeyDown = (e) =>{
+  setShouldFetchData(e.key === "Backspace" ? false : true);
+}
+ 
+
 
   const getTransliterationText = () => {
     const apiObj = new GetTransliterationText(target, currentText);
+    console.log(apiObj, "apiObj")
     dispatch(APITransport(apiObj));
   };
 
@@ -57,7 +81,7 @@ function HostedInferTransliteration(props) {
       dispatch(clearTransliterationResult());
     }
   }, [transliteration]);
-
+console.log(transliteration,"transliteration")
   return (
     <Grid
       className={classes.gridCompute}
@@ -79,20 +103,41 @@ function HostedInferTransliteration(props) {
               lg={4}
               xl={4}
               className={classes.headerContent}
-            ></Grid>
+            >
+               <Typography variant="h6" className={classes.hosted}>
+                Hosted inference API{" "}
+                {
+                  <LightTooltip
+                    arrow
+                    placement="right"
+                    title={translate("label.hostedInferenceTranslation")}>
+                    <InfoOutlinedIcon
+                      className={classes.buttonStyle}
+                      fontSize="small"
+                      color="disabled"
+                    />
+                  </LightTooltip>
+                }
+              </Typography>
+
+            </Grid>
             <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-              <Typography variant="h6" className={classes.hosted}></Typography>
+              <Typography variant="h6" className={classes.hosted}>
+              {tgtLang}
+              </Typography>
             </Grid>
           </Grid>
         </CardContent>
         <CardContent>
           <Autocomplete
+           style={{hight:"300px"}}
             freeSolo
             clearOnBlur={false}
             disableClearable={true}
-            options={result.map((elem) => elem)}
+           options={result.map((elem) => elem)}
             PopperComponent={(params) => (
               <Popper
+             
                 {...params}
                 onClick={(e) =>
                   dispatch(
@@ -104,13 +149,17 @@ function HostedInferTransliteration(props) {
                 }
               />
             )}
-            sx={{ width: 300 }}
+            sx={{ width: 300  }}
             renderInput={(params) => (
               <TextField
+              multiline
+              maxRows={4}
                 variant="outlined"
                 {...params}
                 onChange={setTransliterateValues}
+                onKeyDown={handleKeyDown}
               />
+             
             )}
             value={transliteration}
           />
