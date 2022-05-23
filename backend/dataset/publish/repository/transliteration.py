@@ -125,8 +125,12 @@ class TransliterationRepo:
                     query["groupBy"] = True
                     if query['originalSourceSentence']:
                         query["derived"] = False
+            if "derived" in query.keys():
+                pipeline.append({"$match": {"derived": query["derived"]}})
             if "tags" in query.keys():
                 pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
+            if "scoreQuery" in query.keys():
+                pipeline.append({"$match": query["scoreQuery"]})
             if "collectionSourceQuery" in query.keys():
                 pipeline.append({"$match": query["collectionSourceQuery"]})
             if "submitterNameQuery" in query.keys():
@@ -164,7 +168,7 @@ class TransliterationRepo:
                     if hashes:
                         res_count = len(hashes)
                         project = {"_id": False}
-                        for key in transliteration_search_ignore_keys:
+                        for key in parallel_search_ignore_keys:
                             project[key] = False
                         res = col.find({"sourceTextHash": {"$in": hashes}}, project)
                     if not res:
