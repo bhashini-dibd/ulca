@@ -40,20 +40,20 @@ function HostedInferTransliteration(props) {
   const [transliteration, setTransliteration] = useState("");
   const [shouldFetchData, setShouldFetchData] = useState(true);
 
-  
- const setTransliterateValues = (e) => {
-  if(shouldFetchData){
-    setTransliteration(e.target.value);
-    dispatch(setCurrentText(e.target.value));
-  } else {
-    return false;
-  }
-};
 
-const handleKeyDown = (e) =>{
-  setShouldFetchData(e.key === "Backspace" ? false : true);
-}
- 
+  const setTransliterateValues = (e) => {
+    setTransliteration(e.target.value);
+    if (shouldFetchData) {
+      dispatch(setCurrentText(e.target.value));
+    } else {
+      return false;
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    setShouldFetchData(e.key === "Backspace" ? false : true);
+  }
+
 
 
   const getTransliterationText = () => {
@@ -81,7 +81,9 @@ const handleKeyDown = (e) =>{
       dispatch(clearTransliterationResult());
     }
   }, [transliteration]);
-console.log(transliteration,"transliteration")
+  console.log(transliteration, "transliteration")
+
+
   return (
     <Grid
       className={classes.gridCompute}
@@ -104,7 +106,7 @@ console.log(transliteration,"transliteration")
               xl={4}
               className={classes.headerContent}
             >
-               <Typography variant="h6" className={classes.hosted}>
+              <Typography variant="h6" className={classes.hosted}>
                 Hosted inference API{" "}
                 {
                   <LightTooltip
@@ -123,22 +125,22 @@ console.log(transliteration,"transliteration")
             </Grid>
             <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
               <Typography variant="h6" className={classes.hosted}>
-              {tgtLang}
+                {tgtLang}
               </Typography>
             </Grid>
           </Grid>
         </CardContent>
         <CardContent>
-          <Autocomplete
-           style={{hight:"300px"}}
+        <Autocomplete
             freeSolo
             clearOnBlur={false}
             disableClearable={true}
-           options={result.map((elem) => elem)}
+            options={result.map((elem) => elem)}
             PopperComponent={(params) => (
               <Popper
-             
                 {...params}
+                placement = 'bottom-start'
+                style={{width : window.innerWidth*0.15}}
                 onClick={(e) =>
                   dispatch(
                     setTransliterationText(
@@ -149,17 +151,14 @@ console.log(transliteration,"transliteration")
                 }
               />
             )}
-            sx={{ width: 300  }}
+            sx={{ width: 300 }}
             renderInput={(params) => (
               <TextField
-              multiline
-              maxRows={4}
                 variant="outlined"
                 {...params}
                 onChange={setTransliterateValues}
                 onKeyDown={handleKeyDown}
               />
-             
             )}
             value={transliteration}
           />
