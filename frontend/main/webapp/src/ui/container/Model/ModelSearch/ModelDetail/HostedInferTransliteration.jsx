@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Grid,
   Typography,
@@ -22,6 +22,17 @@ import LightTooltip from "../../../../components/common/LightTooltip";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { translate } from "../../../../../assets/localisation";
 import { getLanguageName } from "../../../../../utils/getLabel";
+import { FormatListBulletedOutlined } from "@material-ui/icons";
+
+const KEY_UP = "ArrowUp";
+const KEY_DOWN = "ArrowDown";
+const KEY_ESCAPE = "Escape";
+const triggerKeys = {
+  KEY_RETURN: "Enter",
+  KEY_ENTER: "Enter",
+  KEY_TAB: "Tab",
+  KEY_SPACE: " ",
+}
 
 function HostedInferTransliteration(props) {
   const { classes, target } = props;
@@ -29,6 +40,7 @@ function HostedInferTransliteration(props) {
   const { result, currentText, transliterationText } = useSelector(
     (state) => state.getTransliterationText
   );
+  const inputEl = useRef(null);
 
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
@@ -39,9 +51,16 @@ function HostedInferTransliteration(props) {
 
   const [transliteration, setTransliteration] = useState("");
   const [shouldFetchData, setShouldFetchData] = useState(true);
-
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [curserIndexPosition, setCurserIndexPosition] = useState(0);
 
   const setTransliterateValues = (e) => {
+    let currentCurserPosition = e.target.selectionStart;
+    setCurserIndexPosition(currentCurserPosition);
+    console.log("cursor position----- ", currentCurserPosition);
+
+    
+
     setTransliteration(e.target.value);
     if (shouldFetchData) {
       dispatch(setCurrentText(e.target.value));
@@ -54,7 +73,17 @@ function HostedInferTransliteration(props) {
     setShouldFetchData(e.key === "Backspace" ? false : true);
   }
 
-
+  useEffect(() => {
+    if (isFirstRender) {
+      setTransliteration(" ");
+      dispatch(setCurrentText(" "));
+      setTimeout(() => {
+        getTransliterationText();
+        setIsFirstRender(false);
+      }, 0);
+    }
+    // Update the document title using the browser API
+  });
 
   const getTransliterationText = () => {
     const apiObj = new GetTransliterationText(target, currentText);
@@ -131,16 +160,16 @@ function HostedInferTransliteration(props) {
           </Grid>
         </CardContent>
         <CardContent>
-        <Autocomplete
+          <Autocomplete
             freeSolo
             clearOnBlur={false}
             disableClearable={true}
-            options={result.map((elem) => elem)}
+            options={!currentText ? [] : result.map((elem) => elem)}
             PopperComponent={(params) => (
               <Popper
                 {...params}
-                placement = 'bottom-start'
-                style={{width : window.innerWidth*0.15}}
+                placement='bottom-start'
+                style={{ width: window.innerWidth * 0.15 }}
                 onClick={(e) =>
                   dispatch(
                     setTransliterationText(
@@ -154,6 +183,7 @@ function HostedInferTransliteration(props) {
             sx={{ width: 300 }}
             renderInput={(params) => (
               <TextField
+                ref={inputEl}
                 variant="outlined"
                 {...params}
                 onChange={setTransliterateValues}
