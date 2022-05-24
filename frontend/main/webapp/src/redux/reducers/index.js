@@ -28,6 +28,8 @@ import getUserDetails from "./Admin/UserDetails";
 import getMasterData from "./Common/getMasterData";
 import getModelDetails from "./Model/ModelSearch/GetModelDetail";
 import getBulkModelSearch from "../reducers/Model/ModelSearch/SpeechToSpeech";
+import datasetMetrics from "../reducers/DataSet/DatasetMetrics/GetReportData";
+import getTransliterationText from '../reducers/Model/ModelSearch/GetTransliterationText';
 
 const index = {
   apiStatus,
@@ -60,6 +62,8 @@ const index = {
   getMasterData,
   getModelDetails,
   getBulkModelSearch,
+  datasetMetrics,
+  getTransliterationText
 };
 
 export default index;

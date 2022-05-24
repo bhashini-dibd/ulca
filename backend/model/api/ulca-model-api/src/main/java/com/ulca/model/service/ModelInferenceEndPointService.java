@@ -52,6 +52,8 @@ import io.swagger.model.TTSRequest;
 import io.swagger.model.TTSResponse;
 import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
+import io.swagger.model.TransliterationRequest;
+import io.swagger.model.TransliterationResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -178,6 +180,31 @@ public class ModelInferenceEndPointService {
 			schema = ttsInference;
 
 			log.info("logging tts inference point response" + responseJsonStr);
+		}
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
+			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
+			TransliterationRequest request = transliterationInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			// OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			OkHttpClient newClient = getTrustAllCertsClient();
+
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+
+			// Response httpResponse = client.newCall(httpRequest).execute();
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+			TransliterationResponse response = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
+			transliterationInference.setResponse(response);
+			schema = transliterationInference;
+
+			log.info("logging TransliterationInference point response" + responseJsonStr);
 		}
 
 		inferenceAPIEndPoint.setSchema(schema);
@@ -535,6 +562,52 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 			}
 		}
+		
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
+			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
+			TransliterationRequest request = transliterationInference.getRequest();
+
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			Response httpResponse = client.newCall(httpRequest).execute();
+			if (httpResponse.code() < 200 || httpResponse.code() > 204) {
+
+				log.info(httpResponse.toString());
+
+				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Failed",
+						HttpStatus.valueOf(httpResponse.code()));
+			}
+			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+			// false);
+			String responseJsonStr = httpResponse.body().string();
+
+			TransliterationResponse transliterationResponse = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
+
+			/*
+			if (transliterationResponse.getOutput() == null || transliterationResponse.getOutput().size() <= 0
+					|| transliterationResponse.getOutput().get(0).getTarget()) {
+				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Response is Empty",
+						HttpStatus.BAD_REQUEST);
+
+			}*/
+			response.setOutputText(transliterationResponse.getOutput().get(0).getTarget().toString());
+
+			return response;
+		}
 
 		return response;
 	}
@@ -542,47 +615,61 @@ public class ModelInferenceEndPointService {
 	/*
 	 * compute for OCR model
 	 */
-	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema, String imagePath)
-			throws URISyntaxException, IOException {
+	public ModelComputeResponse compute(String callBackUrl, OneOfInferenceAPIEndPointSchema schema, String imagePath) {
 
-		ModelComputeResponse response = new ModelComputeResponse();
+		try {
+			
+			ModelComputeResponse response = new ModelComputeResponse();
 
-		io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
+			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 
-		byte[] bytes = FileUtils.readFileToByteArray(new File(imagePath));
+			byte[] bytes = FileUtils.readFileToByteArray(new File(imagePath));
 
-		ImageFile imageFile = new ImageFile();
-		imageFile.setImageContent(bytes);
+			ImageFile imageFile = new ImageFile();
+			imageFile.setImageContent(bytes);
 
-		ImageFiles imageFiles = new ImageFiles();
-		imageFiles.add(imageFile);
+			ImageFiles imageFiles = new ImageFiles();
+			imageFiles.add(imageFile);
 
-		OCRRequest request = ocrInference.getRequest();
-		request.setImage(imageFiles);
+			OCRRequest request = ocrInference.getRequest();
+			request.setImage(imageFiles);
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String requestJson = objectMapper.writeValueAsString(request);
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
 
-		OkHttpClient client = new OkHttpClient();
-		RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-		Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+			OkHttpClient client = new OkHttpClient();
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
-		Response httpResponse = client.newCall(httpRequest).execute();
-		String responseJsonStr = httpResponse.body().string();
+			Response httpResponse = client.newCall(httpRequest).execute();
+			String responseJsonStr = httpResponse.body().string();
 
-		OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
-		if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0) {
-			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
-		} else {
-			log.info("Ocr try me response is null or not proper");
-			log.info("callBackUrl :: " + callBackUrl);
-			log.info("Request Json :: " + requestJson);
-			log.info("ResponseJson :: " + responseJsonStr);
+			OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
+			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0 && !ocrResponse.getOutput().get(0).getSource().isBlank()) {
+				response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+			} else {
+				log.info("Ocr try me response is null or not proper");
+				log.info("callBackUrl :: " + callBackUrl);
+				log.info("Request Json :: " + requestJson);
+				log.info("ResponseJson :: " + responseJsonStr);
+				FileUtils.delete(new File(imagePath));
+				throw new ModelComputeException("Model unable to infer the image", "Model unable to infer the image", HttpStatus.INTERNAL_SERVER_ERROR);
 
+			}
+			return response;
+			
+		}catch(Exception ex) {
+			
+			throw new ModelComputeException(ex.getMessage(), "Model unable to infer the image", HttpStatus.INTERNAL_SERVER_ERROR);
+			
+		}finally {
+			try {
+				FileUtils.delete(new File(imagePath));
+			} catch (IOException e) {
+				log.info("Unable to delete the file : " + imagePath);
+				e.printStackTrace();
+			}
 		}
-		FileUtils.delete(new File(imagePath));
-
-		return response;
 	}
 
 	public static OkHttpClient getTrustAllCertsClient() throws NoSuchAlgorithmException, KeyManagementException {

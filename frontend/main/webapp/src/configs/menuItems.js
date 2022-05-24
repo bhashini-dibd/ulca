@@ -25,20 +25,22 @@ export const menuItems = {
         "ADMIN",
       ],
     },
-    // {
-    //     name: 'Explore Readymade Datasets',
-    //     url: '/readymade-dataset'
-    // },
     {
       name: "Submit Dataset",
       url: "/dataset/upload",
       roles: ["CONTRIBUTOR-USER", "BENCHMARK-DATASET-CONTRIBUTOR", "ADMIN"],
     },
-    // {
-    //     name: 'Readymade Dataset',
-    //     url: '/dataset/readymade-datasets',
-    //     roles:["CONTRIBUTOR-USER"]
-    // }
+    {
+      name: 'Dataset Metrics',
+      url: "/dataset/reports",
+      roles: [
+        "CONTRIBUTOR-USER",
+        "READONLY-USER",
+        "BENCHMARK-DATASET-CONTRIBUTOR",
+        "ADMIN",
+      ],
+      public: true,
+    }
   ],
 
   models: [
