@@ -3,13 +3,15 @@ import uuid
 from datetime import datetime
 from logging.config import dictConfig
 
-from configs.configs import pt_search_tool, pt_delete_tool, pt_inprogress_status, pt_success_status, pt_failed_status
+from configs.configs import pt_search_tool, pt_delete_tool, pt_inprogress_status, pt_success_status, pt_failed_status, \
+    dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts
 from .ptrepo import PTRepo
+from events.notifier import NotifierEvent
 
 log = logging.getLogger('file')
 
 repo = PTRepo()
-srn_map = {}
+notifier = NotifierEvent()
 
 class ProcessTracker:
     def __init__(self):
@@ -19,31 +21,44 @@ class ProcessTracker:
     params: data (record to be processed)
     '''
     def update_task_details(self, data):
-        global srn_map
-        if data["status"] == "SUCCESS":
-            repo.redis_key_inc(data["serviceRequestNumber"], False)
+        if 'datasetType' in data.keys():
+            if data["datasetType"] in [dataset_type_asr, dataset_type_asr_unlabeled, dataset_type_tts]:
+                if data["status"] == "SUCCESS":
+                    if 'isUpdate' not in data.keys():
+                        repo.redis_key_inc(data["serviceRequestNumber"], data["durationInSeconds"], False)
+                    else:
+                        repo.redis_key_inc(data["serviceRequestNumber"], None, False)
+                else:
+                    repo.redis_key_inc(data["serviceRequestNumber"], data["durationInSeconds"], True)
         else:
-            repo.redis_key_inc(data["serviceRequestNumber"], True)
+            if data["status"] == "SUCCESS":
+                repo.redis_key_inc(data["serviceRequestNumber"], None, False)
+            else:
+                repo.redis_key_inc(data["serviceRequestNumber"], None, True)
 
     '''
     Method to update the process tracker for a dataset search event
     params: data (record to be processed)
     params: error (error if any)
     '''
-    def task_event_search(self, data, error):
+    def task_event_search(self, data, error, dataset_type):
         log.info(f'Publishing pt event for SEARCH -- {data["serviceRequestNumber"]}')
         task_event = self.search_task_event(data, pt_search_tool)
         try:
             if task_event:
                 task_event["details"] = data
                 if error:
+                    log.info(f'ERROR in SEARCH: {error}')
                     task_event["status"] = pt_failed_status
                     task_event["error"] = error
+                    notifier_req = {"userID": data["userID"], "count": 0, "datasetType": dataset_type}
                 else:
                     task_event["status"] = pt_success_status
+                    notifier_req = {"userID": data["userID"], "count": data["count"], "datasetType": dataset_type}
                 task_event["lastModifiedTime"] = str(datetime.now())
                 task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
+                notifier.create_notifier_event(data["serviceRequestNumber"], notifier_req)
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool,
                               "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
@@ -56,6 +71,8 @@ class ProcessTracker:
             task_event["status"], task_event["error"] = pt_failed_status, error
             task_event["endTime"] = task_event["lastModifiedTime"] = str(datetime.now())
             repo.update(task_event)
+            notifier_req = {"userID": data["userID"], "count": 0, "datasetType": dataset_type}
+            notifier.create_notifier_event(data["serviceRequestNumber"], notifier_req)
             return None
 
     '''

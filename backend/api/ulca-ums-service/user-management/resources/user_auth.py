@@ -77,7 +77,7 @@ class ApiKeySearch(Resource):
             return post_error("Data Missing","key not found",None), 400
         key = body["key"]
         try:
-            result = authRepo.token_search(key)
+            result = authRepo.key_search(key)
             if "errorID" in result:
                 log.exception("api-key search request failed")
                 return result, 400
@@ -124,16 +124,16 @@ class ResetPassword(Resource):
     def post(self):
         
         body = request.get_json()
-        if "userName" not in body or not body["userName"]:
-            return post_error("Data Missing","userName not found",None), 400
+        if "email" not in body or not body["email"]:
+            return post_error("Data Missing","email not found",None), 400
         if "password" not in body or not body["password"]:
-            return post_error("Data Missing","Password not found",None), 400
-
+            return post_error("Data Missing","password not found",None), 400
+        user_id = None
         user_id=request.headers["x-user-id"]
-        user_name = body["userName"]
+        user_name = body["email"]
         password = body["password"]
         
-        log.info("Request received for password resetting from {}".format(user_name),MODULE_CONTEXT)
+        log.info("Request received for password resetting from {}; userID :{}".format(user_name,user_id),MODULE_CONTEXT)
         if not user_id:
             return post_error("userId missing","userId is mandatory",None), 400
         
@@ -193,25 +193,50 @@ class ActivateDeactivateUser(Resource):
 
     def post(self):
         body = request.get_json()
-        if "userName" not in body or not body["userName"]:
-            return post_error("Data Missing","userName not found",None), 400
+        if "email" not in body or not body["email"]:
+            return post_error("Data Missing","email not found",None), 400
         if "is_active" not in body:
             return post_error("Data Missing","is_active not found",None), 400
-        user_email = body["userName"]
+        user_email = body["email"]
         status= body["is_active"]
+        from_id = None
+        from_id=request.headers["x-user-id"]
 
         if not isinstance(status,bool):
             return post_error("Invalid format", "is_active status should be either true or false", None), 400
-        log.info("Request received for updating activation status of {}".format(user_email),MODULE_CONTEXT)
+        log.info("Request received for updating activation status of {}".format(user_email))
         try:
-            result = authRepo.activate_deactivate_user(user_email,status)
+            result = authRepo.activate_deactivate_user(user_email,status,from_id)
             if result is not None:
-                log.info("Updation of activation status for {} failed".format(user_email),MODULE_CONTEXT)
+                log.info("Updation of activation status for {} failed".format(user_email))
                 return result, 400
             else:
-                log.info("Updation of activation status for {} successful".format(user_email),MODULE_CONTEXT)
+                log.info("Updation of activation status for {} successful".format(user_email))
                 res = CustomResponse(Status.SUCCESS.value, None)
                 return res.getresjson(), 200           
         except Exception as e:
-            log.exception("Exception while activate/deactivate user api call: " + str(e), MODULE_CONTEXT, e)
+            log.exception("Exception while activate/deactivate user api call: " + str(e))
             return post_error("Exception occurred", "Exception while deactivate user api call:{}".format(str(e)), None), 400
+
+
+class VerifyToken(Resource):
+
+    def post(self):
+        body = request.get_json()    
+        if body.get("token") == None:
+            return post_error("Data Missing","token not found",None), 400
+        key = body["token"]
+        try:
+            result = authRepo.token_search(key)
+            if "errorID" in result:
+                log.exception("token search for reset password failed")
+                return result, 400
+            if result["active"] == False:
+                return post_error("Invalid Data","Link expired",None), 400
+            else:
+                log.info("token search for reset password  successsful")
+                res = CustomResponse(Status.SUCCESS_USR_TOKEN.value, result)
+            return res.getresjson(), 200
+        except Exception as e:
+            log.exception("Exception while token search for reset password | {}".format(str(e)))
+            return post_error("Exception occurred", "Exception while token search for reset password : {}".format(str(e)), None), 400

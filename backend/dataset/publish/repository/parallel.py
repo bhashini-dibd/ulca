@@ -1,15 +1,19 @@
-import json
 import logging
 from collections import OrderedDict
 from datetime import datetime
 from logging.config import dictConfig
+
+import bson
+from bson import ObjectId
+
 from configs.configs import db_cluster, db, parallel_collection, parallel_search_ignore_keys, shared_storage_path
 
 import pymongo
+
 log = logging.getLogger('file')
 
-
 mongo_instance_parallel = None
+
 
 class ParallelRepo:
     def __init__(self):
@@ -64,17 +68,29 @@ class ParallelRepo:
 
     def update(self, object_in):
         col = self.get_mongo_instance()
-        col.replace_one({"id": object_in["id"]}, object_in)
+        try:
+            object_in["_id"] = ObjectId(object_in["_id"])
+            col.replace_one({"_id": object_in["_id"]}, object_in, False)
+        except Exception as e:
+            log.exception(f"Exception while updating: {e}", e)
 
     def search_internal(self, query, exclude, offset, res_limit):
         try:
             col = self.get_mongo_instance()
             if offset is None and res_limit is None:
-                res = col.find(query, exclude).sort([('_id', 1)])
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', 1)])
+                else:
+                    res = col.find(query).sort([('_id', 1)])
             else:
-                res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                if exclude:
+                    res = col.find(query, exclude).sort([('_id', -1)]).skip(offset).limit(res_limit)
+                else:
+                    res = col.find(query).sort([('_id', -1)]).skip(offset).limit(res_limit)
             result = []
             for record in res:
+                if "_id" in record.keys():
+                    record["_id"] = str(record["_id"])
                 result.append(record)
             return result
         except Exception as e:
@@ -83,30 +99,52 @@ class ParallelRepo:
 
     def search(self, query, offset, res_limit):
         result, res_count, pipeline, langs = [], 0, [], []
+        if not query:
+            log.info(f'Empty Query: {query}')
+            return result, pipeline, res_count
         try:
             col = self.get_mongo_instance()
             if 'sourceLanguage' in query.keys() and 'targetLanguage' in query.keys():
                 if len(query["targetLanguage"]) == 1:
-                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["targetLanguage"][0]}]}})
+                    if not query['groupBy']:
+                        if query['originalSourceSentence']:
+                            pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]},
+                                                                 {"targetLanguage": query["targetLanguage"][0]}]}})
+                            query["derived"] = False
+                        else:
+                            langs = [query["sourceLanguage"], query["targetLanguage"][0]]
+                            pipeline.append({"$match": {
+                                "$and": [{"sourceLanguage": {"$in": langs}}, {"targetLanguage": {"$in": langs}}]}})
+                    else:
+                        pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]},
+                                                             {"targetLanguage": query["targetLanguage"][0]}]}})
+                        if query['originalSourceSentence']:
+                            query["derived"] = False
                 else:
-                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": {"$in": query["targetLanguage"]}}]}})
+                    pipeline.append({"$match": {"$and": [{"sourceLanguage": query["sourceLanguage"]},
+                                                         {"targetLanguage": {"$in": query["targetLanguage"]}}]}})
                     query["groupBy"] = True
-            elif 'sourceLanguage' in query.keys():
-                pipeline.append({"$match": {"$or": [{"sourceLanguage": query["sourceLanguage"]}, {"targetLanguage": query["sourceLanguage"]}]}})
+                    if query['originalSourceSentence']:
+                        query["derived"] = False
             if "derived" in query.keys():
                 pipeline.append({"$match": {"derived": query["derived"]}})
             if "tags" in query.keys():
                 pipeline.append({"$match": {"tags": {"$all": query["tags"]}}})
             if "scoreQuery" in query.keys():
                 pipeline.append({"$match": query["scoreQuery"]})
-            if "multipleContributors" in query.keys():
-                pipeline.append({"$match": {f'collectionMethod.{query["multipleContributors"]}': {"$exists": True}}})
-            if 'groupBy' in query.keys():
+            if "collectionSourceQuery" in query.keys():
+                pipeline.append({"$match": query["collectionSourceQuery"]})
+            if "submitterNameQuery" in query.keys():
+                pipeline.append({"$match": query["submitterNameQuery"]})
+            if query['multipleContributors']:
+                pipeline.append({"$match": {f'collectionMethod.1': {"$exists": True}}})
+            if query['groupBy']:
                 pipeline.append({"$group": {"_id": {"sourceHash": "$sourceTextHash"}, "count": {"$sum": 1}}})
-                count = 1
+                count = 2
                 if 'countOfTranslations' in query.keys():
                     count = query["countOfTranslations"]
-                pipeline.append({"$group": {"_id": {"$cond": [{"$gte": ["$count", count]}, "$_id.sourceHash", "$$REMOVE"]}}})
+                pipeline.append(
+                    {"$group": {"_id": {"$cond": [{"$gte": ["$count", count]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
                 project = {"_id": 0}
                 for key in parallel_search_ignore_keys:
@@ -121,7 +159,7 @@ class ParallelRepo:
                 pipeline.append({"$match": {"tags": query}})
                 pipeline.append({"$project": {"_id": 0}})
             res = col.aggregate(pipeline, allowDiskUse=True)
-            if 'groupBy' in query.keys():
+            if query['groupBy']:
                 if res:
                     hashes = []
                     for record in res:

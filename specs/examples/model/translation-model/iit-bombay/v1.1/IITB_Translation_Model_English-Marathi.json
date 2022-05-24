@@ -1,0 +1,83 @@
+﻿{
+   "name": "IITB Translation  English-Marathi",
+   "version": "v1.1",
+   "description": "IITB English-Marathi Neural Machine Translation model is based on Transformer architecture. The model is trained using OpenNMT-py library and CTranslate2 library is used for inference. The model is trained on data from various sources like Samanantar, Anuvaad, ILCI, Tatoeba, LoResMT 2021, Spoken Tutorial.",
+   "refUrl": "https://www.cfilt.iitb.ac.in/mtsystem/translate",
+   "task": {
+          "type" : "translation"
+   },
+   "languages": [
+          {
+             "sourceLanguage": "en",
+             "targetLanguage": "mr"
+          }
+   ],
+   "license": "mit",
+   "domain": [
+          "general"
+   ],
+   "submitter": {
+          "name": "IIT Bombay",
+          "aboutMe": "Machine Translation Group at CFILT, IIT Bombay works on improving the performance of Machine Translation systems with a focus on Indic languages",
+          "team": [
+             {
+                "name": "Dr. Pushpak Bhattacharyya",
+                "aboutMe": "IIT Bombay"
+             },
+             {
+                "name": "Vineet Bhat",
+                "aboutMe": "IIT Bombay"
+             },
+             {
+                "name": "Rohit Kundu",
+                "aboutMe": "IIT Bombay"
+             },
+             {
+                "name": "Shivam Mhaskar",
+                "aboutMe": "IIT Bombay"
+             },
+             {
+                "name": "Akshay Batheja",
+                "aboutMe": "IIT Bombay"
+             },
+             {
+                "name": "Shyam Thombre",
+                "aboutMe": "IIT Bombay"
+             },
+             {
+                "name": "Sourabh Deoghare",
+                "aboutMe": "IIT Bombay"
+             },
+             {
+                "name": "Tamali Banerjee",
+                "aboutMe": "IIT Bombay"
+             },
+             {
+                "name": "Jyotsana Khatri",
+                "aboutMe": "IIT Bombay"
+             }
+          ]
+   },
+   "inferenceEndPoint": {
+          "callbackUrl": "https://www.cfilt.iitb.ac.in/en-mr-v1/",
+          "schema": {
+             "taskType": "translation",
+             "request": {
+               "input": [
+                    {
+                        "source": "The rivers in India play an important role in the lives of the people."
+                    }
+               ],
+               "config": {
+                    "language": {
+                        "sourceLanguage": "en",
+                        "targetLanguage": "mr"
+                     }
+               }
+            }
+      }
+   },
+   "trainingDataset": {
+          "description": "Trained on dataset from various sources like Samanantar, Anuvaad, ILCI, Tatoeba, LoResMT 2021, Spoken Tutorial."
+   }
+}

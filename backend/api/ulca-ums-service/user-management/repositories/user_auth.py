@@ -14,8 +14,8 @@ class UserAuthenticationRepositories:
         result = authModel.user_logout(user_name)
         return result
 
-    def token_search(self,key):
-        result = authModel.token_search(key)
+    def key_search(self,key):
+        result = authModel.key_search(key)
         return result
 
     def forgot_password(self,user_name):
@@ -30,6 +30,10 @@ class UserAuthenticationRepositories:
         result = authModel.verify_user(user_email,user_id)
         return result
 
-    def activate_deactivate_user(self,user_email,status):
-        result = authModel.activate_deactivate_user(user_email,status)
+    def activate_deactivate_user(self,user_email,status,from_id):
+        result = authModel.activate_deactivate_user(user_email,status,from_id)
+        return result
+    
+    def token_search(self,token):
+        result = authModel.token_search(token)
         return result

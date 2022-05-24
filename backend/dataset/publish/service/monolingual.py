@@ -1,5 +1,7 @@
 import logging
 import multiprocessing
+import re
+import time
 from datetime import datetime
 from functools import partial
 from logging.config import dictConfig
@@ -49,7 +51,8 @@ class MonolingualService:
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                     elif result[0] == "UPDATE":
                         pt.update_task_details({"status": "SUCCESS", "serviceRequestNumber": metadata["serviceRequestNumber"]})
-                        metrics.build_metric_event(result[2], metadata, None, True)
+                        metric_record = (result[1], result[2])
+                        metrics.build_metric_event(metric_record, metadata, None, True)
                         updates += 1
                     else:
                         error_list.append(
@@ -59,6 +62,7 @@ class MonolingualService:
                              "message": "This record is already available in the system"})
                         pt.update_task_details({"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
                 else:
+                    log.error(f'INTERNAL ERROR: Failing record due to internal error: ID: {record["id"]}, SRN: {metadata["serviceRequestNumber"]}')
                     error_list.append(
                         {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
                          "datasetType": dataset_type_monolingual, "datasetName": metadata["datasetName"],
@@ -68,7 +72,7 @@ class MonolingualService:
                         {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'Mono - {metadata["serviceRequestNumber"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'Mono - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading Monolingual dataset!!", "status": "FAILED"}
@@ -85,8 +89,10 @@ class MonolingualService:
             if record:
                 dup_data = service.enrich_duplicate_data(data, record, metadata, mono_immutable_keys, mono_updatable_keys, mono_non_tag_keys)
                 if dup_data:
-                    repo.update(dup_data)
-                    return "UPDATE", data, dup_data
+                    if metadata["userMode"] != user_mode_pseudo:
+                        dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
+                        repo.update(dup_data)
+                    return "UPDATE", dup_data, record
                 else:
                     return "DUPLICATE", data, record
             insert_data = data
@@ -97,6 +103,7 @@ class MonolingualService:
             insert_data["datasetType"] = metadata["datasetType"]
             insert_data["datasetId"] = [metadata["datasetId"]]
             insert_data["tags"] = service.get_tags(insert_data, mono_non_tag_keys)
+            insert_data["lastModifiedOn"] = insert_data["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
             return "INSERT", insert_data, insert_data
         except Exception as e:
             log.exception(f'Exception while getting enriched data: {e}', e)
@@ -108,8 +115,7 @@ class MonolingualService:
     '''
     def get_monolingual_dataset_internal(self, query):
         try:
-            exclude = {"_id": False}
-            data = repo.search(query, exclude, None, None)
+            data = repo.search(query, None, None, None)
             if data:
                 return data[0]
             else:
@@ -124,25 +130,29 @@ class MonolingualService:
     '''
     def get_monolingual_dataset(self, query):
         log.info(f'Fetching Monolingual datasets for SRN -- {query["serviceRequestNumber"]}')
-        pt.task_event_search(query, None)
+        pt.task_event_search(query, None, dataset_type_monolingual)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
             db_query, tags = {}, []
             if 'sourceLanguage' in query.keys():
                 db_query["sourceLanguage"] = {"$in": query["sourceLanguage"]}
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionMode"])
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
             if 'license' in query.keys():
-                tags.append(query["licence"])
+                tags.extend(query["license"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
+                tags.extend(query["datasetId"])
+            if 'collectionSource' in query.keys():
+                coll_source = [re.compile(cs, re.IGNORECASE) for cs in query["collectionSource"]]
+                db_query["collectionSource"] = {"$in": coll_source}
+            if 'submitterName' in query.keys():
+                db_query["submitter"] = {"$elemMatch": {"name": query["submitterName"]}}
             if 'multipleContributors' in query.keys():
-                db_query[f'collectionMethod.{query["multipleContributors"]}'] = {"$exists": True}
+                if query['multipleContributors']:
+                    db_query[f'collectionMethod.1'] = {"$exists": True}
             if tags:
                 db_query["tags"] = {"$all": tags}
             exclude = {"_id": False}
@@ -155,19 +165,21 @@ class MonolingualService:
                 size = sample_size if count > sample_size else count
                 path, path_sample = utils.push_result_to_object_store(result, query["serviceRequestNumber"], size)
                 if path:
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
-                    pt.task_event_search(op, None)
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                          "count": count, "dataset": path, "datasetSample": path_sample}
+                    pt.task_event_search(op, None, dataset_type_monolingual)
                 else:
                     log.error(f'There was an error while pushing result to S3')
                     error = {"code": "S3_UPLOAD_FAILED", "datasetType": dataset_type_monolingual, "serviceRequestNumber": query["serviceRequestNumber"],
                                                    "message": "There was an error while pushing result to S3"}
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
-                    pt.task_event_search(op, error)
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                          "count": 0, "sample": [], "dataset": None, "datasetSample": None}
+                    pt.task_event_search(op, error, dataset_type_monolingual)
             else:
                 log.info(f'No records retrieved for SRN -- {query["serviceRequestNumber"]}')
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None,
-                      "datasetSample": None}
-                pt.task_event_search(op, None)
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                      "count": 0, "sample": [], "dataset": None, "datasetSample": None}
+                pt.task_event_search(op, None, dataset_type_monolingual)
             log.info(f'Done!')
             return op
         except Exception as e:

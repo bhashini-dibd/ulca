@@ -7,10 +7,13 @@ from logging.config import dictConfig
 from service.parallel import ParallelService
 from service.asr import ASRService
 from service.ocr import OCRService
+from service.tts import TTSService
 from service.monolingual import MonolingualService
+from service.asrunlabeled import ASRUnlabeledService
 
-from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_search_consumer_grp
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual
+from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_search_consumer_grp, \
+    dataset_type_asr_unlabeled, govt_cs, govt_data_whitelist_enabled
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts
 from kafka import KafkaConsumer
 from repository.datasetrepo import DatasetRepo
 
@@ -35,7 +38,7 @@ def search_consume():
         topics = [search_input_topic]
         consumer = instantiate(topics)
         repo = DatasetRepo()
-        p_service, m_service, a_service, o_service = ParallelService(), MonolingualService(), ASRService(), OCRService()
+        p_service, m_service, a_service, o_service, au_service, tts_service = ParallelService(), MonolingualService(), ASRService(), OCRService(), ASRUnlabeledService(), TTSService()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-SEARCH-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -50,6 +53,15 @@ def search_consume():
                             break
                         else:
                             repo.upsert(data["serviceRequestNumber"], {"query": data}, True)
+                        log.info(f'PROCESSING - start - SRN: {data["serviceRequestNumber"]}')
+                        coll_source = []
+                        if govt_data_whitelist_enabled:
+                            for cs in govt_cs:
+                                coll_source.append(cs)
+                        if 'collectionSource' in data.keys():
+                            coll_source.append(data["collectionSource"])
+                        if coll_source:
+                            data["collectionSource"] = coll_source
                         if data["datasetType"] == dataset_type_parallel:
                             p_service.get_parallel_dataset(data)
                         if data["datasetType"] == dataset_type_ocr:
@@ -58,6 +70,11 @@ def search_consume():
                             a_service.get_asr_dataset(data)
                         if data["datasetType"] == dataset_type_monolingual:
                             m_service.get_monolingual_dataset(data)
+                        if data["datasetType"] == dataset_type_asr_unlabeled:
+                            au_service.get_asr_unlabeled_dataset(data)
+                        if data["datasetType"] == dataset_type_tts:
+                            tts_service.get_tts_dataset(data)
+                        log.info(f'PROCESSING - end - SRN: {data["serviceRequestNumber"]}')
                         break
                 except Exception as e:
                     log.exception(f'{prefix} Exception in ds search consumer while consuming: {str(e)}', e)
