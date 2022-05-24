@@ -995,12 +995,38 @@ const DataSet = (theme) => ({
     resize: "none",
     outline: "none",
     fontSize: "14px",
-    lineHeight: "32px",
+    lineHeight: "25px",
     color: "black",
     fontFamily: "Roboto",
 
     //  paddingLeft:'16px'
   },
+  Asrfeedback:{
+    float: "right",
+    marginTop: "38px",
+    marginRight: "20px", 
+    backgroundColor: "#FD7F23",
+    '&:hover': {
+      backgroundColor: "#FD7F23"
+
+    },
+  },
+  Asrcard:{
+    height:"130px",
+    overflowY:"auto",
+    fontFamily: "Roboto",
+    fontSize: "14px",
+     lineHeight: "25px",
+      color: "black"
+  },
+  metricsSearchbar:{
+    width:"100%",
+    position:"absolute",
+     right:"350px",
+    top:"165px",
+    zIndex:"1",
+
+  }
 });
 
 export default DataSet;

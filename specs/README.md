@@ -12,6 +12,7 @@ ULCA system currently supports the following type of datasets :
 - ASR / TTS dataset
 - OCR dataset
 - Document Layout dataset
+- Transliteration dataset
 
 ## Data and Params schema for parallel dataset
 - [ParallelDatasetParamsSchema schema](../../dataset-schema.yml#ParallelDatasetParamsSchema)
@@ -20,6 +21,10 @@ ULCA system currently supports the following type of datasets :
 ## Data and Params schema for monolingual dataset
 - [MonolingualParamsSchema schema](../../dataset-schema.yml#MonolingualParamsSchema)
 - [MonolingualRowSchema schema](../../dataset-schema.yml#MonolingualRowSchema)
+
+## Data and Params schema for transliteration dataset
+- [TransliterationDatasetParamsSchema schema](../../dataset-schema.yml#TransliterationDatasetParamsSchema)
+- [TransliterationDatasetRowSchema schema](../../dataset-schema.yml#TransliterationDatasetRowSchema)
 
 ## Data and Params schema for asr / tts dataset
 - [ASRParamsSchema schema](../../dataset-schema.yml#ASRParamsSchema)

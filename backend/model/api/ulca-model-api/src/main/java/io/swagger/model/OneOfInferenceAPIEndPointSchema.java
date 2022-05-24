@@ -1,23 +1,22 @@
 package io.swagger.model;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 /**
 * OneOfInferenceAPIEndPointSchema
 */
 @JsonTypeInfo(
-		  use = JsonTypeInfo.Id.NAME, 
-		  include = JsonTypeInfo.As.PROPERTY, 
-		  property = "taskType")
-		@JsonSubTypes({ 
-		  @Type(value = ASRInference.class, name = "asr"), 
-		  @Type(value = OCRInference.class, name = "ocr"),
-		  @Type(value = TranslationInference.class, name = "translation"), 
-		  @Type(value = TTSInference.class, name = "tts")
-		})
-
+  use = JsonTypeInfo.Id.NAME,
+  include = JsonTypeInfo.As.PROPERTY,
+  property = "taskType")
+@JsonSubTypes({
+  @JsonSubTypes.Type(value = TranslationInference.class, name = "translation"),
+  @JsonSubTypes.Type(value = TransliterationInference.class, name = "transliteration"),
+  @JsonSubTypes.Type(value = ASRInference.class, name = "asr"),
+  @JsonSubTypes.Type(value = TTSInference.class, name = "tts"),
+  @JsonSubTypes.Type(value = OCRInference.class, name = "ocr")
+})
 public interface OneOfInferenceAPIEndPointSchema {
 
 }

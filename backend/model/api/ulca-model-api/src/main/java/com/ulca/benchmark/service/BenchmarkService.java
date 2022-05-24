@@ -172,6 +172,7 @@ public class BenchmarkService {
 			bmProcess.setStatus("In-Progress");
 			bmProcess.setCreatedOn(new Date().toString());
 			bmProcess.setLastModifiedOn(new Date().toString());
+			bmProcess.setStartTime(new Date().toString());
 			benchmarkprocessDao.save(bmProcess);
 
 			BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
@@ -248,6 +249,7 @@ public class BenchmarkService {
 				bmProcess.setStatus("In-Progress");
 				bmProcess.setCreatedOn(new Date().toString());
 				bmProcess.setLastModifiedOn(new Date().toString());
+				bmProcess.setStartTime(new Date().toString());
 				benchmarkprocessDao.save(bmProcess);
 
 				BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);

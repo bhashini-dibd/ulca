@@ -174,7 +174,7 @@ const Header = (props) => {
                     <HomeIcon fontSize="large" />
                   </Button>
                 </div> */}
-                {authenticate() &&
+                { authenticate() &&
                   roles.indexOf("EXTERNAL-CONSORTIUM-MEMBER") === -1 && (
                     <div
                       className={classes.datasetOption}

@@ -86,7 +86,7 @@ const CardComponent = (props) => {
           style={{ color: "#ffffff", opacity: "0.6" }}
           gutterBottom
         >
-          {data.task === "translation" ? "Source" : "Language"}
+          {data.task === "translation" ? "Source" : "Source"}
         </Typography>
         <Typography variant="body2" style={{ color: "#ffffff" }}>
           {getLanguageName(data.source)}
@@ -96,7 +96,7 @@ const CardComponent = (props) => {
   };
 
   const renderTargetLanguage = (data) => {
-    if (data.task === "translation")
+    if (data.task === "translation" || data.task === 'transliteration')
       return (
         <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
           <Typography

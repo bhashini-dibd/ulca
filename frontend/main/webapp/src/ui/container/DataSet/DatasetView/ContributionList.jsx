@@ -1,7 +1,7 @@
 import MyDatasetList from "./MyDatasetList";
 import { Tabs, Tab, Box, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
-import MyBencmarkList from "./MyBencmarkList";
+import MyBencmarkList from "./MyBenchmarkList";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import MyContributionList from "../../../../redux/actions/api/DataSet/DatasetView/MyContribution";
