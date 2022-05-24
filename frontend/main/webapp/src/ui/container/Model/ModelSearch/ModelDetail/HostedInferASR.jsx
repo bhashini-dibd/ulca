@@ -37,7 +37,7 @@ const HostedInferASR = (props) => {
   } = props;
   const history = useHistory();
   const [data, setData] = useState(null);
-  const [base,setBase64] = useState("")
+  const [base, setBase64] = useState("")
   const [url, setUrl] = useState("");
   const [apiCall, setApiCall] = useState(false);
   const [error, setError] = useState({ url: "" });
@@ -144,7 +144,7 @@ const HostedInferASR = (props) => {
   };
 
 
-  const childData = (text,base64="") => {
+  const childData = (text, base64 = "") => {
     setData(text)
   }
 
@@ -194,6 +194,7 @@ const HostedInferASR = (props) => {
             language={language}
             streaming={props.streaming}
             getchildData={childData}
+            feedback={{ setTarget, setTargetAudio, setData }}
           />
         </Grid>
         <Grid
@@ -212,31 +213,31 @@ const HostedInferASR = (props) => {
               </Typography>
             </Grid>
 
-          
-            <CardContent id="asrCardOutput">{targetAudio}</CardContent>
-            { targetAudio.length > 0 &&  (<>
-            <div    >
-                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(targetAudio)}}>
+
+            <CardContent id="asrCardOutput" className={classes.Asrcard}>{targetAudio}</CardContent>
+            {targetAudio.length > 0 && (<>
+              <div    >
+                <Button variant="contained" size="small"  className={classes.Asrfeedback}  onClick={() => { setModal(true); setSuggestEditValues(targetAudio) }}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
                 </Button>
               </div>
-           
-           
-           </>)}
-           
+
+
+            </>)}
+
             {data && (
 
-             
+
               <div    >
-                <Button variant="contained" size="small" style={{ float: "right", marginTop: "140px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(data)}}>
+                <Button variant="contained" size="small" className={classes.Asrfeedback} onClick={() => { setModal(true); setSuggestEditValues(data) }}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
                 </Button>
-             
-            </div>)}
+
+              </div>)}
           </Card>
         </Grid>
 
@@ -312,20 +313,20 @@ const HostedInferASR = (props) => {
                 {translate("label.output")}
               </Typography>
             </Grid>
-            {target.length > 0 && (<><CardContent><textarea 
-                rows={5}
-                 className={classes.textareas}>
-                    {target}
-                    </textarea></CardContent>
-            
-                {/* <SimpleDialogDemo/> */}
-                <div >
-                  <Button variant="contained" size="small" style={{ float: "right", marginTop: "-5px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => {setModal(true); setSuggestEditValues(target)}}>
-                    <ThumbUpAltIcon className={classes.feedbackIcon} />
-                    <ThumbDownAltIcon className={classes.feedbackIcon} />
-                    <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
-                  </Button>
-               
+            {target.length > 0 && (<><CardContent><textarea
+              rows={5}
+              className={classes.textareas}>
+              {target}
+            </textarea></CardContent>
+
+              {/* <SimpleDialogDemo/> */}
+              <div >
+                <Button variant="contained" size="small" style={{ float: "right", marginTop: "-5px", marginRight: "20px", backgroundColor: "#FD7F23" }} onClick={() => { setModal(true); setSuggestEditValues(target) }}>
+                  <ThumbUpAltIcon className={classes.feedbackIcon} />
+                  <ThumbDownAltIcon className={classes.feedbackIcon} />
+                  <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>
+                </Button>
+
               </div></>)}
 
           </Card>

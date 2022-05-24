@@ -121,7 +121,21 @@ const constants = {
    * action for Feedback Modal
    */
 
-  SUBMIT_FEEDBACK: "SUBMIT_FEEDBACK"
+  SUBMIT_FEEDBACK: "SUBMIT_FEEDBACK",
+
+  /**
+   * action for Dataset Metrics
+   */
+  GET_DATASET_METRICS: "GET_DATASET_METRICS",
+
+  /**
+   * action for fetching Transliteraion value
+   */
+
+  GET_TRANSLITERATION_TEXT: "GET_TRANSLITERATION_TEXT",
+  SET_TRANSLITERATION_TEXT: "SET_TRANSLITERATION_TEXT",
+  SET_CURRENT_TEXT: "SET_CURRENT_TEXT",
+  CLEAR_TRANSLITERATION_RESULT: "CLEAR_TRANSLITERATION_RESULT",
 };
 
 export default constants;

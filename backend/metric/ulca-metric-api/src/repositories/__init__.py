@@ -1,1 +1,2 @@
 from .summarize_dataset import SummarizeDatasetRepo
+from .summarize_tabular_data import GetTabularData
