@@ -1,5 +1,5 @@
 {
-   "name":"AI4Bharat Transliteration (IndicXlit) : English-Hindi",
+   "name":"AI4Bharat Transliteration (IndicXlit) : English-Punjabi",
    "version":"v1.0",
    "description":"IndicXlit is a Transformer-based multilingual transliteration model, trained on Aksharantar dataset which is the largest publicly available parallel transliteration corpora collection for Indic languages at the time of writing (20 May 2022). It is used to convert any roman text written in Indian language (like Hinglish) to the native Indic-script (like Devanagari for Hindi). It supports 21 Indic languages: Assamese, Bangla, Bodo, Gujarati, Hindi, Kannada, Kashmiri, Konkani, Maithili, Malayalam, Manipuri, Marathi, Nepali, Oriya, Panjabi, Sanskrit, Sindhi, Sinhala, Tamil, Telugu, Urdu.",
    "refUrl":"https://github.com/AI4Bharat/IndicXlit",
@@ -9,7 +9,7 @@
    "languages":[
       {
          "sourceLanguage":"en",
-         "targetLanguage":"hi"
+         "targetLanguage":"pa"
       }
    ],
    "license":"mit",
@@ -57,7 +57,7 @@
          "request":{
             "input":[
                {
-                  "source":"bhaarath"
+                  "source":"Swagath"
                }
             ],
             "config":{
@@ -65,7 +65,7 @@
                "numSuggestions":5,
                "language":{
                   "sourceLanguage":"en",
-                  "targetLanguage":"hi"
+                  "targetLanguage":"pa"
                }
             }
          }
