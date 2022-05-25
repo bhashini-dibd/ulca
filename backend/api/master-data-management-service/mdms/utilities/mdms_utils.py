@@ -30,7 +30,7 @@ class MdUtils:
         log.info(f'path expression {path_expression}')
         log.info(f'json_data{json_data}')
         values          =   path_expression.find(json_data)[0].value
-
+        log.info(f'values {values}')
         return values
 
 
