@@ -59,6 +59,16 @@
         "master": "/ttsCorpusFilters.json",
         "jsonPath": "$.ttsCorpusFilters"
       }
+    },
+      {
+        "code": "transliteration-corpus",
+        "label": "Transliteration Dataset",
+        "active": true,
+        "datasetType": "transliteration-corpus",
+        "values": {
+          "master": "/transliterationCorpusFilters.json",
+          "jsonPath": "$.transliterationCorpusFilters"
+        }
     }
   ],
   "relatedMaster": true
