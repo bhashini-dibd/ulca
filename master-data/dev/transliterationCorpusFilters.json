@@ -5,8 +5,8 @@
         "label": "Source Language",
         "active": true,
         "values": {
-          "master": "/transliterationlanguages.json",
-          "jsonPath": "$.transliterationlanguages"
+          "master": "/languages.json",
+          "jsonPath": "$.languages"
         }
       },
       {
