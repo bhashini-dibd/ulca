@@ -30,7 +30,7 @@ class TransliterationService:
         pass
 
     '''
-    Method to load Parallel dataset into the mongo db
+    Method to load Transliteration dataset into the mongo db
     params: request (record to be inserted)
     '''
 
@@ -215,7 +215,7 @@ class TransliterationService:
             return False
 
     '''
-    Method to fetch Parallel dataset from the DB based on various criteria
+    Method to fetch Transliteration dataset from the DB based on various criteria
     params: query (query for search)
     '''
 
@@ -228,7 +228,7 @@ class TransliterationService:
             db_query, score_query = {}, {}
             tags, tgt_lang = [], []
             if 'sourceLanguage' in query.keys():
-                db_query["sourceLanguage"] = query["sourceLanguage"][0]  # source is always single
+                db_query["sourceLanguage"] = query["sourceLanguage"][0] #source is always single
             if 'targetLanguage' in query.keys():
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
@@ -261,11 +261,9 @@ class TransliterationService:
             if 'maxScore' in query.keys():
                 score_query["$lte"] = query["maxScore"]
             if score_query:
-                db_query["scoreQuery"] = {
-                    "collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": score_query}}}
+                db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": score_query}}}
             if 'score' in query.keys():
-                db_query["scoreQuery"] = {
-                    "collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": query["score"]}}}
+                db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": query["score"]}}}
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
             else:
@@ -316,7 +314,7 @@ class TransliterationService:
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
     '''
-    Method to delete Parallel dataset from the DB based on various criteria
+    Method to delete Transliteration dataset from the DB based on various criteria
     params: delete_req (request for deletion)
     '''
 

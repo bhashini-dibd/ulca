@@ -10,10 +10,12 @@ from service.ocr import OCRService
 from service.tts import TTSService
 from service.monolingual import MonolingualService
 from service.asrunlabeled import ASRUnlabeledService
+from service.transliteration import TransliterationService
 
 from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_search_consumer_grp, \
     dataset_type_asr_unlabeled, govt_cs, govt_data_whitelist_enabled
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, \
+    dataset_type_tts, dataset_type_transliteration
 from kafka import KafkaConsumer
 from repository.datasetrepo import DatasetRepo
 
@@ -38,7 +40,9 @@ def search_consume():
         topics = [search_input_topic]
         consumer = instantiate(topics)
         repo = DatasetRepo()
-        p_service, m_service, a_service, o_service, au_service, tts_service = ParallelService(), MonolingualService(), ASRService(), OCRService(), ASRUnlabeledService(), TTSService()
+        p_service, m_service, a_service, o_service, au_service, tts_service, trans_service = ParallelService(), MonolingualService(), \
+                                                                              ASRService(), OCRService(), \
+                                                                              ASRUnlabeledService(), TTSService(), TransliterationService()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-SEARCH-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -74,6 +78,8 @@ def search_consume():
                             au_service.get_asr_unlabeled_dataset(data)
                         if data["datasetType"] == dataset_type_tts:
                             tts_service.get_tts_dataset(data)
+                        if data["datasetType"] == dataset_type_transliteration:
+                            trans_service.get_transliteration_dataset(data)
                         log.info(f'PROCESSING - end - SRN: {data["serviceRequestNumber"]}')
                         break
                 except Exception as e:
