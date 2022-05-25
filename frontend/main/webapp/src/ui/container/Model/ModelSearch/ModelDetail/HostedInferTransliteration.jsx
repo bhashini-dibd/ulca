@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Grid,
   Typography,
@@ -37,23 +37,58 @@ function HostedInferTransliteration(props) {
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
 
+  const inputRef = useRef(null);
+
   const [transliteration, setTransliteration] = useState("");
   const [shouldFetchData, setShouldFetchData] = useState(true);
+  const [isFirstRender, setIsFirstRender] = useState(true);
+  const [startPositionOfCurrentWord, setStartPositionOfCurrentWord] = useState(0);
+  const [curserIndexPosition, setCurserIndexPosition] = useState(0);
 
 
   const setTransliterateValues = (e) => {
-    setTransliteration(e.target.value);
+    let inputValue = e.target.value;
+    let currentCurserPosition = e.target.selectionStart;
+    setCurserIndexPosition(currentCurserPosition);
+    // console.log("cursor position----- ", currentCurserPosition);
+
+    let startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition-1);
+    setStartPositionOfCurrentWord(startingPositionOfWord);
+    let activeWord = inputValue.slice(startingPositionOfWord, currentCurserPosition);
+
+    // console.log("position of space before currently focused word is ----- ", startingPositionOfWord);
+    // console.log("currently focused word is ----- ", activeWord);
+
+    setTransliteration(inputValue);
     if (shouldFetchData) {
-      dispatch(setCurrentText(e.target.value));
+      dispatch(setCurrentText(startingPositionOfWord < 0 ? inputValue : activeWord));
     } else {
       return false;
     }
+    setTimeout(() => {
+      inputRef.current.selectionStart = currentCurserPosition;
+    }, 0);
+    
   };
 
   const handleKeyDown = (e) => {
     setShouldFetchData(e.key === "Backspace" ? false : true);
+    if(e.key === "Enter"){
+      e.preventDefault()
+    }
   }
 
+    useEffect(() => {
+    if (isFirstRender) {
+      setTransliteration(" ");
+      dispatch(setCurrentText(" "));
+      setTimeout(() => {
+        getTransliterationText();
+        setIsFirstRender(false);
+      }, 0);
+    }
+    // Update the document title using the browser API
+  });
 
 
   const getTransliterationText = () => {
@@ -73,10 +108,10 @@ function HostedInferTransliteration(props) {
 
   useEffect(() => {
     if (transliteration[transliteration.length - 1] === " " && result.length) {
-      const transliterationArr = transliteration.split(" ");
-      transliterationArr.pop();
+      // const transliterationArr = transliteration.split(" ");
+      // transliterationArr.pop();
       dispatch(
-        setTransliterationText(transliterationArr.join(" "), `${result[0]} `)
+        setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord+1 : startPositionOfCurrentWord, curserIndexPosition)
       );
       dispatch(clearTransliterationResult());
     }
@@ -135,17 +170,18 @@ function HostedInferTransliteration(props) {
             freeSolo
             clearOnBlur={false}
             disableClearable={true}
-            options={result.map((elem) => elem)}
+            options={!currentText ? [] : result.map((elem) => elem)}
+            onKeyDown={handleKeyDown}
             PopperComponent={(params) => (
               <Popper
                 {...params}
                 placement = 'bottom-start'
-                style={{width : window.innerWidth*0.15}}
+                style={{width : "250px"}}
                 onClick={(e) =>
                   dispatch(
                     setTransliterationText(
                       transliteration,
-                      `${e.target.outerText} `
+                      `${e.target.outerText}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord+1 : startPositionOfCurrentWord, curserIndexPosition
                     )
                   )
                 }
@@ -155,9 +191,9 @@ function HostedInferTransliteration(props) {
             renderInput={(params) => (
               <TextField
                 variant="outlined"
+                ref={inputRef}
                 {...params}
                 onChange={setTransliterateValues}
-                onKeyDown={handleKeyDown}
               />
             )}
             value={transliteration}
