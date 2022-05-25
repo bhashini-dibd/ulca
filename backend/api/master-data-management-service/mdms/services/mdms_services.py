@@ -57,7 +57,8 @@ class MasterDataServices():
         expression          =   sub_master_obj["jsonPath"]
         git_file_location   =   f'{config.git_folder_prefix}{branch}'
         data                =   utils.read_from_git(git_file_location)
-        log.info(f'data {data}')
+        log.info(f'data {data}, type {type(data)}')
+        log.info(f'expression {expression}, type {type(expression)}')
         sub_master_data     =   utils.jsonpath_parsing(data,expression)
         for sub in sub_master_data:
             if "values" in sub.keys() and isinstance(sub["values"],dict) and sub["values"]:
