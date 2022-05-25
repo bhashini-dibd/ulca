@@ -22,17 +22,6 @@ import LightTooltip from "../../../../components/common/LightTooltip";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { translate } from "../../../../../assets/localisation";
 import { getLanguageName } from "../../../../../utils/getLabel";
-import { FormatListBulletedOutlined } from "@material-ui/icons";
-
-const KEY_UP = "ArrowUp";
-const KEY_DOWN = "ArrowDown";
-const KEY_ESCAPE = "Escape";
-const triggerKeys = {
-  KEY_RETURN: "Enter",
-  KEY_ENTER: "Enter",
-  KEY_TAB: "Tab",
-  KEY_SPACE: " ",
-}
 
 function HostedInferTransliteration(props) {
   const { classes, target } = props;
@@ -40,7 +29,6 @@ function HostedInferTransliteration(props) {
   const { result, currentText, transliterationText } = useSelector(
     (state) => state.getTransliterationText
   );
-  const inputEl = useRef(null);
 
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
@@ -49,31 +37,48 @@ function HostedInferTransliteration(props) {
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
 
+  const inputRef = useRef(null);
+
   const [transliteration, setTransliteration] = useState("");
   const [shouldFetchData, setShouldFetchData] = useState(true);
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [startPositionOfCurrentWord, setStartPositionOfCurrentWord] = useState(0);
   const [curserIndexPosition, setCurserIndexPosition] = useState(0);
 
+
   const setTransliterateValues = (e) => {
+    let inputValue = e.target.value;
     let currentCurserPosition = e.target.selectionStart;
     setCurserIndexPosition(currentCurserPosition);
-    console.log("cursor position----- ", currentCurserPosition);
+    // console.log("cursor position----- ", currentCurserPosition);
 
-    
+    let startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition-1);
+    setStartPositionOfCurrentWord(startingPositionOfWord);
+    let activeWord = inputValue.slice(startingPositionOfWord, currentCurserPosition);
 
-    setTransliteration(e.target.value);
+    // console.log("position of space before currently focused word is ----- ", startingPositionOfWord);
+    // console.log("currently focused word is ----- ", activeWord);
+
+    setTransliteration(inputValue);
     if (shouldFetchData) {
-      dispatch(setCurrentText(e.target.value));
+      dispatch(setCurrentText(startingPositionOfWord < 0 ? inputValue : activeWord));
     } else {
       return false;
     }
+    setTimeout(() => {
+      inputRef.current.selectionStart = currentCurserPosition;
+    }, 0);
+    
   };
 
   const handleKeyDown = (e) => {
     setShouldFetchData(e.key === "Backspace" ? false : true);
+    if(e.key === "Enter"){
+      e.preventDefault()
+    }
   }
 
-  useEffect(() => {
+    useEffect(() => {
     if (isFirstRender) {
       setTransliteration(" ");
       dispatch(setCurrentText(" "));
@@ -84,6 +89,7 @@ function HostedInferTransliteration(props) {
     }
     // Update the document title using the browser API
   });
+
 
   const getTransliterationText = () => {
     const apiObj = new GetTransliterationText(target, currentText);
@@ -102,10 +108,10 @@ function HostedInferTransliteration(props) {
 
   useEffect(() => {
     if (transliteration[transliteration.length - 1] === " " && result.length) {
-      const transliterationArr = transliteration.split(" ");
-      transliterationArr.pop();
+      // const transliterationArr = transliteration.split(" ");
+      // transliterationArr.pop();
       dispatch(
-        setTransliterationText(transliterationArr.join(" "), `${result[0]} `)
+        setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord+1 : startPositionOfCurrentWord, curserIndexPosition)
       );
       dispatch(clearTransliterationResult());
     }
@@ -160,21 +166,22 @@ function HostedInferTransliteration(props) {
           </Grid>
         </CardContent>
         <CardContent>
-          <Autocomplete
+        <Autocomplete
             freeSolo
             clearOnBlur={false}
             disableClearable={true}
             options={!currentText ? [] : result.map((elem) => elem)}
+            onKeyDown={handleKeyDown}
             PopperComponent={(params) => (
               <Popper
                 {...params}
-                placement='bottom-start'
-                style={{ width: window.innerWidth * 0.15 }}
+                placement = 'bottom-start'
+                style={{width : "250px"}}
                 onClick={(e) =>
                   dispatch(
                     setTransliterationText(
                       transliteration,
-                      `${e.target.outerText} `
+                      `${e.target.outerText}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord+1 : startPositionOfCurrentWord, curserIndexPosition
                     )
                   )
                 }
@@ -183,11 +190,10 @@ function HostedInferTransliteration(props) {
             sx={{ width: 300 }}
             renderInput={(params) => (
               <TextField
-                ref={inputEl}
                 variant="outlined"
+                ref={inputRef}
                 {...params}
                 onChange={setTransliterateValues}
-                onKeyDown={handleKeyDown}
               />
             )}
             value={transliteration}
