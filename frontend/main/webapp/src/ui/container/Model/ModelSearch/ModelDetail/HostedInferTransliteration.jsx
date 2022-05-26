@@ -117,8 +117,8 @@ function HostedInferTransliteration(props) {
 
   useEffect(() => {
     if (transliteration[transliteration.length - 1] === " " && result.length) {
-      // const transliterationArr = transliteration.split(" ");
-      // transliterationArr.pop();
+      const transliterationArr = transliteration.split(" ");
+      transliterationArr.pop();
       dispatch(
         setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
       );
