@@ -50,35 +50,44 @@ function HostedInferTransliteration(props) {
     let inputValue = e.target.value;
     let currentCurserPosition = e.target.selectionStart;
     setCurserIndexPosition(currentCurserPosition);
-    // console.log("cursor position----- ", currentCurserPosition);
 
-    let startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition-1);
+    let startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition - 1);
     setStartPositionOfCurrentWord(startingPositionOfWord);
     let activeWord = inputValue.slice(startingPositionOfWord, currentCurserPosition);
-
-    // console.log("position of space before currently focused word is ----- ", startingPositionOfWord);
-    // console.log("currently focused word is ----- ", activeWord);
 
     setTransliteration(inputValue);
     if (shouldFetchData) {
       dispatch(setCurrentText(startingPositionOfWord < 0 ? inputValue : activeWord));
     } else {
+      dispatch(clearTransliterationResult());
       return false;
     }
     setTimeout(() => {
       inputRef.current.selectionStart = currentCurserPosition;
     }, 0);
-    
+
   };
 
   const handleKeyDown = (e) => {
     setShouldFetchData(e.key === "Backspace" ? false : true);
-    if(e.key === "Enter"){
-      e.preventDefault()
+    if (e.key === " " && currentText) {
+      e.preventDefault();
+      dispatch(
+        setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
+      );
+      dispatch(setCurrentText(""));
+      dispatch(clearTransliterationResult());
+    } else if (e.key === "Enter" && currentText) {
+      e.preventDefault();
+      dispatch(
+        setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
+      );
+      dispatch(setCurrentText(""));
+      dispatch(clearTransliterationResult());
     }
   }
 
-    useEffect(() => {
+  useEffect(() => {
     if (isFirstRender) {
       setTransliteration(" ");
       dispatch(setCurrentText(" "));
@@ -111,7 +120,7 @@ function HostedInferTransliteration(props) {
       // const transliterationArr = transliteration.split(" ");
       // transliterationArr.pop();
       dispatch(
-        setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord+1 : startPositionOfCurrentWord, curserIndexPosition)
+        setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
       );
       dispatch(clearTransliterationResult());
     }
@@ -166,7 +175,7 @@ function HostedInferTransliteration(props) {
           </Grid>
         </CardContent>
         <CardContent>
-        <Autocomplete
+          <Autocomplete
             freeSolo
             clearOnBlur={false}
             disableClearable={true}
@@ -175,13 +184,13 @@ function HostedInferTransliteration(props) {
             PopperComponent={(params) => (
               <Popper
                 {...params}
-                placement = 'bottom-start'
-                style={{width : "250px"}}
+                placement='bottom-start'
+                style={{ width: window.innerWidth > 776 ? window.innerWidth * 0.15 : window.innerWidth < 450 ? window.innerWidth * 0.5 : window.innerWidth * 0.3 }}
                 onClick={(e) =>
                   dispatch(
                     setTransliterationText(
                       transliteration,
-                      `${e.target.outerText}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord+1 : startPositionOfCurrentWord, curserIndexPosition
+                      `${e.target.outerText}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition
                     )
                   )
                 }
@@ -193,6 +202,7 @@ function HostedInferTransliteration(props) {
                 variant="outlined"
                 ref={inputRef}
                 {...params}
+                onKeyDown={handleKeyDown}
                 onChange={setTransliterateValues}
               />
             )}
