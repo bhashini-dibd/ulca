@@ -49,41 +49,53 @@ function HostedInferTransliteration(props) {
   const setTransliterateValues = (e) => {
     let inputValue = e.target.value;
     let currentCurserPosition = e.target.selectionStart;
-    setCurserIndexPosition(currentCurserPosition);
 
-    let startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition - 1);
-    setStartPositionOfCurrentWord(startingPositionOfWord);
-    let activeWord = inputValue.slice(startingPositionOfWord, currentCurserPosition);
-
-    setTransliteration(inputValue);
-    if (shouldFetchData) {
-      dispatch(setCurrentText(startingPositionOfWord < 0 ? inputValue : activeWord));
-    } else {
-      dispatch(clearTransliterationResult());
+    if (e.target.selectionStart < e.target.value.length) {
+      console.log(e.target.selectionStart, e.target.value.length - 1);
+      currentCurserPosition = e.target.selectionStart+1
       return false;
-    }
-    setTimeout(() => {
-      inputRef.current.selectionStart = currentCurserPosition;
-    }, 0);
+    } else {
+      setTransliteration(inputValue);
+      setCurserIndexPosition(currentCurserPosition);
 
+      let startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition - 1);
+      setStartPositionOfCurrentWord(startingPositionOfWord);
+      let activeWord = inputValue.slice(startingPositionOfWord, currentCurserPosition);
+      // inputRef.current.selectionStart = currentCurserPosition;
+      // setTimeout(() => {
+        if (shouldFetchData) {
+          dispatch(setCurrentText(startingPositionOfWord < 0 ? inputValue : ` ${activeWord}`));
+        } else {
+          dispatch(clearTransliterationResult());
+          return false;
+        }
+        // inputRef.current.setSelectionRange(currentCurserPosition + 1, currentCurserPosition + 1);
+      // }, 200);
+    }
   };
 
   const handleKeyDown = (e) => {
     setShouldFetchData(e.key === "Backspace" ? false : true);
-    if (e.key === " " && currentText) {
+    if (e.key === " " && currentText && result.length > 0) {
       e.preventDefault();
       dispatch(
         setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
       );
       dispatch(setCurrentText(""));
       dispatch(clearTransliterationResult());
-    } else if (e.key === "Enter" && currentText) {
+      // setTimeout(() => {
+      //   inputRef.current.setSelectionRange(curserIndexPosition + 1, curserIndexPosition + 1);
+      // }, 0);
+    } else if (e.key === "Enter" && currentText && result.length > 0) {
       e.preventDefault();
       dispatch(
         setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
       );
       dispatch(setCurrentText(""));
       dispatch(clearTransliterationResult());
+      // setTimeout(() => {
+      //   inputRef.current.setSelectionRange(curserIndexPosition + 1, curserIndexPosition + 1);
+      // }, 0);
     }
   }
 
@@ -116,14 +128,20 @@ function HostedInferTransliteration(props) {
   }, [currentText]);
 
   useEffect(() => {
-    if (transliteration[transliteration.length - 1] === " " && result.length) {
-      const transliterationArr = transliteration.split(" ");
-      transliterationArr.pop();
-      dispatch(
-        setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
-      );
-      dispatch(clearTransliterationResult());
-    }
+    setTimeout(() => {
+      if (transliteration[transliteration.length - 1] === " " && result.length) {
+        // const transliterationArr = transliteration.split(" ");
+        // transliterationArr.pop();
+        dispatch(
+          setTransliterationText(transliteration, `${result[0]}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
+        );
+        dispatch(clearTransliterationResult());
+        // setTimeout(() => {
+        //   inputRef.current.setSelectionRange(curserIndexPosition + 1, curserIndexPosition + 1);
+        // }, 0);
+      }
+    }, 500);
+
   }, [transliteration]);
   console.log(transliteration, "transliteration")
 
@@ -186,13 +204,17 @@ function HostedInferTransliteration(props) {
                 {...params}
                 placement='bottom-start'
                 style={{ width: window.innerWidth > 776 ? window.innerWidth * 0.15 : window.innerWidth < 450 ? window.innerWidth * 0.5 : window.innerWidth * 0.3 }}
-                onClick={(e) =>
+                onClick={(e) => {
                   dispatch(
                     setTransliterationText(
                       transliteration,
                       `${e.target.outerText}  `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition
                     )
                   )
+                  setTimeout(() => {
+                    inputRef.current.setSelectionRange(curserIndexPosition + 1, curserIndexPosition + 1);
+                  }, 0);
+                }
                 }
               />
             )}
@@ -200,8 +222,8 @@ function HostedInferTransliteration(props) {
             renderInput={(params) => (
               <TextField
                 variant="outlined"
-                ref={inputRef}
                 {...params}
+                inputRef={inputRef}
                 onKeyDown={handleKeyDown}
                 onChange={setTransliterateValues}
               />
