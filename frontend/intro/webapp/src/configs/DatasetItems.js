@@ -6,6 +6,7 @@ export const DatasetItems = [
     { value: 'tts-corpus', label: 'TTS Dataset' },
     { value: 'ocr-corpus', label: 'OCR Dataset' },
     { value: 'asr-unlabeled-corpus', label: 'ASR Unlabeled Dataset' },
+    { value: 'transliteration-corpus', label: 'Transliteration Dataset' },
 
 
 ];

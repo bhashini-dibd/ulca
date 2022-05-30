@@ -25,7 +25,7 @@ export default (state = initialState, action) => {
       };
     case C.SET_TRANSLITERATION_TEXT:
       const prevTextArr = action.payload?.prevText.split("");
-      prevTextArr.splice(action.payload?.startIndex, action.payload?.endIndex-action.payload?.startIndex, action.payload?.newWord);
+      prevTextArr.length > 0 ? prevTextArr.splice(action.payload?.startIndex, action.payload?.endIndex-action.payload?.startIndex, action.payload?.newWord) : prevTextArr.push(action.payload?.newWord);
       // prevTextArr.splice(prevTextArr.length - 1, 1);
       // prevTextArr.push(action.payload?.newWord);
       const transliterationText = prevTextArr.join("");
