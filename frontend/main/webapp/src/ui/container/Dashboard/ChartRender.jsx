@@ -767,7 +767,7 @@ const ChartRender = (props) => {
         if (page === 0) {
           selectedOption.value !== dataSet.value &&
             fetchChartData(dataSet.value, "", [
-              { field: "sourceLanguage", value: null },
+              { field: "sourceLanguage", value: 'en' },
             ]);
           setAxisValue({ xAxis: "Languages", yAxis: "Hours" });
           setTitle("Number of audio hours per language");
