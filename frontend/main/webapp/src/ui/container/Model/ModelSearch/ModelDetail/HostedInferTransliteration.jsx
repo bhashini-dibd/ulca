@@ -42,8 +42,8 @@ function HostedInferTransliteration(props) {
   const [transliteration, setTransliteration] = useState("");
   const [shouldFetchData, setShouldFetchData] = useState(true);
   const [isFirstRender, setIsFirstRender] = useState(true);
-  const [startPositionOfCurrentWord, setStartPositionOfCurrentWord] = useState(0);
-  const [curserIndexPosition, setCurserIndexPosition] = useState(0);
+  const [startPositionOfCurrentWord, setStartPositionOfCurrentWord] = useState(-1);
+  const [curserIndexPosition, setCurserIndexPosition] = useState(-1);
   const [isInsertingInMiddle, setIsInsertingInMiddle] = useState(false);
   const [currentCaretPosition, setCurrentCaretPosition] = useState(0);
 
@@ -53,10 +53,14 @@ function HostedInferTransliteration(props) {
     let inputValue = e.target.value;
     let currentCurserPosition = e.target.selectionStart;
 
-    if (e.target.selectionStart < e.target.value.length) {
+    if (e.target.selectionStart < e.target.value.length && e.target.selectionStart >= 0) {
       setIsInsertingInMiddle(true);
-      console.log(e.target.selectionStart, e.target.value.length );
-      currentCurserPosition = e.target.selectionStart
+      console.log(e.target.selectionStart, e.target.value.length);
+      // currentCurserPosition = e.target.selectionStart
+    } else if (e.target.selectionStart < e.target.value.length && e.target.selectionStart == -1) {
+      setIsInsertingInMiddle(false);
+      console.log(e.target.selectionStart, e.target.value.length);
+      // currentCurserPosition = e.target.selectionStart
     } else {
       setIsInsertingInMiddle(false);
     }
@@ -65,8 +69,8 @@ function HostedInferTransliteration(props) {
     setTransliteration(inputValue);
     setCurserIndexPosition(currentCurserPosition);
 
-    if(isInsertingInMiddle){
-      startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition-1);
+    if (isInsertingInMiddle) {
+      startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition - 1);
       console.log("reachable..... 72", startingPositionOfWord);
     } else {
       startingPositionOfWord = inputValue.lastIndexOf(" ", currentCurserPosition - 1);
@@ -77,59 +81,60 @@ function HostedInferTransliteration(props) {
     let setValuesOnTimeOut = setTimeout(() => {
       console.log("reachable..... 80");
       let activeWord = inputValue.slice(startingPositionOfWord, currentCurserPosition);
+      if (startingPositionOfWord == -1) {
+        activeWord = inputValue.split(" ")[0];
+      }
+      console.log("activeWord ======= ", activeWord)
       // inputRef.current.selectionStart = currentCurserPosition;
       // setTimeout(() => {
-        if (shouldFetchData) {
-          dispatch(setCurrentText(startingPositionOfWord < 0 ? inputValue : ` ${activeWord}`));
-          console.log("86 ----> inputValue " + inputValue + ", activeWord" + activeWord );
-          console.log("87 ----> startingPositionOfWord " + startingPositionOfWord + ", currentCurserPosition" + currentCurserPosition );
-          console.log("current Text ..... ", "`" + currentText + "`");
-        } else {
-          dispatch(clearTransliterationResult());
-          return false;
-        }
+      if (shouldFetchData) {
+        dispatch(setCurrentText(`${activeWord}`));
+        console.log("86 ----> inputValue " + inputValue + ", activeWord" + activeWord);
+        console.log("isInsertingInMiddle" + isInsertingInMiddle + "  ----> startingPositionOfWord " + startPositionOfCurrentWord + ", currentCurserPosition" + currentCurserPosition);
+        console.log("current Text ..... ", "`" + currentText + "`");
+      } else {
+        dispatch(clearTransliterationResult());
+        return false;
+      }
     }, 200);
-    
-      setTimeout(() => {
-        console.log("current caret position is ---- ", currentCaretPosition);
-      }, 300);
+
+    setTimeout(() => {
+      console.log("current caret position is ---- ", currentCaretPosition);
+    }, 300);
     return () => clearInterval(setValuesOnTimeOut);
   };
 
   const handleKeyDown = (e) => {
-    // setShouldFetchData(e.key === "Backspace" ? false : true);
-    
+    setShouldFetchData(e.key === "Backspace" ? false : true);
+
     if (e.key === " " && currentText && result.length > 0) {
       e.preventDefault();
       let currentWordLength = result[0].length;
       dispatch(
-        setTransliterationText(transliteration, isInsertingInMiddle ? ` ${result[0]} ` : ` ${result[0]} `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
+        setTransliterationText(transliteration, isInsertingInMiddle || startPositionOfCurrentWord != -1 ? ` ${result[0]} ` : `${result[0]}`, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
       );
       dispatch(setCurrentText(""));
       dispatch(clearTransliterationResult());
       setTimeout(() => {
-        if(isInsertingInMiddle){
+        if (isInsertingInMiddle) {
           inputRef.current.setSelectionRange(startPositionOfCurrentWord + currentWordLength + 2, startPositionOfCurrentWord + currentWordLength + 2);
-        }  
+        }
       }, 0);
     } else if (e.key === "Enter" && currentText && result.length > 0) {
       e.preventDefault();
       let currentWordLength = result[0].length;
       dispatch(
-        setTransliterationText(transliteration, isInsertingInMiddle ? ` ${result[0]} ` : ` ${result[0]} `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
+        setTransliterationText(transliteration, isInsertingInMiddle || startPositionOfCurrentWord != -1 ? ` ${result[0]} ` : `${result[0]}`, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
       );
       dispatch(setCurrentText(""));
       dispatch(clearTransliterationResult());
-      console.log(curserIndexPosition + "  curserIndexPosition" );
+      console.log(curserIndexPosition + "  curserIndexPosition");
       setTimeout(() => {
-        if(isInsertingInMiddle){
+        if (isInsertingInMiddle) {
           inputRef.current.setSelectionRange(startPositionOfCurrentWord + currentWordLength + 2, startPositionOfCurrentWord + currentWordLength + 2);
-        }  
+        }
       }, 0);
     }
-    // setTimeout(() => {
-    //   inputRef.current.setSelectionRange(currentCaretPosition, currentCaretPosition);
-    //   }, 1000);
   }
 
   useEffect(() => {
@@ -161,25 +166,25 @@ function HostedInferTransliteration(props) {
   }, [currentText]);
 
   useEffect(() => {
-    let timeOutCall =  setTimeout(() => {
+    let timeOutCall = setTimeout(() => {
       if (transliteration[transliteration.length - 1] === " " && result.length) {
         // const transliterationArr = transliteration.split(" ");
         // transliterationArr.pop();
         let currentWordLength = result ? result[0].length : 0;
         dispatch(
-          setTransliterationText(transliteration, isInsertingInMiddle ? ` ${result[0]}` : ` ${result[0]} `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
+          setTransliterationText(transliteration, isInsertingInMiddle || startPositionOfCurrentWord != -1 ? ` ${result[0]}` : `${result[0]}`, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
         );
         dispatch(clearTransliterationResult());
-        if(isInsertingInMiddle){
-          inputRef.current.setSelectionRange(currentCaretPosition + 1, currentCaretPosition + 1);        
+        if (isInsertingInMiddle) {
+          inputRef.current.setSelectionRange(currentCaretPosition + 1, currentCaretPosition + 1);
         }
         setTimeout(() => {
-          if(isInsertingInMiddle){
+          if (isInsertingInMiddle) {
             inputRef.current.setSelectionRange(startPositionOfCurrentWord + currentWordLength + 2, startPositionOfCurrentWord + currentWordLength + 2);
-          }  
+          }
         }, 0);
       }
-    }, 3000);
+    }, 300000);
     return () => clearTimeout(timeOutCall);
   }, [transliteration]);
   console.log(transliteration, "transliteration")
@@ -248,14 +253,14 @@ function HostedInferTransliteration(props) {
                   dispatch(
                     setTransliterationText(
                       transliteration,
-                      isInsertingInMiddle ? ` ${e.target.outerText}` : ` ${e.target.outerText} `, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition
+                      isInsertingInMiddle || startPositionOfCurrentWord != -1 ? ` ${e.target.outerText}` : `${e.target.outerText}`, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition
                     )
                   )
                   setTimeout(() => {
-          if(isInsertingInMiddle){
-            inputRef.current.setSelectionRange(startPositionOfCurrentWord + currentWordLength + 2, startPositionOfCurrentWord + currentWordLength + 2);
-          }  
-        }, 0);
+                    if (isInsertingInMiddle) {
+                      inputRef.current.setSelectionRange(startPositionOfCurrentWord + currentWordLength + 2, startPositionOfCurrentWord + currentWordLength + 2);
+                    }
+                  }, 0);
                 }
                 }
               />
