@@ -77,10 +77,14 @@ function HostedInferTransliteration(props) {
     let setValuesOnTimeOut = setTimeout(() => {
       console.log("reachable..... 80");
       let activeWord = inputValue.slice(startingPositionOfWord, currentCurserPosition);
+      if(startingPositionOfWord == "-1"){
+        activeWord = inputValue.split(" ")[0];
+      }
+      console.log("activeWord ======= ", activeWord)
       // inputRef.current.selectionStart = currentCurserPosition;
       // setTimeout(() => {
         if (shouldFetchData) {
-          dispatch(setCurrentText(startingPositionOfWord < 0 ? inputValue : ` ${activeWord}`));
+          dispatch(setCurrentText(startingPositionOfWord < 0 ? isInsertingInMiddle && startingPositionOfWord == "-1" ? `${activeWord}` : inputValue : ` ${activeWord}`));
           console.log("86 ----> inputValue " + inputValue + ", activeWord" + activeWord );
           console.log("87 ----> startingPositionOfWord " + startingPositionOfWord + ", currentCurserPosition" + currentCurserPosition );
           console.log("current Text ..... ", "`" + currentText + "`");
@@ -127,9 +131,6 @@ function HostedInferTransliteration(props) {
         }  
       }, 0);
     }
-    // setTimeout(() => {
-    //   inputRef.current.setSelectionRange(currentCaretPosition, currentCaretPosition);
-    //   }, 1000);
   }
 
   useEffect(() => {
@@ -179,7 +180,7 @@ function HostedInferTransliteration(props) {
           }  
         }, 0);
       }
-    }, 3000);
+    }, 300000);
     return () => clearTimeout(timeOutCall);
   }, [transliteration]);
   console.log(transliteration, "transliteration")
