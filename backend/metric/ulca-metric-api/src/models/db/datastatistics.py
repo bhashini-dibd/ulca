@@ -26,6 +26,7 @@ class AggregateDatasetModel(object):
             duration=   "durationInSeconds"
 
             dtype = request_object["type"]
+            log.info(f'dtype {dtype}')
             match_params = None 
             if "criterions" in request_object:
                 match_params = request_object["criterions"]  # where conditions
@@ -39,6 +40,7 @@ class AggregateDatasetModel(object):
             else:
                 #Charts except ASR are displayed in record counts; initial chart
                 sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
+            log.info(f'sumtotal_query {sumtotal_query}')
             sumtotal_result = utils.query_runner(sumtotal_query)
             true_count = 0
             false_count = 0
@@ -64,6 +66,7 @@ class AggregateDatasetModel(object):
                 if dtype == "parallel-corpus" or dtype == "transliteration-corpus":
                     sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
                                     GROUP BY {src}, {tgt},{delete}'
+                    log.info(sub_query)
 
                 elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus"]:
                     sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
