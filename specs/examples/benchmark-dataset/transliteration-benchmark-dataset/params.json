@@ -1,0 +1,31 @@
+{
+    "name": "Anuvaad en-hi Transliteration Evaluation Benchmark",
+    "taskType": "transliteration",
+    "description": "Anuvaad Evaluation Benchmark for Low-Resource Transliteration",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": "mhil"
+    },
+    "collectionSource": [
+        "Anuvaad en-ml Transliteration Evaluation Benchmark",
+        "https://anuvaad.org/"
+    ],
+    "domain": [
+        "general"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Anuvaad",
+        "aboutMe": "Part of Tarento data team under Ekstep language initiative",
+        "team": [
+            {
+                "name": "Naman Goyal",
+                "aboutMe": "Tarento data team"
+            },
+            {
+                "name": "Cynthia Gao",
+                "aboutMe": "Tarento data team"
+            }
+        ]
+    }
+}

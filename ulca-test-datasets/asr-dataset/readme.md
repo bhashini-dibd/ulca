@@ -250,3 +250,55 @@ Ex : '*collectionDetails*' is not defined under '*collectionMethod*'.
 Refer to [ASRRowSchema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRRowSchema) for the usage.
 
 
+
+## [negative-testcase-08](./negative-testcase-09)
+
+**Description** : 
+Format of hour, minutes and seconds is incorrect. 
+Ex : '*startTime*' and '*endTime*' is in incorrect format.
+
+
+**Error :**
+
+```json
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "text": "में अपना आधा सफ़र अब पूरा कर लिया है",
+        "startTime": "00-00-00",
+        "endTime": "00-00-6.96",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    }
+```
+**Expected correction :**
+
+```json
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "text": "में अपना आधा सफ़र अब पूरा कर लिया है",
+        "startTime": "00:00:00",
+        "endTime": "00:00:6.96",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    }
+```
+
+Refer to [ASRRowSchema](https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/dataset-schema.yml#/components/schemas/ASRRowSchema) for the usage.

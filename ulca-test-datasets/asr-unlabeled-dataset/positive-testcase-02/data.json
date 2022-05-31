@@ -1,0 +1,66 @@
+[
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "startTime": "00:00:00",
+        "endTime": "00:00:6.96",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "startTime": "00:00:6.96",
+        "endTime": "00:00:9.40",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "startTime": "00:00:9.40",
+        "endTime": "00:00:20.00",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    },
+    {
+        "audioFilename": "mkb_june2020_one_minute.wav",
+        "startTime": "00:00:20.00",
+        "endTime": "00:00:30.36",
+        "channel": "stereo",
+        "samplingRate": 44.1,
+        "bitsPerSample": "sixteen",
+        "gender": "male",
+        "age": "60-100",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 55
+            }
+        }
+    }
+]

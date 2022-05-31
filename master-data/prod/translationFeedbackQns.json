@@ -1,0 +1,19 @@
+{
+"translationFeedbackQns":[
+  {
+  "code":"translation",
+  "label":"TRANSLATION",
+  "active":true,
+  "initialQuestion" : {
+      "question": "Are you satisfied with this translation?",
+      "answerType": "5-star-rating",
+      "editbox": "false"
+    },
+   "values" : {
+       "master":"/translationDetailedQns.json",
+       "jsonPath":"$.translationDetailedQns" 
+   }
+  }
+],
+"relatedMaster": true
+}

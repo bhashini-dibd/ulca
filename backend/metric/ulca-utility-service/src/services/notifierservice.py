@@ -7,7 +7,7 @@ log         =   logging.getLogger('file')
 
 repo    =   NotifierRepo()
 
-class NotifierService():
+class NotifierService:
 
     # Cron JOB to update filter set params
     def notify_user(self,emails=None):
@@ -36,6 +36,7 @@ class NotifierService():
     def calculate_counts(self):
         log.info('Calculating counts!')
         try:
+
             parallel_count1 = repo.count_data_col({},config.data_db_schema,config.data_parallel)
             if not parallel_count1:
                 parallelcnts = 0
@@ -72,10 +73,12 @@ class NotifierService():
             elif tts1:
                 tts_count1 = (tts1[0]["total"])/3600
             log.info(tts_count1)
+
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
+
             if aggresult:
                 pending_jobs1,inprogress_jobs1,jobfile1 = self.process_aggregation_output(aggresult)
             else :
@@ -84,6 +87,7 @@ class NotifierService():
             log.info(f"In-Progress:{inprogress_jobs1}")
             log.info(f"file:{jobfile1}")           
             return parallelcnts,ocrcnts,monocnts,asr_count1,asr_unlabeled_count1,tts_count1,pending_jobs1,inprogress_jobs1,jobfile1
+
         except Exception as e:
             log.exception(f'{e}')
 

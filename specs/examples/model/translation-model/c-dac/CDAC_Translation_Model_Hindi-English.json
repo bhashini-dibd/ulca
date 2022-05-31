@@ -1,0 +1,83 @@
+﻿{
+  "name": "C-DAC, Pune Translation Hindi-English",
+  "version": "v1.0",
+  "description": "C-DAC, Pune, Hindi-English Neural Machine Translation model is based on Transformer-attention mechanism. The model is trained on dataset of Parliamentry domain.",
+  "refUrl": "https://www.cdac.in/",
+  "task": {
+    "type" : "translation"
+  },
+  "languages": [
+    {
+      "sourceLanguage": "hi",
+      "targetLanguage": "en"
+    }
+  ],
+  "license": "mit",
+  "domain": [
+    "parliamentary"
+  ],
+  "submitter": {
+    "name": "AAIG, C-DAC",
+    "aboutMe": "Artificial Intelligence (AAI) Group at C-DAC is working on some of the fundamental applications in the field of Natural Language Processing, Machine Translation, Intelligent Language Teaching and Decision Support Systems. MANTRA ",
+    "team": [
+      {
+        "name": "Dr. Ajai Kumar",
+        "aboutMe": "C-DAC, Pune"
+      },
+      {
+        "name": "Mrs. Lenali Singh",
+        "aboutMe": "C-DAC, Pune"
+      },
+      {
+        "name": "Mr. Shashi Pal Singh",
+        "aboutMe": "C-DAC, Pune"
+      },
+      {
+        "name": "Mr. Prashant Chaudhary",
+        "aboutMe": "C-DAC, Pune"
+      },
+      {
+        "name": "Mr. Pulkit Joshi",
+        "aboutMe": "C-DAC, Pune"
+      },
+      {
+        "name": " Ms. Shraddha Amit Kalele",
+        "aboutMe": "C-DAC, Pune"
+      },
+      {
+        "name": "Ms. Nutan",
+        "aboutMe": "C-DAC, Pune"
+      },
+      {
+        "name": "Laishram Rishikanta Meitei",
+        "aboutMe": "C-DAC, Pune"
+      },
+      {
+        "name": "Md Shahzad Alam",
+        "aboutMe": "C-DAC, Pune"
+      }
+    ]
+  },
+  "inferenceEndPoint": {
+    "callbackUrl": "http://mt-ulca-api.rb-aai.in/getbulksyncULCA",
+    "schema": {
+      "taskType": "translation",
+      "request": {
+        "input": [
+          {
+            "source": "आप कैसे हैं?"
+          }
+        ],
+        "config": {
+          "language": {
+            "sourceLanguage": "hi",
+            "targetLanguage": "en"
+          }
+        }
+      }
+    }
+  },
+  "trainingDataset": {
+    "description": "Trained on dataset of Parliamentry domain created by CDAC ."
+  }
+}

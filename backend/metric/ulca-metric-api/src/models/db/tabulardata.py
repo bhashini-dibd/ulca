@@ -1,5 +1,6 @@
 from .queryutils import QueryUtils
 import pandas as pd
+import numpy as np
 from config import DRUID_DB_SCHEMA , TIME_CONVERSION_VAL
 import logging
 from logging.config import dictConfig
@@ -34,16 +35,25 @@ class AggregateTabularDataModel(object):
             dtype_parallel = "parallel-corpus"
             dtype_asr = "asr-corpus"
             dtype_tts = "tts-corpus"
-            query = f'SELECT SUM(\"{count}\") as {total},{datatype}, {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
-            sub_query = f'WHERE (({datatype} = \'{dtype_ocr}\') OR ({datatype} = \'{dtype_parallel}\')) GROUP BY {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter}, {datatype}'
+            query = f'SELECT SUM(\"{count}\") as {total},{datatype}, {src}, {tgt},{delete}, array_to_string({domain}, \',\') as {domain}, array_to_string({collection_method}, \',\') as {collection_method}, array_to_string({submitter}, \',\') as {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
+            sub_query = f'WHERE ({datatype} = \'{dtype_parallel}\') GROUP BY {src}, {tgt},{delete}, array_to_string({domain}, \',\'), array_to_string({collection_method}, \',\'), array_to_string({submitter}, \',\'), {datatype} HAVING {total} > 1000'
             qry  = query+sub_query
             result_parsed = utils.query_runner(qry)
-            query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{datatype}, {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
-            sub_query = f'WHERE (({datatype} = \'{dtype_asr}\') OR ({datatype} = \'{dtype_tts}\')) GROUP BY {src}, {tgt},{delete}, {domain}, {collection_method}, {submitter}, {datatype}'
+
+            query = f'SELECT SUM(\"{count}\") as {total},{datatype}, {src}, {tgt},{delete}, array_to_string({domain}, \',\') as {domain}, array_to_string({collection_method}, \',\') as {collection_method}, array_to_string({submitter}, \',\') as {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
+            sub_query = f'WHERE ({datatype} = \'{dtype_ocr}\') GROUP BY {src}, {tgt},{delete}, array_to_string({domain}, \',\'), array_to_string({collection_method}, \',\'), array_to_string({submitter}, \',\'), {datatype}'
+            qry  = query+sub_query
+            result_parsed_ocr = utils.query_runner(qry)
+
+            result_parsed = result_parsed + result_parsed_ocr
+
+            query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{datatype}, {src}, {tgt},{delete}, array_to_string({domain}, \',\') as {domain}, array_to_string({collection_method}, \',\') as {collection_method}, array_to_string({submitter}, \',\') as {submitter} FROM \"{DRUID_DB_SCHEMA}\"'
+            sub_query = f'WHERE (({datatype} = \'{dtype_asr}\') OR ({datatype} = \'{dtype_tts}\')) GROUP BY {src}, {tgt},{delete}, array_to_string({domain}, \',\'), array_to_string({collection_method}, \',\'), array_to_string({submitter}, \',\'), {datatype}'
             qry  = query+sub_query
             result_parsed_duration = utils.query_runner(qry)
             for elem in result_parsed_duration:
                 elem[total] = elem[total] / 3600
+                elem[total] = float(np.round(elem[total], 3))
 
             result_parsed = result_parsed + result_parsed_duration
 
@@ -54,6 +64,7 @@ class AggregateTabularDataModel(object):
             df.loc[df[delete]=='true', total] = 0-df[total]
             grouped_df = df.groupby([src, tgt, collection_method, domain, submitter, datatype])[total].sum()
             df1 = grouped_df.to_frame().reset_index()
+            df1.sort_values(by=[datatype], inplace=True)
             data_tabular = df1.to_dict('records')
             for elem in data_tabular:
                 val = elem[collection_method]

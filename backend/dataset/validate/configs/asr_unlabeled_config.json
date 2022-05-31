@@ -1,0 +1,8 @@
+[
+    {
+        "test_name":"AudioMetadataCheck", "active":"True"
+    },
+	{
+        "test_name": "HashDedup", "active":"True"
+    }
+]
