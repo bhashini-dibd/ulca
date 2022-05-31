@@ -18,7 +18,8 @@ MAIL_SETTINGS               =   {
                                 }
 MAIL_SENDER                 =   os.environ.get('ULCA_SENDER_EMAIL','ulca@tarento.com')#
 
-receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"siddanth.shaiva@tarento.com")
+receiver_email_ids           =   "siddanth.shaiva@tarento.com"
+#receiver_email_ids          =   os.environ.get('ULCA_DASHBOARD_COUNT_EMAIL_TO_LIST',"siddanth.shaiva@tarento.com")
 ulca_email_group            =   os.environ.get('ULCA_EMAIL_GROUP','siddanth.shaiva@tarento.com')
 
 data_connection_url         =   os.environ.get('ULCA_DS_PUBLISH_MONGO_CLUSTER', 'mongodb://localhost:27017')
@@ -40,7 +41,9 @@ filter_cron_interval_sec     =   os.environ.get('FILTER_CRON_INTERVAL_SEC',300)#
 if isinstance(filter_cron_interval_sec, str):
     filter_cron_interval_sec =  eval(filter_cron_interval_sec)
 
-status_cron_interval_sec     =   os.environ.get('STATUS_UPDATER_CRON_INTERVAL_SEC',17200)
+
+status_cron_interval_sec     =   os.environ.get('STATUS_UPDATER_CRON_INTERVAL_SEC',43200)
+
 if isinstance(status_cron_interval_sec, str):
     status_cron_interval_sec =  eval(status_cron_interval_sec)
 

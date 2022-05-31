@@ -9,11 +9,13 @@ from datetime import datetime
 import csv
 import pytz
 from flask_mail import Mail, Message
-from flask import render_template
+from flask import render_template,Flask
 from app import mail
 IST = pytz.timezone('Asia/Kolkata')
 import os
 
+app = Flask(__name__,template_folder = '../templates')
+mail.init_app(app)
 
 class DataUtils:
     def __init__(self):
@@ -104,28 +106,33 @@ class DataUtils:
         try:
             if isinstance(data,list):
                 log.info("Generating email notification for data count mismatch !!!!")
-                users = ulca_email_group.split(',')
+                users = receiver_email_ids.split(',')
                 tdy_date    =   datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
                 msg         =   Message(subject=f" ULCA - Alert on dataset counts {tdy_date}",sender=MAIL_SENDER,recipients=users)
                 message     =   ""
                 for i in data:
                     line = f"Dataset Type : {i['Data Type']}\t\tMongoDB Count : {i['Mongo Count']}\t\tDruid Count : {i['Druid Count']}"
                     message = f"{message}\n{line}"
-                msg.body    =   f"There is a mismatch found on ulca data stores.\n\nDetails of the unequal types:\n{message}"
-                mail.send(msg)
+                with app.app_context():
+                    msg.body    =   f"There is a mismatch found on ulca data stores.\n\nDetails of the unequal types:\n{message}"
+                    mail.send(msg)
                 log.info(f"Generated alert email ")
 
             if isinstance(data,dict):
                 users = receiver_email_ids.split(',')
                 log.info(f"Generating statistic emails for {users} ") 
+                log.info(f'data == > {data}')
+                log.info(data["ocr_count"])
                 tdy_date    =  datetime.now(IST).strftime('%Y:%m:%d %H:%M:%S')
                 msg         = Message(subject=f" ULCA - Statistics {tdy_date}",
                                 sender=MAIL_SENDER,
                                 recipients=users)
-                msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
-                # with open (file,'rb') as fp:
-                #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
-                mail.send(msg)
+                with app.app_context():
+
+                    msg.html    = render_template('count_mail.html',date=tdy_date,parallel=data["parallel_count"],ocr=data["ocr_count"],mono=data["mono_count"],asr=data["asr_count"],asrun=data["asr_unlabeled_count"],tts=data["tts_count"],inprogress=data["inprogress"],pending=data["pending"])
+                    # with open (file,'rb') as fp:
+                    #     msg.attach(f"statistics-{tdy_date}.csv", "text/csv", fp.read())
+                    mail.send(msg)
                 log.info(f"Generated email notifications")
         except Exception as e:
             log.exception("Exception while generating email notification for ULCA statistics: " +
