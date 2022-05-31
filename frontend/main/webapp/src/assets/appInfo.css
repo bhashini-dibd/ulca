@@ -1,0 +1,146 @@
+
+ *:after {
+  box-sizing: border-box;
+}
+.mt16 {
+	margin-top:1rem !important; 
+}
+.mt0 {
+	margin-top: 0 !important;
+}
+.mb0 {
+	margin-bottom: 0 !important;
+}
+.IntroSection .close {
+    position: absolute;
+    right: 2rem;
+}
+.IntroSection {
+	max-width: 900px;
+	width: 100%;
+	padding: 2rem;
+	font-family: 'Lato', sans-serif;
+	border: 4px solid #292576;
+	font-size: .875rem;
+	line-height: 1.7;
+	color: #0C0F0F;
+	background-color: #ffffff;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	box-shadow: 0 0 2px rgba(0,0,0.5),0 0 8px rgba(0,0,0,.5);
+	-webkit-box-shadow: 0 0 2px rgba(0,0,0.5),0 0 8px rgba(0,0,0,.5);
+	
+	z-index: 999;
+}
+.IntroSection h4 {
+	color: #2C2799;
+	font-family: 'Poppins', sans-serif; 
+	font-weight: 500;
+	font-size: 1.5rem;
+	margin: 0 0 .8rem;
+	padding: 0;
+}
+.titlerow {
+	display: flex;
+	flex-direction: row;
+}
+.IntroSection h6 {
+	font-size: 1rem;
+	font-family: 'Poppins', sans-serif; 
+	font-weight: 500;
+	color: #0C0F0F;
+	margin: 0 0 .8rem;
+	padding: 0;
+}
+.naviBlueColor {
+	background-color: #2C2799 !important;
+}
+.skyBlueColor{
+	background-color: #188EFC !important;
+}
+.purpleColor {
+	background-color: #7A47A4 !important;
+}
+
+.features {
+    display: flex;
+    justify-content: space-between;
+}
+.features p {
+	margin: 0 0 .4rem;
+}
+.features ul {
+	list-style: none;
+	padding: 0;
+	margin-top:0 ;
+}
+.features li {
+	padding-left: 1.5rem;
+}
+.features li::before {
+    content: '';
+	position: absolute;
+	background-image: url('./arrow-white.svg');
+	width: 1.5rem;
+	height: 1.5rem;
+	margin-left: -1.5rem;
+}
+
+.typo {
+	color:white;margin-left:1.5rem; padding-top:-5px;
+}
+
+
+.features .featureColumn {
+	width: 32%;
+
+}
+.features .featureColumn .featureDetail {
+	padding: 1rem;
+	border-radius: .8rem;
+	color: #ffffff;
+/* 	min-height: 230px; */
+	background-color: #000000;
+}
+.features .featureColumn h6 {
+	color: #ffffff;
+	font-weight: 400;
+}
+.arrow-pointer {
+  width: 92%;
+  height: 2.25rem;
+  line-height: 2.25rem;
+  margin-top:.8rem;
+  text-align: center;
+  color: #ffffff;
+  background-color: #000000;
+  position: relative;
+}
+.arrow-pointer::before {
+content: '';
+position: absolute;
+right: -20px;
+bottom: 0;
+width: 0;
+height: 0;
+border-left: 20px solid #000000;
+border-top: 18px solid transparent;
+border-bottom: 18px solid transparent;
+}
+.arrow-pointer.naviBlueColor::before {
+	border-left-color: #2C2799 !important;
+}
+.arrow-pointer.skyBlueColor::before {
+	border-left-color: #188EFC !important;
+}
+.arrow-pointer.purpleColor::before {
+	border-left-color: #7A47A4 !important;
+}
+@media (max-width: 1024px) {
+	.features .featureColumn .featureDetail {
+		min-height: 230px;
+	}
+}

@@ -1,0 +1,18 @@
+{
+  "sourceText": "<ip-string>",
+  "targetText": "<ip-string>",
+  "sourceLanguage": "<ip-string>",
+  "targetLangauge": "<ip-string>",
+  "sourceTextHash": "<gen-string>",
+  "targetTextHash": "<gen-string>",
+  "contributors": ["<ip-uuids-string>"],
+  "submitter": "<ip-uuid-string>",
+  "dataset": "<ip-string>",
+  "collectionModes": ["<ip-string>"],
+  "collectionSources": ["<ip-string>"],
+  "domains": ["<ip-string>"],
+  "licenses": ["<ip-string>"],
+  "tags": ["<gen-string>"],
+  "hashedKey": "<gen-string>",
+  "sk": "<gen-string>"
+}

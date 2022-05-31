@@ -225,6 +225,9 @@ components:
           $ref: '#/components/schemas/AudioBitsPerSample'
         gender:
           $ref: '#/components/schemas/Gender'
+        durationInSeconds:
+          type: number
+          description: audio recording in seconds
       description: dataset event schema
       allOf:
       - $ref: '#/components/schemas/BIEvent'
