@@ -26,7 +26,7 @@ public final class ModelConstants {
 			return list;
 		}
 		if (task.equalsIgnoreCase("transliteration")) {
-			String[] metric = { "bleu", "meteor", "ribes", "gleu", "bert" };
+			String[] metric = { "cer", "accuracy" };
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}

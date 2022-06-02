@@ -83,6 +83,8 @@ public class TransliterationBenchmark {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
 
+			request.getConfig().setNumSuggestions(1);//numSuggestions set to 1
+			
 			Sentences sentences = new Sentences();
 			for (String ip : sourceSentences) {
 				Sentence sentense = new Sentence();
@@ -178,7 +180,7 @@ public class TransliterationBenchmark {
 					SentenceList sentense = sentenses.get(i);
 		            JSONObject target =  new JSONObject();
 					target.put("tgt", expectedTgt.get(i));
-					target.put("mtgt", sentense.getTarget());
+					target.put("mtgt", sentense.getTarget().get(0));
 					corpus.put(target);
 				}
 			}
