@@ -1,6 +1,8 @@
 {
     "name": "Anuvaad en-hi Transliteration Evaluation Benchmark",
-    "taskType": "transliteration",
+    "taskType": {
+        "type" : "transliteration"
+    },
     "description": "Anuvaad Evaluation Benchmark for Low-Resource Transliteration",
     "languages": {
         "sourceLanguage": "en",
