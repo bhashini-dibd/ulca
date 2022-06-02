@@ -596,14 +596,13 @@ public class ModelInferenceEndPointService {
 
 			TransliterationResponse transliterationResponse = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
 
-			/*
-			if (transliterationResponse.getOutput() == null || transliterationResponse.getOutput().size() <= 0
-					|| transliterationResponse.getOutput().get(0).getTarget()) {
+			if (transliterationResponse.getOutput() == null || transliterationResponse.getOutput().size() <= 0 ) {
+					
 				throw new ModelComputeException(httpResponse.message(), "Transliteration Model Compute Response is Empty",
 						HttpStatus.BAD_REQUEST);
 
-			}*/
-			response.setOutputText(transliterationResponse.getOutput().get(0).getTarget().toString());
+			}
+			response.setTransliterationOutput(transliterationResponse.getOutput());
 
 			return response;
 		}
