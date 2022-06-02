@@ -28,5 +28,12 @@
     },
     {
         "task_type":"ocr", "metric_name":"cer", "metric_implementation":"OCRCEREval", "score_context":"default"
+    },
+    {
+        "task_type":"transliteration", "metric_name":"cer", "metric_implementation":"TransliterationCEREval", "score_context":"default"
+    },
+    {
+        "task_type":"transliteration", "metric_name":"accuracy", "metric_implementation":"TransliterationAccuracyEval", "score_context":"default"
     }
+    
 ]
