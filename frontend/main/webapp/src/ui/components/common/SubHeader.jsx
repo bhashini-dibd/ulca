@@ -100,6 +100,7 @@ const SubHeader = (props) => {
     var role = localStorage.getItem("userDetails") && JSON.parse(localStorage.getItem("userDetails")).roles[0];
     const history = useHistory();
     const handleClick = (url) => {
+       
         history.push(`${process.env.PUBLIC_URL}${url}`);
     }
     return (
@@ -117,7 +118,8 @@ const SubHeader = (props) => {
                                 return (
                                     <Tab label={tab.name} {...a11yProps(index)} onClick={() => handleClick(tab.url)} />
                                 )
-                                }else{
+                                }
+                                else{
                                     return(<Tab />)
                                     
                                 }

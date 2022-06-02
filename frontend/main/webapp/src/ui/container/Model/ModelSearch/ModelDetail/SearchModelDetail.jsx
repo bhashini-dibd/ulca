@@ -30,6 +30,7 @@ import GetModelDetails from "../../../../../redux/actions/api/Model/ModelSearch/
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
+import HostedInferTransliteration from "./HostedInferTransliteration";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -154,6 +155,15 @@ const SearchModelDetail = (props) => {
               modelId={params.srno}
             />
           );
+        case "transliteration":
+          return (
+            <HostedInferTransliteration
+              task={task}
+              modelId={params.srno}
+              source={source}
+              target={target}
+            />
+          );
         default:
           return (
             <HostedInference
@@ -253,7 +263,7 @@ const SearchModelDetail = (props) => {
                   </Grid> */}
                   <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                     <Grid container spacing={1}>
-                      {description.map((des, i) => (
+                      {description?.map((des, i) => (
                         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                           <ModelDescription
                             title={des.title}
@@ -286,7 +296,7 @@ const SearchModelDetail = (props) => {
               </Grid>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
                 <Grid container spacing={2}>
-                  {description.map((des, i) => (
+                  {description?.map((des, i) => (
                     <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
                       <ModelDescription
                         title={des.title}
@@ -321,7 +331,7 @@ const SearchModelDetail = (props) => {
                       scrollButtons={false}
                       aria-label="scrollable prevent tabs example"
                     >
-                      {metricArray.map((metric) => (
+                      {metricArray?.map((metric) => (
                         <Tab
                           label={metric}
                           onClick={() => handleIndexChange(metric)}

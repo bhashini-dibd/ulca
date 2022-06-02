@@ -42,6 +42,7 @@
         "react-select": "^4.3.1",
         "react-social-login": "^3.4.13",
         "react-spinners": "^0.11.0",
+        "react-transliterate": "^1.1.9",
         "react-voice-recorder": "^2.1.0",
         "reactjs-popup": "^2.0.4",
         "reactjs-social-login": "^1.0.5",

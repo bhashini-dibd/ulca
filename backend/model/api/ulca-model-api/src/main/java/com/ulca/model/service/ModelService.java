@@ -342,8 +342,14 @@ public class ModelService {
 
 		if (request.getTask() != null && !request.getTask().isBlank()) {
 			ModelTask modelTask = new ModelTask();
-			modelTask.setType(TypeEnum.fromValue(request.getTask()));
+			TypeEnum modelTaskType = TypeEnum.fromValue(request.getTask());
+			if(modelTaskType == null) {
+				throw new RequestParamValidationException("task type is not valid");
+			}
+			modelTask.setType(modelTaskType);
 			model.setTask(modelTask);
+		}else {
+			throw new RequestParamValidationException("task is required field");
 		}
 
 		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
