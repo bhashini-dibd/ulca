@@ -22,7 +22,6 @@ class TransliterationCEREval(ModelMetricEval):
             
            if ground_truth and machine_translation:
                 eval_score = self.cer_score.compute(predictions=machine_translation, references=ground_truth)
-                log.info(f'eval score{eval_score}')
                 if np.isnan(eval_score):
                     log.error("Unable to calculate CER score for transliteration")
                     return None

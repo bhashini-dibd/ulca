@@ -36,7 +36,7 @@ class TransliterationMetricEvalHandler:
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
                     eval_score = metric_inst.transliteration_metric_eval(ground_truth, machine_translation)
                     log.info(f'eval_score {eval_score}')
-                    if eval_score:
+                    if eval_score is not None:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': float(np.round(eval_score, 3))}
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Completed'})
