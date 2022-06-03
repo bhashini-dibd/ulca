@@ -251,7 +251,7 @@ function HostedInferTransliteration(props) {
             onChangeText={(text) => {
               setTransliteration(text);
             }}
-            renderComponent = {(props)=><textarea placeholder="Enter text here..." className={classes.textareas} {...props} />}
+            renderComponent = {(props)=><textarea placeholder="Enter text here..." className={classes.textAreaTransliteration} {...props} />}
           />
           </CardContent>
       </Card>

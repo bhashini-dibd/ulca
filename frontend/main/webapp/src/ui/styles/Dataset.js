@@ -536,6 +536,21 @@ const DataSet = (theme) => ({
 
     //  paddingLeft:'16px'
   },
+
+  textAreaTransliteration: {
+    backgroundColor: "inherit",
+    border: "none",
+    width: "100%",
+    resize: "none",
+    outline: "none",
+    fontSize: "18px",
+    lineHeight: "32px",
+    color: "black",
+    fontFamily: "Roboto",
+    height : "14rem"
+
+    //  paddingLeft:'16px'
+  },
   
   hostedCard: {
     minHeight: "300px",
