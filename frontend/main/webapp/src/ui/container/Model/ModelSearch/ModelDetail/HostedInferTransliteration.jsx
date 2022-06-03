@@ -24,6 +24,7 @@ import { translate } from "../../../../../assets/localisation";
 import { getLanguageName } from "../../../../../utils/getLabel";
 import { ReactTransliterate } from 'react-transliterate';
 import configs from "../../../../../configs/configs";
+import endpoints from "../../../../../configs/apiendpoints";
 
 function HostedInferTransliteration(props) {
   const { classes, target } = props;
@@ -244,7 +245,7 @@ function HostedInferTransliteration(props) {
         </CardContent>
         <CardContent>
           <ReactTransliterate 
-            apiURL = {`${configs.BASE_URL_AUTO}/ulca/apis/v0/model/compute`}
+            apiURL = {`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
             modelId={props.modelId}
             value={transliteration}
             onChangeText={(text) => {
