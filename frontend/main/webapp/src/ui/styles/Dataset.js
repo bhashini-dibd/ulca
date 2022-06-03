@@ -536,12 +536,14 @@ const DataSet = (theme) => ({
 
     //  paddingLeft:'16px'
   },
+  
   hostedCard: {
-    height: "300px",
+    minHeight: "300px",
     borderColor: "#2D63AB",
     borderRadius: "8px",
     paddingBottom: "13px",
     marginRight: "24px",
+    overflowY: "auto",
     "@media (max-width:400px)": {
       marginRight: "1px",
     },
