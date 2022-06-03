@@ -250,7 +250,7 @@ function HostedInferTransliteration(props) {
             onChangeText={(text) => {
               setTransliteration(text);
             }}
-            renderComponent = {(props)=><textarea style={{ borderRadius : "10px", height : "100px", width : "100%"}} {...props} />}
+            renderComponent = {(props)=><textarea style={{ resize : "none", borderRadius : "10px", height : "100px", width : "100%"}} {...props} />}
           />
         </CardContent>
       </Card>
