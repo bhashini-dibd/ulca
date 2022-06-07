@@ -9,4 +9,4 @@ from .translation_ribes_score_eval import TranslationRibesScoreEval
 from .ocr_wer_eval import OCRWEREval
 from .ocr_cer_eval import OCRCEREval
 from .transliteration_cer_eval import TransliterationCEREval
-from .transliteration_accuracy_eval import TransliterationAccuracyEval
+from .transliteration_top1_accuracy_eval import TransliterationTopOneAccuracyEval
