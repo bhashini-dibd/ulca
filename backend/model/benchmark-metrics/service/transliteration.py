@@ -3,22 +3,22 @@ from datetime import datetime
 import numpy as np
 from logging.config import dictConfig
 from kafkawrapper.producer import Producer
+from models.metric_manager import MetricManager
 from utils.mongo_utils import BenchMarkingProcessRepo
 from configs.configs import ulca_notifier_input_topic, ulca_notifier_benchmark_completed_event, ulca_notifier_benchmark_failed_event
-from models.metric_manager import MetricManager
 
 log = logging.getLogger('file')
-
 prod = Producer()
 repo = BenchMarkingProcessRepo()
 
-class TranslationMetricEvalHandler:
+
+class TransliterationMetricEvalHandler:
     def __init__(self):
         pass
 
-    def execute_translation_metric_eval(self, request):
+    def execute_transliteration_metric_eval(self, request):
         try:
-            log.info("Executing Translation Metric Evaluation....  {}".format(datetime.now()))
+            log.info("Executing transliteration Metric Evaluation....  {}".format(datetime.now()))
             metric_mgr = MetricManager.getInstance()
             if 'benchmarkDatasets' in request.keys():
                 for benchmark in request["benchmarkDatasets"]:
@@ -34,7 +34,8 @@ class TranslationMetricEvalHandler:
 
                     ground_truth = [corpus_sentence["tgt"] for corpus_sentence in benchmark["corpus"]]
                     machine_translation = [corpus_sentence["mtgt"] for corpus_sentence in benchmark["corpus"]]
-                    eval_score = metric_inst.machine_translation_metric_eval(ground_truth, machine_translation, request['targetLanguage'])
+                    eval_score = metric_inst.transliteration_metric_eval(ground_truth, machine_translation)
+                    log.info(f'eval_score {eval_score}')
                     if eval_score is not None:
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': float(np.round(eval_score, 3))}
                         repo.insert(doc)
@@ -42,13 +43,12 @@ class TranslationMetricEvalHandler:
                         mail_notif_event = {"event": ulca_notifier_benchmark_completed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
                         prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
                     else:
-                        log.exception("Exception while metric evaluation of model")
+                        log.exception("Exception while calculating metric score of model")
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
                         mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
                         prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
-                               
             else:
                 log.exception("Missing parameter: benchmark details")
                 repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
@@ -60,7 +60,7 @@ class TranslationMetricEvalHandler:
             repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
             mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
             prod.produce(mail_notif_event, ulca_notifier_input_topic, None)
-           
+
 # Log config
 dictConfig({
     'version': 1,

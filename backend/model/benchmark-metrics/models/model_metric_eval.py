@@ -43,6 +43,18 @@ class ModelMetricEval():
         """
         pass
 
+    def transliteration_metric_eval(self, ground_truth, machine_translation):
+        """
+        Functional interface for transliteration type model
+
+        ground_truth        : golden data/human vetted sentences
+        machine_translation : model generated sentences
+        
+        Returns the evaluation score
+        """
+        pass
+
+
     def preprocess_data(self, in_data, lang):
         """
         Interface to add preprocessing required before metric evaluation.
