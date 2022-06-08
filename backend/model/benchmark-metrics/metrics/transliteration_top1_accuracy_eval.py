@@ -1,10 +1,12 @@
 import logging
 from logging.config import dictConfig
 from models.model_metric_eval import ModelMetricEval
+from collections import Counter 
+
 
 log = logging.getLogger('file')
 
-class TransliterationAccuracyEval(ModelMetricEval):
+class TransliterationTopOneAccuracyEval(ModelMetricEval):
     """
     Implementation of metric evaluation of Transliteration type models
     using Accuracy
@@ -18,12 +20,14 @@ class TransliterationAccuracyEval(ModelMetricEval):
         try:
 
             if ground_truth and machine_translation:
+                top1_match  =  []
                 for grnd, mchn in zip(ground_truth,machine_translation):
                     if grnd == mchn:
-                        return 1
+                        top1_match.append(1)
                     else:
-                        return 0
-            
+                        top1_match.append(0)
+                top1_res = Counter(top1_match)
+                return top1_res[1]/len(ground_truth) *100
         except Exception as e:
             log.exception(f"Exception in calculating Accuracy: {str(e)}")
 

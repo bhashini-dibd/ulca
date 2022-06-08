@@ -33,7 +33,7 @@
         "task_type":"transliteration", "metric_name":"cer", "metric_implementation":"TransliterationCEREval", "score_context":"default"
     },
     {
-        "task_type":"transliteration", "metric_name":"accuracy", "metric_implementation":"TransliterationAccuracyEval", "score_context":"default"
+        "task_type":"transliteration", "metric_name":"top-1 accuracy", "metric_implementation":"TransliterationTopOneAccuracyEval", "score_context":"default"
     }
     
 ]
