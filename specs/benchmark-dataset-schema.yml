@@ -6,7 +6,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.1.0
+  version: 0.2.0
 servers:
   - url: /ulca
 paths: {}
@@ -45,6 +45,7 @@ components:
           type: object
           oneOf:
             - $ref: '#/components/schemas/TranslationBenchmarkDatasetParamsSchema'
+            - $ref: '#/components/schemas/TransliterationBenchmarkDatasetParamsSchema'
             - $ref: '#/components/schemas/AsrBenchmarkDatasetParamsSchema'
             - $ref: '#/components/schemas/OcrBenchmarkDatasetParamsSchema'
 
@@ -56,6 +57,7 @@ components:
           type: object
           oneOf:
             - $ref: '#/components/schemas/TranslationBenchmarkDatasetRowSchema'
+            - $ref: '#/components/schemas/TransliterationBenchmarkDatasetRowSchema'
             - $ref: '#/components/schemas/AsrBenchmarkDatasetRowSchema'
             - $ref: '#/components/schemas/OcrBenchmarkDatasetRowSchema'
 
@@ -115,6 +117,26 @@ components:
           description: textual data in target language
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
+      
+    TransliterationBenchmarkDatasetParamsSchema:
+      allOf:
+        - $ref: '#/components/schemas/BenchmarkDatasetCommonParamsSchema'
+        - type: object
+
+    TransliterationBenchmarkDatasetRowSchema:
+      required:
+        - sourceText
+        - targetText
+      properties:
+        sourceText:
+          type: string
+          description: textual data in source language
+        targetText:
+          type: string
+          description: textual data in target language
+      type: object
+      description: the schema of data file uploaded should adhere to this specified structure.
+
 
     AsrBenchmarkDatasetParamsSchema:
       allOf:

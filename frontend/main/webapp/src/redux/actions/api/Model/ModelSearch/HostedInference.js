@@ -73,6 +73,7 @@ export default class HostedInference extends API {
       bodyData.gender = this.gender;
     }else if (this.task === "transliteration") {
       bodyData.input = [{ source: this.input }];
+      
      
     }
     bodyData.userId =

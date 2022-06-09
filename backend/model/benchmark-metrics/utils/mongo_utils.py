@@ -42,7 +42,7 @@ class BenchMarkingProcessRepo:
             #     if benchmark_docs:
             # res = col.update({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, False, False, True)
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
-            if data['eval_score']:
+            if data['eval_score'] is not None:
                 res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, True)
             else:
                 res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Failed", "lastModifiedOn": curr_time} }, False, False, True)
