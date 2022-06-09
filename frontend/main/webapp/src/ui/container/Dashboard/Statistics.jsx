@@ -8,6 +8,7 @@ import HeaderStyles from "../../styles/HeaderStyles";
 
 const Statistics = (props) => {
     const { classes } = props;
+    console.log('...test')
     return (
         <AppBar position="static" color="inherit" elevation={0} style={{ alignContent: 'center', display: 'grid' }}>
             <Toolbar className={classes.toolbar}>

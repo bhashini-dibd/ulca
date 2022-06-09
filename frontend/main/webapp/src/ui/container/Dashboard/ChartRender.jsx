@@ -107,6 +107,7 @@ const ChartRender = (props) => {
         ? selectedLanguageName
         : event && event.hasOwnProperty("label") && event.label
     );
+    
     return [
       { field: "sourceLanguage", value: source },
       { field: "targetLanguage", value: targetLanguage },
