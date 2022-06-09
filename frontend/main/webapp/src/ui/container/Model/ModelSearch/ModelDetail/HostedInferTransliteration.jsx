@@ -22,6 +22,9 @@ import LightTooltip from "../../../../components/common/LightTooltip";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { translate } from "../../../../../assets/localisation";
 import { getLanguageName } from "../../../../../utils/getLabel";
+import { ReactTransliterate } from 'react-transliterate';
+import configs from "../../../../../configs/configs";
+import endpoints from "../../../../../configs/apiendpoints";
 
 function HostedInferTransliteration(props) {
   const { classes, target } = props;
@@ -47,6 +50,10 @@ function HostedInferTransliteration(props) {
   const [isInsertingInMiddle, setIsInsertingInMiddle] = useState(false);
   const [currentCaretPosition, setCurrentCaretPosition] = useState(0);
 
+  useEffect(()=>{
+    console.log("current model ID ========= ", props.modelId);
+    console.log("base url ==== ", configs.BASE_URL_AUTO);
+  })
 
   const setTransliterateValues = (e) => {
     console.log("called after translation");
@@ -237,47 +244,16 @@ function HostedInferTransliteration(props) {
           </Grid>
         </CardContent>
         <CardContent>
-          <Autocomplete
-            freeSolo
-            clearOnBlur={false}
-            disableClearable={true}
-            options={!currentText ? [] : result.map((elem) => elem)}
-            onKeyDown={handleKeyDown}
-            PopperComponent={(params) => (
-              <Popper
-                {...params}
-                placement='bottom-start'
-                style={{ width: window.innerWidth > 776 ? window.innerWidth * 0.15 : window.innerWidth < 450 ? window.innerWidth * 0.5 : window.innerWidth * 0.3 }}
-                onClick={(e) => {
-                  let currentWordLength = e.target.outerText.length;
-                  dispatch(
-                    setTransliterationText(
-                      transliteration,
-                      isInsertingInMiddle || startPositionOfCurrentWord != -1 ? ` ${e.target.outerText}` : `${e.target.outerText}`, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition
-                    )
-                  )
-                  setTimeout(() => {
-                    if (isInsertingInMiddle) {
-                      inputRef.current.setSelectionRange(startPositionOfCurrentWord + currentWordLength + 2, startPositionOfCurrentWord + currentWordLength + 2);
-                    }
-                  }, 0);
-                }
-                }
-              />
-            )}
-            sx={{ width: 300 }}
-            renderInput={(params) => (
-              <TextField
-                variant="outlined"
-                {...params}
-                inputRef={inputRef}
-                onKeyDown={handleKeyDown}
-                onChange={setTransliterateValues}
-              />
-            )}
+          <ReactTransliterate 
+            apiURL = {`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
+            modelId={props.modelId}
             value={transliteration}
+            onChangeText={(text) => {
+              setTransliteration(text);
+            }}
+            renderComponent = {(props)=><textarea placeholder="Enter text here..." className={classes.textAreaTransliteration} {...props} />}
           />
-        </CardContent>
+          </CardContent>
       </Card>
     </Grid>
   );
