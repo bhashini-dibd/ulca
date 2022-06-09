@@ -168,7 +168,34 @@ function HostedInferTransliteration(props) {
     dispatch(clearTransliterationResult());
   }, [transliterationText]);
 
-  
+  useEffect(() => {
+    if (!!currentText) getTransliterationText();
+  }, [currentText]);
+
+  useEffect(() => {
+    let timeOutCall = setTimeout(() => {
+      if (transliteration[transliteration.length - 1] === " " && result.length) {
+        // const transliterationArr = transliteration.split(" ");
+        // transliterationArr.pop();
+        let currentWordLength = result ? result[0].length : 0;
+        dispatch(
+          setTransliterationText(transliteration, isInsertingInMiddle || startPositionOfCurrentWord != -1 ? ` ${result[0]}` : `${result[0]}`, startPositionOfCurrentWord < 0 ? startPositionOfCurrentWord + 1 : startPositionOfCurrentWord, curserIndexPosition)
+        );
+        dispatch(clearTransliterationResult());
+        if (isInsertingInMiddle) {
+          inputRef.current.setSelectionRange(currentCaretPosition + 1, currentCaretPosition + 1);
+        }
+        setTimeout(() => {
+          if (isInsertingInMiddle) {
+            inputRef.current.setSelectionRange(startPositionOfCurrentWord + currentWordLength + 2, startPositionOfCurrentWord + currentWordLength + 2);
+          }
+        }, 0);
+      }
+    }, 300000);
+    return () => clearTimeout(timeOutCall);
+  }, [transliteration]);
+  console.log(transliteration, "transliteration")
+
 
   return (
     <Grid
