@@ -319,8 +319,7 @@ public class ModelInferenceEndPointService {
 		log.info("pollingUrl :: " + pollingUrl);
 
 		OneOfAsyncApiDetailsAsyncApiSchema asyncApiSchema = asyncApiDetails.getAsyncApiSchema();
-		// OneOfAsyncApiDetailsAsyncApiPollingSchema asyncApiPollingSchema =
-		// asyncApiDetails.getAsyncApiPollingSchema();
+		
 
 		if (asyncApiSchema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationAsyncInference")) {
 			io.swagger.model.TranslationAsyncInference translationAsyncInference = (io.swagger.model.TranslationAsyncInference) asyncApiSchema;
@@ -339,11 +338,10 @@ public class ModelInferenceEndPointService {
 			String requestJson = objectMapper.writeValueAsString(request);
 
 			Response httpResponse = okHttpClientPostCall(requestJson, callBackUrl);
-			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
-			// false);
+			
 			String responseJsonStr = httpResponse.body().string();
 
-			log.info("********* responseJson ****** " + responseJsonStr);
+			log.info("********* callBackUrl responseJson ****** :: " + responseJsonStr);
 
 			PollingRequest pollingRequest = objectMapper.readValue(responseJsonStr, PollingRequest.class);
 			translationAsyncInference.setResponse(pollingRequest);
@@ -372,6 +370,7 @@ public class ModelInferenceEndPointService {
 
 				} else {
 					log.info("compute model failed");
+					log.info("Inference end point respose received ::  " + objectMapper.writeValueAsString(pollHttpResponse));					
 					throw new ModelComputeException("Translation Model Compute Failed",
 							"Translation Model Compute Failed", HttpStatus.valueOf(pollHttpResponse.code()));
 				}
