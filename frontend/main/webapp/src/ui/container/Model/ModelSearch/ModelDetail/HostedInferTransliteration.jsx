@@ -221,7 +221,7 @@ function HostedInferTransliteration(props) {
             >
               <Typography variant="h6" className={classes.hosted}>
                 Hosted inference API{" "}
-                {
+                {/* {
                   <LightTooltip
                     arrow
                     placement="right"
@@ -232,7 +232,7 @@ function HostedInferTransliteration(props) {
                       color="disabled"
                     />
                   </LightTooltip>
-                }
+                } */}
               </Typography>
 
             </Grid>
