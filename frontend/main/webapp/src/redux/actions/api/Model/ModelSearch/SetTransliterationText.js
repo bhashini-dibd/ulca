@@ -7,10 +7,10 @@ export const setCurrentText = (text, prevvalText) => {
   };
 };
 
-export const setTransliterationText = (prevText, newWord) => {
+export const setTransliterationText = (prevText, newWord, startIndex, endIndex) => {
   return {
     type: C.SET_TRANSLITERATION_TEXT,
-    payload: { prevText, newWord },
+    payload: { prevText, newWord, startIndex, endIndex },
   };
 };
 

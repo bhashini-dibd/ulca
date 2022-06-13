@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, validate_text_length_threshold
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration, validate_text_length_threshold, validate_text_length_threshold_transliteration
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -14,7 +14,7 @@ class SentenceLengthCheck(BaseValidator):
         try:
             text_list = []
             record = request["record"]
-            if request["datasetType"] == dataset_type_parallel:
+            if request["datasetType"] in [dataset_type_parallel, dataset_type_transliteration]:
                 text_list.append(record['sourceText'])
                 text_list.append(record['targetText'])
             if request["datasetType"] == dataset_type_asr:
@@ -28,7 +28,10 @@ class SentenceLengthCheck(BaseValidator):
 
             for text in text_list:
                 words = len(list(text.split()))
-                if words < validate_text_length_threshold:
+                if request["datasetType"] == dataset_type_transliteration:
+                    if words > validate_text_length_threshold_transliteration:
+                        return {"message": "Sentence Length too big", "code": "TEXT_LENGTH_TOO_BIG", "status": "FAILED"}
+                elif words < validate_text_length_threshold:
                     return {"message": "Sentence Length too short", "code": "TEXT_LENGTH_TOO_SHORT", "status": "FAILED"}
 
             log.info('----sentence length check  -> Passed----')

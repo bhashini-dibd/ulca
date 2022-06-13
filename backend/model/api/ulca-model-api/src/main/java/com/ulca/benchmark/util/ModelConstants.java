@@ -25,6 +25,11 @@ public final class ModelConstants {
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}
+		if (task.equalsIgnoreCase("transliteration")) {
+			String[] metric = { "cer", "top-1 accuracy" };
+			list = new ArrayList<>(Arrays.asList(metric));
+			return list;
+		}
 		if (task.equalsIgnoreCase("asr")) {
 			String[] metric = { "wer", "cer" };
 			list = new ArrayList<>(Arrays.asList(metric));

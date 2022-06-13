@@ -7,9 +7,10 @@ from repository.tts import TTSRepo
 from repository.ocr import OCRRepo
 from repository.monolingual import MonolingualRepo
 from repository.asrunlabeled import ASRUnlabeledRepo
+from repository.transliteration import TransliterationRepo
 from utils.datasetutils import DatasetUtils
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, \
-    dataset_type_asr_unlabeled, dataset_type_tts
+    dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration
 
 log = logging.getLogger('file')
 
@@ -21,6 +22,7 @@ ttsrepo = TTSRepo()
 ocrrepo = OCRRepo()
 monorepo = MonolingualRepo()
 asrunlabeledrepo = ASRUnlabeledRepo()
+transrepo = TransliterationRepo()
 utils = DatasetUtils()
 
 
@@ -42,6 +44,7 @@ class DatasetService:
             monorepo.set_monolingual_collection()
             asrunlabeledrepo.set_asr_unlabeled_collection()
             ttsrepo.set_tts_collection()
+            transrepo.set_transliteration_collection()
         elif request["col"] == dataset_type_parallel:
             log.info("Parallel Dataset.....")
             parallelrepo.set_parallel_collection()
@@ -60,6 +63,9 @@ class DatasetService:
         elif request["col"] == dataset_type_tts:
             log.info("TTS Dataset.....")
             ttsrepo.set_tts_collection()
+        elif request["col"] == dataset_type_transliteration:
+            log.info("Transliteration Dataset.....")
+            transrepo.set_transliteration_collection()
         log.info("Done!")
 
     '''

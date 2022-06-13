@@ -23,7 +23,7 @@ const SimpleTabs = (props) => {
       <AppBar className={classes.appTab} position="static" color="inherit">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12} md={7} lg={8} xl={8}>
-            <Tabs value={props.value} onChange={props.handleChange}>
+            <Tabs value={props.value} onChange={props.handleChange} indicatorColor="primary" variant="scrollable" scrollButtons="auto"  aria-label="basic tabs example">
               {props.tabs.map((tab, index) => {
                 return (
                   <Tab

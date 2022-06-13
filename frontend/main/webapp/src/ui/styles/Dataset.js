@@ -536,12 +536,29 @@ const DataSet = (theme) => ({
 
     //  paddingLeft:'16px'
   },
+
+  textAreaTransliteration: {
+    backgroundColor: "inherit",
+    border: "none",
+    width: "100%",
+    resize: "none",
+    outline: "none",
+    fontSize: "18px",
+    lineHeight: "32px",
+    color: "black",
+    fontFamily: "Roboto",
+    height : "14rem"
+
+    //  paddingLeft:'16px'
+  },
+  
   hostedCard: {
-    height: "300px",
+    minHeight: "300px",
     borderColor: "#2D63AB",
     borderRadius: "8px",
     paddingBottom: "13px",
     marginRight: "24px",
+    overflowY: "auto",
     "@media (max-width:400px)": {
       marginRight: "1px",
     },
@@ -1026,7 +1043,7 @@ const DataSet = (theme) => ({
     top:"165px",
     zIndex:"1",
 
-  }
+  },
 });
 
 export default DataSet;

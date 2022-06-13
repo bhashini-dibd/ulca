@@ -81,8 +81,25 @@ Unlike ASR and OCR, there might be multiple correct alternatives to the referenc
 - Reference implementation : [Here](https://github.com/huggingface/datasets/blob/master/metrics/meteor/meteor.py "Here")
 - Tokenizer : Default
 
-*Additionally, few other metrics such as Rouge, Comet etc: were also experiemnted. However, they are not implemented as of now since they are not giving scores in a proper range for Indic languages. Feel free to drop your suggestions or knowledge about any new metrics. we would love to include them!*
 
+
+## TRANSLITERATION METRICS
+
+Generally transliteration is evaluvated at word level, rather than sentence level.
+
+### CER
+
+- Character Error Rate, Similar to that of ASR/OCR described above.
+- Reference implementation : [Here](https://github.com/AI4Bharat/IndicXlit/blob/master/model_training_scripts/evaluate/evaluate_result_with_rescore_option.py#L153 "Here")
+
+### TOP-1 ACCURACY
+- Top-1 accuracy is the conventional version of accuracy.
+- It measures the proportion of examples for which the predictedlabel matches the single target label.
+- The model answer (the one with highest probability) must be exactly the expected answer.
+- Reference implementation : [Here](https://github.com/AI4Bharat/IndicXlit/blob/master/model_training_scripts/evaluate/evaluate_result_with_rescore_option.py#L532 "Here")
+
+
+*Additionally, few other metrics such as Rouge, Comet etc: were also experiemnted. However, they are not implemented as of now since they are not giving scores in a proper range for Indic languages. Feel free to drop your suggestions or knowledge about any new metrics. we would love to include them!*
 
 ## Prerequisites
 

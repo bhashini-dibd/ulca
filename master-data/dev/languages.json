@@ -154,6 +154,11 @@
       "code": "raj",
       "label": "Rajasthani",
       "active": true
+    },
+    {
+      "code": "gom",
+      "label": "Goan Konkani",
+      "active": true
     }
   ]
 }
