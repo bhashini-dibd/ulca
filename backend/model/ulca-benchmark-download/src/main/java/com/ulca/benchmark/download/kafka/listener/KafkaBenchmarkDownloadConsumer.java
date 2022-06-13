@@ -30,6 +30,7 @@ import com.ulca.benchmark.service.BmProcessTrackerService;
 import com.ulca.benchmark.service.NotificationService;
 import com.ulca.benchmark.service.OcrBenchmark;
 import com.ulca.benchmark.service.TranslationBenchmark;
+import com.ulca.benchmark.service.TransliterationBenchmark;
 import com.ulca.benchmark.util.UnzipUtility;
 import com.ulca.model.dao.ModelDao;
 import com.ulca.model.dao.ModelExtended;
@@ -65,6 +66,9 @@ public class KafkaBenchmarkDownloadConsumer {
 
 	@Autowired
 	TranslationBenchmark translationBenchmark;
+	
+	@Autowired
+	TransliterationBenchmark transliterationBenchmark;
 	
 	@Autowired
 	AsrBenchmark asrBenchmark;
@@ -184,6 +188,16 @@ public class KafkaBenchmarkDownloadConsumer {
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.OCR.toString());
 						
 						datasetRecordCount = ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+								benchmarkProcessId);
+						bmProcess.setRecordCount(datasetRecordCount);
+						
+						break;
+						
+					case TRANSLITERATION:
+
+						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLITERATION.toString());
+						
+						datasetRecordCount = transliterationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
 								benchmarkProcessId);
 						bmProcess.setRecordCount(datasetRecordCount);
 						
