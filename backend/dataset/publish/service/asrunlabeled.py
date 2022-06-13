@@ -81,7 +81,7 @@ class ASRUnlabeledService:
                          "datasetType": dataset_type_asr_unlabeled})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'ASR UNLABELED - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'ASR UNLABELED - {metadata["userMode"]} - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading ASR UNLABELED dataset!!", "status": "FAILED"}

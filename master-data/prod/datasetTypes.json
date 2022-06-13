@@ -34,6 +34,11 @@
         "code": "tts-corpus",
         "label": "TTS Dataset",
         "active": true
+      },
+      {
+        "code": "transliteration-corpus",
+        "label": "Transliteration Dataset",
+        "active": true
       }
     ]
   }

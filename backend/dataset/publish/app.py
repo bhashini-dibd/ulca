@@ -30,7 +30,6 @@ if __name__ == '__main__':
     start_consumer()
     ulca_dataset_publish.run(host=app_host, port=app_port, threaded=True)
 
-
 # Log config
 dictConfig({
     'version': 1,
