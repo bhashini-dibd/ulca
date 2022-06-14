@@ -260,7 +260,7 @@ const SpeechToSpeechOptions = (props) => {
                 />
               </div>
               <IconButton
-                style={{ position: "absolute", top: "0", right: "0", }}
+                style={{ position: "absolute", top: "0", right: "17px", }}
                 onClick={() => handleCopyClick(prop)}
               >
 
