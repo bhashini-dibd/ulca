@@ -86,7 +86,7 @@ const SpeechToSpeechOptions = (props) => {
               <img
                 src={Start}
                 alt=""
-                onClick={() => handleStartRecording()}
+                onClick={()=> {handleStartRecording()}}
                 style={{ cursor: "pointer" }}
               />{" "}
             </div>
