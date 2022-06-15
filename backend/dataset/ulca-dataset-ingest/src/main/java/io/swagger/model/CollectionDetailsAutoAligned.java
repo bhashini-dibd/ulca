@@ -20,7 +20,7 @@ import javax.validation.constraints.*;
 @javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-06-09T08:20:20.072Z[GMT]")
 
 
-public class CollectionDetailsAutoAligned  implements OneOfParallelDatasetCollectionMethodCollectionDetails {
+public class CollectionDetailsAutoAligned  implements OneOfParallelDatasetCollectionMethodCollectionDetails, OneOfTransliterationDatasetCollectionMethodCollectionDetails {
   /**
    * name of the alignment tool
    */

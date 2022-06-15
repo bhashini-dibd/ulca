@@ -203,6 +203,12 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				io.swagger.model.License license = io.swagger.model.License.fromValue(licenseText);
 				if(license != null) {
 					parallelParamsSchema.setLicense(license);
+					if(license == io.swagger.model.License.CUSTOM_LICENSE) {
+						String licenseUrl = node.get("licenseUrl").asText();
+						if(licenseUrl.isBlank()) {
+							errorList.add("custom licenseUrl field value should be present");
+						}
+					}
 				}else {
 					errorList.add("license field value should be present in license list");
 				}
@@ -247,6 +253,11 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 					list.add(collectionDescriptionEnum);
 					parallelDatasetCollectionMethod.setCollectionDescription(list);
 
+					/*
+					 * collectionDetails is non mandatory
+					 */
+					if (node.get("collectionMethod").has("collectionDetails")) { 
+						
 					switch (collectionDescriptionEnum) {
 					case AUTO_ALIGNED:
 						if(node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {
@@ -323,7 +334,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 						break;
 
 					}
-
+				  }
 				} catch (Exception e) {
 					errorList.add("collectionMethod field value not proper.");
 					

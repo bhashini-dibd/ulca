@@ -2,17 +2,27 @@ package com.ulca.model.dao;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.model.Model;
 
 @Document(collection = "model")
+@CompoundIndexes({
+    @CompoundIndex(name = "name_version", def = "{'name': 1, 'version': 1}", unique = true)
+})
 public class ModelExtended extends Model {
 
 	@Id
 	@JsonProperty("modelId")
 	private String modelId;
+	
+	//@Indexed(unique=true)
+	@JsonProperty("version")
+	private String version;
 
 	@JsonProperty("userId")
 	private String userId;
@@ -22,7 +32,6 @@ public class ModelExtended extends Model {
 	
 	@JsonProperty("publishedOn")
 	private String publishedOn;
-	
 	
 	@JsonProperty("status")
 	private String status;
@@ -39,6 +48,14 @@ public class ModelExtended extends Model {
 	public void setModelId(String modelId) {
 		this.modelId = modelId;
 	}
+	
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
 
 	public ModelExtended userId(String userId) {
 		this.userId = userId;
@@ -53,12 +70,10 @@ public class ModelExtended extends Model {
 		this.userId = userId;
 	}
 
-
 	public ModelExtended submittedOn(String submittedOn) {
 		this.submittedOn = submittedOn;
 		return this;
 	}
-	
 	
 	public String getSubmittedOn() {
 		return submittedOn;
@@ -80,8 +95,6 @@ public class ModelExtended extends Model {
 	public void setPublishedOn(String publishedOn) {
 		this.publishedOn = publishedOn;
 	}
-	
-	
 
 	public ModelExtended status(String status) {
 		this.status = status;
@@ -95,7 +108,4 @@ public class ModelExtended extends Model {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
-	
-	
 }

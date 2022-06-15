@@ -211,14 +211,14 @@ class UserAuthenticationModel(object):
 
         
 
-    def activate_deactivate_user(self,user_email,status):
+    def activate_deactivate_user(self,user_email,status,from_id):
         """"Resetting activation status of verified users"""
 
         try:
             #connecting to mongo instance/collection
             collections = get_db()[USR_MONGO_COLLECTION]
             #searching for a verified account for given username
-            record = collections.find({"userName": user_email,"is_verified":True})
+            record = collections.find({"email": user_email,"isVerified":True})
             if record.count()==0:
                 log.info("{} is not a verified user".format(user_email), MODULE_CONTEXT)
                 return post_error("Data Not valid","Not a verified user",None)
@@ -229,17 +229,20 @@ class UserAuthenticationModel(object):
                     # if validity is not None:
                     #     log.info("{} belongs to an inactive org {}, hence operation failed".format(user_email,user["orgID"]), MODULE_CONTEXT)
                     #     return validity
+                    if user["userID"] == from_id:
+                        log.info("Self activation/deactivation not allowed")
+                        return post_error("Invalid Request", "You are not allowed to change your status", None)
                     #updating active status on database
-                    results = collections.update(user, {"$set": {"is_active": status}})
+                    results = collections.update(user, {"$set": {"isActive": status}})
                     if 'writeError' in list(results.keys()):
                         log.info("Status updation on database failed due to writeError")
-                        return post_error("db error", "writeError whie updating record", None)
+                        return post_error("DB error", "Something went wrong, please try again", None)
                     log.info("Status updation on database successful")
             else:
-                return post_error("Data Not valid","Somehow there exist more than one record matching the given parameters ",None)               
+                return post_error("Data Not valid","Something went wrong, please try again",None)               
         except Exception as e:
-            log.exception("Database  exception ",  MODULE_CONTEXT, e)
-            return post_error("Database exception", "Exception:{}".format(str(e)), None)
+            log.exception(f"Database  exception : {e}")
+            return post_error("Database exception", "Something went wrong, please try again", None)
            
            
     def token_search(self,token):

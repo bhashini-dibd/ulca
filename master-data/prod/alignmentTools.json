@@ -1,0 +1,40 @@
+{
+  "alignmentTools": [
+    {
+      "code": "labse",
+      "label": "LaBSE",
+      "active": true,
+      "collectionMethod": [
+        "auto-aligned",
+        "auto-aligned-from-parallel-docs"
+      ],
+      "datasetType": [
+        "parallel-corpus"
+      ]
+    },
+    {
+      "code": "laser",
+      "label": "LASER",
+      "active": true,
+      "collectionMethod": [
+        "auto-aligned",
+        "auto-aligned-from-parallel-docs"
+      ],
+      "datasetType": [
+        "parallel-corpus"
+      ]
+    },
+    {
+      "code": "aenaes",
+      "label": "AENAES",
+      "active": true,
+      "collectionMethod": [
+        "auto-aligned"
+      ],
+      "datasetType": [
+        "asr-corpus",
+        "asr-unlabeled-corpus"
+      ]
+    }
+  ]
+}

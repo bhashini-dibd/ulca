@@ -1,19 +1,18 @@
 from flask import Blueprint
 from flask_restful import Api
 
-from src.resources.dataset import  DatasetSearchResource, DatasetAggregateResource, ModelAggregateResource
+from src.resources.dataset import DatasetAggregateResource
+from src.resources.dataset_tabular_report import DatasetTabularResource
 
 CORPUS_BLUEPRINT = Blueprint("corpus", __name__)
 
-
-Api(CORPUS_BLUEPRINT).add_resource(
-    DatasetSearchResource, "/v0/store/attributes"
-)
-
+#end point for chart data
 Api(CORPUS_BLUEPRINT).add_resource(
     DatasetAggregateResource, "/v0/store/search"
 )
 
+#end point for tabular report data
 Api(CORPUS_BLUEPRINT).add_resource(
-    ModelAggregateResource, "/v0/store/model/search"
+    DatasetTabularResource, "/v0/store/reportdata"
 )
+

@@ -1,5 +1,7 @@
 Flask==1.1.2
 Flask-WTF==0.14.3
+werkzeug==2.0.3
+itsdangerous==2.0.1
 elasticsearch==7.8.0
 Jinja2==2.11.1
 kafka-python==2.0.1
@@ -20,7 +22,9 @@ pyicu>=2.7.4
 wheel>=0.23.0
 pycld2>=0.3
 six>=1.7.3
-futures>=2.1.6
+futures==2.2.0
 morfessor>=2.0.2a1
 polyglot>=16.7.4
 Pillow==8.3.0
+python-Levenshtein>=0.12.2
+fuzzywuzzy>=0.18.0

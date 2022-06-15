@@ -1,6 +1,5 @@
 package org.ulca.filters.pre;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import org.ulca.cache.ZuulConfigCache;
@@ -14,10 +13,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StreamUtils;
-
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.*;
@@ -33,7 +28,6 @@ import static org.ulca.constants.RequestContextConstants.*;
  */
 public class RbacFilter extends ZuulFilter {
 
-    private ObjectMapper objectMapper;
     public ResourceLoader resourceLoader;
 
     @Autowired
@@ -59,7 +53,6 @@ public class RbacFilter extends ZuulFilter {
 
     public RbacFilter(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
-        objectMapper = new ObjectMapper();
     }
 
     @Value("${ulca.superuser.role.code}")
@@ -106,24 +99,7 @@ public class RbacFilter extends ZuulFilter {
     public Boolean verifyAuthorization(RequestContext ctx, String uri) {
         try {
             User user = (User) ctx.get(USER_INFO_KEY);
-            String requestEntityStr;
-            if(ctx.getRequest().getMethod().equals("POST") || ctx.getRequest().getMethod().equals("PUT")) {
-                String charset = ctx.getRequest().getCharacterEncoding();
-                InputStream in = (InputStream) ctx.get("requestEntity");
-                if(null == in)
-                    in = ctx.getRequest().getInputStream();
-                requestEntityStr = StreamUtils.copyToString(in, Charset.forName(charset));
-            }else {
-                if((Boolean)ctx.get(PATH_PARAM_URI)){
-                    requestEntityStr = String.format("%s%s", appHost, ctx.get(REQ_URI));
-                }
-                else{
-                    StringBuilder builder = new StringBuilder();
-                    builder.append(uri);
-                    requestEntityStr = String.format("%s%s", appHost, appendQueryParams(ctx, builder));
-                }
-            }
-            Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), requestEntityStr);
+            Boolean sigVerify = verifySignature(ctx.get(SIG_KEY).toString(), user.getPrivateKey(), (String) ctx.get(PAYLOAD_KEY));
             if(!sigVerify) {
                 logger.info("The signature doesn't match with the public key!");
                 return false;
@@ -160,21 +136,17 @@ public class RbacFilter extends ZuulFilter {
      * Verifies signature with private key
      * @param signature
      * @param privateKey
-     * @param sigValue
+     * @param payload
      * @return
      */
-    public Boolean verifySignature(String signature, String privateKey, String sigValue) {
+    public Boolean verifySignature(String signature, String privateKey, String payload) {
         try{
             MessageDigest digest = MessageDigest.getInstance("MD5");
-            String sigValueHash  = bytesToHex(digest.digest(sigValue.trim().getBytes(StandardCharsets.UTF_8)));
-            String sigHash = privateKey.trim() + "|" + sigValueHash;
+            String sigHash = privateKey.trim() + "|" + payload;
             String hash = bytesToHex(digest.digest(sigHash.trim().getBytes(StandardCharsets.UTF_8)));
             Boolean sig = hash.equals(signature.trim());
-            if(!sig){
-                logger.info("SigValue: {}", sigValue);
-                logger.info("Signature: {}", signature);
-                logger.info("Hash: {}", hash);
-            }
+            if(!sig)
+                logger.info("The signature doesn't match!");
             return sig;
         }catch (Exception e) {
             logger.error("Exception while verifying signature: ", e);

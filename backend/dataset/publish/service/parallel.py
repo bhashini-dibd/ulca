@@ -3,7 +3,8 @@ import time
 import uuid
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, no_of_parallel_processes, offset, limit, user_mode_pseudo, \
-    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel, parallel_updatable_keys
+    sample_size, parallel_immutable_keys, parallel_non_tag_keys, dataset_type_parallel, parallel_updatable_keys, \
+    parallel_derived_keys, parallel_dataset_submitter, parallel_dataset_collection_method
 from repository.parallel import ParallelRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
@@ -11,6 +12,7 @@ from events.error import ErrorEvent
 from processtracker.processtracker import ProcessTracker
 from events.metrics import MetricEvent
 from .datasetservice import DatasetService
+import re
 
 
 log = logging.getLogger('file')
@@ -68,10 +70,10 @@ class ParallelService:
                         {"status": "FAILED", "serviceRequestNumber": metadata["serviceRequestNumber"]})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'Parallel - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'Parallel - {metadata["userMode"]} - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
-            return {"message": "EXCEPTION while loading Parallel dataset!!", "status": "FAILED"}
+            return {"message": "EXCEPTION while loading Par allel dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
 
     '''
@@ -89,8 +91,8 @@ class ParallelService:
                         if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
-                                dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                                 if metadata["userMode"] != user_mode_pseudo:
+                                    dup_data["lastModifiedOn"] = eval(str(time.time()).replace('.', '')[0:13])
                                     repo.update(dup_data)
                                 return "UPDATE", dup_data, record
                             else:
@@ -131,8 +133,7 @@ class ParallelService:
                 db_query = {"tags": {"$all": query["hash"]}}
             else:
                 db_query = {"tags": {"$in": query["hash"]}}
-            exclude = {"_id": False}
-            data = repo.search_internal(db_query, exclude, None, None)
+            data = repo.search_internal(db_query, None, None, None)
             if data:
                 return data
             else:
@@ -196,7 +197,12 @@ class ParallelService:
                                     db_record[key].append(entry)
                     else:
                         if isinstance(db_record[key], list):
-                            if data[key] not in db_record[key]:
+                            eq = False
+                            for r in db_record[key]:
+                                eq = data[key] == r
+                                if eq:
+                                    break
+                            if not eq:
                                 found = True
                                 db_record[key].append(data[key])
                         else:
@@ -276,6 +282,8 @@ class ParallelService:
             derived_data["datasetId"] = list(set(derived_data["datasetId"]))
             derived_data["datasetType"] = metadata["datasetType"]
             derived_data["derived"] = True
+            derived_data["submitter"] = parallel_dataset_submitter
+            derived_data["collectionMethod"] = parallel_dataset_collection_method
             derived_data["tags"] = service.get_tags(derived_data, parallel_non_tag_keys)
             derived_data["id"] = str(uuid.uuid4())
             return derived_data
@@ -289,7 +297,7 @@ class ParallelService:
     '''
     def get_parallel_dataset(self, query):
         log.info(f'Fetching Parallel datasets for SRN -- {query["serviceRequestNumber"]}')
-        pt.task_event_search(query, None)
+        pt.task_event_search(query, None, dataset_type_parallel)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
@@ -300,10 +308,30 @@ class ParallelService:
             if 'targetLanguage' in query.keys():
                 for tgt in query["targetLanguage"]:
                     tgt_lang.append(tgt)
-            if 'originalSourceSentence' in query.keys():
-                db_query['originalSourceSentence'] = query['originalSourceSentence']
-            else:
-                db_query['originalSourceSentence'] = False
+            if 'collectionMethod' in query.keys():
+                tags.extend(query["collectionMethod"])
+            if 'alignmentTool' in query.keys():
+                tags.extend(query["alignmentTool"])
+            if 'editingTool' in query.keys():
+                tags.extend(query["editingTool"])
+            if 'translationModel' in query.keys():
+                tags.extend(query["translationModel"])
+            if 'license' in query.keys():
+                tags.extend(query["license"])
+            if 'domain' in query.keys():
+                tags.extend(query["domain"])
+            if 'datasetId' in query.keys():
+                tags.extend(query["datasetId"])
+                db_query["derived"] = False
+            if tags:
+                db_query["tags"] = tags
+            if tgt_lang:
+                db_query["targetLanguage"] = tgt_lang
+            if 'collectionSource' in query.keys():
+                coll_source = [re.compile(cs, re.IGNORECASE) for cs in query["collectionSource"]]
+                db_query["collectionSourceQuery"] = {"collectionSource": {"$in": coll_source}}
+            if 'submitterName' in query.keys():
+                db_query["submitterNameQuery"] = {"submitter": {"$elemMatch": {"name": query["submitterName"]}}}
             if 'minScore' in query.keys():
                 score_query["$gte"] = query["minScore"]
             if 'maxScore' in query.keys():
@@ -312,25 +340,14 @@ class ParallelService:
                 db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": score_query}}}
             if 'score' in query.keys():
                 db_query["scoreQuery"] = {"collectionMethod": {"$elemMatch": {"collectionDetails.alignmentScore": query["score"]}}}
-            if 'collectionSource' in query.keys():
-                tags.extend(query["collectionSource"])
-            if 'collectionMode' in query.keys():
-                tags.extend(query["collectionMode"])
-            if 'license' in query.keys():
-                tags.extend(query["licence"])
-            if 'domain' in query.keys():
-                tags.extend(query["domain"])
-            if 'datasetId' in query.keys():
-                tags.append(query["datasetId"])
-                db_query["derived"] = False
-            if tags:
-                db_query["tags"] = tags
-            if tgt_lang:
-                db_query["targetLanguage"] = tgt_lang
             if 'multipleContributors' in query.keys():
                 db_query["multipleContributors"] = query["multipleContributors"]
             else:
                 db_query["multipleContributors"] = False
+            if 'originalSourceSentence' in query.keys():
+                db_query['originalSourceSentence'] = query['originalSourceSentence']
+            else:
+                db_query['originalSourceSentence'] = False
             if 'groupBy' in query.keys():
                 db_query["groupBy"] = query["groupBy"]
                 if 'countOfTranslations' in query.keys():
@@ -344,19 +361,22 @@ class ParallelService:
                 size = sample_size if count > sample_size else count
                 path, path_sample = utils.push_result_to_object_store(result, query["serviceRequestNumber"], size)
                 if path:
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": count, "dataset": path, "datasetSample": path_sample}
-                    pt.task_event_search(op, None)
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                          "count": count, "dataset": path, "datasetSample": path_sample}
+                    pt.task_event_search(op, None, dataset_type_parallel)
                 else:
                     log.error(f'There was an error while pushing result to object store!')
                     error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_parallel, "serviceRequestNumber": query["serviceRequestNumber"],
                                                    "message": "There was an error while pushing result to object store"}
-                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None, "datasetSample": None}
-                    pt.task_event_search(op, error)
+                    op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                          "count": 0, "sample": [], "dataset": None, "datasetSample": None}
+                    pt.task_event_search(op, error, dataset_type_parallel)
             else:
                 log.info(f'No records retrieved for SRN -- {query["serviceRequestNumber"]}')
-                op = {"serviceRequestNumber": query["serviceRequestNumber"], "count": 0, "sample": [], "dataset": None,
+                op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
+                      "count": 0, "sample": [], "dataset": None,
                       "datasetSample": None}
-                pt.task_event_search(op, None)
+                pt.task_event_search(op, None, dataset_type_parallel)
             log.info(f'Done!')
             op["pipeline"] = pipeline
             return op

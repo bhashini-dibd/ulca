@@ -105,7 +105,7 @@ class PTRepo:
             log.exception(f'Exception in redis search: {e}', e)
             return None
 
-    def redis_key_inc(self, key, error):
+    def redis_key_inc(self, key, duration, error):
         try:
             client = self.get_redis_instance()
             value = "validateSuccess"
@@ -114,6 +114,14 @@ class PTRepo:
             val = client.hgetall(key)
             if val:
                 client.hincrby(key, value, 1)
+
+            if duration:
+                valueDuration = "validateSuccessSeconds"
+                if error:
+                    valueDuration = "validateErrorSeconds"
+                valduration = client.hgetall(key)
+                if valduration:
+                    client.hincrbyfloat(key, valueDuration, duration)
         except Exception as e:
             log.exception(f'Exception in redis search: {e}', e)
             return None

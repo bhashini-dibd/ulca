@@ -3,12 +3,14 @@ from logging.config import dictConfig
 from repository.parallel import ParallelRepo
 from repository.datasetrepo import DatasetRepo
 from repository.asr import ASRRepo
+from repository.tts import TTSRepo
 from repository.ocr import OCRRepo
 from repository.monolingual import MonolingualRepo
 from repository.asrunlabeled import ASRUnlabeledRepo
+from repository.transliteration import TransliterationRepo
 from utils.datasetutils import DatasetUtils
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, \
-    dataset_type_asr_unlabeled
+    dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration
 
 log = logging.getLogger('file')
 
@@ -16,9 +18,11 @@ mongo_instance = None
 parallelrepo = ParallelRepo()
 datasetrepo = DatasetRepo()
 asrrepo = ASRRepo()
+ttsrepo = TTSRepo()
 ocrrepo = OCRRepo()
 monorepo = MonolingualRepo()
 asrunlabeledrepo = ASRUnlabeledRepo()
+transrepo = TransliterationRepo()
 utils = DatasetUtils()
 
 
@@ -39,16 +43,30 @@ class DatasetService:
             ocrrepo.set_ocr_collection()
             monorepo.set_monolingual_collection()
             asrunlabeledrepo.set_asr_unlabeled_collection()
+            ttsrepo.set_tts_collection()
+            transrepo.set_transliteration_collection()
         elif request["col"] == dataset_type_parallel:
+            log.info("Parallel Dataset.....")
             parallelrepo.set_parallel_collection()
         elif request["col"] == dataset_type_asr:
+            log.info("ASR Dataset.....")
             asrrepo.set_asr_collection()
         elif request["col"] == dataset_type_ocr:
+            log.info("OCR Dataset.....")
             ocrrepo.set_ocr_collection()
         elif request["col"] == dataset_type_monolingual:
+            log.info("Monolingual Dataset.....")
             monorepo.set_monolingual_collection()
         elif request["col"] == dataset_type_asr_unlabeled:
+            log.info("ASR Unlabeled Dataset.....")
             asrunlabeledrepo.set_asr_unlabeled_collection()
+        elif request["col"] == dataset_type_tts:
+            log.info("TTS Dataset.....")
+            ttsrepo.set_tts_collection()
+        elif request["col"] == dataset_type_transliteration:
+            log.info("Transliteration Dataset.....")
+            transrepo.set_transliteration_collection()
+        log.info("Done!")
 
     '''
     Method to check and process duplicate records.
@@ -89,7 +107,12 @@ class DatasetService:
                                 db_record[key].append(entry)
                 else:
                     if isinstance(db_record[key], list):
-                        if data[key] not in db_record[key]:
+                        eq = False
+                        for r in db_record[key]:
+                            eq = data[key] == r
+                            if eq:
+                                break
+                        if not eq:
                             found = True
                             db_record[key].append(data[key])
                     else:

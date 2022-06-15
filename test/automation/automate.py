@@ -1,152 +1,146 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jul 24 10:45:14 2021.
+Created on Sat Dec  4 17:35:27 2021.
 
-@author: dhiru579 @ Tarento.
+@author: dhiru579 @ Tarento
 """
 import os
-import sys
 from argparse import ArgumentParser
 
 import config
 import driver_script
-import core_script as core
-import dataset_script as dataset
-import model_script as model
-
+from core import core_all as core
+from test import test_all as test
+from dataset import dataset_all as dataset
+from model import model_all as model
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-
-    parser.add_argument("--update-schema",
-                        help="updates the schema", action="store_true")
-    parser.add_argument("--chart-data",
-                        help="gets chart data", action="store_true")
-    parser.add_argument("-g", "--groupby", help="groupby in chart " +
-                        "['domain', 'collection', 'submitter']",
-                        type=str, default="")
-    parser.add_argument("--test-website",
-                        help="performs website testing on browser",
-                        action="store_true")
-
-    parser.add_argument("-l", "--login", help="checks if credentials valid",
-                        action="store_true")
-    parser.add_argument("-d", "--dataset", help="flag for dataset functions",
-                        action="store_true")
-    parser.add_argument("-m", "--model", help="flag for model functions",
-                        action="store_true")
-    parser.add_argument("-w", "--wrapper", help="complete automation flag",
-                        action="store_true")
-
-    parser.add_argument("-i", "--input",
-                        help="input file [dataset=csv|model=json]",
-                        type=str, default="")
-    parser.add_argument("-n", "--name", help="Dataset Name",
-                        type=str, default="")
-    parser.add_argument("-url", "--url", help="Dataset URL",
-                        type=str, default="")\
-
-    parser.add_argument("-t", "--type", help="Dataset Type",
-                        type=str, default="")
-    parser.add_argument("-src", "--source-lang", help="source language",
-                        type=str, default="")
-    parser.add_argument("-tgt", "--target-lang",
-                        help="target language eg:hi,mr", type=str, default="")
-    parser.add_argument("-dom", "--domain", help="domain for searched dataset",
-                        type=str, default="")
-    parser.add_argument("-coll", "--collection-method",
-                        help="collection method for dataset",
-                        type=str, default="")
-    parser.add_argument("-ma", "--m-annotators", action="store_true",
-                        help="multiple annotators for downloading")
-    parser.add_argument("-mt", "--m-translators", action="store_true",
-                        help="multiple translators for downloading")
-    parser.add_argument("-org", "--org-source", action="store_true",
-                        help="orginal source sentences")
+    # flag-arguments
+    parser.add_argument("-u", "--update-schema", help="updating schema", action="store_true")
+    parser.add_argument("-c", "--chart", help="gets chart data", action="store_true")
+    parser.add_argument("-ta","--test-all", help="performs website testing", action="store_true")
+    parser.add_argument("-tp","--test-part", help="performs website testing", action="store_true")
+    parser.add_argument("-l", "--login", help="checking credentials", action="store_true")
+    parser.add_argument("-d", "--dataset", help="flag for dataset functions", action="store_true")
+    parser.add_argument("-m", "--model", help="flag for model functions", action="store_true")
+    parser.add_argument("--publish", help="publish the model", action="store_true")
+    parser.add_argument("--unpublish", help="unpublish the model", action="store_true")
+    parser.add_argument("--dont-skip", action="store_true", help="stops skipping status check",)
+    # value-argumenst
+    parser.add_argument("-n", "--name", help="Dataset/Model Name", type=str, default="")
+    parser.add_argument("-url", "--url", help="Dataset/Model URL", type=str, default="")
+    parser.add_argument("-t", "--type", help="Dataset/Model Type", type=str, default="")
+    parser.add_argument("-i", "--input", help="input csv/jsonfile,urls,seentence", type=str, default="",)
+    parser.add_argument("-g","--group",help="group chart by ['domain', 'collection', 'submitter']",type=str,default="",)
+    parser.add_argument("-src", "--source", help="source language", type=str, default="")
+    parser.add_argument("-tgt", "--target", help="target languages", type=str, default="")
+    parser.add_argument("--domain", help="domain for searched dataset", type=str, default="")
+    parser.add_argument("-b", "--benchmark", help="Benchamrk Name", type=str, default="")
+    parser.add_argument("--metric", help="Metric Name", type=str, default="")
+    parser.add_argument("--list", help="listing models,benchmark,metrics", type=str, default="")
 
     args = parser.parse_args()
+
     update_schema_flag = args.update_schema
-    test_flag = args.test_website
-    chart_flag = args.chart_data
-    groupby = args.groupby
+    test_a_flag = args.test_all
+    test_p_flag = args.test_part
+    chart_flag = args.chart
+    groupby = args.group
 
     login_flag = args.login
     dataset_flag = args.dataset
     model_flag = args.model
-    wrapper_flag = args.wrapper
+    publish_flag = args.publish
+    unpublish_flag = args.unpublish
+    dont_skip_flag = args.dont_skip
 
-    inpfile = args.input.strip()
+    inp = args.input.strip()
     name = args.name.strip()
     url = args.url.strip()
 
-    typex = args.type.lower().replace(' ', "-").strip()
-    tgt = args.target_lang.lower().split(',')
-    tgt = list(filter(None, tgt))
-    src = args.source_lang.lower()
-    coll_mtd = args.collection_method.lower().replace(' ', "-").strip()
-    domain = args.domain.lower().replace(' ', "-").strip()
-    m_transl = args.m_translators
-    m_anno = args.m_annotators
-    org_source = args.org_source
-
+    typex = args.type.lower().replace(" ", "-").strip()
+    domain = args.domain.lower().replace(" ", "-").strip()
+    benchmark = args.benchmark.strip()
+    metric = args.metric.strip()
+    src = args.source.lower()
+    tgt = args.target.lower().split(",")  # spliting str into list
+    tgt = list(filter(None, tgt))  # filtering list
+    listby = args.list.lower()
+    
     # enabling-terminal-color-in-windows-only
-    if os.name.lower() == 'nt':
-        os.system('color')
-    # adding -corpus to the dataset-type
-    if typex.find("-corpus") < 0:
-        typex += "-corpus"
+    if os.name.lower() == "nt":
+        os.system("color")
+    
 
     # updating schema
     if update_schema_flag:
-        core.update_schema(config.ULCA_SCHEMAFILE_URL,
-                           config.SCHEMA_FILENAME)
-        sys.exit(0)
+        core.update_schema(config.ULCA_SCHEMAFILE_URL, config.SCHEMA_FILENAME)
+        core.exit_program()
 
     # loading the driver
-    driver = driver_script.load_driver(config.DEFAULT_BROWSER)
-
-    # running test script
-    if test_flag:
-        driver = core.test_elements_with_browser(driver)
-        driver_script.close_driver(driver)
-        sys.exit(0)
+    driver = driver_script.load_driver(config.AUTOMATION_BROWSER)
 
     # getting chart data
     if chart_flag:
+        if typex.find("-corpus") < 0:
+            typex += "-corpus"
         driver = core.get_chart_data(typex, groupby, src, tgt, driver)
         driver_script.close_driver(driver)
-        sys.exit(0)
+        core.exit_program()
 
-    # login process
-    login_status, driver = core.perform_login(driver)
-
-    if login_flag or (not login_status):
+    # running public-web-test script
+    if test_a_flag:
+        driver = test.perform_testing_all(core.perform_login,driver)
         driver_script.close_driver(driver)
-        sys.exit(0)
+        core.exit_program()
+    if test_p_flag:
+        driver = test.perform_testing_partly(core.perform_login,driver)
+        driver_script.close_driver(driver)
+        core.exit_program()
+    
+    login_status = False
+   
+    # if just login then quit
+    if login_flag:
+        login_status, driver = core.perform_login(driver)
+        driver_script.close_driver(driver)
+        core.exit_program()
     # dataset related processes
     elif dataset_flag:
+        login_status, driver = core.perform_login(driver)
+        # adding -corpus to the dataset-type
+        if typex.find("-corpus") < 0:
+            typex += "-corpus"
         if name != "":
-            driver = dataset.perform_upload_with_status(name, url, driver)
-        elif inpfile != "":
-            driver = dataset.perform_upload_with_csv(
-                inpfile, driver)
+            # submit-dataset
+            driver = dataset.perform_submit_get_status(name, url, driver)
+        elif inp != "":
+            # submit-dataset-using-csv
+            driver = dataset.perform_upload_with_csv(inp, driver, d_skip=dont_skip_flag)
         else:
-            driver = dataset.perform_search_and_download(typex, tgt, src,
-                                                         domain, coll_mtd,
-                                                         m_anno, m_transl,
-                                                         org_source, driver)
+            # search-and-download-dataset
+            driver = dataset.perform_search_and_download(typex, tgt, src, domain, driver)
+    
     # model related processes
     elif model_flag:
-        driver = model.perform_translate(name, typex, inpfile, driver)
-        # driver = model.submit_model(dataset_name, csvfile, driver)
-    # wrapper process
-    elif wrapper_flag:
-        print('wrapper method still in-progress.')
+        if typex != "":
+            driver = model.perform_translate(name, typex, inp, driver)
+        else:
+            login_status, driver = core.perform_login(driver)    
+            if inp != "":
+                status, driver = model.perform_model_submit(name, inp, driver)
+            elif listby != "":
+                driver = model.list_public_model_data(True,driver)        
+            elif (unpublish_flag or publish_flag): #status and
+                driver = model.run_publish_task(name, publish_flag, unpublish_flag, driver)
+            else:
+                driver = model.run_benchmark(name, benchmark, metric, driver)
+    
     else:
-        print("no argument found. choices=[-l,-s,-d]")
-        print("-h for help")
-
-    # performs logount and closes browser-driver
-    core.perform_logout(driver)
+        core.print_no_flag_found()
+        
+    
     driver_script.close_driver(driver)
+    

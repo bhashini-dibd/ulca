@@ -1,0 +1,12 @@
+{
+    "inferenceEndpoints": [
+      {
+        "code": "https://cdac.ulcacontrib.org/",
+        "label": "Vakyansh ASR",
+        "active": true,
+        "submitter": [
+          "Vakyansh"
+        ]
+      }
+    ]
+  }

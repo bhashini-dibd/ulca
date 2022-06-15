@@ -19,7 +19,6 @@ public class ModelSearchRequest {
 	@NotBlank(message="task is required")
 	private String task;
 	
-	@NotBlank(message="sourceLanguage is required")
 	private String sourceLanguage;
 	
 	private String targetLanguage;
