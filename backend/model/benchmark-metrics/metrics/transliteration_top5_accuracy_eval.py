@@ -27,7 +27,7 @@ class TransliterationTopFiveAccuracyEval(ModelMetricEval):
                 else:
                     top5_match.append(0)
                 top5_res = Counter(top5_match)
-                return top5_res[1]/len(ground_truth) *100
+                return top5_res[1]/len(top5_match) *100
         except Exception as e:
             log.exception(f"Exception in calculating Accuracy: {str(e)}")
 
