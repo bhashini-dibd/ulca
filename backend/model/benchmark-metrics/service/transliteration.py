@@ -26,6 +26,7 @@ class TransliterationMetricEvalHandler:
                     if not metric_inst:
                         log.info("Metric definition not found")
                         doc = {'benchmarkingProcessId':request['benchmarkingProcessId'],'benchmarkDatasetId': benchmark['datasetId'],'eval_score': None}
+                        log.info(f'doc {doc}')
                         repo.insert(doc)
                         repo.insert_pt({'benchmarkingProcessId': request['benchmarkingProcessId'], 'status': 'Failed'})
                         mail_notif_event = {"event": ulca_notifier_benchmark_failed_event, "entityID": request['modelId'], "userID": request['userId'], "details":{"modelName":request['modelName']}}
