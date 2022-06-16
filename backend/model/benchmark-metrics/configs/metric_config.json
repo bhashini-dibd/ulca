@@ -34,6 +34,9 @@
     },
     {
         "task_type":"transliteration", "metric_name":"top-1 accuracy", "metric_implementation":"TransliterationTopOneAccuracyEval", "score_context":"default"
+    },
+    {
+        "task_type":"transliteration", "metric_name":"top-5 accuracy", "metric_implementation":"TransliterationTopFiveAccuracyEval", "score_context":"default"
     }
     
 ]
