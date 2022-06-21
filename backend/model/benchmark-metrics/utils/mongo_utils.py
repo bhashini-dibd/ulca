@@ -45,7 +45,7 @@ class BenchMarkingProcessRepo:
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
             log.info(f'data {data}')
             if data['eval_score'] is not None:
-                res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, True)
+                res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
                 log.info(f'result of update data in collection benchmarkprocess {res}')
                 log.info(f' updated data in collection benchmarkprocess {data}')
 
@@ -85,7 +85,7 @@ class BenchMarkingProcessRepo:
 
         try:
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
-            res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "tool": "benchmark"}, {"$set": {"status": data["status"], "endTime": curr_time} }, False, False, True)
+            res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "tool": "benchmark"}, {"$set": {"status": data["status"], "endTime": curr_time} }, False, False, None, None)
             log.info(f'result of update data in collection ulca-bm-tasks {res}')
             log.info(f' updated data in collection ulca-bm-tasks {data}')
             if res["nModified"] == 1:
