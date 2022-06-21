@@ -27,7 +27,7 @@ class BenchMarkingProcessRepo:
         else:
             return mongo_instance
 
-    
+
     def insert(self, data):
         
         col = self.get_mongo_instance()
@@ -45,19 +45,22 @@ class BenchMarkingProcessRepo:
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
             log.info(f'data {data}')
             if data['eval_score'] is not None:
-                res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
-                log.info(f'result of update data in collection benchmarkprocess {res}')
-                log.info(f' updated data in collection benchmarkprocess {data}')
-
+                while True:
+                    res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
+                    log.info(f'result of update data in collection benchmarkprocess {res}')
+                    fin = col.find({"benchmarkProcessId": data["benchmarkingProcessId"]})
+                    if fin["status"] == "Completed" and fin["score"] == data["eval_score"] :
+                        log.info(f' updated data in collection benchmarkprocess {data}')
+                        break
             else:
                 res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Failed", "lastModifiedOn": curr_time} }, False, False, True)
 
             # col.update_one({"_id":doc_id}, {"$set": {"status": "Completed" }}, False, True)
             # log.info(res)
-            if res["nModified"] == 1:
-                log.info(f"Updated evaluation score for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
-            else:
-                log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']} eval_score: {data['eval_score']}")
+            #if res["nModified"] == 1:
+             #   log.info(f"Updated evaluation score for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
+            #else:
+            #    log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']} eval_score: {data['eval_score']}")
             #     else:
             #         log.error(f"Document not found for benchmarkingProcessId: {data['benchmarkingProcessId']} and datasetId: {data['benchmarkDatasetId']}")
             # else:
@@ -88,10 +91,10 @@ class BenchMarkingProcessRepo:
             res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "tool": "benchmark"}, {"$set": {"status": data["status"], "endTime": curr_time} }, False, False, None, None)
             log.info(f'result of update data in collection ulca-bm-tasks {res}')
             log.info(f' updated data in collection ulca-bm-tasks {data}')
-            if res["nModified"] == 1:
-                log.info(f"Updated process tracker for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
-            else:
-                log.error(f"Document not found in process tracker for benchmarkingProcessId: {data['benchmarkingProcessId']}")
+            #if res["nModified"] == 1:
+            #    log.info(f"Updated process tracker for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
+            ##else:
+              #  log.error(f"Document not found in process tracker for benchmarkingProcessId: {data['benchmarkingProcessId']}")
 
         except Exception as e:
             log.exception(f"Exception while updating process tracker for benchmarkingProcessId: {data['benchmarkingProcessId']}: {str(e)}")
