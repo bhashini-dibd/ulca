@@ -49,9 +49,11 @@ class BenchMarkingProcessRepo:
                     res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
                     log.info(f'result of update data in collection benchmarkprocess {res}')
                     fin = col.find({"benchmarkProcessId": data["benchmarkingProcessId"]})
-                    if fin["status"] == "Completed" and fin["score"] == data["eval_score"] :
-                        log.info(f' updated data in collection benchmarkprocess {data}')
-                        break
+                    for f in fin:
+                        log.info(f"fin is {f}")
+                        if f["status"] == "Completed" and f["score"] == data["eval_score"] :
+                            log.info(f' updated data in collection benchmarkprocess {data}')
+                            break
             else:
                 res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Failed", "lastModifiedOn": curr_time} }, False, False, True)
 
