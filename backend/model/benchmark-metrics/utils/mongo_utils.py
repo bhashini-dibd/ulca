@@ -45,16 +45,13 @@ class BenchMarkingProcessRepo:
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
             log.info(f'data {data}')
             if data['eval_score'] is not None:
-                while True:
-                    res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
-                    log.info(f'result of update data in collection benchmarkprocess {res}')
-                    fin = col.find({"benchmarkProcessId": data["benchmarkingProcessId"]})
-                    log.info(f'fin is {fin}')
-                    if fin[0]["status"] == "Completed" :#and f["score"] == data["eval_score"] :
-                        log.info(f' updated data in collection benchmarkprocess {data}')
-                        break
+                res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
+                log.info(f'result of update data in collection benchmarkprocess {res}')
+                #fin = col.find({"benchmarkProcessId": data["benchmarkingProcessId"]})
+                #log.info(f'fin is {fin}')
+                    
             else:
-                res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Failed", "lastModifiedOn": curr_time} }, False, False, True)
+                res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Failed", "lastModifiedOn": curr_time} }, False, False, None, None)
 
             # col.update_one({"_id":doc_id}, {"$set": {"status": "Completed" }}, False, True)
             # log.info(res)
