@@ -16,6 +16,7 @@ class BenchMarkingProcessRepo:
         global mongo_instance
         client = pymongo.MongoClient(ulca_db_cluster)
         mongo_instance = client[mongo_db_name][mongo_collection_name]
+        log.info(f'mongo db and collection{mongo_db_name},{mongo_collection_name}')
         return mongo_instance
 
     def get_mongo_instance(self):
@@ -42,8 +43,12 @@ class BenchMarkingProcessRepo:
             #     if benchmark_docs:
             # res = col.update({'benchmarkingProcessId':data['benchmarkingProcessId'], 'benchmarkDatasetId':data['benchmarkDatasetId']}, {"$set": {"score": data['eval_score'], "status": "Completed"} }, False, False, True)
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
+            log.info(f'data {data}')
             if data['eval_score'] is not None:
                 res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, True)
+                log.info(f'result of update data in collection benchmarkprocess {res}')
+                log.info(f' updated data in collection benchmarkprocess {data}')
+
             else:
                 res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Failed", "lastModifiedOn": curr_time} }, False, False, True)
 
@@ -81,7 +86,8 @@ class BenchMarkingProcessRepo:
         try:
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
             res = col.update({"benchmarkProcessId": data["benchmarkingProcessId"], "tool": "benchmark"}, {"$set": {"status": data["status"], "endTime": curr_time} }, False, False, True)
-
+            log.info(f'result of update data in collection ulca-bm-tasks {res}')
+            log.info(f' updated data in collection ulca-bm-tasks {data}')
             if res["nModified"] == 1:
                 log.info(f"Updated process tracker for becnhmarkingProcessId: {data['benchmarkingProcessId']}")
             else:

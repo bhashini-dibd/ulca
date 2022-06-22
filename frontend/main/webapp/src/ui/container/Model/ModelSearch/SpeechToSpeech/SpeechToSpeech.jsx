@@ -150,6 +150,9 @@ const SpeechToSpeech = () => {
       });
     } else {
       setRecordAudio(RecordState.START);
+      setTimeout(() => {
+        handleStopRecording();
+      }, 60000);
     }
   };
 
