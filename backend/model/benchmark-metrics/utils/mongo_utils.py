@@ -45,13 +45,13 @@ class BenchMarkingProcessRepo:
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
             log.info(f'data {data}')
             if data['eval_score'] is not None:
-                while True:
-                    res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
-                    log.info(f'result of update data in collection benchmarkprocess {res}')
-                    fin = col.find({"benchmarkProcessId": data["benchmarkingProcessId"]})
-                    for f in fin:
-                        log.info(f"fin is {f}")
-                        if f["status"] == "Completed" and f["score"] == data["eval_score"] :
+                res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
+                log.info(f'result of update data in collection benchmarkprocess {res}')
+                fin = col.find({"benchmarkProcessId": data["benchmarkingProcessId"]})
+                for f in fin:
+                    log.info(f"fin is {f}")
+                    while True:
+                        if f["status"] == "Completed" :#and f["score"] == data["eval_score"] :
                             log.info(f' updated data in collection benchmarkprocess {data}')
                             break
             else:
