@@ -47,6 +47,8 @@ class BenchMarkingProcessRepo:
             if data['eval_score'] is not None:
                 res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
                 log.info(f'result of update data in collection benchmarkprocess {res}')
+                for re in res:
+                    log.info(f'updated result {re}')
                 #fin = col.find({"benchmarkProcessId": data["benchmarkingProcessId"]})
                 #log.info(f'fin is {fin}')
                     
