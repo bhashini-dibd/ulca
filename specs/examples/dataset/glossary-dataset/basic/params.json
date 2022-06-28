@@ -11,6 +11,7 @@
     "domain":[
         "legal"
     ],
+    "level" : "w",
     "collectionMethod": {
         "collectionDescription": [
             "manual-curated"

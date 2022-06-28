@@ -7,7 +7,7 @@
     {
         "sourceText": "Annexure",
         "targetText": "अनुलग्नक / परिशिष्ट ",
-        "lLevel" : "w"
+        "level" : "w"
     },
     {
         "sourceText": "Adhere to",

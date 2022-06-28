@@ -2,44 +2,52 @@
     {
         "sourceText": "Adhoc",
         "targetText": "तदर्थ, एक कार्य विशेष के लिए ",
-        "level" : "w",
+        "level" : "word",
         "collectionMethod": {
             "collectionDetails": {
-                "timeSpentInSeconds": 38,
-                "numOfKeysPressed": 12
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
             }
         }
     },
     {
         "sourceText": "Annexure",
         "targetText": "अनुलग्नक / परिशिष्ट ",
-        "level" : "w",
+        "level" : "word",
         "collectionMethod": {
             "collectionDetails": {
-                "timeSpentInSeconds": 38,
-                "numOfKeysPressed": 15
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
             }
         }
     },
     {
         "sourceText": "Adhere to",
         "targetText": "अक्षरशः पालन करना ",
-        "level" : "p",
+        "level" : "phrase",
         "collectionMethod": {
             "collectionDetails": {
-                "timeSpentInSeconds": 38,
-                "numOfKeysPressed": 12
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
             }
         }
     },
     {
         "sourceText": "Appreciate the evidence",
         "targetText": "सबूतों पर विचार करना, सबूतों का आंकलन करना  ",
-        "level" : "p",
+        "level" : "phrase",
         "collectionMethod": {
             "collectionDetails": {
-                "timeSpentInSeconds": 38,
-                "numOfKeysPressed": 12
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
             }
         }
     }
