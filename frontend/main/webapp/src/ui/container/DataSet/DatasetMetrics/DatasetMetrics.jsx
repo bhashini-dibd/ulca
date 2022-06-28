@@ -17,31 +17,42 @@ const selectColumnData = [
     options: { viewColumns: false },
     disable: true,
     customHidden: false,
+    checked: true,
   },
   {
     name: "sourceLanguage",
     label: "Source Language",
     disable: false,
     customHidden: false,
+    checked: true,
   },
   {
     name: "targetLanguage",
     label: "Target Language",
     disable: false,
     customHidden: false,
+    checked: true,
   },
-  { name: "domain", label: "Domain", disable: false, customHidden: false },
+  {
+    name: "domain",
+    label: "Domain",
+    disable: false,
+    customHidden: false,
+    checked: true,
+  },
   {
     name: "collectionMethod",
     label: "Collection Method",
     disable: false,
     customHidden: false,
+    checked: true,
   },
   {
     name: "submitterName",
     label: "Submitter",
     disable: false,
     customHidden: false,
+    checked: true,
   },
   {
     name: "count",
@@ -49,6 +60,7 @@ const selectColumnData = [
     options: { viewColumns: false },
     disable: true,
     customHidden: false,
+    checked: true,
   },
 ];
 
@@ -120,6 +132,12 @@ const DatasetMetrics = (props) => {
     tempTotalColumn.forEach((element) => {
       if (element.name === e.target.name) {
         element.customHidden = !element.customHidden;
+      }
+    });
+
+    selectColumnData.forEach((element) => {
+      if (element.name === e.target.name) {
+        element.checked = !element.checked;
       }
     });
 

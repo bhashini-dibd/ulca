@@ -1051,8 +1051,8 @@ const DataSet = (theme) => ({
     alignItems: "center",
     position: "absolute",
     right: "21%",
-    top: "22.5%",
-    zIndex: "99",
+    top: "160px",
+    zIndex: "9999",
   },
 
   metricsbtn: {
