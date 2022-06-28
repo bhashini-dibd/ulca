@@ -8,7 +8,7 @@ from events.errorrepo import ErrorRepo
 from events.processrepo import ProcessRepo
 from utils.cronjobutils import StoreUtils
 import os
-from datetime import datetime,timedelta
+from datetime import datetime,timedelta, timezone
 from logging.config import dictConfig
 
 
@@ -35,6 +35,7 @@ class ErrorProcessor(Thread):
                 # so getting that from mongo; previous implementation : line no-33 
                 log.info('Fetching SRNs from mongo store')
                 srn_list = self.get_unique_srns()
+                log.info(f'srn list {srn_list}')
                 errorepo.remove({"uploaded" : { "$exists" : False},"serviceRequestNumber":{"$nin":srn_list}}) #removing old error records from mongo
                 if srn_list:
                     log.info(f'{len(srn_list)} SRNs found from mongo store')
@@ -52,12 +53,14 @@ class ErrorProcessor(Thread):
     #fetching all error records from redis, and passing on to upload service
     def initiate_error_processing(self,srn_list):
         try:
+            log.info(f'initiating error processing')
             for srn in srn_list:
                 #getting the total error count (summation of "count" field) for records stored on mongo
                 agg_query = [{"$match":{"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}},
                             { "$group": { "_id" : None, "consolidatedCount" : { "$sum": "$count" } } },
                             {"$project":{ "_id":0,"consolidatedCount":1}}]
                 present_count = errorepo.aggregate(agg_query)
+                log.info(f'present count {present_count}')
                 if len(present_count) == 0:
                     continue
                 check_query   = {"serviceRequestNumber" : srn,"uploaded" : True} 
@@ -150,11 +153,13 @@ class ErrorProcessor(Thread):
         
 
     def get_unique_srns(self):
-        lastday = (datetime.now() - timedelta(seconds=redis_key_expiry*2))
+        lastday = datetime.now(timezone.utc) - timedelta(seconds=redis_key_expiry*2)
+        lastday_time = lastday.strftime("%a %b %d %H:%M:%S %Z %Y")
         query = [{ '$match':{'serviceRequestType':{'$in':['dataset','benchmark']},'serviceRequestAction':'submit'}}, 
-                {'$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
-                {'$match': {'date': {'$gt': lastday}}}]
+                {'$project': {'serviceRequestNumber': '$serviceRequestNumber','date':'$startTime'}},
+                {'$match': {'date': {'$gt': lastday_time}}}]
         # log.info(f"Query :{query}")
+        #{'$project': {'date': {'$gt': lastday}},'serviceRequestNumber': '$serviceRequestNumber'}
         SRNlist = []
         aggresult = prorepo.aggregate(query)
         if aggresult:
