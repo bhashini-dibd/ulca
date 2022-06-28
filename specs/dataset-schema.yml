@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.8.0
+  version: 0.9.0
 servers:
   - url: /ulca
 paths: {}
@@ -49,6 +49,7 @@ components:
             - $ref: '#/components/schemas/AsrUnlabeledParamsSchema'
             - $ref: '#/components/schemas/OcrDatasetParamsSchema'
             - $ref: '#/components/schemas/DocumentLayoutParamsSchema'
+            - $ref: '#/components/schemas/GlossaryDatasetParamsSchema'
     DatasetDataRowSchema:
       type: object
       description: the dataset data.json/.csv file should follow this schema
@@ -64,6 +65,7 @@ components:
             - $ref: '#/components/schemas/AsrUnlabeledRowSchema'
             - $ref: '#/components/schemas/OcrDatasetRowSchema'
             - $ref: '#/components/schemas/DocumentLayoutRowSchema'
+            - $ref: '#/components/schemas/GlossaryDatasetRowSchema'
     DatasetCommonParamsSchema:
       type: object
       description: common parameters or attributes of dataset that is primarily same across the supported dataset.
@@ -117,6 +119,38 @@ components:
           $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
+      
+    GlossaryDatasetParamsSchema:
+      allOf:
+        - $ref: '#/components/schemas/DatasetCommonParamsSchema'
+        - type: object
+      type: object
+      properties:
+        collectionMethod:
+          $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
+    GlossaryDatasetRowSchema:
+      required:
+        - sourceText
+        - targetText
+        - glossaryLevel
+      properties:
+        sourceText:
+          type: string
+          description: textual data in source language
+        targetText:
+          type: string
+        glossaryLevel:
+          type: string
+          description: corresponding level of source-target glossary pair
+          enum:
+            - word
+            - phrase
+            - sentence
+        collectionMethod:
+          $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
+      type: object
+      description: the schema of data file uploaded should adhere to this specified structure.
+      
     MonolingualParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
