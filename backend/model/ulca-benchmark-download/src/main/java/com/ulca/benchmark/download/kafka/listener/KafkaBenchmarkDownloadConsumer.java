@@ -210,7 +210,13 @@ public class KafkaBenchmarkDownloadConsumer {
 					}
 
 					bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.completed);
+					
 					//benchmarkProcessDao.save(bmProcess);
+					BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
+					bmProcessUpdate.setRecordCount(bmProcess.getRecordCount());
+					bmProcessUpdate.setLastModifiedOn(new Date().toString());
+					benchmarkProcessDao.save(bmProcessUpdate);
+					
 					
 				} catch (Exception e) {
 					
