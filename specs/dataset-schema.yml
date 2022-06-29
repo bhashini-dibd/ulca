@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.9.0
+  version: 0.9.1
 servers:
   - url: /ulca
 paths: {}
@@ -126,28 +126,34 @@ components:
         - type: object
       type: object
       properties:
+        level:
+          type: string
+          description: corresponding level of source-target glossary pair. W for word, P for phrase and S for sentence
+          enum:
+            - w
+            - p
+            - s
         collectionMethod:
-          $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
+          $ref: '#/components/schemas/GlossaryDatasetCollectionMethod'
     GlossaryDatasetRowSchema:
       required:
         - sourceText
         - targetText
-        - glossaryLevel
       properties:
         sourceText:
           type: string
           description: textual data in source language
         targetText:
           type: string
-        glossaryLevel:
+        level:
           type: string
-          description: corresponding level of source-target glossary pair
+          description: corresponding level of source-target glossary pair. W for word, P for phrase and S for sentence
           enum:
-            - word
-            - phrase
-            - sentence
+            - w
+            - p
+            - s
         collectionMethod:
-          $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
+          $ref: '#/components/schemas/GlossaryDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
       
@@ -611,6 +617,23 @@ components:
         alignmentScore:
           type: number
           description: the alignment score between sourceText and targetText
+    CollectionDetailsGlossaryAutoAligned:
+      type: object
+      description: auto-aligned collection details
+      required:
+        - alignmentTool
+      properties:
+        alignmentTool:
+          type: string
+          description: name of the alignment tool
+          example: LaBSE
+          enum:
+            - LaBSE
+            - LASER
+        alignmentToolVersion:
+          type: string
+          description: alignment tool version
+          example: LaBSE version 3.0
     CollectionDetailsAutoAlignedFromParallelDocs:
       type: object
       description: auto-aligned-from-parallel-docs collection details
@@ -632,6 +655,19 @@ components:
           type: number
           description: the alignment score between sourceText and targetText
     CollectionDetailsManualAligned:
+      type: object
+      description: manual aligned collection details. The pair was mapped manually from existing parallel documents.
+      properties:
+        editingTool:
+          type: string
+          description: name of the editing tool
+          example: microsoft excel
+        editingToolVersion:
+          type: string
+          description: editing tool version
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+    CollectionDetailsManualCurated:
       type: object
       description: manual aligned collection details. The pair was mapped manually from existing parallel documents.
       properties:
@@ -689,6 +725,20 @@ components:
         numOfKeysPressed:
           type: number
           description: number of keyboard keys pressed
+    CollectionDetailsMachineGenerated:
+      type: object
+      description: machine generat6ed collection details
+      required:
+        - model
+      properties:
+        model:
+          type: string
+          description: name of the transliteration model/engine used
+          example: google transliteration
+        modelVersion:
+          type: string
+          description:  model/engine version
+      
     CollectionDetailsMachineTransliterated:
       type: object
       description: machine transliteration collection details
@@ -714,6 +764,32 @@ components:
           enum:
             - MTAutomaticEvaluationMethod
             - MachineTranslatedEvaluationMethod2
+    CollectionDetailsMachineGeneratedPostEdited:
+      type: object
+      description: machine generated and post edited collection details
+      properties:
+        model:
+          type: string
+          description: name of the  model/engine used
+          example: google translation
+        modelVersion:
+          type: string
+          description:  model/engine version
+        editingTool:
+          type: string
+          description: name of the post editing tool
+          example: google transliteration
+        editingToolVersion:
+          type: string
+          description: post editing tool version
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+        timeSpentInSeconds:
+          type: number
+          description: time spent by user to transliterate the sentence.
+        numOfKeysPressed:
+          type: number
+          description: number of keyboard keys pressed
     CollectionDetailsMachineTransliteratedPostEdited:
       type: object
       description: machine transliterated and post edited collection details
@@ -811,6 +887,30 @@ components:
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslated'
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslatedPostEdited'
             - $ref: '#/components/schemas/CollectionDetailsManualTranslated'
+    GlossaryDatasetCollectionMethod:
+      type: object
+      description: specifies how the dataset is curated.
+      required:
+        - collectionDescription
+      properties:
+        collectionDescription:
+          type: array
+          description: various collection methods user have used to create the dataset
+          items:
+            type: string
+            minItems: 1
+            maxItems: 10
+            enum:
+              - auto-aligned
+              - manual-curated
+              - machine-generated
+              - machine-generated-post-edited
+        collectionDetails:
+          oneOf:
+            - $ref: '#/components/schemas/CollectionDetailsGlossaryAutoAligned'
+            - $ref: '#/components/schemas/CollectionDetailsManualCurated'
+            - $ref: '#/components/schemas/CollectionDetailsMachineGenerated'
+            - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedPostEdited'
     TransliterationDatasetCollectionMethod:
       type: object
       description: specifies how the dataset is curated.

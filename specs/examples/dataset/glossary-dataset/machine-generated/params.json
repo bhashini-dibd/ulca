@@ -13,15 +13,11 @@
     ],
     "collectionMethod": {
         "collectionDescription": [
-            "manual-translated"
+            "machine-generated"
         ],
         "collectionDetails": {
-            "editingTool": "Anuvaad",
-            "editingToolVersion": "v1.4",
-            "contributor": {
-                "name": "Raghav Mohan",
-                "aboutMe": "Freelance Hindi translator for project Anuvaad"
-            }
+            "model": "Google",
+            "modelVersion": "v2"
         }
     },
     "license": "cc-by-4.0",
@@ -30,16 +26,12 @@
         "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
         "team": [
             {
-                "name": "Aswin Pradeep",
-                "aboutMe": "NLP Data  lead at Project Anuvaad"
+                "name": "Ajitesh Sharma",
+                "aboutMe": "NLP team lead at Project Anuvaad"
             },
             {
                 "name": "Vishal Mauli",
                 "aboutMe": "Backend team lead at Project Anuvaad"
-            },
-            {
-                "name": "Aravinth Bheemaraj",
-                "aboutMe": "NLP Data team lead at Project Anuvaad"
             }
         ]
     }

@@ -42,7 +42,7 @@ const SelectColumn = (props) => {
                 control={
                   <Checkbox
                     color="success"
-                    defaultChecked
+                    checked={item.checked}
                     disabled={item.disable}
                     onClick={(e) => handleColumnSelection(e)}
                   />
