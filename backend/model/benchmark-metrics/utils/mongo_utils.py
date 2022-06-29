@@ -3,6 +3,7 @@ import pymongo
 from logging.config import dictConfig
 from configs.configs import ulca_db_cluster, mongo_db_name, mongo_collection_name, mongo_pt_collection_name
 from datetime import datetime, timezone
+from pymongo import ReturnDocument
 
 log = logging.getLogger('file')
 mongo_instance = None
@@ -45,8 +46,12 @@ class BenchMarkingProcessRepo:
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
             log.info(f'data {data}')
             if data['eval_score'] is not None:
-                res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'], "status": "Completed", "lastModifiedOn": curr_time} }, False, False, None, None)
+                res = col.find_one_and_update({"benchmarkProcessId": data["benchmarkingProcessId"], "benchmarkDatasetId": data["benchmarkDatasetId"]}, {"$set": {"score": data['eval_score'],  "status": "Completed", "lastModifiedOn": curr_time} },return_document =  ReturnDocument.AFTER)#, False, False, None, None)
                 log.info(f'result of update data in collection benchmarkprocess {res}')
+                #for re in res:
+                #log.info(f'updated result of modified count {res.modified_count}')
+                #log.info(f'updated result of matched count {res.matched_count}')
+                #log.info(f'updated result of matched count {res.raw_result}')
                 #fin = col.find({"benchmarkProcessId": data["benchmarkingProcessId"]})
                 #log.info(f'fin is {fin}')
                     
@@ -86,7 +91,7 @@ class BenchMarkingProcessRepo:
 
         try:
             curr_time = datetime.now(timezone.utc).strftime("%a %b %d %H:%M:%S %Z %Y")
-            res = col.update_one({"benchmarkProcessId": data["benchmarkingProcessId"], "tool": "benchmark"}, {"$set": {"status": data["status"], "endTime": curr_time} }, False, False, None, None)
+            res = col.find_one_and_update({"benchmarkProcessId": data["benchmarkingProcessId"], "tool": "benchmark"}, {"$set": {"status": data["status"], "endTime": curr_time} },return_document =  ReturnDocument.AFTER)#False, False, None, None)
             log.info(f'result of update data in collection ulca-bm-tasks {res}')
             log.info(f' updated data in collection ulca-bm-tasks {data}')
             #if res["nModified"] == 1:
