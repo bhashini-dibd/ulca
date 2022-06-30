@@ -247,6 +247,7 @@ public class ModelService {
 		modelObj.setSubmittedOn(new Date().toString());
 		modelObj.setPublishedOn(new Date().toString());
 		modelObj.setStatus("unpublished");
+		modelObj.setUnpublishReason("Newly submitted model");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		//String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
@@ -414,6 +415,14 @@ public class ModelService {
 			throw new ModelStatusChangeException("Not the submitter of model. So, can not " + status + " it.", status);
 		}
 		model.setStatus(status);
+		if (status.equalsIgnoreCase("unpublished") ) {
+			if(request.getUnpublishReason() == null || ( request.getUnpublishReason() != null && request.getUnpublishReason().isBlank())){
+				throw new ModelStatusChangeException("unpublishReason field should not be empty" ,status);
+
+			}
+
+			model.setUnpublishReason(request.getUnpublishReason());
+		}
 		modelDao.save(model);
 		
 		return new ModelStatusChangeResponse("Model " + status +  " successfull.");
