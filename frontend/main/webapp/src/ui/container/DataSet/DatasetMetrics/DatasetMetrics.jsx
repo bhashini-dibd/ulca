@@ -115,6 +115,19 @@ const DatasetMetrics = (props) => {
   }, []);
 
   const handleSearch = (value) => {
+
+    const res = datasetMetrics.filter((e) => {
+      return (
+        e.collectionMethod.toLowerCase().match(value.trim().toLowerCase()) ||
+        e.datasetType.toLowerCase().match(value.trim().toLowerCase()) ||
+        e.domain.toLowerCase().match(value.trim().toLowerCase()) ||
+        e.sourceLanguage.toLowerCase().match(value.trim().toLowerCase()) ||
+        e.submitterName.toLowerCase().match(value.trim().toLowerCase()) ||
+        e.targetLanguage.toLowerCase().match(value.trim().toLowerCase())
+      );
+    });
+
+    setTableData(res);
     dispatch(getSearchedValue(value));
   };
 
@@ -168,7 +181,7 @@ const DatasetMetrics = (props) => {
         }
       });
       if (!isSame) {
-        OutputData.push(row);
+        OutputData.push({...row});
       }
     });
 

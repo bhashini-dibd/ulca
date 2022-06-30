@@ -1074,6 +1074,11 @@ const DataSet = (theme) => ({
         maxHeight: "170px",
       },
   },
+
+  selectColumnHeader: {
+    marginBottom: "25px",
+    color: "#000",
+  }
 });
 
 export default DataSet;

@@ -5,6 +5,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  Typography,
 } from "@material-ui/core";
 import DataSet from "../../styles/Dataset";
 
@@ -36,12 +37,15 @@ const SelectColumn = (props) => {
     >
       <Grid container className={classes.selectColumnContainer}>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <Typography variant='h6' className={classes.selectColumnHeader}>Select Columns :</Typography>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <FormGroup>
             {columns.map((item) => (
               <FormControlLabel
                 control={
                   <Checkbox
-                    color="success"
+                    color="primary"
                     checked={item.checked}
                     disabled={item.disable}
                     onClick={(e) => handleColumnSelection(e)}
