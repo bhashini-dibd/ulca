@@ -79,6 +79,10 @@ const GlobalStyles = (theme) => ({
     padding: "0 15px",
     borderRadius: "12px",
   },
+
+  contributionTextBox: {
+    marginTop: "30px",
+  }
 });
 
 export default GlobalStyles;

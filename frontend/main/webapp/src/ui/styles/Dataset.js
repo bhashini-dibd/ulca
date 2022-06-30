@@ -536,12 +536,29 @@ const DataSet = (theme) => ({
 
     //  paddingLeft:'16px'
   },
+
+  textAreaTransliteration: {
+    backgroundColor: "inherit",
+    border: "none",
+    width: "100%",
+    resize: "none",
+    outline: "none",
+    fontSize: "18px",
+    lineHeight: "32px",
+    color: "black",
+    fontFamily: "Roboto",
+    height : "14rem"
+
+    //  paddingLeft:'16px'
+  },
+  
   hostedCard: {
-    height: "300px",
+    minHeight: "300px",
     borderColor: "#2D63AB",
     borderRadius: "8px",
     paddingBottom: "13px",
     marginRight: "24px",
+    overflowY: "auto",
     "@media (max-width:400px)": {
       marginRight: "1px",
     },
@@ -1026,7 +1043,37 @@ const DataSet = (theme) => ({
     top:"165px",
     zIndex:"1",
 
-  }
+  },
+
+  metricsParent:{
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    position: "absolute",
+    right: "21%",
+    top: "160px",
+    zIndex: "9999",
+  },
+
+  metricsbtn: {
+    borderRadius: "50%",
+    background: "none",
+    cursor: "pointer",
+    padding: "12px",
+    marginLeft: '20px',
+  },
+
+  selectColumnContainer: {
+      borderBottom: "1px solid #00000029",
+      padding: "20px",
+      width: "350px",
+      height: "fit-content",
+      maxHeight: "350px",
+      "@media (max-width:550px)": {
+        width: "330px",
+        maxHeight: "170px",
+      },
+  },
 });
 
 export default DataSet;

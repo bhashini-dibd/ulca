@@ -86,7 +86,7 @@ const CardComponent = (props) => {
           style={{ color: "#ffffff", opacity: "0.6" }}
           gutterBottom
         >
-          {data.task === "translation" ? "Source" : "Language"}
+          {data.task === "translation" ? "Source" : "Source"}
         </Typography>
         <Typography variant="body2" style={{ color: "#ffffff" }}>
           {getLanguageName(data.source)}
