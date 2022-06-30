@@ -168,7 +168,7 @@ const DatasetMetrics = (props) => {
         }
       });
       if (!isSame) {
-        OutputData.push(row);
+        OutputData.push({...row});
       }
     });
 
