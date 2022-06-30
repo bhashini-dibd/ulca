@@ -266,7 +266,7 @@ components:
           description: the automatic evaluation metric name
           enum:
             - cer
-            - top_k_accuracy_score
+            - top-1-accuracy
         score:
           type: number
           description: is the score as per defined metric for this benchmark.

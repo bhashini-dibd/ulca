@@ -5,6 +5,7 @@
  import C from "../../../constants";
  
  export default class GetTransliterationText extends API {
+   
    constructor(
      languageCode,
      text,
@@ -14,10 +15,12 @@
      this.text = text;
      this.languageCode = languageCode;
      this.endpoint = `https://xlit-api.ai4bharat.org/tl/${languageCode}/${text}`;
+     
      this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
+     console.log(this.userDetails,"this is text")
      this.type = C.GET_TRANSLITERATION_TEXT;
    }
- 
+
    toString() {
      return `${super.toString()} email: ${this.email} token: ${
        this.token
