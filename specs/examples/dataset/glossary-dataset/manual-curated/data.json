@@ -2,7 +2,7 @@
     {
         "sourceText": "Adhoc",
         "targetText": "तदर्थ, एक कार्य विशेष के लिए ",
-        "level" : "word",
+        "level" : "w",
         "collectionMethod": {
             "collectionDetails": {
                 "contributor": {
@@ -14,8 +14,8 @@
     },
     {
         "sourceText": "Annexure",
-        "targetText": "अनुलग्नक / परिशिष्ट ",
-        "level" : "word",
+        "targetText": "अनुलग्नक",
+        "level" : "w",
         "collectionMethod": {
             "collectionDetails": {
                 "contributor": {
@@ -28,7 +28,7 @@
     {
         "sourceText": "Adhere to",
         "targetText": "अक्षरशः पालन करना ",
-        "level" : "phrase",
+        "level" : "p",
         "collectionMethod": {
             "collectionDetails": {
                 "contributor": {
@@ -41,7 +41,7 @@
     {
         "sourceText": "Appreciate the evidence",
         "targetText": "सबूतों पर विचार करना, सबूतों का आंकलन करना  ",
-        "level" : "phrase",
+        "level" : "p",
         "collectionMethod": {
             "collectionDetails": {
                 "contributor": {
