@@ -128,7 +128,7 @@ components:
       properties:
         level:
           type: string
-          description: corresponding level of source-target glossary pair. W for word, P for phrase and S for sentence
+          description: corresponding level of source-target glossary pair. w for word, p for phrase and s for sentence
           enum:
             - w
             - p
