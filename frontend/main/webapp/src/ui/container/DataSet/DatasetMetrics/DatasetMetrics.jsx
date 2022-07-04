@@ -128,6 +128,7 @@ const DatasetMetrics = (props) => {
     });
 
     setTableData(res);
+    prepareDataforTable(columns, res);
     dispatch(getSearchedValue(value));
   };
 
@@ -157,10 +158,10 @@ const DatasetMetrics = (props) => {
     const filteredArr = tempTotalColumn.filter((col) => !col.customHidden);
     setTotalColumns(tempTotalColumn);
     setColumns(filteredArr);
-    prepareDataforTable(filteredArr);
+    prepareDataforTable(filteredArr, tableData);
   };
 
-  const prepareDataforTable = (column) => {
+  const prepareDataforTable = (column, data) => {
     const ActiveColumns = column
       .filter((item) => item.name !== "count")
       .map((col) => col.name);
@@ -172,7 +173,7 @@ const DatasetMetrics = (props) => {
           oldObject[key] === newObject[key] || !ActiveColumns.includes(key)
       );
 
-    datasetMetrics.forEach((row) => {
+    data.forEach((row) => {
       let isSame = false;
       OutputData.forEach((data) => {
         if (compareObject(data, row)) {
