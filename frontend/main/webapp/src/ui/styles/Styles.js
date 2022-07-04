@@ -82,6 +82,10 @@ const GlobalStyles = (theme) => ({
 
   contributionTextBox: {
     marginTop: "30px",
+  },
+
+  contributionTextBoxInput: {
+    fontSize: "14px"
   }
 });
 
