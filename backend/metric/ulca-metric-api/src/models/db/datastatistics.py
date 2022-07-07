@@ -63,7 +63,7 @@ class AggregateDatasetModel(object):
                 value = params["value"]
 
                 #parallel corpus src and tgt are interchangable ; eg : one 'en-hi' record is considered as 'hi-en' as well and is also counted while checking for 'hi' pairs
-                if dtype == "parallel-corpus" or dtype == "transliteration-corpus":
+                if dtype == "parallel-corpus" or dtype == "transliteration-corpus" or dtype == "glossary-corpus":
                     sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
                                     GROUP BY {src}, {tgt},{delete}'
                     log.info(sub_query)
