@@ -72,6 +72,7 @@ const DatasetMetrics = (props) => {
   const [columns, setColumns] = useState([]);
   const [totalColumns, setTotalColumns] = useState(selectColumnData);
   const [tableData, setTableData] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
   const openSelector = Boolean(anchorEl);
 
   const datasetMetrics = useSelector((state) => state.datasetMetrics.result);
@@ -115,20 +116,8 @@ const DatasetMetrics = (props) => {
   }, []);
 
   const handleSearch = (value) => {
-
-    const res = datasetMetrics.filter((e) => {
-      return (
-        e.collectionMethod.toLowerCase().match(value.trim().toLowerCase()) ||
-        e.datasetType.toLowerCase().match(value.trim().toLowerCase()) ||
-        e.domain.toLowerCase().match(value.trim().toLowerCase()) ||
-        e.sourceLanguage.toLowerCase().match(value.trim().toLowerCase()) ||
-        e.submitterName.toLowerCase().match(value.trim().toLowerCase()) ||
-        e.targetLanguage.toLowerCase().match(value.trim().toLowerCase())
-      );
-    });
-
-    setTableData(res);
-    prepareDataforTable(columns, res);
+    setSearchKey(value);
+    prepareDataforTable(columns, datasetMetrics, value);
     dispatch(getSearchedValue(value));
   };
 
@@ -158,10 +147,10 @@ const DatasetMetrics = (props) => {
     const filteredArr = tempTotalColumn.filter((col) => !col.customHidden);
     setTotalColumns(tempTotalColumn);
     setColumns(filteredArr);
-    prepareDataforTable(filteredArr, tableData);
+    prepareDataforTable(filteredArr, datasetMetrics, searchKey);
   };
 
-  const prepareDataforTable = (column, data) => {
+  const prepareDataforTable = (column, data, key) => {
     const ActiveColumns = column
       .filter((item) => item.name !== "count")
       .map((col) => col.name);
@@ -186,7 +175,18 @@ const DatasetMetrics = (props) => {
       }
     });
 
-    setTableData(OutputData);
+    const res = OutputData.filter((e) => {
+      return (
+        e.collectionMethod.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.datasetType.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.domain.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.sourceLanguage.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.submitterName.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.targetLanguage.toLowerCase().match(key.trim().toLowerCase())
+      );
+    });
+
+    setTableData(res);
   };
   return (
     <div>
