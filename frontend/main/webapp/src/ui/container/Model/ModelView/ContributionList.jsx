@@ -71,7 +71,9 @@ const ContributionList = (props) => {
   const [modelStatusInfo, setModelStatusInfo] = useState({
     modelId: "",
     status: "",
+    reason: "",
   });
+
   const status = useSelector((state) => state.getBenchMarkDetails.status);
   const refHook = useRef(false);
 
@@ -357,12 +359,12 @@ const ContributionList = (props) => {
     });
   };
 
-  const toggleModelStatusAPI = (modelId, status) => {
+  const toggleModelStatusAPI = (modelId, status, reason) => {
     const toggledStatus =
       status === "unpublished"
         ? "published"
         : status === "published" && "unpublished";
-    const apiObj = new SwitchModelStatus(modelId, toggledStatus);
+    const apiObj = new SwitchModelStatus(modelId, toggledStatus, reason);
     fetch(apiObj.apiEndPoint(), {
       method: "POST",
       body: JSON.stringify(apiObj.getBody()),
@@ -406,6 +408,10 @@ const ContributionList = (props) => {
     setOpenDialog(true);
     setModelStatusInfo({ status, modelId });
   };
+
+  const handleTextBox = (input) => {
+    setModelStatusInfo({ ...modelStatusInfo, reason: input });
+  }
 
   const isDisabled = (benchmarkPerformance) => {
     for (let i = 0; i < benchmarkPerformance.length; i++) {
@@ -505,7 +511,7 @@ const ContributionList = (props) => {
   };
 
   const renderConfirmationDialog = () => {
-    const { status, modelId } = modelStatusInfo;
+    const { status, modelId, reason } = modelStatusInfo;
     return (
       <Dialog
         title={`${status === "published" ? "Unpublish Model" : "Publish Model"
@@ -514,11 +520,13 @@ const ContributionList = (props) => {
             ? "After the model is unpublished, it will not be available for public use. Are you sure you want to unpublish the model?"
             : "After the model is published, it will be available for public use. Are you sure you want to publish the model?"
           }`}
-        handleSubmit={() => toggleModelStatusAPI(modelId, status)}
+        handleSubmit={() => toggleModelStatusAPI(modelId, status, reason)}
         handleClose={handleDialogClose}
         actionButton="Cancel"
         actionButton2="Yes"
-        open={openDialog}
+        open={openDialog} 
+        showTextBox={status === "published" ? true : false}
+        handleTextBox={(e) => handleTextBox(e)}
       />
     );
   };

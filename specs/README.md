@@ -13,6 +13,7 @@ ULCA system currently supports the following type of datasets :
 - OCR dataset
 - Document Layout dataset
 - Transliteration dataset
+- Glossary dataset
 
 ## Data and Params schema for parallel dataset
 - [ParallelDatasetParamsSchema schema](../../dataset-schema.yml#ParallelDatasetParamsSchema)
@@ -33,6 +34,10 @@ ULCA system currently supports the following type of datasets :
 ## Data and Params schema for ocr dataset
 - [DocumentOCRParamsSchema schema](../../dataset-schema.yml#DocumentOCRParamsSchema)
 - [DocumentOCRRowSchema schema](../../dataset-schema.yml#DocumentOCRRowSchema)
+
+## Data and Params schema for glossary dataset
+- [GlossaryDatasetParamsSchema schema](../../dataset-schema.yml#GlossaryDatasetParamsSchema)
+- [GlossaryDatasetRowSchema schema](../../dataset-schema.yml#GlossaryDatasetRowSchema)
 
 ## Representing a dataset `params`
 ULCA relies upon the submitter to explain their dataset, so that it can be beneficial to the large community, following some of the suggestions will surely benefit the community at large.
