@@ -1,16 +1,11 @@
 package com.ulca.benchmark.kafka.model;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,7 +21,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkDatasetSubmitStagesDao;
-import com.ulca.benchmark.dao.BenchmarkDatasetSubmitStatusDao;
 import com.ulca.benchmark.model.BenchmarkDatasetSubmitStages;
 import com.ulca.benchmark.model.BenchmarkDatasetSubmitStatus;
 import com.ulca.benchmark.model.BenchmarkError;
@@ -44,6 +38,7 @@ import io.swagger.model.OcrBenchmarkDatasetParamsSchema;
 import io.swagger.model.Source;
 import io.swagger.model.Submitter;
 import io.swagger.model.TranslationBenchmarkDatasetParamsSchema;
+import io.swagger.model.TransliterationBenchmarkDatasetParamsSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -162,6 +157,7 @@ public class KafkaBenchmarkIngestConsumer {
 		}
 	}
 	
+	//only params schema is validated
 	private Benchmark validateBenchmarkDatasets(Benchmark benchmark, String paramsFilePath) throws JsonParseException, JsonMappingException, IOException {
 		
 
@@ -218,6 +214,7 @@ public class KafkaBenchmarkIngestConsumer {
 			errorList.add("submitter field should be present");
 		}
 		
+		
 		if(params.has("taskType")) {
 			
 			ModelTask.TypeEnum type = ModelTask.TypeEnum.fromValue(params.getJSONObject("taskType").getString("type"));
@@ -228,6 +225,7 @@ public class KafkaBenchmarkIngestConsumer {
 		}else {
 			errorList.add("taskType field should be present");
 		}
+		
 		
 		if(params.has("version")) {
 			benchmark.setVersion(params.getString("version"));
@@ -241,17 +239,17 @@ public class KafkaBenchmarkIngestConsumer {
 		if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.TRANSLATION)) {
 			TranslationBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, TranslationBenchmarkDatasetParamsSchema.class);
 			benchmark.setParamSchema(paramSchema);
-		}
-		
-		if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.ASR)) {
+		}else if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.ASR)) {
 			AsrBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, AsrBenchmarkDatasetParamsSchema.class);
 			benchmark.setParamSchema(paramSchema);
-		}
-		
-		if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.OCR)) {
+		}else if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.OCR)) {
 			OcrBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, OcrBenchmarkDatasetParamsSchema.class);
 			benchmark.setParamSchema(paramSchema);
+		}else if(benchmark.getTask().getType().equals(ModelTask.TypeEnum.TRANSLITERATION)) {
+			TransliterationBenchmarkDatasetParamsSchema paramSchema = objectMapper.readValue(file, TransliterationBenchmarkDatasetParamsSchema.class);
+			benchmark.setParamSchema(paramSchema);
 		}
+		
 		
 		benchmark.setStatus(BenchmarkSubmissionType.COMPLETED.toString());
 		

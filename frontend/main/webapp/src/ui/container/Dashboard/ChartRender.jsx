@@ -761,6 +761,73 @@ const ChartRender = (props) => {
                 : "Domain",
           });
         }
+        break;
+
+        case "transliteration-corpus":
+        if (page === 0) {
+          selectedOption.value !== dataSet.value &&
+            fetchChartData(dataSet.value, "", [
+              { field: "sourceLanguage", value: 'en' },
+            ]);
+          setAxisValue({ xAxis: "Languages", yAxis: "Count" });
+          setTitle("Number of records");
+        } else if (page === 1) {
+          setTitle(
+            `Number of records in ${
+              selectedLanguageName
+                ? selectedLanguageName
+                : event && event.hasOwnProperty("label") && event.label
+            } - Grouped by ${
+              filter === "domains"
+                ? "Domain"
+                : filter === "source"
+                ? "Source"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain"
+            }`
+          );
+          setAxisValue({
+            yAxis: "Count",
+            xAxis:
+              filter === "domains"
+                ? "Domain"
+                : filter === "source"
+                ? "Source"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain",
+          });
+        } else if (page === 2) {
+          setTitle(
+            `Number of audio hours in ${selectedLanguageName} ${
+              filterValue === "primarySubmitterName" ? "by" : "of"
+            } ${event.label ? event.label : dataValue}  - Grouped by ${
+              filter === "domains"
+                ? "Domain"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain"
+            }`
+          );
+          setAxisValue({
+            yAxis: "Count",
+            xAxis:
+              filter === "domains"
+                ? "Domain"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain",
+          });
+        }
 
         break;
       default:

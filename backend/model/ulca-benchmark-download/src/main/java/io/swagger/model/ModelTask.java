@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the category of model under which it has been released or trained")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-05-20T10:51:52.599Z[GMT]")
 
 
 public class ModelTask   {
@@ -23,6 +23,8 @@ public class ModelTask   {
    */
   public enum TypeEnum {
     TRANSLATION("translation"),
+    
+    TRANSLITERATION("transliteration"),
     
     TTS("tts"),
     

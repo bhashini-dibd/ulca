@@ -1,0 +1,47 @@
+{
+    "datasetType": "glossary-corpus",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": "hi"
+    },
+    "collectionSource": [
+        "42040.pdf",
+        "https: //main.sci.gov.in"
+    ],
+    "domain":[
+        "legal"
+    ],
+    "level" : "w",
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-curated"
+        ],
+        "collectionDetails": {
+            "editingTool": "Anuvaad",
+            "editingToolVersion": "v1.4",
+            "contributor": {
+                "name": "Raghav Mohan",
+                "aboutMe": "Freelance Hindi translator for project Anuvaad"
+            }
+        }
+    },
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
+        "team": [
+            {
+                "name": "Aswin Pradeep",
+                "aboutMe": "NLP Data  lead at Project Anuvaad"
+            },
+            {
+                "name": "Vishal Mauli",
+                "aboutMe": "Backend team lead at Project Anuvaad"
+            },
+            {
+                "name": "Aravinth Bheemaraj",
+                "aboutMe": "NLP Data team lead at Project Anuvaad"
+            }
+        ]
+    }
+}

@@ -80,7 +80,7 @@ class TTSService:
                          "datasetType": dataset_type_tts})
             if error_list:
                 error_event.create_error_event(error_list)
-            log.info(f'TTS - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+            log.info(f'TTS - {metadata["userMode"]} - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
             return {"message": "EXCEPTION while loading TTS dataset!!", "status": "FAILED"}
