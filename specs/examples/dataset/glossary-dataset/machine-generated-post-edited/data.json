@@ -1,0 +1,46 @@
+[
+    {
+        "sourceText": "Adhoc",
+        "targetText": "तदर्थ",
+        "level" : "w",
+        "collectionMethod": {
+            "collectionDetails": {
+                "timeSpentInSeconds": 38,
+                "numOfKeysPressed": 12
+            }
+        }
+    },
+    {
+        "sourceText": "Annexure",
+        "targetText": "अनुलग्नक",
+        "level" : "w",
+        "collectionMethod": {
+            "collectionDetails": {
+                "timeSpentInSeconds": 38,
+                "numOfKeysPressed": 15
+            }
+        }
+    },
+    {
+        "sourceText": "Adhere to",
+        "targetText": "अक्षरशः पालन करना",
+        "level" : "p",
+        "collectionMethod": {
+            "collectionDetails": {
+                "timeSpentInSeconds": 38,
+                "numOfKeysPressed": 12
+            }
+        }
+    },
+    {
+        "sourceText": "Appreciate the evidence",
+        "targetText": "सबूतों का आंकलन करना",
+        "level" : "p",
+        "collectionMethod": {
+            "collectionDetails": {
+                "timeSpentInSeconds": 38,
+                "numOfKeysPressed": 12
+            }
+        }
+    }
+]

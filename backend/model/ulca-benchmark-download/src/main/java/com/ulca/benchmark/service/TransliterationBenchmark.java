@@ -178,10 +178,15 @@ public class TransliterationBenchmark {
 				int size = input.size();
 				for(int i = 0; i< size; i++) {
 					SentenceList sentense = sentenses.get(i);
-		            JSONObject target =  new JSONObject();
-					target.put("tgt", expectedTgt.get(i));
-					target.put("mtgt", sentense.getTarget().get(0));
-					corpus.put(target);
+					if(sentense.getTarget() != null && sentense.getTarget().size() > 0) {
+						JSONObject target =  new JSONObject();
+						target.put("tgt", expectedTgt.get(i));
+						target.put("mtgt", sentense.getTarget().get(0));
+						corpus.put(target);
+					}else {
+						log.info("inference end point result is null for input : "+ input.get(i) + " and expected target : " + expectedTgt.get(i));
+					}
+		            
 				}
 			}
 		}

@@ -1044,6 +1044,41 @@ const DataSet = (theme) => ({
     zIndex:"1",
 
   },
+
+  metricsParent:{
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    position: "absolute",
+    right: "21%",
+    top: "160px",
+    zIndex: "9999",
+  },
+
+  metricsbtn: {
+    borderRadius: "50%",
+    background: "none",
+    cursor: "pointer",
+    padding: "12px",
+    marginLeft: '20px',
+  },
+
+  selectColumnContainer: {
+      borderBottom: "1px solid #00000029",
+      padding: "20px",
+      width: "350px",
+      height: "fit-content",
+      maxHeight: "350px",
+      "@media (max-width:550px)": {
+        width: "330px",
+        maxHeight: "170px",
+      },
+  },
+
+  selectColumnHeader: {
+    marginBottom: "25px",
+    color: "#000",
+  }
 });
 
 export default DataSet;

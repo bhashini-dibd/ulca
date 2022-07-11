@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.0
+  version: 0.4.0
 servers:
   - url: /
 paths: {}
@@ -200,6 +200,7 @@ components:
         - asr-unlabeled-corpus
         - ocr-corpus
         - document-layout-corpus
+        - glossary-corpus
     OAuthIdentity:
       type: object
       properties:
@@ -403,4 +404,5 @@ components:
             - asr
             - document-layout
             - ocr
+            - glossary
       description: the category of model under which it has been released or trained
