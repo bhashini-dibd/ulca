@@ -45,7 +45,7 @@ const NewSearchModel = () => {
   const id = popoverOpen ? "simple-popover" : undefined;
   const [rowsPerPage, setRowsPerPage] = useState(9)
   const handleChange = (event, newValue) => {
-    console.log( newValue," newValue")
+    
     setValue(newValue);
     makeModelSearchAPICall(ModelTask[newValue].value);
     dispatch(SearchList(""));
