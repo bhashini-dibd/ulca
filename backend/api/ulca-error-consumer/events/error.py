@@ -22,6 +22,7 @@ class ErrorEvent:
     def write_error_in_redis(self, data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]} in redis')
         try:
+            log.info(f'data to add in redis {data}')
             error_id = data["serviceRequestNumber"]+'.'+str(uuid.uuid4())
             expiry_time = redis_key_expiry
             store_repo.upsert(error_id,data,expiry_time)
@@ -48,8 +49,10 @@ class ErrorEvent:
     def write_error_in_mongo(self,data):
         log.info(f'Writing error for SRN -- {data["serviceRequestNumber"]} in mongo')
         try:
+            log.exception(f'Mongo upsert data {data}')
             error_rec = {'datasetName':data['datasetName'],'serviceRequestNumber':data['serviceRequestNumber'],'stage':data['stage'],'message':data['message']}
             error_repo.upsert(error_rec)
+
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}')
             return False
