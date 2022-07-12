@@ -151,10 +151,11 @@ class ErrorProcessor(Thread):
 
     def get_unique_srns(self):
         lastday = (datetime.now() - timedelta(seconds=redis_key_expiry*2))
+        log.info(f'lastday of get unique srns {lastday}')
         query = [{ '$match':{'serviceRequestType':{'$in':['dataset','benchmark']},'serviceRequestAction':'submit'}}, 
                 {'$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
                 {'$match': {'date': {'$gt': lastday}}}]
-        # log.info(f"Query :{query}")
+        log.info(f"Query :{query}")
         SRNlist = []
         aggresult = prorepo.aggregate(query)
         if aggresult:
