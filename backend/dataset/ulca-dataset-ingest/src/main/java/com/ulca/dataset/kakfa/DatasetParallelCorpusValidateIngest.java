@@ -485,6 +485,7 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 		if (recordSize <= precheckRecordThreshold) {
 			updateDataset(datasetId, userId, md5hash, paramsSchema);
+			datasetIngest.setMode("real");
 			ingest(paramsSchema, datasetIngest);
 			return;
 		} else {
