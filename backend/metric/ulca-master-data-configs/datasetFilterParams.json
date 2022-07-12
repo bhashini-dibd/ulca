@@ -1,0 +1,1929 @@
+{
+    "dataset": {
+      "parallel-corpus": {
+        "label": "Parallel Dataset",
+        "filters": [
+          {
+            "filter": "languagepair",
+            "label": "Language Pairs",
+            "values": [
+              {
+                "value": "pa",
+                "label": "Punjabi",
+                "targets": [
+                  {
+                    "value": "bn",
+                    "label": "Bengali"
+                  },
+                  {
+                    "value": "hi",
+                    "label": "Hindi"
+                  },
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  },
+                  {
+                    "value": "mr",
+                    "label": "Marathi"
+                  }
+                ]
+              },
+              {
+                "value": "bn",
+                "label": "Bengali",
+                "targets": [
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  },
+                  {
+                    "value": "hi",
+                    "label": "Hindi"
+                  },
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  },
+                  {
+                    "value": "as",
+                    "label": "Assamese"
+                  },
+                  {
+                    "value": "gu",
+                    "label": "Gujarati"
+                  },
+                  {
+                    "value": "pa",
+                    "label": "Punjabi"
+                  },
+                  {
+                    "value": "mr",
+                    "label": "Marathi"
+                  },
+                  {
+                    "value": "kn",
+                    "label": "Kannada"
+                  }
+                ]
+              },
+              {
+                "value": "en",
+                "label": "English",
+                "targets": [
+                  {
+                    "value": "hi",
+                    "label": "Hindi"
+                  },
+                  {
+                    "value": "mr",
+                    "label": "Marathi"
+                  },
+                  {
+                    "value": "pa",
+                    "label": "Punjabi"
+                  },
+                  {
+                    "value": "gu",
+                    "label": "Gujarati"
+                  },
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  },
+                  {
+                    "value": "as",
+                    "label": "Assamese"
+                  },
+                  {
+                    "value": "kn",
+                    "label": "Kannada"
+                  },
+                  {
+                    "value": "bn",
+                    "label": "Bengali"
+                  },
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  },
+                  {
+                    "value": "or",
+                    "label": "Odia"
+                  },
+                  {
+                    "value": "ta",
+                    "label": "Tamil"
+                  }
+                ]
+              },
+              {
+                "value": "ta",
+                "label": "Tamil",
+                "targets": [
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  },
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  }
+                ]
+              },
+              {
+                "value": "ml",
+                "label": "Malayalam",
+                "targets": [
+                  {
+                    "value": "as",
+                    "label": "Assamese"
+                  },
+                  {
+                    "value": "hi",
+                    "label": "Hindi"
+                  },
+                  {
+                    "value": "mr",
+                    "label": "Marathi"
+                  },
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  }
+                ]
+              },
+              {
+                "value": "te",
+                "label": "Telugu",
+                "targets": [
+                  {
+                    "value": "mr",
+                    "label": "Marathi"
+                  },
+                  {
+                    "value": "hi",
+                    "label": "Hindi"
+                  },
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  },
+                  {
+                    "value": "as",
+                    "label": "Assamese"
+                  }
+                ]
+              },
+              {
+                "value": "kn",
+                "label": "Kannada",
+                "targets": [
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  },
+                  {
+                    "value": "as",
+                    "label": "Assamese"
+                  },
+                  {
+                    "value": "gu",
+                    "label": "Gujarati"
+                  },
+                  {
+                    "value": "hi",
+                    "label": "Hindi"
+                  },
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  },
+                  {
+                    "value": "bn",
+                    "label": "Bengali"
+                  },
+                  {
+                    "value": "mr",
+                    "label": "Marathi"
+                  }
+                ]
+              },
+              {
+                "value": "hi",
+                "label": "Hindi",
+                "targets": [
+                  {
+                    "value": "ta",
+                    "label": "Tamil"
+                  },
+                  {
+                    "value": "pa",
+                    "label": "Punjabi"
+                  },
+                  {
+                    "value": "bn",
+                    "label": "Bengali"
+                  },
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  },
+                  {
+                    "value": "kn",
+                    "label": "Kannada"
+                  },
+                  {
+                    "value": "as",
+                    "label": "Assamese"
+                  },
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  },
+                  {
+                    "value": "mr",
+                    "label": "Marathi"
+                  },
+                  {
+                    "value": "gu",
+                    "label": "Gujarati"
+                  }
+                ]
+              },
+              {
+                "value": "mr",
+                "label": "Marathi",
+                "targets": [
+                  {
+                    "value": "bn",
+                    "label": "Bengali"
+                  },
+                  {
+                    "value": "as",
+                    "label": "Assamese"
+                  },
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  },
+                  {
+                    "value": "hi",
+                    "label": "Hindi"
+                  },
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  }
+                ]
+              },
+              {
+                "value": "gu",
+                "label": "Gujarati",
+                "targets": [
+                  {
+                    "value": "ml",
+                    "label": "Malayalam"
+                  },
+                  {
+                    "value": "as",
+                    "label": "Assamese"
+                  },
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  },
+                  {
+                    "value": "mr",
+                    "label": "Marathi"
+                  },
+                  {
+                    "value": "bn",
+                    "label": "Bengali"
+                  },
+                  {
+                    "value": "pa",
+                    "label": "Punjabi"
+                  },
+                  {
+                    "value": "hi",
+                    "label": "Hindi"
+                  }
+                ]
+              },
+              {
+                "value": "or",
+                "label": "Odia",
+                "targets": []
+              },
+              {
+                "value": "as",
+                "label": "Assamese",
+                "targets": [
+                  {
+                    "value": "te",
+                    "label": "Telugu"
+                  }
+                ]
+              },
+              {
+                "value": "kok",
+                "label": "Konkani",
+                "targets": []
+              },
+              {
+                "value": "sa",
+                "label": "Sanskrit",
+                "targets": []
+              },
+              {
+                "value": "ks",
+                "label": "Kashmiri",
+                "targets": []
+              },
+              {
+                "value": "ne",
+                "label": "Nepali",
+                "targets": []
+              },
+              {
+                "value": "ur",
+                "label": "Urdu",
+                "targets": []
+              },
+              {
+                "value": "sd",
+                "label": "Sindhi",
+                "targets": []
+              },
+              {
+                "value": "si",
+                "label": "Sinhala",
+                "targets": []
+              },
+              {
+                "value": "doi",
+                "label": "Dogri",
+                "targets": []
+              },
+              {
+                "value": "mai",
+                "label": "Maithili",
+                "targets": []
+              },
+              {
+                "value": "mni",
+                "label": "Manipuri",
+                "targets": []
+              },
+              {
+                "value": "brx",
+                "label": "Bodo",
+                "targets": []
+              },
+              {
+                "value": "sat",
+                "label": "Santali",
+                "targets": []
+              },
+              {
+                "value": "lus",
+                "label": "Lushai",
+                "targets": []
+              },
+              {
+                "value": "njz",
+                "label": "Ngungwel",
+                "targets": []
+              },
+              {
+                "value": "pnr",
+                "label": "Panim",
+                "targets": []
+              },
+              {
+                "value": "kha",
+                "label": "Khasi",
+                "targets": []
+              },
+              {
+                "value": "grt",
+                "label": "Garo",
+                "targets": []
+              }
+            ]
+          },
+          {
+            "filter": "collectionMethod.collectionDescription",
+            "label": "Collection Method",
+            "values": [
+              {
+                "value": "auto-aligned",
+                "label": "Auto Aligned",
+                "tool/method": [
+                  {
+                    "Alignment Tool": [
+                      "LaBSE"
+                    ]
+                  },
+                  {
+                    "Alignment Score Range": [
+                      "<0.5",
+                      "0.5-0.6",
+                      "0.6-0.7",
+                      "0.8-0.9",
+                      "0.9-1.0"
+                    ]
+                  }
+                ]
+              },
+              {
+                "value": "auto-aligned-from-parallel-docs",
+                "label": "Auto Aligned From Parallel Docs",
+                "tool/method": [
+                  {
+                    "Alignment Tool": [
+                      "LaBSE"
+                    ]
+                  },
+                  {
+                    "Alignment Score Range": [
+                      "<0.5",
+                      "0.5-0.6",
+                      "0.6-0.7",
+                      "0.8-0.9",
+                      "0.9-1.0"
+                    ]
+                  }
+                ]
+              },
+              {
+                "value": "machine-translated",
+                "label": "Machine Translated",
+                "tool/method": [
+                  {
+                    "Translation Model": [
+                      "Google"
+                    ]
+                  },
+                  {
+                    "Evaluation Method": [
+                      null
+                    ]
+                  }
+                ]
+              },
+              {
+                "value": "machine-translated-post-edited",
+                "label": "Machine Translated Post Edited",
+                "tool/method": [
+                  {
+                    "Translation Model": [
+                      "Google"
+                    ]
+                  },
+                  {
+                    "Evaluation Method": [
+                      null
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "filter": "domain",
+            "label": "Domain",
+            "values": [
+              {
+                "value": "entertainment",
+                "label": "Entertainment"
+              },
+              {
+                "value": "financial",
+                "label": "Financial"
+              },
+              {
+                "value": "general",
+                "label": "General"
+              },
+              {
+                "value": "government-press-release",
+                "label": "Government-Press-Release"
+              },
+              {
+                "value": "healthcare",
+                "label": "Healthcare"
+              },
+              {
+                "value": "legal",
+                "label": "Legal"
+              },
+              {
+                "value": "lifestyle",
+                "label": "Lifestyle"
+              },
+              {
+                "value": "news",
+                "label": "News"
+              },
+              {
+                "value": "sports",
+                "label": "Sports"
+              }
+            ]
+          },
+          {
+            "filter": "collectionSource",
+            "label": "Collection Source",
+            "values": [
+              {
+                "value": "\tPIB",
+                "label": "\tPib"
+              },
+              {
+                "value": "42040.pdf",
+                "label": "42040.Pdf"
+              },
+              {
+                "value": "DW News",
+                "label": "Dw News"
+              },
+              {
+                "value": "GoodReturns",
+                "label": "Goodreturns"
+              },
+              {
+                "value": "Indian Express",
+                "label": "Indian Express"
+              },
+              {
+                "value": "IndicCorp",
+                "label": "Indiccorp"
+              },
+              {
+                "value": "Jagran",
+                "label": "Jagran"
+              },
+              {
+                "value": "KhanAcademy",
+                "label": "Khanacademy"
+              },
+              {
+                "value": "Legal Terminologies",
+                "label": "Legal Terminologies"
+              },
+              {
+                "value": "Lokmat",
+                "label": "Lokmat"
+              },
+              {
+                "value": "Multiple Sources",
+                "label": "Multiple Sources"
+              },
+              {
+                "value": "MyKhel",
+                "label": "Mykhel"
+              },
+              {
+                "value": "NPTEL",
+                "label": "Nptel"
+              },
+              {
+                "value": "NewsOnAir",
+                "label": "Newsonair"
+              },
+              {
+                "value": "OneIndia",
+                "label": "Oneindia"
+              },
+              {
+                "value": "PIB",
+                "label": "Pib"
+              },
+              {
+                "value": "PIB Archives",
+                "label": "Pib Archives"
+              },
+              {
+                "value": "Pranabmukherjee",
+                "label": "Pranabmukherjee"
+              },
+              {
+                "value": "Tribune",
+                "label": "Tribune"
+              },
+              {
+                "value": "Wikipedia",
+                "label": "Wikipedia"
+              },
+              {
+                "value": "http://newsonair.com/",
+                "label": "Http://Newsonair.Com/"
+              },
+              {
+                "value": "http://pib.gov.in/",
+                "label": "Http://Pib.Gov.In/"
+              },
+              {
+                "value": "http://pranabmukherjee.nic.in/",
+                "label": "Http://Pranabmukherjee.Nic.In/"
+              },
+              {
+                "value": "https: //main.sci.gov.in",
+                "label": "Https: //Main.Sci.Gov.In"
+              },
+              {
+                "value": "https://archive.pib.gov.in/archive2/",
+                "label": "Https://Archive.Pib.Gov.In/Archive2/"
+              },
+              {
+                "value": "https://en.wikipedia.org/wiki/Main_Page",
+                "label": "Https://En.Wikipedia.Org/Wiki/Main_Page"
+              },
+              {
+                "value": "https://indianexpress.com/",
+                "label": "Https://Indianexpress.Com/"
+              },
+              {
+                "value": "https://indicnlp.ai4bharat.org/corpora/",
+                "label": "Https://Indicnlp.Ai4Bharat.Org/Corpora/"
+              },
+              {
+                "value": "https://nptel.ac.in/",
+                "label": "Https://Nptel.Ac.In/"
+              },
+              {
+                "value": "https://www.dw.com/",
+                "label": "Https://Www.Dw.Com/"
+              },
+              {
+                "value": "https://www.dw.com/en/top-stories/s-9097",
+                "label": "Https://Www.Dw.Com/En/Top-Stories/S-9097"
+              },
+              {
+                "value": "https://www.goodreturns.in/",
+                "label": "Https://Www.Goodreturns.In/"
+              },
+              {
+                "value": "https://www.jagran.com/",
+                "label": "Https://Www.Jagran.Com/"
+              },
+              {
+                "value": "https://www.khanacademy.org/",
+                "label": "Https://Www.Khanacademy.Org/"
+              },
+              {
+                "value": "https://www.kolkata24x7.com/",
+                "label": "Https://Www.Kolkata24X7.Com/"
+              },
+              {
+                "value": "https://www.lokmat.com/",
+                "label": "Https://Www.Lokmat.Com/"
+              },
+              {
+                "value": "https://www.mykhel.com/",
+                "label": "Https://Www.Mykhel.Com/"
+              },
+              {
+                "value": "https://www.oneindia.com/",
+                "label": "Https://Www.Oneindia.Com/"
+              },
+              {
+                "value": "https://www.pib.gov.in/",
+                "label": "Https://Www.Pib.Gov.In/"
+              },
+              {
+                "value": "https://www.pib.gov.in/Allrel.aspx",
+                "label": "Https://Www.Pib.Gov.In/Allrel.Aspx"
+              },
+              {
+                "value": "https://www.pib.gov.in/indexd.aspx",
+                "label": "Https://Www.Pib.Gov.In/Indexd.Aspx"
+              },
+              {
+                "value": "https://www.tribuneindia.com/",
+                "label": "Https://Www.Tribuneindia.Com/"
+              },
+              {
+                "value": "https://www.wikipedia.org/",
+                "label": "Https://Www.Wikipedia.Org/"
+              },
+              {
+                "value": "kolkata24x7",
+                "label": "Kolkata24X7"
+              }
+            ]
+          },
+          {
+            "filter": "license",
+            "label": "License",
+            "values": [
+              {
+                "value": "cc-by-4.0",
+                "label": "Cc-By-4.0"
+              }
+            ]
+          },
+          {
+            "filter": "submitter.name",
+            "label": "Submitter",
+            "values": [
+              {
+                "value": "Project Anuvaad",
+                "label": "Project Anuvaad"
+              },
+              {
+                "value": "Samanantar",
+                "label": "Samanantar"
+              },
+              {
+                "value": "ai4bharat",
+                "label": "Ai4Bharat"
+              }
+            ]
+          }
+        ]
+      },
+      "monolingual-corpus": {
+        "label": "Monolingual Dataset",
+        "filters": [
+          {
+            "filter": "sourceLanguage",
+            "label": "Language",
+            "values": [
+              {
+                "value": "en",
+                "label": "En"
+              },
+              {
+                "value": "hi",
+                "label": "Hi"
+              }
+            ]
+          },
+          {
+            "filter": "domain",
+            "label": "Domain",
+            "values": [
+              {
+                "value": "legal",
+                "label": "Legal"
+              },
+              {
+                "value": "news",
+                "label": "News"
+              },
+              {
+                "value": [
+                  "legal"
+                ],
+                "label": "['Legal']"
+              }
+            ]
+          },
+          {
+            "filter": "collectionMethod.collectionDescription",
+            "label": "Collection Method",
+            "values": [
+              {
+                "value": "",
+                "label": "Unspecified"
+              }
+            ]
+          },
+          {
+            "filter": "collectionSource",
+            "label": "Collection Source",
+            "values": [
+              {
+                "value": "http://pib.gov.in/",
+                "label": "Http://Pib.Gov.In/"
+              },
+              {
+                "value": "https://indiankanoon.org/",
+                "label": "Https://Indiankanoon.Org/"
+              },
+              {
+                "value": [
+                  "https://indiankanoon.org/"
+                ],
+                "label": "['Https://Indiankanoon.Org/']"
+              }
+            ]
+          },
+          {
+            "filter": "license",
+            "label": "License",
+            "values": [
+              {
+                "value": "cc-by-4.0",
+                "label": "Cc-By-4.0"
+              }
+            ]
+          },
+          {
+            "filter": "submitter.name",
+            "label": "Submitter",
+            "values": [
+              {
+                "value": "Project Anuvaad",
+                "label": "Project Anuvaad"
+              }
+            ]
+          }
+        ]
+      },
+      "asr-unlabeled-corpus": {
+        "label": "Asr Unlabeled Dataset",
+        "filters": [
+          {
+            "filter": "sourceLanguage",
+            "label": "Language",
+            "values": [
+              {
+                "value": "as",
+                "label": "Assamese"
+              },
+              {
+                "value": "bn",
+                "label": "Bengali"
+              },
+              {
+                "value": "en",
+                "label": "English"
+              },
+              {
+                "value": "gu",
+                "label": "Gujarati"
+              },
+              {
+                "value": "hi",
+                "label": "Hindi"
+              },
+              {
+                "value": "ml",
+                "label": "Malayalam"
+              },
+              {
+                "value": "mr",
+                "label": "Marathi"
+              },
+              {
+                "value": "ne",
+                "label": "Nepali"
+              },
+              {
+                "value": "or",
+                "label": "Odia"
+              },
+              {
+                "value": "pa",
+                "label": "Punjabi"
+              },
+              {
+                "value": "ta",
+                "label": "Tamil"
+              },
+              {
+                "value": "te",
+                "label": "Telugu"
+              }
+            ]
+          },
+          {
+            "filter": "domain",
+            "label": "Domain",
+            "values": [
+              {
+                "value": "education",
+                "label": "Education"
+              },
+              {
+                "value": "general",
+                "label": "General"
+              },
+              {
+                "value": "news",
+                "label": "News"
+              }
+            ]
+          },
+          {
+            "filter": "collectionMethod.collectionDescription",
+            "label": "Collection Method",
+            "values": [
+              {
+                "value": "machine-generated-transcript",
+                "label": "Machine Generated Transcript",
+                "tool/method": [
+                  {
+                    "ASR Model": [
+                      "gogle asr"
+                    ]
+                  },
+                  {
+                    "Evaluation Method": [
+                      {
+                        "wer": 26.5
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "filter": "collectionSource",
+            "label": "Collection Source",
+            "values": [
+              {
+                "value": "AIR_Dibrugarh_Online_Radio",
+                "label": "Air_Dibrugarh_Online_Radio"
+              },
+              {
+                "value": "AIR_News_Guwahati",
+                "label": "Air_News_Guwahati"
+              },
+              {
+                "value": "Aakashwani_Mumbai",
+                "label": "Aakashwani_Mumbai"
+              },
+              {
+                "value": "BBC_News_Telugu",
+                "label": "Bbc_News_Telugu"
+              },
+              {
+                "value": "Buff_Tutorial_Tamil",
+                "label": "Buff_Tutorial_Tamil"
+              },
+              {
+                "value": "Chai_Bisket_Stories",
+                "label": "Chai_Bisket_Stories"
+              },
+              {
+                "value": "Daily_Post_Punjabi_1",
+                "label": "Daily_Post_Punjabi_1"
+              },
+              {
+                "value": "IITM_ASR_TTS_Male_IN-EN",
+                "label": "Iitm_Asr_Tts_Male_In-En"
+              },
+              {
+                "value": "Kerala_Freethinkers_Forum",
+                "label": "Kerala_Freethinkers_Forum"
+              },
+              {
+                "value": "Lokmat",
+                "label": "Lokmat"
+              },
+              {
+                "value": "Mann_Ki_Baat_odia",
+                "label": "Mann_Ki_Baat_Odia"
+              },
+              {
+                "value": "News18_Bangla",
+                "label": "News18_Bangla"
+              },
+              {
+                "value": "OLI_NSS",
+                "label": "Oli_Nss"
+              },
+              {
+                "value": "TheDeepeshShow",
+                "label": "Thedeepeshshow"
+              },
+              {
+                "value": "YouTube",
+                "label": "Youtube"
+              },
+              {
+                "value": "Zee_Telugu",
+                "label": "Zee_Telugu"
+              },
+              {
+                "value": "https://www.youtube.com/c/OLINSSIITB",
+                "label": "Https://Www.Youtube.Com/C/Olinssiitb"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UC0jAjZQ24EnIgrQbrgNQRwQ",
+                "label": "Https://Www.Youtube.Com/Channel/Uc0Jajzq24Enigrqbrgnqrwq"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCHb9EBkry1PdoPz_jWIrdEA",
+                "label": "Https://Www.Youtube.Com/Channel/Uchb9Ebkry1Pdopz_Jwirdea"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCM3Bjfpp_OyOADpFbKr8Msg",
+                "label": "Https://Www.Youtube.Com/Channel/Ucm3Bjfpp_Oyoadpfbkr8Msg"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCWwJgzihG-eZT67repVDDgw",
+                "label": "Https://Www.Youtube.Com/Channel/Ucwwjgzihg-Ezt67Repvddgw"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCmFcc_FIZkXO1ip-Qsg-KrA",
+                "label": "Https://Www.Youtube.Com/Channel/Ucmfcc_Fizkxo1Ip-Qsg-Kra"
+              },
+              {
+                "value": "https://www.youtube.com/playlist?list=PLRUX5qSAckfK88AJpVefw9MMQNmwSpOVG",
+                "label": "Https://Www.Youtube.Com/Playlist?List=Plrux5Qsackfk88Ajpvefw9Mmqnmwspovg"
+              },
+              {
+                "value": "https://www.youtube.com/watch?v=UIkSFSHX9AU",
+                "label": "Https://Www.Youtube.Com/Watch?V=Uiksfshx9Au"
+              },
+              {
+                "value": "https://youtube.com/playlist?list=PLdfIdC-Yh0OuxJP6ffg-P1R8fQPEhuPpr",
+                "label": "Https://Youtube.Com/Playlist?List=Pldfidc-Yh0Ouxjp6Ffg-P1R8Fqpehuppr"
+              },
+              {
+                "value": "indian-asr-challenge",
+                "label": "Indian-Asr-Challenge"
+              },
+              {
+                "value": "newsonair.nic.in",
+                "label": "Newsonair.Nic.In"
+              }
+            ]
+          },
+          {
+            "filter": "license",
+            "label": "License",
+            "values": [
+              {
+                "value": "cc-by-4.0",
+                "label": "Cc-By-4.0"
+              }
+            ]
+          },
+          {
+            "filter": "submitter.name",
+            "label": "Submitter",
+            "values": [
+              {
+                "value": "Anirudh",
+                "label": "Anirudh"
+              },
+              {
+                "value": "Soujyo",
+                "label": "Soujyo"
+              },
+              {
+                "value": "ekstep",
+                "label": "Ekstep"
+              }
+            ]
+          },
+          {
+            "filter": "format",
+            "label": "Format",
+            "values": [
+              {
+                "value": "wav",
+                "label": "Wav"
+              }
+            ]
+          },
+          {
+            "filter": "channel",
+            "label": "Channel",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": "mono",
+                "label": "Mono"
+              }
+            ]
+          },
+          {
+            "filter": "samplingRate",
+            "label": "Sampling Rate",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": 16,
+                "label": "16"
+              },
+              {
+                "value": 44.1,
+                "label": "44.1"
+              }
+            ]
+          },
+          {
+            "filter": "bitsPerSample",
+            "label": "Bits per Sample",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": "sixteen",
+                "label": "Sixteen"
+              }
+            ]
+          },
+          {
+            "filter": "numberOfSpeakers",
+            "label": "Number of Speakers",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": 1,
+                "label": "1"
+              }
+            ]
+          },
+          {
+            "filter": "gender",
+            "label": "Gender",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": "male",
+                "label": "Male"
+              }
+            ]
+          },
+          {
+            "filter": "age",
+            "label": "Age",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              }
+            ]
+          },
+          {
+            "filter": "dialect",
+            "label": "Dialect",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              }
+            ]
+          },
+          {
+            "filter": "snr.methodDetails.snrTool",
+            "label": "SNR Tool",
+            "values": [
+              {
+                "value": "WADASNR",
+                "label": "Wadasnr"
+              }
+            ]
+          },
+          {
+            "filter": "snr.methodDetails.snr",
+            "label": "SNR",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              }
+            ]
+          }
+        ]
+      },
+      "ocr-corpus": {
+        "label": "OCR Dataset",
+        "filters": [
+          {
+            "filter": "sourceLanguage",
+            "label": "Language",
+            "values": [
+              {
+                "value": "as",
+                "label": "As"
+              },
+              {
+                "value": "bn",
+                "label": "Bn"
+              },
+              {
+                "value": "en",
+                "label": "En"
+              },
+              {
+                "value": "hi",
+                "label": "Hi"
+              },
+              {
+                "value": "ml",
+                "label": "Ml"
+              },
+              {
+                "value": "mr",
+                "label": "Mr"
+              },
+              {
+                "value": "or",
+                "label": "Or"
+              },
+              {
+                "value": "ta",
+                "label": "Ta"
+              }
+            ]
+          },
+          {
+            "filter": "domain",
+            "label": "Domain",
+            "values": [
+              {
+                "value": "education",
+                "label": "Education"
+              },
+              {
+                "value": "general",
+                "label": "General"
+              },
+              {
+                "value": "government-press-release",
+                "label": "Government-Press-Release"
+              },
+              {
+                "value": "legal",
+                "label": "Legal"
+              }
+            ]
+          },
+          {
+            "filter": "collectionMethod.collectionDescription",
+            "label": "Collection Method",
+            "values": [
+              {
+                "value": "web-scraping-ocr",
+                "label": "Web Scraping Ocr",
+                "tool/method": [
+                  {
+                    "OCR Tool": [
+                      "anuvaad ocr"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "filter": "collectionSource",
+            "label": "Collection Source",
+            "values": [
+              {
+                "value": "14_or.pdf",
+                "label": "14_Or.Pdf"
+              },
+              {
+                "value": "17_en.pdf",
+                "label": "17_En.Pdf"
+              },
+              {
+                "value": "1_Economic_Survey_Volume_I_Complete_PDF.pdf",
+                "label": "1_Economic_Survey_Volume_I_Complete_Pdf.Pdf"
+              },
+              {
+                "value": "2_Economic-Survey-Volume-II-Complete-PDF.pdf",
+                "label": "2_Economic-Survey-Volume-Ii-Complete-Pdf.Pdf"
+              },
+              {
+                "value": "2_en.pdf",
+                "label": "2_En.Pdf"
+              },
+              {
+                "value": "3522_2009_13_1501_15302_Judgement_24-Jul-2019_TAM.pdf",
+                "label": "3522_2009_13_1501_15302_Judgement_24-Jul-2019_Tam.Pdf"
+              },
+              {
+                "value": "508_BLOCK_2_as.pdf",
+                "label": "508_Block_2_As.Pdf"
+              },
+              {
+                "value": "6_en.pdf",
+                "label": "6_En.Pdf"
+              },
+              {
+                "value": "7_mr.pdf",
+                "label": "7_Mr.Pdf"
+              },
+              {
+                "value": "Bud-Eng_1010_2020-2-26_475_en.pdf",
+                "label": "Bud-Eng_1010_2020-2-26_475_En.Pdf"
+              },
+              {
+                "value": "Bud-Eng_888_2019-2-19_211_en.pdf",
+                "label": "Bud-Eng_888_2019-2-19_211_En.Pdf"
+              },
+              {
+                "value": "Budget-08-09-M.pdf",
+                "label": "Budget-08-09-M.Pdf"
+              },
+              {
+                "value": "http://niyamasabha.org/codes/ginfo_4_1_A.htm",
+                "label": "Http://Niyamasabha.Org/Codes/Ginfo_4_1_A.Htm"
+              },
+              {
+                "value": "http://www.parliament.gov.bd/index.php/en/parliamentary-business/business-of-the-house/budget/budget-speech",
+                "label": "Http://Www.Parliament.Gov.Bd/Index.Php/En/Parliamentary-Business/Business-Of-The-House/Budget/Budget-Speech"
+              },
+              {
+                "value": "https://budget.odisha.gov.in/budget-speech",
+                "label": "Https://Budget.Odisha.Gov.In/Budget-Speech"
+              },
+              {
+                "value": "https://financedepartment.gujarat.gov.in/Budget-speech.html",
+                "label": "Https://Financedepartment.Gujarat.Gov.In/Budget-Speech.Html"
+              },
+              {
+                "value": "https://mahakosh.maharashtra.gov.in/index.php/en/performance-budget",
+                "label": "Https://Mahakosh.Maharashtra.Gov.In/Index.Php/En/Performance-Budget"
+              },
+              {
+                "value": "https://main.sci.gov.in",
+                "label": "Https://Main.Sci.Gov.In"
+              },
+              {
+                "value": "https://nios.ac.in/dled/dledmed.aspx",
+                "label": "Https://Nios.Ac.In/Dled/Dledmed.Aspx"
+              },
+              {
+                "value": "https://www.indiabudget.gov.in/economicsurvey/",
+                "label": "Https://Www.Indiabudget.Gov.In/Economicsurvey/"
+              },
+              {
+                "value": "nios-diplomacource-508",
+                "label": "Nios-Diplomacource-508"
+              },
+              {
+                "value": "speech_bn_16-17_bn.pdf",
+                "label": "Speech_Bn_16-17_Bn.Pdf"
+              }
+            ]
+          },
+          {
+            "filter": "license",
+            "label": "License",
+            "values": [
+              {
+                "value": "cc-by-4.0",
+                "label": "Cc-By-4.0"
+              }
+            ]
+          },
+          {
+            "filter": "submitter.name",
+            "label": "Submitter",
+            "values": [
+              {
+                "value": "Project Anuvaad",
+                "label": "Project Anuvaad"
+              }
+            ]
+          },
+          {
+            "filter": "format",
+            "label": "Format",
+            "values": [
+              {
+                "value": "png",
+                "label": "Png"
+              }
+            ]
+          },
+          {
+            "filter": "dpi",
+            "label": "DPI",
+            "values": [
+              {
+                "value": "300_dpi",
+                "label": "300_Dpi"
+              },
+              {
+                "value": "72_dpi",
+                "label": "72_Dpi"
+              }
+            ]
+          },
+          {
+            "filter": "imageTextType",
+            "label": "Image Text Type",
+            "values": [
+              {
+                "value": "computer-typed-text",
+                "label": "Computer-Typed-Text"
+              }
+            ]
+          }
+        ]
+      },
+      "asr-corpus": {
+        "label": "ASR / TTS Dataset",
+        "filters": [
+          {
+            "filter": "sourceLanguage",
+            "label": "Language",
+            "values": [
+              {
+                "value": "en",
+                "label": "English"
+              },
+              {
+                "value": "hi",
+                "label": "Hindi"
+              },
+              {
+                "value": "kn",
+                "label": "Kannada"
+              },
+              {
+                "value": "mr",
+                "label": "Marathi"
+              },
+              {
+                "value": "ta",
+                "label": "Tamil"
+              },
+              {
+                "value": "te",
+                "label": "Telugu"
+              }
+            ]
+          },
+          {
+            "filter": "domain",
+            "label": "Domain",
+            "values": [
+              {
+                "value": "entertainment",
+                "label": "Entertainment"
+              },
+              {
+                "value": "general",
+                "label": "General"
+              },
+              {
+                "value": "news",
+                "label": "News"
+              }
+            ]
+          },
+          {
+            "filter": "collectionMethod.collectionDescription",
+            "label": "Collection Method",
+            "values": [
+              {
+                "value": "auto-aligned",
+                "label": "Auto Aligned",
+                "tool/method": []
+              },
+              {
+                "value": "machine-generated-transcript",
+                "label": "Machine Generated Transcript",
+                "tool/method": [
+                  {
+                    "ASR Model": [
+                      "Google STT",
+                      "ekstep asr",
+                      "ekstep asr Version 2",
+                      "gogle asr"
+                    ]
+                  },
+                  {
+                    "Evaluation Method": [
+                      {
+                        "wer": 20
+                      },
+                      {
+                        "wer": 25
+                      },
+                      {
+                        "wer": 26.5
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "value": "manual-transcribed",
+                "label": "Manual Transcribed",
+                "tool/method": []
+              }
+            ]
+          },
+          {
+            "filter": "collectionSource",
+            "label": "Collection Source",
+            "values": [
+              {
+                "value": "Best_Buddies_stories_sridhar",
+                "label": "Best_Buddies_Stories_Sridhar"
+              },
+              {
+                "value": "CEC_English",
+                "label": "Cec_English"
+              },
+              {
+                "value": "Chai_Bisket_Stories",
+                "label": "Chai_Bisket_Stories"
+              },
+              {
+                "value": "DD_Jharkhand",
+                "label": "Dd_Jharkhand"
+              },
+              {
+                "value": "DD_Science_Vigyan_Prasar",
+                "label": "Dd_Science_Vigyan_Prasar"
+              },
+              {
+                "value": "DD_news",
+                "label": "Dd_News"
+              },
+              {
+                "value": "KalaManthan",
+                "label": "Kalamanthan"
+              },
+              {
+                "value": "Live_By_FnP_Media",
+                "label": "Live_By_Fnp_Media"
+              },
+              {
+                "value": "Puthiyathalaimurai_TV",
+                "label": "Puthiyathalaimurai_Tv"
+              },
+              {
+                "value": "STAGE",
+                "label": "Stage"
+              },
+              {
+                "value": "Sadhguru",
+                "label": "Sadhguru"
+              },
+              {
+                "value": "Spill_Poetry",
+                "label": "Spill_Poetry"
+              },
+              {
+                "value": "Stage_Time",
+                "label": "Stage_Time"
+              },
+              {
+                "value": "THE_MODERN_POETS",
+                "label": "The_Modern_Poets"
+              },
+              {
+                "value": "Tape_A_Tale",
+                "label": "Tape_A_Tale"
+              },
+              {
+                "value": "Vividh_Bharti_Mumbai",
+                "label": "Vividh_Bharti_Mumbai"
+              },
+              {
+                "value": "Wordsutra",
+                "label": "Wordsutra"
+              },
+              {
+                "value": "YouTube",
+                "label": "Youtube"
+              },
+              {
+                "value": "Your_Voice",
+                "label": "Your_Voice"
+              },
+              {
+                "value": "autoportal",
+                "label": "Autoportal"
+              },
+              {
+                "value": "dhruv_rathee",
+                "label": "Dhruv_Rathee"
+              },
+              {
+                "value": "https://www.swayamprabha.gov.in",
+                "label": "Https://Www.Swayamprabha.Gov.In"
+              },
+              {
+                "value": "https://www.swayamprabha.gov.in/",
+                "label": "Https://Www.Swayamprabha.Gov.In/"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UC1ofCgg8T11vh6msy8WYhsg",
+                "label": "Https://Www.Youtube.Com/Channel/Uc1Ofcgg8T11Vh6Msy8Wyhsg"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UC3JVxFXrNPKinBVskqMbV-w",
+                "label": "Https://Www.Youtube.Com/Channel/Uc3Jvxfxrnpkinbvskqmbv-W"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UC7hZRTs2Dtmd9uyMtkVsxfQ",
+                "label": "Https://Www.Youtube.Com/Channel/Uc7Hzrts2Dtmd9Uymtkvsxfq"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCA7OQkX9AEIVQ6j9i0OSQhA",
+                "label": "Https://Www.Youtube.Com/Channel/Uca7Oqkx9Aeivq6J9I0Osqha"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCHVajmKCN6kmkDl-f3VLCiQ",
+                "label": "Https://Www.Youtube.Com/Channel/Uchvajmkcn6Kmkdl-F3Vlciq"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCIWcrT3URyL9HDyGgSJfnpg",
+                "label": "Https://Www.Youtube.Com/Channel/Uciwcrt3Uryl9Hdyggsjfnpg"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCKwucPzHZ7zCUIf7If-Wo1g",
+                "label": "Https://Www.Youtube.Com/Channel/Uckwucpzhz7Zcuif7If-Wo1G"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCLb7kq6JfRM89MAvMfd1_nA",
+                "label": "Https://Www.Youtube.Com/Channel/Uclb7Kq6Jfrm89Mavmfd1_Na"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCWMGibmCqz-J7U_08ziHzdg",
+                "label": "Https://Www.Youtube.Com/Channel/Ucwmgibmcqz-J7U_08Zihzdg"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCWsADEtjtdDGDIEIH5c8-3Q",
+                "label": "Https://Www.Youtube.Com/Channel/Ucwsadetjtddgdieih5C8-3Q"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCZgq0kHCr8COZd-lnGnmz9w",
+                "label": "Https://Www.Youtube.Com/Channel/Uczgq0Khcr8Cozd-Lngnmz9W"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCdrNmVHuPaX08K6ZQkIn4TA",
+                "label": "Https://Www.Youtube.Com/Channel/Ucdrnmvhupax08K6Zqkin4Ta"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCqddQRq9NEI2Jcu3LIYK5jg",
+                "label": "Https://Www.Youtube.Com/Channel/Ucqddqrq9Nei2Jcu3Liyk5Jg"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCtcLU4q5GY3U00ou0MDc7Ng",
+                "label": "Https://Www.Youtube.Com/Channel/Uctclu4Q5Gy3U00Ou0Mdc7Ng"
+              },
+              {
+                "value": "https://www.youtube.com/channel/UCyk6ngxxg8tLo-Y9uSLZZmg",
+                "label": "Https://Www.Youtube.Com/Channel/Ucyk6Ngxxg8Tlo-Y9Uslzzmg"
+              },
+              {
+                "value": "https://www.youtube.com/playlist?list=PL8828Z-IEhFEG47-MiL0G7Mh6J-T8eBoq",
+                "label": "Https://Www.Youtube.Com/Playlist?List=Pl8828Z-Iehfeg47-Mil0G7Mh6J-T8Eboq"
+              },
+              {
+                "value": "https://www.youtube.com/playlist?list=PLcBVsra3A46rMrjyv7sEh1M4RTWh4dC0i",
+                "label": "Https://Www.Youtube.Com/Playlist?List=Plcbvsra3A46Rmrjyv7Seh1M4Rtwh4Dc0I"
+              },
+              {
+                "value": "https://www.youtube.com/playlist?list=PLeGsk5xHaSactEHIhyZ1r8Yh5JdkMmh34",
+                "label": "Https://Www.Youtube.Com/Playlist?List=Plegsk5Xhasactehihyz1R8Yh5Jdkmmh34"
+              },
+              {
+                "value": "https://www.youtube.com/watch?v=UIkSFSHX9AU",
+                "label": "Https://Www.Youtube.Com/Watch?V=Uiksfshx9Au"
+              },
+              {
+                "value": "https://www.youtube.com?v=121212121",
+                "label": "Https://Www.Youtube.Com?V=121212121"
+              },
+              {
+                "value": "kalArt",
+                "label": "Kalart"
+              },
+              {
+                "value": "newsonair.nic.in",
+                "label": "Newsonair.Nic.In"
+              },
+              {
+                "value": "openslr",
+                "label": "Openslr"
+              },
+              {
+                "value": "puliyabaazi",
+                "label": "Puliyabaazi"
+              },
+              {
+                "value": "swayamprabha_chapter_16",
+                "label": "Swayamprabha_Chapter_16"
+              },
+              {
+                "value": "swayamprabha_chapter_24",
+                "label": "Swayamprabha_Chapter_24"
+              },
+              {
+                "value": "swayamprabha_chapter_25",
+                "label": "Swayamprabha_Chapter_25"
+              },
+              {
+                "value": "swayamprabha_chapter_26",
+                "label": "Swayamprabha_Chapter_26"
+              },
+              {
+                "value": "swayamprabha_chapter_30",
+                "label": "Swayamprabha_Chapter_30"
+              },
+              {
+                "value": "swayamprabha_chapter_6",
+                "label": "Swayamprabha_Chapter_6"
+              }
+            ]
+          },
+          {
+            "filter": "license",
+            "label": "License",
+            "values": [
+              {
+                "value": "cc-by-4.0",
+                "label": "Cc-By-4.0"
+              }
+            ]
+          },
+          {
+            "filter": "submitter.name",
+            "label": "Submitter",
+            "values": [
+              {
+                "value": "Anirudh",
+                "label": "Anirudh"
+              },
+              {
+                "value": "Rajat",
+                "label": "Rajat"
+              },
+              {
+                "value": "Soujyo",
+                "label": "Soujyo"
+              },
+              {
+                "value": "ekstep",
+                "label": "Ekstep"
+              }
+            ]
+          },
+          {
+            "filter": "format",
+            "label": "Format",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": "wav",
+                "label": "Wav"
+              }
+            ]
+          },
+          {
+            "filter": "channel",
+            "label": "Channel",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": "mono",
+                "label": "Mono"
+              }
+            ]
+          },
+          {
+            "filter": "samplingRate",
+            "label": "Sampling Rate",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": 44.1,
+                "label": "44.1"
+              },
+              {
+                "value": 48,
+                "label": "48"
+              }
+            ]
+          },
+          {
+            "filter": "bitsPerSample",
+            "label": "Bits per Sample",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": "sixteen",
+                "label": "Sixteen"
+              }
+            ]
+          },
+          {
+            "filter": "numberOfSpeakers",
+            "label": "Number of Speakers",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": 1,
+                "label": "1"
+              },
+              {
+                "value": 3,
+                "label": "3"
+              }
+            ]
+          },
+          {
+            "filter": "gender",
+            "label": "Gender",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": "male",
+                "label": "Male"
+              }
+            ]
+          },
+          {
+            "filter": "age",
+            "label": "Age",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": "60-100",
+                "label": "60-100"
+              }
+            ]
+          },
+          {
+            "filter": "dialect",
+            "label": "Dialect",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              }
+            ]
+          },
+          {
+            "filter": "snr.methodDetails.snrTool",
+            "label": "SNR Tool",
+            "values": [
+              {
+                "value": "WADASNR",
+                "label": "Wadasnr"
+              }
+            ]
+          },
+          {
+            "filter": "snr.methodDetails.snr",
+            "label": "SNR ",
+            "values": [
+              {
+                "value": null,
+                "label": "None"
+              },
+              {
+                "value": 32,
+                "label": "32"
+              },
+              {
+                "value": 55,
+                "label": "55"
+              },
+              {
+                "value": 61,
+                "label": "61"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }

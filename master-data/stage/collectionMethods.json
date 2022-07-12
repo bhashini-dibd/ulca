@@ -1,0 +1,157 @@
+{
+  "collectionMethods": [{
+    "code": "studio-recorded",
+    "label": "Studio Recorded",
+    "active": true,
+    "datasetType": [
+      "tts-corpus"
+    ]
+  },
+    {
+      "code": "machine-generated-transcript",
+      "label": "Machine Generated Transcript",
+      "active": true,
+      "datasetType": [
+        "asr-corpus",
+        "asr-unlabeled-corpus"
+      ]
+    },
+    {
+      "code": "manual-transcribed",
+      "label": "Manual Transcribed",
+      "active": true,
+      "datasetType": [
+        "asr-corpus",
+        "asr-unlabeled-corpus"
+      ]
+    },
+    {
+      "code": "web-scrapping-machine-readable",
+      "label": "Web Scrapping Machine Readable",
+      "active": true,
+      "datasetType": [
+        "ocr-corpus"
+      ]
+    },
+    {
+      "code": "web-scraping-ocr",
+      "label": "Web Scraping OCR",
+      "active": true,
+      "datasetType": [
+        "ocr-corpus"
+      ]
+    },
+    {
+      "code": "scanned-ocr",
+      "label": "Scanned OCR",
+      "active": true,
+      "datasetType": [
+        "ocr-corpus"
+      ]
+    },
+    {
+      "code": "screen-capture",
+      "label": "Screen Capture",
+      "active": true,
+      "datasetType": [
+        "ocr-corpus"
+      ]
+    },
+    {
+      "code": "auto-aligned",
+      "label": "Auto Aligned",
+      "active": true,
+      "datasetType": [
+        "parallel-corpus",
+        "asr-corpus",
+        "asr-unlabeled-corpus"
+      ]
+    },
+    {
+      "code": "algorithm-auto-aligned",
+      "label": "Algorithm Auto Aligned",
+      "active": true,
+      "datasetType": [
+        "parallel-corpus",
+        "asr-corpus",
+        "asr-unlabeled-corpus"
+      ]
+    },
+    {
+      "code": "auto-aligned-from-parallel-docs",
+      "label": "Auto Aligned From Parallel Docs",
+      "active": true,
+      "datasetType": [
+        "parallel-corpus"
+      ]
+    },
+    {
+      "code": "manual-aligned",
+      "label": "Manually Aligned",
+      "active": true,
+      "datasetType": [
+        "parallel-corpus"
+      ]
+    },
+    {
+      "code": "machine-translated",
+      "label": "Machine Translated",
+      "active": true,
+      "datasetType": [
+        "parallel-corpus"
+      ]
+    },
+    {
+      "code": "manual-translated",
+      "label": "Manually Translated",
+      "active": true,
+      "datasetType": [
+        "parallel-corpus"
+      ]
+    },
+    {
+      "code": "manual-human-translated",
+      "label": "Manual Human Translated",
+      "active": true,
+      "datasetType": [
+        "parallel-corpus"
+      ]
+    },
+    {
+      "code": "machine-translated-post-edited",
+      "label": "Machine Translated Post Edited",
+      "active": true,
+      "datasetType": []
+    },
+    {
+      "code": "web-scrapping-machine-readable",
+      "label": "Web Scrapping Machine Readable",
+      "active": true,
+      "datasetType": []
+    },
+    {
+      "code": "algorithm-back-translated",
+      "label": "Algorithm Back Translated",
+      "active": true,
+      "datasetType": []
+    },
+    {
+      "code": "human-validated",
+      "label": "Human Validated",
+      "active": true,
+      "datasetType": []
+    },
+    {
+      "code": "phone-recording",
+      "label": "Phone Recording",
+      "active": true,
+      "datasetType": []
+    },
+    {
+      "code": "crowd-sourced",
+      "label": "Crowd Sourced",
+      "active": true,
+      "datasetType": []
+    }
+  ]
+}

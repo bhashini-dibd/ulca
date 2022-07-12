@@ -1,0 +1,184 @@
+[2022-03-14 21:19:32,612] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 21:19:32,617] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 21:19:32,618] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 21:19:32,618] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(DHAo) -- Running..........
+[2022-03-14 21:53:08,719] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 21:53:08,724] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 21:53:08,724] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 21:53:08,725] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(Npvq) -- Running..........
+[2022-03-14 21:59:16,709] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 21:59:16,715] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 21:59:16,715] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 21:59:16,715] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(XUIY) -- Running..........
+[2022-03-14 22:00:17,528] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:00:17,541] {app.py:1891} Thread-1 ERROR in app: Exception on /ulca/notifier/v0/notify/user [POST]
+Traceback (most recent call last):
+  File "/home/siddanth/Ulca-notifier/lib/python3.8/site-packages/flask/app.py", line 1950, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/siddanth/Ulca-notifier/lib/python3.8/site-packages/flask/app.py", line 1936, in dispatch_request
+    return self.view_functions[rule.endpoint](**req.view_args)
+  File "/home/siddanth/Ulca-notifier/lib/python3.8/site-packages/flask_restful/__init__.py", line 468, in wrapper
+    resp = resource(*args, **kwargs)
+  File "/home/siddanth/Ulca-notifier/lib/python3.8/site-packages/flask/views.py", line 89, in view
+    return self.dispatch_request(*args, **kwargs)
+  File "/home/siddanth/Ulca-notifier/lib/python3.8/site-packages/flask_restful/__init__.py", line 583, in dispatch_request
+    resp = meth(*args, **kwargs)
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/resources/notifierresources.py", line 21, in post
+    notifier    =   NotifierEvent(req_criteria["userID"])
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/events/notifier.py", line 21, in __init__
+    self.user_email      =   user_details[0]["email"]
+IndexError: list index out of range
+[2022-03-14 22:00:17,546] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:00:17] "[35m[1mPOST /ulca/notifier/v0/notify/user HTTP/1.1[0m" 500 -
+[2022-03-14 22:02:22,436] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 22:02:22,441] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 22:02:22,441] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 22:02:22,442] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(qWig) -- Running..........
+[2022-03-14 22:02:33,346] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:02:33,349] {notifier.py:56} Thread-1 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:02:33,350] {notifier.py:57} Thread-1 INFO in notifier: {'entityID': '1195500769', 'details': {'datasetName': 'ulca-asr-ds-stqs62022_03_14-07:16:55_AM'}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:02:33,350] {notifierutils.py:18} Thread-1 INFO in notifierutils: Generating email.........
+[2022-03-14 22:02:33,350] {notifierutils.py:29} Thread-1 ERROR in notifierutils: Exception while generating email notification | 'taskType'
+Traceback (most recent call last):
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/utils/notifierutils.py", line 24, in generate_email_notification
+    taskType=template_vars["taskType"],callbackUrl=template_vars["callbackUrl"],len=template_vars["len"])
+KeyError: 'taskType'
+[2022-03-14 22:02:33,351] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:02:33] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:42:27,689] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 22:42:27,694] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 22:42:27,694] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 22:42:27,695] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(Luda) -- Running..........
+[2022-03-14 22:42:31,989] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:42:31,993] {notifier.py:56} Thread-1 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:42:31,993] {notifier.py:57} Thread-1 INFO in notifier: {'entityID': '1195500769', 'details': {'datasetName': 'ulca-asr-ds-stqs62022_03_14-07:16:55_AM'}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:42:31,993] {notifierutils.py:18} Thread-1 INFO in notifierutils: Generating email.........
+[2022-03-14 22:42:36,385] {notifierutils.py:27} Thread-1 INFO in notifierutils: Generated email notification for ['siddanth.shaiva@gmail.com'] 
+[2022-03-14 22:42:36,388] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:42:36] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:45:21,091] {notifierresources.py:14} Thread-2 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:45:21,092] {notifier.py:56} Thread-2 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:45:21,092] {notifier.py:57} Thread-2 INFO in notifier: {'entityID': '1195500769', 'details': {'datasetName': 'ulca-asr-ds-stqs62022_03_14-07:16:55_AM'}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:45:21,092] {notifierutils.py:18} Thread-2 INFO in notifierutils: Generating email.........
+[2022-03-14 22:45:24,218] {notifierutils.py:27} Thread-2 INFO in notifierutils: Generated email notification for ['siddanth.shaiva@gmail.com'] 
+[2022-03-14 22:45:24,219] {_internal.py:225} Thread-2 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:45:24] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:45:42,227] {notifierresources.py:14} Thread-3 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:45:42,228] {notifier.py:56} Thread-3 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:45:42,228] {notifier.py:57} Thread-3 INFO in notifier: {'entityID': '1195500769', 'details': {}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:45:42,228] {notifier.py:74} Thread-3 ERROR in notifier: Exception while writing errors: 'datasetName'
+Traceback (most recent call last):
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/events/notifier.py", line 68, in data_submission_notifier
+    template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None,"taskType":"N/A","callbackUrl":"N/A","len":"N/A"}
+KeyError: 'datasetName'
+[2022-03-14 22:45:42,228] {_internal.py:225} Thread-3 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:45:42] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:47:20,318] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 22:47:20,323] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 22:47:20,323] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 22:47:20,323] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(SoYS) -- Running..........
+[2022-03-14 22:47:32,836] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:47:32,840] {notifier.py:56} Thread-1 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:47:32,840] {notifier.py:57} Thread-1 INFO in notifier: {'entityID': '1195500769', 'details': {'datasetName': 'ulca-asr-ds-stqs62022_03_14-07:16:55_AM'}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:47:32,840] {notifier.py:69} Thread-1 INFO in notifier: sgfsdfsc
+[2022-03-14 22:47:32,840] {notifierutils.py:18} Thread-1 INFO in notifierutils: Generating email.........
+[2022-03-14 22:47:35,279] {notifierutils.py:27} Thread-1 INFO in notifierutils: Generated email notification for ['siddanth.shaiva@gmail.com'] 
+[2022-03-14 22:47:35,283] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:47:35] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:48:02,496] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 22:48:02,501] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 22:48:02,501] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 22:48:02,502] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(fqBQ) -- Running..........
+[2022-03-14 22:48:09,401] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:48:09,405] {notifier.py:56} Thread-1 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:48:09,405] {notifier.py:57} Thread-1 INFO in notifier: {'entityID': '1195500769', 'details': {'datasetName': 'ulca-asr-ds-stqs62022_03_14-07:16:55_AM'}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:48:09,405] {notifierutils.py:18} Thread-1 INFO in notifierutils: Generating email.........
+[2022-03-14 22:48:12,565] {notifierutils.py:27} Thread-1 INFO in notifierutils: Generated email notification for ['siddanth.shaiva@gmail.com'] 
+[2022-03-14 22:48:12,566] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:48:12] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:48:25,684] {notifierresources.py:14} Thread-2 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:48:25,685] {notifier.py:56} Thread-2 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:48:25,685] {notifier.py:57} Thread-2 INFO in notifier: {'entityID': '1195500769', 'details': {}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:48:25,685] {notifier.py:69} Thread-2 INFO in notifier: sgfsdfsc
+[2022-03-14 22:48:25,685] {notifier.py:76} Thread-2 ERROR in notifier: Exception while writing errors: 'datasetName'
+Traceback (most recent call last):
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/events/notifier.py", line 70, in data_submission_notifier
+    template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetName":data["details"]["datasetName"],"datasetType":None,"modelName":None,"taskType":"N/A","callbackUrl":"N/A","len":"N/A"}
+KeyError: 'datasetName'
+[2022-03-14 22:48:25,686] {_internal.py:225} Thread-2 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:48:25] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:49:52,587] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 22:49:52,592] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 22:49:52,592] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 22:49:52,593] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(xVWJ) -- Running..........
+[2022-03-14 22:49:56,241] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:49:56,244] {notifier.py:56} Thread-1 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:49:56,244] {notifier.py:57} Thread-1 INFO in notifier: {'entityID': '1195500769', 'details': {}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:49:56,245] {notifier.py:77} Thread-1 ERROR in notifier: Exception while writing errors: string indices must be integers
+Traceback (most recent call last):
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/events/notifier.py", line 69, in data_submission_notifier
+    data["details"["datasetName"]] = 'N/A'
+TypeError: string indices must be integers
+[2022-03-14 22:49:56,245] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:49:56] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:49:58,709] {notifierresources.py:14} Thread-2 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:49:58,710] {notifier.py:56} Thread-2 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:49:58,710] {notifier.py:57} Thread-2 INFO in notifier: {'entityID': '1195500769', 'details': {}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:49:58,710] {notifier.py:77} Thread-2 ERROR in notifier: Exception while writing errors: string indices must be integers
+Traceback (most recent call last):
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/events/notifier.py", line 69, in data_submission_notifier
+    data["details"["datasetName"]] = 'N/A'
+TypeError: string indices must be integers
+[2022-03-14 22:49:58,711] {_internal.py:225} Thread-2 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:49:58] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:51:29,092] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 22:51:29,096] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 22:51:29,097] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 22:51:29,097] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(cERq) -- Running..........
+[2022-03-14 22:51:32,329] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:51:32,332] {notifier.py:56} Thread-1 INFO in notifier: Request for notifying data submission updates for entityID:1195500769
+[2022-03-14 22:51:32,332] {notifier.py:57} Thread-1 INFO in notifier: {'entityID': '1195500769', 'details': {}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'dataset-submit-completed'}
+[2022-03-14 22:51:32,332] {notifier.py:70} Thread-1 INFO in notifier: sgfsdfsc
+[2022-03-14 22:51:32,332] {notifierutils.py:18} Thread-1 INFO in notifierutils: Generating email.........
+[2022-03-14 22:51:34,907] {notifierutils.py:27} Thread-1 INFO in notifierutils: Generated email notification for ['siddanth.shaiva@gmail.com'] 
+[2022-03-14 22:51:34,911] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:51:34] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:52:59,796] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 22:52:59,800] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 22:52:59,800] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 22:52:59,801] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(UgDq) -- Running..........
+[2022-03-14 22:54:10,686] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:54:10,689] {notifier.py:103} Thread-1 INFO in notifier: Request for notifying benchmark submission updates for entityID:1195500769
+[2022-03-14 22:54:10,689] {notifier.py:104} Thread-1 INFO in notifier: {'entityID': '1195500769', 'details': {'nodelName': 'C-DAC, Pune Translation English-Hindi-01'}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'benchmark-run-failed'}
+[2022-03-14 22:54:10,690] {notifier.py:119} Thread-1 ERROR in notifier: Exception while writing errors: 'modelName'
+Traceback (most recent call last):
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/events/notifier.py", line 115, in benchmark_submission_notifier
+    template_vars       =   {"firstname":self.user_name,"activity_link":link,"datasetType":None,"datasetName":None,"modelName":data["details"]["modelName"]}
+KeyError: 'modelName'
+[2022-03-14 22:54:10,691] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:54:10] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:54:22,431] {notifierresources.py:14} Thread-2 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:54:22,431] {notifier.py:103} Thread-2 INFO in notifier: Request for notifying benchmark submission updates for entityID:1195500769
+[2022-03-14 22:54:22,432] {notifier.py:104} Thread-2 INFO in notifier: {'entityID': '1195500769', 'details': {'modelName': 'C-DAC, Pune Translation English-Hindi-01'}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'benchmark-run-failed'}
+[2022-03-14 22:54:22,432] {notifierutils.py:18} Thread-2 INFO in notifierutils: Generating email.........
+[2022-03-14 22:54:22,432] {notifierutils.py:29} Thread-2 ERROR in notifierutils: Exception while generating email notification | 'taskType'
+Traceback (most recent call last):
+  File "/home/siddanth/Desktop/ulca-automate/ulca/backend/api/ulca-notifier/notifier/utils/notifierutils.py", line 24, in generate_email_notification
+    taskType=template_vars["taskType"],callbackUrl=template_vars["callbackUrl"],len=template_vars["len"])
+KeyError: 'taskType'
+[2022-03-14 22:54:22,433] {_internal.py:225} Thread-2 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:54:22] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:55:50,784] {app.py:36} MainThread INFO in app: Notifier service started <<<<<<<<<<<<>>>>>>>>>>>
+[2022-03-14 22:55:50,788] {_internal.py:225} MainThread WARNING in _internal:  * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+[2022-03-14 22:55:50,789] {_internal.py:225} MainThread INFO in _internal:  * Running on http://192.168.0.124:5001/ (Press CTRL+C to quit)
+[2022-03-14 22:55:50,789] {notifier_consumer.py:33} MainThread INFO in notifier_consumer: DS-NOTIFIER-(HYiW) -- Running..........
+[2022-03-14 22:55:56,900] {notifierresources.py:14} Thread-1 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:55:56,904] {notifier.py:103} Thread-1 INFO in notifier: Request for notifying benchmark submission updates for entityID:1195500769
+[2022-03-14 22:55:56,904] {notifier.py:104} Thread-1 INFO in notifier: {'entityID': '1195500769', 'details': {'modelName': 'C-DAC, Pune Translation English-Hindi-01'}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'benchmark-run-failed'}
+[2022-03-14 22:55:56,904] {notifierutils.py:18} Thread-1 INFO in notifierutils: Generating email.........
+[2022-03-14 22:56:00,021] {notifierutils.py:27} Thread-1 INFO in notifierutils: Generated email notification for ['siddanth.shaiva@gmail.com'] 
+[2022-03-14 22:56:00,025] {_internal.py:225} Thread-1 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:56:00] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -
+[2022-03-14 22:57:33,237] {notifierresources.py:14} Thread-2 INFO in notifierresources: Inside ulca-notifier service
+[2022-03-14 22:57:33,238] {notifier.py:103} Thread-2 INFO in notifier: Request for notifying benchmark submission updates for entityID:1195500769
+[2022-03-14 22:57:33,238] {notifier.py:104} Thread-2 INFO in notifier: {'entityID': '1195500769', 'details': {}, 'userID': '1eb83d279329426db1d1827c0e1abf93', 'event': 'benchmark-run-failed'}
+[2022-03-14 22:57:33,238] {notifierutils.py:18} Thread-2 INFO in notifierutils: Generating email.........
+[2022-03-14 22:57:36,079] {notifierutils.py:27} Thread-2 INFO in notifierutils: Generated email notification for ['siddanth.shaiva@gmail.com'] 
+[2022-03-14 22:57:36,081] {_internal.py:225} Thread-2 INFO in _internal: 192.168.0.124 - - [14/Mar/2022 22:57:36] "POST /ulca/notifier/v0/notify/user HTTP/1.1" 200 -

@@ -1,17 +1,13 @@
 {   
     "datasetType": "asr-corpus",
     "languages": {
-        "sourceLanguage": "hi",
-        "targetLanguage": null
+        "sourceLanguage": "hi"
     },
     "collectionSource": [
         "YouTube", "https://www.youtube.com/watch?v=UIkSFSHX9AU"
     ],
     "domain":[
-        "general"
-    ],
-    "collectionMethod": [
-        "web-scrapping-audio"
+        "news"
     ],
     "license":  "cc-by-4.0",
     "submitter": {
@@ -48,10 +44,10 @@
             "manual-transcribed"
         ],
         "collectionDetails": {
-            "contributers": [{
+            "contributor": {
                 "name": "Harveen",
                 "aboutMe": "Member of thoughtworks asr team"
-            }]
+            }
         }
     }
 }

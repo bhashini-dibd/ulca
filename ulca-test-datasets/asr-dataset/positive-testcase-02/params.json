@@ -1,17 +1,13 @@
 {   
     "datasetType": "asr-corpus",
     "languages": {
-        "sourceLanguage": "hi",
-        "targetLanguage": null
+        "sourceLanguage": "hi"
     },
     "collectionSource": [
         "YouTube", "https://www.youtube.com/watch?v=UIkSFSHX9AU"
     ],
     "domain":[
         "general"
-    ],
-    "collectionMethod": [
-        "web-scrapping-audio"
     ],
     "license":  "cc-by-4.0",
     "submitter": {
@@ -49,9 +45,9 @@
         ],
         "collectionDetails": {
             "asrModel": "gogle asr",
-            "evaluationMethod": [{
-            "wer": 26.5
-        }]
+            "evaluationMethod": {
+                "wer": 26.5
+            }
         }
     }
 }

@@ -1,0 +1,8 @@
+flask==1.1.2
+flask-cors==3.0.8
+flask-restful==0.3.8
+DateTime==4.3
+numpy==1.19.5
+pandas==1.1.2
+pip==20.1
+pymongo==3.11.3
