@@ -8,7 +8,7 @@ from events.errorrepo import ErrorRepo
 from events.processrepo import ProcessRepo
 from utils.cronjobutils import StoreUtils
 import os
-from datetime import datetime,timedelta, timezone
+from datetime import datetime,timedelta
 from logging.config import dictConfig
 
 
@@ -35,9 +35,7 @@ class ErrorProcessor(Thread):
                 # so getting that from mongo; previous implementation : line no-33 
                 log.info('Fetching SRNs from mongo store')
                 srn_list = self.get_unique_srns()
-                log.info(f'srn list {srn_list}')
-                deleted = errorepo.remove({"uploaded" : { "$exists" : False},"serviceRequestNumber":{"$nin":srn_list}}) #removing old error records from mongo
-                
+                errorepo.remove({"uploaded" : { "$exists" : False},"serviceRequestNumber":{"$nin":srn_list}}) #removing old error records from mongo
                 if srn_list:
                     log.info(f'{len(srn_list)} SRNs found from mongo store')
                     log.info(f'Error processing initiated --------------- run : {run}')
@@ -54,29 +52,22 @@ class ErrorProcessor(Thread):
     #fetching all error records from redis, and passing on to upload service
     def initiate_error_processing(self,srn_list):
         try:
-            log.info(f'initiating error processing')
             for srn in srn_list:
                 #getting the total error count (summation of "count" field) for records stored on mongo
                 agg_query = [{"$match":{"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}},
                             { "$group": { "_id" : None, "consolidatedCount" : { "$sum": "$count" } } },
                             {"$project":{ "_id":0,"consolidatedCount":1}}]
                 present_count = errorepo.aggregate(agg_query)
-                log.info(f'present count {present_count}')
                 if len(present_count) == 0:
-                    present_scr_updated = 0
-                else:
-                    present_scr_updated = present_count[0]["consolidatedCount"]
-                   #continue
+                    continue
                 check_query   = {"serviceRequestNumber" : srn,"uploaded" : True} 
                 consolidated_rec = errorepo.search(check_query, {"_id":False}, None, None) #  Respone - Null --> Summary report havent't generated yet
-                log.info(f'consolidated_rec count {consolidated_rec}')
                 if  not consolidated_rec:
                     log.info(f'consolidated count NULL')
-                if (not consolidated_rec or (consolidated_rec[0]["consolidatedCount"] < present_scr_updated)):
+                if (not consolidated_rec or (consolidated_rec[0]["consolidatedCount"] < present_count[0]["consolidatedCount"])):
                     log.info(f'Creating consolidated error report for srn-- {srn}')
                     search_query = {"serviceRequestNumber": srn,"uploaded" : { "$exists" : False}}
                     error_records =errorepo.search(search_query,{"_id":False},None,None)
-                    log.info(f'error_records count {error_records}')
                     if "datasetName" not in error_records[0]:
                         log.info(f'datasetName not found')
                     file = f'{shared_storage_path}consolidated-error-{error_records[0]["datasetName"].replace(" ","-")}-{srn}.csv'
@@ -159,13 +150,12 @@ class ErrorProcessor(Thread):
         
 
     def get_unique_srns(self):
-        lastday = datetime.now(timezone.utc) - timedelta(seconds=redis_key_expiry*2)
-        lastday_time = lastday.strftime("%a %b %d %H:%M:%S %Z %Y")
+        lastday = (datetime.now() - timedelta(seconds=redis_key_expiry*2))
+        log.info(f"lastday  :{lastday}")
         query = [{ '$match':{'serviceRequestType':{'$in':['dataset','benchmark']},'serviceRequestAction':'submit'}}, 
-                {'$project': {'serviceRequestNumber': '$serviceRequestNumber','date':'$startTime'}},
-                {'$match': {'date': {'$gt': lastday_time}}}]
-        # log.info(f"Query :{query}")
-        #{'$project': {'date': {'$gt': lastday}},'serviceRequestNumber': '$serviceRequestNumber'}
+                {'$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
+                {'$match': {'date': {'$gt': lastday}}}]
+        log.info(f"Query :{query}")
         SRNlist = []
         aggresult = prorepo.aggregate(query)
         if aggresult:
