@@ -62,8 +62,8 @@ class ErrorProcessor(Thread):
                             {"$project":{ "_id":0,"consolidatedCount":1}}]
                 present_count = errorepo.aggregate(agg_query)
                 log.info(f'present count {present_count}')
-                if len(present_count) == 0:
-                    continue
+                #if len(present_count) == 0:
+                #   continue
                 check_query   = {"serviceRequestNumber" : srn,"uploaded" : True} 
                 consolidated_rec = errorepo.search(check_query, {"_id":False}, None, None) #  Respone - Null --> Summary report havent't generated yet
                 log.info(f'consolidated_rec count {consolidated_rec}')
