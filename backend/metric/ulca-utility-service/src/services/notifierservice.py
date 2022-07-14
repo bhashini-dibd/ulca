@@ -15,79 +15,49 @@ class NotifierService:
             parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
             utility     =   datautils.DataUtils()
             utility.generate_email_notification({"parallel_count":parallel_count,"ocr_count":ocr_count,"mono_count":mono_count,"asr_count":round(asr_count,4),"asr_unlabeled_count":round(asr_unlabeled_count,4),"tts_count":round(tts_count,4),"pending":pending_jobs,"inprogress":inprogress_jobs,"file":file})
-            resu = "Notified Users"
-            return resu
+                
         except Exception as e:
             log.exception(f'Exception : {e}')
 
     def notify_mismatch(self):
         log.info("Checking for data mismatch.......")
-        parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
-        log.info(f'pending_jobs{pending_jobs, inprogress_jobs,file}')
-        mismatch = self.check_for_mismatch(parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count)
+        parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,pending_jobs,inprogress_jobs,file = self.calculate_counts()
+        mismatch = self.check_for_mismatch(parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count)
         if not mismatch:
             log.info("Data is stable ; no mismtach in counts")
             return None
         utility     =   datautils.DataUtils()
         utility.generate_email_notification(mismatch)
-        return "Notified mismatch"
 
 
     def calculate_counts(self):
         log.info('Calculating counts!')
         try:
-
-            parallel_count1 = repo.count_data_col({},config.data_db_schema,config.data_parallel)
-            if not parallel_count1:
-                parallelcnts = 0
-            elif parallel_count1:
-                parallelcnts = parallel_count1
-            log.info(parallelcnts)
-            ocr_count1 = repo.count_data_col({},config.data_db_schema,config.data_ocr)
-            if not ocr_count1:
-                ocrcnts = 0
-            elif ocr_count1:
-                ocrcnts = ocr_count1
-            log.info(ocrcnts)
-            mono_count1 = repo.count_data_col({},config.data_db_schema,config.data_mono)
-            if not mono_count1:
-                monocnts = 0
-            elif mono_count1:
-                monocnts = mono_count1
-            log.info(monocnts)
-            asr_labeled1 = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
-            if not asr_labeled1:
-                asr_count1 = 0
-            elif asr_labeled1:
-                asr_count1 = (asr_labeled1[0]["total"])/3600
-            log.info(asr_count1)
-            asr_unlabeled1 = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
-            if not asr_unlabeled1:
-                asr_unlabeled_count1 = 0
-            elif asr_unlabeled1:
-                asr_unlabeled_count1 = (asr_unlabeled1[0]["total"])/3600
-            log.info(asr_unlabeled_count1)
-            tts1 = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_tts)
-            if not tts1:
-                asr_unlabeled_count1 = 0
-            elif tts1:
-                tts_count1 = (tts1[0]["total"])/3600
-            log.info(tts_count1)
-
+            parallel_count = repo.count_data_col({},config.data_db_schema,config.data_parallel)
+            log.info(parallel_count)
+            ocr_count = repo.count_data_col({},config.data_db_schema,config.data_ocr)
+            log.info(ocr_count)
+            mono_count = repo.count_data_col({},config.data_db_schema,config.data_mono)
+            log.info(mono_count)
+            asr_labeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr)
+            asr_count = (asr_labeled[0]["total"])/3600
+            log.info(asr_count)
+            asr_unlabeled = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_asr_unlabeled)
+            asr_unlabeled_count = (asr_unlabeled[0]["total"])/3600
+            log.info(asr_unlabeled_count)
+            tts = repo.aggregate_data_col([{'$group':{'_id': None, 'total': {'$sum': "$durationInSeconds"}}}],config.data_db_schema,config.data_tts)
+            tts_count = (tts[0]["total"])/3600
+            log.info(tts_count)
             aggquery = [{ "$match": { "$or": [{ "status": "In-Progress" }, { "status": "Pending" }] ,"$and":[{"serviceRequestAction" : "submit"}]}},
                         {"$lookup":{"from": "ulca-pt-tasks","localField": "serviceRequestNumber","foreignField": "serviceRequestNumber","as": "tasks"}},
                         ]
             aggresult = repo.aggregate_process_col(aggquery,config.process_db_schema,config.process_col)
-
-            if aggresult:
-                pending_jobs1,inprogress_jobs1,jobfile1 = self.process_aggregation_output(aggresult)
-            else :
-                pending_jobs1,inprogress_jobs1,jobfile1 = 0, 0, 0
-            log.info(f"Pending :{pending_jobs1}")
-            log.info(f"In-Progress:{inprogress_jobs1}")
-            log.info(f"file:{jobfile1}")           
-            return parallelcnts,ocrcnts,monocnts,asr_count1,asr_unlabeled_count1,tts_count1,pending_jobs1,inprogress_jobs1,jobfile1
-
+            pending_jobs,inprogress_jobs,jobfile = self.process_aggregation_output(aggresult)
+            log.info(f"Pending :{pending_jobs}")
+            log.info(f"In-Progress:{inprogress_jobs}")
+            log.info(f"file:{jobfile}")
+            
+            return parallel_count,ocr_count,mono_count,asr_count,asr_unlabeled_count,tts_count,pending_jobs,inprogress_jobs,jobfile
         except Exception as e:
             log.exception(f'{e}')
 

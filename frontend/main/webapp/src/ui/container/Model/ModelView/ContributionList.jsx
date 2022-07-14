@@ -1,4 +1,4 @@
-import { withStyles, Button, Typography, Grid } from "@material-ui/core";
+import { withStyles, Button, Typography, Grid, Box } from "@material-ui/core";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "../../../styles/Datatable";
 import React, { useEffect, useState } from "react";
@@ -37,6 +37,8 @@ import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValues from "../../../../redux/actions/api/Model/ModelView/GetSearchedValues";
 import { translate } from "../../../../assets/localisation";
 import { useRef } from "react";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import LightTooltip from "../../../components/common/LightTooltip";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -71,7 +73,9 @@ const ContributionList = (props) => {
   const [modelStatusInfo, setModelStatusInfo] = useState({
     modelId: "",
     status: "",
+    reason: "",
   });
+
   const status = useSelector((state) => state.getBenchMarkDetails.status);
   const refHook = useRef(false);
 
@@ -357,12 +361,12 @@ const ContributionList = (props) => {
     });
   };
 
-  const toggleModelStatusAPI = (modelId, status) => {
+  const toggleModelStatusAPI = (modelId, status, reason) => {
     const toggledStatus =
       status === "unpublished"
         ? "published"
         : status === "published" && "unpublished";
-    const apiObj = new SwitchModelStatus(modelId, toggledStatus);
+    const apiObj = new SwitchModelStatus(modelId, toggledStatus, reason);
     fetch(apiObj.apiEndPoint(), {
       method: "POST",
       body: JSON.stringify(apiObj.getBody()),
@@ -406,6 +410,10 @@ const ContributionList = (props) => {
     setOpenDialog(true);
     setModelStatusInfo({ status, modelId });
   };
+
+  const handleTextBox = (input) => {
+    setModelStatusInfo({ ...modelStatusInfo, reason: input });
+  }
 
   const isDisabled = (benchmarkPerformance) => {
     for (let i = 0; i < benchmarkPerformance.length; i++) {
@@ -481,16 +489,33 @@ const ContributionList = (props) => {
     }
   };
 
-  const renderStatus = (status) => {
+  const renderStatus = (reason, status) => {
     return (
-      <Typography
-        variant="body1"
-        style={{
-          color: returnColor(status),
-        }}
-      >
-        {status}
-      </Typography>
+      <Box display="flex">
+        <Typography
+          variant="body1"
+          style={{
+            color: returnColor(status),
+          }}
+        >
+          {status}{" "}
+        </Typography>
+        {
+            status !== "published" && reason ? (
+              <LightTooltip
+                arrow
+                placement="right"
+                title={reason}
+              >
+                <InfoOutlinedIcon
+                  className={classes.buttonStyle}
+                  fontSize="small"
+                  color="disabled"
+                />
+              </LightTooltip>
+            ) : null
+          }
+      </Box>
     );
   };
 
@@ -505,7 +530,7 @@ const ContributionList = (props) => {
   };
 
   const renderConfirmationDialog = () => {
-    const { status, modelId } = modelStatusInfo;
+    const { status, modelId, reason } = modelStatusInfo;
     return (
       <Dialog
         title={`${status === "published" ? "Unpublish Model" : "Publish Model"
@@ -514,11 +539,13 @@ const ContributionList = (props) => {
             ? "After the model is unpublished, it will not be available for public use. Are you sure you want to unpublish the model?"
             : "After the model is published, it will be available for public use. Are you sure you want to publish the model?"
           }`}
-        handleSubmit={() => toggleModelStatusAPI(modelId, status)}
+        handleSubmit={() => toggleModelStatusAPI(modelId, status, reason)}
         handleClose={handleDialogClose}
         actionButton="Cancel"
         actionButton2="Yes"
-        open={openDialog}
+        open={openDialog} 
+        showTextBox={status === "published" ? true : false}
+        handleTextBox={(e) => handleTextBox(e)}
       />
     );
   };
@@ -614,7 +641,7 @@ const ContributionList = (props) => {
         display: view ? "excluded" : true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
-            return renderStatus(tableMeta.rowData[7]);
+            return renderStatus(tableMeta.rowData[10], tableMeta.rowData[7]);
           }
         },
       },
@@ -644,6 +671,13 @@ const ContributionList = (props) => {
       label: "Benchmark Performance",
       options: {
         display: "excluded",
+      },
+    },
+    {
+      name: "unpublishReason",
+      label: "unPublishReason",
+      options: {
+        display: false,
       },
     },
   ];

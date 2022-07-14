@@ -19,13 +19,6 @@ class StatusCronProcessor(Thread):
         task_list = ['validate','publish','ingest']
         status_list = ['In-Progress','Pending','Queued']
         while not self.stopped.wait(status_cron_interval_sec):
-            usernotify = service.notify_user()
-            mismatch_notify = service.notify_mismatch()
-            log.info(f'user notify {usernotify}')
-            log.info(f'mismatch notified {mismatch_notify}')
-            res = CustomResponse(Status.SUCCESS.value,None,None)
-            log.info(f'response successfully generated.{res}')
-            #return res.getres()
             log.info(f'Job status updater cron run :{run}')
             try:
                 pending_srns = self.get_pending_tasks()

@@ -24,9 +24,22 @@
         "task_type":"translation", "metric_name":"ribes", "metric_implementation":"TranslationRibesScoreEval", "score_context":"default"
     },
     {
+        "task_type":"translation", "metric_name":"chrf", "metric_implementation":"TranslationChrfScoreEval", "score_context":"default"
+    },
+    {
         "task_type":"ocr", "metric_name":"wer", "metric_implementation":"OCRWEREval", "score_context":"default"
     },
     {
         "task_type":"ocr", "metric_name":"cer", "metric_implementation":"OCRCEREval", "score_context":"default"
+    },
+    {
+        "task_type":"transliteration", "metric_name":"cer", "metric_implementation":"TransliterationCEREval", "score_context":"default"
+    },
+    {
+        "task_type":"transliteration", "metric_name":"top-1 accuracy", "metric_implementation":"TransliterationTopOneAccuracyEval", "score_context":"default"
+    },
+    {
+        "task_type":"transliteration", "metric_name":"top-5 accuracy", "metric_implementation":"TransliterationTopFiveAccuracyEval", "score_context":"default"
     }
+    
 ]

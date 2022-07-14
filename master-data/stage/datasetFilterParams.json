@@ -61,13 +61,13 @@
       }
     },
       {
-        "code": "transliteration-corpus",
-        "label": "Transliteration Dataset",
+        "code": "glossary-corpus",
+        "label": "Glossary Dataset",
         "active": true,
-        "datasetType": "transliteration-corpus",
+        "datasetType": "glossary-corpus",
         "values": {
-          "master": "/transliterationCorpusFilters.json",
-          "jsonPath": "$.transliterationCorpusFilters"
+          "master": "/glossaryCorpusFilters.json",
+          "jsonPath": "$.glossaryCorpusFilters"
         }
     }
   ],
