@@ -6,6 +6,7 @@ from .translation_rouge_score import TranslationRougeScoreEval
 from .translation_bert_score_eval import TranslationBertScoreEval
 from .translation_gleu_score_eval import TranslationGleuScoreEval
 from .translation_ribes_score_eval import TranslationRibesScoreEval
+from .translation_chrf_metric_eval import TranslationChrfScoreEval
 from .ocr_wer_eval import OCRWEREval
 from .ocr_cer_eval import OCRCEREval
 from .transliteration_cer_eval import TransliterationCEREval
