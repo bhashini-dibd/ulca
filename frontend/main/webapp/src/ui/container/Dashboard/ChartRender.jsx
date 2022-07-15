@@ -111,12 +111,17 @@ const ChartRender = (props) => {
     if (selectedOption.value === "parallel-corpus") {
       return [
         { field: "sourceLanguage", value: source },
-        { field: "targetLanguage", value: targetLanguage   },
+        { field: "targetLanguage", value: targetLanguage },
       ];
-    } else {
+    } else if (selectedOption.value === "transliteration-corpus") {
       return [
         { field: "sourceLanguage", value: "en" },
         { field: "targetLanguage", value: source },
+      ];
+    } else {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage },
       ];
     }
   };
@@ -148,12 +153,20 @@ const ChartRender = (props) => {
     if (selectedOption.value === "parallel-corpus") {
       return [
         { field: "sourceLanguage", value: source },
-        { field: "targetLanguage", value: targetLanguage   },
+        { field: "targetLanguage", value: targetLanguage },
+        event
       ];
-    } else {
+    } else if (selectedOption.value === "transliteration-corpus") {
       return [
         { field: "sourceLanguage", value: "en" },
         { field: "targetLanguage", value: source },
+        event
+      ];
+    } else {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: "" },
+        event
       ];
     }
   };
