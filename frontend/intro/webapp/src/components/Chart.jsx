@@ -108,7 +108,7 @@ const ChartRender = (props) => {
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }])
+		return ([{ "field":"sourceLanguage", "value": "en"},{ "field":"targetLanguage", "value": source }])
 	}
 
 	const fetchNextParams = (eventValue) => {
@@ -129,7 +129,7 @@ const ChartRender = (props) => {
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }, event])
+		return ([{ "field":"sourceLanguage", "value": "en"},{ "field":"targetLanguage", "value": source }, event])
 	}
 
 	const handleOnClick = (value, event, filter) => {
