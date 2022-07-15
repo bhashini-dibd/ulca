@@ -108,8 +108,8 @@ const ChartRender = (props) => {
         : event && event.hasOwnProperty("label") && event.label
     );
     return [
-      { field: "sourceLanguage", value: source },
-      { field: "targetLanguage", value: targetLanguage },
+      { field: "sourceLanguage", value: "en" },
+      { field: "targetLanguage", value: source },
     ];
   };
 
@@ -137,8 +137,8 @@ const ChartRender = (props) => {
         : event && event.hasOwnProperty("label") && event.label
     );
     return [
-      { field: "sourceLanguage", value: source },
-      { field: "targetLanguage", value: targetLanguage },
+      { field: "sourceLanguage", value: "en" },
+      { field: "targetLanguage", value: source },
       event,
     ];
   };
