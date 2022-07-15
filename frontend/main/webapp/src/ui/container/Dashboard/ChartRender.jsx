@@ -107,10 +107,18 @@ const ChartRender = (props) => {
         ? selectedLanguageName
         : event && event.hasOwnProperty("label") && event.label
     );
-    return [
-      { field: "sourceLanguage", value: "en" },
-      { field: "targetLanguage", value: source },
-    ];
+
+    if (selectedOption.value === "parallel-corpus") {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage   },
+      ];
+    } else {
+      return [
+        { field: "sourceLanguage", value: "en" },
+        { field: "targetLanguage", value: source },
+      ];
+    }
   };
 
   const fetchNextParams = (eventValue) => {
@@ -136,11 +144,18 @@ const ChartRender = (props) => {
         ? selectedLanguageName
         : event && event.hasOwnProperty("label") && event.label
     );
-    return [
-      { field: "sourceLanguage", value: "en" },
-      { field: "targetLanguage", value: source },
-      event,
-    ];
+
+    if (selectedOption.value === "parallel-corpus") {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage   },
+      ];
+    } else {
+      return [
+        { field: "sourceLanguage", value: "en" },
+        { field: "targetLanguage", value: source },
+      ];
+    }
   };
 
   const handleOnClick = (value, event, filter) => {
