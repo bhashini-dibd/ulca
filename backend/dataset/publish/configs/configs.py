@@ -15,6 +15,7 @@ ocr_collection = os.environ.get('ULCA_DS_PUBLISH_OCR_COL', "ocr-dataset")
 parallel_collection = os.environ.get('ULCA_DS_PUBLISH_PARALLEL_COL', "parallel-dataset")
 monolingual_collection = os.environ.get('ULCA_DS_PUBLISH_MONOLINGUAL_COL', "monolingual-dataset")
 transliteration_collection = os.environ.get('ULCA_DS_PUBLISH_TRANSLITERATIONL_COL', "transliteration-dataset")
+glossary_collection = os.environ.get('ULCA_DS_PUBLISH_GLOSSARY_COL', "glossary-dataset")
 object_store = os.environ.get('ULCA_OBJECT_STORE', "AWS")
 
 offset = os.environ.get('ULCA_DATASET_DEFAULT_OFFSET', None)
@@ -108,6 +109,15 @@ transliteration_search_ignore_keys = ["_id", "id", "tags", "submitter", "license
                                "datasetId", "sourceLanguage", "targetLanguage"]
 transliteration_updatable_keys = ["alignmentScore", "version"]
 
+glossary_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+glossary_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
+                         "createdOn"]
+glossary_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "hashedKey", "sk",
+                               "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version",
+                               "datasetId", "sourceLanguage", "targetLanguage"]
+glossary_updatable_keys = ["alignmentScore", "version"]
+
 govt_data_whitelist_enabled = os.environ.get('ULCA_PUBLISH_GOVT_DATA_WHITELIST_ENABLED', True)
 if isinstance(govt_data_whitelist_enabled, str):
     if govt_data_whitelist_enabled == "TRUE":
@@ -160,6 +170,7 @@ dataset_type_asr_unlabeled = os.environ.get('DS_TYPE_ASR_UNLABELED', 'asr-unlabe
 dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 dataset_type_transliteration = os.environ.get('DS_TYPE_TRANSLITERATION', 'transliteration-corpus')
+dataset_type_glossary = os.environ.get('DS_TYPE_GLOSSARY', 'glossary-corpus')
 
 user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'precheck')
 user_mode_real = os.environ.get('USER_MODE_REAL', 'real')
