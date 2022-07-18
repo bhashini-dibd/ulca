@@ -39,6 +39,11 @@
         "code": "transliteration-corpus",
         "label": "Transliteration Dataset",
         "active": true
+      },
+      {
+        "code": "glossary-corpus",
+        "label": "Glossary Dataset",
+        "active": true
       }
     ]
   }
