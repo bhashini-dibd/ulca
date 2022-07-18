@@ -467,6 +467,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 		if (recordSize <= precheckRecordThreshold) {
 			updateDataset(datasetId, userId, md5hash, paramsSchema);
+			datasetIngest.setMode("real");
 			ingest(paramsSchema, datasetIngest);
 			return;
 		} else {
