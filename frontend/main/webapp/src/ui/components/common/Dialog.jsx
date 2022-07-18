@@ -38,6 +38,9 @@ const ResponsiveDialog = (props) => {
                 variant="outlined" 
                 fullWidth 
                 onChange={(e) => {handleTextBox(e.target.value); setReason(e.target.value)}}
+                InputProps={{ className: `${classes.contributionTextBoxInput}` }}
+                InputLabelProps={{ className: `${classes.contributionTextBoxInput}` }}
+                multiline
               />
               : null
             }

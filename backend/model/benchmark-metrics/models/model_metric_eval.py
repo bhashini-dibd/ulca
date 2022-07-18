@@ -11,7 +11,7 @@ class ModelMetricEval():
 
     def machine_translation_metric_eval(self, ground_truth, machine_translation, language):
         """
-        Functional interface for translation type model
+        Functional interface for translation(NMT) type model
 
         ground_truth        : golden data/human vetted sentences
         machine_translation : model generated sentences

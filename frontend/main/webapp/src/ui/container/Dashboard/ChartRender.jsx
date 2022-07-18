@@ -107,10 +107,23 @@ const ChartRender = (props) => {
         ? selectedLanguageName
         : event && event.hasOwnProperty("label") && event.label
     );
-    return [
-      { field: "sourceLanguage", value: source },
-      { field: "targetLanguage", value: targetLanguage },
-    ];
+
+    if (selectedOption.value === "parallel-corpus") {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage },
+      ];
+    } else if (selectedOption.value === "transliteration-corpus") {
+      return [
+        { field: "sourceLanguage", value: "en" },
+        { field: "targetLanguage", value: source },
+      ];
+    } else {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage },
+      ];
+    }
   };
 
   const fetchNextParams = (eventValue) => {
@@ -136,11 +149,26 @@ const ChartRender = (props) => {
         ? selectedLanguageName
         : event && event.hasOwnProperty("label") && event.label
     );
-    return [
-      { field: "sourceLanguage", value: source },
-      { field: "targetLanguage", value: targetLanguage },
-      event,
-    ];
+
+    if (selectedOption.value === "parallel-corpus") {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage },
+        event
+      ];
+    } else if (selectedOption.value === "transliteration-corpus") {
+      return [
+        { field: "sourceLanguage", value: "en" },
+        { field: "targetLanguage", value: source },
+        event
+      ];
+    } else {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: "" },
+        event
+      ];
+    }
   };
 
   const handleOnClick = (value, event, filter) => {
