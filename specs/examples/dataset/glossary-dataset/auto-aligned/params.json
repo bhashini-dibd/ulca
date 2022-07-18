@@ -5,8 +5,7 @@
         "targetLanguage": "hi"
     },
     "collectionSource": [
-        "PIB",
-        "https://www.pib.gov.in/Allrel.aspx"
+        "Anuvaad"
     ],
     "domain":[
         "legal"

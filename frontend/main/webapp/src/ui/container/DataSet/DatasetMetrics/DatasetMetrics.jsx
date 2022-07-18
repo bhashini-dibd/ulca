@@ -72,6 +72,7 @@ const DatasetMetrics = (props) => {
   const [columns, setColumns] = useState([]);
   const [totalColumns, setTotalColumns] = useState(selectColumnData);
   const [tableData, setTableData] = useState([]);
+  const [searchKey, setSearchKey] = useState("");
   const openSelector = Boolean(anchorEl);
 
   const datasetMetrics = useSelector((state) => state.datasetMetrics.result);
@@ -115,6 +116,8 @@ const DatasetMetrics = (props) => {
   }, []);
 
   const handleSearch = (value) => {
+    setSearchKey(value);
+    prepareDataforTable(columns, datasetMetrics, value);
     dispatch(getSearchedValue(value));
   };
 
@@ -144,10 +147,10 @@ const DatasetMetrics = (props) => {
     const filteredArr = tempTotalColumn.filter((col) => !col.customHidden);
     setTotalColumns(tempTotalColumn);
     setColumns(filteredArr);
-    prepareDataforTable(filteredArr);
+    prepareDataforTable(filteredArr, datasetMetrics, searchKey);
   };
 
-  const prepareDataforTable = (column) => {
+  const prepareDataforTable = (column, data, key) => {
     const ActiveColumns = column
       .filter((item) => item.name !== "count")
       .map((col) => col.name);
@@ -159,7 +162,7 @@ const DatasetMetrics = (props) => {
           oldObject[key] === newObject[key] || !ActiveColumns.includes(key)
       );
 
-    datasetMetrics.forEach((row) => {
+    data.forEach((row) => {
       let isSame = false;
       OutputData.forEach((data) => {
         if (compareObject(data, row)) {
@@ -168,11 +171,22 @@ const DatasetMetrics = (props) => {
         }
       });
       if (!isSame) {
-        OutputData.push(row);
+        OutputData.push({...row});
       }
     });
 
-    setTableData(OutputData);
+    const res = OutputData.filter((e) => {
+      return (
+        e.collectionMethod.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.datasetType.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.domain.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.sourceLanguage.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.submitterName.toLowerCase().match(key.trim().toLowerCase()) ||
+        e.targetLanguage.toLowerCase().match(key.trim().toLowerCase())
+      );
+    });
+
+    setTableData(res);
   };
   return (
     <div>
