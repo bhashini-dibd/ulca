@@ -69,6 +69,16 @@
           "master": "/transliterationCorpusFilters.json",
           "jsonPath": "$.transliterationCorpusFilters"
         }
+    },
+    {
+      "code": "glossary-corpus",
+      "label": "Glossary Dataset",
+      "active": true,
+      "datasetType": "glossary-corpus",
+      "values": {
+        "master": "/glossaryCorpusFilters.json",
+        "jsonPath": "$.glossaryCorpusFilters"
+      }
     }
   ],
   "relatedMaster": true
