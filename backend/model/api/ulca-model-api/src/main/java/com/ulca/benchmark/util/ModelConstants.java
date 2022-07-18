@@ -20,7 +20,7 @@ public final class ModelConstants {
 			/*
 			 * rouge has been temporarily removed
 			 */
-			String[] metric = { "bleu", "meteor", "ribes", "gleu", "bert" };
+			String[] metric = { "bleu", "meteor", "ribes", "gleu", "bert", "chrf" };
 
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
