@@ -629,7 +629,7 @@ const DataSet = (theme) => ({
     borderRadius: "24px",
     backgroundColor: "#F3F3F3",
     marginLeft: 0,
-    width: "220px",
+    width: "400px",
     textAlign: "left",
     float: "right",
   },
@@ -652,14 +652,12 @@ const DataSet = (theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(3)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-    },
     fontStyle: "italic",
     fontSize: "14px",
   },
   inputRoot: {
     width: "100%",
+    height: "39px",
   },
   filterBtn: {
     borderRadius: "22px",
