@@ -159,6 +159,21 @@
       "code": "gom",
       "label": "Goan Konkani",
       "active": true
+    },
+    {
+      "code": "awa",
+      "label": "Awadhi",
+      "active": true
+    },
+    {
+      "code": "hne",
+      "label": "Chhattisgarhi",
+      "active": true
+    },
+    {
+      "code": "mag",
+      "label": "Magahi",
+      "active": true
     }
   ]
 }
