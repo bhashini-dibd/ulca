@@ -1196,5 +1196,126 @@
         }
     ],
         "label": "Transliteration Dataset"
+    },
+    "glossary-corpus": {
+        "filters": [{
+            "value": "sourceLanguage",
+            "label": "Source Language",
+            "filterType": "language",
+            "active": true,
+            "input": "single-select",
+            "type": "array",
+            "parent": null
+        },
+        {
+            "value": "targetLanguage",
+            "label": "Target Language",
+            "filterType": "language",
+            "active": true,
+            "input": "multi-select",
+            "type": "array",
+            "parent": null
+        },
+        {
+            "value": "domain",
+            "label": "Domain",
+            "filterType": "basic",
+            "active": true,
+            "input": "single-select",
+            "type": "array",
+            "parent": null
+        },
+        {
+            "value": "collectionSource",
+            "label": "Collection Source",
+            "filterType": "basic",
+            "active": false,
+            "input": "string",
+            "type": "text",
+            "parent": null
+        },
+        {
+            "value": "license",
+            "label": "License",
+            "filterType": "advance",
+            "active": true,
+            "input": "single-select",
+            "type": "array",
+            "parent": null
+        },
+        {
+            "value": "submitterName",
+            "label": "Submitter",
+            "filterType": "advance",
+            "active": true,
+            "input": "string",
+            "type": "text",
+            "parent": null
+        },
+        {
+            "value": "collectionMethod",
+            "label": "Collection Method",
+            "filterType": "advance",
+            "active": true,
+            "input": "single-select",
+            "type": "array",
+            "parent": null
+        },
+        {
+            "value": "alignmentTool",
+            "label": "Alignment Tool",
+            "filterType": "advance",
+            "active": true,
+            "input": "single-select",
+            "type": "array",
+            "parent": "auto-aligned"
+        },
+        {
+            "value": "minScore",
+            "label": "Min Alignment Score",
+            "filterType": "advance",
+            "active": true,
+            "input": "single-select",
+            "type": "number",
+            "parent": "auto-aligned"
+        },
+        {
+            "value": "maxScore",
+            "label": "Max Alignment Score",
+            "filterType": "advance",
+            "active": true,
+            "input": "single-select",
+            "type": "number",
+            "parent": "auto-aligned"
+        },
+        {
+            "value": "translationModel",
+            "label": "Translation Model",
+            "filterType": "advance",
+            "active": true,
+            "input": "single-select",
+            "type": "array",
+            "parent": "machine-translated"
+        },
+        {
+            "value": "evaluationMethod",
+            "label": "Evaluation Method",
+            "filterType": "advance",
+            "active": true,
+            "input": "single-select",
+            "type": "array",
+            "parent": "machine-translated-post-edited"
+        },
+        {
+            "value": "editingTool",
+            "label": "Editing Tool",
+            "filterType": "advance",
+            "active": true,
+            "input": "single-select",
+            "type": "array",
+            "parent": "manual-aligned"
+        }
+    ],
+        "label": "Glossary Dataset"
     }
 }
