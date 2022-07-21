@@ -77,9 +77,19 @@
       "datasetType": "glossary-corpus",
       "values": {
         "master": "/glossaryCorpusFilters.json",
-        "jsonPath": "$.tglossaryCorpusFilters"
+        "jsonPath": "$.glossaryCorpusFilters"
       }
-  }
+    },
+    {
+      "code": "pos-corpus",
+      "label": "POS Dataset",
+      "active": true,
+      "datasetType": "pos-corpus",
+      "values": {
+        "master": "/posCorpusFilters.json",
+        "jsonPath": "$.posCorpusFilters"
+      }
+    }
   ],
   "relatedMaster": true
 }
