@@ -71,7 +71,7 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 			try {
 				TransliterationDatasetSchemaKeys key = TransliterationDatasetSchemaKeys.valueOf(k) ;
 			}catch (Exception ex) {
-				log.info("no enums found ");
+				log.info(k + " unknown property ");
 				errorList.add(k + " unknown property ");
 			}
 			

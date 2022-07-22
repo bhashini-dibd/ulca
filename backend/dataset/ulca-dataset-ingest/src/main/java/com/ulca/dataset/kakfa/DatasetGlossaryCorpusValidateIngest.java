@@ -4,8 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -27,21 +31,20 @@ import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.model.deserializer.TtsDatasetRowDataSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.TtsParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.GlossaryDatasetParamsSchemaDeserializer;
+import com.ulca.dataset.model.deserializer.GlossaryDatasetRowSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
 import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
-import io.swagger.model.AsrParamsSchema;
 import io.swagger.model.DatasetType;
-import io.swagger.model.TtsParamsSchema;
-import io.swagger.model.TtsRowSchema;
+import io.swagger.model.GlossaryDatasetParamsSchema;
+import io.swagger.model.GlossaryDatasetRowSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class DatasetTtsValidateIngest implements DatasetValidateIngest {
+public class DatasetGlossaryCorpusValidateIngest implements DatasetValidateIngest {
 
 	@Autowired
 	ProcessTaskTrackerService processTaskTrackerService;
@@ -62,17 +65,23 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 	private Integer precheckRecordThreshold;
 
 	@Autowired
-	TaskTrackerRedisDao taskTrackerRedisDao;
-
-	@Autowired
 	DatasetService datasetService;
 
 	@Autowired
 	NotificationService notificationService;
 
+	@Autowired
+	TaskTrackerRedisDao taskTrackerRedisDao;
+
+	public static final String SOURCE_TEXT = "sourceText";
+	public static final String SOURCE_TEXT_HASH = "sourceTextHash";
+	public static final String TARGET_TEXT = "targetText";
+	public static final String TARGET_TEXT_HASH = "targetTextHash";
+
 	public void validateIngest(DatasetIngest datasetIngest) {
 
-		log.info("************ Entry DatasetTtsValidateIngest :: validateIngest *********");
+		log.info("************ Entry DatasetGlossaryCorpusValidateIngest :: validateIngest *********");
+
 		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
 		String datasetName = datasetIngest.getDatasetName();
 		DatasetType datasetType = datasetIngest.getDatasetType();
@@ -82,14 +91,13 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		String baseLocation = datasetIngest.getBaseLocation();
 		String mode = datasetIngest.getMode();
 
-		TtsParamsSchema paramsSchema = null;
+		GlossaryDatasetParamsSchema paramsSchema = null;
 
 		Error fileError = validateFileExistence(baseLocation);
 
 		if (fileError != null) {
 
-			log.info("params.json or data.json file missing  :: serviceRequestNumber : " + serviceRequestNumber);
-
+			log.info("params.json or data.json file missing :: serviceRequestNumber : " + serviceRequestNumber);
 			processTaskTrackerService.updateTaskTrackerWithErrorAndEndTime(serviceRequestNumber, ToolEnum.ingest,
 					com.ulca.dataset.model.TaskTracker.StatusEnum.failed, fileError);
 
@@ -110,9 +118,7 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 		} catch (Exception e) {
 
-			log.info("Exception while validating params  :: serviceRequestNumber : " + serviceRequestNumber
-					+ " error :: " + e.getMessage());
-
+			log.info("Exception while validating params :: " + serviceRequestNumber + " error : " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("params validation failed");
@@ -134,7 +140,6 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		}
 
 		try {
-
 			if (mode.equalsIgnoreCase("real")) {
 				updateDataset(datasetId, userId, md5hash, paramsSchema);
 				ingest(paramsSchema, datasetIngest);
@@ -144,9 +149,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 		} catch (Exception e) {
 
-			log.info("Exception while ingesting :: serviceRequestNumber : " + serviceRequestNumber + " error :: "
-					+ e.getMessage());
-
+			log.info("Exception while ingesting the dataset :: serviceRequestNumber : " + serviceRequestNumber
+					+ " error : " + e.getMessage());
 			Error error = new Error();
 			error.setCause(e.getMessage());
 			error.setMessage("INGEST FAILED");
@@ -160,6 +164,7 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 			// send error event
 			datasetErrorPublishService.publishDatasetError("dataset-training", "1000_INGEST_FAILED", e.getMessage(),
 					serviceRequestNumber, datasetName, "ingest", datasetType.toString(), null);
+
 			// update redis when ingest failed
 			taskTrackerRedisDao.updateCountOnIngestFailure(serviceRequestNumber);
 
@@ -168,37 +173,35 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 			return;
 		}
-
 	}
 
-	public TtsParamsSchema validateParamsSchema(DatasetIngest datasetIngest)
+	public GlossaryDatasetParamsSchema validateParamsSchema(DatasetIngest datasetIngest)
 			throws JsonParseException, JsonMappingException, IOException {
 
-		log.info("************ Entry DatasetTtsValidateIngest :: validateParamsSchema *********");
-
 		String paramsFilePath = datasetIngest.getBaseLocation() + File.separator + "params.json";
-		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
 
-		log.info("validing params.json file :: against params schema. serviceRequestNumber : " + serviceRequestNumber);
+		log.info("************ Entry DatasetGlossaryCorpusValidateIngest :: validateParamsSchema *********");
+		log.info("validing file :: against params schema");
+		log.info(paramsFilePath);
 
 		ObjectMapper mapper = new ObjectMapper();
 		SimpleModule module = new SimpleModule();
-		module.addDeserializer(AsrParamsSchema.class, new TtsParamsSchemaDeserializer());
+		module.addDeserializer(GlossaryDatasetParamsSchema.class, new GlossaryDatasetParamsSchemaDeserializer());
 		mapper.registerModule(module);
-
-		TtsParamsSchema paramsSchema = mapper.readValue(new File(paramsFilePath), TtsParamsSchema.class);
+		GlossaryDatasetParamsSchema paramsSchema = mapper.readValue(new File(paramsFilePath),
+				GlossaryDatasetParamsSchema.class);
 		if (paramsSchema == null) {
-
-			log.info("params validation failed. serviceRequestNumber : " + serviceRequestNumber);
-			throw new IOException("params validation failed. serviceRequestNumber : " + serviceRequestNumber);
+			log.info("params validation failed");
+			throw new IOException("paramsValidation failed");
 
 		}
 		return paramsSchema;
 	}
 
-	public void ingest(TtsParamsSchema paramsSchema, DatasetIngest datasetIngest) throws IOException {
+	public void ingest(GlossaryDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest)
+			throws JSONException, IOException, NoSuchAlgorithmException {
 
-		log.info("************ Entry DatasetTtsValidateIngest :: ingest *********");
+		log.info("************ Entry DatasetParallelCorpusValidateIngest :: real ingest *********");
 
 		String datasetId = datasetIngest.getDatasetId();
 		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
@@ -206,11 +209,16 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		String datasetName = datasetIngest.getDatasetName();
 		String mode = datasetIngest.getMode();
 		DatasetType datasetType = datasetIngest.getDatasetType();
-		String path = datasetIngest.getBaseLocation() + File.separator + "data.json";
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		JSONObject source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-		InputStream inputStream = Files.newInputStream(Path.of(path));
+		JSONObject record;
+		record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+
+		String dataFilePath = datasetIngest.getBaseLocation() + File.separator + "data.json";
+
+		log.info("data.json file path :: " + dataFilePath);
+
+		InputStream inputStream = Files.newInputStream(Path.of(dataFilePath));
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
 		int numberOfRecords = 0;
@@ -218,6 +226,7 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		int successCount = 0;
 
 		JSONObject vModel = new JSONObject();
+		vModel.put("record", record);
 		vModel.put("datasetId", datasetId);
 		vModel.put("datasetName", datasetName);
 		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
@@ -225,64 +234,63 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
 
-		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetType, datasetName, userId);
-
-		log.info("Starting Ingest serviceRequestNumber :: " + serviceRequestNumber);
-		String basePath = datasetIngest.getBaseLocation() + File.separator;
+		taskTrackerRedisDao.intialize(serviceRequestNumber, datasetName, userId);
+		log.info("starting to ingest serviceRequestNumber :: " + serviceRequestNumber);
 
 		reader.beginArray();
 		while (reader.hasNext()) {
 
 			numberOfRecords++;
+
 			Object rowObj = new Gson().fromJson(reader, Object.class);
 			ObjectMapper mapper = new ObjectMapper();
-
 			String dataRow = mapper.writeValueAsString(rowObj);
 			SimpleModule module = new SimpleModule();
-			module.addDeserializer(TtsRowSchema.class, new TtsDatasetRowDataSchemaDeserializer());
+			module.addDeserializer(GlossaryDatasetRowSchema.class, new GlossaryDatasetRowSchemaDeserializer());
 			mapper.registerModule(module);
 
-			TtsRowSchema rowSchema = null;
+			GlossaryDatasetRowSchema rowSchema = null;
+
 			try {
-				rowSchema = mapper.readValue(dataRow, TtsRowSchema.class);
+
+				rowSchema = mapper.readValue(dataRow, GlossaryDatasetRowSchema.class);
+
 			} catch (Exception e) {
+
 				failedCount++;
 				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
-				// send error event
 				datasetErrorPublishService.publishDatasetError("dataset-training", "1000_ROW_DATA_VALIDATION_FAILED",
 						e.getMessage(), serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
+
+				log.info("record :: " + numberOfRecords + "failed ");
+				log.info("tracing the error ");
+				e.printStackTrace();
 
 			}
 			if (rowSchema != null) {
 
+				successCount++;
+				taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+
 				JSONObject target = new JSONObject(dataRow);
-				JSONObject finalRecord = deepMerge(source, target);
-				String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
-				finalRecord.remove("languages");
-				finalRecord.put("sourceLanguage", sourceLanguage);
+				JSONObject finalRecord = deepMerge(record, target);
 
-				String fileLocation = basePath + finalRecord.get("audioFilename");
-
-				if (isFileAvailable(fileLocation)) {
-
-					// log.info("File Available :: " + fileLocation);
-					successCount++;
-					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
-					finalRecord.put("fileLocation", fileLocation);
-					UUID uid = UUID.randomUUID();
-					finalRecord.put("id", uid);
-					vModel.put("record", finalRecord);
-					vModel.put("currentRecordIndex", numberOfRecords);
-					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
-				} else {
-					// log.info("File Not Available :: " + fileLocation);
-					failedCount++;
-					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
-					datasetErrorPublishService.publishDatasetError("dataset-training",
-							"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("audioFilename") + " Not available ",
-							serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
-
+				if (finalRecord.has("languages")) {
+					JSONObject language = finalRecord.getJSONObject("languages");
+					String sourceLanguage = language.getString("sourceLanguage");
+					String targetLanguage = language.getString("targetLanguage");
+					finalRecord.put("sourceLanguage", sourceLanguage);
+					finalRecord.put("targetLanguage", targetLanguage);
+					finalRecord.remove("languages");
 				}
+
+				UUID uid = UUID.randomUUID();
+				finalRecord.put("id", uid);
+
+				vModel.put("record", finalRecord);
+				vModel.put("currentRecordIndex", numberOfRecords);
+				
+				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 			}
 		}
 		reader.endArray();
@@ -291,15 +299,15 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, numberOfRecords);
 
-		log.info("Data sent for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
+		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
 				+ numberOfRecords + " success record :: " + successCount);
 
 	}
 
-	public void precheckIngest(TtsParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
-			throws IOException {
+	public void precheckIngest(GlossaryDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
+			throws JSONException, IOException, NoSuchAlgorithmException {
 
-		log.info("************ Entry DatasetTtsValidateIngest :: pseudoIngest *********");
+		log.info("************ Entry DatasetGlossaryCorpusValidateIngest :: precheckIngest *********");
 
 		String datasetId = datasetIngest.getDatasetId();
 		String serviceRequestNumber = datasetIngest.getServiceRequestNumber();
@@ -311,7 +319,7 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		DatasetType datasetType = datasetIngest.getDatasetType();
 
 		ObjectMapper objectMapper = new ObjectMapper();
-		JSONObject source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+		JSONObject record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
 		String dataFilePath = datasetIngest.getBaseLocation() + File.separator + "data.json";
 
@@ -319,6 +327,7 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		JsonReader reader = new JsonReader(new InputStreamReader(inputStream));
 
 		JSONObject vModel = new JSONObject();
+		vModel.put("record", record);
 		vModel.put("datasetId", datasetId);
 		vModel.put("datasetName", datasetName);
 		vModel.put("datasetType", paramsSchema.getDatasetType().toString());
@@ -326,25 +335,24 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
 
+		log.info("Starting precheckIngest serviceRequestNumber :: " + serviceRequestNumber);
+
 		taskTrackerRedisDao.intializePrecheckIngest(serviceRequestNumber, baseLocation, md5hash,
 				paramsSchema.getDatasetType().toString(), datasetName, datasetId, userId);
-		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
-
-		long sampleSize = recordSize / 10;
-		long bufferSize = precheckSampleSize / 10;
 
 		int numberOfRecords = 0;
 		int failedCount = 0;
 		int successCount = 0;
 		int pseudoNumberOfRecords = 0;
 
+		long sampleSize = recordSize / 10;
+		long bufferSize = precheckSampleSize / 10;
 		long base = sampleSize;
 		long counter = 0;
 		long maxCounter = bufferSize;
 
-		String basePath = datasetIngest.getBaseLocation() + File.separator;
-
 		reader.beginArray();
+
 		while (reader.hasNext()) {
 			numberOfRecords++;
 
@@ -354,56 +362,54 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 				++counter;
 
 				Object rowObj = new Gson().fromJson(reader, Object.class);
-				ObjectMapper mapper = new ObjectMapper();
 
+				ObjectMapper mapper = new ObjectMapper();
 				String dataRow = mapper.writeValueAsString(rowObj);
 				SimpleModule module = new SimpleModule();
-				module.addDeserializer(TtsRowSchema.class, new TtsDatasetRowDataSchemaDeserializer());
+				module.addDeserializer(GlossaryDatasetRowSchema.class, new GlossaryDatasetRowSchemaDeserializer());
 				mapper.registerModule(module);
 
-				TtsRowSchema rowSchema = null;
-				try {
+				GlossaryDatasetRowSchema rowSchema = null;
 
-					rowSchema = mapper.readValue(dataRow, TtsRowSchema.class);
+				try {
+					rowSchema = mapper.readValue(dataRow, GlossaryDatasetRowSchema.class);
 
 				} catch (Exception e) {
 
 					failedCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
-					// send error event
 					datasetErrorPublishService.publishDatasetError("dataset-training",
 							"1000_ROW_DATA_VALIDATION_FAILED", e.getMessage(), serviceRequestNumber, datasetName,
 							"ingest", datasetType.toString(), dataRow);
 
+					log.info("record :: " + numberOfRecords + "failed ");
+					log.info("error message :: " + e.getMessage());
+
 				}
 				if (rowSchema != null) {
 
+					successCount++;
+					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
+
 					JSONObject target = new JSONObject(dataRow);
-					JSONObject finalRecord = deepMerge(source, target);
-					String sourceLanguage = finalRecord.getJSONObject("languages").getString("sourceLanguage");
-					finalRecord.remove("languages");
-					finalRecord.put("sourceLanguage", sourceLanguage);
+					JSONObject finalRecord = deepMerge(record, target);
 
-					String fileLocation = basePath + finalRecord.get("audioFilename");
-
-					if (isFileAvailable(fileLocation)) {
-
-						successCount++;
-						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
-						finalRecord.put("fileLocation", fileLocation);
-						UUID uid = UUID.randomUUID();
-						finalRecord.put("id", uid);
-						vModel.put("record", finalRecord);
-						vModel.put("currentRecordIndex", pseudoNumberOfRecords);
-						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
-					} else {
-						failedCount++;
-						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
-						datasetErrorPublishService.publishDatasetError("dataset-training",
-								"1000_ROW_DATA_VALIDATION_FAILED", finalRecord.get("audioFilename") + " Not available ",
-								serviceRequestNumber, datasetName, "ingest", datasetType.toString(), dataRow);
-
+					if (finalRecord.has("languages")) {
+						JSONObject language = finalRecord.getJSONObject("languages");
+						String sourceLanguage = language.getString("sourceLanguage");
+						String targetLanguage = language.getString("targetLanguage");
+						finalRecord.put("sourceLanguage", sourceLanguage);
+						finalRecord.put("targetLanguage", targetLanguage);
+						finalRecord.remove("languages");
 					}
+
+					UUID uid = UUID.randomUUID();
+					finalRecord.put("id", uid);
+
+					vModel.put("record", finalRecord);
+					vModel.put("currentRecordIndex", pseudoNumberOfRecords);
+					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+
 				}
 
 			} else if (numberOfRecords == base) {
@@ -414,7 +420,6 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 			} else {
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 			}
-
 		}
 		reader.endArray();
 		reader.close();
@@ -422,9 +427,26 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 		taskTrackerRedisDao.setCountOnIngestComplete(serviceRequestNumber, pseudoNumberOfRecords);
 
-		log.info("Data sent for pseudo validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
-				+ pseudoNumberOfRecords + " success record :: " + successCount);
+		log.info("data sending for pseudo validation serviceRequestNumber :: " + serviceRequestNumber
+				+ " total Record :: " + pseudoNumberOfRecords + " success record :: " + successCount);
+	}
 
+	public String getSha256Hash(String input) throws NoSuchAlgorithmException {
+
+		MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+		byte[] output = md.digest(input.getBytes(StandardCharsets.UTF_8));
+		BigInteger number = new BigInteger(1, output);
+
+		StringBuilder hexString = new StringBuilder(number.toString(16));
+
+		// Pad with leading zeros
+		while (hexString.length() < 32) {
+			hexString.insert(0, '0');
+		}
+
+		String hashString = hexString.toString();
+		return hashString;
 	}
 
 	public long getRecordSize(String dataFilePath) throws Exception {
@@ -450,9 +472,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		return numberOfRecords;
 	}
 
-	public void initiateIngest(String datasetId, String userId, String md5hash, TtsParamsSchema paramsSchema,
-			DatasetIngest datasetIngest) throws Exception {
-
+	public void initiateIngest(String datasetId, String userId, String md5hash, GlossaryDatasetParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
+			
 		log.info(" initiateIngest ");
 		String dataFilePath = datasetIngest.getBaseLocation() + File.separator + "data.json";
 
@@ -471,8 +492,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 	}
 
 	// update the dataset
-	public void updateDataset(String datasetId, String userId, String md5hash, TtsParamsSchema paramsSchema) {
-
+	public void updateDataset(String datasetId, String userId, String md5hash, GlossaryDatasetParamsSchema paramsSchema) {
+			
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			JSONObject record;
@@ -484,5 +505,4 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 			log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
 		}
 	}
-
 }
