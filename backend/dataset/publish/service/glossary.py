@@ -2,9 +2,9 @@ import logging
 import time
 from logging.config import dictConfig
 from configs.configs import ds_batch_size, offset, limit, user_mode_pseudo, \
-    sample_size, transliteration_immutable_keys, transliteration_non_tag_keys, dataset_type_transliteration, \
-    transliteration_updatable_keys
-from repository.transliteration import TransliterationRepo
+    sample_size, glossary_immutable_keys, glossary_non_tag_keys, dataset_type_glossary, \
+    glossary_updatable_keys
+from repository.glossary import GlossaryRepo
 from utils.datasetutils import DatasetUtils
 from kafkawrapper.producer import Producer
 from events.error import ErrorEvent
@@ -16,7 +16,7 @@ import re
 log = logging.getLogger('file')
 
 mongo_instance = None
-repo = TransliterationRepo()
+repo = GlossaryRepo()
 utils = DatasetUtils()
 prod = Producer()
 error_event = ErrorEvent()
@@ -25,16 +25,16 @@ metrics = MetricEvent()
 service = DatasetService()
 
 
-class TransliterationService:
+class GlossaryService:
     def __init__(self):
         pass
 
     '''
-    Method to load Transliteration dataset into the mongo db
+    Method to load Glossary dataset into the mongo db
     params: request (record to be inserted)
     '''
 
-    def load_transliteration_dataset(self, request):
+    def load_glossary_dataset(self, request):
         try:
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
@@ -57,7 +57,7 @@ class TransliterationService:
                         updates += 1
                     else:
                         error_list.append({"record": result[1], "originalRecord": result[2], "code": "DUPLICATE_RECORD",
-                                           "datasetType": dataset_type_transliteration,
+                                           "datasetType": dataset_type_glossary,
                                            "datasetName": metadata["datasetName"],
                                            "serviceRequestNumber": metadata["serviceRequestNumber"],
                                            "message": "This record is already available in the system"})
@@ -68,7 +68,7 @@ class TransliterationService:
                         f'INTERNAL ERROR: Failing record due to internal error: ID: {record["id"]}, SRN: {metadata["serviceRequestNumber"]}')
                     error_list.append(
                         {"record": record, "code": "INTERNAL_ERROR", "originalRecord": record,
-                         "datasetType": dataset_type_transliteration, "datasetName": metadata["datasetName"],
+                         "datasetType": dataset_type_glossary, "datasetName": metadata["datasetName"],
                          "serviceRequestNumber": metadata["serviceRequestNumber"],
                          "message": "There was an exception while processing this record!"})
                     pt.update_task_details(
@@ -76,10 +76,10 @@ class TransliterationService:
             if error_list:
                 error_event.create_error_event(error_list)
             log.info(
-                f'Transliteration - {metadata["userMode"]} - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
+                f'Glossary - {metadata["userMode"]} - {metadata["serviceRequestNumber"]} - {record["id"]} -- I: {count}, U: {updates}, "E": {len(error_list)}')
         except Exception as e:
             log.exception(e)
-            return {"message": "EXCEPTION while loading Transliteration dataset!!", "status": "FAILED"}
+            return {"message": "EXCEPTION while loading Glossary dataset!!", "status": "FAILED"}
         return {"status": "SUCCESS", "total": 1, "inserts": count, "updates": updates, "invalid": error_list}
 
     '''
@@ -95,7 +95,7 @@ class TransliterationService:
             if records:
                 for record in records:
                     if record:
-                        if data["sourceTextHash"] in record["tags"] and data["targetTextHash"] in record["tags"]:
+                        if data["sourceTextHash"] == record["sourceTextHash"] and data["targetTextHash"] == record["targetTextHash"]:
                             dup_data = self.enrich_duplicate_data(data, record, metadata)
                             if dup_data:
                                 if metadata["userMode"] != user_mode_pseudo:
@@ -107,12 +107,12 @@ class TransliterationService:
             new_records.append(data)
             for obj in new_records:
                 for key in obj.keys():
-                    if key not in transliteration_immutable_keys and key not in transliteration_updatable_keys:
+                    if key not in glossary_immutable_keys and key not in glossary_updatable_keys:
                         if not isinstance(obj[key], list):
                             obj[key] = [obj[key]]
                 obj["datasetType"] = metadata["datasetType"]
                 obj["datasetId"] = [metadata["datasetId"]]
-                obj["tags"] = service.get_tags(obj, transliteration_non_tag_keys)
+                obj["tags"] = service.get_tags(obj, glossary_non_tag_keys)
                 obj["lastModifiedOn"] = obj["createdOn"] = eval(str(time.time()).replace('.', '')[0:13])
                 insert_records.append(obj)
             return "INSERT", insert_records, insert_records
@@ -158,7 +158,7 @@ class TransliterationService:
             db_record[key] = record[key]
         found = False
         for key in data.keys():
-            if key in transliteration_updatable_keys:
+            if key in glossary_updatable_keys:
                 if key not in db_record.keys():
                     found = True
                     db_record[key] = data[key]
@@ -167,7 +167,7 @@ class TransliterationService:
                         found = True
                         db_record[key] = data[key]
                 continue
-            if key not in transliteration_immutable_keys:
+            if key not in glossary_immutable_keys:
                 if key not in db_record.keys():
                     found = True
                     db_record[key] = [data[key]]
@@ -209,19 +209,19 @@ class TransliterationService:
                     dataset_ids.append(entry)
             db_record["datasetId"] = dataset_ids
             db_record["derived"] = False
-            db_record["tags"] = service.get_tags(db_record, transliteration_non_tag_keys)
+            db_record["tags"] = service.get_tags(db_record, glossary_non_tag_keys)
             return db_record
         else:
             return False
 
     '''
-    Method to fetch Transliteration dataset from the DB based on various criteria
+    Method to fetch Glossary dataset from the DB based on various criteria
     params: query (query for search)
     '''
 
-    def get_transliteration_dataset(self, query):
-        log.info(f'Fetching Transliteration datasets for SRN -- {query["serviceRequestNumber"]}')
-        pt.task_event_search(query, None, dataset_type_transliteration)
+    def get_glossary_dataset(self, query):
+        log.info(f'Fetching Glossary datasets for SRN -- {query["serviceRequestNumber"]}')
+        pt.task_event_search(query, None, dataset_type_glossary)
         try:
             off = query["offset"] if 'offset' in query.keys() else offset
             lim = query["limit"] if 'limit' in query.keys() else limit
@@ -242,6 +242,8 @@ class TransliterationService:
                 tags.extend(query["translationModel"])
             if 'license' in query.keys():
                 tags.extend(query["license"])
+            if 'level' in query.keys():
+                tags.extend(query["level"])
             if 'domain' in query.keys():
                 tags.extend(query["domain"])
             if 'datasetId' in query.keys():
@@ -287,21 +289,21 @@ class TransliterationService:
                 if path:
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                           "count": count, "dataset": path, "datasetSample": path_sample}
-                    pt.task_event_search(op, None, dataset_type_transliteration)
+                    pt.task_event_search(op, None, dataset_type_glossary)
                 else:
                     log.error(f'There was an error while pushing result to object store!')
-                    error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_transliteration,
+                    error = {"code": "OS_UPLOAD_FAILED", "datasetType": dataset_type_glossary,
                              "serviceRequestNumber": query["serviceRequestNumber"],
                              "message": "There was an error while pushing result to object store"}
                     op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                           "count": 0, "sample": [], "dataset": None, "datasetSample": None}
-                    pt.task_event_search(op, error, dataset_type_transliteration)
+                    pt.task_event_search(op, error, dataset_type_glossary)
             else:
                 log.info(f'No records retrieved for SRN -- {query["serviceRequestNumber"]}')
                 op = {"serviceRequestNumber": query["serviceRequestNumber"], "userID": query["userId"],
                       "count": 0, "sample": [], "dataset": None,
                       "datasetSample": None}
-                pt.task_event_search(op, None, dataset_type_transliteration)
+                pt.task_event_search(op, None, dataset_type_glossary)
             log.info(f'Done!')
             op["pipeline"] = pipeline
             return op
@@ -310,19 +312,19 @@ class TransliterationService:
             op = {"serviceRequestNumber": query["serviceRequestNumber"]}
             error = {"code": "EXCEPTION", "serviceRequestNumber": query["serviceRequestNumber"],
                      "message": f'Exception in search: {e}'}
-            pt.task_event_search(op, error)
+            pt.task_event_search(op, error, dataset_type_glossary)
             return {"message": str(e), "status": "FAILED", "dataset": "NA"}
 
     '''
-    Method to delete Transliteration dataset from the DB based on various criteria
+    Method to delete Glossary dataset from the DB based on various criteria
     params: delete_req (request for deletion)
     '''
 
-    def delete_transliteration_dataset(self, delete_req):
-        log.info(f'Deleting Transliteration datasets....')
+    def delete_glossary_dataset(self, delete_req):
+        log.info(f'Deleting Glossary datasets....')
         d, u = 0, 0
         try:
-            records = self.get_transliteration_dataset({"datasetId": delete_req["datasetId"]})
+            records = self.get_glossary_dataset({"datasetId": delete_req["datasetId"]})
             for record in records:
                 if len(record["datasetId"]) == 1:
                     repo.delete(record["id"])
