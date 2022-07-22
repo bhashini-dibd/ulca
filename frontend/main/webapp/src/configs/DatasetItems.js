@@ -14,6 +14,7 @@ export const DatasetItems = [
   { value: "asr-unlabeled-corpus", label: "ASR Unlabeled Dataset" },
   { value: "tts-corpus", label: "TTS Dataset" },
   { value: "transliteration-corpus", label: "Transliteration Dataset" },
+  { value: "glossary-corpus", label: "Glossary Dataset" },
 ];
 
 export const DatasetReadymade = [

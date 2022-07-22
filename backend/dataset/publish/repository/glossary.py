@@ -5,7 +5,7 @@ from logging.config import dictConfig
 
 from bson import ObjectId
 
-from configs.configs import db_cluster, db, transliteration_collection, transliteration_search_ignore_keys
+from configs.configs import db_cluster, db, glossary_collection, glossary_search_ignore_keys
 
 import pymongo
 
@@ -14,29 +14,29 @@ log = logging.getLogger('file')
 mongo_instance_transliteration = None
 
 
-class TransliterationRepo:
+class GlossaryRepo:
     def __init__(self):
         pass
 
-    # Method to set Parallel Dataset Mongo DB collection
-    def set_transliteration_collection(self):
+    # Method to set Glossary Dataset Mongo DB collection
+    def set_glossary_collection(self):
         if "localhost" not in db_cluster:
-            log.info(f'Setting the Mongo Transliteration DS Shard Cluster up..... | {datetime.now()}')
+            log.info(f'Setting the Mongo Glossary DS Shard Cluster up..... | {datetime.now()}')
             client = pymongo.MongoClient(db_cluster)
             ulca_db = client[db]
-            ulca_db.drop_collection(transliteration_collection)
-            ulca_col = ulca_db[transliteration_collection]
+            ulca_db.drop_collection(glossary_collection)
+            ulca_col = ulca_db[glossary_collection]
             ulca_col.create_index([("tags", -1)])
             db_cli = client.admin
             key = OrderedDict([("_id", "hashed")])
-            db_cli.command({'shardCollection': f'{db}.{transliteration_collection}', 'key': key})
+            db_cli.command({'shardCollection': f'{db}.{glossary_collection}', 'key': key})
             log.info(f'Done! | {datetime.now()}')
         else:
-            log.info(f'Setting the Mongo DB Local for Transliteration DS.... | {datetime.now()}')
+            log.info(f'Setting the Mongo DB Local for Glossary DS.... | {datetime.now()}')
             client = pymongo.MongoClient(db_cluster)
             ulca_db = client[db]
-            ulca_db.drop_collection(transliteration_collection)
-            ulca_col = ulca_db[transliteration_collection]
+            ulca_db.drop_collection(glossary_collection)
+            ulca_col = ulca_db[glossary_collection]
             ulca_col.create_index([("tags", -1)])
             ulca_col.create_index([("sourceLanguage", -1)])
             ulca_col.create_index([("targetLanguage", -1)])
@@ -46,7 +46,7 @@ class TransliterationRepo:
     def instantiate(self):
         global mongo_instance_transliteration
         client = pymongo.MongoClient(db_cluster)
-        mongo_instance_transliteration = client[db][transliteration_collection]
+        mongo_instance_transliteration = client[db][glossary_collection]
         return mongo_instance_transliteration
 
     def get_mongo_instance(self):
@@ -146,7 +146,7 @@ class TransliterationRepo:
                     {"$group": {"_id": {"$cond": [{"$gte": ["$count", count]}, "$_id.sourceHash", "$$REMOVE"]}}})
             else:
                 project = {"_id": 0}
-                for key in transliteration_search_ignore_keys:
+                for key in glossary_search_ignore_keys:
                     project[key] = 0
                 pipeline.append({"$project": project})
             if offset is not None and res_limit is not None:
@@ -168,7 +168,7 @@ class TransliterationRepo:
                     if hashes:
                         res_count = len(hashes)
                         project = {"_id": False}
-                        for key in transliteration_search_ignore_keys:
+                        for key in glossary_search_ignore_keys:
                             project[key] = False
                         res = col.find({"sourceTextHash": {"$in": hashes}}, project)
                     if not res:
