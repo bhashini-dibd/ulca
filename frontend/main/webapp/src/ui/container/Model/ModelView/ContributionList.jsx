@@ -519,6 +519,19 @@ const ContributionList = (props) => {
     );
   };
 
+  const renderExpandTableStatus = (status) => {
+    return (
+      <Typography
+        variant="body1"
+        style={{
+          color: returnColor(status),
+        }}
+      >
+        {status}
+      </Typography>
+    );
+  }
+
   const convertDate = (date) => {
     return date
       .toLocaleString("en-IN", {
@@ -734,7 +747,7 @@ const ContributionList = (props) => {
           <RenderExpandTable
             rows={rowData[9]}
             color={even_odd}
-            renderStatus={renderStatus}
+            renderStatus={renderExpandTableStatus}
           />                                        
         );
     },

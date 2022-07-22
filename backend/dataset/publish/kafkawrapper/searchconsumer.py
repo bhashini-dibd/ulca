@@ -11,11 +11,13 @@ from service.tts import TTSService
 from service.monolingual import MonolingualService
 from service.asrunlabeled import ASRUnlabeledService
 from service.transliteration import TransliterationService
+from service.glossary import GlossaryService
+
 
 from configs.configs import kafka_bootstrap_server_host, search_input_topic, publish_search_consumer_grp, \
     dataset_type_asr_unlabeled, govt_cs, govt_data_whitelist_enabled
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, \
-    dataset_type_tts, dataset_type_transliteration
+    dataset_type_tts, dataset_type_transliteration, dataset_type_glossary
 from kafka import KafkaConsumer
 from repository.datasetrepo import DatasetRepo
 
@@ -40,9 +42,9 @@ def search_consume():
         topics = [search_input_topic]
         consumer = instantiate(topics)
         repo = DatasetRepo()
-        p_service, m_service, a_service, o_service, au_service, tts_service, trans_service = ParallelService(), MonolingualService(), \
-                                                                              ASRService(), OCRService(), \
-                                                                              ASRUnlabeledService(), TTSService(), TransliterationService()
+        p_service, m_service, a_service, o_service, au_service, tts_service, trans_service, glos_service = ParallelService(), MonolingualService(), \
+                                                                                                           ASRService(), OCRService(), \
+                                                                                                           ASRUnlabeledService(), TTSService(), TransliterationService(), GlossaryService()
         rand_str = ''.join(random.choice(string.ascii_letters) for i in range(4))
         prefix = "DS-SEARCH-" + "(" + rand_str + ")"
         log.info(f'{prefix} -- Running..........')
@@ -80,6 +82,8 @@ def search_consume():
                             tts_service.get_tts_dataset(data)
                         if data["datasetType"] == dataset_type_transliteration:
                             trans_service.get_transliteration_dataset(data)
+                        if data["datasetType"] == dataset_type_glossary:
+                            glos_service.get_glossary_dataset(data)
                         log.info(f'PROCESSING - end - SRN: {data["serviceRequestNumber"]}')
                         break
                 except Exception as e:
