@@ -67,6 +67,7 @@ public class GlossaryDatasetParamsSchemaDeserializer extends StdDeserializer<Glo
 			try {
 				GlossaryDatasetSchemaKeys key = GlossaryDatasetSchemaKeys.valueOf(k);
 			} catch (Exception ex) {
+
 				log.info("GlossaryDatasetSchemaKeys " + k + " not in defined keys");
 				errorList.add(k + " unknown property ");
 			}
