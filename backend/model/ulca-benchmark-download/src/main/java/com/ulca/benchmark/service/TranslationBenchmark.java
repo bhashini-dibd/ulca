@@ -11,6 +11,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -30,6 +31,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.model.ModelInferenceResponse;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
@@ -68,6 +71,9 @@ public class TranslationBenchmark {
 	
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
+	
+	@Autowired
+	BenchmarkProcessDao benchmarkProcessDao;
 	
 
 	public TranslationResponse computeSync(InferenceAPIEndPoint inferenceAPIEndPoint,
@@ -179,7 +185,7 @@ public class TranslationBenchmark {
 		return translationResponse;
 	}
 	
-	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
+	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();
@@ -275,6 +281,13 @@ public class TranslationBenchmark {
 		log.info("data sending to metric calculation ");
 		log.info(metricRequest.toString());
 		
+		//update the total record count
+		int datasetCount = corpus.length();
+		BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
+		bmProcessUpdate.setRecordCount(datasetCount);
+		bmProcessUpdate.setLastModifiedOn(new Date().toString());
+		benchmarkProcessDao.save(bmProcessUpdate);
+		
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
 		
 		//save the model inference response
@@ -289,8 +302,7 @@ public class TranslationBenchmark {
 		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
 		modelInferenceResponseDao.save(modelInferenceResponse);
 		
-		int datasetCount = corpus.length();
-		return datasetCount;
+		
 		
 	}
 	
