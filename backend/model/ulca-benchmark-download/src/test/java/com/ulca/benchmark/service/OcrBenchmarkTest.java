@@ -45,7 +45,7 @@ class OcrBenchmarkTest {
     @Test
     void prepareAndPushToMetric() throws IOException, URISyntaxException {
 
-        String baseLocation = modelUploadFolder + " /ulca/ulca-test-datasets/ocr-dataset/positive-testcase-01";
+        String baseLocation = modelUploadFolder + "/ulca/ulca-test-datasets/ocr-dataset/positive-testcase-01";
         File file = new File(baseLocation + File.separator + "860190fb-3217-4c47-a350-2fd87c69a1d1.png");
         byte[] bytes = Files.readAllBytes(file.toPath());
 
