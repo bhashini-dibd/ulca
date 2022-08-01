@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.0
+  version: 0.10.1
 servers:
   - url: /ulca
 paths: {}
@@ -157,7 +157,6 @@ components:
           $ref: '#/components/schemas/GlossaryDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
-    
     NerDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -166,22 +165,19 @@ components:
       properties:
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
-    
     NerDatasetRowSchema:
       required:
-        - sourceText
+        - nerData
       properties:
         sourceText:
           type: string
           description: textual data in source language
-        sentenceMetadata:
-          $ref: '#/components/schemas/NerMetadata'
+        nerData:
+          $ref: '#/components/schemas/NerDataArray'
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
-      
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
-          
     MonolingualParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -935,7 +931,6 @@ components:
             - $ref: '#/components/schemas/CollectionDetailsManualCurated'
             - $ref: '#/components/schemas/CollectionDetailsMachineGenerated'
             - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedPostEdited'
-            
     NerDatasetCollectionMethod:
       type: object
       description: specifies how the dataset is curated.
@@ -958,7 +953,6 @@ components:
             - $ref: '#/components/schemas/CollectionDetailsManualCurated'
             - $ref: '#/components/schemas/CollectionDetailsMachineGenerated'
             - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedPostEdited'
-            
     TransliterationDatasetCollectionMethod:
       type: object
       description: specifies how the dataset is curated.
@@ -1117,15 +1111,15 @@ components:
     TranscriptTextFormatType1:
       type: object
       description: described in RT-04-guidelines
-      
-    NerMetadata:
+    NerDataArray:
       type: array
       items:
-        $ref: '#/components/schemas/NerSentenceMetadata'
-
-    NerSentenceMetadata:
+        $ref: '#/components/schemas/NerData'
+    NerData:
       type: object
       description: Ner dataset sentencewise metadata
+      required :
+        - tag
       properties:
         wordIndex:
           type: number
@@ -1136,11 +1130,10 @@ components:
           description: corresponsing word in the sentence
         position:
           type: string
-          description: position of the word in sentence. B- Beginning, I- Intermediate
+          description: position of the word in phrase. B- Beginning, I- Intermediate
           enum:
             - B
             - I
-
         tag:
           type: string
           description: NER tag for corresponsing word/index
@@ -1149,4 +1142,5 @@ components:
             - PER
             - ORG
             - LOC
-            - MISC  
+            - MISC
+      
