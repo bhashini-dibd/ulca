@@ -1,0 +1,177 @@
+{
+    "name": "FLORES-200 en-ta Evaluation Benchmark",
+    "taskType": {
+        "type" : "translation"
+    },
+    "description": "The en-ta FLORES-200 (Facebook AI) No Language Left Behind: Scaling Human-Centered Machine Translation. Refer to https://github.com/facebookresearch/flores/blob/main/flores200 for further information",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": "ta"
+    },
+    "collectionSource": [
+        "FLORES-200 Evaluation Benchmark",
+        "https://github.com/facebookresearch/flores/blob/main/flores200"
+    ],
+    "domain": [
+        "general"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Facebook",
+        "aboutMe": "No Language Left Behind: Scaling Human-Centered Machine Translation",
+        "team": [
+            {
+                "name": "Marta R. Costa-jussà",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "James Cross",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Onur Çelebi",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Maha Elbayad",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Kenneth Heafield",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Kevin Heffernan",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Elahe Kalbassi",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Janice Lam",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Daniel Licht",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Jean Maillard",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Anna Sun",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Skyler Wang",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Guillaume Wenzek",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Al Youngblood",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Bapi Akula",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Loic Barrault",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Gabriel Mejia Gonzalez",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Prangthip Hansanti",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "John Hoffman",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Semarley Jarrett",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Kaushik Ram Sadagopan",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Dirk Rowe",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Shannon Spruit",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Chau Tran",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Pierre Andrews",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Necip Fazil Ayan",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Shruti Bhosale",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Sergey Edunov",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Angela Fan",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Cynthia Gao",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Vedanuj Goswami",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Francisco Guzmán",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Philipp Koehn",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Alexandre Mourachko",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Christophe Ropers",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Safiyyah Saleem",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Holger Schwenk",
+                "aboutMe": "Facebook AI Research, LORIA"
+            },
+            {
+                "name": "Jeff Wang",
+                "aboutMe": "Facebook AI Research, LORIA"
+            }
+        ]
+    }
+}
