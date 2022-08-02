@@ -14,11 +14,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -68,15 +63,11 @@ public class TranslationBenchmark {
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
 
-
 	@Autowired
 	OkHttpClientService okHttpClientService;
 
-
-	
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
-	
 
 	public TranslationResponse computeSync(InferenceAPIEndPoint inferenceAPIEndPoint,
 										   List<String> sourceSentences)
@@ -100,7 +91,6 @@ public class TranslationBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-
 			//OkHttpClient client = new OkHttpClient();
 
 //			OkHttpClient client = new OkHttpClient.Builder()
@@ -118,12 +108,9 @@ public class TranslationBenchmark {
 			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
 
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
-
 			return translation;
-
 		}
 		return null;
-
 	}
 
 	public TranslationResponse computeAsyncModel(InferenceAPIEndPoint inferenceAPIEndPoint,List<String> sourceSentences) throws KeyManagementException, NoSuchAlgorithmException, IOException, InterruptedException {
@@ -186,8 +173,7 @@ public class TranslationBenchmark {
 		return translationResponse;
 	}
 
-	
-	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
+	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();
@@ -282,7 +268,6 @@ public class TranslationBenchmark {
 
 		log.info("data sending to metric calculation ");
 		log.info(metricRequest.toString());
-
 		
 		//update the total record count
 		int datasetCount = corpus.length();
@@ -290,7 +275,7 @@ public class TranslationBenchmark {
 		bmProcessUpdate.setRecordCount(datasetCount);
 		bmProcessUpdate.setLastModifiedOn(new Date().toString());
 		benchmarkProcessDao.save(bmProcessUpdate);
-
+    
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
 
 		//save the model inference response
@@ -327,11 +312,5 @@ public class TranslationBenchmark {
 		}
 		return res;
 	}
-
-
-
-
-
-
 
 }
