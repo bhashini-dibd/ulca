@@ -13,6 +13,12 @@ import java.util.ArrayList;
 //Import the Base64 encoding library.
 //import org.apache.commons.codec.binary.Base64;
 
+
+import javax.sound.sampled.AudioFormat;
+
+import java.util.Collection;
+import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +33,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.model.ModelInferenceResponse;
 import com.ulca.benchmark.request.AsrComputeRequest;
 import com.ulca.model.dao.ModelExtended;
@@ -57,7 +65,9 @@ public class AsrBenchmark {
 
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
-
+	
+	@Autowired
+	BenchmarkProcessDao benchmarkProcessDao;
 
 	@Autowired
 	OkHttpClientService okHttpClientService;
@@ -65,6 +75,7 @@ public class AsrBenchmark {
 
 
 	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
+
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
@@ -148,6 +159,13 @@ public class AsrBenchmark {
 		log.info("data before sending to metric");
 		log.info(metricRequest.toString());
 
+		//update the total record count
+		int datasetCount = corpus.length();
+		BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
+		bmProcessUpdate.setRecordCount(datasetCount);
+		bmProcessUpdate.setLastModifiedOn(new Date().toString());
+		benchmarkProcessDao.save(bmProcessUpdate);
+
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
 
 		//save the model inference response
@@ -161,7 +179,20 @@ public class AsrBenchmark {
 		modelInferenceResponse.setUserId(userId);
 		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
 		modelInferenceResponseDao.save(modelInferenceResponse);
-		int datasetCount = corpus.length();
-		return datasetCount;
+		
+	}
+	
+	public String asrComputeInternal(AsrComputeRequest request) {
+		
+		AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
+				.body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
+				.block();
+		
+		if(response != null && response.getData() != null) {
+			return response.getData().getSource();
+		}
+		
+		return null;
+
 	}
 }
