@@ -12,6 +12,11 @@ import java.util.ArrayList;
 //Import the Base64 encoding library.
 //import org.apache.commons.codec.binary.Base64;
 
+import javax.sound.sampled.AudioFormat;
+
+import java.util.Collection;
+import java.util.Date;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +30,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.model.ModelInferenceResponse;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
@@ -56,9 +63,12 @@ public class OcrBenchmark {
 
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
-
-	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
-
+	
+	@Autowired
+	BenchmarkProcessDao benchmarkProcessDao;
+	
+	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
+		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
@@ -146,6 +156,13 @@ public class OcrBenchmark {
 		log.info("data before sending to metric");
 		log.info(metricRequest.toString());
 
+		//update the total record count
+		int datasetCount = corpus.length();
+		BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
+		bmProcessUpdate.setRecordCount(datasetCount);
+		bmProcessUpdate.setLastModifiedOn(new Date().toString());
+		benchmarkProcessDao.save(bmProcessUpdate);
+				
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
 
 		//save the model inference response
@@ -160,11 +177,5 @@ public class OcrBenchmark {
 		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
 		modelInferenceResponseDao.save(modelInferenceResponse);
 
-		int datasetCount = corpus.length();
-		return datasetCount;
-
 	}
-
-
-
 }
