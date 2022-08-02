@@ -77,9 +77,9 @@
       "datasetType": "glossary-corpus",
       "values": {
         "master": "/glossaryCorpusFilters.json",
-        "jsonPath": "$.tglossaryCorpusFilters"
+        "jsonPath": "$.glossaryCorpusFilters"
       }
-  }
+    }
   ],
   "relatedMaster": true
 }
