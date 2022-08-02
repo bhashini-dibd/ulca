@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.4.0
+  version: 0.5.0
 servers:
   - url: /
 paths: {}
@@ -55,6 +55,9 @@ components:
             - raj
             - bho
             - gom
+            - awa
+            - hne
+            - mag
         targetLanguageName:
           type: string
           description: human name associated with the language code
@@ -94,6 +97,9 @@ components:
             - raj
             - bho
             - gom
+            - awa
+            - hne
+            - mag
       description: language pair, make targetLanguage null to reuse the object to indicate single language
     LanguagePairs:
       type: array
@@ -201,6 +207,7 @@ components:
         - ocr-corpus
         - document-layout-corpus
         - glossary-corpus
+        - ner-corpus
     OAuthIdentity:
       type: object
       properties:
@@ -405,4 +412,5 @@ components:
             - document-layout
             - ocr
             - glossary
+            - ner
       description: the category of model under which it has been released or trained

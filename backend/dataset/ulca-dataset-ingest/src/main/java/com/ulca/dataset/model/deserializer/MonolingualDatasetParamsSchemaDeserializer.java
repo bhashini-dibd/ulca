@@ -62,7 +62,7 @@ public class MonolingualDatasetParamsSchemaDeserializer extends StdDeserializer<
 			try {
 				MonolingualDatasetParamsSchemaKeys key = MonolingualDatasetParamsSchemaKeys.valueOf(k) ;
 			}catch (Exception ex) {
-				log.info("MonolingualDatasetParamsSchemaKeys not in defined keys");
+				log.info("MonolingualDatasetParamsSchemaKeys " + k + " not in defined keys");
 				errorList.add(k + " unknown property ");
 			}
 			
