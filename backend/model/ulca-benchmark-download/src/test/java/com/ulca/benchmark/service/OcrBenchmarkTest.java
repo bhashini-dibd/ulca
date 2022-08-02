@@ -31,8 +31,7 @@ class OcrBenchmarkTest {
 
     @Mock
     private KafkaTemplate<String, String> benchmarkMetricKafkaTemplate;
-
-
+    
     @Mock
     ModelInferenceResponseDao modelInferenceResponseDao;
 
@@ -45,13 +44,13 @@ class OcrBenchmarkTest {
     @Test
     void prepareAndPushToMetric() throws IOException, URISyntaxException {
 
-        String baseLocation = modelUploadFolder + " /ulca/ulca-test-datasets/ocr-dataset/positive-testcase-01";
+        String baseLocation = modelUploadFolder + "/ulca/ulca-test-datasets/ocr-dataset/positive-testcase-01";
+
         File file = new File(baseLocation + File.separator + "860190fb-3217-4c47-a350-2fd87c69a1d1.png");
         byte[] bytes = Files.readAllBytes(file.toPath());
 
         File file1 = new File(baseLocation + File.separator + "e2e22810-8aaa-430d-a30e-00eb6ac1e1ab.png");
         byte[] bytes1 = Files.readAllBytes(file1.toPath());
-
 
         ImageFile imageFile = new ImageFile();
         imageFile.setImageContent(bytes1);
@@ -75,13 +74,9 @@ class OcrBenchmarkTest {
         ocrInference.setRequest(ocrRequest);
         inferenceAPIEndPoint.setSchema(ocrInference);
         model.setInferenceEndPoint(inferenceAPIEndPoint);
-
         ModelTask modelTask = new ModelTask();
         modelTask.setType(ModelTask.TypeEnum.OCR);
-
         model.setTask(modelTask);
-
-
 
         Benchmark benchmark = new Benchmark();
 
@@ -96,6 +91,4 @@ class OcrBenchmarkTest {
 
         assertEquals(2,  ocrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
     }
-
-
 }

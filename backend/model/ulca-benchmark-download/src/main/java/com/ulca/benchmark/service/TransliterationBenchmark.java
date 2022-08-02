@@ -63,16 +63,12 @@ public class TransliterationBenchmark {
 
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
-
-
+  
 	@Autowired
 	OkHttpClientService okHttpClientService;
 
-
-	
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
-
 
 	public TransliterationResponse computeSync(InferenceAPIEndPoint inferenceAPIEndPoint,
 											   List<String> sourceSentences)
@@ -125,7 +121,6 @@ public class TransliterationBenchmark {
 
 	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
-
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();
 
@@ -173,10 +168,7 @@ public class TransliterationBenchmark {
 			List<String> expectedTgt = tgtChunks.get(k);
 			TransliterationResponse transliteration = null;
 
-
-
 			transliteration = computeSync(inferenceAPIEndPoint,input );
-
 
 			if(transliteration != null) {
 				@NotNull @Valid SentencesList sentenses = transliteration.getOutput();
@@ -219,7 +211,6 @@ public class TransliterationBenchmark {
 
 		log.info("data sending to metric calculation ");
 		log.info(metricRequest.toString());
-
 		
 		//update the total record count
 		int datasetCount = corpus.length();
