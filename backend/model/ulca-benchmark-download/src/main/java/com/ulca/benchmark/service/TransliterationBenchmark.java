@@ -95,21 +95,6 @@ public class TransliterationBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-
-			//OkHttpClient client = new OkHttpClient();
-
-//			OkHttpClient client = new OkHttpClient.Builder()
-//				      .readTimeout(60, TimeUnit.SECONDS)
-//				      .build();
-//
-//			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
-//			Request httpRequest = new Request.Builder()
-//			        .url(callBackUrl)
-//			        .post(body)
-//			        .build();
-//
-//			Response httpResponse = client.newCall(httpRequest).execute();
-			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
 
 			transliteration = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
@@ -119,7 +104,7 @@ public class TransliterationBenchmark {
 	}
 
 
-	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();

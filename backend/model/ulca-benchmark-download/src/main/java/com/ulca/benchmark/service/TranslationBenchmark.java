@@ -14,11 +14,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -178,7 +173,7 @@ public class TranslationBenchmark {
 		return translationResponse;
 	}
 
-	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();

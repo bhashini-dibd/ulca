@@ -8,16 +8,10 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-
-//Import the Base64 encoding library.
-//import org.apache.commons.codec.binary.Base64;
-
-import javax.sound.sampled.AudioFormat;
-
-import java.util.Collection;
 import java.util.Date;
-
 import java.util.List;
 import java.util.Map;
 
@@ -70,7 +64,7 @@ public class AsrBenchmark {
 	@Autowired
 	OkHttpClientService okHttpClientService;
 
-	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
+	public void  prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
@@ -177,17 +171,4 @@ public class AsrBenchmark {
 		
 	}
 	
-	public String asrComputeInternal(AsrComputeRequest request) {
-		
-		AsrComputeResponse response = builder.build().post().uri(asrcomputeurl)
-				.body(Mono.just(request), AsrComputeRequest.class).retrieve().bodyToMono(AsrComputeResponse.class)
-				.block();
-		
-		if(response != null && response.getData() != null) {
-			return response.getData().getSource();
-		}
-		
-		return null;
-
-	}
 }
