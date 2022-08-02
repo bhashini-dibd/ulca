@@ -1,6 +1,8 @@
 package com.ulca.benchmark.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.*;
@@ -46,6 +48,9 @@ class TranslationBenchmarkTest {
     @Mock
     OkHttpClientService okHttpClientService;
 
+    @Mock
+    BenchmarkProcessDao benchmarkProcessDao;
+
     private static Stream<Arguments>  prepareAndPushToMetricParam(){
         TranslationRequest request = new TranslationRequest();
         InferenceAPIEndPoint inferenceAPIEndPoint = new InferenceAPIEndPoint();
@@ -69,10 +74,11 @@ class TranslationBenchmarkTest {
                 Arguments.of(inferenceAPIEndPoint1,true));
     }
 
+
     @ParameterizedTest
     @MethodSource("prepareAndPushToMetricParam")
     void prepareAndPushToMetric(InferenceAPIEndPoint inferenceAPIEndPoint ,boolean isAsync) throws IOException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        String baseLocation = modelUploadFolder + "ulca/specs/examples/dataset/parallel-dataset/basic";
+        String baseLocation = modelUploadFolder + "/ulca/specs/examples/dataset/parallel-dataset/basic";
         ModelExtended model = new ModelExtended();
         model.setInferenceEndPoint(inferenceAPIEndPoint);
 
@@ -124,6 +130,7 @@ class TranslationBenchmarkTest {
                         objectMapper.writeValueAsString(translationResponse)
                 ))
                 .build();
+        when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
         if (!isAsync) {
             when(okHttpClientService.okHttpClientPostCall(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(response);
@@ -134,6 +141,6 @@ class TranslationBenchmarkTest {
             when(okHttpClientService.okHttpClientAsyncPostCall(ArgumentMatchers.anyString(),ArgumentMatchers.anyString())).thenReturn(response2);
         }
 
-        //assertEquals(3,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+        assertEquals(true,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
     }
 }
