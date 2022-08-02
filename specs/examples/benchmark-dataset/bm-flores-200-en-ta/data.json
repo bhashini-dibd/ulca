@@ -1,0 +1,14 @@
+[
+    {
+        "sourceText": "On Monday, scientists from the Stanford University School of Medicine announced the invention of a new diagnostic tool that can sort cells by type: a tiny printable chip that can be manufactured using standard inkjet printers for possibly about one U.S. cent each.",
+        "targetText": "திங்களன்று, ஸ்டான்போர்ட் யுனிவர்சிட்டி ஸ்கூல் ஆஃப் மெடிசின் விஞ்ஞானிகள் ஒரு புதிய நோயறிதல் கருவியின் கண்டுபிடிப்பை அறிவித்தனர், இது செல்களை வகைப்படி வரிசைப்படுத்தலாம்: ஒரு சிறிய அச்சிடக்கூடிய சில்லு, தரமான இன்க்ஜெட் அச்சுப்பொறிகளைப் பயன்படுத்தி ஒவ்வொன்றும் 1 யு.எஸ்."
+    },
+    {
+        "sourceText": "Lead researchers say this may bring early detection of cancer, tuberculosis, HIV and malaria to patients in low-income countries, where the survival rates for illnesses such as breast cancer can be half those of richer countries.",
+        "targetText": "இது குறைந்த வருமானம் ஈட்டும் நாடுகளில் உள்ள நோயாளிகளுக்கு புற்றுநோய், காசநோய், எச்.ஐ.வி மற்றும் மலேரியாவை முன்கூட்டியே கண்டறியும் என்று முன்னணி ஆராய்ச்சியாளர்கள் கூறுகின்றனர், மார்பக புற்றுநோய் போன்ற நோய்களுக்கான உயிர்வாழ்வு விகிதங்கள் பணக்கார நாடுகளில் பாதியாக இருக்கலாம்."
+    },
+    {
+        "sourceText": "The JAS 39C Gripen crashed onto a runway at around 9:30 am local time (0230 UTC) and exploded, closing the airport to commercial flights.",
+        "targetText": "JAS 39C க்ரப்பென் விமானம் உள்ளூர் நேரம் 9:30 AM (0230 UTC) க்கு ஓடுபாதையில் விழுந்து வெடித்தது, அதனால் வணிக விமானங்களுக்கு விமான நிலையம் மூடப்பட்டது."
+    }
+]
