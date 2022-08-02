@@ -16,7 +16,7 @@ class ModelConstantsTest {
 
     private static Stream<Arguments> getMetricListByModelTaskParam(){
 
-        String[] metric1 = { "bleu", "meteor", "ribes", "gleu", "bert" };
+        String[] metric1 = { "bleu", "meteor", "ribes", "gleu", "bert","chrf" };
         String[] metric2 = { "cer", "top-1 accuracy", "top-5 accuracy"};
         String[] metric3 = { "wer", "cer" };
         String[] metric4 = { "wer", "cer" };
