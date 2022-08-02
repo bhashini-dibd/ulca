@@ -12,7 +12,6 @@ import java.util.ArrayList;
 //Import the Base64 encoding library.
 //import org.apache.commons.codec.binary.Base64;
 
-
 import javax.sound.sampled.AudioFormat;
 
 import java.util.Collection;
@@ -64,14 +63,12 @@ public class OcrBenchmark {
 
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
-
 	
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
 	
 	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
 		
-
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
@@ -159,7 +156,6 @@ public class OcrBenchmark {
 		log.info("data before sending to metric");
 		log.info(metricRequest.toString());
 
-		
 		//update the total record count
 		int datasetCount = corpus.length();
 		BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
@@ -167,7 +163,6 @@ public class OcrBenchmark {
 		bmProcessUpdate.setLastModifiedOn(new Date().toString());
 		benchmarkProcessDao.save(bmProcessUpdate);
 				
-
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
 
 		//save the model inference response
@@ -183,6 +178,4 @@ public class OcrBenchmark {
 		modelInferenceResponseDao.save(modelInferenceResponse);
 
 	}
-
-
 }

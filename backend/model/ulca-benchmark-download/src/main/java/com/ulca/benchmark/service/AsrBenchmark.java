@@ -13,7 +13,6 @@ import java.util.ArrayList;
 //Import the Base64 encoding library.
 //import org.apache.commons.codec.binary.Base64;
 
-
 import javax.sound.sampled.AudioFormat;
 
 import java.util.Collection;
@@ -59,7 +58,6 @@ public class AsrBenchmark {
 	@Value("${asrcomputeurl}")
 	private String asrcomputeurl;
 
-
 	@Autowired
 	WebClient.Builder builder;
 
@@ -72,10 +70,7 @@ public class AsrBenchmark {
 	@Autowired
 	OkHttpClientService okHttpClientService;
 
-
-
 	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException {
-
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
