@@ -3,8 +3,7 @@ Few examples to show how a submitter can contribute dataset to ULCA. The submitt
 
 * [Basic](./basic)
 * [Only words](./basic-only-words)
-* [Sentences with only index and no words](./basic-)
-* [Sentences without index but words](./machine-generated)
-* [Explicit phrase position - Seperate](./machine-generated-post-edited)
-* [Explicit phrase position - Combined](./machine-generated-post-edited)
-* [Without phrase position](./machine-generated-post-edited)
+* [Sentences with only index and no words](./basic-only-index)
+* [Sentences without index but words](./basic-no-index)
+* [Explicit phrase position & tag - Combined](./machine-generated-post-edited)
+* [Without phrase position](./basic-no-position)
