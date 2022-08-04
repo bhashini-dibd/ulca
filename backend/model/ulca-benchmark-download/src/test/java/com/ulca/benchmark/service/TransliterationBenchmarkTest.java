@@ -48,7 +48,7 @@ class TransliterationBenchmarkTest {
 
     @Test
     void prepareAndPushToMetric() throws IOException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        String baseLocation = modelUploadFolder + "/ulca/specs/examples/benchmark-dataset/transliteration-benchmark-dataset";
+        String baseLocation = "src/test/resources/transliteration-benchmark-dataset";
         ModelExtended model = new ModelExtended();
         TransliterationRequest request = new TransliterationRequest();
         TransliterationConfig transliterationConfig = new TransliterationConfig();

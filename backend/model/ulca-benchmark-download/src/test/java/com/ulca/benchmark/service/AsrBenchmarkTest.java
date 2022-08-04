@@ -54,7 +54,7 @@ class AsrBenchmarkTest {
 
     @Test
     void prepareAndPushToMetric() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
-        String baseLocation = modelUploadFolder + "/ulca/specs/examples/benchmark-dataset/asr-benchmark-dataset";
+        String baseLocation =  "src/test/resources/asr-benchmark-dataset";
 
         ASRRequest asrRequest = new ASRRequest();
         AudioConfig audioConfig = new AudioConfig();

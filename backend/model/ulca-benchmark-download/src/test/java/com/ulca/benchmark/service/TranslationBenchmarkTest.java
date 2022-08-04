@@ -78,7 +78,7 @@ class TranslationBenchmarkTest {
     @ParameterizedTest
     @MethodSource("prepareAndPushToMetricParam")
     void prepareAndPushToMetric(InferenceAPIEndPoint inferenceAPIEndPoint ,boolean isAsync) throws IOException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        String baseLocation = modelUploadFolder + "/ulca/specs/examples/dataset/parallel-dataset/basic";
+        String baseLocation = "src/test/resources/basic";
         ModelExtended model = new ModelExtended();
         model.setInferenceEndPoint(inferenceAPIEndPoint);
 
