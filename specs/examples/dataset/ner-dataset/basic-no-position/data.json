@@ -5,13 +5,11 @@
             {
                 "index": 13,
                 "word": "सिंध",
-                "position": "B",
                 "tag": "ORG"
             },
             {
                 "index": 14,
                 "word": "प्रांत",
-                "position": "I",
                 "tag": "ORG"
             }
         ]
@@ -22,13 +20,11 @@
             {
                 "index": 1,
                 "word": "आस्ट्रेलिया",
-                "position": "B",
                 "tag": "LOC"
             },
             {
                 "index": 5,
                 "word": "टीम",
-                "position": "B",
                 "tag": "ORG"
             }
         ]
