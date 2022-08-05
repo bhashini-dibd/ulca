@@ -46,7 +46,7 @@ class OcrBenchmarkTest {
     @Test
     void prepareAndPushToMetric() throws IOException, URISyntaxException {
 
-        String baseLocation = modelUploadFolder + "/ulca/ulca-test-datasets/ocr-dataset/positive-testcase-01";
+        String baseLocation = "src/test/resources/positive-testcase-01";
         OCRRequest ocrRequest = new OCRRequest();
 
         ModelExtended model = new ModelExtended();
