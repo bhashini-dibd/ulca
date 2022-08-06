@@ -3,6 +3,7 @@ package com.ulca.benchmark.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.ResponseCorpus;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.*;
@@ -77,7 +78,7 @@ class TranslationBenchmarkTest {
 
     @ParameterizedTest
     @MethodSource("prepareAndPushToMetricParam")
-    void prepareAndPushToMetric(InferenceAPIEndPoint inferenceAPIEndPoint ,boolean isAsync) throws IOException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
+    void prepareAndPushToMetric(InferenceAPIEndPoint inferenceAPIEndPoint ,boolean isAsync) throws Exception {
         String baseLocation = "src/test/resources/basic";
         ModelExtended model = new ModelExtended();
         model.setInferenceEndPoint(inferenceAPIEndPoint);
@@ -141,6 +142,6 @@ class TranslationBenchmarkTest {
             when(okHttpClientService.okHttpClientAsyncPostCall(ArgumentMatchers.anyString(),ArgumentMatchers.anyString())).thenReturn(response2);
         }
 
-        assertEquals(true,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+        assertEquals(true,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId,new ResponseCorpus()));
     }
 }

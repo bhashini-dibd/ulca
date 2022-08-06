@@ -2,6 +2,7 @@ package com.ulca.benchmark.service;
 
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.ResponseCorpus;
 import com.ulca.benchmark.request.AsrComputeRequest;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
@@ -53,7 +54,7 @@ class AsrBenchmarkTest {
 
 
     @Test
-    void prepareAndPushToMetric() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    void prepareAndPushToMetric() throws Exception {
         String baseLocation =  "src/test/resources/asr-benchmark-dataset";
 
         ASRRequest asrRequest = new ASRRequest();
@@ -79,6 +80,8 @@ class AsrBenchmarkTest {
 
         Benchmark benchmark = new Benchmark();
 
+        ResponseCorpus responseCorpus = new ResponseCorpus();
+
         Map<String,String> fileMap = new HashMap<>();
         fileMap.put("baseLocation",baseLocation);
 
@@ -89,6 +92,6 @@ class AsrBenchmarkTest {
         when(okHttpClientService.asrComputeInternal(ArgumentMatchers.any(AsrComputeRequest.class))).thenReturn("test");
         when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
-        assertEquals(true,  asrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+        assertEquals(true,  asrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId,responseCorpus));
     }
 }

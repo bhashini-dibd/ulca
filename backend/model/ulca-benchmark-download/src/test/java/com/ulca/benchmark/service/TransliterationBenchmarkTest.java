@@ -3,6 +3,7 @@ package com.ulca.benchmark.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.ResponseCorpus;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.*;
@@ -47,7 +48,7 @@ class TransliterationBenchmarkTest {
     BenchmarkProcessDao benchmarkProcessDao;
 
     @Test
-    void prepareAndPushToMetric() throws IOException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
+    void prepareAndPushToMetric() throws Exception {
         String baseLocation = "src/test/resources/transliteration-benchmark-dataset";
         ModelExtended model = new ModelExtended();
         TransliterationRequest request = new TransliterationRequest();
@@ -94,6 +95,6 @@ class TransliterationBenchmarkTest {
 
         when(okHttpClientService.okHttpClientPostCall(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(response);
 
-        assertEquals(true, transliterationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+        assertEquals(true, transliterationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId,new ResponseCorpus()));
     }
 }

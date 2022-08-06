@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.ulca.benchmark.model.ResponseCorpus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -86,13 +87,50 @@ public class KafkaBenchmarkDownloadConsumer {
 		try {
 
 			String benchmarkProcessId = bmDsDownload.getBenchmarkProcessId();
-			
+
 			List<BenchmarkTaskTracker> list = benchmarkTaskTrackerDao.findByBenchmarkProcessId(benchmarkProcessId);
-			
+
 			if(list.size() > 0) {
 				log.info("Duplicate Benchmark Process. Skipping Benchamrk Processing. benchmarkProcessId :: " + benchmarkProcessId);
 				return;
 			}
+			ResponseCorpus responseCorpus = new ResponseCorpus();
+			if(bmDsDownload.getBenchmarkProcessIdList()!=null){
+				try {
+					responseCorpus = getResponseCorpus(benchmarkProcessId);
+
+				}catch (Exception ex) {
+					log.info(ex.getMessage());
+					ex.printStackTrace();
+				}
+				List<String> benchmarkProcessIdList = bmDsDownload.getBenchmarkProcessIdList();
+
+				for (String allMetricBenchmarkProcessId : benchmarkProcessIdList){
+					try {
+						getDownloadBenchmarkDataset(allMetricBenchmarkProcessId,responseCorpus);
+					} catch (Exception ex) {
+						log.info(ex.getMessage());
+						ex.printStackTrace();
+					}
+				}
+			} else
+				try {
+					getDownloadBenchmarkDataset(benchmarkProcessId,responseCorpus);
+
+				}catch (Exception ex) {
+					log.info(ex.getMessage());
+					ex.printStackTrace();
+				}
+		} catch (Exception ex) {
+			log.info("error in listener");
+			ex.printStackTrace();
+		}
+	}
+
+
+	public void getDownloadBenchmarkDataset(String benchmarkProcessId,ResponseCorpus responseCorpus) throws Exception {
+
+
 			bmProcessTrackerService.createTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.inprogress);
 			
 			String downloadFolder = bmDsDownloadFolder + "/benchmark-dataset";
@@ -167,14 +205,14 @@ public class KafkaBenchmarkDownloadConsumer {
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLATION.toString());
 						
 						 translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
-								benchmarkProcessId);
+								benchmarkProcessId,responseCorpus);
 						
 						break;
 					case ASR:
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
 						
 						asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
-								benchmarkProcessId);
+								benchmarkProcessId,responseCorpus);
 						break;
 
 					case OCR:
@@ -182,7 +220,7 @@ public class KafkaBenchmarkDownloadConsumer {
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.OCR.toString());
 						
 						ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
-								benchmarkProcessId);
+								benchmarkProcessId,responseCorpus);
 						break;
 						
 					case TRANSLITERATION:
@@ -190,7 +228,7 @@ public class KafkaBenchmarkDownloadConsumer {
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLITERATION.toString());
 						
 						transliterationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
-								benchmarkProcessId);
+								benchmarkProcessId,responseCorpus);
 						break;
 
 					default:
@@ -220,11 +258,127 @@ public class KafkaBenchmarkDownloadConsumer {
 				log.info("Benchmark Process Not Found. benchmarkProcessId :: "  + benchmarkProcessId);
 			}
 
-		} catch (Exception ex) {
-			log.info("error in listener");
-			ex.printStackTrace();
-		}
+
 	}
+
+
+
+	public ResponseCorpus getResponseCorpus(String benchmarkProcessId) throws Exception {
+
+
+			String downloadFolder = bmDsDownloadFolder + "/benchmark-dataset";
+
+			Path targetLocation = Paths.get(downloadFolder).toAbsolutePath().normalize();
+		ResponseCorpus responseCorpus = null;
+
+
+		try {
+				Files.createDirectories(targetLocation);
+			} catch (Exception ex) {
+				BenchmarkError error = new BenchmarkError();
+				error.setCause(ex.getMessage());
+				error.setMessage("file download failed");
+				error.setCode("2000_FILE_DOWNLOAD_FAILURE");
+				throw new Exception("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
+			}
+
+			BenchmarkProcess bmProcess = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
+
+			if(bmProcess != null) {
+
+				String bmDatasetId = bmProcess.getBenchmarkDatasetId();
+				String fileName = benchmarkProcessId + ".zip";
+
+				String modelId = bmProcess.getModelId();
+				Optional<ModelExtended> modelOpt = modelDao.findById(modelId);
+				ModelExtended model = modelOpt.get();
+
+				Optional<Benchmark> benchmarkOpt = benchmarkDao.findById(bmDatasetId);
+				Benchmark benchmark = benchmarkOpt.get();
+				String datasetUrl = benchmark.getDataset();
+
+				Map<String, String> fileMap = null;
+
+				try {
+					String filePath = downloadUsingNIO(datasetUrl, downloadFolder, fileName);
+
+					log.info("filePath :: " + filePath);
+
+					String serviceRequestNumber = benchmarkProcessId ;
+
+					log.info("serviceRequestNumber :: " + serviceRequestNumber);
+
+					fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
+
+
+				}catch (IOException e) {
+					log.info("Benchmark Process Failed." + " cause :: " + e.getMessage());
+
+					BenchmarkError error = new BenchmarkError();
+					error.setCause(e.getMessage());
+					error.setMessage("file download failed");
+					error.setCode("2000_FILE_DOWNLOAD_FAILURE");
+					e.printStackTrace();
+
+				}
+
+				try {
+
+
+					ModelTask.TypeEnum type = model.getTask().getType();
+
+					switch (type) {
+						case TRANSLATION:
+							log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLATION.toString());
+
+					responseCorpus = translationBenchmark.getResponse(model,fileMap);
+
+							break;
+						case ASR:
+							log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
+
+						responseCorpus = asrBenchmark.getResponse(model, fileMap);
+							break;
+
+						case OCR:
+
+							log.info("modelTaskType :: " + ModelTask.TypeEnum.OCR.toString());
+
+						responseCorpus = ocrBenchmark.getResponse(model, fileMap);
+							break;
+
+						case TRANSLITERATION:
+
+							log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLITERATION.toString());
+
+							transliterationBenchmark.getResponse(model, fileMap);
+							break;
+
+						default:
+
+							break;
+
+					}
+
+				} catch (Exception e) {
+
+					log.info("Benchmark Process Failed. benchmarkProcessId :: " + " cause :: " + e.getMessage());
+
+					BenchmarkError error = new BenchmarkError();
+					error.setCause(e.getMessage());
+					error.setMessage("Benchmark Ingest Failed");
+					error.setCode("2000_BENCHMARK_INGEST_FAILURE");
+					e.printStackTrace();
+
+				}
+
+			} else {
+				log.info("Benchmark Process Not Found.");
+			}
+
+		return responseCorpus;
+	}
+
 
 	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {
 		log.info("************ Entry KafkaBenchmarkDownloadConsumer :: downloadUsingNIO *********");

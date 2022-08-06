@@ -251,13 +251,16 @@ public class BenchmarkService {
 				bmProcess.setLastModifiedOn(new Date().toString());
 				bmProcess.setStartTime(new Date().toString());
 				benchmarkprocessDao.save(bmProcess);
-
-				BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
-				benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
 				benchmarkProcessIds.add(serviceRequestNumber);
 			}
 
 		}
+		BmDatasetDownload bmDsDownload = new BmDatasetDownload(benchmarkProcessIds.get(0));
+
+		if(benchmarkProcessIds.size()>1){
+			bmDsDownload.setBenchmarkProcessIdList(benchmarkProcessIds);
+		}
+		benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
 
 		ExecuteBenchmarkResponse response = new ExecuteBenchmarkResponse();
 		response.setBenchmarkProcessIds(benchmarkProcessIds);
