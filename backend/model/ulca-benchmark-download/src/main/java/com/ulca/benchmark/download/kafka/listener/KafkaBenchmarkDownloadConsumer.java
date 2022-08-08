@@ -351,7 +351,7 @@ public class KafkaBenchmarkDownloadConsumer {
 
 							log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLITERATION.toString());
 
-							transliterationBenchmark.getResponse(model, fileMap);
+						responseCorpus = transliterationBenchmark.getResponse(model, fileMap);
 							break;
 
 						default:
