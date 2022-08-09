@@ -1,0 +1,44 @@
+{
+    "datasetType": "ner-corpus",
+    "languages": {
+        "sourceLanguage": "hi"
+    },
+    "collectionSource": [
+        "https: //wikipedia.org"
+    ],
+    "domain":[
+        "general"
+    ],
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-curated"
+        ],
+        "collectionDetails": {
+            "editingTool": "Microsoft Excel",
+            "editingToolVersion": "v1.4",
+            "contributor": {
+                "name": "Raghav Mohan",
+                "aboutMe": "Freelance Hindi annotator for project Anuvaad"
+            }
+        }
+    },
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
+        "team": [
+            {
+                "name": "Aswin Pradeep",
+                "aboutMe": "NLP Data  lead at Project Anuvaad"
+            },
+            {
+                "name": "Vishal Mauli",
+                "aboutMe": "Backend team lead at Project Anuvaad"
+            },
+            {
+                "name": "Aravinth Bheemaraj",
+                "aboutMe": "NLP Data team lead at Project Anuvaad"
+            }
+        ]
+    }
+}

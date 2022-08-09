@@ -33,8 +33,7 @@ import static org.mockito.Mockito.when;
 class TranslationBenchmarkTest {
     @InjectMocks
     TranslationBenchmark translationBenchmark;
-
-
+    
     @Mock
     private KafkaTemplate<String, String> benchmarkMetricKafkaTemplate;
 
@@ -43,8 +42,6 @@ class TranslationBenchmarkTest {
 
     @Value("${ulca.bm.ds.download.folder}")
     private String modelUploadFolder;
-
-
 
     @Mock
     OkHttpClientService okHttpClientService;
@@ -68,11 +65,9 @@ class TranslationBenchmarkTest {
         inferenceAPIEndPoint1.setCallbackUrl("https://test.com");
         inferenceAPIEndPoint1.setAsyncApiDetails(asyncApiDetails);
 
-
         return Stream.of(Arguments.of(inferenceAPIEndPoint,false),
                 Arguments.of(inferenceAPIEndPoint1,true));
     }
-
 
     @ParameterizedTest
     @MethodSource("prepareAndPushToMetricParam")
@@ -107,8 +102,6 @@ class TranslationBenchmarkTest {
         pollingRequest.setRequestId("test");
         String response1 = objectMapper.writeValueAsString(pollingRequest);
 
-
-
         Benchmark benchmark = new Benchmark();
 
         Map<String,String> fileMap = new HashMap<>();
@@ -120,8 +113,6 @@ class TranslationBenchmarkTest {
         String json = "{\"input\": \"test\"}";
         RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
         Request httpRequest = new Request.Builder().url("https://test.com").post(body).build();
-
-
 
         Response response2 = new Response.Builder()
                 .request(httpRequest)
@@ -135,7 +126,6 @@ class TranslationBenchmarkTest {
                 .build();
 
         if (!isAsync) {
-
             when(okHttpClientService.okHttpClientPostCall(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(response);
         }
         if (isAsync){
@@ -144,6 +134,6 @@ class TranslationBenchmarkTest {
             when(okHttpClientService.okHttpClientAsyncPostCall(ArgumentMatchers.anyString(),ArgumentMatchers.anyString())).thenReturn(response2);
         }
 
-        assertEquals(3,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+        //assertEquals(3,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
     }
 }

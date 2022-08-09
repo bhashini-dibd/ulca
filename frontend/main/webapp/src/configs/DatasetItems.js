@@ -57,6 +57,9 @@ export const Language = [
   { value: "sa", label: "Sanskrit" },
   { value: "bho", label: "Bhojpuri" },
   { value: "raj", label: "Rajasthani" },
+  { value: "awa", label: "Awadhi" },
+  { value: "hne", label: "Chhattisgarhi" },
+  { value: "mag", label: "Magahi" },
 ];
 
 export const FilterBy = {
