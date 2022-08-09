@@ -5,6 +5,7 @@ export const ModelTask = [
   { value: "tts", label: "TTS" },
   { value: "ocr", label: "OCR" },
   { value: "transliteration", label: "Transliteration" },
+  { value: "status-check", label: "Status Check"}
 ];
 export const DatasetItems = [
   { value: "parallel-corpus", label: "Parallel Dataset" },

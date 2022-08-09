@@ -35,7 +35,7 @@ const SimpleTabs = (props) => {
               })}
             </Tabs>
           </Grid>
-          {showFilter!=='sts' &&<Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
+          {showFilter &&<Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
             <Grid container spacing={2} className={classes.gridAlign}>
               <Grid item>
                 <div className={classes.search}>
