@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Data
 @Getter
 @Setter
@@ -14,5 +16,10 @@ import lombok.Setter;
 public class BmDatasetDownload {
 	
 	String benchmarkProcessId;
+	List<String> benchmarkProcessIdList;
+
+	public BmDatasetDownload(String benchmarkProcessId) {
+		this.benchmarkProcessId = benchmarkProcessId;
+	}
 
 }

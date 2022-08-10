@@ -303,6 +303,7 @@ class ModelServiceTest {
     void tryMeOcrImageContent() throws Exception {
 
         File file = new File("src/test/resources/860190fb-3217-4c47-a350-2fd87c69a1d1.png");
+
         FileInputStream input = new FileInputStream(file);
         MultipartFile multipartFile = new MockMultipartFile("fileItem",
                 file.getName(), "image/png", IOUtils.toByteArray(input));

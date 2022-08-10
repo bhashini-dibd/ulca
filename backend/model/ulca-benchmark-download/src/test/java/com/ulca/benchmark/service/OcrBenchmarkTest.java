@@ -2,6 +2,7 @@ package com.ulca.benchmark.service;
 
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
+import com.ulca.benchmark.model.ResponseCorpus;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.*;
@@ -73,6 +74,6 @@ class OcrBenchmarkTest {
         when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
 
-        assertEquals(true,  ocrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+        assertEquals(true,  ocrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId,new ResponseCorpus()));
     }
 }
