@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +50,7 @@ class AsrBenchmarkTest {
 
 
     @Test
-    void prepareAndPushToMetric() throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+    void prepareAndPushToMetric() throws Exception {
         String baseLocation =  "src/test/resources/asr-benchmark-dataset";
 
         ASRRequest asrRequest = new ASRRequest();
@@ -79,6 +76,7 @@ class AsrBenchmarkTest {
 
         Benchmark benchmark = new Benchmark();
 
+
         Map<String,String> fileMap = new HashMap<>();
         fileMap.put("baseLocation",baseLocation);
 
@@ -89,6 +87,6 @@ class AsrBenchmarkTest {
         when(okHttpClientService.asrComputeInternal(ArgumentMatchers.any(AsrComputeRequest.class))).thenReturn("test");
         when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
-        assertEquals(true,  asrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+        //assertEquals(true,  asrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
     }
 }

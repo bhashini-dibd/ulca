@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
@@ -175,7 +177,14 @@ public class BenchmarkService {
 			bmProcess.setStartTime(new Date().toString());
 			benchmarkprocessDao.save(bmProcess);
 
-			BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
+			Map<String,String> map = new HashMap<String, String>();
+			map.put(serviceRequestNumber, bm.getMetric());
+			
+			BmDatasetDownload bmDsDownload = new BmDatasetDownload();
+			bmDsDownload.setBenchmarkDatasetId(bm.getBenchmarkId());
+			bmDsDownload.setModelId(modelId);	
+			bmDsDownload.setBenchmarkProcessIdsMap(map);
+			
 			benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
 			benchmarkProcessIds.add(serviceRequestNumber);
 
@@ -214,6 +223,9 @@ public class BenchmarkService {
 		List<String> metricList = modelConstants.getMetricListByModelTask(benchmark.getTask().getType().toString());
 
 		String benchmarkId = benchmark.getBenchmarkId();
+		
+		Map<String, String> map = new HashMap<String, String>();
+		
 
 		for (String metric : metricList) {
 
@@ -242,7 +254,7 @@ public class BenchmarkService {
 				BenchmarkProcess bmProcess = new BenchmarkProcess();
 				bmProcess.setBenchmarkDatasetId(benchmarkId);
 				bmProcess.setBenchmarkProcessId(serviceRequestNumber);
-				bmProcess.setMetric(benchmarkId);
+				bmProcess.setMetric(metric);
 				bmProcess.setBenchmarkDatasetName(benchmark.getName());
 				bmProcess.setModelId(modelId);
 				bmProcess.setModelName(modelExtended.getName());
@@ -251,12 +263,19 @@ public class BenchmarkService {
 				bmProcess.setLastModifiedOn(new Date().toString());
 				bmProcess.setStartTime(new Date().toString());
 				benchmarkprocessDao.save(bmProcess);
-
-				BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
-				benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
+				map.put(serviceRequestNumber, metric);
 				benchmarkProcessIds.add(serviceRequestNumber);
 			}
 
+		}
+
+		if(benchmarkProcessIds.size()>0){
+			
+			BmDatasetDownload bmDsDownload = new BmDatasetDownload();
+			bmDsDownload.setBenchmarkDatasetId(benchmarkId);
+			bmDsDownload.setModelId(modelId);
+			bmDsDownload.setBenchmarkProcessIdsMap(map);
+			benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
 		}
 
 		ExecuteBenchmarkResponse response = new ExecuteBenchmarkResponse();

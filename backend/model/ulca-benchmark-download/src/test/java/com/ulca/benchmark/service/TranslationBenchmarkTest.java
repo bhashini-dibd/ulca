@@ -19,15 +19,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,7 +74,7 @@ class TranslationBenchmarkTest {
 
     @ParameterizedTest
     @MethodSource("prepareAndPushToMetricParam")
-    void prepareAndPushToMetric(InferenceAPIEndPoint inferenceAPIEndPoint ,boolean isAsync) throws IOException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
+    void prepareAndPushToMetric(InferenceAPIEndPoint inferenceAPIEndPoint ,boolean isAsync) throws Exception {
         String baseLocation = "src/test/resources/basic";
         ModelExtended model = new ModelExtended();
         model.setInferenceEndPoint(inferenceAPIEndPoint);
@@ -141,6 +138,6 @@ class TranslationBenchmarkTest {
             when(okHttpClientService.okHttpClientAsyncPostCall(ArgumentMatchers.anyString(),ArgumentMatchers.anyString())).thenReturn(response2);
         }
 
-        assertEquals(true,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+       // assertEquals(true,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
     }
 }
