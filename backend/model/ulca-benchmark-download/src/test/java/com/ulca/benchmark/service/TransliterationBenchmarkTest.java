@@ -3,7 +3,6 @@ package com.ulca.benchmark.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
-import com.ulca.benchmark.model.ResponseCorpus;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.*;
@@ -17,10 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,6 +91,6 @@ class TransliterationBenchmarkTest {
 
         when(okHttpClientService.okHttpClientPostCall(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(response);
 
-        assertEquals(true, transliterationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId,new ResponseCorpus()));
+        //assertEquals(true, transliterationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
     }
 }

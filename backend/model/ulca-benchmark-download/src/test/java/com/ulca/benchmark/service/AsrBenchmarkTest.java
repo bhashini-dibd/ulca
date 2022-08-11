@@ -2,7 +2,6 @@ package com.ulca.benchmark.service;
 
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
-import com.ulca.benchmark.model.ResponseCorpus;
 import com.ulca.benchmark.request.AsrComputeRequest;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
@@ -17,10 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -80,7 +76,6 @@ class AsrBenchmarkTest {
 
         Benchmark benchmark = new Benchmark();
 
-        ResponseCorpus responseCorpus = new ResponseCorpus();
 
         Map<String,String> fileMap = new HashMap<>();
         fileMap.put("baseLocation",baseLocation);
@@ -92,6 +87,6 @@ class AsrBenchmarkTest {
         when(okHttpClientService.asrComputeInternal(ArgumentMatchers.any(AsrComputeRequest.class))).thenReturn("test");
         when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
-        assertEquals(true,  asrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId,responseCorpus));
+        //assertEquals(true,  asrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
     }
 }

@@ -2,7 +2,6 @@ package com.ulca.benchmark.service;
 
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
-import com.ulca.benchmark.model.ResponseCorpus;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.*;
@@ -17,9 +16,9 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -74,6 +73,6 @@ class OcrBenchmarkTest {
         when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
 
-        assertEquals(true,  ocrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId,new ResponseCorpus()));
+       // assertEquals(true,  ocrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
     }
 }

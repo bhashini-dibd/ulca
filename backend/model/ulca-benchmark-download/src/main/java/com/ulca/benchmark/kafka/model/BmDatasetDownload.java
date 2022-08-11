@@ -1,12 +1,12 @@
 package com.ulca.benchmark.kafka.model;
 
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Data
 @Getter
@@ -15,10 +15,8 @@ import java.util.List;
 @AllArgsConstructor
 public class BmDatasetDownload {
 	
-	String benchmarkProcessId;
-	List<String> benchmarkProcessIdList;
+	String benchmarkDatasetId;
+	String modelId;
+	Map<String, String> benchmarkProcessIdsMap;
 
-	public BmDatasetDownload(String benchmarkProcessId) {
-		this.benchmarkProcessId = benchmarkProcessId;
-	}
 }
