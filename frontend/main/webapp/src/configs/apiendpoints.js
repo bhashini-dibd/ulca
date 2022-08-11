@@ -34,7 +34,7 @@ const endpoints = {
   ocrDocumentUpload: "/ulca/apis/v0/model/tryMe",
   submitFeedback:"/ulca/apis/v0/model/feedback/submit",
   datasetMetrics: "/ulca/data-metric/v0/store/reportdata",
-  getModelHealthStatus: "",
+  getModelHealthStatus: "/ulca/apis/v0/model/getModelHealthStatus",
 };
 
 export default endpoints;
