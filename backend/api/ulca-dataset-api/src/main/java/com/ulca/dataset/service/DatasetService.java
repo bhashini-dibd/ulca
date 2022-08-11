@@ -226,21 +226,35 @@ public class DatasetService {
 	public DatasetListByUserIdResponse datasetListByUserIdPagination(String userId, Integer startPage, Integer endPage,String name) {
 
 		log.info("******** Entry DatasetService:: datasetListByUserIdPagination *******");
-		List<Dataset> searchList = new ArrayList<>();
-		if (name!=null){
-			Dataset dataset = new Dataset();
-			dataset.setDatasetName(name);
 
-			Example<Dataset> example = Example.of(dataset);
-			searchList = datasetDao.findAll(example);
+
+
+		List<DatasetListByUserIdResponseDto> list = new ArrayList<DatasetListByUserIdResponseDto>();
+		List<DatasetListByUserIdResponseDto> searchList = new ArrayList<DatasetListByUserIdResponseDto>();
+
+		int startIndex = PAGE_SIZE * (startPage - 1);
+		int endIndex = PAGE_SIZE * endPage;
+
+		if(name!=null){
+			DatasetListByUserIdResponse datasetListByUserIdResponse = datasetListByUserIdFetchAll(userId,name);
+			List<DatasetListByUserIdResponseDto> allList = datasetListByUserIdResponse.getData();
+			if(allList.size()>=endIndex) {
+				searchList = allList.subList(startIndex, endIndex-1);
+			}else {
+
+				for (int i = startIndex; i < endIndex; i++) {
+					searchList.add(allList.get(i));
+
+				}
+			}
+			DatasetListByUserIdResponse searchResponse = new DatasetListByUserIdResponse("Dataset List By userId",searchList, startPage, endPage);
+			log.info("******** Exit DatasetService:: datasetListByUserIdPagination *******");
+			return searchResponse;
+
 
 		}
-		boolean isPresent = false;
-		
-		List<DatasetListByUserIdResponseDto> list = new ArrayList<DatasetListByUserIdResponseDto>();
-
-
 		int startPg = startPage - 1;
+
 		for(int i= startPg; i< endPage; i++) {
 
 			Pageable paging = PageRequest.of(i, PAGE_SIZE);
@@ -252,17 +266,7 @@ public class DatasetService {
 					String status = p.getStatus().toString();
 					Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
 
-					if (name != null) {
-						isPresent=false;
-						for (Dataset dataset1 : searchList) {
-							if (dataset.get().equals(dataset1)) {
-								isPresent = true;
-								break;
-							}
-						}
 
-					}
-					if (name == null || isPresent) {
 						if (status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
 							list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
 									dataset.get().getDatasetName(), dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
@@ -288,7 +292,7 @@ public class DatasetService {
 						}
 					}
 				}
-			}
+
 		}
 		
 		String msg = "Dataset List By userId";
