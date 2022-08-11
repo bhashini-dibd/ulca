@@ -173,7 +173,7 @@ public class TranslationBenchmark {
 		return translationResponse;
 	}
 
-	public boolean prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, List<String> benchmarkingProcessIdList) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+	public boolean prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, Map<String, String> benchmarkProcessIdsMap) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();
@@ -246,12 +246,16 @@ public class TranslationBenchmark {
 				}
 			}
 		}
-        for (String benchmarkingProcessId:benchmarkingProcessIdList) {
+		List<String> benchmarkProcessIdsList =  new ArrayList<String>(benchmarkProcessIdsMap.keySet()); 
+		
+        for (String benchmarkingProcessId:benchmarkProcessIdsList) {
 
+        	String metric = benchmarkProcessIdsMap.get(benchmarkingProcessId);
+        	
 			JSONArray benchmarkDatasets = new JSONArray();
 			JSONObject benchmarkDataset = new JSONObject();
 			benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
-			benchmarkDataset.put("metric", metric);
+			benchmarkDataset.put("metric",metric );
 			benchmarkDataset.put("corpus", corpus);
 			benchmarkDatasets.put(benchmarkDataset);
 

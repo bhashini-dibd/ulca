@@ -67,7 +67,7 @@ public class OcrBenchmark {
 	@Autowired
 	BenchmarkProcessDao benchmarkProcessDao;
 	
-	public boolean prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, List<String> benchmarkingProcessIdList) throws IOException, URISyntaxException {
+	public boolean prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, Map<String, String> benchmarkProcessIdsMap) throws IOException, URISyntaxException {
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
@@ -128,12 +128,17 @@ public class OcrBenchmark {
 			}else {
 				failedRecords++;
 			}
-
 		}
 		reader.endArray();
 		reader.close();
 		inputStream.close();
-		for (String benchmarkingProcessId:benchmarkingProcessIdList) {
+		
+		List<String> benchmarkProcessIdsList =  new ArrayList<String>(benchmarkProcessIdsMap.keySet()); 
+		
+        for (String benchmarkingProcessId:benchmarkProcessIdsList) {
+
+        	String metric = benchmarkProcessIdsMap.get(benchmarkingProcessId);
+        	
 			JSONArray benchmarkDatasets = new JSONArray();
 			JSONObject benchmarkDataset = new JSONObject();
 			benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());

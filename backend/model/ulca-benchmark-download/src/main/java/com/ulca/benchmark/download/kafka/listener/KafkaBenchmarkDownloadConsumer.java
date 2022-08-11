@@ -8,6 +8,7 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -79,51 +80,26 @@ public class KafkaBenchmarkDownloadConsumer {
 	@Autowired
 	NotificationService notificationService;
 
+
 	@KafkaListener(groupId = "${kafka.ulca.bm.filedownload.ip.topic.group.id}", topics = "${kafka.ulca.bm.filedownload.ip.topic}", containerFactory = "benchmarkDownloadKafkaListenerContainerFactory")
-	public void downloadBenchmarkDataset(BmDatasetDownload bmDsDownload) {
-
-		log.info("************ Entry KafkaBenchmarkDownloadConsumer :: downloadBenchmarkDataset *********");
-
+	public void processBenchmark(BmDatasetDownload bmDsDownload) {
+		
+		log.info("************ Entry KafkaBenchmarkDownloadConsumer :: processBenchmark *********");
+		
 		try {
-
-			String benchmarkProcessId = bmDsDownload.getBenchmarkProcessId();
-
-			List<BenchmarkTaskTracker> list = benchmarkTaskTrackerDao.findByBenchmarkProcessId(benchmarkProcessId);
+			
+			Map<String, String> benchmarkProcessIdsMap = bmDsDownload.getBenchmarkProcessIdsMap();
+			List<String> benchmarkProcessIdList =  new ArrayList<String>(benchmarkProcessIdsMap.keySet()); 
+			
+			List<BenchmarkTaskTracker> list = benchmarkTaskTrackerDao.findByBenchmarkProcessIdIn(benchmarkProcessIdList);
 
 			if(list.size() > 0) {
-				log.info("Duplicate Benchmark Process. Skipping Benchamrk Processing. benchmarkProcessId :: " + benchmarkProcessId);
+				log.info("Duplicate Benchmark Process. Skipping Benchamrk Processing. benchmarkProcessId :: " + benchmarkProcessIdList);
 				return;
 			}
-			if(bmDsDownload.getBenchmarkProcessIdList()!=null){
-				try {
-					getDownloadBenchmarkDataset(bmDsDownload.getBenchmarkProcessIdList());
-
-				}catch (Exception ex) {
-					log.info(ex.getMessage());
-					ex.printStackTrace();
-				}
-
-			} else
-				try {
-					getDownloadBenchmarkDataset(Collections.singletonList(benchmarkProcessId));
-
-				}catch (Exception ex) {
-					log.info(ex.getMessage());
-					ex.printStackTrace();
-				}
-		} catch (Exception ex) {
-			log.info("error in listener");
-			ex.printStackTrace();
-		}
-	}
-
-
-	public void getDownloadBenchmarkDataset(List<String> benchmarkProcessIdList) throws Exception {
-		    String bmProcessId = benchmarkProcessIdList.get(0);
-
-		for (String benchmarkProcessId:benchmarkProcessIdList) {
-			bmProcessTrackerService.createTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.inprogress);
-		}
+			
+			bmProcessTrackerService.createTaskTracker(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.inprogress);
+			
 			String downloadFolder = bmDsDownloadFolder + "/benchmark-dataset";
 			
 			Path targetLocation = Paths.get(downloadFolder).toAbsolutePath().normalize();
@@ -135,131 +111,135 @@ public class KafkaBenchmarkDownloadConsumer {
 				error.setCause(ex.getMessage());
 				error.setMessage("file download failed");
 				error.setCode("2000_FILE_DOWNLOAD_FAILURE");
-				for (String benchmarkProcessId:benchmarkProcessIdList) {
-					bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.failed, error);
-					bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
-				}
+				bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.failed, error);
+				bmProcessTrackerService.updateBmProcess(benchmarkProcessIdList, "Failed");
+				
 				throw new Exception("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
 			}
-
-			BenchmarkProcess bmProcess = benchmarkProcessDao.findByBenchmarkProcessId(bmProcessId);
 			
-			if(bmProcess != null) {
+			String modelId = bmDsDownload.getModelId();
+			Optional<ModelExtended> modelOpt = modelDao.findById(modelId);
+			ModelExtended model = modelOpt.get();
 
-				String bmDatasetId = bmProcess.getBenchmarkDatasetId();
-				String fileName = bmProcessId+ ".zip";
-
-				String modelId = bmProcess.getModelId();
-				Optional<ModelExtended> modelOpt = modelDao.findById(modelId);
-				ModelExtended model = modelOpt.get();
-
-				Optional<Benchmark> benchmarkOpt = benchmarkDao.findById(bmDatasetId);
-				Benchmark benchmark = benchmarkOpt.get();
-				String datasetUrl = benchmark.getDataset();
+			String bmDatasetId = bmDsDownload.getBenchmarkDatasetId();
+			Optional<Benchmark> benchmarkOpt = benchmarkDao.findById(bmDatasetId);
+			Benchmark benchmark = benchmarkOpt.get();
+			String datasetUrl = benchmark.getDataset();
+			
+			Map<String, String> fileMap = null;
+			
+			try {
 				
-				Map<String, String> fileMap = null;
+				fileMap = downloadUnzipBmDataset(bmDatasetId,datasetUrl, downloadFolder);
 				
-				try {
-					String filePath = downloadUsingNIO(datasetUrl, downloadFolder, fileName);
-
-					log.info("filePath :: " + filePath);
-					
-					String serviceRequestNumber = bmProcessId ;
-					
-					log.info("serviceRequestNumber :: " + serviceRequestNumber);
-					
-					fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
-					for (String benchmarkProcessId:benchmarkProcessIdList) {
-						bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.completed);
-					}
-				}catch (IOException e) {
+				
+				
+					bmProcessTrackerService.updateTaskTracker(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.completed);
+				
+			}catch (IOException e) {
 
 
-						log.info("Benchmark Process Failed. benchmarkProcessIds :: " + benchmarkProcessIdList + " cause :: " + e.getMessage());
+					log.info("Benchmark Process Failed. benchmarkProcessIds :: " + benchmarkProcessIdList + " cause :: " + e.getMessage());
 
-						BenchmarkError error = new BenchmarkError();
-						error.setCause(e.getMessage());
-						error.setMessage("file download failed");
-						error.setCode("2000_FILE_DOWNLOAD_FAILURE");
-						for (String benchmarkProcessId:benchmarkProcessIdList) {
-							bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.failed, error);
-							bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
-						}
-						notificationService.notifyBenchmarkFailed(modelId, model.getName(), model.getUserId());
-
-					return;
-				}
-
-				try {
-					for (String benchmarkProcessId:benchmarkProcessIdList) {
-						bmProcessTrackerService.createTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.inprogress);
-						bmProcessTrackerService.createTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.benchmark, BenchmarkTaskTracker.StatusEnum.inprogress);
-					}
-					ModelTask.TypeEnum type = model.getTask().getType();
-
-					switch (type) {
-						case TRANSLATION:
-							log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLATION.toString());
-
-							translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
-									benchmarkProcessIdList);
-
-							break;
-						case ASR:
-							log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
-
-							asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
-									benchmarkProcessIdList);
-							break;
-
-						case OCR:
-
-							log.info("modelTaskType :: " + ModelTask.TypeEnum.OCR.toString());
-
-							ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
-									benchmarkProcessIdList);
-							break;
-
-						case TRANSLITERATION:
-
-							log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLITERATION.toString());
-
-							transliterationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
-									benchmarkProcessIdList);
-							break;
-
-						default:
-
-							break;
-					}
-                    for (String benchmarkProcessId:benchmarkProcessIdList) {
-						bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.completed);
-					}
-				} catch (Exception e) {
-					
-					log.info("Benchmark Process Failed. benchmarkProcessIds :: "  + benchmarkProcessIdList + " cause :: " + e.getMessage());
-					
 					BenchmarkError error = new BenchmarkError();
 					error.setCause(e.getMessage());
-					error.setMessage("Benchmark Ingest Failed");
-					error.setCode("2000_BENCHMARK_INGEST_FAILURE");
-					for (String benchmarkProcessId : benchmarkProcessIdList) {
-						bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.failed, error);
-						bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
-					}
-					notificationService.notifyBenchmarkFailed(modelId,  model.getName(), model.getUserId());
-					e.printStackTrace();
+					error.setMessage("file download failed");
+					error.setCode("2000_FILE_DOWNLOAD_FAILURE");
 					
-				}
-			
-			} else {
-				log.info("Benchmark Process Not Found. benchmarkProcessIds :: "  + benchmarkProcessIdList);
+					bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.download, BenchmarkTaskTracker.StatusEnum.failed, error);
+					bmProcessTrackerService.updateBmProcess(benchmarkProcessIdList, "Failed");
+					
+					notificationService.notifyBenchmarkFailed(modelId, model.getName(), model.getUserId());
+
+				return;
 			}
+			
+			try {
+				
+				bmProcessTrackerService.createTaskTracker(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.inprogress);
+				bmProcessTrackerService.createTaskTracker(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.benchmark, BenchmarkTaskTracker.StatusEnum.inprogress);
+				
+				ModelTask.TypeEnum type = model.getTask().getType();
 
+				switch (type) {
+					case TRANSLATION:
+						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLATION.toString());
+
+						translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap,benchmarkProcessIdsMap);
+								
+
+						break;
+					case ASR:
+						log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
+
+						asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap,benchmarkProcessIdsMap);
+						break;
+
+					case OCR:
+
+						log.info("modelTaskType :: " + ModelTask.TypeEnum.OCR.toString());
+
+						ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, benchmarkProcessIdsMap);
+								
+						break;
+
+					case TRANSLITERATION:
+
+						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLITERATION.toString());
+
+						transliterationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, benchmarkProcessIdsMap);
+						break;
+
+					default:
+
+						break;
+				}
+                
+					bmProcessTrackerService.updateTaskTracker(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.completed);
+				
+			} catch (Exception e) {
+				
+				log.info("Benchmark Process Failed. benchmarkProcessIds :: "  + benchmarkProcessIdList + " cause :: " + e.getMessage());
+				
+				BenchmarkError error = new BenchmarkError();
+				error.setCause(e.getMessage());
+				error.setMessage("Benchmark Ingest Failed");
+				error.setCode("2000_BENCHMARK_INGEST_FAILURE");
+				bmProcessTrackerService.updateTaskTrackerWithErrorAndEndTime(benchmarkProcessIdList, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.failed, error);
+				bmProcessTrackerService.updateBmProcess(benchmarkProcessIdList, "Failed");
+				notificationService.notifyBenchmarkFailed(modelId,  model.getName(), model.getUserId());
+				e.printStackTrace();
+				
+			}
+			
+		} catch (Exception ex) {
+			log.info("error in listener");
+			ex.printStackTrace();
+		}
+		
+		log.info("************ Exit KafkaBenchmarkDownloadConsumer :: processBenchmark *********");
+		
 	}
+	
+	public Map<String, String> downloadUnzipBmDataset(String datasetId, String datasetUrl,  String downloadFolder) throws IOException{
+		
+		Map<String, String> fileMap = null;
+		
+		String fileName = datasetId+ ".zip";
+		String filePath = downloadUsingNIO(datasetUrl, downloadFolder, fileName);
 
-
-
+		log.info("filePath :: " + filePath);
+		
+		String serviceRequestNumber = datasetId ;
+		
+		log.info("serviceRequestNumber :: " + serviceRequestNumber);
+		
+		fileMap = unzipUtility.unzip(filePath, downloadFolder, serviceRequestNumber);
+		
+		
+		return fileMap;
+		
+	}
 
 
 	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {
