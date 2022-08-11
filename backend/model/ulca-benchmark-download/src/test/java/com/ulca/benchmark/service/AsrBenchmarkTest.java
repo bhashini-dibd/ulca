@@ -83,10 +83,13 @@ class AsrBenchmarkTest {
         String metric = "cer";
 
         String benchmarkingProcessId = "1";
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(benchmarkingProcessId, metric);
+        
 
         when(okHttpClientService.asrComputeInternal(ArgumentMatchers.any(AsrComputeRequest.class))).thenReturn("test");
         when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
-        //assertEquals(true,  asrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
+        assertEquals(true,  asrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,map));
     }
 }
