@@ -16,5 +16,7 @@ public interface BenchmarkTaskTrackerDao extends MongoRepository<BenchmarkTaskTr
 	List<BenchmarkTaskTracker> findAllByBenchmarkProcessIdAndTool(String benchmarkProcessId,
 			ToolEnum tool);
 
+	List<BenchmarkTaskTracker> findByBenchmarkProcessIdIn(List<String> benchmarkProcessIdList);
+
 	
 }

@@ -29,7 +29,6 @@ export default class LoginAPI extends API {
   getFormData() {
     const formData = new FormData();
     formData.append('file', this.fileDetails.file);
-    formData.append('modelName', this.fileDetails.modelName);
     formData.append('userId', JSON.parse(localStorage.getItem('userDetails')).userID);
 
     return formData;
