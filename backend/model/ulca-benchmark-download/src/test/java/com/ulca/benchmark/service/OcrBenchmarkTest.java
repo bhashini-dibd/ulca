@@ -1,3 +1,4 @@
+
 package com.ulca.benchmark.service;
 
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
@@ -68,11 +69,13 @@ class OcrBenchmarkTest {
         String metric = "cer";
 
         String benchmarkingProcessId = "1";
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(benchmarkingProcessId, metric);
 
         when(okHttpClientService.ocrCompute("https://test.com",ocrRequest)).thenReturn("test");
         when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
 
-       // assertEquals(true,  ocrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
+        assertEquals(true,  ocrBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,map));
     }
 }

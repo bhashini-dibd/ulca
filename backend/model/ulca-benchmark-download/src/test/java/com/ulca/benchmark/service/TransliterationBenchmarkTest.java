@@ -91,6 +91,8 @@ class TransliterationBenchmarkTest {
 
         when(okHttpClientService.okHttpClientPostCall(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(response);
 
-        //assertEquals(true, transliterationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(benchmarkingProcessId, metric);
+        assertEquals(true, transliterationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,map));
     }
 }

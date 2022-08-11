@@ -137,7 +137,10 @@ class TranslationBenchmarkTest {
 
             when(okHttpClientService.okHttpClientAsyncPostCall(ArgumentMatchers.anyString(),ArgumentMatchers.anyString())).thenReturn(response2);
         }
+        
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(benchmarkingProcessId, metric);
 
-       // assertEquals(true,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric, Collections.singletonList(benchmarkingProcessId)));
+       assertEquals(true,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap, map));
     }
 }
