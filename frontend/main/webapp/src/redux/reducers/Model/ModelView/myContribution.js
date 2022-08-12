@@ -268,6 +268,7 @@ const reducer = (state = initialState, action) => {
           action.payload.searchValue
         ),
       };
+      
     default:
       return {
         ...state,
