@@ -37,7 +37,7 @@ class TextLanguageCheck(BaseValidator):
 
             for text, lang in zip(text_list, lang_list):
                 # Skipping for few languages as the current model doesnt support them
-                if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt']:
+                if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt', 'sd']:
                     continue
 
                 try:
