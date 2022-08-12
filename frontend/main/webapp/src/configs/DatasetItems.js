@@ -1,4 +1,5 @@
 export const ModelTask = [
+  { value: "status-check", label: "Status Check"},
   { value: 'sts', label: 'STS' },
   { value: "translation", label: "Translation" },
   { value: "asr", label: "ASR" },
