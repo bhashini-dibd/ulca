@@ -1,13 +1,14 @@
+import { Typography } from "@material-ui/core";
 import MUIDataTable from "mui-datatables";
 import React from "react";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ModelStatusCheck from "../../../../redux/actions/api/Model/ModelView/ModelStatusCheck";
 import APITransport from "../../../../redux/actions/apitransport/apitransport";
 
 const columns = [
   {
-    name: "model",
+    name: "modelName",
     label: "Model",
   },
   {
@@ -17,18 +18,51 @@ const columns = [
   {
     name: "status",
     label: "Status",
+    options: {
+      customBodyRender: (value, tableMeta, updateValue) => {
+        if (tableMeta.rowData) {
+          return (
+            <Typography
+              style={
+                tableMeta.rowData[2] === "unavailable" ? { color: "red" } : null
+              }
+              variant="body2"
+            >
+              {tableMeta.rowData[2]}
+            </Typography>
+          );
+        }
+      },
+    },
   },
   {
-    name: "callbackURL",
+    name: "callbackUrl",
     label: "Callback URL",
+    options: {
+      customBodyRender: (value, tableMeta, updateValue) => {
+        if (tableMeta.rowData) {
+          return (
+            <Typography
+              style={{textTransform: "none"}}
+              variant="body2"
+            >
+              {tableMeta.rowData[3]}
+            </Typography>
+          );
+        }
+      },
+    },
   },
 ];
 
 const StatusCheck = () => {
   const dispatch = useDispatch();
 
+  const statusCheckResult = useSelector(
+    (state) => state.getModelHealthCheckStatus
+  );
+
   useEffect(() => {
-    // const apiObj = new ModelStatusCheck(type);
     const apiObj = new ModelStatusCheck("");
     dispatch(APITransport(apiObj));
   }, []);
@@ -53,7 +87,13 @@ const StatusCheck = () => {
     },
   };
 
-  return <MUIDataTable options={options} columns={columns} data={[]} />;
+  return (
+    <MUIDataTable
+      options={options}
+      columns={columns}
+      data={statusCheckResult.filteredData}
+    />
+  );
 };
 
 export default StatusCheck;

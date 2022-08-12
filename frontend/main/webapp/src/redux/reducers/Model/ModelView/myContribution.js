@@ -192,24 +192,6 @@ const getContributionList = (state, payload) => {
   return filteredData;
 };
 
-const getModelHealthStatus = (state, payload) => {
-  let responseData = [];
-  let filter = { status: [], task: [], domain: [], license: [] };
-
-  payload.forEach((element) => {
-    responseData.push({ });
-  })
-  
-  responseData = responseData.reverse();
-  let filteredData = getFilterValue(
-    { filterValues: state.selectedFilter },
-    { responseData: responseData }
-  );
-  
-  filteredData.filter = filter;
-  return filteredData;
-}
-
 const capitalizeLetter = (data) => {
   return data.length ? data.replace(data[0], data[0].toUpperCase()) : "";
 };
@@ -286,9 +268,6 @@ const reducer = (state = initialState, action) => {
           action.payload.searchValue
         ),
       };
-
-    case C.GET_MODEL_HEALTH_STATUS:
-      return getModelHealthStatus(state, action.payload.data);
       
     default:
       return {

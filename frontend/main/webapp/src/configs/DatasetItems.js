@@ -1,11 +1,11 @@
 export const ModelTask = [
+  { value: "status-check", label: "Status Check"},
   { value: 'sts', label: 'STS' },
   { value: "translation", label: "Translation" },
   { value: "asr", label: "ASR" },
   { value: "tts", label: "TTS" },
   { value: "ocr", label: "OCR" },
   { value: "transliteration", label: "Transliteration" },
-  { value: "status-check", label: "Status Check"}
 ];
 export const DatasetItems = [
   { value: "parallel-corpus", label: "Parallel Dataset" },

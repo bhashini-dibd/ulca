@@ -40,7 +40,7 @@ function TabPanel(props) {
 const NewSearchModel = () => {
   const filter = useSelector((state) => state.searchFilter);
   const type = ModelTask.map((task) => task.value);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(1);
   const { searchValue } = useSelector((state) => state.BenchmarkList);
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
@@ -141,7 +141,7 @@ const NewSearchModel = () => {
 
   const handleStatusCheckShow = (show) => {
     if(show) {
-      setValue(6);
+      setValue(0);
     }
     else {
       setValue(value);
@@ -179,7 +179,7 @@ const NewSearchModel = () => {
 
       {confirmPopup && (
         <Dialog
-          message={"Do you want to run the status check on all the Modals"}
+          message={"Do you want to run the status check on all the models"}
           handleClose={() => {
             setConfirmPopup(false);
             handleStatusCheckShow(false);
