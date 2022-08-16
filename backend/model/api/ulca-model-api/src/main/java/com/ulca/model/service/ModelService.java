@@ -94,7 +94,7 @@ public class ModelService {
 		return model;
 	}
 
-	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage) {
+	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage,String name) {
 		log.info("******** Entry ModelService:: modelListByUserId *******");
 		List<ModelExtended> list = new ArrayList<ModelExtended>();
 
@@ -102,10 +102,29 @@ public class ModelService {
 			int startPg = startPage - 1;
 			for (int i = startPg; i < endPage; i++) {
 				Pageable paging = PageRequest.of(i, PAGE_SIZE);
-				Page<ModelExtended> modelList = modelDao.findByUserId(userId, paging);
+
+				Page<ModelExtended> modelList = null;
+				if (name!=null){
+					ModelExtended modelExtended = new ModelExtended();
+					modelExtended.setUserId(userId);
+					modelExtended.setName(name);
+					Example<ModelExtended> example = Example.of(modelExtended);
+
+					modelList = modelDao.findAll(example,paging);
+				} else {
+					modelList = modelDao.findByUserId(userId, paging);
+				}
 				list.addAll(modelList.toList());
 			}
-		} else {
+		} else { if (name!=null){
+			ModelExtended modelExtended = new ModelExtended();
+			modelExtended.setUserId(userId);
+			modelExtended.setName(name);
+			Example<ModelExtended> example = Example.of(modelExtended);
+
+			list = modelDao.findAll(example);
+
+		} else
 			list = modelDao.findByUserId(userId);
 		}
 
