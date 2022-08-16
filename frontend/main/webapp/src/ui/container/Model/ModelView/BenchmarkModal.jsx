@@ -88,7 +88,7 @@ const BenchmarkModal = (props) => {
         style={{ float: "right", marginTop: "20px", borderRadius: "22px" }}
         variant="contained"
         onClick={props.makeSubmitAPICall}
-        disabled={submitStatus}
+        disabled={!submitStatus}
       >
         Submit
       </Button>
