@@ -280,14 +280,14 @@ class BenchmarkServiceTest {
     }
     private static Stream<Arguments> benchmarkListByUserIdParam(){
 
-        return Stream.of(Arguments.of("test",1,1),
-                Arguments.of("test",null,null));
+        return Stream.of(Arguments.of("test",1,1,null),
+                Arguments.of("test",null,null,null));
     }
 
 
     @ParameterizedTest
     @MethodSource("benchmarkListByUserIdParam")
-    void benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
+    void benchmarkListByUserId(String userId, Integer startPage, Integer endPage,String name) {
 
         List<Benchmark> list = Collections.singletonList(new Benchmark());
         if (startPage!=null) {
@@ -298,6 +298,6 @@ class BenchmarkServiceTest {
             when(benchmarkDao.findByUserId(userId)).thenReturn(list);
 
         assertEquals(new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size()),
-                benchmarkService.benchmarkListByUserId(userId,startPage,endPage));
+                benchmarkService.benchmarkListByUserId(userId,startPage,endPage,name));
     }
 }

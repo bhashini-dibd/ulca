@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -478,7 +479,7 @@ public class BenchmarkService {
 
 	}
 
-	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
+	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage,String name) {
 		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
 
 		List<Benchmark> list = new ArrayList<Benchmark>();
@@ -487,10 +488,28 @@ public class BenchmarkService {
 			int startPg = startPage - 1;
 			for (int i = startPg; i < endPage; i++) {
 				Pageable paging = PageRequest.of(i, PAGE_SIZE);
-				Page<Benchmark> benchmarkList = benchmarkDao.findByUserId(userId, paging);
+				Page<Benchmark> benchmarkList = null;
+				if (name!=null) {
+					Benchmark benchmark = new Benchmark();
+					benchmark.setUserId(userId);
+					benchmark.setName(name);
+					Example<Benchmark> example = Example.of(benchmark);
+
+					benchmarkList = benchmarkDao.findAll(example, paging);
+				} else {
+
+				benchmarkList =	benchmarkDao.findByUserId(userId, paging);
+				}
 				list.addAll(benchmarkList.toList());
 			}
 		} else {
+			if (name!=null) {
+				Benchmark benchmark = new Benchmark();
+				benchmark.setUserId(userId);
+				benchmark.setName(name);
+				Example<Benchmark> example = Example.of(benchmark);
+				list = benchmarkDao.findAll(example);
+			} else
 			list = benchmarkDao.findByUserId(userId);
 		}
 		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
