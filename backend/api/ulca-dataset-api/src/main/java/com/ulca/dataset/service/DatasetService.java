@@ -75,6 +75,10 @@ public class DatasetService {
 	@Autowired
 	DatasetKafkaTransactionErrorLogDao datasetKafkaTransactionErrorLogDao;
 
+
+	@Autowired
+	KafkaService kafkaService;
+
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
 
@@ -132,83 +136,11 @@ public class DatasetService {
 		fileDownload.setServiceRequestNumber(processTracker.getServiceRequestNumber());
 		
 		//datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
-		
-		
-		try {
-			
-			 ListenableFuture<SendResult<String, FileDownload>> future = datasetFiledownloadKafkaTemplate.send(fileDownloadTopic, fileDownload);
-				
-				 future.addCallback(new ListenableFutureCallback<SendResult<String, FileDownload>>() {
 
-					    public void onSuccess(SendResult<String, FileDownload> result) {
-					    	log.info("DatasetService :: datasetSubmit onSuccess message sent successfully to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
-					    }
 
-					    @Override
-					    public void onFailure(Throwable ex) {
-					    	log.info("DatasetService :: datasetSubmit onFailure Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
-					    	log.info("Error message :: " + ex.getMessage());
-					    	
-					    	DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
-					    	error.setServiceRequestNumber(processTracker.getServiceRequestNumber());
-					    	error.setAttempt(0);
-					    	error.setCreatedOn(new Date().toString());
-					    	error.setLastModifiedOn(new Date().toString());
-					    	error.setFailed(false);
-					    	error.setSuccess(false);
-					    	error.setStage("download");
-					    	List<String> er = new ArrayList<String>();
-					    	er.add(ex.getMessage());
-					    	error.setErrors(er);
-					    	ObjectMapper mapper = new ObjectMapper();
-						
-								String dataRow;
-								try {
-									dataRow = mapper.writeValueAsString(fileDownload);
-							    	error.setData(dataRow);
-							    	datasetKafkaTransactionErrorLogDao.save(error);
-							    	
-								} catch (JsonProcessingException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}
-								
-					    	
-					    }
-					});
-				 
-				 
-			
-		}catch ( KafkaException ex) {
-			log.info("DatasetService :: datasetSubmit Error occured while sending message to fileDownloadTopic, serviceRequestNumber :: "+ processTracker.getServiceRequestNumber());
-			log.info("Error message :: " + ex.getMessage());
-			DatasetKafkaTransactionErrorLog error = new DatasetKafkaTransactionErrorLog();
-	    	error.setServiceRequestNumber(processTracker.getServiceRequestNumber());
-	    	error.setAttempt(0);
-	    	error.setCreatedOn(new Date().toString());
-	    	error.setLastModifiedOn(new Date().toString());
-	    	error.setFailed(false);
-	    	error.setSuccess(false);
-	    	error.setStage("download");
-	    	List<String> er = new ArrayList<String>();
-	    	er.add(ex.getMessage());
-	    	error.setErrors(er);
-	    	ObjectMapper mapper = new ObjectMapper();
-		
-				String dataRow;
-				try {
-					dataRow = mapper.writeValueAsString(fileDownload);
-			    	error.setData(dataRow);
-			    	datasetKafkaTransactionErrorLogDao.save(error);
-			    	
-				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			throw ex;
-		}
-		
+		kafkaService.datasetFiledownload(fileDownloadTopic, fileDownload,processTracker);
+
+
 		String message = "Dataset Submit success";
 		return new DatasetSubmitResponse(message,processTracker.getServiceRequestNumber(), dataset.getDatasetId(),
 				dataset.getCreatedOn());
