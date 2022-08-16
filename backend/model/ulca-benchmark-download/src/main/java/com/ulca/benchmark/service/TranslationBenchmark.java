@@ -11,13 +11,9 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,6 +26,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.model.ModelInferenceResponse;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
@@ -68,6 +66,8 @@ public class TranslationBenchmark {
 	@Autowired
 	OkHttpClientService okHttpClientService;
 
+	@Autowired
+	BenchmarkProcessDao benchmarkProcessDao;
 
 	public TranslationResponse computeSync(InferenceAPIEndPoint inferenceAPIEndPoint,
 										   List<String> sourceSentences)
@@ -91,7 +91,6 @@ public class TranslationBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-
 			//OkHttpClient client = new OkHttpClient();
 
 //			OkHttpClient client = new OkHttpClient.Builder()
@@ -109,12 +108,9 @@ public class TranslationBenchmark {
 			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
 
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
-
 			return translation;
-
 		}
 		return null;
-
 	}
 
 	public TranslationResponse computeAsyncModel(InferenceAPIEndPoint inferenceAPIEndPoint,List<String> sourceSentences) throws KeyManagementException, NoSuchAlgorithmException, IOException, InterruptedException {
@@ -177,7 +173,7 @@ public class TranslationBenchmark {
 		return translationResponse;
 	}
 
-	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+	public void prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();
@@ -272,7 +268,14 @@ public class TranslationBenchmark {
 
 		log.info("data sending to metric calculation ");
 		log.info(metricRequest.toString());
-
+		
+		//update the total record count
+		int datasetCount = corpus.length();
+		BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
+		bmProcessUpdate.setRecordCount(datasetCount);
+		bmProcessUpdate.setLastModifiedOn(new Date().toString());
+		benchmarkProcessDao.save(bmProcessUpdate);
+    
 		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
 
 		//save the model inference response
@@ -286,9 +289,6 @@ public class TranslationBenchmark {
 		modelInferenceResponse.setUserId(userId);
 		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
 		modelInferenceResponseDao.save(modelInferenceResponse);
-
-		int datasetCount = corpus.length();
-		return datasetCount;
 
 	}
 
@@ -312,11 +312,5 @@ public class TranslationBenchmark {
 		}
 		return res;
 	}
-
-
-
-
-
-
 
 }
