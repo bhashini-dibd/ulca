@@ -8,7 +8,7 @@ const initialState = {
   availableFilters: [],
   count: 0,
   status: "progress",
-  submitStatus: true,
+  submitStatus: false,
 };
 
 const getMetric = (metricData = [], availableMetric = []) => {
@@ -52,37 +52,49 @@ const getIndex = (data, benchmarkId) => {
 
 const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
   let result = Object.assign([], JSON.parse(JSON.stringify(prevState)));
+
   if (type === "DATASET") {
     index = getIndex(result.result, index);
+
     result.result[index].selected = !result.result[index].selected;
-    result.filteredData[parentIndex].selected =
-      !result.filteredData[parentIndex].selected;
-    if (result.selectedIndex.indexOf(parentIndex) > -1) {
+    result.filteredData[parentIndex].selected = !result.filteredData[parentIndex].selected;
+    
+    if (result.selectedIndex.indexOf(parentIndex) > -1) {  //if its already selected
       result.result[index].metric.forEach((val) => {
         val.selected = false;
       });
-      // result.filteredData[index].metric
-      //   ? result.filteredData[index].metric.forEach((val) => {
-      //       val.selected = false;
-      //     })
-      // :
+
       result.filteredData[parentIndex].metric.forEach((val) => {
         val.selected = false;
       });
+      
       result.benchmarkInfo.splice(result.selectedIndex.indexOf(index), 1);
       result.selectedIndex.splice(result.selectedIndex.indexOf(index), 1);
     } else {
-      result.selectedIndex.push(parentIndex);
+      result.selectedIndex = [parentIndex];
+
+      result.filteredData.forEach((element, index) => {
+        if(index !== parentIndex) {
+          element.selected = false;
+        }
+      })
+
+      result.result.forEach((element, index) => {
+        if(index !== parentIndex) {
+          element.selected = false;
+        }
+      })
     }
   } else {
-    result.result[parentIndex].metric[index].selected =
-      !result.result[parentIndex].metric[index].selected;
-    result.filteredData[parentIndex].metric[index].selected =
-      !result.filteredData[parentIndex].metric[index].selected;
+    result.result[parentIndex].metric[index].selected = !result.result[parentIndex].metric[index].selected;
+    result.filteredData[parentIndex].metric[index].selected = !result.filteredData[parentIndex].metric[index].selected;
   }
+
   let updatedBenchmarkInfo = [];
+  
   result.result = result.result.map((data) => {
     let updatedData = {};
+    
     result.filteredData.forEach((value) => {
       if (value.benchmarkId === data.benchmarkId) {
         updatedData = Object.assign({}, JSON.parse(JSON.stringify(value)));
@@ -90,13 +102,14 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
         updatedData = Object.assign({}, JSON.parse(JSON.stringify(data)));
       }
     });
+    
     return updatedData;
   });
+  
   result.result.forEach((val) => {
     if (val.selected) {
-      updatedBenchmarkInfo.push({
-        benchmarkId: val.benchmarkId,
-      });
+      updatedBenchmarkInfo.push({ benchmarkId: val.benchmarkId });
+      
       val.metric.forEach((e) => {
         if (e.selected) {
           if (
@@ -115,8 +128,9 @@ const getUpdatedBenchMark = (type, prevState, index, parentIndex = "") => {
       });
     }
   });
+  
   result.benchmarkInfo = updatedBenchmarkInfo;
-  result.submitStatus = getSubmitStatus(updatedBenchmarkInfo);
+  result.submitStatus = updatedBenchmarkInfo.length > 0 ? true : false;
   return result;
 };
 
