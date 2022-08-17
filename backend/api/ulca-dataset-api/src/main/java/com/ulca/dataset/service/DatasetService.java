@@ -142,7 +142,7 @@ public class DatasetService {
 				dataset.getCreatedOn());
 	}
 	
-	public DatasetListByUserIdResponse datasetListByUserId(String userId, Integer startPage, Integer endPage,String name) {
+	public DatasetListByUserIdResponse datasetListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		
 		DatasetListByUserIdResponse response = null;
 
@@ -150,22 +150,28 @@ public class DatasetService {
 				response = datasetListByUserIdFetchAll(userId, name);
 			} else {
 
-				response = datasetListByUserIdPagination(userId, startPage, endPage,name);
+				response = datasetListByUserIdPagination(userId, startPage, endPage,pgSize,name);
 			}
 		return response;
 	}
 
-	public DatasetListByUserIdResponse datasetListByUserIdPagination(String userId, Integer startPage, Integer endPage,String name) {
+	public DatasetListByUserIdResponse datasetListByUserIdPagination(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 
 		log.info("******** Entry DatasetService:: datasetListByUserIdPagination *******");
 
+        Integer pSize = null;
 
+		if(pgSize!= null){
+			pSize = pgSize;
+		} else {
+			pSize = PAGE_SIZE;
+		}
 
 		List<DatasetListByUserIdResponseDto> list = new ArrayList<DatasetListByUserIdResponseDto>();
 		List<DatasetListByUserIdResponseDto> searchList = new ArrayList<DatasetListByUserIdResponseDto>();
 
-		int startIndex = PAGE_SIZE * (startPage - 1);
-		int endIndex = PAGE_SIZE * endPage;
+		int startIndex = pSize * (startPage - 1);
+		int endIndex = pSize* endPage;
 
 		if(name!=null){
 			DatasetListByUserIdResponse datasetListByUserIdResponse = datasetListByUserIdFetchAll(userId,name);
@@ -189,7 +195,7 @@ public class DatasetService {
 
 		for(int i= startPg; i< endPage; i++) {
 
-			Pageable paging = PageRequest.of(i, PAGE_SIZE);
+			Pageable paging = PageRequest.of(i, pSize);
 			Page<ProcessTracker> processTrackerPage = processTrackerDao.findByUserId(userId, paging);
 
 			for (ProcessTracker p : processTrackerPage) {

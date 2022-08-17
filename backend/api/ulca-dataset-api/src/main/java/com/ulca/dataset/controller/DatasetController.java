@@ -47,10 +47,10 @@ public class DatasetController {
 
 	@GetMapping("/listByUserId")
 	public DatasetListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage, @RequestParam(required = false) Integer endPage
-			,@RequestParam(required = false)String name) {
+			,@RequestParam(required = false) Integer pgSize,@RequestParam(required = false)String name) {
 		log.info("******** Entry DatasetController:: listByUserId *******" );
 		
-		return datasetService.datasetListByUserId(userId, startPage, endPage,name);
+		return datasetService.datasetListByUserId(userId, startPage, endPage,pgSize,name);
 	}
 	
 	@GetMapping("/getByDatasetId")
