@@ -553,7 +553,7 @@ const SpeechToSpeechOptions = (props) => {
         {renderOutput()}
 
       </Grid>
-      {audio ? (
+      {output.translation && output.asr ? (
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h5" style={{ marginBottom: "1%" }}>
             Intermediate Output
