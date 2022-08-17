@@ -42,10 +42,10 @@ public class ModelController {
 
 	@GetMapping("/listByUserId")
 	public ModelListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
-			@RequestParam(required = false) Integer endPage,@RequestParam(required = false) String name) {
+			@RequestParam(required = false) Integer endPage,@RequestParam(required = false) Integer pgSize,@RequestParam(required = false) String name) {
 		
 		log.info("******** Entry ModelController:: listByUserId *******");
-		return modelService.modelListByUserId(userId, startPage, endPage,name);
+		return modelService.modelListByUserId(userId, startPage, endPage,pgSize,name);
 	}
 
 	@GetMapping("/getModel")

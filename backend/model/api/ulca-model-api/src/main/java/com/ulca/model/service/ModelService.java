@@ -94,14 +94,20 @@ public class ModelService {
 		return model;
 	}
 
-	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage,String name) {
+	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		log.info("******** Entry ModelService:: modelListByUserId *******");
 		List<ModelExtended> list = new ArrayList<ModelExtended>();
 
 		if (startPage != null) {
 			int startPg = startPage - 1;
 			for (int i = startPg; i < endPage; i++) {
-				Pageable paging = PageRequest.of(i, PAGE_SIZE);
+				Pageable paging = null;
+				if (pgSize!=null) {
+				paging =	PageRequest.of(i, pgSize);
+				} else {
+					paging = PageRequest.of(i,PAGE_SIZE);
+
+				}
 
 				Page<ModelExtended> modelList = null;
 				if (name!=null){

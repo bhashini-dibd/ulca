@@ -479,7 +479,7 @@ public class BenchmarkService {
 
 	}
 
-	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage,String name) {
+	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
 
 		List<Benchmark> list = new ArrayList<Benchmark>();
@@ -487,8 +487,13 @@ public class BenchmarkService {
 		if (startPage != null) {
 			int startPg = startPage - 1;
 			for (int i = startPg; i < endPage; i++) {
-				Pageable paging = PageRequest.of(i, PAGE_SIZE);
-				Page<Benchmark> benchmarkList = null;
+				Pageable paging = null;
+				if (pgSize!=null) {
+					paging =	PageRequest.of(i, pgSize);
+				} else {
+					paging = PageRequest.of(i,PAGE_SIZE);
+
+				}				Page<Benchmark> benchmarkList = null;
 				if (name!=null) {
 					Benchmark benchmark = new Benchmark();
 					benchmark.setUserId(userId);

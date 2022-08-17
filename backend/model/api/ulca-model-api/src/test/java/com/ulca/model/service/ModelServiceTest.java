@@ -90,15 +90,15 @@ class ModelServiceTest {
     }
 
     private static Stream<Arguments> modelListByUserIdParam(){
-        return Stream.of(Arguments.of("test",1,1,null),
-                         Arguments.of("test",null,null,null));
+        return Stream.of(Arguments.of("test",1,1,null,null),
+                         Arguments.of("test",null,null,null,null));
     }
 
 
 
     @ParameterizedTest
     @MethodSource("modelListByUserIdParam")
-    void modelListByUserId(String userId, Integer startPage, Integer endPage,String name) {
+    void modelListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
         if (startPage != null) {
             int startPg = startPage - 1;
             for (int i = startPg; i < endPage; i++) {
@@ -121,7 +121,7 @@ class ModelServiceTest {
         modelDtoList.add(modelDto);
 
         assertEquals(new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size()),
-                modelService.modelListByUserId(userId,startPage,endPage,name));
+                modelService.modelListByUserId(userId,startPage,endPage,pgSize,name));
 
     }
     private static Stream<Arguments> getModelByModelIdParam(){
