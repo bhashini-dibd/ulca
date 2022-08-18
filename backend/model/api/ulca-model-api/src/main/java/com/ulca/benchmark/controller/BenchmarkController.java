@@ -48,10 +48,10 @@ public class BenchmarkController {
 	
 	@GetMapping("/listByUserId")
 	public BenchmarkListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
-			@RequestParam(required = false) Integer endPage,@RequestParam(required = false) Integer pgSize,@RequestParam(required = false) String name) {
+			@RequestParam(required = false) Integer endPage,@RequestParam(required = false) Integer pageSize,@RequestParam(required = false) String name) {
 		log.info("******** Entry BenchMarkController:: listByUserId *******");
 
-		return benchmarkService.benchmarkListByUserId(userId, startPage, endPage,pgSize,name);
+		return benchmarkService.benchmarkListByUserId(userId, startPage, endPage,pageSize,name);
 	}
 
 	@PostMapping("/execute")
