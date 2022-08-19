@@ -96,6 +96,7 @@ public class ModelService {
 
 	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		log.info("******** Entry ModelService:: modelListByUserId *******");
+        Integer count = modelDao.countByUserId(userId);
 		List<ModelExtended> list = new ArrayList<ModelExtended>();
 
 		if (startPage != null) {
@@ -142,7 +143,7 @@ public class ModelService {
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			modelDtoList.add(modelDto);
 		}
-		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
+		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size(),count);
 	}
 
 	public ModelListResponseDto getModelByModelId(String modelId) {

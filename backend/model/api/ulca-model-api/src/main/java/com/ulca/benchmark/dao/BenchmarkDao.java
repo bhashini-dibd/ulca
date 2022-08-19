@@ -30,5 +30,7 @@ public interface BenchmarkDao extends MongoRepository<Benchmark, String> {
 	List<Benchmark> findByTask(ModelTask modelTask, Pageable paging);
 	List<Benchmark> findByLanguages(LanguagePair lp, Pageable paging);
 	List<Benchmark> findByLanguages(LanguagePair lp);
+
+	Integer countByUserId(String userId);
 	
 }

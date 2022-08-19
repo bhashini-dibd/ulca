@@ -482,6 +482,8 @@ public class BenchmarkService {
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
 
+		Integer count = benchmarkDao.countByUserId(userId);
+
 		List<Benchmark> list = new ArrayList<Benchmark>();
 
 		if (startPage != null) {
@@ -519,7 +521,7 @@ public class BenchmarkService {
 		}
 		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
 
-		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size());
+		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size(),count);
 	}
 
 }

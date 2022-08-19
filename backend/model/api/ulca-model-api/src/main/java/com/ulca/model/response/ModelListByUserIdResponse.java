@@ -14,5 +14,6 @@ public class ModelListByUserIdResponse {
 	String message;
 	List<ModelListResponseDto> data;
 	int count;
+	int totalCount;
 
 }
