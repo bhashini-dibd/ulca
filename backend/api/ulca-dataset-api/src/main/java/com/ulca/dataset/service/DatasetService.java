@@ -146,12 +146,14 @@ public class DatasetService {
 		
 		DatasetListByUserIdResponse response = null;
 
-			if (startPage == null) {
-				response = datasetListByUserIdFetchAll(userId, name);
-			} else {
+			if (startPage != null) {
+                response = datasetListByUserIdPagination(userId, startPage, endPage,pgSize,name);
 
-				response = datasetListByUserIdPagination(userId, startPage, endPage,pgSize,name);
-			}
+			} else {
+                response = datasetListByUserIdFetchAll(userId, name);
+
+
+            }
 		return response;
 	}
 
@@ -159,87 +161,33 @@ public class DatasetService {
 
 		log.info("******** Entry DatasetService:: datasetListByUserIdPagination *******");
 
-        Integer pSize = null;
+        Integer pSize = PAGE_SIZE;
 
 		if(pgSize!= null){
 			pSize = pgSize;
-		} else {
-			pSize = PAGE_SIZE;
 		}
 
 		List<DatasetListByUserIdResponseDto> list = new ArrayList<DatasetListByUserIdResponseDto>();
-		List<DatasetListByUserIdResponseDto> searchList = new ArrayList<DatasetListByUserIdResponseDto>();
 
 		int startIndex = pSize * (startPage - 1);
 		int endIndex = pSize* endPage;
 
-		if(name!=null){
+
 			DatasetListByUserIdResponse datasetListByUserIdResponse = datasetListByUserIdFetchAll(userId,name);
 			List<DatasetListByUserIdResponseDto> allList = datasetListByUserIdResponse.getData();
 			if(allList.size()>=endIndex) {
-				searchList = allList.subList(startIndex, endIndex-1);
+				list = allList.subList(startIndex, endIndex-1);
 			}else {
 
 				for (int i = startIndex; i < endIndex; i++) {
-					searchList.add(allList.get(i));
+					list.add(allList.get(i));
 
 				}
 			}
-			DatasetListByUserIdResponse searchResponse = new DatasetListByUserIdResponse("Dataset List By userId",searchList, startPage, endPage);
+			DatasetListByUserIdResponse searchResponse = new DatasetListByUserIdResponse("Dataset List By userId",list, startPage, endPage,allList.size());
 			log.info("******** Exit DatasetService:: datasetListByUserIdPagination *******");
 			return searchResponse;
-
-
-		}
-		int startPg = startPage - 1;
-
-		for(int i= startPg; i< endPage; i++) {
-
-			Pageable paging = PageRequest.of(i, pSize);
-			Page<ProcessTracker> processTrackerPage = processTrackerDao.findByUserId(userId, paging);
-
-			for (ProcessTracker p : processTrackerPage) {
-				if (p.getDatasetId() != null && !p.getDatasetId().isEmpty()) {
-
-					String status = p.getStatus().toString();
-					Optional<Dataset> dataset = datasetDao.findById(p.getDatasetId());
-
-
-						if (status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
-							list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-									dataset.get().getDatasetName(), dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
-						} else {
-
-							List<TaskTracker> taskTrackerList = taskTrackerDao
-									.findAllByServiceRequestNumber(p.getServiceRequestNumber());
-
-							HashMap<String, String> map = new HashMap<String, String>();
-							for (TaskTracker tTracker : taskTrackerList) {
-								map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
-							}
-							if (map.containsValue(TaskTracker.StatusEnum.failed.toString())) {
-								status = ProcessTracker.StatusEnum.failed.toString();
-							} else if (map.containsValue(ProcessTracker.StatusEnum.inprogress.toString())) {
-								status = ProcessTracker.StatusEnum.inprogress.toString();
-							} else if (map.containsKey(TaskTracker.ToolEnum.publish.toString())) {
-								status = map.get(TaskTracker.ToolEnum.publish.toString());
-							}
-
-							list.add(new DatasetListByUserIdResponseDto(p.getDatasetId(), p.getServiceRequestNumber(),
-									dataset.get().getDatasetName(), dataset.get().getDatasetType(), dataset.get().getCreatedOn(), status));
-						}
-					}
-				}
-
-		}
-		
-		String msg = "Dataset List By userId";
-		
-		DatasetListByUserIdResponse response = new DatasetListByUserIdResponse(msg,list, startPage, endPage);
-		log.info("******** Exit DatasetService:: datasetListByUserIdPagination *******");
-		return response;
-
-	}
+    }
 	
 	public DatasetListByUserIdResponse datasetListByUserIdFetchAll(String userId,String name) {
 
