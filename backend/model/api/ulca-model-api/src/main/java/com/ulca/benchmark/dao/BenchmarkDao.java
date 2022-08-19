@@ -32,5 +32,7 @@ public interface BenchmarkDao extends MongoRepository<Benchmark, String> {
 	List<Benchmark> findByLanguages(LanguagePair lp);
 
 	Integer countByUserId(String userId);
+
+	Integer countByUserIdAndName(String userId,String name);
 	
 }

@@ -503,6 +503,8 @@ public class BenchmarkService {
 					Example<Benchmark> example = Example.of(benchmark);
 
 					benchmarkList = benchmarkDao.findAll(example, paging);
+					count = modelDao.countByUserIdAndName(userId,name);
+
 				} else {
 
 				benchmarkList =	benchmarkDao.findByUserId(userId, paging);
@@ -516,8 +518,10 @@ public class BenchmarkService {
 				benchmark.setName(name);
 				Example<Benchmark> example = Example.of(benchmark);
 				list = benchmarkDao.findAll(example);
-			} else
-			list = benchmarkDao.findByUserId(userId);
+				count = list.size();
+			} else {
+				list = benchmarkDao.findByUserId(userId);
+			}
 		}
 		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
 

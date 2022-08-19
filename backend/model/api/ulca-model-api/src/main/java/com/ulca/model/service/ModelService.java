@@ -118,21 +118,26 @@ public class ModelService {
 					Example<ModelExtended> example = Example.of(modelExtended);
 
 					modelList = modelDao.findAll(example,paging);
+					count = modelDao.countByUserIdAndName(userId,name);
 				} else {
 					modelList = modelDao.findByUserId(userId, paging);
 				}
 				list.addAll(modelList.toList());
 			}
-		} else { if (name!=null){
-			ModelExtended modelExtended = new ModelExtended();
-			modelExtended.setUserId(userId);
-			modelExtended.setName(name);
-			Example<ModelExtended> example = Example.of(modelExtended);
+		} else {
+			if (name != null) {
+				ModelExtended modelExtended = new ModelExtended();
+				modelExtended.setUserId(userId);
+				modelExtended.setName(name);
+				Example<ModelExtended> example = Example.of(modelExtended);
 
-			list = modelDao.findAll(example);
+				list = modelDao.findAll(example);
+				count = list.size();
 
-		} else
-			list = modelDao.findByUserId(userId);
+			} else {
+				list = modelDao.findByUserId(userId);
+
+			}
 		}
 
 		List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
