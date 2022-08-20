@@ -482,6 +482,8 @@ public class BenchmarkService {
 	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
 
+		Integer count = benchmarkDao.countByUserId(userId);
+
 		List<Benchmark> list = new ArrayList<Benchmark>();
 
 		if (startPage != null) {
@@ -501,6 +503,8 @@ public class BenchmarkService {
 					Example<Benchmark> example = Example.of(benchmark);
 
 					benchmarkList = benchmarkDao.findAll(example, paging);
+					count = modelDao.countByUserIdAndName(userId,name);
+
 				} else {
 
 				benchmarkList =	benchmarkDao.findByUserId(userId, paging);
@@ -514,12 +518,14 @@ public class BenchmarkService {
 				benchmark.setName(name);
 				Example<Benchmark> example = Example.of(benchmark);
 				list = benchmarkDao.findAll(example);
-			} else
-			list = benchmarkDao.findByUserId(userId);
+				count = list.size();
+			} else {
+				list = benchmarkDao.findByUserId(userId);
+			}
 		}
 		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
 
-		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size());
+		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size(),count);
 	}
 
 }
