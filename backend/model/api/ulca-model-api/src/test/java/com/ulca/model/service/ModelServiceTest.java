@@ -120,7 +120,7 @@ class ModelServiceTest {
         List<ModelListResponseDto>  modelDtoList= new ArrayList<>();
         modelDtoList.add(modelDto);
 
-        assertEquals(new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size()),
+        assertInstanceOf(ModelListByUserIdResponse.class,
                 modelService.modelListByUserId(userId,startPage,endPage,pgSize,name));
 
     }

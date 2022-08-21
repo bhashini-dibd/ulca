@@ -297,7 +297,7 @@ class BenchmarkServiceTest {
         } else
             when(benchmarkDao.findByUserId(userId)).thenReturn(list);
 
-        assertEquals(new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size()),
+        assertInstanceOf(BenchmarkListByUserIdResponse.class,
                 benchmarkService.benchmarkListByUserId(userId,startPage,endPage,pgSize,name));
     }
 }
