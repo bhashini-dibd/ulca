@@ -175,14 +175,15 @@ public class DatasetService {
 
 			DatasetListByUserIdResponse datasetListByUserIdResponse = datasetListByUserIdFetchAll(userId,name);
 			List<DatasetListByUserIdResponseDto> allList = datasetListByUserIdResponse.getData();
-			if(allList.size()>=endIndex) {
+			if(allList.size()>endIndex) {
 				list = allList.subList(startIndex, endIndex-1);
 			}else {
+                 if(allList.size()>0) {
+					 for (int i = startIndex; i < endIndex; i++) {
+						 list.add(allList.get(i));
 
-				for (int i = startIndex; i < endIndex; i++) {
-					list.add(allList.get(i));
-
-				}
+					 }
+				 }
 			}
 			DatasetListByUserIdResponse searchResponse = new DatasetListByUserIdResponse("Dataset List By userId",list, startPage, endPage,allList.size());
 			log.info("******** Exit DatasetService:: datasetListByUserIdPagination *******");

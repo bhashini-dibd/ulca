@@ -45,6 +45,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 
+@MockitoSettings(strictness = Strictness.LENIENT)
 @SpringBootTest
 class DatasetServiceTest {
 
