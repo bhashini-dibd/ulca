@@ -85,6 +85,7 @@ const ContributionList = (props) => {
   //     added) &&
   //     MyContributionListApi();
   // }, []);
+  console.log(data,'data');
 
   useEffect(() => {
     if (status === "completed") {
@@ -94,11 +95,12 @@ const ContributionList = (props) => {
   });
 
   useEffect(() => {
+    console.log("hit");
     if (!refHook.current) {
       MyContributionListApi();
       refHook.current = true;
     }
-  });
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -107,6 +109,7 @@ const ContributionList = (props) => {
   }, []);
 
   useEffect(() => {
+    console.log("this");
     for (let i = 0; i < data.length; i++) {
       if (data[i].submitRefNumber === added) {
         let page = Math.floor(i / PageInfo.count);
@@ -153,13 +156,16 @@ const ContributionList = (props) => {
   //   });
   // }, []);
 
-  const MyContributionListApi = async () => {
+  const MyContributionListApi = async (start, end) => {
     dispatch(ClearReport());
     const userObj = new MyContributionList(
       "SAVE",
       "A_FBTTR-VWSge-1619075981554",
+      start,
+      end,
       "241006445d1546dbb5db836c498be6381606221196566"
     );
+    console.log(userObj);
     dispatch(APITransport(userObj));
     refHook.current = false;
   };
@@ -757,9 +763,19 @@ const ContributionList = (props) => {
     rowsPerPageOptions: [10, 25, 50, 100],
     selectableRows: "none",
     page: PageInfo.page,
+    count: 100,
     onTableChange: (action, tableState) => {
       switch (action) {
         case "changePage":
+          if(tableState.page < PageInfo.page) {
+            console.log( tableState.page, tableState.page + 1,'[][][][][]');
+            MyContributionListApi(`${tableState.page - 1}`, `${tableState.page}`)
+          } else {
+            console.log("here", tableState.page, tableState.page + 1);
+            
+            MyContributionListApi(`${tableState.page+1}`, `${tableState.page + 1}`)
+          }
+
           processTableClickedNextOrPrevious("", tableState.page);
           break;
         case "changeRowsPerPage":

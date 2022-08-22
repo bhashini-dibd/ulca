@@ -3,12 +3,15 @@ import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from 'md5';
 export default class MyContribution extends API {
-    constructor(file_name, user_id, timeout = 200000) {
+    constructor(file_name, user_id, startPage=1, endPage=1, timeout = 200000) {
         super("GET", timeout, false);
         this.user_id = JSON.parse(localStorage.getItem('userDetails')).userID
         this.type = C.GET_MODEL_CONTRIBUTION_LIST;
         this.userDetails = JSON.parse(localStorage.getItem('userInfo'))
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getModelContributionList}`;
+        this.startPage = startPage;
+        this.endPage = endPage;
+        console.log(this.startPage, this.endPage);
     }
 
     toString() {
@@ -24,8 +27,7 @@ export default class MyContribution extends API {
 
     apiEndPoint() {
 
-        
-        let url = `${this.endpoint}?userId=${this.user_id}` 
+        let url = `${this.endpoint}?userId=${this.user_id}&startPage=${this.startPage}&endPage=${this.endPage}` 
         
          return url;
     }

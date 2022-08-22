@@ -221,11 +221,21 @@ const ContributionList = (props) => {
     viewColumns: false,
     rowsPerPage: PageInfo.count,
     rowsPerPageOptions: [10, 25, 50, 100],
+    serverSide: true,
     selectableRows: "none",
     page: PageInfo.page,
     onTableChange: (action, tableState) => {
+      console.log(action,'-=-=-=---=');
       switch (action) {
         case "changePage":
+          console.log(tableState.page,"cllick", PageInfo.page);
+
+          if(tableState.page < PageInfo.page) {
+            MyContributionListApi("", "", `${tableState.page - 2}`, `${tableState.page - 1}`)
+          } else {
+            MyContributionListApi("", "", `${tableState.page}`, `${tableState.page + 1}`)
+          }
+
           processTableClickedNextOrPrevious("", tableState.page);
           break;
         case "changeRowsPerPage":

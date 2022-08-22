@@ -87,6 +87,8 @@ const ContributionList = (props) => {
     const userObj = new MyContributionList(
       "SAVE",
       "A_FBTTR-VWSge-1619075981554",
+      "1",
+      "1",
       "241006445d1546dbb5db836c498be6381606221196566"
     );
     dispatch(APITransport(userObj));
