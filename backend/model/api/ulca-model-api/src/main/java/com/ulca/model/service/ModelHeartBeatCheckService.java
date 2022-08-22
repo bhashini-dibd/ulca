@@ -143,8 +143,10 @@ public class ModelHeartBeatCheckService {
 				}
 
 			} catch (Exception e) {
+                modelHealthStatus.setStatus("unavailable");
+                modelHealthStatusDao.save(modelHealthStatus);
 
-				log.info("healthStatusCheck Failed " + model.getName() + " reason :: " + e.getMessage());
+                log.info("healthStatusCheck Failed " + model.getName() + " reason :: " + e.getMessage());
 				e.printStackTrace();
 			}
 
