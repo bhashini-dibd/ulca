@@ -30,7 +30,9 @@ export default class DocumentUpload extends API {
   getFormData() {
     const formData = new FormData();
     formData.append("file", this.file[0]);
-    formData.append("userId", this.userDetails["userID"]);
+    if(this.userDetails) {
+      formData.append("userId", this.userDetails["userID"]);
+    }
     formData.append("modelId", this.modelId);
 
     return formData;
