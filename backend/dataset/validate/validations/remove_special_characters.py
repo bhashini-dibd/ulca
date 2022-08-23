@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -19,7 +19,7 @@ class RemoveSpecialCharacters(BaseValidator):
     def execute(self, request):
         log.info('----Removing special characters from beginning----')
         try:
-            if request["datasetType"] in [dataset_type_parallel, dataset_type_transliteration]:
+            if request["datasetType"] in [dataset_type_parallel, dataset_type_transliteration, dataset_type_glossary]:
                 request['record']['sourceText'] = self.remove_special(request['record']['sourceText'])
                 request['record']['targetText'] = self.remove_special(request['record']['targetText'])
             if request["datasetType"] == dataset_type_asr:

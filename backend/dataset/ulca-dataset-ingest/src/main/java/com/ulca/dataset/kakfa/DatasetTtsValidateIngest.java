@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.json.JSONException;
@@ -29,8 +27,6 @@ import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.Error;
 import com.ulca.dataset.model.ProcessTracker.StatusEnum;
 import com.ulca.dataset.model.TaskTracker.ToolEnum;
-import com.ulca.dataset.model.deserializer.AsrDatasetRowDataSchemaDeserializer;
-import com.ulca.dataset.model.deserializer.AsrParamsSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.TtsDatasetRowDataSchemaDeserializer;
 import com.ulca.dataset.model.deserializer.TtsParamsSchemaDeserializer;
 import com.ulca.dataset.service.DatasetService;
@@ -38,9 +34,7 @@ import com.ulca.dataset.service.NotificationService;
 import com.ulca.dataset.service.ProcessTaskTrackerService;
 
 import io.swagger.model.AsrParamsSchema;
-import io.swagger.model.AsrRowSchema;
 import io.swagger.model.DatasetType;
-import io.swagger.model.ParallelDatasetParamsSchema;
 import io.swagger.model.TtsParamsSchema;
 import io.swagger.model.TtsRowSchema;
 import lombok.extern.slf4j.Slf4j;
@@ -60,10 +54,10 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 	@Value("${kafka.ulca.ds.validate.ip.topic}")
 	private String validateTopic;
-	
+
 	@Value("${precheck.ingest.sample.size}")
 	private Integer precheckSampleSize;
-	
+
 	@Value("${precheck.ingest.record.threshold}")
 	private Integer precheckRecordThreshold;
 
@@ -138,24 +132,14 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 			return;
 		}
-		if (mode.equalsIgnoreCase("real")) {
-			try {
-				ObjectMapper objectMapper = new ObjectMapper();
-				JSONObject record;
-				record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
-				datasetService.updateDataset(datasetId, userId, record, md5hash);
-
-			} catch (JsonProcessingException | JSONException e) {
-
-				log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
-			}
-		}
 
 		try {
+
 			if (mode.equalsIgnoreCase("real")) {
+				updateDataset(datasetId, userId, md5hash, paramsSchema);
 				ingest(paramsSchema, datasetIngest);
 			} else {
-				initiateIngest(paramsSchema, datasetIngest);
+				initiateIngest(datasetId, userId, md5hash, paramsSchema, datasetIngest);
 			}
 
 		} catch (Exception e) {
@@ -312,7 +296,8 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 
 	}
 
-	public void precheckIngest(TtsParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize) throws IOException {
+	public void precheckIngest(TtsParamsSchema paramsSchema, DatasetIngest datasetIngest, long recordSize)
+			throws IOException {
 
 		log.info("************ Entry DatasetTtsValidateIngest :: pseudoIngest *********");
 
@@ -324,7 +309,7 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		String baseLocation = datasetIngest.getBaseLocation();
 		String md5hash = datasetIngest.getMd5hash();
 		DatasetType datasetType = datasetIngest.getDatasetType();
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		JSONObject source = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
 
@@ -341,17 +326,18 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		vModel.put("userId", userId);
 		vModel.put("userMode", mode);
 
-		taskTrackerRedisDao.intializePrecheckIngest(serviceRequestNumber, baseLocation, md5hash, paramsSchema.getDatasetType().toString(),datasetName , datasetId, userId);
+		taskTrackerRedisDao.intializePrecheckIngest(serviceRequestNumber, baseLocation, md5hash,
+				paramsSchema.getDatasetType().toString(), datasetName, datasetId, userId);
 		log.info("Starting pseudoIngest serviceRequestNumber :: " + serviceRequestNumber);
 
-		long sampleSize = recordSize/10;
-		long bufferSize = precheckSampleSize/10;
-		
+		long sampleSize = recordSize / 10;
+		long bufferSize = precheckSampleSize / 10;
+
 		int numberOfRecords = 0;
 		int failedCount = 0;
 		int successCount = 0;
 		int pseudoNumberOfRecords = 0;
-		
+
 		long base = sampleSize;
 		long counter = 0;
 		long maxCounter = bufferSize;
@@ -362,11 +348,11 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 		while (reader.hasNext()) {
 			numberOfRecords++;
 
-			if(counter < maxCounter ) {
-				
+			if (counter < maxCounter) {
+
 				pseudoNumberOfRecords++;
 				++counter;
-				
+
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 				ObjectMapper mapper = new ObjectMapper();
 
@@ -420,15 +406,15 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 					}
 				}
 
-			}else if ( numberOfRecords == base ){
+			} else if (numberOfRecords == base) {
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 				counter = base;
 				maxCounter = base + bufferSize;
 				base = base + sampleSize;
-			}else {
+			} else {
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 			}
-			
+
 		}
 		reader.endArray();
 		reader.close();
@@ -440,9 +426,9 @@ public class DatasetTtsValidateIngest implements DatasetValidateIngest {
 				+ pseudoNumberOfRecords + " success record :: " + successCount);
 
 	}
-	
-public  long getRecordSize(String dataFilePath) throws Exception {
-		
+
+	public long getRecordSize(String dataFilePath) throws Exception {
+
 		long numberOfRecords = 0;
 		InputStream inputStream;
 		try {
@@ -453,33 +439,50 @@ public  long getRecordSize(String dataFilePath) throws Exception {
 				numberOfRecords++;
 				Object rowObj = new Gson().fromJson(reader, Object.class);
 			}
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw new Exception("data.json file is not proper");
-			
+
 		}
-		
+
 		return numberOfRecords;
 	}
 
-	public  void initiateIngest(TtsParamsSchema paramsSchema, DatasetIngest datasetIngest) throws Exception {
-		
+	public void initiateIngest(String datasetId, String userId, String md5hash, TtsParamsSchema paramsSchema,
+			DatasetIngest datasetIngest) throws Exception {
+
 		log.info(" initiateIngest ");
-		String dataFilePath = datasetIngest.getBaseLocation()  + File.separator + "data.json";
-		
+		String dataFilePath = datasetIngest.getBaseLocation() + File.separator + "data.json";
+
 		long recordSize = getRecordSize(dataFilePath);
-		
+
 		log.info(" total record size ::  " + recordSize);
-		
-		if(recordSize <= precheckRecordThreshold) {
+
+		if (recordSize <= precheckRecordThreshold) {
+			updateDataset(datasetId, userId, md5hash, paramsSchema);
+			datasetIngest.setMode("real");
 			ingest(paramsSchema, datasetIngest);
 			return;
-		}else {
+		} else {
 			precheckIngest(paramsSchema, datasetIngest, recordSize);
 		}
-		
+	}
+
+	// update the dataset
+	public void updateDataset(String datasetId, String userId, String md5hash, TtsParamsSchema paramsSchema) {
+
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			JSONObject record;
+			record = new JSONObject(objectMapper.writeValueAsString(paramsSchema));
+			datasetService.updateDataset(datasetId, userId, record, md5hash);
+
+		} catch (JsonProcessingException | JSONException e) {
+
+			log.info("update Dataset failed , datasetId :: " + datasetId + " reason :: " + e.getMessage());
+		}
 	}
 
 }

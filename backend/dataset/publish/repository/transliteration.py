@@ -168,7 +168,7 @@ class TransliterationRepo:
                     if hashes:
                         res_count = len(hashes)
                         project = {"_id": False}
-                        for key in parallel_search_ignore_keys:
+                        for key in transliteration_search_ignore_keys:
                             project[key] = False
                         res = col.find({"sourceTextHash": {"$in": hashes}}, project)
                     if not res:

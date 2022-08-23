@@ -72,9 +72,12 @@ public class TtsParamsSchemaDeserializer extends StdDeserializer<TtsParamsSchema
 		Set<String> keys = obj.keySet();
 		for (String k : keys) {
 			try {
+				/*
+				 * TTS params schema is same as Asr params schema
+				 */
 				AsrDatasetParamsSchemaKeys key = AsrDatasetParamsSchemaKeys.valueOf(k); // tts params schema keys are same as asr param schema keys
 			} catch (Exception ex) {
-				log.info("no enums found ");
+				log.info(k + " unknown property ");
 				errorList.add(k + " unknown property ");
 			}
 		}

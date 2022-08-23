@@ -8,7 +8,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -111,10 +110,8 @@ public class KafkaBenchmarkDownloadConsumer {
 				bmProcessTrackerService.updateBmProcess(benchmarkProcessId, "Failed");
 				throw new Exception("Could not create the directory where the benchmark-dataset downloaded files will be stored.", ex);
 			}
-			
 
 			BenchmarkProcess bmProcess = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
-			int datasetRecordCount = 0;
 			
 			if(bmProcess != null) {
 
@@ -169,38 +166,31 @@ public class KafkaBenchmarkDownloadConsumer {
 					case TRANSLATION:
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLATION.toString());
 						
-						datasetRecordCount = translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+						 translationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
 								benchmarkProcessId);
-						bmProcess.setRecordCount(datasetRecordCount);
 						
 						break;
 					case ASR:
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.ASR.toString());
 						
-						datasetRecordCount = asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+						asrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
 								benchmarkProcessId);
-						bmProcess.setRecordCount(datasetRecordCount);
-						
 						break;
 
 					case OCR:
 
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.OCR.toString());
 						
-						datasetRecordCount = ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+						ocrBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
 								benchmarkProcessId);
-						bmProcess.setRecordCount(datasetRecordCount);
-						
 						break;
 						
 					case TRANSLITERATION:
 
 						log.info("modelTaskType :: " + ModelTask.TypeEnum.TRANSLITERATION.toString());
 						
-						datasetRecordCount = transliterationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
+						transliterationBenchmark.prepareAndPushToMetric(model, benchmark, fileMap, bmProcess.getMetric(),
 								benchmarkProcessId);
-						bmProcess.setRecordCount(datasetRecordCount);
-						
 						break;
 
 					default:
@@ -210,13 +200,6 @@ public class KafkaBenchmarkDownloadConsumer {
 					}
 
 					bmProcessTrackerService.updateTaskTracker(benchmarkProcessId, BenchmarkTaskTracker.ToolEnum.ingest, BenchmarkTaskTracker.StatusEnum.completed);
-					
-					//benchmarkProcessDao.save(bmProcess);
-					BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
-					bmProcessUpdate.setRecordCount(bmProcess.getRecordCount());
-					bmProcessUpdate.setLastModifiedOn(new Date().toString());
-					benchmarkProcessDao.save(bmProcessUpdate);
-					
 					
 				} catch (Exception e) {
 					
@@ -232,7 +215,6 @@ public class KafkaBenchmarkDownloadConsumer {
 					e.printStackTrace();
 					
 				}
-
 			
 			} else {
 				log.info("Benchmark Process Not Found. benchmarkProcessId :: "  + benchmarkProcessId);
@@ -242,7 +224,6 @@ public class KafkaBenchmarkDownloadConsumer {
 			log.info("error in listener");
 			ex.printStackTrace();
 		}
-
 	}
 
 	private String downloadUsingNIO(String urlStr, String downloadFolder, String fileName) throws IOException {

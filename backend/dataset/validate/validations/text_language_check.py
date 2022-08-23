@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary
 #from langdetect import detect_langs
 from polyglot.detect import Detector
 import logging
@@ -17,7 +17,7 @@ class TextLanguageCheck(BaseValidator):
             text_list = []
             lang_list = []
             record = request["record"]
-            if request["datasetType"] in [dataset_type_parallel, dataset_type_transliteration]:
+            if request["datasetType"] in [dataset_type_parallel, dataset_type_transliteration, dataset_type_glossary]:
                 text_list.append(record['sourceText'])
                 text_list.append(record['targetText'])
                 lang_list.append(record['sourceLanguage'])
@@ -37,7 +37,7 @@ class TextLanguageCheck(BaseValidator):
 
             for text, lang in zip(text_list, lang_list):
                 # Skipping for few languages as the current model doesnt support them
-                if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt']:
+                if lang in ['brx', 'mni', 'sat', 'lus', 'njz', 'pnr', 'grt', 'sd']:
                     continue
 
                 try:

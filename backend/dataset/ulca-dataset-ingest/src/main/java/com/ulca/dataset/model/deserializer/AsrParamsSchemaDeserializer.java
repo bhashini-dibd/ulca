@@ -73,7 +73,7 @@ public class AsrParamsSchemaDeserializer extends StdDeserializer<AsrParamsSchema
 			try {
 				AsrDatasetParamsSchemaKeys key = AsrDatasetParamsSchemaKeys.valueOf(k);
 			} catch (Exception ex) {
-				log.info("no enums found ");
+				log.info("AsrDatasetParamsSchemaKeys " + k + " not in defined keys");
 				errorList.add(k + " unknown property ");
 			}
 		}

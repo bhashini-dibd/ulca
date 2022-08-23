@@ -15,6 +15,7 @@ ocr_collection = os.environ.get('ULCA_DS_PUBLISH_OCR_COL', "ocr-dataset")
 parallel_collection = os.environ.get('ULCA_DS_PUBLISH_PARALLEL_COL', "parallel-dataset")
 monolingual_collection = os.environ.get('ULCA_DS_PUBLISH_MONOLINGUAL_COL', "monolingual-dataset")
 transliteration_collection = os.environ.get('ULCA_DS_PUBLISH_TRANSLITERATIONL_COL', "transliteration-dataset")
+glossary_collection = os.environ.get('ULCA_DS_PUBLISH_GLOSSARY_COL', "glossary-dataset")
 object_store = os.environ.get('ULCA_OBJECT_STORE', "AWS")
 
 offset = os.environ.get('ULCA_DATASET_DEFAULT_OFFSET', None)
@@ -53,7 +54,7 @@ asr_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHa
                       "fileLocation", "lastModifiedOn", "createdOn"]
 asr_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                     "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
-asr_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "textHash",
+asr_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash", "textHash",
                           "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_updatable_keys = ["durationInSeconds", "duration", "version"]
 
@@ -61,7 +62,7 @@ tts_immutable_keys = ["_id", "id", "audioFilename", "text", "audioHash", "textHa
                       "fileLocation", "lastModifiedOn", "createdOn"]
 tts_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                     "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
-tts_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash", "textHash",
+tts_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash", "textHash",
                           "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 tts_updatable_keys = ["durationInSeconds", "duration", "version"]
 
@@ -69,7 +70,7 @@ asr_unlabeled_immutable_keys = ["_id", "id", "audioFilename", "audioHash", "data
                                 "fileLocation", "lastModifiedOn", "createdOn"]
 asr_unlabeled_non_tag_keys = ["_id", "id", "startTime", "endTime", "samplingRate", "audioFilename", "text", "submitter",
                               "fileLocation", "durationInSeconds", "duration", "lastModifiedOn", "createdOn", "age"]
-asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "audioHash",
+asr_unlabeled_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "audioHash",
                                     "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 asr_unlabeled_updatable_keys = ["durationInSeconds", "duration", "version"]
 
@@ -77,7 +78,7 @@ parallel_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextH
                            "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
 parallel_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
                          "createdOn"]
-parallel_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "hashedKey", "sk",
+parallel_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "hashedKey", "sk",
                                "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version",
                                "datasetId", "sourceLanguage", "targetLanguage"]
 parallel_updatable_keys = ["alignmentScore", "version"]
@@ -89,13 +90,13 @@ ocr_immutable_keys = ["_id", "id", "imageFilename", "groundTruth", "imageHash", 
                       "sourceLanguage", "fileLocation", "lastModifiedOn", "createdOn"]
 ocr_non_tag_keys = ["_id", "id", "boundingBox", "imageFilename", "groundTruth", "imageFilePath", "submitter",
                     "fileLocation", "lastModifiedOn", "createdOn"]
-ocr_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "imageHash",
+ocr_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "imageHash",
                           "groundTruthHash", "fileLocation", "lastModifiedOn", "createdOn", "version", "datasetId"]
 ocr_updatable_keys = ["version"]
 
 mono_immutable_keys = ["_id", "id", "text", "textHash", "datasetType", "sourceLanguage", "lastModifiedOn", "createdOn"]
 mono_non_tag_keys = ["_id", "id", "text", "submitter", "lastModifiedOn", "createdOn"]
-mono_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "textHash",
+mono_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "textHash",
                            "lastModifiedOn", "createdOn", "version", "datasetId"]
 mono_updatable_keys = ["version"]
 
@@ -103,10 +104,19 @@ transliteration_immutable_keys = ["_id", "id", "sourceText", "targetText", "sour
                            "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
 transliteration_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
                          "createdOn"]
-transliteration_search_ignore_keys = ["_id", "id", "tags", "submitter", "license", "domain", "datasetType", "hashedKey", "sk",
+transliteration_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "hashedKey", "sk",
                                "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version",
                                "datasetId", "sourceLanguage", "targetLanguage"]
 transliteration_updatable_keys = ["alignmentScore", "version"]
+
+glossary_immutable_keys = ["_id", "id", "sourceText", "targetText", "sourceTextHash", "targetTextHash",
+                           "sourceLanguage", "targetLanguage", "datasetType", "lastModifiedOn", "createdOn"]
+glossary_non_tag_keys = ["_id", "id", "alignmentScore", "sourceText", "targetText", "submitter", "lastModifiedOn",
+                         "createdOn"]
+glossary_search_ignore_keys = ["_id", "id", "tags", "license", "domain", "datasetType", "hashedKey", "sk",
+                               "derived", "sourceTextHash", "targetTextHash", "lastModifiedOn", "createdOn", "version",
+                               "datasetId", "sourceLanguage", "targetLanguage"]
+glossary_updatable_keys = ["alignmentScore", "version"]
 
 govt_data_whitelist_enabled = os.environ.get('ULCA_PUBLISH_GOVT_DATA_WHITELIST_ENABLED', True)
 if isinstance(govt_data_whitelist_enabled, str):
@@ -160,6 +170,7 @@ dataset_type_asr_unlabeled = os.environ.get('DS_TYPE_ASR_UNLABELED', 'asr-unlabe
 dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 dataset_type_transliteration = os.environ.get('DS_TYPE_TRANSLITERATION', 'transliteration-corpus')
+dataset_type_glossary = os.environ.get('DS_TYPE_GLOSSARY', 'glossary-corpus')
 
 user_mode_pseudo = os.environ.get('USER_MODE_PSEUDO', 'precheck')
 user_mode_real = os.environ.get('USER_MODE_REAL', 'real')

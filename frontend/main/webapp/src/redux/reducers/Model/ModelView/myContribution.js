@@ -156,6 +156,7 @@ const getContributionList = (state, payload) => {
           : element.status === "Failed"
           ? "#F54336"
           : "green",
+      unpublishReason: element.unpublishReason,
     });
     !statusFilter.includes(element.status) &&
       element.status &&
@@ -267,6 +268,7 @@ const reducer = (state = initialState, action) => {
           action.payload.searchValue
         ),
       };
+      
     default:
       return {
         ...state,

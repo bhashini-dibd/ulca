@@ -8,9 +8,10 @@ from repository.ocr import OCRRepo
 from repository.monolingual import MonolingualRepo
 from repository.asrunlabeled import ASRUnlabeledRepo
 from repository.transliteration import TransliterationRepo
+from repository.glossary import GlossaryRepo
 from utils.datasetutils import DatasetUtils
 from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, \
-    dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration
+    dataset_type_asr_unlabeled, dataset_type_tts, dataset_type_transliteration, dataset_type_glossary
 
 log = logging.getLogger('file')
 
@@ -23,6 +24,7 @@ ocrrepo = OCRRepo()
 monorepo = MonolingualRepo()
 asrunlabeledrepo = ASRUnlabeledRepo()
 transrepo = TransliterationRepo()
+glosrepo = GlossaryRepo()
 utils = DatasetUtils()
 
 
@@ -45,6 +47,7 @@ class DatasetService:
             asrunlabeledrepo.set_asr_unlabeled_collection()
             ttsrepo.set_tts_collection()
             transrepo.set_transliteration_collection()
+            glosrepo.set_glossary_collection()
         elif request["col"] == dataset_type_parallel:
             log.info("Parallel Dataset.....")
             parallelrepo.set_parallel_collection()
@@ -66,6 +69,9 @@ class DatasetService:
         elif request["col"] == dataset_type_transliteration:
             log.info("Transliteration Dataset.....")
             transrepo.set_transliteration_collection()
+        elif request["col"] == dataset_type_glossary:
+            log.info("Glossary Dataset.....")
+            glosrepo.set_glossary_collection()
         log.info("Done!")
 
     '''

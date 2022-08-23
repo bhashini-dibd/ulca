@@ -1,4 +1,4 @@
-import { withStyles, Button, Typography, Grid } from "@material-ui/core";
+import { withStyles, Button, Typography, Grid, Box } from "@material-ui/core";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import createMuiTheme from "../../../styles/Datatable";
 import React, { useEffect, useState } from "react";
@@ -37,6 +37,8 @@ import Search from "../../../components/Datasets&Model/Search";
 import getSearchedValues from "../../../../redux/actions/api/Model/ModelView/GetSearchedValues";
 import { translate } from "../../../../assets/localisation";
 import { useRef } from "react";
+import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
+import LightTooltip from "../../../components/common/LightTooltip";
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -487,7 +489,37 @@ const ContributionList = (props) => {
     }
   };
 
-  const renderStatus = (status) => {
+  const renderStatus = (reason, status) => {
+    return (
+      <Box display="flex">
+        <Typography
+          variant="body1"
+          style={{
+            color: returnColor(status),
+          }}
+        >
+          {status}{" "}
+        </Typography>
+        {
+            status !== "published" && reason ? (
+              <LightTooltip
+                arrow
+                placement="right"
+                title={reason}
+              >
+                <InfoOutlinedIcon
+                  className={classes.buttonStyle}
+                  fontSize="small"
+                  color="disabled"
+                />
+              </LightTooltip>
+            ) : null
+          }
+      </Box>
+    );
+  };
+
+  const renderExpandTableStatus = (status) => {
     return (
       <Typography
         variant="body1"
@@ -498,7 +530,7 @@ const ContributionList = (props) => {
         {status}
       </Typography>
     );
-  };
+  }
 
   const convertDate = (date) => {
     return date
@@ -622,7 +654,7 @@ const ContributionList = (props) => {
         display: view ? "excluded" : true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
-            return renderStatus(tableMeta.rowData[7]);
+            return renderStatus(tableMeta.rowData[10], tableMeta.rowData[7]);
           }
         },
       },
@@ -652,6 +684,13 @@ const ContributionList = (props) => {
       label: "Benchmark Performance",
       options: {
         display: "excluded",
+      },
+    },
+    {
+      name: "unpublishReason",
+      label: "unPublishReason",
+      options: {
+        display: false,
       },
     },
   ];
@@ -708,7 +747,7 @@ const ContributionList = (props) => {
           <RenderExpandTable
             rows={rowData[9]}
             color={even_odd}
-            renderStatus={renderStatus}
+            renderStatus={renderExpandTableStatus}
           />                                        
         );
     },

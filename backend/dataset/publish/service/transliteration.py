@@ -318,8 +318,8 @@ class TransliterationService:
     params: delete_req (request for deletion)
     '''
 
-    def delete_parallel_dataset(self, delete_req):
-        log.info(f'Deleting PARALLEL datasets....')
+    def delete_transliteration_dataset(self, delete_req):
+        log.info(f'Deleting Transliteration datasets....')
         d, u = 0, 0
         try:
             records = self.get_transliteration_dataset({"datasetId": delete_req["datasetId"]})

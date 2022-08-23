@@ -24,6 +24,9 @@
         "task_type":"translation", "metric_name":"ribes", "metric_implementation":"TranslationRibesScoreEval", "score_context":"default"
     },
     {
+        "task_type":"translation", "metric_name":"chrf", "metric_implementation":"TranslationChrfScoreEval", "score_context":"default"
+    },
+    {
         "task_type":"ocr", "metric_name":"wer", "metric_implementation":"OCRWEREval", "score_context":"default"
     },
     {

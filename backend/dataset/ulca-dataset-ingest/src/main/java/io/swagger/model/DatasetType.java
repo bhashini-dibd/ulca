@@ -20,7 +20,8 @@ public enum DatasetType {
     TTS_CORPUS("tts-corpus"),
     ASR_UNLABELED_CORPUS("asr-unlabeled-corpus"),
     OCR_CORPUS("ocr-corpus"),
-    DOCUMENT_LAYOUT_CORPUS("document-layout-corpus");
+    DOCUMENT_LAYOUT_CORPUS("document-layout-corpus"),
+    GLOSSARY_CORPUS("glossary-corpus");
 
   private String value;
 

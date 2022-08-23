@@ -1,4 +1,5 @@
 export const ModelTask = [
+  { value: "status-check", label: "Status Check"},
   { value: 'sts', label: 'STS' },
   { value: "translation", label: "Translation" },
   { value: "asr", label: "ASR" },
@@ -14,6 +15,7 @@ export const DatasetItems = [
   { value: "asr-unlabeled-corpus", label: "ASR Unlabeled Dataset" },
   { value: "tts-corpus", label: "TTS Dataset" },
   { value: "transliteration-corpus", label: "Transliteration Dataset" },
+  { value: "glossary-corpus", label: "Glossary Dataset" },
 ];
 
 export const DatasetReadymade = [
@@ -56,6 +58,9 @@ export const Language = [
   { value: "sa", label: "Sanskrit" },
   { value: "bho", label: "Bhojpuri" },
   { value: "raj", label: "Rajasthani" },
+  { value: "awa", label: "Awadhi" },
+  { value: "hne", label: "Chhattisgarhi" },
+  { value: "mag", label: "Magahi" },
 ];
 
 export const FilterBy = {
