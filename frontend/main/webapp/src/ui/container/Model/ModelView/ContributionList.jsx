@@ -758,7 +758,6 @@ const ContributionList = (props) => {
     },
     print: false,
     viewColumns: false,
-    rowsPerPage: data.length,
     // rowsPerPageOptions: [10, 25, 50, 100],
     rowsPerPageOptions: false,
     selectableRows: "none",
