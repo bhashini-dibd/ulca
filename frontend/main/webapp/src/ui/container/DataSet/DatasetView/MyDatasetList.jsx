@@ -192,7 +192,9 @@ const ContributionList = (props) => {
       },
     },
   ];
-
+  console.log(data.length, 'data.length');
+  console.log(PageInfo.page, 'PageInfo.page');
+  console.log(totalCount, 'totalCount');
   const options = {
     textLabels: {
       body: {
@@ -220,7 +222,6 @@ const ContributionList = (props) => {
     download: false,
     print: false,
     viewColumns: false,
-    rowsPerPage: data.length,
     rowsPerPageOptions: false,
     // rowsPerPageOptions: [10, 25, 50, 100],
     serverSide: true,
