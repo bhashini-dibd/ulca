@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.ulca.model.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,14 +27,6 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
-import com.ulca.model.response.GetModelFeedbackListResponse;
-import com.ulca.model.response.ModelComputeResponse;
-import com.ulca.model.response.ModelFeedbackSubmitResponse;
-import com.ulca.model.response.ModelListByUserIdResponse;
-import com.ulca.model.response.ModelListResponseDto;
-import com.ulca.model.response.ModelSearchResponse;
-import com.ulca.model.response.ModelStatusChangeResponse;
-import com.ulca.model.response.UploadModelResponse;
 import com.ulca.model.service.ModelService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -49,10 +42,10 @@ public class ModelController {
 
 	@GetMapping("/listByUserId")
 	public ModelListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
-			@RequestParam(required = false) Integer endPage) {
+			@RequestParam(required = false) Integer endPage,@RequestParam(required = false) Integer pageSize,@RequestParam(required = false) String name) {
 		
 		log.info("******** Entry ModelController:: listByUserId *******");
-		return modelService.modelListByUserId(userId, startPage, endPage);
+		return modelService.modelListByUserId(userId, startPage, endPage,pageSize,name);
 	}
 
 	@GetMapping("/getModel")
@@ -90,7 +83,7 @@ public class ModelController {
 	}
 	
 	@PostMapping("/tryMe")
-	public ModelComputeResponse tryMeOcrImageContent(@RequestParam("file") MultipartFile file,@RequestParam(required = true) String userId, @RequestParam(required = true) String modelId) throws Exception {
+	public ModelComputeResponse tryMeOcrImageContent(@RequestParam("file") MultipartFile file, @RequestParam(required = true) String modelId) throws Exception {
 		log.info("******** Entry ModelController:: tryMeOcrImageContent *******");
 		return modelService.tryMeOcrImageContent(file, modelId);
 	}
@@ -107,6 +100,13 @@ public class ModelController {
 	public List<ModelFeedback> getModelFeedbackByModelId(@RequestParam(required = true) String modelId ) {
 		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
 		return modelService.getModelFeedbackByModelId(modelId);
+
+	}
+	@GetMapping("/getModelHealthStatus")
+	public ModelHealthStatusResponse getHealthStatus(@RequestParam(required = false) String taskType , @RequestParam(required = false) Integer startPage
+	       , @RequestParam(required = false) Integer endPage) {
+		log.info("******** Entry ModelController:: getModelHealthStatus *******");
+		return modelService.modelHealthStatus(taskType,startPage,endPage);
 
 	}
 	@GetMapping("/feedback/getByTaskType")

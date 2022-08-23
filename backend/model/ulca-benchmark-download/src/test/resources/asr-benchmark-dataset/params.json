@@ -1,0 +1,34 @@
+{
+    "name" : "ULCA Internal : ASR English Evaluation Benchmark",
+    "taskType": {
+        "type" : "asr"
+    },
+    "description" : "This is the Indian English ASR benchmark dataset.",
+    "languages": {
+        "sourceLanguage": "en"
+    },
+    "collectionSource": [
+        "ULCA Internal"
+    ],
+    "domain": [
+        "education"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "ekstep",
+        "oauthId": {
+            "oauthId": "ulca-dev@tarento.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "ekstep",
+                "oauthId": {
+                    "oauthId": "aravinth.bheemaraj@tarento.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    },
+    "format": "wav"
+}

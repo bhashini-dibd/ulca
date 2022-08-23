@@ -4,13 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -175,7 +178,14 @@ public class BenchmarkService {
 			bmProcess.setStartTime(new Date().toString());
 			benchmarkprocessDao.save(bmProcess);
 
-			BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
+			Map<String,String> map = new HashMap<String, String>();
+			map.put(serviceRequestNumber, bm.getMetric());
+			
+			BmDatasetDownload bmDsDownload = new BmDatasetDownload();
+			bmDsDownload.setBenchmarkDatasetId(bm.getBenchmarkId());
+			bmDsDownload.setModelId(modelId);	
+			bmDsDownload.setBenchmarkProcessIdsMap(map);
+			
 			benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
 			benchmarkProcessIds.add(serviceRequestNumber);
 
@@ -214,6 +224,9 @@ public class BenchmarkService {
 		List<String> metricList = modelConstants.getMetricListByModelTask(benchmark.getTask().getType().toString());
 
 		String benchmarkId = benchmark.getBenchmarkId();
+		
+		Map<String, String> map = new HashMap<String, String>();
+		
 
 		for (String metric : metricList) {
 
@@ -242,7 +255,7 @@ public class BenchmarkService {
 				BenchmarkProcess bmProcess = new BenchmarkProcess();
 				bmProcess.setBenchmarkDatasetId(benchmarkId);
 				bmProcess.setBenchmarkProcessId(serviceRequestNumber);
-				bmProcess.setMetric(benchmarkId);
+				bmProcess.setMetric(metric);
 				bmProcess.setBenchmarkDatasetName(benchmark.getName());
 				bmProcess.setModelId(modelId);
 				bmProcess.setModelName(modelExtended.getName());
@@ -251,12 +264,19 @@ public class BenchmarkService {
 				bmProcess.setLastModifiedOn(new Date().toString());
 				bmProcess.setStartTime(new Date().toString());
 				benchmarkprocessDao.save(bmProcess);
-
-				BmDatasetDownload bmDsDownload = new BmDatasetDownload(serviceRequestNumber);
-				benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
+				map.put(serviceRequestNumber, metric);
 				benchmarkProcessIds.add(serviceRequestNumber);
 			}
 
+		}
+
+		if(benchmarkProcessIds.size()>0){
+			
+			BmDatasetDownload bmDsDownload = new BmDatasetDownload();
+			bmDsDownload.setBenchmarkDatasetId(benchmarkId);
+			bmDsDownload.setModelId(modelId);
+			bmDsDownload.setBenchmarkProcessIdsMap(map);
+			benchmarkDownloadKafkaTemplate.send(benchmarkDownloadTopic, bmDsDownload);
 		}
 
 		ExecuteBenchmarkResponse response = new ExecuteBenchmarkResponse();
@@ -459,24 +479,53 @@ public class BenchmarkService {
 
 	}
 
-	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage) {
+	public BenchmarkListByUserIdResponse benchmarkListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		log.info("******** Entry BenchmarkService:: benchmarkListByUserId *******");
+
+		Integer count = benchmarkDao.countByUserId(userId);
 
 		List<Benchmark> list = new ArrayList<Benchmark>();
 
 		if (startPage != null) {
 			int startPg = startPage - 1;
 			for (int i = startPg; i < endPage; i++) {
-				Pageable paging = PageRequest.of(i, PAGE_SIZE);
-				Page<Benchmark> benchmarkList = benchmarkDao.findByUserId(userId, paging);
+				Pageable paging = null;
+				if (pgSize!=null) {
+					paging =	PageRequest.of(i, pgSize);
+				} else {
+					paging = PageRequest.of(i,PAGE_SIZE);
+
+				}				Page<Benchmark> benchmarkList = null;
+				if (name!=null) {
+					Benchmark benchmark = new Benchmark();
+					benchmark.setUserId(userId);
+					benchmark.setName(name);
+					Example<Benchmark> example = Example.of(benchmark);
+
+					benchmarkList = benchmarkDao.findAll(example, paging);
+					count = modelDao.countByUserIdAndName(userId,name);
+
+				} else {
+
+				benchmarkList =	benchmarkDao.findByUserId(userId, paging);
+				}
 				list.addAll(benchmarkList.toList());
 			}
 		} else {
-			list = benchmarkDao.findByUserId(userId);
+			if (name!=null) {
+				Benchmark benchmark = new Benchmark();
+				benchmark.setUserId(userId);
+				benchmark.setName(name);
+				Example<Benchmark> example = Example.of(benchmark);
+				list = benchmarkDao.findAll(example);
+				count = list.size();
+			} else {
+				list = benchmarkDao.findByUserId(userId);
+			}
 		}
 		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
 
-		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size());
+		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size(),count);
 	}
 
 }

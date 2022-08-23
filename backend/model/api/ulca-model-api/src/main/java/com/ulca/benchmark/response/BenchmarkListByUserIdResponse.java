@@ -21,6 +21,7 @@ public class BenchmarkListByUserIdResponse {
 	private String message;
 	private List<Benchmark>  benchmark;
 	private int count;
+	private int totalCount;
 	
 	
 	
