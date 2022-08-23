@@ -308,8 +308,8 @@ class ModelServiceTest {
         MultipartFile multipartFile = new MockMultipartFile("fileItem",
                 file.getName(), "image/png", IOUtils.toByteArray(input));
 
-        ModelService modelService1 = new ModelService();
-        String filePath = modelService1.storeModelTryMeFile(multipartFile);
+
+        ReflectionTestUtils.setField(modelService,"modelUploadFolder","src/test/resources");
 
         ModelComputeResponse response = new ModelComputeResponse();
         ModelExtended modelExtended = new ModelExtended();
@@ -318,7 +318,7 @@ class ModelServiceTest {
         inferenceAPIEndPoint.setSchema(new OCRInference());
         modelExtended.setInferenceEndPoint(inferenceAPIEndPoint);
         when(modelDao.findById("test")).thenReturn(Optional.of(modelExtended));
-        when(modelInferenceEndPointService.compute("test",new OCRInference(),filePath)).thenReturn(response);
+        when(modelInferenceEndPointService.compute(ArgumentMatchers.any(),ArgumentMatchers.any(),ArgumentMatchers.any())).thenReturn(response);
 
         assertEquals(response,modelService.tryMeOcrImageContent(multipartFile,"test"));
 
