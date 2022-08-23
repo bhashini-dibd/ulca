@@ -67,7 +67,7 @@ const getContributionList = (state, payload) => {
 
   let filter = { status: [], datasetType: [] };
   let refreshStatus = false;
-  payload.forEach((element) => {
+  payload.benchmark.forEach((element) => {
     responseData.push({
       submitRefNumber: element.benchmarkId,
       datasetName: element.name,
@@ -100,6 +100,7 @@ const getContributionList = (state, payload) => {
     { filterValues: state.selectedFilter },
     { responseData: responseData }
   );
+  filteredData.totalCount = payload.totalCount;
   filteredData.filter = filter;
   return filteredData;
 };
@@ -131,7 +132,7 @@ const isFilterSelected = (selectedFilter) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_BENCHMARK_CONTRIBUTION_LIST:
-      return getContributionList(state, action.payload.benchmark);
+      return getContributionList(state, action.payload);
 
     case C.CONTRIBUTION_BENCHMARK_TABLE:
       return getFilterValue(action.payload, state);

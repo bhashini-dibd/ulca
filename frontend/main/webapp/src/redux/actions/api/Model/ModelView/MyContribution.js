@@ -11,7 +11,6 @@ export default class MyContribution extends API {
         this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.getModelContributionList}`;
         this.startPage = startPage;
         this.endPage = endPage;
-        console.log(this.startPage, this.endPage);
     }
 
     toString() {

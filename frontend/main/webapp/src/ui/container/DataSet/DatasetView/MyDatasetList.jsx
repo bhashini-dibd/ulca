@@ -31,6 +31,7 @@ const ContributionList = (props) => {
     PageInfo,
     handleSearch,
     searchValue,
+    totalCount,
   } = props;
 
   const handleShowFilter = (event) => {
@@ -201,9 +202,9 @@ const ContributionList = (props) => {
         search: "Search",
         viewColumns: "View Column",
       },
-      pagination: {
-        rowsPerPage: "Rows per page",
-      },
+      // pagination: {
+      //   rowsPerPage: "Rows per page",
+      // },
       options: { sortDirection: "desc" },
     },
     onRowClick: (rowData) =>
@@ -219,23 +220,17 @@ const ContributionList = (props) => {
     download: false,
     print: false,
     viewColumns: false,
-    rowsPerPage: PageInfo.count,
-    rowsPerPageOptions: [10, 25, 50, 100],
+    rowsPerPage: data.length,
+    rowsPerPageOptions: false,
+    // rowsPerPageOptions: [10, 25, 50, 100],
     serverSide: true,
     selectableRows: "none",
     page: PageInfo.page,
+    count: totalCount,
     onTableChange: (action, tableState) => {
-      console.log(action,'-=-=-=---=');
       switch (action) {
         case "changePage":
-          console.log(tableState.page,"cllick", PageInfo.page);
-
-          if(tableState.page < PageInfo.page) {
-            MyContributionListApi("", "", `${tableState.page - 2}`, `${tableState.page - 1}`)
-          } else {
-            MyContributionListApi("", "", `${tableState.page}`, `${tableState.page + 1}`)
-          }
-
+          MyContributionListApi(`${tableState.page+1}`, `${tableState.page+1}`)
           processTableClickedNextOrPrevious("", tableState.page);
           break;
         case "changeRowsPerPage":

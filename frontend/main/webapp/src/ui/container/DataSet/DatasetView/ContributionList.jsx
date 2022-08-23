@@ -36,7 +36,9 @@ const ContributionList = (props) => {
   const myBenchmarkReport = useSelector((state) => state.myBenchmarkReport);
 
   const data = myContributionReport.filteredData;
+  const totalCount = myContributionReport.totalCount;
   const benchmarkData = myBenchmarkReport.filteredData;
+  const benchmarktotalCount = myBenchmarkReport.totalCount;
   const PageInfo = useSelector((state) => state.pageChangeDetails);
   const BenchmarkPageInfo = useSelector((state) => state.benchmarkPageDetails);
   const clearAllDataset = (data, handleClose) => {
@@ -82,24 +84,26 @@ const ContributionList = (props) => {
     dispatch(getBenchmarkValue(value));
   };
 
-  const MyContributionListApi = () => {
+  const MyContributionListApi = (start = 1, end = 1) => {
     dispatch(ClearReport());
     const userObj = new MyContributionList(
       "SAVE",
       "A_FBTTR-VWSge-1619075981554",
-      "1",
-      "1",
+      start,
+      end,
       "241006445d1546dbb5db836c498be6381606221196566"
     );
     dispatch(APITransport(userObj));
   };
 
-  const MyBenchmarkListApi = () => {
+  const MyBenchmarkListApi = (start = 1, end = 1) => {
     dispatch(ClearReport());
     if (tabs[1].roles.includes(roles[0])) {
       const userObj = new MyBenchmarkList(
         "SAVE",
         "A_FBTTR-VWSge-1619075981554",
+        start,
+        end,
         "241006445d1546dbb5db836c498be6381606221196566"
       );
       dispatch(APITransport(userObj));
@@ -221,6 +225,7 @@ const ContributionList = (props) => {
           handleSearch={handleSearch}
           searchValue={search.dataset}
           task={false}
+          totalCount={totalCount}
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
@@ -234,6 +239,7 @@ const ContributionList = (props) => {
           handleSearch={handleBenchmarkSearch}
           searchValue={search.benchmarkDataset}
           task={true}
+          totalCount={benchmarktotalCount}
         />
       </TabPanel>
     </Box>

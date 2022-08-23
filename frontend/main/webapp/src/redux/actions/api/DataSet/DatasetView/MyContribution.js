@@ -20,12 +20,12 @@ export default class MyCOntribution extends API {
     processResponse(res) {
         super.processResponse(res);
         if (res) {
-            this.report = res.data;
+            this.report = res;
         }
     }
 
     apiEndPoint() {
-        let url = `${this.endpoint}?userId=${this.user_id}&startPage=1&endPage=4` 
+        let url = `${this.endpoint}?userId=${this.user_id}&startPage=${this.startPage}&endPage=${this.endPage}` 
         return url;
     }
 
