@@ -24,7 +24,6 @@ export default class MyContribution extends API {
 
     apiEndPoint() {
 
-        
         let url = `${this.endpoint}?userId=${this.user_id}` 
         
          return url;
