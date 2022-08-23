@@ -26,7 +26,6 @@ const SimpleTabs = (props) => {
           <Grid item xs={12} sm={12} md={7} lg={8} xl={8}>
             <Tabs value={props.value} onChange={props.handleChange} indicatorColor="primary" variant="scrollable" scrollButtons="auto"  aria-label="basic tabs example">
               {props.tabs.map((tab, index) => {
-                console.log(tab);
                 return (
                   <Tab
                     className={classes.tablabel}

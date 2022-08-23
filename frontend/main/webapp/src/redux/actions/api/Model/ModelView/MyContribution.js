@@ -25,11 +25,8 @@ export default class MyContribution extends API {
     }
 
     apiEndPoint() {
-
-        
         let url = `${this.endpoint}?userId=${this.user_id}&startPage=${this.startPage}&endPage=${this.endPage}` 
-        
-         return url;
+        return url;
     }
 
     getBody() {

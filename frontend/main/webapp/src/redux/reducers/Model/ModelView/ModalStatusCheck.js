@@ -54,9 +54,7 @@ const getFilterValue = (payload, data) => {
 const getModelHealthStatus = (state, payload) => {
   let responseData = [];
   let filter = { status: [], task: [], domain: [], license: [] };
-  console.log(payload.benchmark, "payload");
   payload.benchmark.forEach((element) => {
-    console.log(element, " opopoppooo");
     responseData.push({
         callbackUrl: element.callbackUrl,
         modelId: element.modelId,
@@ -73,7 +71,6 @@ const getModelHealthStatus = (state, payload) => {
   );
 
   filteredData.filter = filter;
-  console.log(filteredData, 'filteredData');
   return filteredData;
 };
 
