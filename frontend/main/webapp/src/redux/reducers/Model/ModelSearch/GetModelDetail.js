@@ -11,6 +11,7 @@ const initialState = {
   language: "",
   metricArray: [],
   benchmarkPerformance: [],
+  version: ""
 };
 
 const getModelDetails = (payload) => {
@@ -54,6 +55,7 @@ const reducer = (state = initialState, action) => {
           : `${getLanguageName(source)}`,
         benchmarkPerformance: action.payload.benchmarkPerformance,
         metricArray: action.payload.metric,
+        version: action.payload.version
       };
     default:
       return {

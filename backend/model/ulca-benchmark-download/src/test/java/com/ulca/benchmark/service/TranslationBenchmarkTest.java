@@ -1,6 +1,8 @@
 package com.ulca.benchmark.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.*;
@@ -17,15 +19,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +44,9 @@ class TranslationBenchmarkTest {
 
     @Mock
     OkHttpClientService okHttpClientService;
+
+    @Mock
+    BenchmarkProcessDao benchmarkProcessDao;
 
     private static Stream<Arguments>  prepareAndPushToMetricParam(){
         TranslationRequest request = new TranslationRequest();
@@ -69,10 +71,11 @@ class TranslationBenchmarkTest {
                 Arguments.of(inferenceAPIEndPoint1,true));
     }
 
+
     @ParameterizedTest
     @MethodSource("prepareAndPushToMetricParam")
-    void prepareAndPushToMetric(InferenceAPIEndPoint inferenceAPIEndPoint ,boolean isAsync) throws IOException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        String baseLocation = modelUploadFolder + "ulca/specs/examples/dataset/parallel-dataset/basic";
+    void prepareAndPushToMetric(InferenceAPIEndPoint inferenceAPIEndPoint ,boolean isAsync) throws Exception {
+        String baseLocation = "src/test/resources/basic";
         ModelExtended model = new ModelExtended();
         model.setInferenceEndPoint(inferenceAPIEndPoint);
 
@@ -124,6 +127,7 @@ class TranslationBenchmarkTest {
                         objectMapper.writeValueAsString(translationResponse)
                 ))
                 .build();
+        when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
         if (!isAsync) {
             when(okHttpClientService.okHttpClientPostCall(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(response);
@@ -133,7 +137,10 @@ class TranslationBenchmarkTest {
 
             when(okHttpClientService.okHttpClientAsyncPostCall(ArgumentMatchers.anyString(),ArgumentMatchers.anyString())).thenReturn(response2);
         }
+        
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(benchmarkingProcessId, metric);
 
-        //assertEquals(3,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+       assertEquals(true,  translationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap, map));
     }
 }

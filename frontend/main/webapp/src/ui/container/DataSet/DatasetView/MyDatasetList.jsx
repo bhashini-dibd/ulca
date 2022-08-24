@@ -31,6 +31,7 @@ const ContributionList = (props) => {
     PageInfo,
     handleSearch,
     searchValue,
+    totalCount,
   } = props;
 
   const handleShowFilter = (event) => {
@@ -191,7 +192,9 @@ const ContributionList = (props) => {
       },
     },
   ];
-
+  console.log(data.length, 'data.length');
+  console.log(PageInfo.page, 'PageInfo.page');
+  console.log(totalCount, 'totalCount');
   const options = {
     textLabels: {
       body: {
@@ -201,9 +204,9 @@ const ContributionList = (props) => {
         search: "Search",
         viewColumns: "View Column",
       },
-      pagination: {
-        rowsPerPage: "Rows per page",
-      },
+      // pagination: {
+      //   rowsPerPage: "Rows per page",
+      // },
       options: { sortDirection: "desc" },
     },
     onRowClick: (rowData) =>
@@ -219,13 +222,16 @@ const ContributionList = (props) => {
     download: false,
     print: false,
     viewColumns: false,
-    rowsPerPage: PageInfo.count,
-    rowsPerPageOptions: [10, 25, 50, 100],
+    rowsPerPageOptions: false,
+    // rowsPerPageOptions: [10, 25, 50, 100],
+    serverSide: true,
     selectableRows: "none",
     page: PageInfo.page,
+    count: totalCount,
     onTableChange: (action, tableState) => {
       switch (action) {
         case "changePage":
+          MyContributionListApi(`${tableState.page+1}`, `${tableState.page+1}`)
           processTableClickedNextOrPrevious("", tableState.page);
           break;
         case "changeRowsPerPage":
