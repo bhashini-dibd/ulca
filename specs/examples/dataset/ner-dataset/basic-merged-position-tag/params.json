@@ -3,6 +3,7 @@
     "languages": {
         "sourceLanguage": "hi"
     },
+    "tagsFormat" : "CoNLL",
     "collectionSource": [
         "https: //wikipedia.org"
     ],
