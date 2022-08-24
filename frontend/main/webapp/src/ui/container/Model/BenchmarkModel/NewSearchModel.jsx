@@ -110,7 +110,7 @@ const NewSearchModel = () => {
       searchValue={searchValue}
       handleChange={handleChange}
       value={value}
-      tabs={ModelTask.filter(val => val.value !== 'sts')}
+      tabs={ModelTask.filter(val => val.value !== 'sts' && val.value !== 'status-check')}
       // showFilter={ModelTask[value].value}
     >
       <TabPanel value={value} index={value}>

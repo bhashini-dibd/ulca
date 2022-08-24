@@ -1,13 +1,16 @@
 import API from "../../../api";
+import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from "md5";
 
-export default class SubmitBenchmark extends API {
-  constructor(modelId, benchmarks, timeout = 2000) {
-    super("POST", timeout, false);
-    this.modelId = modelId;
-    this.benchmarks = benchmarks;
-    this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.submitBenchmark}`;
+export default class ModelStatusCheck extends API {
+  constructor(taskType, timeout = 200000) {
+    super("GET", timeout, false);
+    this.taskType = taskType;
+    this.type = C.GET_MODEL_HEALTH_STATUS;
+    this.endpoint = `${super.apiEndPointAuto()}${
+      ENDPOINTS.getModelHealthStatus
+    }`;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
   }
 
@@ -17,36 +20,33 @@ export default class SubmitBenchmark extends API {
     } expires: ${this.expires} userid: ${this.userid}, type: ${this.type}`;
   }
 
-  apiEndPoint() {
-    return this.endpoint;
-  }
-
   processResponse(res) {
     super.processResponse(res);
     if (res) {
-      this.reportValue = res;
+      this.report = res;
     }
   }
 
-  getBody() {
-    return { modelId: this.modelId, benchmarkId: this.benchmarks[0].benchmarkId };
+  apiEndPoint() {
+    let url = this.endpoint;
+    return url;
   }
 
   getHeaders() {
-    let urlSha = md5(JSON.stringify(this.getBody()));
+    let res = this.apiEndPoint();
+    let urlSha = md5(res);
     let hash = md5(this.userDetails.privateKey + "|" + urlSha);
     this.headers = {
       headers: {
-        "Content-Type": "application/json",
         key: this.userDetails.publicKey,
         sig: hash,
-        "payload":urlSha
+        payload: urlSha,
       },
     };
     return this.headers;
   }
 
   getPayload() {
-    return this.reportValue;
+    return this.report;
   }
 }

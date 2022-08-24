@@ -90,15 +90,15 @@ class ModelServiceTest {
     }
 
     private static Stream<Arguments> modelListByUserIdParam(){
-        return Stream.of(Arguments.of("test",1,1),
-                         Arguments.of("test",null,null));
+        return Stream.of(Arguments.of("test",1,1,null,null),
+                         Arguments.of("test",null,null,null,null));
     }
 
 
 
     @ParameterizedTest
     @MethodSource("modelListByUserIdParam")
-    void modelListByUserId(String userId, Integer startPage, Integer endPage) {
+    void modelListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
         if (startPage != null) {
             int startPg = startPage - 1;
             for (int i = startPg; i < endPage; i++) {
@@ -120,8 +120,8 @@ class ModelServiceTest {
         List<ModelListResponseDto>  modelDtoList= new ArrayList<>();
         modelDtoList.add(modelDto);
 
-        assertEquals(new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size()),
-                modelService.modelListByUserId(userId,startPage,endPage));
+        assertInstanceOf(ModelListByUserIdResponse.class,
+                modelService.modelListByUserId(userId,startPage,endPage,pgSize,name));
 
     }
     private static Stream<Arguments> getModelByModelIdParam(){
@@ -308,8 +308,8 @@ class ModelServiceTest {
         MultipartFile multipartFile = new MockMultipartFile("fileItem",
                 file.getName(), "image/png", IOUtils.toByteArray(input));
 
-        ModelService modelService1 = new ModelService();
-        String filePath = modelService1.storeModelTryMeFile(multipartFile);
+
+        ReflectionTestUtils.setField(modelService,"modelUploadFolder","src/test/resources");
 
         ModelComputeResponse response = new ModelComputeResponse();
         ModelExtended modelExtended = new ModelExtended();
@@ -318,7 +318,7 @@ class ModelServiceTest {
         inferenceAPIEndPoint.setSchema(new OCRInference());
         modelExtended.setInferenceEndPoint(inferenceAPIEndPoint);
         when(modelDao.findById("test")).thenReturn(Optional.of(modelExtended));
-        when(modelInferenceEndPointService.compute("test",new OCRInference(),filePath)).thenReturn(response);
+        when(modelInferenceEndPointService.compute(ArgumentMatchers.any(),ArgumentMatchers.any(),ArgumentMatchers.any())).thenReturn(response);
 
         assertEquals(response,modelService.tryMeOcrImageContent(multipartFile,"test"));
 

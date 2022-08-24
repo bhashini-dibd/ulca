@@ -324,9 +324,17 @@ public class KafkaFileDownloadConsumer {
 			if(params.isEmpty() || !params.has("datasetType")) {
 				 throw new IOException("params.json does not contain datasetType");
 			}
-			String type = params.getString("datasetType");
+			String type = params.get("datasetType").toString();
+			if (type.equalsIgnoreCase("null") ||  type.isBlank()){
+				throw new IOException("datasetType value should not be null or empty");
+			}
+
 			datasetType = DatasetType.fromValue(type);
-			
+
+			if(datasetType==null){
+				throw new IOException("Invalid datasetType");
+			}
+
 			return datasetType;
 			
 			

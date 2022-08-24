@@ -68,7 +68,7 @@ const getContributionList = (state, payload) => {
 
   let filter = { status: [], datasetType: [] };
   let refreshStatus = false;
-  payload.forEach((element) => {
+  payload.data.forEach((element) => {
     let getType =
       element.datasetType !== "Benchmark"
         ? getDatasetName(element.datasetType)
@@ -105,6 +105,7 @@ const getContributionList = (state, payload) => {
     { responseData: responseData }
   );
   filteredData.filter = filter;
+  filteredData.totalCount = payload.totalCount;
   return filteredData;
 };
 

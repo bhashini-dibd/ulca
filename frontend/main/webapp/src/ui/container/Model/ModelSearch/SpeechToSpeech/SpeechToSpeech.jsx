@@ -439,10 +439,18 @@ const SpeechToSpeech = () => {
                 } else {
                   setSnackbarError(rsp_data.message);
                 }
+              }).catch(async (error) => {
+                setSnackbarError(
+                  "Unable to process your request at the moment. Please try after sometime."
+                );
               });
             } else {
               setSnackbarError(rsp_data.message);
             }
+          }).catch(async (error) => {
+            setSnackbarError(
+              "Unable to process your request at the moment. Please try after sometime."
+            );
           });
         } else {
           setSnackbarError(rsp_data.message);
