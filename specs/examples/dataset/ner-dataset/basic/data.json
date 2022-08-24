@@ -1,34 +1,34 @@
 [
     {
-        "sourceText" : "सूत्रों के अनुसार , जांच आयोग ने 17 पेज की अपनी रिपोर्ट सिंध प्रांत के गृह विभाग के पास भेज दी है । ",
-        "sentenceMetadata" : [
+        "sourceText": "सूत्रों के अनुसार , जांच आयोग ने 17 पेज की अपनी रिपोर्ट सिंध प्रांत के गृह विभाग के पास भेज दी है । ",
+        "sentenceMetadata": [
             {
                 "index": 13,
                 "word": "सिंध",
-                "position":"B",
+                "position": "B",
                 "tag": "ORG"
             },
             {
                 "index": 14,
                 "word": "प्रांत",
-                "position":"I",
+                "position": "I",
                 "tag": "ORG"
             }
         ]
     },
     {
-        "sourceText" : "आस्ट्रेलिया के खिलाफ वनडे टीम की कमान मिताली को ",
-        "sentenceMetadata" : [
+        "sourceText": "आस्ट्रेलिया के खिलाफ वनडे टीम की कमान मिताली को ",
+        "sentenceMetadata": [
             {
                 "index": 1,
                 "word": "आस्ट्रेलिया",
-                "position":"B",
+                "position": "B",
                 "tag": "LOC"
             },
             {
                 "index": 5,
                 "word": "टीम",
-                "position":"B",
+                "position": "B",
                 "tag": "ORG"
             }
         ]

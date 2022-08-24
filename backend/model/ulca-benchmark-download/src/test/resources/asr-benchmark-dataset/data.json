@@ -1,0 +1,38 @@
+[
+    {
+        "audioFilename": "ahd_00300_long_00454_eng_0008.wav",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 15
+            }
+        },
+        "duration": 5,
+        "gender": "male",
+        "text": "t i the daughter of actor suniel shetty who made her acting debut last year"
+    },
+    {
+        "audioFilename": "ahd_00300_long_00698_eng_0003.wav",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 15
+            }
+        },
+        "duration": 5,
+        "gender": "male",
+        "text": "shorter durations and struggled to produce enough water we think mars had to be"
+    },
+    {
+        "audioFilename": "ahd_00300_long_00698_eng_0009.wav",
+        "snr": {
+            "methodType": "WadaSnr",
+            "methodDetails": {
+                "snr": 15
+            }
+        },
+        "duration": 5,
+        "gender": "male",
+        "text": "nearby grand canyon using climate models the team showed warming periods caused"
+    }
+]

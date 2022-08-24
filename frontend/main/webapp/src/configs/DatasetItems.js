@@ -1,4 +1,5 @@
 export const ModelTask = [
+  { value: "status-check", label: "Status Check"},
   { value: 'sts', label: 'STS' },
   { value: "translation", label: "Translation" },
   { value: "asr", label: "ASR" },
@@ -57,6 +58,9 @@ export const Language = [
   { value: "sa", label: "Sanskrit" },
   { value: "bho", label: "Bhojpuri" },
   { value: "raj", label: "Rajasthani" },
+  { value: "awa", label: "Awadhi" },
+  { value: "hne", label: "Chhattisgarhi" },
+  { value: "mag", label: "Magahi" },
 ];
 
 export const FilterBy = {

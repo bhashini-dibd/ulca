@@ -8,6 +8,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import { withStyles } from "@material-ui/core/styles";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import TabStyles from "../../styles/TabStyles";
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 
 function a11yProps(index) {
   return {
@@ -28,14 +29,15 @@ const SimpleTabs = (props) => {
                 return (
                   <Tab
                     className={classes.tablabel}
-                    label={tab.label}
+                    label={tab.value === "status-check" ? null : tab.label}
+                    icon={tab.value === "status-check" ? <PlaylistAddCheckIcon /> : null}
                     {...a11yProps(index)}
                   />
                 );
               })}
             </Tabs>
           </Grid>
-          {showFilter!=='sts' &&<Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
+          {showFilter &&<Grid item xs={12} sm={12} md={5} lg={4} xl={4}>
             <Grid container spacing={2} className={classes.gridAlign}>
               <Grid item>
                 <div className={classes.search}>
@@ -61,8 +63,7 @@ const SimpleTabs = (props) => {
                   className={classes.filterBtn}
                   onClick={props.handleShowFilter}
                 >
-                  <FilterListIcon className={classes.iconStyle} />
-                  Filter
+                  <FilterListIcon />
                 </Button>
               </Grid>
             </Grid>

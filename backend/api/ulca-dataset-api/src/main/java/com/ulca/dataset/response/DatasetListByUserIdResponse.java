@@ -15,13 +15,17 @@ public class DatasetListByUserIdResponse {
 	String message;
 	List<DatasetListByUserIdResponseDto> data;
 	int count;
+
+	int totalCount;
 	Integer startPage;
 	Integer endPage;
-	public DatasetListByUserIdResponse(String message, List<DatasetListByUserIdResponseDto> data, Integer startPage, Integer endPage) {
+	public DatasetListByUserIdResponse(String message, List<DatasetListByUserIdResponseDto> data, Integer startPage, Integer endPage,Integer totalCount) {
 		super();
 		this.message = message;
 		this.data = data;
+
 		this.count = data.size();
+		this.totalCount = totalCount;
 		if(startPage != null) {
 			this.startPage = startPage;
 			
