@@ -3,7 +3,7 @@ import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from "md5";
 export default class MyCOntribution extends API {
-  constructor(file_name, user_id, timeout = 200000) {
+  constructor(file_name, user_id, startPage, endPage, timeout = 200000) {
     super("GET", timeout, false);
     this.user_id = JSON.parse(localStorage.getItem("userDetails")).userID;
     this.type = C.GET_BENCHMARK_CONTRIBUTION_LIST;
@@ -11,6 +11,8 @@ export default class MyCOntribution extends API {
     this.endpoint = `${super.apiEndPointAuto()}${
       ENDPOINTS.getBenchmarkList
     }`;
+    this.startPage = startPage;
+    this.endPage = endPage;
   }
 
   toString() {
@@ -27,7 +29,7 @@ export default class MyCOntribution extends API {
   }
 
   apiEndPoint() {
-    let url = `${this.endpoint}?userId=${this.user_id}`;
+    let url = `${this.endpoint}?userId=${this.user_id}&startPage=${this.startPage}&endPage=${this.endPage}`;
 
     return url;
   }

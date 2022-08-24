@@ -21,7 +21,7 @@ const endpoints = {
   hostedInference: "/ulca/apis/v0/model/compute",
   hostedVoice: "/ulca/apis/asr/v1/model/compute",
   getBenchmarkDetails: "/ulca/apis/v0/benchmark/getByTask",
-  submitBenchmark: "/ulca/apis/v0/benchmark/execute",
+  submitBenchmark: "/ulca/apis/v0/benchmark/execute/allMetric",
   benchmarkTable: "/ulca/apis/v0/model/getModel",
   benchmarkModelSearch: "/ulca/apis/v0/benchmark/search",
   benchmarkDetails: "/ulca/apis/v0/benchmark/getBenchmark",
@@ -33,7 +33,8 @@ const endpoints = {
   getModel: "/ulca/apis/v0/model/getModel",
   ocrDocumentUpload: "/ulca/apis/v0/model/tryMe",
   submitFeedback:"/ulca/apis/v0/model/feedback/submit",
-  datasetMetrics: "/ulca/data-metric/v0/store/reportdata"
+  datasetMetrics: "/ulca/data-metric/v0/store/reportdata",
+  getModelHealthStatus: "/ulca/apis/v0/model/getModelHealthStatus",
 };
 
 export default endpoints;
