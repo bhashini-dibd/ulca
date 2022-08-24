@@ -1,6 +1,8 @@
 package com.ulca.benchmark.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
 import io.swagger.model.*;
@@ -14,10 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,10 +40,12 @@ class TransliterationBenchmarkTest {
 
     @Mock
     OkHttpClientService okHttpClientService;
+    @Mock
+    BenchmarkProcessDao benchmarkProcessDao;
 
     @Test
-    void prepareAndPushToMetric() throws IOException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
-        String baseLocation = modelUploadFolder + "ulca/specs/examples/benchmark-dataset/transliteration-benchmark-dataset";
+    void prepareAndPushToMetric() throws Exception {
+        String baseLocation = "src/test/resources/transliteration-benchmark-dataset";
         ModelExtended model = new ModelExtended();
         TransliterationRequest request = new TransliterationRequest();
         TransliterationConfig transliterationConfig = new TransliterationConfig();
@@ -86,9 +87,12 @@ class TransliterationBenchmarkTest {
         String metric = "cer";
 
         String benchmarkingProcessId = "1";
+        when(benchmarkProcessDao.findByBenchmarkProcessId("1")).thenReturn(new BenchmarkProcess());
 
         when(okHttpClientService.okHttpClientPostCall(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(response);
 
-        assertEquals(3, transliterationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,metric,benchmarkingProcessId));
+        Map<String, String> map = new HashMap<String, String>();
+        map.put(benchmarkingProcessId, metric);
+        assertEquals(true, transliterationBenchmark.prepareAndPushToMetric(model,benchmark,fileMap,map));
     }
 }

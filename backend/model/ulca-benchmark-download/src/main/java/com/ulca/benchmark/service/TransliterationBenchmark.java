@@ -11,6 +11,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.ulca.benchmark.dao.BenchmarkProcessDao;
+import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.model.ModelInferenceResponse;
 import com.ulca.model.dao.ModelExtended;
 import com.ulca.model.dao.ModelInferenceResponseDao;
@@ -60,10 +63,12 @@ public class TransliterationBenchmark {
 
 	@Autowired
 	ModelInferenceResponseDao modelInferenceResponseDao;
-
+  
 	@Autowired
 	OkHttpClientService okHttpClientService;
 
+	@Autowired
+	BenchmarkProcessDao benchmarkProcessDao;
 
 	public TransliterationResponse computeSync(InferenceAPIEndPoint inferenceAPIEndPoint,
 											   List<String> sourceSentences)
@@ -90,21 +95,6 @@ public class TransliterationBenchmark {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String requestJson = objectMapper.writeValueAsString(request);
 
-
-			//OkHttpClient client = new OkHttpClient();
-
-//			OkHttpClient client = new OkHttpClient.Builder()
-//				      .readTimeout(60, TimeUnit.SECONDS)
-//				      .build();
-//
-//			RequestBody body = RequestBody.create(requestJson,MediaType.parse("application/json"));
-//			Request httpRequest = new Request.Builder()
-//			        .url(callBackUrl)
-//			        .post(body)
-//			        .build();
-//
-//			Response httpResponse = client.newCall(httpRequest).execute();
-			//objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 			String responseJsonStr = okHttpClientService.okHttpClientPostCall(requestJson,callBackUrl);
 
 			transliteration = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
@@ -114,7 +104,7 @@ public class TransliterationBenchmark {
 	}
 
 
-	public int prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, String metric, String benchmarkingProcessId) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
+	public boolean prepareAndPushToMetric(ModelExtended model, Benchmark benchmark, Map<String,String> fileMap, Map<String, String> benchmarkProcessIdsMap) throws IOException, URISyntaxException, NoSuchAlgorithmException, KeyManagementException {
 
 		InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 		Boolean isSyncApi = inferenceAPIEndPoint.isIsSyncApi();
@@ -163,10 +153,7 @@ public class TransliterationBenchmark {
 			List<String> expectedTgt = tgtChunks.get(k);
 			TransliterationResponse transliteration = null;
 
-
-
 			transliteration = computeSync(inferenceAPIEndPoint,input );
-
 
 			if(transliteration != null) {
 				@NotNull @Valid SentencesList sentenses = transliteration.getOutput();
@@ -186,46 +173,58 @@ public class TransliterationBenchmark {
 				}
 			}
 		}
+		
+		List<String> benchmarkProcessIdsList =  new ArrayList<String>(benchmarkProcessIdsMap.keySet()); 
+		
+        for (String benchmarkingProcessId:benchmarkProcessIdsList) {
 
-		JSONArray benchmarkDatasets = new JSONArray();
-		JSONObject benchmarkDataset  = new JSONObject();
-		benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
-		benchmarkDataset.put("metric", metric);
-		benchmarkDataset.put("corpus", corpus);
-		benchmarkDatasets.put(benchmarkDataset);
+        	String metric = benchmarkProcessIdsMap.get(benchmarkingProcessId);
+        	
+			JSONArray benchmarkDatasets = new JSONArray();
+			JSONObject benchmarkDataset = new JSONObject();
+			benchmarkDataset.put("datasetId", benchmark.getBenchmarkId());
+			benchmarkDataset.put("metric", metric);
+			benchmarkDataset.put("corpus", corpus);
+			benchmarkDatasets.put(benchmarkDataset);
 
-		JSONObject metricRequest  = new JSONObject();
-		metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
-		metricRequest.put("modelId", model.getModelId());
-		metricRequest.put("modelName", model.getName());
-		if(benchmark.getLanguages() != null && benchmark.getLanguages().getTargetLanguage() != null) {
-			String targetLanguage = benchmark.getLanguages().getTargetLanguage().toString();
-			metricRequest.put("targetLanguage", targetLanguage);
+			JSONObject metricRequest = new JSONObject();
+			metricRequest.put("benchmarkingProcessId", benchmarkingProcessId);
+			metricRequest.put("modelId", model.getModelId());
+			metricRequest.put("modelName", model.getName());
+			if (benchmark.getLanguages() != null && benchmark.getLanguages().getTargetLanguage() != null) {
+				String targetLanguage = benchmark.getLanguages().getTargetLanguage().toString();
+				metricRequest.put("targetLanguage", targetLanguage);
+			}
+
+			metricRequest.put("userId", userId);
+			metricRequest.put("modelTaskType", model.getTask().getType().toString());
+			metricRequest.put("benchmarkDatasets", benchmarkDatasets);
+
+			log.info("data sending to metric calculation ");
+			log.info(metricRequest.toString());
+
+			//update the total record count
+			int datasetCount = corpus.length();
+			BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
+			bmProcessUpdate.setRecordCount(datasetCount);
+			bmProcessUpdate.setLastModifiedOn(new Date().toString());
+			benchmarkProcessDao.save(bmProcessUpdate);
+
+			benchmarkMetricKafkaTemplate.send(mbMetricTopic, metricRequest.toString());
+
+			//save the model inference response
+			ModelInferenceResponse modelInferenceResponse = new ModelInferenceResponse();
+			modelInferenceResponse.setBenchmarkingProcessId(benchmarkingProcessId);
+			modelInferenceResponse.setCorpus(corpus.toString());
+			modelInferenceResponse.setBenchmarkDatasetId(benchmark.getBenchmarkId());
+			modelInferenceResponse.setMetric(metric);
+			modelInferenceResponse.setModelId(model.getModelId());
+			modelInferenceResponse.setModelName(model.getName());
+			modelInferenceResponse.setUserId(userId);
+			modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
+			modelInferenceResponseDao.save(modelInferenceResponse);
 		}
-
-		metricRequest.put("userId", userId);
-		metricRequest.put("modelTaskType", model.getTask().getType().toString());
-		metricRequest.put("benchmarkDatasets",benchmarkDatasets);
-
-		log.info("data sending to metric calculation ");
-		log.info(metricRequest.toString());
-
-		benchmarkMetricKafkaTemplate.send(mbMetricTopic,metricRequest.toString());
-
-		//save the model inference response
-		ModelInferenceResponse modelInferenceResponse = new ModelInferenceResponse();
-		modelInferenceResponse.setBenchmarkingProcessId(benchmarkingProcessId);
-		modelInferenceResponse.setCorpus(corpus.toString());
-		modelInferenceResponse.setBenchmarkDatasetId(benchmark.getBenchmarkId());
-		modelInferenceResponse.setMetric(metric);
-		modelInferenceResponse.setModelId(model.getModelId());
-		modelInferenceResponse.setModelName(model.getName());
-		modelInferenceResponse.setUserId(userId);
-		modelInferenceResponse.setModelTaskType(model.getTask().getType().toString());
-		modelInferenceResponseDao.save(modelInferenceResponse);
-
-		int datasetCount = corpus.length();
-		return datasetCount;
+		return true;
 
 	}
 

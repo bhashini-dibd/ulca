@@ -28,6 +28,7 @@ const ContributionList = (props) => {
     clearAll,
     apply,
     PageInfo,
+    totalCount,
   } = props;
 
   const handleShowFilter = (event) => {
@@ -178,13 +179,16 @@ const ContributionList = (props) => {
     download: false,
     print: false,
     viewColumns: false,
-    rowsPerPage: PageInfo.count,
-    rowsPerPageOptions: [10, 25, 50, 100],
+    rowsPerPageOptions: false,
+    // rowsPerPageOptions: [10, 25, 50, 100],
     selectableRows: "none",
     page: PageInfo.page,
+    count: totalCount,
+    serverSide: true,
     onTableChange: (action, tableState) => {
       switch (action) {
         case "changePage":
+          MyContributionListApi(`${tableState.page+1}`, `${tableState.page+1}`)
           processTableClickedNextOrPrevious("", tableState.page);
           break;
         case "changeRowsPerPage":

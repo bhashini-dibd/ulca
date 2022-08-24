@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.1
+  version: 0.10.2
 servers:
   - url: /ulca
 paths: {}
@@ -1120,14 +1120,11 @@ components:
       description: Ner dataset sentencewise metadata
       required :
         - tag
+      anyOf:
+          - $ref: '#/components/schemas/NerWordIndex'
+          - $ref: '#/components/schemas/NerWord'
       properties:
-        wordIndex:
-          type: number
-          description: index number of word
-          example: 1
-        word:
-          type: string
-          description: corresponsing word in the sentence
+       
         position:
           type: string
           description: position of the word in phrase. B- Beginning, I- Intermediate
@@ -1144,3 +1141,25 @@ components:
             - LOC
             - MISC
       
+    NerWordIndex:
+      type: object
+      description: Ner dataset sentencewise metadata
+      required :
+        - wordIndex
+      properties:
+        wordIndex:
+          type: number
+          description: index number of word
+          example: 1
+          minItems : 1
+    NerWord:
+      type: object
+      description: Ner dataset sentencewise metadata
+      required :
+        - word
+      properties:
+        word:
+          type: string
+          description: corresponsing word in the sentence
+          minItems : 1
+        

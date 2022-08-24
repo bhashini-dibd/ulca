@@ -1,25 +1,32 @@
 package com.ulca.benchmark.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ulca.benchmark.request.AsrComputeRequest;
-import com.ulca.benchmark.request.AsrComputeResponse;
-import io.swagger.model.OCRRequest;
-import io.swagger.model.OCRResponse;
-import lombok.extern.slf4j.Slf4j;
-import okhttp3.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ulca.benchmark.request.AsrComputeRequest;
+import com.ulca.benchmark.request.AsrComputeResponse;
+
+import io.swagger.model.OCRRequest;
+import io.swagger.model.OCRResponse;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
@@ -109,7 +116,6 @@ public class OkHttpClientService {
 
         OkHttpClient newClient = getTrustAllCertsClient();
         Response httpResponse = newClient.newCall(httpRequest).execute();
-
 
         return httpResponse.body().string();
     }

@@ -33,7 +33,7 @@ const SubmitModel = (props) => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [label, setLabel] = useState("");
-  const [model, setModelInfo] = useState({ modelName: "", file: "" });
+  const [model, setModelInfo] = useState({ file: "" });
   const dispatch = useDispatch();
   const [snackbar, setSnackbarInfo] = useState({
     open: false,
@@ -44,7 +44,7 @@ const SubmitModel = (props) => {
     (state) => state.modelStatus.modelId,
     shallowEqual
   );
-  const [error, setError] = useState({ modelName: "", file: "", type: false });
+  const [error, setError] = useState({ file: "", type: false });
   const [search, setSearch] = useState(false);
   const history = useHistory();
   const modelIdStatus = usePrevious(submitStatus);
@@ -180,14 +180,11 @@ const SubmitModel = (props) => {
   };
 
   const handleSubmitModel = (e) => {
-    if (model.modelName === "") {
+    if (!model.file) {
       setError({
         ...error,
-        name: !model.modelName ? "Name cannot be empty" : "",
         file: !model.file ? "URL cannot be empty" : "",
       });
-    } else if (model.modelName.length > 256) {
-      setError({ ...error, name: "Max 256 characters allowed" });
     } else {
       handleApicall();
       setSnackbarInfo({
@@ -287,7 +284,7 @@ const SubmitModel = (props) => {
                     style={{ paddingTop: "0px" }}
                   >
                     <Grid container spacing={3}>
-                      <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                      {/* <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                         <TextField
                           fullWidth
                           color="primary"
@@ -303,7 +300,7 @@ const SubmitModel = (props) => {
                             setError({ ...error, name: false });
                           }}
                         />
-                      </Grid>
+                      </Grid> */}
                       <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                         <div ondrop={handleChange}>
                           <TextField
