@@ -1,12 +1,20 @@
 {
-    "inferenceEndpoints": [
-      {
-        "code": "https://meity-dev-asr.ulcacontrib.org/",
-        "label": "Vakyansh ASR",
-        "active": true,
-        "submitter": [
-          "Vakyansh"
-        ]
-      }
-    ]
-  }
+  "inferenceEndpoints": [
+    {
+      "code": "https://meity-dev-asr.ulcacontrib.org/",
+      "label": "Vakyansh ASR",
+      "active": true,
+      "submitter": [
+        "Vakyansh"
+      ]
+    },
+    {
+      "code": "https://ai4b-dev-asr.ulcacontrib.org/",
+      "label": "AI4Bharat ASR",
+      "active": true,
+      "submitter": [
+        "AI4Bharat"
+      ]
+    }
+  ]
+}
