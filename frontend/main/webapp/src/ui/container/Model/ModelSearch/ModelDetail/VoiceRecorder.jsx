@@ -39,14 +39,16 @@ const AudioRecord = (props) => {
   const { languages, inferenceEndpoints } = useSelector(
     (state) => state.getMasterData
   );
-  const { version } = useSelector((state) => state.getModelDetails);
-  const vakyanshEndPoint =
+
+  const { version, submitter } = useSelector((state) => state.getModelDetails);
+
+  const streamingEndPoint =
     inferenceEndpoints &&
     inferenceEndpoints.filter(
-      (e) => e.active && e.submitter.indexOf("Vakyansh") > -1
+      (e) => e.active && e.submitter.indexOf(submitter) > -1
     );
 
-  const languageArr = languages.filter((lang) => lang.label === language);
+    const languageArr = languages.filter((lang) => lang.label === language);
   const languageCode = languageArr.length ? languageArr[0].code : "";
   const dispatch = useDispatch();
   const timerRef = useRef();
@@ -80,13 +82,13 @@ const AudioRecord = (props) => {
       clearTimeout(timerRef.current);
     }
 
-    if (vakyanshEndPoint.length) {
+    if (streamingEndPoint.length) {
       setStreamingState("start");
       const output = document.getElementById("asrCardOutput");
       // output.innerText = "";
 
       setData("");
-      const { code } = vakyanshEndPoint[0];
+      const { code } = streamingEndPoint[0];
       streaming.connect(code, languageCode, function (action, id) {
         timerRef.current = setTimeout(() => {
           if (streaming.isStreaming) handleStop();
@@ -124,7 +126,7 @@ const AudioRecord = (props) => {
     setStreamingState("");
     const output = document.getElementById("asrCardOutput");
     if (output) {
-      const { code } = vakyanshEndPoint[0];
+      const { code } = streamingEndPoint[0];
       streaming.punctuateText(
         output.innerText,
         `${code}asr/v1/punctuate/${languageCode}`,
