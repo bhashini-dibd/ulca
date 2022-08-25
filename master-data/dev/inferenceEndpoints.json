@@ -1,7 +1,7 @@
 {
     "inferenceEndpoints": [
       {
-        "code": "https://cdac.ulcacontrib.org/",
+        "code": "https://ai4b-dev-asr.ulcacontrib.org/",
         "label": "Vakyansh ASR",
         "active": true,
         "submitter": [
