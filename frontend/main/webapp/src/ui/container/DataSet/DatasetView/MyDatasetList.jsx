@@ -192,9 +192,7 @@ const ContributionList = (props) => {
       },
     },
   ];
-  console.log(data.length, 'data.length');
-  console.log(PageInfo.page, 'PageInfo.page');
-  console.log(totalCount, 'totalCount');
+
   const options = {
     textLabels: {
       body: {
