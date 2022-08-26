@@ -81,6 +81,14 @@ Unlike ASR and OCR, there might be multiple correct alternatives to the referenc
 - Reference implementation : [Here](https://github.com/huggingface/datasets/blob/master/metrics/meteor/meteor.py "Here")
 - Tokenizer : Default
 
+### chrF
+
+- Character-level F-score
+- MT evaluation metric that use the F-score statistic for character n-gram matching.
+- chrF measures the amount of overlap of short sequences of characters (n-grams) between the MT output and the reference.
+- Since it’s character-based, it’s not very sensitive to how the sentences are tokenized.
+- Library used : [Sacrebleu](https://github.com/mjpost/sacrebleu/blob/master/sacrebleu/metrics/chrf.py "Sacrebleu")
+- Reference implementation : [Here](https://github.com/huggingface/datasets/tree/main/metrics/chrf "Here")
 
 
 ## TRANSLITERATION METRICS
