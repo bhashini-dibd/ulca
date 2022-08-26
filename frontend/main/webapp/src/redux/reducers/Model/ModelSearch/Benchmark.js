@@ -1,7 +1,7 @@
 import C from '../../../actions/constants';
 
 const initialState = {
-    type: "translation",
+    type: "sts",
     source: "",
     target: ""
 }
