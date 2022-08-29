@@ -93,7 +93,8 @@ public class ModelHeartBeatCheckService {
 		log.info("*******  start ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
 
 
-		List<ModelExtended> list = modelDao.findAll();
+		List<ModelExtended> list = modelDao.findByStatus("published");
+		List<ModelHealthStatus> list1 = new ArrayList<>();
 
 
 		for (ModelExtended model : list) {
@@ -129,11 +130,11 @@ public class ModelHeartBeatCheckService {
 							modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 
 							modelHealthStatus.setStatus("available");
-							modelHealthStatusDao.save(modelHealthStatus);
+							list1.add(modelHealthStatus);
 						} catch (Exception e) {
 
 							modelHealthStatus.setStatus("unavailable");
-							modelHealthStatusDao.save(modelHealthStatus);
+							list1.add(modelHealthStatus);
 
 							log.info("healthStatusCheck Failed modelId : " + model.getModelId() + " modelName : "
 									+ model.getName() + " :: " + callBackUrl);
@@ -144,7 +145,7 @@ public class ModelHeartBeatCheckService {
 
 			} catch (Exception e) {
                 modelHealthStatus.setStatus("unavailable");
-                modelHealthStatusDao.save(modelHealthStatus);
+                list1.add(modelHealthStatus);
 
                 log.info("healthStatusCheck Failed " + model.getName() + " reason :: " + e.getMessage());
 				e.printStackTrace();
@@ -152,7 +153,7 @@ public class ModelHeartBeatCheckService {
 
 		}
 
-
+            modelHealthStatusDao.saveAll(list1);
 		log.info("*******  end ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
 	}
 
