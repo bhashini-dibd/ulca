@@ -31,6 +31,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.*;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Stream;
@@ -109,7 +110,7 @@ class DatasetServiceTest {
         Dataset dataset = new Dataset();
         dataset.setDatasetName("test");
         dataset.setDatasetType("test");
-        dataset.setCreatedOn(String.valueOf(new Date()));
+        dataset.setCreatedOn(Instant.now().toEpochMilli());
 
         TaskTracker taskTracker = new TaskTracker();
         taskTracker.setTool("test");
@@ -152,7 +153,7 @@ class DatasetServiceTest {
         Dataset dataset = new Dataset();
         dataset.setDatasetName("test");
         dataset.setDatasetType("test");
-        dataset.setCreatedOn(String.valueOf(new Date()));
+        dataset.setCreatedOn(Instant.now().toEpochMilli());
 
         TaskTracker taskTracker = new TaskTracker();
         taskTracker.setTool("test");

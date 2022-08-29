@@ -10,15 +10,25 @@ const columns = [
   {
     name: "modelName",
     label: "Model",
+    options: {
+      filter: false,
+      sort: false,
+    }
   },
   {
     name: "taskType",
     label: "Task Type",
+    options: {
+      sort: true,
+      filter: true,
+    }
   },
   {
     name: "status",
     label: "Status",
     options: {
+      sort: true,
+      filter: true,
       customBodyRender: (value, tableMeta, updateValue) => {
         if (tableMeta.rowData) {
           return (
@@ -36,9 +46,19 @@ const columns = [
     },
   },
   {
+    name: "lastStatusUpdate",
+    label: "Last Updated Timestamp",
+    options: {
+      sort: false,
+      filter: false,
+    }
+  },
+  {
     name: "callbackUrl",
     label: "Callback URL",
     options: {
+      sort: false,
+      filter: false,
       customBodyRender: (value, tableMeta, updateValue) => {
         if (tableMeta.rowData) {
           return (
@@ -46,7 +66,7 @@ const columns = [
               style={{textTransform: "none"}}
               variant="body2"
             >
-              {tableMeta.rowData[3]}
+              {tableMeta.rowData[4]}
             </Typography>
           );
         }
@@ -57,10 +77,10 @@ const columns = [
 
 const StatusCheck = () => {
   const dispatch = useDispatch();
-
   const statusCheckResult = useSelector(
     (state) => state.getModelHealthCheckStatus
-  );
+    );
+    console.log(statusCheckResult.filteredData,'[][][][]');
 
   useEffect(() => {
     const apiObj = new ModelStatusCheck("");
@@ -73,7 +93,7 @@ const StatusCheck = () => {
     print: false,
     search: true,
     selectableRows: false,
-    filter: false,
+    filter: true,
 
     downloadOptions: {
       filterOptions: {
@@ -89,6 +109,7 @@ const StatusCheck = () => {
 
   return (
     <MUIDataTable
+      title={"Models Health Check"}
       options={options}
       columns={columns}
       data={statusCheckResult.filteredData}

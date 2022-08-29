@@ -110,16 +110,16 @@ public class BenchmarkTaskTracker   {
   private String details = null;
 
   @JsonProperty("startTime")
-  //@DateTimeFormat(iso=ISO.DATE_TIME)
-  private String startTime = null;
+  //@DateTimeFormat(unixtimestamp in millisec)
+  private long startTime;
 
   @JsonProperty("endTime")
- // @DateTimeFormat(iso=ISO.DATE_TIME)
-  private String endTime = null;
+ // @DateTimeFormat(unixtimestamp in millisec)
+  private long endTime;
 
   @JsonProperty("lastModified")
- // @DateTimeFormat(iso=ISO.DATE_TIME)
-  private String lastModified = null;
+ // @DateTimeFormat(unixtimestamp in millisec)
+  private long lastModified;
 
   @JsonProperty("error")
   private BenchmarkError error = null;
@@ -200,7 +200,7 @@ public class BenchmarkTaskTracker   {
     this.details = details;
   }
 
-  public BenchmarkTaskTracker startTime(String startTime) {
+  public BenchmarkTaskTracker startTime(long startTime) {
     this.startTime = startTime;
     return this;
   }
@@ -213,15 +213,15 @@ public class BenchmarkTaskTracker   {
   
     @Valid
     
-    public String getStartTime() {
+    public long getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(String startTime) {
+  public void setStartTime(long startTime) {
     this.startTime = startTime;
   }
 
-  public BenchmarkTaskTracker endTime(String endTime) {
+  public BenchmarkTaskTracker endTime(long endTime) {
     this.endTime = endTime;
     return this;
   }
@@ -233,15 +233,15 @@ public class BenchmarkTaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public String getEndTime() {
+    public long getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(String endTime) {
+  public void setEndTime(long endTime) {
     this.endTime = endTime;
   }
 
-  public BenchmarkTaskTracker lastModified(String lastModified) {
+  public BenchmarkTaskTracker lastModified(long lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -253,11 +253,11 @@ public class BenchmarkTaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public String getLastModified() {
+    public long getLastModified() {
     return lastModified;
   }
 
-  public void setLastModified(String lastModified) {
+  public void setLastModified(long lastModified) {
     this.lastModified = lastModified;
   }
 

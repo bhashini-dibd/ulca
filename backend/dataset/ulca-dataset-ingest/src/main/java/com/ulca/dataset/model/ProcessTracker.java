@@ -164,13 +164,13 @@ public class ProcessTracker {
 	private Object details = null;
 
 	@JsonProperty("startTime")
-	private String startTime = null;
+	private long startTime;
 
 	@JsonProperty("endTime")
-	private String endTime = null;
+	private long endTime;
 
 	@JsonProperty("lastModified")
-	private String lastModified = null;
+	private long lastModified;
 
 	@JsonProperty("error")
 	private Error error = null;
@@ -338,7 +338,7 @@ public class ProcessTracker {
 		this.details = details;
 	}
 
-	public ProcessTracker startTime(String startTime) {
+	public ProcessTracker startTime(long startTime) {
 		this.startTime = startTime;
 		return this;
 	}
@@ -351,15 +351,15 @@ public class ProcessTracker {
 	@Schema(description = "ISO timestamp of the instance of the start of process")
 
 	@Valid
-	public String getStartTime() {
+	public long getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime) {
+	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
 
-	public ProcessTracker endTime(String endTime) {
+	public ProcessTracker endTime(long endTime) {
 		this.endTime = endTime;
 		return this;
 	}
@@ -372,15 +372,15 @@ public class ProcessTracker {
 	@Schema(description = "ISO timestamp of the instance of the end of process")
 
 	@Valid
-	public String getEndTime() {
+	public long getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(String endTime) {
+	public void setEndTime(long endTime) {
 		this.endTime = endTime;
 	}
 
-	public ProcessTracker lastModified(String lastModified) {
+	public ProcessTracker lastModified(long lastModified) {
 		this.lastModified = lastModified;
 		return this;
 	}
@@ -393,11 +393,11 @@ public class ProcessTracker {
 	@Schema(description = "ISO timestamp of the instance of the end of process")
 
 	@Valid
-	public String getLastModified() {
+	public long getLastModified() {
 		return lastModified;
 	}
 
-	public void setLastModified(String lastModified) {
+	public void setLastModified(long lastModified) {
 		this.lastModified = lastModified;
 	}
 
