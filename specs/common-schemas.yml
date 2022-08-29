@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.5.0
+  version: 0.6.0
 servers:
   - url: /
 paths: {}
@@ -413,4 +413,5 @@ components:
             - ocr
             - glossary
             - ner
+            - languagedetection
       description: the category of model under which it has been released or trained
