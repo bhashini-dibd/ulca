@@ -90,8 +90,7 @@ class ModelServiceTest {
     }
 
     private static Stream<Arguments> modelListByUserIdParam(){
-        return Stream.of(Arguments.of("test",1,1,null,null),
-                         Arguments.of("test",null,null,null,null));
+        return Stream.of(Arguments.of("test",null,null,null,null));
     }
 
 
@@ -242,6 +241,8 @@ class ModelServiceTest {
     @ParameterizedTest
     @MethodSource("uploadModelParam")
     void uploadModel(MultipartFile multipartFile,String userId,UploadModelResponse response) throws Exception {
+        ReflectionTestUtils.setField(modelService,"modelUploadFolder","src/test/resources");
+
         assertEquals(modelService.uploadModel(multipartFile,userId),response);
     }
 
