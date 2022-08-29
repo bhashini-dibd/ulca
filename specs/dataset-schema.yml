@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.2
+  version: 0.10.3
 servers:
   - url: /ulca
 paths: {}
@@ -157,14 +157,24 @@ components:
           $ref: '#/components/schemas/GlossaryDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
+      
     NerDatasetParamsSchema:
+      required:
+        - tagsFormat
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
         - type: object
       type: object
       properties:
+        tagsFormat:
+          type: string
+          description: The accepted standard based on which NER tags are labelled in the dataset.
+          enum:
+            - CoNLL-2003
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
+        
+            
     NerDatasetRowSchema:
       required:
         - nerData
@@ -1133,13 +1143,13 @@ components:
             - I
         tag:
           type: string
-          description: NER tag for corresponsing word/index
+          description: NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.
           example: PER
           enum:
+            - O
             - PER
             - ORG
             - LOC
-            - MISC
       
     NerWordIndex:
       type: object

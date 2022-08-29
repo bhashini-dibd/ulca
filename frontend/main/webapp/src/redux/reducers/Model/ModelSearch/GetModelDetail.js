@@ -33,6 +33,7 @@ const getModelDetails = (payload) => {
       para: payload["trainingDataset"]["description"],
     },
     { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
+    { title: "Model Id", para: payload["modelId"] },
   ];
 };
 
