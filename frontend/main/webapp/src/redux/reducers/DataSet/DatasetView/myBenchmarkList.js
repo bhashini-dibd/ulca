@@ -1,5 +1,7 @@
 import C from "../../../actions/constants";
 import getDatasetName from "../../../../utils/getDataset";
+import moment from 'moment';
+
 const initialState = {
   responseData: [],
   filteredData: [],
@@ -9,14 +11,7 @@ const initialState = {
 };
 
 const dateConversion = (value) => {
-  var myDate = new Date(value);
-  let result = myDate.toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    // hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true
-  });
-  return result.toUpperCase();
+  return moment(value).format("MM/DD/YYYY");
 };
 
 const getFilterValue = (payload, data) => {
