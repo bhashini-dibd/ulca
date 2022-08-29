@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -160,7 +161,7 @@ public class AsrBenchmark {
 			int datasetCount = corpus.length();
 			BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
 			bmProcessUpdate.setRecordCount(datasetCount);
-			bmProcessUpdate.setLastModifiedOn(new Date().toString());
+			bmProcessUpdate.setLastModifiedOn(Instant.now().toEpochMilli());
 			benchmarkProcessDao.save(bmProcessUpdate);
 
 			benchmarkMetricKafkaTemplate.send(mbMetricTopic, metricRequest.toString());
