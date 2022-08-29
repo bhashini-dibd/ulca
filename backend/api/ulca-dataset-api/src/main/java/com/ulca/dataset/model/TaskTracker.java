@@ -116,16 +116,16 @@ public class TaskTracker   {
   private String details = null;
 
   @JsonProperty("startTime")
-  //@DateTimeFormat(iso=ISO.DATE_TIME)
-  private String startTime = null;
+  //@DateTimeFormat(unix timestamp millisec)
+  private long startTime;
 
   @JsonProperty("endTime")
- // @DateTimeFormat(iso=ISO.DATE_TIME)
-  private String endTime = null;
+ // @DateTimeFormat(unix timestamp millisec)
+  private long endTime;
 
   @JsonProperty("lastModified")
- // @DateTimeFormat(iso=ISO.DATE_TIME)
-  private String lastModified = null;
+ // @DateTimeFormat(unix timestamp millisec)
+  private long lastModified;
 
   @JsonProperty("error")
   private Error error = null;
@@ -206,7 +206,7 @@ public class TaskTracker   {
     this.details = details;
   }
 
-  public TaskTracker startTime(String startTime) {
+  public TaskTracker startTime(long startTime) {
     this.startTime = startTime;
     return this;
   }
@@ -219,15 +219,15 @@ public class TaskTracker   {
   
     @Valid
     
-    public String getStartTime() {
+    public long getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(String startTime) {
+  public void setStartTime(long startTime) {
     this.startTime = startTime;
   }
 
-  public TaskTracker endTime(String endTime) {
+  public TaskTracker endTime(long endTime) {
     this.endTime = endTime;
     return this;
   }
@@ -239,15 +239,15 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public String getEndTime() {
+    public long getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(String endTime) {
+  public void setEndTime(long endTime) {
     this.endTime = endTime;
   }
 
-  public TaskTracker lastModified(String lastModified) {
+  public TaskTracker lastModified(long lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -259,11 +259,11 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public String getLastModified() {
+    public long getLastModified() {
     return lastModified;
   }
 
-  public void setLastModified(String lastModified) {
+  public void setLastModified(long lastModified) {
     this.lastModified = lastModified;
   }
 

@@ -1,5 +1,6 @@
 package com.ulca.dataset.service;
 
+import java.time.Instant;
 import java.util.*;
 
 import org.json.JSONObject;
@@ -94,7 +95,7 @@ public class DatasetService {
 		Dataset dataset = new Dataset();
 		dataset.setDatasetName(request.getDatasetName());
 		//dataset.setDatasetType(request.getType().toString());
-		dataset.setCreatedOn(new Date().toString());
+		dataset.setCreatedOn(Instant.now().toEpochMilli());
 
 		Fileidentifier fileIndetifier = new Fileidentifier();
 		fileIndetifier.setFileLocationURL(request.getUrl());
@@ -119,7 +120,7 @@ public class DatasetService {
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.submit);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.pending.toString());
-		processTracker.setStartTime(new Date().toString());
+		processTracker.setStartTime(Instant.now().toEpochMilli());
 
 		processTrackerDao.insert(processTracker);
 
