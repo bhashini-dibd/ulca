@@ -30,6 +30,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -105,9 +106,9 @@ public class ModelService {
 			for (int i = startPg; i < endPage; i++) {
 				Pageable paging = null;
 				if (pgSize!=null) {
-				paging =	PageRequest.of(i, pgSize);
+				paging =	PageRequest.of(i, pgSize, Sort.by("submittedOn").descending());
 				} else {
-					paging = PageRequest.of(i,PAGE_SIZE);
+					paging = PageRequest.of(i,PAGE_SIZE, Sort.by("submittedOn").descending());
 
 				}
 
