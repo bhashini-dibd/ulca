@@ -1076,6 +1076,13 @@ const DataSet = (theme) => ({
   selectColumnHeader: {
     marginBottom: "25px",
     color: "#000",
+  },
+
+  descCardIcon: {
+    display: "flex",
+    borderRadius: "20%",
+    padding: "15px",
+    height: "fit-content",
   }
 });
 
