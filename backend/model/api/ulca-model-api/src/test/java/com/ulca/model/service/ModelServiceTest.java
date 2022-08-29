@@ -101,7 +101,7 @@ class ModelServiceTest {
         if (startPage != null) {
             int startPg = startPage - 1;
             for (int i = startPg; i < endPage; i++) {
-                Pageable paging = PageRequest.of(i, 10);
+                Pageable paging = PageRequest.of(i, 10,Sort.by("submittedOn").descending());
                 Page<ModelExtended> modelList = new PageImpl<>(Collections.singletonList(new ModelExtended()));
                 when(modelDao.findByUserId(userId,paging)).thenReturn(modelList);
             }
