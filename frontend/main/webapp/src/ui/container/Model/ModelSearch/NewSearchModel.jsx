@@ -40,25 +40,18 @@ function TabPanel(props) {
 const NewSearchModel = () => {
   const filter = useSelector((state) => state.searchFilter);
   const type = ModelTask.map((task) => task.value);
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(type.indexOf(filter.type));
   const { searchValue } = useSelector((state) => state.BenchmarkList);
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
   const [rowsPerPage, setRowsPerPage] = useState(9);
-  const [confirmPopup, setConfirmPopup] = useState(false);
 
   const handleChange = (event, newValue) => {
-    if (ModelTask[newValue].value === "status-check") {
-      setConfirmPopup(true);
-    }
-
-    if (ModelTask[newValue].value !== "status-check") {
       setValue(newValue);
       makeModelSearchAPICall(ModelTask[newValue].value);
       dispatch(SearchList(""));
       dispatch({ type: "CLEAR_FILTER_MODEL" });
-    }
   };
 
   const dispatch = useDispatch();
@@ -139,15 +132,6 @@ const NewSearchModel = () => {
     );
   };
 
-  const handleStatusCheckShow = (show) => {
-    if(show) {
-      setValue(0);
-    }
-    else {
-      setValue(value);
-    }
-  }
-
   return (
     <>
       <Tab
@@ -176,24 +160,6 @@ const NewSearchModel = () => {
           />
         )}
       </Tab>
-
-      {confirmPopup && (
-        <Dialog
-          message={"Do you want to run the status check on all the models"}
-          handleClose={() => {
-            setConfirmPopup(false);
-            handleStatusCheckShow(false);
-          }}
-          open
-          title={"Status Check"}
-          actionButton="No"
-          actionButton2="Yes"
-          handleSubmit={() => {
-            setConfirmPopup(false);
-            handleStatusCheckShow(true);
-          }}
-        />
-      )}
     </>
   );
 };

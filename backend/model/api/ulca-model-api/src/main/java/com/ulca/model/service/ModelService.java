@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -29,6 +30,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -104,9 +106,9 @@ public class ModelService {
 			for (int i = startPg; i < endPage; i++) {
 				Pageable paging = null;
 				if (pgSize!=null) {
-				paging =	PageRequest.of(i, pgSize);
+				paging =	PageRequest.of(i, pgSize, Sort.by("submittedOn").descending());
 				} else {
-					paging = PageRequest.of(i,PAGE_SIZE);
+					paging = PageRequest.of(i,PAGE_SIZE, Sort.by("submittedOn").descending());
 
 				}
 
@@ -261,8 +263,8 @@ public class ModelService {
 		}
 		
 		modelObj.setUserId(userId);
-		modelObj.setSubmittedOn(new Date().toString());
-		modelObj.setPublishedOn(new Date().toString());
+		modelObj.setSubmittedOn(Instant.now().toEpochMilli());
+		modelObj.setPublishedOn(Instant.now().toEpochMilli());
 		modelObj.setStatus("unpublished");
 		modelObj.setUnpublishReason("Newly submitted model");
 		
