@@ -1,5 +1,6 @@
 package com.ulca.benchmark.service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -100,8 +101,8 @@ public class BenchmarkService {
 		benchmark.setUserId(request.getUserId());
 		benchmark.setDataset(request.getUrl());
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());
-		benchmark.setSubmittedOn(new Date().toString());
-		benchmark.setCreatedOn(new Date().toString());
+		benchmark.setSubmittedOn(Instant.now().toEpochMilli());
+		benchmark.setCreatedOn(Instant.now().toEpochMilli());
 
 		Benchmark existingBenchmark = benchmarkDao.findByName(request.getDatasetName());
 		if (existingBenchmark == null) {
@@ -173,9 +174,9 @@ public class BenchmarkService {
 			bmProcess.setModelId(modelId);
 			bmProcess.setModelName(modelExtended.getName());
 			bmProcess.setStatus("In-Progress");
-			bmProcess.setCreatedOn(new Date().toString());
-			bmProcess.setLastModifiedOn(new Date().toString());
-			bmProcess.setStartTime(new Date().toString());
+			bmProcess.setCreatedOn(Instant.now().toEpochMilli());
+			bmProcess.setLastModifiedOn(Instant.now().toEpochMilli());
+			bmProcess.setStartTime(Instant.now().toEpochMilli());
 			benchmarkprocessDao.save(bmProcess);
 
 			Map<String,String> map = new HashMap<String, String>();
@@ -260,9 +261,9 @@ public class BenchmarkService {
 				bmProcess.setModelId(modelId);
 				bmProcess.setModelName(modelExtended.getName());
 				bmProcess.setStatus("In-Progress");
-				bmProcess.setCreatedOn(new Date().toString());
-				bmProcess.setLastModifiedOn(new Date().toString());
-				bmProcess.setStartTime(new Date().toString());
+				bmProcess.setCreatedOn(Instant.now().toEpochMilli());
+				bmProcess.setLastModifiedOn(Instant.now().toEpochMilli());
+				bmProcess.setStartTime(Instant.now().toEpochMilli());
 				benchmarkprocessDao.save(bmProcess);
 				map.put(serviceRequestNumber, metric);
 				benchmarkProcessIds.add(serviceRequestNumber);

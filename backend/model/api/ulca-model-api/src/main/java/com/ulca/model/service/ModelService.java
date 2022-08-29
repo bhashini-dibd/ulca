@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -261,8 +262,8 @@ public class ModelService {
 		}
 		
 		modelObj.setUserId(userId);
-		modelObj.setSubmittedOn(new Date().toString());
-		modelObj.setPublishedOn(new Date().toString());
+		modelObj.setSubmittedOn(Instant.now().toEpochMilli());
+		modelObj.setPublishedOn(Instant.now().toEpochMilli());
 		modelObj.setStatus("unpublished");
 		modelObj.setUnpublishReason("Newly submitted model");
 		
