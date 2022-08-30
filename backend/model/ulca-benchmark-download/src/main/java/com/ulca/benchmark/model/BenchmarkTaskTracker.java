@@ -111,15 +111,15 @@ public class BenchmarkTaskTracker   {
 
   @JsonProperty("startTime")
   //@DateTimeFormat(unixtimestamp in millisec)
-  private long startTime;
+  private Long startTime;
 
   @JsonProperty("endTime")
  // @DateTimeFormat(unixtimestamp in millisec)
-  private long endTime;
+  private Long endTime;
 
   @JsonProperty("lastModified")
  // @DateTimeFormat(unixtimestamp in millisec)
-  private long lastModified;
+  private Long lastModified;
 
   @JsonProperty("error")
   private BenchmarkError error = null;
@@ -200,7 +200,7 @@ public class BenchmarkTaskTracker   {
     this.details = details;
   }
 
-  public BenchmarkTaskTracker startTime(long startTime) {
+  public BenchmarkTaskTracker startTime(Long startTime) {
     this.startTime = startTime;
     return this;
   }
@@ -213,15 +213,15 @@ public class BenchmarkTaskTracker   {
   
     @Valid
     
-    public long getStartTime() {
+    public Long getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(long startTime) {
+  public void setStartTime(Long startTime) {
     this.startTime = startTime;
   }
 
-  public BenchmarkTaskTracker endTime(long endTime) {
+  public BenchmarkTaskTracker endTime(Long endTime) {
     this.endTime = endTime;
     return this;
   }
@@ -233,15 +233,15 @@ public class BenchmarkTaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public long getEndTime() {
+    public Long getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(long endTime) {
+  public void setEndTime(Long endTime) {
     this.endTime = endTime;
   }
 
-  public BenchmarkTaskTracker lastModified(long lastModified) {
+  public BenchmarkTaskTracker lastModified(Long lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -253,11 +253,11 @@ public class BenchmarkTaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public long getLastModified() {
+    public Long getLastModified() {
     return lastModified;
   }
 
-  public void setLastModified(long lastModified) {
+  public void setLastModified(Long lastModified) {
     this.lastModified = lastModified;
   }
 

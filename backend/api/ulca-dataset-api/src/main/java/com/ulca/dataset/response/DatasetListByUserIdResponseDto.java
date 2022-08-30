@@ -18,7 +18,7 @@ public class DatasetListByUserIdResponseDto {
 	private  String serviceRequestNumber;
 	private  String datasetName;
 	private  String datasetType;
-	private  long submittedOn;
+	private  Long submittedOn;
 	private  String status;
 	
 }

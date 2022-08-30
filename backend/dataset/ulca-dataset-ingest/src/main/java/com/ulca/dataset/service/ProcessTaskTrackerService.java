@@ -120,7 +120,7 @@ public class ProcessTaskTrackerService {
 		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumberAndTool(serviceRequestNumber, tool.toString());
 		if(!taskTrackerList.isEmpty()) {
 			TaskTracker taskTracker = taskTrackerList.get(0);
-			if(taskTracker.getEndTime() == 0) {
+			if(taskTracker.getEndTime() == null || taskTracker.getEndTime() == 0) {
 
 				taskTracker.setEndTime(Instant.now().toEpochMilli());
 				taskTracker.setLastModified(Instant.now().toEpochMilli());

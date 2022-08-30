@@ -27,7 +27,7 @@ public class Dataset {
 	private String collectionMethod;
 	private String collectionSource;
 	
-	private long createdOn;
+	private Long createdOn;
 	
 	private String sampleSize;
 	private String averageHumanScore;
