@@ -1,5 +1,6 @@
 package com.ulca.dataset.service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ProcessTaskTrackerService {
 				|| processTracker.getStatus().equals(ProcessTracker.StatusEnum.failed.toString()))) {
 			processTracker.setStatus(status.toString());
 			if(status == StatusEnum.completed || status == StatusEnum.failed) {
-				processTracker.setEndTime(new Date().toString());}
+				processTracker.setEndTime(Instant.now().toEpochMilli());}
 		}
 		
 		return processTrackerDao.save(processTracker);
@@ -53,7 +54,7 @@ public class ProcessTaskTrackerService {
 		taskTracker.serviceRequestNumber(serviceRequestNumber);
 		taskTracker.setTool(tool.toString());
 		taskTracker.setStatus(status.toString());
-		taskTracker.setStartTime(new Date().toString());
+		taskTracker.setStartTime(Instant.now().toEpochMilli());
 		return taskTrackerDao.save(taskTracker);}
 	public TaskTracker updateTaskTracker(String serviceRequestNumber, ToolEnum tool, TaskTracker.StatusEnum status) {
 		
@@ -62,7 +63,7 @@ public class ProcessTaskTrackerService {
 		if(!taskTrackerList.isEmpty()) {
 			TaskTracker taskTracker = taskTrackerList.get(0);
 			if(status == TaskTracker.StatusEnum.completed || status == TaskTracker.StatusEnum.failed) {
-				taskTracker.setEndTime(new Date().toString());
+				taskTracker.setEndTime(Instant.now().toEpochMilli());
 			}
 			taskTracker.setStatus(status.toString());
 			taskTracker1 = taskTrackerDao.save(taskTracker);
@@ -79,7 +80,7 @@ public TaskTracker updateTaskTrackerWithDetails(String serviceRequestNumber, Too
 		if(!taskTrackerList.isEmpty()) {
 			
 			TaskTracker taskTracker = taskTrackerList.get(0);
-			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setLastModified(Instant.now().toEpochMilli());
 			taskTracker.setDetails(details);
 			
 			if(!(taskTracker.getStatus().equals(TaskTracker.StatusEnum.completed.toString())
@@ -95,8 +96,8 @@ public TaskTracker updateTaskTrackerWithDetails(String serviceRequestNumber, Too
 			TaskTracker taskTracker = new TaskTracker();
 			taskTracker.setServiceRequestNumber(serviceRequestNumber);
 			taskTracker.setTool(tool.toString());
-			taskTracker.setStartTime(new Date().toString());
-			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setStartTime(Instant.now().toEpochMilli());
+			taskTracker.setLastModified(Instant.now().toEpochMilli());
 			taskTracker.setStatus(status.toString());
 			taskTracker.setDetails(details);
 		taskTracker1 = taskTrackerDao.save(taskTracker);
@@ -110,10 +111,10 @@ public TaskTracker updateTaskTrackerWithDetailsAndEndTime(String serviceRequestN
 	TaskTracker taskTracker1 = null;
 	if(!taskTrackerList.isEmpty()) {
 		TaskTracker taskTracker = taskTrackerList.get(0);
-		if(taskTracker.getEndTime() == null || taskTracker.getEndTime().isEmpty()) {
+		if(taskTracker.getEndTime() == null || taskTracker.getEndTime() == 0 ) {
 			
-			taskTracker.setEndTime(new Date().toString());
-			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setEndTime(Instant.now().toEpochMilli());
+			taskTracker.setLastModified(Instant.now().toEpochMilli());
 			
 			if(!(taskTracker.getStatus().equals(TaskTracker.StatusEnum.completed.toString())
 					|| taskTracker.getStatus().equals(TaskTracker.StatusEnum.failed.toString())
@@ -130,9 +131,9 @@ public TaskTracker updateTaskTrackerWithDetailsAndEndTime(String serviceRequestN
 		TaskTracker taskTracker = new TaskTracker();
 		taskTracker.setServiceRequestNumber(serviceRequestNumber);
 		taskTracker.setTool(tool.toString());
-		taskTracker.setStartTime(new Date().toString());
-		taskTracker.setEndTime(new Date().toString());
-		taskTracker.setLastModified(new Date().toString());
+		taskTracker.setStartTime(Instant.now().toEpochMilli());
+		taskTracker.setEndTime(Instant.now().toEpochMilli());
+		taskTracker.setLastModified(Instant.now().toEpochMilli());
 		taskTracker.setStatus(status.toString());
 		taskTracker.setDetails(details);
 		taskTracker1 = taskTrackerDao.save(taskTracker);
@@ -146,7 +147,7 @@ public TaskTracker updateTaskTrackerWithError(String serviceRequestNumber, ToolE
 	TaskTracker taskTracker1 = null;
 	if(!taskTrackerList.isEmpty()) {
 		TaskTracker taskTracker = taskTrackerList.get(0);
-		taskTracker.setLastModified(new Date().toString());
+		taskTracker.setLastModified(Instant.now().toEpochMilli());
 		taskTracker.setStatus(status.toString());
 		taskTracker.setError(error);
 		taskTracker1 = taskTrackerDao.save(taskTracker);
@@ -155,8 +156,8 @@ public TaskTracker updateTaskTrackerWithError(String serviceRequestNumber, ToolE
 		TaskTracker taskTracker = new TaskTracker();
 		taskTracker.setServiceRequestNumber(serviceRequestNumber);
 		taskTracker.setTool(tool.toString());
-		taskTracker.setStartTime(new Date().toString());
-		taskTracker.setLastModified(new Date().toString());
+		taskTracker.setStartTime(Instant.now().toEpochMilli());
+		taskTracker.setLastModified(Instant.now().toEpochMilli());
 		taskTracker.setStatus(status.toString());
 		taskTracker.setError(error);
 		taskTracker1 = taskTrackerDao.save(taskTracker);
@@ -170,8 +171,8 @@ public TaskTracker updateTaskTrackerWithErrorAndEndTime(String serviceRequestNum
 	TaskTracker taskTracker1 = null;
 	if(!taskTrackerList.isEmpty()) {
 		TaskTracker taskTracker = taskTrackerList.get(0);
-		taskTracker.setEndTime(new Date().toString());
-		taskTracker.setLastModified(new Date().toString());
+		taskTracker.setEndTime(Instant.now().toEpochMilli());
+		taskTracker.setLastModified(Instant.now().toEpochMilli());
 		taskTracker.setStatus(status.toString());
 		taskTracker.setError(error);
 		taskTracker1 = taskTrackerDao.save(taskTracker);
@@ -180,9 +181,9 @@ public TaskTracker updateTaskTrackerWithErrorAndEndTime(String serviceRequestNum
 		TaskTracker taskTracker = new TaskTracker();
 		taskTracker.setServiceRequestNumber(serviceRequestNumber);
 		taskTracker.setTool(tool.toString());
-		taskTracker.setStartTime(new Date().toString());
-		taskTracker.setEndTime(new Date().toString());
-		taskTracker.setLastModified(new Date().toString());
+		taskTracker.setStartTime(Instant.now().toEpochMilli());
+		taskTracker.setEndTime(Instant.now().toEpochMilli());
+		taskTracker.setLastModified(Instant.now().toEpochMilli());
 		taskTracker.setStatus(status.toString());
 		taskTracker.setError(error);
 		taskTracker1 =taskTrackerDao.save(taskTracker);
