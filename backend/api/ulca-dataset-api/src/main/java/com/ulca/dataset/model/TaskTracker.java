@@ -117,15 +117,15 @@ public class TaskTracker   {
 
   @JsonProperty("startTime")
   //@DateTimeFormat(unix timestamp millisec)
-  private long startTime;
+  private Long startTime;
 
   @JsonProperty("endTime")
  // @DateTimeFormat(unix timestamp millisec)
-  private long endTime;
+  private Long endTime;
 
   @JsonProperty("lastModified")
  // @DateTimeFormat(unix timestamp millisec)
-  private long lastModified;
+  private Long lastModified;
 
   @JsonProperty("error")
   private Error error = null;
@@ -206,7 +206,7 @@ public class TaskTracker   {
     this.details = details;
   }
 
-  public TaskTracker startTime(long startTime) {
+  public TaskTracker startTime(Long startTime) {
     this.startTime = startTime;
     return this;
   }
@@ -219,15 +219,15 @@ public class TaskTracker   {
   
     @Valid
     
-    public long getStartTime() {
+    public Long getStartTime() {
     return startTime;
   }
 
-  public void setStartTime(long startTime) {
+  public void setStartTime(Long startTime) {
     this.startTime = startTime;
   }
 
-  public TaskTracker endTime(long endTime) {
+  public TaskTracker endTime(Long endTime) {
     this.endTime = endTime;
     return this;
   }
@@ -239,15 +239,15 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public long getEndTime() {
+    public Long getEndTime() {
     return endTime;
   }
 
-  public void setEndTime(long endTime) {
+  public void setEndTime(Long endTime) {
     this.endTime = endTime;
   }
 
-  public TaskTracker lastModified(long lastModified) {
+  public TaskTracker lastModified(Long lastModified) {
     this.lastModified = lastModified;
     return this;
   }
@@ -259,11 +259,11 @@ public class TaskTracker   {
   @Schema(description = "ISO timestamp of the instance of the end of process")
   
     @Valid
-    public long getLastModified() {
+    public Long getLastModified() {
     return lastModified;
   }
 
-  public void setLastModified(long lastModified) {
+  public void setLastModified(Long lastModified) {
     this.lastModified = lastModified;
   }
 

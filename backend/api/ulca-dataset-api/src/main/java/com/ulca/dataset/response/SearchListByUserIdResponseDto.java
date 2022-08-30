@@ -14,7 +14,7 @@ public class SearchListByUserIdResponseDto {
 	
 	
 	private final String serviceRequestNumber;
-	private final long timestamp;
+	private final Long timestamp;
 	private final SearchCriteria searchCriteria;
 	private final List<TaskTracker> status;
 	
