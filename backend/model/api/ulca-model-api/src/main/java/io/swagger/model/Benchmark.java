@@ -70,10 +70,10 @@ public class Benchmark {
 	private Object paramSchema = null;
 
 	@JsonProperty("createdOn")
-	private long createdOn;
+	private Long createdOn;
 
 	@JsonProperty("submittedOn")
-	private long submittedOn;
+	private Long submittedOn;
 
 	@JsonProperty("status")
 	private String status = null;
@@ -365,7 +365,7 @@ public class Benchmark {
 		this.paramSchema = paramSchema;
 	}
 
-	public Benchmark createdOn(long createdOn) {
+	public Benchmark createdOn(Long createdOn) {
 		this.createdOn = createdOn;
 		return this;
 	}
@@ -377,15 +377,15 @@ public class Benchmark {
 	 **/
 	@Schema(description = "timestamp when benchmark is created")
 
-	public long getCreatedOn() {
+	public Long getCreatedOn() {
 		return createdOn;
 	}
 
-	public void setCreatedOn(long createdOn) {
+	public void setCreatedOn(Long createdOn) {
 		this.createdOn = createdOn;
 	}
 
-	public Benchmark submittedOn(long submittedOn) {
+	public Benchmark submittedOn(Long submittedOn) {
 		this.submittedOn = submittedOn;
 		return this;
 	}
@@ -397,11 +397,11 @@ public class Benchmark {
 	 **/
 	@Schema(description = "timestamp when benchmark is submitted/published")
 
-	public long getSubmittedOn() {
+	public Long getSubmittedOn() {
 		return submittedOn;
 	}
 
-	public void setSubmittedOn(long submittedOn) {
+	public void setSubmittedOn(Long submittedOn) {
 		this.submittedOn = submittedOn;
 	}
 
