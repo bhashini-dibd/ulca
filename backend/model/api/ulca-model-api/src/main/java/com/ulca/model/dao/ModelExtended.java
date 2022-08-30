@@ -28,10 +28,10 @@ public class ModelExtended extends Model {
 	private String userId;
 	
 	@JsonProperty("submittedOn")
-	private long submittedOn;
+	private Long submittedOn;
 	
 	@JsonProperty("publishedOn")
-	private long publishedOn;
+	private Long publishedOn;
 	
 	@JsonProperty("status")
 	private String status;
@@ -73,29 +73,29 @@ public class ModelExtended extends Model {
 		this.userId = userId;
 	}
 
-	public ModelExtended submittedOn(long submittedOn) {
+	public ModelExtended submittedOn(Long submittedOn) {
 		this.submittedOn = submittedOn;
 		return this;
 	}
 	
-	public long getSubmittedOn() {
+	public Long getSubmittedOn() {
 		return submittedOn;
 	}
 
-	public void setSubmittedOn(long submittedOn) {
+	public void setSubmittedOn(Long submittedOn) {
 		this.submittedOn = submittedOn;
 	}
 	
-	public ModelExtended publishedOn(long publishedOn) {
+	public ModelExtended publishedOn(Long publishedOn) {
 		this.publishedOn = publishedOn;
 		return this;
 	}
 
-	public long getPublishedOn() {
+	public Long getPublishedOn() {
 		return publishedOn;
 	}
 
-	public void setPublishedOn(long publishedOn) {
+	public void setPublishedOn(Long publishedOn) {
 		this.publishedOn = publishedOn;
 	}
 

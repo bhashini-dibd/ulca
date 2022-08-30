@@ -111,7 +111,7 @@ public TaskTracker updateTaskTrackerWithDetailsAndEndTime(String serviceRequestN
 	TaskTracker taskTracker1 = null;
 	if(!taskTrackerList.isEmpty()) {
 		TaskTracker taskTracker = taskTrackerList.get(0);
-		if(taskTracker.getEndTime() == 0 ) {
+		if(taskTracker.getEndTime() == null || taskTracker.getEndTime() == 0 ) {
 			
 			taskTracker.setEndTime(Instant.now().toEpochMilli());
 			taskTracker.setLastModified(Instant.now().toEpochMilli());
