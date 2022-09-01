@@ -315,6 +315,7 @@ paths:
       tags:
       - model-controller
       operationId: computeModel
+      summary: 'API TO COMPUTE ASR'
       requestBody:
         content:
           application/json:
@@ -2152,6 +2153,7 @@ components:
           $ref: '#/components/schemas/Authenticator'
         data:
           type: object
+          description: email and password for user Login
           oneOf:
             - $ref: '#/components/schemas/UlcaLoginAuthenticator'
             - $ref: '#/components/schemas/GmailLoginAuthenticator'
