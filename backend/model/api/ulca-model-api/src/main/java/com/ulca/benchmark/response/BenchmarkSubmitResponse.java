@@ -28,7 +28,7 @@ public class BenchmarkSubmitResponse implements Serializable{
 
 		Data data;
 		
-		public BenchmarkSubmitResponse(String message, String serviceRequestNumber, String benchmarkId, String timestamp) {
+		public BenchmarkSubmitResponse(String message, String serviceRequestNumber, String benchmarkId, Long timestamp) {
 			super();
 			this.message = message;
 			this.data = new Data(serviceRequestNumber, benchmarkId, timestamp);
@@ -39,8 +39,8 @@ public class BenchmarkSubmitResponse implements Serializable{
 		private class Data{  
 			 private  String serviceRequestNumber;
 			 private  String benchmarkId;
-			 private  String timestamp;
-			public Data(String serviceRequestNumber, String benchmarkId, String timestamp) {
+			 private  Long timestamp;
+			public Data(String serviceRequestNumber, String benchmarkId, Long timestamp) {
 				super();
 				this.serviceRequestNumber = serviceRequestNumber;
 				this.benchmarkId = benchmarkId;

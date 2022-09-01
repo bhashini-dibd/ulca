@@ -24,11 +24,9 @@ const ModelDescription = (props) => {
         <Card sx={{ display: 'flex' }} style={{ minHeight: '100px', maxHeight: '100px', backgroundColor: ImageArray[index].color }}>
             <Grid container >
                 <Grid item xs={3} sm={3} md={3} lg={3} xl={3} style={{ display: 'flex', marginTop: "21px", justifyContent: 'center' }}>
-                    <CardMedia
-                        component="img"
-                        style={{ width: '48px', height: '48px' }}
-                        image={ImageArray[index].imageUrl}
-                    />
+                    <div className={classes.descCardIcon} style={{ color: ImageArray[index].iconColor, backgroundColor: ImageArray[index].color }}>
+                        {ImageArray[index].imageUrl}
+                    </div>
                 </Grid>
                 <Grid item xs={9} sm={9} md={9} lg={9} xl={9} style={{ display: 'flex', marginTop: "5px" }}  className={classes.modelCard}>
                     {/* <Box sx={{ display: 'flex', flexDirection: 'row' }}> */}

@@ -16,4 +16,7 @@ public interface ModelDao extends MongoRepository<ModelExtended, String> {
 	Integer countByUserId(String userId);
 	Integer countByUserIdAndName(String userId,String name);
 
+	List<ModelExtended> findByStatus(String status);
+
+
 }

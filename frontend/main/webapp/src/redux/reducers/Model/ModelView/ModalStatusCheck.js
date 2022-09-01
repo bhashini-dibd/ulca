@@ -61,6 +61,7 @@ const getModelHealthStatus = (state, payload) => {
         modelName: element.modelName,
         status: element.status,
         taskType: element.taskType,
+        lastStatusUpdate: element.lastStatusUpdate,
     });
   });
 
