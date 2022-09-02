@@ -377,6 +377,7 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse'
+                
 
   /ulca/apis/v0/model/listByUserId:
     get:
@@ -775,6 +776,7 @@ paths:
       tags:
         - 'Create Users'
       summary: 'REST API to register/create new user'
+      description: 'register/create new user'
       requestBody:
         content:
           application/json:
@@ -806,6 +808,7 @@ paths:
       tags:
         - 'Verify Users'
       summary: 'REST API to verify user account.'
+      description: 'Verify user account'
       requestBody:
         content:
           application/json:
@@ -837,6 +840,7 @@ paths:
       tags:
         - 'Api-key-search'
       summary: 'REST API key for search'
+      description: 'search using key'
       requestBody:
         content:
           application/json:
@@ -868,6 +872,7 @@ paths:
       tags:
         - 'Login'
       summary: 'REST API to login'
+      description: 'login to existing/new user'
       requestBody:
         content:
           application/json:
@@ -900,6 +905,7 @@ paths:
       tags:
         - 'Forgot Password'
       summary: 'REST API for forgot password request'
+      description: 'request to change password'
       requestBody:
         content:
           application/json:
@@ -930,6 +936,7 @@ paths:
       tags:
         - 'Reset Password'
       summary: 'REST API for resetting password'
+      description: 'Reset forgotten password'
       requestBody:
         content:
           application/json:
@@ -960,6 +967,7 @@ paths:
       tags:
         - 'Report Errors'
       summary: 'REST API to get a downloadable reports on errors '
+      description: 'download error reports'
       requestBody:
         content:
           application/json:
@@ -1999,7 +2007,11 @@ components:
       properties:
         modelId:
           type: string
+        userId:
+          type: string
         task:
+          type: string
+        source:
           type: string
         gender:
           type: string
@@ -2023,12 +2035,13 @@ components:
         imageUri:
           type: string
       example:
-        modelId: 610cfe8b014fa35d5e767c35
-        task: translation
-        input:
-          - source: how are you today ?
+        modelId: 617798c22fbba1441081885d
         userId: 6a73afa4fc774dcdb28d5fff944511f6
-        
+        task: asr
+        source: ml
+        audioUri: https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_malayalam.wav
+        audioContent: UklGRiygCwBXQVZFZm10IBAAAAABAAIARKwAABCxAgAEABAAZGF0YQCgCwAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  
     ModelComputeResponse:
       type: object
       properties:
@@ -2717,6 +2730,15 @@ components:
         phoneNo:
           type: string
           description: Mobile phone number of the user to be registered.
+      example:
+        firstName: Ram
+        lastName: Kumar
+        email: dummy@gmail.com
+        password: password
+        roles: user
+        phoneNo: 9090909090
+        
+        
     
 
     
@@ -2727,10 +2749,16 @@ components:
           $ref: '#/components/schemas/Authenticator'
         data:
           type: object
+          description: email and password for user Login
           oneOf:
             - $ref: '#/components/schemas/UlcaLoginAuthenticator'
             - $ref: '#/components/schemas/GmailLoginAuthenticator'
-    
+      example:
+        authenticator: ULCA
+        data:
+          email: dummy@gmail.com
+          password: password
+        
   
 
     ApiKeySearchRequest:
@@ -2740,6 +2768,8 @@ components:
           type: string
           description: Unique auth token of verified user
       description: Request for user records.
+      example:
+        key: 81eb44672d3746b8ac251ca2425c9184
 
 
     ForgotPasswordRequest:
@@ -2749,6 +2779,8 @@ components:
           type: string
           description: Unique email of the user.
       description: Request for user records.
+      example:
+        email: dummy@gmail.com
     
 
     ResetPasswordRequest:
@@ -2760,6 +2792,9 @@ components:
         password:
           type: string
           description: password to be updated
+      example:
+        email: dummy@gmail.com
+        password: resetNewPassword
 
 
     UserVerificationRequest:
@@ -2771,6 +2806,9 @@ components:
         userID:
           type: string
           description: unique userid value.
+      example:
+        email: dummy@gmail.com
+        userId: 6a73afa4fc774dcdb28d5fff944511f6
     
         
 
@@ -2969,6 +3007,8 @@ components:
           type: string
           description: Unique submission id.
       description: Request for error report on a particular submission.
+      example:
+        serviceRequestNumber: 1160112134
 
     
     ErrorReportResponse:

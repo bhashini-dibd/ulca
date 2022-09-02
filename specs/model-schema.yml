@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.0
+  version: 0.3.1
 servers:
   - url: /ulca
 paths: {}
@@ -52,7 +52,9 @@ components:
         task:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         languages:
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
+          nullable : true
+          allOf : 
+            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
         license:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
         licenseUrl:
@@ -83,7 +85,7 @@ components:
             - $ref: '#/components/schemas/ASRInference'
             - $ref: '#/components/schemas/TTSInference'
             - $ref: '#/components/schemas/OCRInference'
-            - $ref: '#/components/schemas/LanguageInference'
+            - $ref: '#/components/schemas/TxtLangDetectionInference'
           discriminator:
             propertyName: taskType
             mapping:
@@ -92,7 +94,7 @@ components:
               asr: '#/components/schemas/ASRInference'
               tts: '#/components/schemas/TTSInference'
               ocr: '#/components/schemas/OCRInference'
-              languagedetection : '#/components/schemas/LanguageInference'
+              txt-lang-detection : '#/components/schemas/TxtLangDetectionInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
@@ -191,7 +193,7 @@ components:
           $ref: '#/components/schemas/TransliterationRequest'
         response:
           $ref: '#/components/schemas/TransliterationResponse'
-    LanguageInference:
+    TxtLangDetectionInference:
       required:
         - taskType
         - request
@@ -200,9 +202,9 @@ components:
         taskType:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         request:
-          $ref: '#/components/schemas/LanguageRequest'
+          $ref: '#/components/schemas/TxtLangDetectionRequest'
         response:
-          $ref: '#/components/schemas/LanguageResponse'
+          $ref: '#/components/schemas/TxtLangDetectionResponse'
     TranslationAsyncInference:
       required:
         - taskType
@@ -276,7 +278,7 @@ components:
           $ref: '#/components/schemas/SentencesList'
         config:
           $ref: '#/components/schemas/TransliterationConfig'
-    LanguageRequest:
+    TxtLangDetectionRequest:
       required:
         - input
         - config
@@ -285,17 +287,17 @@ components:
         input:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/LanguageConfig'
-    LanguageResponse:
+          $ref: '#/components/schemas/TxtLangDetectionConfig'
+    TxtLangDetectionResponse:
       description: the response for translation.  Standard http status codes to be used.
       required:
         - output
       type: object
       properties:
         output:
-          $ref: '#/components/schemas/LanguagesList'
+          $ref: '#/components/schemas/TxtLanguagesList'
         config:
-          $ref: '#/components/schemas/LanguageConfig'
+          $ref: '#/components/schemas/TxtLangDetectionConfig'
     ASRInference:
       required:
         - taskType
@@ -508,12 +510,12 @@ components:
           items:
             type: string
             minItems: 1
-    LanguagesList:
+    TxtLanguagesList:
       type: array
       description: list of
       items:
-        $ref: '#/components/schemas/LanguageList'
-    LanguageList:
+        $ref: '#/components/schemas/TxtLangDetectionList'
+    TxtLangDetectionList:
       required:
         - source
       type: object
@@ -522,16 +524,24 @@ components:
           minLength: 1
           type: string
           description: input sentence for the model
-        prediction :
-          $ref: '#/components/schemas/LanguagePrediction'
+        langPrediction :
+          type: array
+          description: list of
+          items:
+             $ref: '#/components/schemas/TxtLangDetectionPrediction'
           
-    LanguagePrediction:
+    TxtLangDetectionPrediction:
       type: object
+      required :
+        - langCode
       properties:
-        language:
+        langCode:
           type: string
-          description: detected language of particular sentence
-        languageScore:
+          description: Indic language code, iso-639-1, iso 639-2
+        ScriptCode:
+          type: string
+          description: Script code, iso-15924
+        langScore:
           type: number
           description: the measure of accuracy of language prediction
           
@@ -567,7 +577,7 @@ components:
           example: false
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
-    LanguageConfig:
+    TxtLangDetectionConfig:
       type: object
       properties:
         modelId:
