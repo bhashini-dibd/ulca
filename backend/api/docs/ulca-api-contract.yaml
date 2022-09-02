@@ -316,6 +316,7 @@ paths:
       - model-controller
       operationId: computeModel
       summary: 'API TO COMPUTE ASR'
+      description: 'Compute ASR requests'
       requestBody:
         content:
           application/json:
@@ -563,6 +564,7 @@ paths:
       tags:
         - 'Create Users'
       summary: 'REST API to register/create new user'
+      description: 'register/create new user'
       requestBody:
         content:
           application/json:
@@ -594,6 +596,7 @@ paths:
       tags:
         - 'Verify Users'
       summary: 'REST API to verify user account.'
+      description: 'Verify user account'
       requestBody:
         content:
           application/json:
@@ -625,6 +628,7 @@ paths:
       tags:
         - 'Api-key-search'
       summary: 'REST API key for search'
+      description: 'search using key'
       requestBody:
         content:
           application/json:
@@ -656,6 +660,7 @@ paths:
       tags:
         - 'Login'
       summary: 'REST API to login'
+      description: 'login to existing/new user'
       requestBody:
         content:
           application/json:
@@ -688,6 +693,7 @@ paths:
       tags:
         - 'Forgot Password'
       summary: 'REST API for forgot password request'
+      description: 'request to change password'
       requestBody:
         content:
           application/json:
@@ -718,6 +724,7 @@ paths:
       tags:
         - 'Reset Password'
       summary: 'REST API for resetting password'
+      description: 'Reset forgotten password'
       requestBody:
         content:
           application/json:
@@ -748,6 +755,7 @@ paths:
       tags:
         - 'Report Errors'
       summary: 'REST API to get a downloadable reports on errors '
+      description: 'download error reports'
       requestBody:
         content:
           application/json:
