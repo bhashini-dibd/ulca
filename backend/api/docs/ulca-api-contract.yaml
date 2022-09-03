@@ -13,8 +13,10 @@ paths:
   /ulca/apis/v0/dataset/corpus/submit:
     post:
       tags:
-      - dataset-controller
+        - dataset-controller
       operationId: datasetSubmit
+      summary: Api to training dataset
+      description: Api to upload training dataset
       requestBody:
         content:
           application/json:
@@ -22,25 +24,26 @@ paths:
               $ref: '#/components/schemas/DatasetSubmitRequest'
         required: true
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/DatasetSubmitResponse'
-        "400":
+        '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse'
-      
 
   /ulca/apis/v0/dataset/corpus/search:
     post:
       tags:
       - dataset-controller
       operationId: corpusSearch
+      summary: Api to search training dataset
+      description: Api to search training dataset based on different criteria
       requestBody:
         content:
           application/json:
@@ -64,28 +67,46 @@ paths:
   /ulca/apis/v0/dataset/listByUserId:
     get:
       tags:
-      - dataset-controller
-      operationId: listByUserIdDataset
+        - dataset-controller
+      operationId: listByUserId
+      summary: Api to dataset submitted by user
+      description: Api to dataset submitted by user
       parameters:
-      - name: userId
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: startPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-      - name: endPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
+        - name: startPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+        - name: endPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 2
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 10
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          example: Indic Trans English-Hindi
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
@@ -103,12 +124,15 @@ paths:
       tags:
       - dataset-controller
       operationId: datasetByServiceRequestNumber
+      summary: Api to fetch dataset serviceRequestNumber
+      description: Api to fetch dataset serviceRequestNumber
       parameters:
       - name: serviceRequestNumber
         in: query
         required: true
         schema:
           type: string
+        example: 1144238572
       responses:
         "200":
           description: OK
@@ -128,12 +152,15 @@ paths:
       tags:
       - dataset-controller
       operationId: datasetById
+      summary: Api to fetch dataset by datasetId
+      description: Api to fetch dataset datasetId
       parameters:
       - name: datasetId
         in: query
         required: true
         schema:
           type: string
+        example: 62019355394b3a48f83f814e
       responses:
         "200":
           description: OK
@@ -153,12 +180,15 @@ paths:
       tags:
       - dataset-controller
       operationId: searchStatus
+      summary: Api to fetch status of search corpus dataset
+      description: fetch status of search corpus dataset
       parameters:
       - name: serviceRequestNumber
         in: query
         required: true
         schema:
           type: string
+        example: 2244238572
       responses:
         "200":
           description: OK
@@ -178,24 +208,29 @@ paths:
       tags:
       - dataset-controller
       operationId: searchListByUserId
+      summary: Api to fetch all of search corpus dataset by userId
+      description: fetch all of search corpus dataset by userId
       parameters:
-      - name: userId
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: startPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-      - name: endPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
+        - name: startPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+        - name: endPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 2
       responses:
         "200":
           description: OK
@@ -383,7 +418,7 @@ paths:
     get:
       tags:
         - model-controller
-      operationId: listByUserId
+      operationId: modelListByUserId
       summary: Api to get model by userId or search model of that user by model name
       description: list of model of logged-in user and/or search models of logged-in user by model name
       parameters:
@@ -1064,123 +1099,254 @@ components:
   schemas:
     DatasetSubmitRequest:
       required:
-      - datasetName
-      - url
-      - userId
+        - datasetName
+        - url
+        - userId
       type: object
       properties:
         userId:
           type: string
+          example: 6a73afa4fc774dcdb28d5fff944511f6
         datasetName:
           type: string
+          example: Indic trans English-Hindi
         url:
           type: string
-      example: 
-        userId: 164972ebd9a54f39a97a67bae55162ea
-        datasetName: asr-corpus-validate
-        url: https://ulca-datasets.s3.ap-south-1.amazonaws.com/dev-test/Asr/testAsr2.zip 
+          example: https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca-asr-ds-positive-testcase-03.zip
           
         
-    Data:
+    DatasetSubmitData:
       type: object
       properties:
         serviceRequestNumber:
           type: string
+          example: 1144238572
         datasetId:
           type: string
+          example: 62019355394b3a48f83f814e
         timestamp:
           type: string
+          example: Mon Aug 29 11:08:40 IST 2022
+          
     DatasetSubmitResponse:
       type: object
       properties:
         message:
           type: string
+          example: Dataset Submit success
         data:
-          $ref: '#/components/schemas/Data'
+          $ref: '#/components/schemas/DatasetSubmitData'
+
     DatasetCorpusSearchRequest:
       required:
-      - criteria
+        - criteria
       type: object
       properties:
         userId:
           type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
         datasetType:
           type: string
           enum:
-          - parallel-corpus
-          - monolingual-corpus
-          - asr-corpus
-          - asr-unlabeled-corpus
-          - ocr-corpus
-          - document-layout-corpus
+            - parallel-corpus
+            - monolingual-corpus
+            - transliteration-corpus
+            - asr-corpus
+            - tts-corpus
+            - asr-unlabeled-corpus
+            - ocr-corpus
+            - document-layout-corpus
+            - glossary-corpus
+          example: parallel-corpus
         criteria:
           $ref: '#/components/schemas/SearchCriteria'
+
     SearchCriteria:
       type: object
       properties:
-        licence:
-          type: array
-          items:
-            type: string
-        minScore:
-          type: number
-          format: float
         serviceRequestNumber:
           type: string
-        targetLanguage:
-          type: array
-          items:
-            type: string
-        collectionMode:
-          type: array
-          items:
-            type: string
-        multipleContributors:
-          type: boolean
-        maxScore:
-          type: number
-          format: float
-        collectionSource:
-          type: array
-          items:
-            type: string
-        score:
-          type: number
-          format: float
-        domain:
-          type: array
-          items:
-            type: string
-        limit:
-          type: integer
-          format: int32
-        datasetId:
-          type: string
+          example: 1144238572
         datasetType:
           type: string
+          example: parallel-corpus
+        userId:
+          type: string
+          example: 6a73afa4fc774dcdb28d5fff944511f6
         sourceLanguage:
           type: array
           items:
             type: string
-        groupBy:
-          type: boolean
+          example: ["en"]
+           
+        targetLanguage:
+          type: array
+          items:
+            type: string
+          example: ["hi"]
+          
+        collectionMethod:
+          type: array
+          items:
+            type: string
+      
+        alignmentTool:
+          type: array
+          items:
+            type: string
+          example: ["LaBSE"]
+        editingTool:
+          type: array
+          items:
+            type: string
+          example: ["microsoft excel"]
+          
+        translationModel:
+          type: array
+          items:
+            type: string
+          example: ["google translation"]
+        license:
+          type: array
+          items:
+            type: string
+          example: ["cc-by-4.0"]
+        domain:
+          type: array
+          items:
+            type: string
+          example: ["news"]
+        datasetId:
+          type: array
+          items:
+            type: string
+          example: ["62019355394b3a48f83f814e"]
+        channel:
+          type: array
+          items:
+            type: string
+          example: ["wav"]
+        gender:
+          type: array
+          items:
+            type: string
+          example: ["male"]
+        format:
+          type: array
+          items:
+            type: string
+          example: ["wav"]
+        bitsPerSample:
+          type: array
+          items:
+            type: string
+          example: ["sixteen"]
+        dialect:
+          type: array
+          items:
+            type: string
+          example: ["hi-thethi"]
+        snrTool:
+          type: array
+          items:
+            type: string
+        collectionDescription:
+          type: array
+          items:
+            type: string
+          example: ["auto-aligned"]
+        ocrTool:
+          type: array
+          items:
+            type: string
+          example: ["LaBSE version 3.0"]
+        dpi:
+          type: array
+          items:
+            type: string
+          example: ["300_dpi"]
+        imageTextType:
+          type: array
+          items:
+            type: string
+          example: ["scene-text"]
+          
+        collectionSource:
+          type: string
+          example: ["https://main.sci.gov.in"]
+        submitterName:
+          type: string
+          example: Dr. Raghav
+        minScore:
+          type: number
+          format: float
+        maxScore:
+          type: number
+          format: float
+        score:
+          type: number
+          format: float
+        samplingRate:
+          type: number
+          format: float
         countOfTranslations:
           type: integer
           format: int32
+        minNoOfSpeakers:
+          type: integer
+          format: int32
+        maxNoOfSpeakers:
+          type: integer
+          format: int32
+        noOfSpeakers:
+          type: integer
+          format: int32
+        minAge:
+          type: integer
+          format: int32
+          example: 22
+        maxAge:
+          type: integer
+          format: int32
+          example: 35
+        age:
+          type: integer
+          format: int32
+          example: 18
+        multipleContributors:
+          type: boolean
+          example: false
         originalSourceSentence:
           type: boolean
+          example: false
+        groupBy:
+          type: boolean
+          example: false
+
+    DatasetCorpusSearchResponseData:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+          example: 1144238572
+        timestamp:
+          type: string
+          example: 2022-09-02T12:19:33.050+00:00
+          
     DatasetCorpusSearchResponse:
       type: object
       properties:
         message:
           type: string
         data:
-          $ref: '#/components/schemas/Data'
+          $ref: '#/components/schemas/DatasetCorpusSearchResponseData'
+
     DatasetListByUserIdResponse:
       type: object
       properties:
         message:
           type: string
+          example: Dataset List By userId
         data:
           type: array
           items:
@@ -1188,32 +1354,49 @@ components:
         count:
           type: integer
           format: int32
+          example: 20
+        totalCount:
+          type: integer
+          format: int32
+          example: 192
         startPage:
           type: integer
           format: int32
+          example: 1
         endPage:
           type: integer
           format: int32
+          example: 2
+          
     DatasetListByUserIdResponseDto:
       type: object
       properties:
         datasetId:
           type: string
+          example: 62019355394b3a48f83f814e
         serviceRequestNumber:
           type: string
+          example: 1144238572
         datasetName:
           type: string
+          example: Indic Trans English-Hindi
         datasetType:
           type: string
+          example: parallel-corpus
         submittedOn:
           type: string
+          example: Mon Aug 29 11:08:40 IST 2022
         status:
           type: string
+          example: Completed
+
+  
     DatasetByServiceReqNrResponse:
       type: object
       properties:
         message:
           type: string
+          example: Dataset details
         data:
           type: array
           items:
@@ -1224,22 +1407,27 @@ components:
         code:
           type: string
           description: Code of the error
+          example: 500
         message:
           type: string
           description: Description of the error
+          example: Internal Server Error
         cause:
           type: object
           description: Additional details related to the cause of the error
         report:
           type: string
           description: Link to the error report file
+          example: 
       description: Task Tracker entity
+    
     TaskTracker:
       type: object
       properties:
         serviceRequestNumber:
           type: string
           description: Unique identifier of the service request
+          example: 1169212231
         tool:
           type: string
           description: Tool updating this data
@@ -1251,49 +1439,113 @@ components:
           - publish
           - search
           - delete
+          example: download
         id:
           type: string
+          example: 62565849cddf941574b12c1a
         status:
           type: string
           description: Status of the task
+          example: Completed
         details:
           type: string
           description: Details of the current status of the task
         startTime:
           type: string
           description: ISO timestamp of the instance of the start of process
+          example: Tue Feb 08 03:17:01 IST 2022
         endTime:
           type: string
           description: ISO timestamp of the instance of the end of process
+          example: Tue Feb 08 03:17:01 IST 2022
         lastModified:
           type: string
           description: ISO timestamp of the instance of the end of process
+          example: Tue Feb 08 03:17:01 IST 2022
         error:
           $ref: '#/components/schemas/Error'
       description: Task Tracker entity
+
     DatasetByIdResponse:
       type: object
       properties:
         message:
           type: string
+          example: Dataset Details
         data:
           type: object
           additionalProperties:
             type: array
             items:
               $ref: '#/components/schemas/TaskTracker'
+          example:
+            '1124190703':
+              - serviceRequestNumber: '1124190703'
+                tool: download
+                id: 62cbc2bd72ec8a2af32f09ed
+                status: Completed
+                details:
+                startTime: Mon Jul 11 11:57:09 IST 2022
+                endTime: Mon Jul 11 11:57:13 IST 2022
+                lastModified:
+                error:
+              - serviceRequestNumber: '1124190703'
+                tool: ingest
+                id: 62cbc2c8b106cf28431ee7ab
+                status: Completed
+                details: '{"timeStamp":"Mon Jul 11 11:57:20 IST 2022","processedCount":[{"count":4,"type":"success"},{"count":0,"type":"failed"}]}'
+                startTime: Mon Jul 11 11:57:20 IST 2022
+                endTime: Mon Jul 11 11:57:20 IST 2022
+                lastModified: Mon Jul 11 11:57:20 IST 2022
+                error:
+              - serviceRequestNumber: '1124190703'
+                tool: validate
+                id:
+                status: Pending
+                details:
+                startTime:
+                endTime:
+                lastModified:
+                error:
+              - serviceRequestNumber: '1124190703'
+                tool: publish
+                id:
+                status: Pending
+                details:
+                startTime:
+                endTime:
+                lastModified:
+                error:
+        
+    DatasetSearchStatusData:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+          example: 2224190703
+        timestamp:
+          type: string
+          example: Mon Jul 11 11:38:15 IST 2022
+        searchCriteria:
+          $ref: '#/components/schemas/SearchCriteria'
+        status:
+          $ref: '#/components/schemas/TaskTracker'
+
     DatasetSearchStatusResponse:
       type: object
       properties:
         message:
           type: string
+          example: Search status
         data:
-          $ref: '#/components/schemas/Data'
+          $ref: '#/components/schemas/DatasetSearchStatusData'
+    
     SearchListByUserIdResponse:
       type: object
       properties:
         message:
           type: string
+          example: Search List
         data:
           type: array
           items:
@@ -1301,25 +1553,31 @@ components:
         count:
           type: integer
           format: int32
+          example: 10
         startPage:
           type: integer
           format: int32
+          example: 1
         endPage:
           type: integer
           format: int32
+          example: 2
     SearchListByUserIdResponseDto:
       type: object
       properties:
         serviceRequestNumber:
           type: string
+          example: 2243175285
         timestamp:
           type: string
+          example: Mon Jul 05 11:45:25 IST 2021
         searchCriteria:
           $ref: '#/components/schemas/SearchCriteria'
         status:
           type: array
           items:
             $ref: '#/components/schemas/TaskTracker'
+            
     ASRConfig:
       required:
       - language
@@ -2724,7 +2982,7 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/BenchmarkProcess'
-                
+
     HttpErrorResponse:
       required:
       - code
