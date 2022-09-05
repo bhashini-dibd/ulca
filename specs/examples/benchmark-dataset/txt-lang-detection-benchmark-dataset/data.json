@@ -1,0 +1,18 @@
+[
+    {
+        "sourceText": "हिंदी एक अच्छी भाषा है",
+        "langCode": "hi"
+    },
+    {
+        "sourceText": "its always good to learn many languages",
+        "langCode": "en"
+    },
+    {
+        "sourceText": "മലയാളം പഠിക്കാൻ എളുപ്പമാണ്",
+        "langCode": "ml"
+    },
+    {
+        "sourceText": "बहुत से लोग हिंदी पढ़ और लिख सकते हैं",
+        "langCode": "hi"
+    }
+]
