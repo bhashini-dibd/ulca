@@ -21,6 +21,7 @@ import SpeechToSpeech from "../ModelSearch/SpeechToSpeech/SpeechToSpeech";
 import GridView from "./GridView";
 import Dialog from "../../../components/common/Dialog";
 import StatusCheck from "./StatusCheck";
+import LanguageDetection from "./LanugageDetection";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,7 +67,7 @@ const NewSearchModel = () => {
   const history = useHistory();
 
   const makeModelSearchAPICall = (type) => {
-    if (type !== "sts" && type !== "status-check") {
+    if (type !== "sts" && type !== "status-check" && type!== 'language-detection') {
       const apiObj = new SearchModel(type, "", "");
       dispatch(APITransport(apiObj));
     }
@@ -113,6 +114,10 @@ const NewSearchModel = () => {
       return <StatusCheck />;
     }
 
+    if(ModelTask[value].value === "language-detection"){
+      return <LanguageDetection />;
+    }
+
     if (searchModelResult.filteredData.length)
       return (
         <Suspense fallback={<div>Loading Models...</div>}>
@@ -157,7 +162,7 @@ const NewSearchModel = () => {
         handleChange={handleChange}
         value={value}
         tabs={ModelTask}
-        showFilter={ModelTask[value].value === "sts" || ModelTask[value].value === "status-check" ? false : true} 
+        showFilter={ModelTask[value].value === "sts" || ModelTask[value].value === "status-check" ||  ModelTask[value].value === "language-detection" ? false : true} 
       >
         <TabPanel value={value} index={value}>
           {renderTabs()}
