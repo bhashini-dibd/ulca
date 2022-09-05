@@ -163,7 +163,7 @@ const HostedInference = (props) => {
               className={classes.headerContent}
             >
               <Typography variant="h6" className={classes.hosted}>
-                Language Detection{" "}
+                Input Text{" "}
                 {
                   // <LightTooltip
                   //   arrow
@@ -250,7 +250,8 @@ const HostedInference = (props) => {
                                 renderInput={(params) => <TextField {...params} variant="standard" />}
                             /> */}
               <Typography variant="h6" className={classes.hosted}>
-                {tgtLang}
+                {/* {tgtLang} */}
+                Detected Language
               </Typography>
             </Grid>
           </Grid>
