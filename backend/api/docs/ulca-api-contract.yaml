@@ -13,7 +13,7 @@ paths:
   /ulca/apis/v0/dataset/corpus/submit:
     post:
       tags:
-        - dataset-controller
+        - dataset
       operationId: datasetSubmit
       summary: Api to training dataset
       description: Api to upload training dataset
@@ -40,7 +40,7 @@ paths:
   /ulca/apis/v0/dataset/corpus/search:
     post:
       tags:
-      - dataset-controller
+      - dataset
       operationId: corpusSearch
       summary: Api to search training dataset
       description: Api to search training dataset based on different criteria
@@ -67,7 +67,7 @@ paths:
   /ulca/apis/v0/dataset/listByUserId:
     get:
       tags:
-        - dataset-controller
+        - dataset
       operationId: listByUserId
       summary: Api to dataset submitted by user
       description: Api to dataset submitted by user
@@ -122,7 +122,7 @@ paths:
   /ulca/apis/v0/dataset/getByServiceRequestNumber:
     get:
       tags:
-      - dataset-controller
+      - dataset
       operationId: datasetByServiceRequestNumber
       summary: Api to fetch dataset serviceRequestNumber
       description: Api to fetch dataset serviceRequestNumber
@@ -150,7 +150,7 @@ paths:
   /ulca/apis/v0/dataset/getByDatasetId:
     get:
       tags:
-      - dataset-controller
+      - dataset
       operationId: datasetById
       summary: Api to fetch dataset by datasetId
       description: Api to fetch dataset datasetId
@@ -178,7 +178,7 @@ paths:
   /ulca/apis/v0/dataset/corpus/search/status:
     get:
       tags:
-      - dataset-controller
+      - dataset
       operationId: searchStatus
       summary: Api to fetch status of search corpus dataset
       description: fetch status of search corpus dataset
@@ -206,7 +206,7 @@ paths:
   /ulca/apis/v0/dataset/corpus/search/listByUserId:
     get:
       tags:
-      - dataset-controller
+      - dataset
       operationId: searchListByUserId
       summary: Api to fetch all of search corpus dataset by userId
       description: fetch all of search corpus dataset by userId
@@ -248,7 +248,7 @@ paths:
   /ulca/apis/v0/model/upload:
     post:
       tags:
-      - model-controller
+      - model
       operationId: uploadModel
       summary: Api to upload model json file
       description: upload the model file in json format
@@ -288,7 +288,7 @@ paths:
   /ulca/apis/v0/model/tryMe:
     post:
       tags:
-        - model-controller
+        - model
       operationId: tryMeOcrImageContent
       summary: Api to detect the text in image file
       description: upload the image file to detect the text
@@ -320,7 +320,7 @@ paths:
   /ulca/apis/v0/model/status/change:
     post:
       tags:
-        - model-controller
+        - model
       operationId: changeStatus
       summary: Api to publish/unpublish a model
       description: changes the status of model to publish and unpublish and also accepts reason of unpublish
@@ -341,7 +341,7 @@ paths:
   /ulca/apis/v0/model/search:
     post:
       tags:
-      - model-controller
+      - model
       operationId: searchModel
       summary: Api to search model
       description: searches the model
@@ -368,7 +368,7 @@ paths:
   /ulca/apis/v0/model/feedback/submit:
     post:
       tags:
-        - model-controller
+        - model
       operationId: modelFeedbackSubmit
       summary: Api to provide feedback for model
       description: users can provide feedback for model after try
@@ -389,7 +389,7 @@ paths:
   /ulca/apis/v0/model/compute:
     post:
       tags:
-      - model-controller
+      - model
       operationId: computeModel
       summary: Api to compute the model inference end point result
       description: model inference end point is fetched
@@ -417,7 +417,7 @@ paths:
   /ulca/apis/v0/model/listByUserId:
     get:
       tags:
-        - model-controller
+        - model
       operationId: modelListByUserId
       summary: Api to get model by userId or search model of that user by model name
       description: list of model of logged-in user and/or search models of logged-in user by model name
@@ -476,7 +476,7 @@ paths:
   /ulca/apis/v0/model/getModel:
     get:
       tags:
-        - model-controller
+        - model
       operationId: getModel
       summary: Api to fetch model on modelId
       description: fetch the model details by passing modelId
@@ -504,7 +504,7 @@ paths:
   /ulca/apis/v0/model/getModelHealthStatus:
     get:
       tags:
-        - model-controller
+        - model
       operationId: getHealthStatus
       summary: Api to fetch list of available models
       description: fetch list of available models
@@ -546,7 +546,7 @@ paths:
   /ulca/apis/v0/model/feedback/getByTaskType:
     get:
       tags:
-        - model-controller
+        - model
       operationId: getModelFeedbackByTaskType
       summary: Api to fetch model feedback by taskType
       description: fetch model feedback by taskType
@@ -577,7 +577,7 @@ paths:
   /ulca/apis/v0/model/feedback/getByModelId:
     get:
       tags:
-        - model-controller
+        - model
       operationId: getModelFeedbackByModelId
       summary: Api to fetch model feedback by modelId
       description: fetch model feedback by modelId
@@ -608,7 +608,7 @@ paths:
   /ulca/apis/v0/benchmark/submit:
     post:
       tags:
-        - benchmark-controller
+        - benchmark
       operationId: submitBenchmark
       summary: Api to submit the benchmark dataset
       description: Api to submit the benchmark dataset
@@ -635,7 +635,7 @@ paths:
   /ulca/apis/v0/benchmark/search:
     post:
       tags:
-        - benchmark-controller
+        - benchmark
       operationId: searchBenchmark
       summary: Api to search the benchmark dataset
       description: Api to search the benchmark dataset
@@ -678,7 +678,7 @@ paths:
   /ulca/apis/v0/benchmark/getByTask:
     post:
       tags:
-        - benchmark-controller
+        - benchmark
       operationId: listBytask
       summary: Api to fetch the benchmark dataset on taskType
       description: Api to search the benchmark dataset based on taskType
@@ -705,7 +705,7 @@ paths:
   /ulca/apis/v0/benchmark/execute:
     post:
       tags:
-        - benchmark-controller
+        - benchmark
       operationId: executeBenchmark
       summary: Api to run benchmark process against a benchmark dataset
       description: Api to run benchmark process against a benchmark dataset for one metric
@@ -732,7 +732,7 @@ paths:
   /ulca/apis/v0/benchmark/execute/allMetric:
     post:
       tags:
-        - benchmark-controller
+        - benchmark
       operationId: executeBenchmarkAllMetric
       summary: Api to run benchmark process against a benchmark dataset for all metric available
       description: Api to run benchmark process against a benchmark dataset for all metric available
@@ -759,7 +759,7 @@ paths:
   /ulca/apis/v0/benchmark/process/status:
     get:
       tags:
-        - benchmark-controller
+        - benchmark
       operationId: processStatus
       summary: Api to fetch status of benchmark process
       description: fetch status of benchmark process by benchmarkProcessId
@@ -787,7 +787,7 @@ paths:
   /ulca/apis/v0/benchmark/listByUserId:
     get:
       tags:
-        - benchmark-controller
+        - benchmark
       operationId: listByUserId_1
       summary: Api to fetch benchamrk dataset list by userId
       description: fetch benchamrk dataset list by userId or search the benchmark dataset by name
@@ -843,7 +843,7 @@ paths:
   /ulca/apis/v0/benchmark/getBenchmark:
     get:
       tags:
-        - benchmark-controller
+        - benchmark
       operationId: getBenchmarkById
       summary: Api to fetch benchamrk dataset list by benchmarkId
       description: fetch benchamrk dataset list by benchmarkId
