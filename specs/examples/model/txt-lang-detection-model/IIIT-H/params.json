@@ -1,0 +1,45 @@
+{
+    "name": "IIIT-H textual language detection",
+    "version": "v1.0",
+    "description": "detect language from provided text",
+    "refUrl": "https://ltrc.iiit.ac.in/",
+    "task": {
+       "type" : "txt-lang-detection"
+    },
+    "languages": null,
+    "license": "null",
+    "domain": [
+       "general"
+    ],
+    "submitter": {
+        "name": "LTRC, IIIT-Hyderabad",
+        "aboutMe": "Language Technologies Research Centre",
+        "team": [
+           {
+              "name": "Vandan",
+              "aboutMe": "LTRC, IIIT-H"
+           },
+           {
+              "name": "Dipti Misra Sharma",
+              "aboutMe": "LTRC, IIIT-H"
+           }
+        ]
+     },
+    "inferenceEndPoint": {
+       "callbackUrl": "https://ssmt.iiit.ac.in/langidentify",
+       "schema": {
+          "taskType": "txt-lang-detection",
+          "request": {
+    		"input": [
+        			{
+            		"source": "કોરોનાને કારણે છેલ્લાં બે વર્ષથી ગરબાનું આયોજન થઈ શક્યું નહોતું"
+        			}
+    		]
+          }
+       }
+    },
+    "trainingDataset": {
+       "description": "Public dataset"
+    }
+ }
+ 

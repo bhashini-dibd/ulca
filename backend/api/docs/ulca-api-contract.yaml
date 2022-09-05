@@ -3,8 +3,8 @@ info:
   title: Unified Language Contribution API (ULCA) documentation
   description: 'The ULCA API documentation defines a core set of interfaces that enables users and communities to contribute AI/ML datasets to build a large, open Indic languages resource ecosystem. The dataset contributions are primarily geared toward the area of NLP, ASR/TTS and OCR. The documentation proposes core set of interfaces where various AI based models can be hosted, referenced and benchmarked. The interfaces enables entire community to participate, collaborate and track key benchmark parameters.'
   contact:
-    name: ekstep foundation
-    email: contact@ekstep.org
+    name: Ministry of Electronics and Information Technology
+    url: https://bhashini.gov.in/ulca
   version: 0.7.0
 servers:
 - url: https://meity-auth.ulcacontrib.org 
@@ -13,8 +13,10 @@ paths:
   /ulca/apis/v0/dataset/corpus/submit:
     post:
       tags:
-      - dataset-controller
+        - dataset-controller
       operationId: datasetSubmit
+      summary: Api to training dataset
+      description: Api to upload training dataset
       requestBody:
         content:
           application/json:
@@ -22,25 +24,26 @@ paths:
               $ref: '#/components/schemas/DatasetSubmitRequest'
         required: true
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/DatasetSubmitResponse'
-        "400":
+        '400':
           description: On input errors causing a failure in the job.
           content:
             '*/*':
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse'
-      
 
   /ulca/apis/v0/dataset/corpus/search:
     post:
       tags:
       - dataset-controller
       operationId: corpusSearch
+      summary: Api to search training dataset
+      description: Api to search training dataset based on different criteria
       requestBody:
         content:
           application/json:
@@ -64,28 +67,46 @@ paths:
   /ulca/apis/v0/dataset/listByUserId:
     get:
       tags:
-      - dataset-controller
-      operationId: listByUserIdDataset
+        - dataset-controller
+      operationId: listByUserId
+      summary: Api to dataset submitted by user
+      description: Api to dataset submitted by user
       parameters:
-      - name: userId
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: startPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-      - name: endPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
+        - name: startPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+        - name: endPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 2
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 10
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          example: Indic Trans English-Hindi
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
@@ -103,12 +124,15 @@ paths:
       tags:
       - dataset-controller
       operationId: datasetByServiceRequestNumber
+      summary: Api to fetch dataset serviceRequestNumber
+      description: Api to fetch dataset serviceRequestNumber
       parameters:
       - name: serviceRequestNumber
         in: query
         required: true
         schema:
           type: string
+        example: 1144238572
       responses:
         "200":
           description: OK
@@ -128,12 +152,15 @@ paths:
       tags:
       - dataset-controller
       operationId: datasetById
+      summary: Api to fetch dataset by datasetId
+      description: Api to fetch dataset datasetId
       parameters:
       - name: datasetId
         in: query
         required: true
         schema:
           type: string
+        example: 62019355394b3a48f83f814e
       responses:
         "200":
           description: OK
@@ -153,12 +180,15 @@ paths:
       tags:
       - dataset-controller
       operationId: searchStatus
+      summary: Api to fetch status of search corpus dataset
+      description: fetch status of search corpus dataset
       parameters:
       - name: serviceRequestNumber
         in: query
         required: true
         schema:
           type: string
+        example: 2244238572
       responses:
         "200":
           description: OK
@@ -178,24 +208,29 @@ paths:
       tags:
       - dataset-controller
       operationId: searchListByUserId
+      summary: Api to fetch all of search corpus dataset by userId
+      description: fetch all of search corpus dataset by userId
       parameters:
-      - name: userId
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: startPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-      - name: endPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
+        - name: startPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+        - name: endPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 2
       responses:
         "200":
           description: OK
@@ -215,12 +250,16 @@ paths:
       tags:
       - model-controller
       operationId: uploadModel
+      summary: Api to upload model json file
+      description: upload the model file in json format
       parameters:
       - name: userId
         in: query
         required: true
         schema:
           type: string
+        example:
+          userId: 164972ebd9a54f39a97a67bae55162ea
       requestBody:
         content:
           application/json:
@@ -230,6 +269,8 @@ paths:
                 file:
                   type: string
                   format: binary
+              example:
+                type: /Users/XYZ/Desktop/VakyanshASR-English.json
       responses:
         "200":
           description: OK
@@ -244,35 +285,45 @@ paths:
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse'
 
-  /ulca/apis/v0/model/submit:
+  /ulca/apis/v0/model/tryMe:
     post:
       tags:
-      - model-controller
-      operationId: submitModel
+        - model-controller
+      operationId: tryMeOcrImageContent
+      summary: Api to detect the text in image file
+      description: upload the image file to detect the text
+      parameters:
+        - name: modelId
+          in: query
+          required: true
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ModelExtended'
-        required: true
+              required:
+                - file
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
       responses:
-        "200":
+        '200':
           description: OK
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/ModelExtended'
-        "400":
-          description: On input errors causing a failure in the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
+                $ref: '#/components/schemas/ModelComputeResponse'
+
   /ulca/apis/v0/model/status/change:
     post:
       tags:
         - model-controller
       operationId: changeStatus
+      summary: Api to publish/unpublish a model
+      description: changes the status of model to publish and unpublish and also accepts reason of unpublish
       requestBody:
         content:
           application/json:
@@ -286,11 +337,14 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ModelStatusChangeResponse'
+
   /ulca/apis/v0/model/search:
     post:
       tags:
       - model-controller
       operationId: searchModel
+      summary: Api to search model
+      description: searches the model
       requestBody:
         content:
           application/json:
@@ -310,11 +364,35 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/model/feedback/submit:
+    post:
+      tags:
+        - model-controller
+      operationId: modelFeedbackSubmit
+      summary: Api to provide feedback for model
+      description: users can provide feedback for model after try
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelFeedbackSubmitRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ModelFeedbackSubmitResponse'
+
   /ulca/apis/v0/model/compute:
     post:
       tags:
       - model-controller
       operationId: computeModel
+      summary: Api to compute the model inference end point result
+      description: model inference end point is fetched
       requestBody:
         content:
           application/json:
@@ -334,93 +412,81 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/HttpErrorResponse'
+                
 
-  /ulca/apis/v0/model:
-    get:
-      tags:
-      - model-controller
-      operationId: get_Model
-      parameters:
-      - name: modelId
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ModelExtended'
-        "400":
-          description: On input errors causing a failure in the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-  
   /ulca/apis/v0/model/listByUserId:
     get:
       tags:
-      - model-controller
-      operationId: mistByUserIdModel
-      parameters:
-      - name: userId
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: startPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-      - name: endPage
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int32
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/ModelListByUserIdResponse'
-        "400":
-          description: On input errors causing a failure in the job.
-          content:
-            '*/*':
-              schema:
-                $ref: '#/components/schemas/HttpErrorResponse'
-                
-  /ulca/apis/v0/model/leaderboard/filters:
-    get:
-      tags:
         - model-controller
-      operationId: leaderBoardFilters
+      operationId: modelListByUserId
+      summary: Api to get model by userId or search model of that user by model name
+      description: list of model of logged-in user and/or search models of logged-in user by model name
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 6a73afa4fc774dcdb28d5fff944511f6
+           
+        - name: startPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+          
+        - name: endPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 2
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 10
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          example: IndicTrans
+        
       responses:
         '200':
           description: OK
           content:
             '*/*':
               schema:
-                type: object
+                $ref: '#/components/schemas/ModelListByUserIdResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
                 
   /ulca/apis/v0/model/getModel:
     get:
       tags:
         - model-controller
       operationId: getModel
+      summary: Api to fetch model on modelId
+      description: fetch the model details by passing modelId
       parameters:
         - name: modelId
           in: query
           required: true
           schema:
             type: string
+          example: 61c14e928112f94aa569c688
       responses:
         '200':
           description: OK
@@ -428,18 +494,129 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ModelListResponseDto'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
                 
-  
+  /ulca/apis/v0/model/getModelHealthStatus:
+    get:
+      tags:
+        - model-controller
+      operationId: getHealthStatus
+      summary: Api to fetch list of available models
+      description: fetch list of available models
+      parameters:
+        - name: taskType
+          in: query
+          required: false
+          schema:
+            type: string
+          example: translation
+        - name: startPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+        - name: endPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 2
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ModelHealthStatusResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/model/feedback/getByTaskType:
+    get:
+      tags:
+        - model-controller
+      operationId: getModelFeedbackByTaskType
+      summary: Api to fetch model feedback by taskType
+      description: fetch model feedback by taskType
+      parameters:
+        - name: taskType
+          in: query
+          required: true
+          schema:
+            type: string
+          example: translation
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetModelFeedbackListResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+      
+  /ulca/apis/v0/model/feedback/getByModelId:
+    get:
+      tags:
+        - model-controller
+      operationId: getModelFeedbackByModelId
+      summary: Api to fetch model feedback by modelId
+      description: fetch model feedback by modelId
+      parameters:
+        - name: modelId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 61c380072e74fa406e7618ba
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelFeedback'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+
   /ulca/apis/v0/benchmark/submit:
     post:
       tags:
         - benchmark-controller
       operationId: submitBenchmark
+      summary: Api to submit the benchmark dataset
+      description: Api to submit the benchmark dataset
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Benchmark'
+              $ref: '#/components/schemas/BenchmarkSubmitRequest'
         required: true
       responses:
         '200':
@@ -447,12 +624,21 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: '#/components/schemas/Benchmark'
+                $ref: '#/components/schemas/BenchmarkSubmitResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
   /ulca/apis/v0/benchmark/search:
     post:
       tags:
         - benchmark-controller
       operationId: searchBenchmark
+      summary: Api to search the benchmark dataset
+      description: Api to search the benchmark dataset
       parameters:
         - name: startPage
           in: query
@@ -460,12 +646,15 @@ paths:
           schema:
             type: integer
             format: int32
+          example: 1
         - name: endPage
           in: query
           required: false
           schema:
             type: integer
             format: int32
+          example: 2
+           
       requestBody:
         content:
           application/json:
@@ -479,11 +668,20 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/BenchmarkSearchResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
   /ulca/apis/v0/benchmark/getByTask:
     post:
       tags:
         - benchmark-controller
       operationId: listBytask
+      summary: Api to fetch the benchmark dataset on taskType
+      description: Api to search the benchmark dataset based on taskType
       requestBody:
         content:
           application/json:
@@ -497,11 +695,20 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/BenchmarkListByModelResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
   /ulca/apis/v0/benchmark/execute:
     post:
       tags:
         - benchmark-controller
       operationId: executeBenchmark
+      summary: Api to run benchmark process against a benchmark dataset
+      description: Api to run benchmark process against a benchmark dataset for one metric
       requestBody:
         content:
           application/json:
@@ -515,18 +722,54 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/ExecuteBenchmarkResponse'
-                
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/benchmark/execute/allMetric:
+    post:
+      tags:
+        - benchmark-controller
+      operationId: executeBenchmarkAllMetric
+      summary: Api to run benchmark process against a benchmark dataset for all metric available
+      description: Api to run benchmark process against a benchmark dataset for all metric available
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExecuteBenchmarkAllMetricRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ExecuteBenchmarkResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
   /ulca/apis/v0/benchmark/process/status:
     get:
       tags:
         - benchmark-controller
       operationId: processStatus
+      summary: Api to fetch status of benchmark process
+      description: fetch status of benchmark process by benchmarkProcessId
       parameters:
         - name: benchmarkProcessId
           in: query
           required: true
           schema:
             type: string
+          example: 3338807029
       responses:
         '200':
           description: OK
@@ -534,11 +777,76 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/BmProcessListByProcessIdResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/benchmark/listByUserId:
+    get:
+      tags:
+        - benchmark-controller
+      operationId: listByUserId_1
+      summary: Api to fetch benchamrk dataset list by userId
+      description: fetch benchamrk dataset list by userId or search the benchmark dataset by name
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 61c380072e74fa406e7618ba
+        - name: startPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 1
+        - name: endPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 2
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          example: 10
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          example: Indic benchmark dataset
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BenchmarkListByUserIdResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+
   /ulca/apis/v0/benchmark/getBenchmark:
     get:
       tags:
         - benchmark-controller
       operationId: getBenchmarkById
+      summary: Api to fetch benchamrk dataset list by benchmarkId
+      description: fetch benchamrk dataset list by benchmarkId
       parameters:
         - name: benchmarkId
           in: query
@@ -552,6 +860,13 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/GetBenchmarkByIdResponse'
+        '400':
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+  
   
   
   
@@ -561,6 +876,7 @@ paths:
       tags:
         - 'Create Users'
       summary: 'REST API to register/create new user'
+      description: 'register/create new user'
       requestBody:
         content:
           application/json:
@@ -592,6 +908,7 @@ paths:
       tags:
         - 'Verify Users'
       summary: 'REST API to verify user account.'
+      description: 'Verify user account'
       requestBody:
         content:
           application/json:
@@ -623,6 +940,7 @@ paths:
       tags:
         - 'Api-key-search'
       summary: 'REST API key for search'
+      description: 'search using key'
       requestBody:
         content:
           application/json:
@@ -654,6 +972,7 @@ paths:
       tags:
         - 'Login'
       summary: 'REST API to login'
+      description: 'login to existing/new user'
       requestBody:
         content:
           application/json:
@@ -686,6 +1005,7 @@ paths:
       tags:
         - 'Forgot Password'
       summary: 'REST API for forgot password request'
+      description: 'request to change password'
       requestBody:
         content:
           application/json:
@@ -716,6 +1036,7 @@ paths:
       tags:
         - 'Reset Password'
       summary: 'REST API for resetting password'
+      description: 'Reset forgotten password'
       requestBody:
         content:
           application/json:
@@ -746,6 +1067,7 @@ paths:
       tags:
         - 'Report Errors'
       summary: 'REST API to get a downloadable reports on errors '
+      description: 'download error reports'
       requestBody:
         content:
           application/json:
@@ -777,117 +1099,254 @@ components:
   schemas:
     DatasetSubmitRequest:
       required:
-      - datasetName
-      - url
-      - userId
+        - datasetName
+        - url
+        - userId
       type: object
       properties:
         userId:
           type: string
+          example: 6a73afa4fc774dcdb28d5fff944511f6
         datasetName:
           type: string
+          example: Indic trans English-Hindi
         url:
           type: string
-    Data:
+          example: https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/ulca-asr-ds-positive-testcase-03.zip
+          
+        
+    DatasetSubmitData:
       type: object
       properties:
         serviceRequestNumber:
           type: string
+          example: 1144238572
         datasetId:
           type: string
+          example: 62019355394b3a48f83f814e
         timestamp:
           type: string
+          example: Mon Aug 29 11:08:40 IST 2022
+          
     DatasetSubmitResponse:
       type: object
       properties:
         message:
           type: string
+          example: Dataset Submit success
         data:
-          $ref: '#/components/schemas/Data'
+          $ref: '#/components/schemas/DatasetSubmitData'
+
     DatasetCorpusSearchRequest:
       required:
-      - criteria
+        - criteria
       type: object
       properties:
         userId:
           type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
         datasetType:
           type: string
           enum:
-          - parallel-corpus
-          - monolingual-corpus
-          - asr-corpus
-          - asr-unlabeled-corpus
-          - ocr-corpus
-          - document-layout-corpus
+            - parallel-corpus
+            - monolingual-corpus
+            - transliteration-corpus
+            - asr-corpus
+            - tts-corpus
+            - asr-unlabeled-corpus
+            - ocr-corpus
+            - document-layout-corpus
+            - glossary-corpus
+          example: parallel-corpus
         criteria:
           $ref: '#/components/schemas/SearchCriteria'
+
     SearchCriteria:
       type: object
       properties:
-        licence:
-          type: array
-          items:
-            type: string
-        minScore:
-          type: number
-          format: float
         serviceRequestNumber:
           type: string
-        targetLanguage:
-          type: array
-          items:
-            type: string
-        collectionMode:
-          type: array
-          items:
-            type: string
-        multipleContributors:
-          type: boolean
-        maxScore:
-          type: number
-          format: float
-        collectionSource:
-          type: array
-          items:
-            type: string
-        score:
-          type: number
-          format: float
-        domain:
-          type: array
-          items:
-            type: string
-        limit:
-          type: integer
-          format: int32
-        datasetId:
-          type: string
+          example: 1144238572
         datasetType:
           type: string
+          example: parallel-corpus
+        userId:
+          type: string
+          example: 6a73afa4fc774dcdb28d5fff944511f6
         sourceLanguage:
           type: array
           items:
             type: string
-        groupBy:
-          type: boolean
+          example: ["en"]
+           
+        targetLanguage:
+          type: array
+          items:
+            type: string
+          example: ["hi"]
+          
+        collectionMethod:
+          type: array
+          items:
+            type: string
+      
+        alignmentTool:
+          type: array
+          items:
+            type: string
+          example: ["LaBSE"]
+        editingTool:
+          type: array
+          items:
+            type: string
+          example: ["microsoft excel"]
+          
+        translationModel:
+          type: array
+          items:
+            type: string
+          example: ["google translation"]
+        license:
+          type: array
+          items:
+            type: string
+          example: ["cc-by-4.0"]
+        domain:
+          type: array
+          items:
+            type: string
+          example: ["news"]
+        datasetId:
+          type: array
+          items:
+            type: string
+          example: ["62019355394b3a48f83f814e"]
+        channel:
+          type: array
+          items:
+            type: string
+          example: ["wav"]
+        gender:
+          type: array
+          items:
+            type: string
+          example: ["male"]
+        format:
+          type: array
+          items:
+            type: string
+          example: ["wav"]
+        bitsPerSample:
+          type: array
+          items:
+            type: string
+          example: ["sixteen"]
+        dialect:
+          type: array
+          items:
+            type: string
+          example: ["hi-thethi"]
+        snrTool:
+          type: array
+          items:
+            type: string
+        collectionDescription:
+          type: array
+          items:
+            type: string
+          example: ["auto-aligned"]
+        ocrTool:
+          type: array
+          items:
+            type: string
+          example: ["LaBSE version 3.0"]
+        dpi:
+          type: array
+          items:
+            type: string
+          example: ["300_dpi"]
+        imageTextType:
+          type: array
+          items:
+            type: string
+          example: ["scene-text"]
+          
+        collectionSource:
+          type: string
+          example: ["https://main.sci.gov.in"]
+        submitterName:
+          type: string
+          example: Dr. Raghav
+        minScore:
+          type: number
+          format: float
+        maxScore:
+          type: number
+          format: float
+        score:
+          type: number
+          format: float
+        samplingRate:
+          type: number
+          format: float
         countOfTranslations:
           type: integer
           format: int32
+        minNoOfSpeakers:
+          type: integer
+          format: int32
+        maxNoOfSpeakers:
+          type: integer
+          format: int32
+        noOfSpeakers:
+          type: integer
+          format: int32
+        minAge:
+          type: integer
+          format: int32
+          example: 22
+        maxAge:
+          type: integer
+          format: int32
+          example: 35
+        age:
+          type: integer
+          format: int32
+          example: 18
+        multipleContributors:
+          type: boolean
+          example: false
         originalSourceSentence:
           type: boolean
+          example: false
+        groupBy:
+          type: boolean
+          example: false
+
+    DatasetCorpusSearchResponseData:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+          example: 1144238572
+        timestamp:
+          type: string
+          example: 2022-09-02T12:19:33.050+00:00
+          
     DatasetCorpusSearchResponse:
       type: object
       properties:
         message:
           type: string
         data:
-          $ref: '#/components/schemas/Data'
+          $ref: '#/components/schemas/DatasetCorpusSearchResponseData'
+
     DatasetListByUserIdResponse:
       type: object
       properties:
         message:
           type: string
+          example: Dataset List By userId
         data:
           type: array
           items:
@@ -895,32 +1354,49 @@ components:
         count:
           type: integer
           format: int32
+          example: 20
+        totalCount:
+          type: integer
+          format: int32
+          example: 192
         startPage:
           type: integer
           format: int32
+          example: 1
         endPage:
           type: integer
           format: int32
+          example: 2
+          
     DatasetListByUserIdResponseDto:
       type: object
       properties:
         datasetId:
           type: string
+          example: 62019355394b3a48f83f814e
         serviceRequestNumber:
           type: string
+          example: 1144238572
         datasetName:
           type: string
+          example: Indic Trans English-Hindi
         datasetType:
           type: string
+          example: parallel-corpus
         submittedOn:
           type: string
+          example: Mon Aug 29 11:08:40 IST 2022
         status:
           type: string
+          example: Completed
+
+  
     DatasetByServiceReqNrResponse:
       type: object
       properties:
         message:
           type: string
+          example: Dataset details
         data:
           type: array
           items:
@@ -931,22 +1407,27 @@ components:
         code:
           type: string
           description: Code of the error
+          example: 500
         message:
           type: string
           description: Description of the error
+          example: Internal Server Error
         cause:
           type: object
           description: Additional details related to the cause of the error
         report:
           type: string
           description: Link to the error report file
+          example: 
       description: Task Tracker entity
+    
     TaskTracker:
       type: object
       properties:
         serviceRequestNumber:
           type: string
           description: Unique identifier of the service request
+          example: 1169212231
         tool:
           type: string
           description: Tool updating this data
@@ -958,49 +1439,113 @@ components:
           - publish
           - search
           - delete
+          example: download
         id:
           type: string
+          example: 62565849cddf941574b12c1a
         status:
           type: string
           description: Status of the task
+          example: Completed
         details:
           type: string
           description: Details of the current status of the task
         startTime:
           type: string
           description: ISO timestamp of the instance of the start of process
+          example: Tue Feb 08 03:17:01 IST 2022
         endTime:
           type: string
           description: ISO timestamp of the instance of the end of process
+          example: Tue Feb 08 03:17:01 IST 2022
         lastModified:
           type: string
           description: ISO timestamp of the instance of the end of process
+          example: Tue Feb 08 03:17:01 IST 2022
         error:
           $ref: '#/components/schemas/Error'
       description: Task Tracker entity
+
     DatasetByIdResponse:
       type: object
       properties:
         message:
           type: string
+          example: Dataset Details
         data:
           type: object
           additionalProperties:
             type: array
             items:
               $ref: '#/components/schemas/TaskTracker'
+          example:
+            '1124190703':
+              - serviceRequestNumber: '1124190703'
+                tool: download
+                id: 62cbc2bd72ec8a2af32f09ed
+                status: Completed
+                details:
+                startTime: Mon Jul 11 11:57:09 IST 2022
+                endTime: Mon Jul 11 11:57:13 IST 2022
+                lastModified:
+                error:
+              - serviceRequestNumber: '1124190703'
+                tool: ingest
+                id: 62cbc2c8b106cf28431ee7ab
+                status: Completed
+                details: '{"timeStamp":"Mon Jul 11 11:57:20 IST 2022","processedCount":[{"count":4,"type":"success"},{"count":0,"type":"failed"}]}'
+                startTime: Mon Jul 11 11:57:20 IST 2022
+                endTime: Mon Jul 11 11:57:20 IST 2022
+                lastModified: Mon Jul 11 11:57:20 IST 2022
+                error:
+              - serviceRequestNumber: '1124190703'
+                tool: validate
+                id:
+                status: Pending
+                details:
+                startTime:
+                endTime:
+                lastModified:
+                error:
+              - serviceRequestNumber: '1124190703'
+                tool: publish
+                id:
+                status: Pending
+                details:
+                startTime:
+                endTime:
+                lastModified:
+                error:
+        
+    DatasetSearchStatusData:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+          example: 2224190703
+        timestamp:
+          type: string
+          example: Mon Jul 11 11:38:15 IST 2022
+        searchCriteria:
+          $ref: '#/components/schemas/SearchCriteria'
+        status:
+          $ref: '#/components/schemas/TaskTracker'
+
     DatasetSearchStatusResponse:
       type: object
       properties:
         message:
           type: string
+          example: Search status
         data:
-          $ref: '#/components/schemas/Data'
+          $ref: '#/components/schemas/DatasetSearchStatusData'
+    
     SearchListByUserIdResponse:
       type: object
       properties:
         message:
           type: string
+          example: Search List
         data:
           type: array
           items:
@@ -1008,25 +1553,31 @@ components:
         count:
           type: integer
           format: int32
+          example: 10
         startPage:
           type: integer
           format: int32
+          example: 1
         endPage:
           type: integer
           format: int32
+          example: 2
     SearchListByUserIdResponseDto:
       type: object
       properties:
         serviceRequestNumber:
           type: string
+          example: 2243175285
         timestamp:
           type: string
+          example: Mon Jul 05 11:45:25 IST 2021
         searchCriteria:
           $ref: '#/components/schemas/SearchCriteria'
         status:
           type: array
           items:
             $ref: '#/components/schemas/TaskTracker'
+            
     ASRConfig:
       required:
       - language
@@ -1180,6 +1731,7 @@ components:
         sourceLanguageName:
           type: string
           description: human name associated with the language code
+          example: English
         sourceLanguage:
           type: string
           description: "Indic language code, iso-639-1, iso 639-2"
@@ -1216,6 +1768,7 @@ components:
         targetLanguageName:
           type: string
           description: human name associated with the language code
+          example: Hindi
         targetLanguage:
           type: string
           description: "Indic language code, iso-639-1, iso 639-2"
@@ -1251,17 +1804,18 @@ components:
           - sa
       description: "language pair, make targetLanguage null to reuse the object to\
         \ indicate single language"
+
     ModelExtended:
       required:
-      - description
-      - domain
-      - inferenceEndPoint
-      - languages
-      - license
-      - name
-      - submitter
-      - task
-      - trainingDataset
+        - description
+        - domain
+        - inferenceEndPoint
+        - languages
+        - license
+        - name
+        - submitter
+        - task
+        - trainingDataset
       type: object
       properties:
         name:
@@ -1274,8 +1828,9 @@ components:
           maxLength: 1000
           minLength: 25
           type: string
-          description: "brief description about model, its goal, basically something\
-            \ sweet about it"
+          description: >-
+            brief description about model, its goal, basically something sweet
+            about it
           example: Speech recognition model for classroom lecture
         refUrl:
           maxLength: 200
@@ -1295,18 +1850,22 @@ components:
         license:
           type: string
           enum:
-          - cc-by-4.0
-          - cc-by-sa-4.0
-          - cc-by-nd-2.0
-          - cc-by-nd-4.0
-          - cc-by-nc-3.0
-          - cc-by-nc-4.0
-          - cc-by-nc-sa-4.0
-          - mit
-          - gpl-3.0
-          - bsd-3-clause
-          - private-commercial
-          - unknown-license
+            - cc-by-4.0
+            - cc-by-sa-4.0
+            - cc-by-nd-2.0
+            - cc-by-nd-4.0
+            - cc-by-nc-3.0
+            - cc-by-nc-4.0
+            - cc-by-nc-sa-4.0
+            - mit
+            - gpl-3.0
+            - bsd-3-clause
+            - private-commercial
+            - unknown-license
+            - custom-license
+        licenseUrl:
+          type: string
+          description: url of the custom license
         domain:
           type: array
           properties:
@@ -1324,6 +1883,8 @@ components:
           $ref: '#/components/schemas/TrainingDataset'
         modelId:
           type: string
+        version:
+          type: string
         userId:
           type: string
         submittedOn:
@@ -1332,18 +1893,26 @@ components:
           type: string
         status:
           type: string
+        unpublishReason:
+          type: string
+          
     ModelTask:
       type: object
       properties:
         type:
           type: string
           enum:
-          - translation
-          - tts
-          - asr
-          - document-layout
-          - ocr
+            - translation
+            - transliteration
+            - tts
+            - asr
+            - document-layout
+            - ocr
+      example: 
+        type: translation
+         
       description: the category of model under which it has been released or trained
+
     OAuthIdentity:
       type: object
       properties:
@@ -1449,6 +2018,25 @@ components:
           description: "to be used along with translation model. expected translated\
             \ sentence, for reference"
       description: list of
+
+    SentenceList:
+      required:
+        - source
+      type: object
+      properties:
+        source:
+          maxLength: 2147483647
+          minLength: 1
+          type: string
+          description: input sentence for the model
+        target:
+          type: array
+          description: list of sentences
+          items:
+            type: string
+            description: list of sentences
+      description: list of sentences
+
     Submitter:
       required:
       - name
@@ -1459,6 +2047,7 @@ components:
           minLength: 5
           type: string
           description: Name of the Submitter
+          example: Dr. Raghav
         oauthId:
           $ref: '#/components/schemas/OAuthIdentity'
         aboutMe:
@@ -1619,6 +2208,7 @@ components:
           type: string
         data:
           $ref: '#/components/schemas/ModelExtended'
+    
     ModelStatusChangeRequest:
       type: object
       properties:
@@ -1631,15 +2221,25 @@ components:
           enum:
             - published
             - unpublished
+        unpublishReason:
+          type: string
+      example:
+        userId: 164972ebd9a54f39a97a67bae55162ea
+        modelId: 61c380072e74fa406e7618ba
+        status: unpublished
+        unpublishReason: running benchmark
+    
     ModelStatusChangeResponse:
       type: object
       properties:
         message:
           type: string
+      example:
+        message: Model unpublished successfull.
+    
     ModelSearchRequest:
       required:
-      - sourceLanguage
-      - task
+        - task
       type: object
       properties:
         task:
@@ -1648,6 +2248,11 @@ components:
           type: string
         targetLanguage:
           type: string
+      example:
+        task: translation
+        sourceLanguage: en
+        targetLanguage: hi
+
     ModelSearchResponse:
       type: object
       properties:
@@ -1660,20 +2265,86 @@ components:
         count:
           type: integer
           format: int32
+    ModelFeedbackSubmitRequest:
+      required:
+        - taskType
+      type: object
+      properties:
+        taskType:
+          type: string
+        modelId:
+          type: string
+        userId:
+          type: string
+        input:
+          type: string
+        output:
+          type: string
+        feedback:
+          type: object
+        detailedFeedback:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelFeedbackSubmitRequest'
+      example:
+        taskType: translation
+        input: how are you today ?
+        output: இன்று நீங்கள் எப்படி இருக்கிறீர்கள்?
+        feedback:
+          - feedbackQuestion: Are you satisfied with this translation?
+            feedbackQuestionResponse: 3
+          - feedbackQuestion: Add your comments
+            feedbackQuestionResponse: translation is good
+          - suggestedOutput: null
+          - feedbackQuestion: Rate Translated Text Quality
+            feedbackQuestionResponse: true
+        detailedFeedback: []
+        userId: 6a73afa4fc774dcdb28d5fff944511f6
+        
+    FeedbackData:
+      type: object
+      properties:
+        feedbackId:
+          type: string
+    ModelFeedbackSubmitResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/FeedbackData'
+      example:
+        message: model feedback submitted successful
+        data: 
+          feedbackId: 61c380072e74fa406e7618ba
+
     Input:
       type: object
       properties:
         source:
           type: string
+
     ModelComputeRequest:
       required:
-      - modelId
+        - modelId
       type: object
       properties:
         modelId:
           type: string
+        userId:
+          type: string
         task:
           type: string
+        source:
+          type: string
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+            - transgender
+            - non-specified
+            - others
         input:
           type: array
           items:
@@ -1685,233 +2356,52 @@ components:
           items:
             type: string
             format: byte
+        imageUri:
+          type: string
+      example:
+        modelId: 617798c22fbba1441081885d
+        userId: 6a73afa4fc774dcdb28d5fff944511f6
+        task: asr
+        source: ml
+        audioUri: https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_malayalam.wav
+        audioContent: UklGRiygCwBXQVZFZm10IBAAAAABAAIARKwAABCxAgAEABAAZGF0YQCgCwAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+  
     ModelComputeResponse:
       type: object
       properties:
         outputText:
           type: string
-    Benchmark:
-      required:
-        - dataset
-        - description
-        - domain
-        - languages
-        - name
-        - submitter
-        - task
-      type: object
-      properties:
-        benchmarkId:
-          type: string
-          description: auto-generated unique identification of benchmark data
-        name:
-          type: string
-          description: name of the benchmark
-        description:
-          maxLength: 200
-          minLength: 50
-          type: string
-          description: description of the benchmark including how it has been curated
-          example: benchmark sentences for government press release domain
-        metric:
-          type: array
-          items:
-            type: string
-        dataset:
-          maxLength: 200
-          minLength: 50
-          type: string
-          description: benchmark dataset url
-          example: benchmark dataset url
-        domain:
+        transliterationOutput:
           type: array
           properties:
             empty:
               type: boolean
-          description: This attribute defines that `relevant business area`
+          description: list of
           items:
-            type: string
-            description: This attribute defines that `relevant business area`
-        task:
-          $ref: '#/components/schemas/ModelTask'
-        languages:
-          type: array
-          properties:
-            empty:
-              type: boolean
-          items:
-            $ref: '#/components/schemas/LanguagePair'
-        submitter:
-          $ref: '#/components/schemas/Submitter'
-        createdOn:
-          type: string
-          description: timestamp when benchmark is created
-        submittedOn:
-          type: string
-          description: timestamp when benchmark is submitted/published
-      description: the benchmark dataset for model task.
-    BenchmarkSearchRequest:
-      required:
-        - task
-      type: object
-      properties:
-        task:
-          type: string
-        sourceLanguage:
-          type: string
-        targetLanguage:
-          type: string
-    BenchmarkSearchResponse:
-      type: object
-      properties:
-        message:
-          type: string
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Benchmark'
-        count:
-          type: integer
-          format: int32
-    BenchmarkListByModelRequest:
-      type: object
-      properties:
-        modelId:
-          type: string
-    BenchmarkDto:
-      required:
-        - dataset
-        - description
-        - domain
-        - languages
-        - name
-        - submitter
-        - task
-      type: object
-      properties:
-        availableMetric:
-          type: array
-          items:
-            type: string
-        benchmarkId:
-          type: string
-          description: auto-generated unique identification of benchmark data
-        name:
-          type: string
-          description: name of the benchmark
-        description:
-          maxLength: 200
-          minLength: 50
-          type: string
-          description: description of the benchmark including how it has been curated
-          example: benchmark sentences for government press release domain
-        metric:
-          type: array
-          items:
-            type: string
-        dataset:
-          maxLength: 200
-          minLength: 50
-          type: string
-          description: benchmark dataset url
-          example: benchmark dataset url
-        domain:
-          type: array
-          properties:
-            empty:
-              type: boolean
-          description: This attribute defines that `relevant business area`
-          items:
-            type: string
-            description: This attribute defines that `relevant business area`
-        task:
-          $ref: '#/components/schemas/ModelTask'
-        languages:
-          type: array
-          properties:
-            empty:
-              type: boolean
-          items:
-            $ref: '#/components/schemas/LanguagePair'
-        submitter:
-          $ref: '#/components/schemas/Submitter'
-        createdOn:
-          type: string
-          description: timestamp when benchmark is created
-        submittedOn:
-          type: string
-          description: timestamp when benchmark is submitted/published
-    BenchmarkListByModelResponse:
-      type: object
-      properties:
-        message:
-          type: string
-        benchmark:
-          type: array
-          items:
-            $ref: '#/components/schemas/BenchmarkDto'
-        count:
-          type: integer
-          format: int32
-    BenchmarkMetricRequest:
-      type: object
-      properties:
-        benchmarkId:
-          type: string
-        metric:
-          type: string
-    ExecuteBenchmarkRequest:
-      type: object
-      properties:
-        modelId:
-          type: string
-        benchmarks:
-          type: array
-          items:
-            $ref: '#/components/schemas/BenchmarkMetricRequest'
-    ExecuteBenchmarkResponse:
-      type: object
-      properties:
-        benchmarkProcessId:
-          type: string
-    BenchmarkProcess:
-      type: object
-      properties:
-        id:
-          type: string
-        modelId:
-          type: string
-        benchmarkProcessId:
-          type: string
-        benchmarkDatasetId:
-          type: string
-        benchmarkDatasetName:
-          type: string
-        modelName:
-          type: string
-        score:
-          type: number
-          format: double
-        metric:
-          type: string
-        status:
-          type: string
-        createdOn:
-          type: string
-        lastModifiedOn:
-          type: string
+            $ref: '#/components/schemas/SentenceList'
+      example:
+        outputText: இன்று நீங்கள் எப்படி இருக்கிறீர்கள்?
+        transliterationOutput: null
+    
     ModelListByUserIdResponse:
       type: object
       properties:
         message:
           type: string
+          example: success
         data:
           type: array
           items:
-            $ref: '#/components/schemas/ModelExtended'
+            $ref: '#/components/schemas/ModelListResponseDto'
         count:
           type: integer
           format: int32
+          example: 10
+        totalCount:
+          type: integer
+          format: int32
+          example: 172
+     
     ModelListResponseDto:
       required:
         - description
@@ -1925,6 +2415,11 @@ components:
         - trainingDataset
       type: object
       properties:
+        metric:
+          type: array
+          items:
+            type: string
+          example: ["bleu","meteor","ribes","gleu","bert", "chrf"]
         benchmarkPerformance:
           type: array
           items:
@@ -1948,7 +2443,7 @@ components:
           minLength: 5
           type: string
           description: github link or url giving further info about the model
-          example: 'https://github.com/Open-Speech-EkStep/vakyansh-models'
+          example: https://github.com/Open-Speech-EkStep/vakyansh-models
         task:
           $ref: '#/components/schemas/ModelTask'
         languages:
@@ -1973,6 +2468,10 @@ components:
             - bsd-3-clause
             - private-commercial
             - unknown-license
+            - custom-license
+        licenseUrl:
+          type: string
+          description: url of the custom license
         domain:
           type: array
           properties:
@@ -1990,59 +2489,316 @@ components:
           $ref: '#/components/schemas/TrainingDataset'
         modelId:
           type: string
+          example: 61c380072e74fa406e7618ba
         version:
           type: string
+          example: v1.0
         userId:
           type: string
+          example: 61c380072e74fa406e7618ba
         submittedOn:
           type: string
+          example: Sun Nov 07 16:59:23 IST 2021
         publishedOn:
           type: string
+          example: Sun Nov 07 16:59:23 IST 2021
         status:
           type: string
-    BmProcessListByProcessIdResponse:
+          example: unpublished
+        unpublishReason:
+          type: string
+          example: executing benchmark runs
+
+    BenchmarkProcess:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        modelId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        benchmarkProcessId:
+          type: string
+          example: 3338807029
+        benchmarkDatasetId:
+          type: string
+          example: 61c37ef32e74fa406e7618b6
+        benchmarkDatasetName:
+          type: string
+          example: OCR_benchmark_english
+        modelName:
+          type: string
+          example: Anuvaad-OCR-English
+        modelVersion:
+          type: string
+          example: v1.0
+        score:
+          type: number
+          format: double
+          example: 8.5
+        metric:
+          type: string
+          example: bleu
+        status:
+          type: string
+          example: Completed/In-Progress/Failed
+        createdOn:
+          type: string
+          example: Sun Nov 07 16:59:23 IST 2021
+        lastModifiedOn:
+          type: string
+          example: Sun Nov 07 16:59:23 IST 2021
+        startTime:
+          type: string
+          example: Sun Nov 07 16:59:23 IST 2021
+        endTime:
+          type: string
+          example: Sun Nov 07 16:59:23 IST 2021
+        recordCount:
+          type: integer
+          format: int32
+          example: 456098
+
+    ModelHealthStatusResponse:
       type: object
       properties:
         message:
           type: string
-        data:
+        benchmark:
           type: array
           items:
-            $ref: '#/components/schemas/BenchmarkProcess'
+            $ref: '#/components/schemas/ModelHealthStatus'
         count:
           type: integer
           format: int32
-    GetBenchmarkByIdResponse:
+    
+    ModelHealthStatus:
+      type: object
+      properties:
+        modelId:
+          type: string
+          example: 61c14e928112f94aa569c688
+        modelName:
+          type: string
+          example: Vakyansh-ASR-Hindi
+        taskType:
+          type: string
+          example: translation
+        isSyncApi:
+          type: boolean
+          example: true
+        callbackUrl:
+          type: string
+          
+        pollingUrl:
+          type: string
+        status:
+          type: string
+          example: available
+        lastStatusUpdate:
+          type: string
+          example: Mon Nov 08 03:00:00 IST 2021
+        nextStatusUpdateTiming:
+          type: string
+          example: Mon Nov 08 04:00:00 IST 2021
+
+    GetModelFeedbackListResponse:
+      type: object
+      properties:
+        feedbackId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        stsFeedbackId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        taskType:
+          type: string
+          example: translation
+        modelId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        stsPerformanceId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        userId:
+          type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
+        input:
+          type: string
+          example: how are you today ?
+        output:
+          type: string
+          example: இன்று நீங்கள் எப்படி இருக்கிறீர்கள்?
+        feedback:
+          type: object
+        createdAt:
+          type: string
+          example: Wed Jul 27 19:02:39 IST 2022
+        updatedAt:
+          type: string
+          example: Wed Jul 27 19:02:39 IST 2022
+        detailedFeedback:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelFeedback'
+    ModelFeedback:
+      type: object
+      properties:
+        feedbackId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        stsFeedbackId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        taskType:
+          type: string
+          example: translation
+        modelId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        stsPerformanceId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        userId:
+          type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
+        input:
+          type: string
+          example: how are you today ?
+        output:
+          type: string
+          example: இன்று நீங்கள் எப்படி இருக்கிற
+        feedback:
+          type: object
+        createdAt:
+          type: string
+          example: Wed Jul 27 19:02:39 IST 2022
+        updatedAt:
+          type: string
+          example: Wed Jul 27 19:02:39 IST 2022
+
+    BenchmarkSubmitRequest:
+      required:
+        - datasetName
+        - url
+        - userId
+      type: object
+      properties:
+        userId:
+          type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
+        datasetName:
+          type: string
+          example: Asr Indic benchmark dataset
+        url:
+          type: string
+          example: https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/bm-flores-en-hi.zip
+    
+    BenchmarkSubmitResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Benchmark Dataset has been Submitted
+        data:
+          $ref: '#/components/schemas/BenchmarkSubmitData'
+          
+    BenchmarkSubmitData:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string    
+          example: 4432197063
+        benchmarkId:
+          type: string
+          example: 61c159f58112f94aa569c68b
+        timestamp:
+          type: string
+          example: Wed Jul 27 19:02:39 IST 2022
+
+    BenchmarkSearchRequest:
+      required:
+        - task
+      type: object
+      properties:
+        task:
+          type: string
+          example: translation
+        sourceLanguage:
+          type: string
+          example: en
+        targetLanguage:
+          type: string
+          example: hi     
+    BenchmarkSearchResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Benchmark Search Result
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Benchmark'
+        count:
+          type: integer
+          format: int32
+          example: 24
+
+    Benchmark:
       required:
         - dataset
         - description
         - domain
         - languages
+        - license
         - name
         - submitter
         - task
       type: object
       properties:
-        benchmarkPerformance:
-          type: array
-          items:
-            $ref: '#/components/schemas/BenchmarkProcess'
         benchmarkId:
           type: string
           description: auto-generated unique identification of benchmark data
+          example: 6149e0f378af0820a7d2fb28
         name:
           type: string
           description: name of the benchmark
+          example: FLORES-101 en-mr Evaluation Benchmark
+        version:
+          type: string
+          description: params schema version
+          example: v1.20
+        license:
+          type: string
+          enum:
+            - cc-by-4.0
+            - cc-by-sa-4.0
+            - cc-by-nd-2.0
+            - cc-by-nd-4.0
+            - cc-by-nc-3.0
+            - cc-by-nc-4.0
+            - cc-by-nc-sa-4.0
+            - mit
+            - gpl-3.0
+            - bsd-3-clause
+            - private-commercial
+            - unknown-license
+            - custom-license
+          
+        licenseUrl:
+          type: string
+          description: url of the custom license
         description:
           maxLength: 200
           minLength: 50
           type: string
           description: description of the benchmark including how it has been curated
           example: benchmark sentences for government press release domain
-        metric:
-          type: array
-          items:
-            type: string
+        userId:
+          type: string
+          example: 164972ebd9a54f39a97a67bae55162ea
         dataset:
           maxLength: 200
           minLength: 50
@@ -2058,23 +2814,175 @@ components:
           items:
             type: string
             description: This attribute defines that `relevant business area`
+          example: ["news"]
         task:
           $ref: '#/components/schemas/ModelTask'
         languages:
+          $ref: '#/components/schemas/LanguagePair'
+        submitter:
+          $ref: '#/components/schemas/Submitter'
+        collectionSource:
           type: array
           properties:
             empty:
               type: boolean
+          description: various sources, url from where the information is collected.
+          example:
+            - https://main.sci.gov.in
           items:
-            $ref: '#/components/schemas/LanguagePair'
-        submitter:
-          $ref: '#/components/schemas/Submitter'
+            type: string
+            description: various sources, url from where the information is collected.
+            example: '["https://main.sci.gov.in"]'
+        paramSchema:
+          type: object
+          description: Object created from params.json
         createdOn:
           type: string
           description: timestamp when benchmark is created
+          example: Wed Jul 27 19:02:39 IST 2022
         submittedOn:
           type: string
           description: timestamp when benchmark is submitted/published
+          example: Wed Jul 27 19:02:39 IST 2022
+        status:
+          type: string
+          example: Completed
+      description: the benchmark dataset for model task.
+
+    BenchmarkListByModelRequest:
+      required:
+        - modelId
+      type: object
+      properties:
+        modelId:
+          type: string
+          example: 6149e0f378af0820a7d2fb28
+
+    
+    BenchmarkListByModelResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Benchmark Search Result
+        benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/BenchmarkDto'
+        count:
+          type: integer
+          format: int32
+          example: 24
+
+    BenchmarkDto:
+      allOf:     # Combines the BasicErrorModel and the inline model
+        - $ref: '#/components/schemas/Benchmark'
+        - type: object
+          required:
+            - rootCause
+          properties:
+            metric:
+              type: array
+              items:
+                type: string
+              example: ["bleu","meteor","ribes","gleu","bert", "chrf"]
+            availableMetric:
+              type: array
+              items:
+                type: string
+              example: ["bleu","meteor","ribes","gleu","bert", "chrf"]
+
+    BenchmarkMetricRequest:
+      type: object
+      properties:
+        benchmarkId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        metric:
+          type: string
+          example: bleu
+          
+    ExecuteBenchmarkRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          example: 61c380072e74fa406e7618ba
+        benchmarks:
+          type: array
+          items:
+            $ref: '#/components/schemas/BenchmarkMetricRequest'
+    
+    ExecuteBenchmarkResponse:
+      type: object
+      properties:
+        benchmarkProcessIds:
+          type: array
+          items:
+            type: string
+          example: ["3338807029"]
+    
+    ExecuteBenchmarkAllMetricRequest:
+      type: object
+      properties:
+        modelId:
+          type: string
+          example: 6149e0f378af0820a7d2fb28
+        benchmarkId:
+          type: string
+          example: 6149e0f378af0820a7d2fb28
+   
+    BmProcessListByProcessIdResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Benchmark Process list
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BenchmarkProcess'
+        count:
+          type: integer
+          format: int32
+          example: 1
+
+    BenchmarkListByUserIdResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Benchmark list by UserId
+        benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/Benchmark'
+        count:
+          type: integer
+          format: int32
+          example: 20
+        totalCount:
+          type: integer
+          format: int32
+          example: 192
+
+    GetBenchmarkByIdResponse:
+      allOf:     # Combines the BasicErrorModel and the inline model
+        - $ref: '#/components/schemas/Benchmark'
+        - type: object
+          required:
+            - metric
+          properties:
+            metric:
+              type: array
+              items:
+                type: string
+              example: ["bleu","meteor","ribes","gleu","bert", "chrf"]
+            benchmarkPerformance:
+              type: array
+              items:
+                $ref: '#/components/schemas/BenchmarkProcess'
+
     HttpErrorResponse:
       required:
       - code
@@ -2120,6 +3028,15 @@ components:
         phoneNo:
           type: string
           description: Mobile phone number of the user to be registered.
+      example:
+        firstName: Ram
+        lastName: Kumar
+        email: dummy@gmail.com
+        password: password
+        roles: user
+        phoneNo: 9090909090
+        
+        
     
 
     
@@ -2130,10 +3047,16 @@ components:
           $ref: '#/components/schemas/Authenticator'
         data:
           type: object
+          description: email and password for user Login
           oneOf:
             - $ref: '#/components/schemas/UlcaLoginAuthenticator'
             - $ref: '#/components/schemas/GmailLoginAuthenticator'
-    
+      example:
+        authenticator: ULCA
+        data:
+          email: dummy@gmail.com
+          password: password
+        
   
 
     ApiKeySearchRequest:
@@ -2143,6 +3066,8 @@ components:
           type: string
           description: Unique auth token of verified user
       description: Request for user records.
+      example:
+        key: 81eb44672d3746b8ac251ca2425c9184
 
 
     ForgotPasswordRequest:
@@ -2152,6 +3077,8 @@ components:
           type: string
           description: Unique email of the user.
       description: Request for user records.
+      example:
+        email: dummy@gmail.com
     
 
     ResetPasswordRequest:
@@ -2163,6 +3090,9 @@ components:
         password:
           type: string
           description: password to be updated
+      example:
+        email: dummy@gmail.com
+        password: resetNewPassword
 
 
     UserVerificationRequest:
@@ -2174,6 +3104,9 @@ components:
         userID:
           type: string
           description: unique userid value.
+      example:
+        email: dummy@gmail.com
+        userId: 6a73afa4fc774dcdb28d5fff944511f6
     
         
 
@@ -2352,7 +3285,6 @@ components:
               description: authuser 
 
           
-  
     Authenticator:
       type: string
       enum:
@@ -2362,8 +3294,6 @@ components:
         - FACEBOOK
         - LINKEDIN
     
-   
-  
     
     ErrorReportRequest:
       type: object
@@ -2372,6 +3302,8 @@ components:
           type: string
           description: Unique submission id.
       description: Request for error report on a particular submission.
+      example:
+        serviceRequestNumber: 1160112134
 
     
     ErrorReportResponse:

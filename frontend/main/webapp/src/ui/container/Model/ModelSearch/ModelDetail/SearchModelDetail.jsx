@@ -19,6 +19,7 @@ import {
   AppBar,
   Box,
   Card,
+  Tooltip,
 } from "@material-ui/core";
 import HostedInferASR from "./HostedInferASR";
 import HostedInferOCR from "./HostedInferOCR";
@@ -32,6 +33,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import HostedInferTransliteration from "./HostedInferTransliteration";
 import LanugageDetection from "../LanugageDetection";
+import metricInfo from "../../../../../utils/getMetricInfo.";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -342,10 +344,22 @@ const SearchModelDetail = (props) => {
                       aria-label="scrollable prevent tabs example"
                     >
                       {metricArray?.map((metric) => (
-                        <Tab
-                          label={metric}
-                          onClick={() => handleIndexChange(metric)}
-                        />
+                        <Tooltip
+                          title={
+                            <a
+                              style={{ textDecoration: "none" }}
+                              href="https://github.com/ULCA-IN/ulca/wiki/Model-Evaluation-Metrics-Definitions"
+                              target="_blank"
+                            >{`${metricInfo[metric]}. For further information click here.`}</a>
+                          }
+                          interactive
+                          arrow
+                        >
+                          <Tab
+                            label={metric}
+                            onClick={() => handleIndexChange(metric)}
+                          />
+                        </Tooltip>
                       ))}
                     </Tabs>
                   </AppBar>
