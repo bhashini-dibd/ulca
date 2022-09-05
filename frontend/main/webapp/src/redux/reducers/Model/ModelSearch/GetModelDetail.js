@@ -15,8 +15,8 @@ const initialState = {
 };
 
 const getModelDetails = (payload) => {
-  const target = payload["languages"][0]["targetLanguage"];
-  const source = payload["languages"][0]["sourceLanguage"];
+  const target = payload["languages"] && payload["languages"][0]["targetLanguage"];
+  const source = payload["languages"] && payload["languages"][0]["sourceLanguage"];
   return [
     { title: "Source URL", para: payload["refUrl"] },
     { title: "Task", para: payload["task"]["type"] },
@@ -39,15 +39,15 @@ const getModelDetails = (payload) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_MODEL_DETAIL:
-      const target = action.payload["languages"][0]["targetLanguage"];
-      const source = action.payload["languages"][0]["sourceLanguage"];
+      const target = action.payload["languages"]&& action.payload["languages"][0]["targetLanguage"];
+      const source = action.payload["languages"] && action.payload["languages"][0]["sourceLanguage"];
       return {
         result: getModelDetails(action.payload),
         description: action.payload.description,
         modelName: `${action.payload.name} ${action.payload.version}`,
         task: action.payload["task"]["type"],
-        source: action.payload["languages"][0]["sourceLanguage"],
-        target: action.payload["languages"][0]["targetLanguage"],
+        source: action.payload["languages"] && action.payload["languages"][0]["sourceLanguage"],
+        target: action.payload["languages"] && action.payload["languages"][0]["targetLanguage"],
         inferenceEndPoint: action.payload.inferenceEndPoint,
         submitter: action.payload.submitter.name,
         language: target
