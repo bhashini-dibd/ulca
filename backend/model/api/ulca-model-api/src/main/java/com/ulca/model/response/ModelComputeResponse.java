@@ -8,6 +8,7 @@ import com.ulca.model.request.ModelComputeRequest;
 import io.swagger.model.ASRResponse;
 import io.swagger.model.SentencesList;
 import io.swagger.model.TranslationResponse;
+import io.swagger.model.TxtLangDetectionResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -23,5 +24,6 @@ public class ModelComputeResponse {
 	
 	private String outputText;
 	private SentencesList transliterationOutput;
+	private TxtLangDetectionResponse languageDetectionOutput;
 
 }
