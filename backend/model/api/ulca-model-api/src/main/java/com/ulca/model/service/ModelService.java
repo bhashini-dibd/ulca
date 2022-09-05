@@ -17,6 +17,9 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import com.ulca.model.dao.*;
+import com.ulca.model.response.*;
+import io.swagger.model.*;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +40,6 @@ import com.ulca.benchmark.dao.BenchmarkDao;
 import com.ulca.benchmark.dao.BenchmarkProcessDao;
 import com.ulca.benchmark.model.BenchmarkProcess;
 import com.ulca.benchmark.util.ModelConstants;
-import com.ulca.model.dao.ModelDao;
-import com.ulca.model.dao.ModelExtended;
-import com.ulca.model.dao.ModelFeedback;
-import com.ulca.model.dao.ModelFeedbackDao;
 import com.ulca.model.exception.FileExtensionNotSupportedException;
 import com.ulca.model.exception.ModelNotFoundException;
 import com.ulca.model.exception.ModelStatusChangeException;
@@ -50,26 +49,10 @@ import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.request.ModelFeedbackSubmitRequest;
 import com.ulca.model.request.ModelSearchRequest;
 import com.ulca.model.request.ModelStatusChangeRequest;
-import com.ulca.model.response.GetModelFeedbackListResponse;
-import com.ulca.model.response.ModelComputeResponse;
-import com.ulca.model.response.ModelFeedbackSubmitResponse;
-import com.ulca.model.response.ModelListByUserIdResponse;
-import com.ulca.model.response.ModelListResponseDto;
-import com.ulca.model.response.ModelSearchResponse;
-import com.ulca.model.response.ModelStatusChangeResponse;
-import com.ulca.model.response.UploadModelResponse;
 
-import io.swagger.model.AsyncApiDetails;
-import io.swagger.model.ImageFormat;
-import io.swagger.model.InferenceAPIEndPoint;
-import io.swagger.model.LanguagePair;
 import io.swagger.model.LanguagePair.SourceLanguageEnum;
 import io.swagger.model.LanguagePair.TargetLanguageEnum;
-import io.swagger.model.LanguagePairs;
-import io.swagger.model.License;
-import io.swagger.model.ModelTask;
 import io.swagger.model.ModelTask.TypeEnum;
-import io.swagger.model.OneOfInferenceAPIEndPointSchema;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -90,6 +73,9 @@ public class ModelService {
 	@Autowired
 	ModelFeedbackDao modelFeedbackDao;
 
+	@Autowired
+	ModelHealthStatusDao modelHealthStatusDao;
+
 	@Value("${ulca.model.upload.folder}")
 	private String modelUploadFolder;
 
@@ -108,19 +94,50 @@ public class ModelService {
 		return model;
 	}
 
-	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage) {
+	public ModelListByUserIdResponse modelListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		log.info("******** Entry ModelService:: modelListByUserId *******");
+        Integer count = modelDao.countByUserId(userId);
 		List<ModelExtended> list = new ArrayList<ModelExtended>();
 
 		if (startPage != null) {
 			int startPg = startPage - 1;
 			for (int i = startPg; i < endPage; i++) {
-				Pageable paging = PageRequest.of(i, PAGE_SIZE);
-				Page<ModelExtended> modelList = modelDao.findByUserId(userId, paging);
+				Pageable paging = null;
+				if (pgSize!=null) {
+				paging =	PageRequest.of(i, pgSize);
+				} else {
+					paging = PageRequest.of(i,PAGE_SIZE);
+
+				}
+
+				Page<ModelExtended> modelList = null;
+				if (name!=null){
+					ModelExtended modelExtended = new ModelExtended();
+					modelExtended.setUserId(userId);
+					modelExtended.setName(name);
+					Example<ModelExtended> example = Example.of(modelExtended);
+
+					modelList = modelDao.findAll(example,paging);
+					count = modelDao.countByUserIdAndName(userId,name);
+				} else {
+					modelList = modelDao.findByUserId(userId, paging);
+				}
 				list.addAll(modelList.toList());
 			}
 		} else {
-			list = modelDao.findByUserId(userId);
+			if (name != null) {
+				ModelExtended modelExtended = new ModelExtended();
+				modelExtended.setUserId(userId);
+				modelExtended.setName(name);
+				Example<ModelExtended> example = Example.of(modelExtended);
+
+				list = modelDao.findAll(example);
+				count = list.size();
+
+			} else {
+				list = modelDao.findByUserId(userId);
+
+			}
 		}
 
 		List<ModelListResponseDto> modelDtoList = new ArrayList<ModelListResponseDto>();
@@ -131,7 +148,7 @@ public class ModelService {
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			modelDtoList.add(modelDto);
 		}
-		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size());
+		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size(),count);
 	}
 
 	public ModelListResponseDto getModelByModelId(String modelId) {
@@ -247,6 +264,7 @@ public class ModelService {
 		modelObj.setSubmittedOn(new Date().toString());
 		modelObj.setPublishedOn(new Date().toString());
 		modelObj.setStatus("unpublished");
+		modelObj.setUnpublishReason("Newly submitted model");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 		//String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
@@ -342,8 +360,14 @@ public class ModelService {
 
 		if (request.getTask() != null && !request.getTask().isBlank()) {
 			ModelTask modelTask = new ModelTask();
-			modelTask.setType(TypeEnum.fromValue(request.getTask()));
+			TypeEnum modelTaskType = TypeEnum.fromValue(request.getTask());
+			if(modelTaskType == null) {
+				throw new RequestParamValidationException("task type is not valid");
+			}
+			modelTask.setType(modelTaskType);
 			model.setTask(modelTask);
+		}else {
+			throw new RequestParamValidationException("task is required field");
 		}
 
 		if (request.getSourceLanguage() != null && !request.getSourceLanguage().isBlank()) {
@@ -408,6 +432,14 @@ public class ModelService {
 			throw new ModelStatusChangeException("Not the submitter of model. So, can not " + status + " it.", status);
 		}
 		model.setStatus(status);
+		if (status.equalsIgnoreCase("unpublished") ) {
+			if(request.getUnpublishReason() == null || ( request.getUnpublishReason() != null && request.getUnpublishReason().isBlank())){
+				throw new ModelStatusChangeException("unpublishReason field should not be empty" ,status);
+
+			}
+
+			model.setUnpublishReason(request.getUnpublishReason());
+		}
 		modelDao.save(model);
 		
 		return new ModelStatusChangeResponse("Model " + status +  " successfull.");
@@ -478,6 +510,29 @@ public class ModelService {
 				response.add(res);
 			}
 		return response;
+	}
+	public ModelHealthStatusResponse modelHealthStatus(String taskType, Integer startPage, Integer endPage) {
+		log.info("******** Entry ModelService:: modelHealthStatus *******");
+
+		List<ModelHealthStatus> list = new ArrayList<ModelHealthStatus>();
+		if(taskType==null || taskType.isBlank()){
+			list = modelHealthStatusDao.findAll();
+		} else {
+
+			if (startPage != null) {
+				int startPg = startPage - 1;
+				for (int i = startPg; i < endPage; i++) {
+					Pageable paging = PageRequest.of(i, PAGE_SIZE);
+					Page<ModelHealthStatus> modelHealthStatusesList = modelHealthStatusDao.findByTaskType(taskType, paging);
+					list.addAll(modelHealthStatusesList.toList());
+				}
+			} else {
+				list = modelHealthStatusDao.findByTaskType(taskType);
+			}
+		}
+		log.info("******** Exit ModelService:: modelHealthStatus *******");
+
+		return new ModelHealthStatusResponse("ModelHealthStatus", list, list.size());
 	}
 
 }

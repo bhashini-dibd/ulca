@@ -278,7 +278,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		proCountSuccess.put("count", validateSuccess);
 		proCountFailure.put("count", validateError);
 
-		if (v1 == true && (validateError + validateSuccess >= ingestSuccess)) {
+		if (v1 == true && (validateError + validateSuccess >= ingestSuccess) && (ingestSuccess > 0) ) {
 			// update the end time for validate
 			v2 = true;
 
@@ -307,7 +307,7 @@ public class ProcessTaskTrackerRedisServiceDaemon {
 		proCountSuccess.put("count", publishSuccess);
 		proCountFailure.put("count", publishError);
 
-		if (v2 == true && (publishError + publishSuccess >= validateSuccess)) {
+		if (v2 == true && (publishError + publishSuccess >= validateSuccess) && (validateSuccess > 0)) {
 			// update the end time for publish
 			v3 = true;
 

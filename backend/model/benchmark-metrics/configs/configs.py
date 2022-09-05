@@ -28,3 +28,4 @@ mongo_pt_collection_name = os.environ.get('ULCA_BENCHMARK_PROCESS_TRACKER_COLLEC
 model_task_type_translation = os.environ.get('MODEL_TASK_TYPE_TRANSLATION', 'translation')
 model_task_type_asr = os.environ.get('MODEL_TASK_TYPE_ASR', 'asr')
 model_task_type_ocr = os.environ.get('MODEL_TASK_TYPE_OCR', 'ocr')
+model_task_type_transliteration = os.environ.get('MODEL_TASK_TYPE_TRANSLITERATION', 'transliteration')

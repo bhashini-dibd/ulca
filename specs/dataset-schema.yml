@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.8.0
+  version: 0.10.3
 servers:
   - url: /ulca
 paths: {}
@@ -49,6 +49,8 @@ components:
             - $ref: '#/components/schemas/AsrUnlabeledParamsSchema'
             - $ref: '#/components/schemas/OcrDatasetParamsSchema'
             - $ref: '#/components/schemas/DocumentLayoutParamsSchema'
+            - $ref: '#/components/schemas/GlossaryDatasetParamsSchema'
+            - $ref: '#/components/schemas/NerDatasetParamsSchema'
     DatasetDataRowSchema:
       type: object
       description: the dataset data.json/.csv file should follow this schema
@@ -64,6 +66,8 @@ components:
             - $ref: '#/components/schemas/AsrUnlabeledRowSchema'
             - $ref: '#/components/schemas/OcrDatasetRowSchema'
             - $ref: '#/components/schemas/DocumentLayoutRowSchema'
+            - $ref: '#/components/schemas/GlossaryDatasetRowSchema'
+            - $ref: '#/components/schemas/NerDatasetRowSchema'
     DatasetCommonParamsSchema:
       type: object
       description: common parameters or attributes of dataset that is primarily same across the supported dataset.
@@ -117,6 +121,73 @@ components:
           $ref: '#/components/schemas/ParallelDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
+    GlossaryDatasetParamsSchema:
+      allOf:
+        - $ref: '#/components/schemas/DatasetCommonParamsSchema'
+        - type: object
+      type: object
+      properties:
+        level:
+          type: string
+          description: corresponding level of source-target glossary pair. w for word, p for phrase and s for sentence
+          enum:
+            - w
+            - p
+            - s
+        collectionMethod:
+          $ref: '#/components/schemas/GlossaryDatasetCollectionMethod'
+    GlossaryDatasetRowSchema:
+      required:
+        - sourceText
+        - targetText
+      properties:
+        sourceText:
+          type: string
+          description: textual data in source language
+        targetText:
+          type: string
+        level:
+          type: string
+          description: corresponding level of source-target glossary pair. W for word, P for phrase and S for sentence
+          enum:
+            - w
+            - p
+            - s
+        collectionMethod:
+          $ref: '#/components/schemas/GlossaryDatasetCollectionMethod'
+      type: object
+      description: the schema of data file uploaded should adhere to this specified structure.
+      
+    NerDatasetParamsSchema:
+      required:
+        - tagsFormat
+      allOf:
+        - $ref: '#/components/schemas/DatasetCommonParamsSchema'
+        - type: object
+      type: object
+      properties:
+        tagsFormat:
+          type: string
+          description: The accepted standard based on which NER tags are labelled in the dataset.
+          enum:
+            - CoNLL-2003
+        collectionMethod:
+          $ref: '#/components/schemas/NerDatasetCollectionMethod'
+        
+            
+    NerDatasetRowSchema:
+      required:
+        - nerData
+      properties:
+        sourceText:
+          type: string
+          description: textual data in source language
+        nerData:
+          $ref: '#/components/schemas/NerDataArray'
+        collectionMethod:
+          $ref: '#/components/schemas/NerDatasetCollectionMethod'
+      type: object
+      description: the schema of data file uploaded should adhere to this specified structure.
     MonolingualParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -131,7 +202,6 @@ components:
         text:
           type: string
           description: textual data in source language
-          
     TransliterationDatasetParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -155,7 +225,6 @@ components:
           $ref: '#/components/schemas/TransliterationDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
-          
     AsrParamsSchema:
       allOf:
         - $ref: '#/components/schemas/DatasetCommonParamsSchema'
@@ -579,6 +648,23 @@ components:
         alignmentScore:
           type: number
           description: the alignment score between sourceText and targetText
+    CollectionDetailsGlossaryAutoAligned:
+      type: object
+      description: auto-aligned collection details
+      required:
+        - alignmentTool
+      properties:
+        alignmentTool:
+          type: string
+          description: name of the alignment tool
+          example: LaBSE
+          enum:
+            - LaBSE
+            - LASER
+        alignmentToolVersion:
+          type: string
+          description: alignment tool version
+          example: LaBSE version 3.0
     CollectionDetailsAutoAlignedFromParallelDocs:
       type: object
       description: auto-aligned-from-parallel-docs collection details
@@ -600,6 +686,19 @@ components:
           type: number
           description: the alignment score between sourceText and targetText
     CollectionDetailsManualAligned:
+      type: object
+      description: manual aligned collection details. The pair was mapped manually from existing parallel documents.
+      properties:
+        editingTool:
+          type: string
+          description: name of the editing tool
+          example: microsoft excel
+        editingToolVersion:
+          type: string
+          description: editing tool version
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+    CollectionDetailsManualCurated:
       type: object
       description: manual aligned collection details. The pair was mapped manually from existing parallel documents.
       properties:
@@ -657,6 +756,19 @@ components:
         numOfKeysPressed:
           type: number
           description: number of keyboard keys pressed
+    CollectionDetailsMachineGenerated:
+      type: object
+      description: machine generat6ed collection details
+      required:
+        - model
+      properties:
+        model:
+          type: string
+          description: name of the transliteration model/engine used
+          example: google transliteration
+        modelVersion:
+          type: string
+          description: model/engine version
     CollectionDetailsMachineTransliterated:
       type: object
       description: machine transliteration collection details
@@ -682,6 +794,32 @@ components:
           enum:
             - MTAutomaticEvaluationMethod
             - MachineTranslatedEvaluationMethod2
+    CollectionDetailsMachineGeneratedPostEdited:
+      type: object
+      description: machine generated and post edited collection details
+      properties:
+        model:
+          type: string
+          description: name of the  model/engine used
+          example: google translation
+        modelVersion:
+          type: string
+          description: model/engine version
+        editingTool:
+          type: string
+          description: name of the post editing tool
+          example: google transliteration
+        editingToolVersion:
+          type: string
+          description: post editing tool version
+        contributor:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Contributor
+        timeSpentInSeconds:
+          type: number
+          description: time spent by user to transliterate the sentence.
+        numOfKeysPressed:
+          type: number
+          description: number of keyboard keys pressed
     CollectionDetailsMachineTransliteratedPostEdited:
       type: object
       description: machine transliterated and post edited collection details
@@ -779,7 +917,52 @@ components:
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslated'
             - $ref: '#/components/schemas/CollectionDetailsMachineTranslatedPostEdited'
             - $ref: '#/components/schemas/CollectionDetailsManualTranslated'
-            
+    GlossaryDatasetCollectionMethod:
+      type: object
+      description: specifies how the dataset is curated.
+      required:
+        - collectionDescription
+      properties:
+        collectionDescription:
+          type: array
+          description: various collection methods user have used to create the dataset
+          items:
+            type: string
+            minItems: 1
+            maxItems: 10
+            enum:
+              - auto-aligned
+              - manual-curated
+              - machine-generated
+              - machine-generated-post-edited
+        collectionDetails:
+          oneOf:
+            - $ref: '#/components/schemas/CollectionDetailsGlossaryAutoAligned'
+            - $ref: '#/components/schemas/CollectionDetailsManualCurated'
+            - $ref: '#/components/schemas/CollectionDetailsMachineGenerated'
+            - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedPostEdited'
+    NerDatasetCollectionMethod:
+      type: object
+      description: specifies how the dataset is curated.
+      required:
+        - collectionDescription
+      properties:
+        collectionDescription:
+          type: array
+          description: various collection methods user have used to create the dataset
+          items:
+            type: string
+            minItems: 1
+            maxItems: 10
+            enum:
+              - manual-curated
+              - machine-generated
+              - machine-generated-post-edited
+        collectionDetails:
+          oneOf:
+            - $ref: '#/components/schemas/CollectionDetailsManualCurated'
+            - $ref: '#/components/schemas/CollectionDetailsMachineGenerated'
+            - $ref: '#/components/schemas/CollectionDetailsMachineGeneratedPostEdited'
     TransliterationDatasetCollectionMethod:
       type: object
       description: specifies how the dataset is curated.
@@ -794,15 +977,16 @@ components:
             minItems: 1
             maxItems: 10
             enum:
+              - auto-aligned
               - machine-transliterated
               - machine-transliterated-post-edited
               - manual-transliterated
         collectionDetails:
           oneOf:
+            - $ref: '#/components/schemas/CollectionDetailsAutoAligned'
             - $ref: '#/components/schemas/CollectionDetailsMachineTransliterated'
             - $ref: '#/components/schemas/CollectionDetailsMachineTransliteratedPostEdited'
             - $ref: '#/components/schemas/CollectionDetailsManualTransliterated'
-            
     OcrCollectionMethod:
       type: object
       description: specifies how the dataset is curated.
@@ -937,3 +1121,55 @@ components:
     TranscriptTextFormatType1:
       type: object
       description: described in RT-04-guidelines
+    NerDataArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/NerData'
+    NerData:
+      type: object
+      description: Ner dataset sentencewise metadata
+      required :
+        - tag
+      anyOf:
+          - $ref: '#/components/schemas/NerWordIndex'
+          - $ref: '#/components/schemas/NerWord'
+      properties:
+       
+        position:
+          type: string
+          description: position of the word in phrase. B- Beginning, I- Intermediate
+          enum:
+            - B
+            - I
+        tag:
+          type: string
+          description: NER tag for corresponsing word/index. This should be inline with the corresponding tagsFormat specified in params.json.
+          example: PER
+          enum:
+            - O
+            - PER
+            - ORG
+            - LOC
+      
+    NerWordIndex:
+      type: object
+      description: Ner dataset sentencewise metadata
+      required :
+        - wordIndex
+      properties:
+        wordIndex:
+          type: number
+          description: index number of word
+          example: 1
+          minItems : 1
+    NerWord:
+      type: object
+      description: Ner dataset sentencewise metadata
+      required :
+        - word
+      properties:
+        word:
+          type: string
+          description: corresponsing word in the sentence
+          minItems : 1
+        

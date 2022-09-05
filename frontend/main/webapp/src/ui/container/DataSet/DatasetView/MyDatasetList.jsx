@@ -15,6 +15,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
 import Search from "../../../components/Datasets&Model/Search";
 import { translate } from "../../../../assets/localisation";
+import moment from 'moment';
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -31,6 +32,7 @@ const ContributionList = (props) => {
     PageInfo,
     handleSearch,
     searchValue,
+    totalCount,
   } = props;
 
   const handleShowFilter = (event) => {
@@ -49,13 +51,7 @@ const ContributionList = (props) => {
   });
 
   const convertDate = (date) => {
-    return date
-      .toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .toUpperCase();
+    return moment(date).format("MM/DD/YYYY");
   };
 
   const fetchHeaderButton = () => {
@@ -201,9 +197,9 @@ const ContributionList = (props) => {
         search: "Search",
         viewColumns: "View Column",
       },
-      pagination: {
-        rowsPerPage: "Rows per page",
-      },
+      // pagination: {
+      //   rowsPerPage: "Rows per page",
+      // },
       options: { sortDirection: "desc" },
     },
     onRowClick: (rowData) =>
@@ -219,13 +215,16 @@ const ContributionList = (props) => {
     download: false,
     print: false,
     viewColumns: false,
-    rowsPerPage: PageInfo.count,
-    rowsPerPageOptions: [10, 25, 50, 100],
+    rowsPerPageOptions: false,
+    // rowsPerPageOptions: [10, 25, 50, 100],
+    serverSide: true,
     selectableRows: "none",
     page: PageInfo.page,
+    count: totalCount,
     onTableChange: (action, tableState) => {
       switch (action) {
         case "changePage":
+          MyContributionListApi(`${tableState.page+1}`, `${tableState.page+1}`)
           processTableClickedNextOrPrevious("", tableState.page);
           break;
         case "changeRowsPerPage":

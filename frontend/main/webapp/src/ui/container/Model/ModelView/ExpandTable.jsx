@@ -75,9 +75,9 @@ const ExpandTable = (props) => {
                         >
                           {/* <TableCell></TableCell> */}
                           {/* <TableCell></TableCell> */}
-                          <TableCell>{row.benchmarkDatasetName}</TableCell>
-                          <TableCell>{row.metric.toUpperCase()}</TableCell>
-                          <TableCell>{row.score ? row.score : "--"}</TableCell>
+                          <TableCell>{row?.benchmarkDatasetName}</TableCell>
+                          <TableCell>{row?.metric?.toUpperCase()}</TableCell>
+                          <TableCell>{row?.score ? row.score : "--"}</TableCell>
                           <TableCell>{convertDate(row.createdOn)}</TableCell>
                           <TableCell>{renderStatus(row.status)}</TableCell>
                           {/* <TableCell></TableCell> */}

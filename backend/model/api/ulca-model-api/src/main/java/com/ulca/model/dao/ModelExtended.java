@@ -35,6 +35,9 @@ public class ModelExtended extends Model {
 	
 	@JsonProperty("status")
 	private String status;
+	
+	@JsonProperty("unpublishReason")
+	private String unpublishReason;
 
 	public ModelExtended modelId(String modelId) {
 		this.modelId = modelId;
@@ -108,4 +111,13 @@ public class ModelExtended extends Model {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
+	public String getUnpublishReason() {
+		return unpublishReason;
+	}
+
+	public void setUnpublishReason(String unpublishReason) {
+		this.unpublishReason = unpublishReason;
+	}
+	
 }

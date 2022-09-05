@@ -66,7 +66,7 @@ public class OcrDatasetParamsSchemaDeserializer extends StdDeserializer<OcrDatas
 			try {
 				OcrDatasetParamsSchemaKeys key = OcrDatasetParamsSchemaKeys.valueOf(k) ;
 			}catch (Exception ex) {
-				log.info("OcrDatasetParamsSchemaKeys not valid ");
+				log.info(k + " unknown property ");
 				errorList.add(k + " unknown property ");
 			}
 			

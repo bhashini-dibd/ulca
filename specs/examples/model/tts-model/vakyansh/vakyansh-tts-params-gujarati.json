@@ -1,0 +1,119 @@
+{
+  "name": "Vakyansh TTS - Gujarati",
+  "version": "v1.0",
+  "description": "TTS Model trained using glow TTS vocoder and HiFi GAN",
+  "refUrl": "https://github.com/Open-Speech-EkStep/vakyansh-models",
+  "task": {
+    "type": "tts"
+  },
+  "languages": [
+    {
+      "sourceLanguage": "gu"
+    }
+  ],
+  "license": "mit",
+  "domain": [
+    "general"
+  ],
+  "submitter": {
+    "name": "Vakyansh",
+    "oauthId": {
+      "oauthId": "ekstep@thoughtworks.com",
+      "provider": "google"
+    },
+    "team": [
+      {
+        "name": "Anirudh Gupta",
+        "oauthId": {
+          "oauthId": "anirudh.gupta@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Harveen Singh Chada",
+        "oauthId": {
+          "oauthId": "harveen.chadha@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Priyanshi Shah",
+        "oauthId": {
+          "oauthId": "priyanshi.shah@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Neeraj Chhimwal",
+        "oauthId": {
+          "oauthId": "neeraj.chhimwal@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Ankur Dhuriya",
+        "oauthId": {
+          "oauthId": "ankur.dhuriya@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Rishabh Gaur",
+        "oauthId": {
+          "oauthId": "rishabh.gaur@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Soujyo Sen",
+        "oauthId": {
+          "oauthId": "soujyo.sen@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Ankit Katiyar",
+        "oauthId": {
+          "oauthId": "ankit.katiyar@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Heera Ballabh",
+        "oauthId": {
+          "oauthId": "heerabal@thoughtworks.com",
+          "provider": "google"
+        }
+      },
+      {
+        "name": "Amulya Ahuja",
+        "oauthId": {
+          "oauthId": "amulya.ahuja@thoughtworks.com",
+          "provider": "google"
+        }
+      }
+    ]
+  },
+  "inferenceEndPoint": {
+    "callbackUrl": "https://inference.vakyansh.in/tts/infer",
+    "schema": {
+      "taskType": "tts",
+      "request": {
+        "input": [
+          {
+            "source": "આજે હવામાન સરસ છે."
+          }
+        ],
+        "config": {
+          "language": {
+            "sourceLanguage": "gu"
+          },
+          "gender": "male"
+        }
+      }
+    }
+  },
+  "trainingDataset": {
+    "description": "NLTM-R&D IIT Madras, Chennai."
+  }
+}

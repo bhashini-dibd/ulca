@@ -114,7 +114,6 @@
       }
     },
     "trainingDataset": {
-      "description": "IndicTTS dataset open sourced by IIT Chennai. A special corpus of Indian languages covering 13 major languages of India. It comprises of 10000+ spoken sentences/uttererances each of mono and english recorded by both Male and Female native speakers. Speech waveform files are available in .wav format along with the corresponding text."
+      "description": "NLTM-R&D IIT Madras, Chennai."
     }
   }
-  

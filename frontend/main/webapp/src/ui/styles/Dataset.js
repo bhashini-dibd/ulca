@@ -536,12 +536,29 @@ const DataSet = (theme) => ({
 
     //  paddingLeft:'16px'
   },
+
+  textAreaTransliteration: {
+    backgroundColor: "inherit",
+    border: "none",
+    width: "100%",
+    resize: "none",
+    outline: "none",
+    fontSize: "18px",
+    lineHeight: "32px",
+    color: "black",
+    fontFamily: "Roboto",
+    height : "14rem"
+
+    //  paddingLeft:'16px'
+  },
+  
   hostedCard: {
-    height: "300px",
+    minHeight: "300px",
     borderColor: "#2D63AB",
     borderRadius: "8px",
     paddingBottom: "13px",
     marginRight: "24px",
+    overflowY: "auto",
     "@media (max-width:400px)": {
       marginRight: "1px",
     },
@@ -612,7 +629,7 @@ const DataSet = (theme) => ({
     borderRadius: "24px",
     backgroundColor: "#F3F3F3",
     marginLeft: 0,
-    width: "220px",
+    width: "400px",
     textAlign: "left",
     float: "right",
   },
@@ -635,14 +652,12 @@ const DataSet = (theme) => ({
     paddingLeft: `calc(1em + ${theme.spacing(3)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-    },
     fontStyle: "italic",
     fontSize: "14px",
   },
   inputRoot: {
     width: "100%",
+    height: "39px",
   },
   filterBtn: {
     borderRadius: "22px",
@@ -1026,6 +1041,48 @@ const DataSet = (theme) => ({
     top:"165px",
     zIndex:"1",
 
+  },
+
+  metricsParent:{
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    position: "absolute",
+    right: "21%",
+    top: "160px",
+    zIndex: "9999",
+  },
+
+  metricsbtn: {
+    borderRadius: "50%",
+    background: "none",
+    cursor: "pointer",
+    padding: "12px",
+    marginLeft: '20px',
+  },
+
+  selectColumnContainer: {
+      borderBottom: "1px solid #00000029",
+      padding: "20px",
+      width: "350px",
+      height: "fit-content",
+      maxHeight: "350px",
+      "@media (max-width:550px)": {
+        width: "330px",
+        maxHeight: "170px",
+      },
+  },
+
+  selectColumnHeader: {
+    marginBottom: "25px",
+    color: "#000",
+  },
+
+  descCardIcon: {
+    display: "flex",
+    borderRadius: "20%",
+    padding: "15px",
+    height: "fit-content",
   }
 });
 

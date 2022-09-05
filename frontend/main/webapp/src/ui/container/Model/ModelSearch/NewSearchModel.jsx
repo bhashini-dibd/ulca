@@ -19,6 +19,8 @@ import FilterList from "./ModelDetail/Filter";
 import React from "react";
 import SpeechToSpeech from "../ModelSearch/SpeechToSpeech/SpeechToSpeech";
 import GridView from "./GridView";
+import Dialog from "../../../components/common/Dialog";
+import StatusCheck from "./StatusCheck";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -38,27 +40,26 @@ function TabPanel(props) {
 const NewSearchModel = () => {
   const filter = useSelector((state) => state.searchFilter);
   const type = ModelTask.map((task) => task.value);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(type.indexOf(filter.type));
   const { searchValue } = useSelector((state) => state.BenchmarkList);
   const [anchorEl, setAnchorEl] = useState(null);
   const popoverOpen = Boolean(anchorEl);
   const id = popoverOpen ? "simple-popover" : undefined;
-  const [rowsPerPage, setRowsPerPage] = useState(9)
+  const [rowsPerPage, setRowsPerPage] = useState(9);
+
   const handleChange = (event, newValue) => {
-    setValue(newValue);
-    makeModelSearchAPICall(ModelTask[newValue].value);
-    dispatch(SearchList(""));
-    dispatch({ type: "CLEAR_FILTER_MODEL" });
+      setValue(newValue);
+      makeModelSearchAPICall(ModelTask[newValue].value);
+      dispatch(SearchList(""));
+      dispatch({ type: "CLEAR_FILTER_MODEL" });
   };
+
   const dispatch = useDispatch();
   const searchModelResult = useSelector((state) => state.searchModel);
   const history = useHistory();
-  // useEffect(() => {
-  //   makeModelSearchAPICall(filter.type);
-  // }, []);
 
   const makeModelSearchAPICall = (type) => {
-    if (type !== "sts") {
+    if (type !== "sts" && type !== "status-check") {
       const apiObj = new SearchModel(type, "", "");
       dispatch(APITransport(apiObj));
     }
@@ -77,7 +78,6 @@ const NewSearchModel = () => {
     handleClose();
     dispatch(FilterModel(data, C.SEARCH_FILTER));
     dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: 0 });
-
   };
 
   const handleClick = (data) => {
@@ -91,7 +91,7 @@ const NewSearchModel = () => {
 
   const handleSearch = (event) => {
     dispatch(SearchList(event.target.value));
-    dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: 0 })
+    dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: 0 });
   };
 
   const handleRowsPerPageChange = (e, page) => {
@@ -101,6 +101,11 @@ const NewSearchModel = () => {
     if (ModelTask[value].value === "sts") {
       return <SpeechToSpeech />;
     }
+
+    if (ModelTask[value].value === "status-check") {
+      return <StatusCheck />;
+    }
+
     if (searchModelResult.filteredData.length)
       return (
         <Suspense fallback={<div>Loading Models...</div>}>
@@ -110,11 +115,11 @@ const NewSearchModel = () => {
             page={searchModelResult.page}
             rowsPerPage={rowsPerPage}
             handleRowsPerPageChange={handleRowsPerPageChange}
-            onPageChange={(e, page) => dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: page })}
+            onPageChange={(e, page) =>
+              dispatch({ type: C.EXPLORE_MODEL_PAGE_NO, payload: page })
+            }
           />
-           
         </Suspense>
-        
       );
     return (
       <div
@@ -128,32 +133,34 @@ const NewSearchModel = () => {
   };
 
   return (
-    <Tab
-      handleSearch={handleSearch}
-      handleShowFilter={handleShowFilter}
-      searchValue={searchValue}
-      handleChange={handleChange}
-      value={value}
-      tabs={ModelTask}
-      showFilter={ModelTask[value].value}
-    >
-      <TabPanel value={value} index={value}>
-        {renderTabs()}
-      </TabPanel>
+    <>
+      <Tab
+        handleSearch={handleSearch}
+        handleShowFilter={handleShowFilter}
+        searchValue={searchValue}
+        handleChange={handleChange}
+        value={value}
+        tabs={ModelTask}
+        showFilter={ModelTask[value].value === "sts" || ModelTask[value].value === "status-check" ? false : true} 
+      >
+        <TabPanel value={value} index={value}>
+          {renderTabs()}
+        </TabPanel>
 
-      {popoverOpen && (
-        <FilterList
-          id={id}
-          open={popoverOpen}
-          anchorEl={anchorEl}
-          handleClose={handleClose}
-          filter={searchModelResult.filter}
-          selectedFilter={searchModelResult.selectedFilter}
-          clearAll={clearAll}
-          apply={apply}
-        />
-      )}
-    </Tab>
+        {popoverOpen && (
+          <FilterList
+            id={id}
+            open={popoverOpen}
+            anchorEl={anchorEl}
+            handleClose={handleClose}
+            filter={searchModelResult.filter}
+            selectedFilter={searchModelResult.selectedFilter}
+            clearAll={clearAll}
+            apply={apply}
+          />
+        )}
+      </Tab>
+    </>
   );
 };
 

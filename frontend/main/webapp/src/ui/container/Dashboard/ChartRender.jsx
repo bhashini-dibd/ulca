@@ -107,10 +107,26 @@ const ChartRender = (props) => {
         ? selectedLanguageName
         : event && event.hasOwnProperty("label") && event.label
     );
-    return [
-      { field: "sourceLanguage", value: source },
-      { field: "targetLanguage", value: targetLanguage },
-    ];
+
+    if (selectedOption.value === "parallel-corpus") {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage },
+      ];
+    } else if (
+      selectedOption.value === "transliteration-corpus" ||
+      selectedOption.value === "glossary-corpus"
+    ) {
+      return [
+        { field: "sourceLanguage", value: "en" },
+        { field: "targetLanguage", value: source },
+      ];
+    } else {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage },
+      ];
+    }
   };
 
   const fetchNextParams = (eventValue) => {
@@ -136,11 +152,29 @@ const ChartRender = (props) => {
         ? selectedLanguageName
         : event && event.hasOwnProperty("label") && event.label
     );
-    return [
-      { field: "sourceLanguage", value: source },
-      { field: "targetLanguage", value: targetLanguage },
-      event,
-    ];
+
+    if (selectedOption.value === "parallel-corpus") {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: targetLanguage },
+        event,
+      ];
+    } else if (
+      selectedOption.value === "transliteration-corpus" ||
+      selectedOption.value === "glossary-corpus"
+    ) {
+      return [
+        { field: "sourceLanguage", value: "en" },
+        { field: "targetLanguage", value: source },
+        event,
+      ];
+    } else {
+      return [
+        { field: "sourceLanguage", value: source },
+        { field: "targetLanguage", value: "" },
+        event,
+      ];
+    }
   };
 
   const handleOnClick = (value, event, filter) => {
@@ -307,7 +341,7 @@ const ChartRender = (props) => {
 
   const fetchButtonssecondLevel = () => {
     return (
-      <div >
+      <div>
         {filterValue !== "domains" && (
           <Button
             color={toggleValue === "domains" ? "primary" : "default"}
@@ -334,7 +368,7 @@ const ChartRender = (props) => {
               handleLevelChange("collectionMethod_collectionDescriptions")
             }
           >
-            Collection Method  
+            Collection Method
           </Button>
         )}
         {filterValue !== "primarySubmitterName" && (
@@ -381,9 +415,8 @@ const ChartRender = (props) => {
                 ? "Submitter"
                 : "Domain"
             }`
-            
           );
-        
+
           setAxisValue({
             yAxis: "Count",
             xAxis:
@@ -695,7 +728,6 @@ const ChartRender = (props) => {
         }
 
         break;
-
       case "tts-corpus":
         if (page === 0) {
           selectedOption.value !== dataSet.value &&
@@ -761,7 +793,138 @@ const ChartRender = (props) => {
                 : "Domain",
           });
         }
-
+        break;
+      case "transliteration-corpus":
+        if (page === 0) {
+          selectedOption.value !== dataSet.value &&
+            fetchChartData(dataSet.value, "", [
+              { field: "sourceLanguage", value: "en" },
+            ]);
+          setAxisValue({ xAxis: "Languages", yAxis: "Count" });
+          setTitle("Number of records");
+        } else if (page === 1) {
+          setTitle(
+            `Number of records in ${
+              selectedLanguageName
+                ? selectedLanguageName
+                : event && event.hasOwnProperty("label") && event.label
+            } - Grouped by ${
+              filter === "domains"
+                ? "Domain"
+                : filter === "source"
+                ? "Source"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain"
+            }`
+          );
+          setAxisValue({
+            yAxis: "Count",
+            xAxis:
+              filter === "domains"
+                ? "Domain"
+                : filter === "source"
+                ? "Source"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain",
+          });
+        } else if (page === 2) {
+          setTitle(
+            `Number of audio hours in ${selectedLanguageName} ${
+              filterValue === "primarySubmitterName" ? "by" : "of"
+            } ${event.label ? event.label : dataValue}  - Grouped by ${
+              filter === "domains"
+                ? "Domain"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain"
+            }`
+          );
+          setAxisValue({
+            yAxis: "Count",
+            xAxis:
+              filter === "domains"
+                ? "Domain"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain",
+          });
+        }
+        break;
+      case "glossary-corpus":
+        if (page === 0) {
+          selectedOption.value !== dataSet.value &&
+            fetchChartData(dataSet.value, "", [
+              { field: "sourceLanguage", value: "en" },
+            ]);
+          setAxisValue({ xAxis: "Languages", yAxis: "Count" });
+          setTitle("Number of records");
+        } else if (page === 1) {
+          setTitle(
+            `Number of records in ${
+              selectedLanguageName
+                ? selectedLanguageName
+                : event && event.hasOwnProperty("label") && event.label
+            } - Grouped by ${
+              filter === "domains"
+                ? "Domain"
+                : filter === "source"
+                ? "Source"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain"
+            }`
+          );
+          setAxisValue({
+            yAxis: "Count",
+            xAxis:
+              filter === "domains"
+                ? "Domain"
+                : filter === "source"
+                ? "Source"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain",
+          });
+        } else if (page === 2) {
+          setTitle(
+            `Number of audio hours in ${selectedLanguageName} ${
+              filterValue === "primarySubmitterName" ? "by" : "of"
+            } ${event.label ? event.label : dataValue}  - Grouped by ${
+              filter === "domains"
+                ? "Domain"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain"
+            }`
+          );
+          setAxisValue({
+            yAxis: "Count",
+            xAxis:
+              filter === "domains"
+                ? "Domain"
+                : filter === "collectionMethod_collectionDescriptions"
+                ? "Collection Method"
+                : filter === "primarySubmitterName"
+                ? "Submitter"
+                : "Domain",
+          });
+        }
         break;
       default:
         setTitle("");
@@ -809,7 +972,7 @@ const ChartRender = (props) => {
                     "select-source-language",
                     "Source Language *"
                   )}
-                 
+
                   <Typography value="" variant="h6">
                     (
                     {DashboardReport.count
@@ -837,19 +1000,16 @@ const ChartRender = (props) => {
           </div>
 
           <div className={classes.title}>
-       
-     <ResponsiveContainer width="98%" height={550} >            
+            <ResponsiveContainer width="98%" height={550}>
               <BarChart
-             // style={{paddingRight:"10%"}}
+                // style={{paddingRight:"10%"}}
                 width={800}
                 height={400}
                 data={DashboardReport.data}
                 fontSize="14px"
                 fontFamily="Roboto"
                 maxBarSize={100}
-               
               >
-           
                 <XAxis
                   dataKey="label"
                   textAnchor={"end"}
@@ -885,11 +1045,10 @@ const ChartRender = (props) => {
                     fontWeight="bold"
                     fontSize={16}
                   ></Label>
-              
                 </YAxis>
 
                 <Tooltip
-                  contentStyle={{ fontFamily: "Roboto", fontSize: "14px"  }}
+                  contentStyle={{ fontFamily: "Roboto", fontSize: "14px" }}
                   formatter={(value) =>
                     new Intl.NumberFormat("en").format(value)
                   }
@@ -905,35 +1064,30 @@ const ChartRender = (props) => {
                     handleOnClick(page + 1, event);
                   }}
                 >
-                 
                   <LabelList
                     formatter={(value) =>
                       new Intl.NumberFormat("en").format(value)
                     }
-                    style={{paddingRight:"20px"}}
+                    style={{ paddingRight: "20px", textAnchor: "start" }}
                     cursor={{ fill: "none" }}
                     position="top"
                     dataKey="value"
                     fill="black"
-                    style={{ textAnchor: "start"}}
                     angle={-30}
                     clockWise={4}
                   />
-               
+
                   {DashboardReport.hasOwnProperty("data") &&
                     DashboardReport.data.length > 0 &&
                     DashboardReport.data.map((entry, index) => {
                       const color = colors[index < 9 ? index : index % 10];
                       return <Cell key={index} fill={`#${color}`} />;
                     })}
-                   
                 </Bar>
               </BarChart>
             </ResponsiveContainer>
-          
           </div>
         </Paper>
-        
       </div>
       <Footer />
     </MuiThemeProvider>

@@ -108,7 +108,22 @@ const ChartRender = (props) => {
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }])
+		if (selectedOption.value === "parallel-corpus") {
+			return [
+			  { field: "sourceLanguage", value: source },
+			  { field: "targetLanguage", value: targetLanguage },
+			];
+		  } else if (selectedOption.value === "transliteration-corpus" || selectedOption.value === "glossary-corpus") {
+			return [
+			  { field: "sourceLanguage", value: "en" },
+			  { field: "targetLanguage", value: source },
+			];
+		  } else {
+			return [
+			  { field: "sourceLanguage", value: source },
+			  { field: "targetLanguage", value: targetLanguage },
+			];
+		  }
 	}
 
 	const fetchNextParams = (eventValue) => {
@@ -129,7 +144,25 @@ const ChartRender = (props) => {
 		}
 		setSelectedLanguage(selectedLanguage ? selectedLanguage : event && event.hasOwnProperty("_id") && event._id)
 		setSelectedLanguageName(selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label)
-		return ([{ "field":"sourceLanguage", "value": source,},{ "field":"targetLanguage", "value": targetLanguage }, event])
+		if (selectedOption.value === "parallel-corpus") {
+			return [
+			  { field: "sourceLanguage", value: source },
+			  { field: "targetLanguage", value: targetLanguage },
+			  event
+			];
+		  } else if (selectedOption.value === "transliteration-corpus" || selectedOption.value === "glossary-corpus") {
+			return [
+			  { field: "sourceLanguage", value: "en" },
+			  { field: "targetLanguage", value: source },
+			  event
+			];
+		  } else {
+			return [
+			  { field: "sourceLanguage", value: source },
+			  { field: "targetLanguage", value: "" },
+			  event
+			];
+		  }
 	}
 
 	const handleOnClick = (value, event, filter) => {
@@ -310,6 +343,89 @@ const ChartRender = (props) => {
 					}
 	
 					break;
+					case 'transliteration-corpus':
+
+					if (page === 0) {
+						selectedOption.value !== dataSet.value && fetchChartData(dataSet.value, "", [{"field": "sourceLanguage","value": "en"}])
+						setAxisValue({xAxis:"Languages",yAxis:"Count"})
+						setTitle("Number of records")
+					} else if (page === 1) {
+						setTitle(`Number of records in ${selectedLanguageName ? selectedLanguageName : event && event.hasOwnProperty("label") && event.label} - Grouped by ${(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" :filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
+						setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" : (filter === "source") ? "Source" : filter === "collectionMethod_collectionDescriptions" ? "Collection Method" : filter === "primarySubmitterName" ? "Submitter": "Domain"})
+						
+					} else if (page === 2) {
+						setTitle(`Number of records in ${selectedLanguageName} ${filterValue === "primarySubmitterName"? "by" :"of"} ${event.label} - Grouped by ${(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method":filter === "primarySubmitterName" ? "Submitter": "Domain"}`)
+						setAxisValue({yAxis:("Count"),xAxis:(filter === "domains") ? "Domain" :  filter === "collectionMethod_collectionDescriptions" ? "Collection Method": filter === "primarySubmitterName" ? "Submitter":"Domain"})
+						
+					}
+					break;
+
+					case "glossary-corpus":
+						if (page === 0) {
+						selectedOption.value !== dataSet.value &&
+							fetchChartData(dataSet.value, "", [
+							{ field: "sourceLanguage", value: 'en' },
+							]);
+						setAxisValue({ xAxis: "Languages", yAxis: "Count" });
+						setTitle("Number of records");
+						} else if (page === 1) {
+						setTitle(
+							`Number of records in ${
+							selectedLanguageName
+								? selectedLanguageName
+								: event && event.hasOwnProperty("label") && event.label
+							} - Grouped by ${
+							filter === "domains"
+								? "Domain"
+								: filter === "source"
+								? "Source"
+								: filter === "collectionMethod_collectionDescriptions"
+								? "Collection Method"
+								: filter === "primarySubmitterName"
+								? "Submitter"
+								: "Domain"
+							}`
+						);
+						setAxisValue({
+							yAxis: "Count",
+							xAxis:
+							filter === "domains"
+								? "Domain"
+								: filter === "source"
+								? "Source"
+								: filter === "collectionMethod_collectionDescriptions"
+								? "Collection Method"
+								: filter === "primarySubmitterName"
+								? "Submitter"
+								: "Domain",
+						});
+						} else if (page === 2) {
+						setTitle(
+							`Number of audio hours in ${selectedLanguageName} ${
+							filterValue === "primarySubmitterName" ? "by" : "of"
+							} ${event.label ? event.label : dataValue}  - Grouped by ${
+							filter === "domains"
+								? "Domain"
+								: filter === "collectionMethod_collectionDescriptions"
+								? "Collection Method"
+								: filter === "primarySubmitterName"
+								? "Submitter"
+								: "Domain"
+							}`
+						);
+						setAxisValue({
+							yAxis: "Count",
+							xAxis:
+							filter === "domains"
+								? "Domain"
+								: filter === "collectionMethod_collectionDescriptions"
+								? "Collection Method"
+								: filter === "primarySubmitterName"
+								? "Submitter"
+								: "Domain",
+						});
+						}
+						break;
 			default:
 				setTitle("")
 		}

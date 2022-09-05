@@ -20,8 +20,13 @@ public final class ModelConstants {
 			/*
 			 * rouge has been temporarily removed
 			 */
-			String[] metric = { "bleu", "meteor", "ribes", "gleu", "bert" };
+			String[] metric = { "bleu", "meteor", "ribes", "gleu", "bert", "chrf" };
 
+			list = new ArrayList<>(Arrays.asList(metric));
+			return list;
+		}
+		if (task.equalsIgnoreCase("transliteration")) {
+			String[] metric = { "cer", "top-1 accuracy", "top-5 accuracy"};
 			list = new ArrayList<>(Arrays.asList(metric));
 			return list;
 		}

@@ -5,6 +5,7 @@ const initialState = {
   asr: [],
   tts: [],
   translation: [],
+  transliteration:[],
   sourceLanguage: [],
   targetLanguage: [],
 };
@@ -64,13 +65,15 @@ const updateModelType = (data, prevState) => {
   updatedObj["sourceLanguage"] = getLanguage(
     updatedObj["asr"],
     updatedObj["translation"],
-    updatedObj["tts"]
+    updatedObj["tts"],
+    updatedObj[" transliteration"]
   ).sourceLanguage;
 
   updatedObj["targetLanguage"] = getLanguage(
     updatedObj["asr"],
     updatedObj["translation"],
-    updatedObj["tts"]
+    updatedObj["tts"],
+    updatedObj[" transliteration"]
   ).targetLanguage;
   return updatedObj;
 };

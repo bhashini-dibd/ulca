@@ -59,7 +59,7 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 			try {
 				DocumentLayoutDatasetParamsSchemaKeys key = DocumentLayoutDatasetParamsSchemaKeys.valueOf(k);
 			} catch (Exception ex) {
-				log.info("DocumentLayoutDatasetParamsSchemaKeys not valid ");
+				log.info("DocumentLayoutDatasetParamsSchemaKeys " + k + " not in defined keys");
 				errorList.add(k + " unknown property ");
 			}
 		}

@@ -1,15 +1,18 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
-import {Dialog,Typography,Divider} from '@material-ui/core';
+import {Dialog,Typography,Divider, TextField,withStyles} from '@material-ui/core';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import Theme from "../../theme/theme-default";
+import CommonStyles from "../../styles/Styles";
+import { useState } from 'react';
 
-export default function ResponsiveDialog(props) {
-    const {title,message, open,handleSubmit, handleClose,actionButton, actionButton2  } = props;
+const ResponsiveDialog = (props) => {
+    const {title,message, open,handleSubmit, handleClose,actionButton, actionButton2,showTextBox, handleTextBox, classes  } = props;
+    const [reason, setReason] = useState();
   return (
     
     <MuiThemeProvider theme={Theme}> 
@@ -25,6 +28,22 @@ export default function ResponsiveDialog(props) {
             <Typography variant={"body2"}>
             {message}
             </Typography>
+            {
+              showTextBox ? 
+              <TextField 
+                className={classes.contributionTextBox} 
+                margin="dense" 
+                required 
+                label="Reason to unpublish" 
+                variant="outlined" 
+                fullWidth 
+                onChange={(e) => {handleTextBox(e.target.value); setReason(e.target.value)}}
+                InputProps={{ className: `${classes.contributionTextBoxInput}` }}
+                InputLabelProps={{ className: `${classes.contributionTextBoxInput}` }}
+                multiline
+              />
+              : null
+            }
           </DialogContentText>
         </DialogContent >
         <Divider light />
@@ -32,7 +51,7 @@ export default function ResponsiveDialog(props) {
           <Button size ={"small"} autoFocus onClick ={() =>{handleClose()}} color="default" variant={"outlined"}>
             {actionButton}
           </Button>
-          <Button size ={"small"} variant="contained" onClick={() =>{handleSubmit()}} color="primary" autoFocus>
+          <Button size ={"small"} variant="contained" onClick={() =>{handleSubmit()}} color="primary" autoFocus disabled={showTextBox && !reason ? true: false}>
             {actionButton2}
           </Button>
         </DialogActions>
@@ -40,3 +59,5 @@ export default function ResponsiveDialog(props) {
     </MuiThemeProvider>
   );
 }
+
+export default withStyles(CommonStyles)(ResponsiveDialog);

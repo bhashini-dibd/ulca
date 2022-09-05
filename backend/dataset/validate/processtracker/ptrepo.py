@@ -119,9 +119,9 @@ class PTRepo:
                 valueDuration = "validateSuccessSeconds"
                 if error:
                     valueDuration = "validateErrorSeconds"
-            valduration = client.hgetall(key)
-            if valduration:
-                client.hincrbyfloat(key, valueDuration, duration)
+                valduration = client.hgetall(key)
+                if valduration:
+                    client.hincrbyfloat(key, valueDuration, duration)
         except Exception as e:
             log.exception(f'Exception in redis search: {e}', e)
             return None

@@ -674,8 +674,9 @@ const SearchAndDownloadRecords = (props) => {
                 error={tgtError}
                 helperText="This field is mandatory"
                 disabled={
-                  !languagePair.source && datasetType["parallel-corpus"]
+                  !languagePair.source && datasetType["parallel-corpus"] && datasetType["transliteration-corpus"]
                 }
+               
               />
             </div>
           );

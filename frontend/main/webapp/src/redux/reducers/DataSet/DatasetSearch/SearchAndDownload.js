@@ -14,6 +14,7 @@ const getFilters = (payload, datasetType) => {
     return {
       ...filter,
       values: values.length && values[0].values,
+     
     };
   });
 };

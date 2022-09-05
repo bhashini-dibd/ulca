@@ -112,7 +112,7 @@ const getContributionList = (state, payload) => {
   let license = [];
   let filter = { status: [], task: [], domain: [], license: [] };
   let refreshStatus = false;
-  payload.forEach((element) => {
+  payload.data.forEach((element) => {
     let sLanguage =
       element.languages.length > 0 &&
       element.languages[0].sourceLanguage &&
@@ -156,6 +156,7 @@ const getContributionList = (state, payload) => {
           : element.status === "Failed"
           ? "#F54336"
           : "green",
+      unpublishReason: element.unpublishReason,
     });
     !statusFilter.includes(element.status) &&
       element.status &&
@@ -188,6 +189,7 @@ const getContributionList = (state, payload) => {
     { responseData: responseData }
   );
   filteredData.filter = filter;
+  filteredData.totalCount = payload.totalCount;
   return filteredData;
 };
 
@@ -260,13 +262,14 @@ const reducer = (state = initialState, action) => {
     case C.TOGGLE_MODEL_STATUS:
       return {
         ...state,
-        responseData: getContributionList(state, action.payload.data)
+        responseData: getContributionList(state, action.payload)
           .responseData,
         filteredData: updateModelStatus(
-          getContributionList(state, action.payload.data).responseData,
+          getContributionList(state, action.payload).responseData,
           action.payload.searchValue
         ),
       };
+      
     default:
       return {
         ...state,

@@ -1,5 +1,5 @@
 from models.abstract_handler import BaseValidator
-from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled
+from configs.configs import dataset_type_parallel, dataset_type_asr, dataset_type_ocr, dataset_type_monolingual, dataset_type_asr_unlabeled, dataset_type_glossary
 import logging
 from logging.config import dictConfig
 log = logging.getLogger('file')
@@ -24,6 +24,8 @@ class BasicSchemaCheck(BaseValidator):
                 required_keys = {'text', 'sourceLanguage'}
             if request["datasetType"] == dataset_type_asr_unlabeled:
                 required_keys = {'fileLocation'}
+            if request["datasetType"] == dataset_type_glossary:
+                required_keys = {'sourceText', 'targetText', 'sourceLanguage', 'targetLanguage'}
 
             if required_keys <= request["record"].keys():
                 return super().execute(request)

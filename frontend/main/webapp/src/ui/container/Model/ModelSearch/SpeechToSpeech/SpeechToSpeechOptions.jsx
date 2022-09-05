@@ -86,7 +86,7 @@ const SpeechToSpeechOptions = (props) => {
               <img
                 src={Start}
                 alt=""
-                onClick={() => handleStartRecording()}
+                onClick={()=> {handleStartRecording()}}
                 style={{ cursor: "pointer" }}
               />{" "}
             </div>
@@ -260,7 +260,7 @@ const SpeechToSpeechOptions = (props) => {
                 />
               </div>
               <IconButton
-                style={{ position: "absolute", top: "0", right: "0", }}
+                style={{ position: "absolute", top: "0", right: "17px", }}
                 onClick={() => handleCopyClick(prop)}
               >
 
@@ -553,7 +553,7 @@ const SpeechToSpeechOptions = (props) => {
         {renderOutput()}
 
       </Grid>
-      {audio ? (
+      {output.translation && output.asr ? (
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <Typography variant="h5" style={{ marginBottom: "1%" }}>
             Intermediate Output

@@ -16,7 +16,8 @@ public class ModelStatusChangeRequest {
 	private String userId;
 	private String modelId;
 	private StatusEnum status;
-
+	private String unpublishReason;
+	
 	public enum StatusEnum {
 	    published, unpublished
 	}

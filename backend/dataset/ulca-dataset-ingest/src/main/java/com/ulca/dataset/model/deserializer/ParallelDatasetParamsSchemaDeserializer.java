@@ -73,7 +73,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 			try {
 				ParallelDatasetSchemaKeys key = ParallelDatasetSchemaKeys.valueOf(k) ;
 			}catch (Exception ex) {
-				log.info("no enums found ");
+				log.info(k + " unknown property ");
 				errorList.add(k + " unknown property ");
 			}
 			

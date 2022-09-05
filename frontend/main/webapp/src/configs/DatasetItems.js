@@ -1,9 +1,11 @@
 export const ModelTask = [
+  { value: "status-check", label: "Status Check"},
   { value: 'sts', label: 'STS' },
   { value: "translation", label: "Translation" },
   { value: "asr", label: "ASR" },
   { value: "tts", label: "TTS" },
   { value: "ocr", label: "OCR" },
+  { value: "transliteration", label: "Transliteration" },
 ];
 export const DatasetItems = [
   { value: "parallel-corpus", label: "Parallel Dataset" },
@@ -12,6 +14,8 @@ export const DatasetItems = [
   { value: "ocr-corpus", label: "OCR Dataset" },
   { value: "asr-unlabeled-corpus", label: "ASR Unlabeled Dataset" },
   { value: "tts-corpus", label: "TTS Dataset" },
+  { value: "transliteration-corpus", label: "Transliteration Dataset" },
+  { value: "glossary-corpus", label: "Glossary Dataset" },
 ];
 
 export const DatasetReadymade = [
@@ -20,6 +24,7 @@ export const DatasetReadymade = [
   { value: "asr-corpus", label: "ASR" },
   { value: "ocr-corpus", label: "OCR" },
   { value: "asr-unlabeled-corpus", label: "ASR Unlabeled" },
+  { value: "transliteration", label: "Transliteration" },
 ];
 export const Language = [
   { value: "as", label: "Assamese" },
@@ -53,6 +58,9 @@ export const Language = [
   { value: "sa", label: "Sanskrit" },
   { value: "bho", label: "Bhojpuri" },
   { value: "raj", label: "Rajasthani" },
+  { value: "awa", label: "Awadhi" },
+  { value: "hne", label: "Chhattisgarhi" },
+  { value: "mag", label: "Magahi" },
 ];
 
 export const FilterBy = {

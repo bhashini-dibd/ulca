@@ -231,7 +231,8 @@ footer ul {
     border-radius: 24px;
     padding: 20px;
     position: relative;
-    max-width: 300px;
+    max-width: 365px;
+    min-height: 400px;
 }
 .models div.col-sm-4:first-child>.dataset-orange {
     border: 1px solid #e29f72;
@@ -351,7 +352,7 @@ footer .footerBg img {
     height: 48px;
 }
 .models .dataset-orange {
-  min-height: 520px;
+  min-height: 566px;
 }
 footer ul.link li {
     padding-left: 0;

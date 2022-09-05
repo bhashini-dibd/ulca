@@ -1,5 +1,7 @@
 import C from "../../../actions/constants";
 import getDatasetName from "../../../../utils/getDataset";
+import moment from 'moment';
+
 const initialState = {
   responseData: [],
   filteredData: [],
@@ -9,14 +11,7 @@ const initialState = {
 };
 
 const dateConversion = (value) => {
-  var myDate = new Date(value);
-  let result = myDate.toLocaleString("en-IN", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    // hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true
-  });
-  return result.toUpperCase();
+  return moment(value).format("MM/DD/YYYY");
 };
 
 const getFilterValue = (payload, data) => {
@@ -67,7 +62,7 @@ const getContributionList = (state, payload) => {
 
   let filter = { status: [], datasetType: [] };
   let refreshStatus = false;
-  payload.forEach((element) => {
+  payload.benchmark.forEach((element) => {
     responseData.push({
       submitRefNumber: element.benchmarkId,
       datasetName: element.name,
@@ -100,6 +95,7 @@ const getContributionList = (state, payload) => {
     { filterValues: state.selectedFilter },
     { responseData: responseData }
   );
+  filteredData.totalCount = payload.totalCount;
   filteredData.filter = filter;
   return filteredData;
 };
@@ -131,7 +127,7 @@ const isFilterSelected = (selectedFilter) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_BENCHMARK_CONTRIBUTION_LIST:
-      return getContributionList(state, action.payload.benchmark);
+      return getContributionList(state, action.payload);
 
     case C.CONTRIBUTION_BENCHMARK_TABLE:
       return getFilterValue(action.payload, state);

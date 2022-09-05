@@ -29,7 +29,7 @@ export default class SubmitBenchmark extends API {
   }
 
   getBody() {
-    return { modelId: this.modelId, benchmarks: this.benchmarks };
+    return { modelId: this.modelId, benchmarkId: this.benchmarks[0].benchmarkId };
   }
 
   getHeaders() {

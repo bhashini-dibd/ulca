@@ -12,9 +12,11 @@ import com.ulca.dataset.dao.TaskTrackerDao;
 import com.ulca.dataset.kakfa.DatasetAsrUnlabeledValidateIngest;
 import com.ulca.dataset.kakfa.DatasetAsrValidateIngest;
 import com.ulca.dataset.kakfa.DatasetDocumentLayoutValidateIngest;
+import com.ulca.dataset.kakfa.DatasetGlossaryCorpusValidateIngest;
 import com.ulca.dataset.kakfa.DatasetMonolingualValidateIngest;
 import com.ulca.dataset.kakfa.DatasetOcrValidateIngest;
 import com.ulca.dataset.kakfa.DatasetParallelCorpusValidateIngest;
+import com.ulca.dataset.kakfa.DatasetTransliterationValidateIngest;
 import com.ulca.dataset.kakfa.DatasetTtsValidateIngest;
 import com.ulca.dataset.kakfa.model.DatasetIngest;
 import com.ulca.dataset.model.TaskTracker;
@@ -46,6 +48,12 @@ public class KafkaDatasetIngestConsumer {
 
 	@Autowired
 	DatasetDocumentLayoutValidateIngest datasetDocumentLayoutValidateIngest;
+	
+	@Autowired
+	DatasetTransliterationValidateIngest datasetTransliterationValidateIngest;
+	
+	@Autowired
+	DatasetGlossaryCorpusValidateIngest datasetGlossaryCorpusValidateIngest;
 
 	@Autowired
 	TaskTrackerDao taskTrackerDao;
@@ -109,7 +117,17 @@ public class KafkaDatasetIngestConsumer {
 				log.info("calling the document-layout-corpus validate service");
 				datasetDocumentLayoutValidateIngest.validateIngest(datasetIngest);
 				break;
+				
+			case TRANSLITERATION_CORPUS:
+				log.info("calling the transliteration-corpus validate service");
+				datasetTransliterationValidateIngest.validateIngest(datasetIngest);
+				break;
 
+			case GLOSSARY_CORPUS:
+				log.info("calling the glossary-corpus validate service");
+				datasetGlossaryCorpusValidateIngest.validateIngest(datasetIngest);
+				break;
+				
 			default:
 				log.info("datasetType for serviceRequestNumber not one of defined datasetType");
 				break;

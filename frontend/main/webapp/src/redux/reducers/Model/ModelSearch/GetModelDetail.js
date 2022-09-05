@@ -11,6 +11,7 @@ const initialState = {
   language: "",
   metricArray: [],
   benchmarkPerformance: [],
+  version: ""
 };
 
 const getModelDetails = (payload) => {
@@ -32,6 +33,7 @@ const getModelDetails = (payload) => {
       para: payload["trainingDataset"]["description"],
     },
     { title: "Domain", para: FilterByDomain(payload["domain"])[0].label },
+    { title: "Model Id", para: payload["modelId"] },
   ];
 };
 
@@ -54,6 +56,7 @@ const reducer = (state = initialState, action) => {
           : `${getLanguageName(source)}`,
         benchmarkPerformance: action.payload.benchmarkPerformance,
         metricArray: action.payload.metric,
+        version: action.payload.version
       };
     default:
       return {

@@ -13,6 +13,9 @@ ocr_config_path = os.environ.get('ULCA_VALIDATE_OCR_CONFIG', 'configs/ocr_config
 monolingual_config_path = os.environ.get('ULCA_VALIDATE_MONOLINGUAL_CONFIG', 'configs/monolingual_config.json')
 asr_unlabeled_config_path = os.environ.get('ULCA_VALIDATE_ASR_UNLABELED_CONFIG', 'configs/asr_unlabeled_config.json')
 tts_config_path = os.environ.get('ULCA_VALIDATE_TTS_CONFIG', 'configs/tts_config.json')
+transliteration_config_path = os.environ.get('ULCA_VALIDATE_TRANSLITERATION_CONFIG', 'configs/transliteration_config.json')
+glossary_config_path = os.environ.get('ULCA_VALIDATE_GLOSSARY_CONFIG', 'configs/glossary_config.json')
+
 
 pt_update_batch = os.environ.get('ULCA_PT_UPDATE_BATCH', 1000)
 if isinstance(pt_update_batch, str):
@@ -58,8 +61,12 @@ dataset_type_ocr = os.environ.get('DS_TYPE_OCR', 'ocr-corpus')
 dataset_type_monolingual = os.environ.get('DS_TYPE_MONOLINGUAL', 'monolingual-corpus')
 dataset_type_asr_unlabeled = os.environ.get('DS_TYPE_ASR_UNLABELED', 'asr-unlabeled-corpus')
 dataset_type_tts = os.environ.get('DS_TYPE_TTS', 'tts-corpus')
+dataset_type_transliteration = os.environ.get('DS_TYPE_TRANSLITERATION', 'transliteration-corpus')
+dataset_type_glossary = os.environ.get('DS_TYPE_GLOSSARY', 'glossary-corpus')
+
 
 validate_text_length_threshold = os.environ.get('DS_VALIDATE_TEXT_LENGTH_THRESHOLD', 2)
+validate_text_length_threshold_transliteration = os.environ.get('DS_VALIDATE_TEXT_LENGTH_THRESHOLD_TRANSLITERATION', 1)
 asr_minimum_words_per_min = os.environ.get('DS_VALIDATE_MINIMUM_WORDS_PER_MIN', 10)
 validate_parallel_labse_threshold = os.environ.get('VALIDATE_PARALLEL_LABSE_THRESHOLD', 0.75)
 validate_profanity_reference_en = os.environ.get('DS_VALIDATE_PROFANITY_REFERENCE_EN', "https://raw.githubusercontent.com/LDNOOBW/List-of-Dirty-Naughty-Obscene-and-Otherwise-Bad-Words/master/en")

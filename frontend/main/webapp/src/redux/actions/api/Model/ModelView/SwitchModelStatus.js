@@ -3,7 +3,7 @@ import C from "../../../constants";
 import ENDPOINTS from "../../../../../configs/apiendpoints";
 import md5 from "md5";
 export default class MyContribution extends API {
-  constructor(modelId, status, timeout = 200000) {
+  constructor(modelId, status, reason, timeout = 200000) {
     super("POST", timeout, false);
     this.user_id = JSON.parse(localStorage.getItem("userDetails")).userID;
     this.modelId = modelId;
@@ -11,6 +11,7 @@ export default class MyContribution extends API {
     this.type = C.TOGGLE_MODEL_STATUS;
     this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
     this.endpoint = `${super.apiEndPointAuto()}${ENDPOINTS.toggleModelStatus}`;
+    this.reason = reason;
   }
 
   toString() {
@@ -36,6 +37,7 @@ export default class MyContribution extends API {
       userId: this.user_id,
       modelId: this.modelId,
       status: this.status,
+      unpublishReason: this.reason,
     };
   }
 

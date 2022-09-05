@@ -32,20 +32,23 @@ import SimpleDialogDemo from "../../../../components/common/Feedback";
 
 const AudioRecord = (props) => {
   const streaming = props.streaming;
-  const { classes, language, modelId ,getchildData,feedback} = props;
- const [recordAudio, setRecordAudio] = useState("");
+  const { classes, language, modelId, getchildData, feedback } = props;
+  const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
   const { languages, inferenceEndpoints } = useSelector(
     (state) => state.getMasterData
   );
-  const vakyanshEndPoint =
+
+  const { version, submitter } = useSelector((state) => state.getModelDetails);
+
+  const streamingEndPoint =
     inferenceEndpoints &&
     inferenceEndpoints.filter(
-      (e) => e.active && e.submitter.indexOf("Vakyansh") > -1
+      (e) => e.active && e.submitter.indexOf(submitter) > -1
     );
 
-  const languageArr = languages.filter((lang) => lang.label === language);
+    const languageArr = languages.filter((lang) => lang.label === language);
   const languageCode = languageArr.length ? languageArr[0].code : "";
   const dispatch = useDispatch();
   const timerRef = useRef();
@@ -56,7 +59,7 @@ const AudioRecord = (props) => {
       dispatch(APITransport(obj));
     }
   }, []);
- 
+
   useEffect(() => {
     return () => {
       streaming.isStreaming ? streaming.disconnect() : console.log("unmounted");
@@ -65,36 +68,35 @@ const AudioRecord = (props) => {
     };
   }, []);
 
-  useEffect(()=>{
-    if(streamingState === 'start'){
+  useEffect(() => {
+    if (streamingState === "start") {
       const output = document.getElementById("asrCardOutput");
       output.innerText = "";
       feedback.setTargetAudio("");
       feedback.setData("");
     }
-  },[streamingState]);
-
+  }, [streamingState]);
 
   const handleStart = (data) => {
     if (typeof timerRef.current === "number") {
       clearTimeout(timerRef.current);
     }
 
-    if (vakyanshEndPoint.length) {
+    if (streamingEndPoint.length) {
       setStreamingState("start");
       const output = document.getElementById("asrCardOutput");
       // output.innerText = "";
-     
+
       setData("");
-      const { code } = vakyanshEndPoint[0];
+      const { code } = streamingEndPoint[0];
       streaming.connect(code, languageCode, function (action, id) {
         timerRef.current = setTimeout(() => {
           if (streaming.isStreaming) handleStop();
         }, 61000);
-        
+
         setStreamingState("listen");
         setRecordAudio(RecordState.START);
-        
+
         if (action === SocketStatus.CONNECTED) {
           streaming.startStreaming(
             function (transcript) {
@@ -102,7 +104,7 @@ const AudioRecord = (props) => {
               if (output) output.innerText = transcript;
               getchildData(transcript);
             },
-          
+
             function (errorMsg) {
               console.log("errorMsg", errorMsg);
             }
@@ -124,7 +126,7 @@ const AudioRecord = (props) => {
     setStreamingState("");
     const output = document.getElementById("asrCardOutput");
     if (output) {
-      const { code } = vakyanshEndPoint[0];
+      const { code } = streamingEndPoint[0];
       streaming.punctuateText(
         output.innerText,
         `${code}asr/v1/punctuate/${languageCode}`,
@@ -174,9 +176,7 @@ const AudioRecord = (props) => {
     setData(data.url);
     setBase(blobToBase64(data));
   };
-  
- 
-   
+
   return (
     <Card className={classes.asrCard}>
       <Grid container className={classes.cardHeader}>
@@ -197,7 +197,8 @@ const AudioRecord = (props) => {
           }
         </Typography>
       </Grid>
-      {props.submitter === "Vakyansh" ? (
+      {props.submitter === "Vakyansh" ||
+      (props.submitter === "AI4Bharat" && version === "v3.0") ? (
         <CardContent>
           <Typography variant={"caption"}>
             {translate("label.maxDuration")}
@@ -215,7 +216,7 @@ const AudioRecord = (props) => {
             <div className={classes.center}>
               <img
                 src={Start}
-                alt="" 
+                alt=""
                 onClick={() => handleStart()}
                 style={{ cursor: "pointer" }}
               />{" "}
@@ -232,8 +233,7 @@ const AudioRecord = (props) => {
             </Typography>{" "}
           </div>
           <div className={classes.centerAudio}>
-            {data && <audio src={data} controls id="sample"></audio>  }
-      
+            {data && <audio src={data} controls id="sample"></audio>}
           </div>
         </CardContent>
       ) : (
@@ -276,7 +276,7 @@ const AudioRecord = (props) => {
               <audio src={"test"} controls id="sample"></audio>
             )}
           </div>
-         
+
           <CardActions
             style={{ justifyContent: "flex-end", paddingRight: "20px" }}
           >

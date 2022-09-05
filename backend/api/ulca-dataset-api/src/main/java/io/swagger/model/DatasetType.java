@@ -15,11 +15,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public enum DatasetType {
   PARALLEL_CORPUS("parallel-corpus"),
     MONOLINGUAL_CORPUS("monolingual-corpus"),
+    TRANSLITERATION_CORPUS("transliteration-corpus"),
     ASR_CORPUS("asr-corpus"),
     TTS_CORPUS("tts-corpus"),
     ASR_UNLABELED_CORPUS("asr-unlabeled-corpus"),
     OCR_CORPUS("ocr-corpus"),
-    DOCUMENT_LAYOUT_CORPUS("document-layout-corpus");
+    DOCUMENT_LAYOUT_CORPUS("document-layout-corpus"),
+    GLOSSARY_CORPUS("glossary-corpus");
 
   private String value;
 

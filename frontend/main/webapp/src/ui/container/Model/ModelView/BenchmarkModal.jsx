@@ -19,6 +19,7 @@ import {
   TableHead,
   Box,
   Table,
+  Typography,
 } from "@material-ui/core";
 import { useState } from "react";
 import MUIDataTable from "mui-datatables";
@@ -88,7 +89,7 @@ const BenchmarkModal = (props) => {
         style={{ float: "right", marginTop: "20px", borderRadius: "22px" }}
         variant="contained"
         onClick={props.makeSubmitAPICall}
-        disabled={submitStatus}
+        disabled={!submitStatus}
       >
         Submit
       </Button>
@@ -170,7 +171,7 @@ const BenchmarkModal = (props) => {
       name: "datasetName",
       label: "Benchmark Dataset",
       options: {
-        setCellProps: () => ({ style: {width:"350px"}}),
+        setCellProps: () => ({ style: { width: "350px" } }),
         filter: false,
         sort: false,
       },
@@ -179,16 +180,16 @@ const BenchmarkModal = (props) => {
       name: "domain",
       label: "Domain",
       options: {
-        setCellProps: () => ({ style: {width:"350px"}}),
+        setCellProps: () => ({ style: { width: "350px" } }),
         filter: false,
         sort: false,
       },
     },
     {
       name: "description",
-       label: "Description",
+      label: "Description",
       options: {
-        setCellProps: () => ({ style: {width:"330px"}}),
+        setCellProps: () => ({ style: { width: "330px" } }),
         filter: false,
         sort: false,
       },
@@ -203,7 +204,7 @@ const BenchmarkModal = (props) => {
     {
       name: "Action",
       options: {
-        setCellProps: () => ({ style: {width:"350px"}}),
+        setCellProps: () => ({ style: { width: "350px" } }),
         filter: false,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -279,45 +280,20 @@ const BenchmarkModal = (props) => {
               <>
                 <Box style={{ margin: "0 80px" }}>
                   <Table size="small" aria-label="purchases">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>
-                          <strong>Metric</strong>
-                        </TableCell>
-                        {/* <TableCell align="left">Description</TableCell> */}
-                        <TableCell>
-                          <strong>Action</strong>
-                        </TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
+                    <TableBody style={{ display: "flex", justifyContent: "space-around" }}>
                       {rows.map((row, i) => {
+                        const style = {
+                          backgroundColor: "#FFF2CC",
+                          border: "2px solid #FFD969",
+                          padding: "10px 25px",
+                          margin: "10px 0",
+                          borderRadius: "10px",
+                          fontWeight: "500"
+                        };
                         return (
-                          <TableRow
-                            key={i}
-                            style={{
-                              backgroundColor: "rgba(254, 191, 44, 0.1)",
-                            }}
-                          >
-                            {/* <TableCell></TableCell> */}
-                            <TableCell>
-                              {row.metricName.toUpperCase()}
-                            </TableCell>
-                            {/* <TableCell align="left">{row.description}</TableCell> */}
-                            <TableCell>
-                              {renderSelectButton(
-                                "METRIC",
-                                i,
-                                row.selected,
-                                rowMeta.dataIndex,
-                                row.isMetricDisabled
-                              )}
-                            </TableCell>
-                            <TableCell></TableCell>
-                            <TableCell></TableCell>
-                          </TableRow>
+                          <Typography style={style}>
+                            {row.metricName.toUpperCase()}
+                          </Typography>
                         );
                       })}
                     </TableBody>
@@ -354,10 +330,9 @@ const BenchmarkModal = (props) => {
         MUIDataTableToolbar: {
           root: {
             "@media (max-width: 599.95px)": {
-             // display: "flex !important",
-              whiteSpace:" nowrap",
-              marginBottom:"5px"
-             
+              // display: "flex !important",
+              whiteSpace: " nowrap",
+              marginBottom: "5px",
             },
           },
         },
@@ -468,10 +443,8 @@ const BenchmarkModal = (props) => {
           },
         },
         MUIDataTableBodyCell: {
-          root: {
-             }
-        
-        }
+          root: {},
+        },
       },
     });
 
@@ -510,8 +483,7 @@ const BenchmarkModal = (props) => {
       </div>
       <MuiThemeProvider theme={getMuiTheme()}>
         <MUIDataTable
-      
-         id="benchmarkDataTable"
+          id="benchmarkDataTable"
           options={options}
           data={data}
           columns={columns}
