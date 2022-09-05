@@ -630,6 +630,38 @@ public class ModelInferenceEndPointService {
 
 			return response;
 		}
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
+			io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
+			TxtLangDetectionRequest request = txtLangDetectionInference.getRequest();
+
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			OkHttpClient newClient = getTrustAllCertsClient();
+
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+
+			String responseJsonStr = httpResponse.body().string();
+			TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
+			
+			response.setLanguageDetectionOutput(txtLangDetectionResponse);
+
+			return response;
+			
+		}
 
 		return response;
 	}
