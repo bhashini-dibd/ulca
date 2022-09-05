@@ -31,7 +31,7 @@ import FeedbackPopover from "../../../components/common/FeedbackTTranslation";
 import SubmitFeedback from "../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 import { Language } from "../../../../configs/DatasetItems";
 
-const HostedInference = (props) => {
+const LanguageDetection = (props) => {
   const { classes, title, para, modelId, task } = props;
   const history = useHistory();
   const [translation, setTranslationState] = useState(false);
@@ -317,4 +317,4 @@ const HostedInference = (props) => {
     //   </div>
   );
 };
-export default withStyles(DatasetStyle)(HostedInference);
+export default withStyles(DatasetStyle)(LanguageDetection);
