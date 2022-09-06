@@ -13,6 +13,7 @@ stage('compress build folder')
 withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials', passwordVariable: 'dockerhub_pass', usernameVariable: 'dockerhub_user')])
 {
 sh '''
+ls -altr
 #if [  $( docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME" ) ]
 #then
 #docker rm "$JOB_BASE_NAME"
