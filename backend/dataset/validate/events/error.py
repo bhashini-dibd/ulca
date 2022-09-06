@@ -4,6 +4,7 @@ from datetime import datetime
 from logging.config import dictConfig
 from configs.configs import error_event_input_topic, validate_error_code, pt_publish_tool
 from kafkawrapper.producer import Producer
+import time
 
 log = logging.getLogger('file')
 prod = Producer()
@@ -18,7 +19,7 @@ class ErrorEvent:
         log.info(f'Publishing error event for srn -- {error["serviceRequestNumber"]}')
         try:
             event = {"eventType": "dataset-training", "messageType": "error", "code": validate_error_code.replace("XXX", error["code"]),
-                     "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": str(datetime.now()),
+                     "eventId": f'{error["serviceRequestNumber"]}|{str(uuid.uuid4())}', "timestamp": eval(str(time.time()).replace('.', '')[0:13]),
                      "serviceRequestNumber": error["serviceRequestNumber"], "stage": pt_publish_tool, "datasetName": error["datasetName"],
                      "datasetType": error["datasetType"], "message": error["message"], "record": error["record"]}
             prod.produce(event, error_event_input_topic, None)

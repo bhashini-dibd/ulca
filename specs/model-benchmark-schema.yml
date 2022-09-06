@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  version: 0.2.0
+  version: 0.3.0
   title: ULCA - model and its benchmark schema
   description: The documentation defines the model, benchmark and creating benchmark for newly submitted models.
   contact:
@@ -51,9 +51,10 @@ components:
           description: what kind of task model achieves
           $ref: '#/components/schemas/ModelTask'
         languages:
-          type: object
+          nullable : true
           description: what all languages it supports
-          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
+          allOf : 
+            - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
         license:
           type: object
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
@@ -84,6 +85,7 @@ components:
             - $ref: '#/components/schemas/DocumentLayoutBenchmarkResult'
             - $ref: '#/components/schemas/DocumentOCRBenchmark'
             - $ref: '#/components/schemas/ASRBenchmarkResult'
+            - $ref: '#/components/schemas/TxtLangDetectionBenchmarkResult'
         stage:
           description: after submission model goes through a process before it gets listed.
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ProcessStage
@@ -128,6 +130,7 @@ components:
           - $ref: '#/components/schemas/DocumentLayoutBenchmark'
           - $ref: '#/components/schemas/DocumentOCRBenchmark'
           - $ref: '#/components/schemas/ASRBenchmark'
+          - $ref: '#/components/schemas/TxtLangDetectionBenchmark'
         minLength: 1
     Benchmark:
       type: object
@@ -181,7 +184,7 @@ components:
         - $ref: '#/components/schemas/Benchmark'
         - type: object
       type: object
-      description: Translation benchmark representation
+      description: Transliteration benchmark representation
       properties:
         languages:
           type: object
@@ -190,6 +193,18 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TransliterationBenchmarkMetric'
+            minItems: 1
+    TxtLangDetectionBenchmark:
+      allOf:
+        - $ref: '#/components/schemas/Benchmark'
+        - type: object
+      type: object
+      description: Language detection benchmark representation
+      properties:
+        score:
+          type: array
+          items:
+            $ref: '#/components/schemas/TxtLangDetectionBenchmarkMetric'
             minItems: 1
     DocumentLayoutBenchmark:
       allOf:
@@ -256,7 +271,7 @@ components:
           description: is the score as per defined metric for this benchmark.
     TransliterationBenchmarkMetric:
       type: object
-      description: translation benchmark score
+      description: transliteration benchmark score
       required:
         - metricName
         - score
@@ -266,6 +281,22 @@ components:
           description: the automatic evaluation metric name
           enum:
             - cer
+            - top-1-accuracy
+        score:
+          type: number
+          description: is the score as per defined metric for this benchmark.
+    TxtLangDetectionBenchmarkMetric:
+      type: object
+      description: language detection benchmark score
+      required:
+        - metricName
+        - score
+      properties:
+        metricName:
+          type: string
+          description: the automatic evaluation metric name
+          enum:
+            - F1
             - top-1-accuracy
         score:
           type: number
@@ -377,6 +408,35 @@ components:
           items:
             $ref: '#/components/schemas/TransliterationBenchmarkMetric'
             minItems: 1
+    TxtLangDetectionIndividualBenchmarkResult:
+      allOf:
+        - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/translation-schemas.yml#/components/schemas/Sentence
+        - type: object
+      type: object
+      properties:
+        scores:
+          type: array
+          description: score calculated for each metric mentioned in selected benchmark
+          items:
+            $ref: '#/components/schemas/TxtLangDetectionBenchmarkMetric'
+            minItems: 1
+    TxtLangDetectionBenchmarkResult:
+      type: object
+      description: describes the translation benchmark result
+      properties:
+        benchmarkId:
+          type: string
+          description: auto-generated unique identification of benchmark data
+          format: uuid4
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TxtLangDetectionIndividualBenchmarkResult'
+        summaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/TxtLangDetectionBenchmarkMetric'
+            minItems: 1
     DocumentLayoutIndividualPageBenchmarkResult:
       type: object
       properties:
@@ -474,6 +534,7 @@ components:
             - asr
             - document-layout
             - ocr
+            - txt-lang-detection
     TrainingDataset:
       type: object
       description: training dataset metadata used to train the model
