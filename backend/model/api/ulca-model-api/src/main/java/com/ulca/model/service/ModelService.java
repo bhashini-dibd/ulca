@@ -269,11 +269,8 @@ public class ModelService {
 		modelObj.setUnpublishReason("Newly submitted model");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
-		//String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
-		//OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 		inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
-		//modelDao.save(modelObj);
 		
 		if (modelObj != null) {
 			try {
@@ -318,8 +315,13 @@ public class ModelService {
 		if(model.getTask() == null)
 			throw new ModelValidationException("task is required field");
 		
-		if(model.getLanguages() == null)
-			throw new ModelValidationException("languages is required field");
+		if(model.getLanguages() == null) {
+			ModelTask taskType = model.getTask();
+			if(!taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
+				throw new ModelValidationException("languages is required field");
+			}
+		}
+			
 		
 		if(model.getLicense() == null)
 			throw new ModelValidationException("license is required field");
