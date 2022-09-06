@@ -1,5 +1,6 @@
 package com.ulca.benchmark.service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,8 +102,8 @@ public class BenchmarkService {
 		benchmark.setUserId(request.getUserId());
 		benchmark.setDataset(request.getUrl());
 		benchmark.setStatus(BenchmarkSubmissionType.SUBMITTED.toString());
-		benchmark.setSubmittedOn(new Date().toString());
-		benchmark.setCreatedOn(new Date().toString());
+		benchmark.setSubmittedOn(Instant.now().toEpochMilli());
+		benchmark.setCreatedOn(Instant.now().toEpochMilli());
 
 		Benchmark existingBenchmark = benchmarkDao.findByName(request.getDatasetName());
 		if (existingBenchmark == null) {
@@ -173,9 +175,9 @@ public class BenchmarkService {
 			bmProcess.setModelId(modelId);
 			bmProcess.setModelName(modelExtended.getName());
 			bmProcess.setStatus("In-Progress");
-			bmProcess.setCreatedOn(new Date().toString());
-			bmProcess.setLastModifiedOn(new Date().toString());
-			bmProcess.setStartTime(new Date().toString());
+			bmProcess.setCreatedOn(Instant.now().toEpochMilli());
+			bmProcess.setLastModifiedOn(Instant.now().toEpochMilli());
+			bmProcess.setStartTime(Instant.now().toEpochMilli());
 			benchmarkprocessDao.save(bmProcess);
 
 			Map<String,String> map = new HashMap<String, String>();
@@ -260,9 +262,9 @@ public class BenchmarkService {
 				bmProcess.setModelId(modelId);
 				bmProcess.setModelName(modelExtended.getName());
 				bmProcess.setStatus("In-Progress");
-				bmProcess.setCreatedOn(new Date().toString());
-				bmProcess.setLastModifiedOn(new Date().toString());
-				bmProcess.setStartTime(new Date().toString());
+				bmProcess.setCreatedOn(Instant.now().toEpochMilli());
+				bmProcess.setLastModifiedOn(Instant.now().toEpochMilli());
+				bmProcess.setStartTime(Instant.now().toEpochMilli());
 				benchmarkprocessDao.save(bmProcess);
 				map.put(serviceRequestNumber, metric);
 				benchmarkProcessIds.add(serviceRequestNumber);
@@ -491,11 +493,12 @@ public class BenchmarkService {
 			for (int i = startPg; i < endPage; i++) {
 				Pageable paging = null;
 				if (pgSize!=null) {
-					paging =	PageRequest.of(i, pgSize);
+					paging =	PageRequest.of(i, pgSize, Sort.by("submittedOn").descending());
 				} else {
-					paging = PageRequest.of(i,PAGE_SIZE);
+					paging = PageRequest.of(i,PAGE_SIZE, Sort.by("submittedOn").descending());
 
-				}				Page<Benchmark> benchmarkList = null;
+				}				
+				Page<Benchmark> benchmarkList = null;
 				if (name!=null) {
 					Benchmark benchmark = new Benchmark();
 					benchmark.setUserId(userId);

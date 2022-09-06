@@ -31,6 +31,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -291,7 +292,7 @@ class BenchmarkServiceTest {
 
         List<Benchmark> list = Collections.singletonList(new Benchmark());
         if (startPage!=null) {
-            Pageable paging = PageRequest.of(0, 10);
+            Pageable paging = PageRequest.of(0, 10, Sort.by("submittedOn").descending());
             Page page = new PageImpl(list);
             when(benchmarkDao.findByUserId("test", paging)).thenReturn(page);
         } else

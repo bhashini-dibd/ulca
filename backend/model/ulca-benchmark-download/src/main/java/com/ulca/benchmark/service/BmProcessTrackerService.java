@@ -1,5 +1,6 @@
 package com.ulca.benchmark.service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class BmProcessTrackerService {
 		taskTracker.setBenchmarkProcessId(benchmarkProcessId);
 		taskTracker.setTool(tool);
 		taskTracker.setStatus(status.toString());
-		taskTracker.setStartTime(new Date().toString());
+		taskTracker.setStartTime(Instant.now().toEpochMilli());
 		benchmarkTaskTrackerDao.save(taskTracker);
 
 	}
@@ -43,7 +44,7 @@ public class BmProcessTrackerService {
 			taskTracker.setBenchmarkProcessId(benchmarkProcessId);
 			taskTracker.setTool(tool);
 			taskTracker.setStatus(status.toString());
-			taskTracker.setStartTime(new Date().toString());
+			taskTracker.setStartTime(Instant.now().toEpochMilli());
 			benchmarkTaskTrackerDao.save(taskTracker);
 		}
 
@@ -57,8 +58,8 @@ public class BmProcessTrackerService {
 
 		if (!taskTrackerList.isEmpty()) {
 			BenchmarkTaskTracker taskTracker = taskTrackerList.get(0);
-			taskTracker.setEndTime(new Date().toString());
-			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setEndTime(Instant.now().toEpochMilli());
+			taskTracker.setLastModified(Instant.now().toEpochMilli());
 			taskTracker.setStatus(status.toString());
 			taskTracker.setError(error);
 			benchmarkTaskTrackerDao.save(taskTracker);
@@ -67,9 +68,9 @@ public class BmProcessTrackerService {
 			BenchmarkTaskTracker taskTracker = new BenchmarkTaskTracker();
 			taskTracker.setBenchmarkProcessId(benchmarkProcessId);
 			taskTracker.setTool(tool);
-			taskTracker.setStartTime(new Date().toString());
-			taskTracker.setEndTime(new Date().toString());
-			taskTracker.setLastModified(new Date().toString());
+			taskTracker.setStartTime(Instant.now().toEpochMilli());
+			taskTracker.setEndTime(Instant.now().toEpochMilli());
+			taskTracker.setLastModified(Instant.now().toEpochMilli());
 			taskTracker.setStatus(status.toString());
 			taskTracker.setError(error);
 			benchmarkTaskTrackerDao.save(taskTracker);
@@ -86,8 +87,8 @@ public class BmProcessTrackerService {
 
 			if (!taskTrackerList.isEmpty()) {
 				BenchmarkTaskTracker taskTracker = taskTrackerList.get(0);
-				taskTracker.setEndTime(new Date().toString());
-				taskTracker.setLastModified(new Date().toString());
+				taskTracker.setEndTime(Instant.now().toEpochMilli());
+				taskTracker.setLastModified(Instant.now().toEpochMilli());
 				taskTracker.setStatus(status.toString());
 				taskTracker.setError(error);
 				benchmarkTaskTrackerDao.save(taskTracker);
@@ -96,9 +97,9 @@ public class BmProcessTrackerService {
 				BenchmarkTaskTracker taskTracker = new BenchmarkTaskTracker();
 				taskTracker.setBenchmarkProcessId(benchmarkProcessId);
 				taskTracker.setTool(tool);
-				taskTracker.setStartTime(new Date().toString());
-				taskTracker.setEndTime(new Date().toString());
-				taskTracker.setLastModified(new Date().toString());
+				taskTracker.setStartTime(Instant.now().toEpochMilli());
+				taskTracker.setEndTime(Instant.now().toEpochMilli());
+				taskTracker.setLastModified(Instant.now().toEpochMilli());
 				taskTracker.setStatus(status.toString());
 				taskTracker.setError(error);
 				benchmarkTaskTrackerDao.save(taskTracker);
@@ -116,7 +117,7 @@ public class BmProcessTrackerService {
 			BenchmarkTaskTracker taskTracker = taskTrackerList.get(0);
 			if (status == BenchmarkTaskTracker.StatusEnum.completed
 					|| status == BenchmarkTaskTracker.StatusEnum.failed) {
-				taskTracker.setEndTime(new Date().toString());
+				taskTracker.setEndTime(Instant.now().toEpochMilli());
 			}
 			taskTracker.setStatus(status.toString());
 			benchmarkTaskTrackerDao.save(taskTracker);
@@ -133,7 +134,7 @@ public class BmProcessTrackerService {
 				BenchmarkTaskTracker taskTracker = taskTrackerList.get(0);
 				if (status == BenchmarkTaskTracker.StatusEnum.completed
 						|| status == BenchmarkTaskTracker.StatusEnum.failed) {
-					taskTracker.setEndTime(new Date().toString());
+					taskTracker.setEndTime(Instant.now().toEpochMilli());
 				}
 				taskTracker.setStatus(status.toString());
 				benchmarkTaskTrackerDao.save(taskTracker);
@@ -146,8 +147,8 @@ public class BmProcessTrackerService {
 
 		BenchmarkProcess bmProcess = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
 		bmProcess.setStatus(status);
-		bmProcess.setLastModifiedOn(new Date().toString());
-		bmProcess.setEndTime(new Date().toString());
+		bmProcess.setLastModifiedOn(Instant.now().toEpochMilli());
+		bmProcess.setEndTime(Instant.now().toEpochMilli());
 		benchmarkProcessDao.save(bmProcess);
 
 	}
@@ -157,8 +158,8 @@ public class BmProcessTrackerService {
 		for (String benchmarkProcessId : benchmarkProcessIdList) {
 			BenchmarkProcess bmProcess = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkProcessId);
 			bmProcess.setStatus(status);
-			bmProcess.setLastModifiedOn(new Date().toString());
-			bmProcess.setEndTime(new Date().toString());
+			bmProcess.setLastModifiedOn(Instant.now().toEpochMilli());
+			bmProcess.setEndTime(Instant.now().toEpochMilli());
 			benchmarkProcessDao.save(bmProcess);
 		}
 
