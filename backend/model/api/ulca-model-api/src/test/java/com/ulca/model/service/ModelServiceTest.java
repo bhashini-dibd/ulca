@@ -90,8 +90,7 @@ class ModelServiceTest {
     }
 
     private static Stream<Arguments> modelListByUserIdParam(){
-        return Stream.of(Arguments.of("test",1,1,null,null),
-                         Arguments.of("test",null,null,null,null));
+        return Stream.of(Arguments.of("test",null,null,null,null));
     }
 
 
@@ -102,7 +101,7 @@ class ModelServiceTest {
         if (startPage != null) {
             int startPg = startPage - 1;
             for (int i = startPg; i < endPage; i++) {
-                Pageable paging = PageRequest.of(i, 10);
+                Pageable paging = PageRequest.of(i, 10,Sort.by("submittedOn").descending());
                 Page<ModelExtended> modelList = new PageImpl<>(Collections.singletonList(new ModelExtended()));
                 when(modelDao.findByUserId(userId,paging)).thenReturn(modelList);
             }
@@ -242,6 +241,8 @@ class ModelServiceTest {
     @ParameterizedTest
     @MethodSource("uploadModelParam")
     void uploadModel(MultipartFile multipartFile,String userId,UploadModelResponse response) throws Exception {
+        ReflectionTestUtils.setField(modelService,"modelUploadFolder","src/test/resources");
+
         assertEquals(modelService.uploadModel(multipartFile,userId),response);
     }
 

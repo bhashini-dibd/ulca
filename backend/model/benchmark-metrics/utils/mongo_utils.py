@@ -4,7 +4,7 @@ from logging.config import dictConfig
 from configs.configs import ulca_db_cluster, mongo_db_name, mongo_collection_name, mongo_pt_collection_name
 from datetime import datetime, timezone
 from pymongo import ReturnDocument
-from time import time
+import time
 
 log = logging.getLogger('file')
 mongo_instance = None

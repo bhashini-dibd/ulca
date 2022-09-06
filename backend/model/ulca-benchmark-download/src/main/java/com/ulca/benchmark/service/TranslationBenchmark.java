@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -279,7 +280,7 @@ public class TranslationBenchmark {
 			int datasetCount = corpus.length();
 			BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
 			bmProcessUpdate.setRecordCount(datasetCount);
-			bmProcessUpdate.setLastModifiedOn(new Date().toString());
+			bmProcessUpdate.setLastModifiedOn(Instant.now().toEpochMilli());
 			benchmarkProcessDao.save(bmProcessUpdate);
 
 			benchmarkMetricKafkaTemplate.send(mbMetricTopic, metricRequest.toString());

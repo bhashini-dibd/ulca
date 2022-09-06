@@ -31,10 +31,10 @@ public class BenchmarkProcess {
 	double score;
 	String metric;
 	String status; // Completed/In-Progress/Failed
-	String createdOn;
-	String lastModifiedOn;
-	String startTime;
-	String endTime;
+	Long createdOn;
+	Long lastModifiedOn;
+	Long startTime;
+	Long endTime;
 	Integer recordCount;
 
 }

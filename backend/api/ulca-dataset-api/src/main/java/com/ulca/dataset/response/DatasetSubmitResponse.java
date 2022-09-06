@@ -22,7 +22,7 @@ public class DatasetSubmitResponse implements Serializable{
 
 		Data data;
 		
-		public DatasetSubmitResponse(String message, String serviceRequestNumber, String datasetId, String timestamp) {
+		public DatasetSubmitResponse(String message, String serviceRequestNumber, String datasetId, Long timestamp) {
 			super();
 			this.message = message;
 			this.data = new Data(serviceRequestNumber, datasetId, timestamp);
@@ -33,8 +33,8 @@ public class DatasetSubmitResponse implements Serializable{
 		private class Data{  
 			 private  String serviceRequestNumber;
 			 private  String datasetId;
-			 private  String timestamp;
-			public Data(String serviceRequestNumber, String datasetId, String timestamp) {
+			 private  Long timestamp;
+			public Data(String serviceRequestNumber, String datasetId, Long timestamp) {
 				super();
 				this.serviceRequestNumber = serviceRequestNumber;
 				this.datasetId = datasetId;
