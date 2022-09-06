@@ -14,6 +14,12 @@ withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials
 {
 sh '''
 cd frontend/main/webapp
+
+if [ -f "$(pwd)/build" ]
+then
+  sudo chown -R jenkins.jenkins $(pwd)/build
+  sudo rm -rf $(pwd)/build
+fi
 #if [  $( docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME" ) ]
 #then
 #docker rm "$JOB_BASE_NAME"
