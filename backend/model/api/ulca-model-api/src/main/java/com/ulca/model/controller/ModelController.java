@@ -115,4 +115,13 @@ public class ModelController {
 		return modelService.getModelFeedbackByTaskType(taskType);
 
 	}
+	
+	
+	@GetMapping("/getTransliterationModelId")
+	public GetTransliterationModelIdResponse  getTransliterationModelId() {
+		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
+		return modelService.getTransliterationModelId();
+
+	}
+	
 }
