@@ -93,7 +93,9 @@ public class LanguagePair {
     
     HNE("hne"),
     
-    MAG("mag");
+    MAG("mag"),
+    
+    MULTI("multi");
 
     private String value;
 
@@ -195,7 +197,9 @@ public class LanguagePair {
     
     HNE("hne"),
     
-    MAG("mag");
+    MAG("mag"),
+    
+    MULTI("multi");
 
     private String value;
 
