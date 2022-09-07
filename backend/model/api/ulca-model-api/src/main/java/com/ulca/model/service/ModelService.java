@@ -549,15 +549,15 @@ public class ModelService {
 	}
 
 	
-	public GetTransliterationModelIdResponse getTransliterationModelId() {
+	public GetTransliterationModelIdResponse getTransliterationModelId(String sourceLanguage, String targetLanguage) {
 		
 		ModelExtended model = new ModelExtended();
 		
 		ModelTask modelTask = new ModelTask();
-		modelTask.setType(TypeEnum.TXT_LANG_DETECTION);
+		modelTask.setType(TypeEnum.TRANSLITERATION);
 		model.setTask(modelTask);
 
-		/*
+		
 		LanguagePairs lprs = new LanguagePairs();
 		LanguagePair lp = new LanguagePair();
 		lp.setSourceLanguage(SourceLanguageEnum.fromValue(sourceLanguage));
@@ -566,7 +566,7 @@ public class ModelService {
 		}
 		lprs.add(lp);
 		model.setLanguages(lprs);
-		*/
+		
 		Submitter submitter = new Submitter();
 		submitter.setName("AI4Bharat");
 		model.setSubmitter(submitter);
