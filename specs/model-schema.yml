@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.2
+  version: 0.3.3
 servers:
   - url: /ulca
 paths: {}
@@ -600,28 +600,24 @@ components:
           description: Unique identifier of model
           example: 103
         detectionLevel:
-          type : string
-          description : on what level of text does the model works best 
-          default : word
+          type: string
+          description: on what level of text does the model works best
+          default: word
           enum:
             - word
             - line
             - paragraph
             - page
-        modality :
-          type : string
-          description : on what type of image does the model works best 
-          default : print
+        modality:
+          type: string
+          description: on what type of image does the model works best
+          default: print
           enum:
             - print
             - handwritten
             - scenetext
-        
-           
-          
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
-        
     TTSConfig:
       required:
         - language
@@ -658,9 +654,8 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         transcriptionFormat:
           $ref: '#/components/schemas/TranscriptionFormat'
-        profanityFilter:
-          type: boolean
-          example: true
+        postProcessors:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
         domain:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         detailed:
