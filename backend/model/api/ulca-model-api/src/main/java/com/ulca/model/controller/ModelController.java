@@ -118,9 +118,9 @@ public class ModelController {
 	
 	
 	@GetMapping("/getTransliterationModelId")
-	public GetTransliterationModelIdResponse  getTransliterationModelId() {
+	public GetTransliterationModelIdResponse  getTransliterationModelId(@RequestParam(required = true) String sourceLanguage, @RequestParam(required = false) String targetLanguage) {
 		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
-		return modelService.getTransliterationModelId();
+		return modelService.getTransliterationModelId(sourceLanguage,  targetLanguage);
 
 	}
 	
