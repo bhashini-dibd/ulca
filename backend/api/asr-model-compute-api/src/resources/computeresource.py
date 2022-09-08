@@ -26,6 +26,7 @@ class ASRComputeResource(Resource):
         inf = asrmongorepo.find_doc(body["modelId"])
         inference = inf[0]["inferenceEndPoint"]
         #inference   =   body["inferenceEndPoint"]
+        log.info(f'inference ===== >     {inference}')
         uri         =   False
         if "audioContent" in body:
             audio   =   body["audioContent"]
