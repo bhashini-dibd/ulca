@@ -1,5 +1,5 @@
 pip==20.1
-Flask==1.1.2
+Flask==2.1.0
 Flask-Cors==3.0.8
 Flask-RESTful==0.3.8
 requests==2.23.0
