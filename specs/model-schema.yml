@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.3.1
+  version: 0.3.3
 servers:
   - url: /ulca
 paths: {}
@@ -52,8 +52,8 @@ components:
         task:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
         languages:
-          nullable : true
-          allOf : 
+          nullable: true
+          allOf:
             - $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePairs
         license:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/License
@@ -94,7 +94,7 @@ components:
               asr: '#/components/schemas/ASRInference'
               tts: '#/components/schemas/TTSInference'
               ocr: '#/components/schemas/OCRInference'
-              txt-lang-detection : '#/components/schemas/TxtLangDetectionInference'
+              txt-lang-detection: '#/components/schemas/TxtLangDetectionInference'
         isSyncApi:
           type: boolean
           description: specify true if the inference is a sync api, false otherwise. when false, specify the polling url and related properties
@@ -465,7 +465,7 @@ components:
         output:
           $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TranslationConfig'
+          $ref: '#/components/schemas/OCRConfig'
     FileUploadRequest:
       type: object
       properties:
@@ -524,15 +524,14 @@ components:
           minLength: 1
           type: string
           description: input sentence for the model
-        langPrediction :
+        langPrediction:
           type: array
           description: list of
           items:
-             $ref: '#/components/schemas/TxtLangDetectionPrediction'
-          
+            $ref: '#/components/schemas/TxtLangDetectionPrediction'
     TxtLangDetectionPrediction:
       type: object
-      required :
+      required:
         - langCode
       properties:
         langCode:
@@ -544,8 +543,6 @@ components:
         langScore:
           type: number
           description: the measure of accuracy of language prediction
-          
-          
     TranslationConfig:
       required:
         - language
@@ -584,7 +581,6 @@ components:
           type: integer
           description: Unique identifier of model
           example: 103
-
         isSentence:
           type: boolean
           description: Expects sentence or words
@@ -594,7 +590,6 @@ components:
           type: integer
           description: expected number of predictions
           example: 4
-
     OCRConfig:
       required:
         - language
@@ -604,6 +599,23 @@ components:
           type: string
           description: Unique identifier of model
           example: 103
+        detectionLevel:
+          type: string
+          description: on what level of text does the model works best
+          default: word
+          enum:
+            - word
+            - line
+            - paragraph
+            - page
+        modality:
+          type: string
+          description: on what type of image does the model works best
+          default: print
+          enum:
+            - print
+            - handwritten
+            - scenetext
         language:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
     TTSConfig:
@@ -642,9 +654,8 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         transcriptionFormat:
           $ref: '#/components/schemas/TranscriptionFormat'
-        profanityFilter:
-          type: boolean
-          example: true
+        postProcessors:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
         domain:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
         detailed:

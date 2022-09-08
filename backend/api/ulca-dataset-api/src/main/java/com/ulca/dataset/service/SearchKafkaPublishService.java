@@ -1,5 +1,6 @@
 package com.ulca.dataset.service;
 
+import java.time.Instant;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class SearchKafkaPublishService {
 		processTracker.setServiceRequestAction(ServiceRequestActionEnum.search);
 		processTracker.setServiceRequestType(ServiceRequestTypeEnum.dataset);
 		processTracker.setStatus(StatusEnum.pending.toString());
-		processTracker.setStartTime(new Date().toString());
+		processTracker.setStartTime(Instant.now().toEpochMilli());
 		
 		processTrackerDao.save(processTracker);
 		

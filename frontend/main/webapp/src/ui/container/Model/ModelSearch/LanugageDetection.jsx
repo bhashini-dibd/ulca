@@ -236,11 +236,11 @@ const LanguageDetection = (props) => {
           <Grid container className={classes.cardHeader}>
             <Grid
               item
-              xs={2}
-              sm={2}
-              md={2}
-              lg={2}
-              xl={2}
+              xs={4}
+              sm={4}
+              md={4}
+              lg={4}
+              xl={4}
               className={classes.headerContent}
             >
               {/* <Autocomplete
