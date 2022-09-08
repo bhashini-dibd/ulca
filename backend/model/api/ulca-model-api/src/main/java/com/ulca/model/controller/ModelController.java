@@ -115,4 +115,13 @@ public class ModelController {
 		return modelService.getModelFeedbackByTaskType(taskType);
 
 	}
+	
+	
+	@GetMapping("/getTransliterationModelId")
+	public GetTransliterationModelIdResponse  getTransliterationModelId(@RequestParam(required = true) String sourceLanguage, @RequestParam(required = false) String targetLanguage) {
+		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
+		return modelService.getTransliterationModelId(sourceLanguage,  targetLanguage);
+
+	}
+	
 }
