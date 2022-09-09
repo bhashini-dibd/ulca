@@ -35,7 +35,7 @@ import { ReactTransliterate } from 'react-transliterate';
 import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
-
+import { Switch } from "@material-ui/core";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -60,7 +60,7 @@ const StyledMenu = withStyles({})((props) => (
 ))
 
 const HostedInference = (props) => {
-  const { classes, title, para, modelId, task } = props;
+  const { classes, title, para, modelId, task, source } = props;
   const [gender, setGender] = useState("Female");
   const [audio, setAudio] = useState(null);
   const history = useHistory();
@@ -75,7 +75,7 @@ const HostedInference = (props) => {
   });
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
-  const [base,setBase] = useState("");
+  const [base, setBase] = useState("");
   // useEffect(() => {
   // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
   // }, []);
@@ -85,6 +85,7 @@ const HostedInference = (props) => {
     variant: "success",
   });
   const [transliterationModelId, setTransliterationModelId] = useState("");
+  const [showTransliteration, setShowTransliteration] = useState(false);
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
@@ -93,10 +94,10 @@ const HostedInference = (props) => {
     setTarget("");
   };
 
-  useEffect(()=>{
+  const fetchTransliterationModel = async () => {
     console.log("props.source, props.target", props.source, props.target);
     const apiObj = new GetTransliterationModelID("en", props.source);
-    fetch(apiObj.apiEndPoint(), {
+    source && source !== "en" && fetch(apiObj.apiEndPoint(), {
       method: "GET",
       // headers: apiObj.getHeaders().headers,
     })
@@ -116,8 +117,11 @@ const HostedInference = (props) => {
           variant: "error",
         });
       });
-    
-  },[])
+  }
+
+  useEffect(() => {
+    fetchTransliterationModel();
+  }, [source])
 
   const b64toBlob = (b64Data, contentType = "", sliceSize = 512) => {
     const byteCharacters = atob(b64Data);
@@ -283,24 +287,44 @@ const HostedInference = (props) => {
           <Grid container className={classes.cardHeader}>
             <Grid
               item
-              xs={7}
-              sm={7}
-              md={9}
-              lg={9}
-              xl={9}
+              xs={5}
+              sm={3}
+              md={3}
+              lg={3}
+              xl={3}
               className={classes.headerContent}
             >
               <Typography variant="h6" className={classes.hosted}>
                 Input Text
               </Typography>
             </Grid>
+            {transliterationModelId &&
+              <Grid item xs={5} sm={3} md={5} lg={5} xl={5}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "baseline",
+                  justifyContent: "center"
+                }}
+              >
+                <Typography variant="h6" className={classes.hosted}>
+                  Transliteration
+                </Typography>
+                <Switch
+                  checked={showTransliteration}
+                  onChange={() => setShowTransliteration(!showTransliteration)}
+                  color="primary"
+                  name="checkedB"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+
+              </Grid>}
             <Grid
               item
-              xs={3}
+              xs={12}
               sm={3}
-              md={2}
-              lg={2}
-              xl={2}
+              md={3}
+              lg={3}
+              xl={3}
               className={classes.headerContent}
             >
               {renderGenderDropDown()}
@@ -325,15 +349,16 @@ const HostedInference = (props) => {
               setSourceText(e.target.value);
             }}
           /> */}
-          <ReactTransliterate 
-            apiURL = {`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
+          {showTransliteration ? <ReactTransliterate
+            apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
             modelId={transliterationModelId}
             value={sourceText}
             onChangeText={(text) => {
               setSourceText(text);
             }}
-            renderComponent = {(props)=><textarea placeholder="Enter text here..." className={classes.textAreaTransliteration} {...props} />}
-          />
+            renderComponent={(props) => <textarea placeholder="Enter text here..." className={classes.textAreaTransliteration} {...props} />}
+          /> : <textarea placeholder="Enter text here..." value={sourceText} onChange={(e) => setSourceText(e.target.value)} className={classes.textAreaTransliteration} />
+          }
         </CardContent>
 
         <CardActions className={classes.actionButtons}>
