@@ -15,6 +15,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
 import Search from "../../../components/Datasets&Model/Search";
 import { translate } from "../../../../assets/localisation";
+import moment from 'moment';
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -50,13 +51,7 @@ const ContributionList = (props) => {
   });
 
   const convertDate = (date) => {
-    return date
-      .toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .toUpperCase();
+    return moment(date).format("MM/DD/YYYY");
   };
 
   const fetchHeaderButton = () => {

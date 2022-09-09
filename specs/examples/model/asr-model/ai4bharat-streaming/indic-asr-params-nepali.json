@@ -81,7 +81,7 @@
         ]
     },
     "inferenceEndPoint": {
-       "callbackUrl": "https://meity-dev-asr.ulcacontrib.org/asr/v1/recognize/ai4bne",
+       "callbackUrl": "https://ai4b-dev-asr.ulcacontrib.org/asr/v1/recognize/ne",
        "schema": {
           "taskType": "asr",
           "request": {
