@@ -20,6 +20,7 @@ import {
   Tab,
   AppBar,
   Box,
+  Tooltip,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import MUIDataTable from "mui-datatables";
@@ -27,6 +28,7 @@ import BenchmarkDetails from "../../../../redux/actions/api/Model/BenchmarkModel
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { translate } from "../../../../assets/localisation";
+import metricInfo from "../../../../utils/getMetricInfo.";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -123,7 +125,7 @@ const SearchModelDetail = (props) => {
   const columns = [
     {
       name: "position",
-      label: "#Position",
+      label: "Rank",
     },
     {
       name: "modelVersion",
@@ -339,10 +341,22 @@ const SearchModelDetail = (props) => {
                       aria-label="scrollable prevent tabs example"
                     >
                       {metricArray.map((metric) => (
-                        <Tab
-                          label={metric}
-                          onClick={() => handleIndexChange(metric)}
-                        />
+                        <Tooltip
+                          title={
+                            <a
+                              style={{ textDecoration: "none" }}
+                              href="https://github.com/ULCA-IN/ulca/wiki/Model-Evaluation-Metrics-Definitions"
+                              target="_blank"
+                            >{`${metricInfo[metric]}. For further information click here.`}</a>
+                          }
+                          interactive
+                          arrow
+                        >
+                          <Tab
+                            label={metric}
+                            onClick={() => handleIndexChange(metric)}
+                          />
+                        </Tooltip>
                       ))}
                     </Tabs>
                   </AppBar>

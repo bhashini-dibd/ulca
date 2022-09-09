@@ -39,6 +39,7 @@ import { translate } from "../../../../assets/localisation";
 import { useRef } from "react";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import LightTooltip from "../../../components/common/LightTooltip";
+import moment from 'moment';
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -538,13 +539,7 @@ const ContributionList = (props) => {
   }
 
   const convertDate = (date) => {
-    return date
-      .toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .toUpperCase();
+    return moment(date).format("MM/DD/YYYY");
   };
 
   const renderConfirmationDialog = () => {

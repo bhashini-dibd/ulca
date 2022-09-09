@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.ArrayList;
 
 //Import the Base64 encoding library.
@@ -166,7 +167,7 @@ public class OcrBenchmark {
 			int datasetCount = corpus.length();
 			BenchmarkProcess bmProcessUpdate = benchmarkProcessDao.findByBenchmarkProcessId(benchmarkingProcessId);
 			bmProcessUpdate.setRecordCount(datasetCount);
-			bmProcessUpdate.setLastModifiedOn(new Date().toString());
+			bmProcessUpdate.setLastModifiedOn(Instant.now().toEpochMilli());
 			benchmarkProcessDao.save(bmProcessUpdate);
 
 			benchmarkMetricKafkaTemplate.send(mbMetricTopic, metricRequest.toString());
