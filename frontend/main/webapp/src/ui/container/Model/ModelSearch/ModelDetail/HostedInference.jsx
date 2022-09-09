@@ -22,13 +22,17 @@ import {
   CardActions,
   CardHeader,
 } from "@material-ui/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
 import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
+import { ReactTransliterate } from 'react-transliterate';
+import configs from "../../../../../configs/configs";
+import endpoints from "../../../../../configs/apiendpoints";
+import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
 
 const HostedInference = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -38,9 +42,9 @@ const HostedInference = (props) => {
   const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState("");
   const [modal, setModal] = useState(false);
-  const [suggestEdit, setSuggestEdit] = useState(null)
-  const [suggestEditValues, setSuggestEditValues] = useState("")
-
+  const [suggestEdit, setSuggestEdit] = useState(null);
+  const [suggestEditValues, setSuggestEditValues] = useState("");
+  const [transliterationModelId, setTransliterationModelId] = useState("");
 
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
@@ -48,6 +52,32 @@ const HostedInference = (props) => {
   });
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
+
+  useEffect(()=>{
+    const apiObj = new GetTransliterationModelID("en", props.source);
+    fetch(apiObj.apiEndPoint(), {
+      method: "GET",
+      // headers: apiObj.getHeaders().headers,
+    })
+      .then(async (resp) => {
+        let rsp_data = await resp.json();
+        if (resp.ok) {
+          console.log("resp_data", rsp_data);
+          setTransliterationModelId(rsp_data.modelId);
+        }
+      })
+      .catch((err) => {
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message:
+            "Transliteration Model ID Not Present.",
+          variant: "error",
+        });
+      });
+    
+  },[])
+
 
   // useEffect(() => {
   // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
@@ -181,7 +211,7 @@ const HostedInference = (props) => {
           </Grid>
         </CardContent>
         <CardContent>
-          <textarea
+          {/* <textarea
             value={sourceText}
             rows={5}
             // cols={40}
@@ -190,6 +220,15 @@ const HostedInference = (props) => {
             onChange={(e) => {
               setSourceText(e.target.value);
             }}
+          /> */}
+          <ReactTransliterate 
+            apiURL = {`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
+            modelId={transliterationModelId}
+            value={sourceText}
+            onChangeText={(text) => {
+              setSourceText(text);
+            }}
+            renderComponent = {(props)=><textarea placeholder="Enter text here..." className={classes.textAreaTransliteration} {...props} />}
           />
         </CardContent>
 
