@@ -47,6 +47,7 @@ class ASRComputeRepo:
                 audio.export(processed_file, format="wav")
 
                 encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
+                log.info(f'encoded data {encoded_data}')
                 os.remove(file)
                 os.remove(processed_file)
                 result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat,punctiation=True)
@@ -113,7 +114,7 @@ class ASRComputeRepo:
             body    =   {"config": {"language": {"sourceLanguage": lang},"transcriptionFormat": {"value":transformat},"audioFormat": audioformat,
                         "punctuation": punctiation,"enableInverseTextNormalization": False},"audio": [{"audioContent": str(data)}]}
             request_url = callbackurl
-            log.info(f'transformat == > {transformat}, audioformat==> {audioformat}, lang ==> {lang} punc ==> {punctiation}')
+            log.info(f'transformat == > {transformat}, audioformat==> {audioformat}, lang ==> {lang} punc ==> {punctiation}, audioContent ==> {data}')
             log.info("Intiating request to process asr data on %s"%request_url)
             response = requests.post(url=request_url, headers = headers, json = body,verify=False)
             content = response.content

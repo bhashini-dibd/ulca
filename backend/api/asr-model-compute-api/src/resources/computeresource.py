@@ -33,6 +33,7 @@ class ASRComputeResource(Resource):
         if "audioUri" in body:
             audio   =   body["audioUri"]
             uri     =   True
+        log.info(f'audioContent {audio}')
         try:
             result = asrrepo.process_asr(lang,audio,userId,inference,uri)
             if result.get("status") == "SUCCESS":
