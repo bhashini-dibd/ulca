@@ -1384,8 +1384,8 @@ components:
           type: string
           example: parallel-corpus
         submittedOn:
-          type: string
-          example: Mon Aug 29 11:08:40 IST 2022
+          type: number
+          example: 1663064027000
         status:
           type: string
           example: Completed
@@ -1451,17 +1451,17 @@ components:
           type: string
           description: Details of the current status of the task
         startTime:
-          type: string
+          type: number
           description: ISO timestamp of the instance of the start of process
-          example: Tue Feb 08 03:17:01 IST 2022
+          example: 1663068174000
         endTime:
-          type: string
+          type: number
           description: ISO timestamp of the instance of the end of process
-          example: Tue Feb 08 03:17:01 IST 2022
+          example: 1663068357000
         lastModified:
-          type: string
+          type: number
           description: ISO timestamp of the instance of the end of process
-          example: Tue Feb 08 03:17:01 IST 2022
+          example: 1663068357000
         error:
           $ref: '#/components/schemas/Error'
       description: Task Tracker entity
@@ -1485,8 +1485,8 @@ components:
                 id: 62cbc2bd72ec8a2af32f09ed
                 status: Completed
                 details:
-                startTime: Mon Jul 11 11:57:09 IST 2022
-                endTime: Mon Jul 11 11:57:13 IST 2022
+                startTime: 1663068174000
+                endTime: 1663068357000
                 lastModified:
                 error:
               - serviceRequestNumber: '1124190703'
@@ -1494,9 +1494,9 @@ components:
                 id: 62cbc2c8b106cf28431ee7ab
                 status: Completed
                 details: '{"timeStamp":"Mon Jul 11 11:57:20 IST 2022","processedCount":[{"count":4,"type":"success"},{"count":0,"type":"failed"}]}'
-                startTime: Mon Jul 11 11:57:20 IST 2022
-                endTime: Mon Jul 11 11:57:20 IST 2022
-                lastModified: Mon Jul 11 11:57:20 IST 2022
+                startTime: 1663068174000
+                endTime: 1663068357000
+                lastModified: 1663068357000
                 error:
               - serviceRequestNumber: '1124190703'
                 tool: validate
@@ -1888,9 +1888,9 @@ components:
         userId:
           type: string
         submittedOn:
-          type: string
+          type: number
         publishedOn:
-          type: string
+          type: number
         status:
           type: string
         unpublishReason:
@@ -2497,11 +2497,11 @@ components:
           type: string
           example: 61c380072e74fa406e7618ba
         submittedOn:
-          type: string
-          example: Sun Nov 07 16:59:23 IST 2021
+          type: number
+          example: 1663064027000
         publishedOn:
-          type: string
-          example: Sun Nov 07 16:59:23 IST 2021
+          type: number
+          example: 1663064295000
         status:
           type: string
           example: unpublished
@@ -2544,17 +2544,17 @@ components:
           type: string
           example: Completed/In-Progress/Failed
         createdOn:
-          type: string
-          example: Sun Nov 07 16:59:23 IST 2021
+          type: number
+          example: 1663066562000
         lastModifiedOn:
-          type: string
-          example: Sun Nov 07 16:59:23 IST 2021
+          type: number
+          example: 1663066562000
         startTime:
-          type: string
-          example: Sun Nov 07 16:59:23 IST 2021
+          type: number
+          example: 1663068174000
         endTime:
-          type: string
-          example: Sun Nov 07 16:59:23 IST 2021
+          type: number
+          example: 1663068357000
         recordCount:
           type: integer
           format: int32
@@ -2837,13 +2837,13 @@ components:
           type: object
           description: Object created from params.json
         createdOn:
-          type: string
+          type: number
           description: timestamp when benchmark is created
-          example: Wed Jul 27 19:02:39 IST 2022
+          example: 1663066562000
         submittedOn:
-          type: string
+          type: number
           description: timestamp when benchmark is submitted/published
-          example: Wed Jul 27 19:02:39 IST 2022
+          example: 1663064027000
         status:
           type: string
           example: Completed
