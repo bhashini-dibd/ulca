@@ -24,10 +24,8 @@ class ASRComputeResource(Resource):
         task    =   body["task"]
         lang    =   body["source"]
         inf = asrmongorepo.find_doc(body["modelId"])
-        inference = inf[0]["inferenceEndPoint"]
-        inf_frm_req   =   body["inferenceEndPoint"]
-        log.info(f'inference ===== >     {inference}')
-        log.info(f'inference from request {inf_frm_req}')
+        inf_callbackurl = inf[0]["inferenceEndPoint"]["callbackUrl"]
+        inference   =   body["inferenceEndPoint"]
         uri         =   False
         if "audioContent" in body:
             audio   =   body["audioContent"]
@@ -36,7 +34,7 @@ class ASRComputeResource(Resource):
             uri     =   True
         #log.info(f'audioContent {audio}')
         try:
-            result = asrrepo.process_asr(lang,audio,userId,inference,uri)
+            result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,inference,uri)
             if result.get("status") == "SUCCESS":
                 res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
                 log.info("response successfully generated.")

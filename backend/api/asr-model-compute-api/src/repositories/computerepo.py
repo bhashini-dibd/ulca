@@ -14,7 +14,7 @@ log = logging.getLogger('file')
 
 class ASRComputeRepo:
 
-    def process_asr(self,lang,audio,userId,inference,uri):
+    def process_asr(self,lang,audio,userId,inf_callbackurl,inference,uri):
         """
         Processing audio urls / encoded audio content
         If url, directly initiating the model call
@@ -26,7 +26,7 @@ class ASRComputeRepo:
         - decoding to utf-8
         """
         
-        callbackurl =   inference["callbackUrl"]
+        callbackurl =   inf_callbackurl
         transformat =   inference["schema"]["request"]["config"]["transcriptionFormat"]["value"]
         audioformat =   inference["schema"]["request"]["config"]["audioFormat"]
         if uri == True:
