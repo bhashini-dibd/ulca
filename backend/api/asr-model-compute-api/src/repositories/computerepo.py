@@ -47,7 +47,7 @@ class ASRComputeRepo:
                 audio.export(processed_file, format="wav")
 
                 encoded_data=base64.b64encode(open(processed_file, "rb").read()) 
-                log.info(f'encoded data {encoded_data}')
+                #log.info(f'encoded data {encoded_data}')
                 os.remove(file)
                 os.remove(processed_file)
                 result = self.make_base64_audio_processor_call(encoded_data.decode("utf-8"),lang,callbackurl,transformat,audioformat,punctiation=True)
