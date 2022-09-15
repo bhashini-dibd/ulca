@@ -742,14 +742,17 @@ const ContributionList = (props) => {
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
-      if (rowData[9].length)
+      if (rowData[9].length) {
+        const rows = rowData[9].sort((a, b) => (Number(b.createdOn) - Number(a.createdOn)));
+
         return (
           <RenderExpandTable
-            rows={rowData[9]}
+            rows={rows}
             color={even_odd}
             renderStatus={renderExpandTableStatus}
-          />                                        
+          />
         );
+      }
     },
     print: false,
     viewColumns: false,
