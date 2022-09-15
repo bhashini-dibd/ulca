@@ -2337,6 +2337,8 @@ components:
           type: string
         source:
           type: string
+        audioFormat:
+          type: string
         gender:
           type: string
           enum:
@@ -2363,6 +2365,7 @@ components:
         userId: 6a73afa4fc774dcdb28d5fff944511f6
         task: asr
         source: ml
+        audiFormat: wav
         audioUri: https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_malayalam.wav
         audioContent: UklGRiygCwBXQVZFZm10IBAAAAABAAIARKwAABCxAgAEABAAZGF0YQCgCwAAAAAAAAAAAAAAAAAAAAAAAAAAAA
   
@@ -2382,6 +2385,7 @@ components:
       example:
         outputText: இன்று நீங்கள் எப்படி இருக்கிறீர்கள்?
         transliterationOutput: null
+        languageDetectionOutput: null
     
     ModelListByUserIdResponse:
       type: object
