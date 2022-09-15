@@ -42,9 +42,6 @@ public class ModelController {
 	ModelService modelService;
 
 
-    @Autowired
-	ModelHeartBeatCheckService modelHeartBeatCheckService;
-
 	@GetMapping("/listByUserId")
 	public ModelListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
 			@RequestParam(required = false) Integer endPage,@RequestParam(required = false) Integer pageSize,@RequestParam(required = false) String name) {
@@ -126,13 +123,6 @@ public class ModelController {
 	public GetTransliterationModelIdResponse  getTransliterationModelId(@RequestParam(required = true) String sourceLanguage, @RequestParam(required = false) String targetLanguage) {
 		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
 		return modelService.getTransliterationModelId(sourceLanguage,  targetLanguage);
-
-	}
-
-	@GetMapping("/test")
-	public void test() {
-		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
-		modelHeartBeatCheckService.modelHeathStatusCheck();
 
 	}
 
