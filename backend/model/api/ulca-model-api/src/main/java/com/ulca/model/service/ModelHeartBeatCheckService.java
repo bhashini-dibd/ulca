@@ -101,7 +101,9 @@ public class ModelHeartBeatCheckService {
 
 
 		for (ModelExtended model : list) {
+			
 			ModelHealthStatus modelHealthStatus = new ModelHealthStatus();
+			try {
 			modelHealthStatus.setModelId(model.getModelId());
 			modelHealthStatus.setModelName(model.getName());
 			modelHealthStatus.setTaskType(model.getTask().getType().toString());
@@ -109,7 +111,7 @@ public class ModelHeartBeatCheckService {
 			modelHealthStatus.setNextStatusUpdateTiming(Instant.now().toEpochMilli() +3600000);
 
 
-			try {
+			
 				InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 
 				if (inferenceAPIEndPoint != null && inferenceAPIEndPoint.getCallbackUrl() != null) {
@@ -150,7 +152,7 @@ public class ModelHeartBeatCheckService {
                 modelHealthStatus.setStatus("unavailable");
                 list1.add(modelHealthStatus);
 
-                log.info("healthStatusCheck Failed " + model.getName() + " reason :: " + e.getMessage());
+                log.info("healthStatusCheck Failed modelName :: " + model.getName() + "modelId ::  "+ model.getModelId() + " reason :: " + e.getMessage());
 				e.printStackTrace();
 			}
 
