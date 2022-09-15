@@ -1,5 +1,6 @@
 package com.ulca.model.service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,6 +95,8 @@ public class ModelHeartBeatCheckService {
 
 
 		List<ModelExtended> list = modelDao.findByStatus("published");
+		log.info("*******  Number of published models fetched ::"+ list.size());
+
 		List<ModelHealthStatus> list1 = new ArrayList<>();
 
 
@@ -102,8 +105,8 @@ public class ModelHeartBeatCheckService {
 			modelHealthStatus.setModelId(model.getModelId());
 			modelHealthStatus.setModelName(model.getName());
 			modelHealthStatus.setTaskType(model.getTask().getType().toString());
-			modelHealthStatus.setLastStatusUpdate(new Date().toString());
-			modelHealthStatus.setNextStatusUpdateTiming(DateUtils.addHours(new Date(),1).toString());
+			modelHealthStatus.setLastStatusUpdate(Instant.now().toEpochMilli());
+			modelHealthStatus.setNextStatusUpdateTiming(Instant.now().toEpochMilli() +3600000);
 
 
 			try {
@@ -153,7 +156,9 @@ public class ModelHeartBeatCheckService {
 
 		}
 
-            modelHealthStatusDao.saveAll(list1);
+		log.info("*******  Number of models being status checked available/unavailable ::"+ list1.size());
+
+		modelHealthStatusDao.saveAll(list1);
 		log.info("*******  end ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
 	}
 
