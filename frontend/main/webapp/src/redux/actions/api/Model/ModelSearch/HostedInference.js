@@ -63,7 +63,7 @@ export default class HostedInference extends API {
         bodyData.audioUri = this.input;
       }
       bodyData.source = this.source;
-      bodyData.inferenceEndPoint = this.inferenceEndPoint;
+      // bodyData.inferenceEndPoint = this.inferenceEndPoint;
     } else if (this.task === "ocr") {
       bodyData.imageUri = this.input;
       bodyData.source = this.source;
