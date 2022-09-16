@@ -1,4 +1,5 @@
 import C from "../../../actions/constants";
+import moment from 'moment';
 
 const initialState = {
   responseData: [],
@@ -54,14 +55,15 @@ const getFilterValue = (payload, data) => {
 const getModelHealthStatus = (state, payload) => {
   let responseData = [];
   let filter = { status: [], task: [], domain: [], license: [] };
-  payload.benchmark.forEach((element) => {
+
+  payload.modelHealthStatusList.forEach((element) => {
     responseData.push({
         callbackUrl: element.callbackUrl,
         modelId: element.modelId,
         modelName: element.modelName,
         status: element.status,
         taskType: element.taskType,
-        lastStatusUpdate: element.lastStatusUpdate,
+        lastStatusUpdate: moment(element.lastStatusUpdate).format("DD/MM/YYYY"),
     });
   });
 
