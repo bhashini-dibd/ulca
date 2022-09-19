@@ -106,7 +106,7 @@ public class ModelHeartBeatCheckService {
 
 			ModelHealthStatus modelHealthStatus = new ModelHealthStatus();
 			try {
-				if (model.getName().contains("Google"))
+				if (model.getName().contains("Google") || model.getName().contains("Bing"))
 					continue;
 
 				modelHealthStatus.setModelId(model.getModelId());
