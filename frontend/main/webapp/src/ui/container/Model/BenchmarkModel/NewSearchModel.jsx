@@ -48,7 +48,7 @@ const NewSearchModel = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    makeModelSearchAPICall(ModelTask.filter(val => val.value !== 'sts' && val.value !== 'status-check')[newValue].value);
+    makeModelSearchAPICall(ModelTask.filter(val => val.value !== 'sts')[newValue].value);
     dispatch(SearchList(""));
     dispatch({ type: "CLEAR_FILTER_BENCHMARK" });
   };

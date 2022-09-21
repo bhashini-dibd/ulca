@@ -114,13 +114,10 @@ const getContributionList = (state, payload) => {
   let refreshStatus = false;
   payload.data.forEach((element) => {
     let sLanguage =
-      element.languages &&
       element.languages.length > 0 &&
       element.languages[0].sourceLanguage &&
-      element.languages && 
-    getLanguageName(element.languages[0].sourceLanguage);
+      getLanguageName(element.languages[0].sourceLanguage);
     let tLanguage =
-      element.languages &&
       element.languages &&
       element.languages.length > 0 &&
       element.languages[0].targetLanguage &&
@@ -142,9 +139,7 @@ const getContributionList = (state, payload) => {
       endPoint: element.inferenceEndPoint,
       language: lang,
       source:
-        element.languages &&
-        element.languages.length > 0 &&
-        element.languages[0].sourceLanguage,
+        element.languages.length > 0 && element.languages[0].sourceLanguage,
       target:
         element.languages &&
         element.languages.length > 0 &&
@@ -267,13 +262,14 @@ const reducer = (state = initialState, action) => {
     case C.TOGGLE_MODEL_STATUS:
       return {
         ...state,
-        responseData: getContributionList(state, action.payload).responseData,
+        responseData: getContributionList(state, action.payload)
+          .responseData,
         filteredData: updateModelStatus(
           getContributionList(state, action.payload).responseData,
           action.payload.searchValue
         ),
       };
-
+      
     default:
       return {
         ...state,

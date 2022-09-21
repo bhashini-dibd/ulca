@@ -24,8 +24,8 @@ public class ModelHealthStatus {
 	String pollingUrl;
 	String status;
 
-	Long lastStatusUpdate;
-	Long nextStatusUpdateTiming;
+	String lastStatusUpdate;
+	String nextStatusUpdateTiming;
 	
 	
 }

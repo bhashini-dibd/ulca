@@ -15,9 +15,10 @@ import lombok.RequiredArgsConstructor;
 public class DatasetListByUserIdResponseDto {
 
 	private  String datasetId;
+	private  String serviceRequestNumber;
 	private  String datasetName;
 	private  String datasetType;
 	private  Long submittedOn;
-	private  String userId;
+	private  String status;
 	
 }

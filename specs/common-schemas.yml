@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.2
+  version: 0.5.0
 servers:
   - url: /
 paths: {}
@@ -325,20 +325,6 @@ components:
       enum:
         - sixteen
         - eight
-    AudioPostProcessors:
-      type: array
-      description: This attribute defines the `post processing steps of audio recognition model`
-      example:
-        - itn
-        - punctuation
-      items:
-        type: string
-        enum:
-        - itn
-        - punctuation
-        - numbers-only
-        - profainity-filter
-
     NumberOfSpeakers:
       minimum: 1
       type: number
@@ -427,5 +413,4 @@ components:
             - ocr
             - glossary
             - ner
-            - txt-lang-detection
       description: the category of model under which it has been released or trained
