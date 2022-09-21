@@ -1,15 +1,12 @@
 openapi: 3.0.0
 info:
-  version: 0.5.0
+  version: 0.5.1
   title: ASR and TTS API and schema definitions
-  description: >-
-    Contributor developing models under ASR, TSS task, should implement following schema and API contract for their end point. This will enable ULCA to make inference callback for benchmark and try me functionalities.
+  description: Contributor developing models under ASR, TSS task, should implement following schema and API contract for their end point. This will enable ULCA to make inference callback for benchmark and try me functionalities.
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-
 paths: {}
-
 components:
   securitySchemes:
     authToken:
@@ -17,7 +14,6 @@ components:
       description: token issued by authenticating the user
       name: auth-token
       in: header
-
   schemas:
     SpeechRecognitionRequest:
       type: object
@@ -26,10 +22,9 @@ components:
         - audio
       properties:
         config:
-          $ref: "#/components/schemas/RecognitionConfig"
+          $ref: '#/components/schemas/RecognitionConfig'
         audio:
-          $ref: "#/components/schemas/RecognitionAudio"
-
+          $ref: '#/components/schemas/RecognitionAudio'
     RecognitionAudio:
       type: object
       required:
@@ -38,42 +33,39 @@ components:
         audioContent:
           type: string
           format: byte
-          description: "audio content with audio duration <= 1min"
-          example: "byte64 encoded string"
+          description: audio content with audio duration <= 1min
+          example: byte64 encoded string
         audioUri:
           type: string
-          description: "path on gcp/s3 bucket or https url"
-          example: "gs://bucket/audio.wav"
+          description: path on gcp/s3 bucket or https url
+          example: gs://bucket/audio.wav
         fileId:
           type: string
           description: fileId should be same as returned in the response of file-upload
-          
-
     RecognitionConfig:
       type: object
       required:
         - language
       properties:
         language:
-          $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair"
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
         audioFormat:
-          $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat"
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
         channel:
-          $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel"
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
-          $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate"
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         bitsPerSample:
-          $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample"
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
         transcriptionFormat:
-          $ref: "#/components/schemas/TranscriptionFormat"
-        profanityFilter:
-          type: boolean
-          example: true
+          $ref: '#/components/schemas/TranscriptionFormat'
         domain:
-          $ref: "https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain"
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        postProcessors:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
         detailed:
           type: boolean
-          description: "to specify whether details are required in output like SNR, sampling rate"
+          description: to specify whether details are required in output like SNR, sampling rate
         punctuation:
           type: boolean
           example: true
@@ -84,8 +76,6 @@ components:
             - phone_call
             - video
             - default
-            
-
     TranscriptionFormat:
       type: object
       properties:
@@ -96,7 +86,6 @@ components:
             - srt
             - transcript
             - alternatives
-
     SpeechRecognitionResult:
       type: object
       required:
@@ -104,55 +93,51 @@ components:
       properties:
         transcript:
           type: string
-          example: "This is text"
+          example: This is text
         alternatives:
-          $ref: "#/components/schemas/Alternatives"
+          $ref: '#/components/schemas/Alternatives'
         srt:
           type: string
-          example: "--> This is srt text"
+          example: '--> This is srt text'
         status:
-          $ref: "#/components/schemas/RecognitionStatus"
+          $ref: '#/components/schemas/RecognitionStatus'
         detail:
-          $ref: "#/components/schemas/RecognitionDetail"
-
+          $ref: '#/components/schemas/RecognitionDetail'
     RecognitionDetail:
       type: object
       properties:
         channelTag:
           type: integer
-          description: "For multi-channel audio, this is the channel number corresponding to the recognized result for the audio from that channel. For audioChannelCount = N, its output values can range from '1' to 'N'"
+          description: For multi-channel audio, this is the channel number corresponding to the recognized result for the audio from that channel. For audioChannelCount = N, its output values can range from '1' to 'N'
         languageCode:
           type: string
-          description: "This language code was detected to have the most likelihood of being spoken in the audio"
+          description: This language code was detected to have the most likelihood of being spoken in the audio
         snr:
           type: integer
-          description: "sound to noise ratio of audio"
+          description: sound to noise ratio of audio
         samplingRate:
           type: integer
-          description: "sampling rate of audio"
+          description: sampling rate of audio
         bitsPerSample:
           type: integer
-          description: "bitsPerSample rate of audio"
-
+          description: bitsPerSample rate of audio
     RecognitionStatus:
       type: object
       properties:
         value:
           type: string
-          description: "status of ASR response"
+          description: status of ASR response
           enum:
             - success
             - no-match
             - initial-silence-timeout
             - babble-timeout
             - error
-
     Alternatives:
       type: array
       items:
-        $ref: "#/components/schemas/Alternative"
+        $ref: '#/components/schemas/Alternative'
         minItems: 1
-
     Alternative:
       type: object
       properties:
@@ -165,5 +150,3 @@ components:
         endTime:
           type: string
           format: time
-
-    
