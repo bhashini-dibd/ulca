@@ -77,7 +77,7 @@ export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-      const obj = new GetMasterDataAPI(["feedbackQns","languages"]);
+      const obj = new GetMasterDataAPI(["feedbackQns"]);
       dispatch(APITransport(obj));
   }, [])
 

@@ -1,5 +1,4 @@
 import logging
-import time
 import uuid
 from datetime import datetime
 from logging.config import dictConfig
@@ -56,21 +55,21 @@ class ProcessTracker:
                 else:
                     task_event["status"] = pt_success_status
                     notifier_req = {"userID": data["userID"], "count": data["count"], "datasetType": dataset_type}
-                task_event["lastModified"] = eval(str(time.time()).replace('.', '')[0:13])
-                task_event["endTime"] = task_event["lastModified"]
+                task_event["lastModifiedTime"] = str(datetime.now())
+                task_event["endTime"] = task_event["lastModifiedTime"]
                 repo.update(task_event)
                 notifier.create_notifier_event(data["serviceRequestNumber"], notifier_req)
             else:
                 task_event = {"id": str(uuid.uuid4()), "tool": pt_search_tool,
                               "serviceRequestNumber": data["serviceRequestNumber"], "status": pt_inprogress_status,
-                              "startTime": eval(str(time.time()).replace('.', '')[0:13]), "lastModified": eval(str(time.time()).replace('.', '')[0:13])}
+                              "startTime": str(datetime.now()), "lastModifiedTime": str(datetime.now())}
                 repo.insert(task_event)
             return
         except Exception as e:
             log.exception(f'There was an exception while fetching records: {e}', e)
             error = {"code": "EXCEPTION", "serviceRequestNumber": data["serviceRequestNumber"], "message": f'There was an exception while fetching records: {e}'}
             task_event["status"], task_event["error"] = pt_failed_status, error
-            task_event["endTime"] = task_event["lastModified"] = eval(str(time.time()).replace('.', '')[0:13])
+            task_event["endTime"] = task_event["lastModifiedTime"] = str(datetime.now())
             repo.update(task_event)
             notifier_req = {"userID": data["userID"], "count": 0, "datasetType": dataset_type}
             notifier.create_notifier_event(data["serviceRequestNumber"], notifier_req)

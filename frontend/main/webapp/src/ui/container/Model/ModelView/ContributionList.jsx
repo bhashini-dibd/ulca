@@ -39,7 +39,6 @@ import { translate } from "../../../../assets/localisation";
 import { useRef } from "react";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import LightTooltip from "../../../components/common/LightTooltip";
-import moment from 'moment';
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -539,7 +538,13 @@ const ContributionList = (props) => {
   }
 
   const convertDate = (date) => {
-    return moment(date).format("MM/DD/YYYY");
+    return date
+      .toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      })
+      .toUpperCase();
   };
 
   const renderConfirmationDialog = () => {
@@ -742,17 +747,14 @@ const ContributionList = (props) => {
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
-      if (rowData[9].length) {
-        const rows = rowData[9].sort((a, b) => (Number(b.createdOn) - Number(a.createdOn)));
-
+      if (rowData[9].length)
         return (
           <RenderExpandTable
-            rows={rows}
+            rows={rowData[9]}
             color={even_odd}
             renderStatus={renderExpandTableStatus}
-          />
+          />                                        
         );
-      }
     },
     print: false,
     viewColumns: false,

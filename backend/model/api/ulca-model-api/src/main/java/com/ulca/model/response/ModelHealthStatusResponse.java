@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 public class ModelHealthStatusResponse {
     private String message;
-    private List<ModelHealthStatus> modelHealthStatusList;
+    private List<ModelHealthStatus> benchmark;
     private int count;
 
 

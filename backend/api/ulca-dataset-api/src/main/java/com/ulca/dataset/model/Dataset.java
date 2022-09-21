@@ -20,7 +20,6 @@ public class Dataset {
 	
 	@Indexed(unique=true)
 	private String datasetName;
-	private String userId;
 	
 	private String datasetType;
 	private String domain;
