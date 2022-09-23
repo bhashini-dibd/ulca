@@ -6,6 +6,7 @@ import {
   FilterByCollection,
   getTaskName,
 } from "../../../../utils/getLabel";
+import moment from "moment";
 const initialState = {
   responseData: [],
   filteredData: [],
@@ -132,7 +133,7 @@ const getContributionList = (state, payload) => {
       submitRefNumber: element.modelId,
       modelName: element.name,
       description: element.description,
-      submittedOn: dateConversion(element.submittedOn),
+      submittedOn: moment(element.submittedOn).format("DD/MM/YYYY"),
       task:
         element.task.type !== "translation"
           ? element.task.type.toUpperCase()
@@ -188,7 +189,6 @@ const getContributionList = (state, payload) => {
   filter.license = [...new Set(license)];
   filter.domain = [...new Set(domain)];
 
-  responseData = responseData.reverse();
   let filteredData = getFilterValue(
     { filterValues: state.selectedFilter },
     { responseData: responseData }
