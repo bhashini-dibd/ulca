@@ -94,6 +94,7 @@ public class ModelHeartBeatCheckService {
 		log.info("*******  start ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
 
 		List<ModelExtended> fetchedModels  = modelDao.findByStatus("published");
+		List<String> checkedUrl = new ArrayList<String>();
 		
 		if(fetchedModels == null) {
 			log.info("No published models found");
@@ -136,7 +137,10 @@ public class ModelHeartBeatCheckService {
 						}
 
 						try {
-							modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+							if(!checkedUrl.contains(callBackUrl)) {
+								modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+								checkedUrl.add(callBackUrl);
+							}
 
 							modelHealthStatus.setStatus("available");
 							checkedModels.add(modelHealthStatus);
