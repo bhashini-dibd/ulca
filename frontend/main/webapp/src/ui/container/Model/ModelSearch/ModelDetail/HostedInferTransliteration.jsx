@@ -98,7 +98,7 @@ function HostedInferTransliteration(props) {
         dispatch(setCurrentText(`${activeWord}`));
         console.log("86 ----> inputValue " + inputValue + ", activeWord" + activeWord);
         console.log("isInsertingInMiddle" + isInsertingInMiddle + "  ----> startingPositionOfWord " + startPositionOfCurrentWord + ", currentCurserPosition" + currentCurserPosition);
-        console.log("current Text... ", "`" + currentText + "`");
+        console.log("current Text ..... ", "`" + currentText + "`");
       } else {
         dispatch(clearTransliterationResult());
         return false;

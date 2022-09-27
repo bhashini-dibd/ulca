@@ -21,7 +21,6 @@ import SpeechToSpeech from "../ModelSearch/SpeechToSpeech/SpeechToSpeech";
 import GridView from "./GridView";
 import Dialog from "../../../components/common/Dialog";
 import StatusCheck from "./StatusCheck";
-import LanguageDetection from "./LanugageDetection";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

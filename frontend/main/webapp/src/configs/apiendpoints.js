@@ -35,7 +35,6 @@ const endpoints = {
   submitFeedback:"/ulca/apis/v0/model/feedback/submit",
   datasetMetrics: "/ulca/data-metric/v0/store/reportdata",
   getModelHealthStatus: "/ulca/apis/v0/model/getModelHealthStatus",
-  getTransliterationModelId:"/ulca/apis/v0/model/getTransliterationModelId",
 };
 
 export default endpoints;

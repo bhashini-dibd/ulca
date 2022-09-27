@@ -11,6 +11,7 @@ export default class ModelStatusCheck extends API {
     this.endpoint = `${super.apiEndPointAuto()}${
       ENDPOINTS.getModelHealthStatus
     }`;
+    this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
   }
 
   toString() {
@@ -32,9 +33,14 @@ export default class ModelStatusCheck extends API {
   }
 
   getHeaders() {
+    let res = this.apiEndPoint();
+    let urlSha = md5(res);
+    let hash = md5(this.userDetails.privateKey + "|" + urlSha);
     this.headers = {
       headers: {
-        "Content-Type": "application/json",
+        key: this.userDetails.publicKey,
+        sig: hash,
+        payload: urlSha,
       },
     };
     return this.headers;
