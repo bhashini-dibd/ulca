@@ -10,11 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -150,6 +146,7 @@ public class ModelService {
 			modelDto.setBenchmarkPerformance(benchmarkProcess);
 			modelDtoList.add(modelDto);
 		}
+		modelDtoList.sort(Comparator.comparing(ModelListResponseDto::getSubmittedOn).reversed());
 		return new ModelListByUserIdResponse("Model list by UserId", modelDtoList, modelDtoList.size(),count);
 	}
 

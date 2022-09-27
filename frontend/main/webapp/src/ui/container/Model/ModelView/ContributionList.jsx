@@ -537,6 +537,7 @@ const ContributionList = (props) => {
     );
   }
 
+
   const convertDate = (date) => {
     return date
       .toLocaleString("en-IN", {
@@ -546,6 +547,7 @@ const ContributionList = (props) => {
       })
       .toUpperCase();
   };
+
 
   const renderConfirmationDialog = () => {
     const { status, modelId, reason } = modelStatusInfo;
@@ -583,7 +585,7 @@ const ContributionList = (props) => {
       label: "Task",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
        display: view ? "excluded" : true,
        
       },
@@ -596,7 +598,7 @@ const ContributionList = (props) => {
        
         filter: false,
         // setCellProps: sort  => ({ style: { width:"100px" } }),
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
       },
     },
@@ -605,7 +607,7 @@ const ContributionList = (props) => {
       label: "Version",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
@@ -623,7 +625,7 @@ const ContributionList = (props) => {
       label: "Domain",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
       },
     },
@@ -632,7 +634,7 @@ const ContributionList = (props) => {
       label: "License",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
       },
     },
@@ -641,13 +643,8 @@ const ContributionList = (props) => {
       label: "Submitted On",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
-        customBodyRender: (rowData) => {
-          const date = new Date(rowData);
-          return <>{convertDate(date)}</>;
-        },
-        sortDirection: "desc",
       },
     },
     {
@@ -655,7 +652,7 @@ const ContributionList = (props) => {
       label: "Status",
       options: {
         filter: true,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
@@ -712,7 +709,6 @@ const ContributionList = (props) => {
       pagination: {
         rowsPerPage: "Rows per page",
       },
-      options: { sortDirection: "desc" },
     },
     // onRowClick: (rowData) => {
     //   handleDocumentView(rowData[0]);

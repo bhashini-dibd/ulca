@@ -93,16 +93,31 @@ public class ModelHeartBeatCheckService {
 		log.info("*******  start ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
 
 
+		List<ModelExtended> fetchedModels  = modelDao.findByStatus("published");
+		List<String> checkedUrl = new ArrayList<String>();
+		
+		if(fetchedModels == null) {
+			log.info("No published models found");
+			return;
+		}
+
+
 		List<ModelExtended> list = modelDao.findAll();
 
 
 		for (ModelExtended model : list) {
 			ModelHealthStatus modelHealthStatus = new ModelHealthStatus();
+
 			modelHealthStatus.setModelId(model.getModelId());
 			modelHealthStatus.setModelName(model.getName());
 			modelHealthStatus.setTaskType(model.getTask().getType().toString());
 			modelHealthStatus.setLastStatusUpdate(new Date().toString());
 			modelHealthStatus.setNextStatusUpdateTiming(DateUtils.addHours(new Date(),1).toString());
+
+			try {
+				if (model.getName().contains("Google") || model.getName().contains("Bing"))
+					continue;
+
 
 
 			try {
@@ -126,7 +141,10 @@ public class ModelHeartBeatCheckService {
 						}
 
 						try {
-							modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+							if(!checkedUrl.contains(callBackUrl)) {
+								modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+								checkedUrl.add(callBackUrl);
+							}
 
 							modelHealthStatus.setStatus("available");
 							modelHealthStatusDao.save(modelHealthStatus);
