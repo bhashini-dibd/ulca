@@ -24,11 +24,6 @@
         "code": "transliteration",
         "label": "TRANSLITERATION",
         "active": true
-      },
-      {
-        "code": "txt-lang-detection",
-        "label": "TXT-LANG-DETECTION",
-        "active": true
       }
     ]
   }

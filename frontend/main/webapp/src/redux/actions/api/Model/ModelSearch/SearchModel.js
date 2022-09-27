@@ -44,23 +44,16 @@ export default class SearchModel extends API {
   }
 
   getBody() {
-    let bodyData;
-    if (this.task !== "txt-lang-detection") {
-      bodyData = {
-        task: this.task,
-        sourceLanguage: this.sourceLanguage,
-        targetLanguage: this.targetLanguage,
-        domain: this.domain,
-        submitter: this.submitter,
-      };
-      bodyData.userId =
-        localStorage.getItem("userDetails") &&
-        JSON.parse(localStorage.getItem("userDetails")).userID;
-    } else if (this.task === "txt-lang-detection") {
-      bodyData = {
-        task: this.task,
-      };
-    }
+    let bodyData = {
+      task: this.task,
+      sourceLanguage: this.sourceLanguage,
+      targetLanguage: this.targetLanguage,
+      domain: this.domain,
+      submitter: this.submitter,
+    };
+    bodyData.userId =
+      localStorage.getItem("userDetails") &&
+      JSON.parse(localStorage.getItem("userDetails")).userID;
     return bodyData;
   }
 

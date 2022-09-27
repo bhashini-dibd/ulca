@@ -14,7 +14,7 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "the category of model under which it has been released or trained")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-04T16:26:50.061Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-05-20T10:51:52.599Z[GMT]")
 
 
 public class ModelTask   {
@@ -32,13 +32,7 @@ public class ModelTask   {
     
     DOCUMENT_LAYOUT("document-layout"),
     
-    OCR("ocr"),
-    
-    GLOSSARY("glossary"),
-    
-    NER("ner"),
-    
-    TXT_LANG_DETECTION("txt-lang-detection");
+    OCR("ocr");
 
     private String value;
 

@@ -259,15 +259,6 @@ public class ModelService {
 			throw new ModelValidationException("Model validation failed. Check uploaded file syntax");
 		}
 		
-		ModelTask taskType = modelObj.getTask();
-		if(taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
-			LanguagePair lp = new LanguagePair();
-			lp.setSourceLanguage(SourceLanguageEnum.MULTI);
-			LanguagePairs lps = new LanguagePairs();
-			lps.add(lp);
-			modelObj.setLanguages(lps);	
-		}
-		
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(Instant.now().toEpochMilli());
 		modelObj.setPublishedOn(Instant.now().toEpochMilli());
@@ -275,8 +266,11 @@ public class ModelService {
 		modelObj.setUnpublishReason("Newly submitted model");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
+		//String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
+		//OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 		inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
+		//modelDao.save(modelObj);
 		
 		if (modelObj != null) {
 			try {
@@ -321,13 +315,8 @@ public class ModelService {
 		if(model.getTask() == null)
 			throw new ModelValidationException("task is required field");
 		
-		if(model.getLanguages() == null) {
-			ModelTask taskType = model.getTask();
-			if(!taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
-				throw new ModelValidationException("languages is required field");
-			}
-		}
-			
+		if(model.getLanguages() == null)
+			throw new ModelValidationException("languages is required field");
 		
 		if(model.getLicense() == null)
 			throw new ModelValidationException("license is required field");
@@ -545,48 +534,4 @@ public class ModelService {
 		return new ModelHealthStatusResponse("ModelHealthStatus", list, list.size());
 	}
 
-	
-	public GetTransliterationModelIdResponse getTransliterationModelId(String sourceLanguage, String targetLanguage) {
-		
-		ModelExtended model = new ModelExtended();
-		
-		ModelTask modelTask = new ModelTask();
-		modelTask.setType(TypeEnum.TRANSLITERATION);
-		model.setTask(modelTask);
-
-		
-		LanguagePairs lprs = new LanguagePairs();
-		LanguagePair lp = new LanguagePair();
-		lp.setSourceLanguage(SourceLanguageEnum.fromValue(sourceLanguage));
-		if (targetLanguage != null && !targetLanguage.isBlank()) {
-			lp.setTargetLanguage(TargetLanguageEnum.fromValue(targetLanguage));
-		}
-		lprs.add(lp);
-		model.setLanguages(lprs);
-		
-		Submitter submitter = new Submitter();
-		submitter.setName("AI4Bharat");
-		model.setSubmitter(submitter);
-		
-		/*
-		 * seach only published model
-		 */
-		model.setStatus("published");
-
-		Example<ModelExtended> example = Example.of(model);
-		List<ModelExtended> list = modelDao.findAll(example);
-		
-		if(list != null && list.size() > 0) {
-			GetTransliterationModelIdResponse response = new GetTransliterationModelIdResponse();
-			ModelExtended obj = list.get(0);
-			response.setModelId(obj.getModelId());
-			return response;
-		}
-		
-		return null;
-	}
-
-
-
-	
 }

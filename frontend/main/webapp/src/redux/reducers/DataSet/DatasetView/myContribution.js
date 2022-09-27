@@ -99,7 +99,6 @@ const getContributionList = (state, payload) => {
   filter.status = [...new Set(statusFilter)];
   filter.datasetType = [...new Set(datatypeFilter)];
 
-  responseData = responseData.reverse();
   let filteredData = getFilterValue(
     { filterValues: state.selectedFilter },
     { responseData: responseData }

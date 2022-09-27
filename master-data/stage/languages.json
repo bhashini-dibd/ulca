@@ -174,11 +174,6 @@
       "code": "mag",
       "label": "Magahi",
       "active": true
-    },
-    {
-      "code": "unk",
-      "label": "Unknown Language",
-      "active": true
     }
   ]
 }
