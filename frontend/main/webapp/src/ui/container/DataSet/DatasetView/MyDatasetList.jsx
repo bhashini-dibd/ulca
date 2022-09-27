@@ -177,15 +177,6 @@ const ContributionList = (props) => {
         sortDirection: "desc",
       },
     },
-    {
-      name: "status",
-      label: "Status",
-      options: {
-        filter: true,
-        sort: true,
-        display: view ? "excluded" : true,
-      },
-    },
   ];
 
   const options = {
