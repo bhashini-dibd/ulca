@@ -1,4 +1,5 @@
 import C from "../../../actions/constants";
+import moment from 'moment';
 
 const initialState = {
   responseData: [],
@@ -61,7 +62,7 @@ const getModelHealthStatus = (state, payload) => {
         modelName: element.modelName,
         status: element.status,
         taskType: element.taskType,
-        lastStatusUpdate: element.lastStatusUpdate,
+        lastStatusUpdate: moment(element.lastStatusUpdate).format("DD/MM/YYYY"),
     });
   });
 
