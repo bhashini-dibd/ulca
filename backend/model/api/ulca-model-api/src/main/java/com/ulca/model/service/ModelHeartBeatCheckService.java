@@ -1,5 +1,6 @@
 package com.ulca.model.service;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -92,7 +93,6 @@ public class ModelHeartBeatCheckService {
 
 		log.info("*******  start ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
 
-
 		List<ModelExtended> fetchedModels  = modelDao.findByStatus("published");
 		List<String> checkedUrl = new ArrayList<String>();
 		
@@ -101,26 +101,21 @@ public class ModelHeartBeatCheckService {
 			return;
 		}
 
+		List<ModelHealthStatus> checkedModels = new ArrayList<>();
 
-		List<ModelExtended> list = modelDao.findAll();
+		for (ModelExtended model : fetchedModels) {
 
-
-		for (ModelExtended model : list) {
 			ModelHealthStatus modelHealthStatus = new ModelHealthStatus();
-
-			modelHealthStatus.setModelId(model.getModelId());
-			modelHealthStatus.setModelName(model.getName());
-			modelHealthStatus.setTaskType(model.getTask().getType().toString());
-			modelHealthStatus.setLastStatusUpdate(new Date().toString());
-			modelHealthStatus.setNextStatusUpdateTiming(DateUtils.addHours(new Date(),1).toString());
-
 			try {
 				if (model.getName().contains("Google") || model.getName().contains("Bing"))
 					continue;
 
+				modelHealthStatus.setModelId(model.getModelId());
+				modelHealthStatus.setModelName(model.getName());
+				modelHealthStatus.setTaskType(model.getTask().getType().toString());
+				modelHealthStatus.setLastStatusUpdate(Instant.now().toEpochMilli());
+				modelHealthStatus.setNextStatusUpdateTiming(Instant.now().toEpochMilli() + 3600000);
 
-
-			try {
 				InferenceAPIEndPoint inferenceAPIEndPoint = model.getInferenceEndPoint();
 
 				if (inferenceAPIEndPoint != null && inferenceAPIEndPoint.getCallbackUrl() != null) {
@@ -130,11 +125,12 @@ public class ModelHeartBeatCheckService {
 						modelHealthStatus.setCallbackUrl(callBackUrl);
 						modelHealthStatus.setIsSyncApi(inferenceAPIEndPoint.isIsSyncApi());
 
-						if(!inferenceAPIEndPoint.isIsSyncApi()){
+						if (!inferenceAPIEndPoint.isIsSyncApi()) {
 
-							if (inferenceAPIEndPoint.getAsyncApiDetails() != null){
+							if (inferenceAPIEndPoint.getAsyncApiDetails() != null) {
 								AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
-								if (asyncApiDetails.getPollingUrl() != null && !asyncApiDetails.getPollingUrl().isBlank()){
+								if (asyncApiDetails.getPollingUrl() != null
+										&& !asyncApiDetails.getPollingUrl().isBlank()) {
 									modelHealthStatus.setPollingUrl(asyncApiDetails.getPollingUrl());
 								}
 							}
@@ -147,11 +143,11 @@ public class ModelHeartBeatCheckService {
 							}
 
 							modelHealthStatus.setStatus("available");
-							modelHealthStatusDao.save(modelHealthStatus);
+							checkedModels.add(modelHealthStatus);
 						} catch (Exception e) {
 
 							modelHealthStatus.setStatus("unavailable");
-							modelHealthStatusDao.save(modelHealthStatus);
+							checkedModels.add(modelHealthStatus);
 
 							log.info("healthStatusCheck Failed modelId : " + model.getModelId() + " modelName : "
 									+ model.getName() + " :: " + callBackUrl);
@@ -161,16 +157,18 @@ public class ModelHeartBeatCheckService {
 				}
 
 			} catch (Exception e) {
-                modelHealthStatus.setStatus("unavailable");
-                modelHealthStatusDao.save(modelHealthStatus);
+				modelHealthStatus.setStatus("unavailable");
+				checkedModels.add(modelHealthStatus);
 
-                log.info("healthStatusCheck Failed " + model.getName() + " reason :: " + e.getMessage());
+				log.info("healthStatusCheck Failed modelName :: " + model.getName() + "modelId ::  "
+						+ model.getModelId() + " reason :: " + e.getMessage());
 				e.printStackTrace();
 			}
-
 		}
+		log.info("*******  ModelHeartBeatCheckService ::modelHeathStatusCheck -- Number of published models fetched ::" + fetchedModels.size());
+		log.info("*******  ModelHeartBeatCheckService ::modelHeathStatusCheck -- Number of models being status checked available/unavailable ::" + checkedModels.size());
 
-
+		modelHealthStatusDao.saveAll(checkedModels);
 		log.info("*******  end ModelHeartBeatCheckService ::modelHeathStatusCheck ****** ");
 	}
 
