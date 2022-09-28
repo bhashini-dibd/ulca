@@ -9,7 +9,6 @@ import java.util.List;
 import javax.validation.Valid;
 
 import com.ulca.model.response.*;
-import com.ulca.model.service.ModelHeartBeatCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,7 +39,6 @@ public class ModelController {
 
 	@Autowired
 	ModelService modelService;
-
 
 	@GetMapping("/listByUserId")
 	public ModelListByUserIdResponse listByUserId(@RequestParam String userId, @RequestParam(required = false) Integer startPage,
@@ -117,14 +115,4 @@ public class ModelController {
 		return modelService.getModelFeedbackByTaskType(taskType);
 
 	}
-	
-	
-	@GetMapping("/getTransliterationModelId")
-	public GetTransliterationModelIdResponse  getTransliterationModelId(@RequestParam(required = true) String sourceLanguage, @RequestParam(required = false) String targetLanguage) {
-		log.info("******** Entry ModelController:: getModelFeedbackByModelId *******");
-		return modelService.getTransliterationModelId(sourceLanguage,  targetLanguage);
-
-	}
-
-	
 }

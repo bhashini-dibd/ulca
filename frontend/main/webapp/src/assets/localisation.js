@@ -107,7 +107,6 @@ const localization_EN_Data = {
   "label.translatedspeech": "Translated Speech",
   "label.notes": "Notes",
   "button.translate": "Translate",
-  "button.detect": "Detect",
   "label.description": "Description",
   "label.tryModel": "Try Model",
   "label.backToModelList": "Back to Model List",
@@ -144,7 +143,6 @@ const localization_EN_Data = {
   "lable.Pleaserateyourexperience":"Please rate your experience...",
   "button.Suggest an edit":"Suggest an edit",
   "lable.Addyourcomments":"Add your comments",
-  "button.detect":"Detect"
 
 };
 

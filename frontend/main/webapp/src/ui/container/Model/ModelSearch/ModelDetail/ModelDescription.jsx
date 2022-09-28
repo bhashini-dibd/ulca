@@ -11,20 +11,10 @@ import {
     CardContent
 } from '@material-ui/core';
 import ImageArray from '../../../../../utils/getModelIcons';
-import moment from 'moment';
 
 const ModelDescription = (props) => {
     const { classes, title, para, index } = props;
     const history = useHistory();
-    
-    const getPara = (para) => {
-        if(typeof para !== "string") {
-            return moment(para).format("MM/DD/YYYY");
-        }
-
-        return (para[0] !== undefined) ? para.replace(para[0], para[0].toUpperCase()) : ""
-    }
-
     return (
         /* {/* <Typography variant="h6" className={classes.modelTitle}>{title}</Typography>
              {title !== "Source URL" || para === "NA" ?
@@ -46,7 +36,7 @@ const ModelDescription = (props) => {
                         </Typography  >
                         {title !== 'Source URL' || para === "NA" ?
                             <Typography variant="body2" color="text.secondary" className={classes.modelPara} >
-                                {getPara(para)}
+                                {(para[0]!== undefined) ? para.replace(para[0], para[0].toUpperCase()) : ""}
                             </Typography> :
                             <Typography style={{
                                 overflowWrap: "anywhere",
