@@ -80,7 +80,7 @@ const StatusCheck = () => {
   const statusCheckResult = useSelector(
     (state) => state.getModelHealthCheckStatus
     );
-    
+
   useEffect(() => {
     const apiObj = new ModelStatusCheck("");
     dispatch(APITransport(apiObj));

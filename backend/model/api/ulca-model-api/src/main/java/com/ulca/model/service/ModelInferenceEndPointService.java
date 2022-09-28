@@ -95,7 +95,7 @@ public class ModelInferenceEndPointService {
 			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).addHeader("Accept","application/json").post(body).build();
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,

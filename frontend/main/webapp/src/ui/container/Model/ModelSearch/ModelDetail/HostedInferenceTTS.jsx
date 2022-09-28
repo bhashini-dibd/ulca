@@ -299,25 +299,25 @@ const HostedInference = (props) => {
               </Typography>
             </Grid>
             {transliterationModelId &&
-              <Grid item xs={5} sm={3} md={5} lg={5} xl={5}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "baseline",
-                  justifyContent: "center"
-                }}
-              >
-                <Typography variant="h6" className={classes.hosted}>
-                  Transliteration
-                </Typography>
-                <Switch
-                  checked={showTransliteration}
-                  onChange={() => setShowTransliteration(!showTransliteration)}
-                  color="primary"
-                  name="checkedB"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
+            <Grid item xs={5} sm={3} md={5} lg={5} xl={5}
+              style={{
+                display: "inline-flex",
+                alignItems: "baseline",
+                justifyContent: "center"
+              }}
+            >
+              <Typography variant="h6" className={classes.hosted}>
+                Transliteration
+              </Typography>
+              <Switch
+                checked={showTransliteration}
+                onChange={() => setShowTransliteration(!showTransliteration)}
+                color="primary"
+                name="checkedB"
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
 
-              </Grid>}
+            </Grid>}
             <Grid
               item
               xs={12}

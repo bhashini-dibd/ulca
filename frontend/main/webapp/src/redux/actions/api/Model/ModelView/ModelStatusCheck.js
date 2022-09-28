@@ -34,10 +34,10 @@ export default class ModelStatusCheck extends API {
   getHeaders() {
     this.headers = {
       headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    return this.headers;
+          "Content-Type": "application/json",
+      }
+  };
+  return this.headers;
   }
 
   getPayload() {
