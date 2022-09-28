@@ -63,7 +63,7 @@ export default class HostedInference extends API {
         bodyData.audioUri = this.input;
       }
       bodyData.source = this.source;
-      bodyData.inferenceEndPoint = this.inferenceEndPoint;
+      // bodyData.inferenceEndPoint = this.inferenceEndPoint;
     } else if (this.task === "ocr") {
       bodyData.imageUri = this.input;
       bodyData.source = this.source;
@@ -73,8 +73,8 @@ export default class HostedInference extends API {
       bodyData.gender = this.gender;
     }else if (this.task === "transliteration") {
       bodyData.input = [{ source: this.input }];
-      
-     
+    } else if (this.task === "txt-lang-detection") {
+      bodyData.input = [{ source: this.input }];
     }
     bodyData.userId =
       localStorage.getItem("userDetails") &&

@@ -79,20 +79,22 @@ const CardComponent = (props) => {
   };
 
   const renderSourceLanguage = (data) => {
-    return (
-      <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
-        <Typography
-          variant="caption"
-          style={{ color: "#ffffff", opacity: "0.6" }}
-          gutterBottom
-        >
-          {data.task === "translation" ? "Source" : "Source"}
-        </Typography>
-        <Typography variant="body2" style={{ color: "#ffffff" }}>
-          {getLanguageName(data.source)}
-        </Typography>
-      </Grid>
-    );
+    if(data.source){
+      return (
+        <Grid item xs={4} sm={4} md={4} lg={4} xl={4}>
+          <Typography
+            variant="caption"
+            style={{ color: "#ffffff", opacity: "0.6" }}
+            gutterBottom
+          >
+            {data.task === "translation" ? "Source" : "Source"}
+          </Typography>
+          <Typography variant="body2" style={{ color: "#ffffff" }}>
+            {getLanguageName(data.source)}
+          </Typography>
+        </Grid>
+      );
+    }
   };
 
   const renderTargetLanguage = (data) => {
