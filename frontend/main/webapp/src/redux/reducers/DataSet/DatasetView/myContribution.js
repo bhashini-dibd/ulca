@@ -68,6 +68,7 @@ const getContributionList = (state, payload) => {
 
   let filter = { status: [], datasetType: [] };
   let refreshStatus = false;
+  
   payload.data.forEach((element) => {
     let getType =
       element.datasetType !== "Benchmark"
@@ -75,6 +76,7 @@ const getContributionList = (state, payload) => {
         : element.datasetType;
     responseData.push({
       submitRefNumber: element.serviceRequestNumber,
+      datasetId: element.datasetId,
       datasetName: element.datasetName,
       submittedOn: dateConversion(element.submittedOn),
       datasetType: getType ? getType : "Unidentified",
