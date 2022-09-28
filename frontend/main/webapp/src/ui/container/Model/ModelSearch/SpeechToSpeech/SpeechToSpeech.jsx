@@ -505,6 +505,9 @@ const SpeechToSpeech = () => {
     setUrl("");
     setAudio("");
     setData("");
+    clearAsr();
+    clearTranslation();
+    output.asr = false;
   };
 
   const handleCopyClick = (prop) => {

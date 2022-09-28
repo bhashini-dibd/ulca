@@ -11,7 +11,6 @@ export default class ModelStatusCheck extends API {
     this.endpoint = `${super.apiEndPointAuto()}${
       ENDPOINTS.getModelHealthStatus
     }`;
-    this.userDetails = JSON.parse(localStorage.getItem("userInfo"));
   }
 
   toString() {

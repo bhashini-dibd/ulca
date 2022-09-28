@@ -32,6 +32,7 @@ import APITransport from "../../../../../redux/actions/apitransport/apitransport
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import HostedInferTransliteration from "./HostedInferTransliteration";
+import LanugageDetection from "../LanugageDetection";
 import metricInfo from "../../../../../utils/getMetricInfo.";
 
 function TabPanel(props) {
@@ -160,6 +161,15 @@ const SearchModelDetail = (props) => {
         case "transliteration":
           return (
             <HostedInferTransliteration
+              task={task}
+              modelId={params.srno}
+              source={source}
+              target={target}
+            />
+          );
+        case "txt-lang-detection":
+          return (
+            <LanugageDetection
               task={task}
               modelId={params.srno}
               source={source}
