@@ -319,6 +319,22 @@
       "active": true,
       "whiteList": true,
       "description": "API to fetch pre calculated ETAs"
+    },
+    {
+      "id": "939d5109-c3c5-466c-b1cf-6810c1f182d8",
+      "uri": "/ulca/data-metric/v0/store/reportdata",
+      "module": "ULCA-METRICS",
+      "active": true,
+      "whiteList": true,
+      "description": "API to fetch reports on ULCA"
+    },
+    {
+      "id": "fb876483-130d-4674-8371-00ed262c9be3",
+      "uri": "/ulca/apis/v0/dataset/getByDatasetId",
+      "module": "ULCA-API",
+      "active": true,
+      "whiteList": false,
+      "description": "API to get datasets by datasetID"
     }
   ]
 }
