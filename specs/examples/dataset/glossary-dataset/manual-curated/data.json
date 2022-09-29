@@ -1,0 +1,54 @@
+[
+    {
+        "sourceText": "Adhoc",
+        "targetText": "तदर्थ",
+        "level" : "w",
+        "collectionMethod": {
+            "collectionDetails": {
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
+            }
+        }
+    },
+    {
+        "sourceText": "Annexure",
+        "targetText": "अनुलग्नक",
+        "level" : "w",
+        "collectionMethod": {
+            "collectionDetails": {
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
+            }
+        }
+    },
+    {
+        "sourceText": "Adhere to",
+        "targetText": "अक्षरशः पालन करना ",
+        "level" : "p",
+        "collectionMethod": {
+            "collectionDetails": {
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
+            }
+        }
+    },
+    {
+        "sourceText": "Appreciate the evidence",
+        "targetText": "सबूतों का आंकलन करना",
+        "level" : "p",
+        "collectionMethod": {
+            "collectionDetails": {
+                "contributor": {
+                    "name": "Monika Chauhan",
+                    "aboutMe": "Freelance translator working with Project Anuvaad"
+                }
+            }
+        }
+    }
+]

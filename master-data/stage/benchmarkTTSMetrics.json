@@ -1,0 +1,14 @@
+{
+    "benchmarkTTSMetrics": [
+      {
+        "code": "wer",
+        "label": "WER",
+        "active": true
+      },
+      {
+        "code": "cer",
+        "label": "CER",
+        "active": true
+      }
+    ]
+  }

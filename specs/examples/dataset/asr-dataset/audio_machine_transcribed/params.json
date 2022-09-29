@@ -32,24 +32,22 @@
     "bitsPerSample": "sixteen",
     "numberOfSpeakers": 1,
     "gender": "male",
-    "snr": [{
+    "snr": {
         "methodType": "WadaSnr",
-        "methodDetails": [{
-            "properties": [{
-                "snrTool": "WADASNR",
-                "snrToolVersion": "1.0.1"
-            }]
-        }]
-    }],
+        "methodDetails": {
+            "snrTool": "WADASNR",
+            "snrToolVersion": "1.0.1"
+        }
+    },
     "collectionMethod": {
         "collectionDescription": [
             "machine-generated-transcript"
         ],
         "collectionDetails": {
             "asrModel": "gogle asr",
-            "evaluationMethod": [{
-            "wer": 26.5
-        }]
+            "evaluationMethod": {
+                "wer": 26.5
+            }
         }
     }
 }

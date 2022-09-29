@@ -1,0 +1,10 @@
+{
+    "asrModels": [
+      {
+        "code": "google-asr",
+        "label": "Google ASR",
+        "active": true,
+        "collectionMethod": ["machine-generated-transcript"]
+      }
+    ]
+  }

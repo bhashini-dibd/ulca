@@ -1,0 +1,1031 @@
+openapi: 3.0.1
+info:
+  title: Unified Language Contribution API (ULCA) documentation
+  description: 'The ULCA API documentation defines a core set of interfaces that enables users and communities to contribute AI/ML datasets to build a large, open Indic languages resource ecosystem. The dataset contributions are primarily geared toward the area of NLP, ASR/TTS and OCR. The documentation proposes core set of interfaces where various AI based models can be hosted, referenced and benchmarked. The interfaces enables entire community to participate, collaborate and track key benchmark parameters.'
+  contact:
+    name: ekstep foundation
+    email: contact@ekstep.org
+  version: 0.7.0
+servers:
+- url: https://meity-auth.ulcacontrib.org
+  description: Production server (uses live data)
+paths:
+  /ulca/apis/v0/dataset/corpus/submit:
+    post:
+      tags:
+      - dataset-controller
+      operationId: datasetSubmit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetSubmitRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetSubmitResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+      
+
+  /ulca/apis/v0/dataset/corpus/search:
+    post:
+      tags:
+      - dataset-controller
+      operationId: corpusSearch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatasetCorpusSearchRequest'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetCorpusSearchResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/listByUserId:
+    get:
+      tags:
+      - dataset-controller
+      operationId: listByUserId
+      parameters:
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: startPage
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: endPage
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetListByUserIdResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/getByServiceRequestNumber:
+    get:
+      tags:
+      - dataset-controller
+      operationId: datasetByServiceRequestNumber
+      parameters:
+      - name: serviceRequestNumber
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetByServiceReqNrResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/getByDatasetId:
+    get:
+      tags:
+      - dataset-controller
+      operationId: datasetById
+      parameters:
+      - name: datasetId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetByIdResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/corpus/search/status:
+    get:
+      tags:
+      - dataset-controller
+      operationId: searchStatus
+      parameters:
+      - name: serviceRequestNumber
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DatasetSearchStatusResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+
+  /ulca/apis/v0/dataset/corpus/search/listByUserId:
+    get:
+      tags:
+      - dataset-controller
+      operationId: searchListByUserId
+      parameters:
+      - name: userId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: startPage
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: endPage
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/SearchListByUserIdResponse'
+        "400":
+          description: On input errors causing a failure in the job.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/HttpErrorResponse'
+  /v1/users/signup:
+    post:
+      tags:
+        - 'Create Users'
+      summary: 'REST API to register/create new user'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignupRequest'
+        required: true
+      responses:
+        '200':
+          description: New user is created successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+      
+  /v1/users/verify-user:
+    post:
+      tags:
+        - 'Verify Users'
+      summary: 'REST API to verify user account.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserVerificationRequest'
+        required: true
+      responses:
+        '200':
+          description: User has verified successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserVerificationResponse'
+        '400':
+          description: On input errors causing failure in user verification.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user verification.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/users/api-key-search:
+    post:
+      tags:
+        - 'Api-key-search'
+      summary: 'REST API key for search'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKeySearchRequest'
+        required: true
+      responses:
+        '200':
+          description: apiKey search is successful.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiKeySearchResponse'
+        '400':
+          description: On input errors causing failure in auth token search.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in auth token search.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'   
+                
+  /v1/users/login:
+    post:
+      tags:
+        - 'Login'
+      summary: 'REST API to login'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+        required: true
+      responses:
+        '200':
+          description: Logged in successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserLoginResponse'
+        '400':
+          description: On input errors causing failure in user login.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user login.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error' 
+                
+   
+  /v1/users/forgot-password:
+    post:
+      tags:
+        - 'Forgot Password'
+      summary: 'REST API for forgot password request'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: User has notfied successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors causing failure in user notification.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user notification.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'          
+  /v1/users/reset-password:
+    post:
+      tags:
+        - 'Reset Password'
+      summary: 'REST API for resetting password'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: Password updated successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors causing failure in password resetting.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in password resetting.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v0/error/report:
+    post:
+      tags:
+        - 'Report Errors'
+      summary: 'REST API to get a downloadable reports on errors '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorReportRequest'
+        required: true
+      responses:
+        '200':
+          description: Request successfull.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ErrorReportResponse'
+        '400':
+          description: On input errors causing failure reporting.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in reporting.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+                
+components:
+  schemas:
+    DatasetSubmitRequest:
+      required:
+      - datasetName
+      - url
+      - userId
+      type: object
+      properties:
+        userId:
+          type: string
+        datasetName:
+          type: string
+        url:
+          type: string
+    Data:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+        datasetId:
+          type: string
+        timestamp:
+          type: string
+    DatasetSubmitResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Data'
+    DatasetCorpusSearchRequest:
+      required:
+      - criteria
+      type: object
+      properties:
+        userId:
+          type: string
+        datasetType:
+          type: string
+          enum:
+          - parallel-corpus
+          - monolingual-corpus
+          - asr-corpus
+          - asr-unlabeled-corpus
+          - ocr-corpus
+          - document-layout-corpus
+        criteria:
+          $ref: '#/components/schemas/SearchCriteria'
+    SearchCriteria:
+      type: object
+      properties:
+        licence:
+          type: array
+          items:
+            type: string
+        minScore:
+          type: number
+          format: float
+        serviceRequestNumber:
+          type: string
+        targetLanguage:
+          type: array
+          items:
+            type: string
+        collectionMode:
+          type: array
+          items:
+            type: string
+        multipleContributors:
+          type: boolean
+        maxScore:
+          type: number
+          format: float
+        collectionSource:
+          type: array
+          items:
+            type: string
+        score:
+          type: number
+          format: float
+        domain:
+          type: array
+          items:
+            type: string
+        limit:
+          type: integer
+          format: int32
+        datasetId:
+          type: string
+        datasetType:
+          type: string
+        sourceLanguage:
+          type: array
+          items:
+            type: string
+        groupBy:
+          type: boolean
+        countOfTranslations:
+          type: integer
+          format: int32
+        originalSourceSentence:
+          type: boolean
+    DatasetCorpusSearchResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Data'
+    DatasetListByUserIdResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetListByUserIdResponseDto'
+        count:
+          type: integer
+          format: int32
+        startPage:
+          type: integer
+          format: int32
+        endPage:
+          type: integer
+          format: int32
+    DatasetListByUserIdResponseDto:
+      type: object
+      properties:
+        datasetId:
+          type: string
+        serviceRequestNumber:
+          type: string
+        datasetName:
+          type: string
+        datasetType:
+          type: string
+        submittedOn:
+          type: string
+        status:
+          type: string
+    DatasetByServiceReqNrResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskTracker'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code of the error
+        message:
+          type: string
+          description: Description of the error
+        cause:
+          type: object
+          description: Additional details related to the cause of the error
+        report:
+          type: string
+          description: Link to the error report file
+      description: Task Tracker entity
+    TaskTracker:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+          description: Unique identifier of the service request
+        tool:
+          type: string
+          description: Tool updating this data
+          enum:
+          - download
+          - pseudo
+          - ingest
+          - validate
+          - publish
+          - search
+          - delete
+        id:
+          type: string
+        status:
+          type: string
+          description: Status of the task
+        details:
+          type: string
+          description: Details of the current status of the task
+        startTime:
+          type: string
+          description: ISO timestamp of the instance of the start of process
+        endTime:
+          type: string
+          description: ISO timestamp of the instance of the end of process
+        lastModified:
+          type: string
+          description: ISO timestamp of the instance of the end of process
+        error:
+          $ref: '#/components/schemas/Error'
+      description: Task Tracker entity
+    DatasetByIdResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TaskTracker'
+    DatasetSearchStatusResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Data'
+    SearchListByUserIdResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchListByUserIdResponseDto'
+        count:
+          type: integer
+          format: int32
+        startPage:
+          type: integer
+          format: int32
+        endPage:
+          type: integer
+          format: int32
+    SearchListByUserIdResponseDto:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+        timestamp:
+          type: string
+        searchCriteria:
+          $ref: '#/components/schemas/SearchCriteria'
+        status:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskTracker'
+    HttpErrorResponse:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: string
+          description: status code as encountered in the processing life-cycle
+          
+        message:
+          type: string
+          description: human understandable format
+        timestamp:
+          type: string
+          format: datetime
+    
+    UserSignupRequest:
+      type: object
+      required:
+        - firstName
+        - email
+        - password
+        - roles
+      properties:
+        firstName:
+         type: string
+         description: Firstname of the user to be registered.
+        lastName:
+          type: string
+          description: Lastname of the user to be registered.
+        email:
+          type: string
+          description: email of the user to be registered.
+        password:
+          type: string
+          description: password of the user to be registered.
+        roles:
+          type: array
+          description: Roles assigned to the user to be registered.
+          items:
+            type: string
+        phoneNo:
+          type: string
+          description: Mobile phone number of the user to be registered.
+    
+
+    
+    UserLoginRequest:
+      type: object
+      properties:
+        authenticator:
+          $ref: '#/components/schemas/Authenticator'
+        data:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/UlcaLoginAuthenticator'
+            - $ref: '#/components/schemas/GmailLoginAuthenticator'
+    
+  
+
+    ApiKeySearchRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Unique auth token of verified user
+      description: Request for user records.
+
+
+    ForgotPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Unique email of the user.
+      description: Request for user records.
+    
+
+    ResetPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Unique email of the user.
+        password:
+          type: string
+          description: password to be updated
+
+
+    UserVerificationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: unique email value.
+        userID:
+          type: string
+          description: unique userid value.
+    
+        
+
+    User:
+      type: object
+      properties:
+        userID:
+          type: string
+          description: Unique 32-bit UUID per user.
+        firstName:
+          type: string
+          description: FirstName of the user.
+        lastName:
+          type: string
+          description: LastName of the user.
+        email:
+          type: string
+          description: email id of the user.
+        oauthId:
+          type: string
+          description: oauthId of the user.
+        oauthProvider:
+          type: string
+          description: oauthProvider of the user.
+        registeredTime:
+          type: string
+          description: UTC object indicating time of user signup. 
+        activatedTime:
+          type: string
+          description: UTC object indicating time of user verification.
+        isVerified:
+          type: boolean
+          description: status of user verification.
+        isActive:
+          type: boolean
+          description: status of user activation.
+        phoneNo:
+          type: string
+          description: mobile number of the user
+        roles:
+          type: array
+          items:
+            type: string
+            
+          
+  
+    Role:
+      type: object
+      properties:
+        roleId:
+          type: string
+          description: Unique code per role.
+        name:
+          type: string
+          description: role name.
+        description:
+          type: string
+          description: Description of the role.
+  
+   
+  
+          
+    AuthData:
+      type: object
+      properties:
+        email:
+          type: string
+          description: email of the logged in user.
+        publicKey:
+          type: string
+          description: random uuid key to be used as public key for the logged in user.
+        privateKey:
+          type: string
+          description: hexadecimal uuid key for the logged in user for encrypting request data.
+          
+    UserData:
+      type: object
+      properties:
+        userKeys:
+          $ref: '#/components/schemas/AuthData'
+        userDetails:
+          $ref: '#/components/schemas/User'
+          
+          
+    Status:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          type: object
+          description: data returned by the request.
+        count:
+          type: integer
+          description: count of data items.
+    
+    UserVerificationResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          $ref: '#/components/schemas/AuthData'
+        count:
+          type: integer
+          description: count of data items.
+    
+    UserLoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          $ref: '#/components/schemas/UserData'
+        count:
+          type: integer
+          description: count of data items.
+    
+    ApiKeySearchResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          $ref: '#/components/schemas/UserData'
+        count:
+          type: integer
+          description: count of data items.
+      
+   
+      
+    UlcaLoginAuthenticator:
+      type: object
+      properties:
+        email:
+          type: string
+          description: email of user
+        password:
+          type: string
+          description: password of user
+         
+    GmailLoginAuthenticator:
+      type: object
+      properties:
+        token_type:
+          type: string
+          description: token type
+        access_token:
+          type: string
+          description: token type
+        scope:
+          type: string
+          description: scope
+        login_hint:
+          type: string
+          description: login_hint
+        expires_in:
+          type: number
+          description: expires_in
+        id_token:
+          type: number
+          description: id_token 
+        session_state:
+          type: object
+          description: session_state
+          properties:
+            extraQueryParams:
+              type: string
+              description: extraQueryParams
+            authuser:
+              type: number
+              description: authuser 
+
+          
+  
+    Authenticator:
+      type: string
+      enum:
+        - ULCA
+        - GMAIL
+        - GITHUB
+        - FACEBOOK
+        - LINKEDIN
+    
+   
+  
+    Error:
+      type: object
+      properties:
+        errorID:
+          type: string
+          description: Unique UUID for the error.
+        code:
+          type: string
+          description: Unique code signifying the category for the error.
+        message:
+          type: string
+          description: User readable message pertaining to the error
+        timeStamp:
+          type: number
+          description: 13 digit epoch timestamp
+    ErrorReportRequest:
+      type: object
+      properties:
+        serviceRequestNumber:
+          type: string
+          description: Unique submission id.
+      description: Request for error report on a particular submission.
+
+    
+    ErrorReportResponse:
+      type: object
+      properties:
+        file:
+          type: string
+          description: File path to object store.
+        internal_file:
+          type: string
+          description: Internal file path.
+        serviceRequestNumber:
+          type: string
+          description: Unique id for dataset submission
+        time_stamp:
+          type: string
+          description: Report generated date and time.
+        count:
+          type: integer
+          description: Count of errors uploaded on to object store.
+        uploaded:
+          type: boolean
+          description: status of file upload.
+
+  securitySchemes:
+      apiKey:
+        type: apiKey
+        in: header
+        name: key
+      apiSig:
+        type: apiKey
+        in: header
+        name: sig
+        description: signed request url or body   
+        
+security:
+  - apiKey: []
+    apiSig: []

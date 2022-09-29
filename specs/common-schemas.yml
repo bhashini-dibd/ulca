@@ -1,20 +1,20 @@
 openapi: 3.0.0
 info:
   title: Unified Language Contribution API (ULCA) documentation
-  description: The document defines the common schema object used across all available APIs 
+  description: The document defines the common schema object used across all available APIs
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.2.0
-
+  version: 0.6.2
+servers:
+  - url: /
 paths: {}
 components:
   schemas:
     LanguagePair:
-      type: object
-      description: "language pair, make targetLanguage null to reuse the object to indicate single language"
       required:
         - sourceLanguage
+      type: object
       properties:
         sourceLanguageName:
           type: string
@@ -23,35 +23,41 @@ components:
           type: string
           description: Indic language code, iso-639-1, iso 639-2
           enum:
-          - en
-          - hi
-          - mr
-          - ta
-          - te
-          - kn
-          - gu
-          - pa
-          - bn
-          - ml
-          - as
-          - brx
-          - doi
-          - ks
-          - kok
-          - mai
-          - mni
-          - ne
-          - or
-          - sd
-          - si
-          - ur
-          - sat
-          - lus
-          - njz
-          - pnr
-          - kha
-          - grt
-          - sa
+            - en
+            - hi
+            - mr
+            - ta
+            - te
+            - kn
+            - gu
+            - pa
+            - bn
+            - ml
+            - as
+            - brx
+            - doi
+            - ks
+            - kok
+            - mai
+            - mni
+            - ne
+            - or
+            - sd
+            - si
+            - ur
+            - sat
+            - lus
+            - njz
+            - pnr
+            - kha
+            - grt
+            - sa
+            - raj
+            - bho
+            - gom
+            - awa
+            - hne
+            - mag
         targetLanguageName:
           type: string
           description: human name associated with the language code
@@ -59,49 +65,55 @@ components:
           type: string
           description: Indic language code, iso-639-1, iso 639-2
           enum:
-          - en
-          - hi
-          - mr
-          - ta
-          - te
-          - kn
-          - gu
-          - pa
-          - bn
-          - ml
-          - as
-          - brx
-          - doi
-          - ks
-          - kok
-          - mai
-          - mni
-          - ne
-          - or
-          - sd
-          - si
-          - ur
-          - sat
-          - lus
-          - njz
-          - pnr
-          - kha
-          - grt
-          - sa
-    
+            - en
+            - hi
+            - mr
+            - ta
+            - te
+            - kn
+            - gu
+            - pa
+            - bn
+            - ml
+            - as
+            - brx
+            - doi
+            - ks
+            - kok
+            - mai
+            - mni
+            - ne
+            - or
+            - sd
+            - si
+            - ur
+            - sat
+            - lus
+            - njz
+            - pnr
+            - kha
+            - grt
+            - sa
+            - raj
+            - bho
+            - gom
+            - awa
+            - hne
+            - mag
+      description: language pair, make targetLanguage null to reuse the object to indicate single language
     LanguagePairs:
-        type: array
-        items:
-          $ref: '#/components/schemas/LanguagePair'
-          minItems: 1
-    
+      type: array
+      items:
+        $ref: '#/components/schemas/LanguagePair'
     Domain:
-        type: array
-        description: "This attribute defines that `relevant business area`"
-        example: ["news", "legal"]
-        items:
-          type: string
-          enum:
+      type: array
+      description: This attribute defines that `relevant business area`
+      example:
+        - news
+        - legal
+      items:
+        type: string
+        enum:
           - general
           - news
           - education
@@ -118,28 +130,36 @@ components:
           - technology
           - lifestyle
           - entertainment
-          - parliamentary  
-    
+          - parliamentary
+          - art-and-culture
+          - economy
+          - history
+          - philosophy
+          - religion
+          - national-security-and-defence
+          - literature
+          - geography
     License:
       type: string
       description: license under which information is published.
-      example: 'cc-by-4.0'
+      example: cc-by-4.0
       enum:
-      - cc-by-4.0
-      - cc-by-sa-4.0
-      - cc-by-nd-2.0
-      - cc-by-nd-4.0
-      - cc-by-nc-4.0
-      - cc-by-nc-sa-4.0
-      - mit
-      - gpl-3.0
-      - bsd-3-clause
-      - private-commerical
-      - unknown-license
-  
+        - cc-by-4.0
+        - cc-by-sa-4.0
+        - cc-by-nd-2.0
+        - cc-by-nd-4.0
+        - cc-by-nc-3.0
+        - cc-by-nc-4.0
+        - cc-by-nc-sa-4.0
+        - mit
+        - gpl-3.0
+        - bsd-3-clause
+        - private-commercial
+        - unknown-license
+        - custom-license
     Contributor:
       required:
-      - name
+        - name
       type: object
       properties:
         name:
@@ -152,13 +172,10 @@ components:
         aboutMe:
           type: string
           description: describing the contributor
-
     Contributors:
-        type: array
-        items:
-          $ref: '#/components/schemas/Contributor'
-          minItems: 1
-
+      type: array
+      items:
+        $ref: '#/components/schemas/Contributor'
     Submitter:
       required:
         - name
@@ -176,19 +193,21 @@ components:
           description: Describing the Submitter
         team:
           $ref: '#/components/schemas/Contributors'
-          description: textual data in target language
       description: the schema of data file uploaded should adhere to this specified structure.
-      
     DatasetType:
       type: string
       description: supported dataset type under language initiatives
       enum:
         - parallel-corpus
         - monolingual-corpus
+        - transliteration-corpus
         - asr-corpus
+        - tts-corpus
+        - asr-unlabeled-corpus
         - ocr-corpus
         - document-layout-corpus
-
+        - glossary-corpus
+        - ner-corpus
     OAuthIdentity:
       type: object
       properties:
@@ -203,44 +222,45 @@ components:
           type: string
           description: user authentication provider
           enum:
-          - custom
-          - github
-          - facebook
-          - instagram
-          - google
-          - yahoo
-    
+            - custom
+            - github
+            - facebook
+            - instagram
+            - google
+            - yahoo
     Source:
       type: array
       description: various sources, url from where the information is collected.
-      example: ["https://main.sci.gov.in"]
+      example:
+        - https://main.sci.gov.in
       items:
-        type: string
-        minItems: 1
         maxItems: 10
-  
+        minItems: 1
+        type: string
     CollectionMethod:
       type: array
       description: various collection methods user have used to create the dataset
-      example: ["web-scrapping-machine-readable", "algorithm-auto-aligned"]
-      items:
-        type: string
-        minItems: 1
-        maxItems: 10
-        enum:
+      example:
         - web-scrapping-machine-readable
-        - web-scrapping-ocr
-        - manual-human-translated
         - algorithm-auto-aligned
-        - algorithm-back-translated
-        - human-validated
-        - phone-recording
-        - crowd-sourced
-
+      items:
+        maxItems: 10
+        minItems: 1
+        type: string
+        enum:
+          - web-scrapping-machine-readable
+          - web-scrapping-ocr
+          - manual-human-translated
+          - manual-transliterated
+          - algorithm-auto-aligned
+          - algorithm-back-translated
+          - human-validated
+          - phone-recording
+          - crowd-sourced
     DataPoint:
       required:
-      - label
-      - value
+        - label
+        - value
       type: object
       properties:
         label:
@@ -252,73 +272,78 @@ components:
         internalLabel:
           type: string
           description: internal representation of the label
-
     ImageFormat:
       type: string
       description: image file format description
-      example: "png"
+      example: png
       enum:
-      - jpeg
-      - bmp
-      - png
-      - tiff
-    
+        - jpeg
+        - bmp
+        - png
+        - tiff
     ImageTextType:
       type: string
       description: type of image on which text area is annotated.
-      example: "scene-text"
+      example: scene-text
       enum:
-      - scene-text
-      - typewriter-typed-text
-      - computer-typed-text
-      - handwritten-text          
-    
+        - scene-text
+        - typewriter-typed-text
+        - computer-typed-text
+        - handwritten-text
     ImageDPI:
       type: string
       description: dpi of the image file
-      example: "300_dpi"
+      example: 300_dpi
       enum:
-      - 300_dpi
-      - 72_dpi
-    
+        - 300_dpi
+        - 72_dpi
     AudioFormat:
       type: string
       description: audio format of the audio file
-      example: "flac"
+      example: flac
       enum:
-      - wav
-      - pcm
-      - mp3
-      - flac
-    
+        - wav
+        - pcm
+        - mp3
+        - flac
+        - sph
     AudioChannel:
       type: string
       description: number of channel in the audio
-      example: "stereo"
+      example: stereo
       enum:
-      - mono
-      - stereo
-    
+        - mono
+        - stereo
     AudioSampleRate:
       type: number
       description: sample rate of the audio file in kHz
       example: 44
-     
-    
     AudioBitsPerSample:
       type: string
       description: number of bits per sample
-      example: "sixteen"
+      example: sixteen
       enum:
-      - sixteen
-      - eight
-          
+        - sixteen
+        - eight
+    AudioPostProcessors:
+      type: array
+      description: This attribute defines the `post processing steps of audio recognition model`
+      example:
+        - itn
+        - punctuation
+      items:
+        type: string
+        enum:
+        - itn
+        - punctuation
+        - numbers-only
+        - profainity-filter
+
     NumberOfSpeakers:
+      minimum: 1
       type: number
       description: number of speakers in the recorded audio file
-      minimum: 1
       example: 3
-
     Gender:
       type: string
       description: gender description
@@ -328,7 +353,16 @@ components:
         - transgender
         - non-specified
         - others
-
+    Encoding:
+      type: string
+      description: encoding used for representing the input/output binary data
+      enum:
+        - base64
+        - base85
+        - base36
+        - base32
+        - ascii
+        - ascii85
     ProcessStage:
       type: string
       description: various life-cycle stage of model when benchmarking
@@ -336,15 +370,13 @@ components:
         - submitted
         - benchmarked
         - published
-
     Timeline:
-      type: object
       required:
-        - stage
         - message
-        - timestamp
+        - stage
         - status
-      description: stage life-cycle of model before it gets published
+        - timestamp
+      type: object
       properties:
         stage:
           $ref: '#/components/schemas/ProcessStage'
@@ -353,8 +385,8 @@ components:
           description: human readable message attached for each stage change
         timestamp:
           type: string
-          format: datetime
           description: timestamp of stage changes
+          format: datetime
         status:
           type: string
           description: status of each stage
@@ -363,7 +395,7 @@ components:
             - status-with-errors
             - success
             - failed
-
+      description: stage life-cycle of model before it gets published
     SearchParams:
       type: object
       properties:
@@ -377,9 +409,23 @@ components:
         params:
           type: object
           oneOf:
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Domain'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/Source'
-            - $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/CollectionMethod'
-  
-        
+            - $ref: '#/components/schemas/Domain'
+            - $ref: '#/components/schemas/LanguagePair'
+            - $ref: '#/components/schemas/Source'
+            - $ref: '#/components/schemas/CollectionMethod'
+    ModelTask:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - translation
+            - transliteration
+            - tts
+            - asr
+            - document-layout
+            - ocr
+            - glossary
+            - ner
+            - txt-lang-detection
+      description: the category of model under which it has been released or trained

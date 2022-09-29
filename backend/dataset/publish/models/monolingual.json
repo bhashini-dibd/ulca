@@ -1,0 +1,15 @@
+{
+  "text": "<ip-string>",
+  "language": "<ip-string>",
+  "hash": "<gen-string>",
+  "contributors": ["<ip-uuids-string>"],
+  "submitter": "<ip-uuid-string>",
+  "dataset": "<ip-string>",
+  "collectionModes": ["<ip-string>"],
+  "collectionSources": ["<ip-string>"],
+  "domains": ["<ip-string>"],
+  "licenses": ["<ip-string>"],
+  "tags": ["<gen-string>"],
+  "hashedKey": "<gen-string>",
+  "sk": "<gen-string>"
+}

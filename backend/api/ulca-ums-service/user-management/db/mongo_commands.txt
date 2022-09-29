@@ -1,0 +1,2 @@
+use ulca-user-management
+db.getCollection('ulca-user-tokens').createIndex( { "createdOn": 1 }, { expireAfterSeconds: 86400 } )

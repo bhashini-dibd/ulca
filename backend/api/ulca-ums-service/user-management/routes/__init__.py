@@ -1,0 +1,2 @@
+from .user_manage import USER_MANAGEMENT_BLUEPRINT
+from .user_support import USER_SUPPORT_BLUEPRINT

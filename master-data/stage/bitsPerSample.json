@@ -1,0 +1,14 @@
+{
+    "bitsPerSample": [
+      {
+        "code": "eight",
+        "label": "Eight",
+        "active": true
+      },
+      {
+        "code": "sixteen",
+        "label": "Sixteen",
+        "active": true
+      }
+    ]
+  }

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="domainIcon" transform="translate(-1194 -538)">
+    <g id="domain_black_24dp" transform="translate(1194 538)">
+      <path id="Path_2674" data-name="Path 2674" d="M0,0H24V24H0Z" fill="none"/>
+      <path id="Path_2675" data-name="Path 2675" d="M12,7V3H2V21H22V7ZM6,19H4V17H6Zm0-4H4V13H6Zm0-4H4V9H6ZM6,7H4V5H6Zm4,12H8V17h2Zm0-4H8V13h2Zm0-4H8V9h2Zm0-4H8V5h2ZM20,19H12V17h2V15H12V13h2V11H12V9h8Zm-2-8H16v2h2Zm0,4H16v2h2Z" fill="#3a3a3a"/>
+    </g>
+  </g>
+</svg>

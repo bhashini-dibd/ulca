@@ -1,0 +1,1 @@
+from .notifier import NOTIFIER_BLUEPRINT

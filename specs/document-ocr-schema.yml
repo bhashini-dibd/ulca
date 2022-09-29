@@ -30,7 +30,7 @@ components:
           description: fileId should be same as returned in the response of file-upload
         language:
           description: indicate only sourceLanguage key with respective ISO code.
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
           
     DocumentOCRResponse:
       type: object

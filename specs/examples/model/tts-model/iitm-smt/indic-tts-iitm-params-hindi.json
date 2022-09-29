@@ -1,0 +1,109 @@
+{
+  "name": "IITM Indic TTS - Hindi",
+  "version": "v1.0",
+  "description": "TTS Model trained using ESPnet Tacotron2 architecture and waveglow vocoder",
+  "refUrl": "https://www.iitm.ac.in/donlab/tts/",
+  "task": {
+    "type": "tts"
+  },
+  "languages": [
+    {
+      "sourceLanguage": "hi"
+    }
+  ],
+  "license": "mit",
+  "domain": [
+    "general"
+  ],
+  "submitter": {
+    "name": "SMT Lab, IIT Madras",
+    "oauthId": {
+      "oauthId": "smtiitm@gmail.com "
+    },
+    "team": [
+      {
+            "name": "Hema A. Murthy",
+            "oauthId": {
+            	"oauthId": "hema@cse.iitm.ac.in"
+            }
+      },
+      {
+            "name": "Jom Kuriakose",
+            "oauthId": {
+            	"oauthId": "jom@cse.iitm.ac.in"
+            }
+      },
+      {
+            "name": "Anusha Prakash",
+            "oauthId": {
+            	"oauthId": "anushaprakash@smail.iitm.ac.in"
+            }
+      },
+      {
+            "name": "Bhagyashree Mukherjee",
+            "oauthId": {
+            	"oauthId": "bhagyashree.6april@gmail.com"
+            }
+      },
+      {
+            "name": "Mano Ranjith",
+            "oauthId": {
+            	"oauthId": "mano1381997@gmail.com"
+            }
+      },
+      {
+            "name": "Sudhanshu Srivastava",
+            "oauthId": {
+            	"oauthId": "cs19s025@cse.iitm.ac.in"
+            }
+      },
+      {
+            "name": "Ishika Gupta",
+            "oauthId": {
+            	"oauthId": "gupta.ishika08@gmail.com"
+            }
+      },
+      {
+            "name": "Ashish Seth",
+            "oauthId": {
+            	"oauthId": "ashishseth16226@gmail.com"
+            }
+      },
+      {
+            "name": "Vasista Lodagala",
+            "oauthId": {
+            	"oauthId": "vasista.lodagala@gmail.com"
+            }
+      },
+      {
+            "name": "Mohana Ravi",
+            "oauthId": {
+            	"oauthId": "n.mohanaravi@gmail.com"
+            }
+      }
+    ]
+  },
+  "inferenceEndPoint": {
+    "callbackUrl": "https://asr.iitm.ac.in/IITM_TTS/API/tts_ulca.php",
+    "schema": {
+      "taskType": "tts",
+      "request": {
+        "input": [
+          {
+            "source": "भारत मेरा देश है"
+          }
+        ],
+        "config": {
+          "language": {
+            "sourceLanguage": "hi"
+          },
+          "gender": "male"
+        }
+      }
+    }
+  },
+  "trainingDataset": {
+    "description": "NLTM-R&D IIT Madras, Chennai."
+  }
+}
+

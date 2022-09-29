@@ -1,0 +1,59 @@
+{
+    "licenses": [
+      {
+        "code": "cc-by-4.0",
+        "label": "CC-BY-4.0",
+        "active": true
+      },
+      {
+        "code": "cc-by-sa-4.0",
+        "label": "CC-BY-SA-4.0",
+        "active": true
+      },
+      {
+        "code": "cc-by-nd-2.0",
+        "label": "CC-BY-ND-2.0",
+        "active": true
+      },
+      {
+        "code": "cc-by-nd-3.0",
+        "label": "CC-BY-ND-3.0",
+        "active": true
+      },
+      {
+        "code": "cc-by-nd-4.0",
+        "label": "CC-BY-ND-4.0",
+        "active": true
+      },
+      {
+        "code": "cc-by-nc-sa-4.0",
+        "label": "CC-BY-NC-SA-4.0",
+        "active": true
+      },
+      {
+        "code": "mit",
+        "label": "MIT",
+        "active": true
+      },
+      {
+        "code": "gpl-3.0",
+        "label": "GPL-3.0",
+        "active": true
+      },
+      {
+        "code": "bsd-3-clause",
+        "label": "BSD-3-CLAUSE",
+        "active": true
+      },
+      {
+        "code": "private-commercial",
+        "label": "PRIVATE-COMMERCIAL",
+        "active": true
+      },
+      {
+        "code": "unknown-license",
+        "label": "UNKNOWN-LICENSE",
+        "active": true
+      }
+    ]
+  }

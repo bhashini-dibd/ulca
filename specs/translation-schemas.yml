@@ -28,7 +28,7 @@ components:
       properties:
         languages:
           type: object
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
         sentences:
           $ref: '#/components/schemas/Sentences'
   
@@ -40,7 +40,7 @@ components:
       properties:
         languages:
           type: object
-          $ref: 'https://raw.githubusercontent.com/project-anuvaad/ULCA/develop/specs/common-schemas.yml#/components/schemas/LanguagePair'
+          $ref: 'https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair'
         sentences:
           $ref: '#/components/schemas/Sentences'
   

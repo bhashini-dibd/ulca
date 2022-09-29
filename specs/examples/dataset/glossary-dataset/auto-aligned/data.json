@@ -1,0 +1,22 @@
+[
+    {
+        "sourceText": "Adhoc",
+        "targetText": "तदर्थ",
+        "level" : "w"
+    },
+    {
+        "sourceText": "Annexure",
+        "targetText": "अनुलग्नक",
+        "level" : "w"
+    },
+    {
+        "sourceText": "Adhere to",
+        "targetText": "अक्षरशः पालन करना",
+        "level" : "p"
+    },
+    {
+        "sourceText": "Appreciate the evidence",
+        "targetText": "सबूतों का आंकलन करना",
+        "level" : "p"
+    }
+]

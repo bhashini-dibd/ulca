@@ -1,0 +1,14 @@
+{
+    "dpi": [
+      {
+        "code": "300_dpi",
+        "label": "300_Dpi",
+        "active": true
+      },
+      {
+        "code": "72_dpi",
+        "label": "72_Dpi",
+        "active": true
+      }
+    ]
+  }

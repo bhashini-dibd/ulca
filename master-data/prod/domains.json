@@ -1,0 +1,129 @@
+{
+    "domains": [
+      {
+        "code": "general",
+        "label": "General",
+        "active": true
+      },
+      {
+        "code": "news",
+        "label": "News",
+        "active": true
+      },
+      {
+        "code": "education",
+        "label": "Education",
+        "active": true
+      },
+      {
+        "code": "legal",
+        "label": "Legal",
+        "active": true
+      },
+      {
+        "code": "government-press-release",
+        "label": "Government Press Release",
+        "active": true
+      },
+      {
+        "code": "healthcare",
+        "label": "Healthcare",
+        "active": true
+      },
+      {
+        "code": "agriculture",
+        "label": "Agriculture",
+        "active": true
+      },
+      {
+        "code": "automobile",
+        "label": "Automobile",
+        "active": true
+      },
+      {
+        "code": "tourism",
+        "label": "Tourism",
+        "active": true
+      },
+      {
+        "code": "financial",
+        "label": "Financial",
+        "active": true
+      },
+      {
+        "code": "movies",
+        "label": "Movies",
+        "active": true
+      },
+      {
+        "code": "subtitles",
+        "label": "Subtitles",
+        "active": true
+      },
+      {
+        "code": "sports",
+        "label": "Sports",
+        "active": true
+      },
+      {
+        "code": "technology",
+        "label": "Technology",
+        "active": true
+      },
+      {
+        "code": "lifestyle",
+        "label": "Lifestyle",
+        "active": true
+      },
+      {
+        "code": "entertainment",
+        "label": "Entertainment",
+        "active": true
+      },
+      {
+        "code": "art-and-culture",
+        "label": "Art and Culture",
+        "active": true
+      },
+      {
+        "code": "parliamentary",
+        "label": "Parliamentary",
+        "active": true
+      },
+      {
+        "code": "economy",
+        "label": "Economy",
+        "active": true
+      },
+      {
+        "code": "history",
+        "label": "History",
+        "active": true
+      },
+      {
+        "code": "philosophy",
+        "label": "Philosophy",
+        "active": true
+      },
+      {
+        "code": "religion",
+        "label": "Religion",
+        "active": true
+      },
+      {
+        "code": "national-security-and-defence",
+        "label": "National Security and Defence",
+        "active": true
+      },
+      {
+        "code": "literature",
+        "label": "Literature",
+        "active": true
+      },
+      {
+        "code": "geography",
+        "label": "Geography",
+        "active": true
+      }
+    ]
+  }

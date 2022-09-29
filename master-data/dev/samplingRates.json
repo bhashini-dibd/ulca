@@ -1,0 +1,14 @@
+{
+    "samplingRates": [
+      {
+        "code": 16,
+        "label": "16",
+        "active": true
+      },
+      {
+        "code": 44.1,
+        "label": "44.1",
+        "active": true
+      }
+    ]
+  }

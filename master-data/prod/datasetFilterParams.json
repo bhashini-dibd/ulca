@@ -1,0 +1,95 @@
+{
+  "datasetFilterParams": [
+    {
+      "code": "parallel-corpus",
+      "label": "Parallel Dataset",
+      "active": true,
+      "datasetType": "parallel-corpus",
+      "values": {
+        "master": "/parallelCorpusFilters.json",
+        "jsonPath": "$.parallelCorpusFilters"
+      }
+    },
+    {
+      "code": "monolingual-corpus",
+      "label": "Monolingual Dataset",
+      "active": true,
+      "datasetType": "monolingual-corpus",
+      "values": {
+        "master": "/monolingualCorpusFilters.json",
+        "jsonPath": "$.monolingualCorpusFilters"
+      }
+    },
+    {
+      "code": "asr-unlabeled-corpus",
+      "label": "ASR Unlabeled Dataset",
+      "active": true,
+      "datasetType": "asr-unlabeled-corpus",
+      "values": {
+        "master": "/asrUnlabeledCorpusFilters.json",
+        "jsonPath": "$.asrUnlabeledCorpusFilters"
+      }
+    },
+    {
+      "code": "ocr-corpus",
+      "label": "OCR Dataset",
+      "active": true,
+      "datasetType": "ocr-corpus",
+      "values": {
+        "master": "/ocrCorpusFilters.json",
+        "jsonPath": "$.ocrCorpusFilters"
+      }
+    },
+    {
+      "code": "asr-corpus",
+      "label": "ASR Dataset",
+      "active": true,
+      "datasetType": "asr-corpus",
+      "values": {
+        "master": "/asrCorpusFilters.json",
+        "jsonPath": "$.asrCorpusFilters"
+      }
+    },
+    {
+      "code": "tts-corpus",
+      "label": "TTS Dataset",
+      "active": true,
+      "datasetType": "tts-corpus",
+      "values": {
+        "master": "/ttsCorpusFilters.json",
+        "jsonPath": "$.ttsCorpusFilters"
+      }
+    },
+      {
+        "code": "transliteration-corpus",
+        "label": "Transliteration Dataset",
+        "active": true,
+        "datasetType": "transliteration-corpus",
+        "values": {
+          "master": "/transliterationCorpusFilters.json",
+          "jsonPath": "$.transliterationCorpusFilters"
+        }
+    },
+    {
+      "code": "glossary-corpus",
+      "label": "Glossary Dataset",
+      "active": true,
+      "datasetType": "glossary-corpus",
+      "values": {
+        "master": "/glossaryCorpusFilters.json",
+        "jsonPath": "$.glossaryCorpusFilters"
+      }
+    },
+    {
+      "code": "pos-corpus",
+      "label": "POS Dataset",
+      "active": true,
+      "datasetType": "pos-corpus",
+      "values": {
+        "master": "/posCorpusFilters.json",
+        "jsonPath": "$.posCorpusFilters"
+      }
+    }
+  ],
+  "relatedMaster": true
+}

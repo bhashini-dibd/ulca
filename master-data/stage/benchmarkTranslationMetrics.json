@@ -1,0 +1,34 @@
+{
+    "benchmarkTranslationMetrics": [
+      {
+        "code": "bleu",
+        "label": "BLEU",
+        "active": true
+      },
+      {
+        "code": "sacrebleu",
+        "label": "SacreBLEU",
+        "active": true
+      },
+      {
+        "code": "meteor",
+        "label": "METEOR",
+        "active": true
+      },
+      {
+        "code": "lepor",
+        "label": "LEPOR",
+        "active": true
+      },
+      {
+        "code": "rouge",
+        "label": "ROUGE",
+        "active": false
+      },
+      {
+        "code": "bert",
+        "label": "BERT",
+        "active": true
+      }
+    ]
+  }

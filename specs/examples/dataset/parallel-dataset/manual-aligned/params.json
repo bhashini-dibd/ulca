@@ -1,0 +1,46 @@
+{
+    "datasetType": "parallel-corpus",
+    "languages": {
+        "sourceLanguage": "en",
+        "targetLanguage": "bn"
+    },
+    "collectionSource": [
+        "42040.pdf",
+        "https: //main.sci.gov.in"
+    ],
+    "domain":[
+        "legal"
+    ],
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-aligned"
+        ],
+        "collectionDetails": {
+            "editingTool": "Anuvaad",
+            "editingToolVersion": "v1.4",
+            "contributor": {
+                "name": "Aravinth Bheemaraj",
+                "aboutMe": "NLP Data team lead at Project Anuvaad"
+            }
+        }
+    },
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "Project Anuvaad",
+        "aboutMe": "Open source project run by ekStep foundation, part of Sunbird project",
+        "team": [
+            {
+                "name": "Ajitesh Sharma",
+                "aboutMe": "NLP team lead at Project Anuvaad"
+            },
+            {
+                "name": "Vishal Mauli",
+                "aboutMe": "Backend team lead at Project Anuvaad"
+            },
+            {
+                "name": "Aravinth Bheemaraj",
+                "aboutMe": "NLP Data team lead at Project Anuvaad"
+            }
+        ]
+    }
+}

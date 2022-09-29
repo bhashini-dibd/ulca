@@ -1,8 +1,7 @@
 {
     "datasetType": "asr-corpus",
     "languages": {
-        "sourceLanguage": "en",
-        "targetLanguage": null
+        "sourceLanguage": "en"
     },
     "collectionSource": [
         "openslr", "https://www.youtube.com?v=121212121"
@@ -10,12 +9,20 @@
     "domain":[
         "general"
     ],
-    "collectionMethod": [
-        "web-scrapping-audio"
-    ],
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-transcribed"
+        ],
+        "collectionDetails": {
+            "contributor": {
+                "name": "Harveen",
+                "aboutMe": "Member of thoughtworks asr team"
+            }
+        }
+    },
     "format": "wav",
     "channel": "mono",
-    "samplingRate": 16000,
+    "samplingRate": 48,
     "bitsPerSample": "sixteen",
     "numberOfSpeakers": 3,
     "license":  "cc-by-4.0",

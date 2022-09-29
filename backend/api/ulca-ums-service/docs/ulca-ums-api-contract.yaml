@@ -1,0 +1,491 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: ULCA User Management -API Contract
+  description: >-
+    A python based microservice for user management. This service will expose
+    REST APIs to maintain user and admin functionalities.
+  contact:
+    name: Jainy Joy
+    email: jainy.joy@tarento.com
+servers:
+- url: /ulca/usr-mgmt
+paths:
+  /v1/users/signup:
+    post:
+      tags:
+        - 'Create Users'
+      summary: 'REST API to register/create new user'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSignupRequest'
+        required: true
+      responses:
+        '200':
+          description: New user is created successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user account creation.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+      
+  /v1/users/verify-user:
+    post:
+      tags:
+        - 'Verify Users'
+      summary: 'REST API to verify user account.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserVerificationRequest'
+        required: true
+      responses:
+        '200':
+          description: User has verified successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserVerificationResponse'
+        '400':
+          description: On input errors causing failure in user verification.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user verification.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /v1/users/api-key-search:
+    post:
+      tags:
+        - 'Api-key-search'
+      summary: 'REST API key for search'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKeySearchRequest'
+        required: true
+      responses:
+        '200':
+          description: apiKey search is successful.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiKeySearchResponse'
+        '400':
+          description: On input errors causing failure in auth token search.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in auth token search.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'   
+                
+  /v1/users/login:
+    post:
+      tags:
+        - 'Login'
+      summary: 'REST API to login'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+        required: true
+      responses:
+        '200':
+          description: Logged in successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/UserLoginResponse'
+        '400':
+          description: On input errors causing failure in user login.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user login.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error' 
+                
+   
+  /v1/users/forgot-password:
+    post:
+      tags:
+        - 'Forgot Password'
+      summary: 'REST API for forgot password request'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: User has notfied successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors causing failure in user notification.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in user notification.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'          
+  /v1/users/reset-password:
+    post:
+      tags:
+        - 'Reset Password'
+      summary: 'REST API for resetting password'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: Password updated successfully.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Status'
+        '400':
+          description: On input errors causing failure in password resetting.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: On system level errors causing failure in password resetting.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+       
+ 
+
+components:
+  schemas:
+    UserSignupRequest:
+      type: object
+      required:
+        - firstName
+        - email
+        - password
+        - roles
+      properties:
+        firstName:
+         type: string
+         description: Firstname of the user to be registered.
+        lastName:
+          type: string
+          description: Lastname of the user to be registered.
+        email:
+          type: string
+          description: email of the user to be registered.
+        password:
+          type: string
+          description: password of the user to be registered.
+        roles:
+          type: array
+          description: Roles assigned to the user to be registered.
+          items:
+            type: string
+        phoneNo:
+          type: string
+          description: Mobile phone number of the user to be registered.
+    
+
+    
+    UserLoginRequest:
+      type: object
+      properties:
+        authenticator:
+          $ref: '#/components/schemas/Authenticator'
+        data:
+          type: object
+          oneOf:
+            - $ref: '#/components/schemas/UlcaLoginAuthenticator'
+            - $ref: '#/components/schemas/GmailLoginAuthenticator'
+    
+  
+
+    ApiKeySearchRequest:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Unique auth token of verified user
+      description: Request for user records.
+
+
+    ForgotPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Unique email of the user.
+      description: Request for user records.
+    
+
+    ResetPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: Unique email of the user.
+        password:
+          type: string
+          description: password to be updated
+
+
+    UserVerificationRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          description: unique email value.
+        userID:
+          type: string
+          description: unique userid value.
+    
+        
+
+    User:
+      type: object
+      properties:
+        userID:
+          type: string
+          description: Unique 32-bit UUID per user.
+        firstName:
+          type: string
+          description: FirstName of the user.
+        lastName:
+          type: string
+          description: LastName of the user.
+        email:
+          type: string
+          description: email id of the user.
+        oauthId:
+          type: string
+          description: oauthId of the user.
+        oauthProvider:
+          type: string
+          description: oauthProvider of the user.
+        registeredTime:
+          type: string
+          description: UTC object indicating time of user signup. 
+        activatedTime:
+          type: string
+          description: UTC object indicating time of user verification.
+        isVerified:
+          type: boolean
+          description: status of user verification.
+        isActive:
+          type: boolean
+          description: status of user activation.
+        phoneNo:
+          type: string
+          description: mobile number of the user
+        roles:
+          type: array
+          items:
+            type: string
+            
+          
+  
+    Role:
+      type: object
+      properties:
+        roleId:
+          type: string
+          description: Unique code per role.
+        name:
+          type: string
+          description: role name.
+        description:
+          type: string
+          description: Description of the role.
+  
+   
+  
+          
+    AuthData:
+      type: object
+      properties:
+        email:
+          type: string
+          description: email of the logged in user.
+        publicKey:
+          type: string
+          description: random uuid key to be used as public key for the logged in user.
+        privateKey:
+          type: string
+          description: hexadecimal uuid key for the logged in user for encrypting request data.
+          
+    UserData:
+      type: object
+      properties:
+        userKeys:
+          $ref: '#/components/schemas/AuthData'
+        userDetails:
+          $ref: '#/components/schemas/User'
+          
+          
+    Status:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          type: object
+          description: data returned by the request.
+        count:
+          type: integer
+          description: count of data items.
+    
+    UserVerificationResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          $ref: '#/components/schemas/AuthData'
+        count:
+          type: integer
+          description: count of data items.
+    
+    UserLoginResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          $ref: '#/components/schemas/UserData'
+        count:
+          type: integer
+          description: count of data items.
+    
+    ApiKeySearchResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: message returned after succesful request completion.
+        data:
+          $ref: '#/components/schemas/UserData'
+        count:
+          type: integer
+          description: count of data items.
+      
+   
+      
+    UlcaLoginAuthenticator:
+      type: object
+      properties:
+        email:
+          type: string
+          description: email of user
+        password:
+          type: string
+          description: password of user
+         
+    GmailLoginAuthenticator:
+      type: object
+      properties:
+        token_type:
+          type: string
+          description: token type
+        access_token:
+          type: string
+          description: token type
+        scope:
+          type: string
+          description: scope
+        login_hint:
+          type: string
+          description: login_hint
+        expires_in:
+          type: number
+          description: expires_in
+        id_token:
+          type: number
+          description: id_token 
+        session_state:
+          type: object
+          description: session_state
+          properties:
+            extraQueryParams:
+              type: string
+              description: extraQueryParams
+            authuser:
+              type: number
+              description: authuser 
+
+          
+  
+    Authenticator:
+      type: string
+      enum:
+        - ULCA
+        - GMAIL
+        - GITHUB
+        - FACEBOOK
+        - LINKEDIN
+    
+   
+  
+    Error:
+      type: object
+      properties:
+        errorID:
+          type: string
+          description: Unique UUID for the error.
+        code:
+          type: string
+          description: Unique code signifying the category for the error.
+        message:
+          type: string
+          description: User readable message pertaining to the error
+        timeStamp:
+          type: number
+          description: 13 digit epoch timestamp
