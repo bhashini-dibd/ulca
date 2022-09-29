@@ -5,10 +5,14 @@ from models.status import Status
 import config
 import logging
 from repositories import ASRComputeRepo
+from utils.mongo_utils import ASRMongodbComputeRepo
+from bson.objectid import ObjectId
+
 from logging.config import dictConfig
 log = logging.getLogger('file')
 
 asrrepo = ASRComputeRepo()
+asrmongorepo = ASRMongodbComputeRepo()
 
 # class to navigate audio requests in the form of urls and encoded asr 
 class ASRComputeResource(Resource):
@@ -19,15 +23,17 @@ class ASRComputeResource(Resource):
         userId  =   body["userId"]
         task    =   body["task"]
         lang    =   body["source"]
-        inference   =   body["inferenceEndPoint"]
+        inf = asrmongorepo.find_doc(body["modelId"])
+        inf_callbackurl = inf[0]["inferenceEndPoint"]
         uri         =   False
         if "audioContent" in body:
             audio   =   body["audioContent"]
         if "audioUri" in body:
             audio   =   body["audioUri"]
             uri     =   True
+        #log.info(f'audioContent {audio}')
         try:
-            result = asrrepo.process_asr(lang,audio,userId,inference,uri)
+            result = asrrepo.process_asr(lang,audio,userId,inf_callbackurl,uri)
             if result.get("status") == "SUCCESS":
                 res = CustomResponse(Status.SUCCESS.value,result["output"][0],None)
                 log.info("response successfully generated.")

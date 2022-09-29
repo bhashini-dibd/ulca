@@ -1,7 +1,7 @@
 package io.swagger.model;
 
 import java.util.Objects;
-import io.swagger.model.ImageFile;
+import io.swagger.model.TxtLangDetectionList;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +14,10 @@ import javax.validation.constraints.*;
  */
 @Schema(description = "list of")
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-28T22:14:05.003Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-09-04T16:26:09.493Z[GMT]")
 
 
-public class ImageFiles extends ArrayList<ImageFile>  {
+public class TxtLanguagesList extends ArrayList<TxtLangDetectionList>  {
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -38,7 +38,7 @@ public class ImageFiles extends ArrayList<ImageFile>  {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ImageFiles {\n");
+    sb.append("class TxtLanguagesList {\n");
     sb.append("    ").append(toIndentedString(super.toString())).append("\n");
     sb.append("}");
     return sb.toString();
