@@ -216,7 +216,7 @@ public class DatasetService {
 
 				
 				List<TaskTracker> taskTrackerListUpdated = getStatusUpdatedTaskTrackerList(taskTrackerList, serviceRequestNumber);
-				map.put(serviceRequestNumber, (ArrayList<TaskTracker>) taskTrackerListUpdated);
+				map.put("details", (ArrayList<TaskTracker>) taskTrackerListUpdated);
 			}
 
 		}
