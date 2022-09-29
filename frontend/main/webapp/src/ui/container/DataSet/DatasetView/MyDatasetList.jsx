@@ -136,7 +136,7 @@ const ContributionList = (props) => {
 
   const columns = [
     {
-      name: "submitRefNumber",
+      name: "datasetId",
       label: "s id",
       options: {
         filter: false,
@@ -195,7 +195,7 @@ const ContributionList = (props) => {
     },
     onRowClick: (rowData) =>
       rowData[2] !== "Benchmark" &&
-      handleRowClick(rowData[0], rowData[1], rowData[4]),
+      handleRowClick(rowData[0], rowData[1], rowData[4], rowData),
     // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
     search: false,
