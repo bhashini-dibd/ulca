@@ -29,8 +29,11 @@ class AggregateModelData(object):
                 query   =   [{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
                 result = repo.aggregate(query)
+                log.info(f'result for charts {result}')
+                new_result = [res for res in result if res['_id']['status'] == 'published' and 'model' in res['_id']]
                 chart_data = []
                 for record in result:
+                    #log.info(record)
                     rec = {}
                     rec["_id"]      =   record["_id"]["model"]
                     if record["_id"]["model"] == None:
@@ -41,6 +44,7 @@ class AggregateModelData(object):
                         rec["label"]    =   record["_id"]["model"]
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
+                log.info(chart_data)
                 return chart_data,count
 
             #1st levl drill down on model selected and languages  
