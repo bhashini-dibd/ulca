@@ -29,16 +29,14 @@ class AggregateModelData(object):
                 query   =   [{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
                 result = repo.aggregate(query)
-                log.info(f'result for charts {result}')
                 new_result = [res for res in result if res['_id']['status'] == 'published' and 'model' in res['_id']]
+                log.info(f'result for charts {new_result}')
                 chart_data = []
-                for record in result:
+                for record in new_result:
                     #log.info(record)
                     rec = {}
                     rec["_id"]      =   record["_id"]["model"]
-                    if record["_id"]["model"] == None:
-                        continue; #ingnoring the models whose task types are not defined
-                    elif record["_id"]["model"] and len(record["_id"]["model"])>9:
+                    if record["_id"]["model"] and len(record["_id"]["model"])>9:
                         rec["label"]    =   str(record["_id"]["model"]).title()
                     else:
                         rec["label"]    =   record["_id"]["model"]
