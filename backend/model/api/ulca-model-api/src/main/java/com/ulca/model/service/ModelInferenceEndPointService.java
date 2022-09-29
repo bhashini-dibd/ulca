@@ -54,6 +54,8 @@ import io.swagger.model.TranslationRequest;
 import io.swagger.model.TranslationResponse;
 import io.swagger.model.TransliterationRequest;
 import io.swagger.model.TransliterationResponse;
+import io.swagger.model.TxtLangDetectionRequest;
+import io.swagger.model.TxtLangDetectionResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -93,7 +95,7 @@ public class ModelInferenceEndPointService {
 			OkHttpClient client = new OkHttpClient.Builder().readTimeout(60, TimeUnit.SECONDS).build();
 
 			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
-			Request httpRequest = new Request.Builder().url(callBackUrl).addHeader("Accept","application/json").post(body).build();
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
 
 			Response httpResponse = client.newCall(httpRequest).execute();
 			// objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
@@ -104,9 +106,9 @@ public class ModelInferenceEndPointService {
 			translationInference.setResponse(response);
 			schema = translationInference;
 
-		}
+		}else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 
-		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+		
 			io.swagger.model.ASRInference asrInference = (io.swagger.model.ASRInference) schema;
 			ASRRequest request = asrInference.getRequest();
 
@@ -130,9 +132,9 @@ public class ModelInferenceEndPointService {
 			asrInference.setResponse(response);
 			schema = asrInference;
 
-		}
+		
 
-		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 			OCRRequest request = ocrInference.getRequest();
 
@@ -154,9 +156,9 @@ public class ModelInferenceEndPointService {
 			schema = ocrInference;
 
 			log.info("logging ocr inference point response" + responseJsonStr);
-		}
+		
 
-		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 			io.swagger.model.TTSInference ttsInference = (io.swagger.model.TTSInference) schema;
 			TTSRequest request = ttsInference.getRequest();
 
@@ -180,8 +182,8 @@ public class ModelInferenceEndPointService {
 			schema = ttsInference;
 
 			log.info("logging tts inference point response" + responseJsonStr);
-		}
-		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
+		
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
 
@@ -203,6 +205,28 @@ public class ModelInferenceEndPointService {
 			TransliterationResponse response = objectMapper.readValue(responseJsonStr, TransliterationResponse.class);
 			transliterationInference.setResponse(response);
 			schema = transliterationInference;
+
+			log.info("logging TransliterationInference point response" + responseJsonStr);
+		
+		} else if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
+			io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
+			TxtLangDetectionRequest request = txtLangDetectionInference.getRequest();
+
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			OkHttpClient newClient = getTrustAllCertsClient();
+
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+
+			String responseJsonStr = httpResponse.body().string();
+			TxtLangDetectionResponse response = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
+			txtLangDetectionInference.setResponse(response);
+			schema = txtLangDetectionInference;
 
 			log.info("logging TransliterationInference point response" + responseJsonStr);
 		}
@@ -605,6 +629,38 @@ public class ModelInferenceEndPointService {
 			response.setTransliterationOutput(transliterationResponse.getOutput());
 
 			return response;
+		}
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
+			io.swagger.model.TxtLangDetectionInference txtLangDetectionInference = (io.swagger.model.TxtLangDetectionInference) schema;
+			TxtLangDetectionRequest request = txtLangDetectionInference.getRequest();
+
+			List<Input> input = compute.getInput();
+			Sentences sentences = new Sentences();
+			for (Input ip : input) {
+				Sentence sentense = new Sentence();
+				sentense.setSource(ip.getSource());
+				sentences.add(sentense);
+			}
+			request.setInput(sentences);
+			
+			ObjectMapper objectMapper = new ObjectMapper();
+			String requestJson = objectMapper.writeValueAsString(request);
+
+			
+			RequestBody body = RequestBody.create(requestJson, MediaType.parse("application/json"));
+			Request httpRequest = new Request.Builder().url(callBackUrl).post(body).build();
+
+			OkHttpClient newClient = getTrustAllCertsClient();
+
+			Response httpResponse = newClient.newCall(httpRequest).execute();
+
+			String responseJsonStr = httpResponse.body().string();
+			TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
+			
+			response.setLanguageDetectionOutput(txtLangDetectionResponse);
+
+			return response;
+			
 		}
 
 		return response;
