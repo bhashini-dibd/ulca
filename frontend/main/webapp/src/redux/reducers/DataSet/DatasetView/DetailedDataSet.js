@@ -47,7 +47,7 @@ const getDetailedReport = (payload) => {
 
     let responseData = [];
     let refreshStatus = false;
-    payload.forEach(element => {
+    payload.details.forEach(element => {
         // if (element.tool !== 'pseudo') {
             let count = element.details ? getRecordCount(JSON.parse(element.details)) : ""
             responseData.push(

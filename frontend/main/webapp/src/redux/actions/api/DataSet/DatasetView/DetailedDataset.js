@@ -25,7 +25,7 @@ export default class MyCOntribution extends API {
     }
 
     apiEndPoint() {
-        let url = `${this.endpoint}?serviceRequestNumber=${this.id}` 
+        let url = `${this.endpoint}?datasetId=${this.id}` 
          return url;
     }
     getHeaders() {
