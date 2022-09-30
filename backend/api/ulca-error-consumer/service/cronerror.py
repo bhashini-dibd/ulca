@@ -150,14 +150,21 @@ class ErrorProcessor(Thread):
         
 
     def get_unique_srns(self):
-        lastday = (datetime.now() - timedelta(seconds=redis_key_expiry*2))
-        log.info(f"lastday  :{lastday}")
+        #lastday = (datetime.now() - timedelta(seconds=redis_key_expiry*2))
+        last_day = (datetime.now() - timedelta(seconds=redis_key_expiry*2)).timestamp()
+        last_day = eval(str(last_day).replace('.','')[0:13])
+        log.info(f"lastday  :{last_day}")
+        '''
         query = [{ '$match':{'serviceRequestType':{'$in':['dataset','benchmark']},'serviceRequestAction':'submit'}}, 
                 {'$project': {'date': {'$dateFromString': {'dateString': '$startTime'}},'serviceRequestNumber': '$serviceRequestNumber'}},
-                {'$match': {'date': {'$gt': lastday}}}]
-        log.info(f"Query :{query}")
+                {'$match': {'date': {'$gt': last_day}}}]
+        '''
+        new_query = [{ '$match':{'serviceRequestType':{'$in':['dataset','benchmark']},'serviceRequestAction':'submit'}},
+                    {'$project': {'date':   '$startTime','serviceRequestNumber': '$serviceRequestNumber'}},
+                    {'$match': {'date': {'$gt':last_day}}}]
+        log.info(f"Query :{new_query}")
         SRNlist = []
-        aggresult = prorepo.aggregate(query)
+        aggresult = prorepo.aggregate(new_query)
         if aggresult:
             for agg in aggresult:
                 SRNlist.append(agg["serviceRequestNumber"])
