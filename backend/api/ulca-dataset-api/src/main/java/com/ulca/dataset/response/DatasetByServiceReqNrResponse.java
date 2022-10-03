@@ -22,6 +22,7 @@ public class DatasetByServiceReqNrResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String message;
+	private String datasetName;
 	private List<TaskTracker> data;
 
 }
