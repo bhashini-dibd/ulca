@@ -250,12 +250,12 @@ public class DatasetService {
 		if(processTrackerList == null) {
 			throw new ServiceRequestNumberNotFoundException("serviceRequestNumber :: " + serviceRequestNumber + " not found");
 		}
-
+		Dataset dataset = datasetDao.findByDatasetId(processTrackerList.getDatasetId());
 		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 		
 		List<TaskTracker> taskTrackerListUpdated = getStatusUpdatedTaskTrackerList(taskTrackerList, serviceRequestNumber);
 		
-		DatasetByServiceReqNrResponse response = new DatasetByServiceReqNrResponse("Dataset details", taskTrackerListUpdated);
+		DatasetByServiceReqNrResponse response = new DatasetByServiceReqNrResponse("Dataset details",dataset.getDatasetName(), taskTrackerListUpdated);
 		return response;
 	}
 	
