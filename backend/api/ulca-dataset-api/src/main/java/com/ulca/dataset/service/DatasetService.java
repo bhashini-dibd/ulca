@@ -91,6 +91,7 @@ public class DatasetService {
 		String userId = request.getUserId();
 		Dataset dataset = new Dataset();
 		dataset.setDatasetName(request.getDatasetName());
+		dataset.setSubmitterId(userId);
 		//dataset.setDatasetType(request.getType().toString());
 		dataset.setCreatedOn(Instant.now().toEpochMilli());
 
@@ -140,10 +141,6 @@ public class DatasetService {
 				dataset.getCreatedOn());
 	}
 
-
-
-
-
 	public DatasetListByUserIdResponse datasetListByUserId(String userId, Integer startPage, Integer endPage,Integer pgSize,String name) {
 		log.info("******** Entry DatasetService:: datasetListByUserId *******");
 		DatasetListByUserIdResponse response = null;
@@ -185,14 +182,37 @@ public class DatasetService {
 
 			}
 		}
+
+
 		List<DatasetListByUserIdResponseDto> datasetDtoList = new ArrayList<DatasetListByUserIdResponseDto>();
 		for (Dataset dataset : list) {
-			DatasetListByUserIdResponseDto datasetDto = new DatasetListByUserIdResponseDto();
-			datasetDto.setDatasetId(dataset.getDatasetId());
-			datasetDto.setDatasetType(dataset.getDatasetType());
-			datasetDto.setDatasetName(dataset.getDatasetName());
-			datasetDto.setSubmittedOn(dataset.getCreatedOn());
-			datasetDtoList.add(datasetDto);
+			ProcessTracker processTracker = processTrackerDao.findByDatasetId(dataset.getDatasetId()).get(0);
+			String serviceRequestNumber = processTracker.getServiceRequestNumber();
+			String status = processTracker.getStatus();
+			if(status.equalsIgnoreCase(TaskTracker.StatusEnum.failed.toString()) || status.equalsIgnoreCase(TaskTracker.StatusEnum.completed.toString())) {
+				datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
+						dataset.getDatasetName(), dataset.getDatasetType(), dataset.getCreatedOn(), status));
+			} else  {
+
+				List<TaskTracker> taskTrackerList = taskTrackerDao
+						.findAllByServiceRequestNumber(serviceRequestNumber);
+
+				HashMap<String, String> map = new HashMap<String, String>();
+				for (TaskTracker tTracker : taskTrackerList) {
+					map.put(tTracker.getTool().toString(), tTracker.getStatus().toString());
+				}
+				if(map.containsValue(TaskTracker.StatusEnum.failed.toString())) {
+					status = ProcessTracker.StatusEnum.failed.toString();
+				}else if(map.containsValue(ProcessTracker.StatusEnum.inprogress.toString())) {
+					status = ProcessTracker.StatusEnum.inprogress.toString();
+				}else if (map.containsKey(TaskTracker.ToolEnum.publish.toString())) {
+					status = map.get(TaskTracker.ToolEnum.publish.toString());
+				}
+
+				datasetDtoList.add(new DatasetListByUserIdResponseDto(dataset.getDatasetId(), serviceRequestNumber,
+						dataset.getDatasetName(), dataset.getDatasetType(), dataset.getCreatedOn(), status));
+			}
+
 		}
 		log.info("******** Exit DatasetService:: datasetListByUserId *******");
 
@@ -216,7 +236,7 @@ public class DatasetService {
 
 				
 				List<TaskTracker> taskTrackerListUpdated = getStatusUpdatedTaskTrackerList(taskTrackerList, serviceRequestNumber);
-				map.put(serviceRequestNumber, (ArrayList<TaskTracker>) taskTrackerListUpdated);
+				map.put("details", (ArrayList<TaskTracker>) taskTrackerListUpdated);
 			}
 
 		}
@@ -230,12 +250,12 @@ public class DatasetService {
 		if(processTrackerList == null) {
 			throw new ServiceRequestNumberNotFoundException("serviceRequestNumber :: " + serviceRequestNumber + " not found");
 		}
-
+		Dataset dataset = datasetDao.findByDatasetId(processTrackerList.getDatasetId());
 		List<TaskTracker> taskTrackerList = taskTrackerDao.findAllByServiceRequestNumber(serviceRequestNumber);
 		
 		List<TaskTracker> taskTrackerListUpdated = getStatusUpdatedTaskTrackerList(taskTrackerList, serviceRequestNumber);
 		
-		DatasetByServiceReqNrResponse response = new DatasetByServiceReqNrResponse("Dataset details", taskTrackerListUpdated);
+		DatasetByServiceReqNrResponse response = new DatasetByServiceReqNrResponse("Dataset details",dataset.getDatasetName(), taskTrackerListUpdated);
 		return response;
 	}
 	
