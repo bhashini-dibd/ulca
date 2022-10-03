@@ -23,7 +23,14 @@ import { translate } from "../../../../assets/localisation";
 const DetailedStatus = (props) => {
   const { detailedReport, errorData } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const { status, name, id } = useParams();
+  const { id } = useParams();
+
+  const getStatusDisable = () => {
+    const res = detailedReport.responseData.some(
+      (element) => ["pending", "in-progress"].includes(element.status.toLowerCase())
+    );
+    return !res;
+  };
 
   useEffect(() => {
     DetailedDataSetStatusApi();
@@ -68,7 +75,7 @@ const DetailedStatus = (props) => {
       <div className={classes.headerButtons}>
         <Grid container spacing={1}>
           <Grid item xs={12} sm={12} md={7} lg={7} xl={7}>
-            <Typography variant="h5">{name}</Typography>
+            <Typography variant="h5">{detailedReport.datasetName}</Typography>
           </Grid>
           <Grid item>
             {
@@ -77,12 +84,7 @@ const DetailedStatus = (props) => {
                 size="medium"
                 className={classes.ButtonRefresh}
                 variant="outlined"
-                disabled={
-                  status.toLowerCase() === "in-progress" ||
-                    status.toLowerCase() === "pending"
-                    ? false
-                    : true
-                }
+                disabled={getStatusDisable()}
                 onClick={() => DetailedDataSetStatusApi()}
               >
                 <Cached className={classes.iconStyle} />
@@ -93,12 +95,7 @@ const DetailedStatus = (props) => {
                   size="medium"
                   className={classes.ButtonRefreshMobile}
                   variant="outlined"
-                  disabled={
-                    status.toLowerCase() === "in-progress" ||
-                      status.toLowerCase() === "pending"
-                      ? false
-                      : true
-                  }
+                  disabled={getStatusDisable()}
                   onClick={() => DetailedDataSetStatusApi()}
                 >
                   <Cached className={classes.iconStyle} />

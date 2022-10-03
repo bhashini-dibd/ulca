@@ -20,12 +20,12 @@ export default class MyCOntribution extends API {
         super.processResponse(res);
         if (res) {
 
-            this.report = res.data;
+            this.report = res;
         }
     }
 
     apiEndPoint() {
-        let url = `${this.endpoint}?datasetId=${this.id}` 
+        let url = `${this.endpoint}?serviceRequestNumber=${this.id}` 
          return url;
     }
     getHeaders() {

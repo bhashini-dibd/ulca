@@ -1,7 +1,7 @@
 const endpoints = {
   getContributionList: "/ulca/apis/v0/dataset/listByUserId",
   getBenchmarkList: "/ulca/apis/v0/benchmark/listByUserId",
-  getDetailReport: "/ulca/apis/v0/dataset/getByDatasetId",
+  getDetailReport: "/ulca/apis/v0/dataset/getByServiceRequestNumber",
   dataSetSearchApi: "/ulca/data-metric/v0/store/search",
   login: "/ulca/user-mgmt/v1/users/login",
   datasetSubmit: "/ulca/apis/v0/dataset/corpus/submit",
