@@ -153,7 +153,12 @@ class DatasetServiceTest {
         taskTracker.setTool("test");
         taskTracker.setStatus("In-Progress");
 
+        Dataset dataset = new Dataset();
+        dataset.setDatasetName("test");
+        when(datasetDao.findByDatasetId("test")).thenReturn(dataset);
+
         when(processTrackerDao.findByServiceRequestNumber("1")).thenReturn(processTracker);
+
 
 
         List<TaskTracker> taskTrackerList = new ArrayList<>();
