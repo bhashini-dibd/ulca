@@ -15,7 +15,7 @@ class MasterDataServices():
         log.info(f"Searching for master in redis store{master_list}")
         master_data         =   model.search(master_list)
         not_on_store_list   =   master_list
-        log.info(f'master data @mdms_service - 18')
+        log.info(f'master data @mdms_service - 18 {master_data}')
         if master_data:
             not_on_store_list = [x for x in master_list if x not in master_data.keys()]
             log.info(f'not_on_store_list @21 {not_on_store_list}')
