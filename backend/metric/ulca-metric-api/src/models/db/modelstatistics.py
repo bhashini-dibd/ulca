@@ -29,6 +29,7 @@ class AggregateModelData(object):
                 query   =   [{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
                 log.info(f"Query : {query}")
                 result = repo.aggregate(query)
+                log.info(f'result@32 {result}')
                 new_result = [res for res in result if res['_id']['status'] == 'published' and 'model' in res['_id']]
                 log.info(f'result for charts {new_result}')
                 chart_data = []
