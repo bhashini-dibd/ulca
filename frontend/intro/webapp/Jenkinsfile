@@ -14,7 +14,6 @@ withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials
 {
 sh '''
 cd frontend/intro/webapp
-ls -al
 if [ -d "$(pwd)/build" ]
 then
   sudo chown -R jenkins.jenkins $(pwd)/build
@@ -33,7 +32,6 @@ docker login -u $dockerhub_user -p $dockerhub_pass
 docker push anuvaadio/$image_name:$commit_id
 if [ -d "$(pwd)/build" ]
 then
-  ls -al
   sudo rm -rf $(pwd)/build
 fi
 '''
