@@ -12,11 +12,13 @@ model       =   StoreModel()
 class MasterDataServices():
 
     def get_attributes_data(self,master_list):
-        log.info("Searching for master in redis store")
+        log.info(f"Searching for master in redis store{master_list}")
         master_data         =   model.search(master_list)
         not_on_store_list   =   master_list
+        log.info(f'master data @mdms_service - 18')
         if master_data:
             not_on_store_list = [x for x in master_list if x not in master_data.keys()]
+            log.info(f'not_on_store_list @21 {not_on_store_list}')
         if not_on_store_list:
             from_git = self.get_from_remote_source(not_on_store_list,None)
             if from_git:
@@ -29,6 +31,7 @@ class MasterDataServices():
     #deciding master and properties to return
     def get_from_remote_source(self,master_list,jsonpath):
         master_data_dict = {}
+        log.info(f'master lists @ 32 {master_list}')
         for master in master_list:
             git_file_location   =   f"{config.git_folder_prefix}/{master}.json"
             if not jsonpath:
