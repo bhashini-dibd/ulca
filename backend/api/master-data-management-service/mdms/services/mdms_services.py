@@ -15,7 +15,7 @@ class MasterDataServices():
         log.info(f"Searching for master in redis store{master_list}")
         master_data         =   model.search(master_list)
         not_on_store_list   =   master_list
-        log.info(f'master data @mdms_service - 18 {master_data}')
+        log.info(f'master data keys @ 18{master_data.keys()}')
         if master_data:
             not_on_store_list = [x for x in master_list if x not in master_data.keys()]
             log.info(f'not_on_store_list @21 {not_on_store_list}')
@@ -89,7 +89,7 @@ class MasterDataServices():
             log.info(f'result of format_result() {result}')
             for master, values in result.items():
                 if master == "datasetFilterParams":
-                    #log.info(f'format result func {result}')
+                    log.info(f'format_result --> {values}')
                     for submaster in values: #parallel-corpus, mono etcc.. level
                         for attrib in submaster["values"]: # filetrs specific to dtype
                             if attrib["code"] == "collectionMethod": 
