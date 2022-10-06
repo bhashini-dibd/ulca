@@ -16,7 +16,6 @@ sh '''
 cd frontend/intro/webapp
 if [ -d "$(pwd)/build" ]
 then
-  sudo chown -R jenkins.jenkins $(pwd)/build
   sudo rm -rf $(pwd)/build
 fi
 #if [  $( docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME" ) ]
