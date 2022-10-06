@@ -88,7 +88,6 @@ class ErrorRepo:
         try:
             col = self.get_mongo_instance()
             upd = col.update(object_in,{ '$inc': { 'count': 1 } }, upsert=True)
-            log.info(f' updated output of mongo {upd}')
         except Exception as e:
             log.exception(f'Exception in repo upsert: {e}', e)
 
