@@ -21,6 +21,7 @@ class MasterDataServices():
             log.info(f'not_on_store_list @21 {not_on_store_list}')
         if not_on_store_list:
             from_git = self.get_from_remote_source(not_on_store_list,None)
+            log.info(f'if not_on_store_list {from_git}')
             if from_git:
                 master_data.update(from_git)
                 for master in from_git:
@@ -85,8 +86,10 @@ class MasterDataServices():
     
     def format_result(self,result):
         try:
+            log.info(f'result of format_result() {result}')
             for master, values in result.items():
                 if master == "datasetFilterParams":
+                    #log.info(f'format result func {result}')
                     for submaster in values: #parallel-corpus, mono etcc.. level
                         for attrib in submaster["values"]: # filetrs specific to dtype
                             if attrib["code"] == "collectionMethod": 
