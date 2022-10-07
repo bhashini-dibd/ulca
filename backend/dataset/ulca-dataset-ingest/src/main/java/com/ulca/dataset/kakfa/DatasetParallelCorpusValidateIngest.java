@@ -410,7 +410,8 @@ public class DatasetParallelCorpusValidateIngest implements DatasetValidateInges
 
 					vModel.put("record", finalRecord);
 					vModel.put("currentRecordIndex", pseudoNumberOfRecords);
-					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+				// This has to be reverted back after TDIL dataset submit
+				//	datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 
 				}
 
