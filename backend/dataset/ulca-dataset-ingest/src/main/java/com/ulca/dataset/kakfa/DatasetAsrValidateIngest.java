@@ -401,7 +401,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 						finalRecord.put("id", uid);
 						vModel.put("record", finalRecord);
 						vModel.put("currentRecordIndex", pseudoNumberOfRecords);
-			//			datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 					} else {
 						failedCount++;
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");
