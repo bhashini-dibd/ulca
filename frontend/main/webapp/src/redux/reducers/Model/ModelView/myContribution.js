@@ -6,6 +6,7 @@ import {
   FilterByCollection,
   getTaskName,
 } from "../../../../utils/getLabel";
+import moment from "moment";
 const initialState = {
   responseData: [],
   filteredData: [],
@@ -114,6 +115,7 @@ const getContributionList = (state, payload) => {
   let refreshStatus = false;
   payload.data.forEach((element) => {
     let sLanguage =
+      element.languages &&
       element.languages.length > 0 &&
       element.languages[0].sourceLanguage &&
       getLanguageName(element.languages[0].sourceLanguage);
@@ -129,7 +131,7 @@ const getContributionList = (state, payload) => {
       submitRefNumber: element.modelId,
       modelName: element.name,
       description: element.description,
-      submittedOn: dateConversion(element.submittedOn),
+      submittedOn: moment(element.submittedOn).format("DD/MM/YYYY"),
       task:
         element.task.type !== "translation"
           ? element.task.type.toUpperCase()
@@ -139,7 +141,9 @@ const getContributionList = (state, payload) => {
       endPoint: element.inferenceEndPoint,
       language: lang,
       source:
-        element.languages.length > 0 && element.languages[0].sourceLanguage,
+        element.languages &&
+        element.languages.length > 0 &&
+        element.languages[0].sourceLanguage,
       target:
         element.languages &&
         element.languages.length > 0 &&
@@ -183,7 +187,6 @@ const getContributionList = (state, payload) => {
   filter.license = [...new Set(license)];
   filter.domain = [...new Set(domain)];
 
-  responseData = responseData.reverse();
   let filteredData = getFilterValue(
     { filterValues: state.selectedFilter },
     { responseData: responseData }
@@ -262,14 +265,13 @@ const reducer = (state = initialState, action) => {
     case C.TOGGLE_MODEL_STATUS:
       return {
         ...state,
-        responseData: getContributionList(state, action.payload)
-          .responseData,
+        responseData: getContributionList(state, action.payload).responseData,
         filteredData: updateModelStatus(
           getContributionList(state, action.payload).responseData,
           action.payload.searchValue
         ),
       };
-      
+
     default:
       return {
         ...state,

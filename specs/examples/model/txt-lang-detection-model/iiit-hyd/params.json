@@ -1,0 +1,45 @@
+{
+    "name": "IIIT-H Textual Language Detection",
+    "version": "v1.0",
+    "description": "Detect language from provided text. Currently supports 16 languages (as, bho, bn, en, gu, hi, ka, kn, ml, mni, mr, or, pa, ta, te, ur)",
+    "refUrl": "https://ltrc.iiit.ac.in/",
+    "task": {
+       "type" : "txt-lang-detection"
+    },
+    "languages": null,
+    "license": "cc-by-nc-4.0",
+    "domain": [
+       "general"
+    ],
+    "submitter": {
+        "name": "LTRC, IIIT-Hyderabad",
+        "aboutMe": "Language Technologies Research Centre",
+        "team": [
+           {
+              "name": "Vandan",
+              "aboutMe": "LTRC, IIIT-H"
+           },
+           {
+              "name": "Dipti Misra Sharma",
+              "aboutMe": "LTRC, IIIT-H"
+           }
+        ]
+     },
+    "inferenceEndPoint": {
+       "callbackUrl": "https://ssmt.iiit.ac.in/langidentify",
+       "schema": {
+          "taskType": "txt-lang-detection",
+          "request": {
+    		"input": [
+        			{
+            		"source": "કોરોનાને કારણે છેલ્લાં બે વર્ષથી ગરબાનું આયોજન થઈ શક્યું નહોતું"
+        			}
+    		]
+          }
+       }
+    },
+    "trainingDataset": {
+       "description": "Public dataset"
+    }
+ }
+ 

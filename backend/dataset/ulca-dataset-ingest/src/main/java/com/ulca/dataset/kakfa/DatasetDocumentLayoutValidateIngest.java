@@ -385,7 +385,7 @@ public class DatasetDocumentLayoutValidateIngest implements DatasetValidateInges
 						vModel.put("record", finalRecord);
 						vModel.put("currentRecordIndex", pseudoNumberOfRecords);
 
-						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+		//				datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 						
 					}else {
 						failedCount++;

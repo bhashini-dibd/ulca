@@ -80,7 +80,6 @@ const StatusCheck = () => {
   const statusCheckResult = useSelector(
     (state) => state.getModelHealthCheckStatus
     );
-    console.log(statusCheckResult.filteredData,'[][][][]');
 
   useEffect(() => {
     const apiObj = new ModelStatusCheck("");

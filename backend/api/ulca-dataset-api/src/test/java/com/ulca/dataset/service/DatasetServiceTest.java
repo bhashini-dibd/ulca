@@ -91,42 +91,6 @@ class DatasetServiceTest {
         assertInstanceOf(DatasetSubmitResponse.class,datasetService.datasetSubmit(request));
 
     }
-    private static Stream<Arguments> datasetListByUserIdPaginationParam(){
-
-        return Stream.of(Arguments.of("Failed"),
-                Arguments.of("In-Progress"),
-                Arguments.of("publish"));
-    }
-
-    @ParameterizedTest
-    @MethodSource("datasetListByUserIdPaginationParam")
-    void datasetListByUserIdPagination(String status) {
-        ProcessTracker processTracker = new ProcessTracker();
-        processTracker.setDatasetId("test");
-        processTracker.setUserId("test");
-        processTracker.setStatus(status);
-        processTracker.serviceRequestNumber("1");
-
-        Dataset dataset = new Dataset();
-        dataset.setDatasetName("test");
-        dataset.setDatasetType("test");
-        dataset.setCreatedOn(Instant.now().toEpochMilli());
-
-        TaskTracker taskTracker = new TaskTracker();
-        taskTracker.setTool("test");
-        taskTracker.setStatus(status);
-
-        if(!status.equalsIgnoreCase("Failed")){
-           when(taskTrackerDao.findAllByServiceRequestNumber("1")).thenReturn(Collections.singletonList(taskTracker));
-        }
-
-        Page<ProcessTracker> processTrackerPage = new PageImpl<>(Collections.singletonList(processTracker));
-        when(datasetDao.findById("test")).thenReturn(Optional.of(dataset));
-        when(processTrackerDao.findByUserId("test", PageRequest.of(0,10))).thenReturn(processTrackerPage);
-        
-        assertInstanceOf(DatasetListByUserIdResponse.class,datasetService.datasetListByUserIdPagination("test",1,1,null,null));
-
-    }
 
     @Test
     void datasetListByUserId() {
@@ -134,41 +98,7 @@ class DatasetServiceTest {
         assertInstanceOf(DatasetListByUserIdResponse.class,datasetService.datasetListByUserId("test",null,null,null,null));
 
     }
-    private static Stream<Arguments> datasetListByUserIdFetchAllParam(){
 
-        return Stream.of(Arguments.of("Failed"),
-                Arguments.of("In-Progress"),
-                Arguments.of("publish"));
-    }
-
-    @ParameterizedTest
-    @MethodSource("datasetListByUserIdFetchAllParam")
-    void datasetListByUserIdFetchAll(String status) {
-        ProcessTracker processTracker = new ProcessTracker();
-        processTracker.setDatasetId("test");
-        processTracker.setUserId("test");
-        processTracker.setStatus(status);
-        processTracker.serviceRequestNumber("1");
-
-        Dataset dataset = new Dataset();
-        dataset.setDatasetName("test");
-        dataset.setDatasetType("test");
-        dataset.setCreatedOn(Instant.now().toEpochMilli());
-
-        TaskTracker taskTracker = new TaskTracker();
-        taskTracker.setTool("test");
-        taskTracker.setStatus(status);
-
-        if(!status.equalsIgnoreCase("Failed")){
-            when(taskTrackerDao.findAllByServiceRequestNumber("1")).thenReturn(Collections.singletonList(taskTracker));
-        }
-
-        when(datasetDao.findById("test")).thenReturn(Optional.of(dataset));
-        when(processTrackerDao.findByUserId("test")).thenReturn(Collections.singletonList(processTracker));
-
-        assertInstanceOf(DatasetListByUserIdResponse.class,datasetService.datasetListByUserIdFetchAll("test",null));
-
-    }
     private static Stream<Arguments> datasetByIdParam(){
         ProcessTracker processTracker = new ProcessTracker();
         processTracker.setDatasetId("test");
@@ -223,7 +153,12 @@ class DatasetServiceTest {
         taskTracker.setTool("test");
         taskTracker.setStatus("In-Progress");
 
+        Dataset dataset = new Dataset();
+        dataset.setDatasetName("test");
+        when(datasetDao.findByDatasetId("test")).thenReturn(dataset);
+
         when(processTrackerDao.findByServiceRequestNumber("1")).thenReturn(processTracker);
+
 
 
         List<TaskTracker> taskTrackerList = new ArrayList<>();
