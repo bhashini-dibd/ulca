@@ -34,14 +34,19 @@ class AggregateDatasetModel(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]   #grouping fields
 
+            log.info(f'request_object ==> 37 {request_object}')
+
             #ASR charts are displayed in hours; initial chart
             if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                 sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
+                log.info(f'0th level drill ==> initial display of hours datasets{sumtotal_query}')
             else:
                 #Charts except ASR are displayed in record counts; initial chart
                 sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
-            log.info(f'sumtotal_query {sumtotal_query}')
+                log.info(f'0th level drill ==> initial display of hours datasets{sumtotal_query}')
+            #log.info(f'sumtotal_query {sumtotal_query}')
             sumtotal_result = utils.query_runner(sumtotal_query)
+            log.info(f'Result of Query ie, sumtotal_result @ 47{sumtotal_result}')
             true_count = 0
             false_count = 0
             for val in sumtotal_result:
@@ -59,6 +64,7 @@ class AggregateDatasetModel(object):
                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
                 else:
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
+                log.info(f'query for 1st level drill down {query} ')
                 params = match_params[0]
                 value = params["value"]
 
@@ -67,14 +73,16 @@ class AggregateDatasetModel(object):
                 if dtype == "parallel-corpus" or dtype == "transliteration-corpus" or dtype == "glossary-corpus":
                     sub_query = f'WHERE (({datatype} = \'{dtype}\') AND ({src} != {tgt}) AND ({src} = \'{value}\' OR {tgt} = \'{value}\')) \
                                     GROUP BY {src}, {tgt},{delete}'
-                    log.info(sub_query)
+                    log.info(f'query for 1st level drill down {sub_query} ')
+                    #log.info(sub_query)
 
                 elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus"]:
                     sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
                 qry_for_lang_pair  = query+sub_query
-
+                log.info(f'query for 1st level drill down @ 80 {qry_for_lang_pair} ')
                 result_parsed = utils.query_runner(qry_for_lang_pair)
                 chart_data =  utils.result_formater_for_lang_pairs(result_parsed,dtype,value)
+                log.info(f'query for 1st level drill down @ 83{result_parsed} {chart_data} ')
                 return chart_data,sumtotal
 
             #aggregate query for language groupby ; 1st level drill down for the chart
@@ -100,6 +108,8 @@ class AggregateDatasetModel(object):
 
                 result_parsed = utils.query_runner(query)
                 chart_data = utils.result_formater(result_parsed,grp_field,dtype)
+                log.info(f'result_parsed at transliteration {result_parsed}')
+                log.info(f'rechart data for transliteration {chart_data}')
                 return chart_data,sumtotal
 
             #aggregate query for groupby & matching together; 2nd level drill down
@@ -128,6 +138,8 @@ class AggregateDatasetModel(object):
                 
                 result_parsed = utils.query_runner(query)
                 chart_data = utils.result_formater(result_parsed,grp_field,dtype)
+                log.info(f'result_parsed at transliteration {result_parsed}')
+                log.info(f'chart data for transliteration {chart_data}')
                 return chart_data,sumtotal
         except Exception as e:
             log.exception("Exception on query aggregation : {}".format(str(e)))
