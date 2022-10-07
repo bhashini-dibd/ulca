@@ -14,7 +14,7 @@ withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials
 {
 sh '''
 cd frontend/main/webapp
-if [ -f "$(pwd)/build" ]
+if [ -d "$(pwd)/build" ]
 then
   sudo rm -rf $(pwd)/build
 fi
