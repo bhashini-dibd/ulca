@@ -410,7 +410,7 @@ public class DatasetTransliterationValidateIngest implements DatasetValidateInge
 
 					vModel.put("record", finalRecord);
 					vModel.put("currentRecordIndex", pseudoNumberOfRecords);
-		//			datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
 
 				}
 
