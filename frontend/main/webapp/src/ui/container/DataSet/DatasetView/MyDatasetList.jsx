@@ -15,6 +15,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import FilterList from "./FilterList";
 import Search from "../../../components/Datasets&Model/Search";
 import { translate } from "../../../../assets/localisation";
+import moment from 'moment';
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -50,13 +51,7 @@ const ContributionList = (props) => {
   });
 
   const convertDate = (date) => {
-    return date
-      .toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .toUpperCase();
+    return moment(date).format("MM/DD/YYYY");
   };
 
   const fetchHeaderButton = () => {
@@ -123,9 +118,9 @@ const ContributionList = (props) => {
       //       {/* <Button color={"default"} size="medium" variant="default"  className={classes.buttonStyle} onClick={handleViewChange}> {view ? <List size = "large" /> : <GridOn />}</Button> */}
     );
   };
-  const handleRowClick = (id, name, status) => {
+  const handleRowClick = (id) => {
     history.push(
-      `${process.env.PUBLIC_URL}/dataset-status/${status}/${name}/${id}`
+      `${process.env.PUBLIC_URL}/dataset-status/${id}`
     );
   };
 
@@ -169,6 +164,15 @@ const ContributionList = (props) => {
       },
     },
     {
+      name: "status",
+      label: "Status",
+      options: {
+        filter: false,
+        sort: true,
+        display: view ? "excluded" : true,
+      },
+    },
+    {
       name: "submittedOn",
       label: "Submitted On",
       options: {
@@ -180,15 +184,6 @@ const ContributionList = (props) => {
           return <>{convertDate(date)}</>;
         },
         sortDirection: "desc",
-      },
-    },
-    {
-      name: "status",
-      label: "Status",
-      options: {
-        filter: true,
-        sort: true,
-        display: view ? "excluded" : true,
       },
     },
   ];
@@ -208,8 +203,7 @@ const ContributionList = (props) => {
       options: { sortDirection: "desc" },
     },
     onRowClick: (rowData) =>
-      rowData[2] !== "Benchmark" &&
-      handleRowClick(rowData[0], rowData[1], rowData[4]),
+      rowData[2] !== "Benchmark" && handleRowClick(rowData[0]),
     // onCellClick     : (colData, cellMeta) => handleRowClick( cellMeta),
     customToolbar: fetchHeaderButton,
     search: false,

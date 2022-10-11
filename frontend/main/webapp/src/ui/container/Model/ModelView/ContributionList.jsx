@@ -39,6 +39,7 @@ import { translate } from "../../../../assets/localisation";
 import { useRef } from "react";
 import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import LightTooltip from "../../../components/common/LightTooltip";
+import moment from 'moment';
 
 const ContributionList = (props) => {
   const history = useHistory();
@@ -537,16 +538,6 @@ const ContributionList = (props) => {
     );
   }
 
-  const convertDate = (date) => {
-    return date
-      .toLocaleString("en-IN", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      })
-      .toUpperCase();
-  };
-
   const renderConfirmationDialog = () => {
     const { status, modelId, reason } = modelStatusInfo;
     return (
@@ -583,7 +574,7 @@ const ContributionList = (props) => {
       label: "Task",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
        display: view ? "excluded" : true,
        
       },
@@ -596,7 +587,7 @@ const ContributionList = (props) => {
        
         filter: false,
         // setCellProps: sort  => ({ style: { width:"100px" } }),
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
       },
     },
@@ -605,7 +596,7 @@ const ContributionList = (props) => {
       label: "Version",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
@@ -623,7 +614,7 @@ const ContributionList = (props) => {
       label: "Domain",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
       },
     },
@@ -632,7 +623,7 @@ const ContributionList = (props) => {
       label: "License",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
       },
     },
@@ -641,13 +632,8 @@ const ContributionList = (props) => {
       label: "Submitted On",
       options: {
         filter: false,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
-        customBodyRender: (rowData) => {
-          const date = new Date(rowData);
-          return <>{convertDate(date)}</>;
-        },
-        sortDirection: "desc",
       },
     },
     {
@@ -655,7 +641,7 @@ const ContributionList = (props) => {
       label: "Status",
       options: {
         filter: true,
-        sort: true,
+        sort: false,
         display: view ? "excluded" : true,
         customBodyRender: (value, tableMeta, updateValue) => {
           if (tableMeta.rowData) {
@@ -712,7 +698,6 @@ const ContributionList = (props) => {
       pagination: {
         rowsPerPage: "Rows per page",
       },
-      options: { sortDirection: "desc" },
     },
     // onRowClick: (rowData) => {
     //   handleDocumentView(rowData[0]);
@@ -747,14 +732,17 @@ const ContributionList = (props) => {
     renderExpandableRow: (rowData, rowMeta) => {
       const colSpan = rowData.length + 1;
       const even_odd = rowMeta.rowIndex % 2 === 0;
-      if (rowData[9].length)
+      if (rowData[9].length) {
+        const rows = rowData[9].sort((a, b) => (Number(b.createdOn) - Number(a.createdOn)));
+
         return (
           <RenderExpandTable
-            rows={rowData[9]}
+            rows={rows}
             color={even_odd}
             renderStatus={renderExpandTableStatus}
-          />                                        
+          />
         );
+      }
     },
     print: false,
     viewColumns: false,

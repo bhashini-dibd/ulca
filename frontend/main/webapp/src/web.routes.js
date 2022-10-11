@@ -77,7 +77,7 @@ export default function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-      const obj = new GetMasterDataAPI(["feedbackQns"]);
+      const obj = new GetMasterDataAPI(["feedbackQns","languages"]);
       dispatch(APITransport(obj));
   }, [])
 
@@ -160,7 +160,7 @@ export default function App() {
           component={Dashboard}
         />
         <PrivateRoute
-          path={`${process.env.PUBLIC_URL}/dataset-status/:status/:name/:id`}
+          path={`${process.env.PUBLIC_URL}/dataset-status/:id`}
           title={"Submit Dataset"}
           component={DetailedStatus}
           authenticate={authenticateUser}

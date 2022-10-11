@@ -7,6 +7,7 @@ from .errorrepo import ErrorRepo
 from utils.datasetutils import DatasetUtils
 from service.cronrepo import StoreRepo
 from datetime import datetime
+import time
 
 log = logging.getLogger('file')
 mongo_instance = None
@@ -50,6 +51,7 @@ class ErrorEvent:
         try:
             error_rec = {'datasetName':data['datasetName'],'serviceRequestNumber':data['serviceRequestNumber'],'stage':data['stage'],'message':data['message']}
             error_repo.upsert(error_rec)
+
         except Exception as e:
             log.exception(f'Exception while writing errors: {e}')
             return False
@@ -61,7 +63,7 @@ class ErrorEvent:
         if error_object_path == False:
             return  None
         log.info(f'Error file uploaded on to object store : {error_object_path} for srn -- {srn} ')
-        error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp": str(datetime.now()), "internal_file": file, "file": error_object_path, "count": error_records_count}
+        error_record = {"serviceRequestNumber": srn, "uploaded": True, "time_stamp":eval(str(time.time()).replace('.', '')[0:13]), "internal_file": file, "file": error_object_path, "count": error_records_count}
         persister = threading.Thread(target=self.update_db_status, args=(error_record,srn))
         persister.start()
         return error_record
