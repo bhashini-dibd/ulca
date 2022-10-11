@@ -46,7 +46,7 @@ const HostedInference = (props) => {
   const [suggestEdit, setSuggestEdit] = useState(null);
   const [suggestEditValues, setSuggestEditValues] = useState("");
   const [transliterationModelId, setTransliterationModelId] = useState("");
-  const [showTransliteration, setShowTransliteration] = useState(false);
+  const [showTransliteration, setShowTransliteration] = useState(true);
 
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
@@ -214,13 +214,13 @@ const HostedInference = (props) => {
                 {srcLang}
               </Typography>
             </Grid>
-          </Grid>
           {transliterationModelId &&
             <Grid item xs={3} sm={3} md={3} lg={3} xl={3}
               style={{
                 display: "inline-flex",
                 alignItems: "baseline",
-                justifyContent: "space-evenly"
+                justifyContent: "space-evenly",
+                marginLeft: "auto"
               }}
             >
               <Typography variant="h6" className={classes.hosted}>
@@ -235,6 +235,7 @@ const HostedInference = (props) => {
               />
 
             </Grid>}
+          </Grid>
         </CardContent>
         <CardContent>
           {/* <textarea
