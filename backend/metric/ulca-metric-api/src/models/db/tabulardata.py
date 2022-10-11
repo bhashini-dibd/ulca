@@ -56,7 +56,7 @@ class AggregateTabularDataModel(object):
                 elem[total] = float(np.round(elem[total], 3))
 
             result_parsed = result_parsed + result_parsed_duration
-
+            result_parsed = [rmz for rmz in result_parsed if rmz['total'] != 0]
             log.info("Data queried from Druid: {} rows".format(len(result_parsed)))
             #log.info("Queried data : {}".format(str(result_parsed)))
             log.info(f"result parsed at 62 {result_parsed}")
