@@ -25,9 +25,7 @@ class QueryUtils:
             log.info("Query executed : {}".format(query))
             result          =   collection.execute(text(query)).fetchall()
             result_parsed   =   ([{**row} for row in result])
-            # log.info("Query Result : {}".format(result_parsed))
             collection.close()
-            #log.info(result_parsed)
             return result_parsed
         except Exception as e:
             log.exception("Exception on query execution : {}".format(str(e)))
