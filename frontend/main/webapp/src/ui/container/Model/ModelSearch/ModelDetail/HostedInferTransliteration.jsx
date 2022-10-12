@@ -443,7 +443,7 @@ function HostedInferTransliteration(props) {
       sm={12}
       xs={12}
     >
-      {srcLang !== "English"
+      {srcLang === "English"
         ? renderTransliterationBoxForEN()
         : renderTransliterationBox()}
     </Grid>
