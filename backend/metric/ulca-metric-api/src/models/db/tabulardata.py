@@ -56,7 +56,11 @@ class AggregateTabularDataModel(object):
                 elem[total] = float(np.round(elem[total], 3))
 
             result_parsed = result_parsed + result_parsed_duration
+            log.info(f'length of result parsed before {len(result_parsed)}')
+            log.info(f'result parsed before removing count zero {result_parsed}')
             result_parsed = [rmz for rmz in result_parsed if rmz['total'] != 0]
+            log.info(f'length of result parsed after {len(result_parsed)}')
+            log.info(f'result parsed after removing count zero {result_parsed}')
             log.info("Data queried from Druid: {} rows".format(len(result_parsed)))
             df = pd.DataFrame(result_parsed)
             df.loc[df[delete]=='true', total] = 0-df[total]
