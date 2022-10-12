@@ -73,6 +73,7 @@ class AggregateTabularDataModel(object):
                 if not val:
                     elem[tgt] = None
             log.info("Data queried from Druid: {} rows".format(len(result_parsed)))
+            log.info(f'result parsed  {result_parsed}')
             log.info(f'data tabular {data_tabular}')
             log.info("Data counts formatted: {} rows".format(len(data_tabular)))
             return data_tabular
