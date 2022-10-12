@@ -56,11 +56,6 @@ class AggregateTabularDataModel(object):
                 elem[total] = float(np.round(elem[total], 3))
 
             result_parsed = result_parsed + result_parsed_duration
-            log.info(f'length of result parsed before {len(result_parsed)}')
-            log.info(f'result parsed before removing count zero {result_parsed}')
-            result_parsed = [rmz for rmz in result_parsed if rmz['total'] != 0]
-            log.info(f'length of result parsed after {len(result_parsed)}')
-            log.info(f'result parsed after removing count zero {result_parsed}')
             log.info("Data queried from Druid: {} rows".format(len(result_parsed)))
             df = pd.DataFrame(result_parsed)
             df.loc[df[delete]=='true', total] = 0-df[total]
@@ -76,7 +71,8 @@ class AggregateTabularDataModel(object):
                 if not val:
                     elem[tgt] = None
             log.info("Data counts formatted: {} rows".format(len(data_tabular)))
-            return data_tabular
+            non_zero_tab = [rmz for rmz in data_tabular if rmz['total'] != 0]
+            return non_zero_tab
 
         except Exception as e:
             log.exception("Exception on query aggregation : {}".format(str(e)))
