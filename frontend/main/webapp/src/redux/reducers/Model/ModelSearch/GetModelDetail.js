@@ -40,7 +40,6 @@ const getModelDetails = (payload) => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case C.GET_MODEL_DETAIL:
-      console.log(action,'action');
       const target = action.payload["languages"]&& action.payload["languages"][0]?.["targetLanguage"];
       const source = action.payload["languages"] && action.payload["languages"][0]?.["sourceLanguage"];
       return {

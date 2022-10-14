@@ -46,7 +46,7 @@ const ModelDescription = (props) => {
                         </Typography  >
                         {title !== 'Source URL' || para === "NA" ?
                             <Typography variant="body2" color="text.secondary" className={classes.modelPara} >
-                                {getPara(para)}
+                                 {getPara(para)}
                             </Typography> :
                             <Typography style={{
                                 overflowWrap: "anywhere",

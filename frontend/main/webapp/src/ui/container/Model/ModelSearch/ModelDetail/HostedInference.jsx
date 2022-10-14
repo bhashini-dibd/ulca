@@ -22,7 +22,7 @@ import {
   CardActions,
   CardHeader,
 } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
@@ -46,7 +46,7 @@ const HostedInference = (props) => {
   const [suggestEdit, setSuggestEdit] = useState(null);
   const [suggestEditValues, setSuggestEditValues] = useState("");
   const [transliterationModelId, setTransliterationModelId] = useState("");
-  const [showTransliteration, setShowTransliteration] = useState(false);
+  const [showTransliteration, setShowTransliteration] = useState(true);
 
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
@@ -214,26 +214,27 @@ const HostedInference = (props) => {
                 {srcLang}
               </Typography>
             </Grid>
-            {transliterationModelId &&
-              <Grid item xs={3} sm={3} md={3} lg={3} xl={3}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "baseline",
-                  justifyContent: "space-evenly"
-                }}
-              >
-                <Typography variant="h6" className={classes.hosted}>
-                  Transliteration
-                </Typography>
-                <Switch
-                  checked={showTransliteration}
-                  onChange={() => setShowTransliteration(!showTransliteration)}
-                  color="primary"
-                  name="checkedB"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
+          {transliterationModelId &&
+            <Grid item xs={3} sm={3} md={3} lg={3} xl={3}
+              style={{
+                display: "inline-flex",
+                alignItems: "baseline",
+                justifyContent: "space-evenly",
+                marginLeft: "auto"
+              }}
+            >
+              <Typography variant="h6" className={classes.hosted}>
+                Transliteration
+              </Typography>
+              <Switch
+                checked={showTransliteration}
+                onChange={() => setShowTransliteration(!showTransliteration)}
+                color="primary"
+                name="checkedB"
+                inputProps={{ "aria-label": "primary checkbox" }}
+              />
 
-              </Grid>}
+            </Grid>}
           </Grid>
         </CardContent>
         <CardContent>
