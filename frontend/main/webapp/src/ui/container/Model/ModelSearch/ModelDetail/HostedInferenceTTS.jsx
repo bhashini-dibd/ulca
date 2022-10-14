@@ -36,6 +36,7 @@ import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
 import { Switch } from "@material-ui/core";
+import TTSLiveInference from "./TTSLiveInference";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -60,7 +61,7 @@ const StyledMenu = withStyles({})((props) => (
 ))
 
 const HostedInference = (props) => {
-  const { classes, title, para, modelId, task, source } = props;
+  const { classes, title, para, modelId, task, source, submitter } = props;
   const [gender, setGender] = useState("Female");
   const [audio, setAudio] = useState(null);
   const history = useHistory();
@@ -272,7 +273,10 @@ const HostedInference = (props) => {
   }
 
   return (
-    <Grid
+    <>
+    {submitter === 'AI4Bharat'?
+      <TTSLiveInference source={source} /> :
+      <Grid
       className={classes.gridCompute}
       item
       xl={12}
@@ -456,7 +460,8 @@ const HostedInference = (props) => {
           handleSubmit={handleFeedbackSubmit}
         />
       </Modal>
-    </Grid>
+    </Grid>}
+    </>
   );
 };
 export default withStyles(DatasetStyle)(HostedInference);
