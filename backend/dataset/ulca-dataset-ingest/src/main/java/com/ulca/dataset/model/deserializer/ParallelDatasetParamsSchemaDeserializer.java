@@ -235,11 +235,12 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 			}
 
 		}
-
+		log.info("Test27: JSON Object details "+obj);
 		if(node.has("collectionMethod")) {
 		if (node.get("collectionMethod").has("collectionDescription")) {
 			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
 				errorList.add("collectionDescription field should be String Array");
+				log.info("Test27: Entered errorList collectionDescription Empty");
 			} else {
 
 				try {
