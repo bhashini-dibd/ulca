@@ -57,7 +57,7 @@ const TTSLiveInference = (props) => {
   const [socket, setSocket] = useState(null);
   const [loading, setLoading] = useState(false);
   const [transliterationModelId, setTransliterationModelId] = useState("");
-  const [showTransliteration, setShowTransliteration] = useState(false);
+  const [showTransliteration, setShowTransliteration] = useState(true);
   const [anchorEl, openEl] = useState(null);
   const [gender, setGender] = useState("Female");
   const [sourceText, setSourceText] = useState("");
@@ -370,7 +370,7 @@ const TTSLiveInference = (props) => {
         >
           {audio ? (
             <>
-              <audio controls>
+              <audio controls autoPlay>
                 <source src={audio}></source>
               </audio>
             </>
