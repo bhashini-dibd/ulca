@@ -22,84 +22,12 @@ components:
         sourceLanguage:
           type: string
           description: Indic language code, iso-639-1, iso 639-2
-          enum:
-            - en
-            - hi
-            - mr
-            - ta
-            - te
-            - kn
-            - gu
-            - pa
-            - bn
-            - ml
-            - as
-            - brx
-            - doi
-            - ks
-            - kok
-            - mai
-            - mni
-            - ne
-            - or
-            - sd
-            - si
-            - ur
-            - sat
-            - lus
-            - njz
-            - pnr
-            - kha
-            - grt
-            - sa
-            - raj
-            - bho
-            - gom
-            - awa
-            - hne
-            - mag
+          $ref: '#/components/schemas/SupportedLanguages'
         targetLanguageName:
           type: string
           description: human name associated with the language code
         targetLanguage:
-          type: string
-          description: Indic language code, iso-639-1, iso 639-2
-          enum:
-            - en
-            - hi
-            - mr
-            - ta
-            - te
-            - kn
-            - gu
-            - pa
-            - bn
-            - ml
-            - as
-            - brx
-            - doi
-            - ks
-            - kok
-            - mai
-            - mni
-            - ne
-            - or
-            - sd
-            - si
-            - ur
-            - sat
-            - lus
-            - njz
-            - pnr
-            - kha
-            - grt
-            - sa
-            - raj
-            - bho
-            - gom
-            - awa
-            - hne
-            - mag
+          $ref: '#/components/schemas/SupportedLanguages'
       description: language pair, make targetLanguage null to reuse the object to indicate single language
     LanguagePairs:
       type: array
@@ -334,11 +262,10 @@ components:
       items:
         type: string
         enum:
-        - itn
-        - punctuation
-        - numbers-only
-        - profainity-filter
-
+          - itn
+          - punctuation
+          - numbers-only
+          - profainity-filter
     NumberOfSpeakers:
       minimum: 1
       type: number
@@ -429,3 +356,44 @@ components:
             - ner
             - txt-lang-detection
       description: the category of model under which it has been released or trained
+      
+      
+    SupportedLanguages:
+      type: string
+      description: This attribute defines the  language codes(iso-639-1, iso 639-2) supported under ULCA
+      enum:
+            - en
+            - hi
+            - mr
+            - ta
+            - te
+            - kn
+            - gu
+            - pa
+            - bn
+            - ml
+            - as
+            - brx
+            - doi
+            - ks
+            - kok
+            - mai
+            - mni
+            - ne
+            - or
+            - sd
+            - si
+            - ur
+            - sat
+            - lus
+            - njz
+            - pnr
+            - kha
+            - grt
+            - sa
+            - raj
+            - bho
+            - gom
+            - awa
+            - hne
+            - mag
