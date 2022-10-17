@@ -22,7 +22,7 @@ import {
   CardActions,
   CardHeader,
 } from "@material-ui/core";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
@@ -46,7 +46,8 @@ const HostedInference = (props) => {
   const [suggestEdit, setSuggestEdit] = useState(null);
   const [suggestEditValues, setSuggestEditValues] = useState("");
   const [transliterationModelId, setTransliterationModelId] = useState("");
-  const [showTransliteration, setShowTransliteration] = useState(false);
+  const [showTransliteration, setShowTransliteration] = useState(true);
+
 
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
@@ -214,6 +215,7 @@ const HostedInference = (props) => {
                 {srcLang}
               </Typography>
             </Grid>
+
             {transliterationModelId &&
               <Grid item xs={3} sm={3} md={3} lg={3} xl={3}
                 style={{

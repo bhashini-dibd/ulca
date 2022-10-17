@@ -85,7 +85,8 @@ const HostedInference = (props) => {
     variant: "success",
   });
   const [transliterationModelId, setTransliterationModelId] = useState("");
-  const [showTransliteration, setShowTransliteration] = useState(false);
+  const [showTransliteration, setShowTransliteration] = useState(true);
+
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
@@ -288,6 +289,7 @@ const HostedInference = (props) => {
             <Grid
               item
               xs={5}
+
               sm={3}
               md={3}
               lg={3}

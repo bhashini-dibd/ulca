@@ -526,6 +526,8 @@ public class BenchmarkService {
 				list = benchmarkDao.findByUserId(userId);
 			}
 		}
+		list.sort(Comparator.comparing(Benchmark::getSubmittedOn).reversed());
+
 		log.info("******** Exit BenchmarkService:: benchmarkListByUserId *******");
 
 		return new BenchmarkListByUserIdResponse("Benchmark list by UserId", list, list.size(),count);

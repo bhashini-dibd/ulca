@@ -1,0 +1,57 @@
+{
+    "name": "IIITH OCR - Manipuri",
+    "version": "v2.0",
+    "description": "IIITH-OCR is a CNN-RNN with spatial transformation network based OCR Model that is trained on word level images from various internal datasets.", 
+    "refUrl": "https://www.iiit.ac.in/",
+    "task": {
+       "type" : "ocr"
+    },
+    "languages": [
+       {
+          "sourceLanguage": "mni"
+       }
+    ],
+    "license": "mit",
+    "domain": [
+       "general"
+    ],
+    "submitter": {
+        "name": "IIITH",
+        "aboutMe": "International Institute of Information Technology, Hyderabad",
+        "team": [
+            {
+                "name": "CV Jawahar",
+                "aboutMe": "PI, IIITH"
+            },
+            {
+                "name": "Ajoy Mondal",
+                "aboutMe": "PI, IIITH"
+            },
+            {
+                "name": "Krishna Tulsyan",
+                "aboutMe": "Tech Lead, IIITH"
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+       "callbackUrl": "http://bhasha.iiit.ac.in/ocr/ulca/v2",
+       "schema": {
+          "taskType": "ocr",
+          "request": {
+            "image" : [
+               { 
+                  "imageUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/iiith_ocr_manipuri_word_image1.jpeg"
+               }
+            ],
+             "config": {
+                "language": {
+                   "sourceLanguage": "mni"
+                }
+             }
+          }
+       }
+    },
+    "trainingDataset": {
+       "description": "Various Internal Datasets"
+    }
+}

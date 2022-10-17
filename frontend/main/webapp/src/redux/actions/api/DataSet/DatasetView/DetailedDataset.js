@@ -20,7 +20,7 @@ export default class MyCOntribution extends API {
         super.processResponse(res);
         if (res) {
 
-            this.report = res.data;
+            this.report = res;
         }
     }
 
