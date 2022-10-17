@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -384,12 +385,17 @@ public class ModelInferenceEndPointService {
 					TranslationResponse translationResponse = objectMapper.readValue(pollResponseJsonStr,
 							TranslationResponse.class);
 
-					if (translationResponse.getOutput() == null || translationResponse.getOutput().size() <= 0
-							|| translationResponse.getOutput().get(0).getTarget().isBlank()) {
+					if (translationResponse.getOutput() == null || translationResponse.getOutput().size() <= 0) {
 						throw new ModelComputeException("Translation Model Compute Response Empty",
 								"Translation Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
 					}
-					response.setOutputText(translationResponse.getOutput().get(0).getTarget());
+					List<String>  outputTextList = new ArrayList<>();
+					for (Sentence sentence :translationResponse.getOutput()){
+						outputTextList.add(sentence.getTarget());
+					}
+
+					response.setOutputTextList(outputTextList);
+
 					break;
 
 				} else {
@@ -459,13 +465,17 @@ public class ModelInferenceEndPointService {
 
 			TranslationResponse translation = objectMapper.readValue(responseJsonStr, TranslationResponse.class);
 
-			if (translation.getOutput() == null || translation.getOutput().size() <= 0
-					|| translation.getOutput().get(0).getTarget().isBlank()) {
+			if (translation.getOutput() == null || translation.getOutput().size() <= 0) {
 				throw new ModelComputeException(httpResponse.message(), "Translation Model Compute Response is Empty",
 						HttpStatus.BAD_REQUEST);
 
 			}
-			response.setOutputText(translation.getOutput().get(0).getTarget());
+			List<String>  outputTextList = new ArrayList<>();
+			for (Sentence sentence :translation.getOutput()){
+				outputTextList.add(sentence.getTarget());
+			}
+
+			response.setOutputTextList(outputTextList);
 
 			return response;
 		}
