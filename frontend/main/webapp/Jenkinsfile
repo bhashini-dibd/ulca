@@ -18,6 +18,7 @@ if [ -d "$(pwd)/build" ]
 then
   sudo rm -rf $(pwd)/build
 fi
+docker rm -f $JOB_BASE_NAME || true
 #if [  $( docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME" ) ]
 #then
 #docker rm "$JOB_BASE_NAME"
