@@ -85,7 +85,7 @@ const HostedInference = (props) => {
     variant: "success",
   });
   const [transliterationModelId, setTransliterationModelId] = useState("");
-  const [showTransliteration, setShowTransliteration] = useState(false);
+  const [showTransliteration, setShowTransliteration] = useState(true);
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
