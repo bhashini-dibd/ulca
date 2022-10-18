@@ -349,7 +349,7 @@ const HostedInference = (props) => {
               setSourceText(e.target.value);
             }}
           /> */}
-          {showTransliteration ? <ReactTransliterate
+          {showTransliteration && transliterationModelId ? <ReactTransliterate
             apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
             modelId={transliterationModelId}
             value={sourceText}
