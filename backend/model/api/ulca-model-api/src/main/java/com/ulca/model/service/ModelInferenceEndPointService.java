@@ -17,6 +17,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -481,9 +482,12 @@ public class ModelInferenceEndPointService {
 				outputTextList.add(sentence.getTarget());
 			}
 
-			response = (ModelComputeResponseTranslation) translation;
-
+			ModelComputeResponseTranslation resp = new ModelComputeResponseTranslation();
+			BeanUtils.copyProperties(translation, resp);
+			
+			response = resp;
 			return response;
+			
 		}
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
@@ -523,9 +527,11 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
-			
-			response = (ModelComputeResponseOCR) ocrResponse;
 
+			ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
+			BeanUtils.copyProperties(ocrResponse, resp);
+			
+			response = resp;
 			return response;
 
 		}
@@ -578,9 +584,12 @@ public class ModelInferenceEndPointService {
 
 			}
 			
-			response = (ModelComputeResponseTTS) ttsResponse;
-
+			ModelComputeResponseTTS resp = new ModelComputeResponseTTS();
+			BeanUtils.copyProperties(ttsResponse, resp);
+			
+			response = resp;
 			return response;
+			
 			
 			/*
 			if (ttsResponse.getAudio().get(0).getAudioContent() != null) {
@@ -652,7 +661,10 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
-			response = (ModelComputeResponseTransliteration)transliterationResponse;
+			ModelComputeResponseTransliteration resp = new ModelComputeResponseTransliteration();
+			BeanUtils.copyProperties(transliterationResponse, resp);
+			
+			response = resp;
 			return response;
 		}
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
@@ -682,7 +694,10 @@ public class ModelInferenceEndPointService {
 			String responseJsonStr = httpResponse.body().string();
 			TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
 			
-			response = (ModelComputeResponseTxtLangDetection)txtLangDetectionResponse;
+			ModelComputeResponseTxtLangDetection resp = new ModelComputeResponseTxtLangDetection();
+			BeanUtils.copyProperties(txtLangDetectionResponse, resp);
+			
+			response = resp;
 			return response;
 			
 		}
@@ -724,7 +739,11 @@ public class ModelInferenceEndPointService {
 
 			OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
 			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0 && !ocrResponse.getOutput().get(0).getSource().isBlank()) {
-				response = (ModelComputeResponseOCR)ocrResponse;
+				
+				ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
+				BeanUtils.copyProperties(ocrResponse, resp);
+				response = resp;
+				
 			} else {
 				log.info("Ocr try me response is null or not proper");
 				log.info("callBackUrl :: " + callBackUrl);
