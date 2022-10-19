@@ -112,7 +112,7 @@ const HostedInferASR = (props) => {
           });
         } else {
           if (status) {
-            setTargetAudio(rsp_data.data.source);
+            setTargetAudio(rsp_data.output[0].target);
           } else {
             setSnackbarInfo({
               ...snackbar,
@@ -121,7 +121,7 @@ const HostedInferASR = (props) => {
               timeOut: 0,
               variant: "",
             });
-            setTarget(rsp_data.data.source);
+            setTarget(rsp_data.output[0].target);
           }
           setTranslationState(true);
         }

@@ -116,7 +116,6 @@ const HostedInference = (props) => {
         let rsp_data = await resp.json();
         setLoading(false);
         if (resp.ok) {
-          console.log(rsp_data,'rsp_data');
           if (rsp_data.hasOwnProperty("output") && rsp_data.output[0]) {
             setTarget(rsp_data.output[0].target);
             setSuggestEditValues(rsp_data.output[0].target);
