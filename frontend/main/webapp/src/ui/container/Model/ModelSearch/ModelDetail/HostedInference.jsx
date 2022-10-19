@@ -48,6 +48,7 @@ const HostedInference = (props) => {
   const [transliterationModelId, setTransliterationModelId] = useState("");
   const [showTransliteration, setShowTransliteration] = useState(true);
 
+
   const [sourceLanguage, setSourceLanguage] = useState({
     value: "en",
     label: "English",
@@ -116,8 +117,12 @@ const HostedInference = (props) => {
         setLoading(false);
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputTextList") && rsp_data.outputTextList.length > 0) {
-            setTarget(rsp_data.outputTextList[0]);
-            setSuggestEditValues(rsp_data.outputTextList[0])
+            // setTarget(rsp_data.outputTextList[0]);
+            // setSuggestEditValues(rsp_data.outputTextList[0]);
+            
+            setTarget("");
+            setSuggestEditValues("");
+            
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
             setTranslationState(true);
           }
@@ -214,27 +219,27 @@ const HostedInference = (props) => {
                 {srcLang}
               </Typography>
             </Grid>
-          {transliterationModelId &&
-            <Grid item xs={3} sm={3} md={3} lg={3} xl={3}
-              style={{
-                display: "inline-flex",
-                alignItems: "baseline",
-                justifyContent: "space-evenly",
-                marginLeft: "auto"
-              }}
-            >
-              <Typography variant="h6" className={classes.hosted}>
-                Transliteration
-              </Typography>
-              <Switch
-                checked={showTransliteration}
-                onChange={() => setShowTransliteration(!showTransliteration)}
-                color="primary"
-                name="checkedB"
-                inputProps={{ "aria-label": "primary checkbox" }}
-              />
 
-            </Grid>}
+            {transliterationModelId &&
+              <Grid item xs={3} sm={3} md={3} lg={3} xl={3}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "baseline",
+                  justifyContent: "space-evenly"
+                }}
+              >
+                <Typography variant="h6" className={classes.hosted}>
+                  Transliteration
+                </Typography>
+                <Switch
+                  checked={showTransliteration}
+                  onChange={() => setShowTransliteration(!showTransliteration)}
+                  color="primary"
+                  name="checkedB"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+
+              </Grid>}
           </Grid>
         </CardContent>
         <CardContent>
