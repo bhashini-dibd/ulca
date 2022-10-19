@@ -126,9 +126,8 @@ const HostedInferASR = (props) => {
             variant: "error",
           });
         } else {
-          if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setTarget(rsp_data.outputText);
-            //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
+          if (rsp_data.hasOwnProperty("output") && rsp_data.output) {
+            setTarget(rsp_data.output[0].source);
             setTranslationState(true);
           }
         }
@@ -174,7 +173,7 @@ const HostedInferASR = (props) => {
     }).then(async (res) => {
       let rsp_data = await res.json();
       if (res.ok) {
-        setFileData(rsp_data.outputText);
+        setFileData(rsp_data.output[0].source);
       } else {
         setSnackbarInfo({
           ...snackbar,

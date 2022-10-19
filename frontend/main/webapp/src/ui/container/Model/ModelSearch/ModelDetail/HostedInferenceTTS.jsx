@@ -105,7 +105,6 @@ const HostedInference = (props) => {
       .then(async (resp) => {
         let rsp_data = await resp.json();
         if (resp.ok) {
-          console.log("resp_data", rsp_data);
           setTransliterationModelId(rsp_data.modelId);
         }
       })
@@ -164,12 +163,9 @@ const HostedInference = (props) => {
         let rsp_data = await resp.json();
         setLoading(false);
         if (resp.ok) {
-          if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setBase(rsp_data.outputText)
-            const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-            const urlBlob = window.URL.createObjectURL(blob);
-            setAudio(urlBlob);
-            //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
+          if (rsp_data.hasOwnProperty("audio") && rsp_data.audio) {
+            setBase(rsp_data.audio[0].audioUri)
+            setAudio(rsp_data.audio[0].audioUri);
             setTranslationState(true);
           }
         } else {
