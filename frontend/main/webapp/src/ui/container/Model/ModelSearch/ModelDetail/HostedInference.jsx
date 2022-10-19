@@ -117,8 +117,12 @@ const HostedInference = (props) => {
         setLoading(false);
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("outputTextList") && rsp_data.outputTextList.length > 0) {
-            setTarget(rsp_data.outputTextList[0]);
-            setSuggestEditValues(rsp_data.outputTextList[0])
+            // setTarget(rsp_data.outputTextList[0]);
+            // setSuggestEditValues(rsp_data.outputTextList[0]);
+            
+            setTarget("");
+            setSuggestEditValues("");
+            
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
             setTranslationState(true);
           }
