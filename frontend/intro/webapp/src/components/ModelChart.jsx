@@ -97,7 +97,6 @@ const ChartRender = (props) => {
 	}
 
 	const handleOnClick = (value, event, filter) => {
-        debugger
 		switch (value) {
 			case 1:
 				fetchChartData("model", filter ? filter : filterValue, fetchParams(event))
@@ -203,7 +202,7 @@ const ChartRender = (props) => {
 				{page === 1 && fetchFilterButtons() }
 				
 			</ TitleBar>
-			<div className={classes.iconStyle}>
+			<div className={classes.iconStyle}  style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
 					 	<><Button size="small" color="primary" className={classes.backButton} style={page === 0 ? {visibility:"hidden"}:{}}  onClick={() => handleCardNavigation()}>Reset</Button></>
 						 {(selectedOption.value ==="model" && page===0 )? 
 						<div className= {classes.titleStyle}>
