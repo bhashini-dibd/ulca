@@ -288,7 +288,7 @@ class ModelServiceTest {
         ModelComputeRequest request = new ModelComputeRequest();
         request.setModelId("test");
 
-        ModelComputeResponse response = new ModelComputeResponse();
+        ModelComputeResponse response = new ModelComputeResponseTranslation();
         ModelExtended modelExtended = new ModelExtended();
         InferenceAPIEndPoint inferenceAPIEndPoint = new InferenceAPIEndPoint();
         modelExtended.setInferenceEndPoint(inferenceAPIEndPoint);
@@ -312,7 +312,7 @@ class ModelServiceTest {
 
         ReflectionTestUtils.setField(modelService,"modelUploadFolder","src/test/resources");
 
-        ModelComputeResponse response = new ModelComputeResponse();
+        ModelComputeResponse response = new ModelComputeResponseOCR();
         ModelExtended modelExtended = new ModelExtended();
         InferenceAPIEndPoint inferenceAPIEndPoint = new InferenceAPIEndPoint();
         inferenceAPIEndPoint.setCallbackUrl("test");

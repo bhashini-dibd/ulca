@@ -30,6 +30,11 @@ import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelComputeResponseOCR;
+import com.ulca.model.response.ModelComputeResponseTranslation;
+import com.ulca.model.response.ModelComputeResponseTTS;
+import com.ulca.model.response.ModelComputeResponseTransliteration;
+import com.ulca.model.response.ModelComputeResponseTxtLangDetection;
 
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
@@ -333,7 +338,7 @@ public class ModelInferenceEndPointService {
 	public ModelComputeResponse computeAsyncModel(InferenceAPIEndPoint inferenceAPIEndPoint,
 			ModelComputeRequest compute)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, InterruptedException {
-		ModelComputeResponse response = new ModelComputeResponse();
+		ModelComputeResponse response = new ModelComputeResponseTranslation();
 
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
@@ -394,7 +399,8 @@ public class ModelInferenceEndPointService {
 						outputTextList.add(sentence.getTarget());
 					}
 
-					response.setOutputTextList(outputTextList);
+					//response.setOutputTextList(outputTextList);
+					response = (ModelComputeResponse) translationResponse;
 
 					break;
 
@@ -429,7 +435,7 @@ public class ModelInferenceEndPointService {
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
-		ModelComputeResponse response = new ModelComputeResponse();
+		ModelComputeResponse response = null;
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
@@ -475,7 +481,7 @@ public class ModelInferenceEndPointService {
 				outputTextList.add(sentence.getTarget());
 			}
 
-			response.setOutputTextList(outputTextList);
+			response = (ModelComputeResponseTranslation) translation;
 
 			return response;
 		}
@@ -517,7 +523,10 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
-			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+			
+			response = (ModelComputeResponseOCR) ocrResponse;
+
+			return response;
 
 		}
 
@@ -568,6 +577,12 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
+			
+			response = (ModelComputeResponseTTS) ttsResponse;
+
+			return response;
+			
+			/*
 			if (ttsResponse.getAudio().get(0).getAudioContent() != null) {
 				String encodedString = Base64.getEncoder()
 						.encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
@@ -594,6 +609,7 @@ public class ModelInferenceEndPointService {
 				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
 						HttpStatus.BAD_REQUEST);
 			}
+			*/
 		}
 		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
@@ -636,8 +652,7 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
-			response.setTransliterationOutput(transliterationResponse.getOutput());
-
+			response = (ModelComputeResponseTransliteration)transliterationResponse;
 			return response;
 		}
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
@@ -667,8 +682,7 @@ public class ModelInferenceEndPointService {
 			String responseJsonStr = httpResponse.body().string();
 			TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
 			
-			response.setLanguageDetectionOutput(txtLangDetectionResponse);
-
+			response = (ModelComputeResponseTxtLangDetection)txtLangDetectionResponse;
 			return response;
 			
 		}
@@ -683,7 +697,7 @@ public class ModelInferenceEndPointService {
 
 		try {
 			
-			ModelComputeResponse response = new ModelComputeResponse();
+			ModelComputeResponse response = new ModelComputeResponseOCR();
 
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 
@@ -710,7 +724,7 @@ public class ModelInferenceEndPointService {
 
 			OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
 			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0 && !ocrResponse.getOutput().get(0).getSource().isBlank()) {
-				response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+				response = (ModelComputeResponseOCR)ocrResponse;
 			} else {
 				log.info("Ocr try me response is null or not proper");
 				log.info("callBackUrl :: " + callBackUrl);
