@@ -389,12 +389,8 @@ public class ModelInferenceEndPointService {
 						throw new ModelComputeException("Translation Model Compute Response Empty",
 								"Translation Model Compute Response is Empty", HttpStatus.BAD_REQUEST);
 					}
-					List<String>  outputTextList = new ArrayList<>();
-					for (Sentence sentence :translationResponse.getOutput()){
-						outputTextList.add(sentence.getTarget());
-					}
 
-					response.setOutputTextList(outputTextList);
+					response.setTranslationResponse(translationResponse);
 
 					break;
 
@@ -470,12 +466,9 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
-			List<String>  outputTextList = new ArrayList<>();
-			for (Sentence sentence :translation.getOutput()){
-				outputTextList.add(sentence.getTarget());
-			}
 
-			response.setOutputTextList(outputTextList);
+
+			response.setTranslationResponse(translation);
 
 			return response;
 		}

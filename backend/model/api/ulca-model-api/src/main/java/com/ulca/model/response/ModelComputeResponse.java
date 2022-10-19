@@ -23,7 +23,7 @@ import lombok.Setter;
 public class ModelComputeResponse {
 	
 	private String outputText;
-	private List<String> outputTextList;
+	private TranslationResponse translationResponse;
 	private SentencesList transliterationOutput;
 	private TxtLangDetectionResponse languageDetectionOutput;
 
