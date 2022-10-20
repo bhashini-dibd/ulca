@@ -1,0 +1,78 @@
+{
+   "name":"AI4Bharat Transliteration (IndicXlit) : Bodo-English",
+   "version":"v1.0",
+   "description":"IndicXlit is a Transformer-based multilingual transliteration model, trained on Aksharantar dataset which is the largest publicly available parallel transliteration corpora collection for Indic languages at the time of writing (20 May 2022). It is used to convert any roman text written in Indian language (like Hinglish) to the native Indic-script (like Devanagari for Hindi). It supports 21 Indic languages: Assamese, Bangla, Bodo, Gujarati, Hindi, Kannada, Kashmiri, Konkani, Maithili, Malayalam, Manipuri, Marathi, Nepali, Oriya, Panjabi, Sanskrit, Sindhi, Sinhala, Tamil, Telugu, Urdu.",
+   "refUrl":"https://github.com/AI4Bharat/IndicXlit",
+   "task":{
+      "type":"transliteration"
+   },
+   "languages":[
+      {
+         "sourceLanguage":"brx",
+         "targetLanguage":"en"
+      }
+   ],
+   "license":"mit",
+   "domain":[
+      "general"
+   ],
+   "submitter":{
+      "name":"AI4Bharat",
+      "aboutMe":"A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+      "team": [
+         {
+            "name":"Yash Madhani",
+            "aboutMe":"AI4Bharat, IIT-Madras"
+         },
+         {
+            "name":"Sushane Parthan",
+            "aboutMe":"AI4Bharat, IIT-Madras"
+         },
+         {
+            "name":"Priyanka Bedekar",
+            "aboutMe":"AI4Bharat, IIT-Madras"
+         },
+         {
+            "name":"Ruchi Khapra",
+            "aboutMe":"AI4Bharat, One Fourth Labs"
+         },
+         {
+            "name":"Anoop Kunchukuttan",
+            "aboutMe":"AI4Bharat, Microsoft"
+         },
+         {
+            "name":"Pratyush Kumar",
+            "aboutMe":"AI4Bharat, IITM, Microsoft"
+         },
+         {
+            "name":"Mitesh Shantadevi Khapra",
+            "aboutMe":"RBCDSAI, AI4Bharat, IITM"
+         }
+      ]
+   },
+   "inferenceEndPoint":{
+      "callbackUrl":"https://xlit-api.ai4bharat.org/transliterate",
+      "schema":{
+         "taskType":"transliteration",
+         "request":{
+            "input":[
+               {
+                  "source":"भारत मेरा देश है"
+               }
+            ],
+            "config":{
+               "isSentence":true,
+               "numSuggestions":1,
+               "language":{
+                  "sourceLanguage":"brx",
+                  "targetLanguage":"en"
+               }
+            }
+         }
+      }
+   },
+   "trainingDataset":{
+      "datasetId":"2398749282",
+      "description":"Aksharantar is the largest publicly available transliteration dataset for 21 Indic languages. The corpus has 26M Indic language-English transliteration pairs."
+   }
+}
