@@ -16,7 +16,7 @@ class AggregateModelData(object):
 
     def data_aggregator(self, request_object):
         try:
-            count   =   repo.count({"task.type":{"$ne":None}})  # counting models where the task type is defined
+            count   =   repo.count({"status" : "published","task.type":{"$ne":None}})  # counting models where the task type is defined and status being published
             match_params = None
             if "criterions" in request_object:
                 match_params = request_object["criterions"] # where conditions
@@ -27,11 +27,8 @@ class AggregateModelData(object):
             #aggregating the model types; initial chart
             if (match_params ==  None and grpby_params == None):
                 query   =   [{"$match":{"status":"published"}},{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
-                log.info(f"Query : {query}")
                 result = repo.aggregate(query)
-                log.info(f'result@32 {result}')
                 new_result = [rc for rc in result if rc["_id"]["model"] != None]
-                log.info(f'result for charts {new_result}')
                 chart_data = []
                 for record in new_result:
                     #log.info(record)
