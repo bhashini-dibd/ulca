@@ -26,9 +26,11 @@ import InfoOutlinedIcon from "@material-ui/icons/InfoOutlined";
 import { translate } from "../../../../../assets/localisation";
 import { getLanguageName } from "../../../../../utils/getLabel";
 import { ReactTransliterate } from "react-transliterate";
+import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
 import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import { useParams } from "react-router-dom";
+import { Language } from "../../../../../configs/DatasetItems";
 
 function HostedInferTransliteration(props) {
   const { classes, target, modelId, task } = props;
@@ -194,6 +196,12 @@ function HostedInferTransliteration(props) {
     }
   };
 
+  const [lang, setLang] = useState("")
+  useEffect(() => {
+    const temp = Language.filter((element) => element.label === tgtLang);
+    setLang(temp[0].value);
+  }, [tgtLang])
+
   useEffect(() => {
     if (isFirstRender) {
       setTransliteration(" ");
@@ -276,8 +284,8 @@ function HostedInferTransliteration(props) {
       .then(async (resp) => {
         let rsp_data = await resp.json();
         if (resp.ok) {
-          if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setTransliteratedText(rsp_data.outputText);
+          if (rsp_data.hasOwnProperty("output") && rsp_data.output) {
+            setTransliteratedText(rsp_data.output[0].target);
           }
         } else {
           Promise.reject(rsp_data);
@@ -314,7 +322,8 @@ function HostedInferTransliteration(props) {
           </Grid>
         </CardContent>
         <CardContent>
-          <ReactTransliterate
+          <IndicTransliterate
+            lang={lang}
             apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
             modelId={props.modelId}
             value={transliteration}
