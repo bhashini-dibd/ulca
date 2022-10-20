@@ -122,7 +122,7 @@ const HostedInferASR = (props) => {
             open: true,
             message:
               "The model is not accessible currently. Please try again later",
-            timeOut: 40000,
+            timeOut: 10000,
             variant: "error",
           });
         } else {
@@ -139,7 +139,7 @@ const HostedInferASR = (props) => {
           open: true,
           message:
             "The model is not accessible currently. Please try again later",
-          timeOut: 40000,
+          timeOut: 10000,
           variant: "error",
         });
       });
@@ -164,6 +164,7 @@ const HostedInferASR = (props) => {
       open: true,
       message: "Please wait while we process your request...",
       variant: "info",
+      timeOut: 10000,
     });
     const obj = new OCRFileUpload(file, modelId);
     // dispatch(APITransport(obj));
@@ -180,6 +181,7 @@ const HostedInferASR = (props) => {
           open: true,
           message: rsp_data.message,
           variant: "error",
+          timeOut: 10000,
         });
       }
     });

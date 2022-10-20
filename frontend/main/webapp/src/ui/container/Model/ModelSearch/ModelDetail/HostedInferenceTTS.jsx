@@ -36,6 +36,7 @@ import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
 import { Switch } from "@material-ui/core";
+import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -354,7 +355,7 @@ const HostedInference = (props) => {
               setSourceText(e.target.value);
             }}
           /> */}
-          {showTransliteration && transliterationModelId ? <ReactTransliterate
+          {showTransliteration && transliterationModelId ? <IndicTransliterate
             apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
             modelId={transliterationModelId}
             value={sourceText}
