@@ -602,7 +602,7 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
-			if(request.getConfig().getLanguage().getSourceLanguageName().equalsIgnoreCase("en")){
+			if(!request.getConfig().getLanguage().getSourceLanguageName().equalsIgnoreCase("en")){
 				request.getConfig().setIsSentence(true);
 			}
 			List<Input> input = compute.getInput();
