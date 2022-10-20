@@ -112,7 +112,7 @@ const HostedInferASR = (props) => {
           });
         } else {
           if (status) {
-            setTargetAudio(rsp_data.output[0].target);
+            setTargetAudio(rsp_data.data.source);
           } else {
             setSnackbarInfo({
               ...snackbar,
@@ -121,7 +121,7 @@ const HostedInferASR = (props) => {
               timeOut: 0,
               variant: "",
             });
-            setTarget(rsp_data.output[0].target);
+            setTarget(rsp_data.data.source);
           }
           setTranslationState(true);
         }
@@ -169,7 +169,6 @@ const HostedInferASR = (props) => {
   const handleOnChange = (e) => {
     setSuggestEditValues(e.target.value)
   }
-
 
   return (
     <>
