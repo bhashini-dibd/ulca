@@ -300,31 +300,6 @@ class ModelServiceTest {
 
     }
 
-    @Test
-    void tryMeOcrImageContent() throws Exception {
-
-        File file = new File("src/test/resources/860190fb-3217-4c47-a350-2fd87c69a1d1.png");
-
-        FileInputStream input = new FileInputStream(file);
-        MultipartFile multipartFile = new MockMultipartFile("fileItem",
-                file.getName(), "image/png", IOUtils.toByteArray(input));
-
-
-        ReflectionTestUtils.setField(modelService,"modelUploadFolder","src/test/resources");
-
-        ModelComputeResponse response = new ModelComputeResponseOCR();
-        ModelExtended modelExtended = new ModelExtended();
-        InferenceAPIEndPoint inferenceAPIEndPoint = new InferenceAPIEndPoint();
-        inferenceAPIEndPoint.setCallbackUrl("test");
-        inferenceAPIEndPoint.setSchema(new OCRInference());
-        modelExtended.setInferenceEndPoint(inferenceAPIEndPoint);
-        when(modelDao.findById("test")).thenReturn(Optional.of(modelExtended));
-        when(modelInferenceEndPointService.compute(ArgumentMatchers.any(),ArgumentMatchers.any(),ArgumentMatchers.any())).thenReturn(response);
-
-        assertEquals(response,modelService.tryMeOcrImageContent(multipartFile,"test"));
-
-
-    }
 
     @Test
     void changeStatus() {
