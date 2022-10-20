@@ -116,9 +116,9 @@ const HostedInference = (props) => {
         let rsp_data = await resp.json();
         setLoading(false);
         if (resp.ok) {
-          if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setTarget(rsp_data.outputText);
-            setSuggestEditValues(rsp_data.outputText);
+          if (rsp_data.hasOwnProperty("output") && rsp_data.output[0]) {
+            setTarget(rsp_data.output[0].target);
+            setSuggestEditValues(rsp_data.output[0].target);
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
             setTranslationState(true);
           }
