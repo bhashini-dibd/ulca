@@ -87,11 +87,10 @@ const LanguageDetection = (props) => {
         setLoading(false);
         if (resp.ok) {
           if (
-            rsp_data.hasOwnProperty("languageDetectionOutput") &&
-            rsp_data.languageDetectionOutput
+            rsp_data.hasOwnProperty("output") &&
+            rsp_data.output
           ) {
-            const { output } = rsp_data.languageDetectionOutput;
-            const language = output[0].langPrediction.map((lang) => {
+            const language = rsp_data.output[0].langPrediction.map((lang) => {
               return getLabel(lang.langCode);
             });
             setTarget(language);
