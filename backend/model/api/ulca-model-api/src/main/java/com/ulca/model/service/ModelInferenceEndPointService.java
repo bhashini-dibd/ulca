@@ -16,6 +16,7 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import io.swagger.model.*;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,29 +35,6 @@ import com.ulca.model.response.ModelComputeResponse;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import io.swagger.model.ASRRequest;
-import io.swagger.model.ASRResponse;
-import io.swagger.model.AsyncApiDetails;
-import io.swagger.model.ImageFile;
-import io.swagger.model.ImageFiles;
-import io.swagger.model.InferenceAPIEndPoint;
-import io.swagger.model.OCRRequest;
-import io.swagger.model.OCRResponse;
-import io.swagger.model.OneOfAsyncApiDetailsAsyncApiPollingSchema;
-import io.swagger.model.OneOfAsyncApiDetailsAsyncApiSchema;
-import io.swagger.model.OneOfInferenceAPIEndPointSchema;
-import io.swagger.model.PollingRequest;
-import io.swagger.model.Sentence;
-import io.swagger.model.Sentences;
-import io.swagger.model.TTSConfig;
-import io.swagger.model.TTSRequest;
-import io.swagger.model.TTSResponse;
-import io.swagger.model.TranslationRequest;
-import io.swagger.model.TranslationResponse;
-import io.swagger.model.TransliterationRequest;
-import io.swagger.model.TransliterationResponse;
-import io.swagger.model.TxtLangDetectionRequest;
-import io.swagger.model.TxtLangDetectionResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -599,7 +577,9 @@ public class ModelInferenceEndPointService {
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
 			io.swagger.model.TransliterationInference transliterationInference = (io.swagger.model.TransliterationInference) schema;
 			TransliterationRequest request = transliterationInference.getRequest();
-
+			if(request.getConfig().getLanguage().getSourceLanguageName().equalsIgnoreCase("en")){
+				request.getConfig().setIsSentence(true);
+			}
 			List<Input> input = compute.getInput();
 			Sentences sentences = new Sentences();
 			for (Input ip : input) {
