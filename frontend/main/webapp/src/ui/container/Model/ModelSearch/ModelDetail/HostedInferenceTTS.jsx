@@ -164,8 +164,10 @@ const HostedInference = (props) => {
         setLoading(false);
         if (resp.ok) {
           if (rsp_data.hasOwnProperty("audio") && rsp_data.audio) {
-            setBase(rsp_data.audio[0].audioUri)
-            setAudio(rsp_data.audio[0].audioUri);
+            setBase(rsp_data.audio[0].audioContent);
+            const blob = b64toBlob(rsp_data.audio[0].audioContent, "audio/wav");
+            const urlBlob = window.URL.createObjectURL(blob);
+            setAudio(urlBlob);
             setTranslationState(true);
           }
         } else {
