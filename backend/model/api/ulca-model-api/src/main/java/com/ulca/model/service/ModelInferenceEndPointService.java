@@ -16,7 +16,9 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import io.swagger.model.*;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -30,33 +32,15 @@ import com.ulca.model.exception.ModelComputeException;
 import com.ulca.model.request.Input;
 import com.ulca.model.request.ModelComputeRequest;
 import com.ulca.model.response.ModelComputeResponse;
+import com.ulca.model.response.ModelComputeResponseOCR;
+import com.ulca.model.response.ModelComputeResponseTranslation;
+import com.ulca.model.response.ModelComputeResponseTTS;
+import com.ulca.model.response.ModelComputeResponseTransliteration;
+import com.ulca.model.response.ModelComputeResponseTxtLangDetection;
 
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import io.swagger.model.ASRRequest;
-import io.swagger.model.ASRResponse;
-import io.swagger.model.AsyncApiDetails;
-import io.swagger.model.ImageFile;
-import io.swagger.model.ImageFiles;
-import io.swagger.model.InferenceAPIEndPoint;
-import io.swagger.model.OCRRequest;
-import io.swagger.model.OCRResponse;
-import io.swagger.model.OneOfAsyncApiDetailsAsyncApiPollingSchema;
-import io.swagger.model.OneOfAsyncApiDetailsAsyncApiSchema;
-import io.swagger.model.OneOfInferenceAPIEndPointSchema;
-import io.swagger.model.PollingRequest;
-import io.swagger.model.Sentence;
-import io.swagger.model.Sentences;
-import io.swagger.model.TTSConfig;
-import io.swagger.model.TTSRequest;
-import io.swagger.model.TTSResponse;
-import io.swagger.model.TranslationRequest;
-import io.swagger.model.TranslationResponse;
-import io.swagger.model.TransliterationRequest;
-import io.swagger.model.TransliterationResponse;
-import io.swagger.model.TxtLangDetectionRequest;
-import io.swagger.model.TxtLangDetectionResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -333,7 +317,7 @@ public class ModelInferenceEndPointService {
 	public ModelComputeResponse computeAsyncModel(InferenceAPIEndPoint inferenceAPIEndPoint,
 			ModelComputeRequest compute)
 			throws KeyManagementException, NoSuchAlgorithmException, IOException, InterruptedException {
-		ModelComputeResponse response = new ModelComputeResponse();
+		ModelComputeResponse response = new ModelComputeResponseTranslation();
 
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		AsyncApiDetails asyncApiDetails = inferenceAPIEndPoint.getAsyncApiDetails();
@@ -394,7 +378,8 @@ public class ModelInferenceEndPointService {
 						outputTextList.add(sentence.getTarget());
 					}
 
-					response.setOutputTextList(outputTextList);
+					//response.setOutputTextList(outputTextList);
+					response = (ModelComputeResponse) translationResponse;
 
 					break;
 
@@ -429,7 +414,7 @@ public class ModelInferenceEndPointService {
 		String callBackUrl = inferenceAPIEndPoint.getCallbackUrl();
 		OneOfInferenceAPIEndPointSchema schema = inferenceAPIEndPoint.getSchema();
 
-		ModelComputeResponse response = new ModelComputeResponse();
+		ModelComputeResponse response = null;
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TranslationInference")) {
 			io.swagger.model.TranslationInference translationInference = (io.swagger.model.TranslationInference) schema;
@@ -475,9 +460,12 @@ public class ModelInferenceEndPointService {
 				outputTextList.add(sentence.getTarget());
 			}
 
-			response.setOutputTextList(outputTextList);
-
+			ModelComputeResponseTranslation resp = new ModelComputeResponseTranslation();
+			BeanUtils.copyProperties(translation, resp);
+			
+			response = resp;
 			return response;
+			
 		}
 
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.OCRInference")) {
@@ -517,7 +505,12 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
-			response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+
+			ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
+			BeanUtils.copyProperties(ocrResponse, resp);
+			
+			response = resp;
+			return response;
 
 		}
 
@@ -568,6 +561,15 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
+			
+			ModelComputeResponseTTS resp = new ModelComputeResponseTTS();
+			BeanUtils.copyProperties(ttsResponse, resp);
+			
+			response = resp;
+			return response;
+			
+			
+			/*
 			if (ttsResponse.getAudio().get(0).getAudioContent() != null) {
 				String encodedString = Base64.getEncoder()
 						.encodeToString(ttsResponse.getAudio().get(0).getAudioContent());
@@ -594,6 +596,7 @@ public class ModelInferenceEndPointService {
 				throw new ModelComputeException(httpResponse.message(), "TTS Model Compute Response is Empty",
 						HttpStatus.BAD_REQUEST);
 			}
+			*/
 		}
 		
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TransliterationInference")) {
@@ -636,8 +639,10 @@ public class ModelInferenceEndPointService {
 						HttpStatus.BAD_REQUEST);
 
 			}
-			response.setTransliterationOutput(transliterationResponse.getOutput());
-
+			ModelComputeResponseTransliteration resp = new ModelComputeResponseTransliteration();
+			BeanUtils.copyProperties(transliterationResponse, resp);
+			
+			response = resp;
 			return response;
 		}
 		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TxtLangDetectionInference")) {
@@ -667,8 +672,10 @@ public class ModelInferenceEndPointService {
 			String responseJsonStr = httpResponse.body().string();
 			TxtLangDetectionResponse txtLangDetectionResponse = objectMapper.readValue(responseJsonStr, TxtLangDetectionResponse.class);
 			
-			response.setLanguageDetectionOutput(txtLangDetectionResponse);
-
+			ModelComputeResponseTxtLangDetection resp = new ModelComputeResponseTxtLangDetection();
+			BeanUtils.copyProperties(txtLangDetectionResponse, resp);
+			
+			response = resp;
 			return response;
 			
 		}
@@ -683,7 +690,7 @@ public class ModelInferenceEndPointService {
 
 		try {
 			
-			ModelComputeResponse response = new ModelComputeResponse();
+			ModelComputeResponse response = new ModelComputeResponseOCR();
 
 			io.swagger.model.OCRInference ocrInference = (io.swagger.model.OCRInference) schema;
 
@@ -710,7 +717,11 @@ public class ModelInferenceEndPointService {
 
 			OCRResponse ocrResponse = objectMapper.readValue(responseJsonStr, OCRResponse.class);
 			if (ocrResponse != null && ocrResponse.getOutput() != null && ocrResponse.getOutput().size() > 0 && !ocrResponse.getOutput().get(0).getSource().isBlank()) {
-				response.setOutputText(ocrResponse.getOutput().get(0).getSource());
+				
+				ModelComputeResponseOCR resp = new ModelComputeResponseOCR();
+				BeanUtils.copyProperties(ocrResponse, resp);
+				response = resp;
+				
 			} else {
 				log.info("Ocr try me response is null or not proper");
 				log.info("callBackUrl :: " + callBackUrl);

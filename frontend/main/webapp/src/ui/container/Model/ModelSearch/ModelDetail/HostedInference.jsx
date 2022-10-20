@@ -10,7 +10,8 @@ import { getLanguageName } from "../../../../../utils/getLabel";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import Modal from '../../../../components/common/Modal';
-
+import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
+import { Language } from "../../../../../configs/DatasetItems";
 import {
   Grid,
   Typography,
@@ -55,6 +56,12 @@ const HostedInference = (props) => {
   });
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
+
+  const [lang, setLang] = useState("")
+  useEffect(() => {
+    const temp = Language.filter((element) => element.label === srcLang);
+    setLang(temp[0]?.value);
+  }, [srcLang])
 
   const fetchTransliterationModel = async () => {
     const apiObj = new GetTransliterationModelID("en", source);
@@ -116,9 +123,9 @@ const HostedInference = (props) => {
         let rsp_data = await resp.json();
         setLoading(false);
         if (resp.ok) {
-          if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setTarget(rsp_data.outputText);
-            setSuggestEditValues(rsp_data.outputText);
+          if (rsp_data.hasOwnProperty("output") && rsp_data.output[0]) {
+            setTarget(rsp_data.output[0].target);
+            setSuggestEditValues(rsp_data.output[0].target);
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
             setTranslationState(true);
           }
@@ -249,7 +256,8 @@ const HostedInference = (props) => {
               setSourceText(e.target.value);
             }}
           /> */}
-          {showTransliteration && transliterationModelId ? <ReactTransliterate
+          {showTransliteration && transliterationModelId ? <IndicTransliterate
+            lang={lang}
             apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
             modelId={transliterationModelId}
             value={sourceText}
