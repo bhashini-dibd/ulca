@@ -14,9 +14,10 @@ withCredentials([usernamePassword(credentialsId: 'anuvaad-docker-hub-credentials
 {
 sh '''
 cd backend/model/api/ulca-model-api
-if [ -d "$(pwd)/build" ]
+ls -al
+if [ -d "$(pwd)/src/test/resources/model" ]
 then
-  sudo rm -rf $(pwd)/build
+  sudo rm -rf $(pwd)/src/test/resources/model
 fi
 if [  $( docker ps -q -f status=exited --filter "name=$JOB_BASE_NAME" ) ]
 then
