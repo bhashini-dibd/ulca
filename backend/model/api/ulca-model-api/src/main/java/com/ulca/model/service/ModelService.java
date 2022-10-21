@@ -252,12 +252,13 @@ public class ModelService {
 
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getUploadedModel(modelFilePath);
-		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
 
 
 
 
 		if(modelObj != null) {
+			OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
+
 			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")||schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
 				if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
 					ASRInference asrInference = (ASRInference) schema;
@@ -293,6 +294,7 @@ public class ModelService {
 		modelObj.setUnpublishReason("Newly submitted model");
 		
 		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
+
 		inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
 		
