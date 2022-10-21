@@ -252,9 +252,19 @@ public class ModelService {
 
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getUploadedModel(modelFilePath);
-		
+		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
+
+
+
+
 		if(modelObj != null) {
-			validateModel(modelObj);
+			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+				ASRInference asrInference = (ASRInference) schema;
+				if (!asrInference.getModelProcessingType().toString().equalsIgnoreCase("streaming")){
+					validateModel(modelObj);
+				}
+			} else
+				validateModel(modelObj);
 		}else {
 			throw new ModelValidationException("Model validation failed. Check uploaded file syntax");
 		}
