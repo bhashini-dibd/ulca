@@ -409,15 +409,15 @@ const SpeechToSpeech = () => {
             if (translationResp.ok) {
               setOutput((prev) => ({
                 ...prev,
-                translation: rsp_data.outputText,
+                translation: rsp_data.output[0].target,
               }));
               setSuggestEditValues((prev) => ({
                 ...prev,
-                translation: rsp_data.outputText,
+                translation: rsp_data.output[0].target,
               }));
               const obj = new ComputeAPI(
                 filter.tts.value,
-                rsp_data.outputText,
+                rsp_data.output[0].target,
                 "tts",
                 "",
                 "",
@@ -431,10 +431,15 @@ const SpeechToSpeech = () => {
               }).then(async (ttsResp) => {
                 let rsp_data = await ttsResp.json();
                 if (ttsResp.ok) {
-                  const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-                  setOutputBase64(rsp_data.outputText);
-                  const urlBlob = window.URL.createObjectURL(blob);
-                  setAudio(urlBlob);
+                  if(rsp_data.audio[0].audioContent) {
+                    const blob = b64toBlob(rsp_data.audio[0].audioContent, "audio/wav");
+                    setOutputBase64(rsp_data.audio[0].audioContent);
+                    const urlBlob = window.URL.createObjectURL(blob);
+                    setAudio(urlBlob);
+                  } else {
+                    setOutputBase64(rsp_data.audio[0].audioUri);
+                    setAudio(rsp_data.audio[0].audioUri);
+                  }
                   setSnackbarInfo({ ...snackbar, open: false, message: "" });
                 } else {
                   setSnackbarError(rsp_data.message);
