@@ -357,7 +357,7 @@ components:
             - txt-lang-detection
       description: the category of model under which it has been released or trained
 
-    ModelProcessingType
+    ModelProcessingType:
       type: object
       properties:
         type:
