@@ -258,10 +258,18 @@ public class ModelService {
 
 
 		if(modelObj != null) {
-			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
-				ASRInference asrInference = (ASRInference) schema;
-				if (!asrInference.getModelProcessingType().toString().equalsIgnoreCase("streaming")){
-					validateModel(modelObj);
+			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")||schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+				if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+					ASRInference asrInference = (ASRInference) schema;
+					if (!asrInference.getModelProcessingType().toString().equalsIgnoreCase("streaming")){
+						validateModel(modelObj);
+					}
+				} else {
+					TTSInference ttsInference = (TTSInference) schema;
+
+					if (!ttsInference.getModelProcessingType().toString().equalsIgnoreCase("streaming")) {
+						validateModel(modelObj);
+					}
 				}
 			} else
 				validateModel(modelObj);
