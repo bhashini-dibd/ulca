@@ -122,13 +122,12 @@ const HostedInferASR = (props) => {
             open: true,
             message:
               "The model is not accessible currently. Please try again later",
-            timeOut: 40000,
+            timeOut: 10000,
             variant: "error",
           });
         } else {
-          if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setTarget(rsp_data.outputText);
-            //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
+          if (rsp_data.hasOwnProperty("output") && rsp_data.output) {
+            setTarget(rsp_data.output[0].source);
             setTranslationState(true);
           }
         }
@@ -140,7 +139,7 @@ const HostedInferASR = (props) => {
           open: true,
           message:
             "The model is not accessible currently. Please try again later",
-          timeOut: 40000,
+          timeOut: 10000,
           variant: "error",
         });
       });
@@ -165,6 +164,7 @@ const HostedInferASR = (props) => {
       open: true,
       message: "Please wait while we process your request...",
       variant: "info",
+      timeOut: 10000,
     });
     const obj = new OCRFileUpload(file, modelId);
     // dispatch(APITransport(obj));
@@ -174,13 +174,14 @@ const HostedInferASR = (props) => {
     }).then(async (res) => {
       let rsp_data = await res.json();
       if (res.ok) {
-        setFileData(rsp_data.outputText);
+        setFileData(rsp_data.output[0].source);
       } else {
         setSnackbarInfo({
           ...snackbar,
           open: true,
           message: rsp_data.message,
           variant: "error",
+          timeOut: 10000,
         });
       }
     });
