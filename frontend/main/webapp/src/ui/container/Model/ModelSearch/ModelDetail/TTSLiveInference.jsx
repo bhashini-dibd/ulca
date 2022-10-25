@@ -19,6 +19,7 @@ import Modal from "../../../../components/common/Modal";
 import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
+import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
 
 import {
   Grid,
@@ -113,22 +114,24 @@ const TTSLiveInference = (props) => {
   };
 
   const handleSourceText = (text) => {
+    const lastWord = text.split(" ").slice(-2)[0];
     let request = {
       language: source,
-      text,
+      text:lastWord,
       speaker: gender.toLowerCase(),
     };
     setAudio(null);
     if (text.slice(-1) === " ") {
-      setSourceText(request.text);
+      setSourceText(text);
       emitOnSpace(request);
     } else {
-      setSourceText(request.text);
+      setSourceText(text);
     }
   };
 
   const emitOnSpace = (request) => {
     socket.emit("infer", request, (x) => {
+      setAudio(null);
       if (x["status"] == "SUCCESS") {
         let arrayBuffer = x["output"]["audio"];
         const blob = new Blob([arrayBuffer], { type: "audio/wav" });
@@ -227,6 +230,15 @@ const TTSLiveInference = (props) => {
     );
   };
 
+  const stopLiveTTS = () =>{
+    let request = {
+      language: source,
+      text:sourceText,
+      speaker: gender.toLowerCase(),
+    };
+    emitOnSpace(request);
+  };
+
   return (
     <Grid
       className={classes.gridCompute}
@@ -300,7 +312,8 @@ const TTSLiveInference = (props) => {
         </CardContent>
         <CardContent>
           {showTransliteration ? (
-            <ReactTransliterate
+            <IndicTransliterate
+              lang={source}
               apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
               modelId={transliterationModelId}
               value={sourceText}
@@ -330,6 +343,16 @@ const TTSLiveInference = (props) => {
 
         <CardActions className={classes.actionButtons}>
           <Grid container spacing={2}>
+          <Grid item>
+              <Button
+                disabled={sourceText ? false : true}
+                size="small"
+                variant="outlined"
+                onClick={stopLiveTTS}
+              >
+                Stop
+              </Button>
+            </Grid>
             <Grid item>
               <Button
                 disabled={sourceText ? false : true}
