@@ -50,7 +50,6 @@ function HostedInferTransliteration(props) {
 
   const [transliteration, setTransliteration] = useState("");
   const [shouldFetchData, setShouldFetchData] = useState(true);
-  const [isFirstRender, setIsFirstRender] = useState(true);
   const [startPositionOfCurrentWord, setStartPositionOfCurrentWord] =
     useState(-1);
   const [curserIndexPosition, setCurserIndexPosition] = useState(-1);
@@ -203,31 +202,9 @@ function HostedInferTransliteration(props) {
   }, [tgtLang])
 
   useEffect(() => {
-    if (isFirstRender) {
-      setTransliteration(" ");
-      dispatch(setCurrentText(" "));
-      setTimeout(() => {
-        getTransliterationText();
-        setIsFirstRender(false);
-      }, 0);
-    }
-    // Update the document title using the browser API
-  });
-
-  const getTransliterationText = () => {
-    const apiObj = new GetTransliterationText(target, currentText);
-    console.log(apiObj, "apiObj");
-    dispatch(APITransport(apiObj));
-  };
-
-  useEffect(() => {
     setTransliteration(transliterationText);
     dispatch(clearTransliterationResult());
   }, [transliterationText]);
-
-  useEffect(() => {
-    if (!!currentText) getTransliterationText();
-  }, [currentText]);
 
   useEffect(() => {
     let timeOutCall = setTimeout(() => {
