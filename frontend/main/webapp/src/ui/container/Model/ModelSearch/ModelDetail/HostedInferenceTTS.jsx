@@ -26,7 +26,7 @@ import { useEffect, useState } from "react";
 import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
-import LightTooltip from "../../../../components/common/LightTooltip";
+// import LightTooltip from "../../../../components/common/LightTooltip";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import Modal from '../../../../components/common/Modal';
