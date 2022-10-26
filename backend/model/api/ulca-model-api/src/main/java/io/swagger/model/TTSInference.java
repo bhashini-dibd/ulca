@@ -21,7 +21,7 @@ import javax.validation.constraints.*;
 
 public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("taskType")
-  private ModelTask taskType = null;
+  private String taskType = null;
 
   @JsonProperty("modelProcessingType")
   private ModelProcessingType modelProcessingType = null;
@@ -32,7 +32,7 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private TTSResponse response = null;
 
-  public TTSInference taskType(ModelTask taskType) {
+  public TTSInference taskType(String taskType) {
     this.taskType = taskType;
     return this;
   }
@@ -45,11 +45,11 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
   @NotNull
 
   @Valid
-  public ModelTask getTaskType() {
+  public String getTaskType() {
     return taskType;
   }
 
-  public void setTaskType(ModelTask taskType) {
+  public void setTaskType(String taskType) {
     this.taskType = taskType;
   }
 

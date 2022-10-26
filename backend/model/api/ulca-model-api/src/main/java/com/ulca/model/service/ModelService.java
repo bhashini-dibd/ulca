@@ -253,51 +253,51 @@ public class ModelService {
 		String modelFilePath = storeModelFile(file);
 		ModelExtended modelObj = getUploadedModel(modelFilePath);
 
-
-
-
-		if(modelObj != null) {
-			OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
-
-			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")||schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
-				if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
-					ASRInference asrInference = (ASRInference) schema;
-					if (!asrInference.getModelProcessingType().toString().equalsIgnoreCase("streaming")){
-						validateModel(modelObj);
-					}
-				} else {
-					TTSInference ttsInference = (TTSInference) schema;
-
-					if (!ttsInference.getModelProcessingType().toString().equalsIgnoreCase("streaming")) {
-						validateModel(modelObj);
-					}
-				}
-			} else
-				validateModel(modelObj);
-		}else {
+		if (modelObj != null) {
+			validateModel(modelObj);
+		} else {
 			throw new ModelValidationException("Model validation failed. Check uploaded file syntax");
 		}
-		
+
 		ModelTask taskType = modelObj.getTask();
-		if(taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
+		if (taskType.getType().equals(ModelTask.TypeEnum.TXT_LANG_DETECTION)) {
 			LanguagePair lp = new LanguagePair();
 			lp.setSourceLanguage(SourceLanguageEnum.MULTI);
 			LanguagePairs lps = new LanguagePairs();
 			lps.add(lp);
-			modelObj.setLanguages(lps);	
+			modelObj.setLanguages(lps);
 		}
-		
+
 		modelObj.setUserId(userId);
 		modelObj.setSubmittedOn(Instant.now().toEpochMilli());
 		modelObj.setPublishedOn(Instant.now().toEpochMilli());
 		modelObj.setStatus("unpublished");
 		modelObj.setUnpublishReason("Newly submitted model");
-		
-		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
 
-		inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+		InferenceAPIEndPoint inferenceAPIEndPoint = modelObj.getInferenceEndPoint();
+		OneOfInferenceAPIEndPointSchema schema = modelObj.getInferenceEndPoint().getSchema();
+
+		if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")
+				|| schema.getClass().getName().equalsIgnoreCase("io.swagger.model.TTSInference")) {
+			if (schema.getClass().getName().equalsIgnoreCase("io.swagger.model.ASRInference")) {
+				ASRInference asrInference = (ASRInference) schema;
+				
+				if (!asrInference.getModelProcessingType().getType().equals(ModelProcessingType.TypeEnum.STREAMING)) {
+					inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+				}
+			} else {
+				TTSInference ttsInference = (TTSInference) schema;
+
+				if (!ttsInference.getModelProcessingType().getType().equals(ModelProcessingType.TypeEnum.STREAMING)) {
+					inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+				}
+			}
+		} else {
+			inferenceAPIEndPoint = modelInferenceEndPointService.validateCallBackUrl(inferenceAPIEndPoint);
+		}
+
 		modelObj.setInferenceEndPoint(inferenceAPIEndPoint);
-		
+
 		if (modelObj != null) {
 			try {
 				modelDao.save(modelObj);
@@ -606,7 +606,4 @@ public class ModelService {
 		return null;
 	}
 
-
-
-	
 }
