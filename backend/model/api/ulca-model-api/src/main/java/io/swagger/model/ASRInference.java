@@ -21,7 +21,7 @@ import javax.validation.constraints.*;
 
 public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("taskType")
-  private ModelTask taskType = null;
+  private String taskType = null;
 
   @JsonProperty("modelProcessingType")
   private ModelProcessingType modelProcessingType = null;
@@ -32,7 +32,7 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("response")
   private ASRResponse response = null;
 
-  public ASRInference taskType(ModelTask taskType) {
+  public ASRInference taskType(String taskType) {
     this.taskType = taskType;
     return this;
   }
@@ -45,11 +45,11 @@ public class ASRInference  implements OneOfInferenceAPIEndPointSchema {
   @NotNull
 
   @Valid
-  public ModelTask getTaskType() {
+  public String getTaskType() {
     return taskType;
   }
 
-  public void setTaskType(ModelTask taskType) {
+  public void setTaskType(String taskType) {
     this.taskType = taskType;
   }
 
