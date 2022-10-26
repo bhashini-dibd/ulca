@@ -222,7 +222,6 @@ const ChartRender = (props) => {
 	}
 
 	const fetchButtonssecondLevel = () => {
-		debugger
 		return (
 			<div className={classes.filterButton}>
 				<Typography className={classes.fiterText} value="" variant="body1"> Filter By </Typography>
@@ -507,7 +506,7 @@ const ChartRender = (props) => {
 
 
 								<Tooltip contentStyle={{fontFamily:"Roboto", fontSize:"14px"}} formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }} />
-								<Bar margin={{ top: 140, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }}>
+								<Bar margin={{ top: 140, left: 20, right: 20, bottom: 20 }} dataKey="value" cursor="pointer" radius={[8, 8, 0, 0]} maxBarSize={65} onClick={(event) => { handleOnClick(page + 1, event) }} isAnimationActive={false}>
 									<LabelList
 										formatter={(value) => new Intl.NumberFormat('en').format(value)} cursor={{ fill: 'none' }}
 										position="top"

@@ -25,9 +25,7 @@ class QueryUtils:
             log.info("Query executed : {}".format(query))
             result          =   collection.execute(text(query)).fetchall()
             result_parsed   =   ([{**row} for row in result])
-            # log.info("Query Result : {}".format(result_parsed))
             collection.close()
-            log.info(result_parsed)
             return result_parsed
         except Exception as e:
             log.exception("Exception on query execution : {}".format(str(e)))
@@ -96,6 +94,7 @@ class QueryUtils:
         """
         try:
             aggs ={}
+            log.info(f'result_parsed ==> {result_parsed}, dtype ==> {dtype}, lang ==> {lang}')
             for item in result_parsed:  
                 if item["targetLanguage"] == lang:
                     check = "sourceLanguage" 
@@ -121,6 +120,7 @@ class QueryUtils:
                         aggs[item[check]][True] += item["total"]
                 
             aggs_parsed ={}
+            log.info(f'aggs==> {aggs}')
             for val in aggs:
                 agg = aggs[val]
                 if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
@@ -135,6 +135,7 @@ class QueryUtils:
                     continue
                 elem={}
                 # label = LANG_CODES.get(val)
+                log.info(f'mdmsconfig ==> {self.mdmsconfigs}')
                 label =  self.mdmsconfigs.get(val)["label"]
                 if label == None:
                     label = val

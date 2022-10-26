@@ -30,6 +30,7 @@ import LightTooltip from "../../../components/common/LightTooltip";
 import FeedbackPopover from "../../../components/common/FeedbackTTranslation";
 import SubmitFeedback from "../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
 import { Language } from "../../../../configs/DatasetItems";
+import { useSelector } from "react-redux";
 
 const LanguageDetection = (props) => {
   const { classes, title, para, modelId, task } = props;
@@ -48,7 +49,7 @@ const LanguageDetection = (props) => {
   });
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
-
+  const { languages } = useSelector((state) => state.getMasterData);
   // useEffect(() => {
   // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
   // }, []);
@@ -67,6 +68,12 @@ const LanguageDetection = (props) => {
     setSourceText("");
     setTarget("");
   };
+
+  const getLabel = (code) => {
+    const detectedLanguage = languages.filter((lang) => lang.code === code);
+    return detectedLanguage[0].label;
+  };
+
   const handleCompute = () => {
     setLoading(true);
     const apiObj = new HostedInferenceAPI(modelId, sourceText, task, false);
@@ -80,14 +87,13 @@ const LanguageDetection = (props) => {
         setLoading(false);
         if (resp.ok) {
           if (
-            rsp_data.hasOwnProperty("languageDetectionOutput") &&
-            rsp_data.languageDetectionOutput
+            rsp_data.hasOwnProperty("output") &&
+            rsp_data.output
           ) {
-            const { output } = rsp_data.languageDetectionOutput;
-            const languages = output[0].langPrediction.map((lang) => {
-              return getLanguageName(lang.langCode);
+            const language = rsp_data.output[0].langPrediction.map((lang) => {
+              return getLabel(lang.langCode);
             });
-            setTarget(languages);
+            setTarget(language);
           }
         } else {
           return Promise.reject(rsp_data);
@@ -176,17 +182,6 @@ const LanguageDetection = (props) => {
                   //   />
                   // </LightTooltip>
                 }
-              </Typography>
-            </Grid>
-            <Grid item xs={2} sm={2} md={2} lg={2} xl={2}>
-              {/* <Autocomplete
-                                disabled
-                                options={['English']}
-                                value={'English'}
-                                renderInput={(params) => <TextField {...params} variant="standard" />}
-                            /> */}
-              <Typography variant="h6" className={classes.hosted}>
-                {srcLang}
               </Typography>
             </Grid>
           </Grid>

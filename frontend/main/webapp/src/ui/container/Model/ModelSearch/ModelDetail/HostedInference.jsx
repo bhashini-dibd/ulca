@@ -10,7 +10,8 @@ import { getLanguageName } from "../../../../../utils/getLabel";
 import ThumbUpAltIcon from '@material-ui/icons/ThumbUpAlt';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 import Modal from '../../../../components/common/Modal';
-
+import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
+import { Language } from "../../../../../configs/DatasetItems";
 import {
   Grid,
   Typography,
@@ -22,24 +23,31 @@ import {
   CardActions,
   CardHeader,
 } from "@material-ui/core";
-import { useState } from "react";
+import {  useEffect, useState } from "react";
 import { identifier } from "@babel/types";
 import Snackbar from "../../../../components/common/Snackbar";
 import { translate } from "../../../../../assets/localisation";
 import LightTooltip from "../../../../components/common/LightTooltip";
 import FeedbackPopover from "../../../../components/common/FeedbackTTranslation";
 import SubmitFeedback from "../../../../../redux/actions/api/Model/ModelSearch/SubmitFeedback";
+import { ReactTransliterate } from 'react-transliterate';
+import configs from "../../../../../configs/configs";
+import endpoints from "../../../../../configs/apiendpoints";
+import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
+import { Switch } from "@material-ui/core";
 
 const HostedInference = (props) => {
-  const { classes, title, para, modelId, task } = props;
+  const { classes, title, para, modelId, task, source } = props;
   const history = useHistory();
   const [translation, setTranslationState] = useState(false);
   const [sourceText, setSourceText] = useState("");
   const [loading, setLoading] = useState(false);
   const [target, setTarget] = useState("");
   const [modal, setModal] = useState(false);
-  const [suggestEdit, setSuggestEdit] = useState(null)
-  const [suggestEditValues, setSuggestEditValues] = useState("")
+  const [suggestEdit, setSuggestEdit] = useState(null);
+  const [suggestEditValues, setSuggestEditValues] = useState("");
+  const [transliterationModelId, setTransliterationModelId] = useState("");
+  const [showTransliteration, setShowTransliteration] = useState(true);
 
 
   const [sourceLanguage, setSourceLanguage] = useState({
@@ -48,6 +56,42 @@ const HostedInference = (props) => {
   });
   const srcLang = getLanguageName(props.source);
   const tgtLang = getLanguageName(props.target);
+
+  const [lang, setLang] = useState("")
+  useEffect(() => {
+    const temp = Language.filter((element) => element.label === srcLang);
+    setLang(temp[0]?.value);
+  }, [srcLang])
+
+  const fetchTransliterationModel = async () => {
+    const apiObj = new GetTransliterationModelID("en", source);
+    // console.log("source", source);
+    source && source !== "en" && fetch(apiObj.apiEndPoint(), {
+      method: "GET",
+      // headers: apiObj.getHeaders().headers,
+    })
+      .then(async (resp) => {
+        let rsp_data = await resp.json();
+        if (resp.ok) {
+          console.log("resp_data", rsp_data);
+          setTransliterationModelId(rsp_data.modelId);
+        }
+      })
+      .catch((err) => {
+        setSnackbarInfo({
+          ...snackbar,
+          open: true,
+          message:
+            "Transliteration Model ID Not Present.",
+          variant: "error",
+        });
+      });
+  }
+
+  useEffect(() => {
+    fetchTransliterationModel();
+  }, [source])
+
 
   // useEffect(() => {
   // 	fetchChartData(selectedOption.value,"", [{"field": "sourceLanguage","value": sourceLanguage.value}])
@@ -79,9 +123,9 @@ const HostedInference = (props) => {
         let rsp_data = await resp.json();
         setLoading(false);
         if (resp.ok) {
-          if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setTarget(rsp_data.outputText);
-            setSuggestEditValues(rsp_data.outputText)
+          if (rsp_data.hasOwnProperty("output") && rsp_data.output[0]) {
+            setTarget(rsp_data.output[0].target);
+            setSuggestEditValues(rsp_data.output[0].target);
             //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
             setTranslationState(true);
           }
@@ -178,10 +222,31 @@ const HostedInference = (props) => {
                 {srcLang}
               </Typography>
             </Grid>
+
+            {transliterationModelId &&
+              <Grid item xs={3} sm={3} md={3} lg={3} xl={3}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "baseline",
+                  justifyContent: "space-evenly"
+                }}
+              >
+                <Typography variant="h6" className={classes.hosted}>
+                  Transliteration
+                </Typography>
+                <Switch
+                  checked={showTransliteration}
+                  onChange={() => setShowTransliteration(!showTransliteration)}
+                  color="primary"
+                  name="checkedB"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
+
+              </Grid>}
           </Grid>
         </CardContent>
         <CardContent>
-          <textarea
+          {/* <textarea
             value={sourceText}
             rows={5}
             // cols={40}
@@ -190,7 +255,18 @@ const HostedInference = (props) => {
             onChange={(e) => {
               setSourceText(e.target.value);
             }}
-          />
+          /> */}
+          {showTransliteration && transliterationModelId ? <IndicTransliterate
+            lang={lang}
+            apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
+            modelId={transliterationModelId}
+            value={sourceText}
+            onChangeText={(text) => {
+              setSourceText(text);
+            }}
+            renderComponent={(props) => <textarea placeholder="Enter text here..." className={classes.textAreaTransliteration} {...props} />}
+          /> : <textarea placeholder="Enter text here..." value={sourceText} onChange={(e) => setSourceText(e.target.value)} className={classes.textAreaTransliteration} />
+          }
         </CardContent>
 
         <CardActions className={classes.actionButtons}>
@@ -255,7 +331,7 @@ const HostedInference = (props) => {
             />
 
               <div   >
-                <Button variant="contained" size="small" className={classes.translatfeedbackbutton} onClick={() => {setModal(true);setSuggestEditValues(target)}}>
+                <Button variant="contained" size="small" className={classes.translatfeedbackbutton} onClick={() => { setModal(true); setSuggestEditValues(target) }}>
                   <ThumbUpAltIcon className={classes.feedbackIcon} />
                   <ThumbDownAltIcon className={classes.feedbackIcon} />
                   <Typography variant="body2" className={classes.feedbackTitle} > {translate("button:feedback")}</Typography>

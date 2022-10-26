@@ -1676,22 +1676,16 @@ components:
         config:
           $ref: '#/components/schemas/ASRConfig'
     ASRResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
-      - output
+        - output
       type: object
       properties:
         output:
-          type: array
-          properties:
-            empty:
-              type: boolean
-          description: list of
-          items:
-            $ref: '#/components/schemas/Sentence'
+          $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TranslationConfig'
-      description: the response for translation.  Standard http status codes to be
-        used.
+
     Contributor:
       required:
       - name
@@ -1707,22 +1701,10 @@ components:
         aboutMe:
           type: string
           description: describing the contributor
+
     InferenceAPIEndPoint:
-      required:
-      - callbackUrl
-      - schema
-      type: object
-      properties:
-        callbackUrl:
-          type: string
-        schema:
-          oneOf:
-          - $ref: '#/components/schemas/ASRInference'
-          - $ref: '#/components/schemas/OCRInference'
-          - $ref: '#/components/schemas/TTSInference'
-          - $ref: '#/components/schemas/TranslationInference'
-      description: hosted location defines the end point of the model inference. specify
-        a taskType along with Inference type
+     $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/model-schema.yml#/components/schemas/InferenceAPIEndPoint
+
     LanguagePair:
       required:
       - sourceLanguage
@@ -1897,21 +1879,9 @@ components:
           type: string
           
     ModelTask:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-            - translation
-            - transliteration
-            - tts
-            - asr
-            - document-layout
-            - ocr
+      $ref: $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/ModelTask
       example: 
-        type: translation
-         
-      description: the category of model under which it has been released or trained
+        type: translation  
 
     OAuthIdentity:
       type: object
@@ -1975,23 +1945,18 @@ components:
             example: gs://bucket/testimg.jpeg
         config:
           $ref: '#/components/schemas/OCRConfig'
+    
     OCRResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
-      - output
+        - output
       type: object
       properties:
         output:
-          type: array
-          properties:
-            empty:
-              type: boolean
-          description: list of
-          items:
-            $ref: '#/components/schemas/Sentence'
+          $ref: '#/components/schemas/Sentences'
         config:
-          $ref: '#/components/schemas/TranslationConfig'
-      description: the response for translation.  Standard http status codes to be
-        used.
+          $ref: '#/components/schemas/OCRConfig'
+
     OneOfInferenceAPIEndPointSchema:
       required:
       - taskType
@@ -2001,41 +1966,7 @@ components:
           type: string
       discriminator:
         propertyName: taskType
-    Sentence:
-      required:
-      - source
-      type: object
-      properties:
-        source:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-          description: input sentence for the model
-        target:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-          description: "to be used along with translation model. expected translated\
-            \ sentence, for reference"
-      description: list of
 
-    SentenceList:
-      required:
-        - source
-      type: object
-      properties:
-        source:
-          maxLength: 2147483647
-          minLength: 1
-          type: string
-          description: input sentence for the model
-        target:
-          type: array
-          description: list of sentences
-          items:
-            type: string
-            description: list of sentences
-      description: list of sentences
 
     Submitter:
       required:
@@ -2104,19 +2035,81 @@ components:
             $ref: '#/components/schemas/Sentence'
         config:
           $ref: '#/components/schemas/TTSConfig'
+
     TTSResponse:
+      description: the response for translation. Standard http status codes to be used.
       required:
-      - audioUri
+        - audio
       type: object
       properties:
+        audio:
+          $ref: '#/components/schemas/AudioFiles'
+        config:
+          $ref: '#/components/schemas/AudioConfig'
+
+    AudioFiles:
+      type: array
+      description: list of AudioFile
+      items:
+        $ref: '#/components/schemas/AudioFile'
+
+    AudioFile:
+      required:
+        - audioContent | audioUri
+      type: object
+      properties:
+        audioContent:
+          type: string
+          description: audio content with audio duration <= 1min
+          format: byte
         audioUri:
           type: string
           description: path on gcp/s3 bucket or https url
           example: gs://bucket/audio.wav
-        config:
-          $ref: '#/components/schemas/ASRConfig'
-      description: the response for translation.  Standard http status codes to be
-        used.
+
+    AudioConfig:
+      required:
+        - language
+        - audioFormat
+      type: object
+      properties:
+        modelId:
+          type: string
+          description: Unique identifier of model
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+        audioFormat:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioFormat
+        channel:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
+        samplingRate:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        bitsPerSample:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioBitsPerSample
+        transcriptionFormat:
+          $ref: '#/components/schemas/TranscriptionFormat'
+        postProcessors:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioPostProcessors
+        domain:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Domain
+        detailed:
+          type: boolean
+          description: to specify whether details are required in output like SNR, sampling rate
+        punctuation:
+          type: boolean
+          example: true
+        model:
+          type: string
+          enum:
+            - command_and_search
+            - phone_call
+            - video
+            - default
+        encoding:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Encoding
+    
+
     TrainingDataset:
       required:
       - description
@@ -2141,18 +2134,7 @@ components:
           - srt
           - transcript
           - alternatives
-    TranslationConfig:
-      required:
-      - language
-      type: object
-      properties:
-        modelId:
-          type: integer
-          description: Unique identifier of model
-          format: int32
-          example: 103
-        language:
-          $ref: '#/components/schemas/LanguagePair'
+
     TranslationInference:
       required:
       - request
@@ -2184,23 +2166,31 @@ components:
             $ref: '#/components/schemas/Sentence'
         config:
           $ref: '#/components/schemas/TranslationConfig'
+
     TranslationResponse:
+      description: the response for translation.  Standard http status codes to be used.
       required:
-      - output
+        - output
       type: object
       properties:
         output:
-          type: array
-          properties:
-            empty:
-              type: boolean
-          description: list of
-          items:
-            $ref: '#/components/schemas/Sentence'
+          $ref: '#/components/schemas/Sentences'
         config:
           $ref: '#/components/schemas/TranslationConfig'
-      description: the response for translation.  Standard http status codes to be
-        used.
+    
+
+    TranslationConfig:
+      required:
+        - language
+      type: object
+      properties:
+        modelId:
+          type: integer
+          description: Unique identifier of model
+          example: 103
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+          
     UploadModelResponse:
       type: object
       properties:
@@ -2371,22 +2361,153 @@ components:
   
     ModelComputeResponse:
       type: object
+      oneOf:
+        - $ref: '#/components/schemas/TranslationResponse'
+        - $ref: '#/components/schemas/TransliterationResponse'
+        - $ref: '#/components/schemas/ASRResponse'
+        - $ref: '#/components/schemas/TTSResponse'
+        - $ref: '#/components/schemas/OCRResponse'
+        - $ref: '#/components/schemas/TxtLangDetectionResponse'
+      
+
+    Sentences:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/Sentence'
+    
+    Sentence:
+      required:
+        - source
+      type: object
       properties:
-        outputText:
+        source:
+          minLength: 1
           type: string
-        transliterationOutput:
+          description: input sentence for the model
+        target:
+          minLength: 1
+          type: string
+          description: to be used along with translation model. expected translated sentence, for reference
+    
+    SentencesList:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/SentenceList'
+    
+    SentenceList:
+      required:
+        - source
+      type: object
+      properties:
+        source:
+          minLength: 1
+          type: string
+          description: input sentence for the model
+        target:
           type: array
-          properties:
-            empty:
-              type: boolean
+          description: list of sentences
+          items:
+            type: string
+            minItems: 1
+
+    TransliterationResponse:
+      description: the response for translation.  Standard http status codes to be used.
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/SentencesList'
+        config:
+          $ref: '#/components/schemas/TransliterationConfig'
+    
+    TransliterationConfig:
+      required:
+        - language
+      type: object
+      properties:
+        modelId:
+          type: integer
+          description: Unique identifier of model
+          example: 103
+        numSuggestions:
+          type: integer
+          description: expected number of predictions
+          example: 4
+        isSentence:
+          type: boolean
+          description: Expects sentence or words
+          default: false
+          example: false
+        language:
+          $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/LanguagePair
+    
+    TxtLangDetectionResponse:
+      description: the response for translation.  Standard http status codes to be used.
+      required:
+        - output
+      type: object
+      properties:
+        output:
+          $ref: '#/components/schemas/TxtLanguagesList'
+        config:
+          $ref: '#/components/schemas/TxtLangDetectionConfig'
+    
+    TxtLanguagesList:
+      type: array
+      description: list of
+      items:
+        $ref: '#/components/schemas/TxtLangDetectionList'
+    
+    TxtLangDetectionList:
+      required:
+        - source
+      type: object
+      properties:
+        source:
+          minLength: 1
+          type: string
+          description: input sentence for the model
+        langPrediction:
+          type: array
           description: list of
           items:
-            $ref: '#/components/schemas/SentenceList'
-      example:
-        outputText: இன்று நீங்கள் எப்படி இருக்கிறீர்கள்?
-        transliterationOutput: null
-        languageDetectionOutput: null
+            $ref: '#/components/schemas/TxtLangDetectionPrediction'
     
+    TxtLangDetectionPrediction:
+      type: object
+      required:
+        - langCode
+      properties:
+        langCode:
+          type: string
+          description: Indic language code, iso-639-1, iso 639-2
+        ScriptCode:
+          type: string
+          description: Script code, iso-15924
+        langScore:
+          type: number
+          description: the measure of accuracy of language prediction
+
+    TxtLangDetectionConfig:
+      type: object
+      properties:
+        modelId:
+          type: integer
+          description: Unique identifier of model
+          example: 103
+        isSentence:
+          type: boolean
+          description: Expects sentence or words
+          default: false
+          example: false
+        numSuggestions:
+          type: integer
+          description: expected number of predictions
+          example: 4
+
     ModelListByUserIdResponse:
       type: object
       properties:

@@ -170,7 +170,6 @@ const HostedInferASR = (props) => {
     setSuggestEditValues(e.target.value)
   }
 
-
   return (
     <>
       <Grid container>

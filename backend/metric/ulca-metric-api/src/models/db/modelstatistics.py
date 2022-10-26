@@ -16,7 +16,7 @@ class AggregateModelData(object):
 
     def data_aggregator(self, request_object):
         try:
-            count   =   repo.count({"task.type":{"$ne":None}})  # counting models where the task type is defined
+            count   =   repo.count({"status" : "published","task.type":{"$ne":None}})  # counting models where the task type is defined and status being published
             match_params = None
             if "criterions" in request_object:
                 match_params = request_object["criterions"] # where conditions
@@ -26,21 +26,21 @@ class AggregateModelData(object):
 
             #aggregating the model types; initial chart
             if (match_params ==  None and grpby_params == None):
-                query   =   [{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
-                log.info(f"Query : {query}")
+                query   =   [{"$match":{"status":"published"}},{ "$group": {"_id": {"model":"$task.type"},"count": { "$sum": 1 }}}]
                 result = repo.aggregate(query)
+                new_result = [rc for rc in result if rc["_id"]["model"] != None]
                 chart_data = []
-                for record in result:
+                for record in new_result:
+                    #log.info(record)
                     rec = {}
                     rec["_id"]      =   record["_id"]["model"]
-                    if record["_id"]["model"] == None:
-                        continue; #ingnoring the models whose task types are not defined
-                    elif record["_id"]["model"] and len(record["_id"]["model"])>9:
+                    if record["_id"]["model"] and len(record["_id"]["model"])>9:
                         rec["label"]    =   str(record["_id"]["model"]).title()
                     else:
                         rec["label"]    =   record["_id"]["model"]
                     rec["value"]    =   record["count"]
                     chart_data.append(rec)
+                log.info(chart_data)
                 return chart_data,count
 
             #1st levl drill down on model selected and languages  
