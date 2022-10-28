@@ -1,4 +1,3 @@
-
 #!groovy
 import hudson.model.*
    
