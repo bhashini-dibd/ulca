@@ -1,5 +1,5 @@
 {
-    "name": "AI4Bharat IndicWav2Vec ASR Streaming - Tamil",
+    "name": "AI4Bharat IndicWav2Vec ASR Streaming - Kannada",
     "version": "v3.0",
     "description": "IndicWav2Vec is a multilingual speech model pretrained on 40 Indian langauges. This model represents the largest diversity of Indian languages in the pool of multilingual speech models. We fine-tune this model for downstream ASR for 9 languages and obtain state-of-the-art results on 3 public benchmarks, namely MUCS, MSR and OpenSLR. This model is based on Wav2Vec2.0 large architecture",
     "refUrl": "https://github.com/AI4Bharat/IndicWav2Vec",
@@ -8,7 +8,7 @@
     },
     "languages": [
         {
-            "sourceLanguage": "ta"
+            "sourceLanguage": "kn"
         }
     ],
     "license": "mit",
@@ -81,7 +81,7 @@
         ]
     },
     "inferenceEndPoint": {
-        "callbackUrl": "wss://ai4b-dev-asr.ulcacontrib.org",
+        "callbackUrl": "wss://asr-api.ai4bharat.org",
         "schema": {
             "taskType": "asr",
             "modelProcessingType": {
@@ -90,7 +90,7 @@
             "request": {
                 "audio": [
                     {
-                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_tamil.wav"
+                        "audioUri": "https://anuvaad-raw-datasets.s3-us-west-2.amazonaws.com/vakyansh_kannada.wav"
                     }
                 ],
                 "config": {
@@ -99,7 +99,7 @@
                         "value": "transcript"
                     },
                     "language": {
-                        "sourceLanguage": "ta"
+                        "sourceLanguage": "kn"
                     }
                 }
             }
