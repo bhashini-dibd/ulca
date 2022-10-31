@@ -82,7 +82,7 @@ const AudioRecord = (props) => {
       clearTimeout(timerRef.current);
     }
 
-    if (streamingEndPoint.length) {
+    if (streamingEndPoint?.length) {
       setStreamingState("start");
       const output = document.getElementById("asrCardOutput");
       // output.innerText = "";
