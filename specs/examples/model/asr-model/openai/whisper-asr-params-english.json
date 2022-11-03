@@ -1,5 +1,5 @@
 {
-    "name": "OpenAI Whisper ASR - English (base.en)",
+    "name": "OpenAI Whisper ASR Batch - English (base.en)",
     "version": "v1.0",
     "description": "Whisper is a general-purpose speech recognition model, released by OpenAI. It is trained on a large dataset of diverse audio and is also a multi-task model that can perform multilingual speech recognition as well as speech translation and language identification.",
     "refUrl": "https://github.com/openai/whisper",
@@ -42,6 +42,9 @@
         "callbackUrl": "http://216.48.183.5:4991/recognize/en_v2",
         "schema": {
             "taskType": "asr",
+            "modelProcessingType": {
+                "type": "batch"
+            },
             "request": {
                 "audio": [
                     {
