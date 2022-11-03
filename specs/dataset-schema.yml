@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.4
+  version: 0.10.5
 servers:
   - url: /ulca
 paths: {}
@@ -269,7 +269,7 @@ components:
       properties:
         audioFilename:
           type: string
-          description: filename of the audio file
+          description: filename of the reference image file described in audio
         text:
           type: string
           description: textual output of the audio
@@ -278,13 +278,13 @@ components:
           description: filename of the image file described in audio
         pinCode:
           type: number
-          description: 6 digit pincode of the base location of the speaker
+          description: 6 digit pincode of the recording location
         speaker:
           type: string
           description: speaker name or id for the audio utterance
         district:
           type: string
-          description: district in which speaker belongs to
+          description: district where the recording of the audio was done
         assertLanguage:
           type: string
           description: language in which the speaker claims to speak
@@ -354,16 +354,16 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
         imageFilename:
           type: string
-          description: filename of the image file described in audio
+          description: filename of the reference image file described in audio
         pinCode:
           type: number
-          description: 6 digit pincode of the base location of the speaker
+          description: 6 digit pincode of the recording location
         speaker:
           type: string
           description: speaker name or id for the audio utterance
         district:
           type: string
-          description: district in which speaker belongs to
+          description: district where the recording of the audio was done
         duration:
           type: number
           description: audio duration in seconds
