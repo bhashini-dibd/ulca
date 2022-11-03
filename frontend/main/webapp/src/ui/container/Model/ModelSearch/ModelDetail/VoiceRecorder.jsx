@@ -40,7 +40,7 @@ const AudioRecord = (props) => {
     (state) => state.getMasterData
   );
 
-  const modelDetails = useSelector((state) => state.getModelDetails);
+  const modelProcessingType = useSelector((state) => state.getModelDetails.inferenceEndPoint.schema.modelProcessingType.type);
 
   const { version, submitter } = useSelector((state) => state.getModelDetails);
 
@@ -83,6 +83,9 @@ const AudioRecord = (props) => {
     if (typeof timerRef.current === "number") {
       clearTimeout(timerRef.current);
     }
+
+    console.log("inferenceEndpoints --- ", inferenceEndpoints);
+    console.log("streamingEndPoint?.length --- ", streamingEndPoint?.length);
 
     if (streamingEndPoint?.length) {
       setStreamingState("start");
@@ -202,7 +205,7 @@ const AudioRecord = (props) => {
       {
       // props.submitter === "Vakyansh" ||
       // (props.submitter === "AI4Bharat" && version === "v3.0")
-      modelDetails.inferenceEndPoint.schema.modelProcessingType.type === "streaming"
+      modelProcessingType === "streaming"
        ? (
         <CardContent>
           <Typography variant={"caption"}>
