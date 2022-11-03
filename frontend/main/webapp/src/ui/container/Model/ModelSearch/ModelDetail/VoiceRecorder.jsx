@@ -26,31 +26,23 @@ import GetMasterDataAPI from "../../../../../redux/actions/api/Common/getMasterD
 import { useDispatch, useSelector } from "react-redux";
 import APITransport from "../../../../../redux/actions/apitransport/apitransport";
 import { useRef } from "react";
-import SimpleDialogDemo from "../../../../components/common/Feedback";
 
 // const REACT_SOCKET_URL = config.REACT_SOCKET_URL;
 
 const AudioRecord = (props) => {
   const streaming = props.streaming;
-  const { classes, language, modelId, getchildData, feedback } = props;
+  const { classes, language, modelId, getchildData, feedback, inferenceEndPoint } = props;
   const [recordAudio, setRecordAudio] = useState("");
   const [streamingState, setStreamingState] = useState("");
   const [data, setData] = useState("");
-  const { languages, inferenceEndpoints } = useSelector(
+  const { languages } = useSelector(
     (state) => state.getMasterData
   );
 
   const modelProcessingType = useSelector((state) => state.getModelDetails.inferenceEndPoint.schema.modelProcessingType.type);
-
-  const { version, submitter } = useSelector((state) => state.getModelDetails);
-
-  const streamingEndPoint =
-    inferenceEndpoints &&
-    inferenceEndpoints.filter(
-      (e) => e.active && e.submitter.indexOf(submitter) > -1
-    );
-
-    const languageArr = languages.filter((lang) => lang.label === language);
+  const streamingEndPoint = inferenceEndPoint.callbackUrl
+  
+  const languageArr = languages.filter((lang) => lang.label === language);
   const languageCode = languageArr.length ? languageArr[0].code : "";
   const dispatch = useDispatch();
   const timerRef = useRef();
@@ -84,17 +76,13 @@ const AudioRecord = (props) => {
       clearTimeout(timerRef.current);
     }
 
-    console.log("inferenceEndpoints --- ", inferenceEndpoints);
-    console.log("streamingEndPoint?.length --- ", streamingEndPoint?.length);
-
-    if (streamingEndPoint?.length) {
+    if (streamingEndPoint) {
       setStreamingState("start");
       const output = document.getElementById("asrCardOutput");
       // output.innerText = "";
 
       setData("");
-      const { code } = streamingEndPoint[0];
-      streaming.connect(code, languageCode, function (action, id) {
+      streaming.connect(streamingEndPoint, languageCode, function (action, id) {
         timerRef.current = setTimeout(() => {
           if (streaming.isStreaming) handleStop();
         }, 61000);
@@ -131,10 +119,9 @@ const AudioRecord = (props) => {
     setStreamingState("");
     const output = document.getElementById("asrCardOutput");
     if (output) {
-      const { code } = streamingEndPoint[0];
       streaming.punctuateText(
         output.innerText,
-        `${code}asr/v1/punctuate/${languageCode}`,
+        `${streamingEndPoint}asr/v1/punctuate/${languageCode}`,
         (status, text) => {
           output.innerText = text;
           getchildData(text);
