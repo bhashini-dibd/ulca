@@ -40,6 +40,8 @@ const AudioRecord = (props) => {
     (state) => state.getMasterData
   );
 
+  const modelDetails = useSelector((state) => state.getModelDetails);
+
   const { version, submitter } = useSelector((state) => state.getModelDetails);
 
   const streamingEndPoint =
@@ -197,8 +199,11 @@ const AudioRecord = (props) => {
           }
         </Typography>
       </Grid>
-      {props.submitter === "Vakyansh" ||
-      (props.submitter === "AI4Bharat" && version === "v3.0") ? (
+      {
+      // props.submitter === "Vakyansh" ||
+      // (props.submitter === "AI4Bharat" && version === "v3.0")
+      modelDetails.inferenceEndPoint.schema.modelProcessingType.type === "streaming"
+       ? (
         <CardContent>
           <Typography variant={"caption"}>
             {translate("label.maxDuration")}

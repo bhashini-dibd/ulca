@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.10.3
+  version: 0.10.5
 servers:
   - url: /ulca
 paths: {}
@@ -157,7 +157,6 @@ components:
           $ref: '#/components/schemas/GlossaryDatasetCollectionMethod'
       type: object
       description: the schema of data file uploaded should adhere to this specified structure.
-      
     NerDatasetParamsSchema:
       required:
         - tagsFormat
@@ -173,8 +172,6 @@ components:
             - CoNLL-2003
         collectionMethod:
           $ref: '#/components/schemas/NerDatasetCollectionMethod'
-        
-            
     NerDatasetRowSchema:
       required:
         - nerData
@@ -272,13 +269,25 @@ components:
       properties:
         audioFilename:
           type: string
-          description: filename of the audio file
+          description: filename of the reference image file described in audio
         text:
           type: string
           description: textual output of the audio
+        imageFilename:
+          type: string
+          description: filename of the image file described in audio
+        pinCode:
+          type: number
+          description: 6 digit pincode of the recording location
         speaker:
           type: string
           description: speaker name or id for the audio utterance
+        district:
+          type: string
+          description: district where the recording of the audio was done
+        assertLanguage:
+          type: string
+          description: language in which the speaker claims to speak
         duration:
           type: number
           description: audio duration in seconds
@@ -343,12 +352,24 @@ components:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioChannel
         samplingRate:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/AudioSampleRate
+        imageFilename:
+          type: string
+          description: filename of the reference image file described in audio
+        pinCode:
+          type: number
+          description: 6 digit pincode of the recording location
         speaker:
           type: string
           description: speaker name or id for the audio utterance
+        district:
+          type: string
+          description: district where the recording of the audio was done
         duration:
           type: number
           description: audio duration in seconds
+        assertLanguage:
+          type: string
+          description: language in which the speaker claims to speak
         collectionSource:
           $ref: https://raw.githubusercontent.com/ULCA-IN/ulca/master/specs/common-schemas.yml#/components/schemas/Source
         bitsPerSample:
@@ -1128,13 +1149,12 @@ components:
     NerData:
       type: object
       description: Ner dataset sentencewise metadata
-      required :
+      required:
         - tag
       anyOf:
-          - $ref: '#/components/schemas/NerWordIndex'
-          - $ref: '#/components/schemas/NerWord'
+        - $ref: '#/components/schemas/NerWordIndex'
+        - $ref: '#/components/schemas/NerWord'
       properties:
-       
         position:
           type: string
           description: position of the word in phrase. B- Beginning, I- Intermediate
@@ -1150,26 +1170,24 @@ components:
             - PER
             - ORG
             - LOC
-      
     NerWordIndex:
       type: object
       description: Ner dataset sentencewise metadata
-      required :
+      required:
         - wordIndex
       properties:
         wordIndex:
           type: number
           description: index number of word
           example: 1
-          minItems : 1
+          minItems: 1
     NerWord:
       type: object
       description: Ner dataset sentencewise metadata
-      required :
+      required:
         - word
       properties:
         word:
           type: string
           description: corresponsing word in the sentence
-          minItems : 1
-        
+          minItems: 1
