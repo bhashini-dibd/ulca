@@ -439,42 +439,39 @@ const ContributionList = (props) => {
   ) => {
     if (status !== "failed" && status !== "In Progress") {
       return (
-        <Grid container spacing={1}>
-          <Grid item>
-            {status !== "published" && (
-              <Button
-                className={classes.benchmarkActionButtons}
-                style={{ color: "#FD7F23", fontSize: "1rem" }}
-                size="small"
-                variant="contained"
-                onClick={() => handleRunBenchMarkClick(type, domain, modelId)}
-              >
-                Run Benchmark
-              </Button>
-            )}
-          </Grid>
-          <Grid item xs={3} sm={3} md={3} lg={3} xl={3}>
+        <Box>
+          {status !== "published" && (
             <Button
+              className={classes.benchmarkActionButtons}
+              style={{ color: "#FD7F23", fontSize: "1rem" }}
               size="small"
               variant="contained"
-              className={classes.benchmarkActionButtons}
-              disabled={
-                status === "failed" ||
-                  status === "In Progress" ||
-                  isDisabled(benchmarkPerformance)
-                  ? true
-                  : false
-              }
-              style={{
-                color: status === "published" ? "#F54336" : "#139D60",
-                fontSize: "1rem",
-              }}
-              onClick={() => openConfirmationDialog(status, modelId)}
+              onClick={() => handleRunBenchMarkClick(type, domain, modelId)}
             >
-              {status === "published" ? "Unpublish" : "Publish"}
+              Run Benchmark
             </Button>
-          </Grid>
-        </Grid>
+          )}
+          <Button
+            size="small"
+            variant="contained"
+            className={classes.benchmarkActionButtons}
+            disabled={
+              status === "failed" ||
+                status === "In Progress" ||
+                isDisabled(benchmarkPerformance)
+                ? true
+                : false
+            }
+            style={{
+              color: status === "published" ? "#F54336" : "#139D60",
+              fontSize: "1rem",
+              marginTop: status !== "published" ? "8px" : "0",
+            }}
+            onClick={() => openConfirmationDialog(status, modelId)}
+          >
+            {status === "published" ? "Unpublish" : "Publish"}
+          </Button>
+        </Box>
       );
     }
     return <Typography>--</Typography>;
