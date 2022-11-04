@@ -439,11 +439,11 @@ const ContributionList = (props) => {
   ) => {
     if (status !== "failed" && status !== "In Progress") {
       return (
-        <Box>
+        <Box display="flex" flexDirection="column">
           {status !== "published" && (
             <Button
               className={classes.benchmarkActionButtons}
-              style={{ color: "#FD7F23", fontSize: "1rem" }}
+              style={{ color: "#FD7F23", fontSize: "1rem", width: "fit-content" }}
               size="small"
               variant="contained"
               onClick={() => handleRunBenchMarkClick(type, domain, modelId)}
@@ -466,6 +466,7 @@ const ContributionList = (props) => {
               color: status === "published" ? "#F54336" : "#139D60",
               fontSize: "1rem",
               marginTop: status !== "published" ? "8px" : "0",
+              width: "fit-content"
             }}
             onClick={() => openConfirmationDialog(status, modelId)}
           >
