@@ -87,7 +87,7 @@ const SpeechToSpeechFilter = (props) => {
         {renderSingleAutoComplete(
           filter.asr,
           "asr",
-          asr.filter((a) => a.sourceLanguage === filter.src.value),
+          asr.filter(a => a.sourceLanguage === filter.src.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch'),
           "ASR Model",
           filter.tgt.value ? false : true
         )}

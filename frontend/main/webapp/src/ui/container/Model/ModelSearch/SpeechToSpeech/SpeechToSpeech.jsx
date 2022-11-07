@@ -71,7 +71,7 @@ const SpeechToSpeech = () => {
 
   useEffect(() => {
     if (filter.src && filter.tgt) {
-      const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value);
+      const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch')
       const vakyanshAsr = asrVal.filter(asr => asr.label.toLowerCase().includes('vakyansh'));
       const translationVal = translation.filter(a => a.sourceLanguage === filter.src.value && a.targetLanguage === filter.tgt.value);
       const indictransTranslation = translationVal.filter(asr => asr.label.toLowerCase().includes('indictrans'));
