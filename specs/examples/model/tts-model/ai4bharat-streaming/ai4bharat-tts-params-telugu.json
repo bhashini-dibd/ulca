@@ -1,5 +1,5 @@
 {
-    "name": "AI4Bharat Indic-TTS : Malayalam",
+    "name": "AI4Bharat Indic-TTS Streaming: Telugu",
     "version": "v1.0",
     "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both the genders: 'male' and 'female' voices.",
     "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
@@ -8,7 +8,7 @@
     },
     "languages": [
         {
-            "sourceLanguage": "ml"
+            "sourceLanguage": "te"
         }
     ],
     "license": "mit",
@@ -40,20 +40,20 @@
     "inferenceEndPoint": {
         "callbackUrl": "https://tts-api.ai4bharat.org/",
         "modelProcessingType": {
-            "type": "batch"
+            "type": "streaming"
         },
         "schema": {
             "taskType": "tts",
             "request": {
                 "input": [
                     {
-                        "source": "ഭാരതം എന്റെ രാജ്യമാണ്."
+                        "source": "భారతదేశం నా దేశం."
                     }
                 ],
                 "config": {
                     "gender": "male",
                     "language": {
-                        "sourceLanguage": "ml"
+                        "sourceLanguage": "te"
                     }
                 }
             }
