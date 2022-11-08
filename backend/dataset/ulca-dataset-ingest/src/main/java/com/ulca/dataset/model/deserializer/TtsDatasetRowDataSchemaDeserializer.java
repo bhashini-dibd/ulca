@@ -291,6 +291,7 @@ public class TtsDatasetRowDataSchemaDeserializer extends StdDeserializer<TtsRowS
 						List<CollectionMethodAudio.CollectionDescriptionEnum> list = new ArrayList<CollectionMethodAudio.CollectionDescriptionEnum>();
 						list.add(collectionDescriptionEnum);
 						collectionMethodAudio.setCollectionDescription(list);
+						ttsRowSchema.setCollectionMethod(collectionMethodAudio);
 
 						switch (collectionDescriptionEnum) {
 						case AUTO_ALIGNED:
