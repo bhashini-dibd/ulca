@@ -199,6 +199,7 @@ public class DocumentLayoutDatasetParamsSchemaDeserializer extends StdDeserializ
 							List<OcrCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<OcrCollectionMethod.CollectionDescriptionEnum>();
 							list.add(collectionDescriptionEnum);
 							ocrCollectionMethod.setCollectionDescription(list);
+							docLayoutParamsSchema.setCollectionMethod(ocrCollectionMethod);
 
 							/*
 							 * collectionDetails is non mandatory
