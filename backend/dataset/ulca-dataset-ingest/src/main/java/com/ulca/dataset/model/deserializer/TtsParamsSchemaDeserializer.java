@@ -384,8 +384,6 @@ public class TtsParamsSchemaDeserializer extends StdDeserializer<TtsParamsSchema
 						collectionMethodAudio.setCollectionDescription(list);
 						ttsParamsSchema.setCollectionMethod(collectionMethodAudio);
 
-
-
 						/*
 						 * collectionDetails is non mandatory
 						 */
