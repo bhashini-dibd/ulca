@@ -387,6 +387,8 @@ public class AsrUnlabeledParamsSchemaDeserializer extends StdDeserializer<AsrUnl
 						list.add(collectionDescriptionEnum);
 						collectionMethodAudio.setCollectionDescription(list);
 
+						asrParamsSchema.setCollectionMethod(collectionMethodAudio);
+
 						/*
 						 * collectionDetails is non mandatory
 						 */
