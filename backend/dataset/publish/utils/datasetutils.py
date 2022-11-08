@@ -5,7 +5,7 @@ import logging
 import os
 import zipfile
 from logging.config import dictConfig
-
+from undouble import Undouble
 import requests
 
 from configs.configs import shared_storage_path, dataset_prefix, file_store_host, file_store_upload_endpoint, \
@@ -84,6 +84,15 @@ class DatasetUtils:
         except Exception as e:
             log.exception(f'Exception while uploading using filestore: {e}', e)
             return None
+
+    '''Util to get hash of an image
+    Input is a list of image paths
+    Returns a list of image hashes using average hashes method in the same index / order of the input list'''
+    def get_image_hash(self,image_path_list):
+        model = Undouble(method='ahash', hash_size=64)
+        model.import_data(image_path_list)
+        hash = model.compute_hash(return_dict = True)
+        return hash['img_hash_hex']
 
     # Util method to make an API call and fetch the result
     def call_api(self, uri, api_input, user_id):
