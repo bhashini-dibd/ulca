@@ -129,7 +129,6 @@ public class OcrDatasetRowDataSchemaDeserializer extends StdDeserializer<OcrData
 							ocrCollectionMethod.setCollectionDescription(list);
 							asrRowSchema.setCollectionMethod(ocrCollectionMethod);
 
-
 							if(!node.get("collectionMethod").get("collectionDetails").has("ocrTool")){
 								errorList.add("collectionDetails should contain ocrTool");
 							}else if(!node.get("collectionMethod").get("collectionDetails").get("ocrTool").isTextual()) {
