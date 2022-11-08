@@ -305,7 +305,8 @@ public class OcrDatasetParamsSchemaDeserializer extends StdDeserializer<OcrDatas
 						List<OcrCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<OcrCollectionMethod.CollectionDescriptionEnum>();
 						list.add(collectionDescriptionEnum);
 						ocrCollectionMethod.setCollectionDescription(list);
-						
+						ocrParamsSchema.setCollectionMethod(ocrCollectionMethod);
+
 						/*
 						 * collectionDetails is non mandatory
 						 */

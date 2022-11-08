@@ -235,7 +235,6 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 			}
 
 		}
-
 		if(node.has("collectionMethod")) {
 		if (node.get("collectionMethod").has("collectionDescription")) {
 			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
@@ -245,14 +244,16 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 				try {
 					String collectionDescription = node.get("collectionMethod").get("collectionDescription").get(0)
 							.asText();
+
 					ParallelDatasetCollectionMethod.CollectionDescriptionEnum collectionDescriptionEnum = ParallelDatasetCollectionMethod.CollectionDescriptionEnum
 							.fromValue(collectionDescription);
+
 
 					ParallelDatasetCollectionMethod parallelDatasetCollectionMethod = new ParallelDatasetCollectionMethod();
 					List<ParallelDatasetCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<ParallelDatasetCollectionMethod.CollectionDescriptionEnum>();
 					list.add(collectionDescriptionEnum);
 					parallelDatasetCollectionMethod.setCollectionDescription(list);
-
+					parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
 					/*
 					 * collectionDetails is non mandatory
 					 */
@@ -302,7 +303,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 								CollectionDetailsManualAligned.class);
 						parallelDatasetCollectionMethod.setCollectionDetails(collectionDetailsManualAligned);
 						parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
-						
+						log.info("Test27: Within Manual Aligned Case");						
 						break;
 
 					case MACHINE_TRANSLATED:
