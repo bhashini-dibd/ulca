@@ -63,7 +63,7 @@ const StyledMenu = withStyles({})((props) => (
 ))
 
 const HostedInference = (props) => {
-  const { classes, title, para, modelId, task, source, submitter } = props;
+  const { classes, title, para, modelId, task, source, submitter, inferenceEndPoint } = props;
   const [gender, setGender] = useState("Female");
   const [audio, setAudio] = useState(null);
   const history = useHistory();
@@ -286,7 +286,7 @@ const HostedInference = (props) => {
 
   return (
     <>
-    {submitter === 'AI4Bharat'?
+    {inferenceEndPoint.schema.modelProcessingType.type === 'streaming'?
       <TTSLiveInference source={source} /> :
       <Grid
       className={classes.gridCompute}
