@@ -276,6 +276,7 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 					List<TransliterationDatasetCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<TransliterationDatasetCollectionMethod.CollectionDescriptionEnum>();
 					list.add(collectionDescriptionEnum);
 					transliterationDatasetCollectionMethod.setCollectionDescription(list);
+					transliterationParamsSchema.setCollectionMethod(transliterationDatasetCollectionMethod);
 
 					/*
 					 * collectionDetails is non mandatory

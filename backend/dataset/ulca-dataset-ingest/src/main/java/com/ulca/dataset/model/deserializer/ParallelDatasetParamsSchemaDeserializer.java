@@ -252,7 +252,7 @@ public class ParallelDatasetParamsSchemaDeserializer extends StdDeserializer<Par
 					List<ParallelDatasetCollectionMethod.CollectionDescriptionEnum> list = new ArrayList<ParallelDatasetCollectionMethod.CollectionDescriptionEnum>();
 					list.add(collectionDescriptionEnum);
 					parallelDatasetCollectionMethod.setCollectionDescription(list);
-
+                    parallelParamsSchema.setCollectionMethod(parallelDatasetCollectionMethod);
 					/*
 					 * collectionDetails is non mandatory
 					 */
