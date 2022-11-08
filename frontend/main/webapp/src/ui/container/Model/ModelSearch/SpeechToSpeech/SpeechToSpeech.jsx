@@ -94,7 +94,7 @@ const SpeechToSpeech = () => {
     }
   }, [filter.src, filter.tgt])
 
-
+//const asrVal = asr.filter(a => a.sourceLanguage === filter.src.value && a.inferenceEndPoint.schema.modelProcessingType.type === 'batch')-- sts
 
   const [index, setIndex] = useState(0);
 
