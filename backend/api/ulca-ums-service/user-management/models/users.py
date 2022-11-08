@@ -1,11 +1,12 @@
 from db import get_db
 from utilities import UserUtils,EnumVals, normalize_bson_to_json
 from .response import post_error
-from config import USR_MONGO_COLLECTION
+from config import USR_MONGO_COLLECTION,ADMIN_ROLE_KEY, USR_KEY_MONGO_COLLECTION
 import time
 import logging
 
 log = logging.getLogger('file')
+admin_role_key          =   ADMIN_ROLE_KEY
 
 class UserManagementModel(object):
 
@@ -29,19 +30,40 @@ class UserManagementModel(object):
             return post_error("Database  exception", "An error occurred while processing on the db :{}".format(str(e)), None)
 
 
-    def update_users_by_uid(self,users):
+    def update_users_by_uid(self,users,user_id):
         """Updating user records in the database"""
 
         try:
             for i,user in enumerate(users):
                 #connecting to mongo instance/collection
                 collections = get_db()[USR_MONGO_COLLECTION]
-                #updating user record
-                results = collections.update({"email": user["email"]}, {'$set': user})
-                if 'writeError' in list(results.keys()):
-                    log.info("User{} updation failed due to {}".format((i+1),str(results)))
-                    return post_error("Database error", "some of the records where not updated", None)
-                log.info("User{} updated".format(i+1))
+                record = collections.find({"userID": user_id})
+                if record.count() != 0:
+                    log.info("Record found matching the userID {}".format(user_id))
+                    for rec in record:
+                        #fetching the user roles
+                        roles=rec["roles"] 
+                        #fetching user name
+                        email=rec["email"]
+
+                    #verifying the requested person, both admin and user can reset password   
+                    if (admin_role_key in roles) or (email == user["email"]):
+                        log.info("Reset password request is checked against role permission and username")
+                        #updating user record
+                        results = collections.update({"email": user["email"]}, {'$set': user})
+
+                        key_collection = get_db()[USR_KEY_MONGO_COLLECTION]
+                        # removing API keys from user record
+                        key_collection.remove({"email":user["email"]})
+
+                    if 'writeError' in list(results.keys()):
+                        log.info("User{} updation failed due to {}".format((i+1),str(results)))
+                        return post_error("Database error", "some of the records where not updated", None)
+                    log.info("User{} updated".format(i+1))
+                
+                else:
+                    log.info("No record found matching the userID {}".format(user_id))
+                    return post_error("Data Not valid","You are not authorized to update these details",None)
         except Exception as e:
             log.exception(f"Database connection exception : {e} ")
             return post_error("Database connection exception", "An error occurred while connecting to the database:{}".format(str(e)), None)

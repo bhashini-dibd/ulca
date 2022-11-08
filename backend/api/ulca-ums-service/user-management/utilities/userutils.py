@@ -442,6 +442,12 @@ class UserUtils:
                 return post_error("Data not valid", "Phone number given is not valid", None)
             log.info("Phone number  validated")
         
+        if user.get("password")!=None:
+            password_validity = UserUtils.validate_password(user["password"])
+            if password_validity is not None:
+                log.info("Password validation failed")
+                return password_validity
+            log.info("Password validated")
         
         # if user.get("orgID") != None:
         #     org_validity =OrgUtils.validate_org(str(user["orgID"]).upper())
@@ -466,6 +472,7 @@ class UserUtils:
             #fetching the user details from db
             result = collections.find({'email': user_email}, {
                 'password': 1, '_id': 0,'isActive':1,'isVerified':1})
+            log.info(f'user Details == {result}')
             if result.count() == 0:
                 log.info("{} is not a verified user".format(user_email))
                 return post_error("Not verified", "This email address is not registered with ULCA. Please sign up.", None)
@@ -528,7 +535,7 @@ class UserUtils:
                 email_subject   =   EnumVals.VerificationSubject.value
                 template        =   'usr_verification.html' 
                 user_id         =   user_record["userID"]
-                link            =   mail_ui_link+"activate/{}/{}/{}".format(email,user_id,timestamp)
+                link            =   mail_ui_link+"ulca/activate/{}/{}/{}".format(email,user_id,timestamp)
 
             if task_id == EnumVals.ConfirmationTaskId.value:
                 email_subject   =   EnumVals.ConfirmationSubject.value

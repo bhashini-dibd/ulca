@@ -3,6 +3,8 @@ package io.swagger.model;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import io.swagger.model.ModelProcessingType;
+import io.swagger.model.ModelTask;
 import io.swagger.model.TTSRequest;
 import io.swagger.model.TTSResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,12 +16,15 @@ import javax.validation.constraints.*;
  * TTSInference
  */
 @Validated
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2021-08-02T06:46:17.068Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2022-10-21T11:20:10.991Z[GMT]")
 
 
 public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
   @JsonProperty("taskType")
   private String taskType = null;
+
+  @JsonProperty("modelProcessingType")
+  private ModelProcessingType modelProcessingType = null;
 
   @JsonProperty("request")
   private TTSRequest request = null;
@@ -37,14 +42,36 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
    * @return taskType
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    public String getTaskType() {
+  @Valid
+  public String getTaskType() {
     return taskType;
   }
 
   public void setTaskType(String taskType) {
     this.taskType = taskType;
+  }
+
+  public TTSInference modelProcessingType(ModelProcessingType modelProcessingType) {
+    this.modelProcessingType = modelProcessingType;
+    return this;
+  }
+
+  /**
+   * Get modelProcessingType
+   * @return modelProcessingType
+   **/
+  @Schema(required = true, description = "")
+  @NotNull
+
+  @Valid
+  public ModelProcessingType getModelProcessingType() {
+    return modelProcessingType;
+  }
+
+  public void setModelProcessingType(ModelProcessingType modelProcessingType) {
+    this.modelProcessingType = modelProcessingType;
   }
 
   public TTSInference request(TTSRequest request) {
@@ -57,10 +84,10 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
    * @return request
    **/
   @Schema(required = true, description = "")
-      @NotNull
+  @NotNull
 
-    @Valid
-    public TTSRequest getRequest() {
+  @Valid
+  public TTSRequest getRequest() {
     return request;
   }
 
@@ -78,9 +105,9 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
    * @return response
    **/
   @Schema(description = "")
-  
-    @Valid
-    public TTSResponse getResponse() {
+
+  @Valid
+  public TTSResponse getResponse() {
     return response;
   }
 
@@ -99,21 +126,23 @@ public class TTSInference  implements OneOfInferenceAPIEndPointSchema {
     }
     TTSInference ttSInference = (TTSInference) o;
     return Objects.equals(this.taskType, ttSInference.taskType) &&
-        Objects.equals(this.request, ttSInference.request) &&
-        Objects.equals(this.response, ttSInference.response);
+            Objects.equals(this.modelProcessingType, ttSInference.modelProcessingType) &&
+            Objects.equals(this.request, ttSInference.request) &&
+            Objects.equals(this.response, ttSInference.response);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(taskType, request, response);
+    return Objects.hash(taskType, modelProcessingType, request, response);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TTSInference {\n");
-    
+
     sb.append("    taskType: ").append(toIndentedString(taskType)).append("\n");
+    sb.append("    modelProcessingType: ").append(toIndentedString(modelProcessingType)).append("\n");
     sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("}");

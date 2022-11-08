@@ -5,7 +5,7 @@ info:
   contact:
     name: ekstep foundation
     email: contact@ekstep.org
-  version: 0.6.2
+  version: 0.6.3
 servers:
   - url: /
 paths: {}
@@ -406,3 +406,4 @@ components:
             - awa
             - hne
             - mag
+            - unknown

@@ -383,6 +383,7 @@ public class TtsParamsSchemaDeserializer extends StdDeserializer<TtsParamsSchema
 						list.add(collectionDescriptionEnum);
 						collectionMethodAudio.setCollectionDescription(list);
 						ttsParamsSchema.setCollectionMethod(collectionMethodAudio);
+
 						/*
 						 * collectionDetails is non mandatory
 						 */

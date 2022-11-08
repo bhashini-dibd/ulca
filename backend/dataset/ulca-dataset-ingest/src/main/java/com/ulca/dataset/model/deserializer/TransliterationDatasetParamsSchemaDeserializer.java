@@ -261,7 +261,8 @@ public class TransliterationDatasetParamsSchemaDeserializer extends StdDeseriali
 		}
 		
 		if(node.has("collectionMethod")) {
-		if (node.get("collectionMethod").has("collectionDescription")) {
+
+			if (node.get("collectionMethod").has("collectionDescription")) {
 			if (!node.get("collectionMethod").get("collectionDescription").isArray()) {
 				errorList.add("collectionDescription field should be String Array");
 			} else {
