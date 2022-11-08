@@ -1,0 +1,65 @@
+{
+    "name": "AI4Bharat Indic-TTS : Bodo",
+    "version": "v1.0",
+    "description": "Text-to-speech models trained using FastPitch and HiFi-GAN vocoder. Supports both the genders: 'male' and 'female' voices.",
+    "refUrl": "https://github.com/AI4Bharat/Indic-TTS",
+    "task": {
+        "type": "tts"
+    },
+    "languages": [
+        {
+            "sourceLanguage": "brx"
+        }
+    ],
+    "license": "mit",
+    "domain": [
+        "general"
+    ],
+    "submitter": {
+        "name": "AI4Bharat",
+        "aboutMe": "A non-profit, open-source community of engineers, domain experts, policy makers, and academicians collaborating to build AI solutions to solve India’s problems",
+        "team": [
+            {
+                "name": "Praveen SV",
+                "aboutMe": "IIT-Madras, AI4Bharat"
+            },
+            {
+                "name": "Gokul Karthik K",
+                "aboutMe": "Microsoft Research Intern, AI4Bharat"
+            },
+            {
+                "name": "Pratyush Kumar",
+                "aboutMe": "Microsoft Research, AI4Bharat"
+            },
+            {
+                "name": "Mitesh Khapra",
+                "aboutMe": "IIT-Madras, AI4Bharat"
+            }
+        ]
+    },
+    "inferenceEndPoint": {
+        "callbackUrl": "https://tts-api.ai4bharat.org/",
+        "modelProcessingType": {
+            "type": "batch"
+        },
+        "schema": {
+            "taskType": "tts",
+            "request": {
+                "input": [
+                    {
+                        "source": "गासै सुबुं आनो उदांयै मान सनमान आरो मोनथाय लाना जोनोम लायो।"
+                    }
+                ],
+                "config": {
+                    "gender": "female",
+                    "language": {
+                        "sourceLanguage": "brx"
+                    }
+                }
+            }
+        }
+    },
+    "trainingDataset": {
+        "description": "NLTM-R&D IIT Madras, Chennai."
+    }
+}

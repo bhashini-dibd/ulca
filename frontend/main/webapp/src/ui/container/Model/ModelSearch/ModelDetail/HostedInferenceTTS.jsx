@@ -36,6 +36,8 @@ import configs from "../../../../../configs/configs";
 import endpoints from "../../../../../configs/apiendpoints";
 import GetTransliterationModelID from "../../../../../redux/actions/api/Model/ModelSearch/GetTransliterationModelID";
 import { Switch } from "@material-ui/core";
+import { IndicTransliterate } from "@ai4bharat/indic-transliterate";
+import { Language } from "../../../../../configs/DatasetItems";
 
 const StyledMenu = withStyles({})((props) => (
   <Menu
@@ -86,6 +88,13 @@ const HostedInference = (props) => {
   });
   const [transliterationModelId, setTransliterationModelId] = useState("");
   const [showTransliteration, setShowTransliteration] = useState(true);
+
+  const [lang, setLang] = useState("")
+  useEffect(() => {
+    const temp = Language.filter((element) => element.label === srcLang);
+    setLang(temp[0].value);
+  }, [srcLang])
+
   const handleSnackbarClose = () => {
     setSnackbarInfo({ ...snackbar, open: false });
   };
@@ -104,7 +113,6 @@ const HostedInference = (props) => {
       .then(async (resp) => {
         let rsp_data = await resp.json();
         if (resp.ok) {
-          console.log("resp_data", rsp_data);
           setTransliterationModelId(rsp_data.modelId);
         }
       })
@@ -163,12 +171,16 @@ const HostedInference = (props) => {
         let rsp_data = await resp.json();
         setLoading(false);
         if (resp.ok) {
-          if (rsp_data.hasOwnProperty("outputText") && rsp_data.outputText) {
-            setBase(rsp_data.outputText)
-            const blob = b64toBlob(rsp_data.outputText, "audio/wav");
-            const urlBlob = window.URL.createObjectURL(blob);
-            setAudio(urlBlob);
-            //   setTarget(rsp_data.translation.output[0].target.replace(/\s/g,'\n'));
+          if (rsp_data.hasOwnProperty("audio") && rsp_data.audio) {
+            if(rsp_data.audio[0].audioContent) {
+              setBase(rsp_data.audio[0].audioContent);
+              const blob = b64toBlob(rsp_data.audio[0].audioContent, "audio/wav");
+              const urlBlob = window.URL.createObjectURL(blob);
+              setAudio(urlBlob);
+            } else {
+              setBase(rsp_data.audio[0].audioUri);
+              setAudio(rsp_data.audio[0].audioUri);
+            }
             setTranslationState(true);
           }
         } else {
@@ -288,10 +300,11 @@ const HostedInference = (props) => {
             <Grid
               item
               xs={5}
-              sm={5}
-              md={transliterationModelId ? 3 : 8}
-              lg={transliterationModelId ? 3 : 8}
-              xl={transliterationModelId ? 3 : 8}
+
+              sm={3}
+              md={3}
+              lg={3}
+              xl={3}
               className={classes.headerContent}
             >
               <Typography variant="h6" className={classes.hosted}>
@@ -299,25 +312,25 @@ const HostedInference = (props) => {
               </Typography>
             </Grid>
             {transliterationModelId &&
-            <Grid item xs={5} sm={3} md={5} lg={5} xl={5}
-              style={{
-                display: "inline-flex",
-                alignItems: "baseline",
-                justifyContent: "center"
-              }}
-            >
-              <Typography variant="h6" className={classes.hosted}>
-                Transliteration
-              </Typography>
-              <Switch
-                checked={showTransliteration}
-                onChange={() => setShowTransliteration(!showTransliteration)}
-                color="primary"
-                name="checkedB"
-                inputProps={{ "aria-label": "primary checkbox" }}
-              />
+              <Grid item xs={5} sm={3} md={5} lg={5} xl={5}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "baseline",
+                  justifyContent: "center"
+                }}
+              >
+                <Typography variant="h6" className={classes.hosted}>
+                  Transliteration
+                </Typography>
+                <Switch
+                  checked={showTransliteration}
+                  onChange={() => setShowTransliteration(!showTransliteration)}
+                  color="primary"
+                  name="checkedB"
+                  inputProps={{ "aria-label": "primary checkbox" }}
+                />
 
-            </Grid>}
+              </Grid>}
             <Grid
               item
               xs={12}
@@ -349,7 +362,8 @@ const HostedInference = (props) => {
               setSourceText(e.target.value);
             }}
           /> */}
-          {showTransliteration ? <ReactTransliterate
+          {showTransliteration && transliterationModelId ? <IndicTransliterate
+            lang={lang}
             apiURL={`${configs.BASE_URL_AUTO + endpoints.hostedInference}`}
             modelId={transliterationModelId}
             value={sourceText}
