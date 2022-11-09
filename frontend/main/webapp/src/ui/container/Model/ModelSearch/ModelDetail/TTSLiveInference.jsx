@@ -115,11 +115,20 @@ const TTSLiveInference = (props) => {
 
   const handleSourceText = (text) => {
     const lastWord = text.split(" ").slice(-2)[0];
+    // let request = {
+    //   language: source,
+    //   text:lastWord,
+    //   speaker: gender.toLowerCase(),
+    // };
     let request = {
-      language: source,
-      text:lastWord,
-      speaker: gender.toLowerCase(),
-    };
+      input:[{source:lastWord}],
+      config: {
+        gender: gender.toLowerCase(),
+        language: {
+          sourceLanguage: source
+        }
+      }
+    }
     setAudio(null);
     if (text.slice(-1) === " ") {
       setSourceText(text);
