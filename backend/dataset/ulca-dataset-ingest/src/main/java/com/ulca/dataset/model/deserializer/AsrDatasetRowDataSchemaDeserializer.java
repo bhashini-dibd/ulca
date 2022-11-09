@@ -291,6 +291,8 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 						list.add(collectionDescriptionEnum);
 						collectionMethodAudio.setCollectionDescription(list);
 
+						asrRowSchema.setCollectionMethod(collectionMethodAudio);
+
 						switch (collectionDescriptionEnum) {
 						case AUTO_ALIGNED:
 							if (node.get("collectionMethod").get("collectionDetails").has("alignmentTool")) {

@@ -300,6 +300,7 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 						List<CollectionMethodAudio.CollectionDescriptionEnum> list = new ArrayList<CollectionMethodAudio.CollectionDescriptionEnum>();
 						list.add(collectionDescriptionEnum);
 						collectionMethodAudio.setCollectionDescription(list);
+						asrRowSchema.setCollectionMethod(collectionMethodAudio);
 
 						switch (collectionDescriptionEnum) {
 						case AUTO_ALIGNED:
