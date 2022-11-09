@@ -34,6 +34,7 @@ class ASRService:
     '''
     def load_asr_dataset(self, request):
         try:
+            log.info(f"TEST52: request: {request}")
             metadata, record = request, request["record"]
             error_list, pt_list, metric_list = [], [], []
             count, updates, batch = 0, 0, ds_batch_size
