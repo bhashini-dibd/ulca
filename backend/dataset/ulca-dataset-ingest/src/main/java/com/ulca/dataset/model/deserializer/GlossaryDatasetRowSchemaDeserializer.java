@@ -133,6 +133,7 @@ public class GlossaryDatasetRowSchemaDeserializer extends StdDeserializer<Glossa
 						list.add(collectionDescriptionEnum);
 						glossaryDatasetCollectionMethod.setCollectionDescription(list);
 
+                         glossaryRowSchema.setCollectionMethod(glossaryDatasetCollectionMethod);
 						/*
 						 * collectionDetails is non mandatory
 						 */

@@ -1,0 +1,46 @@
+{
+    "datasetType": "asr-corpus",
+    "languages": {
+        "sourceLanguage": "hi"
+    },
+    "collectionSource": [
+        "studio-recorded"
+    ],
+    "domain": [
+        "general"
+    ],
+    "license": "cc-by-4.0",
+    "submitter": {
+        "name": "IISC",
+        "aboutMe": "Vani dataset created with support from Google",
+        "oauthId": {
+            "oauthId": "anirudh.gupta@google.com",
+            "provider": "google"
+        },
+        "team": [
+            {
+                "name": "Aswin",
+                "oauthId": {
+                    "oauthId": "aswin.pradeep@google.com",
+                    "provider": "google"
+                }
+            }
+        ]
+    },
+    "format": "wav",
+    "channel": "mono",
+    "samplingRate": 44.1,
+    "bitsPerSample": "sixteen",
+    "numberOfSpeakers": 1,
+    "collectionMethod": {
+        "collectionDescription": [
+            "manual-transcribed"
+        ],
+        "collectionDetails": {
+            "contributor": {
+                "name": "Harveen",
+                "aboutMe": "Member of IISC research team"
+            }
+        }
+    }
+}
