@@ -27,6 +27,7 @@ public enum AsrUnlabeledRowDataSchemaKeys {
 	    district,
 	    education,
 	    pinCode,
-	    stayYears
+	    stayYears,
+	    socioEconomic
 	
 }

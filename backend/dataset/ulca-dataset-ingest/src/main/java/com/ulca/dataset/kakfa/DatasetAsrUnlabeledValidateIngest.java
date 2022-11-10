@@ -263,6 +263,10 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 				String fileLocation = basePath + finalRecord.get("audioFilename");
 
 				if (isFileAvailable(fileLocation)) {
+					if (finalRecord.has("imageFilename")){
+						String imageFileLocation = basePath + finalRecord.get("imageFilename");
+						finalRecord.put("imageFileLocation",imageFileLocation);
+					}
 					successCount++;
 					taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 
@@ -388,6 +392,10 @@ public class DatasetAsrUnlabeledValidateIngest implements DatasetValidateIngest 
 					String fileLocation = basePath + finalRecord.get("audioFilename");
 
 					if (isFileAvailable(fileLocation)) {
+						if (finalRecord.has("imageFilename")){
+							String imageFileLocation = basePath + finalRecord.get("imageFilename");
+							finalRecord.put("imageFileLocation",imageFileLocation);
+						}
 						successCount++;
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
 

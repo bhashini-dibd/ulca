@@ -268,6 +268,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 				finalRecord.put("sourceLanguage", sourceLanguage);
 
 				String fileLocation = basePath + finalRecord.get("audioFilename");
+				log.info(fileLocation);
 
 				if (isFileAvailable(fileLocation)) {
 
@@ -285,6 +286,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 					vModel.put("record", finalRecord);
 					vModel.put("currentRecordIndex", numberOfRecords);
 					datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+
 				} else {
 					// log.info("File Not Available :: " + fileLocation);
 					failedCount++;
@@ -304,6 +306,8 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 
 		log.info("data sending for validation serviceRequestNumber :: " + serviceRequestNumber + " total Record :: "
 				+ numberOfRecords + " success record :: " + successCount);
+
+		log.info(vModel.toString());
 
 	}
 
@@ -399,6 +403,10 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 					String fileLocation = basePath + finalRecord.get("audioFilename");
 
 					if (isFileAvailable(fileLocation)) {
+						if (finalRecord.has("imageFilename")){
+							String imageFileLocation = basePath + finalRecord.get("imageFilename");
+							finalRecord.put("imageFileLocation",imageFileLocation);
+						}
 
 						successCount++;
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestSuccess");
@@ -408,6 +416,7 @@ public class DatasetAsrValidateIngest implements DatasetValidateIngest {
 						vModel.put("record", finalRecord);
 						vModel.put("currentRecordIndex", pseudoNumberOfRecords);
 						datasetValidateKafkaTemplate.send(validateTopic, vModel.toString());
+						log.info(vModel.toString());
 					} else {
 						failedCount++;
 						taskTrackerRedisDao.increment(serviceRequestNumber, "ingestError");

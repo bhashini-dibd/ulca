@@ -29,5 +29,6 @@ public enum AsrRowDataSchemaKeys {
 	    district,
 	    education,
 	    pinCode,
-	    stayYears
+	    stayYears,
+	    socioEconomic
 }
