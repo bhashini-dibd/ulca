@@ -44,7 +44,7 @@ class AggregateDatasetModel(object):
             aib_params = grpby_params[0]
             aib_grp_field = aib_params['field']
             ai4b_query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{t_dtype}\') AND (({src} = \'{aib_src_val}\' AND {aib_tgt_val} = \'{tgt_val}\')) AND ({sub_name} = \'{aib}\'))\
+                            WHERE (({datatype} = \'{t_dtype}\') AND (({src} = \'{aib_src_val}\' AND {tgt} = \'{aib_tgt_val}\')) AND ({sub_name} = \'{aib}\'))\
                             GROUP BY {src}, {tgt}, {delete}, {aib_grp_field}'
             ai4b_res = utils.query_runner(ai4b_query)
             aib_chart_data = utils.result_formater_for_lang_pairs(ai4b_res)
