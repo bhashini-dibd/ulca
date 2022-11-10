@@ -7,7 +7,7 @@ export const socketConnection = (socketEndpoint, path) => {
     path,
   });
   socket.once('connect',()=>{
-      console.log('socket connected!');
+      // console.log('socket connected!');
   })
   return socket;
 };

@@ -142,8 +142,11 @@ const TTSLiveInference = (props) => {
     socket.emit("infer", request, (x) => {
       setAudio(null);
       if (x["status"] == "SUCCESS") {
+        console.log('inside ifffffff')
         let arrayBuffer = x["output"]["audio"];
+        console.log('inside arrayBuffer', arrayBuffer)
         const blob = new Blob([arrayBuffer], { type: "audio/wav" });
+        console.log('inside blob', blob)
         const url = window.URL.createObjectURL(blob);
         setAudio(url);
       } else {
