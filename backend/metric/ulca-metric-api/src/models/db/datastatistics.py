@@ -37,11 +37,15 @@ class AggregateDatasetModel(object):
             grpby_params = None
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]   #grouping fields
+            
+            aib_src_val = next((item["value"] for item in match_params if item["field"] == "sourceLanguage"), False)
+            aib_tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), False)
 
-
+            aib_params = grpby_params[0]
+            aib_grp_field = aib_params['field']
             ai4b_query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{t_dtype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\')) AND ({sub_name} = \'{aib}\'))\
-                            GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+                            WHERE (({datatype} = \'{t_dtype}\') AND (({src} = \'{aib_src_val}\' AND {aib_tgt_val} = \'{tgt_val}\')) AND ({sub_name} = \'{aib}\'))\
+                            GROUP BY {src}, {tgt}, {delete}, {aib_grp_field}'
             ai4b_res = utils.query_runner(ai4b_query)
             aib_chart_data = utils.result_formater_for_lang_pairs(ai4b_res)
             log.info(f'ai4 bharat results {ai4b_res}')
