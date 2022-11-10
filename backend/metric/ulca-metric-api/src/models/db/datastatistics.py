@@ -24,6 +24,9 @@ class AggregateDatasetModel(object):
             delete  =   "isDelete"
             datatype=   "datasetType"  
             duration=   "durationInSeconds"
+            t_dtype = "transliteration-corpus"
+            sub_name = "submitter.name"
+            aib = "AI4Bharat"
 
             dtype = request_object["type"]
             log.info(f'dtype {dtype}')
@@ -35,15 +38,23 @@ class AggregateDatasetModel(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]   #grouping fields
 
+
+            ai4b_query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
+                            WHERE (({datatype} = \'{t_dtype}\') AND (({src} = \'{src_val}\' AND {tgt} = \'{tgt_val}\')) AND ({sub_name} = \'{aib}\'))\
+                            GROUP BY {src}, {tgt}, {delete}, {grp_field}'
+            ai4b_res = utils.query_runner(ai4b_query)
+            aib_chart_data = utils.result_formater_for_lang_pairs(ai4b_res)
+            log.info(f'ai4 bharat results {ai4b_res}')
+            log.info(f'ai4 bharat final count of transliteration data {aib_chart_data}')
+
+
             #ASR charts are displayed in hours; initial chart
             if dtype in ["asr-corpus","asr-unlabeled-corpus","tts-corpus"]:
                 sumtotal_query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
             else:
                 #Charts except ASR are displayed in record counts; initial chart
                 sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE ({datatype} = \'{dtype}\') GROUP BY {delete}'
-            log.info(f'sumtotal_query {sumtotal_query}')
             sumtotal_result = utils.query_runner(sumtotal_query)
-            log.info(f'sumtotal_query_result {sumtotal_result}')
             true_count = 0
             false_count = 0
             for val in sumtotal_result:
@@ -74,11 +85,8 @@ class AggregateDatasetModel(object):
                 elif dtype in ["asr-corpus","ocr-corpus","monolingual-corpus","asr-unlabeled-corpus","document-layout-corpus","tts-corpus"]:
                     sub_query = f'WHERE (({datatype} = \'{dtype}\')AND ({src} != {tgt})) GROUP BY {src}, {tgt},{delete}'
                 qry_for_lang_pair  = query+sub_query
-                log.info(f'qry_for_lang_pair at 77 {qry_for_lang_pair}')
                 result_parsed = utils.query_runner(qry_for_lang_pair)
-                log.info(f'result_parsed at 79 {result_parsed}')
                 chart_data =  utils.result_formater_for_lang_pairs(result_parsed,dtype,value)
-                log.info(f'chart data at 81 {chart_data}')
                 return chart_data,sumtotal
 
             #aggregate query for language groupby ; 1st level drill down for the chart
@@ -103,9 +111,7 @@ class AggregateDatasetModel(object):
                             GROUP BY {src}, {tgt}, {delete}, {grp_field}'
 
                 result_parsed = utils.query_runner(query)
-                log.info(f'result_parsed at 106 {result_parsed}')
                 chart_data = utils.result_formater(result_parsed,grp_field,dtype)
-                log.info(f'chart data at 108 {chart_data}')
                 return chart_data,sumtotal
 
             #aggregate query for groupby & matching together; 2nd level drill down
@@ -134,8 +140,6 @@ class AggregateDatasetModel(object):
                 
                 result_parsed = utils.query_runner(query)
                 chart_data = utils.result_formater(result_parsed,grp_field,dtype)
-                log.info(f'result_parsed at 137 {result_parsed}')
-                log.info(f'chart_data at 138 {chart_data}')
                 return chart_data,sumtotal
         except Exception as e:
             log.exception("Exception on query aggregation : {}".format(str(e)))
