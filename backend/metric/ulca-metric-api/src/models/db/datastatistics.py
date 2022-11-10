@@ -38,18 +38,10 @@ class AggregateDatasetModel(object):
             if "groupby" in request_object:
                 grpby_params = request_object["groupby"]   #grouping fields
             
-            aib_src_val = next((item["value"] for item in match_params if item["field"] == "sourceLanguage"), False)
-            aib_tgt_val = next((item["value"] for item in match_params if item["field"] == "targetLanguage"), False)
+            aib_sumtotal_query = f'SELECT SUM(\"{count}\") as {total},{delete}  FROM \"{DRUID_DB_SCHEMA}\"  WHERE (({datatype} = \'{t_dtype}\') AND {sub_name} = {aib} GROUP BY {delete}'
+            aib_results = utils.query_runner(aib_sumtotal_query)
+            log.info(f'aib_results at 43 {aib_results}')
 
-            aib_params = grpby_params[0]
-            aib_grp_field = aib_params['field']
-            ai4b_query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete},{grp_field} FROM \"{DRUID_DB_SCHEMA}\"\
-                            WHERE (({datatype} = \'{t_dtype}\') AND (({src} = \'{aib_src_val}\' AND {tgt} = \'{aib_tgt_val}\')) AND ({sub_name} = \'{aib}\'))\
-                            GROUP BY {src}, {tgt}, {delete}, {aib_grp_field}'
-            ai4b_res = utils.query_runner(ai4b_query)
-            aib_chart_data = utils.result_formater_for_lang_pairs(ai4b_res)
-            log.info(f'ai4 bharat results {ai4b_res}')
-            log.info(f'ai4 bharat final count of transliteration data {aib_chart_data}')
 
 
             #ASR charts are displayed in hours; initial chart
@@ -76,6 +68,7 @@ class AggregateDatasetModel(object):
                     query = f'SELECT SUM(\"{count}\" * \"{duration}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
                 else:
                     query = f'SELECT SUM(\"{count}\") as {total}, {src}, {tgt},{delete} FROM \"{DRUID_DB_SCHEMA}\"'
+                    log.info('logging query at line number 79 {}')
                 params = match_params[0]
                 value = params["value"]
 
