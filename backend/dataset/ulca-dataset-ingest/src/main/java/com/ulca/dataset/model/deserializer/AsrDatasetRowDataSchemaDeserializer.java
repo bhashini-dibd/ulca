@@ -75,6 +75,8 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 
 		}
 
+
+
 		if (!node.has("text")) {
 			errorList.add("text field should be present");
 		} else if (!node.get("text").isTextual()) {
@@ -95,6 +97,16 @@ public class AsrDatasetRowDataSchemaDeserializer extends StdDeserializer<AsrRowS
 
 			String state = node.get("state").asText();
 			asrRowSchema.setState(state);
+
+		}
+		if (!node.has("socioEconomic")) {
+			errorList.add("socioEconomic field should be present");
+		} else if (!node.get("socioEconomic").isTextual()) {
+			errorList.add("socioEconomic field should be String");
+		} else {
+
+			String socioEconomic = node.get("socioEconomic").asText();
+			asrRowSchema.setSocioEconomic(socioEconomic);
 
 		}
 

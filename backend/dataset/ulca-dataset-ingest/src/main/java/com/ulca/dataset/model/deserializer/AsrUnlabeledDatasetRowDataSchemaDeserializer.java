@@ -79,6 +79,17 @@ public class AsrUnlabeledDatasetRowDataSchemaDeserializer extends StdDeserialize
 		
 		// optional params
 
+		if (!node.has("socioEconomic")) {
+			errorList.add("socioEconomic field should be present");
+		} else if (!node.get("socioEconomic").isTextual()) {
+			errorList.add("socioEconomic field should be String");
+		} else {
+
+			String socioEconomic = node.get("socioEconomic").asText();
+			asrRowSchema.setSocioEconomic(socioEconomic);
+
+		}
+
 
 		if (!node.has("state")) {
 			errorList.add("state field should be present");
